@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bullywugs &amp; Mucus Toads — Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#141a17;--panel:#1e2621;--panel2:#25302a;--ink:#eef0e2;--muted:#b4bcaa;--accent:#c4cf72;--line:#3a4840;--green:#8fc0ac;--water:#1b3439;--land:#262b1f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#1d2e2a,#141a17 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:760px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero svg{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:#18201c}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+p{margin:.55rem 0;color:#d6dacb}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid #4d5d52;border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:760px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 46px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 46px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:#d6dacb}td.shared{color:var(--muted);font-style:italic}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">A field guide to an inhabited world · volume II · the anurans</div>
+  <h1>Bullywugs &amp; Mucus&nbsp;Toads</h1>
+  <p class="lede">Two frog-and-toad monster-girl lineages. Each will split into species the way the harpies did, but they start from one shared body plan: <em>Anura</em>, the order every frog and toad belongs to. This guide defines that shared core first. Species come later.</p>
+</header>
+<main>
+  <section class="hero" aria-label="Shared amphibian life cycle">
+    <svg viewBox="0 0 640 420" role="img" aria-labelledby="lc-title lc-desc">
+      <title id="lc-title">The shared life cycle</title>
+      <desc id="lc-desc">Two lanes. Bullywug spawn is laid in clumps and toad spawn in strings. Both hatch into tadpoles in water, pass through one shared metamorphosis step, and leave the water as a Bullywug or a Mucus Toad.</desc>
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8fc0ac"/></marker>
+      </defs>
+      <rect x="0" y="0" width="330" height="420" fill="#1b3439"/>
+      <path d="M0,46 Q40,40 80,46 T160,46 T240,46 T330,46" fill="none" stroke="#2f5a60" stroke-width="2"/>
+      <rect x="330" y="0" width="310" height="420" fill="#232a1e"/>
+      <text x="16" y="28" fill="#8fc0ac" font-size="13" font-weight="700" letter-spacing="2">IN WATER</text>
+      <text x="624" y="28" fill="#c4cf72" font-size="13" font-weight="700" letter-spacing="2" text-anchor="end">ON LAND, NEVER FAR FROM IT</text>
+
+      <text x="80" y="76" fill="#b4bcaa" font-size="12" text-anchor="middle">SPAWN</text>
+      <text x="215" y="76" fill="#b4bcaa" font-size="12" text-anchor="middle">TADPOLE</text>
+      <text x="545" y="76" fill="#b4bcaa" font-size="12" text-anchor="middle">ADULT</text>
+
+      <!-- frog spawn: a clump -->
+      <g fill="#cfe3dc" fill-opacity=".85" stroke="#8fc0ac" stroke-width="1">
+        <circle cx="70" cy="130" r="9"/><circle cx="88" cy="126" r="9"/><circle cx="62" cy="146" r="9"/><circle cx="80" cy="146" r="9"/><circle cx="98" cy="142" r="9"/><circle cx="72" cy="113" r="9"/><circle cx="90" cy="160" r="9"/>
+      </g>
+      <g fill="#1a2a26"><circle cx="70" cy="130" r="3"/><circle cx="88" cy="126" r="3"/><circle cx="62" cy="146" r="3"/><circle cx="80" cy="146" r="3"/><circle cx="98" cy="142" r="3"/><circle cx="72" cy="113" r="3"/><circle cx="90" cy="160" r="3"/></g>
+      <text x="80" y="190" fill="#eef0e2" font-size="12" text-anchor="middle">clumps</text>
+
+      <!-- toad spawn: a string -->
+      <path d="M28,300 C50,280 70,320 92,300 S120,282 134,296" fill="none" stroke="#8fc0ac" stroke-width="7" stroke-opacity=".45" stroke-linecap="round"/>
+      <g fill="#1a2a26"><circle cx="34" cy="294" r="3"/><circle cx="48" cy="291" r="3"/><circle cx="62" cy="300" r="3"/><circle cx="76" cy="307" r="3"/><circle cx="92" cy="300" r="3"/><circle cx="106" cy="291" r="3"/><circle cx="120" cy="290" r="3"/></g>
+      <text x="80" y="340" fill="#eef0e2" font-size="12" text-anchor="middle">strings</text>
+
+      <!-- tadpoles -->
+      <g><ellipse cx="208" cy="138" rx="13" ry="9" fill="#6f8f5a"/><path d="M220,138 q14,-9 28,0 q-14,9 -28,0" fill="#6f8f5a" fill-opacity=".7"/><circle cx="202" cy="135" r="2" fill="#111"/></g>
+      <g><ellipse cx="208" cy="298" rx="13" ry="9" fill="#4a4034"/><path d="M220,298 q14,-9 28,0 q-14,9 -28,0" fill="#4a4034" fill-opacity=".8"/><circle cx="202" cy="295" r="2" fill="#111"/></g>
+
+      <line x1="110" y1="138" x2="186" y2="138" stroke="#8fc0ac" stroke-width="2" marker-end="url(#arr)"/>
+      <line x1="140" y1="298" x2="186" y2="298" stroke="#8fc0ac" stroke-width="2" marker-end="url(#arr)"/>
+
+      <!-- shared metamorphosis -->
+      <rect x="284" y="94" width="96" height="248" rx="18" fill="#2c3a2e" stroke="#c4cf72" stroke-width="2"/>
+      <text x="332" y="186" fill="#c4cf72" font-size="13" font-weight="700" text-anchor="middle">META-</text>
+      <text x="332" y="202" fill="#c4cf72" font-size="13" font-weight="700" text-anchor="middle">MORPHOSIS</text>
+      <text x="332" y="232" fill="#eef0e2" font-size="11" text-anchor="middle">biome sets</text>
+      <text x="332" y="246" fill="#eef0e2" font-size="11" text-anchor="middle">the variant;</text>
+      <text x="332" y="266" fill="#eef0e2" font-size="11" text-anchor="middle">the keeper</text>
+      <text x="332" y="280" fill="#eef0e2" font-size="11" text-anchor="middle">sets the bond</text>
+      <line x1="254" y1="138" x2="280" y2="150" stroke="#8fc0ac" stroke-width="2" marker-end="url(#arr)"/>
+      <line x1="254" y1="298" x2="280" y2="286" stroke="#8fc0ac" stroke-width="2" marker-end="url(#arr)"/>
+
+      <!-- adults -->
+      <line x1="384" y1="150" x2="468" y2="138" stroke="#8fc0ac" stroke-width="2" marker-end="url(#arr)"/>
+      <line x1="384" y1="286" x2="468" y2="298" stroke="#8fc0ac" stroke-width="2" marker-end="url(#arr)"/>
+      <rect x="472" y="102" width="150" height="72" rx="12" fill="#2f4a3a" stroke="#7fb98c"/>
+      <text x="547" y="132" fill="#eef0e2" font-size="15" font-weight="700" text-anchor="middle">Bullywug</text>
+      <text x="547" y="154" fill="#b4bcaa" font-size="11" text-anchor="middle">smooth · leaps · loud</text>
+      <rect x="472" y="262" width="150" height="72" rx="12" fill="#3d3628" stroke="#b49a6a"/>
+      <text x="547" y="292" fill="#eef0e2" font-size="15" font-weight="700" text-anchor="middle">Mucus Toad</text>
+      <text x="547" y="314" fill="#b4bcaa" font-size="11" text-anchor="middle">warty · walks · slow</text>
+
+      <text x="320" y="392" fill="#b4bcaa" font-size="12" text-anchor="middle">Same tongue, same croak, same thirst for water. Different skin.</text>
+    </svg>
+    <div class="note">
+      <div class="eyebrow">The central similarity</div>
+      <h2>Born in water. Bound to it.</h2>
+      <p>Harpies are defined by the sky. Anurans are defined by water: every Bullywug and every Mucus Toad started as a tadpole, and every adult still needs wet skin. That one fact drives most of their behaviour, so it is the shared core both lineages build on.</p>
+      <ul>
+        <li><b>One life cycle</b>Spawn, tadpole, metamorphosis, adult. Shared by both lineages and every future species.</li>
+        <li><b>One need</b>Skin moisture. Water, rain and mud refill it; sun, heat and the Nether drain it.</li>
+        <li><b>One toolkit</b>A long tongue, a strong leap, a croaking chorus.</li>
+        <li><b>One difference that matters</b>Skin. Smooth frog skin dries fast and keeps Bullywugs at the water's edge. Warty toad skin holds water and lets Mucus Toads roam.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>The life cycle (shared)</h2>
+    <p class="section-intro">The loop mirrors vanilla Minecraft frogs on purpose: frogspawn, bucketable tadpoles, and a variant chosen by the biome the tadpole grows up in. Players already understand it, and it gives these two a hatchling-to-bond path the harpies don't have.</p>
+    <div class="rules four">
+      <div class="rule"><strong>1. Spawn</strong>After a chorus night, a pair may leave a clutch in shallow, still water. Bullywug spawn is a floating clump; toad spawn is a long string wound around reeds and seagrass, like in real frogs and toads. Rare, like harpy eggs.</div>
+      <div class="rule"><strong>2. Tadpole</strong>Tiny, aquatic, harmless. Can be caught in a bucket like a vanilla tadpole. Grows over a few in-game days; feeding it (slimeballs, kelp) speeds that up. Owl harpies and fish-eating mobs are its predators.</div>
+      <div class="rule"><strong>3. Metamorphosis</strong>The tadpole crawls ashore. Two things are decided here: the <em>variant</em>, from the biome it grows up in (warm, temperate or cold, the same rule as vanilla frogs), and its <em>keeper</em>. A tadpole raised in a pond the player built treats that pond as home and the player as familiar.</div>
+      <div class="rule"><strong>4. Adult</strong>Lives on land, never far from water. Wild adults also spawn naturally in their biomes, so the life cycle is a bonus path and not the only source of the population.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Shared systems</h2>
+    <p class="section-intro">Every system below exists in both lineages. The lineage only changes the numbers and the flavour, the same way species variants re-skin a harpy without changing the model.</p>
+    <div class="rules">
+      <div class="rule"><strong>Moisture</strong>A hidden value from wet to dry. Refills in water, rain and mud, and near a filled cauldron. Drains in sunlight, in hot or dry biomes, and very fast in the Nether. When dry, she slows down, looks dull and heads for the nearest water. Being dry never kills her; it just sends her home.</div>
+      <div class="rule"><strong>The tongue</strong>A reach attack of about 4 blocks. It catches food (insects, small slimes, magma cubes: eating one leaves a froglight, like vanilla frogs) and pulls dropped items in. What she does with the item is the lineage's personality.</div>
+      <div class="rule"><strong>Leap &amp; swim</strong>Fast swimmers who never drown. A strong jump and little fall damage. Out of water they move in bursts rather than a steady walk.</div>
+      <div class="rule"><strong>The chorus</strong>At dusk, in rain and right after rain, they croak with an inflating throat sac. Nearby individuals join in and settle into one rhythm. The chorus is how the player finds them, and a chorus night is when spawn gets laid.</div>
+      <div class="rule"><strong>Wetting as kindness</strong>The shared bond action: splash a dry one with a water bucket or water bottle, or build her a pond. It is the anuran version of feeding a harpy, and it plugs into the same affection system.</div>
+      <div class="rule"><strong>Cold sleep</strong>In snowy biomes, or when it snows, she digs into mud or a pond bed and sleeps until it warms up (this is called brumation). Wake her early and she is groggy and grumpy.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Where the lineages split</h2>
+    <p class="section-intro">Real frogs and toads are the same animal with different skin, and that is how these two diverge. Each row is a shared system; the cells say how each lineage turns it.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>System</th><th>Bullywug (frog)</th><th>Mucus Toad (toad)</th></tr></thead>
+        <tbody>
+          <tr><th>Skin</th><td>Smooth, glossy, often bright</td><td>Dry-looking, warty, earthy, with big glands behind the eyes</td></tr>
+          <tr><th>Moisture</th><td>Dries fast; stays within a few blocks of water</td><td>Dries slowly; roams forests, gardens and caves, and goes back to water only to breed</td></tr>
+          <tr><th>Movement</th><td>Long legs, big leaps, flashy jumps</td><td>Short legs: walks and makes small hops; digs into soft ground</td></tr>
+          <tr><th>Habitat</th><td>Swamps, mangrove swamps, rivers, lily-pad ponds</td><td>Damp forest floor, lush caves, farm and garden edges, riverbanks</td></tr>
+          <tr><th>Temperament</th><td>Loud, boastful, pushy. A bully who backs down the moment someone pushes back</td><td>Placid, slow, stubborn, sleepy. Hard to impress, hard to upset</td></tr>
+          <tr><th>Tongue</th><td>Snatches things to show off: items from the ground, a fish off a hook, the last word</td><td>Pest control: eats insects and small slimes, which makes her welcome on farms</td></tr>
+          <tr><th>Defence</th><td>Bluff and numbers: puffs up, bellows, shoves; a group gangs up, a lone one flees into water</td><td>Mucus: slippery skin (hard to knock back or grab) and a bitter secretion that gives anything that bites or hits her nausea. Predators learn to leave toads alone</td></tr>
+          <tr><th>Chorus</th><td>Deep bellow contests: the loudest wins the pond</td><td>A long, low trill; she sings alone just as happily</td></tr>
+          <tr><th>Spawn</th><td>Floating clumps</td><td>Strings wound through reeds</td></tr>
+          <tr><th>Wetting (bond)</th><td>Needs it often; a player who keeps her pond full earns grudging respect</td><td>Needs it rarely; she remembers who did it</td></tr>
+          <tr><th>Danger</th><td>Moderate in groups, low alone</td><td>Low; only dangerous to whatever tries to eat her</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Lineage profiles</h2>
+    <div class="grid">
+      <article class="card">
+        <div class="card-top"><span class="group">Swamp &amp; riverbank</span><span class="tag">Social · boisterous</span></div>
+        <h3>Bullywug</h3>
+        <p><b>Habitat</b>Swamps, mangrove swamps, rivers and ponds with lily pads</p>
+        <p><b>Temperament</b>Loud, boastful, pushy, secretly easy to scare</p>
+        <p><b>Ecology &amp; behaviour</b>Lives in noisy groups at the water's edge. Sits on lily pads, holds bellow contests, snatches anything shiny or edible with her tongue, and leaps into the water the moment a fight turns against her.</p>
+        <p><b>Player interaction</b>Stand your ground and she backs down. Keep her pond wet and stocked with fish and she becomes a loud, loyal pond-mate who shows off for you.</p>
+        <p><b>Name</b>From the frog-folk of tabletop fantasy (Dungeons &amp; Dragons): "bully" plus "pollywog", an old word for tadpole.</p>
+        <p class="risk"><b>Danger</b>Moderate in a group; low when you meet one alone.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="group">Damp woodland &amp; caves</span><span class="tag">Solitary · unbothered</span></div>
+        <h3>Mucus Toad</h3>
+        <p><b>Habitat</b>Damp forest floor, lush caves, farm and garden edges, riverbanks</p>
+        <p><b>Temperament</b>Placid, slow, stubborn, sleepy</p>
+        <p><b>Ecology &amp; behaviour</b>Wanders far from water, eats insects and small slimes, digs in under soft soil during the day and comes out at dusk and in rain. Her mucus makes her slippery and bitter, so most predators leave her alone.</p>
+        <p><b>Player interaction</b>Let her settle near your crops and she keeps pests down. Shed mucus could be a useful material (a sticky ingredient, or a salve).</p>
+        <p><b>Name</b>From the Monster Girl Encyclopedia. The source is erotic, so following the "mainly fantasy" tone rule, her mucus here is defensive and practical.</p>
+        <p class="risk"><b>Danger</b>Low; nausea for anyone who attacks her.</p>
+      </article>
+    </div>
+  </section>
+
+  <section style="margin-top:48px">
+    <h2>Ties to the harpies</h2>
+    <p class="section-intro">One world, one food web. These are small hooks, not new systems.</p>
+    <div class="rules">
+      <div class="rule"><strong>Owl harpy</strong>The field guide already lists frogs as owl prey. Owls hunt tadpoles and Bullywugs at night, but learn to avoid Mucus Toads after one bitter bite.</div>
+      <div class="rule"><strong>Crow &amp; seagull</strong>Fellow thieves. A Bullywug with a stolen item and a crow harpy who wants it could be a fun ambient scene.</div>
+      <div class="rule"><strong>Shared code</strong>The affection, home position and synced-action plumbing in <code>AbstractHarpy</code> fits here too, as a shared parent or a sibling <code>AbstractAnuran</code>. Vanilla <code>Frog</code> and <code>Tadpole</code> already have tongue, variant and growth code to learn from.</div>
+    </div>
+  </section>
+
+  <section style="margin-top:48px">
+    <h2>Species to come</h2>
+    <p class="section-intro">Not designed yet. Real animals that could become species later, listed only so the shared core leaves room for them.</p>
+    <div class="grid">
+      <div class="card">
+        <h3>Bullywug candidates</h3>
+        <ul>
+          <li><b>Bullfrog</b>The baseline: big, green, loudest bellow.</li>
+          <li><b>Tree frog</b>Small and sticky-toed: climbs trees and walls.</li>
+          <li><b>Poison dart frog</b>Bright warning colours; jungle.</li>
+          <li><b>Glass frog</b>See-through skin; rare.</li>
+          <li><b>Goliath frog</b>Huge and strong; a riverside brute.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Mucus Toad candidates</h3>
+        <ul>
+          <li><b>Common toad</b>The baseline: brown, warty, unbothered.</li>
+          <li><b>Cane toad</b>Big, toxic, eats anything.</li>
+          <li><b>Fire-bellied toad</b>Flashes a red belly when scared; cold biomes.</li>
+          <li><b>Natterjack</b>Sandy coasts; runs instead of hopping.</li>
+          <li><b>Surinam toad</b>Flat; carries her eggs in her back. Odd but memorable.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top:48px" id="decisions">
+    <h2>Design decisions log</h2>
+    <p class="section-intro">Added 2026-10-18.</p>
+    <div class="rules">
+      <div class="rule"><strong>Brief</strong>Two frog-creature lineages, the Bullywug and the Mucus Toad, in the spirit of the harpy guide. Each will get species like the harpies did; for now the focus is on what they have in common.</div>
+      <div class="rule"><strong>Interpretation</strong>The central similarity is read as the amphibian life cycle plus the need for water, with skin as the one axis where the lineages split. This is a proposal, not a decision.</div>
+      <div class="rule"><strong>Tone</strong>Same rule as the harpies: mainly fantasy. The Mucus Toad's erotic source material is reworked into defensive, practical mucus.</div>
+    </div>
+    <div class="card">
+      <h3>Open questions</h3>
+      <ul>
+        <li>Is the life cycle and water the similarity you had in mind, or did you mean something else (shared looks, a shared society, a shared mechanic)?</li>
+        <li>Wildlife or tribe? Bullywugs in tabletop games live in tribes with chiefs. The harpy guide says ecology, not civilization. A pond "pecking order" (the loudest wins the pond) is the middle ground used above.</li>
+        <li>Can a player-raised tadpole be any lineage, or only the lineage of the spawn it hatched from? (Above: the spawn decides.)</li>
+        <li>The mod id is <code>harpies</code>. If anurans join, does the mod need a broader name?</li>
+        <li>Should drying out ever hurt, or only slow her down? (Above: never lethal.)</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>Concept document · Minecraft-style fantasy ecology · Companion to the harpy field guide. A starting point for mod design, not a final balance specification.</footer>
+</main>
+</body>
+</html>

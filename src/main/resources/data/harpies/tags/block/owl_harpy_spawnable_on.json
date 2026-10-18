@@ -1,0 +1,12 @@
+{
+  "values": [
+    "#minecraft:animals_spawnable_on",
+    "#minecraft:dirt",
+    "#minecraft:sand",
+    "#minecraft:terracotta",
+    "minecraft:podzol",
+    "minecraft:moss_block",
+    "minecraft:snow_block",
+    "minecraft:red_sand"
+  ]
+}

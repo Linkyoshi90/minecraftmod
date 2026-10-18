@@ -1,0 +1,19 @@
+{
+  "values": [
+    "minecraft:gold_nugget",
+    "minecraft:iron_nugget",
+    "minecraft:gold_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:copper_ingot",
+    "minecraft:raw_gold",
+    "minecraft:diamond",
+    "minecraft:emerald",
+    "minecraft:amethyst_shard",
+    "minecraft:quartz",
+    "minecraft:lapis_lazuli",
+    "minecraft:glass_bottle",
+    "minecraft:clock",
+    "minecraft:compass",
+    "#c:music_discs"
+  ]
+}

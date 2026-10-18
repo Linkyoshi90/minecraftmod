@@ -1,0 +1,24 @@
+{
+  "values": [
+    "#minecraft:leaves",
+    "#minecraft:saplings",
+    "minecraft:short_grass",
+    "minecraft:tall_grass",
+    "minecraft:fern",
+    "minecraft:large_fern",
+    "minecraft:vine",
+    "minecraft:glow_lichen",
+    "minecraft:lily_pad",
+    "minecraft:kelp",
+    "minecraft:dried_kelp",
+    "minecraft:seagrass",
+    "minecraft:moss_carpet",
+    "minecraft:big_dripleaf",
+    "minecraft:small_dripleaf",
+    "minecraft:hanging_roots",
+    "minecraft:spore_blossom",
+    "minecraft:melon_slice",
+    "minecraft:beetroot",
+    "minecraft:carrot"
+  ]
+}

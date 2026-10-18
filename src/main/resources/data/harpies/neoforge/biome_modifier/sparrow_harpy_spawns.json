@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harpies:spawns_sparrow_harpy",
+  "spawners": {
+    "type": "harpies:sparrow_harpy",
+    "weight": 10,
+    "minCount": 2,
+    "maxCount": 4
+  }
+}

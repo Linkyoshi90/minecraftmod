@@ -1,0 +1,16 @@
+{
+  "values": [
+    "#c:seeds",
+    "minecraft:wheat",
+    "minecraft:wheat_seeds",
+    "minecraft:beetroot_seeds",
+    "minecraft:melon_seeds",
+    "minecraft:pumpkin_seeds",
+    "minecraft:sugar_cane",
+    "minecraft:cactus",
+    "minecraft:bamboo",
+    "minecraft:sweet_berries",
+    "minecraft:glow_berries",
+    "minecraft:hay_block"
+  ]
+}

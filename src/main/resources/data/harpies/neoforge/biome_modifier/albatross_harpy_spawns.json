@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harpies:spawns_albatross_harpy",
+  "spawners": {
+    "type": "harpies:albatross_harpy",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

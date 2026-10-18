@@ -1,0 +1,11 @@
+{
+  "values": [
+    "#minecraft:animals_spawnable_on",
+    "#minecraft:sand",
+    "minecraft:farmland",
+    "minecraft:dirt_path",
+    "minecraft:coarse_dirt",
+    "minecraft:snow_block",
+    "minecraft:powder_snow"
+  ]
+}

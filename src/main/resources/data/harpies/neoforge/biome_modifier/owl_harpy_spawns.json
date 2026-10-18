@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harpies:spawns_owl_harpy",
+  "spawners": {
+    "type": "harpies:owl_harpy",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}
