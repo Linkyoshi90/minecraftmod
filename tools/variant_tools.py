@@ -11,7 +11,7 @@ import harpy_lib as H
 
 
 def tex_dir():
-    return os.path.join(H.REPO, "src", "main", "resources", "assets", "harpies", "textures", "entity")
+    return os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls", "textures", "entity")
 
 
 def write_variants(name, default_key, paint, variants, build_model, animations, rows, glow=None, width=380):

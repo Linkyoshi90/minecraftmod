@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from harpy_lib import write_png  # noqa: E402
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ASSETS = os.path.join(REPO, "src", "main", "resources", "assets", "harpies")
+ASSETS = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls")
 NAME = "riflebird_nest"
 
 
@@ -83,8 +83,8 @@ def nest_model(eggs):
     elements += [box(frm, to, "#egg") for frm, to in EGG_SPOTS[:eggs]]
     return {
         "parent": "minecraft:block/block",
-        "textures": {"particle": f"harpies:block/{NAME}", "twigs": f"harpies:block/{NAME}",
-                     "lining": f"harpies:block/{NAME}_lining", "egg": f"harpies:block/{NAME}_egg"},
+        "textures": {"particle": f"monstergirls:block/{NAME}", "twigs": f"monstergirls:block/{NAME}",
+                     "lining": f"monstergirls:block/{NAME}_lining", "egg": f"monstergirls:block/{NAME}_egg"},
         "elements": elements,
     }
 
@@ -103,6 +103,6 @@ if __name__ == "__main__":
     for eggs in range(4):
         dump(os.path.join(ASSETS, "models", "block", f"{NAME}_{eggs}.json"), nest_model(eggs))
     dump(os.path.join(ASSETS, "blockstates", NAME + ".json"),
-         {"variants": {f"eggs={e}": {"model": f"harpies:block/{NAME}_{e}"} for e in range(4)}})
-    dump(os.path.join(ASSETS, "models", "item", NAME + ".json"), {"parent": f"harpies:block/{NAME}_1"})
+         {"variants": {f"eggs={e}": {"model": f"monstergirls:block/{NAME}_{e}"} for e in range(4)}})
+    dump(os.path.join(ASSETS, "models", "item", NAME + ".json"), {"parent": f"monstergirls:block/{NAME}_1"})
     print("nest assets written")

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_crow_harpy",
+  "spawners": {
+    "type": "monstergirls:crow_harpy",
+    "weight": 6,
+    "minCount": 3,
+    "maxCount": 5
+  }
+}

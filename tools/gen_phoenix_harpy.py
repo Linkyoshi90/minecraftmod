@@ -325,7 +325,7 @@ def write_glowmask(tex, hot=CLASSIC_HOT, suffix=""):
         for (r, g, b, a) in row:
             out.append((r, g, b, 255) if a and hot(r, g, b) else CLEAR)
         rows.append(out)
-    path = os.path.join(H.REPO, "src", "main", "resources", "assets", "harpies", "textures", "entity", NAME + suffix + "_glowmask.png")
+    path = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls", "textures", "entity", NAME + suffix + "_glowmask.png")
     H.write_png(path, rows)
     print("glow mask ->", os.path.basename(path))
 

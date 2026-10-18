@@ -861,7 +861,7 @@ def preview(path, name, model, tex, anims, speak="sing", head_center=(0, 22.5), 
 
 
 # ----------------------------------------------------------------------------- runner
-def run(name, paint_fn, model_fn, anims_fn, speak="sing", modid="harpies", **preview_kw):
+def run(name, paint_fn, model_fn, anims_fn, speak="sing", modid="monstergirls", **preview_kw):
     """paint_fn() -> texture rows; model_fn() -> Model; anims_fn(Anims) fills the animation set"""
     pack()
     tex = paint_fn()

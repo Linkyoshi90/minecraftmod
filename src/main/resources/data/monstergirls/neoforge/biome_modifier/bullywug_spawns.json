@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_bullywug",
+  "spawners": {
+    "type": "monstergirls:bullywug",
+    "weight": 10,
+    "minCount": 2,
+    "maxCount": 4
+  }
+}

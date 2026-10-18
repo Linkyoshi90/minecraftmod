@@ -1,0 +1,16 @@
+{
+  "values": [
+    "minecraft:gold_ingot",
+    "minecraft:gold_nugget",
+    "minecraft:emerald",
+    "minecraft:diamond",
+    "minecraft:amethyst_shard",
+    "minecraft:lapis_lazuli",
+    "minecraft:quartz",
+    "minecraft:glowstone_dust",
+    "minecraft:copper_ingot",
+    "minecraft:iron_nugget",
+    "minecraft:nautilus_shell",
+    "minecraft:prismarine_shard"
+  ]
+}

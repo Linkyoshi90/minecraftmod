@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_phoenix_harpy",
+  "spawners": {
+    "type": "monstergirls:phoenix_harpy",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_albatross_harpy",
+  "spawners": {
+    "type": "monstergirls:albatross_harpy",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

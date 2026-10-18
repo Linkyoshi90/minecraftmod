@@ -209,7 +209,7 @@ VARIANTS = {
 
 
 def write_variants():
-    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "harpies", "textures", "entity")
+    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls", "textures", "entity")
     texes = {"great_horned": paint()}
     for v, (pal, cloak, tufts, pattern) in VARIANTS.items():
         texes[v] = paint(pal, cloak, tufts, pattern)

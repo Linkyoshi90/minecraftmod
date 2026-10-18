@@ -1,0 +1,61 @@
+package com.linkyoshi90.monstergirls.client;
+
+import com.linkyoshi90.monstergirls.MonsterGirlsMod;
+import com.linkyoshi90.monstergirls.entity.CrowHarpy;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib.model.DefaultedEntityGeoModel;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+public class CrowHarpyRenderer extends GeoEntityRenderer<CrowHarpy> {
+    /** The geo model is ~2 blocks tall; crows are medium-sized. Keep in sync with the hitbox in ModEntities. */
+    public static final float SCALE = 0.85F;
+
+    private static final Map<String, ResourceLocation> TEXTURES = new ConcurrentHashMap<>();
+
+    public CrowHarpyRenderer(EntityRendererProvider.Context context) {
+        super(context, new DefaultedEntityGeoModel<>(MonsterGirlsMod.id("crow_harpy"), true) {
+            @Override
+            public ResourceLocation getModelResource(CrowHarpy crow) {
+                return crow.isBaby() ? YoungModels.geo(crow.modelName()) : super.getModelResource(crow);
+            }
+
+            @Override
+            public ResourceLocation getAnimationResource(CrowHarpy crow) {
+                return crow.isBaby() ? YoungModels.anim(crow.modelName()) : super.getAnimationResource(crow);
+            }
+
+            /** Her belly rounds out while she is expecting. */
+            @Override
+            public void setCustomAnimations(CrowHarpy harpy, long instanceId, AnimationState<CrowHarpy> animationState) {
+                super.setCustomAnimations(harpy, instanceId, animationState);
+                Bellies.harpy(this, harpy);
+            }
+
+            @Override
+            public ResourceLocation getTextureResource(CrowHarpy crow) {
+                if (crow.isBaby()) return YoungModels.tex(crow.modelName());
+                // "" -> crow_harpy.png, "_hooded" -> crow_harpy_hooded.png, ...
+                return TEXTURES.computeIfAbsent(crow.getVariantSuffix(), suffix -> MonsterGirlsMod.id("textures/entity/crow_harpy" + suffix + ".png"));
+            }
+        });
+        this.withScale(SCALE);
+        this.shadowRadius = 0.35F;
+        this.addRenderLayer(new HeldItemLayer<>(this));
+    }
+
+    /** Hatchlings are the adult model at a small scale. */
+    @Override
+    public void scaleModelForRender(float widthScale, float heightScale, PoseStack poseStack, CrowHarpy animatable, BakedGeoModel model,
+                                    boolean isReRender, float partialTick, int packedLight, int packedOverlay) {
+        // the hatchling model is drawn at its own size, whatever the species' scale is
+        if (animatable.isBaby()) super.scaleModelForRender(1.0F, 1.0F, poseStack, animatable, model, isReRender, partialTick, packedLight, packedOverlay);
+        else super.scaleModelForRender(widthScale, heightScale, poseStack, animatable, model, isReRender, partialTick, packedLight, packedOverlay);
+    }
+}

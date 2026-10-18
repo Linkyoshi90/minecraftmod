@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "eggs=0": {
+      "model": "monstergirls:block/riflebird_nest_0"
+    },
+    "eggs=1": {
+      "model": "monstergirls:block/riflebird_nest_1"
+    },
+    "eggs=2": {
+      "model": "monstergirls:block/riflebird_nest_2"
+    },
+    "eggs=3": {
+      "model": "monstergirls:block/riflebird_nest_3"
+    }
+  }
+}

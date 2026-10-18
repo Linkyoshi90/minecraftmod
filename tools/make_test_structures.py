@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Writes the structure templates used by the mod's GameTests (src/main/resources/data/harpies/structure/).
+"""Writes the structure templates used by the mod's GameTests (src/main/resources/data/monstergirls/structure/).
 
     python tools/make_test_structures.py
 
@@ -11,7 +11,7 @@ import os
 import struct
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(REPO, "src", "main", "resources", "data", "harpies", "structure")
+OUT = os.path.join(REPO, "src", "main", "resources", "data", "monstergirls", "structure")
 DATA_VERSION = 3955  # Minecraft 1.21.1
 
 TAG_END, TAG_INT, TAG_STRING, TAG_LIST, TAG_COMPOUND = 0, 3, 8, 9, 10

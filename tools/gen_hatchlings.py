@@ -1,0 +1,318 @@
+#!/usr/bin/env python3
+"""Harpy hatchlings: a tiny chick-girl for each of the eight harpy species. Shared engine: chibi_lib.py on top of harpy_lib.py.
+
+    python tools/gen_hatchlings.py                   # write <species>_hatchling geo / animation / texture
+    python tools/gen_hatchlings.py --preview x.png   # also render a contact sheet of all eight
+
+Concept: a fluffy hatchling, all head and fluff, about half the height of her mother (0.7 to 1.2 blocks). A big round
+head with the humanoid chibi face (huge shiny eyes, blush, tiny smile) under a cap of down, a plump round body with a
+pale belly, stubby wing buds, a pom-pom of tail fluff and little legs with three-toed feet. Each species keeps the
+signature of her mother: the owl her ear tufts and face disc, the ostrich her long legs and striped back, the phoenix
+her flame tufts (with a glow mask), the riflebird her black velvet with a teal sheen. Animations: idle, walk, fly.
+The game uses these for a hatchling harpy (AbstractHarpy#isBaby) and falls back to idle/walk/fly only.
+"""
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import harpy_lib as H
+import chibi_lib as C
+from harpy_lib import rgb, ramp, pick, noise, cube, mirror_cube, hang, track, sym, merge, hold
+
+D = H.D
+
+
+def R(*cols):
+    return ramp([rgb(*c) for c in cols])
+
+
+SKIN = ramp([rgb(206, 150, 124), rgb(230, 178, 150), rgb(244, 202, 174), rgb(252, 224, 198)], nodither=True)
+SKIN_PALE = ramp([rgb(214, 170, 156), rgb(236, 198, 182), rgb(248, 220, 204), rgb(255, 238, 224)], nodither=True)
+
+# k scales the base model (about 14.5 units tall); legh is the leg length in base units
+SPECIES = {
+    "sparrow_harpy": dict(k=0.80, legh=2.5, eye=1.0,
+                          down=R((90, 58, 36), (128, 86, 52), (166, 118, 74), (202, 160, 108), (228, 196, 150)),
+                          belly=R((214, 188, 150), (232, 212, 176), (246, 232, 204), (255, 246, 226)),
+                          wing=R((70, 44, 28), (108, 70, 42), (150, 104, 64), (196, 150, 100)),
+                          leg=R((176, 112, 88), (210, 144, 112), (232, 172, 140)),
+                          iris=R((96, 56, 20), (156, 100, 30), (214, 156, 56), (244, 204, 100)), skin=SKIN,
+                          deco="streaks", tufts=3),
+    "crow_harpy": dict(k=0.94, legh=2.8, eye=1.0,
+                       down=R((22, 20, 34), (38, 34, 58), (58, 52, 86), (84, 76, 118), (118, 108, 154)),
+                       belly=R((46, 42, 66), (66, 60, 92), (88, 80, 120), (112, 104, 146)),
+                       wing=R((16, 14, 26), (30, 26, 48), (48, 42, 74), (80, 70, 118)),
+                       leg=R((44, 42, 52), (70, 68, 80), (100, 98, 112)),
+                       iris=R((60, 40, 90), (104, 70, 140), (160, 120, 190), (206, 176, 230)), skin=SKIN,
+                       deco="sheen", sheen=(110, 100, 170), tufts=3),
+    "ostrich_harpy": dict(k=1.0, legh=6.5, eye=0.9,
+                          down=R((120, 96, 66), (170, 142, 100), (208, 184, 142), (232, 212, 172), (246, 232, 200)),
+                          belly=R((220, 204, 168), (238, 226, 192), (250, 242, 216), (255, 252, 234)),
+                          wing=R((96, 74, 50), (140, 110, 74), (184, 152, 106), (222, 196, 150)),
+                          leg=R((178, 140, 128), (208, 170, 154), (232, 200, 184)),
+                          iris=R((70, 44, 20), (120, 78, 28), (176, 122, 44), (222, 176, 84)), skin=SKIN,
+                          deco="stripes", dark=(84, 62, 42), tufts=1),
+    "owl_harpy": dict(k=0.97, legh=2.0, eye=1.35,
+                      down=R((150, 118, 80), (196, 164, 120), (226, 204, 164), (242, 228, 196), (252, 244, 224)),
+                      belly=R((226, 210, 176), (242, 232, 204), (252, 246, 226), (255, 252, 240)),
+                      wing=R((110, 80, 52), (158, 120, 80), (204, 170, 124), (236, 212, 172)),
+                      leg=R((214, 196, 160), (232, 218, 188), (246, 236, 214)),
+                      iris=R((120, 56, 8), (190, 100, 14), (240, 160, 30), (255, 212, 90)), skin=SKIN_PALE,
+                      deco="speckle", dark=(104, 74, 46), tufts=0, ears=True, disc=True),
+    "seagull_harpy": dict(k=0.80, legh=2.8, eye=1.0,
+                          down=R((110, 110, 106), (156, 156, 150), (196, 196, 188), (226, 226, 220), (246, 246, 242)),
+                          belly=R((218, 218, 214), (236, 236, 232), (248, 248, 246), (255, 255, 255)),
+                          wing=R((96, 100, 108), (136, 142, 152), (178, 184, 194), (214, 220, 228)),
+                          leg=R((200, 100, 80), (230, 130, 100), (246, 164, 128)),
+                          iris=R((140, 100, 20), (200, 154, 30), (240, 204, 70), (255, 236, 130)), skin=SKIN,
+                          deco="speckle", dark=(84, 76, 72), tufts=2),
+    "albatross_harpy": dict(k=1.02, legh=3.0, eye=1.0,
+                            down=R((190, 190, 196), (214, 214, 220), (232, 232, 236), (246, 246, 248), (255, 255, 255)),
+                            belly=R((232, 232, 238), (244, 244, 248), (252, 252, 254), (255, 255, 255)),
+                            wing=R((120, 122, 134), (156, 158, 170), (196, 198, 208), (232, 234, 242)),
+                            leg=R((214, 150, 150), (234, 180, 176), (248, 208, 204)),
+                            iris=R((30, 40, 70), (52, 70, 110), (84, 108, 156), (140, 164, 210)), skin=SKIN_PALE,
+                            deco="plain", tufts=2, bigfeet=True),
+    "riflebird_harpy": dict(k=0.83, legh=2.6, eye=1.0,
+                            down=R((10, 10, 18), (22, 22, 34), (36, 36, 54), (54, 54, 76), (80, 80, 106)),
+                            belly=R((30, 30, 44), (46, 46, 64), (64, 64, 86), (88, 88, 112)),
+                            wing=R((8, 8, 14), (18, 22, 32), (28, 40, 52), (44, 90, 96)),
+                            leg=R((40, 40, 48), (66, 66, 78), (96, 96, 110)),
+                            iris=R((10, 70, 66), (24, 124, 112), (56, 184, 164), (130, 232, 212)), skin=SKIN_PALE,
+                            deco="sheen", sheen=(40, 190, 170), tufts=3),
+    "phoenix_harpy": dict(k=0.97, legh=2.5, eye=1.0,
+                          down=R((150, 28, 14), (210, 64, 18), (246, 112, 28), (255, 164, 52), (255, 214, 104)),
+                          belly=R((246, 148, 40), (255, 188, 64), (255, 220, 112), (255, 242, 170)),
+                          wing=R((120, 20, 12), (190, 48, 16), (240, 98, 24), (255, 170, 60)),
+                          leg=R((200, 120, 24), (240, 160, 40), (255, 200, 80)),
+                          iris=R((140, 40, 8), (214, 84, 16), (255, 146, 30), (255, 214, 90)), skin=SKIN,
+                          deco="flame", tufts=5, glow=True),
+}
+
+
+def sizes(sp):
+    e = sp["eye"]
+    s = {
+        "head": (8, 7, 7), "cap": (8, 2.25, 7, ("down",)), "tuft": (1.5, 2, 1.5), "tuft_tall": (1.5, 3, 1.5), "ear": (1.5, 3, 1.5),
+        "eyelids": (6.4 * e if e < 1.2 else 7.4, 2.5 * e, .25),
+        "body": (6, 5, 5), "belly": (4, 3.5, .5), "bellyfluff": (4.5, 1.5, 1),
+        "wing": (1.25, 4, 3.5), "wingtip": (1, 2.25, 3),
+        "tail": (3, 1.5, 2), "tailf": (1, 2.5, .5),
+        "leg": (1.5, sp["legh"], 1.5), "foot": (3 if sp.get("bigfeet") else 2.5, .5, 3 if sp.get("bigfeet") else 2.5), "toe": (.5, .5, 1),
+    }
+    return s
+
+
+# ----------------------------------------------------------------------------- painting
+def paint(sp, name):
+    pt = H.Painter()
+    glow = H.Painter() if sp.get("glow") else None
+    down, belly, wing, leg = sp["down"], sp["belly"], sp["wing"], sp["leg"]
+    dark = sp.get("dark", (60, 40, 30))
+    deco = sp["deco"]
+
+    def body_deco(f, x, y, w, h, t):
+        if deco == "streaks" and f in ("north", "up", "east", "west", "south") and (x % 5 == 1) and y % 4 < 2 and noise(x, y, 9) < 0.7:
+            return pick(down, t - 0.30, x, y)
+        if deco == "speckle" and noise(x, y, 21) > 0.90:
+            return rgb(*dark)
+        if deco == "stripes" and f in ("up", "east", "west", "south") and (x // 3) % 2 == 0:
+            return rgb(*dark) if noise(x, y, 4) > 0.15 else pick(down, t - 0.2, x, y)
+        if deco == "sheen" and noise(x, y, 17) > 0.86:
+            r, g, b = sp["sheen"]
+            return rgb(r, g, b)
+        if deco == "flame" and (f == "up" or y < h * 0.35) and noise(x, y, 31) > 0.55:
+            return pick(down, min(1.0, t + 0.28), x, y)
+        return None
+
+    body = C.surface(down, 5, 0.58, 0.22, body_deco)
+    for p in ("head", "cap", "body", "tail", "bellyfluff"):
+        pt(p, "all", body)
+    pt("tuft", "all", C.surface(down, 8, 0.78, 0.25, body_deco))
+    pt("tuft_tall", "all", C.surface(down, 8, 0.80, 0.25, body_deco))
+    pt("ear", "all", C.surface(down, 9, 0.50, 0.25, body_deco))
+    pt("belly", "all", C.surface(belly, 6, 0.62, 0.22))
+    pt("bellyfluff", "all", C.surface(belly, 6, 0.66, 0.22))
+
+    def wing_fn(f, x, y, w, h):
+        t = 0.55 + (noise(x, y, 3) - 0.5) * 0.2
+        if f in ("east", "west", "north", "south"):
+            t += 0.12 * ((y // 3) % 2) - 0.1
+            if deco == "sheen" and noise(x, y, 7) > 0.82:
+                r, g, b = sp["sheen"]
+                return rgb(r, g, b)
+            if deco == "flame":
+                t += 0.4 * (y / max(1, h - 1)) - 0.1
+        if f == "down":
+            t -= 0.15
+        return pick(wing, t, x, y)
+    pt("wing", "all", wing_fn)
+    pt("wingtip", "all", wing_fn)
+    pt("tailf", "all", wing_fn)
+
+    def leg_fn(f, x, y, w, h):
+        return pick(leg, 0.5 + (noise(x, y, 11) - 0.5) * 0.25 - (0.18 if f in ("south", "down") else 0.0) + (0.15 if f == "up" else 0), x, y)
+    for p in ("leg", "foot", "toe"):
+        pt(p, "all", leg_fn)
+    if sp.get("owl_legs") or sp["deco"] == "speckle" and sp.get("disc"):
+        pt("leg", "all", C.surface(down, 12, 0.75, 0.2))   # feathered legs
+
+    # ---- the face on the head's front
+    x0, y0, w, h = H.RECT[("head", "north")]
+    T = pt.T
+    skin = sp["skin"]
+    for yy in range(h):
+        for xx in range(w):
+            inside = 1 <= xx <= w - 2 and yy <= h - 2
+            if yy > h - 5 and (xx < 3 + (yy - (h - 5)) or xx > w - 4 - (yy - (h - 5))):
+                inside = False
+            if sp.get("disc"):                              # owl: a round, pale face disc
+                inside = C.ellipse(xx, yy, w / 2, h * 0.55, w * 0.46, h * 0.52) <= 1.0
+            if inside:
+                T[y0 + yy][x0 + xx] = pick(skin, 0.55 + (noise(xx, yy, 2) - 0.5) * 0.1 + (0.15 if yy > h * 0.7 else 0), xx, yy)
+            else:
+                T[y0 + yy][x0 + xx] = body("north", xx, yy, w, h)
+    e = sp["eye"]
+    a, b = 3.3 * e, 4.4 * e
+    ey = h * 0.50
+    cxs = (w * 0.28, w * 0.72)
+    for cx in cxs:
+        C.paint_eye(T, x0 + cx, y0 + ey, a, b, sp["iris"], rgb(40, 24, 24), glint=True)
+        C.blush(T, x0 + cx + (-1 if cx < w / 2 else 1), y0 + ey + b + 2.3, 2.6, 1.5, rgb(240, 130, 130))
+    my = int(h * 0.86)
+    for dx, dy in ((-2, 0), (-1, 1), (0, 1), (1, 1), (2, 0)):    # a tiny smile
+        T[y0 + my + dy][x0 + int(w / 2) + dx] = rgb(150, 70, 74)
+
+    # ---- eyelids: skin with a happy closed-eye curve (shown for a moment when she blinks)
+    lx0, ly0, lw, lh = H.RECT[("eyelids", "north")]
+    hw = H.size_of = H.PARTS["head"]["size"][0]
+    for yy in range(lh):
+        for xx in range(lw):
+            T[ly0 + yy][lx0 + xx] = pick(skin, 0.6, xx, yy)
+    elw = H.PARTS["eyelids"]["size"][0]
+    for cxm in (-0.22 * hw, 0.22 * hw):
+        ecx = (cxm + elw / 2) * D
+        for dx in range(-int(a), int(a) + 1):
+            dy = int(round(1.2 * (1 - (dx / max(1, a)) ** 2)))
+            T[ly0 + int(lh / 2) - dy][lx0 + int(ecx) + dx] = rgb(70, 36, 36)
+    for f in ("east", "west", "south", "up", "down"):
+        px0, py0, pw, ph = H.RECT[("eyelids", f)]
+        for yy in range(ph):
+            for xx in range(pw):
+                T[py0 + yy][px0 + xx] = pick(skin, 0.55, xx, yy)
+
+    # ---- glow mask for the phoenix: flames on the head, wings and tail glow
+    gmask = None
+    if glow is not None:
+        def hot(f, x, y, w, h):
+            return rgb(255, 190, 60) if noise(x, y, 77) > 0.35 else rgb(255, 120, 30)
+        for p in ("tuft", "tuft_tall", "tailf", "wingtip"):
+            glow(p, "all", hot)
+        gx, gy, gw, gh = H.RECT[("belly", "north")]
+        for yy in range(gh):
+            for xx in range(gw):
+                if noise(xx, yy, 5) > 0.5:
+                    glow.T[gy + yy][gx + xx] = rgb(255, 214, 110)
+        gmask = glow.T
+    return pt.T, gmask
+
+
+# ----------------------------------------------------------------------------- geometry
+def build(sp, name):
+    m = H.Model(name)
+    S = H.PARTS
+    sz = lambda p: S[p]["size"]
+    hw, hh, hd = sz("head")
+    bw, bh, bd = sz("body")
+    legw, legh, legd = sz("leg")
+    fw, fh, fd = sz("foot")
+    ww, wh, wd = sz("wing")
+    k = sp["k"]
+    y_body = fh + legh
+    y_neck = y_body + bh - 0.25
+    lx = bw * 0.26
+
+    m.bone("root", None, [0, 0, 0])
+    belly = [cube("belly", [-sz("belly")[0] / 2, y_body + 0.5 * k, -bd / 2 - sz("belly")[2] + 0.1]),
+             cube("bellyfluff", [-sz("bellyfluff")[0] / 2, y_body - 0.25, -bd / 2 - 0.35])]
+    m.bone("body", "root", [0, y_body, 0], [cube("body", [-bw / 2, y_body, -bd / 2])] + belly)
+
+    head = [cube("head", [-hw / 2, y_neck, -hd / 2]), cube("cap", [-hw / 2, y_neck + hh - sz("cap")[1], -hd / 2], inflate=0.25 * k)]
+    top = y_neck + hh
+    tw = sz("tuft")[0]
+    n = sp["tufts"]
+    spots = [(0, -1.0, 0), (-1.8, 0.4, -14), (1.8, 0.4, 14), (-0.9, 1.6, -6), (0.9, 1.6, 6)][:max(n, 0)]
+    for i, (x, z, rz) in enumerate(spots):
+        part = "tuft_tall" if (sp.get("glow") and i == 0) else "tuft"
+        head.append(cube(part, [x * k - tw / 2, top - 0.25, z * k - tw / 2], pivot=[x * k, top - 0.25, z * k], rotation=[0, 0, rz]))
+    if sp.get("ears"):
+        ew = sz("ear")[0]
+        for sx in (-1, 1):
+            head.append(cube("ear", [sx * hw * 0.34 - ew / 2, top - 0.25, -ew / 2], pivot=[sx * hw * 0.34, top - 0.25, 0], rotation=[0, 0, sx * 12]))
+    m.bone("head", "body", [0, y_neck, 0], head)
+    ey_c = y_neck + hh - (hh * 0.50)
+    m.bone("eyelids", "head", [0, ey_c, -hd / 2 + 0.2], [cube("eyelids", [-sz("eyelids")[0] / 2, ey_c - sz("eyelids")[1] / 2, -hd / 2 + 0.1])])
+
+    wy = y_body + bh * 0.88
+    m.bone("wing_r", "body", [-bw / 2, wy, 0.2], [cube("wing", [-bw / 2 - ww, wy - wh, -wd / 2 + 0.2])], mirror=True)
+    tw2, th2, td2 = sz("wingtip")
+    m.bone("wing_tip_r", "wing_r", [-bw / 2 - ww / 2, wy - wh, 0.2], [cube("wingtip", [-bw / 2 - ww / 2 - tw2 / 2, wy - wh - th2, -td2 / 2 + 0.2])], mirror=True)
+
+    tfw, tfh, tfd = sz("tailf")
+    tail = [cube("tail", [-sz("tail")[0] / 2, y_body + 0.5, bd / 2 - 0.25])]
+    for i, (x, rz) in enumerate(((-1.0, -16), (0, 0), (1.0, 16))):
+        tail.append(cube("tailf", [x * k - tfw / 2, y_body + 1.2 * k, bd / 2 + sz("tail")[2] - 0.6],
+                         pivot=[x * k, y_body + 1.2 * k + 0.5, bd / 2 + sz("tail")[2] - 0.5], rotation=[-18, 0, rz]))
+    m.bone("tail", "body", [0, y_body + 1.0, bd / 2], tail)
+
+    m.bone("leg_r", "root", [-lx, y_body, 0], [cube("leg", [-lx - legw / 2, fh, -legd / 2])], mirror=True)
+    toes = []
+    for dx in (-fw * 0.3, 0.0, fw * 0.3):
+        toes.append(cube("toe", [-lx + dx - sz("toe")[0] / 2, 0, -fd / 2 - sz("toe")[2] + 0.3]))
+    m.bone("foot_r", "leg_r", [-lx, fh, 0], [cube("foot", [-lx - fw / 2, 0, -fd / 2 + 0.25 * k])] + toes, mirror=True)
+    return m, y_neck + hh
+
+
+def animations(an):
+    breath = track((0, (0, 0, 0)), (1.5, (0, -0.15, 0)), (3, (0, 0, 0)))
+    an.add("idle", 3.0, True, merge({
+        "body": {"position": breath},
+        "head": {"rotation": track((0, (0, 0, 0)), (0.9, (-3, 8, 2)), (1.8, (2, -6, -2)), (3, (0, 0, 0)))},
+        "tail": {"rotation": track((0, (0, 0, 0)), (0.75, (0, 10, 0)), (1.5, (0, 0, 0)), (2.25, (0, -10, 0)), (3, (0, 0, 0)))},
+    }, H.blink(1.9), sym("wing", track((0, (0, 0, -9)), (1.5, (0, 0, -14)), (3, (0, 0, -9))))))
+    swing = track((0, (30, 0, 0)), (0.3, (-30, 0, 0)), (0.6, (30, 0, 0)))
+    swing_o = track((0, (-30, 0, 0)), (0.3, (30, 0, 0)), (0.6, (-30, 0, 0)))
+    an.add("walk", 0.6, True, merge({
+        "leg_r": {"rotation": swing}, "leg_l": {"rotation": swing_o},
+        "body": {"position": track((0, (0, 0, 0)), (0.15, (0, 0.25, 0)), (0.3, (0, 0, 0)), (0.45, (0, 0.25, 0)), (0.6, (0, 0, 0))),
+                 "rotation": track((0, (0, 0, 5)), (0.3, (0, 0, -5)), (0.6, (0, 0, 5)))},
+        "head": {"rotation": track((0, (0, 0, -5)), (0.3, (0, 0, 5)), (0.6, (0, 0, -5)))},
+        "tail": {"rotation": track((0, (0, 14, 0)), (0.3, (0, -14, 0)), (0.6, (0, 14, 0)))},
+    }, sym("wing", track((0, (0, 0, -14)), (0.3, (0, 0, -26)), (0.6, (0, 0, -14))))))
+    flap = track((0, (0, 0, -100)), (0.2, (0, 0, -25)), (0.4, (0, 0, -100)))
+    an.add("fly", 0.4, True, merge({
+        "body": {"position": track((0, (0, -0.4, 0)), (0.2, (0, 0.4, 0)), (0.4, (0, -0.4, 0))),
+                 "rotation": track((0, (22, 0, 0)), (0.2, (14, 0, 0)), (0.4, (22, 0, 0)))},
+        "head": {"rotation": hold(-20, 0, 0)},
+        "leg_r": {"rotation": hold(35, 0, 0)}, "leg_l": {"rotation": hold(35, 0, 0)},
+        "tail": {"rotation": track((0, (12, 0, 0)), (0.2, (-4, 0, 0)), (0.4, (12, 0, 0)))},
+    }, sym("wing", flap), sym("wing_tip", track((0, (0, 0, 14)), (0.2, (0, 0, -10)), (0.4, (0, 0, 14))))))
+
+
+def main():
+    entries = []
+    for species, sp in SPECIES.items():
+        name = species + "_hatchling"
+        C.declare(sizes(sp), sp["k"])
+        tex, glow = paint(sp, name)
+        model, height = build(sp, name)
+        geo, adoc = C.write_model(name, tex, model, animations, glow)
+        entries.append((geo, tex, adoc["animations"][f"animation.{name}.idle"], 0, height))
+        if "--preview" in sys.argv:
+            pass
+    if "--preview" in sys.argv:
+        C.lineup(sys.argv[sys.argv.index("--preview") + 1], entries, cols=4, cell=360, views=((-30, 12), (150, 10)))
+
+
+if __name__ == "__main__":
+    main()

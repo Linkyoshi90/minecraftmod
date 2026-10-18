@@ -1,0 +1,37 @@
+{
+  "variants": {
+    "species=bullywug": {
+      "model": "minecraft:block/frogspawn"
+    },
+    "species=bullfrog": {
+      "model": "minecraft:block/frogspawn"
+    },
+    "species=tree_frog": {
+      "model": "minecraft:block/frogspawn"
+    },
+    "species=poison_dart_frog": {
+      "model": "minecraft:block/frogspawn"
+    },
+    "species=glass_frog": {
+      "model": "minecraft:block/frogspawn"
+    },
+    "species=goliath_frog": {
+      "model": "minecraft:block/frogspawn"
+    },
+    "species=desert_rain_frog": {
+      "model": "minecraft:block/frogspawn"
+    },
+    "species=mucus_toad": {
+      "model": "minecraft:block/frogspawn"
+    },
+    "species=fire_bellied_toad": {
+      "model": "minecraft:block/frogspawn"
+    },
+    "species=cane_toad": {
+      "model": "minecraft:block/frogspawn"
+    },
+    "species=natterjack": {
+      "model": "minecraft:block/frogspawn"
+    }
+  }
+}
