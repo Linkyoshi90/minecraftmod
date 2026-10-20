@@ -4,6 +4,7 @@ import com.linkyoshi90.monstergirls.MonsterGirlsMod;
 import com.linkyoshi90.monstergirls.block.AnuranSpawnBlock;
 import com.linkyoshi90.monstergirls.block.GirlEggBlock;
 import com.linkyoshi90.monstergirls.block.HarpyEggBlock;
+import com.linkyoshi90.monstergirls.block.PaintedEggBlock;
 import com.linkyoshi90.monstergirls.block.RiflebirdNestBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -32,6 +33,11 @@ public final class ModBlocks {
     public static final DeferredBlock<GirlEggBlock> GIRL_EGG = BLOCKS.registerBlock("girl_egg", GirlEggBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.SAND).strength(0.5F).sound(SoundType.FROGSPAWN).noOcclusion()
                     .pushReaction(PushReaction.DESTROY).randomTicks());
+
+    /** A painted egg the Easter Bunny hid in the grass. */
+    public static final DeferredBlock<PaintedEggBlock> PAINTED_EGG = BLOCKS.registerBlock("painted_egg", PaintedEggBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.2F).sound(SoundType.DECORATED_POT).noOcclusion()
+                    .pushReaction(PushReaction.DESTROY));
 
     private ModBlocks() {}
 }

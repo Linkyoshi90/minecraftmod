@@ -32,6 +32,10 @@ import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.HopperBlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
@@ -115,6 +119,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0F);
         this.setPathfindingMalus(PathType.COCOA, -1.0F);
         this.setCanPickUpLoot(true);
+        this.eggTime = EGG_INTERVAL + this.random.nextInt(EGG_INTERVAL);
         this.goalSelector.addGoal(-1, new SitWhenOrderedGoal<>(this));
         this.goalSelector.addGoal(2, new BuildNestGoal(this));
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));
@@ -314,6 +319,9 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         if (this.father != null) tag.putUUID("Father", this.father);
         tag.putBoolean("OrderedToSit", this.orderedToSit);
         tag.putLong("NextGift", this.nextGiftTime);
+        if (this.roost != null) tag.putLong("Roost", this.roost.asLong());
+        tag.putInt("EggTime", this.eggTime);
+        tag.putInt("RoostDropTime", this.roostDropTime);
     }
 
     @Override
@@ -330,6 +338,9 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.affection.clear();
         CompoundTag affectionTag = tag.getCompound("Affection");
         for (String key : affectionTag.getAllKeys()) this.affection.put(UUID.fromString(key), affectionTag.getInt(key));
+        this.roost = tag.contains("Roost") ? BlockPos.of(tag.getLong("Roost")) : null;
+        if (tag.contains("EggTime")) this.eggTime = tag.getInt("EggTime");
+        if (tag.contains("RoostDropTime")) this.roostDropTime = tag.getInt("RoostDropTime");
     }
 
     // --- held item ----------------------------------------------------------------------------------------------
@@ -596,6 +607,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         if (this.level() instanceof ServerLevel server) {
             this.tickHeldItem(server);
             if (this.timedActionTicks > 0 && --this.timedActionTicks == 0) this.setAction(Action.NONE);
+            this.tickLaying(server);
         }
     }
 
@@ -621,12 +633,105 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
      */
     @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-        return !this.hasAnyAffection() && !this.isSettled() && !this.orderedToSit && !this.gestation.isCarrying();
+        return !this.hasAnyAffection() && !this.isSettled() && !this.orderedToSit && !this.gestation.isCarrying() && this.roost == null;
     }
 
     /** Whether she has made a home somewhere a player gave her (and so shouldn't despawn). */
     protected boolean isSettled() {
         return false;
+    }
+
+    // --- laying and roosting ------------------------------------------------------------------------------------
+
+    /** Like a hen: an unfertilised egg every five to ten minutes. */
+    public static final int EGG_INTERVAL = 6000;
+    /** A roosting sparrow or gull sheds a feather, a twig or a flint into her hopper every two and a half to five minutes. */
+    public static final int ROOST_DROP_INTERVAL = 3000;
+    /** How long a laid egg waits for her to get back to her roost before it is simply dropped. */
+    private static final int EGG_HOLD = 600;
+
+    @Nullable
+    private BlockPos roost;
+    private boolean roosting;
+    private int eggTime = EGG_INTERVAL;
+    private int roostDropTime = ROOST_DROP_INTERVAL;
+
+    /** Her unfertilised egg (empty: she does not lay any). */
+    protected ItemStack unfertilisedEgg() {
+        return ItemStack.EMPTY;
+    }
+
+    /** Whether she settles into the bowl of a hopper to roost (see {@link com.linkyoshi90.monstergirls.entity.ai.RoostInHopperGoal}). */
+    public boolean roostsInHoppers() {
+        return false;
+    }
+
+    /** What she sheds into her roost now and then (feathers and nesting bits). */
+    protected ItemStack roostDrop() {
+        return ItemStack.EMPTY;
+    }
+
+    /** The hopper she has claimed as her roost, or null. */
+    @Nullable
+    public BlockPos getRoost() {
+        return this.roost;
+    }
+
+    public void setRoost(@Nullable BlockPos roost) {
+        this.roost = roost == null ? null : roost.immutable();
+    }
+
+    /** Settled on top of her roost right now. */
+    public boolean isRoosting() {
+        return this.roosting;
+    }
+
+    public void setRoosting(boolean roosting) {
+        if (roosting && !this.roosting && this.getAction() == Action.NONE) this.setAction(Action.SITTING);
+        if (!roosting && this.roosting && this.getAction() == Action.SITTING && !this.isOrderedToSit()) this.setAction(Action.NONE);
+        this.roosting = roosting;
+    }
+
+    public void setEggTime(int ticks) {
+        this.eggTime = ticks;
+    }
+
+    public void setRoostDropTime(int ticks) {
+        this.roostDropTime = ticks;
+    }
+
+    /**
+     * The hen's clock: every five to ten minutes a grown harpy lays an unfertilised egg, into her hopper if she roosts in
+     * one (she waits a little to get back to it) or at her feet. A roosting sparrow or gull also sheds into her hopper.
+     */
+    private void tickLaying(ServerLevel level) {
+        if (this.isBaby()) return;
+        ItemStack egg = this.unfertilisedEgg();
+        if (!egg.isEmpty()) {
+            if (--this.eggTime <= 0) {
+                boolean waiting = this.roost != null && !this.roosting && this.eggTime > -EGG_HOLD;
+                if (!waiting) {
+                    this.deliver(level, egg);
+                    level.playSound(null, this.blockPosition(), SoundEvents.CHICKEN_EGG, SoundSource.NEUTRAL, 0.8F, 1.3F);
+                    this.eggTime = EGG_INTERVAL + this.random.nextInt(EGG_INTERVAL);
+                }
+            }
+        }
+        if (this.roosting && this.roost != null) {
+            if (--this.roostDropTime <= 0) {
+                this.roostDropTime = ROOST_DROP_INTERVAL + this.random.nextInt(ROOST_DROP_INTERVAL);
+                ItemStack drop = this.roostDrop();
+                if (!drop.isEmpty()) this.deliver(level, drop);
+            }
+        }
+    }
+
+    /** Into her hopper while she roosts on it, otherwise on the ground at her feet. */
+    private void deliver(ServerLevel level, ItemStack stack) {
+        if (this.roosting && this.roost != null && level.getBlockEntity(this.roost) instanceof HopperBlockEntity hopper) {
+            stack = HopperBlockEntity.addItem(null, hopper, stack, Direction.UP);
+        }
+        if (!stack.isEmpty()) this.spawnAtLocation(stack);
     }
 
     // --- animation ----------------------------------------------------------------------------------------------

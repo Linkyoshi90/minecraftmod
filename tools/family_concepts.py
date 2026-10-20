@@ -37,8 +37,8 @@ FAMILIES = [
                        "turns on patience, and on the moments when she decides to come to you.",
                   bullets=[("Patience is the bond action", "Sneak (crouch) or stand still near her and she approaches and headbutts you. Running at her sets you back."),
                            ("Petting has limits", "Each cat tolerates a few strokes, then swats (no damage at high friendship). Her tolerance grows with affection."),
-                           ("Hunters at heart", "They stalk small mobs, pounce, and leave presents for whoever they love."),
-                           ("Two tails", "A devoted cat who has lived with you for ten days becomes a true nekomata: a second tail, pale spirit-fire and one spare life.")]),
+                           ("Hunters at heart", "A wild cat sees a stranger as prey: she creeps up low and pounces, until you give her meat. Then the patience game begins."),
+                           ("Two tails", "One wild cat in ten is born a nekomata with a split tail; any devoted cat who has lived with you for ten days becomes one (second tail, pale spirit-fire, a spare life).")]),
         lifecycle=[
             ("1. Courtship", "Only at high friendship (25+). On a night you sleep in your own bed she may curl up in it beside you. One full night is enough: she is expecting by morning, and her belly rounds out over the day."),
             ("2. The den", "When her time comes she looks for a quiet, roofed, dark corner within 16 blocks of where she sleeps (under leaves, beneath stairs, in a barn) and makes a den there out of anything soft: wool, hay, leaves."),
@@ -366,7 +366,7 @@ FAMILIES = [
                  biomes=["forest", "dark_forest", "swamp", "birch_forest", "flower_forest"], temperament="Patient, artistic, house-proud",
                  ecology="Builds a new great wheel web between trees every night and eats it again in the morning. Sits head-down in the centre, waiting.",
                  interaction="Walk around her web, never through it. Compliment it with string.",
-                 signature=("Phantom net", "At night a bonded orb weaver spins a web across the nearest open space by your bed; phantoms, bats and vexes that touch it are stuck and fall. It fades at dawn."),
+                 signature=("Hunting web and phantom net", "Wild, she strings cobwebs round the spot she settled on and goes for whatever they catch (players included) until fed meat. Bonded, she spins a web at night by your bed instead; phantoms, bats and vexes are caught in it. It fades at dawn."),
                  danger="Low.",
                  variants=[("garden", "Garden cross (default)", "Brown with a white cross on the abdomen"), ("goldensilk", "Golden silk", "Gold and cream with banded legs"),
                            ("marbled", "Marbled", "Orange and cream marbling"), ("spiny", "Spiny", "White with red spines and black spots"),
@@ -383,9 +383,9 @@ FAMILIES = [
             dict(id="trapdoor_spider_arachne", name="Trapdoor Spider", group="Badlands, dirt banks & lush caves", tag="Ambush · homebody", height=1.6,
                  biomes=["badlands", "wooded_badlands", "lush_caves", "savanna_plateau"], temperament="A homebody, territorial, deeply loyal",
                  ecology="Lives in a burrow with a silk-hinged trapdoor (a real trapdoor block) and almost never leaves it. Feels footsteps through her silk tripwires and lunges out.",
-                 interaction="Do not stand on her door. Leave food beside it.",
-                 signature=("Door guard", "Bonded, she moves into a burrow near your home (she digs it and places a trapdoor) and ambushes hostile mobs that come close, dragging them under."),
-                 danger="Moderate: the ambush hurts.",
+                 interaction="Throw her meat before she bursts out at you; more meat after that.",
+                 signature=("Burrow ambush", "She digs a hole in soft ground, sinks into it out of sight and bursts out at anything that comes within three blocks. Wild, that includes you, until she is fed meat. Calm, only monsters."),
+                 danger="High while wild: the ambush hurts.",
                  variants=[("brown", "Brown (default)", "Glossy dark brown"), ("black", "Black", "Glossy black"), ("redleg", "Red-legged", "Black with red legs"),
                            ("sandy", "Sandy", "Sand brown"), ("moss", "Mossy", "Dark brown with moss-green flecks")]),
             dict(id="wolf_spider_arachne", name="Wolf Spider", group="Plains, taiga & riverbanks", tag="Hunter · motherly", height=1.7,
@@ -414,7 +414,7 @@ FAMILIES = [
                        "bond, and grooming is how herd animals say they trust each other, so the brush is this family's bond action.",
                   bullets=[("Grooming", "Use a brush on her: the strongest bond action of the family (+2, once every few minutes)."),
                            ("Herds", "Three to six with a lead mare; the herd follows her and flees together."),
-                           ("Carry & ride", "Devoted, she lets you ride (horse, reindeer, goat) or carries a chest for you (alpaca). The zebra never does."),
+                           ("Carry & ride", "At high friendship any centaur lets you ride on her back (a saddle makes her faster), wears a chestplate you give her, and gallops beside you, grinning, whenever she sees you sprint."),
                            ("Kick", "Never stand behind a stranger: centaurs kick back at whatever hurts them from behind.")]),
         lifecycle=[
             ("1. Courtship", "At high friendship she may lie down beside your bed for the night (a centaur does not fit in it; she folds her legs on the floor beside it). By morning she is expecting."),
@@ -425,7 +425,8 @@ FAMILIES = [
         systems=[
             ("Grazing", "They eat grass blocks bare (back to dirt, like sheep), hay bales and flowers, and take apples, carrots, golden carrots and sugar from a hand."),
             ("Herds", "A herd moves together behind its lead mare. Hurt one and the herd bolts, then the lead mare (and the zebras) turn and kick."),
-            ("Carry & ride", "At devoted (60) she lets you ride: put a saddle on her. The alpaca carries a chest (27 slots) instead, and the zebra never carries anyone."),
+            ("Carry & ride", "At high friendship (25) she lets you ride with an empty hand; a saddle makes her faster. A chestplate shows over her torso and adds twice its armour points to her health. Devoted, the alpaca also carries a chest (27 slots)."),
+            ("Running together", "Wild or tame, a centaur who sees a player sprint by gallops up beside them and keeps pace with a big smile until they slow down."),
             ("Rear kick", "A mob or player that hits her from behind gets a double-hoof kick: heavy knockback and damage."),
             ("Lead", "A lead on a fond centaur lets her walk with you; the herd follows its lead mare, so leading the lead mare moves the herd."),
             ("Weather", "Thunderstorms spook them; they bunch together and stamp."),
@@ -497,7 +498,7 @@ FAMILIES = [
         id="merfolk", volume="VIII", title="Merfolk", subtitle="the sea family",
         theme=dict(bg="#101820", panel="#18222c", panel2="#1e2a36", ink="#e6f0f4", muted="#a9bac4", accent="#6fcbd8",
                    line="#30404e", green="#e7c27a", grad="#14324a"),
-        lede="Five sea monster girls with tails instead of legs: orca, koi, shark, seal and axolotl. Half the world is water, and they rule it. "
+        lede="Six sea monster girls with tails instead of legs: orca, dolphin, koi, shark, seal and axolotl. Half the world is water, and they rule it. "
              "On land they are slow and need to stay wet, so they live where the two meet, and they bring the sea's treasures to those who earn it.",
         hero=dict(eyebrow="The central similarity", title="Half the world is water.",
                   text="Merfolk are fast, graceful and strong in the water and nearly helpless on land. They come ashore only to rest on "
@@ -519,25 +520,27 @@ FAMILIES = [
             ("Guides", "In a boat or swimming, a bonded merfolk swims ahead towards the nearest buried treasure, shipwreck or ocean ruin, like a vanilla dolphin."),
             ("Breath", "Swimming within 8 blocks of a bonded merfolk you have Water Breathing (Conduit Power at full devotion)."),
             ("Drowned", "Merfolk hate drowned and attack them on sight; guardians leave them alone."),
+            ("True to their kind", "Each behaves like the animal she comes from. Sharks attack anything that swims, players included, until fed fish or meat. Orcas and dolphins tease: they nudge swimmers and boats, bump squid and fish up out of the water and laugh, never hurting anyone."),
+            ("Seashells", "Now and then a mermaid sifts the sand or gravel of the sea floor and finds a pair of seashells, which she wears over her chest from then on (the shell bra of mermaid stories)."),
         ],
         friendship=dict(
             builds=["Fish (any), kelp for the koi and axolotl", "Shiny things from land: gold, copper, amethyst, emeralds (she trades back a sea treasure)",
                     "Music near the water (a jukebox on the shore)", "Petting while she rests on a rock"],
             costs=["Fishing her favourite spot empty", "Hitting her", "Dragging her (on a lead) away from water"],
             devoted="Conduit Power while you swim near her, and she brings you prismarine, nautilus shells, pearls (an occasional heart of the sea)."),
-        mating=dict(form="Live calf/pup (orca, shark, seal) or roe on plants (koi, axolotl)", young="Calf, pup, fry or larva", grows="5 days",
+        mating=dict(form="Live calf/pup (orca, dolphin, shark, seal) or roe on plants (koi, axolotl)", young="Calf, pup, fry or larva", grows="5 days",
                     where="In water; seal pups on a beach or ice", note="Young use the adult model at 40% scale."),
-        split=[("Habitat", ["Cold and deep ocean", "Rivers, lakes, ponds", "Warm and lukewarm ocean", "Cold ocean, beaches, ice", "Lush caves"]),
-               ("Young", ["Live calf", "Roe on plants", "Live pups", "Live pup on land", "Roe on moss"]),
-               ("On land", ["Helpless", "Helpless", "Helpless", "Comfortable", "Fine (amphibious)"]),
-               ("Signature", ["Pod hunts, protector", "Good luck, waterfall climbing", "Blood scent, escort", "Beach lounger, catches fish", "Regeneration, plays dead"]),
-               ("Danger", ["Moderate (in a pod)", "None", "Moderate if bleeding", "None", "None"])],
+        split=[("Habitat", ["Cold and deep ocean", "Rivers, lakes, ponds", "Warm and lukewarm ocean", "Cold ocean, beaches, ice", "Lush caves", "Warm and temperate ocean"]),
+               ("Young", ["Live calf", "Roe on plants", "Live pups", "Live pup on land", "Roe on moss", "Live calf"]),
+               ("On land", ["Helpless", "Helpless", "Helpless", "Comfortable", "Fine (amphibious)", "Helpless"]),
+               ("Signature", ["Pod hunts, teasing, protector", "Good luck, waterfall climbing", "Attacks anything, blood scent", "Beach lounger, catches fish", "Regeneration, plays dead", "Teasing, leaping, speed"]),
+               ("Danger", ["Moderate (in a pod)", "None", "High until fed", "None", "None", "None"])],
         species=[
             dict(id="orca_mermaid", name="Orca", group="Cold & deep ocean", tag="Clever · pod", height=2.3,
                  biomes=["cold_ocean", "deep_cold_ocean", "ocean", "deep_ocean", "frozen_ocean"], temperament="Clever, playful, fiercely protective",
                  ecology="Lives in pods led by the eldest female. Hunts together, breaches for fun, and knocks prey off ice floes with a wave.",
                  interaction="Swim with the pod, and never hurt one of them.",
-                 signature=("Pod & protector", "A bonded orca and her pod defend you from drowned and guardians. Near boats they breach and splash (a show)."),
+                 signature=("Pod, teasing & protector", "Orcas play with everything: they nudge swimmers, bump squid and fish up out of the water and laugh about it. A bonded orca and her pod defend you from drowned and guardians."),
                  danger="Moderate: a pod defends itself well.",
                  variants=[("resident", "Resident (default)", "Black and white, a grey saddle"), ("transient", "Transient", "Black and white with a darker, sharper saddle"),
                            ("typeb", "Antarctic B", "Grey and cream, a dark cape"), ("white", "White", "Snow white (rare)"),
@@ -553,9 +556,9 @@ FAMILIES = [
             dict(id="shark_mermaid", name="Shark", group="Warm & lukewarm ocean", tag="Fierce · loyal", height=2.2,
                  biomes=["warm_ocean", "lukewarm_ocean", "deep_lukewarm_ocean", "ocean"], temperament="Blunt, fierce, loyal once won",
                  ecology="Smells blood from far away and comes to investigate. She is not cruel, only hungry, and she likes people who feed her.",
-                 interaction="Never swim near her bleeding. Feed her fish from a boat.",
-                 signature=("Blood scent & escort", "She tracks any hurt mob within 32 blocks in the water. A bonded shark escorts you and attacks hostile mobs that hurt you; she brings shark teeth (bone-like presents) and fish."),
-                 danger="Moderate, high if you are bleeding.",
+                 interaction="Throw her fish or meat (from a boat) until she stops seeing you as prey.",
+                 signature=("Attacks anything", "A wild shark attacks anything that swims near her: fish, squid, drowned, swimmers. Fed fish or meat once, she leaves you alone; more food and she warms up to you. Even a bonded shark hunts every fish and monster in the water."),
+                 danger="High until fed.",
                  variants=[("reef", "Grey reef (default)", "Grey back, white belly, dark fin edges"), ("tiger", "Tiger", "Grey-brown with dark stripes"),
                            ("whale", "Whale shark", "Dark blue with white spots (gentle)"), ("mako", "Mako", "Metallic blue"), ("lemon", "Lemon", "Yellow-brown")]),
             dict(id="seal_mermaid", name="Seal", group="Cold ocean, beaches & ice", tag="Playful · lazy", height=1.7,
@@ -574,8 +577,17 @@ FAMILIES = [
                  danger="None.",
                  variants=[("lucy", "Leucistic pink (default)", "Pale pink with red gills"), ("wild", "Wild", "Speckled olive brown"),
                            ("gold", "Gold", "Golden yellow"), ("cyan", "Cyan", "Pale cyan"), ("blue", "Blue", "Deep blue (very rare, as in vanilla)")]),
+            dict(id="dolphin_mermaid", name="Dolphin", group="Warm & temperate ocean", tag="Playful · quick", height=2.0,
+                 biomes=["warm_ocean", "lukewarm_ocean", "deep_lukewarm_ocean", "ocean", "deep_ocean"], temperament="Playful, quick, a terrible tease",
+                 ecology="Lives in big chattering pods. Rides bow waves, leaps for the fun of it and teases anything that swims.",
+                 interaction="Swim with her, race her, toss her a fish.",
+                 signature=("Teasing & leaping", "She nudges swimmers and boats, steals a playful bump at squid and fish, then laughs and darts away. A bonded dolphin gives you Dolphin's Grace when she swims beside you."),
+                 danger="None.",
+                 variants=[("bottlenose", "Bottlenose (default)", "Blue-grey with a pale belly"), ("common", "Common", "Dark back, a cream and grey hourglass"),
+                           ("spinner", "Spinner", "Three-tone grey, slim"), ("rissos", "Risso's", "Pale grey, scarred white"), ("pink", "River pink", "Rosy pink (the Amazon river dolphin)")]),
         ],
         decisions=["The seal is the family's selkie: she is the only one at home on land.",
+                   "The dolphin joined in 2026-10-20 so the orcas have a teasing partner.",
                    "The axolotl's colours match the five vanilla axolotl colours, including the rare blue.",
                    "No hammerhead: its head would need its own model; the five sharks share one."],
         questions=["Should merfolk be carried in a water bucket while young?", "Should the dragon koi be able to fly (a slow levitation)?"],
@@ -604,7 +616,7 @@ FAMILIES = [
             ("Absorb", "She picks up and absorbs dropped items she likes (her species' favourites, and anything shiny). They float inside her body. A devoted slime opens as a 9-slot inventory for her player (sneak and use an empty hand)."),
             ("Diet colour", "Dyes shift her colour: each of her five colours has a dye. Her favourite food also heals her and builds affection."),
             ("Split & merge", "When she would die she splits in two at a quarter health each, and the halves merge back within a minute (once per day). The second time she dies for real."),
-            ("Bounce", "She takes no fall damage and bounces players and mobs that land on her."),
+            ("Bounce", "She takes no fall damage and bounces players and mobs that land on her. She adores anything bouncy herself: give her a slime block or a bed and she bounces on it, squealing."),
             ("Element", "Each species carries her element: verdant grows plants, magma cooks food, honey slows, frost freezes water under her, amethyst rings near ore."),
             ("Daylight", "Slimes rest in shade at noon (they warm up and go floppy) and are liveliest at dusk, at night and in rain."),
         ],
@@ -668,6 +680,13 @@ FAMILIES = [
 ]
 
 
+# the ten families added on 2026-10-20 (volumes X to XIX) live in their own modules
+import family_concepts_new as _NEW  # noqa: E402
+import family_concepts_new2  # noqa: E402,F401  (appends elves, undead, lizardfolk)
+import family_concepts_new3  # noqa: E402,F401  (appends dragons, devils, bugs, flora)
+FAMILIES.extend(_NEW.NEW_FAMILIES)
+
+
 def family(fid):
     return next(f for f in FAMILIES if f["id"] == fid)
 
@@ -679,3 +698,12 @@ def all_species():
 
 # what is in the game (2026-10-19), shown in each guide
 STATUS = {'nekomata': (['Patience bond (sneak or stand still: she comes and headbutts, +1 a minute); she runs from sprinting strangers', 'Petting tolerance and swats', 'Warm-spot naps by day', 'Hunting rabbits, silverfish, and chickens while wild', 'Presents by species', 'Creepers avoid her', 'Bed perk: Regeneration (snow leopard: also Resistance)', 'True nekomata after ten devoted days: second tail, spirit fire, a spare life every five days', 'Litter of 2-3 kittens in the darkest roofed nook nearby; kittens follow their mother', 'Serval ear scan, tiger roar and fishing presents, lioness pride, snow leopard warm tail and no fall damage, cheetah bursts and pace-setting, lynx snowshoes and hiding'], ['Knocking items off ledges', 'Phantoms avoiding her player', 'Carrying a straying kitten back by the scruff', 'Building a den out of wool or hay', 'Tiger near-invisibility in tall grass']), 'kitsune': (['Tails by her strongest bond (1/2/3, nine as a kyubi)', 'The stash game (steals a plain item, buries it under foxfire; digging it up gives +3)', 'Foxfire: real light at night from two tails', 'Pounce on rabbits and wild-fox chicken raids', 'Decoys when badly hurt (two for the red fox)', 'Arctic fox: no freezing, walks on powder snow', 'Fennec digs finds out of sand', 'Corsac wayfinder at night', 'Gray fox climbs walls and trees', 'Litter of 3-4 kits'], ['Digging an earth (den) for the kits', "The arctic fox's dive into snow", 'The gray fox dropping onto prey from trees']), 'lamia': (['Warmth: sun and heat warm her, cold slows her, brumation in the cold', 'Basking', 'Coils (Slowness IV on a hit)', 'Tongue sense, hypnotic gaze', 'Swallowing eggs whole (a round middle)', 'Shed Skin every 3-5 days', 'Campfire bond up to fond', 'Devoted damage share', 'Bed perk: Resistance (python: also Regeneration)', 'Python and cobra lay leathery clutches (cobra heaps leaves; a brooding python doubles hatching speed); the others bear 2-4 live young', 'Cobra hood, spit and calm under music; sea snake breath and reef guide; rattlesnake warnings and heat sight; boa double bonding and climbing'], ['The boa dropping onto prey from branches', 'A Shed Skin cloak']), 'arachne': (['Silk regrowth and brushing', 'Wall climbing (not the trapdoor spider)', 'Venom', 'Spider truce for devoted players', 'Silk-wrapped presents', "Orb weaver's phantom net of temporary cobwebs at night", "Tarantula's itchy hairs, double petting and moulting", 'Trapdoor spider hides unseen and ambushes monsters', "Jumping spider's leap, safety line and love of shiny things", 'Egg sac on the ground; the wolf spider carries her spiderlings', 'Bed perk: Night Vision'], ['Wild webbed lairs', 'Vibration sense', "The trapdoor spider's real burrow and trapdoor block", 'Wolf spider eyeshine']), 'centaur': (['Brush grooming (+2)', 'Grazing', 'Herds following a lead mare', 'Rear kick', 'Riding once devoted and saddled (horse fastest; never the zebra or alpaca)', 'Alpaca: chest pack, fleece shearing, spit', 'Zebra alarm bark and dazzle', 'Reindeer snow trekking and presents', 'Goat climbing, ramming, no fall damage', 'A single foal'], ['Thunderstorms spooking the herd', 'Stamina when ridden']), 'merfolk': (['Fast swimming, slow crawling on land, drying out', "Song at dusk (Dolphin's Grace)", 'Water Breathing / Conduit Power for her swimmer', 'Guiding to treasure', 'Hunting drowned (orca also guardians)', 'Treasure trade for shiny things', 'Koi Luck and dragon koi true form', 'Shark blood scent', 'Seal at home on beaches', 'Axolotl plays dead and grants Regeneration after kills', 'Roe for koi and axolotl, live young for the others'], ['Orca breaching shows', 'The seal balancing a snowball']), 'slime': (['Absorbing items; devoted 9-slot living storage', 'Dye colours', 'Split and merge instead of death (once a day)', 'No fall damage', 'A hit halves her trust', 'Verdant garden growth, magma cooking and glow, honey stickiness and bottles, frost freezing and fire rescue, amethyst ore resonance', 'Budding into 2-3 slimelings'], ['Bees sparing her player', 'Resting in shade at noon', 'Bouncing players that land on her'])}
+
+# 2026-10-20: the ten new families, and what the behaviour pass changed for the older ones
+import family_concepts_status as _ST  # noqa: E402
+STATUS.update(_ST.NEW_STATUS)
+for _fid, (_add, _done, _drop) in _ST.CHANGES.items():
+    _built, _todo = STATUS[_fid]
+    _built = [b for b in _built if not any(d in b for d in _drop)] + _add
+    _todo = [t for t in _todo if not any(d in t for d in _done)]
+    STATUS[_fid] = (_built, _todo)

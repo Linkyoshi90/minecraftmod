@@ -40,6 +40,8 @@ BUILDS = {
     "athletic": dict(chest=(5.5, 3, 3.25), midriff=(3.75, 2.75, 2.5), hips=(5, 1.25, 3.5), bust=(2, 1.5, .75), arm=1.75, thigh=2.5),
     "curvy": dict(chest=(5, 3, 3.25), midriff=(3.25, 2.75, 2.5), hips=(5.75, 1.25, 4), bust=(2.25, 1.75, 1), arm=1.5, thigh=2.75),
     "strong": dict(chest=(5.75, 3, 3.5), midriff=(4, 2.75, 2.75), hips=(5.25, 1.25, 3.75), bust=(2, 1.5, .75), arm=2.0, thigh=2.75),
+    # the minotaur bulls (the one family with men): broad flat chest, thick arms, no bust (two flat pectoral plates)
+    "male": dict(chest=(6.5, 3.25, 3.5), midriff=(4.75, 2.75, 3), hips=(5.25, 1.25, 3.5), bust=(2.75, 1.5, .25), arm=2.25, thigh=3.0),
 }
 
 
@@ -327,10 +329,10 @@ def darker(rmp, f=0.72):
 
 
 def paint_build(pt, pal, build):
-    """muscle definition on the bare midriff of the athletic and strong builds"""
-    if build not in ("athletic", "strong"):
+    """muscle definition on the bare midriff of the athletic, strong and male builds"""
+    if build not in ("athletic", "strong", "male"):
         return
-    deep = build == "strong"
+    deep = build in ("strong", "male")
 
     def abs_(f, x, y, w, h):
         c = (w - 1) / 2

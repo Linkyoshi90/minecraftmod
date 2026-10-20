@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_bee_bug",
+  "spawners": {
+    "type": "monstergirls:bee_bug",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 4
+  }
+}

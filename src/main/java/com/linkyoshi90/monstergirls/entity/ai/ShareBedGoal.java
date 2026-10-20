@@ -71,7 +71,7 @@ public class ShareBedGoal<T extends PathfinderMob & Bonded> extends Goal {
         if (night != this.decidedNight || !player.getUUID().equals(this.decidedFor)) {
             this.decidedNight = night;
             this.decidedFor = player.getUUID();
-            this.decidedYes = this.mob.getRandom().nextFloat() < Bonded.bedChance(this.mob.getAffection(player));
+            this.decidedYes = this.mob.getRandom().nextFloat() < this.mob.bedChanceFor(player);
         }
         return this.decidedYes;
     }

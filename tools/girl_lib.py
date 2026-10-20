@@ -133,6 +133,13 @@ EAR_KINDS = {
     "horse": [("ear_a", 1.5, 3, .75), ("ear_b", .75, 1, .75)],
     "fin": [("ear_a", .25, 3, 3.5)],
     "gill": [("ear_a", .75, 3.5, .75)],
+    # added 2026-10-20 for the new families
+    "rabbit": [("ear_a", 2, 6.5, .75), ("ear_b", 1.25, 1.5, .75)],
+    "lop": [("ear_a", 2.25, 6, .75), ("ear_b", 1.5, 1.25, .75)],
+    "cow": [("ear_a", 2.75, 1.5, 1), ("ear_b", 1, 1, .75)],
+    "elf": [("ear_a", .75, 1.5, 3.5), ("ear_b", .5, .75, 1.5)],
+    "antenna": [("ear_a", .5, 5, .5), ("ear_b", 1, 1, 1)],
+    "plume": [("ear_a", .5, 5.5, .5), ("ear_t", .25, 4, 2.5)],
 }
 
 
@@ -307,6 +314,42 @@ def add_ears(r, kind, hy, z):
         for i, (yy, ang) in enumerate(((5.6, 35), (4.0, 55), (2.4, 75))):
             cs.append(cube("ear_a", [-6.45, hy + yy - 3, -2.6 + z + i * 0.2], pivot=[-6.2, hy + yy, -2.5 + z], rotation=[-15, 0, ang]))
         r.add("ear_r", "head", [-6.2, hy + 5, z], cs, mirror=True)
+    elif kind == "rabbit":                           # tall and upright, leaning out a little
+        aw, ah, ad = S("ear_a")
+        bw, bh, bd = S("ear_b")
+        x = -2.2
+        piv = [x, top - 0.5, -0.4 + z]
+        cs = [("ear_a", [x - aw / 2, top - 0.5, -0.8 + z]), ("ear_b", [x - bw / 2, top - 0.5 + ah, -0.8 + z])]
+        r.add("ear_r", "head", piv, [rot_cube(c_p, c_o, piv, -6, 0, 12) for c_p, c_o in cs], mirror=True)
+    elif kind == "lop":                              # floppy ears hanging down beside the head
+        aw, ah, ad = S("ear_a")
+        bw, bh, bd = S("ear_b")
+        x = -3.6
+        piv = [x, top - 1.0, z]
+        cs = [("ear_a", [x - aw / 2, top - 1.0, -0.4 + z]), ("ear_b", [x - bw / 2, top - 1.0 + ah, -0.4 + z])]
+        r.add("ear_r", "head", piv, [rot_cube(c_p, c_o, piv, 8, 0, 160) for c_p, c_o in cs], mirror=True)
+    elif kind == "cow":                              # sideways, sticking out below the horns
+        aw, ah, ad = S("ear_a")
+        piv = [-4.6, hy + 6.2, z]
+        cs = [cube("ear_a", [-4.6 - aw, hy + 5.6, -0.5 + z], pivot=piv, rotation=[0, 0, -18]),
+              cube("ear_b", [-4.6 - aw + 0.3, hy + 5.85, -0.6 + z], pivot=piv, rotation=[0, 0, -18])]
+        r.add("ear_r", "head", piv, cs, mirror=True)
+    elif kind == "elf":                              # long and pointed, sweeping back and up from the side of the head
+        aw, ah, ad = S("ear_a")
+        piv = [-4.3, hy + 3.4, z + 0.2]
+        cs = [cube("ear_a", [-4.6, hy + 2.6, z - 0.4], pivot=piv, rotation=[-28, -18, 0]),
+              cube("ear_b", [-4.5, hy + 2.85, z + 2.9], pivot=piv, rotation=[-28, -18, 0])]
+        r.add("ear_r", "head", piv, cs, mirror=True)
+    elif kind in ("antenna", "plume"):              # an insect's antennae from the forehead (plume: a moth's feathery ones)
+        aw, ah, ad = S("ear_a")
+        piv = [-1.4, top - 0.6, -2.6 + z]
+        cs = [cube("ear_a", [-1.4 - aw / 2, top - 0.6, -2.6 - ad / 2 + z], pivot=piv, rotation=[-24, 0, 22])]
+        if kind == "antenna":
+            cs.append(cube("ear_b", [-1.4 - 0.5, top - 0.6 + ah - 0.25, -2.6 - 0.5 + z], pivot=piv, rotation=[-24, 0, 22]))
+        else:
+            tw, th, td = S("ear_t")
+            cs.append(cube("ear_t", [-1.4 - tw / 2, top - 0.1, -2.6 - td / 2 + z], pivot=piv, rotation=[-24, 0, 22]))
+        r.add("ear_r", "head", piv, cs, mirror=True)
 
 
 # ----------------------------------------------------------------------------- lower bodies
@@ -807,6 +850,19 @@ def biped_anims(an, tail_bones, extra_tail_bones=(), pounce=True, fox=False):
         "hair_back": {"rotation": hold(-8, 0, 0)},
     }, sym("ear", hold(-30, 0, 0)), sym("arm", hold(-50, 0, 18)), sym("forearm", hold(-40, 0, 0)), sym("hand", hold(-30, 0, 0)),
         {n: {"rotation": hold(40 if i == 0 else 10, 0, 0)} for i, n in enumerate(tail_bones)}))
+    # stalk: belly low, slow deliberate steps, the tail held straight out behind
+    st = Tk((0, (-6, 0, 0)), (0.9, (-40, 0, 0)), (1.8, (-6, 0, 0)))
+    st_o = Tk((0, (-40, 0, 0)), (0.9, (-6, 0, 0)), (1.8, (-40, 0, 0)))
+    an.add("stalk", 1.8, True, merge({
+        "body": {"rotation": hold(28, 0, 0), "position": hold(0, -3.2, 0)}, "head": {"rotation": hold(-26, 0, 0)},
+        "leg_r": {"position": hold(0, -3.2, 0), "rotation": st}, "leg_l": {"position": hold(0, -3.2, 0), "rotation": st_o},
+        "shin_r": {"rotation": hold(70, 0, 0)}, "shin_l": {"rotation": hold(70, 0, 0)},
+        "foot_r": {"rotation": hold(-30, 0, 0)}, "foot_l": {"rotation": hold(-30, 0, 0)},
+        "arm_r": {"rotation": Tk((0, (-50, 0, 0)), (0.9, (-20, 0, 0)), (1.8, (-50, 0, 0)))},
+        "arm_l": {"rotation": Tk((0, (-20, 0, 0)), (0.9, (-50, 0, 0)), (1.8, (-20, 0, 0)))},
+    }, sym("ear", hold(-10, 0, 0)), sym("forearm", hold(-30, 0, 0)),
+        {n: {"rotation": hold(-85 if i == 0 else 4, 0, 0)} for i, n in enumerate(tail_bones)} if not fox else
+        {n: {"rotation": hold(-35, 0, 0)} for n in tail_bones}))
     if fox:
         an.add("dig", 0.8, True, merge({
             "body": {"rotation": hold(55, 0, 0), "position": hold(0, -2, 0)},
@@ -892,6 +948,11 @@ def spider_anims(an):
                                      "head": {"rotation": hold(14, 0, 0)}},
                                     sym("arm", Tk((0, (-60, 0, 10)), (0.5, (-70, 0, 0)), (1, (-60, 0, 10)), (1.5, (-70, 0, 0)), (2, (-60, 0, 10)))),
                                     sym("forearm", hold(-40, 0, 0))))
+    # dig: front legs scraping at the ground, body tipped forward
+    an.add("dig", 0.8, True, merge({"thorax": {"rotation": hold(12, 0, 0), "position": hold(0, -1.5, 0)}, "body": {"rotation": hold(30, 0, 0), "position": hold(0, -1.5, 0)},
+                                    "leg1_r": {"rotation": Tk((0, (0, -20, -10)), (0.4, (0, -50, 20)), (0.8, (0, -20, -10)))},
+                                    "leg1_l": {"rotation": Tk((0, (0, 50, -20)), (0.4, (0, 20, 10)), (0.8, (0, 50, -20)))}},
+                                   sym("arm", Tk((0, (-70, 0, 0)), (0.4, (-30, 0, 0)), (0.8, (-70, 0, 0))))))
     an.add("rear", 1.5, True, merge({"thorax": {"rotation": hold(-22, 0, 0)}, "mouth": {"position": hold(*OUT_)},
                                      "leg1_r": {"rotation": hold(0, -20, -45)}, "leg1_l": {"rotation": hold(0, 20, 45)},
                                      "leg2_r": {"rotation": hold(0, -10, -30)}, "leg2_l": {"rotation": hold(0, 10, 30)}},
@@ -971,6 +1032,15 @@ def fish_anims(an):
     an.add("sing", 3.0, True, merge(upper_idle(), {"mouth": {"position": Tk(*notes)}, "eyelids": {"position": hold(*OUT_)},
                                                    "head": {"rotation": Tk((0, (-14, 0, -4)), (1.5, (-12, 0, 4)), (3, (-14, 0, -4)))}},
                                     sym("arm", Tk((0, (-22, 0, 8)), (1.5, (-26, 0, 10)), (3, (-22, 0, 8)))), sym("forearm", hold(-80, 0, 0))))
+    # dig: bent over the sea floor, sifting sand for shells
+    an.add("dig", 1.0, True, merge({"body": {"rotation": hold(60, 0, 0), "position": hold(0, -3, 0)}, "head": {"rotation": hold(-30, 0, 0)},
+                                    "arm_r": {"rotation": Tk((0, (-90, 0, 0)), (0.25, (-40, 0, 10)), (0.5, (-90, 0, 0)), (1, (-90, 0, 0)))},
+                                    "arm_l": {"rotation": Tk((0, (-90, 0, 0)), (0.5, (-90, 0, 0)), (0.75, (-40, 0, -10)), (1, (-90, 0, 0)))}},
+                                   wave(fins[1:], 1.0, [3, 4, 5, 6], axis=1, phase=0.6)))
+    # laugh: a playful roll and a grin (the orcas and dolphins teasing)
+    an.add("laugh", 1.2, True, merge({"body": {"rotation": Tk((0, (0, 0, -10)), (0.6, (0, 0, 10)), (1.2, (0, 0, -10)))},
+                                      "head": {"rotation": hold(-14, 0, 0)}, "eyelids": {"position": hold(*OUT_)}, "mouth": {"position": hold(*OUT_)}},
+                                     sym("arm", hold(-30, 0, 20)), sym("forearm", hold(-90, 0, 0)), wave(fins[1:], 0.6, [10, 14, 18, 22], axis=0, phase=0.9)))
 
 
 def slime_anims(an):
@@ -991,6 +1061,12 @@ def slime_anims(an):
                                        sym("arm", Tk((0, (0, 0, 0)), (0.3, (-70, 0, 20)), (0.8, (-20, 0, 0)), (1.2, (0, 0, 0))))))
     an.add("split", 1.0, False, {"body": {"position": Tk((0, (0, 0, 0)), (0.5, (0, -3, 0)), (1, (0, -6, 0)))},
                                  "gown": {"position": Tk((0, (0, 0, 0)), (0.5, (0, -2, 0)), (1, (0, -4, 0)))}})
+    # bounce: squash on landing, stretch on the way up, arms thrown up in delight
+    sq = Tk((0, (1.25, 0.7, 1.25)), (0.15, (0.9, 1.2, 0.9)), (0.45, (1.0, 1.05, 1.0)), (0.6, (1.25, 0.7, 1.25)))
+    an.add("bounce", 0.6, True, merge({"gown": {"scale": sq, "position": Tk((0, (0, -1, 0)), (0.15, (0, 0.5, 0)), (0.6, (0, -1, 0)))},
+                                       "body": {"position": Tk((0, (0, -2.5, 0)), (0.15, (0, 1.2, 0)), (0.45, (0, 0.4, 0)), (0.6, (0, -2.5, 0)))},
+                                       "eyelids": {"position": hold(*OUT_)}, "mouth": {"position": hold(*OUT_)}},
+                                      sym("arm", Tk((0, (-40, 0, 30)), (0.15, (-160, 0, 20)), (0.6, (-40, 0, 30))))))
 
 
 # ----------------------------------------------------------------------------- writing
@@ -1022,7 +1098,7 @@ def model_height(geo):
     """the standing height the game scales by (gen_girl_data.model_height skips the same bones)"""
     top = 0.0
     for b in geo["minecraft:geometry"][0]["bones"]:
-        if b["name"].startswith(("tail2", "antlers", "horns", "crystals", "sprout", "ear_", "hair")):
+        if b["name"].startswith(("tail2", "antlers", "horns", "crystals", "sprout", "ear_", "hair", "wing", "halo", "disguise")):
             continue
         for c in b.get("cubes", []):
             top = max(top, c["origin"][1] + c["size"][1])

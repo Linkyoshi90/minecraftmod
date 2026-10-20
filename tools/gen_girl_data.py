@@ -18,15 +18,13 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import family_concepts as C  # noqa: E402
 import harpy_lib as H  # noqa: E402
-import gen_nekomata, gen_kitsune, gen_lamia, gen_arachne, gen_centaur, gen_merfolk, gen_slime  # noqa: E402,E401
+import importlib  # noqa: E402
 
 REPO = H.REPO
 RES = os.path.join(REPO, "src", "main", "resources")
 ASSETS = os.path.join(RES, "assets", "monstergirls")
 DATA = os.path.join(RES, "data", "monstergirls")
 JAVA = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "girl")
-GEN = {"nekomata": gen_nekomata, "kitsune": gen_kitsune, "lamia": gen_lamia, "arachne": gen_arachne, "centaur": gen_centaur,
-       "merfolk": gen_merfolk, "slime": gen_slime}
 
 # family -> (Java enum, hitbox width, spawn category, group size, weight)
 FAMILY = {
@@ -37,10 +35,44 @@ FAMILY = {
     "centaur": ("CENTAUR", 1.1, "creature", (2, 4), 6),
     "merfolk": ("MERFOLK", 0.8, "water_creature", (1, 2), 4),
     "slime": ("SLIME", 0.8, "creature", (1, 2), 5),
+    # added 2026-10-20
+    "jackalope": ("JACKALOPE", 0.6, "creature", (1, 2), 6),
+    "minotaur": ("MINOTAUR", 0.8, "creature", (2, 4), 6),
+    "mollusk": ("MOLLUSK", 0.7, "creature", (1, 1), 5),
+    "elf": ("ELF", 0.6, "creature", (1, 3), 5),
+    "undead": ("UNDEAD", 0.6, "monster", (1, 1), 6),
+    "lizardfolk": ("LIZARDFOLK", 0.7, "creature", (1, 2), 6),
+    "dragon": ("DRAGON", 0.9, "creature", (1, 1), 3),
+    "devil": ("DEVIL", 0.6, "monster", (1, 1), 5),
+    "bug": ("BUG", 0.6, "creature", (1, 2), 6),
+    "flora": ("FLORA", 0.7, "creature", (1, 1), 5),
 }
-GROUP = {"lioness_nekomata": (3, 5), "orca_mermaid": (2, 3), "fennec_kitsune": (2, 3), "corsac_kitsune": (2, 3)}
+GROUP = {"lioness_nekomata": (3, 5), "orca_mermaid": (2, 3), "fennec_kitsune": (2, 3), "corsac_kitsune": (2, 3), "dolphin_mermaid": (2, 3),
+         "al_miraj_jackalope": (3, 5), "bison_minotaur": (3, 6), "high_elf": (2, 4), "bee_bug": (2, 4)}
 CATEGORY = {"axolotl_mermaid": "underground_water_creature", "amethyst_slime": "monster", "magma_slime": "monster",
-            "seal_mermaid": "creature"}
+            "seal_mermaid": "creature", "kraken_mollusk": "water_creature", "ammonite_mollusk": "water_creature",
+            "night_elf": "monster", "blood_elf": "monster", "salamander_lizardfolk": "monster", "turtle_lizardfolk": "creature",
+            "will_o_wisp_undead": "monster", "mosquito_bug": "monster", "greater_devil": "monster", "succubus_devil": "monster",
+            "jack_o_lantern_devil": "monster", "jiang_shi_devil": "monster", "lesser_devil": "monster"}
+# hitbox widths that differ from the family's
+WIDTH = {"kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alraune_flora": 1.2, "frankenstein_undead": 0.8,
+         "gryphon_dragon": 1.3, "long_dragon": 1.0, "jormungandr_dragon": 1.2, "wyvern_dragon": 1.2, "wyrm_dragon": 1.3,
+         "fairy_bug": 0.4, "scorpion_bug": 1.2, "moth_larva_bug": 0.6, "papillon_larva_bug": 0.6, "living_doll_undead": 0.4,
+         "kannae_dragon": 0.5, "lesser_devil": 0.5, "mandragora_flora": 0.5}
+# the name shown in game: the species name plus the family's word, unless NAME says otherwise
+SUFFIX = {"nekomata": " Nekomata", "kitsune": " Kitsune", "lamia": " Lamia", "arachne": " Arachne", "centaur": " Centaur", "merfolk": " Mermaid",
+          "slime": "", "jackalope": "", "minotaur": " Minotaur", "mollusk": "", "elf": "", "undead": "", "lizardfolk": "", "dragon": "",
+          "devil": "", "bug": "", "flora": ""}
+NAME = {"jack_jackalope": "Jack Jackalope", "kraken_mollusk": "Kraken", "octopus_mollusk": "Octopus Girl", "snail_mollusk": "Snail Girl",
+        "long_dragon": "Long Dragon", "zombie_undead": "Zombie Girl", "phantom_undead": "Phantom Girl", "cactus_flora": "Cactus Girl"}
+
+
+def gen_module(fid):
+    """the family's model script module, or None while it has none yet"""
+    try:
+        return importlib.import_module("gen_" + fid)
+    except ModuleNotFoundError:
+        return None
 
 
 def dump(path, data):
@@ -59,7 +91,7 @@ def model_height(sp):
     geo = json.load(open(os.path.join(ASSETS, "geo", "entity", sp + ".geo.json")))
     top = 0.0
     for b in geo["minecraft:geometry"][0]["bones"]:
-        if b["name"].startswith(("tail2", "antlers", "horns", "crystals", "sprout", "ear_", "hair")):
+        if b["name"].startswith(("tail2", "antlers", "horns", "crystals", "sprout", "ear_", "hair", "wing", "halo", "disguise")):
             continue
         for c in b.get("cubes", []):
             top = max(top, c["origin"][1] + c["size"][1])
@@ -73,7 +105,9 @@ def main():
     for fam, s in C.all_species():
         fid = fam["id"]
         sp = s["id"]
-        gen = GEN[fid]
+        gen = gen_module(fid)
+        if gen is None or sp not in gen.SPECIES or not os.path.exists(os.path.join(ASSETS, "geo", "entity", sp + ".geo.json")):
+            continue                                    # not modelled yet: not in the game yet
         gd = gen.SPECIES[sp]
         keys = [k for k, _, _ in s["variants"]]
         assert keys[1:] == list(gd["variants"]), (sp, keys, list(gd["variants"]))
@@ -81,18 +115,23 @@ def main():
         c1 = pal.get("FUR") or pal.get("HAIR")
         c2 = pal.get("HAIR") if pal.get("HAIR") != c1 else pal.get("MARK", "#ffffff")
         enum, width, cat, grp, weight = FAMILY[fid]
+        width = WIDTH.get(sp, width)
         mh = model_height(sp)
         rows.append((sp, enum, s["height"], round(mh, 2), width, hexint(c1), hexint(c2), keys, CATEGORY.get(sp, cat)))
-        # spawns
-        dump(os.path.join(DATA, "tags", "worldgen", "biome", f"spawns_{sp}.json"), {"values": ["minecraft:" + b for b in s["biomes"]]})
-        lo, hi = GROUP.get(sp, grp)
-        dump(os.path.join(DATA, "neoforge", "biome_modifier", f"{sp}_spawns.json"), {
-            "type": "neoforge:add_spawns", "biomes": f"#monstergirls:spawns_{sp}",
-            "spawners": {"type": f"monstergirls:{sp}", "weight": weight, "minCount": lo, "maxCount": hi}})
+        # spawns (species without biomes only come by other means: the phantom, the caterpillars, the fairy queen)
+        tag_path = os.path.join(DATA, "tags", "worldgen", "biome", f"spawns_{sp}.json")
+        mod_path = os.path.join(DATA, "neoforge", "biome_modifier", f"{sp}_spawns.json")
+        if s["biomes"]:
+            dump(tag_path, {"values": ["minecraft:" + b for b in s["biomes"]]})
+            lo, hi = GROUP.get(sp, grp)
+            dump(mod_path, {"type": "neoforge:add_spawns", "biomes": f"#monstergirls:spawns_{sp}",
+                            "spawners": {"type": f"monstergirls:{sp}", "weight": weight, "minCount": lo, "maxCount": hi}})
+        else:
+            for stale in (tag_path, mod_path):
+                if os.path.exists(stale):
+                    os.remove(stale)
         dump(os.path.join(ASSETS, "models", "item", f"{sp}_spawn_egg.json"), {"parent": "minecraft:item/template_spawn_egg"})
-        lang[f"entity.monstergirls.{sp}"] = s["name"] + ("" if fid in ("slime",) else {"nekomata": " Nekomata", "kitsune": " Kitsune",
-                                                                                     "lamia": " Lamia", "arachne": " Arachne",
-                                                                                     "centaur": " Centaur", "merfolk": " Mermaid"}[fid])
+        lang[f"entity.monstergirls.{sp}"] = NAME.get(sp, s["name"] + SUFFIX[fid])
         lang[f"item.monstergirls.{sp}_spawn_egg"] = lang[f"entity.monstergirls.{sp}"] + " Spawn Egg"
         if sp in ("snow_leopard_nekomata", "lynx_nekomata", "arctic_kitsune", "reindeer_centaur"):
             snow_walkers.append("monstergirls:" + sp)
@@ -117,7 +156,7 @@ import java.util.List;
 public enum GirlSpecies {
 %s;
 
-    public enum Family { NEKOMATA, KITSUNE, LAMIA, ARACHNE, CENTAUR, MERFOLK, SLIME }
+    public enum Family { %s }
 
     private final String id;
     private final Family family;
@@ -186,7 +225,7 @@ public enum GirlSpecies {
         return null;
     }
 }
-''' % ",\n".join(lines)
+''' % (",\n".join(lines), ", ".join(dict.fromkeys(r[1] for r in rows)))
     os.makedirs(JAVA, exist_ok=True)
     with open(os.path.join(JAVA, "GirlSpecies.java"), "w", encoding="utf-8", newline="\n") as fh:
         fh.write(java)

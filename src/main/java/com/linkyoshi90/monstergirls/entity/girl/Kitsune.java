@@ -97,12 +97,19 @@ public class Kitsune extends AbstractMonsterGirl {
 
     private int tailsFor(int affection) {
         if (this.isTrueForm()) return 9;
-        return affection >= 60 ? 3 : affection >= BED_AFFECTION ? 2 : 1;
+        return Math.max(this.getTails(), affection >= 60 ? 3 : affection >= BED_AFFECTION ? 2 : 1);
     }
 
     @Override
     protected boolean hasTrueForm() {
         return true;
+    }
+
+    /** One wild kitsune in four is an older fox spirit, born with two or three split tails (one in twenty-five: up to five). */
+    @Override
+    protected int rollTails(net.minecraft.util.RandomSource random) {
+        if (random.nextInt(25) == 0) return 4 + random.nextInt(2);
+        return random.nextInt(4) == 0 ? 2 + random.nextInt(2) : 1;
     }
 
     @Override

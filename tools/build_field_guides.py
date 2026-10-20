@@ -120,6 +120,8 @@ def build(f):
     w(f'  <div class="eyebrow">A field guide to an inhabited world · volume {f["volume"]} · {E(f["subtitle"])}</div>')
     w(f"  <h1>{E(f['title'])}</h1>")
     w(f'  <p class="lede">{E(f["lede"])}</p>')
+    if f.get("food"):
+        w(f'  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Favourite food:</b> {E(f["food"])}</p>')
     w("  " + volumes_nav(fname))
     w("</header>\n<main>")
 

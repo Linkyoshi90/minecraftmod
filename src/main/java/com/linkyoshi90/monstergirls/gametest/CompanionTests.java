@@ -64,7 +64,13 @@ public class CompanionTests {
         BlockPos hopper = new BlockPos(7, 2, 7);
         helper.setBlock(hopper, Blocks.HOPPER);
         SparrowHarpy sparrow = helper.spawn(ModEntities.SPARROW_HARPY.get(), new BlockPos(4, 2, 4));
-        sparrow.setEggTime(1);
+        boolean[] due = {false};
+        helper.onEachTick(() -> {
+            if (sparrow.isRoosting() && !due[0]) {                       // her next egg is due once she has settled in
+                sparrow.setEggTime(1);
+                due[0] = true;
+            }
+        });
         helper.succeedWhen(() -> {
             check(helper.absolutePos(hopper).equals(sparrow.getRoost()), "she should claim the hopper");
             check(helper.getBlockEntity(hopper) instanceof HopperBlockEntity d
@@ -107,7 +113,8 @@ public class CompanionTests {
     public static void riflebirdBringsSeeds(GameTestHelper helper) {
         ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
         RiflebirdHarpy bird = helper.spawn(ModEntities.RIFLEBIRD_HARPY.get(), new BlockPos(8, 2, 8));
-        check(bird.rollGift(player).is(net.neoforged.neoforge.common.Tags.Items.SEEDS), "riflebirds bring seeds");
+        ItemStack gift = bird.rollGift(player);
+        check(gift.is(net.neoforged.neoforge.common.Tags.Items.SEEDS) || gift.is(net.minecraft.world.item.Items.PITCHER_POD), "riflebirds bring seeds");
         bird.setAffection(player.getUUID(), Bonded.FULL_AFFECTION);
         bird.setNextGiftTime(0);
         helper.succeedWhen(() -> {

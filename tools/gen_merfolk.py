@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Merfolk (the sea family, see merfolk_field_guide.html): orca, koi, shark, seal, axolotl.
+"""Merfolk (the sea family, see merfolk_field_guide.html): orca, koi, shark, seal, axolotl, dolphin.
 
     python tools/gen_merfolk.py [species ...] [--previews]
 
 Shared girl_lib upper body on a fish / sea-mammal tail: fin_1 down from the waist, fin_2..fin_4 along the ground and a
 fluke (horizontal for the orca, seal and axolotl, a vertical tail fin for the koi and shark). Extras: a dorsal fin
-(orca, shark, axolotl crest), long trailing fins (koi), fin ears (koi, shark, orca), gill fronds (axolotl). Shell top.
-Five colours per species.
+(orca, shark, dolphin, axolotl crest), long trailing fins (koi), fin ears (koi, shark, orca, dolphin), gill fronds
+(axolotl). Every model has a `seashells` bone (two scallop shells over the bust) that the game shows once she has found
+shells on the sea floor. Five colours per species.
 """
 import os
 import sys
@@ -60,6 +61,15 @@ SPECIES = {
                   "gold": dict(FUR="#f0c858", HAIR="#f4d070", LIGHT="#f8e4a0", INNER="#e8a040", CLOTH="#c87a30"),
                   "cyan": dict(FUR="#c8eef4", HAIR="#d8f4f8", LIGHT="#eafafc", INNER="#e86a8a", CLOTH="#5ab0c8"),
                   "blue": dict(FUR="#4a5ac8", HAIR="#5a6ad8", LIGHT="#7a88e0", MARK="#2a3a8a", INNER="#8a5ad8", CLOTH="#3a3a8a")}),
+    "dolphin_mermaid": dict(
+        build="slim", outfit=dict(top=["halter"], extras=["armlets"]),
+        ears="fin", hair="twintails", bangs="swept", fluke=(8, .75, 3.5), dorsal=(.75, 4.5, 3.5), size=1.05,
+        pal=dict(SKIN=skin("fair"), HAIR="#6a7e92", FUR="#7a90a6", LIGHT="#e8eef2", MARK="#4a5c70", EYE="#2a4a6a", CLOTH="#2aa0a8", TRIM="#f0e8d0",
+                 pattern="solid", extra=dict(belly_white=True)),
+        variants={"common": dict(FUR="#2e3a4a", MARK="#e8d8a0", LIGHT="#f2ecd8", HAIR="#3a4656", pattern="patches", CLOTH="#e8b040"),
+                  "spinner": dict(FUR="#5a6676", MARK="#9aa4b0", HAIR="#6a7686", CLOTH="#8a4ab0"),
+                  "rissos": dict(FUR="#a8acb0", MARK="#f0f0ee", HAIR="#c8ccd0", pattern="speckle", CLOTH="#3a5a8a"),
+                  "pink": dict(FUR="#e8a8b4", HAIR="#f0bcc6", LIGHT="#f8dce2", MARK="#d08898", CLOTH="#3a8a7a")}),
 }
 
 
@@ -128,6 +138,13 @@ def build(sp):
     if not d.get("outfit"):
         sh = cube("shell", [-2.25, 16.8, -2.6])
         r.put("body", sh, G.mirror_cube(sh))
+    # seashells she finds on the sea floor (hidden until the game says she wears them)
+    bw, bh, bd = G.S("bust")
+    cd = G.S("chest")[2]
+    sw, sh_, sdp = G.S("shell")
+    fz = -cd / 2 - bd
+    left = cube("shell", [-0.25 - bw + (bw - sw) / 2, 16.9 - 0.15, fz - sdp + 0.1], inflate=0.1)
+    r.add("seashells", "body", [0, 17.5, fz], [left, G.mirror_cube(left), cube("cord", [-1.5, 18.6, fz - 0.15])])
     G.fish(r, None, d)
     if d.get("dorsal"):
         dw, dh, dd = G.S("dorsal")

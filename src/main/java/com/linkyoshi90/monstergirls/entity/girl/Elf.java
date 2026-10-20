@@ -1,0 +1,468 @@
+package com.linkyoshi90.monstergirls.entity.girl;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.StructureTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.trading.ItemCost;
+import net.minecraft.world.item.trading.Merchant;
+import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.item.trading.MerchantOffers;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LanternBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.SlabType;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * The elven family (elf_field_guide.html): night elf, high elf, wood elf, blood elf, desert elf. The one family with a
+ * society: every elf trades with friends through the vanilla trading screen (fond, 10+), what she sells depends on her
+ * people. Night elves walk only by night; high elves raise a pavilion where their group settles and drive strangers
+ * off it; wood and desert elves live in villages and shoot what threatens them; blood elves are fireproof, set their
+ * enemies alight and trade for gold.
+ */
+public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMob {
+    public static final int TRADE_AFFECTION = 10;
+    public static final int SETTLEMENT_RADIUS = 8;
+    private static final int BUILD_INTERVAL = 60;
+
+    @Nullable
+    private Player tradingPlayer;
+    @Nullable
+    private MerchantOffers offers;
+    @Nullable
+    private BlockPos settlement;
+    private boolean leader;
+    private int built;
+    private long warnedAt = -1000;
+
+    public Elf(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
+        super(type, level, species);
+        if (this.isArcher()) {
+            this.goalSelector.addGoal(2, new RangedAttackGoal(this, 1.0, 30, 15.0F) {
+                @Override
+                public void start() {
+                    super.start();
+                    Elf.this.startTimedAction(Action.SHOOT, 20);
+                }
+            });
+            this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, new ItemStack(species == GirlSpecies.DESERT_ELF ? Items.CROSSBOW : Items.BOW));
+        } else {
+            this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, true));
+        }
+        this.goalSelector.addGoal(4, new TemptGoal(this, 1.0, Ingredient.of(Items.SWEET_BERRIES, Items.GLOW_BERRIES, Items.HONEY_BOTTLE, Items.GOLDEN_APPLE), false));
+        this.goalSelector.addGoal(5, new FollowEntityGoal(this, this::leaderOrHome, 1.0, 10.0F, 5.0F));
+        this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 0.8) {
+            @Override
+            public boolean canUse() {
+                return !Elf.this.isResting() && super.canUse();
+            }
+        });
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
+        if (this.isArcher() || species == GirlSpecies.BLOOD_ELF) {
+            this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Monster.class, true,
+                    m -> !(m instanceof net.minecraft.world.entity.monster.Creeper) && m.distanceToSqr(this) < 16 * 16));
+        }
+        if (species == GirlSpecies.HIGH_ELF) {
+            this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, p -> this.isTrespasser((Player) p)));
+        }
+    }
+
+    public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        return switch (s) {
+            case HIGH_ELF -> girlAttributes(26, 0.28, 5);
+            case BLOOD_ELF -> girlAttributes(28, 0.3, 6);
+            case WOOD_ELF, DESERT_ELF -> girlAttributes(24, 0.3, 3);
+            default -> girlAttributes(22, 0.3, 4);
+        };
+    }
+
+    private boolean isArcher() {
+        return this.species == GirlSpecies.WOOD_ELF || this.species == GirlSpecies.DESERT_ELF;
+    }
+
+    /** Night elves rest in the shade by day. */
+    public boolean isResting() {
+        return this.species == GirlSpecies.NIGHT_ELF && this.level().isDay() && this.getTarget() == null;
+    }
+
+    // --- group and settlement ------------------------------------------------------------------------------------
+
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType type, @Nullable SpawnGroupData group) {
+        if (!(group instanceof GroupData g)) {
+            this.leader = true;
+            group = new GroupData(this.blockPosition());
+        } else if (this.species == GirlSpecies.HIGH_ELF) {
+            this.settlement = g.origin();
+        }
+        if (this.leader && this.species == GirlSpecies.HIGH_ELF) this.settlement = this.blockPosition();
+        return super.finalizeSpawn(level, difficulty, type, group);
+    }
+
+    private record GroupData(BlockPos origin) implements SpawnGroupData {
+    }
+
+    @Nullable
+    private LivingEntity leaderOrHome() {
+        if (this.isBaby()) return this.mother();
+        if (this.leader || this.isResting()) return null;
+        return this.nearest(Elf.class, 24, e -> e.getType() == this.getType() && e.leader && !e.isBaby());
+    }
+
+    public void setSettlement(@Nullable BlockPos pos) {
+        this.settlement = pos;
+        this.leader = pos != null;
+    }
+
+    @Nullable
+    public BlockPos getSettlement() {
+        return this.settlement;
+    }
+
+    public int getBuilt() {
+        return this.built;
+    }
+
+    /** The elven pavilion: a quartz floor, four birch pillars, a slab roof, a lantern. Positions relative to the origin. */
+    public static List<Placement> pavilion() {
+        List<Placement> out = new ArrayList<>();
+        for (int x = -2; x <= 2; x++) for (int z = -2; z <= 2; z++) out.add(new Placement(x, -1, z, Blocks.QUARTZ_BRICKS.defaultBlockState()));
+        BlockState log = Blocks.STRIPPED_BIRCH_LOG.defaultBlockState().setValue(RotatedPillarBlock.AXIS, net.minecraft.core.Direction.Axis.Y);
+        for (int y = 0; y < 3; y++) for (int[] c : new int[][]{{-2, -2}, {2, -2}, {-2, 2}, {2, 2}}) out.add(new Placement(c[0], y, c[1], log));
+        BlockState slab = Blocks.BIRCH_SLAB.defaultBlockState().setValue(SlabBlock.TYPE, SlabType.BOTTOM);
+        for (int x = -3; x <= 3; x++) for (int z = -3; z <= 3; z++) {
+            if (Math.abs(x) <= 1 && Math.abs(z) <= 1) continue;
+            out.add(new Placement(x, 3, z, slab));
+        }
+        for (int x = -1; x <= 1; x++) for (int z = -1; z <= 1; z++) out.add(new Placement(x, 3, z, Blocks.BIRCH_PLANKS.defaultBlockState()));
+        out.add(new Placement(0, 4, 0, Blocks.BIRCH_SLAB.defaultBlockState()));
+        out.add(new Placement(0, 2, 0, Blocks.LANTERN.defaultBlockState().setValue(LanternBlock.HANGING, true)));
+        for (int[] c : new int[][]{{-1, -2}, {1, -2}, {-1, 2}, {1, 2}}) out.add(new Placement(c[0], 0, c[1], Blocks.POTTED_ALLIUM.defaultBlockState()));
+        return out;
+    }
+
+    public record Placement(int x, int y, int z, BlockState state) {
+    }
+
+    /** The group's builder places the next block of the pavilion now and then. */
+    private void build(ServerLevel level) {
+        List<Placement> plan = pavilion();
+        if (this.settlement == null || this.built >= plan.size()) return;
+        Placement p = plan.get(this.built);
+        BlockPos at = this.settlement.offset(p.x(), p.y(), p.z());
+        if (this.distanceToSqr(Vec3.atCenterOf(at)) > 6 * 6) {
+            this.getNavigation().moveTo(at.getX() + 0.5, this.settlement.getY(), at.getZ() + 0.5, 0.9);
+            return;
+        }
+        BlockState cur = level.getBlockState(at);
+        if (p.y() < 0 || cur.canBeReplaced()) {
+            level.setBlock(at, p.state(), 3);
+            level.playSound(null, at, p.state().getSoundType().getPlaceSound(), net.minecraft.sounds.SoundSource.NEUTRAL, 0.8F, 1.0F);
+            this.swing(InteractionHand.MAIN_HAND);
+        }
+        this.built++;
+    }
+
+    /** Within the settlement, strangers are warned and then driven off. */
+    private boolean isTrespasser(Player p) {
+        if (this.settlement == null || p.isCreative() || p.isSpectator() || this.getAffection(p) >= TRADE_AFFECTION || this.isBaby()) return false;
+        if (p.distanceToSqr(Vec3.atCenterOf(this.settlement)) > SETTLEMENT_RADIUS * SETTLEMENT_RADIUS) return false;
+        long now = this.level().getGameTime();
+        if (now - this.warnedAt > 400) {
+            this.warnedAt = now;
+            p.displayClientMessage(Component.translatable("message.monstergirls.elf_warning", this.getDisplayName()), true);
+            return false;
+        }
+        return now - this.warnedAt > 80;
+    }
+
+    // --- trading -------------------------------------------------------------------------------------------------
+
+    private static MerchantOffer offer(net.minecraft.world.level.ItemLike cost, int count, ItemStack result, int uses) {
+        return new MerchantOffer(new ItemCost(cost, count), result, uses, 2, 0.05F);
+    }
+
+    /** What her people sell (the blood elves want gold, everyone else emeralds). */
+    public MerchantOffers makeOffers() {
+        MerchantOffers o = new MerchantOffers();
+        var E = Items.EMERALD;
+        switch (this.species) {
+            case NIGHT_ELF -> {
+                o.add(offer(E, 2, new ItemStack(Items.GLOWSTONE_DUST, 6), 12));
+                o.add(offer(E, 6, new ItemStack(Items.ENDER_PEARL), 6));
+                o.add(offer(E, 3, new ItemStack(Items.AMETHYST_SHARD, 4), 12));
+                o.add(offer(E, 4, new ItemStack(Items.PHANTOM_MEMBRANE, 2), 8));
+                o.add(offer(Items.GLOW_BERRIES, 12, new ItemStack(E), 16));
+            }
+            case HIGH_ELF -> {
+                o.add(offer(E, 8, new ItemStack(Items.BOOK, 3), 8));
+                o.add(offer(E, 12, new ItemStack(Items.EXPERIENCE_BOTTLE, 4), 6));
+                o.add(offer(E, 16, new ItemStack(Items.GOLDEN_APPLE), 4));
+                o.add(offer(E, 4, new ItemStack(Items.QUARTZ_BLOCK, 8), 12));
+                o.add(offer(Items.HONEY_BOTTLE, 3, new ItemStack(E), 16));
+            }
+            case WOOD_ELF -> {
+                o.add(offer(E, 1, new ItemStack(Items.ARROW, 16), 16));
+                o.add(offer(E, 2, new ItemStack(Items.BOW), 8));
+                o.add(offer(E, 1, new ItemStack(Items.OAK_SAPLING, 4), 16));
+                o.add(offer(E, 2, new ItemStack(Items.HONEY_BOTTLE, 2), 12));
+                o.add(offer(Items.SWEET_BERRIES, 16, new ItemStack(E), 16));
+            }
+            case BLOOD_ELF -> {
+                var G = Items.GOLD_INGOT;
+                o.add(offer(G, 2, new ItemStack(Items.QUARTZ, 12), 16));
+                o.add(offer(G, 4, new ItemStack(Items.BLAZE_ROD, 2), 8));
+                o.add(offer(G, 3, new ItemStack(Items.MAGMA_CREAM, 4), 12));
+                o.add(offer(G, 6, new ItemStack(Items.FIRE_CHARGE, 4), 8));
+                o.add(offer(G, 8, new ItemStack(Items.NETHERITE_SCRAP), 2));
+            }
+            default -> {
+                o.add(offer(E, 1, new ItemStack(Items.LEATHER, 4), 16));
+                o.add(offer(E, 3, new ItemStack(Items.CROSSBOW), 8));
+                o.add(offer(E, 1, new ItemStack(Items.ARROW, 12), 16));
+                o.add(offer(E, 2, new ItemStack(Items.CACTUS, 8), 12));
+                o.add(offer(Items.LEATHER, 6, new ItemStack(E), 16));
+            }
+        }
+        return o;
+    }
+
+    @Override
+    public void setTradingPlayer(@Nullable Player player) {
+        this.tradingPlayer = player;
+    }
+
+    @Nullable
+    @Override
+    public Player getTradingPlayer() {
+        return this.tradingPlayer;
+    }
+
+    @Override
+    public MerchantOffers getOffers() {
+        if (this.offers == null) this.offers = this.makeOffers();
+        return this.offers;
+    }
+
+    @Override
+    public void overrideOffers(MerchantOffers offers) {
+        this.offers = offers;
+    }
+
+    @Override
+    public void notifyTrade(MerchantOffer offer) {
+        offer.increaseUses();
+        if (this.tradingPlayer != null) this.addAffection(this.tradingPlayer, 1);
+        this.startTimedAction(Action.TRADE, 30);
+        this.playSound(SoundEvents.VILLAGER_YES, 0.8F, 1.4F);
+    }
+
+    @Override
+    public void notifyTradeUpdated(ItemStack stack) {
+    }
+
+    @Override
+    public int getVillagerXp() {
+        return 0;
+    }
+
+    @Override
+    public void overrideXp(int xp) {
+    }
+
+    @Override
+    public boolean showProgressBar() {
+        return false;
+    }
+
+    @Override
+    public SoundEvent getNotifyTradeSound() {
+        return SoundEvents.VILLAGER_YES;
+    }
+
+    @Override
+    public boolean isClientSide() {
+        return this.level().isClientSide;
+    }
+
+    /** An empty hand opens her trades once she is fond of you (crouch to pat her instead). */
+    @Nullable
+    @Override
+    protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        if (!stack.isEmpty() || this.isBaby()) return null;
+        if (player.isShiftKeyDown()) return this.pet(player);
+        if (this.getAffection(player) < TRADE_AFFECTION || this.getTradingPlayer() != null || this.getTarget() == player) return null;
+        if (!this.level().isClientSide) {
+            this.setTradingPlayer(player);
+            this.openTradingScreen(player, this.getDisplayName(), 1);
+        }
+        return InteractionResult.sidedSuccess(this.level().isClientSide);
+    }
+
+    // --- food, presents ------------------------------------------------------------------------------------------
+
+    @Override
+    public boolean isFood(ItemStack stack) {
+        if (this.species == GirlSpecies.BLOOD_ELF) return stack.is(Items.GOLDEN_APPLE) || stack.is(Items.APPLE);
+        return stack.is(Items.SWEET_BERRIES) || stack.is(Items.GLOW_BERRIES) || stack.is(Items.HONEY_BOTTLE);
+    }
+
+    @Override
+    protected int foodValue(Player player, ItemStack stack) {
+        return stack.is(Items.HONEY_BOTTLE) || stack.is(Items.GOLDEN_APPLE) ? 2 : 1;
+    }
+
+    @Override
+    public ItemStack rollGift(Player player) {
+        MerchantOffers o = this.makeOffers();
+        return o.get(this.random.nextInt(o.size())).getResult().copy();
+    }
+
+    // --- combat --------------------------------------------------------------------------------------------------
+
+    @Override
+    public void performRangedAttack(LivingEntity target, float power) {
+        ItemStack weapon = this.getMainHandItem();
+        Arrow arrow = new Arrow(this.level(), this, new ItemStack(Items.ARROW), weapon.isEmpty() ? null : weapon);
+        arrow.pickup = net.minecraft.world.entity.projectile.AbstractArrow.Pickup.DISALLOWED;
+        double dx = target.getX() - this.getX(), dz = target.getZ() - this.getZ();
+        double dy = target.getY(0.33) - arrow.getY();
+        double d = Math.sqrt(dx * dx + dz * dz);
+        arrow.shoot(dx, dy + d * 0.2, dz, 1.6F, 6.0F);
+        this.playSound(this.species == GirlSpecies.DESERT_ELF ? SoundEvents.CROSSBOW_SHOOT : SoundEvents.SKELETON_SHOOT, 1.0F, 1.2F);
+        this.level().addFreshEntity(arrow);
+        this.startTimedAction(Action.SHOOT, 20);
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        boolean hit = super.doHurtTarget(target);
+        if (hit && this.species == GirlSpecies.BLOOD_ELF) target.igniteForSeconds(4);
+        return hit;
+    }
+
+    // --- tick ----------------------------------------------------------------------------------------------------
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (!(this.level() instanceof ServerLevel server)) return;
+        if (this.tradingPlayer != null && (!this.tradingPlayer.isAlive() || this.tradingPlayer.distanceToSqr(this) > 16 * 16)) this.tradingPlayer = null;
+        if (this.species == GirlSpecies.NIGHT_ELF && this.tickCount % 20 == 0) {
+            if (this.isResting() && this.getAction() == Action.NONE) {
+                this.getNavigation().stop();
+                this.setAction(Action.SITTING);
+            } else if (!this.isResting() && this.getAction() == Action.SITTING && !this.isOrderedToSit()) {
+                this.setAction(Action.NONE);
+            }
+        }
+        if (this.species == GirlSpecies.HIGH_ELF && this.leader && this.settlement != null && this.getTarget() == null && this.tickCount % BUILD_INTERVAL == 0) {
+            this.build(server);
+        }
+    }
+
+    public static boolean spawnRule(GirlSpecies s, ServerLevelAccessor level, BlockPos pos, RandomSource random) {
+        if (s == GirlSpecies.WOOD_ELF || s == GirlSpecies.DESERT_ELF) {   // only in and around villages
+            return level.getLevel().structureManager().getStructureWithPieceAt(pos, StructureTags.VILLAGE).isValid()
+                    || level.getLevel().structureManager().getStructureWithPieceAt(pos.offset(24, 0, 0), StructureTags.VILLAGE).isValid()
+                    || level.getLevel().structureManager().getStructureWithPieceAt(pos.offset(-24, 0, 0), StructureTags.VILLAGE).isValid();
+        }
+        if (s == GirlSpecies.NIGHT_ELF) return level.getLevel().isNight();
+        if (s == GirlSpecies.HIGH_ELF) {                                       // a clearing: flat ground under open sky
+            return level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos.getX(), pos.getZ()) <= pos.getY() + 1;
+        }
+        return true;
+    }
+
+    // --- sounds --------------------------------------------------------------------------------------------------
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return null;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SoundEvents.PLAYER_HURT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.PLAYER_DEATH;
+    }
+
+    @Override
+    public SoundEvent getEatSound() {
+        return SoundEvents.GENERIC_EAT;
+    }
+
+    @Override
+    public SoundEvent getChirpSound() {
+        return SoundEvents.AMETHYST_BLOCK_CHIME;
+    }
+
+    // --- persistence ---------------------------------------------------------------------------------------------
+
+    @Override
+    protected boolean isSettled() {
+        return this.settlement != null && this.built > 0;
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putBoolean("Leader", this.leader);
+        if (this.settlement != null) tag.putLong("Settlement", this.settlement.asLong());
+        tag.putInt("Built", this.built);
+        if (this.offers != null) tag.put("Offers", MerchantOffers.CODEC.encodeStart(this.registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), this.offers).getOrThrow());
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.leader = tag.getBoolean("Leader");
+        this.settlement = tag.contains("Settlement") ? BlockPos.of(tag.getLong("Settlement")) : null;
+        this.built = tag.getInt("Built");
+        if (tag.contains("Offers")) {
+            MerchantOffers.CODEC.parse(this.registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), tag.get("Offers"))
+                    .resultOrPartial(e -> {}).ifPresent(o -> this.offers = o);
+        }
+    }
+}

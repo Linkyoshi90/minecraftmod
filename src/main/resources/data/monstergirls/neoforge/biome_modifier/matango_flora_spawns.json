@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_matango_flora",
+  "spawners": {
+    "type": "monstergirls:matango_flora",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

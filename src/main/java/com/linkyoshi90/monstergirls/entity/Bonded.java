@@ -57,6 +57,11 @@ public interface Bonded {
      * The chance that she joins a trusting player in bed on a given night: one in three at {@link #BED_AFFECTION},
      * rising to certain at {@link #FULL_AFFECTION}.
      */
+    /** Tonight's odds for this player (a succubus does not wait for friendship). */
+    default float bedChanceFor(Player player) {
+        return bedChance(this.getAffection(player));
+    }
+
     static float bedChance(int affection) {
         if (affection < BED_AFFECTION) return 0.0F;
         return Math.min(1.0F, 0.33F + 0.67F * (affection - BED_AFFECTION) / (FULL_AFFECTION - BED_AFFECTION));

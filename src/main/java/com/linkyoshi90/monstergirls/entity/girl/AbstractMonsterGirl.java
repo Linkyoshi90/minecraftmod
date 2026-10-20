@@ -70,11 +70,15 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     private static final EntityDataAccessor<Boolean> DATA_YOUNG = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> DATA_VARIANT = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> DATA_BELLY = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
-    private static final EntityDataAccessor<Byte> DATA_FLAGS = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> DATA_FLAGS = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Byte> DATA_TAILS = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
     private static final Map<String, RawAnimation> ANIMATIONS = new ConcurrentHashMap<>();
 
     /** Synced flags (bits of DATA_FLAGS). */
-    public static final int FLAG_TRUE_FORM = 1, FLAG_HIDDEN = 2, FLAG_DECOY = 4, FLAG_HALF = 8, FLAG_CARRYING = 16, FLAG_SADDLED = 32, FLAG_CHEST = 64;
+    public static final int FLAG_TRUE_FORM = 1, FLAG_HIDDEN = 2, FLAG_DECOY = 4, FLAG_HALF = 8, FLAG_CARRYING = 16, FLAG_SADDLED = 32, FLAG_CHEST = 64,
+            FLAG_CALM = 128, FLAG_SHELLS = 256, FLAG_SMILE = 512, FLAG_MALE = 1024, FLAG_RETRACTED = 2048, FLAG_LIT = 4096, FLAG_MASKED = 8192;
+    /** The flags that are saved (the others are moment-to-moment state). */
+    private static final int SAVED_FLAGS = FLAG_TRUE_FORM | FLAG_SADDLED | FLAG_CHEST | FLAG_HALF | FLAG_CALM | FLAG_SHELLS | FLAG_MALE | FLAG_MASKED;
 
     /** Five in-game days from newborn to grown up. */
     public static final int GROW_TICKS = 5 * 24000;
@@ -89,7 +93,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     public enum Action {
         NONE(null, false), SITTING("sit", false), LYING("lie", false), POUNCE("pounce", true), GROOM("groom", false), HISS("hiss", false),
         DIG("dig", false), LAUGH("laugh", false), REAR("rear", false), COIL("coil", false), BASK("bask", false), LEAP("leap", true),
-        SPIN("spin", false), KICK("kick", true), GRAZE("graze", false), SING("sing", false), ABSORB("absorb", true), SPLIT("split", true);
+        SPIN("spin", false), KICK("kick", true), GRAZE("graze", false), SING("sing", false), ABSORB("absorb", true), SPLIT("split", true),
+        STALK("stalk", false), BOUNCE("bounce", false), PANT("pant", false), CHARGE("charge", false), MILK("milk", false), GRAB("grab", false), INK("ink", true), RETRACT("retract", true), LASH("lash", true), SHOOT("shoot", true), TRADE("trade", true), DRINK("drink", false), ROLL("roll", false), CALL("call", true), STING("sting", true), BREATHE("breathe", true), CHARM("charm", false), HOP("hop", false), EAT("eat", false), HEAL("heal", true), POLLINATE("pollinate", false), SCREAM("scream", true), PUFF("puff", true), PLANT("plant", true);
 
         public final String animation;
         public final boolean once;
@@ -125,6 +130,16 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));
         this.goalSelector.addGoal(3, new GiftGoal<>(this));
         this.goalSelector.addGoal(5, new FollowEntityGoal(this, this::mother, 1.1, 6.0F, 2.5F));
+        this.targetSelector.addGoal(2, new net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal<>(this, Player.class, 10, true, false,
+                p -> p instanceof Player pl && this.isHostileTo(pl)));
+        if (this.canFly()) {                                // the winged and the floating: fly instead of walking
+            this.moveControl = new net.minecraft.world.entity.ai.control.FlyingMoveControl(this, 20, true);
+            net.minecraft.world.entity.ai.navigation.FlyingPathNavigation nav = new net.minecraft.world.entity.ai.navigation.FlyingPathNavigation(this, level);
+            nav.setCanOpenDoors(false);
+            nav.setCanFloat(true);
+            this.navigation = nav;
+            this.goalSelector.addGoal(8, new net.minecraft.world.entity.ai.goal.WaterAvoidingRandomFlyingGoal(this, 1.0));
+        }
     }
 
     /** A young one stays near the closest grown woman of her species. */
@@ -139,7 +154,26 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
                 .add(Attributes.MAX_HEALTH, health)
                 .add(Attributes.MOVEMENT_SPEED, speed)
                 .add(Attributes.ATTACK_DAMAGE, damage)
-                .add(Attributes.FOLLOW_RANGE, 24.0);
+                .add(Attributes.FOLLOW_RANGE, 24.0)
+                .add(Attributes.FLYING_SPEED, Math.max(0.4, speed * 1.4));
+    }
+
+    /**
+     * Whether she flies (the species must only look at {@link #species}: this is asked from the constructor). Fliers get
+     * flying movement and navigation, never take fall damage and play "fly" while airborne.
+     */
+    public boolean canFly() {
+        return false;
+    }
+
+    /** Whether her animation file has a "fly" animation (a floating will-o'-wisp has none: she just idles in the air). */
+    protected boolean hasFlyAnimation() {
+        return this.canFly();
+    }
+
+    @Override
+    public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
+        return !this.canFly() && super.causeFallDamage(distance, multiplier, source);
     }
 
     @Override
@@ -162,7 +196,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         builder.define(DATA_YOUNG, false);
         builder.define(DATA_VARIANT, (byte) 0);
         builder.define(DATA_BELLY, (byte) 0);
-        builder.define(DATA_FLAGS, (byte) 0);
+        builder.define(DATA_FLAGS, 0);
+        builder.define(DATA_TAILS, (byte) 1);
     }
 
     public Action getAction() {
@@ -185,8 +220,22 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     }
 
     public void setFlag(int flag, boolean on) {
-        byte b = this.entityData.get(DATA_FLAGS);
-        this.entityData.set(DATA_FLAGS, (byte) (on ? b | flag : b & ~flag));
+        int b = this.entityData.get(DATA_FLAGS);
+        this.entityData.set(DATA_FLAGS, on ? b | flag : b & ~flag);
+    }
+
+    /** How many tails she was born with (a few kitsune and nekomata have split tails from the start). */
+    public int getTails() {
+        return this.entityData.get(DATA_TAILS);
+    }
+
+    public void setTails(int tails) {
+        this.entityData.set(DATA_TAILS, (byte) Math.max(1, Math.min(9, tails)));
+    }
+
+    /** The tail count a wild one of her species is born with (most: one). */
+    protected int rollTails(RandomSource random) {
+        return 1;
     }
 
     // --- variant -------------------------------------------------------------------------------------------------
@@ -225,7 +274,10 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData groupData) {
-        if (!this.variantFromData) this.setVariantIndex(this.rollWildVariant(this.random));
+        if (!this.variantFromData) {
+            this.setVariantIndex(this.rollWildVariant(this.random));
+            this.setTails(this.rollTails(this.random));
+        }
         return super.finalizeSpawn(level, difficulty, spawnType, groupData);
     }
 
@@ -351,6 +403,37 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, this.getX(), this.getY() + 1, this.getZ(), 30, 0.5, 0.8, 0.5, 0.02);
     }
 
+    // --- wild hostility ----------------------------------------------------------------------------------------
+
+    /** Whether a wild one of her species attacks players on sight until someone calms her with food (meat). */
+    protected boolean wildHostile() {
+        return false;
+    }
+
+    /** What calms a hostile one down (any meat; the zombie wants rotten flesh). */
+    protected boolean calmsHer(ItemStack stack) {
+        return stack.is(ModTags.MEAT);
+    }
+
+    public boolean isCalm() {
+        return this.hasFlag(FLAG_CALM);
+    }
+
+    /** Whether she would attack this player on sight right now. */
+    public boolean isHostileTo(Player player) {
+        return this.wildHostile() && !this.isCalm() && !this.isBaby() && this.father == null && this.getAffection(player) <= 0
+                && !player.isCreative() && !player.isSpectator() && this.level().getDifficulty() != net.minecraft.world.Difficulty.PEACEFUL;
+    }
+
+    /** The first bite of the right food: she stops seeing you as prey. More food from then on builds friendship. */
+    protected void calmDown(ServerLevel level, Player player) {
+        this.setFlag(FLAG_CALM, true);
+        if (this.getTarget() instanceof Player) this.setTarget(null);
+        this.setLastHurtByMob(null);
+        level.sendParticles(ParticleTypes.HAPPY_VILLAGER, this.getX(), this.getY() + this.getBbHeight(), this.getZ(), 8, 0.4, 0.3, 0.4, 0.0);
+        player.displayClientMessage(Component.translatable("message.monstergirls.calmed", this.getDisplayName()), true);
+    }
+
     // --- interaction ---------------------------------------------------------------------------------------------
 
     /** Food she takes from a hand (any meat is always welcome too). */
@@ -383,6 +466,14 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
+        if (this.wildHostile() && !this.isCalm() && !this.isBaby() && this.calmsHer(stack)) {
+            if (this.level() instanceof ServerLevel server) {
+                stack.consume(1, player);
+                this.playSound(this.getEatSound(), 1.0F, this.getVoicePitch());
+                this.calmDown(server, player);
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         InteractionResult family = this.familyInteract(player, hand, stack);
         if (family != null) return family;
         if (!this.isBaby() && (this.isFood(stack) || stack.is(ModTags.MEAT))) {
@@ -403,22 +494,25 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
                 return InteractionResult.sidedSuccess(this.level().isClientSide);
             }
         }
-        if (stack.isEmpty() && !player.isShiftKeyDown()) {
-            if (this.level() instanceof ServerLevel server) {
-                int value = this.petValue(player);
-                if (value > 0) {
-                    if (server.getGameTime() >= this.nextPetTime) {
-                        this.nextPetTime = server.getGameTime() + PET_COOLDOWN;
-                        this.addAffection(player, value);
-                    }
-                    this.getLookControl().setLookAt(player);
-                    this.hearts(server, 2);
-                    this.playSound(this.getChirpSound(), 1.0F, this.getVoicePitch() * 1.1F);
-                }
-            }
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
-        }
+        if (stack.isEmpty() && !player.isShiftKeyDown()) return this.pet(player);
         return super.mobInteract(player, hand);
+    }
+
+    /** A pat from an empty hand. */
+    protected InteractionResult pet(Player player) {
+        if (this.level() instanceof ServerLevel server) {
+            int value = this.petValue(player);
+            if (value > 0) {
+                if (server.getGameTime() >= this.nextPetTime) {
+                    this.nextPetTime = server.getGameTime() + PET_COOLDOWN;
+                    this.addAffection(player, value);
+                }
+                this.getLookControl().setLookAt(player);
+                this.hearts(server, 2);
+                this.playSound(this.getChirpSound(), 1.0F, this.getVoicePitch() * 1.1F);
+            }
+        }
+        return InteractionResult.sidedSuccess(this.level().isClientSide);
     }
 
     public void hearts(ServerLevel level, int count) {
@@ -645,7 +739,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         tag.putBoolean("Young", this.isBaby());
         tag.putInt("GrowTicks", this.growTicks);
         tag.putString("Variant", this.getVariantName());
-        tag.putByte("Flags", this.entityData.get(DATA_FLAGS));
+        tag.putInt("Flags", this.entityData.get(DATA_FLAGS) & SAVED_FLAGS);
+        tag.putByte("Tails", (byte) this.getTails());
         tag.putLong("DevotedSince", this.devotedSince);
     }
 
@@ -665,7 +760,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             this.variantFromData = true;
             this.setVariant(tag.getString("Variant"));
         }
-        this.entityData.set(DATA_FLAGS, (byte) (tag.getByte("Flags") & (FLAG_TRUE_FORM | FLAG_SADDLED | FLAG_CHEST | FLAG_HALF)));
+        this.entityData.set(DATA_FLAGS, tag.getInt("Flags") & SAVED_FLAGS);
+        if (tag.contains("Tails")) this.setTails(tag.getByte("Tails"));
         this.devotedSince = tag.contains("DevotedSince") ? tag.getLong("DevotedSince") : NOT_DEVOTED;
     }
 
@@ -691,6 +787,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         Action action = this.getAction();
         if (action.animation != null) return state.setAndContinue(this.anim(action.animation, action.once));
         if (this.isInWater() && this.hasSwimAnimation()) return state.setAndContinue(this.anim(state.isMoving() ? "swim" : "idle", false));
+        if (this.canFly() && !this.onGround() && !this.isInWater() && this.hasFlyAnimation()) return state.setAndContinue(this.anim("fly", false));
         if (state.isMoving()) {
             boolean fast = this.isSprinting() || this.isAggressive() || this.getDeltaMovement().horizontalDistanceSqr() > 0.02;
             return state.setAndContinue(this.anim(fast ? "run" : "walk", false));

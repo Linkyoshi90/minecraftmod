@@ -22,6 +22,48 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 public final class GirlEvents {
     private GirlEvents() {}
 
+    /** Beehives placed near a queen bee win her heart. */
+    @SubscribeEvent
+    public static void onPlace(net.neoforged.neoforge.event.level.BlockEvent.EntityPlaceEvent event) {
+        if (event.getEntity() instanceof Player p && event.getPlacedBlock().getBlock() instanceof net.minecraft.world.level.block.BeehiveBlock) {
+            com.linkyoshi90.monstergirls.entity.girl.Bug.onHivePlaced(p, event.getPos());
+        }
+    }
+
+    /** One night in five a vampire comes to the bed of someone sleeping in the overworld, and drinks a little. */
+    @SubscribeEvent
+    public static void onWake(net.neoforged.neoforge.event.entity.player.PlayerWakeUpEvent event) {
+        if (!(event.getEntity() instanceof net.minecraft.server.level.ServerPlayer player) || !event.updateLevel()) return;
+        net.minecraft.server.level.ServerLevel level = player.serverLevel();
+        if (level.dimension() != net.minecraft.world.level.Level.OVERWORLD || player.isCreative() || level.random.nextInt(5) != 0) return;
+        var type = com.linkyoshi90.monstergirls.registry.ModGirls.TYPES.get(com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.VAMPIRE_UNDEAD);
+        if (type == null || !(type.get().create(level) instanceof com.linkyoshi90.monstergirls.entity.girl.Undead vampire)) return;
+        vampire.moveTo(player.getX() + 1.0, player.getY(), player.getZ() + 1.0, level.random.nextFloat() * 360.0F, 0.0F);
+        vampire.finalizeSpawn(level, level.getCurrentDifficultyAt(player.blockPosition()), net.minecraft.world.entity.MobSpawnType.EVENT, null);
+        level.addFreshEntity(vampire);
+        com.linkyoshi90.monstergirls.entity.girl.Undead.drinkFrom(player, vampire);
+        player.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.vampire_visit", vampire.getDisplayName()), false);
+    }
+
+    /** The phantom girl comes for players who have not slept in three nights (checked once a minute at night). */
+    @SubscribeEvent
+    public static void onLevelTick(net.neoforged.neoforge.event.tick.LevelTickEvent.Post event) {
+        if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel level) || level.dimension() != net.minecraft.world.level.Level.OVERWORLD) return;
+        if (level.getGameTime() % 1200 != 0 || level.isDay() || level.getDifficulty() == net.minecraft.world.Difficulty.PEACEFUL) return;
+        var type = com.linkyoshi90.monstergirls.registry.ModGirls.TYPES.get(com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.PHANTOM_UNDEAD);
+        if (type == null) return;
+        for (net.minecraft.server.level.ServerPlayer p : level.players()) {
+            if (p.isSpectator() || p.isCreative() || !com.linkyoshi90.monstergirls.entity.girl.Undead.sleepless(p) || level.random.nextInt(3) != 0) continue;
+            if (!level.getEntities(type.get(), p.getBoundingBox().inflate(48), e -> true).isEmpty()) continue;
+            var girl = type.get().create(level);
+            if (girl == null) continue;
+            girl.moveTo(p.getX() + level.random.nextInt(9) - 4, p.getY() + 16, p.getZ() + level.random.nextInt(9) - 4, 0.0F, 0.0F);
+            if (!level.noCollision(girl)) continue;
+            girl.finalizeSpawn(level, level.getCurrentDifficultyAt(p.blockPosition()), net.minecraft.world.entity.MobSpawnType.NATURAL, null);
+            level.addFreshEntity(girl);
+        }
+    }
+
     /** Creepers keep away from nekomata, as they do from vanilla cats. */
     @SubscribeEvent
     public static void onJoin(EntityJoinLevelEvent event) {

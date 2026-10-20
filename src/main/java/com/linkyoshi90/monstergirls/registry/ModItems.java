@@ -66,12 +66,29 @@ public final class ModItems {
     /** Laid by a sparrow roosting on a hopper: unfertilised, eaten raw or baked like any egg. */
     public static final DeferredItem<Item> SPARROW_EGG = ITEMS.registerItem("sparrow_egg",
             props -> new Item(props.stacksTo(16).food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.1F).build())));
+    /** Unfertilised eggs every grown harpy lays on a hen's schedule (see AbstractHarpy#unfertilisedEgg). */
+    public static final DeferredItem<Item> GULL_EGG = laidEgg("gull_egg", 3, 0.2F);
+    public static final DeferredItem<Item> CROW_EGG = laidEgg("crow_egg", 2, 0.2F);
+    public static final DeferredItem<Item> OWL_EGG = laidEgg("owl_egg", 3, 0.2F);
+    public static final DeferredItem<Item> ALBATROSS_EGG = laidEgg("albatross_egg", 5, 0.4F);
+    public static final DeferredItem<Item> OSTRICH_EGG = laidEgg("ostrich_egg", 8, 0.6F);
+    /** The phoenix's: still warm, it leaves you fire resistant for a little while. */
+    public static final DeferredItem<Item> EMBER_EGG = ITEMS.registerItem("ember_egg",
+            props -> new Item(props.stacksTo(16).food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.3F).alwaysEdible()
+                    .effect(() -> new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.FIRE_RESISTANCE, 600, 0), 1.0F).build())));
+
+    private static DeferredItem<Item> laidEgg(String name, int nutrition, float saturation) {
+        return ITEMS.registerItem(name, props -> new Item(props.stacksTo(16).food(new FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturation).build())));
+    }
+
     /** What a lamia leaves behind every few days: a light leather (crafts into leather) and a keepsake. */
     public static final DeferredItem<Item> SHED_SKIN = ITEMS.registerSimpleItem("shed_skin", new Item.Properties().stacksTo(64));
     /** A tarantula's moult. */
     public static final DeferredItem<Item> EXOSKELETON = ITEMS.registerSimpleItem("exoskeleton", new Item.Properties().stacksTo(64));
     /** A woven nest for riflebirds to adopt and lay their eggs in. */
     public static final DeferredItem<BlockItem> RIFLEBIRD_NEST = ITEMS.registerSimpleBlockItem(ModBlocks.RIFLEBIRD_NEST);
+    /** An Easter Bunny's painted egg (place it to hide it again). */
+    public static final DeferredItem<BlockItem> PAINTED_EGG = ITEMS.registerSimpleBlockItem(ModBlocks.PAINTED_EGG);
     /** A fertilised harpy egg: place it somewhere solid and it hatches in about a day. */
     public static final DeferredItem<BlockItem> HARPY_EGG = ITEMS.register("harpy_egg",
             () -> new HarpyEggItem(ModBlocks.HARPY_EGG.get(), new Item.Properties().stacksTo(16)));
@@ -85,6 +102,7 @@ public final class ModItems {
         if (event.getTabKey() == CreativeModeTabs.FOOD_AND_DRINKS) {
             event.accept(RIFLEBIRD_EGG);
             event.accept(SPARROW_EGG);
+            for (var egg : java.util.List.of(GULL_EGG, CROW_EGG, OWL_EGG, ALBATROSS_EGG, OSTRICH_EGG, EMBER_EGG)) event.accept(egg);
         }
         if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
             for (HarpyEggBlock.Species species : HarpyEggBlock.Species.values()) event.accept(HarpyEggItem.of(ModBlocks.HARPY_EGG.get(), species));
@@ -95,6 +113,7 @@ public final class ModItems {
             event.accept(EXOSKELETON);
         }
         if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) event.accept(RIFLEBIRD_NEST);
+        if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) event.accept(PAINTED_EGG);
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
             event.accept(SPARROW_HARPY_SPAWN_EGG);
             event.accept(CROW_HARPY_SPAWN_EGG);

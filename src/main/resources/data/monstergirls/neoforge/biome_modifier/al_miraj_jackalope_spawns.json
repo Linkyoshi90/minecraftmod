@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_al_miraj_jackalope",
+  "spawners": {
+    "type": "monstergirls:al_miraj_jackalope",
+    "weight": 6,
+    "minCount": 3,
+    "maxCount": 5
+  }
+}

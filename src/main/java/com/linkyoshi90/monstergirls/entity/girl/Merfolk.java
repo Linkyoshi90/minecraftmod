@@ -47,9 +47,11 @@ import javax.annotation.Nullable;
 import java.util.UUID;
 
 /**
- * The sea family (merfolk_field_guide.html): orca, koi, shark, seal, axolotl. Half the world is water: fast
+ * The sea family (merfolk_field_guide.html): orca, koi, shark, seal, axolotl, dolphin. Half the world is water: fast
  * swimmers who crawl slowly on land and dry out there; they sing at dusk, lead their favourite to treasure, share
- * their breath, hate drowned, and trade sea treasure for shiny things from the land. Orca, shark and seal bear live
+ * their breath, hate drowned, and trade sea treasure for shiny things from the land. Each is true to her kind: the
+ * shark attacks anything that swims (players too, until fed), the orca and the dolphin tease swimmers and sea life.
+ * Now and then any of them finds seashells on the sea floor and wears them. Orca, dolphin, shark and seal bear live
  * young; koi and axolotl lay roe.
  */
 public class Merfolk extends AbstractMonsterGirl {
@@ -59,6 +61,9 @@ public class Merfolk extends AbstractMonsterGirl {
     @Nullable
     private BlockPos treasure;
     private int playDead;
+    private long nextShellHunt;
+    /** One chance in this many, every couple of seconds over sand or gravel, that she starts rummaging for shells. */
+    private int shellChance = 120;
 
     public Merfolk(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
@@ -73,10 +78,11 @@ public class Merfolk extends AbstractMonsterGirl {
         if (species == GirlSpecies.ORCA_MERMAID) {
             this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Guardian.class, true, g -> this.bondedPlayer(BED_AFFECTION, 24) != null));
         }
-        if (species == GirlSpecies.SHARK_MERMAID) {                   // blood scent: anything hurt and hostile in the water
-            this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Monster.class, 10, true, false,
-                    m -> m.isInWater() && m.getHealth() < m.getMaxHealth()));
+        if (species == GirlSpecies.SHARK_MERMAID) {                   // anything that swims is prey (blood draws her from further)
+            this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, this::isSharkPrey));
         }
+        if (species == GirlSpecies.ORCA_MERMAID || species == GirlSpecies.DOLPHIN_MERMAID) this.goalSelector.addGoal(5, new TeaseGoal());
+        if (species != GirlSpecies.AXOLOTL_MERMAID) this.goalSelector.addGoal(6, new ShellHuntGoal());
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
@@ -85,6 +91,7 @@ public class Merfolk extends AbstractMonsterGirl {
             case SHARK_MERMAID -> girlAttributes(30, 0.25, 7);
             case SEAL_MERMAID -> girlAttributes(22, 0.22, 2);
             case AXOLOTL_MERMAID -> girlAttributes(18, 0.22, 3);
+            case DOLPHIN_MERMAID -> girlAttributes(24, 0.3, 3);
             default -> girlAttributes(20, 0.24, 2);
         };
     }
@@ -120,6 +127,29 @@ public class Merfolk extends AbstractMonsterGirl {
         if (this.isInWater()) return s;
         boolean landy = this.species == GirlSpecies.SEAL_MERMAID || this.species == GirlSpecies.AXOLOTL_MERMAID;
         return s * (landy ? 0.55F : 0.33F);
+    }
+
+    // --- the shark -----------------------------------------------------------------------------------------------
+
+    /** A wild shark attacks swimmers on sight; fish or meat calms her (see {@link AbstractMonsterGirl#calmDown}). */
+    @Override
+    protected boolean wildHostile() {
+        return this.species == GirlSpecies.SHARK_MERMAID;
+    }
+
+    /** She only goes for players who are in the water with her. */
+    @Override
+    public boolean isHostileTo(Player player) {
+        return super.isHostileTo(player) && player.isInWater();
+    }
+
+    /** Anything in the water: fish, squid, turtles, drowned, other swimmers. Never her own kind, never a bonded girl. */
+    private boolean isSharkPrey(LivingEntity e) {
+        if (!e.isInWater() || e instanceof Merfolk || e instanceof Player) return false;
+        if (e instanceof AbstractMonsterGirl girl && (girl.hasAnyAffection() || girl.isBaby())) return false;
+        if (e instanceof net.minecraft.world.entity.TamableAnimal t && t.isTame()) return false;
+        if (e instanceof net.minecraft.world.entity.animal.Dolphin) return false;   // they mob sharks
+        return this.getHealth() < this.getMaxHealth() || e.getHealth() < e.getMaxHealth() || this.distanceToSqr(e) < 12 * 12;
     }
 
     // --- drying out ----------------------------------------------------------------------------------------------
@@ -188,6 +218,7 @@ public class Merfolk extends AbstractMonsterGirl {
         return switch (this.species) {
             case SHARK_MERMAID -> new ItemStack(this.random.nextBoolean() ? Items.BONE : Items.COD);
             case SEAL_MERMAID, ORCA_MERMAID -> new ItemStack(this.random.nextBoolean() ? Items.COD : Items.SALMON, 2);
+            case DOLPHIN_MERMAID -> new ItemStack(this.random.nextInt(4) == 0 ? Items.NAUTILUS_SHELL : Items.TROPICAL_FISH);
             case AXOLOTL_MERMAID -> new ItemStack(this.random.nextBoolean() ? Items.TROPICAL_FISH : Items.CLAY_BALL);
             default -> this.seaTreasure(this.getAffection(player));
         };
@@ -297,6 +328,9 @@ public class Merfolk extends AbstractMonsterGirl {
             p.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 100, 0, true, false));
         }
         if (this.species == GirlSpecies.KOI_MERMAID && this.isInWater()) p.addEffect(new MobEffectInstance(MobEffects.LUCK, 200, 0, true, false));
+        if (this.species == GirlSpecies.DOLPHIN_MERMAID && this.isInWater() && p.isInWater() && p.distanceToSqr(this) < 10 * 10) {
+            p.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 100, 0, true, false));
+        }
         if (this.isTrueForm()) server.sendParticles(ParticleTypes.GLOW, this.getX(), this.getY() + 0.8, this.getZ(), 3, 0.4, 0.4, 0.4, 0.0);
         // a guide to treasure while her favourite is at sea
         if ((p.isInWater() || p.getVehicle() instanceof Boat) && p.distanceToSqr(this) < 16 * 16 && this.isInWater()) {
@@ -318,6 +352,152 @@ public class Merfolk extends AbstractMonsterGirl {
         if (killer.species != GirlSpecies.AXOLOTL_MERMAID) return;
         Player p = killer.bondedPlayer(BED_AFFECTION, 20);
         if (p != null) p.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 0));
+    }
+
+    // --- play and shells -----------------------------------------------------------------------------------------
+
+    public boolean hasShells() {
+        return this.hasFlag(FLAG_SHELLS);
+    }
+
+    public void setShellChance(int chance) {
+        this.shellChance = Math.max(1, chance);
+    }
+
+    /** Whether she can rummage here: in water, right above sand or gravel. */
+    private boolean onSandyBottom() {
+        if (!this.isInWater()) return false;
+        for (int dy = 1; dy <= 2; dy++) {
+            var s = this.level().getBlockState(this.blockPosition().below(dy));
+            if (s.is(BlockTags.SAND) || s.is(net.minecraft.world.level.block.Blocks.GRAVEL)) return true;
+            if (!s.getFluidState().is(FluidTags.WATER)) return false;
+        }
+        return false;
+    }
+
+    /**
+     * Now and then a mermaid without shells sinks to a sandy or gravelly bottom, sifts it for a while and comes up with a
+     * matching pair of seashells, which she wears over her chest from then on.
+     */
+    class ShellHuntGoal extends net.minecraft.world.entity.ai.goal.Goal {
+        private int ticks;
+
+        ShellHuntGoal() {
+            this.setFlags(java.util.EnumSet.of(Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            Merfolk m = Merfolk.this;
+            if (m.hasShells() || m.isBaby() || m.getTarget() != null || m.tickCount % 37 != 0 || !m.onSandyBottom()) return false;
+            return m.level().getGameTime() >= m.nextShellHunt && m.random.nextInt(m.shellChance) == 0;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.ticks > 0 && Merfolk.this.getTarget() == null && Merfolk.this.isInWater();
+        }
+
+        @Override
+        public void start() {
+            this.ticks = 100;
+            Merfolk.this.getNavigation().stop();
+            Merfolk.this.startTimedAction(Action.DIG, 100);
+        }
+
+        @Override
+        public void tick() {
+            Merfolk m = Merfolk.this;
+            m.setDeltaMovement(m.getDeltaMovement().add(0, -0.01, 0));
+            if (m.level() instanceof ServerLevel server && this.ticks % 10 == 0) {
+                server.sendParticles(ParticleTypes.BUBBLE, m.getX(), m.getY(), m.getZ(), 4, 0.4, 0.1, 0.4, 0.02);
+            }
+            if (--this.ticks == 0) {
+                m.nextShellHunt = m.level().getGameTime() + 6000;
+                m.setFlag(FLAG_SHELLS, true);
+                m.playSound(SoundEvents.BRUSH_SAND_COMPLETED, 1.0F, 1.2F);
+                if (m.level() instanceof ServerLevel server) m.hearts(server, 2);
+            }
+        }
+    }
+
+    /**
+     * The orca and the dolphin play with whatever swims: she darts up to a swimmer, a boat or a fish, gives it a playful
+     * shove (players get a splash and a little push, squid and fish are bumped up out of the water), laughs and darts off.
+     * Nobody gets hurt.
+     */
+    class TeaseGoal extends net.minecraft.world.entity.ai.goal.Goal {
+        @Nullable
+        private net.minecraft.world.entity.Entity mark;
+        private int ticks;
+        private long nextTease;
+
+        TeaseGoal() {
+            this.setFlags(java.util.EnumSet.of(Flag.MOVE, Flag.LOOK));
+        }
+
+        @Override
+        public boolean canUse() {
+            Merfolk m = Merfolk.this;
+            if (m.isBaby() || m.getTarget() != null || !m.isInWater() || m.tickCount % 29 != 0 || m.level().getGameTime() < this.nextTease) return false;
+            if (m.random.nextInt(3) != 0) return false;
+            this.mark = m.nearest(net.minecraft.world.entity.Entity.class, 14, e -> e.isAlive() && e.isInWater() && isPlaymate(e));
+            return this.mark != null;
+        }
+
+        private boolean isPlaymate(net.minecraft.world.entity.Entity e) {
+            if (e instanceof Player p) return !p.isSpectator() && !p.isCreative();
+            if (e instanceof Boat) return true;
+            return e instanceof net.minecraft.world.entity.animal.WaterAnimal && !(e instanceof Merfolk)
+                    || e instanceof net.minecraft.world.entity.animal.Turtle || e instanceof net.minecraft.world.entity.animal.axolotl.Axolotl;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.mark != null && this.mark.isAlive() && this.ticks < 160 && Merfolk.this.getTarget() == null;
+        }
+
+        @Override
+        public void start() {
+            this.ticks = 0;
+        }
+
+        @Override
+        public void stop() {
+            this.mark = null;
+            this.nextTease = Merfolk.this.level().getGameTime() + 400 + Merfolk.this.random.nextInt(600);
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+        @Override
+        public void tick() {
+            Merfolk m = Merfolk.this;
+            this.ticks++;
+            m.getLookControl().setLookAt(this.mark, 30.0F, 30.0F);
+            if (m.distanceToSqr(this.mark) > 2.5 * 2.5) {
+                if (this.ticks % 5 == 1) m.getNavigation().moveTo(this.mark.getX(), this.mark.getY(), this.mark.getZ(), 1.6);
+                return;
+            }
+            Vec3 push = this.mark.position().subtract(m.position()).normalize();
+            if (this.mark instanceof Player || this.mark instanceof Boat) {
+                this.mark.push(push.x * 0.5, 0.25, push.z * 0.5);
+                this.mark.hurtMarked = true;
+            } else {
+                this.mark.setDeltaMovement(push.x * 0.3, 0.8, push.z * 0.3);      // up and out of the water it goes
+            }
+            if (m.level() instanceof ServerLevel server) {
+                server.sendParticles(ParticleTypes.SPLASH, this.mark.getX(), this.mark.getY() + 0.5, this.mark.getZ(), 20, 0.5, 0.3, 0.5, 0.1);
+            }
+            m.playSound(SoundEvents.DOLPHIN_PLAY, 1.2F, m.getVoicePitch());
+            m.startTimedAction(Action.LAUGH, 40);
+            Vec3 away = m.position().subtract(this.mark.position()).normalize().scale(10).add(m.position());
+            m.getNavigation().moveTo(away.x, away.y, away.z, 1.8);
+            this.ticks = 999;
+        }
     }
 
     // --- persistence ---------------------------------------------------------------------------------------------

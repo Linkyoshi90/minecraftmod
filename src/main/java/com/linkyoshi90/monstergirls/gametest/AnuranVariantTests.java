@@ -120,12 +120,15 @@ public class AnuranVariantTests {
         CaneToad toadCopy = roundTrip(helper, ModEntities.CANE_TOAD.get(), toad);
         check(toadCopy.getVariantName().equals("black") && toadCopy.getVariantSuffix().equals("_black"), "cane toad variant lost: " + toadCopy.getVariantName());
 
-        // an unknown name falls back to the default; species without variants never get one
+        // an unknown name falls back to the default; every species keeps its own list
         wug.setVariant("purple");
         check(wug.getVariantName().equals("green"), "unknown variant names should fall back to the default");
         Bullfrog bullfrog = helper.spawn(ModEntities.BULLFROG.get(), new BlockPos(12, 2, 12));
+        bullfrog.setVariant("leopard");
+        check(bullfrog.getVariantName().equals("olive") && bullfrog.getVariantSuffix().isEmpty(), "a bullywug colour is not a bullfrog colour");
         bullfrog.setVariant("golden");
-        check(bullfrog.getVariantName().isEmpty() && bullfrog.getVariantSuffix().isEmpty(), "bullfrogs have no variants (they are a different species)");
+        Bullfrog bullfrogCopy = roundTrip(helper, ModEntities.BULLFROG.get(), bullfrog);
+        check(bullfrogCopy.getVariantSuffix().equals("_golden"), "bullfrog variant lost: " + bullfrogCopy.getVariantName());
         helper.succeed();
     }
 
@@ -166,7 +169,13 @@ public class AnuranVariantTests {
 
     @GameTest(template = PLATFORM, batch = "everyAnuranVariantHasATexture")
     public static void everyAnuranVariantHasATexture(GameTestHelper helper) {
-        for (var entry : List.of(java.util.Map.entry("bullywug", AnuranVariants.BULLYWUG), java.util.Map.entry("cane_toad", AnuranVariants.CANE_TOAD))) {
+        for (var entry : List.of(java.util.Map.entry("bullywug", AnuranVariants.BULLYWUG), java.util.Map.entry("cane_toad", AnuranVariants.CANE_TOAD),
+                java.util.Map.entry("bullfrog", AnuranVariants.BULLFROG), java.util.Map.entry("tree_frog", AnuranVariants.TREE_FROG),
+                java.util.Map.entry("poison_dart_frog", AnuranVariants.POISON_DART_FROG), java.util.Map.entry("glass_frog", AnuranVariants.GLASS_FROG),
+                java.util.Map.entry("goliath_frog", AnuranVariants.GOLIATH_FROG), java.util.Map.entry("desert_rain_frog", AnuranVariants.DESERT_RAIN_FROG),
+                java.util.Map.entry("mucus_toad", AnuranVariants.MUCUS_TOAD), java.util.Map.entry("fire_bellied_toad", AnuranVariants.FIRE_BELLIED_TOAD),
+                java.util.Map.entry("natterjack", AnuranVariants.NATTERJACK), java.util.Map.entry("surinam_toad", AnuranVariants.SURINAM_TOAD))) {
+            check(entry.getValue().size() == 5 || entry.getValue().size() == 6, entry.getKey() + " should have at least five colours");
             for (int i = 0; i < entry.getValue().size(); i++) {
                 String suffix = i == 0 ? "" : "_" + entry.getValue().get(i);
                 check(textureExists(entry.getKey() + suffix), "missing texture " + entry.getKey() + suffix + ".png");

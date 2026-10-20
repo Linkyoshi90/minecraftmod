@@ -1,6 +1,6 @@
 package com.linkyoshi90.monstergirls.entity.ai;
 
-import com.linkyoshi90.monstergirls.entity.SparrowHarpy;
+import com.linkyoshi90.monstergirls.entity.AbstractHarpy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
@@ -11,17 +11,18 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 /**
- * Sparrows nest in nooks and hollows, and the bowl of a hopper is just the right size: she picks one nearby that no other sparrow
- * has claimed, settles on it and roosts there, laying an unfertilised egg into it every so often (see
- * {@link SparrowHarpy#tickRoost}). Anything more urgent (danger, food, a song) can still call her away; she comes back.
+ * Sparrows and gulls nest in nooks and hollows, and the bowl of a hopper is just the right size: she picks one nearby that
+ * no other harpy has claimed, settles on it and roosts there. Her eggs go into it, and so do the feathers, twigs (sparrow)
+ * and flints (gull) she sheds (see {@link AbstractHarpy#roostDrop}). Anything more urgent (danger, food, a song) can still
+ * call her away; she comes back.
  */
 public class RoostInHopperGoal extends Goal {
     public static final int SEARCH_RADIUS = 12;
 
-    private final SparrowHarpy sparrow;
+    private final AbstractHarpy sparrow;
     private int ticks;
 
-    public RoostInHopperGoal(SparrowHarpy sparrow) {
+    public RoostInHopperGoal(AbstractHarpy sparrow) {
         this.sparrow = sparrow;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));
     }
@@ -69,7 +70,7 @@ public class RoostInHopperGoal extends Goal {
 
     /** The closest free hopper around her (one no other sparrow nearby calls her own). */
     @Nullable
-    public static BlockPos findHopper(SparrowHarpy sparrow) {
+    public static BlockPos findHopper(AbstractHarpy sparrow) {
         Level level = sparrow.level();
         BlockPos origin = sparrow.blockPosition();
         BlockPos best = null;
@@ -84,8 +85,8 @@ public class RoostInHopperGoal extends Goal {
         return best;
     }
 
-    private static boolean isClaimed(SparrowHarpy self, BlockPos pos) {
-        return !self.level().getEntitiesOfClass(SparrowHarpy.class, self.getBoundingBox().inflate(SEARCH_RADIUS * 2),
+    private static boolean isClaimed(AbstractHarpy self, BlockPos pos) {
+        return !self.level().getEntitiesOfClass(AbstractHarpy.class, self.getBoundingBox().inflate(SEARCH_RADIUS * 2),
                 s -> s != self && pos.equals(s.getRoost())).isEmpty();
     }
 

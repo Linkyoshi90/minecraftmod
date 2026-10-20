@@ -4,6 +4,16 @@ import com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl;
 import com.linkyoshi90.monstergirls.entity.girl.Arachne;
 import com.linkyoshi90.monstergirls.entity.girl.Centaur;
 import com.linkyoshi90.monstergirls.entity.girl.GirlSpecies;
+import com.linkyoshi90.monstergirls.entity.girl.Jackalope;
+import com.linkyoshi90.monstergirls.entity.girl.Minotaur;
+import com.linkyoshi90.monstergirls.entity.girl.Elf;
+import com.linkyoshi90.monstergirls.entity.girl.Undead;
+import com.linkyoshi90.monstergirls.entity.girl.Lizardfolk;
+import com.linkyoshi90.monstergirls.entity.girl.Dragon;
+import com.linkyoshi90.monstergirls.entity.girl.Devil;
+import com.linkyoshi90.monstergirls.entity.girl.Bug;
+import com.linkyoshi90.monstergirls.entity.girl.Flora;
+import com.linkyoshi90.monstergirls.entity.girl.Mollusk;
 import com.linkyoshi90.monstergirls.entity.girl.Kitsune;
 import com.linkyoshi90.monstergirls.entity.girl.Lamia;
 import com.linkyoshi90.monstergirls.entity.girl.Merfolk;
@@ -43,7 +53,7 @@ public final class ModGirls {
             DeferredHolder<EntityType<?>, EntityType<AbstractMonsterGirl>> holder = ModEntities.ENTITY_TYPES.register(s.id(), () -> {
                 EntityType.Builder<AbstractMonsterGirl> b = EntityType.Builder.of(factory, s.category())
                         .sized(s.width(), s.height()).eyeHeight(s.height() * 0.88F).clientTrackingRange(10);
-                if (s == GirlSpecies.MAGMA_SLIME) b = b.fireImmune();
+                if (fireImmune(s)) b = b.fireImmune();
                 return b.build(s.id());
             });
             TYPES.put(s, holder);
@@ -53,8 +63,33 @@ public final class ModGirls {
 
     private ModGirls() {}
 
+    /** Species that lava and fire cannot hurt. */
+    public static boolean fireImmune(GirlSpecies s) {
+        return switch (s.id()) {
+            case "magma_slime", "volcano_jackalope", "blood_elf", "salamander_lizardfolk", "will_o_wisp_undead", "greater_devil", "lesser_devil",
+                 "wyrm_dragon" -> true;
+            default -> false;
+        };
+    }
+
+    /** A family's own conditions on top of the usual spawn rules (the full moon, lava nearby, a village...). */
+    private static boolean familyRule(GirlSpecies s, ServerLevelAccessor level, BlockPos pos, RandomSource random) {
+        return switch (s.family()) {
+            case JACKALOPE -> Jackalope.spawnRule(s, level, pos, random);
+            case ELF -> Elf.spawnRule(s, level, pos, random);
+            case UNDEAD -> Undead.spawnRule(s, level, pos, random);
+            default -> true;
+        };
+    }
+
     /** Forces the static registration above (called from the mod constructor before the registers are attached). */
     public static void init() {
+    }
+
+    @javax.annotation.Nullable
+    public static GirlSpecies speciesOf(EntityType<?> type) {
+        for (var e : TYPES.entrySet()) if (e.getValue().get() == type) return e.getKey();
+        return null;
     }
 
     public static EntityType<AbstractMonsterGirl> type(GirlSpecies s) {
@@ -70,6 +105,16 @@ public final class ModGirls {
             case CENTAUR -> new Centaur(type, level, s);
             case MERFOLK -> new Merfolk(type, level, s);
             case SLIME -> new SlimeGirl(type, level, s);
+            case JACKALOPE -> new Jackalope(type, level, s);
+            case MINOTAUR -> new Minotaur(type, level, s);
+            case MOLLUSK -> new Mollusk(type, level, s);
+            case ELF -> new Elf(type, level, s);
+            case UNDEAD -> new Undead(type, level, s);
+            case LIZARDFOLK -> new Lizardfolk(type, level, s);
+            case DRAGON -> new Dragon(type, level, s);
+            case DEVIL -> new Devil(type, level, s);
+            case BUG -> new Bug(type, level, s);
+            case FLORA -> new Flora(type, level, s);
         };
     }
 
@@ -82,6 +127,16 @@ public final class ModGirls {
             case CENTAUR -> Centaur.createAttributes(s);
             case MERFOLK -> Merfolk.createAttributes(s);
             case SLIME -> SlimeGirl.createAttributes(s);
+            case JACKALOPE -> Jackalope.createAttributes(s);
+            case MINOTAUR -> Minotaur.createAttributes(s);
+            case MOLLUSK -> Mollusk.createAttributes(s);
+            case ELF -> Elf.createAttributes(s);
+            case UNDEAD -> Undead.createAttributes(s);
+            case LIZARDFOLK -> Lizardfolk.createAttributes(s);
+            case DRAGON -> Dragon.createAttributes(s);
+            case DEVIL -> Devil.createAttributes(s);
+            case BUG -> Bug.createAttributes(s);
+            case FLORA -> Flora.createAttributes(s);
         };
     }
 
@@ -91,7 +146,7 @@ public final class ModGirls {
 
     public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
         for (GirlSpecies s : GirlSpecies.values()) {
-            boolean water = s.family() == GirlSpecies.Family.MERFOLK && s != GirlSpecies.SEAL_MERMAID;
+            boolean water = s.category() == net.minecraft.world.entity.MobCategory.WATER_CREATURE || s.category() == net.minecraft.world.entity.MobCategory.UNDERGROUND_WATER_CREATURE;
             event.register(type(s), water ? SpawnPlacementTypes.IN_WATER : SpawnPlacementTypes.ON_GROUND,
                     water ? Heightmap.Types.OCEAN_FLOOR : Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                     water ? ModGirls::checkWaterSpawn : ModGirls::checkLandSpawn, RegisterSpawnPlacementsEvent.Operation.REPLACE);
@@ -101,7 +156,13 @@ public final class ModGirls {
     /** Land girls: any solid ground, and only one natural spawn attempt in three succeeds (rare encounters matter). */
     private static boolean checkLandSpawn(EntityType<AbstractMonsterGirl> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
         if (!Mob.checkMobSpawnRules(type, level, spawnType, pos, random)) return false;
-        return spawnType != MobSpawnType.NATURAL || random.nextInt(3) == 0;
+        GirlSpecies s = speciesOf(type);
+        if (spawnType != MobSpawnType.NATURAL) return true;
+        if (s != null && s.category() == net.minecraft.world.entity.MobCategory.MONSTER
+                && (level.getDifficulty() == net.minecraft.world.Difficulty.PEACEFUL || !net.minecraft.world.entity.monster.Monster.isDarkEnoughToSpawn(level, pos, random))) {
+            return false;                                       // the night walkers need the dark, like any monster
+        }
+        return random.nextInt(3) == 0 && (s == null || familyRule(s, level, pos, random));
     }
 
     private static boolean checkWaterSpawn(EntityType<AbstractMonsterGirl> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {

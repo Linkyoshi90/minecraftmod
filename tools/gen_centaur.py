@@ -5,7 +5,8 @@
 
 Shared girl_lib upper body (waist at 19.5) on a four-legged lower body: barrel, leg_f_r/f_l/b_r/b_l with shin_* and
 hooves, tail. Species extras: reindeer antlers (bone `antlers`), goat horns (`horns`), alpaca fleece (inflated
-barrel). Horse-like ears. Five colours per species.
+barrel). Horse-like ears. Five colours per species. `armor_torso` is an invisible torso-sized box the game fits a
+worn chestplate to (GeckoLib's vanilla armour layer).
 """
 import os
 import sys
@@ -66,7 +67,8 @@ SPECIES = {
 def declare(sp):
     d = SPECIES[sp]
     parts = [("barrel", 7, 7, 15), ("withers", 5, 2.5, 5), ("uleg_f", 2.25, 6.5, 2.75), ("lleg_f", 1.75, 5.75, 1.75),
-             ("uleg_b", 2.5, 6.5, 3.25), ("lleg_b", 1.75, 5.75, 1.75), ("hoof", 2.25, 1.25, 2.25), ("htail",) + d["tail"]]
+             ("uleg_b", 2.5, 6.5, 3.25), ("lleg_b", 1.75, 5.75, 1.75), ("hoof", 2.25, 1.25, 2.25), ("htail",) + d["tail"],
+             ("armor_ref", 6, 8, 4)]
     if d.get("antlers"):
         parts += [("antler_a", .75, 5, .75), ("antler_b", .75, 2.5, .75), ("antler_c", .5, 2, .5)]
     if d.get("horns"):
@@ -102,6 +104,7 @@ def paint(sp, key):
     for p in ("horn_a", "horn_b"):
         pt(p, "all", lambda f, x, y, w, h: pick(horn, 0.45 + 0.25 * (y % 3 == 0), x, y))
     pt("fleece", "all", lambda f, x, y, w, h: pick(pal.FUR, 0.62 + 0.18 * (noise(x // 2, y // 2, 9) > 0.5) + (noise(x, y, 8) - 0.5) * 0.1, x, y))
+    pt("armor_ref", "all", lambda f, x, y, w, h: G.CLEAR)
     return pt.T
 
 
@@ -112,6 +115,7 @@ def build(sp):
     g = G.upper(r, 19.5, dict(hair=d["hair"], bangs=d.get("bangs"), build=d.get("build"), outfit=d.get("outfit"), ears="horse", skirt=False), z0=-2.25)
     G.taur(r, None, d)
     hy, z = g.hy, g.z
+    r.add("armor_torso", "body", [0, 19.5, z], [cube("armor_ref", [-3, 19.25, z - 2])])
     if d.get("antlers"):
         cs = []
         for sg in (-1, 1):

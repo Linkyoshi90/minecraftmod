@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_water_buffalo_minotaur",
+  "spawners": {
+    "type": "monstergirls:water_buffalo_minotaur",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 4
+  }
+}

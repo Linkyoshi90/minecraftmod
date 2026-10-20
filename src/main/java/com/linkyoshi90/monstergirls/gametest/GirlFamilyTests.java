@@ -218,6 +218,7 @@ public class GirlFamilyTests {
     public static void nekomataPatienceAndSwat(GameTestHelper helper) {
         ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(4, 2, 4));
         Nekomata cat = spawn(helper, GirlSpecies.LYNX_NEKOMATA, new BlockPos(8, 2, 8));
+        cat.setFlag(AbstractMonsterGirl.FLAG_CALM, true);                 // a wild cat must be calmed with meat first
         helper.succeedWhen(() -> {
             check(cat.getAffection(player) >= 1, "standing still should win her over a little");
             cat.setAffection(player.getUUID(), 5);
@@ -250,7 +251,7 @@ public class GirlFamilyTests {
         zebra.setAffection(player.getUUID(), 100);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.SADDLE));
         zebra.interact(player, InteractionHand.MAIN_HAND);
-        check(!zebra.hasFlag(AbstractMonsterGirl.FLAG_SADDLED), "a zebra is never saddled");
+        check(zebra.hasFlag(AbstractMonsterGirl.FLAG_SADDLED), "every centaur takes a saddle now, the zebra too");
         alpaca.setAffection(player.getUUID(), 60);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.CHEST));
         alpaca.interact(player, InteractionHand.MAIN_HAND);

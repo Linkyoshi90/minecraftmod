@@ -21,7 +21,9 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.goal.EatBlockGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.TemptGoal;
@@ -31,6 +33,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -41,14 +44,19 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 
 /**
  * The hoofed family (centaur_field_guide.html): horse, zebra, reindeer, mountain goat, alpaca. Herd and hoof:
  * they graze, follow their lead mare, kick back at whatever hurts them from behind, and are won over by grooming
- * (a brush). Devoted, she lets you ride her (the zebra never does) or, for the alpaca, carries a chest.
+ * (a brush). At high friendship she lets you ride on her back (a saddle makes her faster) and wears a chestplate you
+ * give her (it shows over her torso and adds to her health); the devoted alpaca carries a chest. Any centaur who sees
+ * a player sprinting by gallops alongside, grinning from ear to ear.
  */
 public class Centaur extends AbstractMonsterGirl {
-    public static final int RIDE_AFFECTION = 60;
+    public static final int RIDE_AFFECTION = BED_AFFECTION;
+    public static final int ARMOUR_AFFECTION = 10;
+    private static final net.minecraft.resources.ResourceLocation ARMOUR_HEALTH = com.linkyoshi90.monstergirls.MonsterGirlsMod.id("centaur_armour_health");
     private static final int GROOM_COOLDOWN = 3000;
 
     private long nextGroom;
@@ -73,6 +81,7 @@ public class Centaur extends AbstractMonsterGirl {
                 super.checkAndPerformAttack(target);
             }
         });
+        this.goalSelector.addGoal(3, new RunAlongGoal());
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.1, Ingredient.of(Items.APPLE, Items.GOLDEN_CARROT, Items.CARROT, Items.SUGAR, Items.WHEAT), false));
         this.goalSelector.addGoal(5, new FollowEntityGoal(this, this::leader, 1.0, 10.0F, 5.0F));
         this.goalSelector.addGoal(6, new EatBlockGoal(this));
@@ -135,8 +144,25 @@ public class Centaur extends AbstractMonsterGirl {
         return stack.is(Items.GOLDEN_CARROT) || stack.is(Items.HAY_BLOCK) ? 3 : stack.is(Items.APPLE) ? 2 : 1;
     }
 
-    private boolean rideable() {
-        return this.species != GirlSpecies.ZEBRA_CENTAUR && this.species != GirlSpecies.ALPACA_CENTAUR;
+    private static boolean isChestplate(ItemStack stack) {
+        return stack.getItem() instanceof ArmorItem a && a.getType() == ArmorItem.Type.CHESTPLATE;
+    }
+
+    /** Her chestplate adds twice its armour points to her health (leather +6 ... diamond and netherite +16). */
+    public void refreshArmourHealth() {
+        var health = this.getAttribute(Attributes.MAX_HEALTH);
+        if (health == null) return;
+        health.removeModifier(ARMOUR_HEALTH);
+        if (this.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof ArmorItem a) {
+            health.addTransientModifier(new AttributeModifier(ARMOUR_HEALTH, a.getDefense() * 2.0, AttributeModifier.Operation.ADD_VALUE));
+        }
+        if (this.getHealth() > this.getMaxHealth()) this.setHealth(this.getMaxHealth());
+    }
+
+    public void wearArmour(ItemStack chestplate) {
+        this.setItemSlot(EquipmentSlot.CHEST, chestplate);
+        this.setDropChance(EquipmentSlot.CHEST, 2.0F);
+        this.refreshArmourHealth();
     }
 
     @Nullable
@@ -154,7 +180,19 @@ public class Centaur extends AbstractMonsterGirl {
             return InteractionResult.sidedSuccess(client);
         }
         if (this.isBaby()) return null;
-        if (stack.is(Items.SADDLE) && this.rideable() && !this.hasFlag(FLAG_SADDLED)) {
+        if (isChestplate(stack)) {                                     // torso armour
+            if (this.getAffection(player) < ARMOUR_AFFECTION) return InteractionResult.PASS;
+            if (!client) {
+                ItemStack old = this.getItemBySlot(EquipmentSlot.CHEST);
+                this.wearArmour(stack.split(1));
+                if (!old.isEmpty() && !player.getInventory().add(old)) this.spawnAtLocation(old);
+                this.heal(4.0F);
+                this.playSound(SoundEvents.ARMOR_EQUIP_IRON.value(), 1.0F, 1.0F);
+                if (this.level() instanceof ServerLevel server) this.hearts(server, 2);
+            }
+            return InteractionResult.sidedSuccess(client);
+        }
+        if (stack.is(Items.SADDLE) && !this.hasFlag(FLAG_SADDLED)) {
             if (this.getAffection(player) < RIDE_AFFECTION) {
                 if (!client) player.displayClientMessage(Component.translatable("message.monstergirls.ride_refused", this.getDisplayName()), true);
                 return InteractionResult.sidedSuccess(client);
@@ -189,7 +227,20 @@ public class Centaur extends AbstractMonsterGirl {
                 return InteractionResult.sidedSuccess(client);
             }
         }
-        if (stack.isEmpty() && !player.isShiftKeyDown() && this.hasFlag(FLAG_SADDLED) && !this.isVehicle() && this.getAffection(player) >= RIDE_AFFECTION) {
+        if (stack.isEmpty() && player.isShiftKeyDown()) {
+            ItemStack worn = this.getItemBySlot(EquipmentSlot.CHEST);
+            if (!worn.isEmpty() && this.getAffection(player) >= ARMOUR_AFFECTION) {   // help her out of her armour
+                if (!client) {
+                    this.setItemSlot(EquipmentSlot.CHEST, ItemStack.EMPTY);
+                    this.refreshArmourHealth();
+                    if (!player.getInventory().add(worn)) this.spawnAtLocation(worn);
+                    this.playSound(SoundEvents.ARMOR_EQUIP_LEATHER.value(), 1.0F, 1.0F);
+                }
+                return InteractionResult.sidedSuccess(client);
+            }
+            return this.getAffection(player) >= RIDE_AFFECTION ? this.pet(player) : null;   // riders pat her while crouching
+        }
+        if (stack.isEmpty() && !this.isVehicle() && this.getAffection(player) >= RIDE_AFFECTION) {   // high friendship: up on her back
             if (!client) {
                 this.getNavigation().stop();
                 this.setTarget(null);
@@ -234,7 +285,7 @@ public class Centaur extends AbstractMonsterGirl {
     @Nullable
     @Override
     public LivingEntity getControllingPassenger() {
-        return this.hasFlag(FLAG_SADDLED) && this.getFirstPassenger() instanceof Player p ? p : super.getControllingPassenger();
+        return this.getFirstPassenger() instanceof Player p && (this.hasFlag(FLAG_SADDLED) || this.getAffection(p) >= RIDE_AFFECTION) ? p : super.getControllingPassenger();
     }
 
     @Override
@@ -253,7 +304,7 @@ public class Centaur extends AbstractMonsterGirl {
 
     @Override
     protected float getRiddenSpeed(Player player) {
-        float base = this.species == GirlSpecies.HORSE_CENTAUR ? 0.32F : 0.26F;
+        float base = (this.species == GirlSpecies.HORSE_CENTAUR ? 0.32F : 0.26F) * (this.hasFlag(FLAG_SADDLED) ? 1.15F : 1.0F);
         return player.isSprinting() ? base * 1.45F : base;
     }
 
@@ -361,7 +412,7 @@ public class Centaur extends AbstractMonsterGirl {
 
     @Override
     protected boolean isSettled() {
-        return this.hasFlag(FLAG_SADDLED) || this.hasFlag(FLAG_CHEST);
+        return this.hasFlag(FLAG_SADDLED) || this.hasFlag(FLAG_CHEST) || !this.getItemBySlot(EquipmentSlot.CHEST).isEmpty();
     }
 
     @Override
@@ -378,5 +429,84 @@ public class Centaur extends AbstractMonsterGirl {
         this.leadMare = tag.getBoolean("LeadMare");
         this.fleeceTicks = tag.getInt("Fleece");
         this.pack.fromTag(tag.getList("Pack", 10), this.registryAccess());
+        this.refreshArmourHealth();
+        if (tag.contains("Health")) this.setHealth(tag.getFloat("Health"));
+    }
+
+    // --- running together ----------------------------------------------------------------------------------------
+
+    /** The player she is galloping beside, or null. */
+    @Nullable
+    private Player runningWith;
+
+    public boolean isRunningAlong() {
+        return this.runningWith != null;
+    }
+
+    /**
+     * Wild or tame, a centaur who sees a player sprint past cannot help herself: she gallops up beside them and keeps pace,
+     * grinning, until they slow down.
+     */
+    class RunAlongGoal extends Goal {
+        private int slowTicks;
+
+        RunAlongGoal() {
+            this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+        }
+
+        private boolean sprinting(Player p) {
+            return p.isSprinting() && !p.isPassenger() && !p.isSpectator() && !p.isFallFlying();
+        }
+
+        @Override
+        public boolean canUse() {
+            Centaur c = Centaur.this;
+            if (c.isBaby() || c.isOrderedToSit() || c.getTarget() != null || c.isVehicle() || c.tickCount % 7 != 0) return false;
+            Player p = c.level().getNearestPlayer(c, 16.0);
+            if (p == null || !this.sprinting(p) || c.isHostileTo(p)) return false;
+            c.runningWith = p;
+            return true;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            Player p = Centaur.this.runningWith;
+            return p != null && p.isAlive() && Centaur.this.getTarget() == null && !Centaur.this.isOrderedToSit()
+                    && this.slowTicks < 40 && p.distanceToSqr(Centaur.this) < 40 * 40;
+        }
+
+        @Override
+        public void start() {
+            this.slowTicks = 0;
+            Centaur.this.setFlag(FLAG_SMILE, true);
+        }
+
+        @Override
+        public void stop() {
+            Centaur.this.runningWith = null;
+            Centaur.this.setSprinting(false);
+            Centaur.this.setFlag(FLAG_SMILE, false);
+            Centaur.this.getNavigation().stop();
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+        @Override
+        public void tick() {
+            Centaur c = Centaur.this;
+            Player p = c.runningWith;
+            if (p == null) return;
+            this.slowTicks = this.sprinting(p) ? 0 : this.slowTicks + 1;
+            Vec3 fwd = Vec3.directionFromRotation(0, p.getYRot());
+            Vec3 side = new Vec3(-fwd.z, 0, fwd.x);
+            if (side.dot(c.position().subtract(p.position())) < 0) side = side.scale(-1);        // stay on the side she came from
+            Vec3 spot = p.position().add(side.scale(2.2)).add(fwd.scale(0.5));
+            c.setSprinting(true);
+            if (c.tickCount % 3 == 0) c.getNavigation().moveTo(spot.x, spot.y, spot.z, c.distanceToSqr(spot) > 16 ? 1.9 : 1.5);
+            c.getLookControl().setLookAt(p, 30.0F, 30.0F);
+        }
     }
 }

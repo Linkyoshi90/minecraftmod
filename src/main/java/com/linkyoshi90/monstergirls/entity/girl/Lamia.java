@@ -227,7 +227,7 @@ public class Lamia extends AbstractMonsterGirl {
     /** She swallows eggs she finds on the ground whole, and lies digesting for a while (a round middle). */
     @Override
     public boolean wantsToPickUp(ItemStack stack) {
-        return this.digest <= 0 && (stack.is(Items.EGG) || stack.is(Items.TURTLE_EGG) || stack.is(com.linkyoshi90.monstergirls.registry.ModItems.SPARROW_EGG.get()));
+        return this.digest <= 0 && (stack.is(Items.EGG) || stack.is(Items.TURTLE_EGG) || stack.is(com.linkyoshi90.monstergirls.registry.ModTags.LAID_EGGS));
     }
 
     @Override

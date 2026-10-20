@@ -860,4 +860,9 @@ public class CrowHarpy extends AbstractHarpy {
     public boolean storesGiftsAway() {
         return true;
     }
+
+    @Override
+    protected net.minecraft.world.item.ItemStack unfertilisedEgg() {
+        return new net.minecraft.world.item.ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.CROW_EGG.get());
+    }
 }

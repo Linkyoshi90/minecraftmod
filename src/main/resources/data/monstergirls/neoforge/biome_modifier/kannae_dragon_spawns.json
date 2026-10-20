@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_kannae_dragon",
+  "spawners": {
+    "type": "monstergirls:kannae_dragon",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

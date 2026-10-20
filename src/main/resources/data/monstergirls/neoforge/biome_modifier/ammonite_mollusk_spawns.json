@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_ammonite_mollusk",
+  "spawners": {
+    "type": "monstergirls:ammonite_mollusk",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

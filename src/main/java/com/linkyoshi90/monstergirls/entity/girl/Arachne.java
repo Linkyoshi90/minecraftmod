@@ -5,6 +5,7 @@ import com.linkyoshi90.monstergirls.block.GirlEggBlockEntity;
 import com.linkyoshi90.monstergirls.registry.ModBlocks;
 import com.linkyoshi90.monstergirls.registry.ModItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.LongTag;
@@ -12,6 +13,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -31,6 +33,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.monster.Monster;
@@ -40,7 +43,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -58,10 +63,18 @@ public class Arachne extends AbstractMonsterGirl {
 
     private int silkTicks;
     private long nextMoult;
-    private int hideTicks;
     private int carryTicks;
     private final List<BlockPos> webs = new ArrayList<>();
     private long websExpire;
+    /** The orb weaver's hunting web (wild, hostile ones only): it stays until she is calmed. */
+    private final List<BlockPos> trapWebs = new ArrayList<>();
+    @Nullable
+    private BlockPos trapCentre;
+    /** The trapdoor spider's hole: she waits in it, unseen, and bursts out at whatever walks past. */
+    @Nullable
+    private BlockPos burrow;
+    private boolean inBurrow;
+    private int ambushCooldown;
 
     public Arachne(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
@@ -83,6 +96,11 @@ public class Arachne extends AbstractMonsterGirl {
             }
         });
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        if (species == GirlSpecies.ORB_WEAVER_ARACHNE) {
+            // anything caught in her hunting web is dinner (a player she is calm with excepted)
+            this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 5, false, false,
+                    e -> this.isCaughtInTrap(e) && !(e instanceof Arachne) && !(e instanceof Player p && !this.isHostileTo(p))));
+        }
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Rabbit.class, true, r -> this.bestAffection() < 60));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Chicken.class, true, c -> this.bestAffection() < 10));
         if (species == GirlSpecies.TRAPDOOR_SPIDER_ARACHNE || species == GirlSpecies.WOLF_SPIDER_ARACHNE) {
@@ -100,6 +118,19 @@ public class Arachne extends AbstractMonsterGirl {
             case WOLF_SPIDER_ARACHNE -> girlAttributes(22, 0.34, 4);
             default -> girlAttributes(20, 0.28, 3);
         };
+    }
+
+    /** The ambush hunters: the trapdoor spider and the orb weaver attack on sight until someone calms them with meat. */
+    @Override
+    protected boolean wildHostile() {
+        return this.species == GirlSpecies.TRAPDOOR_SPIDER_ARACHNE || this.species == GirlSpecies.ORB_WEAVER_ARACHNE;
+    }
+
+    @Override
+    protected void calmDown(ServerLevel level, Player player) {
+        super.calmDown(level, player);
+        this.leaveBurrow();
+        this.clearTrap(level);
     }
 
     @Override
@@ -246,6 +277,7 @@ public class Arachne extends AbstractMonsterGirl {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean hurt = super.hurt(source, amount);
+        this.leaveBurrow();
         this.setHidden(false);
         if (hurt && this.species == GirlSpecies.TARANTULA_ARACHNE && source.getEntity() instanceof LivingEntity attacker && attacker.distanceToSqr(this) < 16) {
             attacker.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 120, 0));
@@ -283,16 +315,140 @@ public class Arachne extends AbstractMonsterGirl {
                 if (p == null || !p.getInventory().add(moult)) this.spawnAtLocation(moult);
             }
         }
-        if (this.species == GirlSpecies.TRAPDOOR_SPIDER_ARACHNE) {         // lying in wait, unseen
-            boolean idle = this.getTarget() == null && this.getNavigation().isDone() && !this.isBaby();
-            this.hideTicks = idle ? this.hideTicks + 1 : 0;
-            if (this.hideTicks > 200) this.setHidden(true);
-            else if (!idle) this.setHidden(false);
-        }
+        if (this.species == GirlSpecies.TRAPDOOR_SPIDER_ARACHNE) this.tickBurrow(server);
+        if (this.species == GirlSpecies.ORB_WEAVER_ARACHNE && !this.isCalm() && !this.isBaby() && this.tickCount % 61 == 0) this.spinTrap(server);
         if (this.species == GirlSpecies.ORB_WEAVER_ARACHNE && this.tickCount % 200 == 0) this.phantomNet(server);
         if (!this.webs.isEmpty() && (now >= this.websExpire || server.isDay() && this.species == GirlSpecies.ORB_WEAVER_ARACHNE && this.tickCount % 200 == 0)) {
             this.clearWebs(server);
         }
+    }
+
+    // --- the trapdoor spider's burrow ----------------------------------------------------------------------------
+
+    /** Soft ground she can dig her hole in. */
+    private static boolean diggable(BlockState s) {
+        return s.is(BlockTags.DIRT) || s.is(BlockTags.SAND) || s.is(Blocks.GRAVEL) || s.is(Blocks.SNOW_BLOCK) || s.is(Blocks.CLAY) || s.is(Blocks.SOUL_SOIL);
+    }
+
+    public boolean isInBurrow() {
+        return this.inBurrow;
+    }
+
+    @Nullable
+    public BlockPos getBurrow() {
+        return this.burrow;
+    }
+
+    /**
+     * Wild (or with no player of hers around) she digs a hole in soft ground and sinks into it, out of sight. Whatever
+     * comes within three blocks (a player who has not calmed her, an animal; only monsters once she is calm) and she
+     * bursts out and bites. Afterwards she goes back to her hole.
+     */
+    private void tickBurrow(ServerLevel level) {
+        if (this.ambushCooldown > 0) this.ambushCooldown--;
+        boolean lurk = !this.isBaby() && !this.isOrderedToSit() && this.getTarget() == null && this.ambushCooldown == 0
+                && (!this.isCalm() || this.bondedPlayer(BED_AFFECTION, 16) == null);
+        if (this.inBurrow) {
+            LivingEntity prey = lurk ? this.ambushPrey() : null;
+            if (!lurk || prey != null || this.burrow == null || !level.getBlockState(this.burrow).isAir()) {
+                this.leaveBurrow();
+                if (prey != null) {
+                    this.setTarget(prey);
+                    Vec3 d = prey.position().subtract(this.position()).normalize();
+                    this.setDeltaMovement(d.x * 0.6, 0.55, d.z * 0.6);
+                    this.startTimedAction(Action.LEAP, 14);
+                    this.playSound(SoundEvents.SPIDER_AMBIENT, 1.2F, 0.8F);
+                }
+            }
+            return;
+        }
+        if (!lurk) return;
+        if (this.burrow == null && this.onGround() && this.tickCount % 41 == 0) {
+            BlockPos below = this.blockPosition().below();
+            if (diggable(level.getBlockState(below)) && level.getBlockState(below.above()).isAir()) {
+                level.destroyBlock(below, false, this);
+                this.burrow = below.immutable();
+                this.startTimedAction(Action.DIG, 30);
+            }
+        }
+        if (this.burrow == null) return;
+        Vec3 hole = Vec3.atBottomCenterOf(this.burrow);
+        if (this.distanceToSqr(hole.x, this.getY(), hole.z) > 1.0) {
+            if (this.tickCount % 20 == 0) this.getNavigation().moveTo(hole.x, hole.y + 1, hole.z, 0.9);
+            if (this.distanceToSqr(hole) > 24 * 24) this.burrow = null;            // strayed too far: she digs a new one
+            return;
+        }
+        if (level.getBlockState(this.burrow).isAir()) this.enterBurrow();
+    }
+
+    private void enterBurrow() {
+        this.getNavigation().stop();
+        this.inBurrow = true;
+        this.noPhysics = true;
+        this.setNoGravity(true);
+        this.setDeltaMovement(Vec3.ZERO);
+        this.moveTo(this.burrow.getX() + 0.5, this.burrow.getY() - 0.4, this.burrow.getZ() + 0.5, this.getYRot(), 0);
+        this.setHidden(true);
+    }
+
+    private void leaveBurrow() {
+        if (!this.inBurrow) return;
+        this.inBurrow = false;
+        this.noPhysics = false;
+        this.setNoGravity(false);
+        if (this.burrow != null) this.moveTo(this.burrow.getX() + 0.5, this.burrow.getY() + 1.0, this.burrow.getZ() + 0.5, this.getYRot(), 0);
+        this.setHidden(false);
+        this.ambushCooldown = 200;
+    }
+
+    @Nullable
+    private LivingEntity ambushPrey() {
+        return this.nearest(LivingEntity.class, 3.0, e -> e.isAlive() && !(e instanceof Arachne) && (e instanceof Player p ? this.isHostileTo(p)
+                : this.isCalm() ? e instanceof Monster : e instanceof Animal || e instanceof Monster));
+    }
+
+    @Override
+    public boolean isPushable() {
+        return !this.inBurrow && super.isPushable();
+    }
+
+    // --- the orb weaver's hunting web ---------------------------------------------------------------------------
+
+    /** A wild orb weaver strings cobwebs across the paths around the spot she settled on, then waits for her catch. */
+    private void spinTrap(ServerLevel level) {
+        if (this.trapCentre == null) {
+            if (!this.onGround() || this.getTarget() != null) return;
+            this.trapCentre = this.blockPosition().immutable();
+        }
+        this.trapWebs.removeIf(w -> !level.getBlockState(w).is(Blocks.COBWEB));
+        if (this.trapWebs.size() >= 8 || this.getTarget() != null) return;
+        for (int i = 0; i < 12; i++) {
+            BlockPos w = this.trapCentre.offset(this.random.nextInt(7) - 3, this.random.nextInt(2), this.random.nextInt(7) - 3);
+            if (w.closerThan(this.trapCentre, 1.5) || !level.getBlockState(w).isAir()) continue;
+            BlockState under = level.getBlockState(w.below());
+            if (!under.isFaceSturdy(level, w.below(), Direction.UP) && !under.is(Blocks.COBWEB)) continue;
+            level.setBlock(w, Blocks.COBWEB.defaultBlockState(), 3);
+            this.trapWebs.add(w.immutable());
+            this.startTimedAction(Action.SPIN, 40);
+            return;                                                         // one strand at a time
+        }
+    }
+
+    /** Whether something is stuck in one of her hunting webs right now. */
+    public boolean isCaughtInTrap(LivingEntity e) {
+        if (this.trapWebs.isEmpty()) return false;
+        BlockPos p = e.blockPosition();
+        return this.trapWebs.contains(p) || this.trapWebs.contains(p.above());
+    }
+
+    public List<BlockPos> getTrapWebs() {
+        return this.trapWebs;
+    }
+
+    private void clearTrap(ServerLevel level) {
+        for (BlockPos w : this.trapWebs) if (level.getBlockState(w).is(Blocks.COBWEB)) level.removeBlock(w, false);
+        this.trapWebs.clear();
+        this.trapCentre = null;
     }
 
     /**
@@ -326,7 +482,10 @@ public class Arachne extends AbstractMonsterGirl {
 
     @Override
     public void remove(RemovalReason reason) {
-        if (this.level() instanceof ServerLevel server && reason.shouldDestroy()) this.clearWebs(server);
+        if (this.level() instanceof ServerLevel server && reason.shouldDestroy()) {
+            this.clearWebs(server);
+            this.clearTrap(server);
+        }
         super.remove(reason);
     }
 
@@ -342,6 +501,11 @@ public class Arachne extends AbstractMonsterGirl {
         for (BlockPos p : this.webs) w.add(LongTag.valueOf(p.asLong()));
         tag.put("Webs", w);
         tag.putLong("WebsExpire", this.websExpire);
+        net.minecraft.nbt.ListTag tw = new net.minecraft.nbt.ListTag();
+        for (BlockPos p : this.trapWebs) tw.add(LongTag.valueOf(p.asLong()));
+        tag.put("TrapWebs", tw);
+        if (this.trapCentre != null) tag.putLong("TrapCentre", this.trapCentre.asLong());
+        if (this.burrow != null) tag.putLong("Burrow", this.burrow.asLong());
     }
 
     @Override
@@ -353,6 +517,10 @@ public class Arachne extends AbstractMonsterGirl {
         this.webs.clear();
         for (Tag t : tag.getList("Webs", Tag.TAG_LONG)) this.webs.add(BlockPos.of(((LongTag) t).getAsLong()));
         this.websExpire = tag.getLong("WebsExpire");
+        this.trapWebs.clear();
+        for (Tag t : tag.getList("TrapWebs", Tag.TAG_LONG)) this.trapWebs.add(BlockPos.of(((LongTag) t).getAsLong()));
+        this.trapCentre = tag.contains("TrapCentre") ? BlockPos.of(tag.getLong("TrapCentre")) : null;
+        this.burrow = tag.contains("Burrow") ? BlockPos.of(tag.getLong("Burrow")) : null;
     }
 
     /** Devoted (60+): an arachne within 32 blocks extends the spider truce to her player. */

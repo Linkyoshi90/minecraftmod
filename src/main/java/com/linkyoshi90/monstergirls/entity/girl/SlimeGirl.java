@@ -66,6 +66,7 @@ public class SlimeGirl extends AbstractMonsterGirl {
         this.setCanPickUpLoot(true);
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.0, Ingredient.of(favourites(species).toArray(new net.minecraft.world.level.ItemLike[0])), false));
         this.goalSelector.addGoal(5, new FollowEntityGoal(this, this::partnerEntity, 1.2, 1.0F, 0.5F));
+        this.goalSelector.addGoal(6, new BounceGoal(this));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 0.8));
     }
 

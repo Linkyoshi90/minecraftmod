@@ -197,6 +197,7 @@ public class SeagullHarpy extends AbstractHarpy {
         this.goalSelector.addGoal(2, new SirenSongGoal(this));
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.1, this::isEdible, false));
         this.goalSelector.addGoal(4, new FollowBoatGoal(this));
+        this.goalSelector.addGoal(4, new com.linkyoshi90.monstergirls.entity.ai.RoostInHopperGoal(this));
         this.goalSelector.addGoal(5, new BegForFoodGoal(this));
         this.goalSelector.addGoal(5, new SeekItemGoal(this, 1.1, 10.0));
         this.goalSelector.addGoal(6, new BatheGoal(this, 1.0));
@@ -288,5 +289,22 @@ public class SeagullHarpy extends AbstractHarpy {
     @Override
     public ItemStack rollGift(Player player) {
         return HarpyGifts.sea(this.random);
+    }
+
+    @Override
+    protected net.minecraft.world.item.ItemStack unfertilisedEgg() {
+        return new net.minecraft.world.item.ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.GULL_EGG.get());
+    }
+
+    /** Gulls roost in hoppers too (see {@link com.linkyoshi90.monstergirls.entity.ai.RoostInHopperGoal}). */
+    @Override
+    public boolean roostsInHoppers() {
+        return true;
+    }
+
+    /** A moulted feather or a flint from the beach: with a sparrow's twigs, everything a fletcher needs. */
+    @Override
+    protected net.minecraft.world.item.ItemStack roostDrop() {
+        return new net.minecraft.world.item.ItemStack(this.random.nextBoolean() ? net.minecraft.world.item.Items.FEATHER : net.minecraft.world.item.Items.FLINT);
     }
 }

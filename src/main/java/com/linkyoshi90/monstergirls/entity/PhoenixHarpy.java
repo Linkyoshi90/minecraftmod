@@ -458,4 +458,9 @@ public class PhoenixHarpy extends AbstractHarpy {
 
     public static final int HEAL_INTERVAL = 41;
     public static final double HEAL_RANGE = 8.0;
+
+    @Override
+    protected net.minecraft.world.item.ItemStack unfertilisedEgg() {
+        return new net.minecraft.world.item.ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.EMBER_EGG.get());
+    }
 }

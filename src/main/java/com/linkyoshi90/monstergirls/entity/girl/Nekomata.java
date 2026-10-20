@@ -71,7 +71,9 @@ public class Nekomata extends AbstractMonsterGirl {
         super(type, level, species);
         boolean tiger = species == GirlSpecies.TIGER_NEKOMATA;
         this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Player.class, 8.0F, 1.0, 1.4,
-                p -> p instanceof Player pl && pl.isSprinting() && this.getAffection(pl) < 10 && !pl.isSpectator()));
+                p -> p instanceof Player pl && pl.isSprinting() && this.isCalm() && this.getAffection(pl) < 10 && !pl.isSpectator()));
+        // she picks her prey and creeps up on it, belly low, before the pounce
+        this.goalSelector.addGoal(1, new StalkGoal(this, 0.55, 3.5, false, t -> !this.isAggressiveSprint()));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.3, true) {
             @Override
             protected void checkAndPerformAttack(LivingEntity target) {
@@ -100,6 +102,23 @@ public class Nekomata extends AbstractMonsterGirl {
             case SERVAL_NEKOMATA -> girlAttributes(16, 0.3, 3).add(Attributes.JUMP_STRENGTH, 0.66);
             default -> girlAttributes(18, 0.3, 3);
         };
+    }
+
+    /** Wild cats are hunters first: a stranger is prey until she has been given meat. */
+    @Override
+    protected boolean wildHostile() {
+        return true;
+    }
+
+    /** One wild cat in ten was born a nekomata: her tail is split in two from the start. */
+    @Override
+    protected int rollTails(net.minecraft.util.RandomSource random) {
+        return random.nextInt(10) == 0 ? 2 : 1;
+    }
+
+    /** The cheetah's sprint burst skips the stalk: she simply runs her prey down. */
+    private boolean isAggressiveSprint() {
+        return this.burstTicks > 0;
     }
 
     // --- food, petting, presents ---------------------------------------------------------------------------------

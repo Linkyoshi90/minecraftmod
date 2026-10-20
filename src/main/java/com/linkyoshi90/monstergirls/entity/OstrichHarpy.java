@@ -578,4 +578,9 @@ public class OstrichHarpy extends AbstractHarpy {
         this.following = true;
         this.setHomePos(null);
     }
+
+    @Override
+    protected net.minecraft.world.item.ItemStack unfertilisedEgg() {
+        return new net.minecraft.world.item.ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.OSTRICH_EGG.get());
+    }
 }
