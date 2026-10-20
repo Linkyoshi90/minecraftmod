@@ -11,17 +11,17 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 /**
- * Sparrows nest in nooks and boxes, and a dropper is just the right size: she picks one nearby that no other sparrow
+ * Sparrows nest in nooks and hollows, and the bowl of a hopper is just the right size: she picks one nearby that no other sparrow
  * has claimed, settles on it and roosts there, laying an unfertilised egg into it every so often (see
  * {@link SparrowHarpy#tickRoost}). Anything more urgent (danger, food, a song) can still call her away; she comes back.
  */
-public class RoostInDropperGoal extends Goal {
+public class RoostInHopperGoal extends Goal {
     public static final int SEARCH_RADIUS = 12;
 
     private final SparrowHarpy sparrow;
     private int ticks;
 
-    public RoostInDropperGoal(SparrowHarpy sparrow) {
+    public RoostInHopperGoal(SparrowHarpy sparrow) {
         this.sparrow = sparrow;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));
     }
@@ -34,7 +34,7 @@ public class RoostInDropperGoal extends Goal {
             this.sparrow.setRoost(roost = null);
         }
         if (roost == null) {
-            roost = findDropper(this.sparrow);
+            roost = findHopper(this.sparrow);
             if (roost == null) return false;
             this.sparrow.setRoost(roost);
         }
@@ -62,14 +62,14 @@ public class RoostInDropperGoal extends Goal {
         return true;
     }
 
-    /** A dropper with room above it for a small bird. */
+    /** A hopper with room above it for a small bird (she settles into its bowl). */
     public static boolean isRoostable(Level level, BlockPos pos) {
-        return level.getBlockState(pos).is(Blocks.DROPPER) && level.getBlockState(pos.above()).getCollisionShape(level, pos.above()).isEmpty();
+        return level.getBlockState(pos).is(Blocks.HOPPER) && level.getBlockState(pos.above()).getCollisionShape(level, pos.above()).isEmpty();
     }
 
-    /** The closest free dropper around her (one no other sparrow nearby calls her own). */
+    /** The closest free hopper around her (one no other sparrow nearby calls her own). */
     @Nullable
-    public static BlockPos findDropper(SparrowHarpy sparrow) {
+    public static BlockPos findHopper(SparrowHarpy sparrow) {
         Level level = sparrow.level();
         BlockPos origin = sparrow.blockPosition();
         BlockPos best = null;

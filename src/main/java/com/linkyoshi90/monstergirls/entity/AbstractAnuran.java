@@ -1,5 +1,6 @@
 package com.linkyoshi90.monstergirls.entity;
 
+import com.linkyoshi90.monstergirls.entity.ai.AmphibiousMoveControl;
 import com.linkyoshi90.monstergirls.entity.ai.LaySpawnGoal;
 import com.linkyoshi90.monstergirls.entity.ai.ShareBedGoal;
 import com.linkyoshi90.monstergirls.entity.ai.SitWhenOrderedGoal;
@@ -132,6 +133,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     protected AbstractAnuran(EntityType<? extends AbstractAnuran> type, Level level) {
         super(type, level);
         this.setPathfindingMalus(PathType.WATER, this.waterPathMalus());
+        this.moveControl = new AmphibiousMoveControl(this, 1.0F); // swims up and down instead of walking the bottom
         this.setPathfindingMalus(PathType.DANGER_FIRE, -1.0F);
         this.setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0F);
         this.goalSelector.addGoal(-1, new TadpoleGoal(this)); // above everything, FloatGoal included

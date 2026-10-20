@@ -18,7 +18,9 @@ import com.linkyoshi90.monstergirls.entity.OwlHarpy;
 import com.linkyoshi90.monstergirls.entity.PhoenixHarpy;
 import com.linkyoshi90.monstergirls.entity.RiflebirdHarpy;
 import com.linkyoshi90.monstergirls.entity.SeagullHarpy;
+import com.linkyoshi90.monstergirls.entity.girl.GirlSpecies;
 import com.linkyoshi90.monstergirls.registry.ModEntities;
+import com.linkyoshi90.monstergirls.registry.ModGirls;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -54,6 +56,9 @@ public final class MonsterGirlsClient {
         event.registerEntityRenderer(ModEntities.CANE_TOAD.get(), ctx -> new AnuranRenderer<CaneToad>(ctx, "cane_toad", 1.0F, 0.45F));
         event.registerEntityRenderer(ModEntities.NATTERJACK.get(), ctx -> new AnuranRenderer<Natterjack>(ctx, "natterjack", 1.0F, 0.35F));
         event.registerEntityRenderer(ModEntities.SURINAM_TOAD.get(), ctx -> new AnuranRenderer<SurinamToad>(ctx, "surinam_toad", 1.0F, 0.4F));
+        for (GirlSpecies s : GirlSpecies.values()) {
+            event.registerEntityRenderer(ModGirls.type(s), ctx -> new GirlRenderer(ctx, s));
+        }
         event.registerEntityRenderer(ModEntities.PHOENIX_HARPY.get(), ctx -> {
             HarpyRenderer<PhoenixHarpy> renderer = new HarpyRenderer<>(ctx, "phoenix_harpy", 0.85F, 0.35F, PhoenixHarpy::getVariantSuffix);
             renderer.addRenderLayer(new AutoGlowingGeoLayer<>(renderer)); // flames glow (phoenix_harpy[_variant]_glowmask.png)

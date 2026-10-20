@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_wolf_spider_arachne",
+  "spawners": {
+    "type": "monstergirls:wolf_spider_arachne",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

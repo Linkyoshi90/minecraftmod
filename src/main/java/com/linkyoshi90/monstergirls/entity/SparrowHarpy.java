@@ -1,12 +1,11 @@
 package com.linkyoshi90.monstergirls.entity;
 
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
-import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.core.Direction;
 import com.linkyoshi90.monstergirls.registry.ModItems;
-import com.linkyoshi90.monstergirls.entity.ai.RoostInDropperGoal;
+import com.linkyoshi90.monstergirls.entity.ai.RoostInHopperGoal;
 import com.linkyoshi90.monstergirls.entity.ai.ListenToMusicGoal;
 import com.linkyoshi90.monstergirls.entity.ai.BatheGoal;
 import com.linkyoshi90.monstergirls.entity.ai.BegAtFarmGoal;
@@ -112,7 +111,7 @@ public class SparrowHarpy extends AbstractHarpy {
     /** Shares one variant across a spawn group so flocks match. */
     private record VariantGroupData(Variant variant) implements SpawnGroupData {}
 
-    /** An egg every five to ten minutes while she roosts on a dropper. */
+    /** An egg every five to ten minutes while she roosts on a hopper. */
     public static final int EGG_INTERVAL = 6000;
 
     @Nullable
@@ -182,7 +181,7 @@ public class SparrowHarpy extends AbstractHarpy {
         this.goalSelector.addGoal(3, new SingGoal(this));
         // Dangle bread in front of her long enough and she may just grab it.
         this.goalSelector.addGoal(3, new SnatchGoal(this, 1.2, SnatchGoal.From.HAND, 600, 2400, p -> true));
-        this.goalSelector.addGoal(4, new RoostInDropperGoal(this));
+        this.goalSelector.addGoal(4, new RoostInHopperGoal(this));
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.0, Ingredient.of(ModTags.SPARROW_HARPY_FOOD), true));
         this.goalSelector.addGoal(5, new SeekItemGoal(this, 1.0, 8.0));
         this.goalSelector.addGoal(5, new ReturnHomeGoal(this, 1.0, HOME_RADIUS));
@@ -245,9 +244,9 @@ public class SparrowHarpy extends AbstractHarpy {
         if (tag.contains("EggTime")) this.eggTime = tag.getInt("EggTime");
     }
 
-    // --- roosting in a dropper ------------------------------------------------------------------------------------
+    // --- roosting on a hopper ------------------------------------------------------------------------------------
 
-    /** The dropper she has claimed as her roost (see {@link RoostInDropperGoal}), or null. */
+    /** The hopper she has claimed as her roost (see {@link RoostInHopperGoal}), or null. */
     @Nullable
     public BlockPos getRoost() {
         return this.roost;
@@ -272,12 +271,12 @@ public class SparrowHarpy extends AbstractHarpy {
         this.eggTime = ticks;
     }
 
-    /** While she sits on her dropper, every so often an unfertilised egg goes into it. */
+    /** While she sits in her hopper, every so often an unfertilised egg goes into it. */
     public void tickRoost(ServerLevel level) {
         if (!this.roosting || this.roost == null || --this.eggTime > 0) return;
         this.eggTime = EGG_INTERVAL + this.random.nextInt(EGG_INTERVAL);
-        if (!(level.getBlockEntity(this.roost) instanceof DispenserBlockEntity dropper)) return;
-        ItemStack rest = HopperBlockEntity.addItem(null, dropper, new ItemStack(ModItems.SPARROW_EGG.get()), Direction.UP);
+        if (!(level.getBlockEntity(this.roost) instanceof HopperBlockEntity hopper)) return;
+        ItemStack rest = HopperBlockEntity.addItem(null, hopper, new ItemStack(ModItems.SPARROW_EGG.get()), Direction.UP);
         if (rest.isEmpty()) {
             level.playSound(null, this.roost, SoundEvents.CHICKEN_EGG, SoundSource.NEUTRAL, 0.8F, 1.4F);
         }

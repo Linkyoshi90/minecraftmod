@@ -37,6 +37,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:v
 .empty{display:none;color:var(--muted);padding:24px}
 @media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules{grid-template-columns:1fr}.count{width:100%;margin-left:0}}
 @media print{body{background:white;color:#111}.card,.note,.rule{background:white;border-color:#aaa;color:#111}p,.lede,.section-intro,footer{color:#333}.toolbar{display:none}.hero{grid-template-columns:1fr 1fr}}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}code{font-size:.9em;color:var(--green)}.card ul{padding-left:1.2rem;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -44,6 +45,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:v
   <div class="eyebrow">A field guide to an inhabited world</div>
   <h1>Harpies</h1>
   <p class="lede">Eight distinct birdlike monster-girl concepts designed as part of Minecraft’s ecology: creatures with habitats, instincts, routines, and memorable ways to interact with the player—not a separate civilization.</p>
+  <nav class="volumes" aria-label="Field guide volumes"><a href="harpy_field_guide.html" class="here">I · Harpies</a><a href="anuran_field_guide.html">II · Bullywugs &amp; Mucus Toads</a><a href="nekomata_field_guide.html">III · Nekomata</a><a href="kitsune_field_guide.html">IV · Kitsune</a><a href="lamia_field_guide.html">V · Lamia</a><a href="arachne_field_guide.html">VI · Arachne</a><a href="centaur_field_guide.html">VII · Centaurs</a><a href="merfolk_field_guide.html">VIII · Merfolk</a><a href="slime_field_guide.html">IX · Slimes</a></nav>
 </header>
 <main>
   <section class="hero" aria-label="Sparrow harpy concept art">
@@ -177,7 +179,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:v
     <p class="section-intro">A small set of reusable systems can support very different species without making every encounter a complicated simulation.</p>
     <div class="rules">
       <div class="rule"><strong>1. Ambient population</strong>Most harpies are temporary or lightly simulated. Only nearby, notable, or bonded individuals need persistent memory.</div>
-      <div class="rule"><strong>2. Nests & eggs</strong>Nests are habitat objects. Eggs are usually unfertilized; fertilization can be a special mechanic rather than a default breeding loop.</div>
+      <div class="rule"><strong>2. Nests & eggs</strong>Nests are habitat objects. Eggs are unfertilised by default (riflebird, sparrow). Fertilised eggs come only from sharing a bed with a harpy who trusts you: she builds a nest and lays a clutch (see Nests, hatchlings &amp; companions).</div>
       <div class="rule"><strong>3. Individual bonds</strong>Track a relationship only for a deliberately bonded harpy. A field journal can record species discoveries without assigning every creature a personal name.</div>
     </div>
   </section>
@@ -205,7 +207,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:v
         <ul>
           <li>Harpies are the starting point and a small sliver of the wider vision.</li>
           <li>Open: what this mod does differently from existing monster-girl mods is undecided.</li>
-          <li>Hatchlings (2026-10-18): a harpy who spent the night beside someone she trusts builds a woven nest with one fertilised egg (it cracks in four stages, about a day, assets by tools/gen_harpy_eggs.py); a tiny hatchling harpy comes out (eight models, tools/gen_hatchlings.py) and grows up in five days. Decided 2026-10-18: with the frogs and toads joining, the mod is called MonsterGirls (id <code>monstergirls</code>, renamed from <code>harpies</code> on 2026-10-18).</li>
+          <li>Hatchlings (2026-10-18): a harpy who spent the night beside someone she trusts builds a woven nest with a fertilised egg (since 2026-10-19 a clutch of two to four, each hatchling in a random colour) (it cracks in four stages, about a day, assets by tools/gen_harpy_eggs.py); a tiny hatchling harpy comes out (eight models, tools/gen_hatchlings.py) and grows up in five days. Decided 2026-10-18: with the frogs and toads joining, the mod is called MonsterGirls (id <code>monstergirls</code>, renamed from <code>harpies</code> on 2026-10-18).</li>
           <li>Open: the pitch builds on the monmusu universe, while the design philosophy above says harpies are ecology, not a separate civilization. Not yet reconciled.</li>
         </ul>
       </div>
@@ -326,12 +328,41 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:v
     </div>
   </section>
 
+<!-- relationships-2026-10-19 -->
+  <section style="margin-top:48px" id="relationships">
+    <h2>Relationships (shared by every family)</h2>
+    <p class="section-intro">Updated 2026-10-19. Every MonsterGirls family uses the same relationship core; each volume only changes how trust is won, what she gives back and how she bears young. The new families (volumes III to IX) are in their own guides.</p>
+    <div class="rules"><div class="rule"><strong>Affection</strong>Each monster girl remembers every player separately. Feeding, petting and her family's own bond action raise it; hurting her lowers it. <code>/monstergirls bonds</code> lists everyone nearby.</div><div class="rule"><strong>Sit</strong>Right-click any monster girl with a plain stick to make her sit; again to let her get up.</div><div class="rule"><strong>Sharing a bed</strong>At high friendship (25) she may join you in bed: once a night she decides, one in three at 25, certain at 100. Sleep through the night and she is expecting.</div><div class="rule"><strong>Expecting</strong>A pregnancy lasts one in-game day. Her belly rounds out as it goes on (the model shows it).</div><div class="rule"><strong>Born devoted</strong>Her young are born devoted to the player who fathered them (full affection) and never share that player's bed.</div><div class="rule"><strong>Presents</strong>At high friendship every family brings presents of its own kind.</div></div>
+    <div class="table-wrap"><table><thead><tr><th>Bond</th><th>Affection</th><th>What it means</th></tr></thead><tbody><tr><th>Wild</th><td>0</td><td>Keeps her distance; her species&#x27; instincts decide everything.</td></tr><tr><th>Curious</th><td>3+</td><td>Lets you come close and watches what you do.</td></tr><tr><th>Fond</th><td>10+</td><td>Follows you a little way, accepts petting, stops fleeing.</td></tr><tr><th>High friendship</th><td>25+</td><td>May join you in bed at night (one night in three, more the fonder she is) and brings presents.</td></tr><tr><th>Devoted</th><td>60+</td><td>The family&#x27;s devoted perk unlocks (see each guide).</td></tr><tr><th>Full devotion</th><td>100</td><td>The most there is. Every daughter feels this for the player who fathered her.</td></tr></tbody></table></div>
+  </section>
+  <section style="margin-top:48px" id="companions">
+    <h2>Nests, hatchlings &amp; companions</h2>
+    <p class="section-intro">Updated 2026-10-19. What a harpy does once you have won her over. All of this is in the game.</p>
+    <div class="grid">
+      <div class="card"><h3>Mating &amp; the nest</h3><ul>
+        <li><b>Bed</b>At high friendship (25) she may hop into your bed and lie down beside you (one night in three at 25, every night at 100). Sleep through the night and she is expecting.</li>
+        <li><b>Expecting</b>One in-game day. Her belly rounds out as the day goes on (a belly bone added to every adult model).</li>
+        <li><b>Nest &amp; clutch</b>When her time comes she picks a spot (her home if it will do, otherwise a dry, solid spot nearby), weaves a nest for a while, and lays a clutch of two to four fertilised eggs in it. The nest becomes her home, so she broods on it at night.</li>
+        <li><b>Hatchlings</b>The eggs crack over about a day and hatch one hatchling each: her species, each in a random colour of it. Hatchlings grow up in five days.</li>
+        <li><b>Born devoted</b>Every hatchling is devoted to the player who fathered the clutch: full affection, and her species' own bond on top (a crow treats that player as her companion, a phoenix is imprinted, an ostrich is loyal). A daughter never shares her father's bed.</li>
+      </ul></div>
+      <div class="card"><h3>Companions</h3><ul>
+        <li><b>Sit</b>Right-click any harpy with a stick: she sits down (a new sit pose) until you do it again.</li>
+        <li><b>Crow</b>At high friendship she sometimes brings raw iron or raw gold, a diamond in rare cases. With a chest, barrel or hopper nearby that already holds that item, she drops it in there instead of handing it over.</li>
+        <li><b>Riflebird</b>Brings seeds straight into your inventory (now and then a torchflower seed or pitcher pod), on top of her unfertilised eggs.</li>
+        <li><b>Owl</b>Brings food from the night's hunt: rabbit, chicken, cod, berries, apples.</li>
+        <li><b>Seagull &amp; albatross</b>Bring what the sea gave up: fish, kelp, ink sacs, prismarine, turtle scutes, a nautilus shell, very rarely a heart of the sea.</li>
+        <li><b>Phoenix</b>Her warmth heals the player she imprinted on: half a heart every two seconds within eight blocks.</li>
+        <li><b>Sparrow</b>Roosts on a hopper and lays an unfertilised Sparrow Egg into it every five to ten minutes. Sparrow eggs can be eaten raw and bake into cakes and pumpkin pies like hen eggs (they also count as eggs for other mods: <code>c:eggs</code>).</li>
+      </ul></div>
+    </div>
+  </section>
   <footer>Concept document · Minecraft-style fantasy ecology · Intended as a starting point for mod design, not a final balance specification.</footer>
 </main>
 <script>
 const search = document.getElementById('search');
 const filter = document.getElementById('filter');
-const cards = [...document.querySelectorAll('.card')];
+const cards = [...document.querySelectorAll('#grid .card')];
 const count = document.getElementById('count');
 const empty = document.getElementById('empty');
 function update(){

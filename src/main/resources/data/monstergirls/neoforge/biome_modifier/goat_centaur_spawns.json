@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_goat_centaur",
+  "spawners": {
+    "type": "monstergirls:goat_centaur",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 4
+  }
+}

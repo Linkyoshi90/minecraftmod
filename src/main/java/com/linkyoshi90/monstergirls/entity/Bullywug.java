@@ -14,7 +14,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -76,8 +75,7 @@ public class Bullywug extends AbstractAnuran {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new FleeIntoWaterGoal(this));
+        this.goalSelector.addGoal(1, new FleeIntoWaterGoal(this));  // no FloatGoal: she breathes water and dives
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.3, true));
         this.goalSelector.addGoal(3, new SeekWaterGoal(this));
         this.goalSelector.addGoal(4, new TongueSnatchGoal(this));

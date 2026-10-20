@@ -57,7 +57,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * home, bath cooldown, carrying one small item in her hands (eating it if it's food, otherwise dropping it
  * somewhere later), and her affection for each player (raised by feeding and petting; see /monstergirls bonds).
  */
-public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, FlyingAnimal, Bonded {
+public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, FlyingAnimal, Bonded, GiftGiver {
     private static final EntityDataAccessor<Byte> DATA_ACTION =
             SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> DATA_BABY =
@@ -118,7 +118,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.goalSelector.addGoal(-1, new SitWhenOrderedGoal<>(this));
         this.goalSelector.addGoal(2, new BuildNestGoal(this));
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));
-        this.goalSelector.addGoal(3, new GiftGoal(this));
+        this.goalSelector.addGoal(3, new GiftGoal<>(this));
     }
 
     /** Flightless species (the ostrich) walk with ground navigation, fall normally and have no "fly" animation. */

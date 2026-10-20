@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_lioness_nekomata",
+  "spawners": {
+    "type": "monstergirls:lioness_nekomata",
+    "weight": 6,
+    "minCount": 3,
+    "maxCount": 5
+  }
+}

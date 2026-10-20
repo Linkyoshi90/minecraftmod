@@ -63,9 +63,13 @@ public final class ModItems {
     /** Laid by a riflebird for someone she's fond of; unfertilised, so it's just a (fancy) snack. */
     public static final DeferredItem<Item> RIFLEBIRD_EGG = ITEMS.registerItem("riflebird_egg",
             props -> new Item(props.stacksTo(16).food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.4F).build())));
-    /** Laid by a sparrow roosting in a dropper: unfertilised, eaten raw or baked like any egg. */
+    /** Laid by a sparrow roosting on a hopper: unfertilised, eaten raw or baked like any egg. */
     public static final DeferredItem<Item> SPARROW_EGG = ITEMS.registerItem("sparrow_egg",
             props -> new Item(props.stacksTo(16).food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.1F).build())));
+    /** What a lamia leaves behind every few days: a light leather (crafts into leather) and a keepsake. */
+    public static final DeferredItem<Item> SHED_SKIN = ITEMS.registerSimpleItem("shed_skin", new Item.Properties().stacksTo(64));
+    /** A tarantula's moult. */
+    public static final DeferredItem<Item> EXOSKELETON = ITEMS.registerSimpleItem("exoskeleton", new Item.Properties().stacksTo(64));
     /** A woven nest for riflebirds to adopt and lay their eggs in. */
     public static final DeferredItem<BlockItem> RIFLEBIRD_NEST = ITEMS.registerSimpleBlockItem(ModBlocks.RIFLEBIRD_NEST);
     /** A fertilised harpy egg: place it somewhere solid and it hatches in about a day. */
@@ -85,7 +89,11 @@ public final class ModItems {
         if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
             for (HarpyEggBlock.Species species : HarpyEggBlock.Species.values()) event.accept(HarpyEggItem.of(ModBlocks.HARPY_EGG.get(), species));
         }
-        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) event.accept(PHOENIX_ASHES);
+        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+            event.accept(PHOENIX_ASHES);
+            event.accept(SHED_SKIN);
+            event.accept(EXOSKELETON);
+        }
         if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) event.accept(RIFLEBIRD_NEST);
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
             event.accept(SPARROW_HARPY_SPAWN_EGG);
@@ -108,6 +116,7 @@ public final class ModItems {
             event.accept(CANE_TOAD_SPAWN_EGG);
             event.accept(NATTERJACK_SPAWN_EGG);
             event.accept(SURINAM_TOAD_SPAWN_EGG);
+            ModGirls.EGGS.values().forEach(event::accept);
         }
     }
 }

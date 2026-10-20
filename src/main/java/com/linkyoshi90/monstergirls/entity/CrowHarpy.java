@@ -855,7 +855,7 @@ public class CrowHarpy extends AbstractHarpy {
         return HarpyGifts.crow(this.random);
     }
 
-    /** A crow puts her finds away: into the nearest chest (or barrel, or dropper) that already holds the same thing. */
+    /** A crow puts her finds away: into the nearest chest (or barrel, or hopper) that already holds the same thing. */
     @Override
     public boolean storesGiftsAway() {
         return true;

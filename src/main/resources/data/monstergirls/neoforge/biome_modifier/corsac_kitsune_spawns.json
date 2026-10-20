@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_corsac_kitsune",
+  "spawners": {
+    "type": "monstergirls:corsac_kitsune",
+    "weight": 7,
+    "minCount": 2,
+    "maxCount": 3
+  }
+}

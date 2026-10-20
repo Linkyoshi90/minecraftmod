@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "kind=leathery": {
+      "model": "monstergirls:block/girl_egg_leathery"
+    },
+    "kind=silk": {
+      "model": "monstergirls:block/girl_egg_silk"
+    },
+    "kind=roe": {
+      "model": "monstergirls:block/girl_egg_roe"
+    }
+  }
+}
