@@ -100,6 +100,7 @@ public class Nekomata extends AbstractMonsterGirl {
             case CHEETAH_NEKOMATA -> girlAttributes(18, 0.34, 3);
             case SNOW_LEOPARD_NEKOMATA -> girlAttributes(22, 0.3, 4).add(Attributes.JUMP_STRENGTH, 0.62);
             case SERVAL_NEKOMATA -> girlAttributes(16, 0.3, 3).add(Attributes.JUMP_STRENGTH, 0.66);
+            case OCELOT_NEKOMATA -> girlAttributes(16, 0.32, 3);
             default -> girlAttributes(18, 0.3, 3);
         };
     }
@@ -114,6 +115,12 @@ public class Nekomata extends AbstractMonsterGirl {
     @Override
     protected int rollTails(net.minecraft.util.RandomSource random) {
         return random.nextInt(10) == 0 ? 2 : 1;
+    }
+
+    /** The ocelot climbs tree trunks (and walls) like the gray fox. */
+    @Override
+    public boolean onClimbable() {
+        return (this.species == GirlSpecies.OCELOT_NEKOMATA && this.horizontalCollision) || super.onClimbable();
     }
 
     /** The cheetah's sprint burst skips the stalk: she simply runs her prey down. */
@@ -165,6 +172,7 @@ public class Nekomata extends AbstractMonsterGirl {
         return switch (this.species) {
             case TIGER_NEKOMATA -> new ItemStack(this.random.nextBoolean() ? Items.COD : Items.SALMON);
             case CHEETAH_NEKOMATA, LYNX_NEKOMATA -> new ItemStack(r < 50 ? Items.RABBIT : r < 85 ? Items.RABBIT_HIDE : Items.RABBIT_FOOT);
+            case OCELOT_NEKOMATA -> new ItemStack(r < 45 ? Items.COCOA_BEANS : r < 80 ? Items.FEATHER : Items.MELON_SLICE, r < 45 ? 3 : 1);
             default -> new ItemStack(r < 30 ? Items.FEATHER : r < 50 ? Items.RABBIT_HIDE : r < 70 ? Items.STRING : r < 85 ? Items.CHICKEN : r < 97 ? Items.RABBIT : Items.PHANTOM_MEMBRANE);
         };
     }

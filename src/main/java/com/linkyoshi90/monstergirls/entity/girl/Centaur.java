@@ -99,6 +99,7 @@ public class Centaur extends AbstractMonsterGirl {
             case ZEBRA_CENTAUR -> girlAttributes(30, 0.3, 6);
             case GOAT_CENTAUR -> girlAttributes(26, 0.28, 5).add(Attributes.JUMP_STRENGTH, 0.75);
             case ALPACA_CENTAUR -> girlAttributes(24, 0.25, 2);
+            case TAPIR_CENTAUR -> girlAttributes(32, 0.24, 3);
             default -> girlAttributes(28, 0.28, 3);
         };
     }
@@ -136,7 +137,14 @@ public class Centaur extends AbstractMonsterGirl {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return stack.is(Items.APPLE) || stack.is(Items.CARROT) || stack.is(Items.GOLDEN_CARROT) || stack.is(Items.SUGAR) || stack.is(Items.WHEAT) || stack.is(Items.HAY_BLOCK);
+        return stack.is(Items.APPLE) || stack.is(Items.CARROT) || stack.is(Items.GOLDEN_CARROT) || stack.is(Items.SUGAR) || stack.is(Items.WHEAT) || stack.is(Items.HAY_BLOCK)
+                || (this.species == GirlSpecies.TAPIR_CENTAUR && stack.is(Items.MELON_SLICE));
+    }
+
+    /** The baku: no phantom (vanilla or girl) comes for a player within 32 blocks of a tapir. */
+    public static boolean dreamWard(Player player) {
+        return !player.level().getEntitiesOfClass(Centaur.class, player.getBoundingBox().inflate(32),
+                c -> c.isAlive() && c.species == GirlSpecies.TAPIR_CENTAUR).isEmpty();
     }
 
     @Override
@@ -276,6 +284,7 @@ public class Centaur extends AbstractMonsterGirl {
             case REINDEER_CENTAUR -> new ItemStack(r < 40 ? Items.SWEET_BERRIES : r < 75 ? Items.MOSS_BLOCK : Items.GLOW_LICHEN, r < 40 ? 4 : 1);
             case GOAT_CENTAUR -> new ItemStack(r < 60 ? Items.MILK_BUCKET : Items.EMERALD);
             case ALPACA_CENTAUR -> new ItemStack(this.woolColour(), 2);
+            case TAPIR_CENTAUR -> new ItemStack(r < 50 ? Items.MELON_SLICE : r < 85 ? Items.SWEET_BERRIES : Items.GLOW_BERRIES, 3);
             default -> new ItemStack(r < 50 ? Items.APPLE : r < 85 ? Items.WHEAT : Items.GOLDEN_CARROT, r < 85 ? 2 : 1);
         };
     }

@@ -61,6 +61,15 @@ SPECIES = {
                   "brown": dict(FUR="#7a5236", HAIR="#8a6044", MARK="#5a3a24", CLOTH="#e0a030"),
                   "black": dict(FUR="#2a2624", HAIR="#3a3430", MARK="#1a1614", LIGHT="#5a5450", CLOTH="#d0d0d0"),
                   "grey": dict(FUR="#a8a6a4", HAIR="#c0bebc", MARK="#8a8886", CLOTH="#6a3a8a")}),
+    "tapir_centaur": dict(
+        build="strong", outfit=dict(top=["kimono"], colors=dict(kimono="#3a3a52", kimono_trim="#e8e0d0", obi="#c8a050")),
+        hair="bob", tail=(1.5, 1.5, 1.5),
+        pal=dict(SKIN=skin("tan"), HAIR="#1e1c20", FUR="#24222a", LIGHT="#eceae4", MARK="#141216", EYE="#3a2a1e", CLOTH="#3a3a52", TRIM="#c8a050",
+                 pattern="solid", extra=dict(saddle=True)),
+        variants={"lowland": dict(FUR="#4a3a2e", HAIR="#2a1e16", LIGHT="#8a7a6a", MARK="#2a2018", extra=dict()),
+                  "mountain": dict(FUR="#2e2622", HAIR="#1a1614", LIGHT="#d8d0c8", MARK="#1a1614", pattern="speckle", extra=dict()),
+                  "bairds": dict(FUR="#6a625a", HAIR="#3a342e", LIGHT="#c8c0b0", MARK="#3a342e", extra=dict()),
+                  "calf": dict(FUR="#5a3e2a", HAIR="#2a1e16", MARK="#e8dcc0", LIGHT="#e8dcc0", pattern="stripes", extra=dict())}),
 }
 
 
@@ -86,7 +95,10 @@ def paint(sp, key):
     G.paint_upper(pt, pal, top="wrap", top_pattern="check" if sp.startswith("horse") else "weave", outfit=d.get("outfit"), build=d.get("build"))
     coat = G.fur_fn(pal, light_faces=("down",), grain=0.10, seed=31)
     G.paint_ears(pt, pal, G.fur_fn(pal, pattern="solid"))
-    pt("barrel", "all", coat)
+    if pal.extra.get("saddle"):                          # the Malayan tapir's white saddle over a black coat
+        pt("barrel", "all", lambda f, x, y, w, h: coat(f, x, y, w, h) if f == "north" else pick(pal.LIGHT, 0.55 + (noise(x, y, 31) - 0.5) * 0.1, x, y))
+    else:
+        pt("barrel", "all", coat)
     pt("withers", "all", lambda f, x, y, w, h: H.skin_fn(pal, 0.66)(f, x, y, w, h) if f in ("north", "up") and y < h * 0.5 else coat(f, x, y, w, h))
     pt("uleg_f", "all", coat)
     pt("uleg_b", "all", coat)

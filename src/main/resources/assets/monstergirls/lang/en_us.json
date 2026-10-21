@@ -296,7 +296,7 @@
   "message.monstergirls.stash_found": "You found %s's stash. She laughs and runs circles around you",
   "message.monstergirls.cold": "%s is too cold to move",
   "message.monstergirls.ride_refused": "%s does not let you ride her (yet)",
-  "itemGroup.monstergirls": "MonsterGirls",
+  "itemGroup.monstergirls": "Harmontide",
   "entity.monstergirls.dolphin_mermaid": "Dolphin Mermaid",
   "item.monstergirls.dolphin_mermaid_spawn_egg": "Dolphin Mermaid Spawn Egg",
   "item.monstergirls.gull_egg": "Gull Egg",
@@ -432,5 +432,14 @@
   "entity.monstergirls.cactus_flora": "Cactus Girl",
   "item.monstergirls.cactus_flora_spawn_egg": "Cactus Girl Spawn Egg",
   "entity.monstergirls.mandragora_flora": "Mandragora",
-  "item.monstergirls.mandragora_flora_spawn_egg": "Mandragora Spawn Egg"
+  "item.monstergirls.mandragora_flora_spawn_egg": "Mandragora Spawn Egg",
+  "entity.monstergirls.ocelot_nekomata": "Ocelot Nekomata",
+  "item.monstergirls.ocelot_nekomata_spawn_egg": "Ocelot Nekomata Spawn Egg",
+  "entity.monstergirls.tapir_centaur": "Tapir Centaur",
+  "item.monstergirls.tapir_centaur_spawn_egg": "Tapir Centaur Spawn Egg",
+  "entity.monstergirls.banshee_undead": "Banshee",
+  "item.monstergirls.banshee_undead_spawn_egg": "Banshee Spawn Egg",
+  "entity.monstergirls.snapping_turtle_lizardfolk": "Alligator Snapping Turtle",
+  "item.monstergirls.snapping_turtle_lizardfolk_spawn_egg": "Alligator Snapping Turtle Spawn Egg",
+  "message.monstergirls.keening": "%s keens. Danger is close"
 }

@@ -243,7 +243,8 @@ public enum GirlSpecies {
         "message.monstergirls.stash_found": "You found %s's stash. She laughs and runs circles around you",
         "message.monstergirls.cold": "%s is too cold to move",
         "message.monstergirls.ride_refused": "%s does not let you ride her (yet)",
-        "itemGroup.monstergirls": "MonsterGirls",
+        "message.monstergirls.keening": "%s keens. Danger is close",
+        "itemGroup.monstergirls": "Harmontide",
     })
     path = os.path.join(ASSETS, "lang", "en_us.json")
     import collections

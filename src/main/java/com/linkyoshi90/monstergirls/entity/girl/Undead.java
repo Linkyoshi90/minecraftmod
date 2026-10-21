@@ -56,6 +56,7 @@ public class Undead extends AbstractMonsterGirl {
     private long nextGuide;
     @Nullable
     private BlockPos treasure;
+    private final java.util.Map<java.util.UUID, Long> keened = new java.util.HashMap<>();
 
     public Undead(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
@@ -87,6 +88,7 @@ public class Undead extends AbstractMonsterGirl {
             case YUKI_ONNA_UNDEAD -> girlAttributes(24, 0.28, 3);
             case PHANTOM_UNDEAD -> girlAttributes(20, 0.32, 4);
             case VAMPIRE_UNDEAD -> girlAttributes(28, 0.3, 3);
+            case BANSHEE_UNDEAD -> girlAttributes(22, 0.28, 2);
             case FRANKENSTEIN_UNDEAD -> girlAttributes(50, 0.25, 10).add(net.minecraft.world.entity.ai.attributes.Attributes.KNOCKBACK_RESISTANCE, 0.8);
             default -> girlAttributes(24, 0.25, 4);
         };
@@ -232,6 +234,7 @@ public class Undead extends AbstractMonsterGirl {
             case YUKI_ONNA_UNDEAD -> new ItemStack(r < 60 ? Items.SNOWBALL : Items.BLUE_ICE, r < 60 ? 8 : 1);
             case VAMPIRE_UNDEAD -> new ItemStack(r < 50 ? Items.GOLD_NUGGET : Items.ROSE_BUSH, r < 50 ? 4 : 1);
             case PHANTOM_UNDEAD -> new ItemStack(Items.PHANTOM_MEMBRANE);
+            case BANSHEE_UNDEAD -> new ItemStack(r < 75 ? Items.IRON_NUGGET : Items.GHAST_TEAR, r < 75 ? 3 : 1);
             case LIVING_DOLL_UNDEAD -> new ItemStack(r < 50 ? Items.STRING : Items.PINK_WOOL);
             default -> new ItemStack(r < 50 ? Items.BONE : r < 85 ? Items.SOUL_SAND : Items.ROTTEN_FLESH);
         };
@@ -248,6 +251,7 @@ public class Undead extends AbstractMonsterGirl {
             if (this.tickCount % 4 == 0) server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, this.getX(), this.getY() + 0.3, this.getZ(), 1, 0.2, 0.2, 0.2, 0.01);
             this.guide(server);
         }
+        if (this.species == GirlSpecies.BANSHEE_UNDEAD && this.tickCount % 20 == 0) this.keen(server);
         if (this.tickCount % 40 != 0) return;
         boolean sun = server.isDay() && server.canSeeSky(this.blockPosition().above());
         if (sun && (this.species == GirlSpecies.VAMPIRE_UNDEAD || this.species == GirlSpecies.ZOMBIE_UNDEAD)) {
@@ -278,6 +282,24 @@ public class Undead extends AbstractMonsterGirl {
             for (Monster m : server.getEntitiesOfClass(Monster.class, friend.getBoundingBox().inflate(8))) {
                 m.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, 0));
             }
+        }
+    }
+
+    /**
+     * The banshee's keening: a player within 24 blocks at three hearts or less makes her wail, and every hostile mob
+     * within 16 blocks of that player glows for ten seconds (like a bell showing raiders). Once a minute per player.
+     */
+    public void keen(ServerLevel level) {
+        long now = level.getGameTime();
+        for (Player p : level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(24),
+                p -> p.isAlive() && !p.isCreative() && !p.isSpectator() && p.getHealth() <= 6.0F)) {
+            if (now < this.keened.getOrDefault(p.getUUID(), 0L)) continue;
+            this.keened.put(p.getUUID(), now + 1200);
+            this.playSound(SoundEvents.GHAST_SCREAM, 1.0F, 1.4F);
+            for (Monster m : level.getEntitiesOfClass(Monster.class, p.getBoundingBox().inflate(16))) {
+                m.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 0));
+            }
+            p.displayClientMessage(Component.translatable("message.monstergirls.keening", this.getDisplayName()), true);
         }
     }
 

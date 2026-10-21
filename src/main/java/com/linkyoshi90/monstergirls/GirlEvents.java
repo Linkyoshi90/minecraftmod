@@ -54,6 +54,7 @@ public final class GirlEvents {
         if (type == null) return;
         for (net.minecraft.server.level.ServerPlayer p : level.players()) {
             if (p.isSpectator() || p.isCreative() || !com.linkyoshi90.monstergirls.entity.girl.Undead.sleepless(p) || level.random.nextInt(3) != 0) continue;
+            if (com.linkyoshi90.monstergirls.entity.girl.Centaur.dreamWard(p)) continue;
             if (!level.getEntities(type.get(), p.getBoundingBox().inflate(48), e -> true).isEmpty()) continue;
             var girl = type.get().create(level);
             if (girl == null) continue;
@@ -61,6 +62,14 @@ public final class GirlEvents {
             if (!level.noCollision(girl)) continue;
             girl.finalizeSpawn(level, level.getCurrentDifficultyAt(p.blockPosition()), net.minecraft.world.entity.MobSpawnType.NATURAL, null);
             level.addFreshEntity(girl);
+        }
+    }
+
+    /** Vanilla phantoms never come for a player with a tapir (the baku) nearby. */
+    @SubscribeEvent
+    public static void onPhantoms(net.neoforged.neoforge.event.entity.player.PlayerSpawnPhantomsEvent event) {
+        if (com.linkyoshi90.monstergirls.entity.girl.Centaur.dreamWard(event.getEntity())) {
+            event.setResult(net.neoforged.neoforge.event.entity.player.PlayerSpawnPhantomsEvent.Result.DENY);
         }
     }
 

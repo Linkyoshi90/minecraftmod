@@ -73,6 +73,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
             case CHAMELEON_LIZARDFOLK -> girlAttributes(18, 0.24, 3).add(Attributes.ARMOR, 2);
             case IGUANA_LIZARDFOLK -> girlAttributes(22, 0.4, 3).add(Attributes.ARMOR, 3);
             case CROC_LIZARDFOLK -> girlAttributes(40, 0.28, 9).add(Attributes.ARMOR, 8);
+            case SNAPPING_TURTLE_LIZARDFOLK -> girlAttributes(36, 0.18, 7).add(Attributes.ARMOR, 8);
             default -> girlAttributes(26, 0.2, 2).add(Attributes.ARMOR, 6);
         };
     }
@@ -100,6 +101,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
         int r = this.random.nextInt(100);
         return switch (this.species) {
             case TURTLE_LIZARDFOLK -> new ItemStack(r < 30 ? Items.TURTLE_SCUTE : r < 70 ? Items.SEAGRASS : Items.NAUTILUS_SHELL);
+            case SNAPPING_TURTLE_LIZARDFOLK -> new ItemStack(r < 45 ? Items.COD : r < 80 ? Items.SALMON : Items.CLAY_BALL, r < 80 ? 1 : 4);
             case SALAMANDER_LIZARDFOLK -> new ItemStack(r < 50 ? Items.MAGMA_CREAM : Items.BLAZE_POWDER);
             case CROC_LIZARDFOLK -> new ItemStack(r < 60 ? Items.BONE : Items.LEATHER, 2);
             default -> new ItemStack(r < 40 ? Items.SLIME_BALL : r < 80 ? Items.COCOA_BEANS : Items.EMERALD);
@@ -107,6 +109,11 @@ public class Lizardfolk extends AbstractMonsterGirl {
     }
 
     // --- combat --------------------------------------------------------------------------------------------------
+
+    /** The two that carry a shell and hide in it. */
+    private boolean shelled() {
+        return this.species == GirlSpecies.TURTLE_LIZARDFOLK || this.species == GirlSpecies.SNAPPING_TURTLE_LIZARDFOLK;
+    }
 
     public boolean isRetracted() {
         return this.retracted > 0;
@@ -121,7 +128,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
     public boolean hurt(DamageSource source, float amount) {
         if (this.isRetracted()) amount *= 0.2F;
         boolean hurt = super.hurt(source, amount);
-        if (hurt && this.species == GirlSpecies.TURTLE_LIZARDFOLK && !this.level().isClientSide) {
+        if (hurt && this.shelled() && !this.level().isClientSide) {
             this.retracted = 100;
             this.setFlag(FLAG_RETRACTED, true);
             this.getNavigation().stop();
@@ -197,6 +204,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
             if (hide != this.isInvisible()) this.setInvisible(hide);
             if (this.tickCount % 61 == 0) this.snatch(server);
         }
+        if (this.species == GirlSpecies.SNAPPING_TURTLE_LIZARDFOLK && this.tickCount % 200 == 0) this.lure(server);
         if (this.tickCount % 40 != 0) return;
         if (this.isWarm()) {
             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60, 0, true, false));
@@ -214,6 +222,17 @@ public class Lizardfolk extends AbstractMonsterGirl {
         }
     }
 
+    /**
+     * The alligator snapping turtle's tongue lure: sitting still in water she now and then catches a fish and drops it
+     * at her feet, never more than three lying around (so a lure farm stays small).
+     */
+    public void lure(ServerLevel level) {
+        if (!this.isInWater() || this.getTarget() != null || !this.getNavigation().isDone() || this.isBaby() || this.random.nextInt(6) != 0) return;
+        if (level.getEntitiesOfClass(ItemEntity.class, this.getBoundingBox().inflate(4), e -> e.getItem().is(ItemTags.FISHES)).size() >= 3) return;
+        this.spawnAtLocation(new ItemStack(this.random.nextInt(3) == 0 ? Items.SALMON : Items.COD));
+        this.playSound(SoundEvents.FISHING_BOBBER_SPLASH, 0.6F, 0.8F);
+    }
+
     /** The chameleon's tongue: a dropped item within four blocks shoots over to her feet. */
     private void snatch(ServerLevel level) {
         ItemEntity item = this.nearest(ItemEntity.class, 4.0, e -> e.isAlive() && e.distanceToSqr(this) > 1.5);
@@ -229,17 +248,17 @@ public class Lizardfolk extends AbstractMonsterGirl {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.species == GirlSpecies.TURTLE_LIZARDFOLK ? SoundEvents.TURTLE_AMBIENT_LAND : null;
+        return this.shelled() ? SoundEvents.TURTLE_AMBIENT_LAND : null;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return this.species == GirlSpecies.TURTLE_LIZARDFOLK ? SoundEvents.TURTLE_HURT : SoundEvents.PLAYER_HURT;
+        return this.shelled() ? SoundEvents.TURTLE_HURT : SoundEvents.PLAYER_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return this.species == GirlSpecies.TURTLE_LIZARDFOLK ? SoundEvents.TURTLE_DEATH : SoundEvents.PLAYER_DEATH;
+        return this.shelled() ? SoundEvents.TURTLE_DEATH : SoundEvents.PLAYER_DEATH;
     }
 
     @Override

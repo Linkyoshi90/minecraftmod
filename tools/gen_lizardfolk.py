@@ -68,6 +68,17 @@ SPECIES = {
                   "leatherback": dict(FUR="#4a4a52", HAIR="#2a2a32", extra=dict(shell="#2a2a32", shell_band="#7a7a8a")),
                   "loggerhead": dict(FUR="#a87a4a", HAIR="#8a4a2a", extra=dict(shell="#8a3a1a", shell_band="#c8784a")),
                   "olive": dict(FUR="#8a8a4a", HAIR="#5a5a2a", extra=dict(shell="#6a6a2a", shell_band="#a8a85a"))}),
+    "snapping_turtle_lizardfolk": dict(
+        build="strong", outfit=dict(top=["halter", "vest"], bottom="sarong", extras=["belt", "pouch"], colors=dict(cloth2="#3a4a2a", leather="#4a3a2a")),
+        hair="shaggy", bangs="messy", ears=None, legs="scales", foot="claw", tail=[(2.5, 2, 4), (2, 1.75, 4), (1.5, 1.25, 3.5), (1, 1, 3)],
+        tail_rest=DROOP, tail_look="scale", spines=True, shell=True,
+        pal=dict(SKIN=skin("olive"), HAIR="#3a4a22", FUR="#6a5a42", LIGHT="#a89a7a", MARK="#3a3024", EYE="#c8a040", CLOTH="#5a6a4a", TRIM="#a8987a",
+                 pattern="bands", pupil=(1.4, 1.4), extra=dict(shell="#3e3424", shell_band="#24201a")),
+        variants={"mossy": dict(HAIR="#4a7a2a", extra=dict(shell="#3e4a24", shell_band="#5a7a2a")),
+                  "dark": dict(FUR="#3a342a", HAIR="#1e1e16", extra=dict(shell="#1e1a14", shell_band="#3a3428")),
+                  "suwannee": dict(FUR="#7a7466", HAIR="#4a4a3a", extra=dict(shell="#5a5448", shell_band="#3a362e")),
+                  "leucistic": dict(FUR="#e0d4b8", HAIR="#f0e8d0", LIGHT="#fff8e8", MARK="#c8b898", EYE="#c84a4a",
+                                    extra=dict(shell="#d8c8a0", shell_band="#b8a880"))}),
 }
 
 

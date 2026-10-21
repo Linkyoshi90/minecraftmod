@@ -1,4 +1,37 @@
-# MonsterGirls to-do
+# Harmontide to-do
+
+## 0. Tonight: survival server playtest (2026-10-21)
+
+Write down numbers and coordinates, not impressions. They turn into the next to-dos.
+
+- [ ] Before you join: run `./gradlew build` and start a **dedicated server** once (`runServer`). Client-only classes leaking into server code only crash there.
+- [ ] **Generation:** which species did you meet, in which biome, and how many in the first hour of exploring? Note any biome that feels empty or crowded.
+- [ ] **Spawning:** do girls crowd out vanilla animals or the hostile mob cap? Compare animal counts with an area that has no girls in it.
+- [ ] **Behaviour:** check for griefing (blocks broken, crops trampled, chests touched) with `mobGriefing` both true and false. Do they get stuck in caves or doors, or drown?
+- [ ] **Multiplayer:** do the follow, bond, gift and bed-sharing features behave with two players? Does whoever bonded first win?
+- [ ] **Performance:** check tick time with a crowd of girls (for example a harpy roost or an anuran pond). Use `/neoforge tps`, or spark if it is installed.
+- [ ] **Arrow farm:** the real-client check from section 2.
+- [ ] Note every crash or log spam with a timestamp, and copy `logs/latest.log` afterwards.
+
+## 0b. Harmontide rename
+
+- [x] Display name and creative tab now say **Harmontide** (`gradle.properties` `mod_name`, `itemGroup`).
+- [ ] Decide whether to rename `mod_id` `monstergirls` to `harmontide` as well. That **breaks existing worlds**: every entity, block and item id changes. Do it once, before any public release, and **not** before tonight's server test. It touches the package `com.linkyoshi90.monstergirls`, the `assets/monstergirls/` and `data/monstergirls/` namespaces, `MonsterGirlsMod.MODID`, the tools scripts and the gametest structures.
+- [ ] Retitle the `*_field_guide.html` pages ("A field guide to an inhabited world") under Harmontide and link them from the website.
+
+## 0c. New species concepts
+
+See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 species: their families, classifications, vanilla niches and a suggested first batch.
+
+- [x] First four are in the game (2026-10-21), in existing families with GameTests (`HarmontideTests`):
+  - **Ocelot** nekomata: jungle and bamboo, climbs walls and trunks, brings jungle presents.
+  - **Tapir** centaur: jungle and swamp, eats melon. The baku: no vanilla phantoms or phantom girls within 32 blocks.
+  - **Alligator snapping turtle** lizardfolk: swamps, tongue lure (fish at her feet, at most 3 at a time), shell retreat.
+  - **Banshee** undead: birch forests and meadows at night. Keens when a player nearby drops to 3 hearts, and every hostile mob near that player glows.
+- [ ] Playtest them tonight: do they spawn often enough? Is the turtle's fish rate (about 1 a minute) too generous? Is the banshee's ghast-scream keen too loud? Does the ocelot get stuck climbing?
+- [ ] Next batch: Kappa (lizardfolk turtle), Naga (lamia), Dullahan (undead, on a skeleton horse), then the separate harpy and anuran systems: Tengu, Thunderbird and Vodyanoy (the first monster boy, which needs male support in the anuran rig).
+- [ ] Decide on the sensitive ones: Kachina (recommendation: drop it), Thunderbird, Uktena, Wayob.
+- [ ] Decide which new families are worth their own class: Giants, Celestials, Horsemen, Fury, Crustaceans.
 
 ## 1. More species ideas
 

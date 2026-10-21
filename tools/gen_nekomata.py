@@ -73,6 +73,15 @@ SPECIES = {
                   "iberian": dict(FUR="#c8a060", HAIR="#b88c50", pattern="spots", CLOTH="#6a3a2a"),
                   "bobcat": dict(FUR="#b07850", HAIR="#9a6440", pattern="spots", pattern_scale=0.8),
                   "silver": dict(FUR="#d4d6da", HAIR="#dcdee4", LIGHT="#ffffff", MARK="#4a4c52", CLOTH="#3a4a6a")}),
+    "ocelot_nekomata": dict(
+        build="slim", outfit=dict(top=["halter", "capelet"], bottom="shorts", extras=["armlets"]),
+        ears="round", hair="sidetail", tail=((1.25, 1.25, 3.5), (1.25, 1.25, 3.5), (1.25, 1.25, 2.5)), tail_pattern="bars",
+        pal=dict(SKIN=skin("tan"), HAIR="#8a5e34", FUR="#d8a868", LIGHT="#f4ead8", MARK="#2a1c14", EYE="#a8782a", CLOTH="#2e5a3a", TRIM="#d8b860",
+                 pattern="rosettes", facemark="tear+whisker", extra=dict(dark_tips=True)),
+        variants={"grey": dict(FUR="#b8ac98", HAIR="#7a7064", LIGHT="#ece8e0", CLOTH="#4a5a4a"),
+                  "pale": dict(FUR="#ead6aa", HAIR="#b8946a", MARK="#6a4e34", CLOTH="#7a6a3a"),
+                  "melanistic": dict(FUR="#2a2420", LIGHT="#4e443c", MARK="#100e0c", HAIR="#2e2622", EYE="#c8a83a", CLOTH="#6a2e2e"),
+                  "golden": dict(FUR="#e8a050", HAIR="#a86a30", MARK="#3a2414", CLOTH="#2a4a6a")}),
 }
 
 LEG_PARTS = [("thigh", 2.25, 4.75, 2.25), ("shin", 1.75, 6.75, 1.75), ("paw", 2.25, 1.25, 3)]

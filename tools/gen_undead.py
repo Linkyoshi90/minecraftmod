@@ -80,6 +80,15 @@ SPECIES = {
                   "blue": dict(SKIN="#a8b8d0", CLOTH="#3a3a5a"),
                   "pale": dict(SKIN="#e0dcd0", CLOTH="#6a4a3a"),
                   "patchwork": dict(SKIN="#b8c0a0", CLOTH="#7a5a4a", HAIR="#d8d0c0")}),
+    "banshee_undead": dict(
+        build="slim", outfit=dict(top=["sweater", "corset", "capelet"], bottom="hakama", colors=dict(cloth2="#5a6a5e")),
+        hair="flowing", bangs="wispy", ears=None, legs="bare", foot="shoe", comb=True,
+        pal=dict(SKIN="#e8ecee", HAIR="#d8dce4", FUR="#e8ecee", LIGHT="#ffffff", MARK="#8a9098", EYE="#c83a3a", CLOTH="#6a6e78", TRIM="#c8ccd4",
+                 extra=dict(boot="#3a3c42", comb="#d8dce4")),
+        variants={"green": dict(HAIR="#a8542a", CLOTH="#3a6a4a", extra=dict(boot="#2a3a2a", comb="#d8dce4", cloth2="#2e4a36")),
+                  "red": dict(HAIR="#c83a2a", CLOTH="#2a2a32", extra=dict(boot="#1a1a1e", comb="#d8dce4", cloth2="#3a3a46")),
+                  "mist": dict(SKIN="#f2f4f6", HAIR="#f4f6f8", CLOTH="#c8ccd4", EYE="#8aa8c8", extra=dict(boot="#a8acb4", comb="#ffffff", cloth2="#dce0e6")),
+                  "raven": dict(HAIR="#141218", CLOTH="#1e1c24", extra=dict(boot="#141218", comb="#d8dce4", cloth2="#2a2834"))}),
 }
 
 
@@ -104,7 +113,8 @@ def paint_hook(pt, pal, d):
         for p in ("flame_a", "flame_b", "flame_c", "flame_tip", "lick"):
             pt(p, "all", flame)
     ice = G.shades("#a8d8f8")
-    pt("comb", "all", lambda f, x, y, w, h: pick(ice, 0.6 + 0.3 * (x % 2), x, y))
+    comb = G.shades(pal.extra["comb"]) if "comb" in pal.extra else ice   # the banshee's comb is silver
+    pt("comb", "all", lambda f, x, y, w, h: pick(comb, 0.6 + 0.3 * (x % 2), x, y))
     pt("crystal", "all", lambda f, x, y, w, h: pick(ice, 0.85, x, y))
     pt("bolt", "all", lambda f, x, y, w, h: pick(G.shades("#8a8c90"), 0.45 + 0.3 * (x == 0), x, y))
     if d.get("doll"):                                   # porcelain ball joints at the elbows and knees
