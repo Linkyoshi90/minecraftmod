@@ -394,8 +394,8 @@ def build_model():
 
 def _yaw(origin, size, pivot, ry, about):
     """shift a cube (origin + own pivot) as if swung by ry degrees around a vertical axis at about=(x, z)"""
-    # Blockbench Y sense: the written value is used as is for symmetric Y here, and rot_matrix negates it
-    a = math.radians(-ry)
+    # GeckoLib Y sense (see harpy_lib.rot_matrix): the written Y value turns -Z toward -X, so it is used as is
+    a = math.radians(ry)
     px, pz = pivot[0] - about[0], pivot[2] - about[1]
     nx, nz = px * math.cos(a) + pz * math.sin(a), -px * math.sin(a) + pz * math.cos(a)
     dx, dz = nx - px, nz - pz

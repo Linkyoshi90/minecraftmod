@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_living_doll_undead",
+  "spawners": {
+    "type": "monstergirls:living_doll_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

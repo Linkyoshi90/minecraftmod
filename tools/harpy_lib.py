@@ -25,7 +25,7 @@ FORMAT FACTS (verified against Blockbench 5.2.2, not assumed):
   * Rotations: X sense matches the usual reading (positive X leans the top forward).
     The Z sense is mirrored, so rotations are AUTHORED as "positive Z tilts a hanging part's tip
     toward +X" and Z is negated when written out (cubes and animation keys).
-    Y is only used for symmetric sways.
+    Y is written as is: positive Y turns a part's -Z (front) toward -X, verified against GeckoLib 4.7.7.
 """
 import copy
 import json
@@ -699,8 +699,9 @@ def std_bathe(an):
 
 # ----------------------------------------------------------------------------- preview renderer (mirrors Blockbench)
 def rot_matrix(rx, ry, rz):
-    """Rotation values as written to the files -> 3x3 matrix, as Blockbench applies them (all three negated)."""
-    a, b, c = math.radians(-rx), math.radians(-ry), math.radians(-rz)
+    """Rotation values as written to the files -> 3x3 matrix in file space, as GeckoLib applies them
+    (it negates X and Y and mirrors X, so in file space X and Z come out negated and Y does not)."""
+    a, b, c = math.radians(-rx), math.radians(ry), math.radians(-rz)
     ca, sa, cb, sb, cc, sc = math.cos(a), math.sin(a), math.cos(b), math.sin(b), math.cos(c), math.sin(c)
     Rx = ((1, 0, 0), (0, ca, -sa), (0, sa, ca))
     Ry = ((cb, 0, sb), (0, 1, 0), (-sb, 0, cb))

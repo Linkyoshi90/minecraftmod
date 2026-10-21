@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_reindeer_centaur",
+  "spawners": {
+    "type": "monstergirls:reindeer_centaur",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 4
+  }
+}

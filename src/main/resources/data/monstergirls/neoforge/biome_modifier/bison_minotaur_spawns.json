@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_bison_minotaur",
+  "spawners": {
+    "type": "monstergirls:bison_minotaur",
+    "weight": 6,
+    "minCount": 3,
+    "maxCount": 6
+  }
+}

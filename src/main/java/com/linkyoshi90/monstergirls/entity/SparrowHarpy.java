@@ -1,12 +1,11 @@
 package com.linkyoshi90.monstergirls.entity;
 
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
-import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.core.Direction;
 import com.linkyoshi90.monstergirls.registry.ModItems;
-import com.linkyoshi90.monstergirls.entity.ai.RoostInDropperGoal;
+import com.linkyoshi90.monstergirls.entity.ai.RoostInHopperGoal;
 import com.linkyoshi90.monstergirls.entity.ai.ListenToMusicGoal;
 import com.linkyoshi90.monstergirls.entity.ai.BatheGoal;
 import com.linkyoshi90.monstergirls.entity.ai.BegAtFarmGoal;
@@ -54,6 +53,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -111,14 +111,6 @@ public class SparrowHarpy extends AbstractHarpy {
 
     /** Shares one variant across a spawn group so flocks match. */
     private record VariantGroupData(Variant variant) implements SpawnGroupData {}
-
-    /** An egg every five to ten minutes while she roosts on a dropper. */
-    public static final int EGG_INTERVAL = 6000;
-
-    @Nullable
-    private BlockPos roost;
-    private boolean roosting;
-    private int eggTime = EGG_INTERVAL;
 
     public SparrowHarpy(EntityType<? extends SparrowHarpy> type, Level level) {
         super(type, level);
@@ -182,7 +174,7 @@ public class SparrowHarpy extends AbstractHarpy {
         this.goalSelector.addGoal(3, new SingGoal(this));
         // Dangle bread in front of her long enough and she may just grab it.
         this.goalSelector.addGoal(3, new SnatchGoal(this, 1.2, SnatchGoal.From.HAND, 600, 2400, p -> true));
-        this.goalSelector.addGoal(4, new RoostInDropperGoal(this));
+        this.goalSelector.addGoal(4, new RoostInHopperGoal(this));
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.0, Ingredient.of(ModTags.SPARROW_HARPY_FOOD), true));
         this.goalSelector.addGoal(5, new SeekItemGoal(this, 1.0, 8.0));
         this.goalSelector.addGoal(5, new ReturnHomeGoal(this, 1.0, HOME_RADIUS));
@@ -233,66 +225,31 @@ public class SparrowHarpy extends AbstractHarpy {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putString("Variant", this.getVariant().getSerializedName());
-        if (this.roost != null) tag.putLong("Roost", this.roost.asLong());
-        tag.putInt("EggTime", this.eggTime);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setVariant(Variant.byName(tag.getString("Variant")));
-        this.roost = tag.contains("Roost") ? BlockPos.of(tag.getLong("Roost")) : null;
-        if (tag.contains("EggTime")) this.eggTime = tag.getInt("EggTime");
     }
 
-    // --- roosting in a dropper ------------------------------------------------------------------------------------
+    // --- roosting on a hopper ------------------------------------------------------------------------------------
 
-    /** The dropper she has claimed as her roost (see {@link RoostInDropperGoal}), or null. */
-    @Nullable
-    public BlockPos getRoost() {
-        return this.roost;
-    }
-
-    public void setRoost(@Nullable BlockPos roost) {
-        this.roost = roost == null ? null : roost.immutable();
-    }
-
-    /** Settled on top of her roost right now. */
-    public boolean isRoosting() {
-        return this.roosting;
-    }
-
-    public void setRoosting(boolean roosting) {
-        if (roosting && !this.roosting && this.getAction() == Action.NONE) this.setAction(Action.SITTING);
-        if (!roosting && this.roosting && this.getAction() == Action.SITTING && !this.isOrderedToSit()) this.setAction(Action.NONE);
-        this.roosting = roosting;
-    }
-
-    public void setEggTime(int ticks) {
-        this.eggTime = ticks;
-    }
-
-    /** While she sits on her dropper, every so often an unfertilised egg goes into it. */
-    public void tickRoost(ServerLevel level) {
-        if (!this.roosting || this.roost == null || --this.eggTime > 0) return;
-        this.eggTime = EGG_INTERVAL + this.random.nextInt(EGG_INTERVAL);
-        if (!(level.getBlockEntity(this.roost) instanceof DispenserBlockEntity dropper)) return;
-        ItemStack rest = HopperBlockEntity.addItem(null, dropper, new ItemStack(ModItems.SPARROW_EGG.get()), Direction.UP);
-        if (rest.isEmpty()) {
-            level.playSound(null, this.roost, SoundEvents.CHICKEN_EGG, SoundSource.NEUTRAL, 0.8F, 1.4F);
-        }
+    /** She nests in the bowl of a hopper (see {@link RoostInHopperGoal}). */
+    @Override
+    public boolean roostsInHoppers() {
+        return true;
     }
 
     @Override
-    public void aiStep() {
-        super.aiStep();
-        if (this.level() instanceof ServerLevel server) this.tickRoost(server);
+    protected ItemStack unfertilisedEgg() {
+        return new ItemStack(ModItems.SPARROW_EGG.get());
     }
 
-    /** A sparrow with a roost of her own stays. */
+    /** A moulted feather or a twig from her nesting: half of what a fletcher needs (the gulls bring the flint). */
     @Override
-    protected boolean isSettled() {
-        return this.roost != null;
+    protected ItemStack roostDrop() {
+        return new ItemStack(this.random.nextBoolean() ? Items.FEATHER : Items.STICK);
     }
 
     @Override

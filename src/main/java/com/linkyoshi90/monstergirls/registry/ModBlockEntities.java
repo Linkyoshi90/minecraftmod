@@ -1,6 +1,7 @@
 package com.linkyoshi90.monstergirls.registry;
 
 import com.linkyoshi90.monstergirls.MonsterGirlsMod;
+import com.linkyoshi90.monstergirls.block.GirlEggBlockEntity;
 import com.linkyoshi90.monstergirls.block.ParentageBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -14,6 +15,11 @@ public final class ModBlockEntities {
     @SuppressWarnings("DataFlowIssue")
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ParentageBlockEntity>> PARENTAGE = BLOCK_ENTITIES.register("parentage",
             () -> BlockEntityType.Builder.of(ParentageBlockEntity::new, ModBlocks.HARPY_EGG.get(), ModBlocks.ANURAN_SPAWN.get()).build(null));
+
+    /** What a girl egg clutch hatches into. */
+    @SuppressWarnings("DataFlowIssue")
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GirlEggBlockEntity>> GIRL_EGG = BLOCK_ENTITIES.register("girl_egg",
+            () -> BlockEntityType.Builder.of(GirlEggBlockEntity::new, ModBlocks.GIRL_EGG.get()).build(null));
 
     private ModBlockEntities() {}
 }

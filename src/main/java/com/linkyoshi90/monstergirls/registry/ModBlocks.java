@@ -2,7 +2,9 @@ package com.linkyoshi90.monstergirls.registry;
 
 import com.linkyoshi90.monstergirls.MonsterGirlsMod;
 import com.linkyoshi90.monstergirls.block.AnuranSpawnBlock;
+import com.linkyoshi90.monstergirls.block.GirlEggBlock;
 import com.linkyoshi90.monstergirls.block.HarpyEggBlock;
+import com.linkyoshi90.monstergirls.block.PaintedEggBlock;
 import com.linkyoshi90.monstergirls.block.RiflebirdNestBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -25,6 +27,16 @@ public final class ModBlocks {
     /** Frog and toad spawn on a still water surface (laid by a mother, never crafted). */
     public static final DeferredBlock<AnuranSpawnBlock> ANURAN_SPAWN = BLOCKS.registerBlock("anuran_spawn", AnuranSpawnBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.WATER).strength(0.0F).sound(SoundType.FROGSPAWN).noOcclusion().noCollission()
+                    .pushReaction(PushReaction.DESTROY));
+
+    /** Eggs, egg sacs and roe of the later families (the species lives in the block entity). */
+    public static final DeferredBlock<GirlEggBlock> GIRL_EGG = BLOCKS.registerBlock("girl_egg", GirlEggBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.SAND).strength(0.5F).sound(SoundType.FROGSPAWN).noOcclusion()
+                    .pushReaction(PushReaction.DESTROY).randomTicks());
+
+    /** A painted egg the Easter Bunny hid in the grass. */
+    public static final DeferredBlock<PaintedEggBlock> PAINTED_EGG = BLOCKS.registerBlock("painted_egg", PaintedEggBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.2F).sound(SoundType.DECORATED_POT).noOcclusion()
                     .pushReaction(PushReaction.DESTROY));
 
     private ModBlocks() {}

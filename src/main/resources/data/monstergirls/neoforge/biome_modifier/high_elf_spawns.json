@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_high_elf",
+  "spawners": {
+    "type": "monstergirls:high_elf",
+    "weight": 5,
+    "minCount": 2,
+    "maxCount": 4
+  }
+}

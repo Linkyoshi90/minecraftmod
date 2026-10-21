@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_yuki_onna_undead",
+  "spawners": {
+    "type": "monstergirls:yuki_onna_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

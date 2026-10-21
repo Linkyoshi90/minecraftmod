@@ -20,6 +20,7 @@ public final class BedSharing {
                 Gestation gestation = ((Bonded) mob).getGestation();
                 if (!player.getUUID().equals(gestation.getSharingWith())) continue;
                 gestation.setSharingWith(null);
+                if (mob instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl girl) girl.onNightShared(player);   // her bed perk
                 if (!((Bonded) mob).canShareBed()) continue;
                 gestation.conceive(player.getUUID());
                 expecting++;

@@ -1,19 +1,19 @@
 package com.linkyoshi90.monstergirls.entity.ai;
 
-import com.linkyoshi90.monstergirls.entity.AbstractHarpy;
 import com.linkyoshi90.monstergirls.entity.Bonded;
+import com.linkyoshi90.monstergirls.entity.GiftGiver;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.phys.Vec3;
 
@@ -21,19 +21,19 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 /**
- * A harpy who is very fond of someone ({@link Bonded#GIFT_AFFECTION}) now and then brings them a present of her
- * kind ({@link AbstractHarpy#rollGift}) and slips it straight into their inventory. A species that
- * {@link AbstractHarpy#storesGiftsAway() stores gifts away} (the crow) instead drops it into the nearest chest,
- * barrel or dropper that already holds that kind of item, if there is one close by.
+ * A monster girl who is very fond of someone ({@link Bonded#GIFT_AFFECTION}) now and then brings them a present of her
+ * kind ({@link GiftGiver#rollGift}) and slips it straight into their inventory. A species that
+ * {@link GiftGiver#storesGiftsAway() stores gifts away} (the crow) instead drops it into the nearest chest,
+ * barrel or hopper that already holds that kind of item, if there is one close by.
  */
-public class GiftGoal extends Goal {
+public class GiftGoal<T extends PathfinderMob & Bonded & GiftGiver> extends Goal {
     public static final double PLAYER_RANGE = 16.0;
     public static final int CONTAINER_RANGE = 12;
     private static final double REACH_SQR = 2.5 * 2.5;
     private static final int GIVE_UP_TICKS = 400;
     private static final int RETRY_TICKS = 200;
 
-    private final AbstractHarpy harpy;
+    private final T harpy;
     @Nullable
     private Player player;
     @Nullable
@@ -41,7 +41,7 @@ public class GiftGoal extends Goal {
     private ItemStack gift = ItemStack.EMPTY;
     private int ticks;
 
-    public GiftGoal(AbstractHarpy harpy) {
+    public GiftGoal(T harpy) {
         this.harpy = harpy;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
@@ -68,14 +68,14 @@ public class GiftGoal extends Goal {
         return true;
     }
 
-    /** The closest chest, barrel or dropper nearby that already holds this kind of item and has room for more. */
+    /** The closest chest, barrel or hopper nearby that already holds this kind of item and has room for more. */
     @Nullable
     public static BlockPos findContainerWith(Level level, BlockPos origin, ItemStack stack) {
         BlockPos best = null;
         double bestDist = Double.MAX_VALUE;
         for (BlockPos pos : BlockPos.betweenClosed(origin.offset(-CONTAINER_RANGE, -4, -CONTAINER_RANGE), origin.offset(CONTAINER_RANGE, 4, CONTAINER_RANGE))) {
             var be = level.getBlockEntity(pos);
-            if (!(be instanceof ChestBlockEntity || be instanceof BarrelBlockEntity || be instanceof DispenserBlockEntity)) continue;
+            if (!(be instanceof ChestBlockEntity || be instanceof BarrelBlockEntity || be instanceof HopperBlockEntity)) continue;
             Container container = HopperBlockEntity.getContainerAt(level, pos);
             if (container == null || !container.hasAnyMatching(s -> ItemStack.isSameItemSameComponents(s, stack)) || !hasRoom(container, stack)) continue;
             double dist = pos.distSqr(origin);

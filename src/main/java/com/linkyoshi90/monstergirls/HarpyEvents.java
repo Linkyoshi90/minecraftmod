@@ -23,6 +23,10 @@ public final class HarpyEvents {
         if (cache == null) return;
         Block.popResource(level, event.getPos(), cache.item().copy());
         Player player = event.getPlayer();
+        if (level.getEntity(cache.crow()) instanceof com.linkyoshi90.monstergirls.entity.girl.Kitsune fox) {   // a kitsune's stash: the game is won
+            fox.onStashFound(player);
+            return;
+        }
         if (level.getEntity(cache.crow()) instanceof CrowHarpy crow && !crow.isOwnedBy(player)
                 && crow.distanceToSqr(player) < 24 * 24 && crow.hasLineOfSight(player)) {
             crow.addGrudge(player.getUUID());

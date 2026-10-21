@@ -344,4 +344,9 @@ public class OwlHarpy extends AbstractHarpy {
     public ItemStack rollGift(Player player) {
         return HarpyGifts.owl(this.random);
     }
+
+    @Override
+    protected net.minecraft.world.item.ItemStack unfertilisedEgg() {
+        return new net.minecraft.world.item.ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.OWL_EGG.get());
+    }
 }

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_ent_flora",
+  "spawners": {
+    "type": "monstergirls:ent_flora",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

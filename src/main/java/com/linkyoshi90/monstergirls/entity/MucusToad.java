@@ -61,7 +61,12 @@ public class MucusToad extends AbstractAnuran {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(0, new FloatGoal(this) {          // she can't breathe water: up for air only when she needs it
+            @Override
+            public boolean canUse() {
+                return MucusToad.this.getAirSupply() < MucusToad.this.getMaxAirSupply() && super.canUse();
+            }
+        });
         this.goalSelector.addGoal(1, new SeekWaterGoal(this));
         this.goalSelector.addGoal(2, new EatPestGoal(this));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.0, stack -> stack.is(ModTags.MUCUS_TOAD_FOOD), false));

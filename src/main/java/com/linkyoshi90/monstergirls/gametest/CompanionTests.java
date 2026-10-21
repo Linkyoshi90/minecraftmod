@@ -23,7 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import net.minecraft.world.level.block.entity.DispenserBlockEntity;
+import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
@@ -31,7 +31,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import static com.linkyoshi90.monstergirls.gametest.HarpyTestUtil.PLATFORM;
 import static com.linkyoshi90.monstergirls.gametest.HarpyTestUtil.check;
 
-/** Sitting on command, sparrows roosting in droppers, presents from fond harpies, the phoenix's healing, bullywug slime. */
+/** Sitting on command, sparrows roosting on hoppers, presents from fond harpies, the phoenix's healing, bullywug slime. */
 @GameTestHolder(MonsterGirlsMod.MODID)
 @PrefixGameTestTemplate(false)
 public class CompanionTests {
@@ -59,16 +59,22 @@ public class CompanionTests {
         });
     }
 
-    @GameTest(template = PLATFORM, timeoutTicks = 600, batch = "sparrowRoostsInADropperAndLays")
-    public static void sparrowRoostsInADropperAndLays(GameTestHelper helper) {
-        BlockPos dropper = new BlockPos(7, 2, 7);
-        helper.setBlock(dropper, Blocks.DROPPER);
+    @GameTest(template = PLATFORM, timeoutTicks = 600, batch = "sparrowRoostsOnAHopperAndLays")
+    public static void sparrowRoostsOnAHopperAndLays(GameTestHelper helper) {
+        BlockPos hopper = new BlockPos(7, 2, 7);
+        helper.setBlock(hopper, Blocks.HOPPER);
         SparrowHarpy sparrow = helper.spawn(ModEntities.SPARROW_HARPY.get(), new BlockPos(4, 2, 4));
-        sparrow.setEggTime(1);
+        boolean[] due = {false};
+        helper.onEachTick(() -> {
+            if (sparrow.isRoosting() && !due[0]) {                       // her next egg is due once she has settled in
+                sparrow.setEggTime(1);
+                due[0] = true;
+            }
+        });
         helper.succeedWhen(() -> {
-            check(helper.absolutePos(dropper).equals(sparrow.getRoost()), "she should claim the dropper");
-            check(helper.getBlockEntity(dropper) instanceof DispenserBlockEntity d
-                    && d.countItem(ModItems.SPARROW_EGG.get()) == 1, "an egg should be in the dropper");
+            check(helper.absolutePos(hopper).equals(sparrow.getRoost()), "she should claim the hopper");
+            check(helper.getBlockEntity(hopper) instanceof HopperBlockEntity d
+                    && d.countItem(ModItems.SPARROW_EGG.get()) == 1, "an egg should be in the hopper");
         });
     }
 
@@ -107,7 +113,8 @@ public class CompanionTests {
     public static void riflebirdBringsSeeds(GameTestHelper helper) {
         ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
         RiflebirdHarpy bird = helper.spawn(ModEntities.RIFLEBIRD_HARPY.get(), new BlockPos(8, 2, 8));
-        check(bird.rollGift(player).is(net.neoforged.neoforge.common.Tags.Items.SEEDS), "riflebirds bring seeds");
+        ItemStack gift = bird.rollGift(player);
+        check(gift.is(net.neoforged.neoforge.common.Tags.Items.SEEDS) || gift.is(net.minecraft.world.item.Items.PITCHER_POD), "riflebirds bring seeds");
         bird.setAffection(player.getUUID(), Bonded.FULL_AFFECTION);
         bird.setNextGiftTime(0);
         helper.succeedWhen(() -> {

@@ -66,9 +66,7 @@ def main():
         "ingredients": [{"item": "minecraft:pumpkin"}, {"item": "minecraft:sugar"}, {"item": "monstergirls:sparrow_egg"}],
         "result": {"id": "minecraft:pumpkin_pie", "count": 1},
     })
-    # the common tag other mods' recipes use for "any egg"
-    dump(os.path.join(RES, "data", "c", "tags", "item", "eggs.json"),
-         {"replace": False, "values": ["monstergirls:sparrow_egg"]})
+    # the common tag other mods' recipes use for "any egg" is written by gen_laid_eggs.py (all the harpy eggs)
     print("sparrow egg item written")
 
 

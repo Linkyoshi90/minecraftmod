@@ -17,6 +17,12 @@ public final class ModTags {
     /** Blocks a sparrow harpy will take a dust bath in. */
     public static final TagKey<Block> SPARROW_HARPY_DUST_BATH = TagKey.create(Registries.BLOCK, MonsterGirlsMod.id("sparrow_harpy_dust_bath"));
 
+    /** Every unfertilised egg a harpy lays (tools/gen_laid_eggs.py); cakes and pies take any of them. */
+    public static final TagKey<Item> LAID_EGGS = TagKey.create(Registries.ITEM, MonsterGirlsMod.id("laid_eggs"));
+
+    /** Blocks a slime girl loves to bounce on (slime blocks and beds). */
+    public static final TagKey<Block> BOUNCY = TagKey.create(Registries.BLOCK, MonsterGirlsMod.id("bouncy"));
+
     /** What a crow eats: seeds, crops, berries, meat and fish. Also accepted as a small kindness (no gift). */
     public static final TagKey<Item> CROW_HARPY_FOOD = TagKey.create(Registries.ITEM, MonsterGirlsMod.id("crow_harpy_food"));
     /** Shiny things a crow collects, steals first, and accepts as a trade for a gift. */

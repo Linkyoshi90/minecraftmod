@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_frankenstein_undead",
+  "spawners": {
+    "type": "monstergirls:frankenstein_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}
