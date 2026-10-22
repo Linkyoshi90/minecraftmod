@@ -30,7 +30,7 @@ public class FollowEntityGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (this.mob.tickCount % 19 != 0 || this.mob.getTarget() != null) return false;
+        if (this.mob.tickCount % 19 != 0 || this.mob.getTarget() != null || com.linkyoshi90.monstergirls.entity.Orders.commanded(this.mob)) return false;
         this.leader = this.who.get();
         return this.leader != null && this.leader.isAlive() && this.mob.distanceToSqr(this.leader) > this.start * this.start;
     }

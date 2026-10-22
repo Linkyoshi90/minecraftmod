@@ -228,10 +228,16 @@ public class Bug extends AbstractMonsterGirl {
             return;
         }
         switch (this.species) {
-            case MOTH_BUG -> this.seekLight(server);
+            case MOTH_BUG -> {
+                this.seekLight(server);
+                if (this.tickCount % 20 == 0) this.eatWool(server);
+            }
             case FAIRY_BUG -> this.fairy(server);
             case FAIRY_QUEEN_BUG -> this.bless(server);
-            case BEE_BUG, QUEEN_BEE_BUG -> this.tickBee(server);
+            case BEE_BUG, QUEEN_BEE_BUG -> {
+                this.tickBee(server);
+                if (this.tickCount % 100 == 0) this.pollinate(server);
+            }
             case PAPILLON_BUG -> this.tickPapillon(server);
             default -> {
             }
@@ -239,6 +245,59 @@ public class Bug extends AbstractMonsterGirl {
         if (this.species == GirlSpecies.MOTH_BUG && this.tickCount % 40 == 0) {
             Player p = this.bondedPlayer(60, 12);
             if (p != null) p.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0, true, false));
+        }
+    }
+
+    /** Like real clothes moths, she nibbles wool (and carpet) lying about, and it heals her. Never wool that is built into something. */
+    private void eatWool(ServerLevel level) {
+        ItemEntity wool = this.nearest(ItemEntity.class, 6.0, e -> e.isAlive() && (e.getItem().is(net.minecraft.tags.ItemTags.WOOL) || e.getItem().is(net.minecraft.tags.ItemTags.WOOL_CARPETS)));
+        if (wool == null) return;
+        if (this.distanceToSqr(wool) > 9.0) {                              // a moth flutters: close enough to reach is close enough
+            this.getNavigation().moveTo(wool, 1.0);
+            return;
+        }
+        wool.getItem().shrink(1);
+        if (wool.getItem().isEmpty()) wool.discard();
+        this.heal(2.0F);
+        this.playSound(SoundEvents.WOOL_BREAK, 0.8F, 1.3F);
+    }
+
+    private boolean floraNectar;
+
+    public boolean carriesFloraNectar() {
+        return this.floraNectar;
+    }
+
+    /**
+     * A bee girl next to a flora girl with nectar to spare gathers some. Carrying it past a vanilla flower, she may
+     * pollinate it (one chance in twenty a visit): the flower becomes a young alraune. Not where there are already
+     * four flora girls within 16 blocks, and only where mobGriefing allows.
+     */
+    public void pollinate(ServerLevel level) {
+        if (this.isBaby()) return;
+        if (!this.floraNectar) {
+            Flora flora = this.nearest(Flora.class, 3.0, f -> f.hasNectar());
+            if (flora != null) {
+                flora.giveNectar();
+                this.floraNectar = true;
+                level.sendParticles(ParticleTypes.FALLING_NECTAR, this.getX(), this.getY() + 0.5, this.getZ(), 6, 0.3, 0.3, 0.3, 0.0);
+            }
+            return;
+        }
+        if (this.random.nextInt(20) != 0 || !net.neoforged.neoforge.event.EventHooks.canEntityGrief(level, this)) return;
+        if (level.getEntitiesOfClass(Flora.class, this.getBoundingBox().inflate(16)).size() >= 4) return;
+        for (BlockPos p : BlockPos.betweenClosed(this.blockPosition().offset(-2, -2, -2), this.blockPosition().offset(2, 1, 2))) {
+            if (!level.getBlockState(p).is(net.minecraft.tags.BlockTags.SMALL_FLOWERS)) continue;
+            BlockPos at = p.immutable();
+            if (!(com.linkyoshi90.monstergirls.registry.ModGirls.type(GirlSpecies.ALRAUNE_FLORA).create(level) instanceof Flora bud)) return;
+            level.removeBlock(at, false);
+            bud.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, this.random.nextFloat() * 360.0F, 0.0F);
+            bud.finalizeSpawn(level, level.getCurrentDifficultyAt(at), net.minecraft.world.entity.MobSpawnType.BREEDING, null);
+            bud.setBaby(true);
+            level.addFreshEntity(bud);
+            level.sendParticles(ParticleTypes.HAPPY_VILLAGER, at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, 12, 0.4, 0.4, 0.4, 0.0);
+            this.floraNectar = false;
+            return;
         }
     }
 
@@ -528,5 +587,10 @@ public class Bug extends AbstractMonsterGirl {
         this.nectar = tag.getBoolean("Nectar");
         this.fountain = tag.contains("Fountain") ? BlockPos.of(tag.getLong("Fountain")) : null;
         this.carryTicks = tag.getInt("Carry");
+    }
+
+    @Override
+    public boolean isHealer() {
+        return this.species == GirlSpecies.FAIRY_BUG || this.species == GirlSpecies.FAIRY_QUEEN_BUG;
     }
 }

@@ -33,6 +33,132 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
 - [ ] Decide on the sensitive ones: Kachina (recommendation: drop it), Thunderbird, Uktena, Wayob.
 - [ ] Decide which new families are worth their own class: Giants, Celestials, Horsemen, Fury, Crustaceans.
 
+## 0d. Kinship (girls and their vanilla counterparts)
+
+In since 2026-10-21: `entity/girl/Kinship.java`, tested in `KinshipTests`.
+- A girl draws her vanilla kin to her: they follow her within 16 blocks. While she does not see a player as prey, her kin neither flee from that player nor attack them. So a calmed zombie girl's zombies leave you alone, and an ocelot nekomata's ocelots stop running.
+- Feed her and one of her kin her family's food within 30 seconds, close together: she **introduces** you. Cats, horses, donkeys, mules and llamas are tamed, ocelots and foxes trust you, and everything else becomes a persistent friend that follows you and never targets a player.
+- Kin: nekomata and cats (ocelot nekomata and ocelots), kitsune and foxes, arachne and spiders, the horse and zebra centaur and horses, donkeys and mules, the alpaca and llamas, the goat centaur and goats, dolphin and orca mermaids and dolphins, the axolotl mermaid and axolotls, slimes and slimes (magma: magma cubes), jackalopes and rabbits, minotaurs and cows and mooshrooms, kraken, ika and octopus and squid, the zombie girl and zombies, husks, drowned and zombie villagers, the phantom girl and phantoms, the turtles and turtles, bees and bees. Everyone else has no kin and bonds and breeds with players only, as before. Minotaur cows already breed with bulls.
+- [ ] Playtest: does a befriended zombie still go for villagers? (It does today. Decide whether friends should leave villagers alone too.) Befriended zombies still burn in daylight.
+- [ ] Harpies and anurans are separate classes, not covered yet: parrots and chickens, frogs.
+- [ ] Slimes and phantoms have no pathfinding, so they do not visibly follow. They only stop attacking.
+
+## 0e. Stick orders and stances
+
+In since 2026-10-21: `entity/Orders.java`, used by harpies, anurans and every girl family. Tested in `OrdersTests`.
+- **Right-click with a stick** cycles **Sit → Patrol → Follow → Free roam**. Patrol: she roams within 10 blocks of the spot where you gave the order. Follow: she stays within 7 blocks of you, and catches up at once if more than 40 blocks behind. Anyone can make her sit and get up again; patrol and follow need her to be fond of you (10+).
+- **Sneak + right-click with a stick** cycles **Hostile → Neutral → Self-defence → Peaceful** (fond only). Until a stance is set she follows her instincts, as before.
+  - Hostile attacks hostile mobs, wild girls that are hostile to you, and anyone who hurts her or you.
+  - Neutral defends herself and you.
+  - Self-defence only hits back.
+  - Peaceful never fights.
+- **No friendly fire:** two companions (both fond of the same player) never hurt or target each other, nor each other's befriended vanilla mobs. That is the phoenix and ostrich crossfire fix. Stray shots never hit her player either; deliberate pokes (a swat, a clumsy kick) still do.
+- [ ] **Next command:** even a sitting girl should run for water when she is drying out (anurans, merfolk) or on fire. She should get up, save herself and then go back to her spot.
+- [ ] Playtest: is patrol at 10 blocks and follow at 7 the right size? Does the follow teleport feel right for flying harpies?
+- [ ] Befriended vanilla mobs (Kinship) do not take stick orders yet.
+- [ ] `RelationshipTests.eggHatchesIntoAGrowingHatchling` failed once and then passed on the next run. It is flaky and needs looking at.
+
+## 0f. Answers to the field guides' open questions (2026-10-22)
+
+The answers given on 2026-10-22, as a work list. Ticked = in game.
+
+**All families**
+- [x] Befriended vanilla mobs (Kinship) take stick orders and stances too.
+- [ ] Dev-client test: harpy hatchlings growing up (`eggHatchesIntoAGrowingHatchling` was flaky once).
+- [x] Crash fix (2026-10-22, at random tick speed 100): `BuildNestGoal` ticked once more after losing its nest spot. Not growth-related. Regression test: `AnswersTests.nestGoalSurvivesALostSpot`.
+
+**Harpy**
+- [x] The female/male colouring split (grey-brown against black-and-white) becomes two variants of the same mob. Already the case: the ostrich's `hen` variant.
+- [x] Ostrich kick: 3 hearts on normal (vanilla difficulty scaling for the rest), high knockback. It should hurt.
+- [x] Territory-edge offering: any herbivore food (new item tag `monstergirls:herbivore_food`).
+- [x] Winged cap (leather + feathers): slows the fall (capped fall speed) and cuts fall damage to a fifth; sneaking folds the wings.
+- [x] Winged cap: a GeckoLib armour model (`geo/item/armor/winged_cap.geo.json`) whose wings beat while falling and fold otherwise. Check it in the dev client: the server loads it, but nobody has seen it render yet.
+
+**Anuran**
+- [x] Skirt and cattails become a removable outfit (the bullywug). At high friendship shears take them off: you get a lily pad and three sugar cane. A lily pad puts them back. Woven reed shorts are painted under the skirt, so she stays dressed.
+
+**Nekomata**
+- [x] A true nekomata's spare life stays hers alone (no player totem). Answer: no.
+- [x] Kittens can be put on a lead.
+
+**Kitsune**
+- [x] The nine-tailed elder spawns naturally, very rarely, in cherry groves.
+- [x] The stash game works on other mobs' drops too.
+
+**Lamia**
+- [x] Shed Skin crafts a light armour piece (a snakeskin cloak).
+- [x] She carries her player in her coils: a slow mount off sand, fast on sand.
+
+**Arachne**
+- [x] The silk cocoon present becomes an item you open.
+- [x] The spider truce covers cave spiders (it already did: `GirlEvents.onTarget`).
+- [x] Spider-silk trousers and shoes: light, iron-level protection, but they wear out faster.
+
+**Centaur**
+- [x] Ridden centaurs have stamina. A 15-second gallop, then a slow walk until a third is back.
+- [x] The zebra lets only her father ride her.
+
+**Merfolk**
+- [x] Young merfolk can be carried in a water bucket.
+- [x] The dragon koi can fly (slow levitation). Out of water she floats about a block above the ground, without gravity.
+- [x] All merfolk fetch items the player dropped. Items that fell into the water.
+- [x] At high friendship they share air with a drowning player, then surface themselves so they don't drown. Once every 30 seconds. Water breathing at high friendship was replaced by this; devoted still gives conduit power.
+- [x] Merfolk merchants: neutral wild merfolk who trade ocean loot (from the loot pools) like villagers. One wild grown merfolk in five. Empty hand opens her trades. Wares are rolled from the ruin, shipwreck and buried treasure loot tables; she buys cod and gold.
+- [x] Merfolk scales drop now and then, even from wild ones. They craft into flippers (faster swimming).
+
+**Slime**
+- [x] Two slime species can merge into a mixed slime. At high friendship with both, a slime ball on one while a slime of another kind is within 3 blocks: they flow into one marbled slime (ten looks, one per pair). She keeps both girls' data. A killing blow, or sneak + slime ball, separates them again.
+- [x] A slime's inventory spills out when she splits.
+
+**Jackalope**
+- [x] The Inaba brings rice cakes (a new food) at full devotion.
+- [x] Rice cakes craft into mochi with other foods (apple mochi, melon mochi...).
+- Not doing: several jackalopes breeding with one sleeping player at once. It turns the abstract bed-sharing into a group scene, and the mod is low ecchi.
+
+**Minotaur**
+- [x] Cheese becomes its own item.
+- [x] Only cows (female minotaurs) can be milked (already the case).
+- Not doing: the embarrassed-but-gives-milk-anyway reaction, and milk dripping from the chest. Both sexualise the milking.
+
+**Mollusk**
+- [x] The kraken can pull a boat (a ride). High friendship: in the water next to her player's boat she tows it the way the rider looks.
+- [x] Every squid type (kraken, ika, octopus) drops an ink sac now and then.
+
+**Elves**
+- [ ] High elf settlements grow beyond one pavilion, but only if worldgen and performance stay unaffected.
+
+**Undead**
+- [x] The living doll sits on bookshelves (any block that powers an enchanting table). With nobody to stalk she hops onto a free bookshelf top within 10 blocks and sits there for one to two minutes, watching the room.
+
+**Lizardfolk**
+- [x] The chameleon's colours follow the biome.
+
+**Dragon**
+- [x] The wyrm's fire breath sets fire on top of blocks (normal fire ticks do the rest, no burnt block variants). Obeys `mobGriefing`.
+
+**Devil**
+- [x] The lesser devil steals from chests too.
+
+**Bug**
+- [x] The moth eats wool. Wool and carpet lying about (she heals on it). She never eats wool built into something.
+- [x] Bee girls collect nectar from flora girls. A bee girl carrying flora nectar near a vanilla flower has a small chance to turn it into a flora girl.
+
+**Flora**
+- [x] The alraune can be planted as a flower block. At high friendship, sneak with a shovel: she becomes an Alraune Bloom item. Plant it on dirt; right-click or break it and she steps out with her bonds intact.
+- [x] Nectar from flora girls at high friendship, collected with a glass bottle (built as gathering, not "milking").
+- [x] Nectar waters and feeds a field: pour a bottle on farmland and it soaks every block within 2 and gives every crop a growth spurt.
+- [x] Nectar as a placeable fluid (Bucket of Nectar: three nectar bottles and a bucket). It hydrates farmland like water, and crops within 4 blocks grow on half of their growth ticks. It is slow and honey-like, makes no infinite source, and renders as golden-tinted water.
+
+## 0g. Round of 2026-10-22 (evening)
+
+- [x] **Cowbell:** a minotaur cow's bell rings once (a note over her head) when her milk is ready again. This replaces the milk-drip idea, which stays out (it sexualises her).
+- [x] **Orders outrank following:** under sit or patrol a girl no longer follows her player, flocks, flies home, brings presents, begs or joins your bed. Under follow only her own following gives way (presents and bed stay). This covers harpies (leader, flock, home, owl night-stalking), anurans and girls.
+- [x] **Healing balm** (nectar bottle, honey bottle and a small flower make 3, or a present from a healer): use it on a girl who is fond of you, or on a befriended vanilla mob, for 10 health and Regeneration II. Healers are the flora, the verdant and honey slimes, the snail, the fairies and the axolotl. At high friendship one present in five is a balm, and every 30 seconds they tend your most-hurt companion nearby (4 health and a little regeneration).
+- [x] **Farmhands:** a girl patrolling (stick) for a player she is fond of at high friendship harvests ripe crops in her patrol area, replants them from the harvest, and stores the rest in a chest or barrel there (or drops it). Flora girls also nudge growing crops along. Obeys mobGriefing. Merfolk don't farm.
+- [x] **Slimes in any RGB colour:** a dye mixes its colour into hers, a water bottle washes it out, and merging mixes the two colours. Mixing averages the hues round the colour wheel and keeps brightness and most of the saturation (red + blue = magenta, red + green = yellow), so repeated merges never turn white. Dyed slimes use `<species>_tint.png` (light greys) with the colour applied by the renderer.
+- [ ] Dev client: how the tint looks on each slime (the core and eyes take the colour too), the cowbell, and how harpies settle on patrol.
+- [ ] Harpies and anurans don't farm yet (only the girl families).
+
 ## 1. More species ideas
 
 Ideas to pick from. Each new species needs a gen module, a field-guide entry, tests and its own favourite food.
@@ -125,6 +251,8 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 | moth, moth larva, scorpion, papillon, papillon larva | *none* | bee hurt | bee death | sting, larva chew, cocoon/emerge |
 | **Flora** (alraune, matango, ent, cactus, mandragora) | azalea leaves step | azalea leaves break | azalea break | mandragora scream (ghast scream), bone meal, pollen/spore puff, matango sink |
 | **All girls** | | | | eat (generic eat), chirp/happy, egg laid (chicken egg), pet |
+
+**Full register:** [SOUNDS.md](SOUNDS.md) lists every sound with its file and line (regenerate it with `python tools/sound_register.py`).
 
 ### Plan for the sound work
 - [ ] Pick a naming scheme: `entity.<species>.<slot>`. Generate the `sounds.json` entries, the `ModSounds` registration and the subtitles from `GirlSpecies`, the same way `gen_girl_data.py` works.

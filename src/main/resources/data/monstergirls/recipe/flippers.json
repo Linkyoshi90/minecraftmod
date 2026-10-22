@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "S S",
+    "S S",
+    "L L"
+  ],
+  "key": {
+    "S": {
+      "item": "monstergirls:merfolk_scale"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    }
+  },
+  "result": {
+    "id": "monstergirls:flippers",
+    "count": 1
+  }
+}

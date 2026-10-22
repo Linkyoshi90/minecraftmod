@@ -50,7 +50,7 @@ public class ShareBedGoal<T extends PathfinderMob & Bonded> extends Goal {
 
     @Override
     public boolean canUse() {
-        if (--this.scanDelay > 0) return false;
+        if (--this.scanDelay > 0 || com.linkyoshi90.monstergirls.entity.Orders.holdsPlace(this.mob)) return false;
         this.scanDelay = 20;
         if (!this.mob.canShareBed() || this.mob.isOrderedToSit() || this.mob.getTarget() != null || this.mob.isInWater()) return false;
         Player best = null;

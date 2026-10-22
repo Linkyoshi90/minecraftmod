@@ -110,6 +110,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     @Nullable
     private UUID father;
     private boolean orderedToSit;
+    private final com.linkyoshi90.monstergirls.entity.Orders orders = new com.linkyoshi90.monstergirls.entity.Orders();
     private long nextGiftTime = -1;
 
     protected AbstractHarpy(EntityType<? extends AbstractHarpy> type, Level level) {
@@ -121,6 +122,8 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.setCanPickUpLoot(true);
         this.eggTime = EGG_INTERVAL + this.random.nextInt(EGG_INTERVAL);
         this.goalSelector.addGoal(-1, new SitWhenOrderedGoal<>(this));
+        this.goalSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StayNearGoal<>(this));
+        this.targetSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StanceTargetGoal<>(this));
         this.goalSelector.addGoal(2, new BuildNestGoal(this));
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));
         this.goalSelector.addGoal(3, new GiftGoal<>(this));
@@ -271,7 +274,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (hand == InteractionHand.MAIN_HAND && player.getMainHandItem().is(Items.STICK)) {
-            if (!this.level().isClientSide) this.toggleSitting(player);
+            if (!this.level().isClientSide) Orders.onStick(this, this.orders, player);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
         if (hand == InteractionHand.MAIN_HAND && !this.isBaby() && player.getMainHandItem().is(ModTags.MEAT)
@@ -318,6 +321,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.gestation.save(tag);
         if (this.father != null) tag.putUUID("Father", this.father);
         tag.putBoolean("OrderedToSit", this.orderedToSit);
+        tag.put("Orders", this.orders.save());
         tag.putLong("NextGift", this.nextGiftTime);
         if (this.roost != null) tag.putLong("Roost", this.roost.asLong());
         tag.putInt("EggTime", this.eggTime);
@@ -334,6 +338,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.gestation.load(tag);
         this.father = tag.hasUUID("Father") ? tag.getUUID("Father") : null;
         this.orderedToSit = tag.getBoolean("OrderedToSit");
+        this.orders.load(tag.getCompound("Orders"));
         this.nextGiftTime = tag.contains("NextGift") ? tag.getLong("NextGift") : -1;
         this.affection.clear();
         CompoundTag affectionTag = tag.getCompound("Affection");
@@ -540,6 +545,19 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
 
     // --- sitting on command --------------------------------------------------------------------------------------
 
+    // --- stick orders --------------------------------------------------------------------------------------------
+
+    @Override
+    public com.linkyoshi90.monstergirls.entity.Orders getOrders() {
+        return this.orders;
+    }
+
+    /** Her stance has the last word on whom she fights (and companions never fight each other). */
+    @Override
+    public void setTarget(@Nullable net.minecraft.world.entity.LivingEntity target) {
+        super.setTarget(this.orders == null || this.orders.allows(this, target) ? target : null);
+    }
+
     @Override
     public boolean isOrderedToSit() {
         return this.orderedToSit;
@@ -555,13 +573,6 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         } else if (this.getAction() == Action.SITTING) {
             this.setAction(Action.NONE);
         }
-    }
-
-    /** A stick: sit down, or get up again. */
-    private void toggleSitting(Player player) {
-        this.setOrderedToSit(!this.orderedToSit);
-        player.displayClientMessage(Component.translatable(this.orderedToSit ? "message.monstergirls.sits" : "message.monstergirls.stands",
-                this.getDisplayName()), true);
     }
 
     // --- gifts -----------------------------------------------------------------------------------------------------

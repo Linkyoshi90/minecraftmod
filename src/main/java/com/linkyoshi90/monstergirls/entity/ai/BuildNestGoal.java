@@ -95,6 +95,7 @@ public class BuildNestGoal extends Goal {
 
     @Override
     public void tick() {
+        if (this.spot == null) return;                       // spot lost (taken, or the clutch is laid): the goal stops on its next check
         this.ticks++;
         if (this.ticks > GIVE_UP_TICKS) {
             BlockPos here = findSpot(this.harpy.level(), this.harpy.blockPosition(), 2);

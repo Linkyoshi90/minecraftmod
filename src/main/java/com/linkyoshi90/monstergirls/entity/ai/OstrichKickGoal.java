@@ -5,7 +5,6 @@ import com.linkyoshi90.monstergirls.entity.OstrichHarpy;
 import com.linkyoshi90.monstergirls.registry.ModSounds;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.player.Player;
 
@@ -17,6 +16,8 @@ import net.minecraft.world.entity.player.Player;
 public class OstrichKickGoal extends MeleeAttackGoal {
     /** Health a kicked player always keeps (two hearts). */
     private static final float PLAYER_HEALTH_FLOOR = 4.0F;
+    /** A kick at a player: three hearts on Normal (vanilla scales it to two on Easy, four and a half on Hard). It should hurt. */
+    private static final float PLAYER_KICK = 6.0F;
     /** Hard difficulty scales mob damage to players by 1.5; leave room for it. */
     private static final float HARD_SCALING = 1.5F;
 
@@ -41,12 +42,13 @@ public class OstrichKickGoal extends MeleeAttackGoal {
     }
 
     private void kickPlayer(Player player) {
-        float strength = (float) this.ostrich.getAttributeValue(Attributes.ATTACK_DAMAGE);
         // Half a heart of margin so rounding (and Hard's scaling) can never dip below the floor.
-        float damage = Math.min(strength, (player.getHealth() - PLAYER_HEALTH_FLOOR - 1.0F) / HARD_SCALING);
+        float damage = Math.min(PLAYER_KICK, (player.getHealth() - PLAYER_HEALTH_FLOOR - 1.0F) / HARD_SCALING);
         if (damage >= 1.0F && player.hurt(this.ostrich.damageSources().mobAttack(this.ostrich), damage)) {
             float yaw = this.ostrich.getYRot() * Mth.DEG_TO_RAD;
-            player.knockback((float) this.ostrich.getAttributeValue(Attributes.ATTACK_KNOCKBACK) * 0.5F, Mth.sin(yaw), -Mth.cos(yaw));
+            player.knockback(2.0, Mth.sin(yaw), -Mth.cos(yaw));     // a long, high flight backwards
+            player.setDeltaMovement(player.getDeltaMovement().add(0.0, 0.35, 0.0));
+            player.hurtMarked = true;                               // send the new motion to the client
             this.ostrich.onKicked(player);
         } else {
             this.ostrich.spare(player); // she's made her point

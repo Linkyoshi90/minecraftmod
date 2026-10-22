@@ -28,7 +28,8 @@ public class StalkPlayerGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (this.owl.level().isDay() || this.owl.level().getGameTime() < this.nextTime || this.owl.getTarget() != null) return false;
+        if (this.owl.level().isDay() || this.owl.level().getGameTime() < this.nextTime || this.owl.getTarget() != null
+                || com.linkyoshi90.monstergirls.entity.Orders.commanded(this.owl)) return false;
         if (this.owl.getRandom().nextInt(reducedTickDelay(400)) != 0) return false;
         this.target = this.owl.level().getNearestPlayer(this.owl.getX(), this.owl.getY(), this.owl.getZ(), 24.0,
                 e -> e instanceof Player p && !p.isSpectator());

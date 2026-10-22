@@ -20,9 +20,12 @@ public final class MonsterGirlsMod {
     public MonsterGirlsMod(IEventBus modBus, ModContainer container) {
         container.registerConfig(ModConfig.Type.CLIENT, MonsterGirlsClientConfig.SPEC);
         ModGirls.init();                                   // the later families' entity types and spawn eggs
+        com.linkyoshi90.monstergirls.registry.ModFluids.FLUID_TYPES.register(modBus);
+        com.linkyoshi90.monstergirls.registry.ModFluids.FLUIDS.register(modBus);
         ModBlocks.BLOCKS.register(modBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modBus);
         ModEntities.ENTITY_TYPES.register(modBus);
+        com.linkyoshi90.monstergirls.registry.ModArmorMaterials.ARMOR_MATERIALS.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModSounds.SOUND_EVENTS.register(modBus);
 

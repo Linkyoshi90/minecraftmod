@@ -58,11 +58,15 @@ public class Centaur extends AbstractMonsterGirl {
     public static final int ARMOUR_AFFECTION = 10;
     private static final net.minecraft.resources.ResourceLocation ARMOUR_HEALTH = com.linkyoshi90.monstergirls.MonsterGirlsMod.id("centaur_armour_health");
     private static final int GROOM_COOLDOWN = 3000;
+    /** A full gallop lasts 15 seconds; at zero she slows to a walk until she has caught her breath (a third back). */
+    static final float MAX_STAMINA = 300.0F;
 
     private long nextGroom;
     private long nextKick;
     private long nextAlarm;
     private int fleeceTicks;
+    private float stamina = MAX_STAMINA;
+    private boolean winded;
     private boolean leadMare;
     private final SimpleContainer pack = new SimpleContainer(27);
 
@@ -201,7 +205,7 @@ public class Centaur extends AbstractMonsterGirl {
             return InteractionResult.sidedSuccess(client);
         }
         if (stack.is(Items.SADDLE) && !this.hasFlag(FLAG_SADDLED)) {
-            if (this.getAffection(player) < RIDE_AFFECTION) {
+            if (this.getAffection(player) < RIDE_AFFECTION || !this.mayCarry(player)) {
                 if (!client) player.displayClientMessage(Component.translatable("message.monstergirls.ride_refused", this.getDisplayName()), true);
                 return InteractionResult.sidedSuccess(client);
             }
@@ -249,6 +253,10 @@ public class Centaur extends AbstractMonsterGirl {
             return this.getAffection(player) >= RIDE_AFFECTION ? this.pet(player) : null;   // riders pat her while crouching
         }
         if (stack.isEmpty() && !this.isVehicle() && this.getAffection(player) >= RIDE_AFFECTION) {   // high friendship: up on her back
+            if (!this.mayCarry(player)) {
+                if (!client) player.displayClientMessage(Component.translatable("message.monstergirls.ride_refused", this.getDisplayName()), true);
+                return InteractionResult.sidedSuccess(client);
+            }
             if (!client) {
                 this.getNavigation().stop();
                 this.setTarget(null);
@@ -297,9 +305,26 @@ public class Centaur extends AbstractMonsterGirl {
         return this.getFirstPassenger() instanceof Player p && (this.hasFlag(FLAG_SADDLED) || this.getAffection(p) >= RIDE_AFFECTION) ? p : super.getControllingPassenger();
     }
 
+    /** The zebra is famously never tamed: only her father may ride her. */
+    public boolean mayCarry(Player player) {
+        return this.species != GirlSpecies.ZEBRA_CENTAUR || player.getUUID().equals(this.getFather());
+    }
+
+    public float getStamina() {
+        return this.stamina;
+    }
+
     @Override
     protected void tickRidden(Player player, Vec3 travel) {
         super.tickRidden(player, travel);
+        boolean galloping = player.isSprinting() && travel.lengthSqr() > 0 && !this.winded;
+        this.stamina = Math.max(0.0F, Math.min(MAX_STAMINA, this.stamina + (galloping ? -1.0F : 0.5F)));
+        if (this.stamina <= 0.0F && !this.winded) {
+            this.winded = true;
+            if (!this.level().isClientSide) player.displayClientMessage(Component.translatable("message.monstergirls.winded", this.getDisplayName()), true);
+        } else if (this.winded && this.stamina >= MAX_STAMINA / 3) {
+            this.winded = false;
+        }
         Vec2 rot = new Vec2(player.getXRot() * 0.5F, player.getYRot());
         this.setRot(rot.y, rot.x);
         this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
@@ -314,7 +339,7 @@ public class Centaur extends AbstractMonsterGirl {
     @Override
     protected float getRiddenSpeed(Player player) {
         float base = (this.species == GirlSpecies.HORSE_CENTAUR ? 0.32F : 0.26F) * (this.hasFlag(FLAG_SADDLED) ? 1.15F : 1.0F);
-        return player.isSprinting() ? base * 1.45F : base;
+        return player.isSprinting() && !this.winded ? base * 1.45F : this.winded ? base * 0.7F : base;
     }
 
     @Override

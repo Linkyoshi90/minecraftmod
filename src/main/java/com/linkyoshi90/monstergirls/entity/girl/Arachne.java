@@ -168,6 +168,7 @@ public class Arachne extends AbstractMonsterGirl {
         if (this.level() instanceof ServerLevel server) {
             this.silkTicks = 0;
             this.spawnAtLocation(new ItemStack(Items.STRING, 1 + this.random.nextInt(2)));
+            if (this.random.nextInt(3) == 0) this.spawnAtLocation(new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.SPIDER_SILK.get()));
             this.addAffection(player, 1);
             stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
             this.playSound(SoundEvents.BRUSH_GENERIC, 1.0F, 1.0F);
@@ -189,11 +190,9 @@ public class Arachne extends AbstractMonsterGirl {
     @Override
     public ItemStack rollGift(Player player) {
         int r = this.random.nextInt(100);
-        if (this.getAffection(player) >= 60) {                            // a silk-wrapped present
-            if (r < 3) return new ItemStack(Items.DIAMOND);
-            if (r < 10) return new ItemStack(Items.BOOK);
-            if (r < 30) return new ItemStack(Items.GOLD_INGOT);
-            if (r < 55) return new ItemStack(Items.IRON_INGOT);
+        if (this.getAffection(player) >= 60 && r < 55) {                  // a silk-wrapped present: a cocoon to tear open
+            ItemStack inside = new ItemStack(r < 3 ? Items.DIAMOND : r < 10 ? Items.BOOK : r < 30 ? Items.GOLD_INGOT : Items.IRON_INGOT);
+            return com.linkyoshi90.monstergirls.item.CocoonItem.wrapping(inside);
         }
         return new ItemStack(r < 70 ? Items.STRING : r < 85 ? Items.COBWEB : Items.SPIDER_EYE, r < 70 ? 2 + this.random.nextInt(3) : 1);
     }

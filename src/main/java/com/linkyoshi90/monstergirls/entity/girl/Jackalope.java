@@ -168,6 +168,9 @@ public class Jackalope extends AbstractMonsterGirl {
     public ItemStack rollGift(Player player) {
         int r = this.random.nextInt(100);
         if (this.getAffection(player) >= 60 && r < 10) return new ItemStack(Items.RABBIT_FOOT);
+        if (this.species == GirlSpecies.INABA_JACKALOPE && this.getAffection(player) >= FULL_AFFECTION && r < 50) {
+            return new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.RICE_CAKE.get(), 2);   // pounded under the moon
+        }
         return switch (this.species) {
             case INABA_JACKALOPE -> new ItemStack(r < 50 ? Items.SUGAR : r < 80 ? Items.GLOWSTONE_DUST : Items.CAKE);
             case EASTER_JACKALOPE -> new ItemStack(ModBlocks.PAINTED_EGG.get());

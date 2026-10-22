@@ -48,7 +48,7 @@ public class GiftGoal<T extends PathfinderMob & Bonded & GiftGiver> extends Goal
 
     @Override
     public boolean canUse() {
-        if (this.harpy.tickCount % 41 != 0 || !this.harpy.isGiftDue() || this.harpy.isBaby() || this.harpy.isOrderedToSit()
+        if (this.harpy.tickCount % 41 != 0 || !this.harpy.isGiftDue() || this.harpy.isBaby() || com.linkyoshi90.monstergirls.entity.Orders.holdsPlace(this.harpy)
                 || this.harpy.getTarget() != null) return false;
         Player best = null;
         for (Player p : this.harpy.level().players()) {
@@ -57,7 +57,8 @@ public class GiftGoal<T extends PathfinderMob & Bonded & GiftGiver> extends Goal
             if (best == null || p.distanceToSqr(this.harpy) < best.distanceToSqr(this.harpy)) best = p;
         }
         if (best == null) return false;
-        ItemStack gift = this.harpy.rollGift(best);
+        ItemStack gift = this.harpy instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl girl && girl.isHealer()
+                && girl.getRandom().nextInt(5) == 0 ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.HEALING_BALM.get()) : this.harpy.rollGift(best);
         if (gift.isEmpty()) {
             this.harpy.scheduleNextGift();
             return false;

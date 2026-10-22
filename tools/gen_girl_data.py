@@ -244,6 +244,7 @@ public enum GirlSpecies {
         "message.monstergirls.cold": "%s is too cold to move",
         "message.monstergirls.ride_refused": "%s does not let you ride her (yet)",
         "message.monstergirls.keening": "%s keens. Danger is close",
+        "message.monstergirls.introduced": "%s introduces you to her %s. It is yours now",
         "itemGroup.monstergirls": "Harmontide",
     })
     path = os.path.join(ASSETS, "lang", "en_us.json")

@@ -34,6 +34,8 @@ public final class ModTags {
     public static final TagKey<Block> CROW_HARPY_SCARECROWS = TagKey.create(Registries.BLOCK, MonsterGirlsMod.id("crow_harpy_scarecrows"));
 
     /** Seeds and plants an ostrich eats on top of any ordinary food (she's an omnivore). */
+    /** Plant food of any kind: what a herbivore accepts as an offering (the ostrich at her territory's edge). */
+    public static final TagKey<Item> HERBIVORE_FOOD = TagKey.create(Registries.ITEM, MonsterGirlsMod.id("herbivore_food"));
     public static final TagKey<Item> OSTRICH_HARPY_FOOD = TagKey.create(Registries.ITEM, MonsterGirlsMod.id("ostrich_harpy_food"));
     /** Leafy greens: an ostrich's favourite, worth double affection. */
     public static final TagKey<Item> OSTRICH_HARPY_FAVOURITES = TagKey.create(Registries.ITEM, MonsterGirlsMod.id("ostrich_harpy_favourites"));

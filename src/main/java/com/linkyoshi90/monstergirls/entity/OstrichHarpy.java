@@ -407,7 +407,18 @@ public class OstrichHarpy extends AbstractHarpy {
                 return InteractionResult.sidedSuccess(this.level().isClientSide);
             }
         }
-        // Food: she won't take it from someone she's busy chasing off.
+        // An offering of plant food at the edge of her territory makes peace, even mid-charge.
+        if (stack.is(ModTags.HERBIVORE_FOOD) && (this.getTarget() == player || this.getAction() == Action.DISPLAYING)) {
+            if (!this.level().isClientSide) {
+                stack.consume(1, player);
+                this.spare(player);
+                if (this.getAction() == Action.DISPLAYING) this.setAction(Action.NONE);
+                this.addAffection(player, 1);
+                this.playSound(this.getEatSound(), 1.0F, this.getVoicePitch());
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+        // Other food: she won't take it from someone she's busy chasing off.
         if (this.isEdible(stack) && this.getTarget() != player) {
             if (this.level() instanceof ServerLevel server) {
                 boolean favourite = this.isFavouriteFood(stack);

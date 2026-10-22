@@ -92,12 +92,14 @@ public class SlimeGirl extends AbstractMonsterGirl {
             case HONEY_SLIME -> List.of(DyeColor.YELLOW, DyeColor.ORANGE, DyeColor.WHITE, DyeColor.BROWN, DyeColor.PINK);
             case FROST_SLIME -> List.of(DyeColor.LIGHT_BLUE, DyeColor.WHITE, DyeColor.LIME, DyeColor.BLUE, DyeColor.PINK);
             case AMETHYST_SLIME -> List.of(DyeColor.PURPLE, DyeColor.PINK, DyeColor.YELLOW, DyeColor.GRAY, DyeColor.GREEN);
+            case MIXED_SLIME -> List.of();                                  // her colours are her two halves
             default -> List.of(DyeColor.LIME, DyeColor.WHITE, DyeColor.BROWN, DyeColor.CYAN, DyeColor.YELLOW);
         };
     }
 
     @Override
     public boolean isFood(ItemStack stack) {
+        if (this.isMixed()) return this.kinds().stream().anyMatch(k -> favourites(k).stream().anyMatch(stack::is));
         return favourites(this.species).stream().anyMatch(stack::is);
     }
 
@@ -124,11 +126,32 @@ public class SlimeGirl extends AbstractMonsterGirl {
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
         boolean client = this.level().isClientSide;
-        if (stack.getItem() instanceof DyeItem dye) {                       // she takes the colour of the dye
-            int i = dyes(this.species).indexOf(dye.getDyeColor());
-            if (i < 0) return null;
+        if (stack.is(Items.SLIME_BALL) && !this.isBaby() && !this.isHalf() && this.getAffection(player) >= BED_AFFECTION) {
+            if (this.isMixed() && player.isShiftKeyDown()) {                // sneak: let the two of them go their own ways
+                if (!client) this.separate((ServerLevel) this.level());
+                return InteractionResult.sidedSuccess(client);
+            }
+            SlimeGirl other = this.isMixed() ? null : this.nearest(SlimeGirl.class, 3.0, o -> canMerge(this, o, player));
+            if (other != null) {
+                if (!client) merge((ServerLevel) this.level(), this, other, player);
+                stack.consume(1, player);
+                return InteractionResult.sidedSuccess(client);
+            }
+        }
+        if (stack.is(Items.POTION) && this.hasCustomColour()
+                && stack.getOrDefault(net.minecraft.core.component.DataComponents.POTION_CONTENTS, net.minecraft.world.item.alchemy.PotionContents.EMPTY)
+                .is(net.minecraft.world.item.alchemy.Potions.WATER)) {            // a water bottle washes the dye out of her
             if (!client) {
-                this.setVariantIndex(i);
+                this.setColour(-1);
+                stack.consume(1, player);
+                if (!player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE))) player.drop(new ItemStack(Items.GLASS_BOTTLE), false);
+                this.playSound(SoundEvents.SLIME_SQUISH, 1.0F, 1.4F);
+            }
+            return InteractionResult.sidedSuccess(client);
+        }
+        if (stack.getItem() instanceof DyeItem dye) {                       // the dye's colour mixes into hers (any colour there is)
+            if (!client) {
+                this.setColour(blend(this.colour(), dye.getDyeColor().getTextureDiffuseColor()));
                 stack.consume(1, player);
                 this.startTimedAction(Action.ABSORB, 24);
                 this.playSound(SoundEvents.SLIME_SQUISH, 1.0F, 1.2F);
@@ -206,6 +229,11 @@ public class SlimeGirl extends AbstractMonsterGirl {
     /** A killing blow splits her in two small halves (once a day) that find each other again and merge. */
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        if (!this.level().isClientSide && amount >= this.getHealth() && this.isMixed() && !this.parts.isEmpty()
+                && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            this.separate((ServerLevel) this.level());                       // never lost: she comes apart into the two again
+            return false;
+        }
         if (!this.level().isClientSide && amount >= this.getHealth() && !this.hasFlag(FLAG_HALF) && !this.isBaby()
                 && this.level().getGameTime() - this.lastSplit >= SPLIT_COOLDOWN && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             this.split((ServerLevel) this.level());
@@ -217,6 +245,7 @@ public class SlimeGirl extends AbstractMonsterGirl {
 
     private void split(ServerLevel level) {
         this.lastSplit = level.getGameTime();
+        for (ItemStack s : this.belly.removeAllItems()) this.spawnAtLocation(s);   // the blow knocks everything out of her
         this.setHealth(this.getMaxHealth() * 0.25F);
         this.startTimedAction(Action.SPLIT, 20);
         this.playSound(SoundEvents.SLIME_SQUISH, 1.0F, 0.8F);
@@ -408,6 +437,12 @@ public class SlimeGirl extends AbstractMonsterGirl {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        if (this.hasCustomColour()) tag.putInt("Colour", this.colour());
+        if (!this.parts.isEmpty()) {
+            net.minecraft.nbt.ListTag list = new net.minecraft.nbt.ListTag();
+            list.addAll(this.parts);
+            tag.put("Parts", list);
+        }
         tag.put("Belly", this.belly.createTag(this.registryAccess()));
         tag.putLong("LastSplit", this.lastSplit);
         if (this.partner != null) tag.putUUID("Partner", this.partner);
@@ -416,8 +451,148 @@ public class SlimeGirl extends AbstractMonsterGirl {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.setColour(tag.contains("Colour") ? tag.getInt("Colour") : -1);
+        this.parts.clear();
+        for (var t : tag.getList("Parts", net.minecraft.nbt.Tag.TAG_COMPOUND)) this.parts.add((CompoundTag) t);
         this.belly.fromTag(tag.getList("Belly", 10), this.registryAccess());
         if (tag.contains("LastSplit")) this.lastSplit = tag.getLong("LastSplit");
         this.partner = tag.hasUUID("Partner") ? tag.getUUID("Partner") : null;
+    }
+
+    // --- mixed slimes ---------------------------------------------------------------------------------------------
+
+    private static final List<GirlSpecies> KINDS = List.of(GirlSpecies.VERDANT_SLIME, GirlSpecies.MAGMA_SLIME, GirlSpecies.HONEY_SLIME,
+            GirlSpecies.FROST_SLIME, GirlSpecies.AMETHYST_SLIME);
+    /** The two girls she is made of (their saved data), to give back when she separates. */
+    private final List<CompoundTag> parts = new java.util.ArrayList<>();
+
+    public boolean isMixed() {
+        return this.species == GirlSpecies.MIXED_SLIME;
+    }
+
+    /** The two kinds a mixed slime is made of (read off her colour variant, e.g. "honey_frost"). */
+    public List<GirlSpecies> kinds() {
+        if (!this.isMixed()) return List.of(this.species);
+        String[] k = this.getVariantName().split("_");
+        return List.of(GirlSpecies.byId(k[0] + "_slime"), GirlSpecies.byId(k[1] + "_slime"));
+    }
+
+    public int partCount() {
+        return this.parts.size();
+    }
+
+    /** Two grown, whole slimes of different kinds, both at high friendship with the same player. */
+    public static boolean canMerge(SlimeGirl a, SlimeGirl b, Player player) {
+        return a != b && b.isAlive() && !a.isMixed() && !b.isMixed() && a.species != b.species && !a.isBaby() && !b.isBaby()
+                && !a.isHalf() && !b.isHalf() && b.getAffection(player) >= BED_AFFECTION && a.getAffection(player) >= BED_AFFECTION;
+    }
+
+    private static CompoundTag saved(SlimeGirl girl) {
+        CompoundTag tag = new CompoundTag();
+        girl.saveWithoutId(tag);
+        tag.remove("UUID");
+        tag.putString("PartSpecies", girl.species.id());
+        return tag;
+    }
+
+    /** The two flow together into one marbled slime that carries both of them (bonds, belongings and all). */
+    public static SlimeGirl merge(ServerLevel level, SlimeGirl a, SlimeGirl b, Player player) {
+        if (!(com.linkyoshi90.monstergirls.registry.ModGirls.type(GirlSpecies.MIXED_SLIME).create(level) instanceof SlimeGirl mixed)) return null;
+        int ia = KINDS.indexOf(a.species), ib = KINDS.indexOf(b.species);
+        String key = KINDS.get(Math.min(ia, ib)).id().replace("_slime", "") + "_" + KINDS.get(Math.max(ia, ib)).id().replace("_slime", "");
+        mixed.setVariant(key);
+        mixed.setColour(blend(a.colour(), b.colour()));                       // the two colours flow together
+        mixed.parts.add(saved(a));
+        mixed.parts.add(saved(b));
+        mixed.setAffection(player.getUUID(), Math.max(a.getAffection(player), b.getAffection(player)));
+        mixed.moveTo((a.getX() + b.getX()) / 2, a.getY(), (a.getZ() + b.getZ()) / 2, a.getYRot(), 0.0F);
+        mixed.setPersistenceRequired();
+        level.addFreshEntity(mixed);
+        level.sendParticles(ParticleTypes.ITEM_SLIME, mixed.getX(), mixed.getY() + 1, mixed.getZ(), 30, 0.5, 0.5, 0.5, 0.1);
+        mixed.playSound(SoundEvents.SLIME_SQUISH, 1.0F, 0.7F);
+        a.discard();
+        b.discard();
+        return mixed;
+    }
+
+    /** She comes apart into the two she was (each a little worn), with whatever she was carrying at her feet. */
+    public void separate(ServerLevel level) {
+        if (this.parts.isEmpty()) return;
+        for (CompoundTag tag : this.parts) {
+            GirlSpecies s = GirlSpecies.byId(tag.getString("PartSpecies"));
+            net.minecraft.world.entity.Entity e = s == null ? null : com.linkyoshi90.monstergirls.registry.ModGirls.type(s).create(level);
+            if (!(e instanceof SlimeGirl girl)) continue;
+            girl.load(tag);
+            girl.moveTo(this.getX() + this.random.nextGaussian() * 0.6, this.getY(), this.getZ() + this.random.nextGaussian() * 0.6, this.getYRot(), 0.0F);
+            girl.setHealth(Math.max(1.0F, girl.getMaxHealth() * 0.5F));
+            level.addFreshEntity(girl);
+        }
+        this.parts.clear();
+        for (ItemStack s : this.belly.removeAllItems()) this.spawnAtLocation(s);
+        level.sendParticles(ParticleTypes.ITEM_SLIME, this.getX(), this.getY() + 1, this.getZ(), 30, 0.5, 0.5, 0.5, 0.1);
+        this.playSound(SoundEvents.SLIME_SQUISH, 1.0F, 1.3F);
+        this.discard();
+    }
+
+    // --- colour: anywhere on the RGB spectrum ---------------------------------------------------------------------
+
+    private static final net.minecraft.network.syncher.EntityDataAccessor<Integer> DATA_COLOUR =
+            net.minecraft.network.syncher.SynchedEntityData.defineId(SlimeGirl.class, net.minecraft.network.syncher.EntityDataSerializers.INT);
+
+    @Override
+    protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_COLOUR, -1);
+    }
+
+    /** Whether dye (or a merge) has given her a colour of her own (she is then drawn tinted, see GirlRenderer). */
+    public boolean hasCustomColour() {
+        return this.entityData.get(DATA_COLOUR) >= 0;
+    }
+
+    /** Her colour as 0xRRGGBB: her own, or her kind's natural one. */
+    public int colour() {
+        int c = this.entityData.get(DATA_COLOUR);
+        return c >= 0 ? c : this.species.eggColor() & 0xFFFFFF;
+    }
+
+    /** -1 goes back to her natural colours. */
+    public void setColour(int rgb) {
+        this.entityData.set(DATA_COLOUR, rgb < 0 ? -1 : rgb & 0xFFFFFF);
+    }
+
+    /** RGB to hue, saturation, value (all 0..1). */
+    static float[] hsv(int rgb) {
+        float r = (rgb >> 16 & 255) / 255.0F, g = (rgb >> 8 & 255) / 255.0F, b = (rgb & 255) / 255.0F;
+        float max = Math.max(r, Math.max(g, b)), min = Math.min(r, Math.min(g, b)), d = max - min;
+        float h = d == 0 ? 0 : max == r ? ((g - b) / d) % 6 : max == g ? (b - r) / d + 2 : (r - g) / d + 4;
+        h /= 6.0F;
+        if (h < 0) h += 1.0F;
+        return new float[]{h, max == 0 ? 0 : d / max, max};
+    }
+
+    /**
+     * Two colours flowing together, like mixing light without washing out: the hue is the average round the colour
+     * wheel (red and blue make magenta, red and green yellow), the brightness is the brighter one's, and most of the
+     * saturation is kept. It only fades towards white or grey when the two pull in opposite directions (complementary
+     * colours) or one of them was pale already, and even then only part of the way, so repeated merges never end up
+     * plain white.
+     */
+    public static int blend(int a, int b) {
+        float[] x = hsv(a), y = hsv(b);
+        double ax = Math.cos(x[0] * 2 * Math.PI) * x[1], ay = Math.sin(x[0] * 2 * Math.PI) * x[1];
+        double bx = Math.cos(y[0] * 2 * Math.PI) * y[1], by = Math.sin(y[0] * 2 * Math.PI) * y[1];
+        double mx = (ax + bx) / 2, my = (ay + by) / 2, pull = Math.hypot(mx, my);
+        float hue = pull < 1.0E-4 ? x[0] : (float) (Math.atan2(my, mx) / (2 * Math.PI));
+        if (hue < 0) hue += 1.0F;
+        float maxSat = Math.max(x[1], y[1]);
+        double meanSat = (x[1] + y[1]) / 2;
+        float sat = meanSat < 1.0E-4 ? 0.0F : (float) (maxSat * (0.6 + 0.4 * Math.min(1.0, pull / meanSat)) * Math.sqrt(meanSat / maxSat));
+        return net.minecraft.util.Mth.hsvToRgb(hue, Math.min(1.0F, sat), Math.max(x[2], y[2])) & 0xFFFFFF;
+    }
+
+    @Override
+    public boolean isHealer() {
+        return this.species == GirlSpecies.VERDANT_SLIME || this.species == GirlSpecies.HONEY_SLIME;
     }
 }

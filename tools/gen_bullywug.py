@@ -104,6 +104,7 @@ def _paint():
             return REED[1]
         return pick(REED, base, x, y)
     pt("wrap", "all", weave)
+    pt("hips", "all", weave)                                  # woven reed shorts under the skirt (the skirt comes off)
 
     def rope(f, x, y, w, h):
         t = 0.30 + 0.35 * (((x + y) % 3) == 0) + (noise(x, y, 19) - 0.5) * 0.1

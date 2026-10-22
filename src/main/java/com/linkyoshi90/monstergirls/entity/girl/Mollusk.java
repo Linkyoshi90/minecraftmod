@@ -262,7 +262,14 @@ public class Mollusk extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.KRAKEN_MOLLUSK && this.hasFlag(FLAG_TOWING)) this.tow();
         if (!(this.level() instanceof ServerLevel server)) return;
+        if (this.species == GirlSpecies.KRAKEN_MOLLUSK && this.tickCount % 10 == 0) this.checkTow();
+        boolean squid = this.species == GirlSpecies.KRAKEN_MOLLUSK || this.species == GirlSpecies.IKA_MOLLUSK || this.species == GirlSpecies.OCTOPUS_MOLLUSK;
+        if (squid && !this.isBaby() && this.random.nextInt(9000) == 0) {           // about once every 7.5 minutes, like a chicken's egg
+            boolean glow = this.species == GirlSpecies.IKA_MOLLUSK && "firefly".equals(this.getVariantName());
+            this.spawnAtLocation(new ItemStack(glow ? Items.GLOW_INK_SAC : Items.INK_SAC));
+        }
         if (this.retracted > 0) {
             this.getNavigation().stop();
             this.setDeltaMovement(this.getDeltaMovement().multiply(0, 1, 0));
@@ -321,5 +328,41 @@ public class Mollusk extends AbstractMonsterGirl {
         super.readAdditionalSaveData(tag);
         this.retracted = tag.getInt("Retracted");
         this.setFlag(FLAG_RETRACTED, this.retracted > 0);
+    }
+
+    // --- towing a boat ---------------------------------------------------------------------------------------------
+
+    @Nullable
+    private net.minecraft.world.entity.vehicle.Boat towedBoat() {
+        var boats = this.level().getEntitiesOfClass(net.minecraft.world.entity.vehicle.Boat.class, this.getBoundingBox().inflate(12),
+                b -> b.getControllingPassenger() instanceof Player && b.isInWater());
+        return boats.isEmpty() ? null : boats.get(0);
+    }
+
+    /** Server: the kraken takes the boat of the player she is fond of (high friendship) whenever she is in the water near it. */
+    private void checkTow() {
+        Player p = this.bondedPlayer(BED_AFFECTION, 12);
+        boolean towing = p != null && p.getVehicle() instanceof net.minecraft.world.entity.vehicle.Boat b && b.isInWater() && this.isInWater() && !this.isBaby();
+        if (towing != this.hasFlag(FLAG_TOWING)) this.setFlag(FLAG_TOWING, towing);
+        if (towing) {
+            Vec3 ahead = p.getVehicle().position().add(p.getViewVector(1.0F).multiply(1, 0, 1).normalize().scale(3.0));
+            this.getNavigation().moveTo(ahead.x, p.getVehicle().getY() - 1.0, ahead.z, 1.6);
+        }
+    }
+
+    /** Both sides (the boat moves where its rider's game runs): a strong pull the way the rider is looking. */
+    private void tow() {
+        var boat = this.towedBoat();
+        if (boat == null || !(boat.getControllingPassenger() instanceof Player rider)) return;
+        Vec3 look = rider.getViewVector(1.0F).multiply(1, 0, 1).normalize();
+        Vec3 v = boat.getDeltaMovement().add(look.scale(0.04));
+        double h = v.horizontalDistance();
+        if (h > 1.1) v = new Vec3(v.x / h * 1.1, v.y, v.z / h * 1.1);
+        boat.setDeltaMovement(v);
+    }
+
+    @Override
+    public boolean isHealer() {
+        return this.species == GirlSpecies.SNAIL_MOLLUSK;
     }
 }

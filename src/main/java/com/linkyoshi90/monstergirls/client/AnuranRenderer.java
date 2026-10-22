@@ -38,6 +38,13 @@ public class AnuranRenderer<T extends AbstractAnuran> extends GeoEntityRenderer<
             public void setCustomAnimations(T animatable, long instanceId, AnimationState<T> animationState) {
                 super.setCustomAnimations(animatable, instanceId, animationState);
                 Bellies.anuran(this, animatable);
+                if (animatable instanceof com.linkyoshi90.monstergirls.entity.Bullywug wug) {   // the outfit that comes off
+                    boolean off = wug.isUndressed();
+                    for (String b : new String[]{"skirt", "cattails"}) {
+                        var bone = this.getAnimationProcessor().getBone(b);
+                        if (bone != null) bone.setHidden(off);
+                    }
+                }
             }
 
             @Override

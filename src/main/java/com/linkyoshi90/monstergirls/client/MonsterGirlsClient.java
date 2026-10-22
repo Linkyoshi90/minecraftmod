@@ -31,6 +31,41 @@ import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 public final class MonsterGirlsClient {
     private MonsterGirlsClient() {}
 
+    /** Nectar looks like water, tinted gold, and is see-through like it. */
+    @SubscribeEvent
+    public static void clientExtensions(net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent event) {
+        event.registerFluidType(new net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions() {
+            @Override
+            public net.minecraft.resources.ResourceLocation getStillTexture() {
+                return net.minecraft.resources.ResourceLocation.withDefaultNamespace("block/water_still");
+            }
+
+            @Override
+            public net.minecraft.resources.ResourceLocation getFlowingTexture() {
+                return net.minecraft.resources.ResourceLocation.withDefaultNamespace("block/water_flow");
+            }
+
+            @Override
+            public net.minecraft.resources.ResourceLocation getOverlayTexture() {
+                return net.minecraft.resources.ResourceLocation.withDefaultNamespace("block/water_overlay");
+            }
+
+            @Override
+            public int getTintColor() {
+                return 0xE0F2B04A;
+            }
+        }, com.linkyoshi90.monstergirls.registry.ModFluids.NECTAR_TYPE.get());
+    }
+
+    @SubscribeEvent
+    @SuppressWarnings("deprecation")
+    public static void clientSetup(net.neoforged.fml.event.lifecycle.FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(com.linkyoshi90.monstergirls.registry.ModFluids.NECTAR.get(), net.minecraft.client.renderer.RenderType.translucent());
+            net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(com.linkyoshi90.monstergirls.registry.ModFluids.FLOWING_NECTAR.get(), net.minecraft.client.renderer.RenderType.translucent());
+        });
+    }
+
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.SPARROW_HARPY.get(), SparrowHarpyRenderer::new);

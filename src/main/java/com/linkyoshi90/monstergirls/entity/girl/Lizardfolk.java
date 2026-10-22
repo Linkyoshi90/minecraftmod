@@ -197,6 +197,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
             if (this.getAction() == Action.RETRACT) this.setAction(Action.NONE);
         }
         if (this.species == GirlSpecies.SALAMANDER_LIZARDFOLK) this.glow(server, 8);
+        if (this.species == GirlSpecies.CHAMELEON_LIZARDFOLK && this.tickCount % 100 == 0) this.blend(server);
         if (this.species == GirlSpecies.CHAMELEON_LIZARDFOLK) {               // still and unseen
             boolean still = this.getDeltaMovement().horizontalDistanceSqr() < 1.0E-4 && this.getTarget() == null;
             this.stillTicks = still ? this.stillTicks + 1 : 0;
@@ -231,6 +232,18 @@ public class Lizardfolk extends AbstractMonsterGirl {
         if (level.getEntitiesOfClass(ItemEntity.class, this.getBoundingBox().inflate(4), e -> e.getItem().is(ItemTags.FISHES)).size() >= 3) return;
         this.spawnAtLocation(new ItemStack(this.random.nextInt(3) == 0 ? Items.SALMON : Items.COD));
         this.playSound(SoundEvents.FISHING_BOBBER_SPLASH, 0.6F, 0.8F);
+    }
+
+    /** The chameleon's colours follow her surroundings: the jungle's bright panther, desert yellow, woodland brown, veiled in swamps. */
+    private void blend(ServerLevel level) {
+        var biome = level.getBiome(this.blockPosition());
+        String key = biome.is(net.neoforged.neoforge.common.Tags.Biomes.IS_JUNGLE) ? "panther"
+                : biome.is(net.neoforged.neoforge.common.Tags.Biomes.IS_HOT_OVERWORLD) && biome.is(net.neoforged.neoforge.common.Tags.Biomes.IS_DRY_OVERWORLD) ? "yellow"
+                : biome.is(net.neoforged.neoforge.common.Tags.Biomes.IS_SWAMP) ? "veiled"
+                : biome.is(net.neoforged.neoforge.common.Tags.Biomes.IS_CONIFEROUS_TREE) || biome.is(net.neoforged.neoforge.common.Tags.Biomes.IS_DEAD) ? "brown"
+                : "green";
+        int index = this.species.variants().indexOf(key);
+        if (index >= 0 && index != this.getVariantIndex()) this.setVariantIndex(index);
     }
 
     /** The chameleon's tongue: a dropped item within four blocks shoots over to her feet. */

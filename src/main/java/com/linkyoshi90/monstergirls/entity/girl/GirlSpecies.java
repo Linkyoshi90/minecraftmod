@@ -49,6 +49,7 @@ public enum GirlSpecies {
     HONEY_SLIME("honey_slime", Family.SLIME, 1.5F, 28.5F, 0.8F, MobCategory.CREATURE, 0xF0B030, 0xF8C850, "golden", "amber", "clover", "buckwheat", "blossom"),
     FROST_SLIME("frost_slime", Family.SLIME, 1.6F, 28.5F, 0.8F, MobCategory.CREATURE, 0x8AD0F0, 0xB8E8FF, "ice", "glacier", "aurora", "deep", "snow"),
     AMETHYST_SLIME("amethyst_slime", Family.SLIME, 1.55F, 28.5F, 0.8F, MobCategory.MONSTER, 0xA070D8, 0xC098F0, "amethyst", "rose", "citrine", "smoky", "emerald"),
+    MIXED_SLIME("mixed_slime", Family.SLIME, 1.6F, 28.5F, 0.8F, MobCategory.CREATURE, 0x6AD04A, 0x8AE060, "verdant_magma", "verdant_honey", "verdant_frost", "verdant_amethyst", "magma_honey", "magma_frost", "magma_amethyst", "honey_frost", "honey_amethyst", "frost_amethyst"),
     INABA_JACKALOPE("inaba_jackalope", Family.JACKALOPE, 1.55F, 28.5F, 0.6F, MobCategory.CREATURE, 0xF6F6F4, 0xF2F0F4, "moon", "harvest", "blood", "blue", "eclipse"),
     JACK_JACKALOPE("jack_jackalope", Family.JACKALOPE, 1.7F, 28.6F, 0.6F, MobCategory.CREATURE, 0x8A6A48, 0x6A4A2E, "brown", "grey", "tan", "snowshoe", "black"),
     EASTER_JACKALOPE("easter_jackalope", Family.JACKALOPE, 1.5F, 28.5F, 0.6F, MobCategory.CREATURE, 0xF8D4DE, 0xF4C0D0, "pink", "mint", "lavender", "butter", "sky"),

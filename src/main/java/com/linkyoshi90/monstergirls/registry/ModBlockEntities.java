@@ -21,5 +21,11 @@ public final class ModBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GirlEggBlockEntity>> GIRL_EGG = BLOCK_ENTITIES.register("girl_egg",
             () -> BlockEntityType.Builder.of(GirlEggBlockEntity::new, ModBlocks.GIRL_EGG.get()).build(null));
 
+    /** The alraune asleep in her bloom. */
+    @SuppressWarnings("DataFlowIssue")
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.linkyoshi90.monstergirls.block.AlrauneBloomBlockEntity>> ALRAUNE_BLOOM =
+            BLOCK_ENTITIES.register("alraune_bloom", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.AlrauneBloomBlockEntity::new,
+                    ModBlocks.ALRAUNE_BLOOM.get()).build(null));
+
     private ModBlockEntities() {}
 }

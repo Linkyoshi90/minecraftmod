@@ -45,6 +45,26 @@ ADD = {
                        ("dark", "Dark", "Almost black"), ("suwannee", "Suwannee", "The Suwannee River species, paler and greyer"),
                        ("leucistic", "Leucistic", "Pale cream, very rare")]),
         {"Habitat": "Swamps, mangroves", "Signature": "Tongue lure, shell", "Danger": "Moderate if provoked"})],
+    "slime": [(
+        dict(id="mixed_slime", name="Mixed Slime", group="Made, not found", tag="Two in one · marbled", height=1.6,
+             biomes=[], temperament="Two moods at once",
+             ecology="Two slime girls of different kinds who trust the same player can flow together into one marbled slime. "
+                     "She is both of them: a killing blow does not split her into halves, it separates her back into the two she was.",
+             interaction="Hold a slime ball and right-click one of two slimes (of different kinds, both at high friendship with you) standing "
+                         "together. Sneak and do it again to separate them.",
+             signature=("Two in one", "One slime carrying both girls, their bonds and their belongings. Never lost: hurt badly, she comes apart into the two again."),
+             danger="Low.",
+             variants=[("verdant_magma", "Verdant and magma (default)", "Marbled verdant and magma jelly"),
+                       ("verdant_honey", "Verdant and honey", "Marbled verdant and honey jelly"),
+                       ("verdant_frost", "Verdant and frost", "Marbled verdant and frost jelly"),
+                       ("verdant_amethyst", "Verdant and amethyst", "Marbled verdant and amethyst jelly"),
+                       ("magma_honey", "Magma and honey", "Marbled magma and honey jelly"),
+                       ("magma_frost", "Magma and frost", "Marbled magma and frost jelly"),
+                       ("magma_amethyst", "Magma and amethyst", "Marbled magma and amethyst jelly"),
+                       ("honey_frost", "Honey and frost", "Marbled honey and frost jelly"),
+                       ("honey_amethyst", "Honey and amethyst", "Marbled honey and amethyst jelly"),
+                       ("frost_amethyst", "Frost and amethyst", "Marbled frost and amethyst jelly")]),
+        {"Habitat": "Wherever two slimes meet", "Favourite food": "Whatever her halves like", "Element": "Both", "Weakness": "Being separated", "Danger": "Low"})],
     "undead": [(
         dict(id="banshee_undead", name="Banshee", group="Birch forests, at night", tag="Mournful · watchful", height=1.75,
              biomes=["birch_forest", "old_growth_birch_forest", "meadow"], temperament="Mournful, gentle, protective",
@@ -67,3 +87,8 @@ for fid, entries in ADD.items():
         fam["species"].append(species)
         for label, values in fam.get("split", []):
             values.append(cols.get(label, "-"))
+
+# answers of 2026-10-22: red kitsune also live in cherry groves, where one in twenty is a nine-tailed elder (Kitsune.finalizeSpawn)
+for _s in C.family("kitsune")["species"]:
+    if _s["id"] == "red_kitsune" and "cherry_grove" not in _s["biomes"]:
+        _s["biomes"].append("cherry_grove")

@@ -65,7 +65,7 @@ public class GirlFamilyTests {
             AbstractMonsterGirl girl = spawn(helper, s, new BlockPos(1 + (i % 6) * 2, 2, 1 + (i / 6) * 2));
             i++;
             check(girl.getSpecies() == s, s + " has the wrong species");
-            check(s.variants().size() == 5, s + " should have five colours");
+            check(s.variants().size() == (s == GirlSpecies.MIXED_SLIME ? 10 : 5), s + " should have five colours (a mixed slime: one per pair of kinds)");
             girl.setVariant(s.variants().get(3));
             check(girl.getVariantSuffix().equals("_" + s.variants().get(3)), s + " variant suffix: " + girl.getVariantSuffix());
             girl.setAffection(father, 42);
@@ -249,9 +249,10 @@ public class GirlFamilyTests {
         check(player.getVehicle() == horse, "she lets her player ride");
         player.stopRiding();
         zebra.setAffection(player.getUUID(), 100);
+        zebra.setFather(player.getUUID());                                // a zebra only lets her father ride (and saddle) her
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.SADDLE));
         zebra.interact(player, InteractionHand.MAIN_HAND);
-        check(zebra.hasFlag(AbstractMonsterGirl.FLAG_SADDLED), "every centaur takes a saddle now, the zebra too");
+        check(zebra.hasFlag(AbstractMonsterGirl.FLAG_SADDLED), "every centaur takes a saddle, the zebra from her father");
         alpaca.setAffection(player.getUUID(), 60);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.CHEST));
         alpaca.interact(player, InteractionHand.MAIN_HAND);
@@ -270,7 +271,7 @@ public class GirlFamilyTests {
         SlimeGirl slime = spawn(helper, GirlSpecies.VERDANT_SLIME, new BlockPos(7, 2, 7));
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.CYAN_DYE));
         slime.interact(player, InteractionHand.MAIN_HAND);
-        check(slime.getVariantName().equals("teal"), "cyan dye turns her teal: " + slime.getVariantName());
+        check(slime.hasCustomColour() && slime.colour() != GirlSpecies.VERDANT_SLIME.eggColor(), "cyan dye mixes into her colour");
         slime.setAffection(player.getUUID(), 40);
         slime.hurt(helper.getLevel().damageSources().playerAttack(player), 1.0F);
         check(slime.getAffection(player) == 20, "a hit halves her trust: " + slime.getAffection(player));

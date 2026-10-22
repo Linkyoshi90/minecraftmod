@@ -45,6 +45,32 @@ import java.util.UUID;
  * in the ground until someone pulls her out, when she screams.
  */
 public class Flora extends AbstractMonsterGirl {
+    /** Nectar can be gathered once every half day. */
+    public static final int NECTAR_COOLDOWN = 12000;
+    private long nextNectar;
+
+    /** Whether a bee could gather nectar from her right now (a grown flower that has nectar to spare). */
+    public boolean hasNectar() {
+        return !this.isBaby() && this.level().getGameTime() >= this.nextNectar;
+    }
+
+    /** Herself, curled up as a bloom to plant elsewhere (AlrauneBloomBlock lets her out again). */
+    public ItemStack asBloom() {
+        CompoundTag girl = new CompoundTag();
+        this.saveWithoutId(girl);
+        girl.remove("UUID");                                                // a fresh one when she unfolds (a copied bloom never clashes)
+        CompoundTag data = new CompoundTag();
+        data.put("Girl", girl);
+        ItemStack bloom = new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.ALRAUNE_BLOOM.get());
+        net.minecraft.world.item.BlockItem.setBlockEntityData(bloom, com.linkyoshi90.monstergirls.registry.ModBlockEntities.ALRAUNE_BLOOM.get(), data);
+        return bloom;
+    }
+
+    /** A bee girl took her nectar. */
+    public void giveNectar() {
+        this.nextNectar = this.level().getGameTime() + NECTAR_COOLDOWN;
+    }
+
     private int stillTicks;
     private int sunk;
     private long nextPlant;
@@ -98,6 +124,29 @@ public class Flora extends AbstractMonsterGirl {
     @Nullable
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        if (this.species == GirlSpecies.ALRAUNE_FLORA && stack.is(net.minecraft.tags.ItemTags.SHOVELS) && player.isShiftKeyDown() && !this.isBaby()) {
+            if (this.getAffection(player) < BED_AFFECTION) return InteractionResult.PASS;   // only for someone she trusts
+            if (!this.level().isClientSide) {
+                ItemStack bloom = this.asBloom();
+                if (!player.getInventory().add(bloom)) player.drop(bloom, false);
+                stack.hurtAndBreak(1, player, net.minecraft.world.entity.EquipmentSlot.MAINHAND);
+                this.playSound(net.minecraft.sounds.SoundEvents.ROOTED_DIRT_BREAK, 1.0F, 1.0F);
+                this.discard();
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+        if (stack.is(Items.GLASS_BOTTLE) && !this.isBaby()) {                // nectar from her blossoms
+            if (this.getAffection(player) < BED_AFFECTION || this.level().getGameTime() < this.nextNectar) return InteractionResult.PASS;
+            if (this.level() instanceof net.minecraft.server.level.ServerLevel server) {
+                this.nextNectar = server.getGameTime() + NECTAR_COOLDOWN;
+                stack.consume(1, player);
+                ItemStack nectar = new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.NECTAR_BOTTLE.get());
+                if (!player.getInventory().add(nectar)) player.drop(nectar, false);
+                this.playSound(net.minecraft.sounds.SoundEvents.BOTTLE_FILL, 1.0F, 1.2F);
+                this.hearts(server, 2);
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         if (this.species == GirlSpecies.MANDRAGORA_FLORA && this.isHidden()) {
             if (this.level() instanceof ServerLevel server) {
                 this.setHidden(false);
@@ -289,5 +338,10 @@ public class Flora extends AbstractMonsterGirl {
         super.readAdditionalSaveData(tag);
         this.nextPlant = tag.getLong("NextPlant");
         this.setFlag(FLAG_HIDDEN, tag.getBoolean("Buried"));
+    }
+
+    @Override
+    public boolean isHealer() {
+        return true;
     }
 }

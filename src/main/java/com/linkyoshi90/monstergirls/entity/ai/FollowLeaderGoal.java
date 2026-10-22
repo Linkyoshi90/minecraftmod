@@ -29,6 +29,7 @@ public class FollowLeaderGoal extends Goal {
 
     @Override
     public boolean canUse() {
+        if (com.linkyoshi90.monstergirls.entity.Orders.commanded(this.harpy)) return false;   // a stick order outranks her own following
         Player player = this.leader.get();
         if (player == null || player.isSpectator() || this.harpy.distanceToSqr(player) < this.startDistance * this.startDistance) return false;
         this.target = player;

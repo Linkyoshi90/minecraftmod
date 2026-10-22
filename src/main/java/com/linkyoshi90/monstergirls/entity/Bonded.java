@@ -49,6 +49,9 @@ public interface Bonded {
 
     void setOrderedToSit(boolean sit);
 
+    /** Her stick orders: where to be and when to fight (see {@link Orders}). */
+    Orders getOrders();
+
     default boolean trustsEnoughForBed(Player player) {
         return this.getAffection(player) >= BED_AFFECTION && !player.getUUID().equals(this.getFather());
     }

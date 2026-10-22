@@ -149,6 +149,30 @@ public class Devil extends AbstractMonsterGirl {
         this.playSound(SoundEvents.VEX_AMBIENT, 1.0F, 1.6F);
     }
 
+    /**
+     * With nobody to prank, she lifts one thing from a chest or barrel within five blocks (never an unopened loot chest)
+     * and keeps it until someone feeds her. Obeys mobGriefing.
+     */
+    public boolean raidChest(ServerLevel level) {
+        if (!this.loot.isEmpty() || this.hasAnyAffection() && this.bondedPlayer(60, 64) != null
+                || !net.neoforged.neoforge.event.EventHooks.canEntityGrief(level, this)) return false;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(this.blockPosition().offset(-5, -2, -5), this.blockPosition().offset(5, 2, 5))) {
+            if (!(level.getBlockEntity(p) instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity box)) continue;
+            if (box instanceof net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity r && r.getLootTable() != null) continue;
+            int size = box.getContainerSize(), start = this.random.nextInt(size);
+            for (int i = 0; i < size; i++) {
+                int slot = (start + i) % size;
+                if (box.getItem(slot).isEmpty()) continue;
+                this.loot = box.removeItem(slot, 1);
+                level.playSound(null, p, SoundEvents.CHEST_OPEN, net.minecraft.sounds.SoundSource.BLOCKS, 0.5F, 1.4F);
+                this.startTimedAction(Action.LAUGH, 30);
+                this.playSound(SoundEvents.VEX_AMBIENT, 1.0F, 1.6F);
+                return true;
+            }
+        }
+        return false;
+    }
+
     /** Feeding or hitting the thief makes her give back what she took. */
     private void giveBack(Player p) {
         if (this.loot.isEmpty()) return;
@@ -215,6 +239,8 @@ public class Devil extends AbstractMonsterGirl {
                     if (p != null && !p.isCreative() && !p.isSpectator() && this.getAffection(p) < 60) {
                         this.nextPrank = server.getGameTime() + 1200 + this.random.nextInt(1200);
                         this.prank(p);
+                    } else if (p == null && this.random.nextInt(10) == 0 && this.raidChest(server)) {
+                        this.nextPrank = server.getGameTime() + 1200 + this.random.nextInt(1200);
                     }
                 }
                 Player friend = this.bondedPlayer(60, 16);                    // devoted: her pranks go to your enemies

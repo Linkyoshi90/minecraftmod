@@ -281,6 +281,19 @@ public class Dragon extends AbstractMonsterGirl {
         }
         level.sendParticles(ParticleTypes.FLAME, this.getX() + dir.x * 1.5, this.getEyeY(), this.getZ() + dir.z * 1.5, 20, 0.3, 0.2, 0.3, 0.05);
         this.playSound(SoundEvents.BLAZE_SHOOT, 1.0F, 0.7F);
+        if (net.neoforged.neoforge.event.EventHooks.canEntityGrief(level, this)) {          // fire on the ground around the target
+            net.minecraft.core.BlockPos at = target.blockPosition();
+            for (int i = 0; i < 3; i++) {
+                net.minecraft.core.BlockPos p = at.offset(this.random.nextInt(3) - 1, 0, this.random.nextInt(3) - 1);
+                for (int dy = 1; dy >= -2; dy--) {
+                    net.minecraft.core.BlockPos q = p.above(dy);
+                    if (level.getBlockState(q).isAir() && net.minecraft.world.level.block.BaseFireBlock.canBePlacedAt(level, q, net.minecraft.core.Direction.UP)) {
+                        level.setBlockAndUpdate(q, net.minecraft.world.level.block.BaseFireBlock.getState(level, q));
+                        break;
+                    }
+                }
+            }
+        }
         this.startTimedAction(Action.BREATHE, 30);
     }
 

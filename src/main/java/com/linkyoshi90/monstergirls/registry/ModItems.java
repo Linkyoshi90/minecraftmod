@@ -96,6 +96,66 @@ public final class ModItems {
     public static final DeferredItem<PhoenixAshesItem> PHOENIX_ASHES = ITEMS.registerItem("phoenix_ashes",
             props -> new PhoenixAshesItem(props.stacksTo(16).rarity(Rarity.RARE)));
 
+    // --- Harmontide (answers of 2026-10-22): foods, materials and gear from the girls ----------------------------------
+
+    private static DeferredItem<Item> food(String name, int nutrition, float saturation) {
+        return ITEMS.registerItem(name, props -> new Item(props.food(new FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturation).build())));
+    }
+
+    /** Made from a minotaur cow's milk (or brought by her). */
+    public static final DeferredItem<Item> CHEESE = food("cheese", 4, 0.8F);
+    /** The Inaba's present at full devotion; also the base of mochi. */
+    public static final DeferredItem<Item> RICE_CAKE = food("rice_cake", 5, 0.6F);
+    public static final DeferredItem<Item> APPLE_MOCHI = food("apple_mochi", 7, 0.8F);
+    public static final DeferredItem<Item> MELON_MOCHI = food("melon_mochi", 7, 0.8F);
+    public static final DeferredItem<Item> BERRY_MOCHI = food("berry_mochi", 7, 0.8F);
+    public static final DeferredItem<Item> CHOCOLATE_MOCHI = food("chocolate_mochi", 7, 0.8F);
+    public static final DeferredItem<Item> HONEY_MOCHI = food("honey_mochi", 8, 0.8F);
+    public static final DeferredItem<Item> PUMPKIN_MOCHI = food("pumpkin_mochi", 7, 0.8F);
+    public static final java.util.List<DeferredItem<Item>> MOCHI = java.util.List.of(APPLE_MOCHI, MELON_MOCHI, BERRY_MOCHI, CHOCOLATE_MOCHI, HONEY_MOCHI, PUMPKIN_MOCHI);
+
+    /** Brushed off an arachne now and then: the material of silk trousers and shoes. */
+    public static final DeferredItem<Item> SPIDER_SILK = ITEMS.registerSimpleItem("spider_silk", new Item.Properties());
+    /** Shed by merfolk, wild or not: flippers are made of it. */
+    public static final DeferredItem<Item> MERFOLK_SCALE = ITEMS.registerSimpleItem("merfolk_scale", new Item.Properties());
+    /** A flora girl's nectar: waters and feeds a field. */
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.NectarItem> NECTAR_BOTTLE = ITEMS.registerItem("nectar_bottle",
+            props -> new com.linkyoshi90.monstergirls.item.NectarItem(props.stacksTo(16).craftRemainder(net.minecraft.world.item.Items.GLASS_BOTTLE)));
+    /** An arachne's silk-wrapped present. */
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.CocoonItem> SILK_COCOON = ITEMS.registerItem("silk_cocoon",
+            props -> new com.linkyoshi90.monstergirls.item.CocoonItem(props.stacksTo(16)));
+    /** A young merfolk carried in a bucket of water. */
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.MerfolkBucketItem> MERFOLK_BUCKET = ITEMS.registerItem("merfolk_bucket",
+            props -> new com.linkyoshi90.monstergirls.item.MerfolkBucketItem(props.stacksTo(1)));
+
+    public static final DeferredItem<net.minecraft.world.item.ArmorItem> SNAKESKIN_CLOAK = ITEMS.registerItem("snakeskin_cloak",
+            props -> new net.minecraft.world.item.ArmorItem(ModArmorMaterials.SNAKESKIN, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE,
+                    props.durability(net.minecraft.world.item.ArmorItem.Type.CHESTPLATE.getDurability(6))));
+    /** Iron's protection, but silk frays: about half an iron piece's durability. */
+    public static final DeferredItem<net.minecraft.world.item.ArmorItem> SILK_TROUSERS = ITEMS.registerItem("silk_trousers",
+            props -> new net.minecraft.world.item.ArmorItem(ModArmorMaterials.SPIDER_SILK, net.minecraft.world.item.ArmorItem.Type.LEGGINGS,
+                    props.durability(net.minecraft.world.item.ArmorItem.Type.LEGGINGS.getDurability(7))));
+    public static final DeferredItem<net.minecraft.world.item.ArmorItem> SILK_SHOES = ITEMS.registerItem("silk_shoes",
+            props -> new net.minecraft.world.item.ArmorItem(ModArmorMaterials.SPIDER_SILK, net.minecraft.world.item.ArmorItem.Type.BOOTS,
+                    props.durability(net.minecraft.world.item.ArmorItem.Type.BOOTS.getDurability(7))));
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.FlippersItem> FLIPPERS = ITEMS.registerItem("flippers",
+            props -> new com.linkyoshi90.monstergirls.item.FlippersItem(ModArmorMaterials.MERFOLK_SCALE, props.durability(net.minecraft.world.item.ArmorItem.Type.BOOTS.getDurability(10))));
+    /** Leather and feathers: slows a fall and softens the landing (see item/GearEvents). */
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.WingedCapItem> WINGED_CAP = ITEMS.registerItem("winged_cap",
+            props -> new com.linkyoshi90.monstergirls.item.WingedCapItem(ModArmorMaterials.WINGED_CAP,
+                    props.durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(8))));
+
+    /** An alraune rooted as a flower, to plant somewhere new. */
+    public static final DeferredItem<BlockItem> ALRAUNE_BLOOM = ITEMS.register("alraune_bloom",
+            () -> new BlockItem(ModBlocks.ALRAUNE_BLOOM.get(), new Item.Properties().stacksTo(1)));
+
+    /** A bucket of nectar (three bottles' worth): pour it into a field. */
+    public static final DeferredItem<net.minecraft.world.item.BucketItem> NECTAR_BUCKET = ITEMS.register("nectar_bucket",
+            () -> new net.minecraft.world.item.BucketItem(ModFluids.NECTAR.get(), new Item.Properties().craftRemainder(net.minecraft.world.item.Items.BUCKET).stacksTo(1)));
+
+    /** Brought by healer girls (or made from nectar and honey): heals a befriended girl or vanilla friend. */
+    public static final DeferredItem<Item> HEALING_BALM = ITEMS.registerSimpleItem("healing_balm", new Item.Properties().stacksTo(16));
+
     private ModItems() {}
 
     public static void addToCreativeTabs(BuildCreativeModeTabContentsEvent event) {
@@ -103,6 +163,19 @@ public final class ModItems {
             event.accept(RIFLEBIRD_EGG);
             event.accept(SPARROW_EGG);
             for (var egg : java.util.List.of(GULL_EGG, CROW_EGG, OWL_EGG, ALBATROSS_EGG, OSTRICH_EGG, EMBER_EGG)) event.accept(egg);
+            event.accept(CHEESE);
+            event.accept(RICE_CAKE);
+            MOCHI.forEach(event::accept);
+        }
+        if (event.getTabKey() == CreativeModeTabs.COMBAT) {
+            for (var gear : java.util.List.of(SNAKESKIN_CLOAK, SILK_TROUSERS, SILK_SHOES, FLIPPERS, WINGED_CAP)) event.accept(gear);
+        }
+        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+            event.accept(NECTAR_BOTTLE);
+            event.accept(ALRAUNE_BLOOM);
+            event.accept(HEALING_BALM);
+            event.accept(NECTAR_BUCKET);
+            event.accept(MERFOLK_BUCKET);
         }
         if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
             for (HarpyEggBlock.Species species : HarpyEggBlock.Species.values()) event.accept(HarpyEggItem.of(ModBlocks.HARPY_EGG.get(), species));
@@ -111,6 +184,9 @@ public final class ModItems {
             event.accept(PHOENIX_ASHES);
             event.accept(SHED_SKIN);
             event.accept(EXOSKELETON);
+            event.accept(SPIDER_SILK);
+            event.accept(MERFOLK_SCALE);
+            event.accept(SILK_COCOON);
         }
         if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) event.accept(RIFLEBIRD_NEST);
         if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) event.accept(PAINTED_EGG);

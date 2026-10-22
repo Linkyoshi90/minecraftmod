@@ -30,7 +30,8 @@ public class ReturnHomeGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (this.harpy.getHomePos() == null || this.harpy.getRandom().nextInt(reducedTickDelay(60)) != 0) return false;
+        if (this.harpy.getHomePos() == null || com.linkyoshi90.monstergirls.entity.Orders.commanded(this.harpy)
+                || this.harpy.getRandom().nextInt(reducedTickDelay(60)) != 0) return false;
         double limit = this.harpy.level().isDay() ? this.roamRadius : 4.0;
         return this.homeDistSqr() > limit * limit;
     }

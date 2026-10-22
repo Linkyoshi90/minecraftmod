@@ -22,6 +22,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -615,5 +616,55 @@ public class Lamia extends AbstractMonsterGirl {
             if (l.getAffection(player) >= 60 && l.isAlive() && !l.isBaby()) return l;
         }
         return null;
+    }
+
+    // --- riding in her coils -------------------------------------------------------------------------------------
+
+    /** At high friendship an empty hand climbs into her coils (crouch to pat her instead). */
+    @Nullable
+    @Override
+    protected InteractionResult familyInteract(Player player, net.minecraft.world.InteractionHand hand, ItemStack stack) {
+        if (!stack.isEmpty() || player.isShiftKeyDown() || this.isBaby() || this.isVehicle() || this.getAffection(player) < BED_AFFECTION) return null;
+        if (!this.level().isClientSide) {
+            this.getNavigation().stop();
+            this.setTarget(null);
+            this.setOrderedToSit(false);
+            player.startRiding(this);
+        }
+        return InteractionResult.sidedSuccess(this.level().isClientSide);
+    }
+
+    @Nullable
+    @Override
+    public LivingEntity getControllingPassenger() {
+        return this.getFirstPassenger() instanceof Player p && this.getAffection(p) >= BED_AFFECTION ? p : super.getControllingPassenger();
+    }
+
+    @Override
+    protected void tickRidden(Player player, Vec3 travel) {
+        super.tickRidden(player, travel);
+        this.setRot(player.getYRot(), player.getXRot() * 0.5F);
+        this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
+    }
+
+    @Override
+    protected Vec3 getRiddenInput(Player player, Vec3 travel) {
+        float forward = player.zza <= 0.0F ? player.zza * 0.25F : player.zza;
+        return new Vec3(player.xxa * 0.5F, 0.0, forward);
+    }
+
+    /** A sidewinding glide across sand, a slow slither everywhere else. */
+    @Override
+    protected float getRiddenSpeed(Player player) {
+        return this.onSand() ? 0.36F : 0.12F;
+    }
+
+    public boolean onSand() {
+        return this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).is(BlockTags.SAND);
+    }
+
+    @Override
+    protected Vec3 getPassengerAttachmentPoint(net.minecraft.world.entity.Entity passenger, net.minecraft.world.entity.EntityDimensions dims, float scale) {
+        return new Vec3(0.0, dims.height() * 0.3, 0.9);                   // in her coils, behind her
     }
 }

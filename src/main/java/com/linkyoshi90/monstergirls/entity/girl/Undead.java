@@ -62,6 +62,7 @@ public class Undead extends AbstractMonsterGirl {
         super(type, level, species);
         boolean creeper = species == GirlSpecies.LIVING_DOLL_UNDEAD || species == GirlSpecies.YUKI_ONNA_UNDEAD;
         if (creeper) this.goalSelector.addGoal(1, new StalkGoal(this, 1.0, 1.6, true, t -> t instanceof Player));
+        if (species == GirlSpecies.LIVING_DOLL_UNDEAD) this.goalSelector.addGoal(2, new ShelfGoal());
         if (species == GirlSpecies.VAMPIRE_UNDEAD) this.goalSelector.addGoal(1, new StalkGoal(this, 0.8, 2.5, false, t -> !this.level().isDay()));
         if (species == GirlSpecies.FRANKENSTEIN_UNDEAD) {
             this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Player.class, 10.0F, 1.0, 1.4,
@@ -372,5 +373,96 @@ public class Undead extends AbstractMonsterGirl {
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.strongUntil = tag.getLong("StrongUntil");
+    }
+
+    // --- the doll's perch ---------------------------------------------------------------------------------------------
+
+    /** A bookshelf (or anything that powers an enchanting table, so modded shelves count). */
+    public static boolean isShelf(Level level, BlockPos pos) {
+        var s = level.getBlockState(pos);
+        return s.is(net.minecraft.world.level.block.Blocks.BOOKSHELF) || s.is(net.minecraft.world.level.block.Blocks.CHISELED_BOOKSHELF)
+                || s.getEnchantPowerBonus(level, pos) > 0;
+    }
+
+    /**
+     * With nobody to creep after, the living doll looks for a bookshelf with room on top, hops up and sits there
+     * like a doll on display, watching the room, for a minute or two. Then she gets down for a while.
+     */
+    class ShelfGoal extends net.minecraft.world.entity.ai.goal.Goal {
+        @Nullable
+        private BlockPos shelf;
+        private int cooldown;
+        private int ticks;
+        private int sitFor;
+
+        ShelfGoal() {
+            this.setFlags(java.util.EnumSet.of(Flag.MOVE, Flag.JUMP));
+        }
+
+        private boolean onTop() {
+            return this.shelf != null && Undead.this.blockPosition().equals(this.shelf.above());
+        }
+
+        @Override
+        public boolean canUse() {
+            if (--this.cooldown > 0 || Undead.this.getTarget() != null || Undead.this.isOrderedToSit()) return false;
+            this.cooldown = 40;
+            BlockPos o = Undead.this.blockPosition();
+            BlockPos best = null;
+            double bestDist = Double.MAX_VALUE;
+            for (BlockPos p : BlockPos.betweenClosed(o.offset(-10, -3, -10), o.offset(10, 4, 10))) {
+                if (!isShelf(Undead.this.level(), p) || !Undead.this.level().getBlockState(p.above()).isAir()) continue;
+                double d = p.distSqr(o);
+                if (d < bestDist) {
+                    bestDist = d;
+                    best = p.immutable();
+                }
+            }
+            this.shelf = best;
+            return best != null;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.shelf != null && Undead.this.getTarget() == null && !Undead.this.isOrderedToSit() && isShelf(Undead.this.level(), this.shelf)
+                    && Undead.this.level().getBlockState(this.shelf.above()).isAir() && (this.onTop() ? this.ticks < this.sitFor : this.ticks < 400);
+        }
+
+        @Override
+        public void start() {
+            this.ticks = 0;
+            this.sitFor = 1200 + Undead.this.random.nextInt(1200);
+        }
+
+        @Override
+        public void tick() {
+            this.ticks++;
+            if (this.onTop()) {
+                Undead.this.getNavigation().stop();
+                Undead.this.setDeltaMovement(Undead.this.getDeltaMovement().multiply(0.0, 1.0, 0.0));
+                if (Undead.this.getAction() != Action.SITTING) {
+                    Undead.this.setAction(Action.SITTING);
+                    this.ticks = 0;                                      // the sit begins now
+                }
+                Player p = Undead.this.level().getNearestPlayer(Undead.this, 12);
+                if (p != null) Undead.this.getLookControl().setLookAt(p);
+                return;
+            }
+            Vec3 top = Vec3.atBottomCenterOf(this.shelf.above());
+            double dx = top.x - Undead.this.getX(), dz = top.z - Undead.this.getZ();
+            if (dx * dx + dz * dz < 2.6 && top.y - Undead.this.getY() < 3.5) {   // close enough: a hop up onto the shelf
+                Undead.this.moveTo(top.x, top.y, top.z, Undead.this.getYRot(), 0.0F);
+                Undead.this.playSound(net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_LEATHER.value(), 0.6F, 1.6F);
+                return;
+            }
+            if (this.ticks % 10 == 1) Undead.this.getNavigation().moveTo(this.shelf.getX() + 0.5, this.shelf.getY(), this.shelf.getZ() + 0.5, 1.0);
+        }
+
+        @Override
+        public void stop() {
+            if (Undead.this.getAction() == Action.SITTING && !Undead.this.isOrderedToSit()) Undead.this.setAction(Action.NONE);
+            if (this.onTop()) this.cooldown = 1200;                         // she has sat long enough for now
+            this.shelf = null;
+        }
     }
 }

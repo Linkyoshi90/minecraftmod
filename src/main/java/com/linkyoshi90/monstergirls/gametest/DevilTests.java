@@ -29,11 +29,11 @@ public class DevilTests {
         for (int i = 0; i < 9; i++) player.getInventory().setItem(i, new ItemStack(Items.APPLE));
         for (int i = 0; i < 30 && imp.getLoot().isEmpty(); i++) imp.prank(player);
         check(!imp.getLoot().isEmpty(), "sooner or later she steals something");
-        int apples = player.getInventory().countItem(Items.APPLE);
         player.getInventory().selected = 0;
-        player.getInventory().setItem(0, ItemStack.EMPTY);
+        player.getInventory().setItem(0, ItemStack.EMPTY);                     // the cookie goes in this slot (count after clearing it)
+        int apples = player.getInventory().countItem(Items.APPLE);
         interact(imp, player, new ItemStack(Items.COOKIE));
-        check(imp.getLoot().isEmpty() && player.getInventory().countItem(Items.APPLE) == apples, "a sweet and she gives it back");
+        check(imp.getLoot().isEmpty() && player.getInventory().countItem(Items.APPLE) == apples + 1, "a sweet and she gives it back");
         HarpyTestUtil.remove(player);
         helper.succeed();
     }

@@ -39,5 +39,16 @@ public final class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.2F).sound(SoundType.DECORATED_POT).noOcclusion()
                     .pushReaction(PushReaction.DESTROY));
 
+    /** An alraune rooted as a flower (she unfolds when it is used or broken). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.AlrauneBloomBlock> ALRAUNE_BLOOM = BLOCKS.registerBlock("alraune_bloom",
+            com.linkyoshi90.monstergirls.block.AlrauneBloomBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).instabreak().noCollission().sound(SoundType.AZALEA_LEAVES)
+                    .offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY));
+
+    /** The nectar fluid's block (see ModFluids). */
+    public static final DeferredBlock<net.minecraft.world.level.block.LiquidBlock> NECTAR = BLOCKS.register("nectar",
+            () -> new net.minecraft.world.level.block.LiquidBlock(ModFluids.NECTAR.get(),
+                    BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.WATER).mapColor(MapColor.COLOR_YELLOW)));
+
     private ModBlocks() {}
 }

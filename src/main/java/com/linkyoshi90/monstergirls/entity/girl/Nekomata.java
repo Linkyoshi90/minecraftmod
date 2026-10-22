@@ -69,6 +69,7 @@ public class Nekomata extends AbstractMonsterGirl {
 
     public Nekomata(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
+        if (species == GirlSpecies.OCELOT_NEKOMATA) this.navigation = this.createNavigation(level);   // the first one was made before species was set
         boolean tiger = species == GirlSpecies.TIGER_NEKOMATA;
         this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Player.class, 8.0F, 1.0, 1.4,
                 p -> p instanceof Player pl && pl.isSprinting() && this.isCalm() && this.getAffection(pl) < 10 && !pl.isSpectator()));
@@ -115,6 +116,11 @@ public class Nekomata extends AbstractMonsterGirl {
     @Override
     protected int rollTails(net.minecraft.util.RandomSource random) {
         return random.nextInt(10) == 0 ? 2 : 1;
+    }
+
+    @Override
+    protected net.minecraft.world.entity.ai.navigation.PathNavigation createNavigation(Level level) {
+        return this.species == GirlSpecies.OCELOT_NEKOMATA ? new net.minecraft.world.entity.ai.navigation.WallClimberNavigation(this, level) : super.createNavigation(level);
     }
 
     /** The ocelot climbs tree trunks (and walls) like the gray fox. */

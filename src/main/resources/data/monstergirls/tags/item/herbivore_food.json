@@ -1,0 +1,39 @@
+{
+  "values": [
+    "minecraft:wheat",
+    "minecraft:hay_block",
+    "minecraft:carrot",
+    "minecraft:golden_carrot",
+    "minecraft:potato",
+    "minecraft:baked_potato",
+    "minecraft:beetroot",
+    "minecraft:apple",
+    "minecraft:golden_apple",
+    "minecraft:melon_slice",
+    "minecraft:glistering_melon_slice",
+    "minecraft:sweet_berries",
+    "minecraft:glow_berries",
+    "minecraft:sugar",
+    "minecraft:sugar_cane",
+    "minecraft:bread",
+    "minecraft:kelp",
+    "minecraft:dried_kelp",
+    "minecraft:cactus",
+    "minecraft:bamboo",
+    "minecraft:chorus_fruit",
+    "minecraft:beetroot_soup",
+    "#c:seeds",
+    {
+      "id": "#c:foods/fruit",
+      "required": false
+    },
+    {
+      "id": "#c:foods/vegetable",
+      "required": false
+    },
+    {
+      "id": "#c:foods/bread",
+      "required": false
+    }
+  ]
+}

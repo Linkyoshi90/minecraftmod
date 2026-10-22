@@ -58,6 +58,7 @@ public class Kitsune extends AbstractMonsterGirl {
 
     public Kitsune(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
+        if (species == GirlSpecies.GRAY_KITSUNE) this.navigation = this.createNavigation(level);   // the first one was made before species was set
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.4) {
             @Override
             public boolean canUse() {
@@ -110,6 +111,18 @@ public class Kitsune extends AbstractMonsterGirl {
     protected int rollTails(net.minecraft.util.RandomSource random) {
         if (random.nextInt(25) == 0) return 4 + random.nextInt(2);
         return random.nextInt(4) == 0 ? 2 + random.nextInt(2) : 1;
+    }
+
+    /** One kitsune in twenty that wanders out of a cherry grove is an elder fox spirit with all nine tails. */
+    @Override
+    public net.minecraft.world.entity.SpawnGroupData finalizeSpawn(net.minecraft.world.level.ServerLevelAccessor level, net.minecraft.world.DifficultyInstance difficulty,
+                                                                   net.minecraft.world.entity.MobSpawnType type, @Nullable net.minecraft.world.entity.SpawnGroupData group) {
+        var data = super.finalizeSpawn(level, difficulty, type, group);
+        if (type == net.minecraft.world.entity.MobSpawnType.NATURAL && level.getBiome(this.blockPosition()).is(net.minecraft.world.level.biome.Biomes.CHERRY_GROVE)
+                && this.random.nextInt(20) == 0) {
+            this.setTails(9);
+        }
+        return data;
     }
 
     @Override
@@ -299,6 +312,8 @@ public class Kitsune extends AbstractMonsterGirl {
      */
     class StashGoal extends Goal {
         private Player victim;
+        @Nullable
+        private net.minecraft.world.entity.item.ItemEntity found;
         private ItemStack loot = ItemStack.EMPTY;
         private BlockPos spot;
         private int ticks;
@@ -322,12 +337,16 @@ public class Kitsune extends AbstractMonsterGirl {
                     return true;
                 }
             }
-            return false;
+            // no hand to take from: something plain lying about (a mob's drop, never a player's own throw) will do
+            this.found = Kitsune.this.nearest(net.minecraft.world.entity.item.ItemEntity.class, 10.0,
+                    e -> e.isAlive() && e.getOwner() == null && e.getAge() > 40 && this.plain(e.getItem()));
+            return this.found != null;
         }
 
         @Override
         public boolean canContinueToUse() {
-            return this.ticks < 600 && Kitsune.this.getTarget() == null && (this.loot.isEmpty() ? this.victim != null && this.victim.isAlive() : true);
+            boolean source = this.victim != null ? this.victim.isAlive() : this.found != null && this.found.isAlive();
+            return this.ticks < 600 && Kitsune.this.getTarget() == null && (!this.loot.isEmpty() || source);
         }
 
         @Override
@@ -340,6 +359,23 @@ public class Kitsune extends AbstractMonsterGirl {
         @Override
         public void tick() {
             this.ticks++;
+            if (this.loot.isEmpty() && this.victim == null) {               // a loose drop: trot over and snap it up
+                Kitsune.this.getLookControl().setLookAt(this.found);
+                if (Kitsune.this.distanceToSqr(this.found) > 2.5) {
+                    if (this.ticks % 10 == 1) Kitsune.this.getNavigation().moveTo(this.found, 1.2);
+                    return;
+                }
+                this.loot = this.found.getItem().copy();
+                this.found.discard();
+                Kitsune.this.playSound(SoundEvents.FOX_BITE, 1.0F, 1.4F);
+                this.spot = this.findSpot();
+                if (this.spot == null) {
+                    Kitsune.this.spawnAtLocation(this.loot);
+                    this.loot = ItemStack.EMPTY;
+                    this.ticks = 9999;
+                }
+                return;
+            }
             if (this.loot.isEmpty()) {
                 Kitsune.this.getLookControl().setLookAt(this.victim);
                 if (Kitsune.this.distanceToSqr(this.victim) > 2.5) {
@@ -397,6 +433,7 @@ public class Kitsune extends AbstractMonsterGirl {
             if (!this.loot.isEmpty()) Kitsune.this.spawnAtLocation(this.loot);
             this.loot = ItemStack.EMPTY;
             this.victim = null;
+            this.found = null;
             Kitsune.this.nextStashTime = Kitsune.this.level().getGameTime() + 4800 + Kitsune.this.random.nextInt(4800);
         }
     }

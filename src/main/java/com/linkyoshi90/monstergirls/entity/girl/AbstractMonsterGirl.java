@@ -76,9 +76,10 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     /** Synced flags (bits of DATA_FLAGS). */
     public static final int FLAG_TRUE_FORM = 1, FLAG_HIDDEN = 2, FLAG_DECOY = 4, FLAG_HALF = 8, FLAG_CARRYING = 16, FLAG_SADDLED = 32, FLAG_CHEST = 64,
-            FLAG_CALM = 128, FLAG_SHELLS = 256, FLAG_SMILE = 512, FLAG_MALE = 1024, FLAG_RETRACTED = 2048, FLAG_LIT = 4096, FLAG_MASKED = 8192;
+            FLAG_CALM = 128, FLAG_SHELLS = 256, FLAG_SMILE = 512, FLAG_MALE = 1024, FLAG_RETRACTED = 2048, FLAG_LIT = 4096, FLAG_MASKED = 8192,
+            FLAG_MERCHANT = 16384, FLAG_TOWING = 32768;
     /** The flags that are saved (the others are moment-to-moment state). */
-    private static final int SAVED_FLAGS = FLAG_TRUE_FORM | FLAG_SADDLED | FLAG_CHEST | FLAG_HALF | FLAG_CALM | FLAG_SHELLS | FLAG_MALE | FLAG_MASKED;
+    private static final int SAVED_FLAGS = FLAG_TRUE_FORM | FLAG_SADDLED | FLAG_CHEST | FLAG_HALF | FLAG_CALM | FLAG_SHELLS | FLAG_MALE | FLAG_MASKED | FLAG_MERCHANT;
 
     /** Five in-game days from newborn to grown up. */
     public static final int GROW_TICKS = 5 * 24000;
@@ -112,6 +113,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     @Nullable
     private UUID father;
     private boolean orderedToSit;
+    private final com.linkyoshi90.monstergirls.entity.Orders orders = new com.linkyoshi90.monstergirls.entity.Orders();
     private long nextGiftTime = -1;
     private int growTicks;
     private int timedActionTicks;
@@ -127,6 +129,9 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         super(type, level);
         this.species = species;
         this.goalSelector.addGoal(-1, new SitWhenOrderedGoal<>(this));
+        this.goalSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StayNearGoal<>(this));
+        this.goalSelector.addGoal(3, new FarmhandGoal(this));
+        this.targetSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StanceTargetGoal<>(this));
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));
         this.goalSelector.addGoal(3, new GiftGoal<>(this));
         this.goalSelector.addGoal(5, new FollowEntityGoal(this, this::mother, 1.1, 6.0F, 2.5F));
@@ -371,6 +376,19 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     public void onNightShared(ServerPlayer player) {
     }
 
+    // --- stick orders --------------------------------------------------------------------------------------------
+
+    @Override
+    public com.linkyoshi90.monstergirls.entity.Orders getOrders() {
+        return this.orders;
+    }
+
+    /** Her stance has the last word on whom she fights (and companions never fight each other). */
+    @Override
+    public void setTarget(@Nullable net.minecraft.world.entity.LivingEntity target) {
+        super.setTarget(this.orders == null || this.orders.allows(this, target) ? target : null);
+    }
+
     @Override
     public boolean isOrderedToSit() {
         return this.orderedToSit;
@@ -459,11 +477,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         ItemStack stack = player.getItemInHand(hand);
         if (hand != InteractionHand.MAIN_HAND) return super.mobInteract(player, hand);
         if (stack.is(Items.STICK)) {
-            if (!this.level().isClientSide) {
-                this.setOrderedToSit(!this.orderedToSit);
-                player.displayClientMessage(Component.translatable(this.orderedToSit ? "message.monstergirls.sits" : "message.monstergirls.stands",
-                        this.getDisplayName()), true);
-            }
+            if (!this.level().isClientSide) com.linkyoshi90.monstergirls.entity.Orders.onStick(this, this.orders, player);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
         if (this.wildHostile() && !this.isCalm() && !this.isBaby() && this.calmsHer(stack)) {
@@ -648,6 +662,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.level() instanceof ServerLevel healerLevel && this.tickCount % 600 == 0) this.tendCompanions(healerLevel);
         if (!(this.level() instanceof ServerLevel server)) return;
         this.gestation.tick();
         if (this.tickCount % 10 == 0) this.entityData.set(DATA_BELLY, (byte) Math.round(this.bellyProgress() * 100));
@@ -735,6 +750,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.gestation.save(tag);
         if (this.father != null) tag.putUUID("Father", this.father);
         tag.putBoolean("OrderedToSit", this.orderedToSit);
+        tag.put("Orders", this.orders.save());
         tag.putLong("NextGift", this.nextGiftTime);
         tag.putBoolean("Young", this.isBaby());
         tag.putInt("GrowTicks", this.growTicks);
@@ -753,6 +769,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.gestation.load(tag);
         this.father = tag.hasUUID("Father") ? tag.getUUID("Father") : null;
         this.orderedToSit = tag.getBoolean("OrderedToSit");
+        this.orders.load(tag.getCompound("Orders"));
         this.nextGiftTime = tag.contains("NextGift") ? tag.getLong("NextGift") : -1;
         this.entityData.set(DATA_YOUNG, tag.getBoolean("Young"));
         this.growTicks = tag.getInt("GrowTicks");
@@ -815,5 +832,30 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     /** Whether a spot can hold an egg block (air above something solid). */
     protected static boolean canHoldBlock(LevelAccessor level, BlockPos pos) {
         return level.getBlockState(pos).isAir() && level.getBlockState(pos.below()).isFaceSturdy(level, pos.below(), net.minecraft.core.Direction.UP);
+    }
+
+    // --- healers ---------------------------------------------------------------------------------------------------
+
+    /** Healers (flora, the verdant and honey slimes, the snail, the fairies, the axolotl) bring healing balms and tend companions. */
+    public boolean isHealer() {
+        return false;
+    }
+
+    /**
+     * A healer at high friendship tends her player's hurt companions within 8 blocks (other girls, befriended vanilla
+     * mobs) once every 30 seconds: the worst hurt gets 4 health and a little regeneration.
+     */
+    public void tendCompanions(ServerLevel level) {
+        if (!this.isHealer() || this.isBaby() || this.bondedPlayer(BED_AFFECTION, 16) == null) return;
+        net.minecraft.world.entity.LivingEntity worst = null;
+        for (var e : level.getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, this.getBoundingBox().inflate(8),
+                e -> e != this && e.isAlive() && !(e instanceof Player) && e.getHealth() < e.getMaxHealth() && com.linkyoshi90.monstergirls.entity.Orders.companions(this, e))) {
+            if (worst == null || e.getHealth() / e.getMaxHealth() < worst.getHealth() / worst.getMaxHealth()) worst = e;
+        }
+        if (worst == null) return;
+        worst.heal(4.0F);
+        worst.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.REGENERATION, 100, 0));
+        level.sendParticles(ParticleTypes.HEART, worst.getX(), worst.getY() + worst.getBbHeight(), worst.getZ(), 4, 0.3, 0.2, 0.3, 0.0);
+        this.getLookControl().setLookAt(worst);
     }
 }

@@ -190,6 +190,17 @@ public class Minotaur extends AbstractMonsterGirl {
         return null;
     }
 
+    /** The milk is ready again: her cowbell rings once (a note over her head), so you know without asking. */
+    private void ringBell(ServerLevel level) {
+        this.nextMilk = 0;
+        this.playSound(SoundEvents.NOTE_BLOCK_COW_BELL.value(), 1.0F, 1.0F);
+        level.sendParticles(ParticleTypes.NOTE, this.getX(), this.getY() + this.getBbHeight() + 0.4, this.getZ(), 0, 0.3, 0.0, 0.0, 1.0);
+    }
+
+    public boolean isMilkReady() {
+        return this.level().getGameTime() >= this.nextMilk;
+    }
+
     public void setNextMilk(long time) {
         this.nextMilk = time;
     }
@@ -198,8 +209,10 @@ public class Minotaur extends AbstractMonsterGirl {
     public ItemStack rollGift(Player player) {
         int r = this.random.nextInt(100);
         return switch (this.species) {
-            case CATTLE_MINOTAUR -> new ItemStack(r < 50 ? Items.MILK_BUCKET : Items.WHEAT, r < 50 ? 1 : 4);
-            case WATER_BUFFALO_MINOTAUR -> new ItemStack(r < 20 ? Items.CAKE : Items.MILK_BUCKET);
+            case CATTLE_MINOTAUR -> r < 35 ? new ItemStack(Items.MILK_BUCKET) : r < 60 ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.CHEESE.get(), 2)
+                    : new ItemStack(Items.WHEAT, 4);
+            case WATER_BUFFALO_MINOTAUR -> r < 20 ? new ItemStack(Items.CAKE) : r < 60 ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.CHEESE.get(), 2)
+                    : new ItemStack(Items.MILK_BUCKET);
             case MINOAN_MINOTAUR -> new ItemStack(r < 10 ? Items.GOLD_INGOT : r < 50 ? Items.COPPER_INGOT : Items.BRICK, r < 50 ? 1 : 3);
             default -> new ItemStack(r < 50 ? Items.LEATHER : Items.WHEAT, 2);
         };
@@ -256,6 +269,7 @@ public class Minotaur extends AbstractMonsterGirl {
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.inLove > 0) this.inLove--;
         if (this.stampede > 0) this.stampede--;
+        if (this.nextMilk > 0 && server.getGameTime() >= this.nextMilk) this.ringBell(server);
         if (this.tickCount % 40 == 0 && !this.isBaby()) {
             Player p = this.bondedPlayer(60, 16);
             if (p != null) {

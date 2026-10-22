@@ -60,6 +60,41 @@ SPECIES = {
                   "emerald": dict(FUR="#40c070", HAIR="#60d88a", MARK="#1e7a40", EYE="#0e4a24", extra=dict(core="#d8ffe8", crystal="#80f0a8"))}),
 }
 
+# a mixed slime: two kinds of slime flowed into one (variants: every pair, in this order; the first is the default)
+KINDS = ["verdant", "magma", "honey", "frost", "amethyst"]
+PAIRS = [f"{a}_{b}" for i, a in enumerate(KINDS) for b in KINDS[i + 1:]]
+SPECIES["mixed_slime"] = dict(build="standard", outfit=dict(top=[]), extra="none", hair="wavy",
+                              pal=SPECIES["verdant_slime"]["pal"], variants={k: {} for k in PAIRS[1:]})
+
+
+def smooth_noise(x, y, seed, cell=6):
+    """value noise, bilinear between a grid of random values (for the marbling)"""
+    import random as _r
+
+    def v(ix, iy):
+        return _r.Random(ix * 73856093 ^ iy * 19349663 ^ seed).random()
+    gx, gy = x / cell, y / cell
+    ix, iy = int(gx), int(gy)
+    fx, fy = gx - ix, gy - iy
+    a = v(ix, iy) * (1 - fx) + v(ix + 1, iy) * fx
+    b = v(ix, iy + 1) * (1 - fx) + v(ix + 1, iy + 1) * fx
+    return a * (1 - fy) + b * fy
+
+
+def paint_mixed(key):
+    """both kinds painted on the same model, then marbled together: swirling bands of one through the other"""
+    import math
+    a, b = (key or PAIRS[0]).split("_")
+    ta = paint("mixed_slime", None, base=SPECIES[a + "_slime"]["pal"])
+    tb = paint("mixed_slime", None, base=SPECIES[b + "_slime"]["pal"])
+    out = [row[:] for row in ta]
+    for y, row in enumerate(out):
+        for x in range(len(row)):
+            band = math.sin((x * 0.9 + y * 0.55) / 6.0 + 4.0 * smooth_noise(x, y, 7, cell=10))
+            if band > 0.15:
+                row[x] = tb[y][x]
+    return out
+
 
 def declare(sp):
     d = SPECIES[sp]
@@ -72,9 +107,11 @@ def declare(sp):
               build=SPECIES[sp].get("build"), outfit=SPECIES[sp].get("outfit"))
 
 
-def paint(sp, key, glow=False):
+def paint(sp, key, glow=False, base=None):
+    if sp == "mixed_slime" and base is None:
+        return paint_mixed(key)
     d = SPECIES[sp]
-    base = dict(d["pal"])
+    base = dict(base or d["pal"])
     over = d["variants"].get(key) if key else None
     pal = G.pal_from(base, over)
     pal.SKIN = shades(base["FUR"] if not over or "FUR" not in over else over["FUR"], n=4, dark=0.7, light=0.4, nodither=True)
@@ -156,8 +193,30 @@ def write_glowmasks(sp):
     print(sp, "glow masks written")
 
 
+def write_tint(sp):
+    """<species>_tint.png: the default texture in light greys (alpha kept), for slimes the game tints in any RGB colour"""
+    out = []
+    for row in paint(sp, None):
+        r2 = []
+        for c in row:
+            if not c[3]:
+                r2.append(CLEAR)
+                continue
+            lum = (0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]) / 255.0
+            g = int(120 + 135 * lum)                   # 120..255: dark details stay darker, the tint carries the colour
+            r2.append((g, g, g, c[3]))
+        out.append(r2)
+    H.write_png(os.path.join(G.ASSETS, "textures", "entity", sp + "_tint.png"), out)
+    if SPECIES[sp].get("glow"):                        # the glow layer looks for <texture>_glowmask.png, tinted one included
+        H.write_png(os.path.join(G.ASSETS, "textures", "entity", sp + "_tint_glowmask.png"), paint(sp, None, glow=True))
+
+
 if __name__ == "__main__":
     G.run_family("slime", SPECIES, declare, paint, build, anims, VIEWS, FACE)
+    for s in SPECIES:
+        if s in sys.argv or not [a for a in sys.argv[1:] if not a.startswith("--")]:
+            declare(s)
+            write_tint(s)
     for s in SPECIES:
         if s in sys.argv or not [a for a in sys.argv[1:] if not a.startswith("--")]:
             declare(s)

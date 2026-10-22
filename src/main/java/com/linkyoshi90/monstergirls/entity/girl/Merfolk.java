@@ -19,6 +19,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MoverType;
@@ -54,7 +55,7 @@ import java.util.UUID;
  * Now and then any of them finds seashells on the sea floor and wears them. Orca, dolphin, shark and seal bear live
  * young; koi and axolotl lay roe.
  */
-public class Merfolk extends AbstractMonsterGirl {
+public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.item.trading.Merchant, net.minecraft.world.entity.animal.Bucketable {
     private int dryTicks;
     private long nextTrade;
     private long nextTreasureSearch;
@@ -83,6 +84,7 @@ public class Merfolk extends AbstractMonsterGirl {
         }
         if (species == GirlSpecies.ORCA_MERMAID || species == GirlSpecies.DOLPHIN_MERMAID) this.goalSelector.addGoal(5, new TeaseGoal());
         if (species != GirlSpecies.AXOLOTL_MERMAID) this.goalSelector.addGoal(6, new ShellHuntGoal());
+        this.goalSelector.addGoal(4, new FetchGoal());
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
@@ -124,7 +126,7 @@ public class Merfolk extends AbstractMonsterGirl {
     @Override
     public float getSpeed() {
         float s = super.getSpeed();
-        if (this.isInWater()) return s;
+        if (this.isInWater() || this.isLevitating()) return s;
         boolean landy = this.species == GirlSpecies.SEAL_MERMAID || this.species == GirlSpecies.AXOLOTL_MERMAID;
         return s * (landy ? 0.55F : 0.33F);
     }
@@ -137,10 +139,10 @@ public class Merfolk extends AbstractMonsterGirl {
         return this.species == GirlSpecies.SHARK_MERMAID;
     }
 
-    /** She only goes for players who are in the water with her. */
+    /** She only goes for players who are in the water with her. A merchant never does: she is here to trade. */
     @Override
     public boolean isHostileTo(Player player) {
-        return super.isHostileTo(player) && player.isInWater();
+        return super.isHostileTo(player) && player.isInWater() && !this.isMerchant();
     }
 
     /** Anything in the water: fish, squid, turtles, drowned, other swimmers. Never her own kind, never a bonded girl. */
@@ -190,6 +192,16 @@ public class Merfolk extends AbstractMonsterGirl {
     @Nullable
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        if (this.isBaby() && stack.is(Items.WATER_BUCKET)) {                 // the young fit in a bucket
+            return net.minecraft.world.entity.animal.Bucketable.bucketMobPickup(player, hand, this).orElse(null);
+        }
+        if (this.isMerchant() && stack.isEmpty() && !player.isShiftKeyDown() && this.tradingPlayer == null && !this.isBaby()) {
+            if (!this.level().isClientSide) {
+                this.setTradingPlayer(player);
+                this.openTradingScreen(player, net.minecraft.network.chat.Component.translatable("entity.monstergirls.merfolk_merchant", this.getDisplayName()), 1);
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         if (!shiny(stack) || this.isBaby()) return null;
         if (this.level() instanceof ServerLevel server && server.getGameTime() >= this.nextTrade) {
             this.nextTrade = server.getGameTime() + 600;
@@ -292,6 +304,7 @@ public class Merfolk extends AbstractMonsterGirl {
     public boolean hurt(DamageSource source, float amount) {
         if (this.playDead > 0 && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) return false;
         boolean hurt = super.hurt(source, amount);
+        if (hurt && !this.isBaby() && this.random.nextInt(6) == 0) this.spawnAtLocation(new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.MERFOLK_SCALE.get()));
         if (hurt && this.species == GirlSpecies.AXOLOTL_MERMAID && this.getHealth() < this.getMaxHealth() * 0.5F && this.isAlive()) {
             this.playDead = 200;
             this.setAction(Action.LYING);
@@ -312,6 +325,10 @@ public class Merfolk extends AbstractMonsterGirl {
         super.aiStep();
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.playDead > 0 && --this.playDead == 0 && this.getAction() == Action.LYING) this.setAction(Action.NONE);
+        if (this.tickCount % 10 == 0) this.breathe(server);
+        this.levitate();
+        if (this.needsAir && this.isInWater()) this.setDeltaMovement(this.getDeltaMovement().add(0.0, 0.05, 0.0));   // up for air
+        if (!this.isBaby() && this.random.nextInt(12000) == 0) this.spawnAtLocation(new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.MERFOLK_SCALE.get()));
         boolean wet = this.isInWaterRainOrBubble() || (this.species == GirlSpecies.SEAL_MERMAID && this.onBeach());
         this.dryTicks = wet ? 0 : this.dryTicks + 1;
         if (this.dryTicks > this.dryLimit() && this.tickCount % 40 == 0) this.hurt(this.damageSources().dryOut(), 1.0F);
@@ -319,8 +336,8 @@ public class Merfolk extends AbstractMonsterGirl {
         Player p = this.bondedPlayer(BED_AFFECTION, 32);
         if (p == null) return;
         boolean full = this.getAffection(p) >= FULL_AFFECTION;
-        if (p.isInWater() && p.distanceToSqr(this) < 8 * 8) {         // her breath: water breathing (conduit power when devoted)
-            p.addEffect(new MobEffectInstance(full ? MobEffects.CONDUIT_POWER : MobEffects.WATER_BREATHING, 200, 0, true, false));
+        if (full && p.isInWater() && p.distanceToSqr(this) < 8 * 8) {   // devoted: conduit power (below that she shares her breath)
+            p.addEffect(new MobEffectInstance(MobEffects.CONDUIT_POWER, 200, 0, true, false));
         }
         long day = server.getDayTime() % 24000;
         if (day > 12000 && day < 13800 && this.getAction() == Action.NONE && !this.isInWater()) this.startTimedAction(Action.SING, 120);
@@ -505,12 +522,315 @@ public class Merfolk extends AbstractMonsterGirl {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        tag.putBoolean("FromBucket", this.fromBucket);
+        if (this.offers != null) tag.put("Offers", net.minecraft.world.item.trading.MerchantOffers.CODEC.encodeStart(
+                this.registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), this.offers).getOrThrow());
         tag.putInt("DryTicks", this.dryTicks);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.fromBucket = tag.getBoolean("FromBucket");
+        if (tag.contains("Offers")) {
+            net.minecraft.world.item.trading.MerchantOffers.CODEC.parse(this.registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), tag.get("Offers"))
+                    .resultOrPartial(e -> {}).ifPresent(o -> this.offers = o);
+        }
         this.dryTicks = tag.getInt("DryTicks");
+    }
+    // --- the dragon koi floats ----------------------------------------------------------------------------------------
+
+    /** The dragon koi (a koi's true form) needs no water: out of it she floats, slowly, a little above the ground. */
+    public boolean isLevitating() {
+        return this.species == GirlSpecies.KOI_MERMAID && this.isTrueForm() && !this.isInWater();
+    }
+
+    private void levitate() {
+        boolean on = this.isLevitating();
+        if (on != this.isNoGravity()) this.setNoGravity(on);
+        if (!on) return;
+        double ground = this.getY() - 8;
+        for (int dy = 0; dy <= 8; dy++) {                                  // the first solid block below her
+            BlockPos p = BlockPos.containing(this.getX(), this.getY() - dy - 0.01, this.getZ());
+            if (!this.level().getBlockState(p).getCollisionShape(this.level(), p).isEmpty()) {
+                ground = p.getY() + 1;
+                break;
+            }
+        }
+        double target = ground + 1.2 + 0.15 * Math.sin(this.tickCount * 0.08);
+        Vec3 v = this.getDeltaMovement();
+        this.setDeltaMovement(v.x, Math.max(-0.08, Math.min(0.08, (target - this.getY()) * 0.1)), v.z);
+        this.fallDistance = 0;
+    }
+
+    // --- sharing her breath ----------------------------------------------------------------------------------------
+
+    private boolean needsAir;
+    private int airless;
+    private long nextShare;
+
+    public boolean needsAir() {
+        return this.needsAir;
+    }
+
+    /**
+     * High friendship: a player near her running out of air gets a full breath from her, once every 30 seconds. Then
+     * she has to surface herself, and drowns slowly if she can't within 20 seconds.
+     */
+    public void breathe(ServerLevel level) {
+        if (this.needsAir) {
+            if (!this.isEyeInFluid(net.minecraft.tags.FluidTags.WATER)) {
+                this.needsAir = false;
+                this.airless = 0;
+            } else if (++this.airless > 40) {
+                this.hurt(this.damageSources().drown(), 2.0F);
+            }
+            return;
+        }
+        if (level.getGameTime() < this.nextShare) return;
+        Player p = this.bondedPlayer(BED_AFFECTION, 6);
+        if (p == null || p.getAirSupply() > p.getMaxAirSupply() / 3
+                || !level.getFluidState(BlockPos.containing(p.getEyePosition())).is(net.minecraft.tags.FluidTags.WATER)) return;
+        p.setAirSupply(p.getMaxAirSupply());
+        this.needsAir = true;
+        this.airless = 0;
+        this.nextShare = level.getGameTime() + 600;
+        level.sendParticles(ParticleTypes.BUBBLE, p.getX(), p.getEyeY(), p.getZ(), 12, 0.3, 0.3, 0.3, 0.05);
+    }
+
+    // --- fetching ---------------------------------------------------------------------------------------------------
+
+    /** Something her player dropped into the water: she swims for it and brings it back. */
+    class FetchGoal extends net.minecraft.world.entity.ai.goal.Goal {
+        private Player owner;
+        private net.minecraft.world.entity.item.ItemEntity item;
+        private int cooldown;
+        private int ticks;
+
+        FetchGoal() {
+            this.setFlags(java.util.EnumSet.of(Flag.MOVE, Flag.LOOK));
+        }
+
+        private boolean holding() {
+            return !Merfolk.this.getMainHandItem().isEmpty();
+        }
+
+        @Override
+        public boolean canUse() {
+            if (--this.cooldown > 0 || Merfolk.this.isBaby() || this.holding() || Merfolk.this.getTarget() != null) return false;
+            this.cooldown = 20;
+            this.owner = Merfolk.this.bondedPlayer(10, 24);
+            if (this.owner == null) return false;
+            this.item = Merfolk.this.nearest(net.minecraft.world.entity.item.ItemEntity.class, 16.0,
+                    e -> e.isAlive() && e.isInWater() && e.getOwner() == this.owner);
+            return this.item != null;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.ticks < 600 && this.owner.isAlive() && (this.holding() || this.item.isAlive());
+        }
+
+        @Override
+        public void start() {
+            this.ticks = 0;
+        }
+
+        @Override
+        public void tick() {
+            this.ticks++;
+            var target = this.holding() ? (net.minecraft.world.entity.Entity) this.owner : this.item;
+            Merfolk.this.getLookControl().setLookAt(target);
+            if (Merfolk.this.distanceToSqr(target) > (this.holding() ? 6.0 : 2.0)) {
+                if (this.ticks % 10 == 1) Merfolk.this.getNavigation().moveTo(target, 1.3);
+                return;
+            }
+            if (!this.holding()) {
+                Merfolk.this.setItemSlot(EquipmentSlot.MAINHAND, this.item.getItem().copy());
+                Merfolk.this.setDropChance(EquipmentSlot.MAINHAND, 2.0F);
+                this.item.discard();
+                return;
+            }
+            ItemStack back = Merfolk.this.getMainHandItem();
+            Merfolk.this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+            if (!this.owner.getInventory().add(back)) Merfolk.this.spawnAtLocation(back);
+            Merfolk.this.playSound(SoundEvents.ITEM_PICKUP, 0.6F, 1.2F);
+        }
+
+        @Override
+        public void stop() {
+            if (this.holding()) {                                             // could not reach you: she leaves it where she is
+                Merfolk.this.spawnAtLocation(Merfolk.this.getMainHandItem());
+                Merfolk.this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+            }
+            this.item = null;
+        }
+    }
+
+    // --- the merchant -----------------------------------------------------------------------------------------------
+
+    @Nullable
+    private Player tradingPlayer;
+    @Nullable
+    private net.minecraft.world.item.trading.MerchantOffers offers;
+
+    public boolean isMerchant() {
+        return this.hasFlag(FLAG_MERCHANT);
+    }
+
+    public void setMerchant(boolean merchant) {
+        this.setFlag(FLAG_MERCHANT, merchant);
+    }
+
+    /** One wild grown merfolk in five is a merchant: neutral, and here to trade. */
+    @Override
+    public net.minecraft.world.entity.SpawnGroupData finalizeSpawn(net.minecraft.world.level.ServerLevelAccessor level, net.minecraft.world.DifficultyInstance difficulty,
+                                                                   net.minecraft.world.entity.MobSpawnType type, @Nullable net.minecraft.world.entity.SpawnGroupData group) {
+        var data = super.finalizeSpawn(level, difficulty, type, group);
+        if (type == net.minecraft.world.entity.MobSpawnType.NATURAL && !this.isBaby() && this.random.nextInt(5) == 0) this.setMerchant(true);
+        return data;
+    }
+
+    private static final java.util.List<net.minecraft.resources.ResourceKey<net.minecraft.world.level.storage.loot.LootTable>> SEA_LOOT = java.util.List.of(
+            net.minecraft.world.level.storage.loot.BuiltInLootTables.UNDERWATER_RUIN_SMALL, net.minecraft.world.level.storage.loot.BuiltInLootTables.UNDERWATER_RUIN_BIG,
+            net.minecraft.world.level.storage.loot.BuiltInLootTables.SHIPWRECK_TREASURE, net.minecraft.world.level.storage.loot.BuiltInLootTables.SHIPWRECK_SUPPLY,
+            net.minecraft.world.level.storage.loot.BuiltInLootTables.BURIED_TREASURE);
+
+    /** Emeralds for one of something, by how rare it is. */
+    static int price(ItemStack s) {
+        int each = switch (s.getRarity()) {
+            case COMMON -> 1;
+            case UNCOMMON -> 6;
+            case RARE -> 14;
+            case EPIC -> 28;
+        };
+        if (s.isEnchanted()) each += 8;
+        return Math.max(1, Math.min(64, s.getMaxStackSize() > 1 ? Math.max(1, s.getCount() * each / 4) : each));
+    }
+
+    /** Her wares come out of the sea's own loot (ruins, shipwrecks, buried treasure); she buys fish and shiny things. */
+    public net.minecraft.world.item.trading.MerchantOffers makeOffers(ServerLevel level) {
+        var o = new net.minecraft.world.item.trading.MerchantOffers();
+        var params = new net.minecraft.world.level.storage.loot.LootParams.Builder(level)
+                .withParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.ORIGIN, this.position())
+                .create(net.minecraft.world.level.storage.loot.parameters.LootContextParamSets.CHEST);
+        java.util.Set<net.minecraft.world.item.Item> seen = new java.util.HashSet<>();
+        for (int roll = 0; roll < 4 && o.size() < 6; roll++) {
+            var table = level.getServer().reloadableRegistries().getLootTable(SEA_LOOT.get(this.random.nextInt(SEA_LOOT.size())));
+            for (ItemStack s : table.getRandomItems(params)) {
+                if (o.size() >= 6 || s.isEmpty() || s.is(Items.MAP) || s.is(Items.FILLED_MAP) || !seen.add(s.getItem())) continue;
+                o.add(new net.minecraft.world.item.trading.MerchantOffer(new net.minecraft.world.item.trading.ItemCost(Items.EMERALD, price(s)), s, 4, 3, 0.05F));
+            }
+        }
+        o.add(new net.minecraft.world.item.trading.MerchantOffer(new net.minecraft.world.item.trading.ItemCost(Items.COD, 12), new ItemStack(Items.EMERALD), 16, 2, 0.05F));
+        o.add(new net.minecraft.world.item.trading.MerchantOffer(new net.minecraft.world.item.trading.ItemCost(Items.GOLD_INGOT, 3), new ItemStack(Items.EMERALD, 2), 12, 2, 0.05F));
+        return o;
+    }
+
+    @Override
+    public void setTradingPlayer(@Nullable Player player) {
+        this.tradingPlayer = player;
+    }
+
+    @Nullable
+    @Override
+    public Player getTradingPlayer() {
+        return this.tradingPlayer;
+    }
+
+    @Override
+    public net.minecraft.world.item.trading.MerchantOffers getOffers() {
+        if (this.offers == null) {
+            this.offers = this.level() instanceof ServerLevel server ? this.makeOffers(server) : new net.minecraft.world.item.trading.MerchantOffers();
+        }
+        return this.offers;
+    }
+
+    @Override
+    public void overrideOffers(net.minecraft.world.item.trading.MerchantOffers offers) {
+        this.offers = offers;
+    }
+
+    @Override
+    public void notifyTrade(net.minecraft.world.item.trading.MerchantOffer offer) {
+        offer.increaseUses();
+        if (this.tradingPlayer != null) this.addAffection(this.tradingPlayer, 1);
+        this.playSound(SoundEvents.DOLPHIN_PLAY, 0.8F, 1.3F);
+    }
+
+    @Override
+    public void notifyTradeUpdated(ItemStack stack) {
+    }
+
+    @Override
+    public int getVillagerXp() {
+        return 0;
+    }
+
+    @Override
+    public void overrideXp(int xp) {
+    }
+
+    @Override
+    public boolean showProgressBar() {
+        return false;
+    }
+
+    @Override
+    public SoundEvent getNotifyTradeSound() {
+        return SoundEvents.DOLPHIN_PLAY;
+    }
+
+    @Override
+    public boolean isClientSide() {
+        return this.level().isClientSide;
+    }
+
+    // --- the bucket (young only) ----------------------------------------------------------------------------------
+
+    private boolean fromBucket;
+
+    @Override
+    public boolean fromBucket() {
+        return this.fromBucket;
+    }
+
+    @Override
+    public void setFromBucket(boolean fromBucket) {
+        this.fromBucket = fromBucket;
+        if (fromBucket) this.setPersistenceRequired();
+    }
+
+    /** The whole of her (age, father, bonds, colour) goes into the bucket, and her species with it. */
+    @Override
+    public void saveToBucketTag(ItemStack stack) {
+        net.minecraft.world.entity.animal.Bucketable.saveDefaultDataToBucketTag(this, stack);
+        net.minecraft.world.item.component.CustomData.update(net.minecraft.core.component.DataComponents.BUCKET_ENTITY_DATA, stack, tag -> {
+            CompoundTag girl = new CompoundTag();
+            this.addAdditionalSaveData(girl);
+            tag.put("Girl", girl);
+            tag.putString("Species", this.species.id());
+        });
+    }
+
+    @Override
+    public void loadFromBucketTag(CompoundTag tag) {
+        net.minecraft.world.entity.animal.Bucketable.loadDefaultDataFromBucketTag(this, tag);
+        if (tag.contains("Girl")) this.readAdditionalSaveData(tag.getCompound("Girl"));
+    }
+
+    @Override
+    public ItemStack getBucketItemStack() {
+        return new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.MERFOLK_BUCKET.get());
+    }
+
+    @Override
+    public SoundEvent getPickupSound() {
+        return SoundEvents.BUCKET_FILL_FISH;
+    }
+
+    @Override
+    public boolean isHealer() {
+        return this.species == GirlSpecies.AXOLOTL_MERMAID;
     }
 }

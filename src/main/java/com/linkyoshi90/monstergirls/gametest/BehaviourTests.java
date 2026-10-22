@@ -158,7 +158,10 @@ public class BehaviourTests {
         check(player.getVehicle() != zebra, "not yet: she needs high friendship");
         zebra.setAffection(player.getUUID(), Centaur.RIDE_AFFECTION);
         interact(zebra, player, ItemStack.EMPTY);
-        check(player.getVehicle() == zebra, "at high friendship she carries you, no saddle needed (even the zebra)");
+        check(player.getVehicle() != zebra, "a zebra carries no one but her father, however fond of you she is");
+        zebra.setFather(player.getUUID());
+        interact(zebra, player, ItemStack.EMPTY);
+        check(player.getVehicle() == zebra, "her father she carries, no saddle needed");
         check(zebra.getControllingPassenger() == player, "and you steer");
         player.stopRiding();
         HarpyTestUtil.remove(player);

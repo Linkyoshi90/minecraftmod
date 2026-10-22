@@ -49,6 +49,15 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         if (species.family() == GirlSpecies.Family.CENTAUR) this.addRenderLayer(new TorsoArmourLayer(this));
     }
 
+    /** A dyed (or merged) slime is drawn in her own colour, any colour at all. */
+    @Override
+    public software.bernie.geckolib.util.Color getRenderColor(AbstractMonsterGirl girl, float partialTick, int packedLight) {
+        if (girl instanceof com.linkyoshi90.monstergirls.entity.girl.SlimeGirl slime && slime.hasCustomColour()) {
+            return software.bernie.geckolib.util.Color.ofOpaque(slime.colour());
+        }
+        return super.getRenderColor(girl, partialTick, packedLight);
+    }
+
     /** A worn chestplate, fitted to the invisible armor_torso box in her model. */
     static class TorsoArmourLayer extends ItemArmorGeoLayer<AbstractMonsterGirl> {
         TorsoArmourLayer(GirlRenderer renderer) {
@@ -99,6 +108,9 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         @Override
         public ResourceLocation getTextureResource(AbstractMonsterGirl girl) {
             String name = this.modelName(girl);
+            if (girl instanceof com.linkyoshi90.monstergirls.entity.girl.SlimeGirl slime && slime.hasCustomColour()) {   // a light grey copy, tinted by her colour
+                return this.textures.computeIfAbsent(name + "_tint", s -> MonsterGirlsMod.id("textures/entity/" + s + ".png"));
+            }
             return this.textures.computeIfAbsent(name + girl.getVariantSuffix(), s -> MonsterGirlsMod.id("textures/entity/" + s + ".png"));
         }
 

@@ -29,7 +29,7 @@ public class BegForFoodGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (this.harpy.level().getGameTime() < this.nextTime || this.harpy.isHoldingSomething()) return false;
+        if (this.harpy.level().getGameTime() < this.nextTime || this.harpy.isHoldingSomething() || com.linkyoshi90.monstergirls.entity.Orders.holdsPlace(this.harpy)) return false;
         if (this.harpy.getRandom().nextInt(reducedTickDelay(600)) != 0) return false;
         this.mark = this.harpy.level().getNearestPlayer(this.harpy.getX(), this.harpy.getY(), this.harpy.getZ(), 12.0,
                 e -> e instanceof Player p && this.isMark(p));

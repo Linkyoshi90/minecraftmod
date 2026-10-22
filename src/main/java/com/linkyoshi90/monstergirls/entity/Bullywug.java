@@ -171,12 +171,14 @@ public class Bullywug extends AbstractAnuran {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        tag.putBoolean("Undressed", this.isUndressed());
         tag.putInt("SlimeTime", this.slimeTime);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.setUndressed(tag.getBoolean("Undressed"));
         if (tag.contains("SlimeTime")) this.slimeTime = tag.getInt("SlimeTime");
     }
 
@@ -207,5 +209,54 @@ public class Bullywug extends AbstractAnuran {
     @Override
     protected int dryLimitTicks() {
         return DRY_LIMIT_TICKS;
+    }
+
+    // --- her outfit: the lily-pad skirt and the cattails come off (reed shorts and wrap stay) ----------------------------
+
+    private static final net.minecraft.network.syncher.EntityDataAccessor<Boolean> DATA_UNDRESSED =
+            net.minecraft.network.syncher.SynchedEntityData.defineId(Bullywug.class, net.minecraft.network.syncher.EntityDataSerializers.BOOLEAN);
+
+    @Override
+    protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_UNDRESSED, false);
+    }
+
+    /** Whether she has taken off her lily-pad skirt and cattails (the renderer hides those bones). */
+    public boolean isUndressed() {
+        return this.entityData.get(DATA_UNDRESSED);
+    }
+
+    public void setUndressed(boolean undressed) {
+        this.entityData.set(DATA_UNDRESSED, undressed);
+    }
+
+    /**
+     * At high friendship, shears: she takes off her skirt and cattails and hands them to you (a lily pad and three
+     * cattails, as sugar cane). A lily pad: she makes herself a new skirt and picks fresh cattails.
+     */
+    @Override
+    protected net.minecraft.world.InteractionResult mobInteract(Player player, net.minecraft.world.InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (hand == net.minecraft.world.InteractionHand.MAIN_HAND && !this.isTadpole() && !this.isBaby()) {
+            if (stack.is(Items.SHEARS) && !this.isUndressed() && this.getAffection(player) >= BED_AFFECTION) {
+                if (!this.level().isClientSide) {
+                    this.setUndressed(true);
+                    this.spawnAtLocation(new ItemStack(Items.LILY_PAD));
+                    this.spawnAtLocation(new ItemStack(Items.SUGAR_CANE, 3));
+                    this.playSound(net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_LEATHER.value(), 1.0F, 1.2F);
+                }
+                return net.minecraft.world.InteractionResult.sidedSuccess(this.level().isClientSide);
+            }
+            if (stack.is(Items.LILY_PAD) && this.isUndressed()) {
+                if (!this.level().isClientSide) {
+                    this.setUndressed(false);
+                    stack.consume(1, player);
+                    this.playSound(net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_LEATHER.value(), 1.0F, 1.0F);
+                }
+                return net.minecraft.world.InteractionResult.sidedSuccess(this.level().isClientSide);
+            }
+        }
+        return super.mobInteract(player, hand);
     }
 }

@@ -114,6 +114,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     @Nullable
     private UUID father;
     private boolean orderedToSit;
+    private final com.linkyoshi90.monstergirls.entity.Orders orders = new com.linkyoshi90.monstergirls.entity.Orders();
     private boolean inBed;
 
     /** Five in-game days from hatching to adult: the first two and a half as a tadpole, the rest as a froglet. */
@@ -138,6 +139,8 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         this.setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0F);
         this.goalSelector.addGoal(-1, new TadpoleGoal(this)); // above everything, FloatGoal included
         this.goalSelector.addGoal(-1, new SitWhenOrderedGoal<>(this));
+        this.goalSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StayNearGoal<>(this));
+        this.targetSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StanceTargetGoal<>(this));
         this.goalSelector.addGoal(2, new LaySpawnGoal(this));
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));
     }
@@ -397,11 +400,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (hand == InteractionHand.MAIN_HAND && stack.is(Items.STICK) && !this.isTadpole()) {
-            if (!this.level().isClientSide) {
-                this.setOrderedToSit(!this.orderedToSit);
-                player.displayClientMessage(Component.translatable(this.orderedToSit ? "message.monstergirls.sits" : "message.monstergirls.stands",
-                        this.getDisplayName()), true);
-            }
+            if (!this.level().isClientSide) Orders.onStick(this, this.orders, player);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
         if (hand == InteractionHand.MAIN_HAND && stack.isEmpty() && !player.isShiftKeyDown()) {
@@ -469,6 +468,19 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     /** How round her belly is, 0 (not expecting) to 1 (due); synced to the client. */
     public float getBellySwell() {
         return this.entityData.get(DATA_BELLY) / 100.0F;
+    }
+
+    // --- stick orders --------------------------------------------------------------------------------------------
+
+    @Override
+    public com.linkyoshi90.monstergirls.entity.Orders getOrders() {
+        return this.orders;
+    }
+
+    /** Her stance has the last word on whom she fights (and companions never fight each other). */
+    @Override
+    public void setTarget(@Nullable net.minecraft.world.entity.LivingEntity target) {
+        super.setTarget(this.orders == null || this.orders.allows(this, target) ? target : null);
     }
 
     @Override
@@ -605,6 +617,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         this.gestation.save(tag);
         if (this.father != null) tag.putUUID("Father", this.father);
         tag.putBoolean("OrderedToSit", this.orderedToSit);
+        tag.put("Orders", this.orders.save());
         CompoundTag affectionTag = new CompoundTag();
         this.affection.forEach((uuid, a) -> affectionTag.putInt(uuid.toString(), a));
         tag.put("Affection", affectionTag);
@@ -623,6 +636,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         this.gestation.load(tag);
         this.father = tag.hasUUID("Father") ? tag.getUUID("Father") : null;
         this.orderedToSit = tag.getBoolean("OrderedToSit");
+        this.orders.load(tag.getCompound("Orders"));
         this.affection.clear();
         CompoundTag affectionTag = tag.getCompound("Affection");
         for (String key : affectionTag.getAllKeys()) this.affection.put(UUID.fromString(key), affectionTag.getInt(key));

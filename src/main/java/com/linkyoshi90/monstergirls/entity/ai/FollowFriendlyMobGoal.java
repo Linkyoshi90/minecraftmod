@@ -39,6 +39,7 @@ public class FollowFriendlyMobGoal extends Goal {
 
     @Override
     public boolean canUse() {
+        if (com.linkyoshi90.monstergirls.entity.Orders.commanded(this.mob)) return false;     // no flocking off under orders
         if (this.mob.getRandom().nextInt(reducedTickDelay(400)) != 0) return false;
         List<Mob> nearby = this.mob.level().getEntitiesOfClass(Mob.class,
                 this.mob.getBoundingBox().inflate(this.searchRadius), this::isFriendly);
