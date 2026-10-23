@@ -138,6 +138,13 @@ public class SlimeGirl extends AbstractMonsterGirl {
                 return InteractionResult.sidedSuccess(client);
             }
         }
+        if (stack.is(Items.SLIME_BALL) && !this.isMixed() && !this.isBaby() && !this.isHalf()) {        // why not: say so
+            SlimeGirl near = this.nearest(SlimeGirl.class, 3.0, o -> o != this && !o.isMixed() && o.species != this.species && !o.isBaby() && !o.isHalf());
+            if (near != null) {
+                if (!client) player.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.merge_trust", this.getDisplayName(), near.getDisplayName()), true);
+                return InteractionResult.sidedSuccess(client);
+            }
+        }
         if (stack.is(Items.POTION) && this.hasCustomColour()
                 && stack.getOrDefault(net.minecraft.core.component.DataComponents.POTION_CONTENTS, net.minecraft.world.item.alchemy.PotionContents.EMPTY)
                 .is(net.minecraft.world.item.alchemy.Potions.WATER)) {            // a water bottle washes the dye out of her

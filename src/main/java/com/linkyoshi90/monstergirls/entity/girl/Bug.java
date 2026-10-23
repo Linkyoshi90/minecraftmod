@@ -177,7 +177,7 @@ public class Bug extends AbstractMonsterGirl {
             for (BlockPos p : BlockPos.betweenClosed(o.offset(-4, -2, -4), o.offset(4, 2, 4))) {
                 if (!canHoldBlock(level, p)) continue;
                 level.setBlock(p, ModBlocks.GIRL_EGG.get().defaultBlockState().setValue(GirlEggBlock.KIND, GirlEggBlock.Kind.SILK), 3);
-                if (level.getBlockEntity(p) instanceof GirlEggBlockEntity be) be.setup(young, 2, father);
+                if (level.getBlockEntity(p) instanceof GirlEggBlockEntity be) be.setup(young, 2, father).withPaint(this.getPaint());
                 return true;
             }
         }

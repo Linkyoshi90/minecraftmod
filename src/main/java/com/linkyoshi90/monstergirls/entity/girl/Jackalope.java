@@ -289,7 +289,7 @@ public class Jackalope extends AbstractMonsterGirl {
         if (this.tickCount % 20 != 0) return;
         this.eggs.removeIf(p -> !level.getBlockState(p).is(ModBlocks.PAINTED_EGG.get()));
         if (level.getGameTime() < this.nextEgg || this.eggs.size() >= MAX_EGGS) return;
-        this.nextEgg = level.getGameTime() + 2400 + this.random.nextInt(2400);
+        this.nextEgg = level.getGameTime() + 200;                               // nowhere to hide one here: try again soon
         BlockPos o = this.blockPosition();
         for (int i = 0; i < 24; i++) {
             BlockPos p = o.offset(this.random.nextInt(17) - 8, this.random.nextInt(5) - 2, this.random.nextInt(17) - 8);
@@ -297,6 +297,7 @@ public class Jackalope extends AbstractMonsterGirl {
             if (!level.getBlockState(p.below()).is(BlockTags.DIRT) && !level.getBlockState(p.below()).is(BlockTags.SAND)) continue;
             level.setBlock(p, ModBlocks.PAINTED_EGG.get().defaultBlockState().setValue(PaintedEggBlock.COLOR, this.random.nextInt(PaintedEggBlock.COLORS)), 3);
             this.eggs.add(p.immutable());
+            this.nextEgg = level.getGameTime() + 2400 + this.random.nextInt(2400);
             this.getNavigation().moveTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, 1.1);
             level.playSound(null, p, SoundEvents.GRASS_PLACE, net.minecraft.sounds.SoundSource.NEUTRAL, 0.6F, 1.4F);
             return;

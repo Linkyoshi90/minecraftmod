@@ -111,6 +111,8 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
             if (girl instanceof com.linkyoshi90.monstergirls.entity.girl.SlimeGirl slime && slime.hasCustomColour()) {   // a light grey copy, tinted by her colour
                 return this.textures.computeIfAbsent(name + "_tint", s -> MonsterGirlsMod.id("textures/entity/" + s + ".png"));
             }
+            String paint = girl.getPaintName();
+            if (paint != null) return this.textures.computeIfAbsent(name + "_paint_" + paint, s -> MonsterGirlsMod.id("textures/entity/" + s + ".png"));
             return this.textures.computeIfAbsent(name + girl.getVariantSuffix(), s -> MonsterGirlsMod.id("textures/entity/" + s + ".png"));
         }
 

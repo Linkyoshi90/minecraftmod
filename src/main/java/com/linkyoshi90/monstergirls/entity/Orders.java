@@ -148,7 +148,8 @@ public final class Orders {
         mob.setOrderedToSit(next == Command.SIT);
         String key = switch (next) {
             case SIT -> "message.monstergirls.sits";
-            case PATROL -> "message.monstergirls.order.patrol";
+            case PATROL -> com.linkyoshi90.monstergirls.entity.girl.FarmhandGoal.hasFarmland(mob.level(), mob.blockPosition())
+                    && !(mob instanceof com.linkyoshi90.monstergirls.entity.girl.Merfolk) ? "message.monstergirls.order.patrol_farm" : "message.monstergirls.order.patrol";
             case FOLLOW -> "message.monstergirls.order.follow";
             case FREE_ROAM -> now == Command.SIT ? "message.monstergirls.stands" : "message.monstergirls.order.free";
         };

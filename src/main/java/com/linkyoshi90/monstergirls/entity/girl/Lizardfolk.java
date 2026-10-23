@@ -74,6 +74,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
             case IGUANA_LIZARDFOLK -> girlAttributes(22, 0.4, 3).add(Attributes.ARMOR, 3);
             case CROC_LIZARDFOLK -> girlAttributes(40, 0.28, 9).add(Attributes.ARMOR, 8);
             case SNAPPING_TURTLE_LIZARDFOLK -> girlAttributes(36, 0.18, 7).add(Attributes.ARMOR, 8);
+            case KAPPA_LIZARDFOLK -> girlAttributes(22, 0.28, 4).add(Attributes.ARMOR, 4);
             default -> girlAttributes(26, 0.2, 2).add(Attributes.ARMOR, 6);
         };
     }
@@ -88,7 +89,8 @@ public class Lizardfolk extends AbstractMonsterGirl {
     @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(Items.EGG) || stack.is(Items.TURTLE_EGG) || stack.is(ModTags.LAID_EGGS) || stack.is(ItemTags.FISHES)
-                || (this.species == GirlSpecies.TURTLE_LIZARDFOLK && stack.is(Items.SEAGRASS));
+                || (this.species == GirlSpecies.TURTLE_LIZARDFOLK && stack.is(Items.SEAGRASS))
+                || (this.species == GirlSpecies.KAPPA_LIZARDFOLK && (stack.is(Items.MELON_SLICE) || stack.is(Items.KELP)));   // no cucumbers here
     }
 
     @Override
@@ -102,6 +104,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
         return switch (this.species) {
             case TURTLE_LIZARDFOLK -> new ItemStack(r < 30 ? Items.TURTLE_SCUTE : r < 70 ? Items.SEAGRASS : Items.NAUTILUS_SHELL);
             case SNAPPING_TURTLE_LIZARDFOLK -> new ItemStack(r < 45 ? Items.COD : r < 80 ? Items.SALMON : Items.CLAY_BALL, r < 80 ? 1 : 4);
+            case KAPPA_LIZARDFOLK -> new ItemStack(r < 40 ? Items.COD : r < 70 ? Items.KELP : r < 95 ? Items.SEA_PICKLE : Items.NAUTILUS_SHELL, r < 70 ? 2 : 1);
             case SALAMANDER_LIZARDFOLK -> new ItemStack(r < 50 ? Items.MAGMA_CREAM : Items.BLAZE_POWDER);
             case CROC_LIZARDFOLK -> new ItemStack(r < 60 ? Items.BONE : Items.LEATHER, 2);
             default -> new ItemStack(r < 40 ? Items.SLIME_BALL : r < 80 ? Items.COCOA_BEANS : Items.EMERALD);
@@ -167,7 +170,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
             var under = level.getBlockState(p.below());
             if (!under.is(BlockTags.SAND) && !under.is(BlockTags.DIRT) && !under.is(net.minecraft.world.level.block.Blocks.NETHERRACK)) continue;
             level.setBlock(p, ModBlocks.GIRL_EGG.get().defaultBlockState().setValue(GirlEggBlock.KIND, GirlEggBlock.Kind.LEATHERY), 3);
-            if (level.getBlockEntity(p) instanceof GirlEggBlockEntity be) be.setup(this.species.id(), this.litterSize(), father);
+            if (level.getBlockEntity(p) instanceof GirlEggBlockEntity be) be.setup(this.species.id(), this.litterSize(), father).withPaint(this.getPaint());
             return true;
         }
         return super.giveBirth(level, father);
@@ -206,6 +209,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
             if (this.tickCount % 61 == 0) this.snatch(server);
         }
         if (this.species == GirlSpecies.SNAPPING_TURTLE_LIZARDFOLK && this.tickCount % 200 == 0) this.lure(server);
+        if (this.species == GirlSpecies.KAPPA_LIZARDFOLK) this.tickDish(server);
         if (this.tickCount % 40 != 0) return;
         if (this.isWarm()) {
             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60, 0, true, false));
@@ -289,5 +293,46 @@ public class Lizardfolk extends AbstractMonsterGirl {
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.retracted = tag.getInt("Retracted");
+    }
+
+    // --- the kappa's dish -----------------------------------------------------------------------------------------
+
+    /** Two minutes out of water and rain and the water in her dish is gone. */
+    public static final int DISH_DRY = 2400;
+    private int dishDry;
+    private final java.util.Map<java.util.UUID, Long> bowed = new java.util.HashMap<>();
+
+    public boolean isDishDry() {
+        return this.dishDry > DISH_DRY;
+    }
+
+    /** Wet she is strong; with her dish dry she is weak and slow. A player who bows to her (crouching, facing her) gets a bow back. */
+    private void tickDish(ServerLevel level) {
+        this.dishDry = this.isInWaterRainOrBubble() ? 0 : this.dishDry + 1;
+        if (this.tickCount % 40 == 0) {
+            if (this.dishDry == 0 && this.isInWater()) this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 60, 0, true, false));
+            else if (this.isDishDry()) {
+                this.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, 0, true, false));
+                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 0, true, false));
+            }
+        }
+        if (this.tickCount % 10 != 0) return;
+        for (Player p : level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(4), p -> p.isShiftKeyDown() && !p.isSpectator())) {
+            Vec3 toHer = this.position().subtract(p.position()).normalize();
+            if (p.getViewVector(1.0F).dot(toHer) > 0.8 && level.getGameTime() >= this.bowed.getOrDefault(p.getUUID(), 0L)) this.bowBack(level, p);
+        }
+    }
+
+    /** She bows back, as politeness demands, and spills her dish: weak for a while, and done fighting this player. */
+    public void bowBack(ServerLevel level, Player p) {
+        this.bowed.put(p.getUUID(), level.getGameTime() + 6000);
+        this.dishDry = DISH_DRY + 1;
+        if (this.getTarget() == p) this.setTarget(null);
+        if (this.getLastHurtByMob() == p) this.setLastHurtByMob(null);
+        this.getLookControl().setLookAt(p);
+        this.addAffection(p, 1);
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.SPLASH, this.getX(), this.getY() + this.getBbHeight(), this.getZ(), 16, 0.3, 0.1, 0.3, 0.1);
+        this.playSound(SoundEvents.GENERIC_SPLASH, 0.6F, 1.4F);
+        p.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.kappa_bow", this.getDisplayName()), true);
     }
 }

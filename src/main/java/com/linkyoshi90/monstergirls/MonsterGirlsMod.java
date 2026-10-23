@@ -27,6 +27,7 @@ public final class MonsterGirlsMod {
         ModEntities.ENTITY_TYPES.register(modBus);
         com.linkyoshi90.monstergirls.registry.ModArmorMaterials.ARMOR_MATERIALS.register(modBus);
         ModItems.ITEMS.register(modBus);
+        ModItems.TABS.register(modBus);
         ModSounds.SOUND_EVENTS.register(modBus);
 
         modBus.addListener(ModEntities::registerAttributes);

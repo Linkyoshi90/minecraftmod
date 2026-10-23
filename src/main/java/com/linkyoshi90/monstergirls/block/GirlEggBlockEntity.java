@@ -26,11 +26,24 @@ public class GirlEggBlockEntity extends BlockEntity {
         super(ModBlockEntities.GIRL_EGG.get(), pos, state);
     }
 
-    public void setup(String species, int count, @Nullable UUID father) {
+    private int paint;
+
+    public GirlEggBlockEntity setup(String species, int count, @Nullable UUID father) {
         this.species = species;
         this.count = count;
         this.father = father;
         this.setChanged();
+        return this;
+    }
+
+    /** The mother's Harmontide paint, which the young inherit. */
+    public void withPaint(int paint) {
+        this.paint = paint;
+        this.setChanged();
+    }
+
+    public int getPaint() {
+        return this.paint;
     }
 
     @Nullable
@@ -65,6 +78,7 @@ public class GirlEggBlockEntity extends BlockEntity {
         tag.putInt("Count", this.count);
         if (this.father != null) tag.putUUID("Father", this.father);
         tag.putInt("Cracks", this.cracks);
+        tag.putInt("Paint", this.paint);
     }
 
     @Override
@@ -74,5 +88,6 @@ public class GirlEggBlockEntity extends BlockEntity {
         this.count = tag.getInt("Count");
         this.father = tag.hasUUID("Father") ? tag.getUUID("Father") : null;
         this.cracks = tag.getInt("Cracks");
+        this.paint = tag.getInt("Paint");
     }
 }

@@ -298,7 +298,7 @@ public class Flora extends AbstractMonsterGirl {
         for (BlockPos p : BlockPos.betweenClosed(o.offset(-3, -1, -3), o.offset(3, 1, 3))) {
             if (!canHoldBlock(level, p) || !level.getBlockState(p.below()).is(BlockTags.DIRT)) continue;
             level.setBlock(p, ModBlocks.GIRL_EGG.get().defaultBlockState().setValue(GirlEggBlock.KIND, GirlEggBlock.Kind.LEATHERY), 3);
-            if (level.getBlockEntity(p) instanceof GirlEggBlockEntity be) be.setup(this.species.id(), 1, father);
+            if (level.getBlockEntity(p) instanceof GirlEggBlockEntity be) be.setup(this.species.id(), 1, father).withPaint(this.getPaint());
             return true;
         }
         return super.giveBirth(level, father);

@@ -18,13 +18,13 @@ import java.util.EnumSet;
 import java.util.List;
 
 /**
- * A girl told to patrol (stick) by someone she is fond of at high friendship works the fields in her patrol area:
+ * A girl (harpies and anurans too) told to patrol (stick) by someone she is fond of works the fields in her patrol area:
  * she harvests ripe crops, replants them from the harvest (like a farmer villager) and puts the rest into a chest or
  * barrel in the area (or leaves it at her feet). Flora girls also give growing crops a nudge now and then. Obeys
  * mobGriefing, as farmer villagers do. Merfolk stay in the water.
  */
-public class FarmhandGoal extends Goal {
-    private final AbstractMonsterGirl girl;
+public class FarmhandGoal<T extends net.minecraft.world.entity.PathfinderMob & com.linkyoshi90.monstergirls.entity.Bonded> extends Goal {
+    private final T girl;
     @Nullable
     private BlockPos crop;
     @Nullable
@@ -32,18 +32,27 @@ public class FarmhandGoal extends Goal {
     private int cooldown;
     private int ticks;
 
-    public FarmhandGoal(AbstractMonsterGirl girl) {
+    public FarmhandGoal(T girl) {
         this.girl = girl;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
-    /** On duty: patrolling for a player she is fond of (high friendship), grown, out of the water families. */
+    /** On duty: patrolling for a player she is fond of (who is in this world), grown, not a merfolk. */
     public boolean onDuty() {
         Orders o = this.girl.getOrders();
-        return o.command(this.girl) == Orders.Command.PATROL && o.anchor() != null && o.commanderId() != null
-                && this.girl.getAffection(o.commanderId()) >= AbstractMonsterGirl.BED_AFFECTION && !this.girl.isBaby()
-                && this.girl.getSpecies().family() != GirlSpecies.Family.MERFOLK && this.girl.getTarget() == null
+        net.minecraft.world.entity.player.Player boss = o.commander(this.girl);
+        return o.command(this.girl) == Orders.Command.PATROL && o.anchor() != null && boss != null && this.girl.getAffection(boss) >= Orders.AFFECTION
+                && !this.girl.isBaby() && !(this.girl instanceof Merfolk) && this.girl.getTarget() == null
                 && this.girl.level() instanceof ServerLevel level && net.neoforged.neoforge.event.EventHooks.canEntityGrief(level, this.girl);
+    }
+
+    /** Whether there is farmland around a patrol spot (the patrol order says she will tend it). */
+    public static boolean hasFarmland(net.minecraft.world.level.Level level, BlockPos anchor) {
+        int r = (int) Orders.PATROL_RADIUS;
+        for (BlockPos p : BlockPos.betweenClosed(anchor.offset(-r, -3, -r), anchor.offset(r, 2, r))) {
+            if (level.getBlockState(p).getBlock() instanceof net.minecraft.world.level.block.FarmBlock) return true;
+        }
+        return false;
     }
 
     private static boolean ripe(BlockState s) {
@@ -61,7 +70,7 @@ public class FarmhandGoal extends Goal {
         for (BlockPos p : BlockPos.betweenClosed(anchor.offset(-r, -2, -r), anchor.offset(r, 2, r))) {
             BlockState s = this.girl.level().getBlockState(p);
             if (!ripe(s)) {
-                if (this.girl.getSpecies().family() == GirlSpecies.Family.FLORA && s.getBlock() instanceof CropBlock c
+                if (this.girl instanceof Flora && s.getBlock() instanceof CropBlock c
                         && this.girl.getRandom().nextInt(400) == 0 && this.girl.level() instanceof ServerLevel level) {
                     c.performBonemeal(level, level.random, p, s);           // a flora girl's touch: growing crops get a nudge
                 }

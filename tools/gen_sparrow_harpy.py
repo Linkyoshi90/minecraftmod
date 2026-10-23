@@ -48,7 +48,22 @@ def paint(pal=PAL, LEAF=LEAF, GOLD=GOLD):
     # feathered bandeau with a slight bust
     D = H.D
 
+    papi = getattr(pal, "papi", False)
+    COTTON = ramp([rgb(178, 182, 190), rgb(214, 218, 224), rgb(236, 238, 242), rgb(248, 249, 251), rgb(255, 255, 255)])
+
+    def shirt(f, x, y, w, h):                                   # Papi's white sleeveless shirt
+        if f == "up":
+            return pick(SKIN, 0.66, x, y)
+        if f == "down":
+            return pick(COTTON, 0.5, x, y)
+        if y >= h - D // 2:
+            return COTTON[1]                                    # a stitched hem
+        t = 0.80 + (noise(x, y, 29) - 0.5) * 0.12 - (0.12 if f in ("east", "west", "south") else 0) - (0.08 if (x + y) % 9 == 0 else 0)
+        return pick(COTTON, t, x, y)
+
     def wrap(f, x, y, w, h):
+        if papi:
+            return shirt(f, x, y, w, h)
         if f == "up":
             return pick(SKIN, 0.66, x, y)
         if f == "down":
@@ -83,6 +98,12 @@ def paint(pal=PAL, LEAF=LEAF, GOLD=GOLD):
                 return LEAF[1]
             r = h - 1 - y
             tl = 2.2 * D
+            if papi:                                            # denim: square-cut, orange stitching, no leaf veins
+                if y < D:
+                    return LEAF[1] if (x // 2) % 2 else LEAF[0]
+                if y in (D, D + 1) or r == 1 or x in (1, w - 2):
+                    return GOLD[1] if (x + y) % 2 == 0 else pick(LEAF, 0.6, x, y)
+                return pick(LEAF, 0.5 + (noise(x, y, 43) - 0.5) * 0.3 + (0.1 if (x + y) % 3 == 0 else 0), x, y)
             if r < tl:
                 half = (w / 2.0) * (min(1.0, (r + 1) / tl) ** 0.8)
                 if abs(x + 0.5 - w / 2.0) > half or (r < D // 2 and noise(x, y, 41) > 0.5):
@@ -153,14 +174,18 @@ VARIANTS = {
         hair=[rgb(58, 22, 14), rgb(92, 36, 22), rgb(130, 56, 32), rgb(166, 80, 44), rgb(200, 112, 64), rgb(228, 152, 100)],
         fea=[rgb(40, 22, 16), rgb(70, 38, 24), rgb(110, 60, 34), rgb(152, 88, 50), rgb(200, 140, 96), rgb(236, 214, 186), rgb(250, 244, 234)]),
         ramp([rgb(40, 62, 26), rgb(62, 96, 36), rgb(96, 136, 52), rgb(136, 172, 74), rgb(178, 204, 108)])),
-    # rare sky-blue one, a nod to Papi from Monster Musume: light blue hair, blue wings, golden eyes, white outfit
+    # rare sky-blue one, a nod to Papi from Monster Musume: messy light blue hair (the ahoge every sparrow has), light
+    # blue wings, orange-amber eyes, yellow scaly bird legs, a white sleeveless shirt and denim shorts
     "papi": (variant_pal(
-        hair=[rgb(40, 70, 120), rgb(60, 105, 165), rgb(88, 145, 205), rgb(120, 180, 230), rgb(160, 212, 245), rgb(200, 236, 255)],
-        fea=[rgb(24, 36, 78), rgb(36, 58, 120), rgb(52, 90, 170), rgb(78, 130, 210), rgb(120, 175, 235), rgb(188, 222, 250), rgb(240, 248, 255)],
-        eye=[rgb(130, 90, 20), rgb(190, 140, 30), rgb(232, 190, 50), rgb(248, 220, 100), rgb(255, 240, 170)],
-        pupil=rgb(60, 40, 14)),
-        ramp([rgb(120, 124, 140), rgb(170, 176, 192), rgb(208, 214, 226), rgb(232, 236, 244), rgb(250, 252, 255)])),
+        hair=[rgb(56, 104, 146), rgb(86, 146, 192), rgb(122, 186, 228), rgb(158, 212, 244), rgb(194, 234, 252), rgb(226, 248, 255)],
+        fea=[rgb(38, 76, 124), rgb(58, 112, 166), rgb(88, 152, 206), rgb(124, 188, 234), rgb(164, 214, 248), rgb(208, 236, 255), rgb(244, 252, 255)],
+        eye=[rgb(120, 50, 14), rgb(176, 84, 22), rgb(220, 124, 36), rgb(244, 164, 64), rgb(255, 206, 120)],
+        pupil=rgb(64, 26, 10)),
+        ramp([rgb(28, 44, 78), rgb(42, 66, 112), rgb(62, 94, 148), rgb(88, 122, 178), rgb(122, 154, 204)])),
 }
+
+
+VARIANTS["papi"][0].papi = True                 # her shirt and shorts (see paint)
 
 
 def write_variants():

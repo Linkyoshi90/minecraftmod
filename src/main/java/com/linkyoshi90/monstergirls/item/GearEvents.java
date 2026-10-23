@@ -54,6 +54,19 @@ public final class GearEvents {
         stack.consume(1, p);
     }
 
+    /** The friendship charm (creative): any girl is devoted to you at once. */
+    @SubscribeEvent
+    public static void onCharm(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract event) {
+        if (event.getHand() != net.minecraft.world.InteractionHand.MAIN_HAND || !event.getItemStack().is(ModItems.FRIENDSHIP_CHARM.get())
+                || !(event.getTarget() instanceof com.linkyoshi90.monstergirls.entity.Bonded girl)) return;
+        event.setCanceled(true);
+        event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
+        if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel level)) return;
+        girl.setAffection(event.getEntity().getUUID(), com.linkyoshi90.monstergirls.entity.Bonded.FULL_AFFECTION);
+        var t = event.getTarget();
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.HEART, t.getX(), t.getY() + t.getBbHeight(), t.getZ(), 10, 0.4, 0.3, 0.4, 0.0);
+    }
+
     public static boolean befriended(net.minecraft.world.entity.LivingEntity target, Player p) {
         return target instanceof com.linkyoshi90.monstergirls.entity.Bonded b && b.getAffection(p) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION
                 || p.getUUID().equals(com.linkyoshi90.monstergirls.entity.girl.Kinship.friendOf(target));

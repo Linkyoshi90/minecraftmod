@@ -158,6 +158,7 @@ def declare(extra_parts=(), ears=None, hair=None, build=None, outfit=None):
         H.part(*args)
     for args in extra_parts:
         H.part(*args)
+    H.part("belly_skin", *H.PARTS["midriff"]["size"])         # the expecting belly: its own smooth skin, no abs or navel stretched over it
     H.pack()
 
 
@@ -218,7 +219,7 @@ def _old_torso(r, s, W, dy, z, parent):
     body += [bust, mirror_cube(bust)]
     r.add("body", parent, [0, W, z], body)
     # the belly: a copy of the midriff pivoting at its back face, hidden in game until she is expecting
-    r.add("belly", "body", [0, 13.25 + dy + 1.375, 1.25 + z], [cube("midriff", [-1.75, 13.25 + dy, -1.25 + z])])
+    r.add("belly", "body", [0, 13.25 + dy + 1.375, 1.25 + z], [cube("belly_skin", [-1.75, 13.25 + dy, -1.25 + z])])
     if s.get("skirt"):
         sk = []
         for i, (p, x, rz) in enumerate((("cloth_m", -3.0, 5), ("cloth_l", -1.5, -3), ("cloth_s", -0.2, 2), ("cloth_l", 1.0, -2), ("cloth_m", 2.0, 6))):
@@ -674,9 +675,9 @@ def paint_upper(pt, pal, top="wrap", top_pattern=None, outfit=None, build=None):
     H.paint_hair(pt, pal)
     HS.paint(pt, pal)
     H.paint_body_skin(pt, pal)
+    pt("belly_skin", "all", H.skin_fn(pal, 0.66))
     if pal.facemark:
         pt("head", ("north",), facemark_fn(pal))
-    # the belly copy wears the midriff's paint (same part)
     if top == "wrap":
         pt("chest", "all", cloth_fn(pal, 0.55, 1, top_pattern))
         pt("bust", "all", cloth_fn(pal, 0.6, 0, top_pattern))

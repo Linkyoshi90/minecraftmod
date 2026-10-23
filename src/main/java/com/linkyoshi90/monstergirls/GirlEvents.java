@@ -73,6 +73,27 @@ public final class GirlEvents {
         }
     }
 
+    /** A naga keeps strangers from the treasure she guards (opening or breaking an unopened structure chest near her). */
+    @SubscribeEvent
+    public static void onOpenChest(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock event) {
+        if (event.getLevel().isClientSide()) return;
+        com.linkyoshi90.monstergirls.entity.girl.Lamia naga = com.linkyoshi90.monstergirls.entity.girl.Lamia.guardOf(event.getLevel(), event.getPos(), event.getEntity());
+        if (naga != null) {
+            naga.warnOff(event.getEntity());
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onBreakChest(net.neoforged.neoforge.event.level.BlockEvent.BreakEvent event) {
+        if (!(event.getLevel() instanceof net.minecraft.world.level.Level level) || level.isClientSide()) return;
+        com.linkyoshi90.monstergirls.entity.girl.Lamia naga = com.linkyoshi90.monstergirls.entity.girl.Lamia.guardOf(level, event.getPos(), event.getPlayer());
+        if (naga != null) {
+            naga.warnOff(event.getPlayer());
+            event.setCanceled(true);
+        }
+    }
+
     /** Creepers keep away from nekomata, as they do from vanilla cats. */
     @SubscribeEvent
     public static void onJoin(EntityJoinLevelEvent event) {

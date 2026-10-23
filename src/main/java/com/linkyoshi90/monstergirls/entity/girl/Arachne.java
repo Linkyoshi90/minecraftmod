@@ -217,7 +217,7 @@ public class Arachne extends AbstractMonsterGirl {
         for (BlockPos p : BlockPos.betweenClosed(o.offset(-3, -1, -3), o.offset(3, 1, 3))) {
             if (!canHoldBlock(level, p)) continue;
             level.setBlock(p, ModBlocks.GIRL_EGG.get().defaultBlockState().setValue(GirlEggBlock.KIND, GirlEggBlock.Kind.SILK), 3);
-            if (level.getBlockEntity(p) instanceof GirlEggBlockEntity be) be.setup(this.species.id(), this.litterSize(), father);
+            if (level.getBlockEntity(p) instanceof GirlEggBlockEntity be) be.setup(this.species.id(), this.litterSize(), father).withPaint(this.getPaint());
             for (int i = 0; i < 4; i++) {                                   // most of the brood balloons away on silk
                 level.sendParticles(ParticleTypes.WHITE_ASH, p.getX() + 0.5, p.getY() + 1, p.getZ() + 0.5, 6, 0.3, 1.5, 0.3, 0.02);
             }

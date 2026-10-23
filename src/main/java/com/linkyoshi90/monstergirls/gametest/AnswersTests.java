@@ -401,4 +401,24 @@ public class AnswersTests {
             helper.succeed();
         });
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 400, batch = "harpiesFarmTooAndTheCharm")
+    public static void harpiesFarmTooAndTheCharm(GameTestHelper helper) {
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        BlockPos soil = new BlockPos(9, 1, 7), crop = soil.above();
+        helper.setBlock(soil, Blocks.FARMLAND);
+        helper.setBlock(crop, ((net.minecraft.world.level.block.CropBlock) Blocks.CARROTS).getStateForAge(7));
+        var owl = helper.spawn(com.linkyoshi90.monstergirls.registry.ModEntities.OWL_HARPY.get(), new BlockPos(6, 2, 6));
+        owl.setAffection(player.getUUID(), Orders.AFFECTION);                     // fond is enough, the same as for patrolling
+        owl.getOrders().set(Orders.Command.PATROL, player, owl.blockPosition());
+        AbstractMonsterGirl girl = spawn(helper, GirlSpecies.HORSE_CENTAUR, new BlockPos(12, 2, 12));
+        player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.FRIENDSHIP_CHARM.get()));
+        player.interactOn(girl, InteractionHand.MAIN_HAND);
+        check(girl.getAffection(player) == AbstractMonsterGirl.FULL_AFFECTION, "the charm fills her friendship");
+        helper.succeedWhen(() -> {
+            BlockState s = helper.getBlockState(crop);
+            check(s.is(Blocks.CARROTS) && ((net.minecraft.world.level.block.CropBlock) Blocks.CARROTS).getAge(s) == 0, "a patrolling harpy harvests and replants too");
+            HarpyTestUtil.remove(player);
+        });
+    }
 }

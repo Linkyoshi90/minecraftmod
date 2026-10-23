@@ -123,6 +123,6 @@ public class GirlEggBlock extends Block implements EntityBlock, SimpleWaterlogge
         level.playSound(null, pos, SoundEvents.TURTLE_EGG_HATCH, SoundSource.BLOCKS, 0.7F, 1.1F);
         if (id == null) return;
         EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(MonsterGirlsMod.id(id));
-        for (int i = 0; i < count; i++) AbstractMonsterGirl.youngOf(level, type, pos, father);
+        for (int i = 0; i < count; i++) AbstractMonsterGirl.youngOf(level, type, pos, father, be.getPaint());
     }
 }

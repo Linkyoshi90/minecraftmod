@@ -180,7 +180,7 @@ def serpent_anims(an, flies):
                                         H.sym("arm", H.track((0, (0, 0, 0)), (0.5, (-170, 0, 10)), (1.2, (-170, 0, 10)), (1.5, (0, 0, 0))))))
     if flies:
         Tk, hold, merge = H.track, H.hold, H.merge
-        flat = [(80, 0, 0)] + [(0, 0, 0)] * 7
+        flat = [(80, 0, 0), (-80, 0, 0)] + [(0, 0, 0)] * 6      # seg_1 swings back; seg_2 turns the rest of the chain level again
         an.add("fly", 3.0, True, merge(G.upper_idle(), {"root": {"position": hold(0, 6, 0)}, "body": {"rotation": hold(-10, 0, 0)}},
                                        G.wave(segs, 3.0, [0, 12, 16, 18, 20, 22, 24, 26], axis=1, phase=0.8, base=flat),
                                        H.sym("arm", hold(-20, 0, 30))))

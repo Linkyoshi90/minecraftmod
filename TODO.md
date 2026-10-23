@@ -29,7 +29,19 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Alligator snapping turtle** lizardfolk: swamps, tongue lure (fish at her feet, at most 3 at a time), shell retreat.
   - **Banshee** undead: birch forests and meadows at night. Keens when a player nearby drops to 3 hearts, and every hostile mob near that player glows.
 - [ ] Playtest them tonight: do they spawn often enough? Is the turtle's fish rate (about 1 a minute) too generous? Is the banshee's ghast-scream keen too loud? Does the ocelot get stuck climbing?
-- [ ] Next batch: Kappa (lizardfolk turtle), Naga (lamia), Dullahan (undead, on a skeleton horse), then the separate harpy and anuran systems: Tengu, Thunderbird and Vodyanoy (the first monster boy, which needs male support in the anuran rig).
+- [x] Second batch (2026-10-23), tested in `HarmontideTests`:
+  - **Kappa** (lizardfolk): rivers and swamps. Shell and water dish. Strong when wet, weak and slow after two minutes dry. Bow to her (crouch, facing her) and she bows back and spills her dish (weak, and she stops fighting you), +1 friendship once every 5 minutes. Melon slices and kelp stand in for cucumbers.
+  - **Naga** (lamia): jungles. King cobra hood and a gold crown. Nobody she is not fond of opens or breaks an unopened structure chest within 10 blocks of her. Player chests are never affected.
+  - **Dullahan** (undead): plains and meadows at night. She carries her head in the crook of her arm, with a blue spirit flame at the neck. Half of them ride a skeleton horse. She backs away from anyone holding gold.
+- [ ] Next: the harpy and anuran systems. Tengu, Thunderbird, then Vodyanoy (the first monster boy, which needs male support in the anuran rig).
+- [ ] Flaky test: `strandedTadpoleFindsThePond` failed once and then passed.
+- [x] **Sleep schedules** (`SleepGoal`): day girls lie down and sleep at night, nocturnal ones by day. The nocturnal ones are the undead, foxes, moths and mosquitoes, the night elf, the succubus, the jiang shi, the jack o'lantern, the tapir and the ocelot. A hit or a hand wakes her for 30 s. Bed-sharing comes first, a follow order keeps her up, and nekomata (their own naps), merfolk, harpies and anurans keep their own rest.
+- [ ] Third wave of creatures: see HARMONTIDE_CONCEPTS.md "Third wave", with reference art in `D:\wamp64\www\images\creatures\`.
+- [x] **Harmontide paints:** a girl who spawns (naturally or from a spawn egg) is painted 1 time in 64, in blue, red, green, yellow, purple, black or inverted. Daughters inherit it, whether born or hatched from her clutch, and it is saved. Textures come from `tools/gen_paints.py` (run it after the model scripts): her body takes the paint's colour and clothes shift with it, like the references. Girl families only for now; harpies and anurans have their own variants.
+- [x] **Expecting bellies** no longer stretch abs over the bump: the belly bone has its own smooth skin texture (`belly_skin`). All 17 girl families were regenerated.
+- [x] Decided: no Kachina and no Rainbow Serpent. Bears share a family with kobolds and the other canids ("canid girls").
+- Not doing: the full-moon "phantom pregnancy" of every befriended girl. It is still the whole household getting pregnant by the player in one night. Normal single bed-sharing stays as it is.
+- Not doing: the full-moon event where every befriended girl queues at the bed to mate (a group sex scene; the mod is low ecchi). A non-sexual full moon is fine: a moonlit vigil, or moods.
 - [ ] Decide on the sensitive ones: Kachina (recommendation: drop it), Thunderbird, Uktena, Wayob.
 - [ ] Decide which new families are worth their own class: Giants, Celestials, Horsemen, Fury, Crustaceans.
 
@@ -157,7 +169,12 @@ The answers given on 2026-10-22, as a work list. Ticked = in game.
 - [x] **Farmhands:** a girl patrolling (stick) for a player she is fond of at high friendship harvests ripe crops in her patrol area, replants them from the harvest, and stores the rest in a chest or barrel there (or drops it). Flora girls also nudge growing crops along. Obeys mobGriefing. Merfolk don't farm.
 - [x] **Slimes in any RGB colour:** a dye mixes its colour into hers, a water bottle washes it out, and merging mixes the two colours. Mixing averages the hues round the colour wheel and keeps brightness and most of the saturation (red + blue = magenta, red + green = yellow), so repeated merges never turn white. Dyed slimes use `<species>_tint.png` (light greys) with the colour applied by the renderer.
 - [ ] Dev client: how the tint looks on each slime (the core and eyes take the colour too), the cowbell, and how harpies settle on patrol.
-- [ ] Harpies and anurans don't farm yet (only the girl families).
+- [x] Farming, round 2: harpies and anurans farm too, and fond (10) is enough, the same as for patrolling. The patrol message says "tends the fields" when farmland is near. Only works while her player is in the world.
+- [x] Slime merging tells you why it didn't happen (both slimes need high friendship, 25).
+- [x] The Harmontide creative tab holds everything (spawn eggs also stay in vanilla's Spawn Eggs tab).
+- [x] Friendship Charm (creative only, no recipe): use it on any girl to fill her friendship to the full.
+- [x] Papi (the rare sparrow variant) looks like her anime self: sky-blue hair and wings, orange-amber eyes, a white sleeveless shirt and denim shorts (plus the ahoge and yellow bird legs she already had).
+- [x] Easter bunny egg-hiding: when no spot fits she retries after 10 s, not after 2 to 4 minutes (also fixed a flaky test).
 
 ## 1. More species ideas
 

@@ -79,6 +79,17 @@ SPECIES = {
                   "suwannee": dict(FUR="#7a7466", HAIR="#4a4a3a", extra=dict(shell="#5a5448", shell_band="#3a362e")),
                   "leucistic": dict(FUR="#e0d4b8", HAIR="#f0e8d0", LIGHT="#fff8e8", MARK="#c8b898", EYE="#c84a4a",
                                     extra=dict(shell="#d8c8a0", shell_band="#b8a880"))}),
+    "kappa_lizardfolk": dict(
+        build="petite", outfit=dict(top=["halter", "vest"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#3a5a7a", leather="#4a6a3a")),
+        hair="bob", bangs="blunt", ears=None, legs="scales", foot="claw", tail=[(1.5, 1.5, 2), (1, 1, 1.5)], tail_rest=[(-50, 0, 0), (10, 0, 0)],
+        tail_look="scale", shell=True, dish=True,
+        pal=dict(SKIN=skin("peach"), HAIR="#3a7a3a", FUR="#5aa84a", LIGHT="#c8e8a0", MARK="#2a5a2a", EYE="#e8b030", CLOTH="#e8e0c8", TRIM="#3a5a7a",
+                 pupil=(1.4, 1.4), extra=dict(shell="#4a7a2a", shell_band="#2a4a1e", dish="#e8f4f8")),
+        variants={"pond": dict(FUR="#3ab0a0", HAIR="#2a7a7a", MARK="#1e5a5a", extra=dict(shell="#2a7a6a", shell_band="#1e4a44", dish="#e8f4f8")),
+                  "red": dict(FUR="#c84a3a", HAIR="#8a2a1e", MARK="#5a1a10", extra=dict(shell="#8a3a1a", shell_band="#4a1e10", dish="#f0e8e0")),
+                  "mountain": dict(FUR="#8a6a3a", HAIR="#5a4024", MARK="#3a2a14", extra=dict(shell="#6a4a2a", shell_band="#3a2a18", dish="#e8f0f0")),
+                  "white": dict(FUR="#e8ece4", HAIR="#d8e0d8", MARK="#a8b0a8", LIGHT="#ffffff", EYE="#c84a4a",
+                                extra=dict(shell="#c8ccc0", shell_band="#8a8e84", dish="#f4fcff"))}),
 }
 
 
@@ -90,6 +101,8 @@ def declare_hook(sp, d):
         out += [("carapace", 7, 8, 2.5), ("carapace_top", 5.5, 6, 1.25), ("plastron", 5, 5, .5)]
     if d.get("teeth"):
         out += [("snout", 3.5, 1, 1.5)]
+    if d.get("dish"):
+        out += [("dish", 4, .5, 4), ("dish_water", 3, .25, 3)]
     return out
 
 
@@ -104,6 +117,9 @@ def paint_hook(pt, pal, d):
     for p in ("carapace", "carapace_top"):
         pt(p, "all", scutes)
     pt("plastron", "all", lambda f, x, y, w, h: pick(G.shades("#e8d8a0"), 0.5 + 0.2 * (y % 3 == 0), x, y))
+    dish = G.shades(pal.extra.get("dish", "#e8f4f8"))
+    pt("dish", "all", lambda f, x, y, w, h: pick(dish, 0.55 + 0.25 * (x in (0, w - 1) or y in (0, h - 1)), x, y))
+    pt("dish_water", "all", lambda f, x, y, w, h: pick(G.shades("#5ab0e8"), 0.6 + 0.2 * ((x + y) % 3 == 0), x, y))
     pt("snout", "all", lambda f, x, y, w, h: pal.WHITE if f == "north" and y == h - 1 and x % 2 == 0 else H.skin_fn(pal, 0.66)(f, x, y, w, h))
 
 
@@ -121,6 +137,8 @@ def build_hook(r, g, d):
         r.add("shell", "body", [0, 16, 1.5 + z], [cube("carapace", [-3.5, 12.5, cd / 2 - 0.2 + z]), cube("carapace_top", [-2.75, 13.5, cd / 2 + 2.2 + z])])
     if d.get("teeth"):
         r.put("head", cube("snout", [-1.75, g.hy + 0.5, -5.2 + z]))
+    if d.get("dish"):                                   # the kappa's dish (sara), set into her hair, with water in it
+        r.add("dish", "head", [0, g.hy + 8.6, z], [cube("dish", [-2, g.hy + 8.6, -2 + z]), cube("dish_water", [-1.5, g.hy + 9.0, -1.5 + z])])
 
 
 def anim_extra(an, sp, d):

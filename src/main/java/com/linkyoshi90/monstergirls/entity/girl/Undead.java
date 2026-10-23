@@ -63,6 +63,9 @@ public class Undead extends AbstractMonsterGirl {
         boolean creeper = species == GirlSpecies.LIVING_DOLL_UNDEAD || species == GirlSpecies.YUKI_ONNA_UNDEAD;
         if (creeper) this.goalSelector.addGoal(1, new StalkGoal(this, 1.0, 1.6, true, t -> t instanceof Player));
         if (species == GirlSpecies.LIVING_DOLL_UNDEAD) this.goalSelector.addGoal(2, new ShelfGoal());
+        if (species == GirlSpecies.DULLAHAN_UNDEAD) {                       // the dullahan fears gold
+            this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Player.class, 8.0F, 1.0, 1.3, p -> p instanceof Player pl && fearsGold(pl)));
+        }
         if (species == GirlSpecies.VAMPIRE_UNDEAD) this.goalSelector.addGoal(1, new StalkGoal(this, 0.8, 2.5, false, t -> !this.level().isDay()));
         if (species == GirlSpecies.FRANKENSTEIN_UNDEAD) {
             this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Player.class, 10.0F, 1.0, 1.4,
@@ -89,6 +92,7 @@ public class Undead extends AbstractMonsterGirl {
             case YUKI_ONNA_UNDEAD -> girlAttributes(24, 0.28, 3);
             case PHANTOM_UNDEAD -> girlAttributes(20, 0.32, 4);
             case VAMPIRE_UNDEAD -> girlAttributes(28, 0.3, 3);
+            case DULLAHAN_UNDEAD -> girlAttributes(30, 0.28, 5).add(net.minecraft.world.entity.ai.attributes.Attributes.ARMOR, 4);
             case BANSHEE_UNDEAD -> girlAttributes(22, 0.28, 2);
             case FRANKENSTEIN_UNDEAD -> girlAttributes(50, 0.25, 10).add(net.minecraft.world.entity.ai.attributes.Attributes.KNOCKBACK_RESISTANCE, 0.8);
             default -> girlAttributes(24, 0.25, 4);
@@ -253,6 +257,7 @@ public class Undead extends AbstractMonsterGirl {
             this.guide(server);
         }
         if (this.species == GirlSpecies.BANSHEE_UNDEAD && this.tickCount % 20 == 0) this.keen(server);
+        if (this.wantsSteed) this.mountSteed(server);
         if (this.tickCount % 40 != 0) return;
         boolean sun = server.isDay() && server.canSeeSky(this.blockPosition().above());
         if (sun && (this.species == GirlSpecies.VAMPIRE_UNDEAD || this.species == GirlSpecies.ZOMBIE_UNDEAD)) {
@@ -464,5 +469,38 @@ public class Undead extends AbstractMonsterGirl {
             if (this.onTop()) this.cooldown = 1200;                         // she has sat long enough for now
             this.shelf = null;
         }
+    }
+
+    // --- the dullahan ------------------------------------------------------------------------------------------------
+
+    /** Anything gold in either hand (everything a piglin loves). */
+    public static boolean fearsGold(Player p) {
+        return p.getMainHandItem().is(net.minecraft.tags.ItemTags.PIGLIN_LOVED) || p.getOffhandItem().is(net.minecraft.tags.ItemTags.PIGLIN_LOVED);
+    }
+
+    private boolean wantsSteed;
+
+    /** Half of the dullahans that come out at night ride a skeleton horse (mounted on her first tick, once she is in the world). */
+    @Override
+    public net.minecraft.world.entity.SpawnGroupData finalizeSpawn(net.minecraft.world.level.ServerLevelAccessor level, net.minecraft.world.DifficultyInstance difficulty,
+                                                                   net.minecraft.world.entity.MobSpawnType type, @Nullable net.minecraft.world.entity.SpawnGroupData group) {
+        var data = super.finalizeSpawn(level, difficulty, type, group);
+        if (this.species == GirlSpecies.DULLAHAN_UNDEAD && type == net.minecraft.world.entity.MobSpawnType.NATURAL && this.random.nextBoolean()) this.wantsSteed = true;
+        return data;
+    }
+
+    public void setWantsSteed(boolean wants) {
+        this.wantsSteed = wants;
+    }
+
+    private void mountSteed(ServerLevel level) {
+        this.wantsSteed = false;
+        if (this.isPassenger()) return;
+        var horse = net.minecraft.world.entity.EntityType.SKELETON_HORSE.create(level);
+        if (horse == null) return;
+        horse.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+        horse.finalizeSpawn(level, level.getCurrentDifficultyAt(this.blockPosition()), net.minecraft.world.entity.MobSpawnType.JOCKEY, null);
+        level.addFreshEntity(horse);
+        this.startRiding(horse, true);
     }
 }

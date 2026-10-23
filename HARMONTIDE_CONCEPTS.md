@@ -112,3 +112,69 @@ The best ratio of new content to new code, because each reuses a family that alr
 4. Vodyanoy (Anuran): the first monster boy
 5. Banshee and Dullahan (Undead)
 6. Tengu (Harpy crow)
+
+
+---
+
+## Third wave (2026-10-23)
+
+Reference art: `D:\wamp64\www\images\creatures\<name>_<f|m>_<paint>.webp`. "Ref" gives the name there, or "–" when there is none yet. Rows marked *exists* are already in the game, so their refs only feed paints and touch-ups.
+
+| Creature | Ref | Home | Basis | Niche |
+|---|---|---|---|---|
+| **Crab girl** | `crab_man`, `crabby`, `spider_crab` | Crustaceans (new) | True crabs, Decapoda › Brachyura | Beaches. Walks sideways and pinches. A hermit variant swaps shells (shulker or nautilus). |
+| **Taniwha** | `taniwha` | Dragon (water serpent) | Māori guardian beings of rivers and the sea | Deep river pools and sea caves. A guardian of one place that protects people who respect it. *Living tradition: design with care.* |
+| **Moo** | `moo` | Dinosaurs (new) | A sauropod (Sauropoda) with spikes, Māori-influenced | Plains and forests. Huge, slow, gentle, a living landmark. *Māori influence: respectful design.* |
+| **Nightmarcher** | `nightmarcher` | Undead | The Hawaiian huakaʻi pō, processions of ancestral spirits | Marches a set path at night. Lying down or looking away lets them pass. *Sacred in a living tradition: no farming them, no jokes.* |
+| **Adaro** | `adaro` (m and f) | Merfolk | Solomon Islands sea spirits | Rides waterspouts and throws flying fish. One of the few with a male ref. |
+| **Genie** | `genie` | Spirits (new) | The jinn of Arabian folklore (the "genie" of the stories) | Deserts. Bound to a lamp item, grants three small boons a day. *The jinn are part of Islamic belief: keep it storybook.* |
+| **Bahamut** | `bahamut` | Dragon (or Merfolk) | The world-fish of Arabian cosmology (the dragon in later games) | The deep ocean. Rare and enormous. |
+| **Manticore** | `manticore` | Beasts (new, on the taur rig) | Persian man-eater: a lion's body and a scorpion's tail | Badlands. Shoots tail spines. |
+| **Camel** | `camel` | Centaur | Bactrian camel, *Camelus bactrianus* (Artiodactyla › Camelidae) | Cold desert and steppe. Kin of vanilla camels, a long-haul mount. |
+| **Dromedary** | (`camel`) | Centaur | *Camelus dromedarius* | Hot desert. Kin of vanilla camels. |
+| **Girtablilu** | `girtablilu` | Bug (next to the scorpion) | Mesopotamian scorpion-man gate guardians | Desert ruins. Guards a doorway. |
+| **Lamassu** | `lamassu` | Centaur (winged bull) | Assyrian protective deity | Guards village gates and deters raiders. |
+| **Oryx** | `oryx` | Centaur | *Oryx gazella* / *O. leucoryx* (Bovidae) | Desert, in herds, with long straight horns. |
+| **Dugong** | `dugong` | Merfolk | *Dugong dugon* (Sirenia › Dugongidae) | Warm shallow seagrass. A gentle grazer that eats seagrass. |
+| **Golem** | `golem` | Constructs (new) | Golem of Jewish folklore; kin of the vanilla iron golem | Villages. A defender who befriends iron golems. |
+| **Dolphin** | `dolphin` | Merfolk, *exists* | `dolphin_mermaid` | Refs feed paints. |
+| **Ziz** | `ziz` | Harpy | The giant bird of Jewish legend | Mountain peaks, huge. |
+| **Lilith** | `lilith` | Devil | A night demoness of Mesopotamian and Jewish lore | Nocturnal. Keep her low ecchi (no succubus overlap). |
+| **Anubis** | `anubis` | Canids (new) | Egyptian god of the dead, a jackal | Desert pyramids. Guards tombs, nocturnal. |
+| **Wadjet** | `wadjet` | Lamia (cobra) | Egyptian cobra goddess, protector | Desert rivers. Protects her player. |
+| **Spinosaur** | `spinosaur` | Dinosaurs | *Spinosaurus aegyptiacus* (Theropoda › Spinosauridae) | Rivers. A fisher, half aquatic. |
+| **Amarok** | `amarok` | Canids | The giant lone wolf of Inuit stories | Snowy plains. Hunts alone at night. |
+| **Polar bear** | `polar_bear` | Bears (new) | *Ursus maritimus* (Carnivora › Ursidae) | Snow and ice. Kin of vanilla polar bears, fishes. |
+| **Grizzly bear** | – | Bears | *Ursus arctos horribilis* | Taiga. Salmon and berries. |
+| **Black bear** | – | Bears | *Ursus americanus* | Forests. Climbs, raids berry bushes. |
+| **Panda** | – | Bears | *Ailuropoda melanoleuca* | Bamboo jungle. Kin of vanilla pandas, eats bamboo. |
+| **Keelut** | `keelut` | Canids | The Inuit hairless dog spirit | Snowy plains at night. Leaves no tracks. |
+| **Penguin** | `penguin` | Harpy (flightless) | Spheniscidae | Snowy beaches. A fast swimmer, walks slowly. |
+| **Koala** | – (`drop_bear` for the joke variant) | Marsupials (new) | *Phascolarctos cinereus* (Diprotodontia) | Climbs trees and sleeps 20 hours a day. The "drop bear" is a rare joke variant. |
+| **Min Min Lights** | `min_min_lights` | Jellies (new) | Outback mystery lights, as a floating glowing jellyfish | Badlands and savanna at night. Floats and glows, leads you astray. |
+| **Jellyfish** | – | Jellies | Scyphozoa (Cnidaria) | Warm ocean. Stings, glows. |
+| **Sea turtle** | `sea_turtle` | Lizardfolk, *exists* | `turtle_lizardfolk` | Refs feed paints. |
+| **Kangaroo** | `kangaroo` | Marsupials | *Macropus* (Macropodidae) | Savanna in mobs. Kick-boxes, carries her joey in the pouch. |
+| **Bunyip** | `bunyip` | Merfolk (or Lizardfolk) | The water monster of Aboriginal stories | Billabongs and swamps at night. Its booming call warns you off. *Living tradition.* |
+| **Tiddalik** | `tiddalik` | Anuran | The frog of the Dreaming story who drank all the water | Drinks a pond dry. Made to laugh, she lets the water flow back. *Living tradition.* |
+| **Wasp** | – | Bug | Vespidae | Hedges and meadows. Stings, builds paper nests. |
+| **Hornet** | – | Bug | *Vespa* | Forests. Bigger, hunts bees. Enemy of the bee girls. |
+| **Curupira** | `curupira` | Elf (or Flora) | Brazilian forest protector with red hair and backward feet | Jungle. Protects animals from hunters; her backward footprints confuse trackers. |
+| **Capybara** | `capybara` | Rodents (new, with Ratatoskr) | *Hydrochoerus hydrochaeris* (Rodentia › Caviidae) | Rivers and swamps. Every animal likes sitting next to her. |
+| **Toucan** | `toucan` | Harpy | Ramphastidae | Jungle canopy. A fruit eater with a big beak. |
+| **Armadillo** | `armadillo` | Armoured (new; kin of the vanilla armadillo) | Cingulata | Savanna and badlands. Rolls up when scared and drops scutes. |
+| **Fishman** | `fishman` (m and f) | Merfolk (a boy) | Fish folk of many myths | Ocean ruins. A good first merfolk boy. |
+| **Argentinosaurus** | `argentinosaurus` | Dinosaurs | *Argentinosaurus huinculensis* (Titanosauria) | Plains. The largest of them all, very rare. |
+| **Amaru** | `amaru` | Dragon | The Andean (Inca) serpent-dragon of water and the underworld | Mountains and rivers. Brings rain. |
+| **Pishtaco** | `pishtaco` | Undead (or Devil) | Andean bogeyman folklore | Mountains at night. Tone her down to a sinister but non-gory stalker. |
+
+**Decided (2026-10-24):** the Kachina and the Rainbow Serpent stay out. Bears join kobolds and the other canids in one family, the **canid girls** (Anubis, Amarok, Keelut, kobolds, polar, grizzly and black bears, panda).
+
+**New families this wave would need:** Crustaceans, Dinosaurs, Spirits, Beasts (taur-rig chimeras), Constructs, Canid girls (with the bears), Marsupials, Jellies, Rodents, Armoured. The best value first is the ones with vanilla kin, since Kinship works for them at once: Bears (polar bear, panda), Camels, the Golem (iron golem), Armoured (armadillo).
+
+## Harmontide paints (proposal)
+
+Nearly every creature in the references comes in the same seven **colour paints**: blue, red, green, yellow, purple, black and inverted. Plush, realistic and polygon are art styles, not recolours, and don't carry over to Minecraft textures. Proposal:
+- A wild girl has a rare chance (1 in 64?) to spawn **painted** in one of the seven, like a shiny. The paint is saved on her and her daughters may inherit it.
+- The paints are generated offline: every species' default texture recoloured (hue-shifted, keeping the shading), plus an inverted copy. That is about 7 × 104 textures, roughly 25 MB.
+- Open questions: how rare? Inherited or not? A way to repaint (a rare item)?

@@ -123,6 +123,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.eggTime = EGG_INTERVAL + this.random.nextInt(EGG_INTERVAL);
         this.goalSelector.addGoal(-1, new SitWhenOrderedGoal<>(this));
         this.goalSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StayNearGoal<>(this));
+        this.goalSelector.addGoal(3, new com.linkyoshi90.monstergirls.entity.girl.FarmhandGoal<>(this));
         this.targetSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StanceTargetGoal<>(this));
         this.goalSelector.addGoal(2, new BuildNestGoal(this));
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));

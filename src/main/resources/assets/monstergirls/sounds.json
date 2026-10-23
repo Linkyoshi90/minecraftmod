@@ -199,50 +199,7 @@
   "entity.ostrich_harpy.ambient": {
     "subtitle": "subtitles.monstergirls.entity.ostrich_harpy.ambient",
     "sounds": [
-      {
-        "name": "minecraft:mob/sniffer/idle1",
-        "pitch": 0.85
-      },
-      {
-        "name": "minecraft:mob/sniffer/idle2",
-        "pitch": 0.85
-      },
-      {
-        "name": "minecraft:mob/sniffer/idle3",
-        "pitch": 0.85
-      },
-      {
-        "name": "minecraft:mob/sniffer/idle4",
-        "pitch": 0.85
-      },
-      {
-        "name": "minecraft:mob/sniffer/idle5",
-        "pitch": 0.85
-      },
-      {
-        "name": "minecraft:mob/sniffer/idle6",
-        "pitch": 0.85
-      },
-      {
-        "name": "minecraft:mob/sniffer/idle7",
-        "pitch": 0.85
-      },
-      {
-        "name": "minecraft:mob/sniffer/idle8",
-        "pitch": 0.85
-      },
-      {
-        "name": "minecraft:mob/sniffer/idle9",
-        "pitch": 0.85
-      },
-      {
-        "name": "minecraft:mob/sniffer/idle10",
-        "pitch": 0.85
-      },
-      {
-        "name": "minecraft:mob/sniffer/idle11",
-        "pitch": 0.85
-      }
+      "monstergirls:ostrich_harpy/ambient"
     ]
   },
   "entity.ostrich_harpy.hiss": {

@@ -251,7 +251,7 @@ public class Mollusk extends AbstractMonsterGirl {
             if (!ok) continue;
             level.setBlock(p, ModBlocks.GIRL_EGG.get().defaultBlockState().setValue(GirlEggBlock.KIND, water ? GirlEggBlock.Kind.ROE : GirlEggBlock.Kind.LEATHERY)
                     .setValue(GirlEggBlock.WATERLOGGED, water), 3);
-            if (level.getBlockEntity(p) instanceof GirlEggBlockEntity be) be.setup(this.species.id(), this.litterSize(), father);
+            if (level.getBlockEntity(p) instanceof GirlEggBlockEntity be) be.setup(this.species.id(), this.litterSize(), father).withPaint(this.getPaint());
             return true;
         }
         return water ? super.giveBirth(level, father) : false;

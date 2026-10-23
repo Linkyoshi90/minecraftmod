@@ -140,6 +140,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         this.goalSelector.addGoal(-1, new TadpoleGoal(this)); // above everything, FloatGoal included
         this.goalSelector.addGoal(-1, new SitWhenOrderedGoal<>(this));
         this.goalSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StayNearGoal<>(this));
+        this.goalSelector.addGoal(3, new com.linkyoshi90.monstergirls.entity.girl.FarmhandGoal<>(this));
         this.targetSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StanceTargetGoal<>(this));
         this.goalSelector.addGoal(2, new LaySpawnGoal(this));
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));

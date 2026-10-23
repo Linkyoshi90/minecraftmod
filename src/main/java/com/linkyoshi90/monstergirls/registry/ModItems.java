@@ -156,62 +156,35 @@ public final class ModItems {
     /** Brought by healer girls (or made from nectar and honey): heals a befriended girl or vanilla friend. */
     public static final DeferredItem<Item> HEALING_BALM = ITEMS.registerSimpleItem("healing_balm", new Item.Properties().stacksTo(16));
 
+    /** Creative only (no recipe): fills a girl's friendship with you to the full, for testing. */
+    public static final DeferredItem<Item> FRIENDSHIP_CHARM = ITEMS.registerSimpleItem("friendship_charm", new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+
+    // --- the Harmontide creative tab: everything the mod adds -------------------------------------------------------
+
+    public static final DeferredRegister<net.minecraft.world.item.CreativeModeTab> TABS = DeferredRegister.create(net.minecraft.core.registries.Registries.CREATIVE_MODE_TAB, MonsterGirlsMod.MODID);
+    public static final net.neoforged.neoforge.registries.DeferredHolder<net.minecraft.world.item.CreativeModeTab, net.minecraft.world.item.CreativeModeTab> TAB =
+            TABS.register("harmontide", () -> net.minecraft.world.item.CreativeModeTab.builder()
+                    .title(net.minecraft.network.chat.Component.translatable("itemGroup.monstergirls"))
+                    .icon(() -> HarpyEggItem.of(ModBlocks.HARPY_EGG.get(), HarpyEggBlock.Species.values()[0]))
+                    .displayItems((params, out) -> {
+                        for (var e : ITEMS.getEntries()) {                     // items and blocks first, spawn eggs last
+                            Item item = e.get();
+                            if (item instanceof DeferredSpawnEggItem) continue;
+                            if (item == HARPY_EGG.get()) {
+                                for (HarpyEggBlock.Species species : HarpyEggBlock.Species.values()) out.accept(HarpyEggItem.of(ModBlocks.HARPY_EGG.get(), species));
+                            } else {
+                                out.accept(item);
+                            }
+                        }
+                        for (var e : ITEMS.getEntries()) if (e.get() instanceof DeferredSpawnEggItem) out.accept(e.get());
+                    }).build());
+
     private ModItems() {}
 
+    /** Spawn eggs also go in vanilla's Spawn Eggs tab, as players expect; everything else lives in the Harmontide tab. */
     public static void addToCreativeTabs(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.FOOD_AND_DRINKS) {
-            event.accept(RIFLEBIRD_EGG);
-            event.accept(SPARROW_EGG);
-            for (var egg : java.util.List.of(GULL_EGG, CROW_EGG, OWL_EGG, ALBATROSS_EGG, OSTRICH_EGG, EMBER_EGG)) event.accept(egg);
-            event.accept(CHEESE);
-            event.accept(RICE_CAKE);
-            MOCHI.forEach(event::accept);
-        }
-        if (event.getTabKey() == CreativeModeTabs.COMBAT) {
-            for (var gear : java.util.List.of(SNAKESKIN_CLOAK, SILK_TROUSERS, SILK_SHOES, FLIPPERS, WINGED_CAP)) event.accept(gear);
-        }
-        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-            event.accept(NECTAR_BOTTLE);
-            event.accept(ALRAUNE_BLOOM);
-            event.accept(HEALING_BALM);
-            event.accept(NECTAR_BUCKET);
-            event.accept(MERFOLK_BUCKET);
-        }
-        if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
-            for (HarpyEggBlock.Species species : HarpyEggBlock.Species.values()) event.accept(HarpyEggItem.of(ModBlocks.HARPY_EGG.get(), species));
-        }
-        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-            event.accept(PHOENIX_ASHES);
-            event.accept(SHED_SKIN);
-            event.accept(EXOSKELETON);
-            event.accept(SPIDER_SILK);
-            event.accept(MERFOLK_SCALE);
-            event.accept(SILK_COCOON);
-        }
-        if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) event.accept(RIFLEBIRD_NEST);
-        if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) event.accept(PAINTED_EGG);
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
-            event.accept(SPARROW_HARPY_SPAWN_EGG);
-            event.accept(CROW_HARPY_SPAWN_EGG);
-            event.accept(OSTRICH_HARPY_SPAWN_EGG);
-            event.accept(RIFLEBIRD_HARPY_SPAWN_EGG);
-            event.accept(PHOENIX_HARPY_SPAWN_EGG);
-            event.accept(OWL_HARPY_SPAWN_EGG);
-            event.accept(SEAGULL_HARPY_SPAWN_EGG);
-            event.accept(ALBATROSS_HARPY_SPAWN_EGG);
-            event.accept(BULLYWUG_SPAWN_EGG);
-            event.accept(MUCUS_TOAD_SPAWN_EGG);
-            event.accept(BULLFROG_SPAWN_EGG);
-            event.accept(TREE_FROG_SPAWN_EGG);
-            event.accept(POISON_DART_FROG_SPAWN_EGG);
-            event.accept(GLASS_FROG_SPAWN_EGG);
-            event.accept(GOLIATH_FROG_SPAWN_EGG);
-            event.accept(DESERT_RAIN_FROG_SPAWN_EGG);
-            event.accept(FIRE_BELLIED_TOAD_SPAWN_EGG);
-            event.accept(CANE_TOAD_SPAWN_EGG);
-            event.accept(NATTERJACK_SPAWN_EGG);
-            event.accept(SURINAM_TOAD_SPAWN_EGG);
-            ModGirls.EGGS.values().forEach(event::accept);
+            for (var e : ITEMS.getEntries()) if (e.get() instanceof DeferredSpawnEggItem) event.accept(e.get());
         }
     }
 }

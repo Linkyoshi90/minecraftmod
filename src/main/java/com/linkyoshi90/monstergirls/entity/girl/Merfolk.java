@@ -260,7 +260,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
             if (!level.getFluidState(p).is(FluidTags.WATER) || !level.getFluidState(p).isSource() || !level.getBlockState(p).is(net.minecraft.world.level.block.Blocks.WATER)) continue;
             if (!level.getBlockState(p.below()).isFaceSturdy(level, p.below(), net.minecraft.core.Direction.UP)) continue;
             level.setBlock(p, ModBlocks.GIRL_EGG.get().defaultBlockState().setValue(GirlEggBlock.KIND, GirlEggBlock.Kind.ROE).setValue(GirlEggBlock.WATERLOGGED, true), 3);
-            if (level.getBlockEntity(p) instanceof GirlEggBlockEntity be) be.setup(this.species.id(), this.litterSize(), father);
+            if (level.getBlockEntity(p) instanceof GirlEggBlockEntity be) be.setup(this.species.id(), this.litterSize(), father).withPaint(this.getPaint());
             return true;
         }
         return false;                                                   // no water nearby: she keeps carrying

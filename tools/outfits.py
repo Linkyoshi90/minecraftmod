@@ -271,7 +271,7 @@ def torso(r, s, W, dy, z, parent):
         body.append(cube("scarf", [-2.125, 18.9 + dy, -1.75 + z]))
         body.append(hang("scarf_tail", 1.2, 19.5 + dy, -2.2 + z, -10, -12))
     r.add("body", parent, [0, W, z], body)
-    r.add("belly", "body", [0, 13.25 + dy + mh / 2, md / 2 + z], [cube("midriff", [-mw / 2, 13.25 + dy, -md / 2 + z])])
+    r.add("belly", "body", [0, 13.25 + dy + mh / 2, md / 2 + z], [cube("belly_skin", [-mw / 2, 13.25 + dy, -md / 2 + z])])
     if sk:
         r.add("skirt", "body", [0, 13.7 + dy, z], sk)
 

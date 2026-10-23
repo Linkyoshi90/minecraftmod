@@ -89,6 +89,15 @@ SPECIES = {
                   "red": dict(HAIR="#c83a2a", CLOTH="#2a2a32", extra=dict(boot="#1a1a1e", comb="#d8dce4", cloth2="#3a3a46")),
                   "mist": dict(SKIN="#f2f4f6", HAIR="#f4f6f8", CLOTH="#c8ccd4", EYE="#8aa8c8", extra=dict(boot="#a8acb4", comb="#ffffff", cloth2="#dce0e6")),
                   "raven": dict(HAIR="#141218", CLOTH="#1e1c24", extra=dict(boot="#141218", comb="#d8dce4", cloth2="#2a2834"))}),
+    "dullahan_undead": dict(
+        build="athletic", outfit=dict(top=["corset", "capelet"], bottom="hakama", extras=["pauldron", "bracers", "belt"], colors=dict(cloth2="#2a2a32")),
+        hair="ponytail", bangs="parted", ears=None, legs="bare", foot="shoe", headless=True, glow=["stump"],
+        pal=dict(SKIN="#e8e4e8", HAIR="#d8dce4", FUR="#e8e4e8", LIGHT="#ffffff", MARK="#5a5a68", EYE="#5ac8f0", CLOTH="#2a2a36", TRIM="#a8b0c0",
+                 extra=dict(boot="#1e1e24", flame="#5ac8f8")),
+        variants={"crimson": dict(CLOTH="#5a141e", TRIM="#c8a050", extra=dict(boot="#1e0e10", flame="#5ac8f8", cloth2="#3a0e14")),
+                  "ash": dict(HAIR="#8a8a90", CLOTH="#4a4a52", TRIM="#8a8a90", extra=dict(boot="#2a2a2e", flame="#a8e0ff", cloth2="#3a3a40")),
+                  "gold": dict(HAIR="#e8d090", CLOTH="#1e1e2a", TRIM="#e8c050", extra=dict(boot="#1a1a1e", flame="#f8d070", cloth2="#2a2a36")),
+                  "pale": dict(HAIR="#f4f4f8", CLOTH="#c8ccd4", TRIM="#5a6a8a", EYE="#8a6ad8", extra=dict(boot="#8a8e98", flame="#b08af8", cloth2="#a8acb4"))}),
 }
 
 
@@ -100,6 +109,8 @@ def declare_hook(sp, d):
         out += [("comb", 3, 1.5, .5), ("crystal", 1, 1.5, 1)]
     if d.get("bolts"):
         out += [("bolt", 1.25, .75, .75)]
+    if d.get("headless"):
+        out += [("stump", 3.5, 1.5, 3)]
     return out
 
 
@@ -112,6 +123,8 @@ def paint_hook(pt, pal, d):
             return G.with_alpha(pick(fl, t, x, y), 210 if y > h * 0.6 else 255)
         for p in ("flame_a", "flame_b", "flame_c", "flame_tip", "lick"):
             pt(p, "all", flame)
+    fl = G.shades(pal.extra.get("flame", "#5ac8f8"))                 # the dullahan's neck: a cold spirit flame
+    pt("stump", "all", lambda f, x, y, w, h: G.with_alpha(pick(fl, 0.6 + 0.3 * ((x + y) % 2 == 0), x, y), 220))
     ice = G.shades("#a8d8f8")
     comb = G.shades(pal.extra["comb"]) if "comb" in pal.extra else ice   # the banshee's comb is silver
     pt("comb", "all", lambda f, x, y, w, h: pick(comb, 0.6 + 0.3 * (x % 2), x, y))
@@ -137,6 +150,8 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
+    if d.get("headless"):                               # blue flame where her neck ends (the head itself is carried, see anim_extra)
+        r.put("body", cube("stump", [-1.75, hy - 0.5, -1.5 + z]))
     if d.get("wisp"):
         aw, ah, ad = G.S("flame_a")
         cs = [cube("flame_a", [-aw / 2, 8.0, -ad / 2]), cube("flame_b", [-G.S("flame_b")[0] / 2, 4.25, -G.S("flame_b")[2] / 2 + 0.5]),
@@ -160,6 +175,10 @@ def anim_extra(an, sp, d):
                  "root": {"position": Tk((0, (0, 2.0, 0)), (1.0, (0, 2.6, 0)), (2.0, (0, 2.0, 0)))}}
         for key in ("idle", "walk", "run", "sit", "lie", "groom", "hiss", "stalk", "pounce"):
             F._inject(an, key, flick)
+    if d.get("headless"):                              # the dullahan carries her head in the crook of her right arm, in every pose
+        carry = merge({"head": {"position": hold(-8.0, -12.5, -2.0)}}, {"arm_r": {"rotation": hold(-15, 0, -20)}, "forearm_r": {"rotation": hold(-60, 0, 0)}})
+        for k in list(an.A):
+            F._inject(an, k.split(".")[-1], carry)
     an.add("drink", 2.0, True, merge({"head": {"rotation": hold(18, 24, 0)}, "body": {"rotation": hold(14, 0, 0)},
                                       "mouth": {"position": hold(*H.OUT_)}, "eyelids": {"position": hold(*H.OUT_)}},
                                      sym("arm", hold(-70, 0, -24)), sym("forearm", hold(-40, 0, 0))))
@@ -168,6 +187,9 @@ def anim_extra(an, sp, d):
                                         "leg_r": {"rotation": Tk((0, (16, 0, 0)), (0.7, (-16, 0, 0)), (1.4, (16, 0, 0)))},
                                         "leg_l": {"rotation": Tk((0, (-16, 0, 0)), (0.7, (16, 0, 0)), (1.4, (-16, 0, 0)))}},
                                        sym("arm", hold(-85, 0, 0))))
+    if d.get("headless"):
+        for k in list(an.A):
+            F._inject(an, k.split(".")[-1], carry)
 
 
 if __name__ == "__main__":

@@ -92,3 +92,51 @@ for fid, entries in ADD.items():
 for _s in C.family("kitsune")["species"]:
     if _s["id"] == "red_kitsune" and "cherry_grove" not in _s["biomes"]:
         _s["biomes"].append("cherry_grove")
+
+
+# second batch (2026-10-23): Kappa, Naga, Dullahan
+SECOND = {
+    "lizardfolk": [(
+        dict(id="kappa_lizardfolk", name="Kappa", group="Rivers & swamps", tag="Polite · mischievous", height=1.5,
+             biomes=["river", "swamp"], temperament="Mischievous, proud, very polite",
+             ecology="A river yokai of Japan: a turtle's shell on her back and a dish of water (the sara) on her head. Folklore says it comes "
+                     "from the softshell turtle (Pelodiscus sinensis, Testudines: Trionychidae) and the Japanese giant salamander.",
+             interaction="Bow to her (crouch while facing her): she bows back. Melon slices stand in for her beloved cucumbers.",
+             signature=("Her dish", "Wet (water, rain) she is strong. Two minutes dry and her dish has run empty: she is weak and slow. Bow to her and "
+                        "she bows back, spilling it: a kappa who was after you stops at once."),
+             danger="Moderate in the water, low out of it.",
+             variants=[("river", "River (default)", "Green shell and hair"), ("pond", "Pond", "Teal"), ("red", "Red", "A red kappa"),
+                       ("mountain", "Mountain", "Brown"), ("white", "White", "Rare and pale")]),
+        {"Habitat": "Rivers, swamps", "Signature": "Water dish, bowing", "Danger": "Moderate in water"})],
+    "lamia": [(
+        dict(id="naga_lamia", name="Naga", group="Jungle temples", tag="Regal · watchful", height=2.3,
+             biomes=["jungle", "sparse_jungle", "bamboo_jungle"], temperament="Regal, watchful, generous to friends",
+             ecology="The serpent guardians of South and Southeast Asian myth, who keep watch over water and treasure. Her serpent half is a "
+                     "king cobra (Ophiophagus hannah, Squamata: Elapidae): a hood, and a crown of her own.",
+             interaction="Earn her trust before you go for the temple's treasure.",
+             signature=("Guardian", "Nobody she is not fond of opens a treasure chest (an unopened structure chest) within 10 blocks of her: she "
+                        "spreads her hood and warns them off. Your own chests are never hers to guard."),
+             danger="Moderate.",
+             variants=[("king", "King cobra (default)", "Olive with pale bands"), ("black", "Black", "Glossy black"), ("golden", "Golden", "Gold and cream"),
+                       ("jade", "Jade", "Green"), ("crimson", "Crimson", "Deep red")]),
+        {"Habitat": "Jungle temples", "Young": "Live young", "Defence": "Hood, venom", "Signature": "Guards treasure", "Danger": "Moderate"})],
+    "undead": [(
+        dict(id="dullahan_undead", name="Dullahan", group="Plains & meadows, at night", tag="Headless · dignified", height=1.85,
+             biomes=["plains", "meadow", "sunflower_plains"], temperament="Dignified, reserved, kind underneath",
+             ecology="The headless rider of Irish folklore. She carries her head under her arm; a cold blue spirit flame burns where her neck ends. "
+                     "In the old stories the dullahan fears gold.",
+             interaction="Pumpkin pie, and never hold gold at her.",
+             signature=("Headless rider", "She often rides a skeleton horse through the night. Anyone holding gold makes her back away."),
+             danger="Low unless provoked.",
+             variants=[("knight", "Knight (default)", "Dark armour, silver hair"), ("crimson", "Crimson", "Red cloak"), ("ash", "Ash", "Grey"),
+                       ("gold", "Gilded", "Gold trim"), ("pale", "Pale", "White hair, pale cloak")]),
+        {"Haunts": "Plains and meadows, at night", "Signature": "Head under her arm, rides at night, fears gold", "Danger": "Low unless provoked"})],
+}
+for _fid, _entries in SECOND.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))

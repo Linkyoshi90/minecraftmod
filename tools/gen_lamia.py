@@ -63,6 +63,15 @@ SPECIES = {
                   "emerald": dict(FUR="#2a9a4a", MARK="#f0f8f0", LIGHT="#e8f0a0", pattern="speckle", HAIR="#1e5a2a", EYE="#d8c040", extra=dict(tail="#2a8a42")),
                   "sand": dict(FUR="#d8c08a", MARK="#6a4a2a", pattern="spots", HAIR="#8a6a40", extra=dict(tail="#b89060")),
                   "rosy": dict(FUR="#c8c0bc", MARK="#c08070", pattern="finestripes", HAIR="#8a5a5a", extra=dict(tail="#c08070"))}),
+    "naga_lamia": dict(
+        build="athletic", outfit=dict(top=["bandeau", "capelet"], bottom="loincloth", extras=["usekh", "armlets", "bracers"], colors=dict(cloth2="#e8c050")),
+        thick=1.15, hair="flowing", hood=True, crown=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#1e1a14", FUR="#5a5030", LIGHT="#e8dcb0", MARK="#d8c890", EYE="#e8b020", CLOTH="#2a5a3a", TRIM="#e8c050",
+                 pattern="bars", facemark="scales"),
+        variants={"black": dict(FUR="#1a1a1c", MARK="#4a4a4c", LIGHT="#c8c0a8", HAIR="#101012", CLOTH="#3a2a4a"),
+                  "golden": dict(FUR="#c8a050", MARK="#f0e0a0", HAIR="#5a3a14", CLOTH="#6a1e1e"),
+                  "jade": dict(FUR="#2a6a3a", MARK="#a8d888", HAIR="#14301e", CLOTH="#e8e0c8"),
+                  "crimson": dict(FUR="#7a1e1e", MARK="#d8a060", HAIR="#2a0e0e", CLOTH="#1e2a4a")}),
 }
 
 
@@ -73,6 +82,8 @@ def declare(sp):
     extra = []
     if d.get("hood"):
         extra.append(("hood_p", 5.5, 6.5, .5))
+    if d.get("crown"):
+        extra += [("crown", 4.5, 1, 4.5), ("crown_spike", .75, 1.5, .5), ("crown_gem", 1, 1, .25)]
     if d.get("rattle"):
         extra.append(("rattle", 1.25, 1, .75))
     if d.get("paddle"):
@@ -104,6 +115,10 @@ def paint(sp, key):
         else:
             pt(f"seg_{i}", "all", sc)
     pt("hood_p", "all", lambda f, x, y, w, h: pick(pal.LIGHT, 0.55, x, y) if f == "north" else sc(f, x, y, w, h))
+    gold = shades("#e8c050")
+    pt("crown", "all", lambda f, x, y, w, h: pick(gold, 0.55 + 0.3 * (y == 0), x, y))
+    pt("crown_spike", "all", lambda f, x, y, w, h: pick(gold, 0.7 - 0.2 * (x == 0), x, y))
+    pt("crown_gem", "all", lambda f, x, y, w, h: pick(shades("#3ac87a"), 0.7, x, y))
     pt("rattle", "all", lambda f, x, y, w, h: pick(shades("#c8b896"), 0.55 - (0.25 if y == h - 1 else 0), x, y))
     pt("paddle", "all", lambda f, x, y, w, h: pick(pal.FUR, 0.5, x, y) if (y // 3) % 2 else pick(pal.MARK, 0.4, x, y))
     return pt.T
@@ -113,8 +128,14 @@ def build(sp):
     d = SPECIES[sp]
     r = G.Rig()
     r.add("root", None, [0, 0, 0])
-    G.upper(r, 12, dict(hair=d["hair"], bangs=d.get("bangs"), build=d.get("build"), outfit=d.get("outfit"), ears=None, skirt=False))
+    g = G.upper(r, 12, dict(hair=d["hair"], bangs=d.get("bangs"), build=d.get("build"), outfit=d.get("outfit"), ears=None, skirt=False))
     end_z = G.serpent(r, None, d)
+    if d.get("crown"):                                  # the naga's crown: a gold band, five spikes, a jade gem at the front
+        cs = [cube("crown", [-2.25, g.hy + 8.3, -2.25 + g.z])]
+        for x in (-1.9, -0.95, 0, 0.95, 1.9):
+            cs.append(cube("crown_spike", [x - 0.375, g.hy + 9.3, -2.4 + g.z]))
+        cs.append(cube("crown_gem", [-0.5, g.hy + 8.3, -2.55 + g.z]))
+        r.add("crown", "head", [0, g.hy + 8.3, g.z], cs)
     if d.get("hood"):
         hp = G.S("hood_p")
         r.add("hood", "body", [0, 19, 1.4], [G.rot_cube("hood_p", [-hp[0], 16.5, 1.4], [0, 19, 1.4], 0, 0, 22),

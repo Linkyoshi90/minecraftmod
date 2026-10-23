@@ -124,6 +124,7 @@ public class Lamia extends AbstractMonsterGirl {
         return switch (s) {
             case PYTHON_LAMIA -> girlAttributes(32, 0.22, 5);
             case COBRA_LAMIA -> girlAttributes(24, 0.26, 4);
+            case NAGA_LAMIA -> girlAttributes(32, 0.26, 5);
             case BOA_LAMIA -> girlAttributes(28, 0.24, 4);
             default -> girlAttributes(22, 0.26, 3);
         };
@@ -253,6 +254,7 @@ public class Lamia extends AbstractMonsterGirl {
         if (this.level().getGameTime() >= this.nextShed - 2400) return new ItemStack(ModItems.SHED_SKIN.get());
         int r = this.random.nextInt(100);
         return switch (this.species) {
+            case NAGA_LAMIA -> new ItemStack(r < 50 ? Items.GOLD_NUGGET : r < 90 ? Items.EMERALD : r < 98 ? Items.GOLD_INGOT : Items.DIAMOND, r < 50 ? 4 : 1);
             case SEA_SNAKE_LAMIA -> new ItemStack(r < 50 ? Items.COD : r < 80 ? Items.PRISMARINE_SHARD : Items.NAUTILUS_SHELL);
             case RATTLESNAKE_LAMIA -> new ItemStack(r < 50 ? Items.RABBIT_HIDE : r < 85 ? Items.CACTUS : Items.GOLD_NUGGET);
             default -> new ItemStack(r < 40 ? Items.EGG : r < 70 ? Items.RABBIT : r < 90 ? Items.FEATHER : Items.EMERALD);
@@ -282,7 +284,7 @@ public class Lamia extends AbstractMonsterGirl {
         }
         if (spot == null) return super.giveBirth(level, father);
         level.setBlock(spot, ModBlocks.GIRL_EGG.get().defaultBlockState().setValue(GirlEggBlock.KIND, GirlEggBlock.Kind.LEATHERY), 3);
-        if (level.getBlockEntity(spot) instanceof GirlEggBlockEntity be) be.setup(this.species.id(), this.litterSize(), father);
+        if (level.getBlockEntity(spot) instanceof GirlEggBlockEntity be) be.setup(this.species.id(), this.litterSize(), father).withPaint(this.getPaint());
         if (this.species == GirlSpecies.COBRA_LAMIA) {                // the only snake that builds a nest: leaves heaped around it
             for (BlockPos p : new BlockPos[]{spot.north(), spot.south(), spot.east(), spot.west()}) {
                 if (canHoldBlock(level, p)) level.setBlock(p, Blocks.OAK_LEAVES.defaultBlockState().setValue(net.minecraft.world.level.block.LeavesBlock.PERSISTENT, true), 3);
@@ -666,5 +668,30 @@ public class Lamia extends AbstractMonsterGirl {
     @Override
     protected Vec3 getPassengerAttachmentPoint(net.minecraft.world.entity.Entity passenger, net.minecraft.world.entity.EntityDimensions dims, float scale) {
         return new Vec3(0.0, dims.height() * 0.3, 0.9);                   // in her coils, behind her
+    }
+
+    // --- the naga guards treasure -------------------------------------------------------------------------------------
+
+    /**
+     * Whether a naga keeps this player from a treasure chest here: an unopened structure chest (it still has its loot
+     * table) within 10 blocks of a naga who is not fond of the player. Player chests are never hers to guard.
+     */
+    @Nullable
+    public static Lamia guardOf(Level level, BlockPos pos, Player player) {
+        if (player.isCreative() || !(level.getBlockEntity(pos) instanceof net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity box)
+                || box.getLootTable() == null) return null;
+        for (Lamia l : level.getEntitiesOfClass(Lamia.class, new net.minecraft.world.phys.AABB(pos).inflate(10),
+                l -> l.isAlive() && !l.isBaby() && l.species == GirlSpecies.NAGA_LAMIA && l.getAffection(player) < 10)) {
+            return l;
+        }
+        return null;
+    }
+
+    /** She spreads her hood and warns the thief off. */
+    public void warnOff(Player player) {
+        this.startTimedAction(Action.HISS, 30);
+        this.getLookControl().setLookAt(player);
+        this.playSound(SoundEvents.CAT_HISS, 1.0F, 0.6F);
+        player.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.naga_guard", this.getDisplayName()), true);
     }
 }

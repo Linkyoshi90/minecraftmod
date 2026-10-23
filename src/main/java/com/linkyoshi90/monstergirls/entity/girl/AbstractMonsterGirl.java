@@ -70,6 +70,11 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     private static final EntityDataAccessor<Boolean> DATA_YOUNG = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> DATA_VARIANT = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> DATA_BELLY = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Byte> DATA_PAINT = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
+    /** The Harmontide paints (textures/entity/&lt;model&gt;_paint_&lt;name&gt;.png, tools/gen_paints.py); 0 is unpainted. */
+    public static final java.util.List<String> PAINTS = java.util.List.of("blue", "red", "green", "yellow", "purple", "black", "inverted");
+    /** One wild girl in this many is painted, like a shiny. */
+    public static final int PAINT_RARITY = 64;
     private static final EntityDataAccessor<Integer> DATA_FLAGS = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> DATA_TAILS = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
     private static final Map<String, RawAnimation> ANIMATIONS = new ConcurrentHashMap<>();
@@ -130,7 +135,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.species = species;
         this.goalSelector.addGoal(-1, new SitWhenOrderedGoal<>(this));
         this.goalSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StayNearGoal<>(this));
-        this.goalSelector.addGoal(3, new FarmhandGoal(this));
+        this.goalSelector.addGoal(3, new FarmhandGoal<>(this));
+        this.goalSelector.addGoal(7, new SleepGoal(this));
         this.targetSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StanceTargetGoal<>(this));
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));
         this.goalSelector.addGoal(3, new GiftGoal<>(this));
@@ -202,6 +208,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         builder.define(DATA_VARIANT, (byte) 0);
         builder.define(DATA_BELLY, (byte) 0);
         builder.define(DATA_FLAGS, 0);
+        builder.define(DATA_PAINT, (byte) 0);
         builder.define(DATA_TAILS, (byte) 1);
     }
 
@@ -279,6 +286,9 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData groupData) {
+        if (!this.variantFromData && spawnType != MobSpawnType.BREEDING && this.random.nextInt(PAINT_RARITY) == 0) {
+            this.setPaint(1 + this.random.nextInt(PAINTS.size()));       // a painted one: rare, like a shiny
+        }
         if (!this.variantFromData) {
             this.setVariantIndex(this.rollWildVariant(this.random));
             this.setTails(this.rollTails(this.random));
@@ -474,6 +484,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
+        this.wokenUntil = this.level().getGameTime() + 600;               // a hand wakes her (for half a minute)
         ItemStack stack = player.getItemInHand(hand);
         if (hand != InteractionHand.MAIN_HAND) return super.mobInteract(player, hand);
         if (stack.is(Items.STICK)) {
@@ -541,6 +552,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean hurt = super.hurt(source, amount);
+        if (hurt) this.wokenUntil = this.level().getGameTime() + 600;
         if (hurt && !this.level().isClientSide && source.getEntity() instanceof Player player) this.onHurtByPlayer(player);
         return hurt;
     }
@@ -642,8 +654,15 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
                 this.random.nextFloat() * 360.0F, 0.0F);
         young.setBaby(true);
         young.randomizeVariant();
+        young.setPaint(this.getPaint());                                  // a painted mother has painted daughters
         level.addFreshEntity(young);
         young.bornTo(father);
+        return young;
+    }
+
+    public static AbstractMonsterGirl youngOf(ServerLevel level, EntityType<?> type, BlockPos pos, @Nullable UUID father, int paint) {
+        AbstractMonsterGirl young = youngOf(level, type, pos, father);
+        if (young != null) young.setPaint(paint);
         return young;
     }
 
@@ -757,6 +776,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         tag.putString("Variant", this.getVariantName());
         tag.putInt("Flags", this.entityData.get(DATA_FLAGS) & SAVED_FLAGS);
         tag.putByte("Tails", (byte) this.getTails());
+        if (this.getPaint() > 0) tag.putString("Paint", this.getPaintName());
         tag.putLong("DevotedSince", this.devotedSince);
     }
 
@@ -779,6 +799,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         }
         this.entityData.set(DATA_FLAGS, tag.getInt("Flags") & SAVED_FLAGS);
         if (tag.contains("Tails")) this.setTails(tag.getByte("Tails"));
+        if (tag.contains("Paint")) this.setPaint(PAINTS.indexOf(tag.getString("Paint")) + 1);
         this.devotedSince = tag.contains("DevotedSince") ? tag.getLong("DevotedSince") : NOT_DEVOTED;
     }
 
@@ -857,5 +878,39 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         worst.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.REGENERATION, 100, 0));
         level.sendParticles(ParticleTypes.HEART, worst.getX(), worst.getY() + worst.getBbHeight(), worst.getZ(), 4, 0.3, 0.2, 0.3, 0.0);
         this.getLookControl().setLookAt(worst);
+    }
+
+    // --- sleep ----------------------------------------------------------------------------------------------------
+
+    private long wokenUntil;
+
+    /** Until when she stays awake (after a hit or a hand), see SleepGoal. */
+    public long getWokenUntil() {
+        return this.wokenUntil;
+    }
+
+    /** Up at night, asleep by day: the undead, foxes, moths and mosquitoes, the night elf, the succubus, the jiang shi and the jack o'lantern, the tapir. */
+    public boolean isNocturnal() {
+        return switch (this.species) {
+            case NIGHT_ELF, MOTH_BUG, MOSQUITO_BUG, SUCCUBUS_DEVIL, JIANG_SHI_DEVIL, JACK_O_LANTERN_DEVIL, TAPIR_CENTAUR, OCELOT_NEKOMATA -> true;
+            default -> this.species.family() == GirlSpecies.Family.UNDEAD || this.species.family() == GirlSpecies.Family.KITSUNE;
+        };
+    }
+
+    // --- Harmontide paints -----------------------------------------------------------------------------------------
+
+    /** 0 unpainted, else 1 + an index into PAINTS. */
+    public int getPaint() {
+        return this.entityData.get(DATA_PAINT);
+    }
+
+    public void setPaint(int paint) {
+        this.entityData.set(DATA_PAINT, (byte) (paint < 0 || paint > PAINTS.size() ? 0 : paint));
+    }
+
+    @Nullable
+    public String getPaintName() {
+        int p = this.getPaint();
+        return p == 0 ? null : PAINTS.get(p - 1);
     }
 }

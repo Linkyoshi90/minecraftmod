@@ -479,5 +479,16 @@
   "item.monstergirls.mixed_slime_spawn_egg": "Mixed Slime Spawn Egg",
   "item.monstergirls.healing_balm": "Healing Balm",
   "message.monstergirls.balm_refused": "%s will not let you near enough (befriend her first)",
-  "message.monstergirls.balm_unhurt": "%s is not hurt"
+  "message.monstergirls.balm_unhurt": "%s is not hurt",
+  "item.monstergirls.friendship_charm": "Friendship Charm",
+  "message.monstergirls.merge_trust": "%s and %s would flow together, but both need high friendship with you first",
+  "message.monstergirls.order.patrol_farm": "%s patrols here and tends the fields",
+  "entity.monstergirls.naga_lamia": "Naga Lamia",
+  "item.monstergirls.naga_lamia_spawn_egg": "Naga Lamia Spawn Egg",
+  "entity.monstergirls.dullahan_undead": "Dullahan",
+  "item.monstergirls.dullahan_undead_spawn_egg": "Dullahan Spawn Egg",
+  "entity.monstergirls.kappa_lizardfolk": "Kappa",
+  "item.monstergirls.kappa_lizardfolk_spawn_egg": "Kappa Spawn Egg",
+  "message.monstergirls.kappa_bow": "%s bows back politely, spilling the water from her dish",
+  "message.monstergirls.naga_guard": "%s spreads her hood: this treasure is under her protection"
 }
