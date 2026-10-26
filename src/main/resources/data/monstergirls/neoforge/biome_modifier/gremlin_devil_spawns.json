@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_gremlin_devil",
+  "spawners": {
+    "type": "monstergirls:gremlin_devil",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

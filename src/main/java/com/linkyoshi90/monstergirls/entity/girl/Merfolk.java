@@ -148,6 +148,8 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
             case SIREN_MERMAID -> girlAttributes(26, 0.26, 4);
             case AXOLUME_MERMAID -> girlAttributes(18, 0.24, 2);
             case MANTARROW_MERMAID -> girlAttributes(24, 0.28, 2);
+            case PLATYPUS_MERMAID -> girlAttributes(16, 0.26, 2);
+            case MOONSEAL_MERMAID -> girlAttributes(28, 0.24, 2);
             default -> girlAttributes(20, 0.24, 2);
         };
     }
@@ -296,6 +298,8 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         return switch (this.species) {
             case SHARK_MERMAID -> new ItemStack(this.random.nextBoolean() ? Items.BONE : Items.COD);
             case SEAL_MERMAID, ORCA_MERMAID -> new ItemStack(this.random.nextBoolean() ? Items.COD : Items.SALMON, 2);
+            case PLATYPUS_MERMAID -> new ItemStack(this.random.nextBoolean() ? Items.CLAY_BALL : Items.SALMON, 2);
+            case MOONSEAL_MERMAID -> new ItemStack(this.random.nextInt(4) == 0 ? Items.PRISMARINE_CRYSTALS : this.random.nextBoolean() ? Items.COD : Items.SNOWBALL, 2);
             case DOLPHIN_MERMAID -> new ItemStack(this.random.nextInt(4) == 0 ? Items.NAUTILUS_SHELL : Items.TROPICAL_FISH);
             case AXOLOTL_MERMAID -> new ItemStack(this.random.nextBoolean() ? Items.TROPICAL_FISH : Items.CLAY_BALL);
             case AHUIZOTL_MERMAID -> new ItemStack(this.random.nextInt(4) == 0 ? Items.FISHING_ROD : this.random.nextBoolean() ? Items.SALMON : Items.COD,
@@ -372,6 +376,10 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     public boolean hurt(DamageSource source, float amount) {
         if (this.playDead > 0 && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) return false;
         boolean hurt = super.hurt(source, amount);
+        if (hurt && this.species == GirlSpecies.PLATYPUS_MERMAID && !this.isBaby() && source.getEntity() instanceof LivingEntity a && a.distanceToSqr(this) < 3 * 3
+                && !(a instanceof Player p && this.getAffection(p) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION)) {
+            a.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 0));     // her venomous spur
+        }
         if (hurt && !this.isBaby() && this.random.nextInt(6) == 0) this.spawnAtLocation(new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.MERFOLK_SCALE.get()));
         if (hurt && this.species == GirlSpecies.AXOLOTL_MERMAID && this.getHealth() < this.getMaxHealth() * 0.5F && this.isAlive()) {
             this.playDead = 200;
@@ -397,6 +405,8 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         if (this.species == GirlSpecies.AHUIZOTL_MERMAID && !this.isBaby() && this.tickCount % 100 == 0) this.fishForFriend(server);
         if (this.species == GirlSpecies.SIREN_MERMAID && !this.isBaby() && this.tickCount % 10 == 0) this.sirenSong(server);
         if (this.isManta() && !this.isBaby()) this.tickManta();
+        if (this.species == GirlSpecies.PLATYPUS_MERMAID && !this.isBaby() && this.tickCount % 20 == 0) this.electrosense(server);
+        if (this.species == GirlSpecies.MOONSEAL_MERMAID && !this.isBaby() && this.tickCount % 40 == 0) this.moonSong(server);
         if (this.species == GirlSpecies.AXOLUME_MERMAID && !this.isBaby()) {        // she lights the water, and her friend heals beside her
             this.glow(server, 10);
             Player healed = this.tickCount % 40 == 0 ? this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8) : null;
@@ -438,6 +448,31 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
                 server.sendParticles(ParticleTypes.DOLPHIN, this.getX(), this.getY() + 0.5, this.getZ(), 6, 0.3, 0.2, 0.3, 0.0);
             }
         }
+    }
+
+    // --- the platypus and the moonseal --------------------------------------------------------------------------------
+
+    /** In the water, she senses every monster within 16 blocks of her friend and makes it glow. Returns how many. */
+    public int electrosense(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null || !this.isInWater()) return 0;
+        int n = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(16))) {
+            m.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40, 0, true, false));
+            n++;
+        }
+        return n;
+    }
+
+    /** Dolphin's Grace for her friend swimming beside her; on a full-moon night she sings and they regenerate. */
+    public boolean moonSong(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return false;
+        if (friend.isInWater() && friend.distanceToSqr(this) < 8 * 8) friend.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 60, 0, true, false));
+        if (level.isDay() || level.getMoonPhase() != 0) return false;
+        friend.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60, 0, true, false));
+        if (this.getAction() == Action.NONE) this.startTimedAction(Action.SING, 40);
+        return true;
     }
 
     // --- the mantarrow: a ride across the sea ---------------------------------------------------------------------------

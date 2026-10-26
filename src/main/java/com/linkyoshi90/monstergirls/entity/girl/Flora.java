@@ -108,6 +108,7 @@ public class Flora extends AbstractMonsterGirl {
             case CACTUS_FLORA -> girlAttributes(28, 0.18, 4).add(Attributes.ARMOR, 4);
             case LESHY_FLORA -> girlAttributes(60, 0.24, 6).add(Attributes.KNOCKBACK_RESISTANCE, 0.7);
             case VENUS_FLYTRAP_FLORA -> girlAttributes(32, 0.1, 4).add(Attributes.KNOCKBACK_RESISTANCE, 0.8);
+            case KESARAN_PASARAN_FLORA -> girlAttributes(8, 0.2, 1);
             default -> girlAttributes(10, 0.24, 1);
         };
     }
@@ -126,7 +127,8 @@ public class Flora extends AbstractMonsterGirl {
     @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(Items.BONE_MEAL) || stack.is(Items.POTION)
-                || this.species == GirlSpecies.VENUS_FLYTRAP_FLORA && (stack.is(Items.SPIDER_EYE) || stack.is(Items.ROTTEN_FLESH));
+                || this.species == GirlSpecies.VENUS_FLYTRAP_FLORA && (stack.is(Items.SPIDER_EYE) || stack.is(Items.ROTTEN_FLESH))
+                || this.species == GirlSpecies.KESARAN_PASARAN_FLORA && stack.is(Items.SUGAR);
     }
 
     @Override
@@ -139,6 +141,15 @@ public class Flora extends AbstractMonsterGirl {
     @Nullable
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        if (this.species == GirlSpecies.KESARAN_PASARAN_FLORA && stack.is(Items.SUGAR) && !this.isBaby()) {   // sugar: she splits in two
+            if (this.level() instanceof ServerLevel server) {
+                stack.consume(1, player);
+                this.addAffection(player, 1);
+                this.hearts(server, 2);
+                this.split(server);
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         if (this.species == GirlSpecies.ALRAUNE_FLORA && stack.is(net.minecraft.tags.ItemTags.SHOVELS) && player.isShiftKeyDown() && !this.isBaby()) {
             if (this.getAffection(player) < BED_AFFECTION) return InteractionResult.PASS;   // only for someone she trusts
             if (!this.level().isClientSide) {
@@ -193,6 +204,7 @@ public class Flora extends AbstractMonsterGirl {
             case CACTUS_FLORA -> new ItemStack(r < 60 ? Items.CACTUS : Items.GREEN_DYE, 2);
             case MANDRAGORA_FLORA -> new ItemStack(r < 50 ? Items.POTATO : Items.CARROT, 3);
             case VENUS_FLYTRAP_FLORA -> new ItemStack(r < 50 ? Items.BONE_MEAL : r < 80 ? Items.SLIME_BALL : Items.SPIDER_EYE, r < 50 ? 3 : 1);
+            case KESARAN_PASARAN_FLORA -> new ItemStack(r < 45 ? Items.DANDELION : r < 75 ? Items.SUGAR : r < 95 ? Items.WHITE_DYE : Items.RABBIT_FOOT, r < 95 ? 2 : 1);
             default -> new ItemStack(r < 40 ? Items.WHEAT_SEEDS : r < 80 ? Items.PINK_TULIP : Items.HONEY_BOTTLE, r < 40 ? 4 : 1);
         };
     }
@@ -279,6 +291,64 @@ public class Flora extends AbstractMonsterGirl {
         }
         if (this.species == GirlSpecies.LESHY_FLORA && this.tickCount % 40 == 0) this.bellowAtRival(server);
         if (this.species == GirlSpecies.VENUS_FLYTRAP_FLORA && !this.isBaby()) this.tickTrap(server);
+        if (this.isPuff()) this.tickDrift(server);
+    }
+
+    // --- the kesaran pasaran -------------------------------------------------------------------------------------
+
+    public static final int MAX_PUFFS = 3;
+
+    public boolean isPuff() {
+        return this.species == GirlSpecies.KESARAN_PASARAN_FLORA;
+    }
+
+    @Override
+    public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
+        return !this.isPuff() && super.causeFallDamage(distance, multiplier, source);
+    }
+
+    /** Which way the wind blows: the same for every puff in the world, turning slowly over the day. */
+    public static net.minecraft.world.phys.Vec3 wind(long time) {
+        double a = time / 2400.0 * Math.PI * 2 + Math.sin(time / 700.0);
+        return new net.minecraft.world.phys.Vec3(Math.cos(a), 0, Math.sin(a));
+    }
+
+    /** Off the ground, carried by the wind 2 to 5 blocks up; befriended, she drifts after her friend instead. */
+    private void tickDrift(ServerLevel level) {
+        this.setNoGravity(true);
+        this.getNavigation().stop();
+        net.minecraft.world.phys.Vec3 want = wind(level.getGameTime()).scale(0.045);
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        int ground = 0;
+        while (ground < 8 && level.getBlockState(this.blockPosition().below(ground + 1)).getCollisionShape(level, this.blockPosition().below(ground + 1)).isEmpty()) {
+            ground++;
+        }
+        double up = ground < 2 ? 0.04 : ground > 5 ? -0.025 : 0.012 * Math.sin(this.tickCount / 20.0);
+        if (friend != null && this.distanceToSqr(friend) > 3 * 3) {
+            net.minecraft.world.phys.Vec3 to = friend.position().add(0, 1.5, 0).subtract(this.position());
+            want = to.normalize().scale(0.09);
+            up = Math.max(up, want.y);
+        }
+        if (this.isOrderedToSit()) want = net.minecraft.world.phys.Vec3.ZERO;
+        if (this.horizontalCollision) up = 0.06;                         // up and over whatever she bumps into
+        net.minecraft.world.phys.Vec3 v = this.getDeltaMovement();
+        this.setDeltaMovement(v.x + (want.x - v.x) * 0.1, v.y + (up - v.y) * 0.2, v.z + (want.z - v.z) * 0.1);
+        if (v.horizontalDistanceSqr() > 1.0E-4) this.setYRot(this.yBodyRot = (float) (Math.atan2(-v.x, v.z) * 180.0 / Math.PI));
+        if (friend != null && this.tickCount % 40 == 0 && this.distanceToSqr(friend) < 8 * 8) {
+            friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.LUCK, 100, 0, true, false));
+        }
+    }
+
+    /** A second puff of her drifts off (no more than three of them within 16 blocks). True if she split. */
+    public boolean split(ServerLevel level) {
+        if (level.getEntitiesOfClass(Flora.class, this.getBoundingBox().inflate(16), Flora::isPuff).size() >= MAX_PUFFS) return false;
+        if (!(this.getType().create(level) instanceof Flora twin)) return false;
+        twin.moveTo(this.getX() + 0.4, this.getY() + 0.2, this.getZ(), this.getYRot(), 0.0F);
+        twin.setVariant(this.getVariantName());
+        level.addFreshEntity(twin);
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.CLOUD, this.getX(), this.getY() + 1, this.getZ(), 10, 0.3, 0.3, 0.3, 0.02);
+        this.playSound(SoundEvents.WOOL_BREAK, 1.0F, 1.6F);
+        return true;
     }
 
     // --- the venus flytrap ----------------------------------------------------------------------------------------

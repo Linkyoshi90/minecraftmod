@@ -87,6 +87,21 @@ SPECIES = {
                   "slate": dict(FUR="#6a7a8a", HAIR="#3a4a5a", extra=dict(wing="#5a6a8a", wing_bone="#2a3444", tail_col="#6a7a8a")),
                   "venom": dict(FUR="#6a9a3a", HAIR="#3a5a1e", MARK="#e8d83a", extra=dict(wing="#5a8a2a", wing_bone="#2a4010", tail_col="#6a9a3a")),
                   "dusk": dict(FUR="#7a5a8a", HAIR="#4a2a5a", extra=dict(wing="#6a4a8a", wing_bone="#2a1a3a", tail_col="#7a5a8a"))}),
+    # twelfth wave: the alebrije, a winged folk-art chimera painted all over in bright dots and zigzags
+    "alebrije_dragon": dict(
+        build="slim", outfit=dict(top=["halter"], bottom="shorts", extras=["armlets"], colors=dict(cloth2="#f8e070")), hair="wavy", bangs="swept",
+        ears="fox", legs="scales", foot="claw", tail=DRAGON_TAIL, tail_look="scale", tail_rest=[(-30, 0, 0), (8, 0, 0), (8, 0, 0), (6, 0, 0)],
+        horns="dragon", wings="dragon", wing_scale=1.0, flies=True, alebrije=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#e85aa8", FUR="#3a6ad8", LIGHT="#f8e070", MARK="#e85aa8", EYE="#f8d040", CLOTH="#f8e070", TRIM="#e85aa8",
+                 pupil=(0.9, 3.4), extra=dict(horn="#f8e070", wing="#3a6ad8", wing_bone="#e85aa8", tail_col="#3a6ad8", dot="#f8e070", zig="#e85aa8")),
+        variants={"green": dict(HAIR="#f08a2a", FUR="#3aa85a", MARK="#f08a2a", extra=dict(horn="#f8a0c8", wing="#3aa85a", wing_bone="#f08a2a",
+                                                                                          tail_col="#3aa85a", dot="#f8a0c8", zig="#f08a2a")),
+                  "pink": dict(HAIR="#2ac8b8", FUR="#e85aa8", MARK="#2ac8b8", extra=dict(horn="#f8e070", wing="#e85aa8", wing_bone="#2ac8b8",
+                                                                                        tail_col="#e85aa8", dot="#f8e070", zig="#2ac8b8")),
+                  "orange": dict(HAIR="#8a4ad8", FUR="#f08a2a", MARK="#8a4ad8", extra=dict(horn="#7ad84a", wing="#f08a2a", wing_bone="#8a4ad8",
+                                                                                          tail_col="#f08a2a", dot="#7ad84a", zig="#8a4ad8")),
+                  "purple": dict(HAIR="#9ae83a", FUR="#7a3ac8", MARK="#9ae83a", extra=dict(horn="#e83a3a", wing="#7a3ac8", wing_bone="#9ae83a",
+                                                                                          tail_col="#7a3ac8", dot="#e83a3a", zig="#9ae83a"))}),
     "orochi_dragon": dict(
         build="curvy", outfit=dict(top=["kimono"], bottom="hakama", extras=["pearls"],
                                    colors=dict(kimono="#a81a2a", kimono_trim="#e8c040", obi="#1a1a1a", cloth2="#2a1a1a")),
@@ -131,6 +146,17 @@ def paint_hook(pt, pal, d):
         pt(p, "all", fur)
     pt("hoof", "all", lambda f, x, y, w, h: pick(G.shades("#2a2420"), 0.4, x, y))
     pt("htail", "all", lambda f, x, y, w, h: pick(pal.MARK if y > h * 0.7 else pal.FUR, 0.5, x, y))
+    if pal.extra.get("dot"):                              # the alebrije's folk-art paint: bright dots and zigzags over every scale
+        dot, zig = G.shades(pal.extra["dot"]), G.shades(pal.extra["zig"])
+
+        def folk(f, x, y, w, h):
+            if (y + abs(x % 6 - 3)) % 7 == 0:
+                return pick(zig, 0.6, x, y)
+            if (x * 3 + y * 5) % 11 == 0:
+                return pick(dot, 0.7, x, y)
+            return None
+        for p in ["thigh", "shin", "paw", "tail_a", "tail_b", "tail_c", "tail_d"] + [n for n, *_ in P.WING_KINDS["dragon"]]:
+            pt(p, ("north", "south", "east", "west", "up"), folk)
 
 
 def build_hook(r, g, d):

@@ -89,6 +89,27 @@ SPECIES = {
                   "pale": dict(FUR="#e0d8cc", HAIR="#ece4d8", LIGHT="#ffffff", MARK="#c8c0b4"),
                   "slate": dict(FUR="#5a6068", HAIR="#4a5058", MARK="#3a4048", CLOTH="#c8a040"),
                   "sandy": dict(FUR="#c8b490", HAIR="#b8a07a", MARK="#a08a64", CLOTH="#2a7a8a")}),
+    # twelfth wave: the platypus, fur, a duck-billed cap and a flat beaver tail
+    "platypus_mermaid": dict(
+        build="petite", outfit=dict(top=["sports"], extras=["armlets"], colors=dict(cloth2="#3a6a8a")),
+        ears=None, hair="bob", bangs="blunt", fluke=(5.5, .75, 6), platypus=True, size=0.95,
+        pal=dict(SKIN=skin("tan"), HAIR="#5a3a22", FUR="#6a4a2e", LIGHT="#c8a880", MARK="#3a2414", EYE="#1a1410", CLOTH="#3a8aa8", TRIM="#e8c060",
+                 pattern="solid", extra=dict(belly_white=True, bill="#3a3438")),
+        variants={"dark": dict(HAIR="#2e2014", FUR="#3a2a1c", LIGHT="#8a6a50", MARK="#1e140c"),
+                  "golden": dict(HAIR="#a8783a", FUR="#b8884a", LIGHT="#f0d8a8", MARK="#6a4a1e", CLOTH="#3a5a2a"),
+                  "grey": dict(HAIR="#5a5652", FUR="#6e6a66", LIGHT="#c8c4c0", MARK="#3a3836", CLOTH="#a84a4a"),
+                  "pale": dict(HAIR="#c8b090", FUR="#d8c0a0", LIGHT="#f8ece0", MARK="#9a8064", CLOTH="#5a7ac8", extra=dict(belly_white=True, bill="#8a7a7a"))}),
+    # twelfth wave: the moonseal, a night-blue seal with crescent moons on her tail (they glow) and little antlers
+    "moonseal_mermaid": dict(
+        build="curvy", outfit=dict(top=["bandeau"], extras=["pearls"], colors=dict(cloth2="#e8f0f8")),
+        ears=None, hair="wavy", bangs="swept", fluke=(7, .75, 3.5), seal=True, moon=True, glow=["crescent"],
+        pal=dict(SKIN=skin("pale"), HAIR="#e8eef8", FUR="#2a3a8a", LIGHT="#e8eef8", MARK="#14204a", EYE="#5ab8f0", CLOTH="#e8eef8", TRIM="#5ab8f0",
+                 pattern="solid", extra=dict(belly_white=True, moon="#f4f8ff", antler="#e8e0d0")),
+        variants={"purple": dict(HAIR="#f0e8f8", FUR="#5a3a8a", MARK="#2a1a4a", EYE="#c88af0", TRIM="#c88af0", extra=dict(belly_white=True, moon="#f8f0ff", antler="#e8e0d0")),
+                  "green": dict(HAIR="#e8f8f0", FUR="#2a6a6a", MARK="#143a3a", EYE="#5af0c8", TRIM="#5af0c8", extra=dict(belly_white=True, moon="#f0fff8", antler="#e8e0d0")),
+                  "silver": dict(HAIR="#f4f4f8", FUR="#8a90a0", MARK="#4a505e", EYE="#5a8ad8", TRIM="#5a8ad8", extra=dict(belly_white=True, moon="#ffffff", antler="#f4f0e8")),
+                  "night": dict(HAIR="#1e1e2a", FUR="#1a1a26", MARK="#0a0a12", LIGHT="#5a5a7a", EYE="#f8d040", TRIM="#f8d040", CLOTH="#2a2a3a",
+                                extra=dict(belly_white=True, moon="#f8d860", antler="#c8b890"))}),
     # eleventh wave: the mantarrow, a manta ray: wide wing fins from her hips, a thin whip of a tail
     "mantarrow_mermaid": dict(
         build="slim", outfit=dict(top=["halter"], extras=["armlets"], colors=dict(cloth2="#1e2a4a")),
@@ -137,6 +158,10 @@ def declare(sp):
         parts.append(("flipper", 3, .5, 3.5))
     if d.get("manta"):
         parts.append(("manta_fin", 7, 6, .5))
+    if d.get("platypus"):
+        parts += [("pcap", 9.5, 3, 9.5), ("bill", 6, 1, 4.5)]
+    if d.get("moon"):
+        parts += [("crescent", 2.5, 2.5, .25), ("antler_a", .5, 3, .5), ("antler_b", .5, 1.5, .5)]
     parts.append(("shell", 2, 1.75, .5))
     G.declare(parts, ears=d["ears"], hair=SPECIES[sp]["hair"],
               build=SPECIES[sp].get("build"), outfit=SPECIES[sp].get("outfit"))
@@ -175,6 +200,22 @@ def paint(sp, key):
        if y < h - (abs(x + 0.5 - w / 2) * 2 // 3) else CLEAR)
     pt("ribbon", "all", lambda f, x, y, w, h: G.with_alpha(pick(pal.MARK, 0.55 + 0.25 * (y % 3 == 0), x, y), 220) if y < h - 1 or x % 2 else G.CLEAR)
     pt("flipper", "all", lambda f, x, y, w, h: pick(pal.MARK, 0.35 + 0.2 * (x % 4 == 0), x, y))
+    bill = shades(pal.extra.get("bill", "#3a3438"))
+    pt("pcap", "all", lambda f, x, y, w, h: CLEAR if f == "down" else pick(pal.MARK, 0.55 + (noise(x, y, 71) - 0.5) * 0.12, x, y))
+    pt("bill", "all", lambda f, x, y, w, h: pick(bill, 0.45 + 0.1 * (f == "up") + 0.15 * (f == "up" and y == h - 2 and x in (w // 2 - 2, w // 2 + 1)), x, y))
+    moon = shades(pal.extra.get("moon", "#f4f8ff"))
+
+    def crescent(f, x, y, w, h):                                  # a crescent moon: a disc with a bite out of it
+        if f not in ("north", "south"):
+            return CLEAR
+        cx, cy, rr = w / 2, h / 2, w / 2
+        inside = (x + 0.5 - cx) ** 2 + (y + 0.5 - cy) ** 2 < rr * rr
+        bite = (x + 0.5 - cx - rr * 0.45) ** 2 + (y + 0.5 - cy + rr * 0.2) ** 2 < (rr * 0.8) ** 2
+        return pick(moon, 0.75, x, y) if inside and not bite else CLEAR
+    pt("crescent", "all", crescent)
+    ant = shades(pal.extra.get("antler", "#e8e0d0"))
+    pt("antler_a", "all", lambda f, x, y, w, h: pick(ant, 0.55 + 0.1 * (y % 2), x, y))
+    pt("antler_b", "all", lambda f, x, y, w, h: pick(ant, 0.6, x, y))
     if pal.extra.get("gills"):
         pt("fin_1", ("east", "west"), lambda f, x, y, w, h: pick(pal.MARK, 0.25, x, y) if (y in (1, 3, 5) and 2 <= x < w - 2) else None)
     if pal.extra.get("spot"):                                     # tancho: one red spot on the head
@@ -217,6 +258,16 @@ def build(sp):
     if d.get("manta"):                                   # the wing fins, swept out from her hips
         mw = G.S("manta_fin")[0]
         r.add("manta_r", "fin_1", [-2, 9, 0], [G.rot_cube("manta_fin", [-2 - mw, 4.5, -0.25], [-2, 9, 0], 0, 0, -12)], mirror=True)
+    if d.get("platypus"):                                # a furry cap with a duck bill for a peak
+        hy = 12 + 8 + 0.0
+        r.add("pcap", "head", [0, 28, 0], [cube("pcap", [-4.75, 26.2, -4.75]), G.rot_cube("bill", [-3, 25.9, -8.9], [0, 26.4, -4.6], 12, 0, 0)])
+    if d.get("moon"):                                    # crescents down her tail (they glow), little antlers in her hair
+        r.put("fin_1", cube("crescent", [-1.25, 4.0, -2.2]))
+        r.put("fin_2", cube("crescent", [-1.25, 0.6, -1.0]))
+        r.put("fin_3", cube("crescent", [-1.0, 0.4, 5.6]))
+        for sg in (-1, 1):
+            r.put("head", G.rot_cube("antler_a", [sg * 2.4 - 0.25, 28.0, -0.5], [sg * 2.4, 28.0, -0.25], -10, 0, -18 * sg),
+                  G.rot_cube("antler_b", [sg * 2.9 - 0.25, 29.4, -0.5], [sg * 2.9, 29.4, -0.25], -10, 0, -60 * sg))
     if d.get("seal"):
         f2 = G.S("fin_2")
         for sg in (-1, 1):

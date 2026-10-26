@@ -18,6 +18,16 @@ SEGS = [("seg_1", 4.5, 10.5, 4), ("seg_2", 4.25, 4, 5.5), ("seg_3", 4, 3.75, 5.5
         ("seg_5", 3, 2.75, 5), ("seg_6", 2.5, 2.25, 4.5), ("seg_7", 2, 1.75, 4), ("seg_8", 1.25, 1.25, 3.5)]
 
 SPECIES = {
+    # twelfth wave: the tsuchinoko, a short fat snake body (thick, stubby) that curls up and rolls ("roll")
+    "tsuchinoko_lamia": dict(
+        build="petite", outfit=dict(top=["sweater"], extras=["scarf"], colors=dict(scarf="#c83a3a")),
+        thick=1.55, stub=0.55, hair="bob", bangs="blunt",
+        pal=dict(SKIN=skin("fair"), HAIR="#5a3e24", FUR="#7a5a34", LIGHT="#e8d4a8", MARK="#4a3018", EYE="#c8902a", CLOTH="#e8dcc0", TRIM="#c83a3a",
+                 pattern="diamonds", facemark=None),
+        variants={"grey": dict(HAIR="#5a5a5e", FUR="#7a7a7e", LIGHT="#d8d8d8", MARK="#3a3a3e", CLOTH="#c8d8e8"),
+                  "green": dict(HAIR="#3a5a2a", FUR="#5a7a3a", LIGHT="#d8e8a8", MARK="#2a4a1a", CLOTH="#f0e0b0"),
+                  "gold": dict(HAIR="#a8782a", FUR="#d8a840", LIGHT="#f8e8b0", MARK="#8a5a1a", CLOTH="#3a2a4a"),
+                  "black": dict(HAIR="#1e1c1e", FUR="#2a282a", LIGHT="#8a8488", MARK="#121012", EYE="#e8c040", CLOTH="#a83a3a")}),
     "python_lamia": dict(
         build="curvy", outfit=dict(top=["halter"], bottom="sarong", extras=["armlets"]),
         thick=1.15, hair="wavy",
@@ -101,7 +111,8 @@ SPECIES = {
 def declare(sp):
     d = SPECIES[sp]
     k = d["thick"]
-    parts = [(n, round(w * k * 4) / 4, round(h * k * 4) / 4 if i else h, dd) for i, (n, w, h, dd) in enumerate(SEGS)]
+    st = d.get("stub", 1.0)                             # a stubby tail: the same girth, much shorter
+    parts = [(n, round(w * k * 4) / 4, round(h * k * 4) / 4 if i else h, round(dd * (st if i else 1) * 4) / 4) for i, (n, w, h, dd) in enumerate(SEGS)]
     extra = []
     if d.get("hood"):
         extra.append(("hood_p", 5.5, 6.5, .5))
@@ -199,6 +210,9 @@ SEG_NAMES = [f"seg_{i}" for i in range(1, 9)]
 
 def anims(an):
     G.serpent_anims(an, SEG_NAMES)
+    Tk = H.track                                         # curled up, rolling down the hill like a wheel
+    an.add("roll", 0.5, True, {"root": {"rotation": Tk((0, (0, 0, 0)), (0.25, (180, 0, 0)), (0.5, (360, 0, 0))), "position": H.hold(0, 5, 0)},
+                               **{s: {"rotation": H.hold(-35, 0, 0)} for s in SEG_NAMES[1:]}})
 
 
 VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0, 180, 0),

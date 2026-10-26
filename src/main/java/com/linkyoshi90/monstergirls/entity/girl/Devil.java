@@ -78,6 +78,8 @@ public class Devil extends AbstractMonsterGirl {
             case GREATER_DEVIL -> girlAttributes(70, 0.28, 10);
             case JACK_O_LANTERN_DEVIL -> girlAttributes(24, 0.28, 4);
             case ONI_DEVIL -> girlAttributes(50, 0.27, 9).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 1.2);
+            case GREMLIN_DEVIL -> girlAttributes(12, 0.3, 1);
+            case KARAKASA_OBAKE_DEVIL -> girlAttributes(20, 0.3, 2);
             default -> girlAttributes(30, 0.26, 5);
         };
     }
@@ -109,6 +111,66 @@ public class Devil extends AbstractMonsterGirl {
             case ONI_DEVIL -> stack.is(Items.HONEY_BOTTLE);
             default -> stack.is(Items.PUMPKIN_PIE);
         };
+    }
+
+    // --- the gremlin and the karakasa obake ---------------------------------------------------------------------------
+
+    private long calmUntil;
+    private final java.util.List<net.minecraft.core.BlockPos> furnaces = new java.util.ArrayList<>();
+
+    /** Befriended, she tinkers with the furnaces near her friend (they cook twice as fast); wild, she pranks at night. */
+    private void tickGremlin(ServerLevel level) {
+        if (this.isBaby()) return;
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend != null) {
+            if (this.tickCount % 40 == 0) this.findFurnaces(level);
+            for (net.minecraft.core.BlockPos p : this.furnaces) {
+                if (level.getBlockEntity(p) instanceof net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity f) {
+                    net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity.serverTick(level, p, level.getBlockState(p), f);   // a second tick each tick
+                }
+            }
+            return;
+        }
+        this.furnaces.clear();
+        if (!level.isDay() && level.getGameTime() >= this.calmUntil && this.bestAffection() < com.linkyoshi90.monstergirls.entity.Orders.AFFECTION
+                && this.tickCount % 300 == 0) this.tinker(level);
+    }
+
+    public int findFurnaces(ServerLevel level) {
+        this.furnaces.clear();
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(this.blockPosition().offset(-6, -2, -6), this.blockPosition().offset(6, 2, 6))) {
+            if (level.getBlockEntity(p) instanceof net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity) this.furnaces.add(p.immutable());
+        }
+        return this.furnaces.size();
+    }
+
+    /** A prank on what people built: a lever flipped or a door swung, within 6 blocks. True if she did one. */
+    public boolean tinker(ServerLevel level) {
+        java.util.List<net.minecraft.core.BlockPos> found = new java.util.ArrayList<>();
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(this.blockPosition().offset(-6, -2, -6), this.blockPosition().offset(6, 2, 6))) {
+            var b = level.getBlockState(p).getBlock();
+            if (b instanceof net.minecraft.world.level.block.LeverBlock || b instanceof net.minecraft.world.level.block.DoorBlock) found.add(p.immutable());
+        }
+        if (found.isEmpty()) return false;
+        net.minecraft.core.BlockPos p = found.get(this.random.nextInt(found.size()));
+        var s = level.getBlockState(p);
+        if (s.getBlock() instanceof net.minecraft.world.level.block.LeverBlock lever) lever.pull(s, level, p, null);
+        else if (s.getBlock() instanceof net.minecraft.world.level.block.DoorBlock door) door.setOpen(this, level, s, p, !door.isOpen(s));
+        this.startTimedAction(Action.LAUGH, 30);
+        return true;
+    }
+
+    /** A projectile about to hit a player: a befriended karakasa obake within 4 blocks of them catches it on her umbrella. */
+    public static boolean shelter(Player player, net.minecraft.world.entity.projectile.Projectile projectile) {
+        if (!(player.level() instanceof ServerLevel level) || projectile.getOwner() == player) return false;
+        for (Devil d : level.getEntitiesOfClass(Devil.class, player.getBoundingBox().inflate(4),
+                d -> d.species == GirlSpecies.KARAKASA_OBAKE_DEVIL && !d.isBaby() && d.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION)) {
+            projectile.discard();
+            d.playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 1.3F);
+            d.getLookControl().setLookAt(projectile);
+            return true;
+        }
+        return false;
     }
 
     // --- the oni -------------------------------------------------------------------------------------------------
@@ -258,6 +320,7 @@ public class Devil extends AbstractMonsterGirl {
 
     @Override
     public boolean isFood(ItemStack stack) {
+        if (this.species == GirlSpecies.KARAKASA_OBAKE_DEVIL && (stack.is(Items.PAPER) || stack.is(Items.STRING))) return true;
         return stack.is(Items.SUGAR) || stack.is(Items.COOKIE) || stack.is(Items.CAKE) || stack.is(Items.PUMPKIN_PIE) || stack.is(Items.HONEY_BOTTLE);
     }
 
@@ -270,6 +333,7 @@ public class Devil extends AbstractMonsterGirl {
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
         if (this.isDisguised() && !this.level().isClientSide) this.setDisguised(false);
+        if (this.species == GirlSpecies.GREMLIN_DEVIL && stack.is(Items.COOKIE)) this.calmUntil = this.level().getGameTime() + 24000;   // no pranks for a day
         if (this.species == GirlSpecies.ONI_DEVIL && stack.is(Items.COCOA_BEANS) && this.getAffection(player) < com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {
             if (this.level() instanceof ServerLevel server) {
                 stack.consume(1, player);
@@ -286,6 +350,8 @@ public class Devil extends AbstractMonsterGirl {
         return switch (this.species) {
             case JIANG_SHI_DEVIL -> new ItemStack(r < 60 ? Items.PAPER : Items.GOLD_NUGGET, 3);
             case JACK_O_LANTERN_DEVIL -> new ItemStack(r < 50 ? Items.PUMPKIN_SEEDS : r < 80 ? Items.TORCH : Items.JACK_O_LANTERN, r < 80 ? 4 : 1);
+            case GREMLIN_DEVIL -> new ItemStack(r < 40 ? Items.REDSTONE : r < 75 ? Items.IRON_NUGGET : r < 95 ? Items.REPEATER : Items.COMPARATOR, r < 75 ? 4 : 1);
+            case KARAKASA_OBAKE_DEVIL -> new ItemStack(r < 40 ? Items.PAPER : r < 75 ? Items.STRING : Items.BAMBOO, 3);
             case ONI_DEVIL -> new ItemStack(r < 45 ? Items.IRON_INGOT : r < 80 ? Items.BAMBOO : Items.HONEY_BOTTLE, r < 45 ? 2 : r < 80 ? 8 : 1);
             default -> new ItemStack(r < 40 ? Items.BLAZE_POWDER : r < 75 ? Items.MAGMA_CREAM : Items.QUARTZ, 2);
         };
@@ -371,6 +437,7 @@ public class Devil extends AbstractMonsterGirl {
                 if (!server.isDay()) this.glow(server, 10);
                 else this.glow(server, 0);
             }
+            case GREMLIN_DEVIL -> this.tickGremlin(server);
             case JIANG_SHI_DEVIL -> {                                         // she can only hop
                 if (!this.getNavigation().isDone() && this.onGround() && !this.level().isDay()) {
                     this.setDeltaMovement(this.getDeltaMovement().add(0, 0.42, 0));

@@ -79,6 +79,7 @@ public final class Kinship {
             }
             other("ostrich_harpy", EntityType.CHICKEN);
             other("penguin_harpy", EntityType.CHICKEN);
+            other("dodobold_harpy", EntityType.CHICKEN);
             for (String a : List.of("bullywug", "mucus_toad", "bullfrog", "tree_frog", "poison_dart_frog", "glass_frog", "goliath_frog", "desert_rain_frog",
                     "fire_bellied_toad", "cane_toad", "natterjack", "surinam_toad", "vodyanoy", "mailtoad")) {
                 other(a, EntityType.FROG);
@@ -99,6 +100,7 @@ public final class Kinship {
     private static Set<EntityType<?>> kinOf(GirlSpecies s) {
         return switch (s) {
             case OCELOT_NEKOMATA -> Set.of(EntityType.OCELOT);
+            case BOGHARE_JACKALOPE -> Set.of(EntityType.RABBIT, EntityType.FROG);
             case HORSE_CENTAUR, ZEBRA_CENTAUR, PEGASUS_CENTAUR, UNICORN_CENTAUR -> Set.of(EntityType.HORSE, EntityType.DONKEY, EntityType.MULE);
             case ALPACA_CENTAUR -> Set.of(EntityType.LLAMA, EntityType.TRADER_LLAMA);
             case GOAT_CENTAUR -> Set.of(EntityType.GOAT);

@@ -21,6 +21,15 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class GirlEvents {
     /** An aegis boar takes a share of every blow meant for her friend (Armoured.shield). */
+    /** A befriended karakasa obake near a player catches the projectiles about to hit them. */
+    @SubscribeEvent
+    public static void onProjectileImpact(net.neoforged.neoforge.event.entity.ProjectileImpactEvent event) {
+        if (event.getRayTraceResult() instanceof net.minecraft.world.phys.EntityHitResult hit && hit.getEntity() instanceof net.minecraft.world.entity.player.Player p
+                && com.linkyoshi90.monstergirls.entity.girl.Devil.shelter(p, event.getProjectile())) {
+            event.setCanceled(true);
+        }
+    }
+
     @SubscribeEvent
     public static void onPlayerHurt(net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent event) {
         if (event.getEntity() instanceof net.minecraft.world.entity.player.Player p && !p.level().isClientSide) {

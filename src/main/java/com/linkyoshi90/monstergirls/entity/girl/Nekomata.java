@@ -104,6 +104,7 @@ public class Nekomata extends AbstractMonsterGirl {
             case OCELOT_NEKOMATA -> girlAttributes(16, 0.32, 3);
             case BLAZE_CAT_NEKOMATA -> girlAttributes(24, 0.32, 5);
             case WATERLIL_NEKOMATA -> girlAttributes(16, 0.3, 2);
+            case CHESHIRE_NEKOMATA -> girlAttributes(20, 0.32, 3);
             default -> girlAttributes(18, 0.3, 3);
         };
     }
@@ -137,6 +138,24 @@ public class Nekomata extends AbstractMonsterGirl {
     }
 
     // --- food, petting, presents ---------------------------------------------------------------------------------
+
+    // --- the cheshire cat (her fading is the renderer's) -----------------------------------------------------------------
+
+    /** Left more than 14 blocks behind, she blinks back to her friend's side. True if she did. */
+    public boolean blinkToFriend(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 96);
+        if (friend == null || this.isOrderedToSit() || this.isPassenger() || this.distanceToSqr(friend) < 14 * 14) return false;
+        for (int i = 0; i < 12; i++) {
+            BlockPos p = friend.blockPosition().offset(this.random.nextInt(5) - 2, this.random.nextInt(3) - 1, this.random.nextInt(5) - 2);
+            if (!level.getBlockState(p.below()).isSolid() || !level.getBlockState(p).isAir() || !level.getBlockState(p.above()).isAir()) continue;
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.WITCH, this.getX(), this.getY() + 1, this.getZ(), 12, 0.3, 0.6, 0.3, 0.0);
+            this.teleportTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5);
+            this.getNavigation().stop();
+            this.playSound(SoundEvents.CAT_PURR, 1.0F, 1.2F);
+            return true;
+        }
+        return false;
+    }
 
     // --- the waterlil ----------------------------------------------------------------------------------------------------
 
@@ -364,6 +383,7 @@ public class Nekomata extends AbstractMonsterGirl {
         super.aiStep();
         if (this.species == GirlSpecies.BLAZE_CAT_NEKOMATA && this.level() instanceof ServerLevel fire && this.tickCount % 40 == 0 && !this.isBaby()) this.kindle(fire);
         if (this.species == GirlSpecies.WATERLIL_NEKOMATA && this.level() instanceof ServerLevel pond && this.tickCount % 4 == 0) this.tickPads(pond);
+        if (this.species == GirlSpecies.CHESHIRE_NEKOMATA && this.level() instanceof ServerLevel wonder && this.tickCount % 20 == 0) this.blinkToFriend(wonder);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.isTrueForm() && this.tickCount % 20 == 0 && !server.isDay()) {
             server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, this.getRandomX(0.6), this.getY() + this.getBbHeight() * this.random.nextDouble(), this.getRandomZ(0.6), 1, 0, 0.02, 0, 0);

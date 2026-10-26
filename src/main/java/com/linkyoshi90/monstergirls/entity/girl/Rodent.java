@@ -73,7 +73,55 @@ public class Rodent extends AbstractMonsterGirl {
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         if (s == GirlSpecies.NEEDLEHOG_RODENT) return girlAttributes(16, 0.28, 2);
         if (s == GirlSpecies.COATIMANO_RODENT) return girlAttributes(14, 0.3, 1);
+        if (s == GirlSpecies.MARMOTAUR_RODENT) return girlAttributes(28, 0.26, 5).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 1.2);
+        if (s == GirlSpecies.BAMBADGER_RODENT) return girlAttributes(16, 0.28, 2);
         return s == GirlSpecies.CAPYBARA_RODENT ? girlAttributes(26, 0.23, 2) : girlAttributes(14, 0.34, 1);
+    }
+
+    // --- the marmotaur and the bambadger -------------------------------------------------------------------------------
+
+    private long nextWhistle;
+
+    /** Monsters within 16 blocks of her friend glow; when new ones come, she whistles a warning. Returns how many she saw. */
+    public int keepWatch(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null) return 0;
+        int n = 0;
+        boolean fresh = false;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(16))) {
+            fresh |= !m.hasEffect(net.minecraft.world.effect.MobEffects.GLOWING);
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.GLOWING, 60, 0, true, false));
+            n++;
+        }
+        if (fresh && level.getGameTime() >= this.nextWhistle) {
+            this.nextWhistle = level.getGameTime() + 200;
+            this.playSound(SoundEvents.NOTE_BLOCK_FLUTE.value(), 2.0F, 2.0F);
+            this.startTimedAction(Action.POINT, 20);
+            friend.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.marmot_whistle", this.getDisplayName()), true);
+        }
+        return n;
+    }
+
+    /** Her bamboo flute: the bamboo and sugar cane within 6 blocks grow. Returns how many grew. */
+    public int playFlute(ServerLevel level) {
+        int n = 0;
+        for (BlockPos p : BlockPos.betweenClosed(this.blockPosition().offset(-6, -2, -6), this.blockPosition().offset(6, 3, 6))) {
+            var s = level.getBlockState(p);
+            if (s.is(net.minecraft.world.level.block.Blocks.BAMBOO) || s.is(net.minecraft.world.level.block.Blocks.BAMBOO_SAPLING)) {
+                if (level.getBlockState(p.above()).is(net.minecraft.world.level.block.Blocks.BAMBOO)) continue;     // only the tip of each stalk
+                if (net.minecraft.world.item.BoneMealItem.growCrop(new ItemStack(Items.BONE_MEAL), level, p.immutable())) n++;
+            } else if (s.is(net.minecraft.world.level.block.Blocks.SUGAR_CANE) && level.getBlockState(p.above()).isAir()) {
+                int height = 1;
+                while (height < 3 && level.getBlockState(p.below(height)).is(net.minecraft.world.level.block.Blocks.SUGAR_CANE)) height++;
+                if (height < 3) {
+                    level.setBlock(p.above(), net.minecraft.world.level.block.Blocks.SUGAR_CANE.defaultBlockState(), 3);
+                    n++;
+                }
+            }
+        }
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.NOTE, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 6, 0.6, 0.3, 0.6, 1.0);
+        this.playSound(SoundEvents.NOTE_BLOCK_FLUTE.value(), 1.0F, 1.0F + this.random.nextFloat() * 0.5F);
+        return n;
     }
 
     // --- the coatimano ------------------------------------------------------------------------------------------------
@@ -319,6 +367,9 @@ public class Rodent extends AbstractMonsterGirl {
     public void aiStep() {
         super.aiStep();
         if (this.species == GirlSpecies.COATIMANO_RODENT && this.level() instanceof ServerLevel diggingLevel && !this.isBaby()) this.tickDig(diggingLevel);
+        if (this.species == GirlSpecies.MARMOTAUR_RODENT && this.level() instanceof ServerLevel lookout && !this.isBaby() && this.tickCount % 20 == 0) this.keepWatch(lookout);
+        if (this.species == GirlSpecies.BAMBADGER_RODENT && this.level() instanceof ServerLevel grove && !this.isBaby() && this.tickCount % 600 == 0
+                && this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32) != null) this.playFlute(grove);
         if (this.species == GirlSpecies.NEEDLEHOG_RODENT && !this.level().isClientSide) {
             if (this.curled > 0 && --this.curled == 0 && this.getAction() == Action.CURL) this.setAction(Action.NONE);
             if (this.isCurled()) this.getNavigation().stop();
@@ -348,6 +399,8 @@ public class Rodent extends AbstractMonsterGirl {
     public boolean isFood(ItemStack stack) {
         if (this.species == GirlSpecies.NEEDLEHOG_RODENT) return stack.is(Items.SPIDER_EYE) || stack.is(Items.SWEET_BERRIES) || stack.is(Items.GLOW_BERRIES);
         if (this.species == GirlSpecies.COATIMANO_RODENT) return stack.is(Items.APPLE) || stack.is(Items.MELON_SLICE) || stack.is(Items.SWEET_BERRIES) || stack.is(Items.EGG);
+        if (this.species == GirlSpecies.MARMOTAUR_RODENT) return stack.is(Items.SHORT_GRASS) || stack.is(Items.SWEET_BERRIES) || stack.is(Items.WHEAT);
+        if (this.species == GirlSpecies.BAMBADGER_RODENT) return stack.is(Items.BAMBOO) || stack.is(Items.SWEET_BERRIES);
         return this.species == GirlSpecies.CAPYBARA_RODENT ? stack.is(Items.MELON_SLICE) || stack.is(Items.SUGAR_CANE) || stack.is(Items.APPLE)
                 : stack.is(Tags.Items.SEEDS) || stack.is(Items.SWEET_BERRIES) || stack.is(Items.GLOW_BERRIES);
     }
@@ -363,6 +416,14 @@ public class Rodent extends AbstractMonsterGirl {
             for (int i = 0; i < this.notes.getContainerSize(); i++) if (!this.notes.getItem(i).isEmpty()) return this.notes.removeItemNoUpdate(i);
             int r = this.random.nextInt(100);
             return new ItemStack(r < 40 ? Items.PAPER : r < 75 ? Items.SWEET_BERRIES : Items.SPIDER_EYE, r < 75 ? 2 : 1);
+        }
+        if (this.species == GirlSpecies.MARMOTAUR_RODENT) {
+            int r = this.random.nextInt(100);
+            return new ItemStack(r < 40 ? Items.FLINT : r < 70 ? Items.HONEYCOMB : r < 95 ? Items.GOLD_NUGGET : Items.EMERALD, r < 95 ? 2 : 1);
+        }
+        if (this.species == GirlSpecies.BAMBADGER_RODENT) {
+            int r = this.random.nextInt(100);
+            return new ItemStack(r < 45 ? Items.BAMBOO : r < 85 ? Items.SUGAR_CANE : Items.NOTE_BLOCK, r < 85 ? 4 : 1);
         }
         if (this.species == GirlSpecies.COATIMANO_RODENT) {
             int r = this.random.nextInt(100);

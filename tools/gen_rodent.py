@@ -49,6 +49,27 @@ SPECIES = {
                   "ring": dict(HAIR="#4a4a50", FUR="#8a8a90", LIGHT="#f4f4f6", MARK="#1e1e22", CLOTH="#c84a3a"),
                   "red": dict(HAIR="#7a2e1a", FUR="#a8482a", LIGHT="#f0c8a8", MARK="#4a160a", CLOTH="#3a5a8a"),
                   "white": dict(HAIR="#e0dcd4", FUR="#ece8e0", LIGHT="#ffffff", MARK="#9a948a", EYE="#c84a5a", CLOTH="#5a7a3a")}),
+    # twelfth wave: the marmotaur, a stout marmot with curled golden ram horns and an amber pendant
+    "marmotaur_rodent": dict(
+        build="curvy", outfit=dict(top=["sweater"], bottom="shorts", extras=["pearls"], colors=dict(cloth2="#5a4a3a", pearl="#e8c050")),
+        hair="shaggy", bangs="messy", ears="round", legs="fur", foot="paw", tail=[(2.25, 2.25, 3), (2.5, 2.5, 3)], tail_rest=[(-35, 0, 0), (20, 0, 0)],
+        tail_look="fur", horns="ram", pendant=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#8a6a42", FUR="#a88458", LIGHT="#f0e4cc", MARK="#5a4228", EYE="#3a7ac8", CLOTH="#e8dcc4", TRIM="#e8c050",
+                 pattern="dapple", extra=dict(horn="#d8a838", amber="#e8701e")),
+        variants={"grey": dict(HAIR="#6a6660", FUR="#8a8680", LIGHT="#e8e4e0", MARK="#4a4642", extra=dict(horn="#a8783a", amber="#e8701e")),
+                  "black": dict(HAIR="#2a2624", FUR="#3a3432", LIGHT="#8a8480", MARK="#1a1614", EYE="#c8a030", extra=dict(horn="#c8ccd4", amber="#5ab8e8")),
+                  "red": dict(HAIR="#8a3e1e", FUR="#a8542a", LIGHT="#f0c8a8", MARK="#5a2410", extra=dict(horn="#d8a838", amber="#e8c03a")),
+                  "white": dict(HAIR="#e8e4dc", FUR="#f0ece6", LIGHT="#ffffff", MARK="#b8b0a4", EYE="#c84a5a", extra=dict(horn="#e8c050", amber="#c83a5a"))}),
+    # twelfth wave: the bambadger, a badger striped like bamboo, a bamboo flute on a cord
+    "bambadger_rodent": dict(
+        build="petite", outfit=dict(top=["halter"], bottom="shorts", extras=["scarf"], colors=dict(scarf="#e8dcb0", cloth2="#3a5a2a")),
+        hair="bob", bangs="parted", ears="round", legs="fur", foot="paw", tail=[(2, 2, 2.5)], tail_rest=[(-25, 0, 0)], tail_look="fur", flute=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#4a7a2e", FUR="#6a9a3a", LIGHT="#f0ecd8", MARK="#3a5a1e", EYE="#3a6a2a", CLOTH="#e8dcb0", TRIM="#8ab84a",
+                 pattern="bars", extra=dict(bamboo="#8ab84a")),
+        variants={"golden": dict(HAIR="#a8882e", FUR="#c8a840", MARK="#6a5418", CLOTH="#3a5a2a", extra=dict(bamboo="#e8c84a")),
+                  "black": dict(HAIR="#2a2a26", FUR="#3a3a34", LIGHT="#e8e4d8", MARK="#141412", EYE="#8ab84a", extra=dict(bamboo="#4a4a3a")),
+                  "red": dict(HAIR="#8a3a22", FUR="#a84e2e", MARK="#5a2010", extra=dict(bamboo="#c8683a")),
+                  "pale": dict(HAIR="#b8c8a0", FUR="#d0dcb8", LIGHT="#ffffff", MARK="#8a9a70", extra=dict(bamboo="#d8e8b0"))}),
     "ratatoskr_rodent": dict(
         build="petite", outfit=dict(top=["bandeau", "vest"], bottom="shorts", extras=["satchel", "scarf"], colors=dict(scarf="#3a7a4a", leather="#5a3a22")),
         hair="ponytail", bangs="messy", ears="tuft", legs="fur", foot="paw",
@@ -68,6 +89,10 @@ def declare_hook(sp, d):
         out += [("quill", 1, 1, 5), ("note", 2, 2.5, .25)]
     if d.get("coati"):
         out += [("coati_nose", 2, 1.75, 2.5)]
+    if d.get("pendant"):
+        out += [("pendant", 1.5, 2, .5)]
+    if d.get("flute"):
+        out += [("flute", 6, .75, .75), ("cord", .25, 3, .25)]
     return out
 
 
@@ -77,6 +102,15 @@ def paint_hook(pt, pal, d):
     pt("yuzu_leaf", "all", lambda f, x, y, w, h: pick(G.shades("#4a9a3a"), 0.55, x, y))
     pt("coati_nose", "all", lambda f, x, y, w, h: pick(G.shades("#1e1a1c"), 0.4, x, y) if f == "north" and y == h - 1
        else pick(pal.LIGHT if f == "down" else pal.FUR, 0.55, x, y))
+    amber = G.shades(pal.extra.get("amber", "#e8701e"))
+    pt("pendant", "all", lambda f, x, y, w, h: pick(amber, 0.55 + 0.3 * (f == "north" and 0 < x < w - 1 and y in (2, 3)), x, y)
+       if 0 < y < h - 1 or 0 < x < w - 1 else pick(G.shades("#e8c050"), 0.6, x, y))
+    bam = G.shades(pal.extra.get("bamboo", "#8ab84a"))
+    pt("flute", "all", lambda f, x, y, w, h: pick(G.shades("#3a2a1e"), 0.3, x, y) if f == "north" and x % 4 == 1
+       else pick(bam, 0.45 + 0.2 * (x % 8 == 0), x, y))
+    pt("cord", "all", lambda f, x, y, w, h: pick(G.shades("#8a5a2a"), 0.5, x, y))
+    if pal.extra.get("bamboo"):                         # the badger's white stripe down her hair
+        pt("hair_cap", ("up", "north"), lambda f, x, y, w, h: pick(pal.LIGHT, 0.75, x, y) if abs(x + 0.5 - w / 2) < w * 0.12 else None)
     q, tip = G.shades(pal.extra.get("quill", "#5a4030")), G.shades(pal.extra.get("quill_tip", "#e8dcc8"))
     pt("quill", "all", lambda f, x, y, w, h: pick(tip if y >= h - 1 or f == "south" else q, 0.5 + 0.15 * (x % 2), x, y))
     pt("note", "all", lambda f, x, y, w, h: pick(G.shades("#3a3a4a"), 0.45, x, y) if f == "south" and y % 2 == 1 and 0 < x < w - 1
@@ -84,6 +118,11 @@ def paint_hook(pt, pal, d):
 
 
 def build_hook(r, g, d):
+    if d.get("pendant"):                                # the amber pendant on her necklace
+        r.put("body", cube("pendant", [-0.75, 16.6, -G.S("chest")[2] / 2 - G.S("bust")[2] - 0.6 + g.z]))
+    if d.get("flute"):                                  # the flute hangs across her chest from its cord
+        fz = -G.S("chest")[2] / 2 - G.S("bust")[2] - 0.8 + g.z
+        r.put("body", cube("flute", [-3, 15.2, fz]), cube("cord", [-0.125, 15.9, fz + 0.25]))
     if d.get("coati"):                                   # the long nose
         r.put("head", cube("coati_nose", [-1, g.hy + 0.6, -5.9 + g.z]))
     if d.get("quills"):                                 # rows of quills sweeping back over her head and down her back

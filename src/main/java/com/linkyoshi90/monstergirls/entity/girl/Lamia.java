@@ -132,6 +132,7 @@ public class Lamia extends AbstractMonsterGirl {
             case NAGA_LAMIA -> girlAttributes(32, 0.26, 5);
             case WADJET_LAMIA -> girlAttributes(30, 0.3, 6);
             case MEDUSA_LAMIA -> girlAttributes(30, 0.26, 4);
+            case TSUCHINOKO_LAMIA -> girlAttributes(18, 0.24, 2);
             case BOA_LAMIA -> girlAttributes(28, 0.24, 4);
             default -> girlAttributes(22, 0.26, 3);
         };
@@ -219,12 +220,14 @@ public class Lamia extends AbstractMonsterGirl {
 
     @Override
     public boolean isFood(ItemStack stack) {
+        if (this.species == GirlSpecies.TSUCHINOKO_LAMIA && stack.is(Items.HONEY_BOTTLE)) return true;   // she loves a drink
         return stack.is(Items.EGG) || stack.is(Items.RABBIT) || stack.is(Items.CHICKEN) || stack.is(ItemTags.FISHES) || stack.is(Items.TURTLE_EGG);
     }
 
     @Override
     protected int foodValue(Player player, ItemStack stack) {
-        int v = stack.is(Items.EGG) || stack.is(Items.RABBIT) ? 2 : super.foodValue(player, stack);
+        if (stack.is(Items.HONEY_BOTTLE) && !player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE))) player.drop(new ItemStack(Items.GLASS_BOTTLE), false);
+        int v = stack.is(Items.EGG) || stack.is(Items.RABBIT) || stack.is(Items.HONEY_BOTTLE) ? 2 : super.foodValue(player, stack);
         return this.species == GirlSpecies.BOA_LAMIA ? v * 2 : v;       // the boa bonds fastest
     }
 
@@ -256,11 +259,37 @@ public class Lamia extends AbstractMonsterGirl {
         return Math.max(super.bellyProgress(), this.digest > 0 ? 0.6F : 0.0F);
     }
 
+    // --- the tsuchinoko ----------------------------------------------------------------------------------------------
+
+    /** Whether the ground two blocks ahead of where she is going lies lower than she stands: a slope to roll down. */
+    public boolean downhillAhead(ServerLevel level) {
+        net.minecraft.world.phys.Vec3 v = this.getDeltaMovement();
+        if (v.horizontalDistanceSqr() < 0.0025) return false;
+        BlockPos a = BlockPos.containing(this.position().add(v.multiply(1, 0, 1).normalize().scale(2.0)));
+        BlockPos under = a.below();                                     // nothing to stand on ahead at her own level: it drops away
+        return level.getBlockState(a).getCollisionShape(level, a).isEmpty() && level.getBlockState(under).getCollisionShape(level, under).isEmpty();
+    }
+
+    /** Downhill she curls up and rolls, faster than a player can run. */
+    private void tickRoll(ServerLevel level) {
+        boolean roll = !this.isBaby() && (this.onGround() || this.getDeltaMovement().y < 0) && this.downhillAhead(level);
+        if (roll) {
+            if (this.getAction() != Action.ROLL) this.setAction(Action.ROLL);
+            net.minecraft.world.phys.Vec3 v = this.getDeltaMovement();
+            double h = Math.sqrt(v.horizontalDistanceSqr());
+            if (h < 0.42) this.setDeltaMovement(v.x * 1.3, v.y, v.z * 1.3);
+        } else if (this.getAction() == Action.ROLL) {
+            this.setAction(Action.NONE);
+        }
+    }
+
     @Override
     public ItemStack rollGift(Player player) {
         if (this.level().getGameTime() >= this.nextShed - 2400) return new ItemStack(ModItems.SHED_SKIN.get());
         int r = this.random.nextInt(100);
         return switch (this.species) {
+            case TSUCHINOKO_LAMIA -> new ItemStack(r < 50 ? Items.GOLD_NUGGET : r < 80 ? Items.GOLDEN_CARROT : r < 97 ? Items.GOLD_INGOT : Items.GOLDEN_APPLE,
+                    r < 50 ? 5 : 1);
             case NAGA_LAMIA -> new ItemStack(r < 50 ? Items.GOLD_NUGGET : r < 90 ? Items.EMERALD : r < 98 ? Items.GOLD_INGOT : Items.DIAMOND, r < 50 ? 4 : 1);
             case WADJET_LAMIA -> r < 70 ? new ItemStack(Items.EMERALD, 1 + r % 2) : new ItemStack(r < 90 ? Items.GOLD_NUGGET : Items.LAPIS_LAZULI, 3);
             case SEA_SNAKE_LAMIA -> new ItemStack(r < 50 ? Items.COD : r < 80 ? Items.PRISMARINE_SHARD : Items.NAUTILUS_SHELL);
@@ -379,6 +408,7 @@ public class Lamia extends AbstractMonsterGirl {
             case MEDUSA_LAMIA -> {
                 if (this.tickCount % 10 == 0) this.petrify(server);
             }
+            case TSUCHINOKO_LAMIA -> this.tickRoll(server);
             default -> {
             }
         }

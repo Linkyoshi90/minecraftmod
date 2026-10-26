@@ -79,6 +79,7 @@ public class Dragon extends AbstractMonsterGirl {
             case GRYPHON_DRAGON -> girlAttributes(50, 0.32, 7);
             case KANNAE_DRAGON -> girlAttributes(40, 0.3, 8);
             case WYVERN_DRAGON -> girlAttributes(44, 0.3, 6);
+            case ALEBRIJE_DRAGON -> girlAttributes(30, 0.3, 4);
             default -> girlAttributes(70, 0.26, 9).add(Attributes.ARMOR, 4);
         };
     }
@@ -86,7 +87,7 @@ public class Dragon extends AbstractMonsterGirl {
     @Override
     public boolean canFly() {
         return switch (this.species) {
-            case LONG_DRAGON, WYRM_DRAGON, GRYPHON_DRAGON, WYVERN_DRAGON -> true;
+            case LONG_DRAGON, WYRM_DRAGON, GRYPHON_DRAGON, WYVERN_DRAGON, ALEBRIJE_DRAGON -> true;
             default -> false;
         };
     }
@@ -143,6 +144,8 @@ public class Dragon extends AbstractMonsterGirl {
 
     @Override
     public boolean isFood(ItemStack stack) {
+        if (this.species == GirlSpecies.ALEBRIJE_DRAGON && (stack.is(Items.APPLE) || stack.is(Items.MELON_SLICE) || stack.is(Items.SWEET_BERRIES)
+                || stack.getItem() instanceof net.minecraft.world.item.DyeItem)) return true;
         return stack.is(Items.COOKED_BEEF) || stack.is(Items.COOKED_PORKCHOP) || stack.is(Items.COOKED_MUTTON) || stack.is(Items.COOKED_CHICKEN)
                 || stack.is(Items.COOKED_RABBIT) || stack.is(Items.GOLDEN_APPLE);
     }
@@ -200,6 +203,9 @@ public class Dragon extends AbstractMonsterGirl {
     @Override
     public ItemStack rollGift(Player player) {
         int r = this.random.nextInt(100);
+        if (this.species == GirlSpecies.ALEBRIJE_DRAGON) {                 // her presents are dyes, every colour
+            return new ItemStack(net.minecraft.world.item.DyeItem.byColor(net.minecraft.world.item.DyeColor.byId(r % 16)), 3);
+        }
         if (r < 5) return new ItemStack(Items.DIAMOND);
         if (r < 30) return new ItemStack(Items.GOLD_INGOT, 2);
         return switch (this.species) {
@@ -299,11 +305,27 @@ public class Dragon extends AbstractMonsterGirl {
 
     // --- tick ----------------------------------------------------------------------------------------------------
 
+    /** The alebrije dyes a sheep near her in a bright colour (not the one it has). True if she did. */
+    public boolean paintSheep(ServerLevel level) {
+        java.util.List<net.minecraft.world.entity.animal.Sheep> sheep = level.getEntitiesOfClass(net.minecraft.world.entity.animal.Sheep.class,
+                this.getBoundingBox().inflate(8), s -> !s.isSheared() && !s.isBaby());
+        if (sheep.isEmpty()) return false;
+        net.minecraft.world.entity.animal.Sheep s = sheep.get(this.random.nextInt(sheep.size()));
+        net.minecraft.world.item.DyeColor c;
+        do c = net.minecraft.world.item.DyeColor.byId(this.random.nextInt(16)); while (c == s.getColor());
+        s.setColor(c);
+        level.sendParticles(ParticleTypes.HAPPY_VILLAGER, s.getX(), s.getY() + 1, s.getZ(), 8, 0.4, 0.4, 0.4, 0.0);
+        this.playSound(SoundEvents.DYE_USE, 1.0F, 1.0F);
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.lair == null && this.onGround()) this.lair = this.blockPosition();
+        if (this.species == GirlSpecies.ALEBRIJE_DRAGON && !this.isBaby() && this.tickCount % 1200 == 0
+                && this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32) != null) this.paintSheep(server);
         if (!this.isVehicle() && this.isNoGravity() && !this.canFly()) this.setNoGravity(false);
         if (this.drowsy > 0) {
             this.drowsy--;

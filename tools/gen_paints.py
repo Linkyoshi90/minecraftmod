@@ -17,7 +17,9 @@ of light) and camo (blotchy woodland camouflage). And (tenth wave, from the refe
 with stitched seams), pixel (an 8-bit palette in chunky pixels), origami (folded paper, light and shade either side of
 each fold) and gummy (bright see-through candy, drawn translucent). And (eleventh wave): synthwave (a dark violet body
 with a neon sunset gradient and grid lines), cookie (baked dough with chocolate chips and browned edges), cloud (soft
-white with sky-blue shade underneath) and the seasonal valentine (pink and red with little hearts). The drips and
+white with sky-blue shade underneath) and the seasonal valentine (pink and red with little hearts). And (twelfth wave):
+porcelain (white glaze with blue painted motifs), denim (blue twill with orange stitching), moss (grey stone overgrown with
+moss) and the seasonal easter (pastel egg stripes, April only). The drips and
 patterns follow the model: they are drawn per cube face from the geo file, running down each side from its top edge.
 
     python tools/gen_paints.py [paint ...] [model ...]   # everything, or just the paints and/or models named
@@ -42,7 +44,7 @@ GEO = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls", "
 JAVA = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "girl", "GirlSpecies.java")
 HUES = {"blue": 0.58, "red": 0.0, "green": 0.33, "yellow": 0.14, "purple": 0.77}
 # the harpies and anurans (their own entity classes): the adult texture and the young ones (hatchling, tadpole, froglet)
-OTHERS = ["sparrow_harpy", "crow_harpy", "ostrich_harpy", "owl_harpy", "seagull_harpy", "albatross_harpy", "riflebird_harpy", "phoenix_harpy", "tengu_harpy", "toucan_harpy", "penguin_harpy", "vodyanoy", "zhuque_harpy", "finch_harpy", "flamingo_harpy", "coin_magpie_harpy", "trickster_raven_harpy", "rookmourn_harpy", "cassowrath_harpy",
+OTHERS = ["sparrow_harpy", "crow_harpy", "ostrich_harpy", "owl_harpy", "seagull_harpy", "albatross_harpy", "riflebird_harpy", "phoenix_harpy", "tengu_harpy", "toucan_harpy", "penguin_harpy", "vodyanoy", "zhuque_harpy", "finch_harpy", "flamingo_harpy", "coin_magpie_harpy", "trickster_raven_harpy", "rookmourn_harpy", "cassowrath_harpy", "dodobold_harpy",
           "bullywug", "mucus_toad", "bullfrog", "tree_frog", "poison_dart_frog", "glass_frog", "goliath_frog", "desert_rain_frog",
           "fire_bellied_toad", "cane_toad", "natterjack", "surinam_toad", "mailtoad"]
 
@@ -179,7 +181,7 @@ def drip_len(seed, col, h, longer=1.0):
 def treat(img, name, model):
     if name in PATINA_SHARE or name in ("glow", "ink", "magma", "pumpkin", "candy_cane", "frost", "sakura", "stained_glass", "sepia",
                                         "opal", "chrome", "aurora", "camo", "plush", "pixel", "origami", "gummy",
-                                        "synthwave", "cookie", "cloud", "valentine"):
+                                        "synthwave", "cookie", "cloud", "valentine", "porcelain", "denim", "moss", "easter"):
         return finish(img, name, model)[0]
     W = len(img[0])
     out = [list(row) for row in img]
@@ -304,7 +306,7 @@ def treat(img, name, model):
 TREATS = ["chocolate", "icecream", "strawberry", "jello", "milk", "gold", "marble", "galaxy", "ghost", "honey", "rainbow",
           "copper", "copper_exposed", "copper_weathered", "copper_oxidized", "glow", "ink", "magma", "pumpkin", "candy_cane",
           "frost", "sakura", "stained_glass", "sepia", "opal", "chrome", "aurora", "camo", "plush", "pixel", "origami", "gummy",
-          "synthwave", "cookie", "cloud", "valentine"]
+          "synthwave", "cookie", "cloud", "valentine", "porcelain", "denim", "moss", "easter"]
 PEARL = hexes("#b8b0c0", "#d8d2e0", "#ece8f2", "#f8f6fc", "#ffffff")
 CHROME = hexes("#1e2024", "#4a4e56", "#8a909a", "#c8ccd4", "#ffffff")
 AURORA = hexes("#2af08a", "#3ad8c8", "#5aa0f0", "#8a6af0", "#c86ae8")
@@ -321,6 +323,10 @@ EMBER = hexes("#a8280a", "#e85a14", "#f8901e", "#ffc84a", "#fff0a0")
 NEON = hexes("#1a8a8a", "#2ad0c8", "#5af8f0", "#b0fff8")
 NIGHTBODY = hexes("#0a0a14", "#14141e", "#20202e", "#2e2e40", "#40405a")
 PUMPKIN = hexes("#7a2e06", "#b04a0e", "#e0701a", "#f89a3a", "#ffc070")
+DENIM = hexes("#1e2e5a", "#2e4a82", "#4a6aa8", "#7a96c8")
+MOSS = hexes("#2e4a1e", "#4a6e2a", "#6a9a3a", "#9ac85a")
+STONE = hexes("#4a4a4e", "#6e6e72", "#909094", "#b8b8bc")
+PASTEL = [(240, 150, 186), (140, 196, 240), (244, 214, 110), (150, 214, 150), (196, 160, 236)]
 DOUGH = hexes("#7a4a24", "#b07838", "#d6a460", "#ecca8c")
 ROSE = hexes("#b02a54", "#e0607e", "#f39ab0", "#ffd2de")
 VINE = hexes("#1e3a14", "#2e5a1e", "#467a2a", "#62a03a")
@@ -494,6 +500,32 @@ def finish(img, name, model):
                 hx_, hy_ = (xx + 3 * i) % 12, (yy + 2 * i) % 10                  # little hearts scattered over every face
                 if fw > 4 and fh > 4 and (hy_, hx_) in ((0, 1), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (2, 1), (2, 2), (2, 3), (3, 2)):
                     c = (200, 20, 60) if not hair else (255, 240, 246)
+            elif name == "porcelain":
+                if l < 0.22 and face:
+                    continue
+                c = tuple(int(v * (0.86 + 0.14 * l)) for v in (242, 246, 252))
+                if fw > 3 and fh > 3 and (edge or (xx * 3 + yy * 2 + i) % 9 == 0 or (yy == fh - 2 and xx % 2 == 0)):
+                    c = (44, 76, 168)                                       # a cobalt rim, the blue painted motifs, a band near each hem
+            elif name == "denim":
+                if l < 0.22 and face:
+                    continue
+                c = ramp_pick(DENIM, 0.25 + 0.6 * l - 0.08 * ((xx + yy) % 3 == 0))
+                if edge and fw > 2 and fh > 2 and (xx + yy) % 2 == 0:
+                    c = (222, 150, 62)                                      # the orange stitching along every seam
+            elif name == "moss":
+                if l < 0.22 and face:
+                    continue
+                mossy = yy < 2 or H.noise(x // 3, y // 3, 91) > 0.55
+                c = ramp_pick(MOSS if mossy else STONE, 0.25 + 0.6 * l)
+            elif name == "easter":
+                if l < 0.22 and face:
+                    continue
+                band = (yy + abs(xx % 4 - 2)) // 5                          # wavy pastel bands, like a dyed egg
+                if (yy + abs(xx % 4 - 2)) % 5 == 0:
+                    c = (250, 250, 246)
+                else:
+                    pr, pg, pb = PASTEL[(band + i) % len(PASTEL)]
+                    c = (int(pr * (0.85 + 0.15 * l)), int(pg * (0.85 + 0.15 * l)), int(pb * (0.85 + 0.15 * l)))
             else:                                                       # candy cane: red and white stripes, round and round
                 if l < 0.22 and face:
                     continue

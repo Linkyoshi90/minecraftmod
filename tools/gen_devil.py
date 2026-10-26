@@ -67,6 +67,32 @@ SPECIES = {
                   "green": dict(extra=dict(kimono="#2a6a4a", obi="#e8c040", kimono_trim="#e8c040", cloth2="#1e4a34", hat="#1a1a22")),
                   "black": dict(extra=dict(kimono="#1a1a22", obi="#a81a2a", kimono_trim="#a81a2a", cloth2="#141418", hat="#1a1a22")),
                   "gold": dict(extra=dict(kimono="#c8a030", obi="#a81a2a", kimono_trim="#a81a2a", cloth2="#8a6a1a", hat="#1a1a22"))}),
+    # twelfth wave: the gremlin, a little green tinkerer with huge ears and a spanner
+    "gremlin_devil": dict(
+        build="petite", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["belt"], colors=dict(cloth2="#3a4a2a", leather="#5a3a22")),
+        hair="wavy", bangs="parted", ears="big", legs="bare", foot="shoe", spanner=True,
+        pal=dict(SKIN="#b8c890", HAIR="#5a8ad8", FUR="#b8c890", LIGHT="#e0e8c0", MARK="#7a8a5a", EYE="#3a8a4a", CLOTH="#7a9a5a", TRIM="#c8a040",
+                 INNER="#e8b0a0", extra=dict(boot="#5a3a22")),
+        variants={"blue": dict(SKIN="#98b8d8", FUR="#98b8d8", LIGHT="#d0e0f0", MARK="#5a7a9a", HAIR="#2a4a8a", CLOTH="#4a6a9a"),
+                  "yellow": dict(SKIN="#e0d090", FUR="#e0d090", LIGHT="#f4ecc0", MARK="#a8984a", HAIR="#d86a2a", CLOTH="#c8902a"),
+                  "grey": dict(SKIN="#a8a8a8", FUR="#a8a8a8", LIGHT="#d8d8d8", MARK="#6a6a6a", HAIR="#3a3a3e", CLOTH="#5a5a62"),
+                  "purple": dict(SKIN="#c0a8d0", FUR="#c0a8d0", LIGHT="#e4d8ec", MARK="#7a5a8a", HAIR="#5a2a7a", CLOTH="#7a4a9a")}),
+    # twelfth wave: the karakasa obake, a girl under an umbrella hat, a thin tail curled like its handle, hopping on one leg ("onehop")
+    "karakasa_obake_devil": dict(
+        build="petite", outfit=dict(top=["kimono"], bottom="hakama", extras=[],
+                                    colors=dict(kimono="#3a6ac8", kimono_trim="#f4f0e8", obi="#c83a3a", cloth2="#2a4a8a")),
+        hair="bob", bangs="blunt", ears=None, legs="bare", foot="shoe", tail=[(.75, .75, 4), (.75, .75, 4), (.75, .75, 3)],
+        tail_rest=[(-20, 0, 0), (-40, 0, 0), (-70, 0, 0)], tail_look="fur", umbrella=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#3a6ac8", FUR="#3a6ac8", LIGHT="#a8c8f0", MARK="#2a4a8a", EYE="#3a5ab8", CLOTH="#3a6ac8", TRIM="#f4f0e8",
+                 extra=dict(canopy="#4a7ad8", rib="#2a3a6a", boot="#3a2a20")),
+        variants={"red": dict(HAIR="#c83a3a", FUR="#c83a3a", MARK="#7a1a1a", EYE="#c83a3a",
+                              extra=dict(canopy="#d84a3a", rib="#5a1a14", kimono="#c83a3a", obi="#2a2a2a", cloth2="#8a2a2a", boot="#3a2a20")),
+                  "purple": dict(HAIR="#7a4ab8", FUR="#7a4ab8", MARK="#4a2a7a", EYE="#8a4ac8",
+                                 extra=dict(canopy="#8a5ac8", rib="#3a1e5a", kimono="#7a4ab8", obi="#f8e070", cloth2="#4a2a7a", boot="#3a2a20")),
+                  "green": dict(HAIR="#3a8a5a", FUR="#3a8a5a", MARK="#1e5a3a", EYE="#3a8a4a",
+                                extra=dict(canopy="#4a9a6a", rib="#1e4a2e", kimono="#3a8a5a", obi="#c83a3a", cloth2="#1e5a3a", boot="#3a2a20")),
+                  "white": dict(HAIR="#f0eef0", FUR="#f0eef0", MARK="#a8a4b0", EYE="#c84a5a",
+                                extra=dict(canopy="#f4f2f0", rib="#8a8490", kimono="#f4f2f0", obi="#c83a3a", cloth2="#c8c4d0", boot="#3a2a20"))}),
     # ninth wave: the oni, big and horned, a tiger-skin loincloth and an iron club (kanabo) in her right hand
     "oni_devil": dict(
         build="strong", outfit=dict(top=["sarashi"], bottom="loincloth", extras=["arm_wraps", "belt"], colors=dict(cloth2="#e8a830")),
@@ -88,6 +114,10 @@ def declare_hook(sp, d):
         out += [("club", 2.25, 11, 2.25), ("grip", 1.25, 3.5, 1.25), ("stud", .5, .5, .5)]
     if d.get("qing"):
         out += [("cap", 9, 3, 9), ("cap_brim", 10.5, .75, 10.5), ("button", 1.5, 1.5, 1.5), ("talisman", 3, 6, .25)]
+    if d.get("spanner"):
+        out += [("spanner", .75, 4, .75), ("spanner_head", 2, 1, .75)]
+    if d.get("umbrella"):
+        out += [("canopy", 14, 1, 14), ("canopy_b", 10.5, 1.25, 10.5), ("canopy_c", 7, 1.25, 7), ("canopy_top", 3.5, 1, 3.5), ("umb_tip", 1, 2, 1)]
     return out
 
 
@@ -116,6 +146,23 @@ def paint_hook(pt, pal, d):
         black = G.shades("#1e1a14")
         for p in ("flap_f", "flap_b"):
             pt(p, "all", lambda f, x, y, w, h: pick(black, 0.4, x, y) if (y + x // 2) % 4 == 0 else None)
+    steel = G.shades("#9a9aa6")
+    pt("spanner", "all", lambda f, x, y, w, h: pick(G.shades("#c83a3a") if y >= h - 5 else steel, 0.55, x, y))
+    pt("spanner_head", "all", lambda f, x, y, w, h: CLEAR if f in ("north", "south") and x in (w // 2 - 1, w // 2) and y < h // 2 else pick(steel, 0.6, x, y))
+    can, rib = G.shades(pal.extra.get("canopy", "#4a7ad8")), G.shades(pal.extra.get("rib", "#2a3a6a"))
+
+    def canopy(f, x, y, w, h):                            # oiled paper panels between bamboo ribs; darker underneath
+        if f == "down":
+            return pick(can, 0.3, x, y) if (x - y) % 13 and (x + y) % 13 else pick(rib, 0.4, x, y)
+        if f == "up":
+            dx, dy = x + 0.5 - w / 2, y + 0.5 - h / 2
+            return pick(rib, 0.45, x, y) if abs(dx) < 0.6 or abs(dy) < 0.6 or abs(abs(dx) - abs(dy)) < 0.7 else pick(can, 0.55 + 0.1 * (abs(dx) + abs(dy) < w * 0.3), x, y)
+        return pick(rib, 0.35, x, y) if y == h - 1 or x % 13 == 0 else pick(can, 0.5, x, y)
+    pt("canopy", "all", canopy)
+    pt("canopy_b", "all", canopy)
+    pt("canopy_c", "all", canopy)
+    pt("canopy_top", "all", lambda f, x, y, w, h: pick(can, 0.62, x, y))
+    pt("umb_tip", "all", lambda f, x, y, w, h: pick(rib, 0.5, x, y))
     hat = G.shades(pal.extra.get("hat", "#1a1a22"))
     pt("cap", "all", lambda f, x, y, w, h: pick(hat, 0.45 + 0.1 * (x % 3 == 0), x, y))
     pt("cap_brim", "all", lambda f, x, y, w, h: pick(hat, 0.35, x, y))
@@ -143,6 +190,13 @@ def build_hook(r, g, d):
         studs = [cube("stud", [px - 1.45 + 2.4 * (i % 2), py + 1.5 + 2.2 * (i // 2), cz - 0.25]) for i in range(8)]
         studs += [cube("stud", [px - 0.25, py + 2.6 + 2.2 * i, cz - 1.45]) for i in range(3)]
         r.add("club", "hand_r", [px, py - 1.5, pz], [cube("grip", [px - 0.625, py - 2.5, cz - 0.625]), cube("club", [px - 1.125, py + 1.0, cz - 1.125])] + studs)
+    if d.get("spanner"):                                 # a spanner in her right hand
+        px, py, pz = r.b["hand_r"]["pivot"]
+        r.add("spanner", "hand_r", [px, py - 1.5, pz], [cube("spanner", [px - 0.375, py - 4.5, pz - 2.2]), cube("spanner_head", [px - 1.0, py - 5.4, pz - 2.2])])
+    if d.get("umbrella"):                                # the umbrella hat, wide and peaked
+        r.add("umbrella", "head", [0, hy + 9, z], [cube("canopy", [-7, hy + 8.4, -7 + z]), cube("canopy_b", [-5.25, hy + 9.4, -5.25 + z]),
+                                                    cube("canopy_c", [-3.5, hy + 10.65, -3.5 + z]), cube("canopy_top", [-1.75, hy + 11.9, -1.75 + z]),
+                                                    cube("umb_tip", [-0.5, hy + 12.9, -0.5 + z])])
     if d.get("qing"):
         r.add("qing_hat", "head", [0, hy + 8, z], [cube("cap", [-4.5, hy + 7.6, -4.5 + z]), cube("cap_brim", [-5.25, hy + 7.4, -5.25 + z]),
                                                  cube("button", [-0.75, hy + 10.6, -0.75 + z]), cube("talisman", [-1.5, hy + 2.2, -5.6 + z])])
@@ -162,6 +216,15 @@ def anim_extra(an, sp, d):
     if d.get("pumpkin"):                                 # the disguise stays shrunk away unless the game shows it (see GirlRenderer)
         for key in [k.split(".")[-1] for k in an.A]:
             F._inject(an, key, {"disguise": {"scale": hold(0, 0, 0)}})
+    if d.get("spanner"):                                 # the gremlin's big ears stick out sideways
+        for key in [k.split(".")[-1] for k in an.A]:
+            F._inject(an, key, {"ear_r": {"rotation": hold(0, 0, 65)}, "ear_l": {"rotation": hold(0, 0, -65)}})
+    an.add("onehop", 0.7, True, merge({"root": {"position": Tk((0, (0, 0, 0)), (0.15, (0, -0.5, 0)), (0.35, (0, 2.5, 0)), (0.6, (0, 0, 0)), (0.7, (0, 0, 0)))},
+                                       "leg_r": {"rotation": hold(0, 0, 0)}, "leg_l": {"rotation": hold(-40, 0, 0)}, "shin_l": {"rotation": hold(90, 0, 0)}},
+                                      sym("arm", hold(-20, 0, 35))))
+    if d.get("umbrella"):                                # the karakasa obake goes everywhere on one leg
+        for key in ("walk", "run"):
+            an.A[f"animation.{sp}.{key}"] = an.A[f"animation.{sp}.onehop"]
     an.add("charm", 2.0, True, merge({"head": {"rotation": hold(8, 14, 6)}, "body": {"rotation": hold(0, 10, 4)}},
                                      {"arm_r": {"rotation": hold(-150, 0, 20)}, "forearm_r": {"rotation": hold(-60, 0, 0)}}))
 

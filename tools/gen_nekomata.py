@@ -73,6 +73,16 @@ SPECIES = {
                   "iberian": dict(FUR="#c8a060", HAIR="#b88c50", pattern="spots", CLOTH="#6a3a2a"),
                   "bobcat": dict(FUR="#b07850", HAIR="#9a6440", pattern="spots", pattern_scale=0.8),
                   "silver": dict(FUR="#d4d6da", HAIR="#dcdee4", LIGHT="#ffffff", MARK="#4a4c52", CLOTH="#3a4a6a")}),
+    # twelfth wave: the cheshire cat, ringed in two colours, with a huge grin that glows (glow mask) and stays when she fades
+    "cheshire_nekomata": dict(grin=True, glow=["grin"],
+        build="slim", outfit=dict(top=["halter", "vest"], bottom="shorts", extras=["scarf"], colors=dict(cloth2="#3a1e4a", scarf="#f8e070")),
+        ears="cat", hair="shaggy", bangs="messy", tail=((1.5, 1.5, 4), (1.5, 1.5, 4), (1.5, 1.5, 3.5)), tail_pattern="bars",
+        pal=dict(SKIN=skin("fair"), HAIR="#e86aa8", FUR="#f088b8", LIGHT="#fcd8e8", MARK="#7a3a9a", EYE="#e8e040", CLOTH="#4a2a6a", TRIM="#f8e070",
+                 INNER="#f8b0c8", pattern="bars"),
+        variants={"purple": dict(HAIR="#8a4ac8", FUR="#9a5ad8", LIGHT="#e0c8f8", MARK="#2a9a9a", EYE="#f8d040", CLOTH="#1e4a4a"),
+                  "blue": dict(HAIR="#4a7ad8", FUR="#5a8ae8", LIGHT="#f0f4ff", MARK="#f4f6ff", EYE="#f8e040", CLOTH="#1e2a5a"),
+                  "gold": dict(HAIR="#d8a030", FUR="#e8b040", LIGHT="#f8e8b8", MARK="#6a3a14", EYE="#3ac87a", CLOTH="#5a2a14"),
+                  "black": dict(HAIR="#2a2230", FUR="#2e2634", LIGHT="#6a5a78", MARK="#8a4ad8", EYE="#e8e040", CLOTH="#1a1420")}),
     # eleventh wave: the waterlil, a big cat's head on a tiny body, riding her own lily pad, a small bloom on top
     # (lily pads grow under her in the game)
     "waterlil_nekomata": dict(chibi=True,
@@ -130,6 +140,8 @@ def declare(sp):
         extra += [("lotus_petal", 2.25, .5, 3), ("lotus_heart", 1.5, 1.25, 1.5)]
     if d.get("chibi"):
         extra += [("lily_pad", 16, .5, 16)]
+    if d.get("grin"):
+        extra += [("grin", 4.5, 1.5, .25)]
     G.declare(leg_parts(d.get("build")) + [("tail_a",) + a, ("tail_b",) + b, ("tail_c",) + c] + extra, ears=d["ears"], hair=d["hair"],
               build=d.get("build"), outfit=d.get("outfit"))
 
@@ -199,6 +211,20 @@ def paint(sp, pal):
         lp, li = G.shades(pal.extra.get("lotus", "#f8b0cc")), G.shades(pal.extra.get("lotus_in", "#fff0a0"))
         pt("lotus_petal", "all", lambda f, x, y, w, h: pick(lp, 0.55 + 0.2 * (f == "up") - 0.15 * (x == 0 or x == w - 1), x, y))
         pt("lotus_heart", "all", lambda f, x, y, w, h: pick(li, 0.65, x, y))
+    if d.get("grin"):                                    # a crescent of white teeth, outlined: all of her that stays when she fades
+        teeth, line = G.shades("#fbf8f0"), G.shades("#2a1420")
+
+        def grin(f, x, y, w, h):                          # a smile: straight along the top, curving up to the corners below
+            if f != "north":
+                return CLEAR
+            e = (x + 0.5 - w / 2) / (w / 2)
+            bot = (h - 1) * (1 - 0.9 * e * e)
+            if y > bot + 0.5:
+                return CLEAR
+            if y == 0 or y > bot - 0.5 or abs(e) > 0.93:
+                return pick(line, 0.3, x, y)
+            return pick(line, 0.4, x, y) if x % 2 == 0 and y < bot - 1 else pick(teeth, 0.78, x, y)
+        pt("grin", "all", grin)
     if d.get("chibi"):
         pad = G.shades("#4a8a3a")
 
@@ -262,17 +288,21 @@ def build(sp):
         r.put("foot_r", cube("flame", [cx - 1.375, 0.1, -2.0]))
         hx, hyy, hz = r.b["hand_r"]["pivot"]
         r.put("hand_r", cube("flame_hand", [hx - 1.125, hyy - 2.6, hz - 1.0]))
+    if d.get("grin"):                                    # the grin, wide across her lower face
+        r.put("head", cube("grin", [-2.25, g.hy + 0.6, -4.2 + g.z]))
     if "stitched" in d["variants"]:                      # Neko Zombie's muzzle (drawn only on that variant)
         r.put("head", cube("nz_muzzle", [-1.75, g.hy + 0.4, -6.3 + g.z]))
     if d.get("chibi"):
         chibify(r, g.hy)
-        r.add("pad", None, [0, 0, 0], [cube("lily_pad", [-8, 0, -8])])   # its own bone: it stays flat whatever she does
+        r.b["pad"] = dict(parent=None, pivot=[0, 0, 0], cubes=[cube("lily_pad", [-8, 0, -8])], mirror=False)
+        r.order.insert(0, "pad")                         # its own bone: it stays flat whatever she does
+        r.b["head"]["parent"] = "pad"                    # and her head rests on it, whatever her body does under it
     return r.model(sp)
 
 
-def chibify(r, neck, body=0.55, head=1.25, lift=0.5):
-    """A big head on a tiny body: the body shrinks toward the ground, the head (and all on it) grows about the neck,
-    and the whole of her sits `lift` up (on her lily pad). Faces keep their UV rectangles, so the texture just stretches."""
+def chibify(r, neck, body=0.5, head=1.3, lift=0.5):
+    """Only a big head shows: the head (and all on it) grows about the neck and rests `lift` up, on her lily pad; the
+    small body hangs under the pad, in the water. Faces keep their UV rectangles, so the texture just stretches."""
     def under_head(n):
         while n:
             if n == "head":
@@ -280,14 +310,14 @@ def chibify(r, neck, body=0.55, head=1.25, lift=0.5):
             n = r.b[n]["parent"]
         return False
     old_neck = [0, neck, 0]
-    new_neck = [0, neck * body + lift, 0]
+    new_neck = [0, lift, 0]
     done = set()
     for n in r.order:
         if n == "root":
             continue
         k = head if under_head(n) else body
         move = (lambda p: [nn + (v - o) * head for v, o, nn in zip(p, old_neck, new_neck)]) if under_head(n) \
-            else (lambda p: [p[0] * body, p[1] * body + lift, p[2] * body])
+            else (lambda p: [p[0] * body, (p[1] - neck) * body, p[2] * body])
         b = r.b[n]
         b["pivot"] = move(b["pivot"])
         for c in b["cubes"]:

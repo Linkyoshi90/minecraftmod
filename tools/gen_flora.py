@@ -22,6 +22,16 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # twelfth wave: the kesaran pasaran, a little dandelion-seed girl hanging under her fluffy puff, legs dangling ("drift")
+    "kesaran_pasaran_flora": dict(
+        build="petite", outfit=dict(top=["halter"], bottom="wrap_skirt", colors=dict(cloth2="#f0ece4")), hair="bob", bangs="blunt", ears=None,
+        legs="bare", foot="shoe", plant="puff",
+        pal=dict(SKIN=skin("fair"), HAIR="#f4f2ee", FUR="#f4f2ee", LIGHT="#ffffff", MARK="#c8c4bc", EYE="#5a8ad8", CLOTH="#f8f6f0", TRIM="#c8b890",
+                 extra=dict(puff="#fbfaf6", seed="#8a6a3a", boot="#c8b890")),
+        variants={"yellow": dict(HAIR="#f8e070", EYE="#d88a2a", CLOTH="#f8e8a0", extra=dict(puff="#f8e470", seed="#8a6a3a", boot="#c8a040")),
+                  "blue": dict(HAIR="#a8c8f0", EYE="#3a5ab8", CLOTH="#d8e8f8", extra=dict(puff="#b8d4f4", seed="#4a5a8a", boot="#7a9ac8")),
+                  "pink": dict(HAIR="#f8b8d0", EYE="#c84a7a", CLOTH="#f8dce8", extra=dict(puff="#f8c8dc", seed="#8a4a5a", boot="#d888a8")),
+                  "black": dict(HAIR="#2a2830", EYE="#e8c040", CLOTH="#3a3840", TRIM="#8a8890", extra=dict(puff="#3a3842", seed="#1e1c20", boot="#5a5860"))}),
     # ninth wave: the venus flytrap rises from a rosette of leaves between two great trap lobes (bones jaw_r/jaw_l) that snap shut ("snap")
     "venus_flytrap_flora": dict(
         build="slim", outfit=dict(top=["bandeau"], extras=["armlets"]), hair="sidetail", bangs="jagged", ears=None, lower="none", plant="trap",
@@ -111,6 +121,8 @@ def declare_hook(sp, d):
         return [("rbulb", 5, 6, 5), ("rtend_a", 1, 4, 1), ("rtend_b", .75, 3, .75), ("leafy", 1.5, 6, .25), ("tuft", 4, 1, 4)]
     if k == "leshy":
         return [("beard", 1.5, 7, .75), ("beard_s", 1.5, 5, .75), ("moss", 5.5, 1.5, 3.5)]
+    if k == "puff":
+        return [("seed_stalk", .5, 5, .5), ("puff_ball", 4.5, 3, 4.5), ("puff_ray", .5, .5, 8), ("puff_tip", 1.5, 1.5, 1.5)]
     return []
 
 
@@ -127,6 +139,11 @@ def paint_hook(pt, pal, d):
     pt("lobe", "all", lambda f, x, y, w, h: pick(leaf, 0.5 + 0.12 * (y % 3 == 0), x, y) if f in ("up", "down")
        else pick(trap if abs(x + 0.5 - w / 2) < w * 0.36 and y > 0 else leaf, 0.45 + 0.25 * (y / max(1, h - 1)) + (noise(x, y, 43) - 0.5) * 0.1, x, y))
     pt("cilia", "all", lambda f, x, y, w, h: pick(G.shades(e.get("cilia", "#e8f0a0")), 0.5 + 0.2 * (y == 0), x, y))
+    puff, seed = G.shades(e.get("puff", "#fbfaf6")), G.shades(e.get("seed", "#8a6a3a"))
+    pt("seed_stalk", "all", lambda f, x, y, w, h: pick(seed, 0.5 + 0.1 * (y % 2), x, y))
+    pt("puff_ball", "all", lambda f, x, y, w, h: pick(puff, 0.6 + 0.25 * (noise(x, y, 87) > 0.5), x, y))
+    pt("puff_ray", "all", lambda f, x, y, w, h: pick(puff, 0.7 + 0.15 * (x % 2), x, y))
+    pt("puff_tip", "all", lambda f, x, y, w, h: G.with_alpha(pick(puff, 0.75 + 0.2 * ((x + y) % 2), x, y), 230))
     cap, spot = G.shades(e.get("cap", "#c8302a")), G.shades(e.get("spot", "#f8f4ec"))
     spotted = lambda f, x, y, w, h: pick(spot, 0.7, x, y) if (x * 7 + y * 11) % 13 < 2 and f != "down" else pick(cap if f != "down" else spot, 0.5, x, y)
     pt("cap", "all", spotted)
@@ -213,6 +230,16 @@ def build_hook(r, g, d):
     import math
     k = d["plant"]
     hy, z = g.hy, g.z
+    if k == "puff":                                            # the seed stalk rising from her head into the puff, rays all round
+        top = hy + 13.0
+        cs = [cube("seed_stalk", [-0.25, hy + 8.0, -0.25 + z]), cube("puff_ball", [-2.25, top - 1.0, -2.25 + z])]
+        for ring, tilt in ((0, -35), (1, -62), (2, -85)):       # a fan of fluff opening upward, like a dandelion seed's
+            for i in range(10 - 3 * ring):
+                a = i * 360 / (10 - 3 * ring) + ring * 18
+                cs.append(G.rot_cube("puff_ray", [-0.25, top, z], [0, top + 0.25, z], tilt, a, 0))
+                tip = H.rot_about((0, top + 0.25, z + 8), (0, top + 0.25, z), H.rot_matrix(tilt, a, 0))
+                cs.append(cube("puff_tip", [tip[0] - 0.75, tip[1] - 0.75, tip[2] - 0.75]))
+        r.add("puff", "head", [0, hy + 8.0, z], cs)
     if k == "trap":                                            # a rosette of leaves; a trap lobe each side, hinged low, open wide
         cs = [cube("bulb", [-3.5, 7.0, -3.5]), cube("stem", [-1.25, 0, -1.25])]
         for i in range(6):
@@ -302,6 +329,16 @@ def anim_extra(an, sp, d):
                                         "eyelids": {"position": hold(*H.OUT_)},
                                         "jaw_r": {"rotation": hold(0, 60, -22)}, "jaw_l": {"rotation": hold(0, -60, 22)}},
                                        sym("arm", hold(-30, 0, -20)), sym("forearm", hold(-60, 0, 0))))
+    if k == "puff":                                            # she never walks: she drifts, legs dangling, the puff turning
+        drift = merge({"body": {"rotation": Tk((0, (4, 0, 3)), (1.5, (4, 0, -3)), (3.0, (4, 0, 3)))},
+                       "puff": {"rotation": Tk((0, (0, 0, 0)), (3.0, (0, 40, 0)))},
+                       "leg_r": {"rotation": Tk((0, (10, 0, 0)), (1.5, (-6, 0, 0)), (3.0, (10, 0, 0)))},
+                       "leg_l": {"rotation": Tk((0, (-6, 0, 0)), (1.5, (10, 0, 0)), (3.0, (-6, 0, 0)))},
+                       "shin_r": {"rotation": hold(18, 0, 0)}, "shin_l": {"rotation": hold(14, 0, 0)}}, G.upper_idle())
+        for key in ("walk", "run"):
+            an.A.pop(f"animation.{sp}.{key}", None)
+            an.add(key, 3.0, True, drift)
+        an.add("drift", 3.0, True, drift)
     if k in ("flower", "mushroom", "cactus", "root", "trap"):  # no legs: she sways instead of walking
         sway = {"body": {"rotation": Tk((0, (0, 0, 3)), (1.0, (0, 0, -3)), (2.0, (0, 0, 3)))}}
         for key in ("walk", "run"):

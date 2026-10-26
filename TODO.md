@@ -209,6 +209,22 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Sphinx** (centaur, never ridden): a hand asks a riddle (nine, `riddle.monstergirls.N`); the item held out next answers it: right gives an enchanted book, gold or emeralds (+5), wrong gives a pounce (4 damage, -2).
   - **Brownie** (elf, nocturnal, no trading): every 10 s at night, befriended, `tidy` merges part stacks in the chests within 8 and puts loose items into them.
   - **Paints:** synthwave, cookie, cloud and valentine (February only, like pumpkin in October), so 43 in all.
+- [x] **Twelfth wave** (2026-10-26), tested in `TwelfthWaveTests`:
+  - **Cheshire cat** (nekomata): `GirlRenderer.cheshireAlpha` fades her out unless the viewer looks straight at her; her grin is a glow layer drawn whole. Befriended, `blinkToFriend` puts her back beside a friend 14 blocks away.
+  - **Kesaran pasaran** (flora): no gravity; `tickDrift` follows `Flora.wind` (the same for every puff, turning over the day) 2 to 5 blocks up, or her friend; Luck within 8; sugar `split`s her (`MAX_PUFFS` 3 within 16).
+  - **Tsuchinoko** (lamia): `tickRoll` curls her up (`ROLL`) and speeds her when the ground ahead lies lower; honey; golden gifts.
+  - **Platypus** (merfolk): `electrosense` makes monsters within 16 of her friend glow while she is in water; her spur poisons strangers who hit her.
+  - **Moonseal** (merfolk): glowing crescents (glow mask); `moonSong` gives Dolphin's Grace to her swimming friend, and Regeneration on full-moon nights.
+  - **Marmotaur** (rodent): `keepWatch` makes monsters within 16 of her friend glow and whistles at new ones (every 10 s at most).
+  - **Bambadger** (rodent): every 30 s, befriended, `playFlute` grows the bamboo tips and sugar cane within 6.
+  - **Dodobold** (`DodoboldHarpy`, `tools/gen_dodobold_harpy.py`, the penguin's rig made small and fat): flightless; a friend's crouching empty hand opens her 18-slot saddlebags (dropped on death; she never despawns while carrying); dodo eggs. Chickens are her kin.
+  - **Boghare** (jackalope): Jump Boost II within 8 of her friend; lily pads are a treat; rabbits and frogs are kin.
+  - **Gremlin** (devil, nocturnal): wild, every 15 s at night `tinker` flips a lever or swings a door within 6 (a cookie stops her for a day); befriended, furnaces within 6 tick twice while her friend is within 16.
+  - **Karakasa obake** (devil): walks by hopping on one leg; `Devil.shelter` (on `ProjectileImpactEvent`) cancels projectiles about to hit a player within 4 blocks of her when she is their friend.
+  - **Alebrije** (dragon): flies; befriended, every minute `paintSheep` dyes a sheep within 8 a new colour; dye presents.
+  - **Paints:** porcelain, denim, moss and easter (April only, like valentine in February), so 47 in all.
+  - **Waterlil:** only her head shows, resting on the lily pad (the pad's own bone); her body hangs under it.
+- [ ] Dev client for the twelfth wave: the cheshire fade and grin in first and third person, the kesaran's drift (does she get stuck under trees?), the tsuchinoko's roll, the dodobold's saddlebags screen, the karakasa catching skeleton arrows, the gremlin's furnace speed, and the waterlil's body under the water.
 - [ ] Server playtest for the mailtoad and the brownie (they need heavy testing on a server): delivery to a player who logs off mid-walk, to another dimension, to a name with different case, two mailtoads to one player; the brownie with modded containers, double chests, shulker boxes inside chests, and item frames.
 - [ ] Dev client for the eleventh wave: the slothren's hang pose under a real branch, the gliderune on a shoulder, the mantarrow ride and leap, the sphinx's wings and pounce, the talosling run down, the waterlil's pads under a sprinting friend, and the four new paints.
 - [x] **Jade** (optional, `compat/JadePlugin`): every girl, harpy and frog shows "Pregnant: yes/no" (not on bulls, the leshy, the vodyanoy, constructs or young) and "Friendship: 12/25" (the looking player's affection out of the next milestone, 10/25/60/100; `BondInfo`). The server sends both, so a server without Jade shows neither. Jade is in the dev client but kept off the game test server (its join packet breaks the tests' fake players). `dustBathesOnSand` failed once more (2026-10-25), unrelated.
@@ -387,7 +403,7 @@ Ideas to pick from. Each new species needs a gen module, a field-guide entry, te
 - **Centaur:** donkey, unicorn, camel, elk
 - **Merfolk:** pufferfish, angler, manatee, siren (a luring song)
 - **Slime:** ender slime (teleports), copper slime (oxidises), crystal slime
-- **Harpy:** penguin, flamingo, hummingbird, vulture, parrot
+- **Harpy:** penguin, flamingo, hummingbird, vulture, parrot, duck (mallard, mandarin, white farm duck)
 - **Anuran:** axolotl-like newt girls (a salamander sub-family?)
 - **Jackalope:** wolpertinger, snowshoe hare
 - **Minotaur:** yak, highland cow

@@ -44,6 +44,10 @@ IN_GAME = {
     "sloth": "slothren_armoured", "coatimano": "coatimano_rodent", "waterlil": "waterlil_nekomata", "rookmourn": "rookmourn_harpy",
     "cassowrath": "cassowrath_harpy", "talosling": "talosling_construct", "mantarrow": "mantarrow_mermaid", "sphinx": "sphinx_centaur",
     "brownie": "brownie_elf",
+    # twelfth wave (2026-10-26)
+    "cheshire": "cheshire_nekomata", "kesaran_pasaran": "kesaran_pasaran_flora", "tsuchinoko": "tsuchinoko_lamia", "platypus": "platypus_mermaid",
+    "moonseal": "moonseal_mermaid", "marmotaur": "marmotaur_rodent", "bambadger": "bambadger_rodent", "dodobold": "dodobold_harpy",
+    "boghare": "boghare_jackalope", "gremlin": "gremlin_devil", "karakasa_obake": "karakasa_obake_devil", "alebrije": "alebrije_dragon",
 }
 # not a creature to make, and the ones set aside on purpose
 EXCLUDED = {
@@ -53,6 +57,12 @@ EXCLUDED = {
     "taniwha": "set aside: living Māori tradition", "nightmarcher": "set aside: living Hawaiian tradition",
     "bunyip": "set aside: living Aboriginal tradition", "tiddalik": "set aside: living Aboriginal tradition",
     "thunderbird": "declined: sacred to living North American nations' traditions",
+    "amaru": "set aside: living Andean tradition", "apu": "set aside: living Andean tradition", "supay": "set aside: living Andean tradition",
+    "wayob": "set aside: living Maya tradition", "pukwudgie": "set aside: living Wampanoag tradition",
+    "mimi_spirit": "set aside: living Aboriginal tradition", "nargun": "set aside: living Aboriginal tradition",
+    "yara_ma_yha_who": "set aside: living Aboriginal tradition", "menehune": "set aside: living Hawaiian tradition",
+    "akhlut": "set aside: living Inuit tradition", "ijiraq": "set aside: living Inuit tradition", "keelut": "set aside: living Inuit tradition",
+    "peacepipe_bison": "set aside: a sacred pipe of living Plains traditions",
 }
 
 

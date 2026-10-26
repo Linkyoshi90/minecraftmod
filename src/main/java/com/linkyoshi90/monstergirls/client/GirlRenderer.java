@@ -38,9 +38,9 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
     private final GirlSpecies species;
     /** Species with a glow mask (textures/entity/&lt;texture&gt;_glowmask.png for every colour). */
     static final java.util.Set<String> GLOWING = java.util.Set.of("magma_slime", "will_o_wisp_undead", "salamander_lizardfolk", "jack_o_lantern_devil",
-            "jellyfish_mollusk", "dark_elf", "ender_slime", "aurorantler_centaur", "axolume_mermaid", "blaze_cat_nekomata");
+            "jellyfish_mollusk", "dark_elf", "ender_slime", "aurorantler_centaur", "axolume_mermaid", "blaze_cat_nekomata", "moonseal_mermaid");
     /** Species drawn see-through (jelly, flame, insect wings, ghosts). */
-    static final java.util.Set<String> TRANSLUCENT = java.util.Set.of("will_o_wisp_undead", "jellyfish_mollusk");
+    static final java.util.Set<String> TRANSLUCENT = java.util.Set.of("will_o_wisp_undead", "jellyfish_mollusk", "cheshire_nekomata");
 
     public GirlRenderer(EntityRendererProvider.Context context, GirlSpecies species) {
         super(context, new Model(species));
@@ -51,6 +51,17 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         if (species == GirlSpecies.SHEEP_MINOTAUR || species == GirlSpecies.RHIWOOL_MINOTAUR) this.addRenderLayer(new DyedWoolLayer(this));
         this.addRenderLayer(new MoonEyesLayer<>(this));
         this.addRenderLayer(new PaintGlowLayer<>(this, AbstractMonsterGirl::getPaintName));
+        if (species == GirlSpecies.CHESHIRE_NEKOMATA) {                    // her grin glows, whole, however faded the rest of her is
+            this.addRenderLayer(new AutoGlowingGeoLayer<>(this) {
+                @Override
+                public void render(PoseStack poseStack, AbstractMonsterGirl girl, BakedGeoModel model, RenderType renderType, MultiBufferSource buffers,
+                                   VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+                    RenderType glowType = this.getRenderType(girl);
+                    if (glowType == null) return;
+                    this.getRenderer().reRender(model, poseStack, buffers, girl, glowType, buffers.getBuffer(glowType), partialTick, 0xF000F0, packedOverlay, -1);
+                }
+            });
+        }
         if (species == GirlSpecies.FIREFLY_BUG) {                          // every firefly pulses in time with the others (the world's clock)
             this.addRenderLayer(new AutoGlowingGeoLayer<>(this) {
                 @Override
@@ -75,6 +86,16 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         return s * s;
     }
 
+    /** How much of the cheshire cat shows to this player: all of her when looked at straight, fading to nothing (but her grin) aside. */
+    static float cheshireAlpha(AbstractMonsterGirl girl) {
+        var viewer = net.minecraft.client.Minecraft.getInstance().player;
+        if (viewer == null) return 1.0F;
+        net.minecraft.world.phys.Vec3 to = girl.position().add(0, girl.getBbHeight() * 0.6, 0).subtract(viewer.getEyePosition());
+        if (to.lengthSqr() < 1.5 * 1.5) return 1.0F;
+        double dot = to.normalize().dot(viewer.getViewVector(1.0F));
+        return (float) net.minecraft.util.Mth.clamp((dot - 0.94) / 0.04, 0.0, 1.0);
+    }
+
     /** A girl with her own death animation (the golem breaks apart) is not tipped over as she dies. */
     @Override
     protected float getDeathMaxRotation(AbstractMonsterGirl girl) {
@@ -84,6 +105,9 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
     /** A dyed (or merged) slime is drawn in her own colour, any colour at all. */
     @Override
     public software.bernie.geckolib.util.Color getRenderColor(AbstractMonsterGirl girl, float partialTick, int packedLight) {
+        if (this.species == GirlSpecies.CHESHIRE_NEKOMATA) {
+            return software.bernie.geckolib.util.Color.ofARGB(cheshireAlpha(girl), 1.0F, 1.0F, 1.0F);
+        }
         if (girl instanceof com.linkyoshi90.monstergirls.entity.girl.SlimeGirl slime && slime.hasCustomColour()) {
             return software.bernie.geckolib.util.Color.ofOpaque(slime.colour());
         }

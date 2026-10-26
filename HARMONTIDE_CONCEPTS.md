@@ -335,7 +335,7 @@ From the reference art. The Thunderbird is left out on purpose (a living traditi
 | **Gliderune** | Marsupial | A sugar glider. Glides; befriended, she rides on your shoulder and gives you Slow Falling. |
 | **Slothren** | Armoured | A mossy sloth. Hangs from branches by day; spreads moss and flowers; befriended, she grows your crops. |
 | **Coatimano** | Rodent | A coati with a brush of a nose. Digs out suspicious sand and gravel and brings you the find. |
-| **Waterlil** | Nekomata | A big cat's head on a tiny body, a small bloom on top, riding her own lily pad. Lily pads grow under her and her friend on water. |
+| **Waterlil** | Nekomata | A big cat's head resting on her own lily pad, a small bloom on top, her little body hidden under the pad. Lily pads grow under her and her friend on water. |
 | **Rookmourn** | Harpy | A rook in a plague doctor's hat. Cures poison, nausea, hunger and wither nearby; a golden apple has her cure a zombie villager. |
 | **Cassowrath** | Harpy | A cassowary. Territorial, kicks hard; befriended, a stick's patrol order has her guard a spot. |
 | **Talosling** | Construct | A bronze clockwork girl with a wind-up key. Redstone winds her; she guards her friend; run down, she sits still. |
@@ -344,3 +344,26 @@ From the reference art. The Thunderbird is left out on purpose (a living traditi
 | **Brownie** | Elf | A tiny house spirit. At night she tidies chests and puts loose items away; paid in milk and bread. |
 
 Paints: synthwave, cookie, cloud and the seasonal valentine (February only), so 43 in all.
+
+## Twelfth wave (2026-10-26, in the game)
+
+From the reference art. Set aside as living traditions: Amaru, Apu, Supay, Wayob, Pukwudgie, Mimi spirits, Nargun,
+Yara-ma-yha-who, Menehune, Akhlut, Ijiraq, Keelut and the peace-pipe bison.
+
+| Species | Home | Design |
+|---|---|---|
+| **Cheshire cat** | Nekomata | Ringed in two colours, with a huge glowing grin. Unless you look straight at her, only the grin shows. Befriended, she blinks back to your side. |
+| **Kesaran pasaran** | Flora | A little dandelion-seed girl under her puff, drifting on the wind. Luck for her friend; sugar makes her split (up to three). |
+| **Tsuchinoko** | Lamia | A stubby, fat snake who rolls downhill like a wheel. Loves honey; golden presents. |
+| **Platypus** | Merfolk | A duck-billed cap and a beaver tail. Underwater she makes monsters near her friend glow; her spur poisons strangers. |
+| **Moonseal** | Merfolk | A night-blue seal with glowing crescents and little antlers. Dolphin's Grace; on a full moon she sings and her friend regenerates. |
+| **Marmotaur** | Rodent | A stout marmot with golden ram's horns and an amber pendant. Whistles when monsters come; they glow. |
+| **Bambadger** | Rodent | A bamboo-striped badger with a flute that makes bamboo and sugar cane grow. |
+| **Dodobold** | Harpy | A small, fat, flightless dodo in an ornate harness with saddlebags (18 slots) for her friend. |
+| **Boghare** | Jackalope | A mossy swamp hare with a lily flower and pink-tipped ears. Jump Boost for her friend; frogs are her kin. |
+| **Gremlin** | Devil | A little green tinkerer. Wild, she pranks levers and doors at night (a cookie stops her); befriended, furnaces cook twice as fast. |
+| **Karakasa obake** | Devil | A girl under an umbrella hat who hops on one leg; her umbrella catches projectiles aimed at her friend. |
+| **Alebrije** | Dragon | A winged folk-art chimera in bright dots and zigzags. Flies; dyes sheep; gives dyes. |
+
+Paints: porcelain, denim, moss and the seasonal easter (April only), so 47 in all. The waterlil is now only a big
+cat's head resting on her lily pad, her little body hidden under it.

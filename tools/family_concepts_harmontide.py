@@ -1126,10 +1126,10 @@ ELEVENTH = {
                         ("red", "Red", "Rust red"), ("white", "White", "Pale")]),
          {"Habitat": "Deserts, jungles", "Signature": "Digs up archaeology", "Danger": "None"})],
     "nekomata": [
-        (dict(id="waterlil_nekomata", name="Waterlil", group="Swamps", tag="Dainty · dry-footed", height=0.8,
+        (dict(id="waterlil_nekomata", name="Waterlil", group="Swamps", tag="Dainty · dry-footed", height=0.6,
               biomes=["swamp", "mangrove_swamp", "river"], temperament="Dainty",
-              ecology="A Harmontide cat who will not get her paws wet: a big cat's head on a tiny body, a small bloom on top, riding "
-                      "her own lily pad. Lily pads grow under her feet wherever she walks on water.",
+              ecology="A Harmontide cat who will not get her paws wet: a big cat's head resting on her own lily pad, a small bloom "
+                      "on top, her little body hidden in the water under it. Lily pads grow under her feet wherever she walks on water.",
               interaction="Fish.",
               signature=("Lily pads", "Lily pads grow under her as she walks on water, and fade again behind her; befriended, they grow "
                                       "under her friend too while they are near her."),
@@ -1182,6 +1182,135 @@ ELEVENTH = {
          {"Habitat": "Villages", "Trades": "Chores for milk", "Signature": "Tidies chests at night", "Danger": "None"})],
 }
 for _fid, _entries in ELEVENTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
+
+# --- the twelfth wave (2026-10-26): more of the Harmontide reference art ---------------------------------------------
+TWELFTH = {
+    "nekomata": [
+        (dict(id="cheshire_nekomata", name="Cheshire", group="Flower forests", tag="Grinning · elusive", height=1.5,
+              biomes=["flower_forest", "dark_forest", "birch_forest"], temperament="Mischievous, curious",
+              ecology="The grinning cat of Wonderland, striped and smug, who fades away until only her grin is left.",
+              interaction="Fish, and a straight look.",
+              signature=("The grin", "Unless you look straight at her she fades away, all but her glowing grin; befriended, she blinks "
+                                     "back to her friend's side whenever she is left behind."),
+              danger="None.",
+              variants=[("pink", "Pink (default)", "Pink and purple stripes"), ("purple", "Purple", "Purple and teal"), ("blue", "Blue", "Blue and white"),
+                        ("gold", "Gold", "Gold and brown"), ("black", "Black", "Black and violet")]),
+         {"Habitat": "Flower forests", "Social": "Alone", "Water": "Avoids it", "Signature": "Fades to a grin", "Danger": "None"})],
+    "flora": [
+        (dict(id="kesaran_pasaran_flora", name="Kesaran Pasaran", group="Meadows", tag="Fluffy · drifting", height=0.7,
+              biomes=["meadow", "plains", "sunflower_plains", "flower_forest"], temperament="Gentle, carefree",
+              ecology="The lucky puff of Japanese folklore, here a little dandelion seed of a girl hanging under her fluffy puff.",
+              interaction="Sugar.",
+              signature=("On the wind", "She never touches the ground: the wind carries her along, all of them drifting the same way; "
+                                        "befriended, she drifts after her friend and brings them Luck. Fed sugar, she splits in two "
+                                        "(up to three of her)."),
+              danger="None.",
+              variants=[("white", "White (default)", "A white puff"), ("yellow", "Yellow", "A dandelion-yellow puff"), ("blue", "Blue", "A blue puff"),
+                        ("pink", "Pink", "A pink puff"), ("black", "Black", "A black puff")]),
+         {"Habitat": "Meadows", "Signature": "Drifts on the wind, brings Luck", "Danger": "None"})],
+    "lamia": [
+        (dict(id="tsuchinoko_lamia", name="Tsuchinoko", group="Mountain forests", tag="Stubby · roly-poly", height=1.0,
+              biomes=["forest", "cherry_grove", "windswept_forest"], temperament="Lazy, greedy",
+              ecology="The fat little snake of Japanese legend that rolls down hills like a wheel and loves a drink.",
+              interaction="Honey.",
+              signature=("Rolling", "Downhill she curls up and rolls, faster than you can run. Her rare presents are golden."),
+              danger="None.",
+              variants=[("brown", "Brown (default)", "Brown, a pale belly"), ("grey", "Grey", "Grey"), ("green", "Green", "Moss green"),
+                        ("gold", "Gold", "Golden"), ("black", "Black", "Black")]),
+         {"Habitat": "Mountain forests", "Young": "Eggs", "Defence": "Rolls away", "Signature": "Rolls downhill", "Danger": "None"})],
+    "merfolk": [
+        (dict(id="platypus_mermaid", name="Platypus", group="Rivers", tag="Odd · clever", height=1.35, biomes=["river", "swamp"],
+              temperament="Shy, clever",
+              ecology="A Harmontide platypus: a duck-billed cap, a flat beaver tail, and a sixth sense for anything that moves.",
+              interaction="Fish.",
+              signature=("Electrosense", "Underwater she senses every monster within 16 blocks of her friend and makes them glow. "
+                                         "Strangers who hit her are poisoned by her spur."),
+              danger="Low (her spur).",
+              variants=[("brown", "Brown (default)", "Brown"), ("dark", "Dark", "Dark brown"), ("golden", "Golden", "Golden"),
+                        ("grey", "Grey", "Grey"), ("pale", "Pale", "Pale")]),
+         {"Habitat": "Rivers", "Young": "Eggs", "On land": "Waddles", "Signature": "Senses hidden monsters", "Danger": "Low"}),
+        (dict(id="moonseal_mermaid", name="Moonseal", group="Frozen seas", tag="Dreamy · moonlit", height=1.55,
+              biomes=["frozen_ocean", "cold_ocean", "snowy_beach", "frozen_river"], temperament="Calm, dreamy",
+              ecology="A Harmontide seal of the frozen seas, blue as the night, with crescent moons on her fur and little antlers.",
+              interaction="Fish.",
+              signature=("Moon song", "Her crescents glow at night; on a full moon she sings, and her friend near her regenerates. "
+                                      "Befriended, she gives Dolphin's Grace to her friend swimming beside her."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Night blue, white crescents"), ("purple", "Purple", "Purple"), ("green", "Green", "Sea green"),
+                        ("silver", "Silver", "Silver"), ("night", "Night", "Black, gold crescents")]),
+         {"Habitat": "Frozen seas", "Young": "Pups", "On land": "Flops", "Signature": "Sings at the full moon", "Danger": "None"})],
+    "rodent": [
+        (dict(id="marmotaur_rodent", name="Marmotaur", group="Mountain meadows", tag="Watchful · stout", height=1.3,
+              biomes=["meadow", "windswept_hills", "windswept_gravelly_hills", "grove"], temperament="Watchful, bold",
+              ecology="A Harmontide marmot with golden ram's horns and an amber pendant, the lookout of the high meadows.",
+              interaction="Grass and berries.",
+              signature=("Lookout", "When monsters come within 16 blocks of her friend she whistles a warning and they glow. She "
+                                    "headbutts hard."),
+              danger="Low (her headbutt).",
+              variants=[("tawny", "Tawny (default)", "Tawny, golden horns"), ("grey", "Grey", "Grey, bronze horns"), ("black", "Black", "Black, silver horns"),
+                        ("red", "Red", "Red, golden horns"), ("white", "White", "White, golden horns")]),
+         {"Habitat": "Mountain meadows", "Signature": "Whistles at monsters", "Danger": "Low"}),
+        (dict(id="bambadger_rodent", name="Bambadger", group="Bamboo jungles", tag="Cheerful · musical", height=1.2,
+              biomes=["bamboo_jungle", "jungle"], temperament="Cheerful",
+              ecology="A Harmontide badger striped like green bamboo, who plays a bamboo flute on a cord round her neck.",
+              interaction="Bamboo and sweet berries.",
+              signature=("Flute", "Befriended, every half minute she plays her flute, and the bamboo and sugar cane around her grow."),
+              danger="None.",
+              variants=[("green", "Green (default)", "Bamboo green"), ("golden", "Golden", "Golden bamboo"), ("black", "Black", "Black bamboo"),
+                        ("red", "Red", "Red bamboo"), ("pale", "Pale", "Pale")]),
+         {"Habitat": "Bamboo jungles", "Signature": "Her flute grows bamboo", "Danger": "None"})],
+    "jackalope": [
+        (dict(id="boghare_jackalope", name="Boghare", group="Swamps", tag="Bouncy · soggy", height=1.35,
+              biomes=["swamp", "mangrove_swamp"], temperament="Bouncy, friendly",
+              ecology="A Harmontide swamp hare, mossy green with a lily flower on her head and long ears tipped in pink.",
+              interaction="Carrots and lily pads.",
+              signature=("Leaps", "She leaps huge distances; her friend near her gets Jump Boost. Frogs are her kin."),
+              danger="None.",
+              variants=[("green", "Green (default)", "Moss green, a red flower"), ("blue", "Blue", "Blue"), ("purple", "Purple", "Purple"),
+                        ("red", "Red", "Red"), ("yellow", "Yellow", "Yellow")]),
+         {"Habitat": "Swamps", "Social": "Alone", "Signature": "Jump Boost for her friend", "Danger": "None"})],
+    "devil": [
+        (dict(id="gremlin_devil", name="Gremlin", group="Near villages", tag="Mischievous · handy", height=1.0,
+              biomes=["plains", "forest", "savanna"], temperament="Mischievous",
+              ecology="A little green tinkerer with big ears, who meddles with machines.",
+              interaction="Cookies.",
+              signature=("Tinkering", "At night a wild one pranks what people built: she flips levers and opens doors. A cookie "
+                                      "stops her. Befriended, she tinkers with furnaces near her friend so they cook twice as fast."),
+              danger="None (only pranks).",
+              variants=[("moss", "Moss (default)", "Green skin, blue hair"), ("blue", "Blue", "Blue"), ("yellow", "Yellow", "Yellow"),
+                        ("grey", "Grey", "Grey"), ("purple", "Purple", "Purple")]),
+         {"Habitat": "Near villages", "Signature": "Pranks machines, speeds furnaces", "Danger": "None"}),
+        (dict(id="karakasa_obake_devil", name="Karakasa Obake", group="Cherry groves", tag="Hopping · loyal", height=1.3,
+              biomes=["cherry_grove", "bamboo_jungle", "swamp"], temperament="Playful, loyal",
+              ecology="The umbrella spirit of Japanese folklore, here a girl under an umbrella hat who hops on one leg.",
+              interaction="Paper and string.",
+              signature=("Umbrella", "Befriended, her umbrella catches the arrows and other projectiles aimed at her friend near her."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "A blue umbrella"), ("red", "Red", "A red umbrella"), ("purple", "Purple", "A purple umbrella"),
+                        ("green", "Green", "A green umbrella"), ("white", "White", "A white umbrella")]),
+         {"Habitat": "Cherry groves", "Signature": "Catches projectiles", "Danger": "None"})],
+    "dragon": [
+        (dict(id="alebrije_dragon", name="Alebrije", group="Badlands", tag="Bright · joyful", height=1.7,
+              biomes=["savanna", "badlands", "wooded_badlands"], temperament="Joyful",
+              ecology="A spirit of colour from Mexican folk art: a winged chimera painted in bright patterns, every one her own.",
+              interaction="Fruit and dyes.",
+              signature=("Colours", "She flies. Befriended, now and then she dyes a sheep near her in a bright colour, and her "
+                                    "presents are dyes."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue, pink and yellow"), ("green", "Green", "Green, orange and pink"),
+                        ("pink", "Pink", "Pink, teal and yellow"), ("orange", "Orange", "Orange, purple and green"),
+                        ("purple", "Purple", "Purple, lime and red")]),
+         {"Habitat": "Badlands", "Moves by": "Flying", "Signature": "Dyes sheep", "Danger": "None"})],
+}
+for _fid, _entries in TWELFTH.items():
     _fam = C.family(_fid)
     for _species, _cols in _entries:
         if any(x["id"] == _species["id"] for x in _fam["species"]):

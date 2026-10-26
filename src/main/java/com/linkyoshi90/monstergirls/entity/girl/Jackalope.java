@@ -102,6 +102,7 @@ public class Jackalope extends AbstractMonsterGirl {
             case VOLCANO_JACKALOPE -> girlAttributes(10, 0.36, 1).add(Attributes.JUMP_STRENGTH, 0.55);
             case WOLPERTINGER_JACKALOPE -> girlAttributes(16, 0.34, 1).add(Attributes.JUMP_STRENGTH, 0.7);
             case CLOCKHARE_JACKALOPE -> girlAttributes(16, 0.33, 1).add(Attributes.JUMP_STRENGTH, 0.62);
+            case BOGHARE_JACKALOPE -> girlAttributes(16, 0.34, 1).add(Attributes.JUMP_STRENGTH, 0.9);
             default -> girlAttributes(16, 0.32, 1).add(Attributes.JUMP_STRENGTH, 0.62);
         };
     }
@@ -124,7 +125,7 @@ public class Jackalope extends AbstractMonsterGirl {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return stack.is(Items.CARROT) || stack.is(Items.GOLDEN_CARROT);
+        return stack.is(Items.CARROT) || stack.is(Items.GOLDEN_CARROT) || this.species == GirlSpecies.BOGHARE_JACKALOPE && stack.is(Items.LILY_PAD);
     }
 
     @Override
@@ -277,6 +278,7 @@ public class Jackalope extends AbstractMonsterGirl {
             case EASTER_JACKALOPE -> new ItemStack(ModBlocks.PAINTED_EGG.get());
             case AL_MIRAJ_JACKALOPE -> new ItemStack(r < 60 ? Items.CACTUS : Items.GOLD_NUGGET, r < 60 ? 1 : 3);
             case VOLCANO_JACKALOPE -> new ItemStack(r < 50 ? Items.MAGMA_CREAM : Items.COAL);
+            case BOGHARE_JACKALOPE -> new ItemStack(r < 45 ? Items.LILY_PAD : r < 80 ? Items.SLIME_BALL : Items.CARROT, 2);
             case WOLPERTINGER_JACKALOPE -> new ItemStack(r < 50 ? Items.FEATHER : r < 80 ? Items.SWEET_BERRIES : Items.RABBIT_HIDE, 2);
             case CLOCKHARE_JACKALOPE -> new ItemStack(r < 40 ? Items.GOLD_NUGGET : r < 75 ? Items.CARROT : r < 95 ? Items.COPPER_INGOT : Items.CLOCK, r < 75 ? 3 : 1);
             default -> new ItemStack(r < 50 ? Items.CARROT : Items.DANDELION, 2);
@@ -346,6 +348,10 @@ public class Jackalope extends AbstractMonsterGirl {
     public void aiStep() {
         super.aiStep();
         if (!(this.level() instanceof ServerLevel server)) return;
+        if (this.species == GirlSpecies.BOGHARE_JACKALOPE && this.tickCount % 40 == 0 && !this.isBaby()) {   // her friend leaps like her
+            Player leaper = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+            if (leaper != null) leaper.addEffect(new MobEffectInstance(MobEffects.JUMP, 100, 1, true, false));
+        }
         // luck travels with her while she is following her favourite player
         if (this.tickCount % 40 == 0 && !this.isBaby()) {
             Player p = this.bondedPlayer(FOLLOW_AFFECTION, 8);

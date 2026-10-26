@@ -80,7 +80,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             "frost", "sakura", "stained_glass", "sepia",                       // stained glass is see-through
             "opal", "chrome", "aurora", "camo",
             "plush", "pixel", "origami", "gummy",                              // gummy is see-through
-            "synthwave", "cookie", "cloud", "valentine");                      // valentine is seasonal, February only
+            "synthwave", "cookie", "cloud", "valentine",                       // valentine is seasonal, February only
+            "porcelain", "denim", "moss", "easter");                           // easter is seasonal, April only
     /** Homage variants (the look of a favourite character): a wild one rolls them only rarely. */
     public static final java.util.Set<String> HOMAGES = java.util.Set.of("gunman", "blossom", "lost", "stitched", "nurse", "mummy", "ranger", "outback");
     /** One wild girl in this many is painted, like a shiny. */
@@ -1008,7 +1009,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     public boolean isNocturnal() {
         return switch (this.species) {
             case NIGHT_ELF, MOTH_BUG, MOSQUITO_BUG, SUCCUBUS_DEVIL, JIANG_SHI_DEVIL, JACK_O_LANTERN_DEVIL, TAPIR_CENTAUR, OCELOT_NEKOMATA, ANUBIS_CANID,
-                 CHUPACABRA_LIZARDFOLK, FIREFLY_BUG, CAVE_BAT, ONI_DEVIL, GARGOYLE_CONSTRUCT, SLOTHREN_ARMOURED, BROWNIE_ELF -> true;
+                 CHUPACABRA_LIZARDFOLK, FIREFLY_BUG, CAVE_BAT, ONI_DEVIL, GARGOYLE_CONSTRUCT, SLOTHREN_ARMOURED, BROWNIE_ELF, GREMLIN_DEVIL -> true;
             default -> this.species.family() == GirlSpecies.Family.UNDEAD || this.species.family() == GirlSpecies.Family.KITSUNE;
         };
     }

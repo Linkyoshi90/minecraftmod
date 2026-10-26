@@ -75,6 +75,16 @@ SPECIES = {
                   "grey": dict(HAIR="#5a5a5e", FUR="#7a7a80", LIGHT="#e0e0e4", MARK="#3a3a3e", CLOTH="#e8e0f0", extra=dict(hat="#2a2430", band="#6a3a8a", watch="#f0d060")),
                   "spotted": dict(HAIR="#1e1a1c", FUR="#f4f2ee", MARK="#1e1a1c", pattern="patches", CLOTH="#c8d8e8",
                                   extra=dict(hat="#1e1a22", band="#3a6aa8", watch="#d8a840"))}),
+    # twelfth wave: the boghare, a mossy swamp hare with long lop ears tipped in pink and a lily flower on her head
+    "boghare_jackalope": dict(
+        build="petite", outfit=dict(top=["halter"], bottom="shorts", extras=["scarf"], colors=dict(scarf="#e8506a", cloth2="#3a5a2a")),
+        hair="bob", bangs="messy", ears="lop", legs="fur", foot="long", tail=PUFF, tail_look="puff", lily=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#3a9a5a", FUR="#4aa868", LIGHT="#f8c8dc", MARK="#2a6a3a", EYE="#3a8a4a", CLOTH="#f8c8dc", TRIM="#e8506a",
+                 INNER="#e86a9a", extra=dict(petal="#e8303a", petal_in="#f8e070")),
+        variants={"blue": dict(HAIR="#3a6ac8", FUR="#4a7ad8", MARK="#2a4a8a", EYE="#3a5ab8", extra=dict(petal="#f8f0f4", petal_in="#f8e070")),
+                  "purple": dict(HAIR="#7a4ab8", FUR="#8a5ac8", MARK="#4a2a7a", EYE="#8a4ac8", extra=dict(petal="#f8a8c8", petal_in="#f8e070")),
+                  "red": dict(HAIR="#c83a3a", FUR="#d84a4a", MARK="#8a1e22", EYE="#c83a3a", extra=dict(petal="#f8e070", petal_in="#e8701e")),
+                  "yellow": dict(HAIR="#d8b83a", FUR="#e8c84a", MARK="#8a7a1e", EYE="#b8902a", extra=dict(petal="#e8303a", petal_in="#f8f0c0"))}),
     # ninth wave: the wolpertinger, antlers and small feathered wings she glides on (the "fly" animation)
     "wolpertinger_jackalope": dict(
         build="petite", outfit=dict(top=["halter", "vest"], bottom="shorts", extras=["belt", "scarf"],
@@ -93,12 +103,20 @@ SPECIES = {
 
 
 def declare_hook(sp, d):
+    if d.get("lily"):
+        return [("lily_petal", 2, .5, 3), ("lily_heart", 1.25, 1, 1.25)]
     if d.get("clock"):
         return [("hat_brim", 6, .5, 6), ("hat_crown", 4, 4, 4), ("hat_band", 4.25, .75, 4.25), ("watch", 1.75, 1.75, .5), ("chain", 2.5, .25, .25)]
     return [("basket", 3, 2.25, 2.5), ("handle", .5, 2.5, .5), ("egg", 1, 1.25, 1)] if d.get("basket") else []
 
 
 def paint_hook(pt, pal, d):
+    if d.get("lily"):
+        lp, li = G.shades(pal.extra.get("petal", "#e8303a")), G.shades(pal.extra.get("petal_in", "#f8e070"))
+        pt("lily_petal", "all", lambda f, x, y, w, h: pick(lp, 0.5 + 0.2 * (f == "up") - 0.12 * (x in (0, w - 1)), x, y))
+        pt("lily_heart", "all", lambda f, x, y, w, h: pick(li, 0.65, x, y))
+        pt("ear_a", ("north", "south", "east", "west"), lambda f, x, y, w, h: pick(pal.INNER, 0.55, x, y) if y >= h - 3 else None)   # pink tips
+        return
     if d.get("clock"):
         hat, band, brass = G.shades(pal.extra.get("hat", "#1e1a22")), G.shades(pal.extra.get("band", "#8a2a3a")), G.shades(pal.extra.get("watch", "#d8a840"))
         pt("hat_brim", "all", lambda f, x, y, w, h: pick(hat, 0.4, x, y))
@@ -118,6 +136,12 @@ def paint_hook(pt, pal, d):
 
 
 def build_hook(r, g, d):
+    if d.get("lily"):                                    # a lily flower on top of her head
+        hy, z = g.hy, g.z
+        cx, cy, cz = -1.0, hy + 8.4, -0.5 + z
+        petals = [G.rot_cube("lily_petal", [cx - 1.0, cy, cz - 0.2], [cx, cy, cz], -38, a, 0) for a in (0, 72, 144, 216, 288)]
+        r.add("lily", "head", [cx, cy, cz], petals + [cube("lily_heart", [cx - 0.625, cy, cz - 0.625])])
+        return
     if d.get("clock"):                                   # a top hat set between her ears; the watch on its chain at her right hip
         hy, z = g.hy, g.z
         r.add("tophat", "head", [0, hy + 9.0, z], [cube("hat_brim", [-3, hy + 9.0, -3 + z]), cube("hat_crown", [-2, hy + 9.5, -2 + z]),

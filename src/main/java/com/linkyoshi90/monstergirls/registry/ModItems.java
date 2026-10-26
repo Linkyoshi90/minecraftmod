@@ -44,6 +44,8 @@ public final class ModItems {
             () -> new DeferredSpawnEggItem(ModEntities.CASSOWRATH_HARPY, 0x14161E, 0x2C5CAA, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> MAILTOAD_SPAWN_EGG = ITEMS.register("mailtoad_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.MAILTOAD, 0x325CB4, 0xD2A632, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> DODOBOLD_HARPY_SPAWN_EGG = ITEMS.register("dodobold_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.DODOBOLD_HARPY, 0x2A3C74, 0xF0C450, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> COIN_MAGPIE_HARPY_SPAWN_EGG = ITEMS.register("coin_magpie_harpy_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.COIN_MAGPIE_HARPY, 0x1A3440, 0xF0F0F4, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> TRICKSTER_RAVEN_HARPY_SPAWN_EGG = ITEMS.register("trickster_raven_harpy_spawn_egg",
@@ -102,6 +104,7 @@ public final class ModItems {
     public static final DeferredItem<Item> FLAMINGO_EGG = laidEgg("flamingo_egg", 3, 0.2F);
     public static final DeferredItem<Item> MAGPIE_EGG = laidEgg("magpie_egg", 2, 0.2F);
     public static final DeferredItem<Item> ROOK_EGG = laidEgg("rook_egg", 2, 0.2F);
+    public static final DeferredItem<Item> DODO_EGG = laidEgg("dodo_egg", 6, 0.5F);
     public static final DeferredItem<Item> CASSOWARY_EGG = laidEgg("cassowary_egg", 8, 0.6F);
     public static final DeferredItem<Item> RAVEN_EGG = laidEgg("raven_egg", 2, 0.2F);
     public static final DeferredItem<Item> ZHUQUE_EGG = laidEgg("zhuque_egg", 4, 0.3F);
