@@ -105,6 +105,8 @@ public class Nekomata extends AbstractMonsterGirl {
             case BLAZE_CAT_NEKOMATA -> girlAttributes(24, 0.32, 5);
             case WATERLIL_NEKOMATA -> girlAttributes(16, 0.3, 2);
             case CHESHIRE_NEKOMATA -> girlAttributes(20, 0.32, 3);
+            case SNOWLOPER_NEKOMATA -> girlAttributes(18, 0.34, 2);
+            case JAGLARE_NEKOMATA -> girlAttributes(30, 0.32, 7).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 0.8);
             default -> girlAttributes(18, 0.3, 3);
         };
     }
@@ -207,6 +209,66 @@ public class Nekomata extends AbstractMonsterGirl {
     @Override
     public boolean fireImmune() {
         return this.species == GirlSpecies.BLAZE_CAT_NEKOMATA || super.fireImmune();
+    }
+
+    @Override
+    public boolean canFreeze() {
+        return this.species != GirlSpecies.SNOWLOPER_NEKOMATA && super.canFreeze();
+    }
+
+    // --- the snowloper and the jaglare --------------------------------------------------------------------------------
+
+    /** Speed for the snowloper's friend while they stand on snow. True if she gave it. */
+    public boolean snowStride(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return false;
+        BlockPos under = friend.getOnPos();
+        boolean snow = level.getBlockState(friend.blockPosition()).is(net.minecraft.tags.BlockTags.SNOW) || level.getBlockState(under).is(net.minecraft.tags.BlockTags.SNOW);
+        if (snow) friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 60, 1, true, false));
+        return snow;
+    }
+
+    /** Up in the trees: prey passing at least two blocks below gets pounced on. The prey she dropped on, or null. */
+    @Nullable
+    public net.minecraft.world.entity.LivingEntity dropOnPrey(ServerLevel level) {
+        if (this.getTarget() != null || this.isOrderedToSit() || this.isBaby()) return null;
+        net.minecraft.world.entity.LivingEntity prey = this.nearest(net.minecraft.world.entity.LivingEntity.class, 7,
+                e -> e != this && e.isAlive() && this.getY() - e.getY() >= 2.0 && (e instanceof net.minecraft.world.entity.monster.Monster
+                        || e instanceof net.minecraft.world.entity.animal.Animal a && !(a instanceof net.minecraft.world.entity.TamableAnimal t && t.isTame()))
+                        && !(e instanceof com.linkyoshi90.monstergirls.entity.Bonded));
+        if (prey == null) return null;
+        Vec3 to = prey.position().subtract(this.position());
+        this.setDeltaMovement(to.x * 0.2, 0.25, to.z * 0.2);
+        this.setTarget(prey);
+        this.startTimedAction(Action.POUNCE, 20);
+        this.playSound(SoundEvents.CAT_HISS, 1.0F, 0.7F);
+        return prey;
+    }
+
+    /** Onto the top of a tree within 6 blocks, to lie in wait. True if she climbed. */
+    public boolean climbTree(ServerLevel level) {
+        for (int i = 0; i < 16; i++) {
+            BlockPos p = this.blockPosition().offset(this.random.nextInt(13) - 6, 2 + this.random.nextInt(8), this.random.nextInt(13) - 6);
+            if (level.getBlockState(p.below()).is(net.minecraft.tags.BlockTags.LEAVES) && level.getBlockState(p).isAir() && level.getBlockState(p.above()).isAir()) {
+                this.teleportTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5);
+                this.getNavigation().stop();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Her roar: the monsters within 8 blocks of her friend are weakened. Returns how many. */
+    public int roar(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return 0;
+        var near = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8));
+        for (var m : near) m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WEAKNESS, 120, 0));
+        if (!near.isEmpty()) {
+            this.playSound(SoundEvents.RAVAGER_ROAR, 0.8F, 1.6F);
+            this.startTimedAction(Action.HISS, 30);
+        }
+        return near.size();
     }
 
     /** Her burning paws set whatever she hits alight. */
@@ -373,7 +435,8 @@ public class Nekomata extends AbstractMonsterGirl {
 
     @Override
     public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
-        return this.species != GirlSpecies.SNOW_LEOPARD_NEKOMATA && super.causeFallDamage(Math.max(0, distance - 3), multiplier, source);
+        return this.species != GirlSpecies.SNOW_LEOPARD_NEKOMATA && this.species != GirlSpecies.JAGLARE_NEKOMATA   // she drops from the trees
+                && super.causeFallDamage(Math.max(0, distance - 3), multiplier, source);
     }
 
     // --- tick ----------------------------------------------------------------------------------------------------
@@ -384,6 +447,13 @@ public class Nekomata extends AbstractMonsterGirl {
         if (this.species == GirlSpecies.BLAZE_CAT_NEKOMATA && this.level() instanceof ServerLevel fire && this.tickCount % 40 == 0 && !this.isBaby()) this.kindle(fire);
         if (this.species == GirlSpecies.WATERLIL_NEKOMATA && this.level() instanceof ServerLevel pond && this.tickCount % 4 == 0) this.tickPads(pond);
         if (this.species == GirlSpecies.CHESHIRE_NEKOMATA && this.level() instanceof ServerLevel wonder && this.tickCount % 20 == 0) this.blinkToFriend(wonder);
+        if (this.species == GirlSpecies.SNOWLOPER_NEKOMATA && this.level() instanceof ServerLevel snow && this.tickCount % 20 == 0) this.snowStride(snow);
+        if (this.species == GirlSpecies.JAGLARE_NEKOMATA && this.level() instanceof ServerLevel jungle && !this.isBaby()) {
+            if (this.tickCount % 10 == 0) this.dropOnPrey(jungle);
+            if (this.tickCount % 400 == 0 && this.onGround() && this.getTarget() == null && this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32) == null
+                    && this.random.nextInt(3) == 0) this.climbTree(jungle);
+            if (this.tickCount % 200 == 0) this.roar(jungle);
+        }
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.isTrueForm() && this.tickCount % 20 == 0 && !server.isDay()) {
             server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, this.getRandomX(0.6), this.getY() + this.getBbHeight() * this.random.nextDouble(), this.getRandomZ(0.6), 1, 0, 0.02, 0, 0);

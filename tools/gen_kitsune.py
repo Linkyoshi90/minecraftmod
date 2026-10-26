@@ -7,14 +7,26 @@ Shared girl_lib rig with fur legs and nine fox tails (tail_1..tail_9, fanned out
 her bond allows: one wild, two at high friendship, three devoted, nine for a kyubi elder). Shrine-maiden outfit: a
 white top and a coloured skirt. Five colours per species.
 """
+import math
 import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import girl_lib as G  # noqa: E402
-from girl_lib import H, pick, noise, skin, shades  # noqa: E402
+from girl_lib import H, cube, pick, noise, skin, shades  # noqa: E402
 
 SPECIES = {
+    # thirteenth wave: the wattlefox, a blue fox wreathed in golden wattle blossom
+    "wattlefox_kitsune": dict(
+        build="slim", outfit=dict(top=["halter", "capelet"], bottom="wrap_skirt", extras=["pearls"], colors=dict(cloth2="#e8c040")),
+        ears="fox", hair="wavy", stockings=False, tip="light", wattle=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#4a7ae8", FUR="#3a6ad8", LIGHT="#e8f0ff", MARK="#1e3a8a", EYE="#e8c040", CLOTH="#2a5a3a", TRIM="#e8c040",
+                 facemark="fox", extra=dict(bloom="#f8d030", leaf="#5a8a4a")),
+        variants={"teal": dict(HAIR="#2a9a9a", FUR="#2a8a8a", MARK="#145a5a", extra=dict(bloom="#f8d030", leaf="#5a8a4a")),
+                  "violet": dict(HAIR="#8a5ad8", FUR="#7a4ac8", MARK="#3a1e6a", extra=dict(bloom="#f8e070", leaf="#5a8a4a")),
+                  "golden": dict(HAIR="#e8b040", FUR="#d8a030", MARK="#7a4a10", LIGHT="#fff4d8", EYE="#3a7ac8", CLOTH="#3a5a8a",
+                                 extra=dict(bloom="#fff070", leaf="#4a7a3a")),
+                  "grey": dict(HAIR="#8a8e98", FUR="#7a7e88", MARK="#3a3e48", extra=dict(bloom="#f8d030", leaf="#5a8a4a"))}),
     "red_kitsune": dict(
         build="standard", outfit=dict(top=["kimono"], bottom="hakama", colors=dict(kimono="#f4f0ea", kimono_trim="#c8352a", cloth2="#b8302a", obi="#b8302a")),
         ears="fox", hair="hime", stockings=True, tip="light",
@@ -74,7 +86,8 @@ def leg_parts(build):
 
 
 def declare(sp):
-    G.declare(leg_parts(SPECIES[sp].get("build")), ears=SPECIES[sp]["ears"], hair=SPECIES[sp]["hair"],
+    extra = [("wattle", 1.25, 1.25, 1.25), ("wattle_leaf", .5, .25, 2.5)] if SPECIES[sp].get("wattle") else []
+    G.declare(leg_parts(SPECIES[sp].get("build")) + extra, ears=SPECIES[sp]["ears"], hair=SPECIES[sp]["hair"],
               build=SPECIES[sp].get("build"), outfit=SPECIES[sp].get("outfit"))
 
 
@@ -118,6 +131,9 @@ def paint(sp, key):
     pt("ftail_b", "all", bushy)
     tip = pal.LIGHT if d["tip"] == "light" else pal.MARK
     pt("ftail_c", "all", lambda f, x, y, w, h: pick(tip, 0.6 + (noise(x, y, 9) - 0.5) * 0.2, x, y))
+    bloom, leaf = shades(pal.extra.get("bloom", "#f8d030")), shades(pal.extra.get("leaf", "#5a8a4a"))
+    pt("wattle", "all", lambda f, x, y, w, h: pick(bloom, 0.55 + 0.3 * ((x + y) % 2), x, y))     # fluffy golden balls of blossom
+    pt("wattle_leaf", "all", lambda f, x, y, w, h: pick(leaf, 0.5 + 0.15 * (y % 2), x, y))
     return pt.T
 
 
@@ -129,6 +145,16 @@ def build(sp):
     G.legs_biped(r, g, d)
     G.OF.dress_legs(r, d.get("outfit"))
     G.fox_tails(r, d, 9)
+    if d.get("wattle"):                                  # a wreath of wattle round her head
+        hy, z = g.hy, g.z
+        cs = []
+        for i in range(9):
+            a = math.radians(i * 40)
+            x, zz = 4.4 * math.sin(a), 4.4 * math.cos(a)
+            cs.append(cube("wattle", [x - 0.625, hy + 7.4 + 0.4 * (i % 2), zz - 0.625 + z]))
+            if i % 2 == 0:
+                cs.append(G.rot_cube("wattle_leaf", [x - 0.25, hy + 7.6, zz + z], [x, hy + 7.6, zz + z], 0, i * 40 + 90, 0))
+        r.add("wreath", "head", [0, hy + 7.6, z], cs)
     return r.model(sp)
 
 

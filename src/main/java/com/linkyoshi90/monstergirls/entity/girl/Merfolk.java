@@ -150,6 +150,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
             case MANTARROW_MERMAID -> girlAttributes(24, 0.28, 2);
             case PLATYPUS_MERMAID -> girlAttributes(16, 0.26, 2);
             case MOONSEAL_MERMAID -> girlAttributes(28, 0.24, 2);
+            case RUST_OTTER_MERMAID -> girlAttributes(20, 0.27, 3);
             default -> girlAttributes(20, 0.24, 2);
         };
     }
@@ -298,6 +299,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         return switch (this.species) {
             case SHARK_MERMAID -> new ItemStack(this.random.nextBoolean() ? Items.BONE : Items.COD);
             case SEAL_MERMAID, ORCA_MERMAID -> new ItemStack(this.random.nextBoolean() ? Items.COD : Items.SALMON, 2);
+            case RUST_OTTER_MERMAID -> new ItemStack(this.random.nextInt(3) == 0 ? Items.COPPER_INGOT : Items.RAW_COPPER, 2);
             case PLATYPUS_MERMAID -> new ItemStack(this.random.nextBoolean() ? Items.CLAY_BALL : Items.SALMON, 2);
             case MOONSEAL_MERMAID -> new ItemStack(this.random.nextInt(4) == 0 ? Items.PRISMARINE_CRYSTALS : this.random.nextBoolean() ? Items.COD : Items.SNOWBALL, 2);
             case DOLPHIN_MERMAID -> new ItemStack(this.random.nextInt(4) == 0 ? Items.NAUTILUS_SHELL : Items.TROPICAL_FISH);
@@ -406,6 +408,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         if (this.species == GirlSpecies.SIREN_MERMAID && !this.isBaby() && this.tickCount % 10 == 0) this.sirenSong(server);
         if (this.isManta() && !this.isBaby()) this.tickManta();
         if (this.species == GirlSpecies.PLATYPUS_MERMAID && !this.isBaby() && this.tickCount % 20 == 0) this.electrosense(server);
+        if (this.species == GirlSpecies.RUST_OTTER_MERMAID && !this.isBaby() && this.tickCount % 1200 == 0) this.scrape(server);
         if (this.species == GirlSpecies.MOONSEAL_MERMAID && !this.isBaby() && this.tickCount % 40 == 0) this.moonSong(server);
         if (this.species == GirlSpecies.AXOLUME_MERMAID && !this.isBaby()) {        // she lights the water, and her friend heals beside her
             this.glow(server, 10);
@@ -448,6 +451,30 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
                 server.sendParticles(ParticleTypes.DOLPHIN, this.getX(), this.getY() + 0.5, this.getZ(), 6, 0.3, 0.2, 0.3, 0.0);
             }
         }
+    }
+
+    // --- the rust otter ------------------------------------------------------------------------------------------------
+
+    /** The most weathered copper block within 6 blocks of her friend loses a stage of its green. True if she scraped one. */
+    public boolean scrape(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null) return false;
+        net.minecraft.core.BlockPos best = null;
+        int age = 0;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-6, -3, -6), friend.blockPosition().offset(6, 3, 6))) {
+            var s = level.getBlockState(p);
+            if (s.getBlock() instanceof net.minecraft.world.level.block.WeatheringCopper w && w.getAge().ordinal() > age) {
+                age = w.getAge().ordinal();
+                best = p.immutable();
+            }
+        }
+        if (best == null) return false;
+        var prev = net.minecraft.world.level.block.WeatheringCopper.getPrevious(level.getBlockState(best));
+        if (prev.isEmpty()) return false;
+        level.setBlock(best, prev.get(), 3);
+        level.levelEvent(3005, best, 0);                                     // the scraping particles
+        this.playSound(SoundEvents.AXE_SCRAPE, 1.0F, 1.2F);
+        return true;
     }
 
     // --- the platypus and the moonseal --------------------------------------------------------------------------------

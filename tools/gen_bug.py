@@ -54,6 +54,20 @@ SPECIES = {
                                                            lantern="#f8a0d8")),
                   "white": dict(HAIR="#e8e4d8", CLOTH="#a8a8b0", extra=dict(wing="#d8d4c8", wing_vein="#8a8478", wing_alpha=220, antenna="#8a8478",
                                                                             boot="#8a8478", lantern="#ffffff"))}),
+    # thirteenth wave: the scarabronze, a bronze scarab: a gilded crown, a domed shell of two wing-cases on her back
+    "scarabronze_bug": dict(
+        build="athletic", outfit=dict(top=["bandeau"], bottom="wrap_skirt", extras=["usekh", "armlets", "belt"], colors=dict(cloth2="#2a3a8a", usekh2="#2a3a8a")),
+        hair="hime", bangs="blunt", ears="antenna", legs="stockings", foot="shoe", crown=True, elytra=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#1e1a2e", FUR="#a8702a", LIGHT="#e8b860", MARK="#4a2a10", EYE="#e8c040", CLOTH="#2a3a8a", TRIM="#e8c040",
+                 extra=dict(antenna="#4a2a10", stocking="#7a4a1e", boot="#4a2a10", shell="#b07a30", shell2="#e8c060")),
+        variants={"blue": dict(FUR="#2a3a8a", LIGHT="#6a8ad8", MARK="#141e4a", CLOTH="#a8702a",
+                               extra=dict(antenna="#141e4a", stocking="#2a3a8a", boot="#141e4a", shell="#2a4aa8", shell2="#e8c060")),
+                  "green": dict(FUR="#2a7a4a", LIGHT="#6ac890", MARK="#14422a",
+                                extra=dict(antenna="#14422a", stocking="#2a6a3a", boot="#14422a", shell="#2a8a5a", shell2="#a8f0c0")),
+                  "gold": dict(FUR="#d8a840", LIGHT="#f8e090", MARK="#7a5410", CLOTH="#5a1e2a",
+                               extra=dict(antenna="#7a5410", stocking="#a87a2a", boot="#7a5410", shell="#e8b840", shell2="#fff0b0")),
+                  "black": dict(FUR="#2a2628", LIGHT="#6a6468", MARK="#0e0c0e", CLOTH="#a82a3a",
+                                extra=dict(antenna="#0e0c0e", stocking="#2a2628", boot="#0e0c0e", shell="#2a2a34", shell2="#8a8ac8"))}),
     "mantis_bug": dict(                                  # ninth wave: scythe forearms, long folded wings, the prayer pose
         build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["bracers"], colors=dict(cloth2="#4a7a2a")), hair="ponytail", bangs="parted",
         ears="antenna", legs="stockings", foot="shoe", wings="insect", scythes=True,
@@ -171,6 +185,8 @@ def declare_hook(sp, d):
         out += [("petal", 2, 2, .5)]
     if d.get("lantern"):                                 # the firefly's glowing abdomen
         out += [("lantern", 3.5, 3, 4)]
+    if d.get("elytra"):                                  # the scarab's wing-cases
+        out += [("elytra", 3.5, 9, 1.5)]
     if d.get("scythes"):                                 # the mantis: a toothed blade along each forearm; the orchid's petal hips; the leaf's cape
         out += [("scythe", .75, 4.5, 1.5), ("petal_hip", 3.25, 2.5, .5), ("leafcape", 6, 9, .5)]
     return out
@@ -194,6 +210,9 @@ def paint_hook(pt, pal, d):
     pt("leafcape", "all", lambda f, x, y, w, h: (pick(leaf, 0.5 + 0.25 * (x == w // 2) + 0.12 * ((x - w // 2) == (y // 2) % 3), x, y)
                                                  if abs(x + 0.5 - w / 2) < w / 2 * (1 - (y / h) ** 2) + 0.6 else CLEAR)
        if pal.extra.get("leafcape") else CLEAR)
+    shell, shell2 = G.shades(pal.extra.get("shell", "#b07a30")), G.shades(pal.extra.get("shell2", "#e8c060"))
+    pt("elytra", "all", lambda f, x, y, w, h: pick(shell2, 0.55, x, y) if (f in ("south", "east", "west") and (y % 5 == 0 or x == 0))
+       else pick(shell, 0.4 + 0.25 * (f == "south") + (noise(x, y, 99) - 0.5) * 0.1, x, y))
     lamp = G.shades(pal.extra.get("lantern", "#f8e070"))
     pt("lantern", "all", lambda f, x, y, w, h: pick(lamp, 0.65 + 0.25 * ((x + y) % 3 == 0), x, y) if y >= h * 0.35 or f == "down"
        else pick(pal.FUR, 0.45, x, y))
@@ -219,6 +238,10 @@ def build_hook(r, g, d):
                                                        G.rot_cube("stinger", [-0.25, 9.2, 7.8 + z], [0, 12.5, 1.5 + z], 35, 0, 0)])
     if d.get("crown"):
         r.put("head", cube("crown", [-2, hy + 8.6, -2 + z]), cube("jewel", [-0.5, hy + 9.0, -2.4 + z]))
+    if d.get("elytra"):                                  # two domed wing-cases closed over her back
+        cd = G.S("chest")[2]
+        r.add("elytra", "body", [0, 19.5, cd / 2 + z], [G.rot_cube("elytra", [-3.5, 10.8, cd / 2 + 0.2 + z], [-1.75, 19.5, cd / 2 + z], 8, 0, 4),
+                                                        G.rot_cube("elytra", [0, 10.8, cd / 2 + 0.2 + z], [1.75, 19.5, cd / 2 + z], 8, 0, -4)])
     if d.get("lantern"):                                 # her lantern, under her wings at the small of her back
         r.add("lantern", "body", [0, 12.5, 1.5 + z], [G.rot_cube("lantern", [-1.75, 9.5, 1.2 + z], [0, 12.5, 1.5 + z], 30, 0, 0)])
     if d.get("scythes"):

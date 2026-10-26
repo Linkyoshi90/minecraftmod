@@ -82,6 +82,20 @@ SPECIES = {
                   "dawn": dict(FUR="#6a4a5a", MARK="#3a2432", HAIR="#ffe8f0", EYE="#f8a0c0", extra=dict(antler="#f8a0c0", antler2="#f8d080")),
                   "frost": dict(FUR="#a8b8c8", MARK="#6a7a8a", LIGHT="#ffffff", EYE="#e8f8ff", extra=dict(antler="#ffffff", antler2="#a8e8ff")),
                   "ember": dict(FUR="#5a3a2a", MARK="#2a1a12", HAIR="#ffe0b0", EYE="#f8c050", extra=dict(antler="#f8c050", antler2="#f86a3a"))}),
+    # thirteenth wave: the momoshika, a white-and-blue deer taur with peach blossoms in her antlers
+    "momoshika_centaur": dict(
+        build="slim", outfit=dict(top=["halter", "capelet"], extras=["pearls"], colors=dict(cloth2="#f4c0d0")),
+        hair="flowing", tail=(2, 3, 1.5), antlers=True, blossoms=True, ears="round",
+        pal=dict(SKIN=skin("pale"), HAIR="#f4f0f8", FUR="#d8e4f4", LIGHT="#ffffff", MARK="#3a5ab0", EYE="#e86aa0", CLOTH="#3a5ab0", TRIM="#f8b8d0",
+                 pattern="spots", extra=dict(antler="#f0e8e0", antler2="#e8d8d0", bloom="#f8a8c8", bloom_in="#f8e070")),
+        variants={"pink": dict(FUR="#f4d8e4", MARK="#c8507a", HAIR="#fbe8f0", CLOTH="#c8507a",
+                               extra=dict(antler="#f0e8e0", antler2="#e8d8d0", bloom="#ffffff", bloom_in="#f8a8c8")),
+                  "gold": dict(FUR="#f0dca8", MARK="#a87a2a", HAIR="#fff4d8", CLOTH="#a87a2a", EYE="#3a8ac8",
+                               extra=dict(antler="#f0e0b0", antler2="#e8c880", bloom="#f8a8c8", bloom_in="#f8e070")),
+                  "green": dict(FUR="#d8ecd8", MARK="#3a8a5a", HAIR="#f0f8f0", CLOTH="#3a8a5a",
+                                extra=dict(antler="#e8e0d0", antler2="#d8d0c0", bloom="#f8a8c8", bloom_in="#f8e070")),
+                  "white": dict(FUR="#f8f8fa", MARK="#b8bcc8", HAIR="#ffffff", CLOTH="#8a8ac8", EYE="#8a6ad8",
+                                extra=dict(antler="#f8f4f0", antler2="#ece4dc", bloom="#f8a8c8", bloom_in="#f8e070"))}),
     # eleventh wave: the sphinx, a winged lioness taur in a striped nemes headcloth
     "sphinx_centaur": dict(
         build="athletic", outfit=dict(top=["bandeau"], extras=["usekh", "armlets", "belt"], colors=dict(usekh2="#2a4a9a")),
@@ -158,6 +172,8 @@ def declare(sp):
              ("armor_ref", 6, 8, 4)]
     if d.get("antlers"):
         parts += [("antler_a", .75, 5, .75), ("antler_b", .75, 2.5, .75), ("antler_c", .5, 2, .5)]
+    if d.get("blossoms"):
+        parts += [("blossom", 1.5, 1.5, 1.5), ("blossom_in", .75, .75, .75)]
     if d.get("horns"):
         parts += [("horn_a", 1, 3, 1), ("horn_b", .75, 2.5, .75)]
     if d.get("uhorn"):                                   # the unicorn's single spiral horn
@@ -197,6 +213,9 @@ def paint(sp, key):
     pt("lleg_f", "all", lower)
     pt("lleg_b", "all", lower)
     pt("hoof", "all", lambda f, x, y, w, h: pick(shades("#3a302a"), 0.45 + 0.2 * (y == 0) + (noise(x, y, 3) - 0.5) * 0.1, x, y))
+    bloom, bloom_in = shades(pal.extra.get("bloom", "#f8a8c8")), shades(pal.extra.get("bloom_in", "#f8e070"))
+    pt("blossom", "all", lambda f, x, y, w, h: pick(bloom, 0.55 + 0.25 * ((x + y) % 2), x, y))
+    pt("blossom_in", "all", lambda f, x, y, w, h: pick(bloom_in, 0.7, x, y))
     kelp = shades(pal.extra.get("kelp", "#4a8a3a"))
     pt("htail", "all", lambda f, x, y, w, h: pick(kelp, 0.45 + (noise(x, y, 6) - 0.5) * 0.3, x, y) if d.get("kelp") and (x + y // 2) % 3 == 0
        else pick(pal.HAIR, 0.45 + 0.25 * ((x + y // 3) % 3 == 0) + (noise(x, y, 5) - 0.5) * 0.15, x, y)
@@ -258,6 +277,11 @@ def build(sp):
             cs.append(G.rot_cube("antler_b", [x + sg * 1.8 - 0.375, hy + 11.0, -1.4 + z], [x + sg * 1.8, hy + 11.0, -1.0 + z], -45, 0, -10 * sg))
             cs.append(G.rot_cube("antler_c", [x + sg * 2.6 - 0.25, hy + 12.4, 0.8 + z], [x + sg * 2.6, hy + 12.4, 1.0 + z], 10, 0, 30 * sg))
             cs.append(G.rot_cube("antler_b", [x + sg * 0.6 - 0.375, hy + 9.6, -1.9 + z], [x + sg * 0.6, hy + 9.6, -1.6 + z], -60, 0, 0))
+        if d.get("blossoms"):                            # peach blossoms caught in the tines
+            for sg in (-1, 1):
+                for bx, by, bz in ((2.6 + 1.8, 11.4, -1.6), (2.6 + 2.6, 13.6, 1.2), (2.6 + 0.6, 10.6, -2.4), (2.6 + 1.2, 9.4, 0.2)):
+                    cs.append(cube("blossom", [sg * bx - 0.75, hy + by - 0.75, bz - 0.75 + z]))
+                    cs.append(cube("blossom_in", [sg * bx - 0.375, hy + by - 0.375, bz - 1.0 + z]))
         r.add("antlers", "head", [0, hy + 8.4, z], cs)
     if d.get("horns"):
         cs = []

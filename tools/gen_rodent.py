@@ -14,7 +14,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import girl_family as F  # noqa: E402
 import girl_lib as G  # noqa: E402
-from girl_lib import H, cube, pick, skin  # noqa: E402
+from girl_lib import H, cube, pick, skin, CLEAR  # noqa: E402
 
 SPECIES = {
     "capybara_rodent": dict(
@@ -70,6 +70,31 @@ SPECIES = {
                   "black": dict(HAIR="#2a2a26", FUR="#3a3a34", LIGHT="#e8e4d8", MARK="#141412", EYE="#8ab84a", extra=dict(bamboo="#4a4a3a")),
                   "red": dict(HAIR="#8a3a22", FUR="#a84e2e", MARK="#5a2010", extra=dict(bamboo="#c8683a")),
                   "pale": dict(HAIR="#b8c8a0", FUR="#d0dcb8", LIGHT="#ffffff", MARK="#8a9a70", extra=dict(bamboo="#d8e8b0"))}),
+    # thirteenth wave: the squirricerat, a squirrel with a triceratops' frill and three horns, a great spiral tail
+    "squirricerat_rodent": dict(
+        build="athletic", outfit=dict(top=["halter", "vest"], bottom="shorts", extras=["belt", "pearls"], colors=dict(cloth2="#3a2a1e", leather="#8a6a3a")),
+        hair="ponytail", bangs="jagged", ears="tuft", legs="fur", foot="paw",
+        tail=[(2.75, 2.75, 4), (3.25, 3.25, 4), (3, 3, 4), (2.25, 2.25, 3)], tail_rest=[(-70, 0, 0), (55, 0, 0), (45, 0, 0), (40, 0, 0)], tail_look="fur",
+        frill=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#2a4a9a", FUR="#3a5ab0", LIGHT="#d0dcf4", MARK="#1a2a6a", EYE="#e8a030", CLOTH="#d8b060", TRIM="#2a4a9a",
+                 pattern="dapple", extra=dict(frill="#a8c4f8", frill_edge="#e8c060", horn="#f0e8d8")),
+        variants={"green": dict(HAIR="#2a6a3a", FUR="#3a8a4a", LIGHT="#c8ecc8", MARK="#1a4a24", extra=dict(frill="#5aa86a", frill_edge="#f0d060", horn="#f0e8d8")),
+                  "red": dict(HAIR="#8a2a1e", FUR="#b8402a", LIGHT="#f0c8b0", MARK="#5a1a10", CLOTH="#3a5a8a",
+                              extra=dict(frill="#d8603a", frill_edge="#f8e070", horn="#f0e8d8")),
+                  "brown": dict(HAIR="#5a3a22", FUR="#8a5a34", LIGHT="#e8d0b0", MARK="#3a2414", extra=dict(frill="#a87a4a", frill_edge="#e8c060", horn="#f0e8d8")),
+                  "grey": dict(HAIR="#4a4a52", FUR="#7a7a84", LIGHT="#e0e0e6", MARK="#2a2a32", extra=dict(frill="#9a9aa6", frill_edge="#c8d8f0", horn="#f0e8d8"))}),
+    # thirteenth wave: the kamaitachi, the sickle weasel of the wind: long and slim, a sickle blade on each forearm
+    "kamaitachi_rodent": dict(
+        build="slim", outfit=dict(top=["halter"], bottom="hakama", extras=["scarf"], colors=dict(cloth2="#3a5a7a", scarf="#e8f0f8")),
+        hair="sidetail", bangs="jagged", ears="round", legs="fur", foot="paw",
+        tail=[(1.5, 1.5, 4), (1.5, 1.5, 4), (1.25, 1.25, 4), (1, 1, 3)], tail_rest=[(-15, 0, 0), (12, 0, 0), (10, 0, 0), (8, 0, 0)], tail_look="fur",
+        sickles=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#c89a5a", FUR="#d8aa6a", LIGHT="#fbf4e8", MARK="#6a4a2a", EYE="#3a8a6a", CLOTH="#3a5a7a", TRIM="#e8f0f8",
+                 pattern="solid", extra=dict(blade="#c8d0dc")),
+        variants={"white": dict(HAIR="#f4f2ee", FUR="#f6f4f0", LIGHT="#ffffff", MARK="#2a2628", EYE="#c84a5a", CLOTH="#2a2a3a"),
+                  "brown": dict(HAIR="#6a4a2e", FUR="#7a5636", LIGHT="#e8d4bc", MARK="#3a2416", CLOTH="#5a3a6a"),
+                  "grey": dict(HAIR="#7a7a80", FUR="#8a8a90", LIGHT="#e8e8ec", MARK="#3a3a40", CLOTH="#3a6a5a"),
+                  "black": dict(HAIR="#1e1c1e", FUR="#2a282a", LIGHT="#8a8488", MARK="#0e0c0e", EYE="#e8d040", CLOTH="#a83a3a")}),
     "ratatoskr_rodent": dict(
         build="petite", outfit=dict(top=["bandeau", "vest"], bottom="shorts", extras=["satchel", "scarf"], colors=dict(scarf="#3a7a4a", leather="#5a3a22")),
         hair="ponytail", bangs="messy", ears="tuft", legs="fur", foot="paw",
@@ -93,6 +118,10 @@ def declare_hook(sp, d):
         out += [("pendant", 1.5, 2, .5)]
     if d.get("flute"):
         out += [("flute", 6, .75, .75), ("cord", .25, 3, .25)]
+    if d.get("frill"):
+        out += [("frill", 12, 8, .75), ("trihorn", 1, 4, 1), ("nosehorn", .75, 1.25, .75)]
+    if d.get("sickles"):
+        out += [("sickle", .5, 5, 2.25)]
     return out
 
 
@@ -102,6 +131,27 @@ def paint_hook(pt, pal, d):
     pt("yuzu_leaf", "all", lambda f, x, y, w, h: pick(G.shades("#4a9a3a"), 0.55, x, y))
     pt("coati_nose", "all", lambda f, x, y, w, h: pick(G.shades("#1e1a1c"), 0.4, x, y) if f == "north" and y == h - 1
        else pick(pal.LIGHT if f == "down" else pal.FUR, 0.55, x, y))
+    frill, edge = G.shades(pal.extra.get("frill", "#5a7ac8")), G.shades(pal.extra.get("frill_edge", "#e8c060"))
+
+    def fr(f, x, y, w, h):                               # the frill: a fan plate, scalloped and spotted along its edge
+        if f not in ("north", "south"):
+            return CLEAR                                 # a thin plate: no frame round it
+        dx = (x + 0.5 - w / 2) / (w / 2)
+        top = (h - 1) * dx * dx                          # a half-disc: the corners cut away
+        if f in ("north", "south") and y < top:
+            return CLEAR
+        if f in ("north", "south") and y < top + 1.5:
+            return pick(edge, 0.6, x, y)
+        if (x * 7 + y * 5) % 13 == 0:
+            return pick(pal.MARK, 0.4, x, y)             # spots
+        return pick(frill, 0.55 + 0.12 * ((x + y) % 4 == 0), x, y)
+    pt("frill", "all", fr)
+    horn = G.shades(pal.extra.get("horn", "#f0e8d8"))
+    pt("trihorn", "all", lambda f, x, y, w, h: pick(horn, 0.5 + 0.2 * (y < 2), x, y))
+    pt("nosehorn", "all", lambda f, x, y, w, h: pick(horn, 0.6, x, y))
+    blade = G.shades(pal.extra.get("blade", "#c8d0dc"))
+    pt("sickle", "all", lambda f, x, y, w, h: pick(blade, 0.55 + 0.3 * (f in ("north", "east") and x == w - 1), x, y)
+       if f not in ("east", "west") or y > h * 0.15 else CLEAR)
     amber = G.shades(pal.extra.get("amber", "#e8701e"))
     pt("pendant", "all", lambda f, x, y, w, h: pick(amber, 0.55 + 0.3 * (f == "north" and 0 < x < w - 1 and y in (2, 3)), x, y)
        if 0 < y < h - 1 or 0 < x < w - 1 else pick(G.shades("#e8c050"), 0.6, x, y))
@@ -118,6 +168,15 @@ def paint_hook(pt, pal, d):
 
 
 def build_hook(r, g, d):
+    if d.get("frill"):                                   # the frill behind her head, two brow horns and a little nose horn
+        hy, z = g.hy, g.z
+        r.add("frill", "head", [0, hy + 6, 4.8 + z], [G.rot_cube("frill", [-6, hy + 5.0, 4.8 + z], [0, hy + 6, 4.8 + z], -25, 0, 0)])
+        r.put("head", G.rot_cube("trihorn", [-2.7, hy + 8.6, -2.0 + z], [-2.2, hy + 8.6, -1.5 + z], -25, 0, 12),
+              G.rot_cube("trihorn", [1.7, hy + 8.6, -2.0 + z], [2.2, hy + 8.6, -1.5 + z], -25, 0, -12),
+              G.rot_cube("nosehorn", [-0.375, hy + 2.4, -4.5 + z], [0, hy + 2.4, -4.1 + z], -75, 0, 0))
+    if d.get("sickles"):                                 # a sickle blade along each forearm, curving back past the elbow
+        px, py, pz = r.b["forearm_r"]["pivot"]
+        r.put("forearm_r", G.rot_cube("sickle", [px - 1.2, py - 4.4, pz - 0.6], [px - 1.0, py - 3.5, pz], 15, 0, 8))
     if d.get("pendant"):                                # the amber pendant on her necklace
         r.put("body", cube("pendant", [-0.75, 16.6, -G.S("chest")[2] / 2 - G.S("bust")[2] - 0.6 + g.z]))
     if d.get("flute"):                                  # the flute hangs across her chest from its cord

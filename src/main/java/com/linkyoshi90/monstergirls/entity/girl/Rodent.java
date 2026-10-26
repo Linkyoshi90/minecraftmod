@@ -62,6 +62,12 @@ public class Rodent extends AbstractMonsterGirl {
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.0, this::isFood, false));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, species == GirlSpecies.RATATOSKR_RODENT ? 1.0 : 0.7));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        if (species == GirlSpecies.SQUIRRICERAT_RODENT || species == GirlSpecies.KAMAITACHI_RODENT) {   // they fight the monsters near their friend
+            this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, true));
+            this.targetSelector.addGoal(2, new net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal<>(this,
+                    net.minecraft.world.entity.monster.Monster.class, 10, true, false,
+                    m -> !(m instanceof net.minecraft.world.entity.monster.Creeper) && this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16) != null));
+        }
         if (species == GirlSpecies.NEEDLEHOG_RODENT) {                    // she hunts the silverfish in your walls
             this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.1, true));
             this.targetSelector.addGoal(2, new net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal<>(this,
@@ -75,7 +81,46 @@ public class Rodent extends AbstractMonsterGirl {
         if (s == GirlSpecies.COATIMANO_RODENT) return girlAttributes(14, 0.3, 1);
         if (s == GirlSpecies.MARMOTAUR_RODENT) return girlAttributes(28, 0.26, 5).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 1.2);
         if (s == GirlSpecies.BAMBADGER_RODENT) return girlAttributes(16, 0.28, 2);
+        if (s == GirlSpecies.SQUIRRICERAT_RODENT) return girlAttributes(24, 0.3, 5).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 1.5);
+        if (s == GirlSpecies.KAMAITACHI_RODENT) return girlAttributes(18, 0.38, 4).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 1.2);
         return s == GirlSpecies.CAPYBARA_RODENT ? girlAttributes(26, 0.23, 2) : girlAttributes(14, 0.34, 1);
+    }
+
+    // --- the squirricerat and the kamaitachi ---------------------------------------------------------------------------
+
+    /** A sapling buried in open grass within 6 blocks: one day it is a tree. True if she planted one. */
+    public boolean buryAcorn(ServerLevel level) {
+        var saplings = java.util.List.of(net.minecraft.world.level.block.Blocks.OAK_SAPLING, net.minecraft.world.level.block.Blocks.BIRCH_SAPLING,
+                net.minecraft.world.level.block.Blocks.DARK_OAK_SAPLING);
+        for (int i = 0; i < 12; i++) {
+            BlockPos p = this.blockPosition().offset(this.random.nextInt(13) - 6, this.random.nextInt(5) - 2, this.random.nextInt(13) - 6);
+            if (!level.getBlockState(p.below()).is(net.minecraft.world.level.block.Blocks.GRASS_BLOCK) || !level.getBlockState(p).isAir() || !level.canSeeSky(p)) continue;
+            level.setBlock(p, saplings.get(this.random.nextInt(saplings.size())).defaultBlockState(), 3);
+            level.levelEvent(2001, p.below(), net.minecraft.world.level.block.Block.getId(level.getBlockState(p.below())));
+            return true;
+        }
+        return false;
+    }
+
+    /** Her gusts cut the tall grass, natural leaves and cobwebs within 3 blocks of her friend (a few each time). Returns how many. */
+    public int gust(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return 0;
+        int n = 0;
+        for (BlockPos p : BlockPos.betweenClosed(friend.blockPosition().offset(-3, -1, -3), friend.blockPosition().offset(3, 3, 3))) {
+            var s = level.getBlockState(p);
+            boolean cut = s.is(net.minecraft.world.level.block.Blocks.SHORT_GRASS) || s.is(net.minecraft.world.level.block.Blocks.TALL_GRASS)
+                    || s.is(net.minecraft.world.level.block.Blocks.FERN) || s.is(net.minecraft.world.level.block.Blocks.LARGE_FERN) || s.is(net.minecraft.world.level.block.Blocks.COBWEB)
+                    || s.getBlock() instanceof net.minecraft.world.level.block.LeavesBlock && !s.getValue(net.minecraft.world.level.block.LeavesBlock.PERSISTENT);   // never leaves someone placed
+            if (!cut) continue;
+            level.destroyBlock(p, true, this);
+            if (++n >= 6) break;
+        }
+        if (n > 0) {
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.SWEEP_ATTACK, friend.getX(), friend.getY() + 1, friend.getZ(), 3, 1.5, 0.5, 1.5, 0.0);
+            this.playSound(SoundEvents.BREEZE_WIND_CHARGE_BURST.value(), 0.5F, 1.4F);
+        }
+        return n;
     }
 
     // --- the marmotaur and the bambadger -------------------------------------------------------------------------------
@@ -367,6 +412,8 @@ public class Rodent extends AbstractMonsterGirl {
     public void aiStep() {
         super.aiStep();
         if (this.species == GirlSpecies.COATIMANO_RODENT && this.level() instanceof ServerLevel diggingLevel && !this.isBaby()) this.tickDig(diggingLevel);
+        if (this.species == GirlSpecies.SQUIRRICERAT_RODENT && this.level() instanceof ServerLevel acorn && !this.isBaby() && this.tickCount % 2400 == 0) this.buryAcorn(acorn);
+        if (this.species == GirlSpecies.KAMAITACHI_RODENT && this.level() instanceof ServerLevel gale && !this.isBaby() && this.tickCount % 20 == 0) this.gust(gale);
         if (this.species == GirlSpecies.MARMOTAUR_RODENT && this.level() instanceof ServerLevel lookout && !this.isBaby() && this.tickCount % 20 == 0) this.keepWatch(lookout);
         if (this.species == GirlSpecies.BAMBADGER_RODENT && this.level() instanceof ServerLevel grove && !this.isBaby() && this.tickCount % 600 == 0
                 && this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32) != null) this.playFlute(grove);
@@ -401,6 +448,8 @@ public class Rodent extends AbstractMonsterGirl {
         if (this.species == GirlSpecies.COATIMANO_RODENT) return stack.is(Items.APPLE) || stack.is(Items.MELON_SLICE) || stack.is(Items.SWEET_BERRIES) || stack.is(Items.EGG);
         if (this.species == GirlSpecies.MARMOTAUR_RODENT) return stack.is(Items.SHORT_GRASS) || stack.is(Items.SWEET_BERRIES) || stack.is(Items.WHEAT);
         if (this.species == GirlSpecies.BAMBADGER_RODENT) return stack.is(Items.BAMBOO) || stack.is(Items.SWEET_BERRIES);
+        if (this.species == GirlSpecies.SQUIRRICERAT_RODENT) return stack.is(Items.SWEET_BERRIES) || stack.is(Items.WHEAT_SEEDS) || stack.is(Items.PUMPKIN_SEEDS);
+        if (this.species == GirlSpecies.KAMAITACHI_RODENT) return stack.is(Items.CHICKEN) || stack.is(Items.COOKED_CHICKEN) || stack.is(Items.EGG);
         return this.species == GirlSpecies.CAPYBARA_RODENT ? stack.is(Items.MELON_SLICE) || stack.is(Items.SUGAR_CANE) || stack.is(Items.APPLE)
                 : stack.is(Tags.Items.SEEDS) || stack.is(Items.SWEET_BERRIES) || stack.is(Items.GLOW_BERRIES);
     }
@@ -416,6 +465,15 @@ public class Rodent extends AbstractMonsterGirl {
             for (int i = 0; i < this.notes.getContainerSize(); i++) if (!this.notes.getItem(i).isEmpty()) return this.notes.removeItemNoUpdate(i);
             int r = this.random.nextInt(100);
             return new ItemStack(r < 40 ? Items.PAPER : r < 75 ? Items.SWEET_BERRIES : Items.SPIDER_EYE, r < 75 ? 2 : 1);
+        }
+        if (this.species == GirlSpecies.SQUIRRICERAT_RODENT) {
+            int r = this.random.nextInt(100);
+            return new ItemStack(r < 30 ? Items.OAK_SAPLING : r < 55 ? Items.BIRCH_SAPLING : r < 75 ? Items.DARK_OAK_SAPLING : r < 95 ? Items.SWEET_BERRIES : Items.BONE_BLOCK,
+                    r < 95 ? 2 : 1);
+        }
+        if (this.species == GirlSpecies.KAMAITACHI_RODENT) {
+            int r = this.random.nextInt(100);
+            return new ItemStack(r < 40 ? Items.FEATHER : r < 75 ? Items.STRING : r < 95 ? Items.WHEAT_SEEDS : Items.WIND_CHARGE, r < 95 ? 3 : 2);
         }
         if (this.species == GirlSpecies.MARMOTAUR_RODENT) {
             int r = this.random.nextInt(100);

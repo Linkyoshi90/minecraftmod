@@ -47,7 +47,7 @@ public interface Painted {
         List<Integer> ok = new ArrayList<>();
         for (int i = 0; i < AbstractMonsterGirl.PAINTS.size(); i++) {
             String p = AbstractMonsterGirl.PAINTS.get(i);
-            if (p.startsWith("copper_") || "pumpkin".equals(p) && month != 10 || "candy_cane".equals(p) && month != 12 || "valentine".equals(p) && month != 2 || "easter".equals(p) && month != 4) continue;
+            if (p.startsWith("copper_") || "pumpkin".equals(p) && month != 10 || "candy_cane".equals(p) && month != 12 || "valentine".equals(p) && month != 2 || "easter".equals(p) && month != 4 || "fireworks".equals(p) && month != 1) continue;
             ok.add(i + 1);
         }
         return ok.get(random.nextInt(ok.size()));

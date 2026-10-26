@@ -73,6 +73,26 @@ SPECIES = {
                   "iberian": dict(FUR="#c8a060", HAIR="#b88c50", pattern="spots", CLOTH="#6a3a2a"),
                   "bobcat": dict(FUR="#b07850", HAIR="#9a6440", pattern="spots", pattern_scale=0.8),
                   "silver": dict(FUR="#d4d6da", HAIR="#dcdee4", LIGHT="#ffffff", MARK="#4a4c52", CLOTH="#3a4a6a")}),
+    # thirteenth wave: the snowloper, a white snow-leopard cub with blue snowflake rosettes and a thick tail
+    "snowloper_nekomata": dict(
+        build="petite", outfit=dict(top=["sweater"], bottom="shorts", extras=["scarf"], colors=dict(cloth2="#3a5a8a", scarf="#8ab0e8")),
+        ears="round", hair="bob", bangs="blunt", tail=((2.25, 2.25, 4), (2.25, 2.25, 4), (2.25, 2.25, 3.5)), tail_pattern="rosettes",
+        pal=dict(SKIN=skin("pale"), HAIR="#f4f6fa", FUR="#f0f4fa", LIGHT="#ffffff", MARK="#7aa0d8", EYE="#4ab8f8", CLOTH="#e8eef8", TRIM="#7aa0d8",
+                 INNER="#f0c0d0", pattern="rosettes"),
+        variants={"grey": dict(HAIR="#c8ccd2", FUR="#c8ccd4", MARK="#4a5058", CLOTH="#3a4a5a"),
+                  "cream": dict(HAIR="#f4ead8", FUR="#f0e4cc", MARK="#a8885a", EYE="#5ab07a", CLOTH="#a85a4a"),
+                  "blue": dict(HAIR="#c8dcf8", FUR="#b8d0f4", MARK="#3a6ac8", CLOTH="#2a3a6a"),
+                  "black": dict(HAIR="#3a3a44", FUR="#4a4a56", LIGHT="#8a8a98", MARK="#1a1a22", EYE="#f8d040", CLOTH="#c8d8f0")}),
+    # thirteenth wave: the jaglare, a blue-patterned jaguar with a lion's mane and a tufted tail
+    "jaglare_nekomata": dict(tuft=True,
+        build="athletic", outfit=dict(top=["bandeau"], bottom="loincloth", extras=["armlets", "pearls"], colors=dict(cloth2="#e8c040")),
+        ears="round", hair="mane", bangs="messy", tail=((1.5, 1.5, 4), (1.5, 1.5, 4), (1.75, 1.75, 3)), tail_pattern="rosettes",
+        pal=dict(SKIN=skin("tan"), HAIR="#1e2a6a", FUR="#3a5ab8", LIGHT="#a8c0f0", MARK="#141e5a", EYE="#f8c040", CLOTH="#e8c040", TRIM="#141e5a",
+                 INNER="#e8a0b0", pattern="rosettes"),
+        variants={"gold": dict(HAIR="#5a3a14", FUR="#d8a040", LIGHT="#f8e4b0", MARK="#3a240e", EYE="#5ab05a", CLOTH="#2a5a3a"),
+                  "black": dict(HAIR="#141216", FUR="#24222a", LIGHT="#4a4650", MARK="#0a080c", EYE="#f8e040", CLOTH="#a83a3a"),
+                  "white": dict(HAIR="#d8d4cc", FUR="#f0ece6", LIGHT="#ffffff", MARK="#5a5a62", EYE="#4ab8f8", CLOTH="#3a5a8a"),
+                  "violet": dict(HAIR="#3a1e5a", FUR="#7a4ac8", LIGHT="#d0b8f4", MARK="#2a1448", CLOTH="#f8d060")}),
     # twelfth wave: the cheshire cat, ringed in two colours, with a huge grin that glows (glow mask) and stays when she fades
     "cheshire_nekomata": dict(grin=True, glow=["grin"],
         build="slim", outfit=dict(top=["halter", "vest"], bottom="shorts", extras=["scarf"], colors=dict(cloth2="#3a1e4a", scarf="#f8e070")),

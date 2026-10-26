@@ -1318,3 +1318,133 @@ for _fid, _entries in TWELFTH.items():
         _fam["species"].append(_species)
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
+
+
+# --- the thirteenth wave (2026-10-26): more of the Harmontide reference art, and four Japanese spirits -----------------
+THIRTEENTH = {
+    "merfolk": [
+        (dict(id="rust_otter_mermaid", name="Rust Otter", group="Rivers", tag="Handy · tinkering", height=1.4, biomes=["river", "swamp"],
+              temperament="Busy, practical",
+              ecology="A Harmontide river otter, dark and sleek, hung with copper charms she polishes endlessly.",
+              interaction="Fish.",
+              signature=("Copper", "Befriended, she scrapes the green off weathered copper blocks near her friend, one stage at a time. "
+                                   "She dives up raw copper and nuggets as presents."),
+              danger="None.",
+              variants=[("black", "Black (default)", "Black, copper charms"), ("brown", "Brown", "Brown"), ("grey", "Grey", "Grey, verdigris charms"),
+                        ("copper", "Copper", "Rust red"), ("pale", "Pale", "Pale")]),
+         {"Habitat": "Rivers", "Young": "Pups", "On land": "Lopes", "Signature": "Keeps copper shiny", "Danger": "None"})],
+    "construct": [
+        (dict(id="tin_squirrel_construct", name="Tin Squirrel", group="Villages", tag="Thrifty · clockwork", height=1.2,
+              biomes=["plains", "forest", "birch_forest"], temperament="Thrifty, fussy",
+              ecology="A Harmontide clockwork squirrel of riveted tin, who hoards every scrap of metal she finds.",
+              interaction="Iron and gold nuggets.",
+              signature=("Scrap", "Hand her a worn-out iron or gold tool or armour piece and she breaks it down into nuggets. She "
+                                  "picks up nuggets lying near her."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue tin"), ("silver", "Silver", "Bright tin"), ("copper", "Copper", "Copper"),
+                        ("gold", "Gold", "Gilded"), ("verdigris", "Verdigris", "Green with age")]),
+         {"Habitat": "Villages", "Signature": "Scraps worn gear into nuggets", "Danger": "None"})],
+    "kitsune": [
+        (dict(id="wattlefox_kitsune", name="Wattlefox", group="Savannas", tag="Bright · brave", height=1.45,
+              biomes=["savanna", "savanna_plateau", "windswept_savanna"], temperament="Bright, brave",
+              ecology="A Harmontide fox of the dry country, blue as dusk, wreathed in golden wattle that blooms after fire.",
+              interaction="Sweet berries and chicken.",
+              signature=("After the fire", "She cannot burn. Befriended, she puts out fires near her friend and plants acacia "
+                                           "saplings on bare ground."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue, golden wattle"), ("teal", "Teal", "Teal"), ("violet", "Violet", "Violet"),
+                        ("golden", "Golden", "Gold"), ("grey", "Grey", "Grey")]),
+         {"Habitat": "Savannas", "Tails": "One to three", "Signature": "Puts out fires", "Danger": "None"})],
+    "bug": [
+        (dict(id="scarabronze_bug", name="Scarabronze", group="Deserts", tag="Steadfast · shining", height=1.5, biomes=["desert", "badlands"],
+              temperament="Steadfast",
+              ecology="A Harmontide scarab cased in bronze and gold, who rolls the sun up the sky each morning.",
+              interaction="Rotten flesh, which she rolls away.",
+              signature=("The roller", "Hand her rotten flesh and she rolls it into bone meal. At sunrise her friend gets Haste for "
+                                       "the morning. Her shell is armour."),
+              danger="None.",
+              variants=[("bronze", "Bronze (default)", "Bronze, lapis cloth"), ("blue", "Blue", "Lapis"), ("green", "Green", "Malachite"),
+                        ("gold", "Gold", "Gold"), ("black", "Black", "Obsidian")]),
+         {"Habitat": "Deserts", "Signature": "Rolls rotten flesh into bone meal", "Danger": "None"})],
+    "bat": [
+        (dict(id="date_bat", name="Datebat", group="Oases", tag="Sweet · nocturnal", height=1.4, biomes=["desert", "savanna", "jungle"],
+              temperament="Sweet, sleepy",
+              ecology="A Harmontide fruit bat of the oasis, with date-palm fronds in her hair and a cluster of dates by her ear.",
+              interaction="Sweet berries, apples and melon.",
+              signature=("Pollinator", "She roosts by day. At night she flies from flower to flower, and the crops near her friend "
+                                       "grow."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue, gold cloth"), ("sand", "Sand", "Sandy"), ("brown", "Brown", "Brown"),
+                        ("black", "Black", "Black"), ("gold", "Gold", "Golden")]),
+         {"Habitat": "Oases", "Signature": "Crops grow at night", "Danger": "None"})],
+    "nekomata": [
+        (dict(id="snowloper_nekomata", name="Snowloper", group="Snowy slopes", tag="Playful · fluffy", height=1.3,
+              biomes=["snowy_slopes", "grove", "snowy_taiga", "frozen_peaks"], temperament="Playful",
+              ecology="A Harmontide snow-leopard cub, white with blue snowflake rosettes, who bounds across deep snow.",
+              interaction="Fish.",
+              signature=("Snow strider", "She walks on powder snow and never freezes; her friend gets Speed while on snow."),
+              danger="None.",
+              variants=[("white", "White (default)", "White, blue rosettes"), ("grey", "Grey", "Grey"), ("cream", "Cream", "Cream"),
+                        ("blue", "Blue", "Ice blue"), ("black", "Black", "Black")]),
+         {"Habitat": "Snowy slopes", "Social": "Alone", "Water": "Avoids it", "Signature": "Speed on snow", "Danger": "None"}),
+        (dict(id="jaglare_nekomata", name="Jaglare", group="Jungles", tag="Proud · ambusher", height=1.6, biomes=["jungle", "sparse_jungle"],
+              temperament="Proud, patient",
+              ecology="A Harmontide jaguar, blue-patterned, with a lion's mane: she lurks in the trees.",
+              interaction="Fish and meat.",
+              signature=("Ambush", "She lurks in the jungle trees and drops on what passes below. Her roar weakens monsters near her "
+                                   "friend."),
+              danger="Medium (her ambush).",
+              variants=[("blue", "Blue (default)", "Blue rosettes"), ("gold", "Gold", "A golden jaguar"), ("black", "Black", "A black panther"),
+                        ("white", "White", "White"), ("violet", "Violet", "Violet")]),
+         {"Habitat": "Jungles", "Social": "Alone", "Water": "Swims", "Signature": "Drops from the trees", "Danger": "Medium"})],
+    "rodent": [
+        (dict(id="squirricerat_rodent", name="Squirricerat", group="Forests", tag="Bold · busy", height=1.35,
+              biomes=["forest", "dark_forest", "old_growth_birch_forest"], temperament="Bold",
+              ecology="A Harmontide squirrel with a triceratops' frill and three horns, and a great spiral tail.",
+              interaction="Sweet berries and seeds.",
+              signature=("Horns and acorns", "She charges horns-first at monsters. She buries saplings, which grow into trees."),
+              danger="Low (her charge).",
+              variants=[("blue", "Blue (default)", "Blue"), ("green", "Green", "Green"), ("red", "Red", "Red"), ("brown", "Brown", "Brown"),
+                        ("grey", "Grey", "Grey")]),
+         {"Habitat": "Forests", "Signature": "Plants trees, charges monsters", "Danger": "Low"}),
+        (dict(id="kamaitachi_rodent", name="Kamaitachi", group="Mountains", tag="Swift · sharp", height=1.35,
+              biomes=["windswept_hills", "windswept_forest", "meadow", "cherry_grove"], temperament="Swift, mischievous",
+              ecology="The sickle weasel of Japanese folklore, who rides the whirlwind with a blade on each forearm.",
+              interaction="Chicken and eggs.",
+              signature=("Whirlwind", "She is fast. Befriended, her gusts cut the tall grass, leaves and cobwebs around her friend. "
+                                      "Her slashes knock back."),
+              danger="Low (her slashes).",
+              variants=[("fawn", "Fawn (default)", "Fawn"), ("white", "White", "An ermine"), ("brown", "Brown", "Brown"), ("grey", "Grey", "Grey"),
+                        ("black", "Black", "Black")]),
+         {"Habitat": "Mountains", "Signature": "Cuts grass, leaves and cobwebs", "Danger": "Low"})],
+    "centaur": [
+        (dict(id="momoshika_centaur", name="Momoshika", group="Cherry groves", tag="Gentle · blessed", height=2.0,
+              biomes=["cherry_grove", "flower_forest", "meadow"], temperament="Gentle",
+              ecology="A Harmontide deer taur, white with blue spots, with peach blossoms caught in her antlers.",
+              interaction="Apples and sweet berries.",
+              signature=("Peach blossom", "By day her friend regenerates beside her; now and then her present is a golden apple."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "White, blue spots"), ("pink", "Pink", "Pink"), ("gold", "Gold", "Gold"), ("green", "Green", "Green"),
+                        ("white", "White", "White")]),
+         {"Habitat": "Cherry groves", "Ridden": "By friends", "Signature": "Regeneration by day", "Temperament": "Gentle", "Danger": "None"})],
+    "devil": [
+        (dict(id="chochin_obake_devil", name="Chochin-obake", group="Villages at night", tag="Spooky · loyal", height=1.6,
+              biomes=["cherry_grove", "bamboo_jungle", "forest"], temperament="Spooky, loyal",
+              ecology="The paper-lantern spirit of Japanese folklore, here a girl under a living lantern with one great eye and a lolling "
+                      "tongue.",
+              interaction="Paper and candles.",
+              signature=("Lantern", "Her lantern glows. Befriended, at night she keeps beside her friend and lights the way where "
+                                    "they go."),
+              danger="None.",
+              variants=[("red", "Red (default)", "A red-banded lantern"), ("white", "White", "A white lantern"), ("blue", "Blue", "A blue lantern"),
+                        ("purple", "Purple", "A purple lantern"), ("gold", "Gold", "A golden lantern")]),
+         {"Habitat": "Villages at night", "Signature": "A light that follows her friend", "Danger": "None"})],
+}
+for _fid, _entries in THIRTEENTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))

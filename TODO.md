@@ -224,6 +224,21 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Alebrije** (dragon): flies; befriended, every minute `paintSheep` dyes a sheep within 8 a new colour; dye presents.
   - **Paints:** porcelain, denim, moss and easter (April only, like valentine in February), so 47 in all.
   - **Waterlil:** only her head shows, resting on the lily pad (the pad's own bone); her body hangs under it.
+- [x] **Thirteenth wave** (2026-10-26), tested in `ThirteenthWaveTests`:
+  - **Rust otter** (merfolk): every minute, befriended, `scrape` takes one stage of weathering off the most weathered copper block within 6 of her friend (`WeatheringCopper.getPrevious`).
+  - **Tin squirrel** (construct): `scrap` turns a damaged iron or gold tool or armour piece into 1 to 9 nuggets (more the less worn); she pulls nuggets within 1.5 blocks into her 9-slot hoard (saved; her presents come from it).
+  - **Peaflare** (`PeaflareHarpy`, `tools/gen_peaflare_harpy.py`, the crow's rig with a crest and a nine-feather train): `dazzle` gives Slowness II and Weakness to monsters within 8 of her friend, at most every 10 s, with her "display". Peafowl eggs; chickens are her kin.
+  - **Wattlefox** (kitsune): fireproof; `douse` puts out fire blocks within 6 of her friend (and the friend); every 2 minutes, befriended, `plantAcacia`.
+  - **Scarabronze** (bug): armour 10; rotten flesh in her hand becomes 2 bone meal; `sunrise` gives her friend Haste for 5 minutes once a day in the first half minute of morning.
+  - **Datebat** (bat): every 5 s at night, befriended, `pollinate` grows the crops within 6 of her a stage.
+  - **Snowloper** (nekomata): on the powder-snow walkers list; never freezes; `snowStride` gives Speed II on snow.
+  - **Jaglare** (nekomata): no fall damage; `climbTree` up onto leaves when wild and idle; `dropOnPrey` pounces on monsters and animals 2+ blocks below; `roar` weakens monsters near her friend.
+  - **Squirricerat** (rodent): fights monsters near her friend (not creepers); every 2 minutes `buryAcorn` plants a sapling on open grass.
+  - **Kamaitachi** (rodent): fast; `gust` cuts up to 6 grass, fern, cobweb and natural (not player-placed) leaf blocks within 3 of her friend each second.
+  - **Momoshika** (centaur): `blossom` gives Regeneration by day within 8; pink petals, apples, cherry saplings, rarely a golden apple.
+  - **Chochin-obake** (devil): her lantern glows (glow mask) and lights the night where she stands; befriended, she walks to her friend at night.
+  - **Paints:** tartan, watercolour, hologram (translucent) and fireworks (January only), so 51 in all.
+- [ ] Dev client for the thirteenth wave: the peaflare's display fan in play, the jaglare in real jungle trees, the kamaitachi's gusts near a player's leaf builds (persistent leaves should be spared), the chochin-obake's light, and the hologram paint.
 - [ ] Dev client for the twelfth wave: the cheshire fade and grin in first and third person, the kesaran's drift (does she get stuck under trees?), the tsuchinoko's roll, the dodobold's saddlebags screen, the karakasa catching skeleton arrows, the gremlin's furnace speed, and the waterlil's body under the water.
 - [ ] Server playtest for the mailtoad and the brownie (they need heavy testing on a server): delivery to a player who logs off mid-walk, to another dimension, to a name with different case, two mailtoads to one player; the brownie with modded containers, double chests, shulker boxes inside chests, and item frames.
 - [ ] Dev client for the eleventh wave: the slothren's hang pose under a real branch, the gliderune on a shoulder, the mantarrow ride and leap, the sphinx's wings and pounce, the talosling run down, the waterlil's pads under a sprinting friend, and the four new paints.
@@ -239,7 +254,7 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - the flamingo's one-leg pose and march
   - stained glass in game
 - [ ] Dev client for the seventh wave: the crabs' sideways walk, the joey's seat in the pouch, the golem's break-apart (and that she does not tip over), the jellyfish's translucency and glow, and the glow and magma paints in the dark.
-- [ ] Flaky tests: `strandedTadpoleFindsThePond`, `wrecksBoatsAtTheRock` and `orbWeaverSpinsAHuntingWeb` each failed one full run (2026-10-25) and passed the others. On 2026-10-26 `trustedMobComesToTheBed`, `strandedTadpoleFindsThePond`, `dustBathesOnSand` and `rootedFloraGrowsCrops` each failed one of two runs. `oniFleesBeansAndTakesADrink` failed once because `isDay` lags `setDayTime` by a tick; it now waits a tick.
+- [ ] Flaky tests: `strandedTadpoleFindsThePond`, `wrecksBoatsAtTheRock` and `orbWeaverSpinsAHuntingWeb` each failed one full run (2026-10-25) and passed the others. On 2026-10-26 `trustedMobComesToTheBed`, `strandedTadpoleFindsThePond`, `dustBathesOnSand` and `rootedFloraGrowsCrops` each failed one of two runs. `oniFleesBeansAndTakesADrink` failed once because `isDay` lags `setDayTime` by a tick; it now waits a tick. `loneBullywugBacksDownIntoWater` failed once (2026-10-26, thirteenth wave run), unrelated to that wave.
 - [ ] Flaky tests (2026-10-24): `mermaidFindsSeashells` failed twice in a row, then passed. `pythonLaysAClutchThatHatches` failed once: she can wander more than 5 blocks before laying, out of the area the test searches.
 - [x] **Sleep schedules** (`SleepGoal`): day girls lie down and sleep at night, nocturnal ones by day. The nocturnal ones are the undead, foxes, moths and mosquitoes, the night elf, the succubus, the jiang shi, the jack o'lantern, the tapir and the ocelot. A hit or a hand wakes her for 30 s. Bed-sharing comes first, a follow order keeps her up, and nekomata (their own naps), merfolk, harpies and anurans keep their own rest.
 - [ ] Third wave of creatures: see HARMONTIDE_CONCEPTS.md "Third wave", with reference art in `D:\wamp64\www\images\creatures\`.

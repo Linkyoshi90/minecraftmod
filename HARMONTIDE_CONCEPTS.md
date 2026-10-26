@@ -367,3 +367,24 @@ Yara-ma-yha-who, Menehune, Akhlut, Ijiraq, Keelut and the peace-pipe bison.
 
 Paints: porcelain, denim, moss and the seasonal easter (April only), so 47 in all. The waterlil is now only a big
 cat's head resting on her lily pad, her little body hidden under it.
+
+## Thirteenth wave (2026-10-26, in the game)
+
+Eight Harmontide originals from the reference art and four spirits of Japanese folklore.
+
+| Species | Home | Design |
+|---|---|---|
+| **Rust otter** | Merfolk | A dark otter hung with copper charms. Scrapes the green off weathered copper near her friend; raw copper presents. |
+| **Tin squirrel** | Construct | A clockwork squirrel of riveted tin. Breaks worn iron and gold gear down into nuggets; hoards nuggets. |
+| **Peaflare** | Harpy | A peacock: when monsters come near her friend, her train rises into a great eyed fan and dazzles them. |
+| **Wattlefox** | Kitsune | A blue fox wreathed in golden wattle. Fireproof; puts out fires near her friend; plants acacia. |
+| **Scarabronze** | Bug | An armoured bronze scarab. Rolls rotten flesh into bone meal; Haste for her friend at sunrise. |
+| **Datebat** | Bat | A fruit bat with date-palm fronds. Roosts by day; at night the crops near her grow. |
+| **Snowloper** | Nekomata | A snow-leopard cub with snowflake rosettes. Walks on powder snow; Speed on snow for her friend. |
+| **Jaglare** | Nekomata | A blue jaguar with a lion's mane. Drops on prey from the treetops; her roar weakens monsters. |
+| **Squirricerat** | Rodent | A squirrel with a triceratops' frill and horns. Charges monsters; plants trees. |
+| **Kamaitachi** | Rodent | The sickle weasel. Fast; her gusts cut grass, leaves and cobwebs round her friend. |
+| **Momoshika** | Centaur | A deer taur with peach blossoms in her antlers. Regeneration by day; golden apples now and then. |
+| **Chochin-obake** | Devil | A girl under a living paper lantern with one great eye. Her light follows her friend at night. |
+
+Paints: tartan, watercolour, hologram (see-through) and the seasonal fireworks (January only), so 51 in all.

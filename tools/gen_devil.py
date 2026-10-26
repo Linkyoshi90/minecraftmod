@@ -67,6 +67,17 @@ SPECIES = {
                   "green": dict(extra=dict(kimono="#2a6a4a", obi="#e8c040", kimono_trim="#e8c040", cloth2="#1e4a34", hat="#1a1a22")),
                   "black": dict(extra=dict(kimono="#1a1a22", obi="#a81a2a", kimono_trim="#a81a2a", cloth2="#141418", hat="#1a1a22")),
                   "gold": dict(extra=dict(kimono="#c8a030", obi="#a81a2a", kimono_trim="#a81a2a", cloth2="#8a6a1a", hat="#1a1a22"))}),
+    # thirteenth wave: the chochin-obake, a girl under a living paper lantern (it glows) with one great eye and a lolling tongue
+    "chochin_obake_devil": dict(
+        build="petite", outfit=dict(top=["kimono"], bottom="hakama", extras=[],
+                                    colors=dict(kimono="#f4f0e8", kimono_trim="#c83a3a", obi="#c83a3a", cloth2="#2a2a32")),
+        hair="hime", bangs="blunt", ears=None, legs="bare", foot="shoe", lantern=True, glow=["lantern"],
+        pal=dict(SKIN=skin("pale"), HAIR="#1e1a22", FUR="#1e1a22", LIGHT="#f4f0e8", MARK="#c83a3a", EYE="#e8a030", CLOTH="#f4f0e8", TRIM="#c83a3a",
+                 extra=dict(paper="#f8e8c0", band="#c83a3a", rim="#1e1a1e", boot="#2a2a32")),
+        variants={"white": dict(extra=dict(paper="#fbf8f0", band="#2a2a32", rim="#1e1a1e", boot="#2a2a32")),
+                  "blue": dict(HAIR="#1e2a4a", extra=dict(paper="#c8dcf8", band="#2a4a9a", rim="#14182a", boot="#2a2a32", kimono="#2a4a9a", obi="#f8e070")),
+                  "purple": dict(HAIR="#2a1e3a", extra=dict(paper="#e8d0f4", band="#6a2a9a", rim="#1e1428", boot="#2a2a32", kimono="#6a2a9a", obi="#f8e070")),
+                  "gold": dict(HAIR="#3a2a14", extra=dict(paper="#fff0b0", band="#d8902a", rim="#3a2410", boot="#2a2a32", kimono="#d8902a", obi="#2a2a32"))}),
     # twelfth wave: the gremlin, a little green tinkerer with huge ears and a spanner
     "gremlin_devil": dict(
         build="petite", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["belt"], colors=dict(cloth2="#3a4a2a", leather="#5a3a22")),
@@ -116,6 +127,8 @@ def declare_hook(sp, d):
         out += [("cap", 9, 3, 9), ("cap_brim", 10.5, .75, 10.5), ("button", 1.5, 1.5, 1.5), ("talisman", 3, 6, .25)]
     if d.get("spanner"):
         out += [("spanner", .75, 4, .75), ("spanner_head", 2, 1, .75)]
+    if d.get("lantern"):
+        out += [("lantern", 8.5, 8, 8.5), ("lantern_rim", 6.5, 1, 6.5), ("tongue", 2, .5, 3.5)]
     if d.get("umbrella"):
         out += [("canopy", 14, 1, 14), ("canopy_b", 10.5, 1.25, 10.5), ("canopy_c", 7, 1.25, 7), ("canopy_top", 3.5, 1, 3.5), ("umb_tip", 1, 2, 1)]
     return out
@@ -146,6 +159,24 @@ def paint_hook(pt, pal, d):
         black = G.shades("#1e1a14")
         for p in ("flap_f", "flap_b"):
             pt(p, "all", lambda f, x, y, w, h: pick(black, 0.4, x, y) if (y + x // 2) % 4 == 0 else None)
+    paper, band, rim = G.shades(pal.extra.get("paper", "#f8e8c0")), G.shades(pal.extra.get("band", "#c83a3a")), G.shades(pal.extra.get("rim", "#1e1a1e"))
+
+    def lantern(f, x, y, w, h):                           # ribbed paper; on the front one great eye and a wide mouth
+        if f in ("up", "down"):
+            return pick(rim, 0.4, x, y)
+        if f == "north":
+            ex, ey = w * 0.5, h * 0.4
+            d2 = ((x + 0.5 - ex) / (w * 0.22)) ** 2 + ((y + 0.5 - ey) / (h * 0.17)) ** 2
+            if d2 < 1.0:
+                return pick(rim, 0.15, x, y) if d2 < 0.22 else pick(G.shades("#ffffff"), 0.9, x, y) if d2 < 0.75 else pick(rim, 0.25, x, y)
+            if abs(y + 0.5 - h * 0.74) < h * 0.05 and abs(x + 0.5 - w / 2) < w * 0.34:
+                return pick(G.shades("#7a1420"), 0.35, x, y)
+        if y % 4 == 0:
+            return pick(rim, 0.35, x, y)                  # the bamboo ribs
+        return pick(band if (y // 4) % 3 == 1 else paper, 0.55 + 0.15 * noise(x, y, 31), x, y)
+    pt("lantern", "all", lantern)
+    pt("lantern_rim", "all", lambda f, x, y, w, h: pick(rim, 0.45 + 0.15 * (f == "up"), x, y))
+    pt("tongue", "all", lambda f, x, y, w, h: pick(G.shades("#e85a6a"), 0.55 + 0.2 * (f == "up"), x, y))
     steel = G.shades("#9a9aa6")
     pt("spanner", "all", lambda f, x, y, w, h: pick(G.shades("#c83a3a") if y >= h - 5 else steel, 0.55, x, y))
     pt("spanner_head", "all", lambda f, x, y, w, h: CLEAR if f in ("north", "south") and x in (w // 2 - 1, w // 2) and y < h // 2 else pick(steel, 0.6, x, y))
@@ -190,6 +221,10 @@ def build_hook(r, g, d):
         studs = [cube("stud", [px - 1.45 + 2.4 * (i % 2), py + 1.5 + 2.2 * (i // 2), cz - 0.25]) for i in range(8)]
         studs += [cube("stud", [px - 0.25, py + 2.6 + 2.2 * i, cz - 1.45]) for i in range(3)]
         r.add("club", "hand_r", [px, py - 1.5, pz], [cube("grip", [px - 0.625, py - 2.5, cz - 0.625]), cube("club", [px - 1.125, py + 1.0, cz - 1.125])] + studs)
+    if d.get("lantern"):                                 # the lantern rests on her head like a tall hat; the tongue hangs from its mouth
+        r.add("lantern", "head", [0, hy + 8, z], [cube("lantern", [-4.25, hy + 8.6, -4.25 + z]), cube("lantern_rim", [-3.25, hy + 8.0, -3.25 + z]),
+                                                    cube("lantern_rim", [-3.25, hy + 16.6, -3.25 + z]),
+                                                    G.rot_cube("tongue", [-1, hy + 9.6, -6.6 + z], [0, hy + 10.6, -4.4 + z], 35, 0, 0)])
     if d.get("spanner"):                                 # a spanner in her right hand
         px, py, pz = r.b["hand_r"]["pivot"]
         r.add("spanner", "hand_r", [px, py - 1.5, pz], [cube("spanner", [px - 0.375, py - 4.5, pz - 2.2]), cube("spanner_head", [px - 1.0, py - 5.4, pz - 2.2])])

@@ -89,6 +89,17 @@ SPECIES = {
                   "pale": dict(FUR="#e0d8cc", HAIR="#ece4d8", LIGHT="#ffffff", MARK="#c8c0b4"),
                   "slate": dict(FUR="#5a6068", HAIR="#4a5058", MARK="#3a4048", CLOTH="#c8a040"),
                   "sandy": dict(FUR="#c8b490", HAIR="#b8a07a", MARK="#a08a64", CLOTH="#2a7a8a")}),
+    # thirteenth wave: the rust otter, a dark otter hung with copper charms
+    "rust_otter_mermaid": dict(
+        build="athletic", outfit=dict(top=["sports"], extras=["armlets", "belt"], colors=dict(cloth2="#5a3a22", leather="#7a4a24")),
+        ears="round", hair="shaggy", bangs="messy", fluke=(3.5, .75, 4), charms=True, size=0.95,
+        pal=dict(SKIN=skin("tan"), HAIR="#2e2620", FUR="#3a2e26", LIGHT="#9a8470", MARK="#1e1814", EYE="#d8803a", CLOTH="#b8642a", TRIM="#d8803a",
+                 pattern="solid", extra=dict(belly_white=True, copper="#d8803a")),
+        variants={"brown": dict(HAIR="#5a3a22", FUR="#6a4a2e", LIGHT="#c8a880", MARK="#3a2414"),
+                  "grey": dict(HAIR="#4a4644", FUR="#5a5652", LIGHT="#b8b2aa", MARK="#2a2826", CLOTH="#5aa890", TRIM="#7ac8b0",
+                               extra=dict(belly_white=True, copper="#5aa890")),
+                  "copper": dict(HAIR="#8a3e1a", FUR="#a8542a", LIGHT="#e8b890", MARK="#5a2410", CLOTH="#3a5a7a"),
+                  "pale": dict(HAIR="#c8b8a4", FUR="#d8c8b4", LIGHT="#f4ece0", MARK="#8a7a68", EYE="#3a8a9a")}),
     # twelfth wave: the platypus, fur, a duck-billed cap and a flat beaver tail
     "platypus_mermaid": dict(
         build="petite", outfit=dict(top=["sports"], extras=["armlets"], colors=dict(cloth2="#3a6a8a")),
@@ -160,6 +171,8 @@ def declare(sp):
         parts.append(("manta_fin", 7, 6, .5))
     if d.get("platypus"):
         parts += [("pcap", 9.5, 3, 9.5), ("bill", 6, 1, 4.5)]
+    if d.get("charms"):
+        parts += [("charm", 1.25, 1.5, .25), ("charm_cord", 4.5, .25, .25)]
     if d.get("moon"):
         parts += [("crescent", 2.5, 2.5, .25), ("antler_a", .5, 3, .5), ("antler_b", .5, 1.5, .5)]
     parts.append(("shell", 2, 1.75, .5))
@@ -200,6 +213,9 @@ def paint(sp, key):
        if y < h - (abs(x + 0.5 - w / 2) * 2 // 3) else CLEAR)
     pt("ribbon", "all", lambda f, x, y, w, h: G.with_alpha(pick(pal.MARK, 0.55 + 0.25 * (y % 3 == 0), x, y), 220) if y < h - 1 or x % 2 else G.CLEAR)
     pt("flipper", "all", lambda f, x, y, w, h: pick(pal.MARK, 0.35 + 0.2 * (x % 4 == 0), x, y))
+    cu = shades(pal.extra.get("copper", "#d8803a"))
+    pt("charm", "all", lambda f, x, y, w, h: pick(cu, 0.5 + 0.3 * (x == 1 and y == 1) - 0.2 * (y == h - 1), x, y))
+    pt("charm_cord", "all", lambda f, x, y, w, h: pick(shades("#5a3a22"), 0.45, x, y))
     bill = shades(pal.extra.get("bill", "#3a3438"))
     pt("pcap", "all", lambda f, x, y, w, h: CLEAR if f == "down" else pick(pal.MARK, 0.55 + (noise(x, y, 71) - 0.5) * 0.12, x, y))
     pt("bill", "all", lambda f, x, y, w, h: pick(bill, 0.45 + 0.1 * (f == "up") + 0.15 * (f == "up" and y == h - 2 and x in (w // 2 - 2, w // 2 + 1)), x, y))
@@ -258,6 +274,10 @@ def build(sp):
     if d.get("manta"):                                   # the wing fins, swept out from her hips
         mw = G.S("manta_fin")[0]
         r.add("manta_r", "fin_1", [-2, 9, 0], [G.rot_cube("manta_fin", [-2 - mw, 4.5, -0.25], [-2, 9, 0], 0, 0, -12)], mirror=True)
+    if d.get("charms"):                                  # copper charms on a cord round her neck, one at her hip
+        fz = -G.S("chest")[2] / 2 - G.S("bust")[2] - 0.4
+        r.put("body", cube("charm_cord", [-2.25, 18.6, fz]), cube("charm", [-1.9, 17.0, fz - 0.1]), cube("charm", [-0.625, 16.6, fz - 0.1]),
+              cube("charm", [0.65, 17.0, fz - 0.1]), cube("charm", [-3.0, 11.6, -1.6]))
     if d.get("platypus"):                                # a furry cap with a duck bill for a peak
         hy = 12 + 8 + 0.0
         r.add("pcap", "head", [0, 28, 0], [cube("pcap", [-4.75, 26.2, -4.75]), G.rot_cube("bill", [-3, 25.9, -8.9], [0, 26.4, -4.6], 12, 0, 0)])

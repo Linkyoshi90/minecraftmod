@@ -82,7 +82,7 @@ public class Kitsune extends AbstractMonsterGirl {
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
-        return girlAttributes(s == GirlSpecies.FENNEC_KITSUNE ? 12 : 16, s == GirlSpecies.CORSAC_KITSUNE ? 0.33 : 0.3, 3);
+        return girlAttributes(s == GirlSpecies.FENNEC_KITSUNE ? 12 : s == GirlSpecies.WATTLEFOX_KITSUNE ? 18 : 16, s == GirlSpecies.CORSAC_KITSUNE ? 0.33 : 0.3, 3);
     }
 
     @Override
@@ -136,6 +136,42 @@ public class Kitsune extends AbstractMonsterGirl {
         return (this.species == GirlSpecies.GRAY_KITSUNE && this.horizontalCollision) || super.onClimbable();
     }
 
+    /** The wattlefox cannot burn: wattle blooms after the fire. */
+    @Override
+    public boolean fireImmune() {
+        return this.species == GirlSpecies.WATTLEFOX_KITSUNE || super.fireImmune();
+    }
+
+    /** Fires within 6 blocks of her friend go out (and her friend stops burning). Returns how many she put out. */
+    public int douse(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return 0;
+        friend.clearFire();
+        int n = 0;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-6, -2, -6), friend.blockPosition().offset(6, 3, 6))) {
+            if (level.getBlockState(p).getBlock() instanceof net.minecraft.world.level.block.BaseFireBlock) {
+                level.removeBlock(p, false);
+                level.levelEvent(1009, p, 0);                                 // the hiss of a fire going out
+                n++;
+            }
+        }
+        return n;
+    }
+
+    /** An acacia sapling on bare grass near her, in the open. True if she planted one. */
+    public boolean plantAcacia(ServerLevel level) {
+        for (int i = 0; i < 12; i++) {
+            net.minecraft.core.BlockPos p = this.blockPosition().offset(this.random.nextInt(13) - 6, this.random.nextInt(5) - 2, this.random.nextInt(13) - 6);
+            var below = level.getBlockState(p.below());
+            if (!(below.is(net.minecraft.world.level.block.Blocks.GRASS_BLOCK) || below.is(net.minecraft.world.level.block.Blocks.DIRT) || below.is(net.minecraft.world.level.block.Blocks.COARSE_DIRT))
+                    || !level.getBlockState(p).isAir() || !level.canSeeSky(p)) continue;
+            level.setBlock(p, net.minecraft.world.level.block.Blocks.ACACIA_SAPLING.defaultBlockState(), 3);
+            level.levelEvent(2005, p, 0);
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean canFreeze() {
         return this.species != GirlSpecies.ARCTIC_KITSUNE && super.canFreeze();
@@ -145,7 +181,8 @@ public class Kitsune extends AbstractMonsterGirl {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return stack.is(Items.SWEET_BERRIES) || stack.is(Items.GLOW_BERRIES) || stack.is(Items.CHICKEN) || stack.is(Items.COOKED_CHICKEN) || stack.is(ItemTags.FISHES);
+        return stack.is(Items.SWEET_BERRIES) || stack.is(Items.GLOW_BERRIES) || stack.is(Items.CHICKEN) || stack.is(Items.COOKED_CHICKEN) || stack.is(ItemTags.FISHES)
+                || this.species == GirlSpecies.WATTLEFOX_KITSUNE && stack.is(Items.HONEYCOMB);
     }
 
     @Override
@@ -157,6 +194,7 @@ public class Kitsune extends AbstractMonsterGirl {
     public ItemStack rollGift(Player player) {
         int r = this.random.nextInt(100);
         if (this.species == GirlSpecies.FENNEC_KITSUNE) return this.digFind();
+        if (this.species == GirlSpecies.WATTLEFOX_KITSUNE) return new ItemStack(r < 50 ? Items.ACACIA_SAPLING : r < 85 ? Items.YELLOW_DYE : Items.HONEYCOMB, 2);
         if (this.species == GirlSpecies.RED_KITSUNE && this.getAffection(player) >= 60) {
             return new ItemStack(r < 10 ? Items.EMERALD : r < 45 ? Items.GOLD_NUGGET : Items.SWEET_BERRIES, r < 45 ? 1 : 3);
         }
@@ -265,6 +303,10 @@ public class Kitsune extends AbstractMonsterGirl {
         if (this.isDecoy()) {
             if (++this.decoyAge > DECOY_LIFE) this.discard();
             return;
+        }
+        if (this.species == GirlSpecies.WATTLEFOX_KITSUNE && !this.isBaby()) {
+            if (this.tickCount % 20 == 0) this.douse(server);
+            if (this.tickCount % 2400 == 0 && this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32) != null) this.plantAcacia(server);
         }
         if (this.tickCount % 20 == 0) this.entityData.set(DATA_TAILS, (byte) this.tailsFor(this.bestAffection()));
         // foxfire: real light at night once she has two tails (a kyubi carries a brighter lantern)

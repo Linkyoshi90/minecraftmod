@@ -80,6 +80,7 @@ public class Devil extends AbstractMonsterGirl {
             case ONI_DEVIL -> girlAttributes(50, 0.27, 9).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 1.2);
             case GREMLIN_DEVIL -> girlAttributes(12, 0.3, 1);
             case KARAKASA_OBAKE_DEVIL -> girlAttributes(20, 0.3, 2);
+            case CHOCHIN_OBAKE_DEVIL -> girlAttributes(18, 0.3, 2);
             default -> girlAttributes(30, 0.26, 5);
         };
     }
@@ -158,6 +159,15 @@ public class Devil extends AbstractMonsterGirl {
         else if (s.getBlock() instanceof net.minecraft.world.level.block.DoorBlock door) door.setOpen(this, level, s, p, !door.isOpen(s));
         this.startTimedAction(Action.LAUGH, 30);
         return true;
+    }
+
+    /** The chochin-obake's lantern lights where she is at night; befriended, she keeps beside her friend through the dark. */
+    private void tickLantern(ServerLevel level) {
+        boolean night = !level.isDay();
+        this.glow(level, night ? 12 : 0);
+        if (!night || this.isBaby() || this.tickCount % 20 != 0 || this.isOrderedToSit()) return;
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend != null && this.distanceToSqr(friend) > 3 * 3) this.getNavigation().moveTo(friend, 1.2);
     }
 
     /** A projectile about to hit a player: a befriended karakasa obake within 4 blocks of them catches it on her umbrella. */
@@ -321,6 +331,7 @@ public class Devil extends AbstractMonsterGirl {
     @Override
     public boolean isFood(ItemStack stack) {
         if (this.species == GirlSpecies.KARAKASA_OBAKE_DEVIL && (stack.is(Items.PAPER) || stack.is(Items.STRING))) return true;
+        if (this.species == GirlSpecies.CHOCHIN_OBAKE_DEVIL && (stack.is(Items.PAPER) || stack.is(net.minecraft.tags.ItemTags.CANDLES))) return true;
         return stack.is(Items.SUGAR) || stack.is(Items.COOKIE) || stack.is(Items.CAKE) || stack.is(Items.PUMPKIN_PIE) || stack.is(Items.HONEY_BOTTLE);
     }
 
@@ -352,6 +363,7 @@ public class Devil extends AbstractMonsterGirl {
             case JACK_O_LANTERN_DEVIL -> new ItemStack(r < 50 ? Items.PUMPKIN_SEEDS : r < 80 ? Items.TORCH : Items.JACK_O_LANTERN, r < 80 ? 4 : 1);
             case GREMLIN_DEVIL -> new ItemStack(r < 40 ? Items.REDSTONE : r < 75 ? Items.IRON_NUGGET : r < 95 ? Items.REPEATER : Items.COMPARATOR, r < 75 ? 4 : 1);
             case KARAKASA_OBAKE_DEVIL -> new ItemStack(r < 40 ? Items.PAPER : r < 75 ? Items.STRING : Items.BAMBOO, 3);
+            case CHOCHIN_OBAKE_DEVIL -> new ItemStack(r < 40 ? Items.PAPER : r < 75 ? Items.CANDLE : r < 95 ? Items.TORCH : Items.LANTERN, r < 95 ? 3 : 1);
             case ONI_DEVIL -> new ItemStack(r < 45 ? Items.IRON_INGOT : r < 80 ? Items.BAMBOO : Items.HONEY_BOTTLE, r < 45 ? 2 : r < 80 ? 8 : 1);
             default -> new ItemStack(r < 40 ? Items.BLAZE_POWDER : r < 75 ? Items.MAGMA_CREAM : Items.QUARTZ, 2);
         };
@@ -438,6 +450,7 @@ public class Devil extends AbstractMonsterGirl {
                 else this.glow(server, 0);
             }
             case GREMLIN_DEVIL -> this.tickGremlin(server);
+            case CHOCHIN_OBAKE_DEVIL -> this.tickLantern(server);
             case JIANG_SHI_DEVIL -> {                                         // she can only hop
                 if (!this.getNavigation().isDone() && this.onGround() && !this.level().isDay()) {
                     this.setDeltaMovement(this.getDeltaMovement().add(0, 0.42, 0));

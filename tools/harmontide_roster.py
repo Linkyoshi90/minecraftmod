@@ -48,6 +48,10 @@ IN_GAME = {
     "cheshire": "cheshire_nekomata", "kesaran_pasaran": "kesaran_pasaran_flora", "tsuchinoko": "tsuchinoko_lamia", "platypus": "platypus_mermaid",
     "moonseal": "moonseal_mermaid", "marmotaur": "marmotaur_rodent", "bambadger": "bambadger_rodent", "dodobold": "dodobold_harpy",
     "boghare": "boghare_jackalope", "gremlin": "gremlin_devil", "karakasa_obake": "karakasa_obake_devil", "alebrije": "alebrije_dragon",
+    # thirteenth wave (2026-10-26)
+    "rust_otter": "rust_otter_mermaid", "tin_squirrel": "tin_squirrel_construct", "peaflare": "peaflare_harpy", "wattlefox": "wattlefox_kitsune",
+    "scarabronze": "scarabronze_bug", "datebat": "date_bat", "snowloper": "snowloper_nekomata", "jaglare": "jaglare_nekomata",
+    "squirricerat": "squirricerat_rodent", "kamaitachi": "kamaitachi_rodent", "momoshika": "momoshika_centaur", "japanese_lantern": "chochin_obake_devil",
 }
 # not a creature to make, and the ones set aside on purpose
 EXCLUDED = {

@@ -14,7 +14,7 @@ final class Paints {
 
     /** Jello, ghost and stained glass are see-through: drawn translucent. */
     static boolean translucent(@Nullable String paint) {
-        return "jello".equals(paint) || "ghost".equals(paint) || "stained_glass".equals(paint) || "gummy".equals(paint);
+        return "jello".equals(paint) || "ghost".equals(paint) || "stained_glass".equals(paint) || "gummy".equals(paint) || "hologram".equals(paint);
     }
 
     static ResourceLocation of(ResourceLocation texture, @Nullable String paint) {

@@ -25,6 +25,7 @@ import com.linkyoshi90.monstergirls.entity.TenguHarpy;
 import com.linkyoshi90.monstergirls.entity.FinchHarpy;
 import com.linkyoshi90.monstergirls.entity.FlamingoHarpy;
 import com.linkyoshi90.monstergirls.entity.CoinMagpieHarpy;
+import com.linkyoshi90.monstergirls.entity.PeaflareHarpy;
 import com.linkyoshi90.monstergirls.entity.DodoboldHarpy;
 import com.linkyoshi90.monstergirls.entity.RookmournHarpy;
 import com.linkyoshi90.monstergirls.entity.CassowrathHarpy;
@@ -170,6 +171,13 @@ public final class ModEntities {
                     .clientTrackingRange(10)
                     .build("dodobold_harpy"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<PeaflareHarpy>> PEAFLARE_HARPY =
+            ENTITY_TYPES.register("peaflare_harpy", () -> EntityType.Builder.of(PeaflareHarpy::new, MobCategory.CREATURE)
+                    .sized(0.6F, 1.8F)
+                    .eyeHeight(1.55F)
+                    .clientTrackingRange(10)
+                    .build("peaflare_harpy"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<FlamingoHarpy>> FLAMINGO_HARPY =
             ENTITY_TYPES.register("flamingo_harpy", () -> EntityType.Builder.of(FlamingoHarpy::new, MobCategory.CREATURE)
                     .sized(0.55F, 1.95F)
@@ -308,6 +316,7 @@ public final class ModEntities {
         event.put(FINCH_HARPY.get(), FinchHarpy.createAttributes().build());
         event.put(FLAMINGO_HARPY.get(), FlamingoHarpy.createAttributes().build());
         event.put(COIN_MAGPIE_HARPY.get(), CoinMagpieHarpy.createAttributes().build());
+        event.put(PEAFLARE_HARPY.get(), PeaflareHarpy.createAttributes().build());
         event.put(DODOBOLD_HARPY.get(), DodoboldHarpy.createAttributes().build());
         event.put(ROOKMOURN_HARPY.get(), RookmournHarpy.createAttributes().build());
         event.put(CASSOWRATH_HARPY.get(), CassowrathHarpy.createAttributes().build());
@@ -363,6 +372,8 @@ public final class ModEntities {
                 AbstractAnuran::checkSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(DODOBOLD_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 DodoboldHarpy::checkDodoboldHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(PEAFLARE_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                PeaflareHarpy::checkPeaflareHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(COIN_MAGPIE_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 CoinMagpieHarpy::checkCoinMagpieHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(TRICKSTER_RAVEN_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,

@@ -17,6 +17,20 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirteenth wave: the datebat, a fruit bat of the oasis with date-palm fronds in her hair and a cluster of dates
+    "date_bat": dict(
+        build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["belt", "armlets"], colors=dict(cloth2="#c89a3a")),
+        hair="wavy", bangs="parted", ears="big", legs="bare", foot="paw", wings="bat", wing_scale=0.95, flies=True, palm=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#3a5ab0", FUR="#4a6ac0", LIGHT="#c8d8f4", MARK="#1e2e6a", EYE="#e8b040", CLOTH="#e8c060", TRIM="#2a4a9a",
+                 INNER="#e8a0a0", pattern="solid", extra=dict(wing="#3a4a90", wing_bone="#1e2a5a", boot="#1e2a5a", frond="#5a9a3a", date="#7a3a1a")),
+        variants={"sand": dict(HAIR="#a88a5a", FUR="#c8a870", LIGHT="#f0e0c0", MARK="#6a4a2a", CLOTH="#3a6a8a",
+                               extra=dict(wing="#8a6a44", wing_bone="#5a4028", boot="#5a4028", frond="#5a9a3a", date="#7a3a1a")),
+                  "brown": dict(HAIR="#5a3a22", FUR="#6a4a2e", LIGHT="#c8a880", MARK="#2e1e12", CLOTH="#c84a3a",
+                                extra=dict(wing="#4a3424", wing_bone="#2a1a10", boot="#2a1a10", frond="#5a9a3a", date="#a85a2a")),
+                  "black": dict(HAIR="#1e1a1e", FUR="#2a2428", LIGHT="#6a6468", MARK="#0e0c0e", EYE="#e8d040",
+                                extra=dict(wing="#2a2428", wing_bone="#0e0c0e", boot="#0e0c0e", frond="#3a7a2a", date="#5a2a10")),
+                  "gold": dict(HAIR="#d8a840", FUR="#e0b450", LIGHT="#f8ecc0", MARK="#7a5418", CLOTH="#2a4a8a",
+                               extra=dict(wing="#b08a3a", wing_bone="#6a4a14", boot="#6a4a14", frond="#4a8a3a", date="#7a3a1a"))}),
     "cave_bat": dict(
         build="petite", outfit=dict(top=["halter"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#3a2a3a")),
         hair="pixie", bangs="messy", ears="big", legs="stockings", foot="paw", wings="bat", wing_scale=0.85, flies=True,
@@ -34,7 +48,7 @@ SPECIES = {
 
 
 def declare_hook(sp, d):
-    return [("snout", 3, 2, 2), ("snout_n", 1.25, .75, .5), ("ruff", 5.5, 1.75, 4.25)]
+    return [("snout", 3, 2, 2), ("snout_n", 1.25, .75, .5), ("ruff", 5.5, 1.75, 4.25), ("frond", 1.5, .25, 6.5), ("date", 1, 1.25, 1)]
 
 
 def paint_hook(pt, pal, d):
@@ -45,6 +59,10 @@ def paint_hook(pt, pal, d):
     pt("snout_n", "all", lambda f, x, y, w, h: pick(G.shades("#1e1412"), 0.4, x, y) if fox else CLEAR)
     gold = G.shades("#e8b050")
     pt("ruff", "all", lambda f, x, y, w, h: pick(gold, 0.5 + 0.25 * ((x + y) % 3 == 0), x, y) if fox else CLEAR)
+    frond, date = G.shades(pal.extra.get("frond", "#5a9a3a")), G.shades(pal.extra.get("date", "#7a3a1a"))
+    pt("frond", "all", lambda f, x, y, w, h: pick(frond, 0.45 + 0.25 * (x == w // 2) + 0.1 * (y % 2), x, y) if f in ("up", "down") or y == 0
+       else pick(frond, 0.4, x, y))
+    pt("date", "all", lambda f, x, y, w, h: pick(date, 0.45 + 0.25 * (f == "up") + 0.1 * (x % 2), x, y))
     if pal.extra.get("frost"):                           # the hoary bat's frosted tips
         for p in [p for p in H.PARTS if p.startswith(("hair", "strand", "bang")) and p != "hair_cap"]:
             pt(p, "all", lambda f, x, y, w, h: pick(pal.LIGHT, 0.7, x, y) if (x * 5 + y * 3) % 7 == 0 else None)
@@ -52,8 +70,13 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
-    r.put("head", cube("snout", [-1.5, hy + 0.4, -6.0 + z]), cube("snout_n", [-0.625, hy + 1.65, -6.4 + z]))
-    r.put("body", cube("ruff", [-2.75, 18.4, -2.125 + z]))
+    if not d.get("palm"):
+        r.put("head", cube("snout", [-1.5, hy + 0.4, -6.0 + z]), cube("snout_n", [-0.625, hy + 1.65, -6.4 + z]))
+        r.put("body", cube("ruff", [-2.75, 18.4, -2.125 + z]))
+    if d.get("palm"):                                    # date-palm fronds fanned on her head, a cluster of dates by her ear
+        fr = [G.rot_cube("frond", [-0.625, hy + 9.6, z], [0, hy + 9.7, z], 30 + 15 * (i % 2), i * 60 + 15, 0) for i in range(6)]
+        fr += [cube("date", [3.6, hy + 5.2, -1.0 + z]), cube("date", [4.2, hy + 4.2, -0.4 + z]), cube("date", [3.4, hy + 4.0, 0.2 + z])]
+        r.add("palm", "head", [0, hy + 8.5, z], fr)
     d["tall"] = round(G.model_height(r.model("probe").doc()), 2)   # for "roost" (the animations are made after the rig)
 
 

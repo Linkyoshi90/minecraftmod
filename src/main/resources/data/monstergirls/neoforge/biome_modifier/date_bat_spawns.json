@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_date_bat",
+  "spawners": {
+    "type": "monstergirls:date_bat",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

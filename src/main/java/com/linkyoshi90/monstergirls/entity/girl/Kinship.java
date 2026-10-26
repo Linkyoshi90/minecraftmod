@@ -80,6 +80,7 @@ public final class Kinship {
             other("ostrich_harpy", EntityType.CHICKEN);
             other("penguin_harpy", EntityType.CHICKEN);
             other("dodobold_harpy", EntityType.CHICKEN);
+            other("peaflare_harpy", EntityType.CHICKEN);
             for (String a : List.of("bullywug", "mucus_toad", "bullfrog", "tree_frog", "poison_dart_frog", "glass_frog", "goliath_frog", "desert_rain_frog",
                     "fire_bellied_toad", "cane_toad", "natterjack", "surinam_toad", "vodyanoy", "mailtoad")) {
                 other(a, EntityType.FROG);

@@ -40,6 +40,17 @@ SPECIES = {
                   "iron": dict(SKIN=skin("#a8acb4"), FUR="#a8acb4", LIGHT="#d8dce4", MARK="#5a5e66", CLOTH="#3a3a46", extra=dict(boot="#5a5e66", key="#c8ccd4")),
                   "verdigris": dict(SKIN=skin("#5aa890"), FUR="#5aa890", LIGHT="#a0d8c8", MARK="#2a6a58", CLOTH="#7a4a2a", EYE="#f8d040",
                                     extra=dict(boot="#2a6a58", key="#7ac8b0"))}),
+    # thirteenth wave: the tin squirrel, a clockwork squirrel of riveted blue tin with a great curled tail
+    "tin_squirrel_construct": dict(
+        build="petite", outfit=dict(top=["halter", "vest"], bottom="shorts", extras=["satchel"], colors=dict(cloth2="#2a3a6a", leather="#8a6a3a")),
+        hair="ponytail", bangs="messy", ears="tuft", legs="bare", foot="paw",
+        tail=[(2.5, 2.5, 4), (3, 3, 4), (2.75, 2.75, 4), (2, 2, 3)], tail_rest=[(-70, 0, 0), (55, 0, 0), (45, 0, 0), (40, 0, 0)], tail_look="fur", tin=True,
+        pal=dict(SKIN=skin("#a8b8d4"), HAIR="#3a5aa8", FUR="#5a7ac0", LIGHT="#d8e4f8", MARK="#2a3a6a", EYE="#2ad8f8", CLOTH="#2a3a6a", TRIM="#d8b060",
+                 pattern="solid", extra=dict(boot="#2a3a6a", key="#d8b060")),
+        variants={"silver": dict(SKIN=skin("#c8ccd4"), HAIR="#7a7e88", FUR="#a8acb4", LIGHT="#eceef2", MARK="#5a5e66", EYE="#4a8af8"),
+                  "copper": dict(SKIN=skin("#d89a6a"), HAIR="#8a3e1a", FUR="#c8703a", LIGHT="#f0b890", MARK="#6a2a10", CLOTH="#2a5a5a"),
+                  "gold": dict(SKIN=skin("#ecd090"), HAIR="#a87a1e", FUR="#e0b450", LIGHT="#f8e8b0", MARK="#7a5410", EYE="#e83a3a", CLOTH="#5a1e2a"),
+                  "verdigris": dict(SKIN=skin("#a8d8c8"), HAIR="#2a6a58", FUR="#5aa890", LIGHT="#c8f0e4", MARK="#1e4a3e", EYE="#f8c040", CLOTH="#6a3a1e")}),
     # tenth wave: the gargoyle, carved stone with bat wings, short horns and a spaded tail; "perch" is her statue pose
     "gargoyle_construct": dict(
         build="athletic", outfit=dict(top=["bandeau"], bottom="loincloth", extras=["armlets"], colors=dict(cloth2="#5a5a62")),
@@ -70,6 +81,11 @@ def paint_hook(pt, pal, d):
     glow = G.shades(pal.extra.get("shem", "#e8c868"))
     clay = G.shades(pal.extra.get("boot", "#8a8078"))
     pt("shem", "all", lambda f, x, y, w, h: pick(glow, 0.75, x, y) if f == "north" and x in (1, 3, 5, 7, 9) and y in (1, 2) else pick(clay, 0.45, x, y))
+    if d.get("tin"):                                     # rivets down every plate, and seams on the tail
+        for p in ("thigh", "shin", "arm_up", "forearm", "tail_a", "tail_b", "tail_c", "tail_d"):
+            pt(p, ("north", "south", "east", "west"), lambda f, x, y, w, h: pick(pal.LIGHT, 0.75, x, y) if x in (0, w - 1) and y % 3 == 1
+               else pick(pal.MARK, 0.45, x, y) if y % 6 == 0 else None)
+        return
     for p in ("thigh", "shin", "arm_up", "forearm"):                # finger marks pressed into the clay
         pt(p, ("north", "south", "east", "west"), lambda f, x, y, w, h: pick(pal.MARK, 0.5, x, y) if (x * 5 + y * 3) % 41 == 0 else None)
 
@@ -80,7 +96,10 @@ def build_hook(r, g, d):
         r.add("key", "body", [0, 17, cd / 2 + g.z], [cube("key_shaft", [-0.375, 16.6, cd / 2 + g.z]), cube("key_bow", [-1.75, 15.75, cd / 2 + 3.0 + g.z])])
         px, py, pz = r.b["arm_r"]["pivot"]
         r.put("arm_r", cube("gear", [px - 0.75, py - 2.5, pz - 1.0]))
-    if not d.get("gargoyle") and not d.get("talos"):     # the golem's shem; the gargoyle and the talosling have none
+    if d.get("tin"):                                     # a little gear on each arm
+        px, py, pz = r.b["arm_r"]["pivot"]
+        r.put("arm_r", cube("gear", [px - 0.75, py - 2.5, pz - 1.0]))
+    if not d.get("gargoyle") and not d.get("talos") and not d.get("tin"):     # the golem's shem; the others have none
         r.put("head", cube("shem", [-1.5, g.hy + 6.3, -4.35 + g.z]))
 
 

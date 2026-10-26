@@ -46,9 +46,49 @@ public class Construct extends AbstractMonsterGirl {
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        if (s == GirlSpecies.TIN_SQUIRREL_CONSTRUCT) return girlAttributes(16, 0.32, 1).add(Attributes.ARMOR, 4);
         if (s == GirlSpecies.TALOSLING_CONSTRUCT) return girlAttributes(40, 0.3, 6).add(Attributes.ARMOR, 6);
         if (s == GirlSpecies.GARGOYLE_CONSTRUCT) return girlAttributes(40, 0.27, 7).add(Attributes.ARMOR, 6).add(Attributes.KNOCKBACK_RESISTANCE, 0.6);
         return girlAttributes(HEALTH, 0.22, 12).add(Attributes.KNOCKBACK_RESISTANCE, 1.0).add(Attributes.ARMOR, 4);
+    }
+
+    // --- the tin squirrel ----------------------------------------------------------------------------------------------
+
+    private final net.minecraft.world.SimpleContainer hoard = new net.minecraft.world.SimpleContainer(9);
+
+    public boolean isTin() {
+        return this.species == GirlSpecies.TIN_SQUIRREL_CONSTRUCT;
+    }
+
+    public net.minecraft.world.SimpleContainer getHoard() {
+        return this.hoard;
+    }
+
+    /** A worn iron or gold tool or armour piece, broken down into nuggets (more the less worn it is). Null if she won't take it. */
+    @Nullable
+    public ItemStack scrap(ItemStack worn) {
+        if (!worn.isDamageableItem() || !worn.isDamaged()) return null;
+        net.minecraft.world.item.Item nugget = worn.getItem().isValidRepairItem(worn, new ItemStack(Items.IRON_INGOT)) ? Items.IRON_NUGGET
+                : worn.getItem().isValidRepairItem(worn, new ItemStack(Items.GOLD_INGOT)) ? Items.GOLD_NUGGET : null;
+        if (nugget == null) return null;
+        int n = 1 + Math.round(8.0F * (1.0F - (float) worn.getDamageValue() / worn.getMaxDamage()));
+        return new ItemStack(nugget, n);
+    }
+
+    /** Nuggets lying near her go into her hoard. */
+    private void tickHoard(net.minecraft.server.level.ServerLevel level) {
+        for (net.minecraft.world.entity.item.ItemEntity e : level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, this.getBoundingBox().inflate(1.5),
+                e -> e.isAlive() && (e.getItem().is(Items.IRON_NUGGET) || e.getItem().is(Items.GOLD_NUGGET)))) {
+            ItemStack left = this.hoard.addItem(e.getItem().copy());
+            if (left.getCount() != e.getItem().getCount()) this.playSound(SoundEvents.ITEM_PICKUP, 0.6F, 1.6F);
+            if (left.isEmpty()) e.discard();
+            else e.setItem(left);
+        }
+        if (this.tickCount % 40 == 0 && this.getNavigation().isDone()) {
+            net.minecraft.world.entity.item.ItemEntity near = this.nearest(net.minecraft.world.entity.item.ItemEntity.class, 8,
+                    e -> e.getItem().is(Items.IRON_NUGGET) || e.getItem().is(Items.GOLD_NUGGET));
+            if (near != null) this.getNavigation().moveTo(near, 1.1);
+        }
     }
 
     // --- the talosling --------------------------------------------------------------------------------------------------
@@ -69,12 +109,14 @@ public class Construct extends AbstractMonsterGirl {
     public void addAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         if (this.isTalos()) tag.putInt("Wound", this.wound);
+        if (this.isTin()) tag.put("Hoard", this.hoard.createTag(this.registryAccess()));
     }
 
     @Override
     public void readAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         if (tag.contains("Wound")) this.wound = tag.getInt("Wound");
+        if (tag.contains("Hoard")) this.hoard.fromTag(tag.getList("Hoard", net.minecraft.nbt.Tag.TAG_COMPOUND), this.registryAccess());
     }
 
     /** Redstone dust winds her spring. */
@@ -90,6 +132,18 @@ public class Construct extends AbstractMonsterGirl {
     @Nullable
     @Override
     protected net.minecraft.world.InteractionResult familyInteract(Player player, net.minecraft.world.InteractionHand hand, ItemStack stack) {
+        if (this.isTin() && !this.isBaby()) {
+            ItemStack nuggets = this.scrap(stack);
+            if (nuggets != null) {
+                if (!this.level().isClientSide) {
+                    stack.shrink(1);
+                    if (!player.getInventory().add(nuggets)) player.drop(nuggets, false);
+                    this.playSound(SoundEvents.SMITHING_TABLE_USE, 0.8F, 1.4F);
+                    this.addAffection(player, 1);
+                }
+                return net.minecraft.world.InteractionResult.sidedSuccess(this.level().isClientSide);
+            }
+        }
         if (this.isTalos() && stack.is(Items.REDSTONE)) {
             if (!this.level().isClientSide && this.windUp(player, stack)) this.addAffection(player, 1);
             return net.minecraft.world.InteractionResult.sidedSuccess(this.level().isClientSide);
@@ -152,6 +206,7 @@ public class Construct extends AbstractMonsterGirl {
         super.aiStep();
         if (this.isGargoyle() && !this.level().isClientSide) this.tickGargoyle();
         if (this.isTalos() && !this.level().isClientSide) this.tickTalos();
+        if (this.isTin() && this.level() instanceof net.minecraft.server.level.ServerLevel tinLevel && this.tickCount % 5 == 0) this.tickHoard(tinLevel);
     }
 
     /** A monster near a villager (or, once she is devoted, near her friend). Creepers are left alone, as iron golems do. */
@@ -220,6 +275,7 @@ public class Construct extends AbstractMonsterGirl {
     @Override
     public boolean isFood(ItemStack stack) {
         if (this.isTalos()) return stack.is(Items.COPPER_INGOT) || stack.is(Items.IRON_NUGGET);
+        if (this.isTin()) return stack.is(Items.IRON_NUGGET) || stack.is(Items.GOLD_NUGGET);
         if (this.isGargoyle()) return stack.is(Items.COBBLESTONE) || stack.is(Items.STONE) || stack.is(Items.STONE_BRICKS);
         return stack.is(Items.CLAY_BALL) || stack.is(Items.CLAY);
     }
@@ -232,6 +288,10 @@ public class Construct extends AbstractMonsterGirl {
     @Override
     public ItemStack rollGift(Player player) {
         int r = this.random.nextInt(100);
+        if (this.isTin()) {                                             // something from her hoard, else odds and ends
+            for (int i = 0; i < this.hoard.getContainerSize(); i++) if (!this.hoard.getItem(i).isEmpty()) return this.hoard.removeItem(i, 4);
+            return new ItemStack(r < 50 ? Items.IRON_NUGGET : r < 85 ? Items.COPPER_INGOT : Items.GOLD_NUGGET, r < 50 ? 4 : 2);
+        }
         if (this.isTalos()) return new ItemStack(r < 40 ? Items.COPPER_INGOT : r < 75 ? Items.REDSTONE : r < 95 ? Items.IRON_NUGGET : Items.CLOCK,
                 r < 40 ? 2 : r < 75 ? 4 : r < 95 ? 6 : 1);
         if (this.isGargoyle()) return r < 45 ? new ItemStack(Items.COBBLESTONE, 4) : r < 80 ? new ItemStack(Items.FLINT, 2) : r < 95 ? new ItemStack(Items.AMETHYST_SHARD)

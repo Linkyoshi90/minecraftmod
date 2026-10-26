@@ -47,7 +47,7 @@ public class BatGirl extends AbstractMonsterGirl {
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
-        return girlAttributes(14, 0.3, 2);
+        return girlAttributes(s == GirlSpecies.DATE_BAT ? 12 : 14, 0.3, 2);
     }
 
     @Override
@@ -164,10 +164,26 @@ public class BatGirl extends AbstractMonsterGirl {
             if (this.roost == null) this.setAction(Action.NONE);
             else this.setPos(this.roost.getX() + 0.5, this.roost.getY() - this.getBbHeight(), this.roost.getZ() + 0.5);
         }
+        if (this.species == GirlSpecies.DATE_BAT && !this.isBaby() && !this.isRoosting() && !server.isDay() && this.tickCount % 100 == 0
+                && this.bondedPlayer(Orders.AFFECTION, 32) != null) this.pollinate(server);
         if (this.tickCount % PING == 0 && !this.isRoosting() && !this.isBaby()) {
             Player friend = this.bondedPlayer(Orders.AFFECTION, 32);
             if (friend != null) this.ping(server, friend);
         }
+    }
+
+    /** The datebat at night: the crops within 6 blocks of her grow a stage. Returns how many grew. */
+    public int pollinate(ServerLevel level) {
+        int n = 0;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(this.blockPosition().offset(-6, -5, -6), this.blockPosition().offset(6, 2, 6))) {
+            var s = level.getBlockState(p);
+            if (s.getBlock() instanceof net.minecraft.world.level.block.CropBlock crop && !crop.isMaxAge(s)) {
+                level.setBlock(p, crop.getStateForAge(crop.getAge(s) + 1), 2);
+                level.levelEvent(2005, p, 0);
+                n++;
+            }
+        }
+        return n;
     }
 
     @Override
@@ -192,6 +208,7 @@ public class BatGirl extends AbstractMonsterGirl {
     @Override
     public ItemStack rollGift(Player player) {
         int r = this.random.nextInt(100);
+        if (this.species == GirlSpecies.DATE_BAT) return new ItemStack(r < 40 ? Items.SWEET_BERRIES : r < 75 ? Items.APPLE : r < 95 ? Items.HONEYCOMB : Items.GOLDEN_APPLE, r < 95 ? 3 : 1);
         return new ItemStack(r < 45 ? Items.BONE_MEAL : r < 80 ? Items.GLOW_BERRIES : r < 95 ? Items.APPLE : Items.PHANTOM_MEMBRANE, r < 80 ? 3 : 1);
     }
 

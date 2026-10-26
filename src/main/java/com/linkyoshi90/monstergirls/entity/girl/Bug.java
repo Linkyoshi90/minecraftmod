@@ -130,6 +130,7 @@ public class Bug extends AbstractMonsterGirl {
             case QUEEN_BEE_BUG -> girlAttributes(44, 0.28, 5);
             case HORNET_BUG -> girlAttributes(22, 0.32, 5);
             case MANTIS_BUG -> girlAttributes(20, 0.32, 6);
+            case SCARABRONZE_BUG -> girlAttributes(30, 0.26, 4).add(net.minecraft.world.entity.ai.attributes.Attributes.ARMOR, 10);
             case MOTH_LARVA_BUG, PAPILLON_LARVA_BUG -> girlAttributes(10, 0.14, 0);
             default -> girlAttributes(16, 0.3, 2);
         };
@@ -216,6 +217,19 @@ public class Bug extends AbstractMonsterGirl {
 
     // --- food, presents ------------------------------------------------------------------------------------------
 
+    private long lastSunrise = -1;
+
+    /** At sunrise (the first half minute of the day) her friend gets Haste for the morning, once a day. True when she gave it. */
+    public boolean sunrise(ServerLevel level) {
+        long day = level.getDayTime() / 24000, time = level.getDayTime() % 24000;
+        if (time >= 600 || day == this.lastSunrise) return false;
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null) return false;
+        this.lastSunrise = day;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DIG_SPEED, 6000, 0, true, true));
+        return true;
+    }
+
     @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(Items.HONEY_BOTTLE) || stack.is(Items.SUGAR) || stack.is(Items.HONEYCOMB) || stack.is(net.minecraft.tags.ItemTags.SMALL_FLOWERS)
@@ -234,6 +248,16 @@ public class Bug extends AbstractMonsterGirl {
     @Override
     @javax.annotation.Nullable
     protected net.minecraft.world.InteractionResult familyInteract(Player player, net.minecraft.world.InteractionHand hand, ItemStack stack) {
+        if (this.species == GirlSpecies.SCARABRONZE_BUG && stack.is(Items.ROTTEN_FLESH) && !this.isBaby()) {   // she rolls it into bone meal
+            if (this.level() instanceof ServerLevel server) {
+                stack.consume(1, player);
+                ItemStack meal = new ItemStack(Items.BONE_MEAL, 2);
+                if (!player.getInventory().add(meal)) player.drop(meal, false);
+                this.playSound(SoundEvents.ROOTED_DIRT_PLACE, 1.0F, 1.2F);
+                this.addAffection(player, 1);
+            }
+            return net.minecraft.world.InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         if ((this.species != GirlSpecies.FIREFLY_BUG && this.species != GirlSpecies.FAIRY_BUG) || !stack.is(Items.GLASS_BOTTLE)) return null;
         if (this.level() instanceof ServerLevel server) {
             stack.consume(1, player);
@@ -277,6 +301,7 @@ public class Bug extends AbstractMonsterGirl {
             case FAIRY_BUG, FAIRY_QUEEN_BUG -> new ItemStack(r < 50 ? Items.GLOW_BERRIES : r < 85 ? Items.GLOWSTONE_DUST : Items.GOLDEN_APPLE);
             case FIREFLY_BUG -> new ItemStack(r < 50 ? Items.GLOWSTONE_DUST : r < 85 ? Items.GLOW_BERRIES : Items.GLOW_INK_SAC, r < 85 ? 2 : 1);
             case MOTH_BUG -> new ItemStack(r < 70 ? Items.STRING : Items.WHITE_WOOL);
+            case SCARABRONZE_BUG -> new ItemStack(r < 45 ? Items.BONE_MEAL : r < 80 ? Items.GOLD_NUGGET : r < 97 ? Items.LAPIS_LAZULI : Items.GOLD_INGOT, r < 97 ? 3 : 1);
             case SCORPION_BUG -> new ItemStack(r < 60 ? Items.SPIDER_EYE : Items.GOLD_NUGGET, r < 60 ? 1 : 3);
             case HORNET_BUG -> new ItemStack(r < 55 ? Items.PAPER : Items.CLAY_BALL, r < 55 ? 2 : 3);
             case MANTIS_BUG -> new ItemStack(r < 50 ? Items.STRING : r < 85 ? Items.SPIDER_EYE : Items.ENDER_PEARL, r < 50 ? 3 : 1);
@@ -339,6 +364,7 @@ public class Bug extends AbstractMonsterGirl {
         if (this.carryTicks > 0 && --this.carryTicks == 0) this.setFlag(FLAG_CARRYING, false);
         if (this.species == GirlSpecies.FIREFLY_BUG) this.glow(server, server.isDay() ? 0 : 7);   // her lantern lights the night
         if (this.species == GirlSpecies.MANTIS_BUG && !this.isBaby()) this.ambush(server);
+        if (this.species == GirlSpecies.SCARABRONZE_BUG && !this.isBaby() && this.tickCount % 20 == 0) this.sunrise(server);
         if (this.isLarva()) {
             if (++this.age >= METAMORPHOSIS) {
                 this.metamorphose(server);

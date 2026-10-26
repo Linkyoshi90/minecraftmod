@@ -106,6 +106,18 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
         }
     }
 
+    // --- the momoshika ----------------------------------------------------------------------------------------------
+
+    /** By day her friend within 8 blocks of her regenerates. True if she healed them. */
+    public boolean blossom(ServerLevel level) {
+        if (!level.isDay()) return false;
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null) return false;
+        friend.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60, 0, true, false));
+        level.sendParticles(ParticleTypes.CHERRY_LEAVES, this.getX(), this.getY() + this.getBbHeight(), this.getZ(), 3, 0.5, 0.3, 0.5, 0.0);
+        return true;
+    }
+
     // --- the sphinx -------------------------------------------------------------------------------------------------
 
     /** Her riddles, each answered with an item (the lang key is riddle.monstergirls.N). */
@@ -203,6 +215,7 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
             case TUSKTAUR_CENTAUR -> girlAttributes(60, 0.24, 9).add(Attributes.ATTACK_KNOCKBACK, 2.0).add(Attributes.KNOCKBACK_RESISTANCE, 0.8);
             case AURORANTLER_CENTAUR -> girlAttributes(26, 0.3, 3);
             case SPHINX_CENTAUR -> girlAttributes(50, 0.3, 8);
+            case MOMOSHIKA_CENTAUR -> girlAttributes(26, 0.3, 3);
             default -> girlAttributes(28, 0.28, 3);
         };
     }
@@ -355,7 +368,8 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
                 || (this.isCamel() && stack.is(Items.CACTUS))
                 || (this.species == GirlSpecies.KELPIE_CENTAUR && (stack.is(Items.KELP) || stack.is(Items.DRIED_KELP)))
                 || (this.species == GirlSpecies.PEGASUS_CENTAUR && stack.is(Items.GOLDEN_APPLE))
-                || (this.species == GirlSpecies.AURORANTLER_CENTAUR && (stack.is(Items.SWEET_BERRIES) || stack.is(Items.GLOW_BERRIES)));
+                || (this.species == GirlSpecies.AURORANTLER_CENTAUR && (stack.is(Items.SWEET_BERRIES) || stack.is(Items.GLOW_BERRIES)))
+                || (this.species == GirlSpecies.MOMOSHIKA_CENTAUR && (stack.is(Items.APPLE) || stack.is(Items.SWEET_BERRIES)));
     }
 
     /** The baku: no phantom (vanilla or girl) comes for a player within 32 blocks of a tapir. */
@@ -538,6 +552,8 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
             case TUSKTAUR_CENTAUR -> new ItemStack(r < 45 ? Items.BROWN_WOOL : r < 80 ? Items.BONE : Items.PACKED_ICE, r < 80 ? 2 : 4);
             case SPHINX_CENTAUR -> new ItemStack(r < 40 ? Items.GOLD_NUGGET : r < 75 ? Items.LAPIS_LAZULI : r < 95 ? Items.SANDSTONE : Items.GOLD_INGOT,
                     r < 40 ? 4 : r < 75 ? 3 : r < 95 ? 4 : 1);
+            case MOMOSHIKA_CENTAUR -> new ItemStack(r < 45 ? Items.PINK_PETALS : r < 80 ? Items.APPLE : r < 95 ? Items.CHERRY_SAPLING : Items.GOLDEN_APPLE,
+                    r < 80 ? 3 : 1);
             case AURORANTLER_CENTAUR -> new ItemStack(r < 45 ? Items.GLOW_BERRIES : r < 80 ? Items.GLOW_LICHEN : Items.AMETHYST_SHARD, r < 45 ? 3 : 2);
             case GOAT_CENTAUR -> new ItemStack(r < 60 ? Items.MILK_BUCKET : Items.EMERALD);
             case ALPACA_CENTAUR -> new ItemStack(this.woolColour(), 2);
@@ -658,6 +674,7 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
     public void aiStep() {
         super.aiStep();
         if (this.species == GirlSpecies.AURORANTLER_CENTAUR && this.level() instanceof ServerLevel aurora && !this.isBaby()) this.aurora(aurora);
+        if (this.species == GirlSpecies.MOMOSHIKA_CENTAUR && this.level() instanceof ServerLevel grove && !this.isBaby() && this.tickCount % 40 == 0) this.blossom(grove);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.ALPACA_CENTAUR && this.fleeceTicks < 24000) this.fleeceTicks++;
         if (this.camelLove > 0 && --this.camelLove % 10 == 0) this.courtCamel(server);

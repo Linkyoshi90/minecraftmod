@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_tin_squirrel_construct",
+  "spawners": {
+    "type": "monstergirls:tin_squirrel_construct",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}
