@@ -12,7 +12,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import girl_lib as G  # noqa: E402
-from girl_lib import H, cube, pick, noise, skin, shades  # noqa: E402
+from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SEGS = [("seg_1", 4.5, 10.5, 4), ("seg_2", 4.25, 4, 5.5), ("seg_3", 4, 3.75, 5.5), ("seg_4", 3.5, 3.25, 5),
         ("seg_5", 3, 2.75, 5), ("seg_6", 2.5, 2.25, 4.5), ("seg_7", 2, 1.75, 4), ("seg_8", 1.25, 1.25, 3.5)]
@@ -27,6 +27,19 @@ SPECIES = {
                   "piebald": dict(pattern="patches", MARK="#f4f2ee", HAIR="#2a1e16"),
                   "albino": dict(FUR="#f4ecd8", MARK="#f0d060", EYE="#d83a3a", HAIR="#f2ead8", PUPIL="#7a1010", CLOTH="#c86a6a"),
                   "reticulated": dict(FUR="#8a7a4a", MARK="#1e1a12", pattern="net", HAIR="#4a3a22")}),
+    "medusa_lamia": dict(                               # ninth wave: living snakes for hair (bone snakes), a blindfold (shown once befriended)
+        build="slim", outfit=dict(top=["halter"], bottom="sarong", extras=["armlets", "pearls"], colors=dict(cloth2="#f0ece0")),
+        thick=1.05, hair="bob", bangs="none", medusa=True,
+        pal=dict(SKIN=skin("pale"), HAIR="#3a7a3a", FUR="#4a7a4a", LIGHT="#e0ecc8", MARK="#2a4a2a", EYE="#e8d040", CLOTH="#f4f0e6", TRIM="#d8b048",
+                 pattern="bands", facemark="scales", extra=dict(snake="#4a9a3a", snake_band="#2a5a24", blindfold="#5a2a6a")),
+        variants={"bronze": dict(HAIR="#8a5a2a", FUR="#8a6a3a", MARK="#5a3a1a", EYE="#4ab8a8",
+                                 extra=dict(snake="#b0783a", snake_band="#6a4018", blindfold="#2a3a5a")),
+                  "onyx": dict(HAIR="#1e1e22", FUR="#2a2a30", MARK="#141418", LIGHT="#8a8a90", EYE="#c83a3a",
+                               extra=dict(snake="#2a2a30", snake_band="#5a5a64", blindfold="#a8a8b0")),
+                  "marble": dict(SKIN="#e8e4dc", HAIR="#d8d4cc", FUR="#c8c4bc", MARK="#9a968e", LIGHT="#f8f6f2", EYE="#8a8a8e",
+                                 extra=dict(snake="#d8d4cc", snake_band="#9a968e", blindfold="#3a3a40")),
+                  "coral": dict(HAIR="#c83a2a", FUR="#c84a3a", MARK="#1e1a18", LIGHT="#f8e0c0", EYE="#f8d040",
+                                extra=dict(snake="#d8402a", snake_band="#1e1a18", snake_band2="#f0d040", blindfold="#1e1a18"))}),
     "cobra_lamia": dict(
         build="slim", outfit=dict(top=["bandeau"], bottom="loincloth", extras=["usekh", "armlets"], colors=dict(cloth2="#f0ead8")),
         thick=1.0, hair="bob", hood=True,
@@ -72,6 +85,16 @@ SPECIES = {
                   "golden": dict(FUR="#c8a050", MARK="#f0e0a0", HAIR="#5a3a14", CLOTH="#6a1e1e"),
                   "jade": dict(FUR="#2a6a3a", MARK="#a8d888", HAIR="#14301e", CLOTH="#e8e0c8"),
                   "crimson": dict(FUR="#7a1e1e", MARK="#d8a060", HAIR="#2a0e0e", CLOTH="#1e2a4a")}),
+    "wadjet_lamia": dict(                               # on two legs (girl_family): built by legged_* below
+        biped=True, build="athletic", outfit=dict(top=["bandeau"], bottom="wrap_skirt", extras=["usekh", "armlets", "bracers"], colors=dict(cloth2="#e8c050")),
+        hair="bob", bangs="blunt", ears=None, legs="bare", foot="shoe", tail=[(1.5, 1.5, 4), (1.25, 1.25, 4), (1, 1, 3.5)], tail_look="scale",
+        tail_rest=[(-35, 0, 0), (12, 0, 0), (10, 0, 0)], pupil=(0.9, 3.6),
+        pal=dict(SKIN=skin("brown"), HAIR="#141210", FUR="#7a6a3a", LIGHT="#e8dcb0", MARK="#3a2e1a", EYE="#e8b020", CLOTH="#f0ece0", TRIM="#e8c050",
+                 pattern="bars", extra=dict(boot="#c8a050")),
+        variants={"green": dict(FUR="#2a8a4a", MARK="#145a2a", LIGHT="#b8e8a0"),
+                  "black": dict(FUR="#1e1c1a", MARK="#4a4440", LIGHT="#c8c0a8", CLOTH="#e8e0d0"),
+                  "gold": dict(FUR="#c8a050", MARK="#f0e0a0", LIGHT="#fff4d0", CLOTH="#2a4a8a"),
+                  "red": dict(FUR="#a83a2a", MARK="#5a1a10", LIGHT="#e8b8a0", CLOTH="#e8e0d0")}),
 }
 
 
@@ -88,6 +111,8 @@ def declare(sp):
         extra.append(("rattle", 1.25, 1, .75))
     if d.get("paddle"):
         extra.append(("paddle", .5, 3.5, 4))
+    if d.get("medusa"):
+        extra += [("snake", 1, 5.5, 1), ("snake_h", 1.5, 1, 2), ("blindfold", 8.5, 1.75, 8.5), ("blind_tail", 1, 3, .25)]
     G.declare(parts + extra, ears=None, hair=SPECIES[sp]["hair"],
               build=SPECIES[sp].get("build"), outfit=SPECIES[sp].get("outfit"))
 
@@ -121,6 +146,14 @@ def paint(sp, key):
     pt("crown_gem", "all", lambda f, x, y, w, h: pick(shades("#3ac87a"), 0.7, x, y))
     pt("rattle", "all", lambda f, x, y, w, h: pick(shades("#c8b896"), 0.55 - (0.25 if y == h - 1 else 0), x, y))
     pt("paddle", "all", lambda f, x, y, w, h: pick(pal.FUR, 0.5, x, y) if (y // 3) % 2 else pick(pal.MARK, 0.4, x, y))
+    sn, band = shades(pal.extra.get("snake", "#4a9a3a")), shades(pal.extra.get("snake_band", "#2a5a24"))
+    band2 = shades(pal.extra.get("snake_band2", pal.extra.get("snake_band", "#2a5a24")))
+    pt("snake", "all", lambda f, x, y, w, h: pick(band if y % 4 == 0 else band2 if y % 4 == 2 and pal.extra.get("snake_band2") else sn, 0.5 + 0.15 * (f == "north"), x, y))
+    pt("snake_h", "all", lambda f, x, y, w, h: pick(shades("#f8d040"), 0.7, x, y) if f == "north" and y == 0 and x in (0, w - 1)
+       else pick(sn, 0.45 + 0.1 * (f == "up"), x, y))
+    bf = shades(pal.extra.get("blindfold", "#5a2a6a"))
+    pt("blindfold", "all", lambda f, x, y, w, h: pick(bf, 0.45 + 0.15 * (y == 0) + (noise(x, y, 51) - 0.5) * 0.1, x, y) if f not in ("up", "down") else CLEAR)
+    pt("blind_tail", "all", lambda f, x, y, w, h: pick(bf, 0.45, x, y))
     return pt.T
 
 
@@ -146,6 +179,18 @@ def build(sp):
             r.put("seg_8", cube("rattle", [-0.625, 0.1, end_z - 0.25 + i * 0.7]))
     if d.get("paddle"):
         r.put("seg_8", cube("paddle", [-0.25, 0, end_z - 1.5]))
+    if d.get("medusa"):                                 # nine snakes rising from her head and curling out, each with its own head
+        hy, z = g.hy, g.z
+        cs = []
+        for i, (x, zz, ry) in enumerate(((-3.2, -2.5, -30), (-1.2, -3.0, -10), (1.2, -3.0, 10), (3.2, -2.5, 30), (-3.4, 0.5, -70),
+                                         (3.4, 0.5, 70), (-2.4, 3.0, -140), (0, 3.4, 180), (2.4, 3.0, 140))):
+            tilt = 28 + 8 * (i % 3)
+            cs.append(G.rot_cube("snake", [x - 0.5, hy + 7.6, zz - 0.5 + z], [x, hy + 7.6, zz + z], -tilt, ry, 0))
+            tip = H.rot_about((x, hy + 7.6 + 5.0, zz + z), (x, hy + 7.6, zz + z), H.rot_matrix(-tilt, ry, 0))
+            cs.append(G.rot_cube("snake_h", [tip[0] - 0.75, tip[1] - 0.3, tip[2] - 1.6], list(tip), 10, ry, 0))
+        r.add("snakes", "head", [0, hy + 7.6, z], cs)
+        r.add("blindfold", "head", [0, hy + 3.5, z], [cube("blindfold", [-4.25, hy + 2.6, -4.25 + z], inflate=0.3),
+                                                      G.rot_cube("blind_tail", [-0.5, hy + 0.2, 4.5 + z], [0, hy + 3.2, 4.4 + z], 12, 0, 0)])
     return r.model(sp)
 
 
@@ -160,5 +205,37 @@ VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0
          ("walk", 0.3, -45, 20), ("rear", 0.9, -30, 8), ("sit", 0, -40, 25), ("bask", 0, -40, 15)]
 FACE = [("idle", 0, 0, 0, 24), ("idle", 2.75, 0, 0, 24), ("hiss", 0.5, 0, 0, 24), ("idle", 0, -30, 8, 24)]
 
+
+# --- the two-legged ones (the wadjet): girl_family's biped with the lamia hood, and the lamia's bask, coil and rear ---------
+
+def legged_declare(sp, d):
+    return [("hood_p", 5.5, 6.5, .5)]
+
+
+def legged_paint(pt, pal, d):
+    sc = G.scale_fn(pal, belly_faces=("down",))
+    pt("hood_p", "all", lambda f, x, y, w, h: pick(pal.LIGHT, 0.55, x, y) if f == "north" else sc(f, x, y, w, h))
+
+
+def legged_build(r, g, d):
+    hp = G.S("hood_p")
+    y, z = 19.5, 2.6                                    # higher and further back than on a serpent: it frames her head, behind the bob
+    r.add("hood", "body", [0, y + 2.5, z], [G.rot_cube("hood_p", [-hp[0], y, z], [0, y + 2.5, z], 0, 0, 18),
+                                             G.rot_cube("hood_p", [0, y, z], [0, y + 2.5, z], 0, 0, -18)])
+
+
+def legged_anims(an, sp, d):
+    Tk, hold, sym, merge = H.track, H.hold, H.sym, H.merge
+    an.add("bask", 4.0, True, merge({"root": {"rotation": hold(-90, 0, 0), "position": hold(0, 2.5, 0)}, "head": {"rotation": hold(-30, 0, 0)},
+                                     "eyelids": {"position": hold(*H.OUT_)}}, sym("arm", hold(-170, 0, 20))))
+    an.add("coil", 1.5, True, merge({"body": {"rotation": hold(15, 0, 0)}, "hood": {"scale": hold(1.25, 1.1, 1)}},
+                                    sym("arm", Tk((0, (-80, 0, 25)), (0.75, (-90, 0, 35)), (1.5, (-80, 0, 25))))))
+    an.add("rear", 1.0, False, merge({"body": {"rotation": Tk((0, (0, 0, 0)), (0.5, (-15, 0, 0)))}, "head": {"rotation": hold(-15, 0, 0)},
+                                      "hood": {"scale": Tk((0, (1, 1, 1)), (0.5, (1.35, 1.2, 1)))}}, sym("arm", hold(-30, 0, 30))))
+
+
 if __name__ == "__main__":
-    G.run_family("lamia", SPECIES, declare, paint, build, anims, VIEWS, FACE)
+    import girl_family as F
+    legged = {k: v for k, v in SPECIES.items() if v.get("biped")}
+    F.run_family("lamia", legged, legged_declare, legged_paint, legged_build, legged_anims)
+    G.run_family("lamia", {k: v for k, v in SPECIES.items() if k not in legged}, declare, paint, build, anims, VIEWS, FACE)

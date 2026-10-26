@@ -47,7 +47,9 @@ public class HarpyEggBlock extends Block implements EntityBlock {
 
     public enum Species implements StringRepresentable {
         SPARROW("sparrow_harpy"), CROW("crow_harpy"), OSTRICH("ostrich_harpy"), OWL("owl_harpy"),
-        SEAGULL("seagull_harpy"), ALBATROSS("albatross_harpy"), RIFLEBIRD("riflebird_harpy"), PHOENIX("phoenix_harpy");
+        SEAGULL("seagull_harpy"), ALBATROSS("albatross_harpy"), RIFLEBIRD("riflebird_harpy"), PHOENIX("phoenix_harpy"),
+        TENGU("tengu_harpy"), TOUCAN("toucan_harpy"), PENGUIN("penguin_harpy"), ZHUQUE("zhuque_harpy"), FINCH("finch_harpy"), FLAMINGO("flamingo_harpy"), MAGPIE("coin_magpie_harpy"),
+        RAVEN("trickster_raven_harpy"), ROOK("rookmourn_harpy"), CASSOWRATH("cassowrath_harpy");
 
         private final String entityId;
 
@@ -129,6 +131,7 @@ public class HarpyEggBlock extends Block implements EntityBlock {
     public static void hatch(ServerLevel level, BlockPos pos, BlockState state) {
         level.playSound(null, pos, SoundEvents.TURTLE_EGG_HATCH, SoundSource.BLOCKS, 0.7F, 1.0F);
         UUID father = ParentageBlockEntity.fatherAt(level, pos);
+        int paint = ParentageBlockEntity.paintAt(level, pos);
         level.removeBlock(pos, false);
         EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(MonsterGirlsMod.id(state.getValue(SPECIES).entityId()));
         DifficultyInstance difficulty = level.getCurrentDifficultyAt(pos);
@@ -139,6 +142,7 @@ public class HarpyEggBlock extends Block implements EntityBlock {
             chick.finalizeSpawn(level, difficulty, MobSpawnType.BREEDING, null);
             chick.randomizeVariant();
             chick.setBaby(true);
+            chick.setPaint(paint);                                      // a painted mother's young are painted too
             level.addFreshEntity(chick);
             chick.bornTo(father);
         }

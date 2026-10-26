@@ -67,6 +67,16 @@ SPECIES = {
                   "green": dict(extra=dict(kimono="#2a6a4a", obi="#e8c040", kimono_trim="#e8c040", cloth2="#1e4a34", hat="#1a1a22")),
                   "black": dict(extra=dict(kimono="#1a1a22", obi="#a81a2a", kimono_trim="#a81a2a", cloth2="#141418", hat="#1a1a22")),
                   "gold": dict(extra=dict(kimono="#c8a030", obi="#a81a2a", kimono_trim="#a81a2a", cloth2="#8a6a1a", hat="#1a1a22"))}),
+    # ninth wave: the oni, big and horned, a tiger-skin loincloth and an iron club (kanabo) in her right hand
+    "oni_devil": dict(
+        build="strong", outfit=dict(top=["sarashi"], bottom="loincloth", extras=["arm_wraps", "belt"], colors=dict(cloth2="#e8a830")),
+        hair="shaggy", bangs="messy", ears="elf", legs="bare", foot="shoe", horns="devil", club=True,
+        pal=dict(SKIN="#d8584a", HAIR="#1e1a1e", FUR="#d8584a", LIGHT="#f0a090", MARK="#8a2a22", EYE="#f8d040", CLOTH="#f4f0e6", TRIM="#2a2420",
+                 extra=dict(horn="#f4ecd8", boot="#3a2a20", tiger=True)),
+        variants={"blue": dict(SKIN="#5a7ad0", FUR="#5a7ad0", LIGHT="#a0b8f0", MARK="#2a3a8a", HAIR="#f4f0e6"),
+                  "yellow": dict(SKIN="#e8c05a", FUR="#e8c05a", LIGHT="#f8e0a0", MARK="#a87a2a", HAIR="#3a2a1a", EYE="#d83a2a"),
+                  "green": dict(SKIN="#6aa85a", FUR="#6aa85a", LIGHT="#a8d898", MARK="#2a5a2a", HAIR="#e8e0c8"),
+                  "black": dict(SKIN="#4a4448", FUR="#4a4448", LIGHT="#8a8488", MARK="#1e1a1e", HAIR="#e8e4e0", EYE="#f84a2a")}),
 }
 
 
@@ -74,6 +84,8 @@ def declare_hook(sp, d):
     out = []
     if d.get("pumpkin"):
         out += [("pumpkin", 9.5, 5, 9.5), ("pumpkin_f", 9.5, 3.5, .25), ("stem", 1.5, 2, 1.5), ("whole", 12, 11, 12), ("whole_f", 12, 11, .25)]
+    if d.get("club"):                                    # the kanabo: a long iron club with studs, and tiger stripes on her loincloth
+        out += [("club", 2.25, 11, 2.25), ("grip", 1.25, 3.5, 1.25), ("stud", .5, .5, .5)]
     if d.get("qing"):
         out += [("cap", 9, 3, 9), ("cap_brim", 10.5, .75, 10.5), ("button", 1.5, 1.5, 1.5), ("talisman", 3, 6, .25)]
     return out
@@ -96,6 +108,14 @@ def paint_hook(pt, pal, d):
         return pick(candle, 0.8, x, y) if eye or mouth else CLEAR
     pt("pumpkin_f", "all", lambda f, x, y, w, h: face(f, x, y, w, h, 0.3, 0.75))
     pt("whole_f", "all", lambda f, x, y, w, h: face(f, x, y, w, h))
+    iron = G.shades("#4a4a52")
+    pt("club", "all", lambda f, x, y, w, h: pick(iron, 0.4 + 0.2 * (x == 0) + (noise(x, y, 13) - 0.5) * 0.1, x, y))
+    pt("grip", "all", lambda f, x, y, w, h: pick(G.shades("#6a2a1a"), 0.45 + 0.2 * (y % 2), x, y))
+    pt("stud", "all", lambda f, x, y, w, h: pick(G.shades("#9a9aa2"), 0.7, x, y))
+    if pal.extra.get("tiger"):                           # the tiger-skin loincloth
+        black = G.shades("#1e1a14")
+        for p in ("flap_f", "flap_b"):
+            pt(p, "all", lambda f, x, y, w, h: pick(black, 0.4, x, y) if (y + x // 2) % 4 == 0 else None)
     hat = G.shades(pal.extra.get("hat", "#1a1a22"))
     pt("cap", "all", lambda f, x, y, w, h: pick(hat, 0.45 + 0.1 * (x % 3 == 0), x, y))
     pt("cap_brim", "all", lambda f, x, y, w, h: pick(hat, 0.35, x, y))
@@ -117,6 +137,12 @@ def build_hook(r, g, d):
         r.add("pumpkin_hat", "head", [0, hy + 8, z], [cube("pumpkin", [-4.75, hy + 7.4, -4.75 + z]), cube("pumpkin_f", [-4.75, hy + 8.2, -4.85 + z]),
                                                     cube("stem", [-0.75, hy + 12.3, -0.75 + z])])
         r.add("disguise", "root", [0, 0, 0], [cube("whole", [-6, 0, -6]), cube("whole_f", [-6, 0, -6.1]), cube("stem", [-0.75, 11, -0.75])])
+    if d.get("club"):                                    # held upright in her right hand, resting against her shoulder
+        px, py, pz = r.b["hand_r"]["pivot"]
+        cz = pz - 2.4
+        studs = [cube("stud", [px - 1.45 + 2.4 * (i % 2), py + 1.5 + 2.2 * (i // 2), cz - 0.25]) for i in range(8)]
+        studs += [cube("stud", [px - 0.25, py + 2.6 + 2.2 * i, cz - 1.45]) for i in range(3)]
+        r.add("club", "hand_r", [px, py - 1.5, pz], [cube("grip", [px - 0.625, py - 2.5, cz - 0.625]), cube("club", [px - 1.125, py + 1.0, cz - 1.125])] + studs)
     if d.get("qing"):
         r.add("qing_hat", "head", [0, hy + 8, z], [cube("cap", [-4.5, hy + 7.6, -4.5 + z]), cube("cap_brim", [-5.25, hy + 7.4, -5.25 + z]),
                                                  cube("button", [-0.75, hy + 10.6, -0.75 + z]), cube("talisman", [-1.5, hy + 2.2, -5.6 + z])])

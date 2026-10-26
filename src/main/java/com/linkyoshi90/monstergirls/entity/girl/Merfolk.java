@@ -48,7 +48,7 @@ import javax.annotation.Nullable;
 import java.util.UUID;
 
 /**
- * The sea family (merfolk_field_guide.html): orca, koi, shark, seal, axolotl, dolphin. Half the world is water: fast
+ * The sea family (merfolk_field_guide.html): orca, koi, shark, seal, axolotl, dolphin, dugong. Half the world is water: fast
  * swimmers who crawl slowly on land and dry out there; they sing at dusk, lead their favourite to treasure, share
  * their breath, hate drowned, and trade sea treasure for shiny things from the land. Each is true to her kind: the
  * shark attacks anything that swims (players too, until fed), the orca and the dolphin tease swimmers and sea life.
@@ -78,6 +78,10 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Drowned.class, true));
         if (species == GirlSpecies.ORCA_MERMAID) {
             this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Guardian.class, true, g -> this.bondedPlayer(BED_AFFECTION, 24) != null));
+            this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, com.linkyoshi90.monstergirls.entity.PenguinHarpy.class, 10, true, false,
+                    p -> !((com.linkyoshi90.monstergirls.entity.PenguinHarpy) p).isBefriended()));   // orcas hunt penguins nobody has befriended
+            this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, net.minecraft.world.entity.LivingEntity.class, 10, true, false,
+                    e -> com.linkyoshi90.monstergirls.compat.AlexsMobs.is(e, "seal")));   // and Alex's Mobs seals
         }
         if (species == GirlSpecies.SHARK_MERMAID) {                   // anything that swims is prey (blood draws her from further)
             this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, this::isSharkPrey));
@@ -85,6 +89,51 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         if (species == GirlSpecies.ORCA_MERMAID || species == GirlSpecies.DOLPHIN_MERMAID) this.goalSelector.addGoal(5, new TeaseGoal());
         if (species != GirlSpecies.AXOLOTL_MERMAID) this.goalSelector.addGoal(6, new ShellHuntGoal());
         this.goalSelector.addGoal(4, new FetchGoal());
+        this.goalSelector.addGoal(2, new SurfaceGoal());
+        if (species == GirlSpecies.AHUIZOTL_MERMAID) {                // a lit lantern in hand keeps a wild ahuizotl away
+            this.goalSelector.addGoal(1, new net.minecraft.world.entity.ai.goal.AvoidEntityGoal<>(this, Player.class, 8.0F, 1.1, 1.4,
+                    e -> e instanceof Player p && holdsLantern(p) && this.getAffection(p) < com.linkyoshi90.monstergirls.entity.Orders.AFFECTION));
+        }
+    }
+
+    // --- the ahuizotl ----------------------------------------------------------------------------------------------
+
+    public static boolean holdsLantern(Player p) {
+        return p.getMainHandItem().is(Items.LANTERN) || p.getOffhandItem().is(Items.LANTERN) || p.getMainHandItem().is(Items.SOUL_LANTERN)
+                || p.getOffhandItem().is(Items.SOUL_LANTERN);
+    }
+
+    /** A wild ahuizotl near a fishing hook, ready to snatch the catch (none comes near a lantern, nor steals from a friend). */
+    @Nullable
+    public static Merfolk thiefNear(net.minecraft.world.entity.Entity hook, Player fisher) {
+        if (holdsLantern(fisher)) return null;
+        for (Merfolk m : hook.level().getEntitiesOfClass(Merfolk.class, hook.getBoundingBox().inflate(12),
+                m -> m.isAlive() && !m.isBaby() && m.species == GirlSpecies.AHUIZOTL_MERMAID
+                        && m.getAffection(fisher) < com.linkyoshi90.monstergirls.entity.Orders.AFFECTION)) {
+            return m;
+        }
+        return null;
+    }
+
+    /** The hand on her tail takes the fish off your line. */
+    public void stealCatch(ServerLevel level, Player fisher) {
+        this.heal(4.0F);
+        this.startTimedAction(Action.LAUGH, 20);
+        this.playSound(SoundEvents.FOX_SNIFF, 1.0F, 1.4F);
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.SPLASH, this.getX(), this.getY() + 0.5, this.getZ(), 12, 0.4, 0.2, 0.4, 0.1);
+        fisher.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.ahuizotl_steal", this.getDisplayName()), true);
+    }
+
+    private long nextCatch;
+
+    /** Befriended, she fishes for her friend now and then (in the water, near them). */
+    private void fishForFriend(ServerLevel level) {
+        if (!this.isInWater() || level.getGameTime() < this.nextCatch) return;
+        Player p = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (p == null) return;
+        this.nextCatch = level.getGameTime() + 1800 + this.random.nextInt(1800);
+        this.spawnAtLocation(new ItemStack(this.random.nextInt(3) == 0 ? Items.SALMON : Items.COD));
+        this.playSound(SoundEvents.FISHING_BOBBER_SPLASH, 0.8F, 1.2F);
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
@@ -94,13 +143,18 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
             case SEAL_MERMAID -> girlAttributes(22, 0.22, 2);
             case AXOLOTL_MERMAID -> girlAttributes(18, 0.22, 3);
             case DOLPHIN_MERMAID -> girlAttributes(24, 0.3, 3);
+            case DUGONG_MERMAID -> girlAttributes(28, 0.2, 2);
+            case AHUIZOTL_MERMAID -> girlAttributes(22, 0.28, 3);
+            case SIREN_MERMAID -> girlAttributes(26, 0.26, 4);
+            case AXOLUME_MERMAID -> girlAttributes(18, 0.24, 2);
+            case MANTARROW_MERMAID -> girlAttributes(24, 0.28, 2);
             default -> girlAttributes(20, 0.24, 2);
         };
     }
 
     @Override
     protected PathNavigation createNavigation(Level level) {
-        return new AmphibiousPathNavigation(this, level);
+        return new com.linkyoshi90.monstergirls.entity.ai.SwimmerNavigation(this, level);
     }
 
     @Override
@@ -180,8 +234,15 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
 
     @Override
     public boolean isFood(ItemStack stack) {
+        if (this.species == GirlSpecies.DUGONG_MERMAID) return stack.is(Items.SEAGRASS) || stack.is(Items.KELP);   // a grazer: no fish
         return stack.is(ItemTags.FISHES) || ((this.species == GirlSpecies.KOI_MERMAID || this.species == GirlSpecies.AXOLOTL_MERMAID)
                 && (stack.is(Items.KELP) || stack.is(Items.DRIED_KELP) || stack.is(Items.BREAD)));
+    }
+
+    /** Seagrass is what wins a dugong over. */
+    @Override
+    protected int foodValue(Player player, ItemStack stack) {
+        return this.species == GirlSpecies.DUGONG_MERMAID && stack.is(Items.SEAGRASS) ? 3 : super.foodValue(player, stack);
     }
 
     private static boolean shiny(ItemStack s) {
@@ -192,6 +253,11 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     @Nullable
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        if (this.isManta() && stack.isEmpty() && !player.isShiftKeyDown() && !this.isBaby() && !this.isVehicle()
+                && this.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {   // a friend climbs on
+            if (!this.level().isClientSide) player.startRiding(this);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         if (this.isBaby() && stack.is(Items.WATER_BUCKET)) {                 // the young fit in a bucket
             return net.minecraft.world.entity.animal.Bucketable.bucketMobPickup(player, hand, this).orElse(null);
         }
@@ -232,6 +298,8 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
             case SEAL_MERMAID, ORCA_MERMAID -> new ItemStack(this.random.nextBoolean() ? Items.COD : Items.SALMON, 2);
             case DOLPHIN_MERMAID -> new ItemStack(this.random.nextInt(4) == 0 ? Items.NAUTILUS_SHELL : Items.TROPICAL_FISH);
             case AXOLOTL_MERMAID -> new ItemStack(this.random.nextBoolean() ? Items.TROPICAL_FISH : Items.CLAY_BALL);
+            case AHUIZOTL_MERMAID -> new ItemStack(this.random.nextInt(4) == 0 ? Items.FISHING_ROD : this.random.nextBoolean() ? Items.SALMON : Items.COD,
+                    this.random.nextInt(4) == 0 ? 1 : 2);
             default -> this.seaTreasure(this.getAffection(player));
         };
     }
@@ -326,6 +394,14 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.playDead > 0 && --this.playDead == 0 && this.getAction() == Action.LYING) this.setAction(Action.NONE);
         if (this.tickCount % 10 == 0) this.breathe(server);
+        if (this.species == GirlSpecies.AHUIZOTL_MERMAID && !this.isBaby() && this.tickCount % 100 == 0) this.fishForFriend(server);
+        if (this.species == GirlSpecies.SIREN_MERMAID && !this.isBaby() && this.tickCount % 10 == 0) this.sirenSong(server);
+        if (this.isManta() && !this.isBaby()) this.tickManta();
+        if (this.species == GirlSpecies.AXOLUME_MERMAID && !this.isBaby()) {        // she lights the water, and her friend heals beside her
+            this.glow(server, 10);
+            Player healed = this.tickCount % 40 == 0 ? this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8) : null;
+            if (healed != null) healed.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 80, 0, true, false));
+        }
         this.levitate();
         if (this.needsAir && this.isInWater()) this.setDeltaMovement(this.getDeltaMovement().add(0.0, 0.05, 0.0));   // up for air
         if (!this.isBaby() && this.random.nextInt(12000) == 0) this.spawnAtLocation(new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.MERFOLK_SCALE.get()));
@@ -362,6 +438,85 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
                 server.sendParticles(ParticleTypes.DOLPHIN, this.getX(), this.getY() + 0.5, this.getZ(), 6, 0.3, 0.2, 0.3, 0.0);
             }
         }
+    }
+
+    // --- the mantarrow: a ride across the sea ---------------------------------------------------------------------------
+
+    public boolean isManta() {
+        return this.species == GirlSpecies.MANTARROW_MERMAID;
+    }
+
+    @Nullable
+    @Override
+    public LivingEntity getControllingPassenger() {
+        return this.isManta() && this.getFirstPassenger() instanceof Player p ? p : super.getControllingPassenger();
+    }
+
+    @Override
+    protected void tickRidden(Player player, Vec3 travel) {
+        super.tickRidden(player, travel);
+        this.setRot(player.getYRot(), player.getXRot() * 0.5F);
+        this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
+        if (this.isInWater()) {                                         // faster than a boat; she keeps her rider at the surface
+            float speed = player.zza > 0 ? (player.isSprinting() ? 0.6F : 0.48F) : 0.0F;
+            Vec3 fwd = Vec3.directionFromRotation(0, this.getYRot()).scale(speed);
+            double up = this.getFluidHeight(net.minecraft.tags.FluidTags.WATER) > 0.9 ? 0.08 : this.horizontalCollision ? 0.4 : 0.0;
+            this.setDeltaMovement(fwd.x, Math.max(this.getDeltaMovement().y, up), fwd.z);
+            player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 60, 0, true, false));
+        }
+    }
+
+    @Override
+    protected Vec3 getRiddenInput(Player player, Vec3 travel) {
+        return new Vec3(player.xxa * 0.5F, 0.0, player.zza > 0 ? player.zza : player.zza * 0.25F);
+    }
+
+    @Override
+    protected float getRiddenSpeed(Player player) {
+        return 0.2F;
+    }
+
+    @Override
+    public boolean canBeRiddenUnderFluidType(net.neoforged.neoforge.fluids.FluidType type, net.minecraft.world.entity.Entity rider) {
+        return this.isManta() || super.canBeRiddenUnderFluidType(type, rider);
+    }
+
+    /** Now and then she leaps clear of the waves. */
+    private void tickManta() {
+        if (this.isVehicle() || !this.isInWater() || this.tickCount % 100 != 0 || this.random.nextInt(3) != 0) return;
+        if (this.getFluidHeight(net.minecraft.tags.FluidTags.WATER) > 1.5) return;
+        Vec3 fwd = Vec3.directionFromRotation(0, this.getYRot()).scale(0.6);
+        this.setDeltaMovement(fwd.x, 0.9, fwd.z);
+        this.playSound(SoundEvents.DOLPHIN_JUMP, 1.0F, 0.8F);
+    }
+
+    private long nextSongMessage;
+
+    /**
+     * The siren sings whenever someone is near: strangers within 24 blocks are drawn toward her, step by step; friends
+     * swimming within 16 get Conduit Power.
+     */
+    public void sirenSong(ServerLevel level) {
+        boolean sang = false;
+        for (Player p : level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(24), p -> !p.isSpectator() && !p.isCreative())) {
+            boolean friend = this.getAffection(p) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION;
+            if (friend) {
+                if (!p.isInWater() || p.distanceToSqr(this) > 16 * 16) continue;
+                p.addEffect(new MobEffectInstance(MobEffects.CONDUIT_POWER, 220, 0, true, true));
+            } else if (p.distanceToSqr(this) > 2.5 * 2.5) {
+                Vec3 pull = this.position().subtract(p.position()).normalize().scale(0.08);
+                p.setDeltaMovement(p.getDeltaMovement().add(pull.x, 0, pull.z));
+                p.hurtMarked = true;                                             // send the nudge to the client
+                if (level.getGameTime() >= this.nextSongMessage) {
+                    this.nextSongMessage = level.getGameTime() + 300;
+                    p.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.siren_song", this.getDisplayName()), true);
+                }
+            }
+            sang = true;
+        }
+        if (!sang) return;
+        if (this.getAction() == Action.NONE) this.startTimedAction(Action.SING, 40);
+        level.sendParticles(ParticleTypes.NOTE, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 1, 0.4, 0.2, 0.4, this.random.nextDouble());
     }
 
     /** After an axolotl fights beside her player, the player regenerates (like a vanilla axolotl). */
@@ -561,6 +716,74 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         Vec3 v = this.getDeltaMovement();
         this.setDeltaMovement(v.x, Math.max(-0.08, Math.min(0.08, (target - this.getY()) * 0.1)), v.z);
         this.fallDistance = 0;
+    }
+
+    // --- coming up for air -------------------------------------------------------------------------------------------
+
+    /** When she next comes up for a breath (-1: not yet decided). */
+    private long nextBreath = -1;
+
+    public void setNextBreath(long time) {
+        this.nextBreath = time;
+    }
+
+    /**
+     * She breathes water, but every one to three minutes she rises to the surface, puts her head out and takes a breath
+     * for a few seconds anyway, as a seal or a dolphin would: it sells the illusion.
+     */
+    class SurfaceGoal extends net.minecraft.world.entity.ai.goal.Goal {
+        private int ticks;
+        private int atSurface;
+
+        SurfaceGoal() {
+            this.setFlags(java.util.EnumSet.of(Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            Merfolk m = Merfolk.this;
+            if (m.nextBreath < 0) m.nextBreath = m.level().getGameTime() + 1200 + m.random.nextInt(2400);
+            return m.level().getGameTime() >= m.nextBreath && m.getTarget() == null && m.isInWater() && m.isEyeInFluid(FluidTags.WATER);
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.ticks < 300 && this.atSurface < 60 && Merfolk.this.getTarget() == null && Merfolk.this.isInWater();
+        }
+
+        @Override
+        public void start() {
+            this.ticks = 0;
+            this.atSurface = 0;
+            Merfolk.this.getNavigation().stop();
+        }
+
+        @Override
+        public void stop() {
+            Merfolk m = Merfolk.this;
+            m.nextBreath = m.level().getGameTime() + 1200 + m.random.nextInt(2400);
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+        @Override
+        public void tick() {
+            Merfolk m = Merfolk.this;
+            this.ticks++;
+            m.setXRot(-30.0F);
+            if (m.isEyeInFluid(FluidTags.WATER)) {
+                m.setDeltaMovement(m.getDeltaMovement().multiply(0.8, 1.0, 0.8).add(0.0, 0.06, 0.0));   // straight up
+                return;
+            }
+            if (this.atSurface++ == 0 && m.level() instanceof ServerLevel server) {                      // the breath
+                server.sendParticles(ParticleTypes.SPLASH, m.getX(), m.getEyeY(), m.getZ(), 12, 0.3, 0.1, 0.3, 0.1);
+                m.playSound(SoundEvents.GENERIC_SPLASH, 0.4F, 1.4F);
+            }
+            if (m.getDeltaMovement().y < 0) m.setDeltaMovement(m.getDeltaMovement().add(0.0, 0.04, 0.0));   // keep her head out
+        }
     }
 
     // --- sharing her breath ----------------------------------------------------------------------------------------

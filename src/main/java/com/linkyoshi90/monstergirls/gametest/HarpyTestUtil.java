@@ -29,8 +29,13 @@ final class HarpyTestUtil {
      * the level's player list, so mob AI (nearest-player lookups) can see it. Remove it with {@link #remove}.
      */
     static ServerPlayer survivalPlayer(GameTestHelper helper, BlockPos relativePos) {
+        return survivalPlayer(helper, relativePos, "test-player");
+    }
+
+    /** The same, under a name of its own (for lookups by name). */
+    static ServerPlayer survivalPlayer(GameTestHelper helper, BlockPos relativePos, String name) {
         MinecraftServer server = helper.getLevel().getServer();
-        CommonListenerCookie cookie = CommonListenerCookie.createInitial(new GameProfile(UUID.randomUUID(), "test-player"), false);
+        CommonListenerCookie cookie = CommonListenerCookie.createInitial(new GameProfile(UUID.randomUUID(), name), false);
         ServerPlayer player = new ServerPlayer(server, helper.getLevel(), cookie.gameProfile(), cookie.clientInformation());
         Connection connection = new Connection(PacketFlow.SERVERBOUND);
         new EmbeddedChannel(connection);

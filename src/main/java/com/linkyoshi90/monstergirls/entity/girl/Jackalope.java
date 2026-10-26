@@ -47,7 +47,8 @@ import java.util.List;
  * (they bolt from sprinters and predators), big jumpers, won with carrots. At high friendship she follows her favourite
  * player and brings luck with her. Inaba comes down only under a full moon and warms up twice as fast once caught; Jack
  * charges with her antlers; the Easter Bunny hides painted eggs; the Al-mi'raj clan defends its own; the volcano
- * rabbit lives by lava, is very shy and runs out of breath.
+ * rabbit lives by lava, is very shy and runs out of breath. The wolpertinger jumps twice, glides down from any height on
+ * her little wings, and now and then swaps a player's boots for leather ones (feed her and she gives them back).
  */
 public class Jackalope extends AbstractMonsterGirl {
     public static final int FOLLOW_AFFECTION = BED_AFFECTION;
@@ -60,6 +61,14 @@ public class Jackalope extends AbstractMonsterGirl {
     private long nextEgg;
     private long nextShed;
     private final List<BlockPos> eggs = new ArrayList<>();
+    private boolean jumped;
+    private boolean doubleJumped;
+    private double lastDy;
+    /** The wolpertinger's prize: someone's boots, and whose. */
+    private ItemStack boots = ItemStack.EMPTY;
+    @Nullable
+    private java.util.UUID bootsOwner;
+    private long nextBootPrank;
 
     public Jackalope(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
@@ -91,6 +100,8 @@ public class Jackalope extends AbstractMonsterGirl {
             case JACK_JACKALOPE -> girlAttributes(22, 0.33, 5).add(Attributes.JUMP_STRENGTH, 0.66).add(Attributes.ATTACK_KNOCKBACK, 1.5);
             case AL_MIRAJ_JACKALOPE -> girlAttributes(20, 0.34, 6).add(Attributes.JUMP_STRENGTH, 0.62);
             case VOLCANO_JACKALOPE -> girlAttributes(10, 0.36, 1).add(Attributes.JUMP_STRENGTH, 0.55);
+            case WOLPERTINGER_JACKALOPE -> girlAttributes(16, 0.34, 1).add(Attributes.JUMP_STRENGTH, 0.7);
+            case CLOCKHARE_JACKALOPE -> girlAttributes(16, 0.33, 1).add(Attributes.JUMP_STRENGTH, 0.62);
             default -> girlAttributes(16, 0.32, 1).add(Attributes.JUMP_STRENGTH, 0.62);
         };
     }
@@ -118,7 +129,97 @@ public class Jackalope extends AbstractMonsterGirl {
 
     @Override
     protected int foodValue(Player player, ItemStack stack) {
+        if (!this.boots.isEmpty() && player.getUUID().equals(this.bootsOwner)) this.returnBoots(player);
         return stack.is(Items.GOLDEN_CARROT) ? 3 : 1;
+    }
+
+    // --- the wolpertinger -----------------------------------------------------------------------------------------
+
+    public ItemStack getBoots() {
+        return this.boots;
+    }
+
+    /** Her prank: your boots for a pair of leather ones, once a day at most, and only from someone close enough. */
+    public boolean swapBoots(Player p) {
+        ItemStack worn = p.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.FEET);
+        if (!this.boots.isEmpty() || worn.isEmpty() || worn.is(Items.LEATHER_BOOTS)) return false;
+        this.boots = worn.copy();
+        this.bootsOwner = p.getUUID();
+        p.setItemSlot(net.minecraft.world.entity.EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
+        this.startTimedAction(Action.LAUGH, 30);
+        this.playSound(SoundEvents.RABBIT_JUMP, 1.0F, 1.6F);
+        p.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.boots_swapped", this.getDisplayName()), true);
+        return true;
+    }
+
+    private void returnBoots(Player p) {
+        if (!p.getInventory().add(this.boots)) p.drop(this.boots, false);
+        this.boots = ItemStack.EMPTY;
+        this.bootsOwner = null;
+    }
+
+    /** A second jump at the top of the first; a glide down from any height. */
+    private void tickWings(ServerLevel level) {
+        double dy = this.getDeltaMovement().y;
+        if (this.onGround()) {
+            this.jumped = false;
+            this.doubleJumped = false;
+        } else {
+            if (dy > 0.2 && this.lastDy <= 0.0) this.jumped = true;
+            if (this.jumped && !this.doubleJumped && this.lastDy > 0.0 && dy <= 0.0 && !this.getNavigation().isDone()) {   // still going somewhere
+                this.doubleJumped = true;
+                this.setDeltaMovement(this.getDeltaMovement().add(0, 0.45, 0));
+                level.sendParticles(ParticleTypes.CLOUD, this.getX(), this.getY(), this.getZ(), 3, 0.2, 0.0, 0.2, 0.0);
+            }
+            if (dy < -0.15 && !this.isInWater()) {
+                this.setDeltaMovement(this.getDeltaMovement().x, -0.15, this.getDeltaMovement().z);
+                this.resetFallDistance();
+            }
+        }
+        this.lastDy = this.getDeltaMovement().y;
+        if (this.tickCount % 40 == 0 && level.getGameTime() >= this.nextBootPrank && !this.isBaby() && this.random.nextInt(6) == 0) {
+            Player p = this.level().getNearestPlayer(this, 2.5);
+            if (p != null && !p.isCreative() && !p.isSpectator() && this.swapBoots(p)) this.nextBootPrank = level.getGameTime() + 24000;
+        }
+    }
+
+    // --- the clockhare ------------------------------------------------------------------------------------------------
+
+    /** Ticks without sleep after which phantoms come (three nights). */
+    public static final int PHANTOM_TICKS = 72000;
+    private int clockPhase = -1;
+    private long phantomWarned = -1;
+
+    /** Her watch: a chime at dawn and at dusk, a warning when her friend has not slept for three nights, Haste beside her. */
+    private void tickClock(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        int phase = level.getDayTime() % 24000L < 12000L ? 0 : 1;
+        if (this.clockPhase >= 0 && phase != this.clockPhase) this.chime(level, friend, phase == 0 ? "dawn" : "dusk");
+        this.clockPhase = phase;
+        if (friend == null) return;
+        if (friend.distanceToSqr(this) < 8 * 8) friend.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 60, 0, true, false));
+        long night = level.getDayTime() / 24000L;
+        if (phase == 1 && this.phantomWarned != night && phantomsDue(friend)) {
+            this.phantomWarned = night;
+            this.chime(level, friend, "phantoms");
+        }
+    }
+
+    public static boolean phantomsDue(Player p) {
+        return p instanceof net.minecraft.server.level.ServerPlayer sp
+                && sp.getStats().getValue(net.minecraft.stats.Stats.CUSTOM.get(net.minecraft.stats.Stats.TIME_SINCE_REST)) >= PHANTOM_TICKS;
+    }
+
+    /** "dawn", "dusk" or "phantoms": the watch chimes, and her friend is told. */
+    public void chime(ServerLevel level, @Nullable Player friend, String which) {
+        this.playSound(SoundEvents.NOTE_BLOCK_BELL.value(), 1.0F, which.equals("phantoms") ? 0.6F : 1.4F);
+        level.sendParticles(ParticleTypes.NOTE, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 1, 0.2, 0.1, 0.2, 0.6);
+        if (friend != null) friend.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.clock_" + which, this.getDisplayName()), true);
+    }
+
+    @Override
+    protected boolean isGliding() {
+        return this.species == GirlSpecies.WOLPERTINGER_JACKALOPE && this.getDeltaMovement().y < -0.1;
     }
 
     /** Petting only counts if you crouch down to her level. */
@@ -176,6 +277,8 @@ public class Jackalope extends AbstractMonsterGirl {
             case EASTER_JACKALOPE -> new ItemStack(ModBlocks.PAINTED_EGG.get());
             case AL_MIRAJ_JACKALOPE -> new ItemStack(r < 60 ? Items.CACTUS : Items.GOLD_NUGGET, r < 60 ? 1 : 3);
             case VOLCANO_JACKALOPE -> new ItemStack(r < 50 ? Items.MAGMA_CREAM : Items.COAL);
+            case WOLPERTINGER_JACKALOPE -> new ItemStack(r < 50 ? Items.FEATHER : r < 80 ? Items.SWEET_BERRIES : Items.RABBIT_HIDE, 2);
+            case CLOCKHARE_JACKALOPE -> new ItemStack(r < 40 ? Items.GOLD_NUGGET : r < 75 ? Items.CARROT : r < 95 ? Items.COPPER_INGOT : Items.CLOCK, r < 75 ? 3 : 1);
             default -> new ItemStack(r < 50 ? Items.CARROT : Items.DANDELION, 2);
         };
     }
@@ -189,10 +292,16 @@ public class Jackalope extends AbstractMonsterGirl {
 
     // --- combat --------------------------------------------------------------------------------------------------
 
-    /** Short drops (up to six blocks) do not hurt a jackalope. */
+    /** Short drops (up to six blocks) do not hurt a jackalope; none hurt the gliding wolpertinger. */
     @Override
     public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
-        return super.causeFallDamage(distance - 3.0F, multiplier, source);
+        return this.species != GirlSpecies.WOLPERTINGER_JACKALOPE && super.causeFallDamage(distance - 3.0F, multiplier, source);
+    }
+
+    @Override
+    protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
+        super.dropCustomDeathLoot(level, source, recentlyHit);
+        if (!this.boots.isEmpty()) this.spawnAtLocation(this.boots);
     }
 
     @Override
@@ -243,6 +352,8 @@ public class Jackalope extends AbstractMonsterGirl {
             if (p != null) p.addEffect(new MobEffectInstance(MobEffects.LUCK, 100, this.getAffection(p) >= 60 ? 1 : 0, true, false));
         }
         if (this.species == GirlSpecies.VOLCANO_JACKALOPE) this.tickStamina();
+        if (this.species == GirlSpecies.WOLPERTINGER_JACKALOPE) this.tickWings(server);
+        if (this.species == GirlSpecies.CLOCKHARE_JACKALOPE && !this.isBaby() && this.tickCount % 20 == 0) this.tickClock(server);
         if (this.species == GirlSpecies.INABA_JACKALOPE && !server.isDay() && this.tickCount % 20 == 0) {
             server.sendParticles(ParticleTypes.END_ROD, this.getX(), this.getY() + 1.2, this.getZ(), 1, 0.3, 0.4, 0.3, 0.0);
         }
@@ -371,6 +482,11 @@ public class Jackalope extends AbstractMonsterGirl {
         tag.putBoolean("Caught", this.caught);
         tag.putLong("NextEgg", this.nextEgg);
         tag.putLong("NextShed", this.nextShed);
+        if (!this.boots.isEmpty()) {
+            tag.put("Boots", this.boots.save(this.registryAccess()));
+            if (this.bootsOwner != null) tag.putUUID("BootsOwner", this.bootsOwner);
+        }
+        tag.putLong("NextBootPrank", this.nextBootPrank);
         net.minecraft.nbt.ListTag l = new net.minecraft.nbt.ListTag();
         for (BlockPos p : this.eggs) l.add(LongTag.valueOf(p.asLong()));
         tag.put("Eggs", l);
@@ -382,6 +498,9 @@ public class Jackalope extends AbstractMonsterGirl {
         this.caught = tag.getBoolean("Caught");
         this.nextEgg = tag.getLong("NextEgg");
         this.nextShed = tag.getLong("NextShed");
+        this.boots = tag.contains("Boots") ? ItemStack.parseOptional(this.registryAccess(), tag.getCompound("Boots")) : ItemStack.EMPTY;
+        this.bootsOwner = tag.hasUUID("BootsOwner") ? tag.getUUID("BootsOwner") : null;
+        this.nextBootPrank = tag.getLong("NextBootPrank");
         this.eggs.clear();
         for (Tag t : tag.getList("Eggs", Tag.TAG_LONG)) this.eggs.add(BlockPos.of(((LongTag) t).getAsLong()));
     }

@@ -63,14 +63,51 @@ SPECIES = {
                   "ash": dict(FUR="#7a7672", HAIR="#5a5652", LIGHT="#c8c4c0", MARK="#3a3632"),
                   "cinder": dict(FUR="#7a3e2a", HAIR="#5a2a1a", LIGHT="#d89070", MARK="#e86a2a"),
                   "golden": dict(FUR="#b8945a", HAIR="#9a7440", LIGHT="#f0dcb0", MARK="#6a4e2a")}),
+    # tenth wave: the clockhare, a top hat between her ears, a waistcoat, a brass pocket watch on a chain at her hip
+    "clockhare_jackalope": dict(
+        build="slim", outfit=dict(top=["sweater", "vest"], bottom="shorts", extras=["belt"], colors=dict(leather="#3a2a3a", cloth2="#2a2430")),
+        hair="bob", bangs="blunt", ears="rabbit", legs="fur", foot="long", tail=PUFF, tail_look="puff", clock=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e1a1c", FUR="#2a2628", LIGHT="#f0ece6", MARK="#141214", EYE="#c8902a", CLOTH="#f0ece6", TRIM="#d8a840",
+                 INNER="#e0a8a8", extra=dict(hat="#1e1a22", band="#8a2a3a", watch="#d8a840")),
+        variants={"white": dict(HAIR="#f4f2ee", FUR="#f6f4f0", LIGHT="#ffffff", MARK="#c8c4be", EYE="#c84a5a", CLOTH="#3a3a5a",
+                                extra=dict(hat="#2a2a3a", band="#c8c8d8", watch="#d0d4dc")),
+                  "brown": dict(HAIR="#5a3a24", FUR="#7a5236", LIGHT="#e8d4bc", MARK="#3a2416", CLOTH="#e8dcc0", extra=dict(hat="#3a2a1e", band="#2a5a3a", watch="#c87a4a")),
+                  "grey": dict(HAIR="#5a5a5e", FUR="#7a7a80", LIGHT="#e0e0e4", MARK="#3a3a3e", CLOTH="#e8e0f0", extra=dict(hat="#2a2430", band="#6a3a8a", watch="#f0d060")),
+                  "spotted": dict(HAIR="#1e1a1c", FUR="#f4f2ee", MARK="#1e1a1c", pattern="patches", CLOTH="#c8d8e8",
+                                  extra=dict(hat="#1e1a22", band="#3a6aa8", watch="#d8a840"))}),
+    # ninth wave: the wolpertinger, antlers and small feathered wings she glides on (the "fly" animation)
+    "wolpertinger_jackalope": dict(
+        build="petite", outfit=dict(top=["halter", "vest"], bottom="shorts", extras=["belt", "scarf"],
+                                    colors=dict(leather="#3a5a2a", cloth2="#3a5a2a", scarf="#c83a2a")),
+        hair="twintails", bangs="jagged", ears="rabbit", legs="fur", foot="long", tail=PUFF, tail_look="puff", horns="antlers",
+        wings="feather", wing_scale=0.5, flies=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#7a5432", FUR="#9a7048", LIGHT="#ecdcc0", MARK="#4a3020", EYE="#3a7a3a", CLOTH="#f0ece0", TRIM="#c8a040",
+                 INNER="#e0a8a0", extra=dict(horn="#e8dcc0", wing="#a8683a", wing_tip="#3a2414")),
+        variants={"grey": dict(FUR="#8a8682", HAIR="#6a6660", LIGHT="#e4e0dc", MARK="#3a3836", extra=dict(horn="#e8dcc0", wing="#7a7a72", wing_tip="#2a5a4a")),
+                  "white": dict(FUR="#f4f2ee", HAIR="#ece8e2", LIGHT="#ffffff", MARK="#b8b4ae", EYE="#c84a5a",
+                                extra=dict(horn="#c8b490", wing="#f4f2ee", wing_tip="#a8a49e")),
+                  "red": dict(FUR="#c8622e", HAIR="#a84a22", LIGHT="#f0d0b0", MARK="#6a2a12", extra=dict(horn="#e8dcc0", wing="#c8622e", wing_tip="#2a1a10")),
+                  "black": dict(FUR="#2a2628", HAIR="#1a1618", LIGHT="#5a5458", MARK="#0e0c0e", EYE="#c8a030",
+                                extra=dict(horn="#f0e8d8", wing="#1e1a22", wing_tip="#3a3a5a"))}),
 }
 
 
 def declare_hook(sp, d):
+    if d.get("clock"):
+        return [("hat_brim", 6, .5, 6), ("hat_crown", 4, 4, 4), ("hat_band", 4.25, .75, 4.25), ("watch", 1.75, 1.75, .5), ("chain", 2.5, .25, .25)]
     return [("basket", 3, 2.25, 2.5), ("handle", .5, 2.5, .5), ("egg", 1, 1.25, 1)] if d.get("basket") else []
 
 
 def paint_hook(pt, pal, d):
+    if d.get("clock"):
+        hat, band, brass = G.shades(pal.extra.get("hat", "#1e1a22")), G.shades(pal.extra.get("band", "#8a2a3a")), G.shades(pal.extra.get("watch", "#d8a840"))
+        pt("hat_brim", "all", lambda f, x, y, w, h: pick(hat, 0.4, x, y))
+        pt("hat_crown", "all", lambda f, x, y, w, h: pick(hat, 0.45 + 0.1 * (f == "up"), x, y))
+        pt("hat_band", "all", lambda f, x, y, w, h: pick(band, 0.5, x, y))
+        pt("watch", "all", lambda f, x, y, w, h: (pick(G.shades("#f4f0e4"), 0.7, x, y) if 0 < x < w - 1 and 0 < y < h - 1 else pick(brass, 0.6, x, y))
+           if f == "north" else pick(brass, 0.5, x, y))
+        pt("chain", "all", lambda f, x, y, w, h: pick(brass, 0.6 + 0.2 * (x % 2), x, y))
+        return
     if not d.get("basket"):
         return
     wicker = G.shades("#b8884a")
@@ -81,6 +118,13 @@ def paint_hook(pt, pal, d):
 
 
 def build_hook(r, g, d):
+    if d.get("clock"):                                   # a top hat set between her ears; the watch on its chain at her right hip
+        hy, z = g.hy, g.z
+        r.add("tophat", "head", [0, hy + 9.0, z], [cube("hat_brim", [-3, hy + 9.0, -3 + z]), cube("hat_crown", [-2, hy + 9.5, -2 + z]),
+                                                  cube("hat_band", [-2.125, hy + 9.6, -2.125 + z])])
+        hw = G.S("hips")[0]
+        r.put("body", cube("watch", [-hw / 2 - 0.9, 10.6, -2.2 + z]), cube("chain", [-hw / 2 + 0.6, 12.3, -2.1 + z]))
+        return
     if not d.get("basket"):
         return
     hx = -(G.S("chest")[0] / 2 + G.S("arm_up")[0] / 2)

@@ -24,6 +24,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
@@ -61,7 +62,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * home, bath cooldown, carrying one small item in her hands (eating it if it's food, otherwise dropping it
  * somewhere later), and her affection for each player (raised by feeding and petting; see /monstergirls bonds).
  */
-public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, FlyingAnimal, Bonded, GiftGiver {
+public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, FlyingAnimal, Bonded, GiftGiver, Painted {
     private static final EntityDataAccessor<Byte> DATA_ACTION =
             SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> DATA_BABY =
@@ -69,6 +70,8 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     /** How far along her pregnancy is, 0-100, for the renderer to round out her belly. */
     private static final EntityDataAccessor<Byte> DATA_BELLY =
             SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> DATA_MOONSTRUCK =
+            SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.BOOLEAN);
     /** Gifts for a favourite player come every five to ten minutes. */
     private static final int GIFT_INTERVAL = 6000;
     private static final Map<String, RawAnimation> ANIMATIONS = new ConcurrentHashMap<>();
@@ -86,7 +89,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     /** How far away a harpy hears (and reacts to) a jukebox playing. */
     public static final int MUSIC_RANGE = 16;
 
-    public enum Action { NONE, SINGING, BATHING, CAWING, KNOCKING, PRANKING, DISPLAYING, KICKING, BROODING, HOOTING, SLEEPING, POUNCING, BEGGING, DANCING, STRIKING, CRYING, CACHING, SITTING, LYING, NESTING }
+    public enum Action { NONE, SINGING, BATHING, CAWING, KNOCKING, PRANKING, DISPLAYING, KICKING, BROODING, HOOTING, SLEEPING, POUNCING, BEGGING, DANCING, STRIKING, CRYING, CACHING, SITTING, LYING, NESTING, DRINKING, CLACKING, PERCHING }
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -176,6 +179,8 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         builder.define(DATA_ACTION, (byte) Action.NONE.ordinal());
         builder.define(DATA_BABY, false);
         builder.define(DATA_BELLY, (byte) 0);
+        builder.define(DATA_MOONSTRUCK, false);
+        builder.define(DATA_PAINT, (byte) 0);
     }
 
     public Action getAction() {
@@ -263,6 +268,11 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     }
 
     /** Whether any player at all has won some of her affection. */
+    /** The highest affection she has for anyone. */
+    public int bestAffection() {
+        return this.affection.values().stream().mapToInt(Integer::intValue).max().orElse(0);
+    }
+
     public boolean hasAnyAffection() {
         return this.affection.values().stream().anyMatch(a -> a > 0);
     }
@@ -274,6 +284,8 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     /** Empty main hand, not sneaking: a pat on the head. Species add their own reaction in {@link #onPetted}. */
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
+        InteractionResult paint = Painted.interact(this, this, player, hand);
+        if (paint != null) return paint;
         if (hand == InteractionHand.MAIN_HAND && player.getMainHandItem().is(Items.STICK)) {
             if (!this.level().isClientSide) Orders.onStick(this, this.orders, player);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
@@ -313,6 +325,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        tag.putBoolean("Waxed", this.waxed);
         if (this.homePos != null) tag.putLong("Home", this.homePos.asLong());
         CompoundTag affectionTag = new CompoundTag();
         this.affection.forEach((uuid, a) -> affectionTag.putInt(uuid.toString(), a));
@@ -322,6 +335,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.gestation.save(tag);
         if (this.father != null) tag.putUUID("Father", this.father);
         tag.putBoolean("OrderedToSit", this.orderedToSit);
+        if (this.getPaint() > 0) tag.putString("Paint", this.getPaintName());
         tag.put("Orders", this.orders.save());
         tag.putLong("NextGift", this.nextGiftTime);
         if (this.roost != null) tag.putLong("Roost", this.roost.asLong());
@@ -332,6 +346,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.waxed = tag.getBoolean("Waxed");
         this.homePos = tag.contains("Home") ? BlockPos.of(tag.getLong("Home")) : null;
         if (tag.contains("Variant")) this.variantFromData = true;
         this.entityData.set(DATA_BABY, tag.getBoolean("Baby"));
@@ -339,6 +354,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.gestation.load(tag);
         this.father = tag.hasUUID("Father") ? tag.getUUID("Father") : null;
         this.orderedToSit = tag.getBoolean("OrderedToSit");
+        if (tag.contains("Paint")) this.setPaint(com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.PAINTS.indexOf(tag.getString("Paint")) + 1);
         this.orders.load(tag.getCompound("Orders"));
         this.nextGiftTime = tag.contains("NextGift") ? tag.getLong("NextGift") : -1;
         this.affection.clear();
@@ -535,6 +551,16 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     }
 
     @Override
+    public boolean isMoonstruck() {
+        return this.entityData.get(DATA_MOONSTRUCK);
+    }
+
+    @Override
+    public void setMoonstruck(boolean moonstruck) {
+        this.entityData.set(DATA_MOONSTRUCK, moonstruck);
+    }
+
+    @Override
     public void settleInBed() {
         this.setAction(Action.LYING);
     }
@@ -605,6 +631,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     public void aiStep() {
         super.aiStep();
         if (this.level() instanceof ServerLevel) {
+            Painted.tickCopper(this, this);
             this.gestation.tick();
             if (this.isBaby() && ++this.growTicks >= GROW_TICKS) this.setBaby(false);
             if (this.tickCount % 10 == 0) this.entityData.set(DATA_BELLY, (byte) Math.round(this.gestation.progress() * 100));
@@ -812,5 +839,54 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.geoCache;
+    }
+
+    // --- Harmontide paints (as for the girls, see AbstractMonsterGirl.PAINTS) --------------------------------------
+
+    private static final net.minecraft.network.syncher.EntityDataAccessor<Byte> DATA_PAINT =
+            net.minecraft.network.syncher.SynchedEntityData.defineId(AbstractHarpy.class, net.minecraft.network.syncher.EntityDataSerializers.BYTE);
+
+    /** 0 unpainted, else 1 + an index into AbstractMonsterGirl.PAINTS. */
+    public int getPaint() {
+        return this.entityData.get(DATA_PAINT);
+    }
+
+    public void setPaint(int paint) {
+        this.entityData.set(DATA_PAINT, (byte) (paint < 0 || paint > com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.PAINTS.size() ? 0 : paint));
+    }
+
+    /** Copper paint stops weathering once waxed (Painted). */
+    private boolean waxed;
+
+    @Override
+    public boolean isWaxed() {
+        return this.waxed;
+    }
+
+    @Override
+    public void setWaxed(boolean waxed) {
+        this.waxed = waxed;
+    }
+
+    @Override
+    @Nullable
+    public String getPaintName() {
+        int p = this.getPaint();
+        return p == 0 ? null : com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.PAINTS.get(p - 1);
+    }
+
+    /** One wild one in 64 (never a hatchling: she takes her mother's) is painted. */
+    protected void rollPaint(MobSpawnType spawnType) {
+        if (spawnType != MobSpawnType.BREEDING && !this.hasVariantFromData()
+                && this.random.nextInt(com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.PAINT_RARITY) == 0) {
+            this.setPaint(Painted.roll(this.random));
+        }
+    }
+
+    @Override
+    public net.minecraft.world.entity.SpawnGroupData finalizeSpawn(net.minecraft.world.level.ServerLevelAccessor level, net.minecraft.world.DifficultyInstance difficulty,
+                                                                   MobSpawnType spawnType, @Nullable net.minecraft.world.entity.SpawnGroupData group) {
+        this.rollPaint(spawnType);
+        return super.finalizeSpawn(level, difficulty, spawnType, group);
     }
 }

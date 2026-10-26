@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_ender_slime",
+  "spawners": {
+    "type": "monstergirls:ender_slime",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

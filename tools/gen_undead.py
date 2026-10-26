@@ -25,7 +25,19 @@ SPECIES = {
         variants={"gothic": dict(HAIR="#1e1a22", EYE="#a82a3a", CLOTH="#2a1a2a", TRIM="#a82a3a"),
                   "rose": dict(HAIR="#f0c8a0", CLOTH="#e88aa8", TRIM="#fff0f4", EYE="#6a4a8a", extra=dict(stocking="#ffffff", boot="#e88aa8")),
                   "blue": dict(HAIR="#f4e090", CLOTH="#4a7ad8", TRIM="#ffffff", extra=dict(stocking="#ffffff", boot="#2a3a6a")),
-                  "antique": dict(SKIN="#ecd8c0", HAIR="#a8804a", CLOTH="#8a6a4a", TRIM="#e8d8b8", EYE="#5a4a3a")}),
+                  "antique": dict(SKIN="#ecd8c0", HAIR="#a8804a", CLOTH="#8a6a4a", TRIM="#e8d8b8", EYE="#5a4a3a"),
+                  # homage to Gregory Horror Show (2026-10-25): the Lost Doll, red braids and a patched green dress, Katie's face on the back
+                  "lost": dict(SKIN="#f0b0a8", HAIR="#e0503a", CLOTH="#2e7a4a", TRIM="#3a9a5a", EYE="#7a3a9a",
+                               extra=dict(stocking="#f0b0a8", boot="#e05040", cloth2="#2e7a4a", lost=True))}),
+    "mummy_undead": dict(
+        build="slim", outfit=dict(top=["sarashi"], bottom="loincloth", extras=["usekh"], colors=dict(bandage="#ece4cc", cloth2="#ece4cc")),
+        hair="hime", bangs="blunt", ears=None, legs="bare", foot="shoe", mummy=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#1a1614", FUR="#ece4cc", LIGHT="#fff8e8", MARK="#b8a888", EYE="#5ab0e8", CLOTH="#ece4cc", TRIM="#e8c050",
+                 extra=dict(boot="#ece4cc", wrap="#ece4cc")),
+        variants={"aged": dict(extra=dict(boot="#d8c89a", wrap="#d8c89a", bandage="#d8c89a", cloth2="#d8c89a")),
+                  "royal": dict(TRIM="#3a5ac8", EYE="#e8c050", extra=dict(boot="#f4ecd8", wrap="#f4ecd8", gilded=True)),
+                  "sand": dict(SKIN=skin("brown"), extra=dict(boot="#c8b088", wrap="#c8b088", bandage="#c8b088", cloth2="#c8b088")),
+                  "night": dict(SKIN=skin("grey"), EYE="#7af0ff", extra=dict(boot="#a8a8b0", wrap="#a8a8b0", bandage="#a8a8b0", cloth2="#a8a8b0"))}),
     "will_o_wisp_undead": dict(
         build="slim", outfit=dict(top=["halter"], extras=["armlets"]), lower="none",
         hair="flowing", bangs="wispy", ears=None, wisp=True, glow=["flame_a", "flame_b", "flame_c", "flame_tip", "hair_cap", "strand_l1"],
@@ -98,6 +110,24 @@ SPECIES = {
                   "ash": dict(HAIR="#8a8a90", CLOTH="#4a4a52", TRIM="#8a8a90", extra=dict(boot="#2a2a2e", flame="#a8e0ff", cloth2="#3a3a40")),
                   "gold": dict(HAIR="#e8d090", CLOTH="#1e1e2a", TRIM="#e8c050", extra=dict(boot="#1a1a1e", flame="#f8d070", cloth2="#2a2a36")),
                   "pale": dict(HAIR="#f4f4f8", CLOTH="#c8ccd4", TRIM="#5a6a8a", EYE="#8a6ad8", extra=dict(boot="#8a8e98", flame="#b08af8", cloth2="#a8acb4"))}),
+    "llorona_undead": dict(
+        build="slim", outfit=dict(top=["corset", "capelet"], bottom="hakama", extras=["pearls"], colors=dict(cloth2="#e8e0d8", leather="#d8d0c8")),
+        hair="flowing", bangs="wispy", ears=None, legs="bare", foot="shoe",
+        pal=dict(SKIN="#e8dcd8", HAIR="#141214", FUR="#e8dcd8", LIGHT="#ffffff", MARK="#7a9ac8", EYE="#5a8ac8", CLOTH="#f4f0ec", TRIM="#c8c0b8",
+                 facemark="tear", extra=dict(boot="#c8c0b8")),
+        variants={"mourning": dict(CLOTH="#1e1a22", TRIM="#5a5060", extra=dict(boot="#141216", cloth2="#2a2430", leather="#2a2430")),
+                  "rose": dict(CLOTH="#e8b8c0", TRIM="#a85a6a", extra=dict(boot="#a85a6a", cloth2="#f0c8d0", leather="#c88a98")),
+                  "river": dict(CLOTH="#9ab0c0", TRIM="#4a6a7a", HAIR="#2a3a44", extra=dict(boot="#4a6a7a", cloth2="#b8c8d4", leather="#6a8494")),
+                  "marigold": dict(CLOTH="#f0a030", TRIM="#7a2a5a", HAIR="#1a1014", extra=dict(boot="#7a2a5a", cloth2="#f8c050", leather="#c86a20"))}),
+    "lich_undead": dict(
+        build="slim", outfit=dict(top=["corset", "mantle"], bottom="hakama", extras=["pearls", "bracers"], colors=dict(cloth2="#1a1628", leather="#3a2a5a")),
+        hair="flowing", bangs="wispy", ears=None, legs="bare", foot="shoe", lich=True,
+        pal=dict(SKIN="#c8d0d8", HAIR="#e8eef4", FUR="#c8d0d8", LIGHT="#ffffff", MARK="#4a5a6a", EYE="#5af0f8", CLOTH="#2a2440", TRIM="#8af0f8",
+                 extra=dict(boot="#1a1628", crown="#c8a040", gem="#5af0f8")),
+        variants={"bone": dict(SKIN="#e8dcc8", HAIR="#f4ecdc", EYE="#f8d050", CLOTH="#3a3020", TRIM="#f8d050", extra=dict(boot="#2a2418", crown="#a88a50", gem="#f8d050")),
+                  "crimson": dict(CLOTH="#5a1420", TRIM="#f83a3a", EYE="#f83a3a", extra=dict(boot="#2a0a10", crown="#c8a040", gem="#f83a3a")),
+                  "verdant": dict(CLOTH="#1e3a24", TRIM="#5af07a", EYE="#5af07a", extra=dict(boot="#0e1e12", crown="#8a9a5a", gem="#5af07a")),
+                  "void": dict(SKIN="#b8b0c8", CLOTH="#14101e", TRIM="#b05af8", EYE="#b05af8", HAIR="#d0c8e8", extra=dict(boot="#0a0810", crown="#4a4060", gem="#b05af8"))}),
 }
 
 
@@ -111,6 +141,15 @@ def declare_hook(sp, d):
         out += [("bolt", 1.25, .75, .75)]
     if d.get("headless"):
         out += [("stump", 3.5, 1.5, 3)]
+    if d.get("lich"):
+        out += [("crown", 4.5, 1, 4.5), ("crown_spike", .75, 2, .5), ("crown_gem", 1, 1, .25)]
+    if d.get("doll"):
+        out += [("katie", 8, 8, .25), ("doll_bow", 2.5, 2, .5)]
+    if d.get("mummy"):                                   # the bandage layers she unravels: arms and shins (outer), torso and thighs
+        a = G.OF.BUILDS[d.get("build", "slim")].get("arm", 1.5)
+        t = G.OF.thigh_width(d.get("build"), 2.25)
+        out += [("wrap_arm", a + .5, 3.5, a + .5), ("wrap_fore", a + .5, 3, a + .5), ("wrap_shin", t, 6.5, t), ("wrap_thigh", t + .5, 4.5, t + .5),
+                ("wrap_torso", 5.5, 6.5, 4)]
     return out
 
 
@@ -130,6 +169,10 @@ def paint_hook(pt, pal, d):
     pt("comb", "all", lambda f, x, y, w, h: pick(comb, 0.6 + 0.3 * (x % 2), x, y))
     pt("crystal", "all", lambda f, x, y, w, h: pick(ice, 0.85, x, y))
     pt("bolt", "all", lambda f, x, y, w, h: pick(G.shades("#8a8c90"), 0.45 + 0.3 * (x == 0), x, y))
+    crown = G.shades(pal.extra.get("crown", "#c8a040"))              # the lich's crown: tarnished gold, a soul gem
+    pt("crown", "all", lambda f, x, y, w, h: pick(crown, 0.5 + 0.3 * (y == 0), x, y))
+    pt("crown_spike", "all", lambda f, x, y, w, h: pick(crown, 0.6 - 0.2 * (x == 0), x, y))
+    pt("crown_gem", "all", lambda f, x, y, w, h: pick(G.shades(pal.extra.get("gem", "#5af0f8")), 0.8, x, y))
     if d.get("doll"):                                   # porcelain ball joints at the elbows and knees
         joint = G.shades("#d8c8c0")
         for p in ("forearm", "shin"):
@@ -144,12 +187,78 @@ def paint_hook(pt, pal, d):
         for p in ("arm_up", "thigh", "midriff"):
             pt(p, ("north", "east", "west"), stitch)
         pt("head", ("north",), lambda f, x, y, w, h: pick(G.shades("#3a3a3a"), 0.3, x, y) if (x == 3 or x == 4) and 6 <= y <= 13 and y % 2 == 0 else None)
+    if d.get("doll"):                                   # the Lost Doll's things, drawn only on her
+        lost = pal.extra.get("lost")
+        blue, white, gold, red, ink = G.shades("#2ea8d8"), G.shades("#f8f8f0"), G.shades("#f0c030"), G.shades("#d83a2a"), G.shades("#1a1a1a")
+
+        def katie(f, x, y, w, h):                       # her other face, on the back of her head
+            if not lost:
+                return CLEAR
+            if f != "south":
+                return pick(blue, 0.45, x, y)
+            for cx in (w * 0.28, w * 0.72):             # big round eyes
+                d2 = (x + 0.5 - cx) ** 2 + (y + 0.5 - h * 0.38) ** 2
+                if d2 < (w * 0.17) ** 2:
+                    return pick(red if d2 < (w * 0.05) ** 2 else gold if d2 < (w * 0.1) ** 2 else white, 0.55, x, y)
+            if h * 0.66 <= y < h * 0.82 and w * 0.22 <= x < w * 0.78:   # a row of zigzag teeth, white on red
+                k = (y - int(h * 0.66)) * 2
+                return pick(white if abs(x % 6 - 3) * 1.6 >= k else red, 0.55, x, y)
+            return pick(blue, 0.5 + 0.12 * ((x * 3 + y) % 7 == 0), x, y)
+        pt("katie", "all", katie)
+        pt("doll_bow", "all", lambda f, x, y, w, h: pick(G.shades("#5a4aa8"), 0.5 + 0.2 * (x in (0, w - 1)), x, y) if lost else CLEAR)
+        if lost:
+            freck, jaw = G.shades("#e07a90"), G.shades("#c87a72")
+            pt("head", ("north",), lambda f, x, y, w, h: pick(freck, 0.5, x, y) if (x, y) in {(13, 17), (15, 16), (17, 17), (19, 16), (14, 19), (18, 19)}
+               else pick(jaw, 0.4, x, y) if ((x in (int(w * 0.3), int(w * 0.7)) and y >= int(h * 0.64)) or (y == int(h * 0.64) and int(w * 0.3) <= x <= int(w * 0.7)))
+               else None)                               # freckles, and the line of her puppet jaw
+            yellow, mint, thread = G.shades("#f4c86a"), G.shades("#7ec06a"), G.shades("#14503a")
+
+            def patched(f, x, y, w, h):                 # patches sewn onto her dress
+                if f != "north":
+                    return None
+                for x0, x1, y0, y1, col in ((0.12, 0.42, 0.15, 0.55, mint), (0.58, 0.9, 0.35, 0.8, yellow)):
+                    if w * x0 <= x < w * x1 and h * y0 <= y < h * y1:
+                        edge = x in (int(w * x0), int(w * x1) - 1) or y in (int(h * y0), int(h * y1) - 1)
+                        return pick(thread, 0.4, x, y) if edge and (x + y) % 2 == 0 else pick(col, 0.55, x, y)
+                return None
+            for p in ("corset", "panel_f", "cape_b", "chest"):
+                pt(p, ("north",), patched)
+    if d.get("mummy"):
+        wrap = G.shades(pal.extra.get("wrap", "#ece4cc"))
+        gilt = G.shades("#e8c050")
+
+        def bandage(f, x, y, w, h):
+            if f in ("up", "down"):
+                return CLEAR
+            if pal.extra.get("gilded") and y % 9 == 4:
+                return pick(gilt, 0.6, x, y)
+            return pick(wrap, 0.25 if (2 * x + 5 * y) % 11 == 0 else 0.6 + 0.12 * ((y // 3) % 2), x, y)
+        for p in ("wrap_arm", "wrap_fore", "wrap_shin", "wrap_thigh", "wrap_torso"):
+            pt(p, "all", bandage)
+        pt("head", ("south", "east", "west", "up"), lambda f, x, y, w, h: bandage(f if f != "up" else "north", x, y, w, h) if y > h * 0.55 or f == "up" else None)
+        for p in ("thigh", "shin", "arm_up", "forearm"):          # thin wraps on her skin under the layers
+            pt(p, ("north", "south", "east", "west"), lambda f, x, y, w, h: pick(wrap, 0.55, x, y) if (x + 2 * y) % 6 < 2 else None)
     if d.get("fangs"):
         pt("mouth", ("north",), lambda f, x, y, w, h: pal.WHITE if y == 0 and x in (1, w - 2) else None)
 
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
+    if d.get("mummy"):                                  # each layer is its own bone, so the game can hide them one at a time
+        a = G.OF.BUILDS[d.get("build", "slim")].get("arm", 1.5)
+        t = G.OF.thigh_width(d.get("build"), 2.25)
+        ax, ay, az = r.b["arm_r"]["pivot"]
+        fx, fy, fz = r.b["forearm_r"]["pivot"]
+        r.add("wrap_arm_r", "arm_r", [ax, ay, az], [cube("wrap_arm", [ax - (a + .5) / 2, ay - 3.5, az - (a + .5) / 2])], mirror=True)
+        r.add("wrap_fore_r", "forearm_r", [fx, fy, fz], [cube("wrap_fore", [fx - (a + .5) / 2, fy - 3, fz - (a + .5) / 2])], mirror=True)
+        lx, ly, lz = r.b["leg_r"]["pivot"]
+        sx, sy, sz = r.b["shin_r"]["pivot"]
+        r.add("wrap_shin_r", "shin_r", [sx, sy, sz], [cube("wrap_shin", [sx - t / 2, sy - 6.5, sz - t / 2])], mirror=True)
+        r.add("wrap_thigh_r", "leg_r", [lx, ly, lz], [cube("wrap_thigh", [lx - (t + .5) / 2, ly - 4.5, lz - (t + .5) / 2])], mirror=True)
+        r.add("wrap_torso", "body", [0, 16, z], [cube("wrap_torso", [-2.75, 12.6, -2 + z])])
+    if d.get("doll"):                                   # Katie on the back of her head (riding on her hair), bows on her curls
+        r.put("hair_back", cube("katie", [-4, hy + 0.2, 7.6 + z]))
+        r.put("hair_side_r", cube("doll_bow", [-8.4, hy + 5.4, -1.25 + z]))
     if d.get("headless"):                               # blue flame where her neck ends (the head itself is carried, see anim_extra)
         r.put("body", cube("stump", [-1.75, hy - 0.5, -1.5 + z]))
     if d.get("wisp"):
@@ -164,11 +273,20 @@ def build_hook(r, g, d):
     if d.get("bolts"):
         b = cube("bolt", [-3.4, hy - 0.6, -0.4 + z])
         r.put("body", b, G.mirror_cube(b))
+    if d.get("lich"):                                   # a tall, spiked crown with a soul gem at the front
+        cs = [cube("crown", [-2.25, hy + 8.3, -2.25 + z])]
+        for x, hgt in ((-1.9, 0.0), (-0.95, 0.6), (0, 1.0), (0.95, 0.6), (1.9, 0.0)):
+            cs.append(cube("crown_spike", [x - 0.375, hy + 9.3 + hgt, -2.4 + z]))
+        cs.append(cube("crown_gem", [-0.5, hy + 8.3, -2.55 + z]))
+        r.add("crown", "head", [0, hy + 8.3, z], cs)
 
 
 def anim_extra(an, sp, d):
     """the wisp's flicker, the jiang shi-like zombie shamble ("shamble") and the vampire's bite ("drink")"""
     Tk, hold, sym, merge = H.track, H.hold, H.sym, H.merge
+    if d.get("mummy"):                                  # flustered, she spins round and round, wrapping herself up again
+        an.add("spin", 1.0, True, {"root": {"rotation": H.track((0, (0, 0, 0)), (0.5, (0, 180, 0)), (1.0, (0, 360, 0)))},
+                                   "arm_r": {"rotation": H.hold(-20, 0, 60)}, "arm_l": {"rotation": H.hold(-20, 0, -60)}})
     if d.get("wisp"):
         flick = {"flame": {"rotation": Tk((0, (0, 0, 3)), (0.5, (4, 0, -3)), (1.0, (0, 0, 3))),
                            "scale": Tk((0, (1.0, 1.0, 1.0)), (0.25, (1.06, 0.94, 1.06)), (0.5, (0.96, 1.08, 0.96)), (1.0, (1.0, 1.0, 1.0)))},
@@ -179,6 +297,10 @@ def anim_extra(an, sp, d):
         carry = merge({"head": {"position": hold(-8.0, -12.5, -2.0)}}, {"arm_r": {"rotation": hold(-15, 0, -20)}, "forearm_r": {"rotation": hold(-60, 0, 0)}})
         for k in list(an.A):
             F._inject(an, k.split(".")[-1], carry)
+    if d.get("lich"):                                   # cast: both hands thrust forward, then up
+        an.add("cast", 1.0, False, merge({"body": {"rotation": Tk((0, (0, 0, 0)), (0.4, (-8, 0, 0)), (1.0, (0, 0, 0)))},
+                                          "head": {"rotation": hold(-10, 0, 0)}},
+                                         sym("arm", Tk((0, (0, 0, 0)), (0.4, (-100, 0, 15)), (0.7, (-150, 0, 25)), (1.0, (-30, 0, 10))))))
     an.add("drink", 2.0, True, merge({"head": {"rotation": hold(18, 24, 0)}, "body": {"rotation": hold(14, 0, 0)},
                                       "mouth": {"position": hold(*H.OUT_)}, "eyelids": {"position": hold(*H.OUT_)}},
                                      sym("arm", hold(-70, 0, -24)), sym("forearm", hold(-40, 0, 0))))

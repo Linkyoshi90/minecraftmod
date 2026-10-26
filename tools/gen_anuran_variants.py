@@ -60,6 +60,11 @@ SPECIES = {
         "european": dict(BACK="#3a3a34", BELLY="#e86a18", SAC="#f08a30", HAIR="#c84a18"),
         "giant": dict(BACK="#6a5a2a", BELLY="#d83a24", HAIR="#a02a18"),
         "blue": dict(BACK="#2a5a8a", BELLY="#e84a1e", HAIR="#2a3a6a")}),
+    "vodyanoy": ("gen_vodyanoy", "river", {
+        "bog": dict(BACK="#4a3a1e", BELLY="#a89070", HAIR="#3a5a1a"),
+        "old": dict(BACK="#5a6a5a", BELLY="#c0bcac", HAIR="#a8b098"),
+        "lake": dict(BACK="#2a5a5a", BELLY="#a8c0b8", HAIR="#2a7a6a"),
+        "pale": dict(BACK="#a8b890", BELLY="#ece8d8", HAIR="#78a860", EYE="#c83a3a")}),
     "natterjack": ("gen_natterjack", "olive", {
         "green": dict(BACK="#3a8a3a", BELLY="#e6e0c0", HAIR="#4a3a2a"),
         "brown": dict(BACK="#7a5a36", BELLY="#e2d4b4", HAIR="#3a2a1a"),

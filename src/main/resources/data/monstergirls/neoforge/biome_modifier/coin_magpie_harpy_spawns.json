@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_coin_magpie_harpy",
+  "spawners": {
+    "type": "monstergirls:coin_magpie_harpy",
+    "weight": 5,
+    "minCount": 2,
+    "maxCount": 3
+  }
+}

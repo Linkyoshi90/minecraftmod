@@ -13,7 +13,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import girl_lib as G  # noqa: E402
 import family_concepts as C  # noqa: E402
-from girl_lib import H, pick, noise, CLEAR, BROAD, shades, skin  # noqa: E402
+from girl_lib import H, cube, pick, noise, CLEAR, BROAD, shades, skin  # noqa: E402
 
 FAMILY = C.family("nekomata")
 
@@ -73,6 +73,30 @@ SPECIES = {
                   "iberian": dict(FUR="#c8a060", HAIR="#b88c50", pattern="spots", CLOTH="#6a3a2a"),
                   "bobcat": dict(FUR="#b07850", HAIR="#9a6440", pattern="spots", pattern_scale=0.8),
                   "silver": dict(FUR="#d4d6da", HAIR="#dcdee4", LIGHT="#ffffff", MARK="#4a4c52", CLOTH="#3a4a6a")}),
+    # eleventh wave: the waterlil, a big cat's head on a tiny body, riding her own lily pad, a small bloom on top
+    # (lily pads grow under her in the game)
+    "waterlil_nekomata": dict(chibi=True,
+        build="petite", outfit=dict(top=["halter"], bottom="shorts", extras=["pearls"], colors=dict(cloth2="#2a5a3a")),
+        ears="cat", hair="bob", tail=((1.25, 1.25, 3.5), (1.25, 1.25, 3.5), (1.25, 1.25, 2.5)), tail_pattern="solid", lotus=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1a1a1e", FUR="#1e1e22", LIGHT="#4a4a50", MARK="#0e0e10", EYE="#4ad8d0", CLOTH="#3a8a4a", TRIM="#f8c0d8",
+                 INNER="#f0a8b8", pattern="solid", extra=dict(lotus="#f8b0cc", lotus_in="#fff0a0")),
+        variants={"white": dict(FUR="#f4f2ee", HAIR="#fbf8f4", LIGHT="#ffffff", MARK="#c8c4be", EYE="#6aa8f0", extra=dict(lotus="#f8f8f0", lotus_in="#f8e070")),
+                  "calico": dict(FUR="#f4f0e8", HAIR="#c8783a", MARK="#2a2420", pattern="patches", EYE="#d8a030",
+                                 extra=dict(lotus="#f8d850", lotus_in="#f88a2a")),
+                  "grey": dict(FUR="#7a7a80", HAIR="#5a5a62", LIGHT="#b8b8be", EYE="#e8c050", extra=dict(lotus="#8ab0f0", lotus_in="#f8f0a0")),
+                  "ginger": dict(FUR="#d8843a", HAIR="#b8602a", LIGHT="#f4d8b0", MARK="#8a4418", EYE="#4aa86a", extra=dict(lotus="#e84a4a", lotus_in="#f8d050"))}),
+    # tenth wave: the blaze cat of the Nether, black with flames for paws and a burning tail tip (glow masks)
+    "blaze_cat_nekomata": dict(
+        build="slim", outfit=dict(top=["halter", "capelet"], bottom="shorts", extras=["armlets"], colors=dict(cloth2="#1e1a1e")),
+        ears="cat", hair="shaggy", tail=((1.25, 1.25, 3.5), (1.25, 1.25, 3.5), (1.5, 1.5, 2.5)), tail_pattern="solid", flames=True,
+        glow=["flame", "flame_hand", "tail_c"],
+        pal=dict(SKIN=skin("fair"), HAIR="#1a1618", FUR="#1e1a1c", LIGHT="#4a4246", MARK="#0e0c0e", EYE="#f0a020", CLOTH="#1e1a1e", TRIM="#f07a20",
+                 pattern="solid", extra=dict(flame="#f8901e", flame_hot="#ffe070")),
+        variants={"soul": dict(EYE="#4ae8f0", TRIM="#4ac8e8", extra=dict(flame="#2ab8e8", flame_hot="#b0f8ff")),
+                  "ash": dict(FUR="#5a5658", HAIR="#3a3638", LIGHT="#8a8688", EYE="#f0c040", extra=dict(flame="#f8901e", flame_hot="#ffe070")),
+                  "cinder": dict(FUR="#3a1a14", HAIR="#2a0e0a", LIGHT="#6a3a2a", EYE="#f84a2a", TRIM="#e83a1a", extra=dict(flame="#e83a1a", flame_hot="#f8a040")),
+                  "white": dict(FUR="#f4f0ea", HAIR="#ffffff", LIGHT="#ffffff", MARK="#c8c0b4", EYE="#d8a020", CLOTH="#f4f0ea", TRIM="#e8b830",
+                                extra=dict(flame="#f0c030", flame_hot="#fff8c0"))}),
     "ocelot_nekomata": dict(
         build="slim", outfit=dict(top=["halter", "capelet"], bottom="shorts", extras=["armlets"]),
         ears="round", hair="sidetail", tail=((1.25, 1.25, 3.5), (1.25, 1.25, 3.5), (1.25, 1.25, 2.5)), tail_pattern="bars",
@@ -81,7 +105,10 @@ SPECIES = {
         variants={"grey": dict(FUR="#b8ac98", HAIR="#7a7064", LIGHT="#ece8e0", CLOTH="#4a5a4a"),
                   "pale": dict(FUR="#ead6aa", HAIR="#b8946a", MARK="#6a4e34", CLOTH="#7a6a3a"),
                   "melanistic": dict(FUR="#2a2420", LIGHT="#4e443c", MARK="#100e0c", HAIR="#2e2622", EYE="#c8a83a", CLOTH="#6a2e2e"),
-                  "golden": dict(FUR="#e8a050", HAIR="#a86a30", MARK="#3a2414", CLOTH="#2a4a6a")}),
+                  "golden": dict(FUR="#e8a050", HAIR="#a86a30", MARK="#3a2414", CLOTH="#2a4a6a"),
+                  # homage to Gregory Horror Show (2026-10-25): Neko Zombie, sewn together, a purple patch over half her head
+                  "stitched": dict(SKIN=skin("#ccc8b4"), FUR="#bcb8a4", HAIR="#aca898", LIGHT="#d8d4c4", MARK="#7a5a7a", EYE="#d82a2a", CLOTH="#c81e2a",
+                                   TRIM="#1e4a9a", pattern="solid", extra=dict(stitched=True, cloth2="#8a7e60"))}),
 }
 
 LEG_PARTS = [("thigh", 2.25, 4.75, 2.25), ("shin", 1.75, 6.75, 1.75), ("paw", 2.25, 1.25, 3)]
@@ -96,7 +123,14 @@ def leg_parts(build):
 def declare(sp):
     d = SPECIES[sp]
     (a, b, c) = d["tail"]
-    G.declare(leg_parts(d.get("build")) + [("tail_a",) + a, ("tail_b",) + b, ("tail_c",) + c], ears=d["ears"], hair=d["hair"],
+    extra = [("nz_muzzle", 3.5, 2.25, 2.5)] if "stitched" in d["variants"] else []   # the stitched cat's muzzle (drawn only on her)
+    if d.get("flames"):
+        extra += [("flame", 2.75, 2.25, 3.5), ("flame_hand", 2.25, 2.5, 2)]
+    if d.get("lotus"):
+        extra += [("lotus_petal", 2.25, .5, 3), ("lotus_heart", 1.5, 1.25, 1.5)]
+    if d.get("chibi"):
+        extra += [("lily_pad", 16, .5, 16)]
+    G.declare(leg_parts(d.get("build")) + [("tail_a",) + a, ("tail_b",) + b, ("tail_c",) + c] + extra, ears=d["ears"], hair=d["hair"],
               build=d.get("build"), outfit=d.get("outfit"))
 
 
@@ -149,6 +183,63 @@ def paint(sp, pal):
     else:
         tip = pal.MARK if d["tail_pattern"] != "solid" or pal.extra.get("dark_tips") else pal.FUR
         pt("tail_c", "all", lambda f, x, y, w, h: pick(tip, 0.38 + (noise(x, y, 9) - 0.5) * 0.2, x, y))
+    if d.get("flames"):                                  # flickering flames: hot at the root, ragged at the top
+        fl, hot = G.shades(pal.extra.get("flame", "#f8901e")), G.shades(pal.extra.get("flame_hot", "#ffe070"))
+
+        def flame(f, x, y, w, h):
+            if f == "down":
+                return CLEAR
+            if y < h * 0.45 and (x * 5 + y * 3) % 4 == 0:
+                return CLEAR
+            return pick(hot if y > h * 0.6 else fl, 0.55 + 0.25 * noise(x, y, 59), x, y)
+        pt("flame", "all", flame)
+        pt("flame_hand", "all", flame)
+        pt("tail_c", "all", lambda f, x, y, w, h: pick(hot if y > h * 0.5 else fl, 0.6 + 0.2 * noise(x, y, 61), x, y))
+    if d.get("lotus"):
+        lp, li = G.shades(pal.extra.get("lotus", "#f8b0cc")), G.shades(pal.extra.get("lotus_in", "#fff0a0"))
+        pt("lotus_petal", "all", lambda f, x, y, w, h: pick(lp, 0.55 + 0.2 * (f == "up") - 0.15 * (x == 0 or x == w - 1), x, y))
+        pt("lotus_heart", "all", lambda f, x, y, w, h: pick(li, 0.65, x, y))
+    if d.get("chibi"):
+        pad = G.shades("#4a8a3a")
+
+        def lily(f, x, y, w, h):                         # round, with the notch at the back and veins from the middle
+            if f in ("up", "down"):
+                dx, dy = x + 0.5 - w / 2, y + 0.5 - h / 2
+                if dx * dx + dy * dy > (w / 2) ** 2 or (dy > 0 and abs(dx) < dy * 0.3):
+                    return CLEAR
+                vein = f == "up" and (abs(dx) < 0.6 or abs(dy) < 0.6 or abs(abs(dx) - abs(dy)) < 0.7)
+                return pick(pad, 0.42 + 0.18 * (f == "up") + 0.12 * vein + (noise(x, y, 81) - 0.5) * 0.08, x, y)
+            return pick(pad, 0.35, x, y) if abs(x + 0.5 - w / 2) < w * 0.22 else CLEAR
+        pt("lily_pad", "all", lily)
+    zombie = pal.extra.get("stitched")
+    thread, hole, purple = G.shades("#e0dccc"), G.shades("#141414"), G.shades("#7a4a7a")
+    ink = G.shades("#141414")
+    pt("nz_muzzle", "all", lambda f, x, y, w, h: CLEAR if not zombie
+       else pick(ink, 0.2, x, y) if f == "north" and y >= 1 and abs(x + 0.5 - w / 2) < (h - y) * 1.3 and y < h - 2      # a gaping mouth
+       else pick(thread, 0.7, x, y) if f == "north" and y == h - 1 and x % 3 == 1
+       else pick(pal.FUR, 0.5 + 0.1 * (f == "up"), x, y))
+    if zombie:
+        def seam(f, x, y, w, h, horizontal=True):         # a sewn seam: white loops with black stitch holes
+            k = y if horizontal else x
+            m = x if horizontal else y
+            return (pick(thread, 0.65, x, y) if m % 3 == 1 else pick(hole, 0.2, x, y) if m % 3 == 0 else None) if k in (h // 2 - 1, h // 2) else None
+
+        def head(f, x, y, w, h):                          # the purple patch over half her head, sewn on
+            patch = (f == "north" and x >= w * 0.52 and (y < h * 0.34 or x >= w * 0.88)) or f == "east" or (f == "up" and x >= w * 0.5)
+            edge = f == "north" and (x == int(w * 0.52) and y < h * 0.34 or y == int(h * 0.34) and x >= w * 0.52)
+            if edge:
+                return pick(thread, 0.7, x, y) if (x + y) % 2 == 0 else pick(hole, 0.2, x, y)
+            return pick(purple, 0.5 + 0.1 * (f == "up"), x, y) if patch else None
+        pt("head", "all", head)
+        pt("hair_cap", ("north", "south", "east", "west", "up"), lambda f, x, y, w, h: pick(purple, 0.45 + 0.1 * (x % 4 == 0), x, y) if x >= w * 0.5 else None)
+        pt("ear_a", "all", lambda f, x, y, w, h: pick(purple, 0.4 + 0.15 * (f == "north"), x, y))
+        for p in ("thigh", "arm_up", "forearm", "tail_a", "tail_b"):
+            pt(p, ("north", "east", "west", "south"), seam)
+        stripe = lambda f, x, y, w, h: pick(pal.CLOTH if (y // 3) % 2 == 0 else pal.TRIM, 0.5, x, y)   # a red and blue striped top
+        for p in ("chest", "bust", "cape_t", "cape_b", "neckband"):
+            pt(p, ("north", "south", "east", "west"), stripe)
+        for p in ("sh_hips", "short_leg"):                # stitched-up khaki shorts
+            pt(p, ("north",), lambda f, x, y, w, h: pick(hole, 0.35, x, y) if abs(x - w * 0.3 - y * 0.6) < 0.6 and y % 2 == 0 else None)
     return pt.T
 
 
@@ -161,7 +252,54 @@ def build(sp):
     G.OF.dress_legs(r, d.get("outfit"))
     G.cat_tail(r, d, "tail")
     G.cat_tail(r, d, "tail2", x=0.6)                     # the true nekomata's second tail (hidden by the renderer)
+    if d.get("lotus"):                                   # a lotus flower: behind her ear, or on top of a chibi head
+        hy, z = g.hy, g.z
+        cx, cy, cz = (1.1, hy + 9.3, -0.8 + z) if d.get("chibi") else (2.4, hy + 8.8, -1.4 + z)
+        petals = [G.rot_cube("lotus_petal", [cx - 1.125, cy, cz - 0.2], [cx, cy, cz], -40, a, 0) for a in (0, 72, 144, 216, 288)]
+        r.add("lotus", "head", [cx, cy, cz], petals + [cube("lotus_heart", [cx - 0.75, cy, cz - 0.75])])
+    if d.get("flames"):                                  # flames round her feet and hands
+        cx = r.b["foot_r"]["pivot"][0]
+        r.put("foot_r", cube("flame", [cx - 1.375, 0.1, -2.0]))
+        hx, hyy, hz = r.b["hand_r"]["pivot"]
+        r.put("hand_r", cube("flame_hand", [hx - 1.125, hyy - 2.6, hz - 1.0]))
+    if "stitched" in d["variants"]:                      # Neko Zombie's muzzle (drawn only on that variant)
+        r.put("head", cube("nz_muzzle", [-1.75, g.hy + 0.4, -6.3 + g.z]))
+    if d.get("chibi"):
+        chibify(r, g.hy)
+        r.add("pad", None, [0, 0, 0], [cube("lily_pad", [-8, 0, -8])])   # its own bone: it stays flat whatever she does
     return r.model(sp)
+
+
+def chibify(r, neck, body=0.55, head=1.25, lift=0.5):
+    """A big head on a tiny body: the body shrinks toward the ground, the head (and all on it) grows about the neck,
+    and the whole of her sits `lift` up (on her lily pad). Faces keep their UV rectangles, so the texture just stretches."""
+    def under_head(n):
+        while n:
+            if n == "head":
+                return True
+            n = r.b[n]["parent"]
+        return False
+    old_neck = [0, neck, 0]
+    new_neck = [0, neck * body + lift, 0]
+    done = set()
+    for n in r.order:
+        if n == "root":
+            continue
+        k = head if under_head(n) else body
+        move = (lambda p: [nn + (v - o) * head for v, o, nn in zip(p, old_neck, new_neck)]) if under_head(n) \
+            else (lambda p: [p[0] * body, p[1] * body + lift, p[2] * body])
+        b = r.b[n]
+        b["pivot"] = move(b["pivot"])
+        for c in b["cubes"]:
+            if id(c) in done:
+                continue
+            done.add(id(c))
+            c["origin"] = [round(v, 3) for v in move(c["origin"])]
+            c["size"] = [round(v * k, 3) for v in c["size"]]
+            if "pivot" in c:
+                c["pivot"] = [round(v, 3) for v in move(c["pivot"])]
+            if "inflate" in c:
+                c["inflate"] = round(c["inflate"] * k, 3)
 
 
 def anims(an):
@@ -178,6 +316,10 @@ def run(sp, previews):
     keys = list(SPECIES[sp]["variants"])
     tex = paint(sp, pal_for(sp))
     geo, adoc, texes = G.write(sp, tex, build(sp), anims, keys, lambda k: paint(sp, pal_for(sp, k)))
+    if SPECIES[sp].get("glow"):
+        import girl_family as F
+        for k, t in texes.items():
+            F.write_glowmask(sp + ("_" + k if k else ""), t, SPECIES[sp]["glow"])
     height = G.model_height(geo)
     if previews:
         G.previews(sp, geo, adoc, texes, VIEWS, FACE, height)

@@ -65,7 +65,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * doing" action that drives the GeckoLib animation, and the need for water. Any anuran left dry for too long slowly
  * takes damage (frogs dry out fast, toads slowly); water or rain resets the clock.
  */
-public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity, Bonded {
+public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity, Bonded, Painted {
     private static final EntityDataAccessor<Byte> DATA_ACTION =
             SynchedEntityData.defineId(AbstractAnuran.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> DATA_STAGE =
@@ -78,6 +78,8 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     /** How far along her pregnancy is, 0-100, for the renderer to round out her belly. */
     private static final EntityDataAccessor<Byte> DATA_BELLY =
             SynchedEntityData.defineId(AbstractAnuran.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> DATA_MOONSTRUCK =
+            SynchedEntityData.defineId(AbstractAnuran.class, EntityDataSerializers.BOOLEAN);
     private static final Map<String, RawAnimation> ANIMATIONS = new ConcurrentHashMap<>();
     /** Dry skin hurts this often once the limit is passed. */
     private static final int DRY_DAMAGE_INTERVAL = 40;
@@ -89,7 +91,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         WARNING("warn", false), PEEPING("peep", false), GUARDING("guard", false), STOMPING("stomp", false), LIFTING("lift", false),
         SCREAMING("scream", false), BURROWING("burrow", true), SIPPING("sip", false), UNKEN("unken", false), TRILLING("trill", false),
         GULPING("gulp", false), SQUIRTING("squirt", false), CHORUS("chorus", false), SWEEPING("sweep", false),
-        BROODING("brood", false), BIRTH("birth", true);
+        BROODING("brood", false), BIRTH("birth", true), PULLING("pull", true);
 
         /** The animation.&lt;species&gt;.&lt;name&gt; this action plays, and whether it plays once and holds its last pose. */
         public final String animation;
@@ -116,6 +118,10 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     private boolean orderedToSit;
     private final com.linkyoshi90.monstergirls.entity.Orders orders = new com.linkyoshi90.monstergirls.entity.Orders();
     private boolean inBed;
+    /** Fed a slimeball: in the mood, and a vanilla frog in love will do (see {@link #courtFrog}). */
+    private int frogLove;
+    /** The father of spawn sired by a vanilla frog (a third of its tadpoles hatch as vanilla tadpoles). */
+    public static final UUID FROG_FATHER = new UUID(0L, 0x46524F47L);
 
     /** Five in-game days from hatching to adult: the first two and a half as a tadpole, the rest as a froglet. */
     public static final int GROW_TICKS = 5 * 24000;
@@ -226,6 +232,8 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         builder.define(DATA_STAGE, ADULT);
         builder.define(DATA_VARIANT, (byte) 0);
         builder.define(DATA_BELLY, (byte) 0);
+        builder.define(DATA_MOONSTRUCK, false);
+        builder.define(DATA_PAINT, (byte) 0);
     }
 
     // --- colour variant -------------------------------------------------------------------------------------------
@@ -268,6 +276,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType,
                                         @Nullable SpawnGroupData groupData) {
+        this.rollPaint(spawnType);
         if (!this.variantFromData) this.rollVariant(level.getBiome(this.blockPosition()));
         return super.finalizeSpawn(level, difficulty, spawnType, groupData);
     }
@@ -373,6 +382,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     public void aiStep() {
         super.aiStep();
         if (this.level() instanceof ServerLevel) {
+            Painted.tickCopper(this, this);
             if (this.isWet()) this.dryTicks = 0;
             else this.dryTicks++;
             if (this.isDriedOut() && this.tickCount % DRY_DAMAGE_INTERVAL == 0) {
@@ -383,6 +393,8 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
             this.gestation.tick();
             if (this.tickCount % 10 == 0) this.entityData.set(DATA_BELLY, (byte) Math.round(this.gestation.progress() * 100));
             if (this.orderedToSit && this.getAction() == Action.NONE) this.setAction(Action.SITTING);
+            if (this.frogLove > 0 && --this.frogLove % 10 == 0) this.courtFrog((ServerLevel) this.level());
+            if (this.tickCount % 40 == 0 && !this.isBaby()) this.gatherFrogs((ServerLevel) this.level());
             if (this.isBaby()) {
                 this.growTicks++;
                 if (this.growTicks >= GROW_TICKS) this.setBaby(false);
@@ -399,6 +411,8 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
      */
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
+        InteractionResult paint = Painted.interact(this, this, player, hand);
+        if (paint != null) return paint;
         ItemStack stack = player.getItemInHand(hand);
         if (hand == InteractionHand.MAIN_HAND && stack.is(Items.STICK) && !this.isTadpole()) {
             if (!this.level().isClientSide) Orders.onStick(this, this.orders, player);
@@ -413,6 +427,14 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
                 this.getLookControl().setLookAt(player);
                 server.sendParticles(ParticleTypes.HEART, this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ(), 2, 0.3, 0.2, 0.3, 0.0);
                 this.playSound(this.getAmbientSound(), 1.0F, this.getVoicePitch() * 1.1F);
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+        if (hand == InteractionHand.MAIN_HAND && stack.is(Items.SLIME_BALL) && !this.isBaby() && this.canShareBed() && this.frogLove <= 0) {
+            if (this.level() instanceof ServerLevel server) {                // in the mood: a vanilla frog in love will do
+                if (!player.getAbilities().instabuild) stack.shrink(1);
+                this.frogLove = 600;
+                server.sendParticles(ParticleTypes.HEART, this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ(), 3, 0.3, 0.2, 0.3, 0.0);
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
@@ -436,6 +458,39 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
             }
         }
         return super.mobInteract(player, hand);
+    }
+
+    // --- frog kin ----------------------------------------------------------------------------------------------------
+
+    public int getFrogLove() {
+        return this.frogLove;
+    }
+
+    /** She walks up to a vanilla frog in love (fed a slimeball) within 8 blocks, and she is expecting frogspawn. */
+    public void courtFrog(ServerLevel level) {
+        if (!this.gestation.canConceive()) return;
+        net.minecraft.world.entity.animal.frog.Frog frog = null;
+        for (var f : level.getEntitiesOfClass(net.minecraft.world.entity.animal.frog.Frog.class, this.getBoundingBox().inflate(8), f -> f.isInLove() && !f.isBaby())) {
+            if (frog == null || f.distanceToSqr(this) < frog.distanceToSqr(this)) frog = f;
+        }
+        if (frog == null) return;
+        if (this.distanceToSqr(frog) > 2.5 * 2.5) {
+            this.getNavigation().moveTo(frog, 1.0);
+            return;
+        }
+        this.gestation.conceive(FROG_FATHER);
+        this.frogLove = 0;
+        frog.resetLove();
+        level.sendParticles(ParticleTypes.HEART, this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ(), 6, 0.4, 0.3, 0.4, 0.0);
+    }
+
+    /** Her kin: vanilla frogs within 16 blocks hop over and keep near her. */
+    public void gatherFrogs(ServerLevel level) {
+        for (var f : level.getEntitiesOfClass(net.minecraft.world.entity.animal.frog.Frog.class, this.getBoundingBox().inflate(16),
+                f -> !f.isLeashed() && f.distanceToSqr(this) > 5 * 5)) {
+            f.getBrain().setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.WALK_TARGET,
+                    new net.minecraft.world.entity.ai.memory.WalkTarget(this, 1.0F, 3));
+        }
     }
 
     // --- relationships and young ------------------------------------------------------------------------------------
@@ -523,11 +578,26 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         return !this.isBaby() && !this.isAquaticOnly() && this.gestation.canConceive();
     }
 
+    @Override
+    public boolean isMoonstruck() {
+        return this.entityData.get(DATA_MOONSTRUCK);
+    }
+
+    @Override
+    public void setMoonstruck(boolean moonstruck) {
+        this.entityData.set(DATA_MOONSTRUCK, moonstruck);
+    }
+
     /** In the bed she sits snug beside the sleeper (every anuran model has a "sit" pose). */
     @Override
     public void settleInBed() {
         this.inBed = true;
         this.setAction(Action.SITTING);
+    }
+
+    /** Settled in or beside the bed for the night (no other rest takes her away from it). */
+    public boolean isInBed() {
+        return this.inBed;
     }
 
     @Override
@@ -611,6 +681,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        tag.putBoolean("Waxed", this.waxed);
         tag.putInt("DryTicks", this.dryTicks);
         tag.putByte("Stage", this.getStage());
         tag.putInt("GrowTicks", this.growTicks);
@@ -618,6 +689,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         this.gestation.save(tag);
         if (this.father != null) tag.putUUID("Father", this.father);
         tag.putBoolean("OrderedToSit", this.orderedToSit);
+        if (this.getPaint() > 0) tag.putString("Paint", this.getPaintName());
         tag.put("Orders", this.orders.save());
         CompoundTag affectionTag = new CompoundTag();
         this.affection.forEach((uuid, a) -> affectionTag.putInt(uuid.toString(), a));
@@ -627,6 +699,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.waxed = tag.getBoolean("Waxed");
         this.dryTicks = tag.getInt("DryTicks");
         this.entityData.set(DATA_STAGE, tag.contains("Stage") ? tag.getByte("Stage") : (tag.getBoolean("Baby") ? FROGLET : ADULT));
         this.growTicks = tag.getInt("GrowTicks");
@@ -637,6 +710,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         this.gestation.load(tag);
         this.father = tag.hasUUID("Father") ? tag.getUUID("Father") : null;
         this.orderedToSit = tag.getBoolean("OrderedToSit");
+        if (tag.contains("Paint")) this.setPaint(com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.PAINTS.indexOf(tag.getString("Paint")) + 1);
         this.orders.load(tag.getCompound("Orders"));
         this.affection.clear();
         CompoundTag affectionTag = tag.getCompound("Affection");
@@ -682,5 +756,47 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.geoCache;
+    }
+
+    // --- Harmontide paints (as for the girls, see AbstractMonsterGirl.PAINTS) --------------------------------------
+
+    private static final net.minecraft.network.syncher.EntityDataAccessor<Byte> DATA_PAINT =
+            net.minecraft.network.syncher.SynchedEntityData.defineId(AbstractAnuran.class, net.minecraft.network.syncher.EntityDataSerializers.BYTE);
+
+    /** 0 unpainted, else 1 + an index into AbstractMonsterGirl.PAINTS. */
+    public int getPaint() {
+        return this.entityData.get(DATA_PAINT);
+    }
+
+    public void setPaint(int paint) {
+        this.entityData.set(DATA_PAINT, (byte) (paint < 0 || paint > com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.PAINTS.size() ? 0 : paint));
+    }
+
+    /** Copper paint stops weathering once waxed (Painted). */
+    private boolean waxed;
+
+    @Override
+    public boolean isWaxed() {
+        return this.waxed;
+    }
+
+    @Override
+    public void setWaxed(boolean waxed) {
+        this.waxed = waxed;
+    }
+
+    @Override
+    @Nullable
+    public String getPaintName() {
+        int p = this.getPaint();
+        return p == 0 ? null : com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.PAINTS.get(p - 1);
+    }
+
+    /** One wild one in 64 (never a hatchling: she takes her mother's) is painted. */
+    protected void rollPaint(MobSpawnType spawnType) {
+        if (spawnType != MobSpawnType.BREEDING && !this.hasVariantFromData()
+                && this.random.nextInt(com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.PAINT_RARITY) == 0) {
+            this.setPaint(Painted.roll(this.random));
+        }
     }
 }

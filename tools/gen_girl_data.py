@@ -46,25 +46,66 @@ FAMILY = {
     "devil": ("DEVIL", 0.6, "monster", (1, 1), 5),
     "bug": ("BUG", 0.6, "creature", (1, 2), 6),
     "flora": ("FLORA", 0.7, "creature", (1, 1), 5),
+    # added 2026-10-24
+    "canid": ("CANID", 0.7, "creature", (1, 2), 6),
+    "rodent": ("RODENT", 0.7, "creature", (1, 2), 6),
+    # added 2026-10-25
+    "crustacean": ("CRUSTACEAN", 0.7, "creature", (1, 3), 6),
+    "marsupial": ("MARSUPIAL", 0.7, "creature", (2, 4), 6),
+    "armoured": ("ARMOURED", 0.7, "creature", (1, 2), 6),
+    "construct": ("CONSTRUCT", 0.9, "creature", (1, 1), 2),
+    "bat": ("BAT", 0.6, "creature", (2, 3), 6),
 }
 GROUP = {"lioness_nekomata": (3, 5), "orca_mermaid": (2, 3), "fennec_kitsune": (2, 3), "corsac_kitsune": (2, 3), "dolphin_mermaid": (2, 3),
-         "al_miraj_jackalope": (3, 5), "bison_minotaur": (3, 6), "high_elf": (2, 4), "bee_bug": (2, 4)}
+         "al_miraj_jackalope": (3, 5), "bison_minotaur": (3, 6), "high_elf": (2, 4), "bee_bug": (2, 4),
+         "dugong_mermaid": (2, 2), "kelpie_centaur": (1, 1), "wolf_canid": (2, 4), "panda_canid": (1, 3), "anubis_canid": (1, 1),
+         "pegasus_centaur": (1, 2), "lich_undead": (1, 1), "capybara_rodent": (2, 4), "leshy_flora": (1, 1), "llorona_undead": (1, 1),
+         "black_tortoise_lizardfolk": (1, 1), "grizzly_canid": (1, 1), "red_eared_slider_lizardfolk": (2, 4), "galapagos_tortoise_lizardfolk": (1, 2),
+         "kangaroo_marsupial": (3, 5), "golem_construct": (1, 1), "jellyfish_mollusk": (2, 4), "ahuizotl_mermaid": (1, 2),
+         "unicorn_centaur": (1, 1), "firefly_bug": (3, 6), "mummy_undead": (1, 2), "chupacabra_lizardfolk": (1, 1),
+         "sheep_minotaur": (3, 5), "highland_minotaur": (2, 3), "yak_minotaur": (2, 3), "dark_elf": (1, 2), "medusa_lamia": (1, 1),
+         "oni_devil": (1, 1), "mantis_bug": (1, 1), "ender_slime": (1, 2), "venus_flytrap_flora": (1, 1), "siren_mermaid": (1, 1),
+         "tusktaur_centaur": (2, 3), "aurorantler_centaur": (1, 2), "rhiwool_minotaur": (1, 2), "meloncollie_canid": (1, 1), "clockhare_jackalope": (1, 1),
+         "axolume_mermaid": (1, 2), "aegis_boar_armoured": (1, 1), "blaze_cat_nekomata": (1, 1), "gargoyle_construct": (1, 1),
+         "anvil_tortoise_lizardfolk": (1, 1), "gliderune_marsupial": (2, 4), "slothren_armoured": (1, 1), "coatimano_rodent": (2, 4),
+         "waterlil_nekomata": (1, 1), "talosling_construct": (1, 1), "mantarrow_mermaid": (1, 2), "sphinx_centaur": (1, 1), "brownie_elf": (1, 1)}
 CATEGORY = {"axolotl_mermaid": "underground_water_creature", "amethyst_slime": "monster", "magma_slime": "monster",
             "seal_mermaid": "creature", "kraken_mollusk": "water_creature", "ammonite_mollusk": "water_creature",
             "night_elf": "monster", "blood_elf": "monster", "salamander_lizardfolk": "monster", "turtle_lizardfolk": "creature",
             "will_o_wisp_undead": "monster", "mosquito_bug": "monster", "greater_devil": "monster", "succubus_devil": "monster",
-            "jack_o_lantern_devil": "monster", "jiang_shi_devil": "monster", "lesser_devil": "monster"}
+            "jack_o_lantern_devil": "monster", "jiang_shi_devil": "monster", "lesser_devil": "monster", "lich_undead": "monster", "jellyfish_mollusk": "water_creature", "mummy_undead": "monster", "chupacabra_lizardfolk": "monster",
+            "dark_elf": "monster", "oni_devil": "monster", "ender_slime": "monster", "siren_mermaid": "water_creature",
+            "axolume_mermaid": "underground_water_creature", "blaze_cat_nekomata": "monster", "gargoyle_construct": "monster",
+            "mantarrow_mermaid": "water_creature"}
 # hitbox widths that differ from the family's
 WIDTH = {"kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alraune_flora": 1.2, "frankenstein_undead": 0.8,
          "gryphon_dragon": 1.3, "long_dragon": 1.0, "jormungandr_dragon": 1.2, "wyvern_dragon": 1.2, "wyrm_dragon": 1.3,
          "fairy_bug": 0.4, "scorpion_bug": 1.2, "moth_larva_bug": 0.6, "papillon_larva_bug": 0.6, "living_doll_undead": 0.4,
-         "kannae_dragon": 0.5, "lesser_devil": 0.5, "mandragora_flora": 0.5}
+         "kannae_dragon": 0.5, "lesser_devil": 0.5, "mandragora_flora": 0.5, "polar_bear_canid": 0.8, "grizzly_canid": 0.8, "kobold_canid": 0.5,
+         "ratatoskr_rodent": 0.5, "galapagos_tortoise_lizardfolk": 0.9, "golem_construct": 1.0, "kangaroo_marsupial": 0.7, "hermit_crab_crustacean": 0.6, "firefly_bug": 0.4, "black_bear_canid": 0.8, "unicorn_centaur": 1.2,
+         "yak_minotaur": 1.0, "oni_devil": 0.8, "venus_flytrap_flora": 1.2, "cave_bat": 0.5, "wolpertinger_jackalope": 0.5,
+         "tusktaur_centaur": 1.5, "rhiwool_minotaur": 0.9, "needlehog_rodent": 0.6, "aegis_boar_armoured": 0.8, "gargoyle_construct": 0.8,
+         "anvil_tortoise_lizardfolk": 0.9, "gliderune_marsupial": 0.5, "sphinx_centaur": 1.3, "brownie_elf": 0.4}
 # the name shown in game: the species name plus the family's word, unless NAME says otherwise
 SUFFIX = {"nekomata": " Nekomata", "kitsune": " Kitsune", "lamia": " Lamia", "arachne": " Arachne", "centaur": " Centaur", "merfolk": " Mermaid",
           "slime": "", "jackalope": "", "minotaur": " Minotaur", "mollusk": "", "elf": "", "undead": "", "lizardfolk": "", "dragon": "",
-          "devil": "", "bug": "", "flora": ""}
+          "devil": "", "bug": "", "flora": "", "canid": "", "rodent": "", "crustacean": " Girl", "marsupial": " Girl",
+          "armoured": " Girl", "construct": "", "bat": " Girl"}
 NAME = {"jack_jackalope": "Jack Jackalope", "kraken_mollusk": "Kraken", "octopus_mollusk": "Octopus Girl", "snail_mollusk": "Snail Girl",
-        "long_dragon": "Long Dragon", "zombie_undead": "Zombie Girl", "phantom_undead": "Phantom Girl", "cactus_flora": "Cactus Girl"}
+        "long_dragon": "Long Dragon", "zombie_undead": "Zombie Girl", "phantom_undead": "Phantom Girl", "cactus_flora": "Cactus Girl",
+        "wolf_canid": "Wolf Girl", "polar_bear_canid": "Polar Bear Girl", "panda_canid": "Panda Girl", "mimic_slime": "Mimic",
+        "grizzly_canid": "Grizzly Girl", "capybara_rodent": "Capybara Girl", "leshy_flora": "Leshy", "llorona_undead": "La Llorona",
+        "black_tortoise_lizardfolk": "Black Tortoise", "golem_construct": "Golem", "crab_crustacean": "Crab Girl",
+        "hermit_crab_crustacean": "Hermit Crab Girl", "jellyfish_mollusk": "Jellyfish Girl", "ahuizotl_mermaid": "Ahuizotl",
+        "unicorn_centaur": "Unicorn", "black_bear_canid": "Black Bear Girl", "koala_marsupial": "Koala Girl", "gecko_lizardfolk": "Gecko Girl",
+        "firefly_bug": "Firefly", "mummy_undead": "Mummy", "sheep_minotaur": "Sheep Girl", "highland_minotaur": "Highland Minotaur",
+        "cave_bat": "Bat Girl", "dark_elf": "Dark Elf", "medusa_lamia": "Medusa", "oni_devil": "Oni", "mantis_bug": "Mantis Girl",
+        "ender_slime": "Ender Slime", "wolpertinger_jackalope": "Wolpertinger", "venus_flytrap_flora": "Venus Flytrap", "siren_mermaid": "Siren",
+        "tusktaur_centaur": "Tusktaur", "aurorantler_centaur": "Aurorantler", "rhiwool_minotaur": "Rhiwool", "meloncollie_canid": "Meloncollie",
+        "needlehog_rodent": "Needlehog", "clockhare_jackalope": "Clockhare", "axolume_mermaid": "Axolume", "aegis_boar_armoured": "Aegis Boar",
+        "blaze_cat_nekomata": "Blaze Cat", "gargoyle_construct": "Gargoyle", "anvil_tortoise_lizardfolk": "Anvil Tortoise",
+        "gliderune_marsupial": "Gliderune", "slothren_armoured": "Slothren", "coatimano_rodent": "Coatimano", "waterlil_nekomata": "Waterlil",
+        "talosling_construct": "Talosling", "mantarrow_mermaid": "Mantarrow", "sphinx_centaur": "Sphinx", "brownie_elf": "Brownie"}
 
 
 def gen_module(fid):
@@ -133,7 +174,8 @@ def main():
         dump(os.path.join(ASSETS, "models", "item", f"{sp}_spawn_egg.json"), {"parent": "minecraft:item/template_spawn_egg"})
         lang[f"entity.monstergirls.{sp}"] = NAME.get(sp, s["name"] + SUFFIX[fid])
         lang[f"item.monstergirls.{sp}_spawn_egg"] = lang[f"entity.monstergirls.{sp}"] + " Spawn Egg"
-        if sp in ("snow_leopard_nekomata", "lynx_nekomata", "arctic_kitsune", "reindeer_centaur"):
+        if sp in ("snow_leopard_nekomata", "lynx_nekomata", "arctic_kitsune", "reindeer_centaur", "highland_minotaur", "yak_minotaur", "tusktaur_centaur",
+                  "aurorantler_centaur"):
             snow_walkers.append("monstergirls:" + sp)
     dump(os.path.join(RES, "data", "minecraft", "tags", "entity_type", "powder_snow_walkable_mobs.json"), {"replace": False, "values": snow_walkers})
 
@@ -244,6 +286,7 @@ public enum GirlSpecies {
         "message.monstergirls.cold": "%s is too cold to move",
         "message.monstergirls.ride_refused": "%s does not let you ride her (yet)",
         "message.monstergirls.keening": "%s keens. Danger is close",
+        "message.monstergirls.mended": "You mend %s's wound. She won't forget it",
         "message.monstergirls.introduced": "%s introduces you to her %s. It is yours now",
         "itemGroup.monstergirls": "Harmontide",
     })

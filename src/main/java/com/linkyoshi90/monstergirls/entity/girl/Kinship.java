@@ -1,6 +1,10 @@
 package com.linkyoshi90.monstergirls.entity.girl;
 
 import com.linkyoshi90.monstergirls.MonsterGirlsMod;
+import com.linkyoshi90.monstergirls.compat.AlexsMobs;
+import com.linkyoshi90.monstergirls.entity.AbstractAnuran;
+import com.linkyoshi90.monstergirls.entity.AbstractHarpy;
+import net.minecraft.core.registries.BuiltInRegistries;
 import com.linkyoshi90.monstergirls.entity.Orders;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -43,6 +47,8 @@ import java.util.UUID;
  * attacking. Feed her and one of her kin her family's food within 30 seconds of each other, and she introduces you:
  * the vanilla mob becomes yours (tamed where vanilla has taming, otherwise a persistent friend that follows you and
  * never targets a player). Families without a vanilla counterpart only bond and breed with players, as before.
+ * Harpies count parrots (the ostrich and the penguin: chickens) as kin, anurans frogs; with Alex's Mobs installed its
+ * animals join their girls' kin too (compat/AlexsMobs).
  */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class Kinship {
@@ -53,13 +59,36 @@ public final class Kinship {
     private static final double RANGE = 16.0;   // how far her pull on her kin reaches
     private static final double MATCH = 8.0;    // how close the two must be for an introduction
 
-    private static final Map<GirlSpecies, Set<EntityType<?>>> KIN = new EnumMap<>(GirlSpecies.class);
-    private static final Set<EntityType<?>> ALL = new HashSet<>();
+    /** Built on first use, when every mod's entities are registered (so Alex's Mobs can be looked up). */
+    private static final class Table {
+        static final Map<GirlSpecies, Set<EntityType<?>>> KIN = new EnumMap<>(GirlSpecies.class);
+        /** Harpies and anurans, by entity id path. */
+        static final Map<String, Set<EntityType<?>>> OTHERS = new java.util.HashMap<>();
+        static final Set<EntityType<?>> ALL = new HashSet<>();
 
-    static {
-        for (GirlSpecies s : GirlSpecies.values()) {
-            Set<EntityType<?>> kin = kinOf(s);
-            KIN.put(s, kin);
+        static {
+            for (GirlSpecies s : GirlSpecies.values()) {
+                Set<EntityType<?>> kin = new HashSet<>(kinOf(s));
+                kin.addAll(AlexsMobs.kinOf(s.id()));
+                KIN.put(s, Set.copyOf(kin));
+                ALL.addAll(kin);
+            }
+            for (String h : List.of("sparrow_harpy", "crow_harpy", "owl_harpy", "seagull_harpy", "albatross_harpy", "riflebird_harpy", "tengu_harpy", "toucan_harpy",
+                    "finch_harpy", "flamingo_harpy", "coin_magpie_harpy", "trickster_raven_harpy", "rookmourn_harpy")) {
+                other(h, EntityType.PARROT);
+            }
+            other("ostrich_harpy", EntityType.CHICKEN);
+            other("penguin_harpy", EntityType.CHICKEN);
+            for (String a : List.of("bullywug", "mucus_toad", "bullfrog", "tree_frog", "poison_dart_frog", "glass_frog", "goliath_frog", "desert_rain_frog",
+                    "fire_bellied_toad", "cane_toad", "natterjack", "surinam_toad", "vodyanoy", "mailtoad")) {
+                other(a, EntityType.FROG);
+            }
+        }
+
+        private static void other(String girl, EntityType<?> vanilla) {
+            Set<EntityType<?>> kin = new HashSet<>(AlexsMobs.kinOf(girl));
+            kin.add(vanilla);
+            OTHERS.put(girl, Set.copyOf(kin));
             ALL.addAll(kin);
         }
     }
@@ -70,18 +99,41 @@ public final class Kinship {
     private static Set<EntityType<?>> kinOf(GirlSpecies s) {
         return switch (s) {
             case OCELOT_NEKOMATA -> Set.of(EntityType.OCELOT);
-            case HORSE_CENTAUR, ZEBRA_CENTAUR -> Set.of(EntityType.HORSE, EntityType.DONKEY, EntityType.MULE);
+            case HORSE_CENTAUR, ZEBRA_CENTAUR, PEGASUS_CENTAUR, UNICORN_CENTAUR -> Set.of(EntityType.HORSE, EntityType.DONKEY, EntityType.MULE);
             case ALPACA_CENTAUR -> Set.of(EntityType.LLAMA, EntityType.TRADER_LLAMA);
             case GOAT_CENTAUR -> Set.of(EntityType.GOAT);
+            case CAMEL_CENTAUR, DROMEDARY_CENTAUR -> Set.of(EntityType.CAMEL);
+            case WOLF_CANID, KOBOLD_CANID -> Set.of(EntityType.WOLF);
+            case POLAR_BEAR_CANID, GRIZZLY_CANID, BLACK_BEAR_CANID -> Set.of(EntityType.POLAR_BEAR);
+            case PANDA_CANID -> Set.of(EntityType.PANDA);
             case ORCA_MERMAID, DOLPHIN_MERMAID -> Set.of(EntityType.DOLPHIN);
             case AXOLOTL_MERMAID -> Set.of(EntityType.AXOLOTL);
             case MAGMA_SLIME -> Set.of(EntityType.MAGMA_CUBE);
             case KRAKEN_MOLLUSK, IKA_MOLLUSK, OCTOPUS_MOLLUSK -> Set.of(EntityType.SQUID, EntityType.GLOW_SQUID);
             case ZOMBIE_UNDEAD -> Set.of(EntityType.ZOMBIE, EntityType.HUSK, EntityType.DROWNED, EntityType.ZOMBIE_VILLAGER);
             case PHANTOM_UNDEAD -> Set.of(EntityType.PHANTOM);
-            case TURTLE_LIZARDFOLK, SNAPPING_TURTLE_LIZARDFOLK -> Set.of(EntityType.TURTLE);
+            case VAMPIRE_UNDEAD -> Set.of(EntityType.BAT);
+            case YUKI_ONNA_UNDEAD -> Set.of(EntityType.SNOW_GOLEM);
+            case GOLEM_CONSTRUCT -> Set.of(EntityType.IRON_GOLEM);
+            case ARMADILLO_ARMOURED -> Set.of(EntityType.ARMADILLO);
+            case SHEEP_MINOTAUR -> Set.of(EntityType.SHEEP);
+            case CAVE_BAT -> Set.of(EntityType.BAT);
+            case DARK_ELF -> Set.of(EntityType.WARDEN);
+            case BLAZE_CAT_NEKOMATA -> Set.of(EntityType.BLAZE);
+            case AEGIS_BOAR_ARMOURED -> Set.of(EntityType.HOGLIN);
+            case AXOLUME_MERMAID -> Set.of(EntityType.AXOLOTL);
+            case MELONCOLLIE_CANID -> Set.of(EntityType.WOLF);
+            case ENDER_SLIME -> Set.of(EntityType.ENDERMITE);
+            case DULLAHAN_UNDEAD -> Set.of(EntityType.SKELETON_HORSE);
+            case LICH_UNDEAD -> Set.of(EntityType.SKELETON, EntityType.STRAY);
+            case FAIRY_BUG, FAIRY_QUEEN_BUG -> Set.of(EntityType.ALLAY);
+            case LESSER_DEVIL -> Set.of(EntityType.VEX);
+            case KOI_MERMAID -> Set.of(EntityType.TROPICAL_FISH);
+            case MATANGO_FLORA -> Set.of(EntityType.MOOSHROOM);
+            case TURTLE_LIZARDFOLK, SNAPPING_TURTLE_LIZARDFOLK, BLACK_TORTOISE_LIZARDFOLK, RED_EARED_SLIDER_LIZARDFOLK, GALAPAGOS_TORTOISE_LIZARDFOLK,
+                 BOX_TURTLE_LIZARDFOLK, SOFTSHELL_TURTLE_LIZARDFOLK, MATAMATA_LIZARDFOLK -> Set.of(EntityType.TURTLE);
             case BEE_BUG, QUEEN_BEE_BUG -> Set.of(EntityType.BEE);
-            case REINDEER_CENTAUR, TAPIR_CENTAUR, SHARK_MERMAID, SEAL_MERMAID, KOI_MERMAID, SNAIL_MOLLUSK, AMMONITE_MOLLUSK -> Set.of();
+            case REINDEER_CENTAUR, TAPIR_CENTAUR, SHARK_MERMAID, SEAL_MERMAID, DUGONG_MERMAID, SNAIL_MOLLUSK, AMMONITE_MOLLUSK -> Set.of();
             default -> switch (s.family()) {
                 case NEKOMATA -> Set.of(EntityType.CAT);
                 case KITSUNE -> Set.of(EntityType.FOX);
@@ -95,16 +147,40 @@ public final class Kinship {
     }
 
     public static Set<EntityType<?>> kin(GirlSpecies s) {
-        return KIN.get(s);
+        return Table.KIN.get(s);
     }
 
-    /** The nearest grown girl within range whose kin this mob is. */
+    /** Whatever counts as her kin: a monster girl's, a harpy's or an anuran's (empty for anything else). */
+    public static Set<EntityType<?>> kinOf(Entity girl) {
+        if (girl instanceof AbstractMonsterGirl g) return Table.KIN.get(g.getSpecies());
+        if (girl instanceof AbstractHarpy || girl instanceof AbstractAnuran) {
+            return Table.OTHERS.getOrDefault(BuiltInRegistries.ENTITY_TYPE.getKey(girl.getType()).getPath(), Set.of());
+        }
+        return Set.of();
+    }
+
+    private static boolean isGirl(Entity e) {
+        return e instanceof AbstractMonsterGirl || e instanceof AbstractHarpy || e instanceof AbstractAnuran;
+    }
+
+    private static boolean eats(Entity girl, ItemStack stack) {
+        if (girl instanceof AbstractMonsterGirl g) return g.isFood(stack);
+        if (girl instanceof AbstractHarpy h) return h.isEdible(stack);
+        return girl instanceof AbstractAnuran a && a.isFood(stack);
+    }
+
+    private static boolean hostileTo(Entity girl, Player player) {
+        if (girl instanceof AbstractMonsterGirl g) return g.isHostileTo(player);
+        return girl instanceof Mob m && m.getTarget() == player;
+    }
+
+    /** The nearest grown girl (a monster girl, harpy or anuran) within range whose kin this mob is. */
     @Nullable
-    public static AbstractMonsterGirl girlOf(Entity mob, double range) {
-        AbstractMonsterGirl best = null;
+    public static PathfinderMob girlOf(Entity mob, double range) {
+        PathfinderMob best = null;
         double bestDist = range * range;
-        for (AbstractMonsterGirl g : mob.level().getEntitiesOfClass(AbstractMonsterGirl.class, mob.getBoundingBox().inflate(range),
-                g -> g.isAlive() && !g.isBaby() && KIN.get(g.getSpecies()).contains(mob.getType()))) {
+        for (PathfinderMob g : mob.level().getEntitiesOfClass(PathfinderMob.class, mob.getBoundingBox().inflate(range),
+                g -> g.isAlive() && !g.isBaby() && isGirl(g) && kinOf(g).contains(mob.getType()))) {
             double d = g.distanceToSqr(mob);
             if (d <= bestDist) {
                 best = g;
@@ -123,10 +199,13 @@ public final class Kinship {
 
     /** Whether this kin mob leaves the player alone: it is someone's friend, or a girl of its kind nearby is friendly to them. */
     public static boolean ignores(Entity mob, Player player) {
-        if (!ALL.contains(mob.getType())) return false;
+        if (!Table.ALL.contains(mob.getType())) return false;
         if (friendOf(mob) != null) return true;
-        AbstractMonsterGirl girl = girlOf(mob, RANGE);
-        return girl != null && !girl.isHostileTo(player);
+        PathfinderMob girl = girlOf(mob, RANGE);
+        if (mob.getType() == EntityType.WARDEN || mob.getType() == EntityType.BLAZE || mob.getType() == EntityType.HOGLIN) {   // fierce kin spare only her friends
+            return girl instanceof AbstractMonsterGirl g && g.getAffection(player) >= Orders.AFFECTION;
+        }
+        return girl != null && !hostileTo(girl, player);
     }
 
     // --- feeding and introductions --------------------------------------------------------------------------------
@@ -143,16 +222,16 @@ public final class Kinship {
 
     /** Feeding a girl, or a kin mob near her, with her family's food. True when the event should stop there. */
     public static boolean feed(ServerLevel level, Player player, Entity target, ItemStack stack) {
-        if (target instanceof AbstractMonsterGirl girl) {
-            if (!girl.isBaby() && !KIN.get(girl.getSpecies()).isEmpty() && girl.isFood(stack) && !girl.isHostileTo(player)) {
+        if (isGirl(target) && target instanceof PathfinderMob girl) {
+            if (!girl.isBaby() && !kinOf(girl).isEmpty() && eats(girl, stack) && !hostileTo(girl, player)) {
                 markFed(girl, player);
                 match(level, girl, player);
             }
             return false;                                      // she eats it the usual way
         }
-        if (!(target instanceof Mob mob) || !ALL.contains(mob.getType()) || friendOf(mob) != null) return false;
-        AbstractMonsterGirl girl = girlOf(mob, MATCH);
-        if (girl == null || !girl.isFood(stack) || girl.isHostileTo(player)) return false;
+        if (!(target instanceof Mob mob) || !Table.ALL.contains(mob.getType()) || friendOf(mob) != null || mob.getType() == EntityType.WARDEN) return false;
+        PathfinderMob girl = girlOf(mob, MATCH);
+        if (girl == null || !eats(girl, stack) || hostileTo(girl, player)) return false;
         markFed(mob, player);
         boolean vanillaEats = mob instanceof Animal a && a.isFood(stack);   // its own food: vanilla still feeds (and may breed) it
         if (!vanillaEats) {
@@ -164,16 +243,16 @@ public final class Kinship {
     }
 
     /** Both fed by the same player in time: every such kin mob near her is introduced. */
-    private static void match(ServerLevel level, AbstractMonsterGirl girl, Player player) {
+    private static void match(ServerLevel level, PathfinderMob girl, Player player) {
         if (!fedBy(girl, player)) return;
-        Set<EntityType<?>> kin = KIN.get(girl.getSpecies());
+        Set<EntityType<?>> kin = kinOf(girl);
         List<Mob> ready = level.getEntitiesOfClass(Mob.class, girl.getBoundingBox().inflate(MATCH),
                 m -> kin.contains(m.getType()) && friendOf(m) == null && fedBy(m, player));
         for (Mob m : ready) befriend(level, m, player, girl);
     }
 
     /** The vanilla mob becomes the player's: tamed where vanilla allows it, otherwise a persistent friend. */
-    public static void befriend(ServerLevel level, Mob mob, Player player, AbstractMonsterGirl girl) {
+    public static void befriend(ServerLevel level, Mob mob, Player player, PathfinderMob girl) {
         CompoundTag tag = mob.getPersistentData();
         tag.putUUID(FRIEND, player.getUUID());
         tag.remove(FED_BY);
@@ -188,7 +267,7 @@ public final class Kinship {
         else if (mob instanceof Ocelot o) o.setTrusting(true);
         else if (mob instanceof Fox f && !f.trusts(player.getUUID())) f.addTrustedUUID(player.getUUID());
         level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getY() + mob.getBbHeight(), mob.getZ(), 6, 0.4, 0.3, 0.4, 0.0);
-        girl.hearts(level, 4);
+        level.sendParticles(ParticleTypes.HEART, girl.getX(), girl.getY() + girl.getBbHeight() + 0.2, girl.getZ(), 4, 0.3, 0.2, 0.3, 0.0);
         player.displayClientMessage(Component.translatable("message.monstergirls.introduced", girl.getDisplayName(), mob.getDisplayName()), false);
     }
 
@@ -285,7 +364,7 @@ public final class Kinship {
     /** Kin mobs follow their girl (or, once introduced, their player) and stop running from players she likes. */
     @SubscribeEvent
     public static void onJoin(EntityJoinLevelEvent event) {
-        if (event.getLevel().isClientSide() || !(event.getEntity() instanceof PathfinderMob mob) || !ALL.contains(mob.getType())) return;
+        if (event.getLevel().isClientSide() || !(event.getEntity() instanceof PathfinderMob mob) || !Table.ALL.contains(mob.getType())) return;
         for (WrappedGoal w : List.copyOf(mob.goalSelector.getAvailableGoals())) {
             if (w.getGoal() instanceof AvoidEntityGoal<?> avoid && avoid.avoidClass == Player.class) {
                 mob.goalSelector.removeGoal(avoid);

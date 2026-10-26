@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_penguin_harpy",
+  "spawners": {
+    "type": "monstergirls:penguin_harpy",
+    "weight": 6,
+    "minCount": 4,
+    "maxCount": 8
+  }
+}

@@ -43,15 +43,31 @@ public class ParentageBlockEntity extends BlockEntity {
         if (father != null && level.getBlockEntity(pos) instanceof ParentageBlockEntity be) be.setFather(father);
     }
 
+    /** The mother's Harmontide paint, which the young inherit (0: none). */
+    private int paint;
+
+    public static int paintAt(LevelAccessor level, BlockPos pos) {
+        return level.getBlockEntity(pos) instanceof ParentageBlockEntity be ? be.paint : 0;
+    }
+
+    public static void setPaintAt(LevelAccessor level, BlockPos pos, int paint) {
+        if (paint > 0 && level.getBlockEntity(pos) instanceof ParentageBlockEntity be) {
+            be.paint = paint;
+            be.setChanged();
+        }
+    }
+
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         if (this.father != null) tag.putUUID("Father", this.father);
+        if (this.paint > 0) tag.putInt("Paint", this.paint);
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         this.father = tag.hasUUID("Father") ? tag.getUUID("Father") : null;
+        this.paint = tag.getInt("Paint");
     }
 }

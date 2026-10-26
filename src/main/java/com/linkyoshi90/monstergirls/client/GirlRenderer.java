@@ -37,9 +37,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
     private final GirlSpecies species;
     /** Species with a glow mask (textures/entity/&lt;texture&gt;_glowmask.png for every colour). */
-    static final java.util.Set<String> GLOWING = java.util.Set.of("magma_slime", "will_o_wisp_undead", "salamander_lizardfolk", "jack_o_lantern_devil");
+    static final java.util.Set<String> GLOWING = java.util.Set.of("magma_slime", "will_o_wisp_undead", "salamander_lizardfolk", "jack_o_lantern_devil",
+            "jellyfish_mollusk", "dark_elf", "ender_slime", "aurorantler_centaur", "axolume_mermaid", "blaze_cat_nekomata");
     /** Species drawn see-through (jelly, flame, insect wings, ghosts). */
-    static final java.util.Set<String> TRANSLUCENT = java.util.Set.of("will_o_wisp_undead");
+    static final java.util.Set<String> TRANSLUCENT = java.util.Set.of("will_o_wisp_undead", "jellyfish_mollusk");
 
     public GirlRenderer(EntityRendererProvider.Context context, GirlSpecies species) {
         super(context, new Model(species));
@@ -47,6 +48,37 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         this.shadowRadius = species.width() * 0.6F;
         if (GLOWING.contains(species.id())) this.addRenderLayer(new AutoGlowingGeoLayer<>(this));
         if (species.family() == GirlSpecies.Family.CENTAUR) this.addRenderLayer(new TorsoArmourLayer(this));
+        if (species == GirlSpecies.SHEEP_MINOTAUR || species == GirlSpecies.RHIWOOL_MINOTAUR) this.addRenderLayer(new DyedWoolLayer(this));
+        this.addRenderLayer(new MoonEyesLayer<>(this));
+        this.addRenderLayer(new PaintGlowLayer<>(this, AbstractMonsterGirl::getPaintName));
+        if (species == GirlSpecies.FIREFLY_BUG) {                          // every firefly pulses in time with the others (the world's clock)
+            this.addRenderLayer(new AutoGlowingGeoLayer<>(this) {
+                @Override
+                public void render(PoseStack poseStack, AbstractMonsterGirl girl, BakedGeoModel model, RenderType renderType, MultiBufferSource buffers,
+                                   VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+                    float glow = fireflyPulse(girl.level().getGameTime() + partialTick);
+                    RenderType glowType = this.getRenderType(girl);
+                    if (glow <= 0.02F || glowType == null) return;
+                    int c = (int) (glow * 255);
+                    this.getRenderer().reRender(model, poseStack, buffers, girl, glowType, buffers.getBuffer(glowType), partialTick, 0xF000F0, packedOverlay,
+                            c << 24 | c << 16 | c << 8 | c);
+                }
+            });
+        }
+    }
+
+    /** A firefly's glow over her 3-second cycle: it swells and fades for two seconds, then she is dark for one. */
+    static float fireflyPulse(float time) {
+        float phase = time % 60.0F;
+        if (phase >= 40.0F) return 0.0F;
+        float s = net.minecraft.util.Mth.sin((float) Math.PI * phase / 40.0F);
+        return s * s;
+    }
+
+    /** A girl with her own death animation (the golem breaks apart) is not tipped over as she dies. */
+    @Override
+    protected float getDeathMaxRotation(AbstractMonsterGirl girl) {
+        return girl.hasDeathAnimation() ? 0.0F : super.getDeathMaxRotation(girl);
     }
 
     /** A dyed (or merged) slime is drawn in her own colour, any colour at all. */
@@ -56,6 +88,23 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
             return software.bernie.geckolib.util.Color.ofOpaque(slime.colour());
         }
         return super.getRenderColor(girl, partialTick, packedLight);
+    }
+
+    /** A dyed sheep's fleece: &lt;model&gt;_wool.png (the wool alone, in white) drawn over her again in the dye's colour. */
+    static class DyedWoolLayer extends software.bernie.geckolib.renderer.layer.GeoRenderLayer<AbstractMonsterGirl> {
+        DyedWoolLayer(GirlRenderer renderer) {
+            super(renderer);
+        }
+
+        @Override
+        public void render(PoseStack poseStack, AbstractMonsterGirl girl, BakedGeoModel model, RenderType renderType, MultiBufferSource buffers,
+                           VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+            if (!(girl instanceof com.linkyoshi90.monstergirls.entity.girl.Minotaur m) || m.getWoolDye() == null || m.isShorn() || girl.getPaint() > 0) return;
+            String name = girl.getSpecies().id() + (girl.hasFlag(AbstractMonsterGirl.FLAG_MALE) ? "_male" : "") + "_wool";
+            RenderType wool = RenderType.entityCutoutNoCull(MonsterGirlsMod.id("textures/entity/" + name + ".png"));
+            this.getRenderer().reRender(model, poseStack, buffers, girl, wool, buffers.getBuffer(wool), partialTick, packedLight, packedOverlay,
+                    m.getWoolDye().getTextureDiffuseColor());
+        }
     }
 
     /** A worn chestplate, fitted to the invisible armor_torso box in her model. */
@@ -153,6 +202,35 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
                 GeoBone t = proc.getBone(b);
                 if (t != null) t.setHidden(!twin);
             }
+            if (girl.isInjured()) {                                          // a broken wing hangs limp
+                for (String w : new String[]{"wing_l", "wing2_l"}) {
+                    GeoBone b = proc.getBone(w);
+                    // ponytail: droop angle not checked in a dev client; flip the sign if it points up
+                    if (b != null) {
+                        b.setRotX(0.5F);
+                        b.setRotY(0.3F);
+                        b.setRotZ(-1.1F);
+                    }
+                }
+            }
+            GeoBone tail = proc.getBone("tail");                               // a gecko's tail grows back after she sheds it
+            if (tail != null && girl.getSpecies() == GirlSpecies.GECKO_LIZARDFOLK) tail.setHidden(girl.hasFlag(AbstractMonsterGirl.FLAG_TAILLESS));
+            for (String b : new String[]{"wrap_arm_r", "wrap_arm_l", "wrap_fore_r", "wrap_fore_l", "wrap_shin_r", "wrap_shin_l"}) {   // the mummy's layers
+                GeoBone w = proc.getBone(b);
+                if (w != null) w.setHidden(girl.hasFlag(AbstractMonsterGirl.FLAG_UNWRAP_A));
+            }
+            for (String b : new String[]{"wrap_torso", "wrap_thigh_r", "wrap_thigh_l"}) {
+                GeoBone w = proc.getBone(b);
+                if (w != null) w.setHidden(girl.hasFlag(AbstractMonsterGirl.FLAG_UNWRAP_B));
+            }
+            for (String b : new String[]{"wool", "wool_hips", "wool_head"}) {         // a shorn sheep
+                GeoBone w = proc.getBone(b);
+                if (w != null) w.setHidden(girl.hasFlag(AbstractMonsterGirl.FLAG_SHORN));
+            }
+            GeoBone pack = proc.getBone("pack");                               // the yak's chest, once she carries one
+            if (pack != null) pack.setHidden(!girl.hasFlag(AbstractMonsterGirl.FLAG_CHEST));
+            GeoBone blindfold = proc.getBone("blindfold");                     // the medusa's, once she has a friend
+            if (blindfold != null) blindfold.setHidden(!girl.hasFlag(AbstractMonsterGirl.FLAG_BLINDFOLD));
             GeoBone brood = proc.getBone("brood");
             if (brood != null) brood.setHidden(!girl.hasFlag(AbstractMonsterGirl.FLAG_CARRYING));
             GeoBone shells = proc.getBone("seashells");
@@ -178,6 +256,7 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
 
     @Override
     public RenderType getRenderType(AbstractMonsterGirl girl, ResourceLocation texture, @Nullable MultiBufferSource buffers, float partialTick) {
-        return this.species.family() == GirlSpecies.Family.SLIME || TRANSLUCENT.contains(this.species.id()) || this.species.id().endsWith("_bug") ? RenderType.entityTranslucent(texture) : super.getRenderType(girl, texture, buffers, partialTick);
+        return this.species.family() == GirlSpecies.Family.SLIME || TRANSLUCENT.contains(this.species.id()) || this.species.id().endsWith("_bug")
+                || Paints.translucent(girl.getPaintName()) ? RenderType.entityTranslucent(texture) : super.getRenderType(girl, texture, buffers, partialTick);
     }
 }

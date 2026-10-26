@@ -55,6 +55,8 @@ public final class AnuranVariants {
     public static final List<String> FIRE_BELLIED_TOAD = List.of("oriental", "yellow", "european", "giant", "blue");
     public static final List<String> NATTERJACK = List.of("olive", "green", "brown", "red", "grey");
     public static final List<String> SURINAM_TOAD = List.of("brown", "dark", "olive", "pale", "rust");
+    public static final List<String> VODYANOY = List.of("river", "bog", "old", "lake", "pale");
+    public static final List<String> MAILTOAD = List.of("post", "teal", "green", "grey", "gold");
 
     /** One in this many of the newer species is the rare colour (the last one listed below), wherever it spawns. */
     public static final int RARE = 30;
@@ -74,7 +76,9 @@ public final class AnuranVariants {
             Map.entry("fire_bellied_toad", new Set(FIRE_BELLIED_TOAD, (b, r) -> b.is(Tags.Biomes.IS_MOUNTAIN) && r.nextInt(2) == 0
                     ? FIRE_BELLIED_TOAD.indexOf("yellow") : common(FIRE_BELLIED_TOAD, "blue").apply(b, r))),
             Map.entry("natterjack", new Set(NATTERJACK, common(NATTERJACK, "red"))),
-            Map.entry("surinam_toad", new Set(SURINAM_TOAD, common(SURINAM_TOAD, "pale"))));
+            Map.entry("mailtoad", new Set(MAILTOAD, common(MAILTOAD, "gold"))),
+            Map.entry("surinam_toad", new Set(SURINAM_TOAD, common(SURINAM_TOAD, "pale"))),
+            Map.entry("vodyanoy", new Set(VODYANOY, common(VODYANOY, "pale"))));
 
     /**
      * The newer species' rule: the rare colour one time in {@link #RARE}; otherwise the default half the time and the

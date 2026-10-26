@@ -22,6 +22,15 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # ninth wave: the venus flytrap rises from a rosette of leaves between two great trap lobes (bones jaw_r/jaw_l) that snap shut ("snap")
+    "venus_flytrap_flora": dict(
+        build="slim", outfit=dict(top=["bandeau"], extras=["armlets"]), hair="sidetail", bangs="jagged", ears=None, lower="none", plant="trap",
+        pal=dict(SKIN="#a8d890", HAIR="#c82a3a", FUR="#c82a3a", LIGHT="#e8f8d0", MARK="#6a1a22", EYE="#e8d040", CLOTH="#5aa83a", TRIM="#c82a3a",
+                 extra=dict(leaf="#5aa83a", trap="#d8303a", cilia="#e8f0a0")),
+        variants={"red": dict(SKIN="#e8b0a8", HAIR="#a81a2a", CLOTH="#a81a2a", TRIM="#e8d040", extra=dict(leaf="#a8303a", trap="#7a1222", cilia="#f8c8a0")),
+                  "purple": dict(SKIN="#c8b0d8", HAIR="#6a2a8a", CLOTH="#5a3a7a", extra=dict(leaf="#6a5a8a", trap="#8a2aa8", cilia="#e8c8f8")),
+                  "yellow": dict(SKIN="#d8e8a0", HAIR="#d8a82a", CLOTH="#a8c83a", extra=dict(leaf="#a8c83a", trap="#e8a82a", cilia="#f8f0c0")),
+                  "dark": dict(SKIN="#7aa86a", HAIR="#3a0e14", CLOTH="#2a5a1e", extra=dict(leaf="#2a5a1e", trap="#6a1a1e", cilia="#c8d8a0"))}),
     "alraune_flora": dict(
         build="curvy", outfit=dict(top=["bandeau"], extras=["pearls"]), hair="wavy", bangs="parted", ears=None, lower="none", plant="flower",
         pal=dict(SKIN="#b8e0a0", HAIR="#f088b0", FUR="#f088b0", LIGHT="#fcd8e8", MARK="#c84a7a", EYE="#e8c040", CLOTH="#f088b0", TRIM="#7ab85a",
@@ -38,6 +47,15 @@ SPECIES = {
                   "glow": dict(HAIR="#3ac8e8", extra=dict(cap="#2a6ab8", spot="#8af0ff", stalk="#d8e8f0", mycelium="#5a6a8a")),
                   "purple": dict(HAIR="#8a3ab8", extra=dict(cap="#7a2aa8", spot="#e8c8f8", stalk="#ece0f0", mycelium="#6a5a7a")),
                   "white": dict(HAIR="#f0ece4", extra=dict(cap="#f4f0e8", spot="#c8c0b0", stalk="#f8f4ec", mycelium="#9a8a9a"))}),
+    "leshy_flora": dict(
+        build="male", outfit=dict(top=["mantle"], bottom="loincloth", extras=["belt"], colors=dict(cloth2="#3a5a2a")), hair="shaggy", bangs="messy",
+        ears=None, legs="fur", foot="hoof", plant="leshy", horns="antlers",
+        pal=dict(SKIN="#8a6a48", HAIR="#4a7a3a", FUR="#5a4a32", LIGHT="#8a7a5a", MARK="#3a2a1a", EYE="#7ae860", CLOTH="#3a5a2a", TRIM="#8a6a3a",
+                 extra=dict(horn="#a8906a", moss="#4a7a3a", hoof="#3a2a1a")),
+        variants={"birch": dict(SKIN="#d8d0c0", HAIR="#7ab85a", FUR="#c8c0b0", extra=dict(horn="#e8e0d0", moss="#7ab85a", hoof="#2a2a2a")),
+                  "spruce": dict(SKIN="#5a3e26", HAIR="#2a5a3a", FUR="#4a3220", extra=dict(horn="#8a7050", moss="#2a5a3a", hoof="#2a1a10")),
+                  "autumn": dict(HAIR="#c8682a", extra=dict(horn="#a8906a", moss="#c8682a", hoof="#3a2a1a")),
+                  "frost": dict(SKIN="#a8b0b0", HAIR="#d8e8e8", FUR="#8a9090", EYE="#5ab0e8", extra=dict(horn="#e8f0f0", moss="#c8dcdc", hoof="#3a3a40"))}),
     "ent_flora": dict(
         build="strong", outfit=dict(top=["sarashi"], bottom="loincloth", colors=dict(bandage="#7a9a4a", cloth2="#5a7a3a")), hair="mane", bangs="messy",
         ears=None, legs="bare", foot="claw", plant="tree",
@@ -54,7 +72,14 @@ SPECIES = {
         variants={"blue": dict(SKIN="#7ab8a8", HAIR="#3a7a7a", extra=dict(cactus="#4a8a8a", bloom="#f8d040"), CLOTH="#f8d040"),
                   "golden": dict(SKIN="#c8c06a", HAIR="#9a8a2a", extra=dict(cactus="#a8a03a", bloom="#f05a3a"), CLOTH="#f05a3a"),
                   "purple": dict(SKIN="#8a8aa8", HAIR="#5a4a7a", extra=dict(cactus="#6a5a8a", bloom="#f8f0a0"), CLOTH="#f8f0a0"),
-                  "white": dict(SKIN="#c8d8b8", HAIR="#f0f0e8", MARK="#ffffff", extra=dict(cactus="#a8c098", bloom="#f07aa8"))}),
+                  "white": dict(SKIN="#c8d8b8", HAIR="#f0f0e8", MARK="#ffffff", extra=dict(cactus="#a8c098", bloom="#f07aa8")),
+                  # homages to Gregory Horror Show (2026-10-25): Cactus Girl and Cactus Gunman
+                  "gunman": dict(SKIN="#2e8a46", HAIR="#141414", EYE="#3a2a9a", CLOTH="#e8dcc8", TRIM="#8a2e4a",
+                                 extra=dict(cactus="#1e7a3e", bloom="#d83a2a", gunman=True, hat="#f4c018", hat_band="#1e7a3e", bandana="#d81e1e",
+                                            poncho="#e8dcc8", poncho_band="#8a2e4a", ribs="#1a6a34")),
+                  "blossom": dict(SKIN="#62b434", HAIR="#14603a", EYE="#e0301e", CLOTH="#2a5aa0", TRIM="#f8c830",
+                                  extra=dict(cactus="#4aa02e", bloom="#f86aa8", blossom=True, hat="#d8782a", hat_band="#6a3a18", bandana="#f02a10",
+                                             poncho="#1e4e98", poncho_band="#f0a030", ribs="#2e8a2a"))}),
     "mandragora_flora": dict(
         build="petite", outfit=dict(top=["halter"], colors=dict()), hair="pixie", bangs="messy", ears=None, lower="none", plant="root",
         pal=dict(SKIN="#e8d0b0", HAIR="#5aa84a", FUR="#d8b890", LIGHT="#f8ecd8", MARK="#8a6a4a", EYE="#3a2a1a", CLOTH="#7ab85a", TRIM="#3a7a2a",
@@ -68,6 +93,8 @@ SPECIES = {
 
 def declare_hook(sp, d):
     k = d["plant"]
+    if k == "trap":
+        return [("lobe", .75, 9, 7.5), ("cilia", .5, 2.25, .5), ("bulb", 7, 5, 7), ("leaf", 2.5, .25, 6), ("stem", 2.5, 7, 2.5)]
     if k == "flower":
         return [("petal", 3.5, .5, 7), ("petal_in", 3.5, 6, .5), ("bulb", 7, 5, 7), ("leaf", 2.5, .25, 6), ("stem", 2.5, 7, 2.5)]
     if k == "mushroom":
@@ -76,9 +103,14 @@ def declare_hook(sp, d):
     if k == "tree":
         return [("branch", 1.25, 6, 1.25), ("twig", .75, 3, .75), ("leafball", 4, 3.5, 4)]
     if k == "cactus":
-        return [("column", 5.5, 13, 5.5), ("carm", 2.5, 5, 2.5), ("carm_up", 2.5, 4, 2.5), ("bloom", 2.5, 1.5, 2.5)]
+        return [("column", 5.5, 13, 5.5), ("carm", 2.5, 5, 2.5), ("carm_up", 2.5, 4, 2.5), ("bloom", 2.5, 1.5, 2.5),
+                ("sombrero_brim", 17, .75, 17), ("sombrero_crown", 6, 4, 6), ("sombrero_top", 4.5, 2, 4.5), ("bandana", 5.5, 1.75, 4.25),
+                ("poncho", 7.5, 5.5, 5.25), ("braid", 1.5, 6, 1.5), ("braid_bow", 3, 1.5, .5), ("lasso", 4, 4, .25), ("mustache", 7, 2, .25),
+                ("bandolier", 1.5, 12, .5), ("sleeve_puff", 2.25, 2, 2.25)]
     if k == "root":
         return [("rbulb", 5, 6, 5), ("rtend_a", 1, 4, 1), ("rtend_b", .75, 3, .75), ("leafy", 1.5, 6, .25), ("tuft", 4, 1, 4)]
+    if k == "leshy":
+        return [("beard", 1.5, 7, .75), ("beard_s", 1.5, 5, .75), ("moss", 5.5, 1.5, 3.5)]
     return []
 
 
@@ -91,6 +123,10 @@ def paint_hook(pt, pal, d):
     pt("bulb", "all", lambda f, x, y, w, h: pick(leaf, 0.45 + 0.2 * ((x + y) % 3 == 0), x, y))
     pt("leaf", "all", lambda f, x, y, w, h: pick(leaf, 0.5 + 0.2 * (x == w // 2), x, y))
     pt("stem", "all", lambda f, x, y, w, h: pick(leaf, 0.4 + 0.15 * (y % 3 == 0), x, y))
+    trap = G.shades(e.get("trap", "#d8303a"))
+    pt("lobe", "all", lambda f, x, y, w, h: pick(leaf, 0.5 + 0.12 * (y % 3 == 0), x, y) if f in ("up", "down")
+       else pick(trap if abs(x + 0.5 - w / 2) < w * 0.36 and y > 0 else leaf, 0.45 + 0.25 * (y / max(1, h - 1)) + (noise(x, y, 43) - 0.5) * 0.1, x, y))
+    pt("cilia", "all", lambda f, x, y, w, h: pick(G.shades(e.get("cilia", "#e8f0a0")), 0.5 + 0.2 * (y == 0), x, y))
     cap, spot = G.shades(e.get("cap", "#c8302a")), G.shades(e.get("spot", "#f8f4ec"))
     spotted = lambda f, x, y, w, h: pick(spot, 0.7, x, y) if (x * 7 + y * 11) % 13 < 2 and f != "down" else pick(cap if f != "down" else spot, 0.5, x, y)
     pt("cap", "all", spotted)
@@ -114,6 +150,61 @@ def paint_hook(pt, pal, d):
         pt(p, "all", lambda f, x, y, w, h: pick(root, 0.45 + 0.2 * (y % 3 == 0) + (noise(x, y, 4) - 0.5) * 0.1, x, y))
     pt("leafy", "all", lambda f, x, y, w, h: pick(leaf, 0.5 + 0.25 * (x == w // 2), x, y))
     pt("tuft", "all", lambda f, x, y, w, h: pick(leaf, 0.45, x, y))
+    moss = G.shades(e.get("moss", "#4a7a3a"))                         # the leshy's beard and shoulders of moss
+    for p in ("beard", "beard_s", "moss"):
+        pt(p, "all", lambda f, x, y, w, h: pick(moss, 0.4 + 0.3 * ((x + y // 2) % 3 == 0) + (noise(x, y, 8) - 0.5) * 0.15, x, y))
+    if d["plant"] == "cactus":                                 # the homage variants (Cactus Girl, Cactus Gunman): drawn only on them
+        girl, gun = e.get("blossom"), e.get("gunman")
+        any_ = girl or gun
+        show = lambda on, fn: (lambda f, x, y, w, h: fn(f, x, y, w, h) if on else CLEAR)
+        hat, band = G.shades(e.get("hat", "#d8782a")), G.shades(e.get("hat_band", "#6a3a18"))
+
+        def weave(f, x, y, w, h, band_rows=0):                  # straw, in rows of little scallops
+            if band_rows and y >= h - band_rows and f not in ("up", "down"):
+                return pick(band, 0.45, x, y)
+            arc = (y % 3 == 1 and (x + (y // 3) * 2) % 5 in (1, 2, 3)) or (y % 3 == 2 and (x + (y // 3) * 2) % 5 in (0, 4))
+            return pick(hat, 0.5 + 0.22 * arc - 0.1 * (f == "down"), x, y)
+        pt("sombrero_brim", "all", show(any_, weave))
+        pt("sombrero_crown", "all", show(any_, lambda f, x, y, w, h: weave(f, x, y, w, h, band_rows=3)))
+        pt("sombrero_top", "all", show(any_, weave))
+        red, gold = G.shades(e.get("bandana", "#f02a10")), G.shades("#f8c830")
+        pt("bandana", "all", show(any_, lambda f, x, y, w, h: pick(gold if girl and y == h - 1 else red, 0.5 + 0.15 * ((x + y) % 5 == 0), x, y)))
+        pon, pband = G.shades(e.get("poncho", "#1e4e98")), G.shades(e.get("poncho_band", "#f0a030"))
+        ink, cream = G.shades("#1e1a1a"), G.shades("#f4ecdc")
+
+        def poncho(f, x, y, w, h):
+            if f in ("up", "down"):
+                return CLEAR if f == "down" else pick(pon if gun else cream, 0.5, x, y)
+            if y >= h - 2:                                      # the fringe
+                return pick(pband, 0.55, x, y) if x % 2 == 0 else CLEAR
+            if girl:
+                if y < h * 0.55:                                # a cow-print top
+                    return pick(ink, 0.3, x, y) if H.noise(x // 3, y // 3, 41) > 0.68 else pick(cream, 0.6, x, y)
+                zig = abs((x % 6) - 3) == (y - int(h * 0.55)) % 4    # a zigzag band with diamonds under it
+                dia = (x + 3) % 6 == 0 and y == h - 4
+                return pick(pband if zig else ink if dia else pon, 0.5 + 0.1 * zig, x, y)
+            zig = abs((x % 6) - 3) == (y // 2) % 4                   # the gunman's: cream and maroon zigzags, bullet holes
+            if (x * 7 + y * 5) % 37 == 0:
+                return pick(ink, 0.2, x, y)
+            return pick(pband if zig else pon, 0.45 + 0.15 * (y % 4 == 0), x, y)
+        pt("poncho", "all", show(any_, poncho))
+        hair_c = G.shades(e.get("braid", "#14603a"))
+        pt("braid", "all", show(girl, lambda f, x, y, w, h: pick(pal.HAIR, 0.45 + 0.25 * ((y // 3) % 2 == 0), x, y)))
+        pt("braid_bow", "all", show(girl, lambda f, x, y, w, h: pick(red, 0.55 + 0.2 * (x in (0, w - 1)), x, y)))
+        rope = G.shades("#c08a3a")
+        pt("lasso", "all", show(girl, lambda f, x, y, w, h: CLEAR if (2 <= x < w - 2 and 2 <= y < h - 2) else pick(rope, 0.5 + 0.2 * ((x + y) % 2), x, y)))
+        pt("mustache", "all", show(gun, lambda f, x, y, w, h: CLEAR if (f == "north" and (y < h * 0.4 and abs(x + 0.5 - w / 2) > w * 0.12
+                                                                                           or y >= h * 0.7 and abs(x + 0.5 - w / 2) < w * 0.3))
+                                     else pick(ink, 0.25, x, y)))
+        leather, brass = G.shades("#6a3a24"), G.shades("#b88a3a")
+        pt("bandolier", "all", show(gun, lambda f, x, y, w, h: pick(brass if f == "north" and y % 3 != 0 and 1 <= x < w - 1 else leather, 0.5, x, y)))
+        pt("sleeve_puff", "all", show(girl, lambda f, x, y, w, h: pick(pon, 0.55 + 0.2 * (y == h - 1), x, y)))
+        ribs = G.shades(e.get("ribs", "#2e8a2a"))
+        if any_:                                                # cactus ribs down her skin
+            for p in ("head", "arm_up", "forearm", "column", "carm", "carm_up"):
+                pt(p, ("north", "south", "east", "west"), lambda f, x, y, w, h: pick(ribs, 0.4, x, y) if x % 5 == 2 else None)
+            if girl:                                            # freckles
+                pt("head", ("north",), lambda f, x, y, w, h: pick(ribs, 0.25, x, y) if (x, y) in {(13, 17), (15, 16), (17, 17), (14, 19), (16, 19)} else None)
     if d["plant"] in ("cactus",):                              # spines on her skin too
         pt("arm_up", ("north", "east", "west"), lambda f, x, y, w, h: pick(G.shades("#f8f0d8"), 0.7, x, y) if (x + 3 * y) % 7 == 0 else None)
 
@@ -122,6 +213,13 @@ def build_hook(r, g, d):
     import math
     k = d["plant"]
     hy, z = g.hy, g.z
+    if k == "trap":                                            # a rosette of leaves; a trap lobe each side, hinged low, open wide
+        cs = [cube("bulb", [-3.5, 7.0, -3.5]), cube("stem", [-1.25, 0, -1.25])]
+        for i in range(6):
+            cs.append(G.rot_cube("leaf", [-1.25, 0.1, 5.0], [0, 0.2, 0], -4, i * 60 + 15, 0))
+        r.add("trap", "root", [0, 0, 0], cs)
+        teeth = [cube("cilia", [-4.6, 15.9, -3.6 + 1.0 * i]) for i in range(8)]
+        r.add("jaw_r", "trap", [-3.5, 8.0, 0], [cube("lobe", [-4.6, 7.0, -3.75])] + teeth, mirror=True)
     if k == "flower":                                          # her waist rises from the flower's heart
         cs = [cube("bulb", [-3.5, 7.0, -3.5]), cube("stem", [-1.25, 0, -1.25])]
         for i in range(8):                                    # the great outer petals droop from under the bulb
@@ -150,6 +248,19 @@ def build_hook(r, g, d):
                                            cube("carm", [-5.25, 5, -1.25]), cube("carm_up", [-5.25, 7.5, -1.25]),
                                            cube("carm", [2.75, 3.5, -1.25]), cube("carm_up", [2.75, 6.0, -1.25])])
         r.put("head", cube("bloom", [2.0, hy + 7.6, -1.0 + z]))
+        r.add("sombrero", "head", [0, hy + 7, z], [cube("sombrero_brim", [-8.5, hy + 6.8, -8.5 + z]), cube("sombrero_crown", [-3, hy + 7.5, -3 + z]),
+                                                   cube("sombrero_top", [-2.25, hy + 11.5, -2.25 + z])])
+        r.add("braids", "head", [0, hy + 2, z], [cube("braid", [-6.4, hy - 4.0, -1.75 + z]), cube("braid", [4.9, hy - 4.0, -1.75 + z]),
+                                                 cube("braid_bow", [-7.15, hy - 3.2, -2.0 + z]), cube("braid_bow", [4.15, hy - 3.2, -2.0 + z])])
+        r.put("head", cube("mustache", [-3.5, hy + 0.2, -4.35 + z]))
+        r.add("poncho", "body", [0, 16, z], [cube("poncho", [-3.75, 13.4, -2.625 + z]), cube("bandana", [-2.75, 18.6, -2.125 + z]),
+                                             G.rot_cube("bandolier", [-0.75, 10.6, -2.95 + z], [0, 16.6, -2.7 + z], 0, 0, 48),
+                                             cube("lasso", [-4.6, 11.0, -2.9 + z])])
+        r.put("arm_r", cube("sleeve_puff", [r.b["arm_r"]["pivot"][0] - 1.125, r.b["arm_r"]["pivot"][1] - 2.2, -1.125 + z]))
+    if k == "leshy":                                           # a long beard of moss, moss on his shoulders
+        r.add("beard", "head", [0, hy + 0.5, z - 4], [G.hang("beard", -0.75, hy + 0.6, z - 4.6, 0, -6), G.hang("beard_s", -2.25, hy + 0.8, z - 4.4, 6, -5),
+                                                     G.hang("beard_s", 0.75, hy + 0.8, z - 4.4, -6, -5)])
+        r.put("body", cube("moss", [-2.75, 19.0, -1.75 + z]))
     if k == "root":
         r.add("rootbody", "root", [0, 0, 0], [cube("rbulb", [-2.5, 6.0, -2.5])])
         for i in range(5):
@@ -178,11 +289,24 @@ def anim_extra(an, sp, d):
     if k in ("mushroom", "root"):
         for key in [kk.split(".")[-1] for kk in an.A]:
             F._inject(an, key, {"disguise": {"scale": hold(0, 0, 0)}})
-    if k in ("flower", "mushroom", "cactus", "root"):          # no legs: she sways instead of walking
+    if k == "trap":                                            # the lobes stand open; "snap" swings them shut over whatever is in front
+        for key in [kk.split(".")[-1] for kk in an.A]:
+            F._inject(an, key, {"jaw_r": {"rotation": hold(0, 30, 35)}, "jaw_l": {"rotation": hold(0, -30, -35)}})
+        an.add("snap", 0.6, False, merge({"jaw_r": {"rotation": Tk((0, (0, 30, 35)), (0.08, (0, 60, -20)), (0.45, (0, 60, -20)), (0.6, (0, 30, 35)))},
+                                          "jaw_l": {"rotation": Tk((0, (0, -30, -35)), (0.08, (0, -60, 20)), (0.45, (0, -60, 20)), (0.6, (0, -30, -35)))},
+                                          "body": {"rotation": Tk((0, (0, 0, 0)), (0.08, (16, 0, 0)), (0.6, (0, 0, 0)))}},
+                                         sym("arm", Tk((0, (0, 0, 0)), (0.08, (-70, 0, 0)), (0.6, (0, 0, 0))))))
+    if k == "trap":                                            # asleep: sunk into her rosette, upright, the lobes closed over her like a bud
+        an.A.pop(f"animation.{sp}.lie", None)
+        an.add("lie", 3.0, True, merge({"body": {"position": hold(0, -4.5, 0), "rotation": hold(8, 0, 0)}, "head": {"rotation": hold(22, 0, 6)},
+                                        "eyelids": {"position": hold(*H.OUT_)},
+                                        "jaw_r": {"rotation": hold(0, 60, -22)}, "jaw_l": {"rotation": hold(0, -60, 22)}},
+                                       sym("arm", hold(-30, 0, -20)), sym("forearm", hold(-60, 0, 0))))
+    if k in ("flower", "mushroom", "cactus", "root", "trap"):  # no legs: she sways instead of walking
         sway = {"body": {"rotation": Tk((0, (0, 0, 3)), (1.0, (0, 0, -3)), (2.0, (0, 0, 3)))}}
         for key in ("walk", "run"):
             an.A.pop(f"animation.{sp}.{key}", None)
-            an.add(key, 2.0, True, merge(G.upper_idle(), sway))
+            an.add(key, 2.0, True, merge(G.upper_idle(), sway, {"jaw_r": {"rotation": hold(0, 30, 35)}, "jaw_l": {"rotation": hold(0, -30, -35)}} if k == "trap" else {}))
 
 
 VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0, 180, 0),

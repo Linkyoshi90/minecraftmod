@@ -7,7 +7,8 @@ Shared girl_lib upper body on a fish / sea-mammal tail: fin_1 down from the wais
 fluke (horizontal for the orca, seal and axolotl, a vertical tail fin for the koi and shark). Extras: a dorsal fin
 (orca, shark, dolphin, axolotl crest), long trailing fins (koi), fin ears (koi, shark, orca, dolphin), gill fronds
 (axolotl). Every model has a `seashells` bone (two scallop shells over the bust) that the game shows once she has found
-shells on the sea floor. Five colours per species.
+shells on the sea floor. Five colours per species. The ahuizotl (a river otter) has fur, round ears and a hand at the
+end of her tail instead of a fluke (`hand`), for stealing fish off fishing lines.
 """
 import os
 import sys
@@ -70,6 +71,55 @@ SPECIES = {
                   "spinner": dict(FUR="#5a6676", MARK="#9aa4b0", HAIR="#6a7686", CLOTH="#8a4ab0"),
                   "rissos": dict(FUR="#a8acb0", MARK="#f0f0ee", HAIR="#c8ccd0", pattern="speckle", CLOTH="#3a5a8a"),
                   "pink": dict(FUR="#e8a8b4", HAIR="#f0bcc6", LIGHT="#f8dce2", MARK="#d08898", CLOTH="#3a8a7a")}),
+    "ahuizotl_mermaid": dict(
+        build="athletic", outfit=dict(top=["sports"], extras=["armlets"], colors=dict(cloth2="#2a6a6a")),
+        ears="round", hair="shaggy", bangs="messy", fluke=(3, .75, 3.5), hand=True, size=0.95,
+        pal=dict(SKIN=skin("tan"), HAIR="#5a3e2a", FUR="#6a4a32", LIGHT="#c8a888", MARK="#3a2818", EYE="#2a1a10", CLOTH="#2a8a8a", TRIM="#e8c060",
+                 pattern="solid", extra=dict(belly_white=True)),
+        variants={"dark": dict(FUR="#2e221a", HAIR="#1e1610", LIGHT="#7a6450", MARK="#14100c"),
+                  "golden": dict(FUR="#a8783a", HAIR="#8a5a2a", LIGHT="#e8c890", MARK="#5a3a1a", CLOTH="#3a5a9a"),
+                  "grey": dict(FUR="#6a6460", HAIR="#4a4440", LIGHT="#c8c0b8", MARK="#2e2a28", CLOTH="#9a3a3a"),
+                  "jade": dict(FUR="#4a5a3a", HAIR="#2e3a22", LIGHT="#a8b888", MARK="#1e2614", CLOTH="#c8a040")}),
+    "dugong_mermaid": dict(
+        build="curvy", outfit=dict(top=["bandeau"], extras=["pearls"]),
+        ears=None, hair="wavy", bangs="swept", fluke=(9, .75, 3.5), size=1.15,
+        pal=dict(SKIN=skin("fair"), HAIR="#5a4a42", FUR="#9a9a9c", LIGHT="#d8d4d0", MARK="#7a7a7e", EYE="#3a3a4a", CLOTH="#3a9a6a", TRIM="#e8e0c8",
+                 pattern="solid"),
+        variants={"brown": dict(FUR="#8a7a6a", HAIR="#7a6a5a", MARK="#6a5a4a"),
+                  "pale": dict(FUR="#e0d8cc", HAIR="#ece4d8", LIGHT="#ffffff", MARK="#c8c0b4"),
+                  "slate": dict(FUR="#5a6068", HAIR="#4a5058", MARK="#3a4048", CLOTH="#c8a040"),
+                  "sandy": dict(FUR="#c8b490", HAIR="#b8a07a", MARK="#a08a64", CLOTH="#2a7a8a")}),
+    # eleventh wave: the mantarrow, a manta ray: wide wing fins from her hips, a thin whip of a tail
+    "mantarrow_mermaid": dict(
+        build="slim", outfit=dict(top=["halter"], extras=["armlets"], colors=dict(cloth2="#1e2a4a")),
+        ears=None, hair="flowing", bangs="parted", fluke=(1, .75, 8), manta=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e2a5a", FUR="#2a3a7a", LIGHT="#e8eef8", MARK="#14204a", EYE="#4ac8f0", CLOTH="#e8eef8", TRIM="#4ac8f0",
+                 pattern="solid", extra=dict(belly_white=True)),
+        variants={"black": dict(HAIR="#141418", FUR="#1e1e24", MARK="#0a0a0e", LIGHT="#d8d8e0", CLOTH="#3a3a46"),
+                  "spotted": dict(HAIR="#141418", FUR="#1e1e24", MARK="#f4f4f6", LIGHT="#f4f4f6", pattern="spots", CLOTH="#e8e8f0"),
+                  "teal": dict(HAIR="#1a5a6a", FUR="#2a7a8a", MARK="#0e3a44", CLOTH="#f8e8c0"),
+                  "violet": dict(HAIR="#3a2a6a", FUR="#5a3a8a", MARK="#2a1a44", CLOTH="#f0d8f8", EYE="#f8a0e0")}),
+    # tenth wave: the axolume, a glowing axolotl of the lush caves: her gills, crest and fluke glow (glow masks)
+    "axolume_mermaid": dict(
+        build="petite", outfit=dict(top=["halter"], extras=["pearls"], colors=dict(cloth2="#1e2a6a")),
+        ears="gill", hair="odango", fluke=(4.5, .5, 3), dorsal=(.5, 2.5, 9), axolotl=True, glow=["ear_a", "dorsal", "fluke"],
+        pal=dict(SKIN="#a8c8f0", HAIR="#3a5ad8", FUR="#3a5ad8", LIGHT="#a8d8ff", MARK="#7af0ff", EYE="#1a1a3e", CLOTH="#1e2a6a", TRIM="#7af0ff",
+                 pattern="spots", INNER="#7af0ff"),
+        variants={"rose": dict(SKIN="#f0c0d8", HAIR="#d84a9a", FUR="#d84a9a", LIGHT="#f8c8e8", MARK="#ffb0f0", INNER="#ffb0f0", TRIM="#ffb0f0"),
+                  "gold": dict(SKIN="#f4e0b0", HAIR="#d8a030", FUR="#d8a030", LIGHT="#f8e8a8", MARK="#fff0a0", INNER="#fff0a0", TRIM="#fff0a0"),
+                  "jade": dict(SKIN="#b8e8c8", HAIR="#2a9a6a", FUR="#2a9a6a", LIGHT="#a8f0c8", MARK="#9affc8", INNER="#9affc8", TRIM="#9affc8"),
+                  "void": dict(SKIN="#8a7aa8", HAIR="#1e1830", FUR="#1e1830", LIGHT="#4a3a6a", MARK="#c88aff", INNER="#c88aff", TRIM="#c88aff",
+                               CLOTH="#2a1e3a")}),
+    # ninth wave: the siren, a scaled tail with long trailing fins, fin ears and flowing hair
+    "siren_mermaid": dict(
+        build="curvy", outfit=dict(top=["halter"], extras=["pearls", "armlets"], colors=dict(cloth2="#2a6a7a")),
+        ears="fin", hair="flowing", bangs="wispy", fluke=(.5, 6.5, 5.5), long_fins=True, scales=True, size=1.05,
+        pal=dict(SKIN=skin("pale"), HAIR="#3ab8b0", FUR="#2a9a98", LIGHT="#b8f0e8", MARK="#1a6a70", EYE="#e8d040", CLOTH="#e8f4f0", TRIM="#e8d8a0",
+                 pattern="solid"),
+        variants={"pearl": dict(HAIR="#f4f4f8", FUR="#d8dce4", LIGHT="#ffffff", MARK="#a8b0c0", EYE="#8a6ad8", CLOTH="#c8a8e8"),
+                  "coral": dict(HAIR="#f87a6a", FUR="#f0907a", LIGHT="#fcd8c8", MARK="#c84a4a", EYE="#3ab8b0", CLOTH="#f8e8c8"),
+                  "abyss": dict(SKIN=skin("fair"), HAIR="#1a2a6a", FUR="#1e3a7a", LIGHT="#6a8ad8", MARK="#0e1a4a", EYE="#8af0f8", CLOTH="#2a2a4a"),
+                  "storm": dict(HAIR="#8a8e98", FUR="#6a707a", LIGHT="#c8ccd4", MARK="#3a3e48", EYE="#e8e8f8", CLOTH="#3a4a5a")}),
 }
 
 
@@ -85,6 +135,8 @@ def declare(sp):
         parts.append(("ribbon", .25, 6, 3))
     if d.get("seal"):
         parts.append(("flipper", 3, .5, 3.5))
+    if d.get("manta"):
+        parts.append(("manta_fin", 7, 6, .5))
     parts.append(("shell", 2, 1.75, .5))
     G.declare(parts, ears=d["ears"], hair=SPECIES[sp]["hair"],
               build=SPECIES[sp].get("build"), outfit=SPECIES[sp].get("outfit"))
@@ -103,7 +155,7 @@ def paint(sp, key):
     pt("shell", "all", lambda f, x, y, w, h: pick(shell, 0.55 + 0.3 * (x % 3 == 1), x, y))
     sc = G.scale_fn(pal, belly_faces=("down", "north") if pal.extra.get("belly_white") else ("down",))
     smooth = G.fur_fn(pal, light_faces=("down", "north") if pal.extra.get("belly_white") else ("down",), grain=0.06, seed=41)
-    body = sc if sp.startswith("koi") else smooth                 # the koi has scales; the mammals and the shark are smooth
+    body = sc if sp.startswith("koi") or d.get("scales") else smooth                 # the koi has scales; the mammals and the shark are smooth
     skin_t = H.skin_fn(pal, 0.66)
     pt("hips", "all", lambda f, x, y, w, h: skin_t(f, x, y, w, h) if y < h * 0.4 else body(f, x, y, w, h))
     for p in ("fin_1", "fin_2", "fin_3", "fin_4"):
@@ -116,13 +168,19 @@ def paint(sp, key):
             col = pick(pal.LIGHT, t, x, y)
         return col
     pt("fluke", "all", fin)
+    if d.get("hand"):                                             # the ahuizotl's tail ends in a hand: skin, with fingers
+        pt("fluke", "all", lambda f, x, y, w, h: CLEAR if f in ("up", "down") and y >= h * 0.55 and x % 3 == 2 else skin_t(f, x, y, w, h))
     pt("dorsal", "all", fin)
+    pt("manta_fin", "all", lambda f, x, y, w, h: pick(pal.LIGHT if f == "north" else pal.FUR, 0.5 + 0.15 * (y == 0) - 0.1 * (x in (0, w - 1)), x, y)
+       if y < h - (abs(x + 0.5 - w / 2) * 2 // 3) else CLEAR)
     pt("ribbon", "all", lambda f, x, y, w, h: G.with_alpha(pick(pal.MARK, 0.55 + 0.25 * (y % 3 == 0), x, y), 220) if y < h - 1 or x % 2 else G.CLEAR)
     pt("flipper", "all", lambda f, x, y, w, h: pick(pal.MARK, 0.35 + 0.2 * (x % 4 == 0), x, y))
     if pal.extra.get("gills"):
         pt("fin_1", ("east", "west"), lambda f, x, y, w, h: pick(pal.MARK, 0.25, x, y) if (y in (1, 3, 5) and 2 <= x < w - 2) else None)
     if pal.extra.get("spot"):                                     # tancho: one red spot on the head
         pt("hair_cap", ("up",), lambda f, x, y, w, h: pick(shades("#d8402a"), 0.55, x, y) if (x - w / 2) ** 2 + (y - h / 2) ** 2 < 30 else None)
+    if d["ears"] == "round":
+        G.paint_ears(pt, pal, G.fur_fn(pal, pattern="solid"))
     if d["ears"] == "gill":
         pt("ear_a", "all", lambda f, x, y, w, h: pick(pal.INNER, 0.55 + 0.25 * (y % 2 == 0), x, y))
     elif d["ears"] == "fin":
@@ -156,6 +214,9 @@ def build(sp):
         for sg in (-1, 1):
             c = G.rot_cube("ribbon", [sg * 2.4 - 0.125, 2.0, 2.0], [sg * 2.4, 6, 2.5], 20, 0, -18 * sg)
             r.put("fin_2", c)
+    if d.get("manta"):                                   # the wing fins, swept out from her hips
+        mw = G.S("manta_fin")[0]
+        r.add("manta_r", "fin_1", [-2, 9, 0], [G.rot_cube("manta_fin", [-2 - mw, 4.5, -0.25], [-2, 9, 0], 0, 0, -12)], mirror=True)
     if d.get("seal"):
         f2 = G.S("fin_2")
         for sg in (-1, 1):
@@ -173,3 +234,10 @@ FACE = [("idle", 0, 0, 0, 24), ("idle", 2.75, 0, 0, 24), ("sing", 0.5, 0, 0, 24)
 
 if __name__ == "__main__":
     G.run_family("merfolk", SPECIES, declare, paint, build, anims, VIEWS, FACE)
+    import girl_family as F
+    want = [a for a in sys.argv[1:] if not a.startswith("--")]
+    for sp, d in SPECIES.items():                        # glow masks: the axolume's gills, crest and fluke
+        if d.get("glow") and (not want or sp in want):
+            declare(sp)
+            for k in [None] + list(d["variants"]):
+                F.write_glowmask(sp + ("_" + k if k else ""), paint(sp, k), d["glow"])

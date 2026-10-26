@@ -1,5 +1,6 @@
 package com.linkyoshi90.monstergirls.entity.girl;
 
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -33,13 +34,17 @@ import net.minecraft.world.phys.Vec3;
  * with a sweet tooth. The lesser devil plays pranks (steals from your hotbar, swaps your slots, shoves you); the
  * succubus' gaze slows the one she is after and she slips into their bed whatever her friendship; the greater devil
  * flies and throws fire; the jack o'lantern hides as a pumpkin and creeps after you unseen; the jiang shi can only hop
- * and is calmed by a paper talisman.
+ * and is calmed by a paper talisman. The oni walks the mountains at night with an iron club: a honey bottle calms her,
+ * thrown beans (cocoa beans) drive her off, and once she is your friend she guards your door through the night.
  */
 public class Devil extends AbstractMonsterGirl {
     private long nextPrank;
     private ItemStack loot = ItemStack.EMPTY;
     private int stillTicks;
     private long nextFire;
+    @javax.annotation.Nullable
+    private java.util.UUID beanThrower;
+    private long fleeUntil;
 
     public Devil(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
@@ -57,6 +62,13 @@ public class Devil extends AbstractMonsterGirl {
             }
         });
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        if (species == GirlSpecies.ONI_DEVIL) {
+            this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Player.class, 16.0F, 1.2, 1.5,          // "Oni wa soto!"
+                    p -> p.getUUID().equals(this.beanThrower) && this.level().getGameTime() < this.fleeUntil));
+            this.goalSelector.addGoal(5, new GuardDoorGoal());
+            this.targetSelector.addGoal(3, new net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal<>(this, Monster.class, true,
+                    m -> !(m instanceof net.minecraft.world.entity.monster.Creeper) && this.guardedDoor() != null && m.distanceToSqr(this) < 12 * 12));
+        }
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
@@ -65,6 +77,7 @@ public class Devil extends AbstractMonsterGirl {
             case SUCCUBUS_DEVIL -> girlAttributes(26, 0.3, 4);
             case GREATER_DEVIL -> girlAttributes(70, 0.28, 10);
             case JACK_O_LANTERN_DEVIL -> girlAttributes(24, 0.28, 4);
+            case ONI_DEVIL -> girlAttributes(50, 0.27, 9).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 1.2);
             default -> girlAttributes(30, 0.26, 5);
         };
     }
@@ -76,21 +89,82 @@ public class Devil extends AbstractMonsterGirl {
 
     // --- hostility -----------------------------------------------------------------------------------------------
 
-    /** The jack o'lantern and, at night, the jiang shi come for players. */
+    /** The jack o'lantern and, at night, the jiang shi and the oni come for players. */
     @Override
     protected boolean wildHostile() {
-        return this.species == GirlSpecies.JACK_O_LANTERN_DEVIL || this.species == GirlSpecies.JIANG_SHI_DEVIL;
+        return this.species == GirlSpecies.JACK_O_LANTERN_DEVIL || this.species == GirlSpecies.JIANG_SHI_DEVIL || this.species == GirlSpecies.ONI_DEVIL;
     }
 
     @Override
     public boolean isHostileTo(Player player) {
-        return super.isHostileTo(player) && (this.species != GirlSpecies.JIANG_SHI_DEVIL || !this.level().isDay());
+        boolean night = this.species != GirlSpecies.JIANG_SHI_DEVIL && this.species != GirlSpecies.ONI_DEVIL || !this.level().isDay();
+        return super.isHostileTo(player) && night && !(this.species == GirlSpecies.ONI_DEVIL && this.level().getGameTime() < this.fleeUntil);
     }
 
-    /** A paper talisman for the jiang shi; pumpkin pie for the jack o'lantern. */
+    /** A paper talisman for the jiang shi; pumpkin pie for the jack o'lantern; a drink (a honey bottle) for the oni. */
     @Override
     protected boolean calmsHer(ItemStack stack) {
-        return this.species == GirlSpecies.JIANG_SHI_DEVIL ? stack.is(Items.PAPER) : stack.is(Items.PUMPKIN_PIE);
+        return switch (this.species) {
+            case JIANG_SHI_DEVIL -> stack.is(Items.PAPER);
+            case ONI_DEVIL -> stack.is(Items.HONEY_BOTTLE);
+            default -> stack.is(Items.PUMPKIN_PIE);
+        };
+    }
+
+    // --- the oni -------------------------------------------------------------------------------------------------
+
+    /** Setsubun: beans thrown at an oni who is not your friend send her running for a minute. */
+    public void pelt(ServerLevel level, Player player) {
+        this.beanThrower = player.getUUID();
+        this.fleeUntil = level.getGameTime() + 1200;
+        if (this.getTarget() == player) this.setTarget(null);
+        this.setLastHurtByMob(null);
+        this.playSound(SoundEvents.RAVAGER_HURT, 1.0F, 1.4F);
+        level.sendParticles(new net.minecraft.core.particles.ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Items.COCOA_BEANS)),
+                this.getX(), this.getY() + this.getBbHeight() * 0.7, this.getZ(), 10, 0.3, 0.3, 0.3, 0.1);
+        player.displayClientMessage(Component.translatable("message.monstergirls.oni_beans", this.getDisplayName()), true);
+    }
+
+    /** At night her friend's nearest door (within 12 blocks of them) is hers to guard. */
+    @javax.annotation.Nullable
+    private net.minecraft.core.BlockPos guardedDoor() {
+        if (this.species != GirlSpecies.ONI_DEVIL || this.level().isDay() || this.isBaby() || this.isOrderedToSit()) return null;
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null) return null;
+        net.minecraft.core.BlockPos best = null;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-12, -3, -12), friend.blockPosition().offset(12, 3, 12))) {
+            if (this.level().getBlockState(p).is(net.minecraft.tags.BlockTags.DOORS) && (best == null || p.distSqr(friend.blockPosition()) < best.distSqr(friend.blockPosition()))) {
+                best = p.immutable();
+            }
+        }
+        return best;
+    }
+
+    /** She goes to stand at the door, and stays there. */
+    class GuardDoorGoal extends net.minecraft.world.entity.ai.goal.Goal {
+        @javax.annotation.Nullable
+        private net.minecraft.core.BlockPos door;
+
+        GuardDoorGoal() {
+            this.setFlags(java.util.EnumSet.of(Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            if (Devil.this.tickCount % 40 != 0 || Devil.this.getTarget() != null) return false;
+            this.door = Devil.this.guardedDoor();
+            return this.door != null && Devil.this.distanceToSqr(Vec3.atCenterOf(this.door)) > 3 * 3;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.door != null && Devil.this.getTarget() == null && !Devil.this.level().isDay() && Devil.this.getNavigation().isInProgress();
+        }
+
+        @Override
+        public void start() {
+            Devil.this.getNavigation().moveTo(this.door.getX() + 0.5, this.door.getY(), this.door.getZ() + 0.5, 1.0);
+        }
     }
 
     /** She slips into a bed whatever her friendship, and every night she is sure of it. */
@@ -190,12 +264,19 @@ public class Devil extends AbstractMonsterGirl {
     @Override
     protected int foodValue(Player player, ItemStack stack) {
         this.giveBack(player);
-        return stack.is(Items.CAKE) ? 3 : 1;
+        return stack.is(Items.CAKE) || this.species == GirlSpecies.ONI_DEVIL && stack.is(Items.HONEY_BOTTLE) ? 3 : 1;
     }
 
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
         if (this.isDisguised() && !this.level().isClientSide) this.setDisguised(false);
+        if (this.species == GirlSpecies.ONI_DEVIL && stack.is(Items.COCOA_BEANS) && this.getAffection(player) < com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {
+            if (this.level() instanceof ServerLevel server) {
+                stack.consume(1, player);
+                this.pelt(server, player);
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         return null;
     }
 
@@ -205,6 +286,7 @@ public class Devil extends AbstractMonsterGirl {
         return switch (this.species) {
             case JIANG_SHI_DEVIL -> new ItemStack(r < 60 ? Items.PAPER : Items.GOLD_NUGGET, 3);
             case JACK_O_LANTERN_DEVIL -> new ItemStack(r < 50 ? Items.PUMPKIN_SEEDS : r < 80 ? Items.TORCH : Items.JACK_O_LANTERN, r < 80 ? 4 : 1);
+            case ONI_DEVIL -> new ItemStack(r < 45 ? Items.IRON_INGOT : r < 80 ? Items.BAMBOO : Items.HONEY_BOTTLE, r < 45 ? 2 : r < 80 ? 8 : 1);
             default -> new ItemStack(r < 40 ? Items.BLAZE_POWDER : r < 75 ? Items.MAGMA_CREAM : Items.QUARTZ, 2);
         };
     }
@@ -223,6 +305,7 @@ public class Devil extends AbstractMonsterGirl {
     public boolean doHurtTarget(Entity target) {
         boolean hit = super.doHurtTarget(target);
         if (hit && this.species == GirlSpecies.GREATER_DEVIL) target.igniteForSeconds(4);
+        if (hit && this.species == GirlSpecies.ONI_DEVIL) this.playSound(SoundEvents.ANVIL_LAND, 0.5F, 0.7F);   // the iron club
         return hit;
     }
 

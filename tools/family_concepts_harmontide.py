@@ -140,3 +140,1052 @@ for _fid, _entries in SECOND.items():
         _fam["species"].append(_species)
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
+
+
+# fourth wave (2026-10-24): Camel, Dromedary, Kelpie, Wadjet, Hornet, Dugong (HARMONTIDE_CONCEPTS.md "Fourth wave")
+FOURTH = {
+    "centaur": [(
+        dict(id="camel_centaur", name="Camel", group="Badlands & high savanna", tag="Steady · unbothered", height=2.4,
+             biomes=["savanna_plateau", "windswept_savanna", "badlands"], temperament="Unflappable, patient, generous",
+             ecology="Camelus bactrianus (Artiodactyla: Camelidae), the two-humped camel of cold deserts and steppe. Her humps store fat, not water, "
+                     "and her thick winter coat falls out in clumps every spring. Cousin of the vanilla camels.",
+             interaction="Climb on: she carries anyone. Cactus is her treat, and a bucket brings back camel milk.",
+             signature=("Caravan", "Anyone may ride her, friend or stranger. Feed her cactus beside a vanilla camel fed cactus and the two raise a calf. "
+                        "A bucket milks her (once every five minutes)."),
+             danger="None.",
+             variants=[("bactrian", "Bactrian (default)", "Warm brown, two humps"), ("wild", "Wild", "Lean and sandy grey"),
+                       ("white", "White", "Cream white"), ("dark", "Dark", "Deep brown"), ("winter", "Winter coat", "Shaggy and pale")]),
+        {"Habitat": "Badlands, high savanna", "Ridden": "Yes: by anyone", "Signature": "Milk, breeds with camels", "Temperament": "Unflappable", "Danger": "None"}),
+        (dict(id="dromedary_centaur", name="Dromedary", group="Desert", tag="Hardy · good-humoured", height=2.35,
+              biomes=["desert"], temperament="Hardy, good-humoured, a little smug",
+              ecology="Camelus dromedarius (Artiodactyla: Camelidae), the one-humped camel of hot deserts. She can go a week without water and "
+                      "drink a bathtub's worth when she finds it. Cousin of the vanilla camels.",
+              interaction="Climb on: she carries anyone. Cactus is her treat, and a bucket brings back camel milk.",
+              signature=("Caravan", "Anyone may ride her, friend or stranger. Feed her cactus beside a vanilla camel fed cactus and the two raise a "
+                         "calf. A bucket milks her (once every five minutes)."),
+              danger="None.",
+              variants=[("desert", "Desert (default)", "Sandy fawn, one hump"), ("white", "White", "Cream white"), ("black", "Black", "Dark brown-black"),
+                        ("red", "Red", "Rusty red"), ("piebald", "Piebald", "Fawn with white patches")]),
+         {"Habitat": "Desert", "Ridden": "Yes: by anyone", "Signature": "Milk, breeds with camels", "Temperament": "Hardy", "Danger": "None"}),
+        (dict(id="kelpie_centaur", name="Kelpie", group="Rivers, at night", tag="Wild · beguiling", height=2.3,
+              biomes=["river", "frozen_river"], temperament="Charming by day, dangerous by night",
+              ecology="The water horse of Scottish lochs and rivers: a dark mare with weed in her mane who invites travellers to ride, then "
+                      "carries them into the deep. Here the dive is a prank and the danger is only at night.",
+              interaction="Make friends by day (kelp, apples), then saddle her. Never stand on her bank at night as a stranger.",
+              signature=("Water horse", "Saddled, she carries you over water faster than any boat, and on land like a horse. By day she is "
+                         "calm. At night she attacks any player she is not fond of."),
+              danger="High at night, none by day.",
+              variants=[("loch", "Loch (default)", "Black-green coat, kelp in her mane"), ("grey", "Grey", "Grey mare"),
+                        ("white", "White", "Pale as river mist"), ("peat", "Peat", "Peat-brown"), ("sea", "Sea", "Blue-green")]),
+         {"Habitat": "Rivers", "Ridden": "With a saddle: faster than a boat", "Signature": "Hunts at night", "Temperament": "Two-faced", "Danger": "High at night"})],
+    "lamia": [(
+        dict(id="wadjet_lamia", name="Wadjet", group="Desert", tag="Protective · fierce", height=1.85,
+             biomes=["desert"], temperament="Protective, proud, merciless to monsters",
+             ecology="The cobra goddess of Lower Egypt, the uraeus on the pharaoh's crown, here in a two-legged form. Her hood is the Egyptian "
+                     "cobra's (Naja haje, Squamata: Elapidae). Her sister Nekhbet, the vulture, guards Upper Egypt.",
+             interaction="Walk past her: she blesses you. Stay and be kind, and she pays in emeralds.",
+             signature=("Blessing", "Every player who passes within 8 blocks, and the girls following them, gets Regeneration and Resistance. She "
+                        "hunts every hostile mob in sight. Name her Nekhbet and the blessing and her bite grow stronger."),
+             danger="Deadly to monsters, none to players.",
+             variants=[("egyptian", "Egyptian (default)", "Olive-brown scales, gold"), ("green", "Green", "The green one: jade scales"),
+                       ("black", "Black", "Black-necked"), ("gold", "Gold", "Gold and cream"), ("red", "Red", "Red spitting cobra")]),
+        {"Habitat": "Desert", "Young": "Live young", "Defence": "Hood, venom", "Signature": "Blessing, hunts monsters", "Danger": "None to players"})],
+    "bug": [(
+        dict(id="hornet_bug", name="Hornet", group="Forests", tag="Fierce · territorial", height=1.6,
+             biomes=["forest", "birch_forest", "dark_forest", "flower_forest"], temperament="Fierce, territorial, fiercely loyal once won",
+             ecology="Vespa (Hymenoptera: Vespidae), the largest of the social wasps. She chews wood into paper for her nest and hunts other "
+                     "insects, bees above all.",
+             interaction="Keep your distance until she knows you. She eats meat and fruit. A hornet with a broken wing can't fly: mend it with a "
+                         "healing balm and she is yours for life.",
+             signature=("Territorial", "She stings players who come too close and hunts bees and bee girls until someone befriends her. On patrol "
+                        "she tears into hostile mobs. Friends get paper and clay."),
+             danger="High up close.",
+             variants=[("european", "European (default)", "Brown-red and yellow"), ("giant", "Giant", "Orange head, dark bands"),
+                       ("baldfaced", "Bald-faced", "Black and white"), ("yellowlegged", "Yellow-legged", "Dark with an orange band"),
+                       ("oriental", "Oriental", "Red-brown with a yellow band")]),
+        {"Habitat": "Forests", "Signature": "Territorial, hunts bees", "Danger": "High up close"})],
+    "merfolk": [(
+        dict(id="dugong_mermaid", name="Dugong", group="Warm shallow seas", tag="Gentle · inseparable", height=2.0,
+             biomes=["warm_ocean", "lukewarm_ocean"], temperament="Gentle, slow, devoted to her partner",
+             ecology="Dugong dugon (Sirenia: Dugongidae), the sea cow of warm seagrass meadows, and the likely source of many mermaid stories. "
+                     "She grazes all day and is almost never seen alone.",
+             interaction="Bring seagrass. Swim slowly.",
+             signature=("Sea cow", "Almost always found in pairs. Seagrass wins her over, and friends get sea treasure."),
+             danger="None.",
+             variants=[("grey", "Grey (default)", "Soft grey"), ("brown", "Brown", "Brown-grey"), ("pale", "Pale", "Pale cream"),
+                       ("slate", "Slate", "Dark slate"), ("sandy", "Sandy", "Sandy")]),
+        {"Habitat": "Warm shallows", "Young": "One calf", "On land": "Slow", "Signature": "Pairs, seagrass", "Danger": "None"})],
+}
+for _fid, _entries in FOURTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
+
+# fifth wave (2026-10-24): a new family, the canid girls (with the bears), and Pegasus, Lich, Mimic in existing ones
+if not any(f["id"] == "canid" for f in C.FAMILIES):
+    C.FAMILIES.append(dict(
+        id="canid", volume="XX", title="Canids", subtitle="the canid family (and the bears)", food="Meat; the wolf loves bones, the panda bamboo",
+        theme=dict(bg="#141210", panel="#1e1a17", panel2="#26211d", ink="#f2ebe2", muted="#c2b4a4", accent="#d89a4a",
+                   line="#3e342c", green="#9ad06a", grad="#2e2216"),
+        lede="Four canid and bear monster girls: the wolf and her pack, the great white polar bear, the bamboo-loving panda and Anubis, "
+             "jackal of the desert tombs. Loyal, strong, and kin to the beasts of the vanilla world.",
+        hero=dict(eyebrow="The central similarity", title="Kin to the beasts.",
+                  text="Every one of them has vanilla kin, except Anubis, who keeps the dead: wolves, polar bears and pandas follow her "
+                       "and trust whoever she trusts.",
+                  bullets=[("Pack", "The wolf runs with a pack led by its alpha."), ("Hunt", "The wolf and the polar bear hunt while wild."),
+                           ("Nature", "The panda is born with a personality, like vanilla pandas."),
+                           ("Judgement", "Anubis weighs your heart against the feather.")]),
+        lifecycle=[("1. Courtship", "At high friendship she may share your bed."), ("2. Pups", "A day later she bears a litter of pups or cubs."),
+                   ("3. Young", "Her young stay by their mother."), ("4. Grown", "Grown in five days, devoted to their father.")],
+        systems=[("Pack", "Wolves spawn in packs. The first is the alpha and the others follow her; wild, they hunt sheep and rabbits."),
+                 ("Wolf kin", "A befriended wolf girl's tamed wolves join her fights."),
+                 ("Polar hunt", "A wild polar bear hunts seal mermaids and penguin harpies, fishes at open water and guards her cubs."),
+                 ("Personality", "Pandas are lazy, worried, playful, aggressive, weak or normal; a playful one rolls, a weak one sneezes."),
+                 ("The weighing", "Anubis weighs every player who comes near: those who killed villagers or iron golems are condemned and hunted; "
+                                  "light hearts may open the tomb chests she guards.")],
+        friendship=dict(builds=["Meat (+2); bones for the wolf (+3), bamboo for the panda (+2), fish for the polar bear (+2)", "Petting"],
+                        costs=["Hitting her", "For Anubis: killing villagers or iron golems"],
+                        devoted="Her kin are yours: wolves, polar bears and pandas near her trust you."),
+        mating=dict(form="Live young", young="Pups or cubs", grows="5 days", where="Beside her", note="Young use the adult model at 45%."),
+        split=[("Habitat", []), ("Kin", []), ("Signature", []), ("Danger", [])],
+        species=[],
+        decisions=["Bears share the canid family (2026-10-24). The wolf is her own species, not a kobold."],
+        questions=["Kobolds: a sixth canid later?"],
+    ))
+
+FIFTH = {
+    "canid": [(
+        dict(id="wolf_canid", name="Wolf", group="Taiga & forests", tag="Loyal · pack-minded", height=1.8,
+             biomes=["taiga", "old_growth_pine_taiga", "old_growth_spruce_taiga", "snowy_taiga", "forest", "grove"], temperament="Loyal, proud, pack-minded",
+             ecology="Canis lupus (Carnivora: Canidae). She runs with a pack led by its alpha, and kin of the vanilla wolves.",
+             interaction="Bones. Never come between her and her pack.",
+             signature=("Pack hunter", "Wild, her pack hunts sheep and rabbits. Befriended, your tamed wolves join her fights. She howls at night."),
+             danger="Moderate in a pack.",
+             variants=[("pale", "Pale (default)", "Pale grey-white"), ("woods", "Woods", "Brown"), ("snowy", "Snowy", "White"),
+                       ("ashen", "Ashen", "Grey"), ("rusty", "Rusty", "Rust red")]),
+        {"Habitat": "Taiga, forests", "Kin": "Wolves", "Signature": "Pack, leads your wolves", "Danger": "Moderate in a pack"}),
+        (dict(id="polar_bear_canid", name="Polar Bear", group="Snow & ice", tag="Mighty · protective", height=2.2,
+              biomes=["snowy_plains", "ice_spikes", "snowy_beach", "frozen_ocean"], temperament="Calm, mighty, fiercely protective",
+              ecology="Ursus maritimus (Carnivora: Ursidae). The great white bear of the sea ice, who hunts seals.",
+              interaction="Fish. Keep clear of her cubs.",
+              signature=("Ice hunter", "Wild, she hunts seal mermaids and penguin harpies. She fishes at open water, and attacks anyone near her cubs."),
+              danger="High near her cubs.",
+              variants=[("white", "White (default)", "White"), ("cream", "Cream", "Cream"), ("grey", "Grey", "Grey"),
+                        ("pizzly", "Pizzly", "Brown and white"), ("ice", "Ice", "Pale blue")]),
+         {"Habitat": "Snow, ice", "Kin": "Polar bears", "Signature": "Hunts seals and penguins, fishes", "Danger": "High near cubs"}),
+        (dict(id="panda_canid", name="Panda", group="Bamboo jungles", tag="Lazy · lovable", height=1.75,
+              biomes=["bamboo_jungle"], temperament="Born with a personality",
+              ecology="Ailuropoda melanoleuca (Carnivora: Ursidae). A bear who eats almost nothing but bamboo, and sleeps a lot.",
+              interaction="Bamboo, and cake.",
+              signature=("Personality", "Lazy (lies about), worried (fears strangers and storms), playful (rolls), aggressive (hits back hard, "
+                                        "guards her friends), weak (sneezes often) or normal. She sneezes up slimeballs now and then."),
+              danger="Low (aggressive ones: moderate).",
+              variants=[("black", "Black (default)", "Black and white"), ("brown", "Brown", "Brown and white"), ("cream", "Cream", "Cream and white"),
+                        ("grey", "Grey", "Grey and white"), ("red", "Red", "Rusty red and white")]),
+         {"Habitat": "Bamboo jungles", "Kin": "Pandas", "Signature": "Personalities, sneezes", "Danger": "Low"}),
+        (dict(id="anubis_canid", name="Anubis", group="Deserts, at night", tag="Solemn · just", height=1.95,
+              biomes=["desert"], temperament="Solemn, just, merciless to the guilty",
+              ecology="The jackal-headed guardian of Egyptian tombs, who weighs the hearts of the dead against the feather of Ma'at. "
+                      "Her jackal is the golden jackal (Canis aureus).",
+              interaction="Come with a clean conscience. Bread and honey as offerings.",
+              signature=("The weighing", "She weighs every player who comes near. Anyone who killed villagers or iron golems is condemned "
+                                         "and hunted. Others may open the tomb chests she guards."),
+              danger="Deadly to the condemned, none to others.",
+              variants=[("black", "Black (default)", "Black jackal, gold"), ("gold", "Gold", "Golden jackal"), ("silver", "Silver", "Grey"),
+                        ("sand", "Sand", "Sandy"), ("night", "Night", "Blue-black")]),
+         {"Habitat": "Deserts, at night", "Kin": "-", "Signature": "Weighs your heart, guards tombs", "Danger": "Only to the guilty"})],
+    "centaur": [(
+        dict(id="pegasus_centaur", name="Pegasus", group="Meadows near mountains", tag="Noble · proud", height=2.4,
+             biomes=["meadow", "cherry_grove"], temperament="Proud, gentle, free",
+             ecology="The winged horse of Greek myth, tamed by Bellerophon with a golden bridle.",
+             interaction="Golden apples, and a golden bridle (gold horse armour) once she trusts you.",
+             signature=("Winged", "Ridden, she leaps high into the air (hold jump) and glides down slowly. No true flight."),
+             danger="Low.",
+             variants=[("white", "White (default)", "White"), ("grey", "Grey", "Dapple grey"), ("palomino", "Palomino", "Gold"),
+                       ("black", "Black", "Black"), ("dawn", "Dawn", "Rose and gold")]),
+        {"Habitat": "Meadows", "Ridden": "With a golden bridle: leaps and glides", "Signature": "Wings", "Temperament": "Proud", "Danger": "Low"})],
+    "undead": [(
+        dict(id="lich_undead", name="Lich", group="The deep dark", tag="Ancient · scholarly", height=1.9,
+             biomes=["deep_dark"], temperament="Cold, ancient, curious once calmed",
+             ecology="A sorcerer who put her soul into a phylactery to cheat death.",
+             interaction="Find and break her phylactery first. Then books.",
+             signature=("Phylactery", "She casts slowness and weakness. While her phylactery stands she cannot die: she reforms beside it. "
+                                      "Break it and she is peaceful. Befriended, she trades experience for books."),
+             danger="High until her phylactery breaks.",
+             variants=[("soul", "Soul (default)", "Pale blue soul fire"), ("bone", "Bone", "Ivory"), ("crimson", "Crimson", "Red"),
+                       ("verdant", "Verdant", "Green"), ("void", "Void", "Black and violet")]),
+        {"Haunts": "The deep dark", "Signature": "Phylactery, curses, books for XP", "Danger": "High until the phylactery breaks"})],
+    "slime": [(
+        dict(id="mimic_slime", name="Mimic", group="Unopened loot chests", tag="Greedy · cuddly", height=1.5,
+             biomes=[], temperament="Greedy, then devoted",
+             ecology="A slime who lives in a treasure chest and keeps its loot inside her. She waits in dungeons and mineshafts.",
+             interaction="Open a loot chest at your own risk. Feed her gold.",
+             signature=("Treasure chest", "One unopened loot chest in eight is a mimic: she bites once and keeps the loot. Gold wins her "
+                                          "over; then she follows you and her loot is yours (crouch and right-click to open her)."),
+             danger="One bite.",
+             variants=[("oak", "Oak (default)", "An oak chest"), ("spruce", "Spruce", "A dark chest"), ("gilded", "Gilded", "A gold-trimmed chest"),
+                       ("ender", "Ender", "An ender chest"), ("christmas", "Christmas", "A festive chest")]),
+        {"Habitat": "Loot chests", "Favourite food": "Gold", "Element": "Greed", "Weakness": "Being opened", "Danger": "One bite"})],
+}
+for _fid, _entries in FIFTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
+
+# sixth wave (2026-10-24): a new family, the rodents (capybara, Ratatoskr), and kobold, grizzly, leshy, Xuanwu, La Llorona
+if not any(f["id"] == "rodent" for f in C.FAMILIES):
+    C.FAMILIES.append(dict(
+        id="rodent", volume="XXI", title="Rodents", subtitle="the rodent family", food="Seeds, nuts and greens; the capybara loves melon",
+        theme=dict(bg="#15130f", panel="#1f1c16", panel2="#27231b", ink="#f2ece0", muted="#c4b8a2", accent="#d8884a",
+                   line="#40382c", green="#9ad06a", grad="#2e2414"),
+        lede="Two rodent monster girls: the capybara, calmest animal alive, and Ratatoskr, the squirrel who runs up and down the "
+             "world tree carrying messages. Small, busy, and good company.",
+        hero=dict(eyebrow="The central similarity", title="Gnawers and gatherers.",
+                  text="Rodents gather: the capybara gathers friends around her, Ratatoskr gathers seeds and saplings (and forgets half of them).",
+                  bullets=[("Calm", "No predator hunts near a capybara."), ("Caches", "Ratatoskr's forgotten caches grow into trees."),
+                           ("Messages", "Ratatoskr carries items between friends."), ("Company", "Idle girls like to sit beside a capybara.")]),
+        lifecycle=[("1. Courtship", "At high friendship she may share your bed."), ("2. Pups", "A day later she bears a litter."),
+                   ("3. Young", "Her young stay by their mother."), ("4. Grown", "Grown in five days, devoted to their father.")],
+        systems=[("Calm", "Wolves, foxes, cats and ocelots hunt nothing within 8 blocks of a capybara; idle girls nearby sit beside her."),
+                 ("Scatter-hoarding", "Ratatoskr picks up seeds and saplings and plants the ones she forgets."),
+                 ("Messenger", "Hand Ratatoskr an item: she carries it to the nearest other player she is fond of (now and then swapped as a prank).")],
+        friendship=dict(builds=["Food (+1), melon for the capybara (+2), seeds and berries for Ratatoskr (+2)", "Petting"],
+                        costs=["Hitting her"], devoted="She shares her calm: her devoted friends heal beside her (Regeneration)."),
+        mating=dict(form="Live young", young="Pups", grows="5 days", where="Beside her", note="Young use the adult model at 45%."),
+        split=[("Habitat", []), ("Signature", []), ("Danger", [])],
+        species=[],
+        decisions=["The rodents start with two (2026-10-24)."],
+        questions=["More rodents later: a hamster, a beaver?"],
+    ))
+
+SIXTH = {
+    "canid": [(
+        dict(id="kobold_canid", name="Kobold", group="Caves & mountains", tag="Eager · nose for ore", height=1.35,
+             biomes=["dripstone_caves", "lush_caves", "windswept_hills", "stony_peaks"], temperament="Eager, nosy, loyal",
+             ecology="The mine spirit of German folklore, who gave cobalt its name, here a little dog-girl miner in a helmet.",
+             interaction="Bring her meat or bones and take her mining.",
+             signature=("Nose for ore", "Befriended, she sniffs out the nearest diamond, gold or emerald ore and points the way. She yelps when "
+                                        "the block you look at holds up sand or gravel, and she smells mimics: a mimic chest near her rattles."),
+             danger="None.",
+             variants=[("tan", "Tan (default)", "Tan fur"), ("cobalt", "Cobalt", "Cobalt blue"), ("black", "Black", "Black"),
+                       ("cream", "Cream", "Cream"), ("red", "Red", "Rust red")]),
+        {"Habitat": "Caves, mountains", "Kin": "Wolves", "Signature": "Finds ore, warns of cave-ins", "Danger": "None"}),
+        (dict(id="grizzly_canid", name="Grizzly", group="Taiga", tag="Hearty · hungry", height=2.25,
+              biomes=["taiga", "old_growth_pine_taiga", "old_growth_spruce_taiga", "windswept_forest"], temperament="Hearty, hungry, sleepy in winter",
+              ecology="Ursus arctos horribilis (Carnivora: Ursidae), the brown bear of the northern forests.",
+              interaction="Salmon and honey.",
+              signature=("Forager", "She fishes salmon from rivers, raids full beehives for honey (the bees sting her for it) and hibernates "
+                                    "while it snows."),
+              danger="High if provoked.",
+              variants=[("brown", "Brown (default)", "Brown"), ("cinnamon", "Cinnamon", "Red-brown"), ("silvertip", "Silvertip", "Grizzled"),
+                        ("dark", "Dark", "Near black"), ("blond", "Blond", "Pale gold")]),
+         {"Habitat": "Taiga", "Kin": "Polar bears", "Signature": "Salmon, honey raids, hibernation", "Danger": "High if provoked"})],
+    "rodent": [(
+        dict(id="capybara_rodent", name="Capybara", group="Rivers & swamps", tag="Calm · beloved", height=1.6,
+             biomes=["swamp", "mangrove_swamp", "river"], temperament="Unflappable",
+             ecology="Hydrochoerus hydrochaeris (Rodentia: Caviidae), the largest rodent alive, famous for letting every other animal "
+                     "sit on or beside her.",
+             interaction="Melon, sugar cane and apples. Just sit with her.",
+             signature=("Calm", "No wolf, fox, cat or ocelot hunts within 8 blocks of her. Idle girls nearby sit down beside her. "
+                                "She soaks in water with a yuzu on her head."),
+             danger="None.",
+             variants=[("brown", "Brown (default)", "Brown"), ("sandy", "Sandy", "Sandy"), ("dark", "Dark", "Dark brown"),
+                       ("ginger", "Ginger", "Ginger"), ("grey", "Grey", "Grey")]),
+        {"Habitat": "Rivers, swamps", "Signature": "Calm aura, girls sit with her", "Danger": "None"}),
+        (dict(id="ratatoskr_rodent", name="Ratatoskr", group="Forests", tag="Quick · mischievous", height=1.4,
+              biomes=["forest", "birch_forest", "dark_forest", "old_growth_birch_forest", "taiga"], temperament="Quick, chatty, a prankster",
+              ecology="The squirrel who runs up and down Yggdrasil carrying insults between the eagle and the serpent. Her red squirrel is "
+                      "Sciurus vulgaris (Rodentia: Sciuridae).",
+              interaction="Seeds and berries. Hand her something to deliver.",
+              signature=("Messenger", "She carries an item you give her to the nearest other player she is fond of (now and then she swaps it "
+                                      "for something else). She hoards seeds and saplings, and the ones she forgets grow into trees."),
+              danger="None.",
+              variants=[("red", "Red (default)", "Red squirrel"), ("grey", "Grey", "Grey squirrel"), ("black", "Black", "Black"),
+                        ("fox", "Fox", "Fox squirrel"), ("abert", "Abert's", "Tassel-eared grey")]),
+         {"Habitat": "Forests", "Signature": "Messenger, plants trees", "Danger": "None"})],
+    "flora": [(
+        dict(id="leshy_flora", name="Leshy", group="Old-growth taiga", tag="Ancient · territorial", height=2.3,
+             biomes=["old_growth_pine_taiga", "old_growth_spruce_taiga"], temperament="Ancient, jealous of his trees",
+             ecology="The lord of the Slavic forest, antlered and bearded with moss, who leads woodcutters astray. The Vodyanoy's rival.",
+             interaction="Plant saplings near him. Never clear-cut his forest.",
+             signature=("Forest lord", "He counts the logs you cut and the saplings you plant near him. Planters get saplings and apples; "
+                                       "clear-cutters get lost in his fog. Meeting a vodyanoy, he bellows at him."),
+             danger="Low (he misleads, he does not fight).",
+             variants=[("oak", "Oak (default)", "Oak bark, green moss"), ("birch", "Birch", "Pale birch"), ("spruce", "Spruce", "Dark spruce"),
+                       ("autumn", "Autumn", "Autumn moss"), ("frost", "Frost", "Frosted")]),
+        {"Habitat": "Old-growth taiga", "Signature": "Counts your trees, fog", "Danger": "Low"})],
+    "lizardfolk": [(
+        dict(id="black_tortoise_lizardfolk", name="Black Tortoise", group="Frozen rivers", tag="Steadfast · cold", height=1.85,
+             biomes=["frozen_river", "snowy_beach", "frozen_ocean"], temperament="Steadfast, patient, cold",
+             ecology="Xuanwu, the north of the Chinese Four Symbols: winter and water, a tortoise with a serpent coiled round her.",
+             interaction="Fish and patience.",
+             signature=("Shell", "Arrows glance off her shell. The north of the Four Symbols."),
+             danger="Low.",
+             variants=[("dark", "Dark (default)", "Blue-black"), ("jade", "Jade", "Jade"), ("bronze", "Bronze", "Bronze"),
+                       ("ice", "Ice", "Pale ice"), ("black", "Black", "Black and red")]),
+        {"Habitat": "Frozen rivers", "Signature": "Arrows glance off, Four Symbols", "Danger": "Low"})],
+    "undead": [(
+        dict(id="llorona_undead", name="La Llorona", group="Rivers, at night", tag="Grieving · kind", height=1.8,
+             biomes=["river", "swamp"], temperament="Grieving, gentle",
+             ecology="The weeping woman of Mexican folklore, who searches the rivers at night. Here she brings the lost home.",
+             interaction="Pumpkin pie. Help her bring a lost one home.",
+             signature=("Bringing them home", "At night she finds lost young animals and village children and leads them home to their "
+                                              "own kind. Bring one home with her and she stops weeping for the night."),
+             danger="None.",
+             variants=[("white", "White (default)", "A white gown"), ("mourning", "Mourning", "Black"), ("rose", "Rose", "Rose"),
+                       ("river", "River", "River blue"), ("marigold", "Marigold", "Marigold, for the Day of the Dead")]),
+        {"Haunts": "Rivers, at night", "Signature": "Leads the lost home", "Danger": "None"})],
+}
+for _fid, _entries in SIXTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
+
+# turtles (2026-10-25): the red-eared slider, the Galapagos tortoise, the box turtle, the softshell and the matamata
+TURTLES = [
+    (dict(id="red_eared_slider_lizardfolk", name="Red-Eared Slider", group="Ponds & rivers", tag="Sociable · skittish", height=1.4,
+          biomes=["river", "swamp", "forest", "flower_forest"], temperament="Sociable, easily startled",
+          ecology="Trachemys scripta elegans (Testudines: Emydidae), the pond turtle with the red streak behind each eye, named for "
+                  "sliding off her log into the water at the first sign of trouble.",
+          interaction="Fish and kelp. Walk up slowly.",
+          signature=("Sliding off", "Sliders bask together by the water. When a stranger comes within 6 blocks, every slider nearby slides "
+                                    "into the nearest water at once. Every food is worth double to her."),
+          danger="None.",
+          variants=[("slider", "Red-eared (default)", "Green with red streaks"), ("yellow_bellied", "Yellow-bellied", "Yellow streaks"),
+                    ("cumberland", "Cumberland", "Orange streaks"), ("pastel", "Pastel", "Pale pastel"), ("albino", "Albino", "Cream and yellow")]),
+     {"Habitat": "Ponds, rivers", "Signature": "Slides into the water together", "Danger": "None"}),
+    (dict(id="galapagos_tortoise_lizardfolk", name="Galapagos Tortoise", group="Islands & beaches", tag="Ancient · unhurried", height=1.95,
+          biomes=["beach", "stony_shore", "savanna"], temperament="Ancient, patient, unhurried",
+          ecology="Chelonoidis niger (Testudines: Testudinidae), the giant tortoise of the Galapagos, who lives well over a century.",
+          interaction="Cactus and melon. Climb on with an empty hand once she is fond of you (crouch to pat her).",
+          signature=("A ride on her shell", "The slowest girl there is, and the toughest. A friend can sit on her shell: she keeps "
+                                            "going where she was going. Cactus does not prick her."),
+          danger="None.",
+          variants=[("galapagos", "Galapagos (default)", "Grey-brown"), ("santa_cruz", "Santa Cruz", "Dark"), ("pinta", "Pinta", "Pale grey, for Lonesome George"),
+                    ("espanola", "Espanola", "Brown"), ("aldabra", "Aldabra", "Near black")]),
+     {"Habitat": "Islands, beaches, savanna", "Signature": "Carries a friend on her shell", "Danger": "None"}),
+    (dict(id="box_turtle_lizardfolk", name="Box Turtle", group="Forests", tag="Homebody · cautious", height=1.4,
+          biomes=["forest", "birch_forest", "dark_forest", "flower_forest"], temperament="A cautious homebody",
+          ecology="Terrapene carolina (Testudines: Emydidae), the box turtle, whose hinged shell closes completely, and who spends her whole "
+                  "life within a few hundred metres of where she hatched.",
+          interaction="Mushrooms and berries.",
+          signature=("Shut tight", "Hidden in her shell she takes no damage at all. A stranger sprinting near her makes her shut. She never "
+                                   "strays more than 16 blocks from home."),
+          danger="None.",
+          variants=[("eastern", "Eastern (default)", "Brown with yellow"), ("ornate", "Ornate", "Bright yellow rays"),
+                    ("three_toed", "Three-toed", "Olive"), ("gulf_coast", "Gulf Coast", "Dark"), ("desert", "Desert", "Sandy")]),
+     {"Habitat": "Forests", "Signature": "Shuts tight (no damage), stays home", "Danger": "None"}),
+    (dict(id="softshell_turtle_lizardfolk", name="Softshell Turtle", group="Rivers", tag="Quick · nippy", height=1.55,
+          biomes=["river", "swamp"], temperament="Quick, nippy",
+          ecology="Apalone spinifera (Testudines: Trionychidae), the pancake-flat river turtle with a leathery shell and a snorkel nose, "
+                  "who lies buried in the riverbed and bites hard.",
+          interaction="Fish. Do not tread on her.",
+          signature=("Buried", "Still on a sandy, muddy or gravel riverbed she is buried out of sight and breathes underwater. A stranger who "
+                               "comes within a block and a half gets bitten. No armour, but quick on land and in water."),
+          danger="Low (if stepped on).",
+          variants=[("softshell", "Spiny (default)", "Olive, dark spots"), ("spiny", "Dark-spotted", "Dark spots"), ("smooth", "Smooth", "Plain tan"),
+                    ("chinese", "Chinese", "Green-grey"), ("florida", "Florida", "Dark brown")]),
+     {"Habitat": "Rivers", "Signature": "Buried in the riverbed, bites", "Danger": "Low"}),
+    (dict(id="matamata_lizardfolk", name="Matamata", group="Swamps", tag="Still · strange", height=1.5,
+          biomes=["swamp", "mangrove_swamp"], temperament="Very still, very patient",
+          ecology="Chelus fimbriata (Testudines: Chelidae), the South American turtle who looks like a pile of dead leaves and swallows "
+                  "fish with a sudden gulp.",
+          interaction="Fish.",
+          signature=("Leaf litter", "Still in the water she looks like dead leaves (invisible). Fish that swim within 4 blocks are sucked "
+                                    "into her mouth; her friend gets the fish."),
+          danger="None.",
+          variants=[("matamata", "Matamata (default)", "Leaf brown"), ("mossy", "Mossy", "Mossy green"), ("dark", "Dark", "Dark brown"),
+                    ("orinoco", "Orinoco", "Red-brown"), ("pale", "Pale", "Pale")]),
+     {"Habitat": "Swamps", "Signature": "Looks like leaves, gulps fish", "Danger": "None"}),
+]
+_fam = C.family("lizardfolk")
+for _species, _cols in TURTLES:
+    if any(x["id"] == _species["id"] for x in _fam["species"]):
+        continue
+    _fam["species"].append(_species)
+    for _label, _values in _fam.get("split", []):
+        _values.append(_cols.get(_label, "-"))
+
+
+# seventh wave (2026-10-25): crustaceans, marsupials, the armoured and the constructs as new families, the jellyfish
+# (with the mollusks) and the ahuizotl (with the merfolk), plus homage variants of existing species
+
+
+def _family(**kw):
+    if not any(f["id"] == kw["id"] for f in C.FAMILIES):
+        C.FAMILIES.append(dict(kw))
+
+
+_LIFE = [("1. Courtship", "At high friendship she may share your bed."), ("2. Young", "A day later she bears young."),
+         ("3. Growing", "Her young stay by their mother."), ("4. Grown", "Grown in five days, devoted to their father.")]
+_family(id="crustacean", volume="XXII", title="Crustaceans", subtitle="the crab family", food="Fish and kelp",
+        theme=dict(bg="#140f0f", panel="#1f1716", panel2="#281e1c", ink="#f4e8e2", muted="#c8b0a6", accent="#e0603a",
+                   line="#442e2a", green="#7ac8b0", grad="#3a1a14"),
+        lede="Beach-combing crab girls with a hard shell and harder claws. They mind their own business, sideways, until someone hits them.",
+        hero=dict(eyebrow="The central similarity", title="Armour on the outside.",
+                  text="A crab carries her skeleton outside: a carapace on her back and two big claws. The hermit carries a borrowed shell instead.",
+                  bullets=[("Sideways", "They walk sideways."), ("Pinch", "Hit one and she pinches back."),
+                           ("Shells", "The hermit crab swaps shells: give her a nautilus or shulker shell."), ("Beaches", "Sand, shores and warm shallows.")]),
+        lifecycle=[("1. Courtship", "At high friendship she may share your bed."), ("2. Eggs", "She lays a clutch in wet sand."),
+                   ("3. Young", "Little crabs hatch and follow her."), ("4. Grown", "Grown in five days, devoted to their father.")],
+        systems=[("Pinch", "Neutral: hit one and she pinches back (Slowness for a moment)."),
+                 ("Sideways", "They scuttle sideways."), ("Shell swap", "Hand the hermit crab a nautilus or shulker shell and she moves in (you get her old one back).")],
+        friendship=dict(builds=["Fish (+1), kelp and sea pickles (+2)", "Petting"], costs=["Hitting her"], devoted="She pinches anything that hurts you."),
+        mating=dict(form="Eggs", young="Little crabs", grows="5 days", where="Wet sand", note="Young use the adult model at 45%."),
+        split=[("Habitat", []), ("Signature", []), ("Danger", [])], species=[],
+        decisions=["Crabs and hermit crabs first (2026-10-25). The spider crab is a variant (a decorator crab)."],
+        questions=["A coconut crab who climbs palms?"])
+_family(id="marsupial", volume="XXIII", title="Marsupials", subtitle="the pouch family", food="Grass, leaves and fruit",
+        theme=dict(bg="#15120e", panel="#201b15", panel2="#29221a", ink="#f4ece0", muted="#c8b89e", accent="#d8783a",
+                   line="#42382a", green="#9ac86a", grad="#3a2a14"),
+        lede="The Australian family. The kangaroo carries her young in her pouch and boxes anything that bothers them.",
+        hero=dict(eyebrow="The central similarity", title="Young in the pouch.",
+                  text="Their young ride in the mother's pouch until they are grown.",
+                  bullets=[("Pouch", "Her joey rides in her pouch."), ("Kick", "Big knockback kicks."),
+                           ("Mobs", "Kangaroos live in mobs."), ("Outback", "Savanna and badlands.")]),
+        lifecycle=[("1. Courtship", "At high friendship she may share your bed."), ("2. Joey", "A day later a joey is born."),
+                   ("3. In the pouch", "The joey rides in her pouch while it grows."), ("4. Grown", "Grown in five days, devoted to their father.")],
+        systems=[("Pouch", "Her joey rides in her pouch until it is grown."), ("Kick", "She fights with kicks that knock back hard.")],
+        friendship=dict(builds=["Grass, wheat and apples (+1), sweet berries (+2)", "Petting"], costs=["Hitting her"],
+                        devoted="She kicks whatever goes for you."),
+        mating=dict(form="Live young", young="Joeys", grows="5 days", where="In her pouch", note="Young use the adult model at 45%."),
+        split=[("Habitat", []), ("Signature", []), ("Danger", [])], species=[],
+        decisions=["The kangaroo first (2026-10-25); the koala comes in the next wave."], questions=["A wombat? A Tasmanian devil?"])
+_family(id="armoured", volume="XXIV", title="Armoured", subtitle="the armadillo family", food="Insects and spider eyes; she likes beetroot",
+        theme=dict(bg="#15120f", panel="#201b16", panel2="#29231c", ink="#f2eadf", muted="#c6b6a0", accent="#c8884a",
+                   line="#443a2c", green="#a8c86a", grad="#3a2a18"),
+        lede="The armadillo girls: banded armour on their backs, and when they are scared they roll up into a ball.",
+        hero=dict(eyebrow="The central similarity", title="Roll up.",
+                  text="Frightened, she rolls up into a ball, and nothing gets through. Befriended, she rolls into whatever goes for you.",
+                  bullets=[("Ball", "No damage while rolled up."), ("Rolling charge", "Befriended, she rolls into monsters."),
+                           ("Scutes", "She sheds armadillo scutes as presents."), ("Kin", "Vanilla armadillos.")]),
+        lifecycle=_LIFE, systems=[("Rolling up", "A hit or a sprinting stranger rolls her up for a few seconds: she takes no damage."),
+                                   ("Rolling charge", "Befriended, she curls up and rolls into a monster near her friend, knocking it back.")],
+        friendship=dict(builds=["Spider eyes (+2), beetroot and sweet berries (+1)", "Petting"], costs=["Hitting her"],
+                        devoted="She rolls into anything that hurts you."),
+        mating=dict(form="Live young", young="Pups", grows="5 days", where="Beside her", note="Young use the adult model at 45%."),
+        split=[("Habitat", []), ("Signature", []), ("Danger", [])], species=[],
+        decisions=["One species for now (2026-10-25), with a ranger variant (a cowboy hat and scarf)."], questions=["A pangolin?"])
+_family(id="construct", volume="XXV", title="Constructs", subtitle="the golem family", food="Clay (she patches herself)",
+        theme=dict(bg="#13110f", panel="#1d1a17", panel2="#26221e", ink="#f0e8e0", muted="#c0b2a4", accent="#b8784a",
+                   line="#3e3630", green="#8ab08a", grad="#2e2018"),
+        lede="Girls shaped by hand. The clay golem of Jewish folklore, here a village guardian who leads the iron golems.",
+        hero=dict(eyebrow="The central similarity", title="Made, not born.",
+                  text="A construct is shaped, not born: she has no young, and when she falls she breaks apart into clay.",
+                  bullets=[("Toughest", "More health than an iron golem."), ("Guardian", "She fights monsters near villagers."),
+                           ("Kin", "Iron golems follow her."), ("Breaks", "She breaks into pieces when she falls.")]),
+        lifecycle=[("1. Shaped", "Golems are made, not born."), ("2. -", "No young."), ("3. -", "-"), ("4. -", "-")],
+        systems=[("Guardian", "She attacks monsters within 16 blocks of a villager."), ("Patched", "Clay heals her."),
+                 ("Breaking", "When she falls she breaks into pieces and leaves clay behind.")],
+        friendship=dict(builds=["Clay balls (+1), clay blocks (+3)", "Petting"], costs=["Hitting her"], devoted="She guards you like a village."),
+        mating=dict(form="None (she is made)", young="-", grows="-", where="-", note="A golem cannot have young."),
+        split=[("Habitat", []), ("Signature", []), ("Danger", [])], species=[],
+        decisions=["The clay golem first (2026-10-25). Iron golems are now her kin, not Frankenstein's monster's."],
+        questions=["A copper golem when the game has one?"])
+
+SEVENTH = {
+    "crustacean": [
+        (dict(id="crab_crustacean", name="Crab", group="Beaches", tag="Sideways · snappy", height=1.5, biomes=["beach", "mangrove_swamp", "warm_ocean"],
+              temperament="Busy, defensive",
+              ecology="True crabs (Decapoda: Brachyura): a hard carapace, two claws, and a sideways walk.",
+              interaction="Fish and kelp. Do not hit her.",
+              signature=("Pinch", "Neutral: she pinches whoever hits her first (Slowness). The decorator variant dresses her shell in kelp and coral, "
+                                  "like the spider crab's relatives."),
+              danger="Low (if hit).",
+              variants=[("red", "Red (default)", "Red"), ("blue", "Blue crab", "Blue claws"), ("ghost", "Ghost crab", "Sand-pale"),
+                        ("fiddler", "Fiddler", "Orange and purple"), ("decorator", "Decorator", "Kelp and coral on her shell")]),
+         {"Habitat": "Beaches", "Signature": "Pinches back, walks sideways", "Danger": "Low"}),
+        (dict(id="hermit_crab_crustacean", name="Hermit Crab", group="Beaches", tag="Shy · house-proud", height=1.35, biomes=["beach", "warm_ocean"],
+              temperament="Shy, house-proud",
+              ecology="Hermit crabs (Decapoda: Paguroidea) live in borrowed shells and move house as they grow.",
+              interaction="Fish. Offer her a better shell.",
+              signature=("Shell swap", "Give her a nautilus shell or a shulker shell and she moves in; you get her old one back. "
+                                       "She pinches whoever hits her first."),
+              danger="Low (if hit).",
+              variants=[("whelk", "Whelk (default)", "A whelk shell"), ("nautilus", "Nautilus", "A nautilus shell"), ("shulker", "Shulker", "A shulker shell"),
+                        ("turban", "Turban", "A green turban shell"), ("coral", "Coral", "A pink shell")]),
+         {"Habitat": "Beaches", "Signature": "Swaps shells, pinches back", "Danger": "Low"})],
+    "marsupial": [
+        (dict(id="kangaroo_marsupial", name="Kangaroo", group="Savanna", tag="Bouncy · scrappy", height=1.9, biomes=["savanna", "savanna_plateau", "badlands"],
+              temperament="Bouncy, scrappy",
+              ecology="Red and grey kangaroos (Diprotodontia: Macropodidae), who box and kick to settle things.",
+              interaction="Grass and berries.",
+              signature=("Pouch and kick", "Her joey rides in her pouch until it is grown. She fights with kicks that knock back hard. "
+                                           "The outback variant wears a red hoodie and sunglasses."),
+              danger="Medium (if provoked).",
+              variants=[("red", "Red (default)", "Red-brown"), ("grey", "Eastern grey", "Grey"), ("wallaroo", "Wallaroo", "Dark"),
+                        ("albino", "Albino", "White"), ("outback", "Outback", "A red hoodie and sunglasses")]),
+         {"Habitat": "Savanna, badlands", "Signature": "Joey in the pouch, big kicks", "Danger": "Medium"})],
+    "armoured": [
+        (dict(id="armadillo_armoured", name="Armadillo", group="Savanna & badlands", tag="Timid · tough", height=1.45, biomes=["savanna", "badlands", "wooded_badlands"],
+              temperament="Timid, then very tough",
+              ecology="Armadillos (Cingulata: Dasypodidae): banded armour of bony scutes. The three-banded one rolls into a perfect ball.",
+              interaction="Spider eyes, beetroot and berries.",
+              signature=("Roll up", "A hit or a sprinting stranger rolls her into a ball: she takes no damage. Befriended, she rolls into monsters near "
+                                    "her friend. The ranger variant wears a cowboy hat and scarf, a rolling frontier guard."),
+              danger="None.",
+              variants=[("nine_banded", "Nine-banded (default)", "Grey-brown"), ("three_banded", "Three-banded", "Tan"),
+                        ("pink_fairy", "Pink fairy", "Pink and white"), ("giant", "Giant", "Dark"), ("ranger", "Ranger", "Rust-orange, cowboy hat and scarf")]),
+         {"Habitat": "Savanna, badlands", "Signature": "Rolls up, rolling charge", "Danger": "None"})],
+    "construct": [
+        (dict(id="golem_construct", name="Golem", group="Villages", tag="Steadfast · silent", height=2.4, biomes=["plains", "meadow", "savanna"],
+              temperament="Steadfast, quiet",
+              ecology="The golem of Jewish folklore: a figure shaped from clay and brought to life by a word on her brow.",
+              interaction="Clay. Defend the village with her.",
+              signature=("Village guardian", "120 health, more than an iron golem. She fights monsters near villagers, and iron golems follow her. "
+                                             "When she falls she breaks into pieces."),
+              danger="High for monsters.",
+              variants=[("clay", "Clay (default)", "Grey clay"), ("terracotta", "Terracotta", "Fired orange"), ("red_clay", "Red clay", "Red"),
+                        ("kaolin", "Kaolin", "White clay"), ("mud", "River mud", "Dark brown")]),
+         {"Habitat": "Near villages", "Signature": "Guards villagers, breaks apart", "Danger": "High for monsters"})],
+    "mollusk": [
+        (dict(id="jellyfish_mollusk", name="Jellyfish", group="Warm ocean", tag="Drifting · glowing", height=1.6, biomes=["warm_ocean", "lukewarm_ocean", "deep_lukewarm_ocean"],
+              temperament="Dreamy, drifting",
+              ecology="Jellyfish (Cnidaria: Scyphozoa). Not a mollusk at all, but she drifts with them.",
+              interaction="Fish.",
+              signature=("Sting and glow", "She glows at night and stings whatever bumps into her (Poison). Friends are never stung, "
+                                           "and swimming near her they see in the dark (Night Vision)."),
+              danger="Low (stings).",
+              variants=[("moon", "Moon (default)", "Pale blue"), ("pink", "Pink", "Pink"), ("box", "Box", "Clear"),
+                        ("lion", "Lion's mane", "Orange"), ("purple", "Purple", "Purple-striped")]),
+         {"Habitat": "Warm ocean", "Body": "Bell and tentacle skirt", "Signature": "Stings, glows", "Danger": "Low"})],
+    "merfolk": [
+        (dict(id="ahuizotl_mermaid", name="Ahuizotl", group="Rivers", tag="Thieving · playful", height=1.5, biomes=["river", "jungle", "mangrove_swamp"],
+              temperament="A playful thief",
+              ecology="The Aztec water creature with a hand at the end of her tail, perhaps inspired by the neotropical otter.",
+              interaction="Fish. Keep a lantern in your hand.",
+              signature=("Fish thief", "A wild ahuizotl steals fish off your fishing line with the hand on her tail. A lantern in your hand keeps her "
+                                       "away. Befriended, she fishes for you instead."),
+              danger="None.",
+              variants=[("otter", "Otter (default)", "Brown"), ("dark", "Dark", "Near black"), ("golden", "Golden", "Golden brown"),
+                        ("grey", "Grey", "Grey"), ("jade", "Jade", "Green-tinged")]),
+         {"Habitat": "Rivers", "Young": "Live pups", "On land": "Slow", "Signature": "Steals fish off your line", "Danger": "None"})],
+}
+for _fid, _entries in SEVENTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
+# homage variants for existing species (2026-10-25): generic names, the look of a favourite character
+for _sid, _variant in [("cactus_flora", ("gunman", "Gunman", "A straw sombrero, a big black mustache, a poncho and a bandolier")),
+                       ("cactus_flora", ("blossom", "Blossom", "A straw sombrero, braids with red bows, a cow-print top and a blue poncho, a lasso")),
+                       ("living_doll_undead", ("lost", "Lost", "Red curls with purple bows, a patched green dress, a second face on the back of her head")),
+                       ("ocelot_nekomata", ("stitched", "Stitched", "Sewn together, a purple patch over half her head, a striped top")),
+                       ("salamander_lizardfolk", ("nurse", "Nurse", "Pink and spotted, a nurse's dress and cap, a huge syringe in hand")),
+                       ("wolf_canid", ("mummy", "Mummy", "A bandaged head, red shirt and blue overalls, a cleaver in the head")),
+                       ("anubis_canid", ("mummy", "Mummy", "A bandaged head, a grey suit, a machete in the head"))]:
+    for _fam in C.FAMILIES:
+        for _s in _fam["species"]:
+            if _s["id"] == _sid and all(v[0] != _variant[0] for v in _s["variants"]):
+                _s["variants"].append(_variant)
+
+
+# eighth wave (2026-10-25): unicorn, black bear, koala, gecko, chupacabra, firefly, mummy (the flamingo is a harpy: her own script)
+EIGHTH = {
+    "centaur": [
+        (dict(id="unicorn_centaur", name="Unicorn", group="Flower forests", tag="Pure · healing", height=2.2,
+              biomes=["flower_forest", "cherry_grove", "meadow"], temperament="Gentle, wary of the impure",
+              ecology="The unicorn of European legend: a white horse with a single spiralled horn, who only lets the pure of heart come near.",
+              interaction="Golden carrots and sugar. Come with clean hands.",
+              signature=("Pure heart, healing horn", "A player who has killed villagers or iron golems can never befriend her, and she keeps away "
+                                                     "from them. Her horn clears poison and wither from friends near her and speeds up the cure of "
+                                                     "zombie villagers. Friends may ride her."),
+              danger="None.",
+              variants=[("white", "White (default)", "White, golden horn"), ("silver", "Silver", "Silver-grey"), ("rose", "Rose", "Rose pink"),
+                        ("midnight", "Midnight", "Deep blue"), ("rainbow", "Rainbow", "A rainbow mane")]),
+         {"Habitat": "Flower forests, cherry groves", "Ridden": "By friends", "Signature": "Heals, pure hearts only", "Temperament": "Gentle",
+          "Danger": "None"})],
+    "canid": [
+        (dict(id="black_bear_canid", name="Black Bear", group="Forests", tag="Timid · greedy for berries", height=2.0,
+              biomes=["forest", "birch_forest", "taiga", "old_growth_birch_forest"], temperament="Timid, hungry",
+              ecology="Ursus americanus (Carnivora: Ursidae), the forest bear who climbs trees and raids berry patches.",
+              interaction="Sweet berries and honey. Move slowly.",
+              signature=("Scares easily", "She climbs trees and eats berry bushes bare. A sprinting stranger, an explosion, a bell or a goat horn "
+                                          "sends her running, dropping what she holds; befriended, only explosions still do."),
+              danger="Low.",
+              variants=[("black", "Black (default)", "Black"), ("cinnamon", "Cinnamon", "Red-brown"), ("glacier", "Glacier", "Blue-grey"),
+                        ("kermode", "Kermode", "White, the spirit bear"), ("brown", "Brown", "Brown")]),
+         {"Habitat": "Forests", "Kin": "Polar bears", "Signature": "Climbs trees, raids berries, scares easily", "Danger": "Low"})],
+    "marsupial": [
+        (dict(id="koala_marsupial", name="Koala", group="Forests", tag="Sleepy · clingy", height=1.4,
+              biomes=["forest", "birch_forest", "savanna_plateau"], temperament="Sleepy",
+              ecology="Phascolarctos cinereus (Diprotodontia: Phascolarctidae), who eats only leaves and sleeps most of the day.",
+              interaction="Leaves. Do not wake her.",
+              signature=("Asleep", "Awake only at dawn and dusk; the rest of the time she sleeps clinging to a tree trunk. Her joey rides on her "
+                                   "back. The rare drop bear drops onto whoever walks under her tree (a hug, once she likes you)."),
+              danger="None (the drop bear: a fright).",
+              variants=[("grey", "Grey (default)", "Grey"), ("brown", "Brown", "Brown-grey"), ("pale", "Pale", "Pale grey"),
+                        ("dark", "Dark", "Dark grey"), ("drop_bear", "Drop bear", "Red eyes, sharp claws (rare)")]),
+         {"Habitat": "Forests", "Signature": "Sleeps on trees, the drop bear", "Danger": "None"})],
+    "lizardfolk": [
+        (dict(id="gecko_lizardfolk", name="Gecko", group="Jungles & deserts", tag="Quick · curious", height=1.35,
+              biomes=["jungle", "sparse_jungle", "desert", "savanna"], temperament="Quick, curious",
+              ecology="Geckos (Squamata: Gekkota), who climb sheer walls on sticky toe pads and lick their own eyes clean.",
+              interaction="Fruit.",
+              signature=("Climber", "Fast, and she climbs walls. Curious: she trails you and goes to look at anything you drop. She sheds her "
+                                    "tail when hit, and it grows back."),
+              danger="None.",
+              variants=[("leopard", "Leopard (default)", "Yellow with spots"), ("crested", "Crested", "Orange, a crest"),
+                        ("tokay", "Tokay", "Blue-grey, orange spots"), ("day", "Day gecko", "Bright green"), ("gargoyle", "Gargoyle", "Mottled grey")]),
+         {"Habitat": "Jungles, deserts", "Signature": "Climbs walls, sheds her tail", "Danger": "None"}),
+        (dict(id="chupacabra_lizardfolk", name="Chupacabra", group="Mountain edges", tag="Shy · unruly", height=1.6,
+              biomes=["windswept_hills", "jagged_peaks", "meadow", "badlands"], temperament="Shy, ungovernable",
+              ecology="The goat-sucker of 1990s Puerto Rico: a spiny reptilian cryptid. (The later 'canine chupacabras' were coyotes with mange.)",
+              interaction="Mutton. Do not stare.",
+              signature=("Goat hunter", "She hunts wild goats only, never tamed, named, leashed or fenced ones, and hides when you look straight at "
+                                        "her. Fed, she lingers near you but takes no orders; at high friendship she leaves mutton."),
+              danger="None (to players).",
+              variants=[("grey", "Grey (default)", "Grey-green, red spines"), ("dark", "Dark", "Charcoal"), ("sand", "Sand", "Sandy"),
+                        ("blue", "Blue", "Blue-grey"), ("red", "Red", "Rust red")]),
+         {"Habitat": "Mountain edges", "Signature": "Hunts wild goats, hides when watched", "Danger": "None"})],
+    "bug": [
+        (dict(id="firefly_bug", name="Firefly", group="Meadows at night", tag="Twinkling · tiny", height=0.9,
+              biomes=["meadow", "plains", "swamp", "mangrove_swamp"], temperament="Shy, twinkling",
+              ecology="Fireflies (Coleoptera: Lampyridae), whose glowing bellies blink, in some places all in time.",
+              interaction="Sugar and honey. A glass bottle catches her (why?).",
+              signature=("Blinking", "She glows at night, and the fireflies around her blink in time. A glass bottle catches her (or a fairy) in "
+                                     "a jar, a light block; break it to let her out."),
+              danger="None.",
+              variants=[("amber", "Amber (default)", "Amber glow"), ("green", "Green", "Green glow"), ("blue", "Blue", "Blue ghost"),
+                        ("pink", "Pink", "Pink glow"), ("white", "White", "White glow")]),
+         {"Habitat": "Meadows, swamps at night", "Signature": "Glows, blinks in time, jars", "Danger": "None"})],
+    "undead": [
+        (dict(id="mummy_undead", name="Mummy", group="Desert pyramids", tag="Bashful · ancient", height=1.8,
+              biomes=["desert"], temperament="Ancient, bashful",
+              ecology="The wrapped dead of Egyptian tombs, here a bashful guardian of the pyramid's loot.",
+              interaction="Paper and gold. Pull gently.",
+              signature=("Unravelling", "Hits loosen her bandages (string and paper). Befriended, a crouching pull with an empty hand unravels her "
+                                        "a layer at a time, down to skimpy wraps; then she hurries, spins and wraps herself up again."),
+              danger="Low.",
+              variants=[("linen", "Linen (default)", "Pale linen"), ("aged", "Aged", "Yellowed"), ("royal", "Royal", "Gold and lapis"),
+                        ("sand", "Sand", "Sandy"), ("night", "Night", "Grey, glowing eyes")]),
+         {"Haunts": "Desert pyramids", "Signature": "Unravels and rewraps", "Danger": "Low"})],
+}
+for _fid, _entries in EIGHTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
+
+# ninth wave (2026-10-25): sheep, highland cow, yak, the bats (a new family), the dark elf, medusa, oni, mantis, ender
+# slime, wolpertinger, venus flytrap, siren
+_family(id="bat", volume="XXVI", title="Bats", subtitle="the bat family", food="Fruit (apples, melon, berries)",
+        theme=dict(bg="#110f14", panel="#1a1720", panel2="#221e2a", ink="#ece6f4", muted="#b4a8c4", accent="#9a6ad8",
+                   line="#3a3046", green="#8ac8a0", grad="#2a1a3a"),
+        lede="Night fliers on leathery wings. By day they hang upside down from cave ceilings; by night they hear the whole world around them.",
+        hero=dict(eyebrow="The central similarity", title="Hanging upside down.",
+                  text="A bat rests hanging from a ceiling by her feet, wings wrapped round her, and flies at night.",
+                  bullets=[("Roost", "She hangs from cave ceilings to rest."), ("Echolocation", "Befriended, she shows you the mobs near you, through walls."),
+                           ("Night", "Awake at night."), ("Kin", "Vanilla bats.")]),
+        lifecycle=_LIFE,
+        systems=[("Roosting", "By day she hangs upside down under a ceiling (a cave roof, an overhang) and sleeps."),
+                 ("Echolocation", "Befriended, she pings every few seconds: monsters near her friend glow for a moment, through walls."),
+                 ("Flight", "She flies, and never takes fall damage.")],
+        friendship=dict(builds=["Apples, melon slices and sweet berries (+1), glow berries (+2)", "Petting"], costs=["Hitting her", "Waking her"],
+                        devoted="Her pings never stop while you are near."),
+        mating=dict(form="Live young", young="Pups", grows="5 days", where="Beside her", note="Young use the adult model at 45%."),
+        split=[("Habitat", []), ("Signature", []), ("Danger", [])], species=[],
+        decisions=["One species first (2026-10-25), the fruit bat as a variant (a fox face). Vampires keep bats too."],
+        questions=["A vampire bat who drinks from sleeping mobs?"])
+
+NINTH = {
+    "minotaur": [
+        (dict(id="sheep_minotaur", name="Sheep", group="Meadows", tag="Woolly · gentle", height=1.6, biomes=["meadow", "plains", "windswept_hills"],
+              temperament="Gentle, flock-minded",
+              ecology="Domestic sheep (Bovidae: Ovis aries), whose wool never stops growing. The family's mildest member.",
+              interaction="Wheat and grass. Shears.",
+              signature=("Wool", "Shears take her wool (it regrows after she grazes). Dye her like a sheep and her wool takes the colour. "
+                                 "Vanilla sheep follow her as their shepherd."),
+              danger="None.",
+              variants=[("white", "White (default)", "White wool"), ("black", "Black", "Black wool"), ("brown", "Brown", "Brown wool"),
+                        ("jacob", "Jacob", "Black-spotted wool"), ("merino", "Merino", "Cream, extra-fine wool")]),
+         {"Habitat": "Meadows, plains", "Temper": "Gentle", "Signature": "Shear and dye her, sheep follow her", "Danger": "None"}),
+        (dict(id="highland_minotaur", name="Highland", group="Snowy hills", tag="Shaggy · unbothered", height=1.8,
+              biomes=["snowy_slopes", "grove", "windswept_hills", "snowy_plains"], temperament="Calm, shaggy",
+              ecology="Highland cattle (Bovidae: Bos taurus), the long-haired cattle of the Scottish Highlands, with a fringe over the eyes.",
+              interaction="Wheat.",
+              signature=("Never cold", "Her shaggy coat keeps out any cold: she never freezes, and walks on powder snow."),
+              danger="Low (if provoked).",
+              variants=[("red", "Red (default)", "Ginger"), ("black", "Black", "Black"), ("dun", "Dun", "Pale gold"),
+                        ("white", "White", "Cream"), ("brindle", "Brindle", "Striped brown")]),
+         {"Habitat": "Snowy hills", "Temper": "Calm", "Signature": "Never freezes", "Danger": "Low"}),
+        (dict(id="yak_minotaur", name="Yak", group="Mountains", tag="Sturdy · loyal", height=1.9,
+              biomes=["jagged_peaks", "frozen_peaks", "stony_peaks", "snowy_slopes"], temperament="Sturdy, patient",
+              ecology="The yak (Bovidae: Bos grunniens) of the Himalaya, a pack animal at home far above the tree line.",
+              interaction="Wheat. Give her a chest.",
+              signature=("Pack yak", "Give her a chest and she carries two rows of cargo (crouch and use her to open it), following you over "
+                                     "the mountains. She never freezes either."),
+              danger="Low (if provoked).",
+              variants=[("brown", "Brown (default)", "Dark brown"), ("black", "Black", "Black"), ("white", "White", "White"),
+                        ("golden", "Golden", "Golden"), ("pied", "Pied", "Black and white")]),
+         {"Habitat": "High mountains", "Temper": "Patient", "Signature": "Carries a chest of cargo", "Danger": "Low"})],
+    "bat": [
+        (dict(id="cave_bat", name="Bat", group="Caves & forests", tag="Nocturnal · keen-eared", height=1.4,
+              biomes=["dripstone_caves", "lush_caves", "dark_forest", "jungle"], temperament="Shy by day, lively by night",
+              ecology="Bats (Chiroptera), the only mammals that truly fly, who find their way in the dark by echolocation.",
+              interaction="Fruit. Let her sleep.",
+              signature=("Roost and ping", "She hangs upside down from ceilings to rest. Befriended, she pings every few seconds and monsters "
+                                           "near her friend glow for a moment, through walls. The fruit bat has a fox face."),
+              danger="None.",
+              variants=[("brown", "Brown (default)", "Brown"), ("fruit", "Fruit bat", "Fox-faced, golden mantle"), ("vampire", "Vampire", "Dark grey, red eyes"),
+                        ("ghost", "Ghost", "White"), ("hoary", "Hoary", "Frosted brown")]),
+         {"Habitat": "Caves, dark forests", "Signature": "Roosts upside down, echolocation", "Danger": "None"})],
+    "elf": [
+        (dict(id="dark_elf", name="Dark Elf", group="The deep dark", tag="Silent · watchful", height=1.75, biomes=["deep_dark"],
+              temperament="Silent, watchful",
+              ecology="Elves who went down into the deep dark and learned to live beside the Warden.",
+              interaction="Echo shards and sculk. Move quietly.",
+              signature=("Warden's kin", "She walks silently and never sets off sculk sensors or shriekers. While she likes you, a Warden near "
+                                         "her lets you be. Her gifts are echo shards and sculk."),
+              danger="Low (the Warden is not).",
+              variants=[("sculk", "Sculk (default)", "Grey-blue skin, teal glow"), ("ash", "Ash", "Ash grey"), ("abyss", "Abyss", "Near black"),
+                        ("echo", "Echo", "Teal"), ("pale", "Pale", "White hair, pale skin")]),
+         {"Habitat": "The deep dark", "Trades": "Echo shards, sculk", "Signature": "Silent, calms the Warden", "Danger": "Low"})],
+    "lamia": [
+        (dict(id="medusa_lamia", name="Medusa", group="Stony shores", tag="Stony-eyed · lonely", height=1.8, biomes=["stony_shore", "stony_peaks", "desert"],
+              temperament="Lonely, guarded",
+              ecology="The gorgon of Greek myth, with living snakes for hair, whose gaze turns onlookers to stone.",
+              interaction="Rabbit and eggs. Do not meet her eyes.",
+              signature=("Petrifying gaze", "Look a stranger medusa in the eyes and you are slowed nearly to a stop; monsters that meet her gaze "
+                                            "freeze for a few seconds. Befriended, she wears a blindfold so it is safe to look at her."),
+              danger="Medium (her gaze).",
+              variants=[("emerald", "Emerald (default)", "Green snakes"), ("bronze", "Bronze", "Bronze snakes"), ("onyx", "Onyx", "Black snakes"),
+                        ("marble", "Marble", "White, stone-pale"), ("coral", "Coral", "Red-banded snakes")]),
+         {"Habitat": "Stony shores and peaks", "Young": "Eggs", "Defence": "Her gaze", "Signature": "Petrifying gaze, blindfold for friends",
+          "Danger": "Medium"})],
+    "devil": [
+        (dict(id="oni_devil", name="Oni", group="Mountains at night", tag="Mighty · boisterous", height=2.2,
+              biomes=["windswept_hills", "cherry_grove", "taiga", "stony_peaks"], temperament="Boisterous, fond of a drink",
+              ecology="The ogres of Japanese folklore: horned, red or blue, with an iron club, driven off every spring by thrown beans.",
+              interaction="Honey bottles. Cocoa beans drive her off.",
+              signature=("Iron club", "Big and hard-hitting. Thrown beans (cocoa beans) drive her away, as at Setsubun. Befriended, she guards "
+                                      "your door at night."),
+              danger="High (if provoked).",
+              variants=[("red", "Red (default)", "Red skin"), ("blue", "Blue", "Blue skin"), ("yellow", "Yellow", "Yellow skin"),
+                        ("green", "Green", "Green skin"), ("black", "Black", "Grey-black skin")]),
+         {"Habitat": "Mountains at night", "Signature": "Iron club, fears beans, guards your door", "Danger": "High"})],
+    "bug": [
+        (dict(id="mantis_bug", name="Mantis", group="Flower forests", tag="Still · lightning-fast", height=1.7,
+              biomes=["flower_forest", "jungle", "meadow", "savanna"], temperament="Patient, then sudden",
+              ecology="Praying mantises (Mantodea), ambush hunters who wait folded in prayer and strike faster than the eye can follow.",
+              interaction="Spider eyes. Keep still.",
+              signature=("Ambush", "She holds a still prayer pose, then strikes in a flash at silverfish, endermites and spiders. The orchid mantis "
+                                   "cannot be seen among flowers."),
+              danger="Low (to players).",
+              variants=[("green", "Green (default)", "Green"), ("brown", "Brown", "Bark brown"), ("orchid", "Orchid", "Pink and white"),
+                        ("leaf", "Leaf", "Leaf green, a leaf cape"), ("ghost", "Ghost", "Pale")]),
+         {"Habitat": "Flower forests, jungles", "Signature": "Prays, strikes arthropods", "Danger": "Low"})],
+    "slime": [
+        (dict(id="ender_slime", name="Ender Slime", group="The End", tag="Flickering · light-fingered", height=1.7,
+              biomes=["end_highlands", "end_midlands", "warped_forest"], temperament="Shy, light-fingered",
+              ecology="A slime that ate an ender pearl: she flickers from place to place and moves the world around a block at a time.",
+              interaction="Chorus fruit and ender pearls.",
+              signature=("Teleporting", "She teleports away when hit, like an enderman, picks up loose blocks and puts them down somewhere else. "
+                                        "Endermites are her kin."),
+              danger="Low.",
+              variants=[("void", "Void (default)", "Black and violet"), ("chorus", "Chorus", "Pale purple"), ("pearl", "Pearl", "Teal"),
+                        ("end_stone", "End stone", "Pale yellow"), ("shulker", "Shulker", "Purple and gold")]),
+         {"Habitat": "The End, warped forests", "Favourite food": "Chorus fruit", "Element": "Ender", "Weakness": "Water",
+          "Danger": "Low"})],
+    "jackalope": [
+        (dict(id="wolpertinger_jackalope", name="Wolpertinger", group="Bavarian forests", tag="Prankster · springy", height=1.5,
+              biomes=["forest", "taiga", "old_growth_spruce_taiga", "windswept_forest"], temperament="Mischievous",
+              ecology="The horned, winged rabbit of Bavarian folklore, said to show herself only at dusk to the right company.",
+              interaction="Carrots. Mind your boots.",
+              signature=("Prankster", "She double-jumps and glides down from heights on little wings. Now and then she swaps your boots for "
+                                      "leather ones; feed her to get yours back."),
+              danger="None.",
+              variants=[("brown", "Brown (default)", "Brown, pheasant wings"), ("grey", "Grey", "Grey, duck wings"), ("white", "Snow", "White"),
+                        ("red", "Red", "Fox-red"), ("black", "Black", "Black, raven wings")]),
+         {"Habitat": "Forests", "Social": "Pranks", "Signature": "Double jump, glides, swaps your boots", "Danger": "None"})],
+    "flora": [
+        (dict(id="venus_flytrap_flora", name="Venus Flytrap", group="Swamps", tag="Hungry · snappy", height=1.6, biomes=["swamp", "mangrove_swamp"],
+              temperament="Hungry, quick",
+              ecology="Dionaea muscipula, the carnivorous plant of the Carolina bogs, whose leaves snap shut when touched twice.",
+              interaction="Meat. Keep a step back.",
+              signature=("Snap trap", "Rooted like the alraune. Her trap snaps shut on any mob or stranger that steps into reach, holding and "
+                                      "biting. Befriended, she only snaps at monsters: a garden guard."),
+              danger="Medium (in reach).",
+              variants=[("green", "Green (default)", "Green, red trap"), ("red", "Red", "All red"), ("purple", "Purple", "Purple"),
+                        ("yellow", "Yellow", "Yellow-green"), ("dark", "Dark", "Dark green")]),
+         {"Habitat": "Swamps", "Signature": "Snaps and holds, guards gardens", "Danger": "Medium"})],
+    "merfolk": [
+        (dict(id="siren_mermaid", name="Siren", group="Rocky coasts", tag="Enchanting · dangerous", height=1.7,
+              biomes=["stony_shore", "ocean", "deep_ocean", "cold_ocean"], temperament="Enchanting",
+              ecology="The singers of the rocks, here the mermaid kind of the sailors' tales, whose song draws ships onto the reef.",
+              interaction="Fish.",
+              signature=("Luring song", "Her song draws strangers toward the water. Sung for a friend, it gives Conduit Power while they swim."),
+              danger="Medium (her song).",
+              variants=[("teal", "Teal (default)", "Teal"), ("pearl", "Pearl", "White and silver"), ("coral", "Coral", "Coral pink"),
+                        ("abyss", "Abyss", "Deep blue"), ("storm", "Storm", "Grey")]),
+         {"Habitat": "Rocky coasts", "Young": "Roe", "On land": "Slow", "Signature": "Lures strangers, Conduit Power for friends",
+          "Danger": "Medium"})],
+}
+for _fid, _entries in NINTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
+
+# tenth wave (2026-10-25): Harmontide's own creatures from the reference art (the coin magpie and the trickster raven
+# are harpies: their own scripts)
+TENTH = {
+    "centaur": [
+        (dict(id="tusktaur_centaur", name="Tusktaur", group="Snowy plains", tag="Huge · motherly", height=2.6,
+              biomes=["snowy_plains", "snowy_taiga", "frozen_river", "ice_spikes"], temperament="Patient, protective",
+              ecology="A Harmontide mammoth-taur: the woolly mammoth's body, shaggy and tusked, below a broad-shouldered girl.",
+              interaction="Wheat and hay. Ride her through the deep snow.",
+              signature=("Tusk sweep", "A sweep of her tusks knocks back everything in front of her. Friends ride her, and she never sinks in "
+                                       "powder snow or freezes."),
+              danger="High (if provoked).",
+              variants=[("woolly", "Woolly (default)", "Red-brown wool"), ("black", "Black", "Black wool"), ("snow", "Snow", "White wool"),
+                        ("steppe", "Steppe", "Pale gold"), ("ember", "Ember", "Dark, gilded tusks")]),
+         {"Habitat": "Snowy plains", "Ridden": "By friends", "Signature": "Tusk sweep, never sinks in snow", "Temperament": "Protective",
+          "Danger": "High"}),
+        (dict(id="aurorantler_centaur", name="Aurorantler", group="Snowy taiga", tag="Luminous · aloof", height=2.2,
+              biomes=["snowy_taiga", "grove", "snowy_slopes"], temperament="Aloof, gentle",
+              ecology="A Harmontide deer-taur whose antlers catch the northern lights.",
+              interaction="Sweet berries and glow berries.",
+              signature=("Aurora antlers", "Her antlers glow at night and light the snow around her. Her friend sees in the dark beside her "
+                                           "(Night Vision)."),
+              danger="None.",
+              variants=[("aurora", "Aurora (default)", "Green-blue glow"), ("violet", "Violet", "Violet glow"), ("dawn", "Dawn", "Pink glow"),
+                        ("frost", "Frost", "White glow"), ("ember", "Ember", "Amber glow")]),
+         {"Habitat": "Snowy taiga", "Ridden": "By friends", "Signature": "Glowing antlers, Night Vision", "Temperament": "Aloof",
+          "Danger": "None"})],
+    "minotaur": [
+        (dict(id="rhiwool_minotaur", name="Rhiwool", group="Tundra", tag="Shaggy · headstrong", height=2.0,
+              biomes=["snowy_plains", "frozen_peaks", "windswept_gravelly_hills"], temperament="Headstrong",
+              ecology="A Harmontide woolly rhino: a great horn on her brow and wool to the ground.",
+              interaction="Wheat. Shears.",
+              signature=("Rhino charge", "She charges in a straight line and sends whatever she hits flying. Shears take her wool, which "
+                                         "grows back once she grazes."),
+              danger="High (if provoked).",
+              variants=[("black", "Black (default)", "Black wool"), ("brown", "Brown", "Brown wool"), ("grey", "Grey", "Grey wool"),
+                        ("white", "White", "White wool"), ("red", "Red", "Red wool")]),
+         {"Habitat": "Tundra", "Temper": "Headstrong", "Signature": "Straight-line charge, shearable", "Danger": "High"})],
+    "canid": [
+        (dict(id="meloncollie_canid", name="Meloncollie", group="Farmland", tag="Cheerful · bossy", height=1.5,
+              biomes=["plains", "sunflower_plains", "savanna"], temperament="Cheerful, bossy",
+              ecology="A Harmontide herding dog with a watermelon rind for a coat.",
+              interaction="Melon slices and bones.",
+              signature=("Herding", "Befriended, she rounds up stray cows, sheep, pigs and chickens and herds them back to the nearest "
+                                    "fenced pen. She plants melon seeds."),
+              danger="None.",
+              variants=[("melon", "Melon (default)", "Green rind, brown and white"), ("golden", "Golden", "A yellow melon"),
+                        ("black", "Black", "A black-rind melon"), ("tricolour", "Tricolour", "Black, tan and white"), ("seedless", "Seedless", "Pale rind")]),
+         {"Habitat": "Farmland", "Kin": "Wolves", "Signature": "Herds animals into pens", "Danger": "None"})],
+    "rodent": [
+        (dict(id="needlehog_rodent", name="Needlehog", group="Forests", tag="Prickly · studious", height=1.3,
+              biomes=["forest", "birch_forest", "dark_forest", "meadow"], temperament="Shy, studious",
+              ecology="A Harmontide hedgehog with quills long enough to pin notes to.",
+              interaction="Spider eyes and berries.",
+              signature=("Quills", "Frightened, she rolls into a ball of quills that pricks whatever touches her. She hunts silverfish and "
+                                   "picks up paper and books she finds."),
+              danger="Low (her quills).",
+              variants=[("brown", "Brown (default)", "Brown quills"), ("blue", "Blue", "Blue-grey quills"), ("albino", "Albino", "White quills"),
+                        ("cinnamon", "Cinnamon", "Ginger quills"), ("dark", "Dark", "Dark quills")]),
+         {"Habitat": "Forests", "Signature": "Quill ball, hunts silverfish", "Danger": "Low"})],
+    "jackalope": [
+        (dict(id="clockhare_jackalope", name="Clockhare", group="Villages", tag="Punctual · fussy", height=1.45,
+              biomes=["plains", "meadow", "flower_forest"], temperament="Punctual, fussy",
+              ecology="A Harmontide hare in a waistcoat and top hat, never far from her pocket watch.",
+              interaction="Carrots. Be on time.",
+              signature=("Pocket watch", "Her watch chimes at dawn and at dusk, and warns her friend when phantoms are due. Her friend works "
+                                         "faster beside her (Haste)."),
+              danger="None.",
+              variants=[("black", "Black (default)", "Black fur, brass watch"), ("white", "White", "White fur, silver watch"),
+                        ("brown", "Brown", "Brown fur, copper watch"), ("grey", "Grey", "Grey fur, gold watch"), ("spotted", "Spotted", "Dutch markings")]),
+         {"Habitat": "Plains", "Social": "Keeps time", "Signature": "Chimes, Haste", "Danger": "None"})],
+    "merfolk": [
+        (dict(id="axolume_mermaid", name="Axolume", group="Lush caves", tag="Glowing · gentle", height=1.4, biomes=["lush_caves"],
+              temperament="Gentle",
+              ecology="A Harmontide axolotl whose frills and spots glow in the dark water of the lush caves.",
+              interaction="Tropical fish.",
+              signature=("Glow", "She lights the water around her, and her friend heals beside her (Regeneration)."),
+              danger="None.",
+              variants=[("azure", "Azure (default)", "Blue glow"), ("rose", "Rose", "Pink glow"), ("gold", "Gold", "Gold glow"),
+                        ("jade", "Jade", "Green glow"), ("void", "Void", "Black, violet glow")]),
+         {"Habitat": "Lush caves", "Young": "Roe", "On land": "Slow", "Signature": "Glows, Regeneration", "Danger": "None"})],
+    "armoured": [
+        (dict(id="aegis_boar_armoured", name="Aegis Boar", group="Forests", tag="Stalwart · stubborn", height=1.9,
+              biomes=["forest", "dark_forest", "old_growth_spruce_taiga"], temperament="Stalwart",
+              ecology="A Harmontide boar in plate armour, tusked and broad, who stands in front of whoever she guards.",
+              interaction="Carrots, potatoes and beetroot.",
+              signature=("Shield", "Befriended, she takes a third of every hit meant for her friend within 8 blocks, and charges what struck "
+                                   "them."),
+              danger="Medium (if provoked).",
+              variants=[("bronze", "Bronze (default)", "Bronze plate"), ("iron", "Iron", "Iron plate"), ("gold", "Gold", "Gold plate"),
+                        ("blue", "Azure", "Blue-enamelled plate"), ("black", "Black", "Blackened plate")]),
+         {"Habitat": "Forests", "Signature": "Takes hits for her friend", "Danger": "Medium"})],
+    "nekomata": [
+        (dict(id="blaze_cat_nekomata", name="Blaze Cat", group="The Nether", tag="Fiery · haughty", height=1.6,
+              biomes=["nether_wastes", "crimson_forest", "basalt_deltas"], temperament="Haughty",
+              ecology="A Harmontide black cat of the Nether with flames for paws.",
+              interaction="Cooked fish and blaze powder.",
+              signature=("Burning paws", "Fireproof. Her blows set things alight, and she lights campfires and candles near her. Blazes "
+                                         "are her kin; befriended, her friend takes no harm from fire beside her."),
+              danger="Medium.",
+              variants=[("black", "Black (default)", "Black, orange flames"), ("soul", "Soul", "Black, blue flames"), ("ash", "Ash", "Grey"),
+                        ("cinder", "Cinder", "Red-black"), ("white", "White", "White, gold flames")]),
+         {"Habitat": "The Nether", "Size": "Medium", "Signature": "Fire paws, Fire Resistance", "Danger": "Medium"})],
+    "construct": [
+        (dict(id="gargoyle_construct", name="Gargoyle", group="Rooftops", tag="Still · watchful", height=1.8,
+              biomes=["plains", "meadow", "windswept_hills"], temperament="Silent by day, watchful by night",
+              ecology="The carved guardian of cathedral roofs: stone by day, awake at night.",
+              interaction="Stone and cobblestone. Leave her a high perch.",
+              signature=("Stone by day", "By day she turns to stone: nothing hurts her. At night she wakes, flies, and fights monsters near "
+                                         "her friend."),
+              danger="Medium (at night).",
+              variants=[("granite", "Granite (default)", "Grey stone"), ("sandstone", "Sandstone", "Sandstone"), ("blackstone", "Blackstone", "Blackstone"),
+                        ("moss", "Mossy", "Mossy stone"), ("marble", "Marble", "White stone")]),
+         {"Habitat": "Rooftops", "Signature": "Stone by day, flies at night", "Danger": "Medium"})],
+}
+for _fid, _entries in TENTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
+
+# eleventh wave (2026-10-26): more Harmontide creatures (the rookmourn and the cassowrath are harpies, the mailtoad an
+# anuran: their own scripts)
+ELEVENTH = {
+    "lizardfolk": [
+        (dict(id="anvil_tortoise_lizardfolk", name="Anvil Tortoise", group="Mountains & villages", tag="Steady · handy", height=1.5,
+              biomes=["stony_peaks", "windswept_hills", "plains"], temperament="Steady, patient",
+              ecology="A Harmontide tortoise whose shell is a smith's anvil.",
+              interaction="Iron nuggets and melons. Bring her what is broken.",
+              signature=("Anvil shell", "Hand her a damaged tool or armour piece with one of its repair materials and she mends it, for no "
+                                        "experience. Too heavy to push or knock back."),
+              danger="None.",
+              variants=[("iron", "Iron (default)", "An iron anvil"), ("copper", "Copper", "A copper anvil"), ("gold", "Gold", "A gold anvil"),
+                        ("blackstone", "Blackstone", "A dark anvil"), ("chipped", "Chipped", "A worn, chipped anvil")]),
+         {"Habitat": "Mountains, villages", "Signature": "Repairs tools for free", "Danger": "None"})],
+    "marsupial": [
+        (dict(id="gliderune_marsupial", name="Gliderune", group="Forests", tag="Tiny · clingy", height=1.2,
+              biomes=["forest", "birch_forest", "jungle", "dark_forest"], temperament="Playful, clingy",
+              ecology="A Harmontide sugar glider who sails from tree to tree on the skin between her arms and legs.",
+              interaction="Sweet berries and honey.",
+              signature=("Glider", "She glides down from any height. Befriended, she rides on your shoulder and you fall slowly while she "
+                                   "is there (Slow Falling)."),
+              danger="None.",
+              variants=[("grey", "Grey (default)", "Grey, a dark stripe"), ("blue", "Blue", "Blue-grey"), ("leucistic", "Leucistic", "White"),
+                        ("mosaic", "Mosaic", "White with grey patches"), ("cinnamon", "Cinnamon", "Ginger")]),
+         {"Habitat": "Forests", "Signature": "Rides your shoulder, Slow Falling", "Danger": "None"})],
+    "armoured": [
+        (dict(id="slothren_armoured", name="Slothren", group="Jungles", tag="Slow · mossy", height=1.6,
+              biomes=["jungle", "sparse_jungle", "bamboo_jungle", "lush_caves"], temperament="Slow, serene",
+              ecology="A Harmontide sloth, a cousin of the armadillos, so slow that moss and flowers grow in her fur.",
+              interaction="Leaves and glow berries. Do not hurry her.",
+              signature=("Mossy", "She hangs from branches by day and barely moves. Moss and flowers spread around where she rests; "
+                                  "befriended, crops and saplings near her grow as if bone-mealed."),
+              danger="None.",
+              variants=[("moss", "Mossy (default)", "Brown, green moss"), ("pale", "Pale", "Pale, white moss"), ("dark", "Dark", "Dark brown"),
+                        ("blossom", "Blossom", "Flowers in her fur"), ("fungal", "Fungal", "Mushrooms in her fur")]),
+         {"Habitat": "Jungles", "Signature": "Hangs from branches, spreads moss and growth", "Danger": "None"})],
+    "rodent": [
+        (dict(id="coatimano_rodent", name="Coatimano", group="Deserts & jungles", tag="Nosy · busy", height=1.35,
+              biomes=["desert", "jungle", "badlands", "savanna"], temperament="Nosy, busy",
+              ecology="A Harmontide coati, ring-tailed and long-nosed, who digs in everything.",
+              interaction="Fruit and eggs.",
+              signature=("Digger", "She sniffs out suspicious sand and gravel within 12 blocks and brushes it out; befriended, she brings "
+                                   "you what she finds."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue, ringed tail"), ("brown", "Brown", "Brown"), ("ring", "Ringed", "Grey, bold rings"),
+                        ("red", "Red", "Rust red"), ("white", "White", "Pale")]),
+         {"Habitat": "Deserts, jungles", "Signature": "Digs up archaeology", "Danger": "None"})],
+    "nekomata": [
+        (dict(id="waterlil_nekomata", name="Waterlil", group="Swamps", tag="Dainty · dry-footed", height=0.8,
+              biomes=["swamp", "mangrove_swamp", "river"], temperament="Dainty",
+              ecology="A Harmontide cat who will not get her paws wet: a big cat's head on a tiny body, a small bloom on top, riding "
+                      "her own lily pad. Lily pads grow under her feet wherever she walks on water.",
+              interaction="Fish.",
+              signature=("Lily pads", "Lily pads grow under her as she walks on water, and fade again behind her; befriended, they grow "
+                                      "under her friend too while they are near her."),
+              danger="None.",
+              variants=[("black", "Black (default)", "Black, a pink lotus"), ("white", "White", "White, a white lotus"),
+                        ("calico", "Calico", "Calico, a yellow lotus"), ("grey", "Grey", "Grey, a blue lotus"), ("ginger", "Ginger", "Ginger, a red lotus")]),
+         {"Habitat": "Swamps", "Social": "Alone", "Water": "Walks on lily pads", "Signature": "Lily pads for her friend", "Danger": "None"})],
+    "construct": [
+        (dict(id="talosling_construct", name="Talosling", group="Ruins", tag="Loyal · wound up", height=1.5,
+              biomes=["desert", "badlands", "stony_peaks"], temperament="Loyal, clockwork",
+              ecology="A Harmontide bronze automaton hound, a little Talos, that runs on a wound spring.",
+              interaction="Redstone winds her up.",
+              signature=("Clockwork", "Redstone dust winds her spring (five minutes a dust, up to twenty): while wound she guards her "
+                                      "friend; run down, she sits still until wound again."),
+              danger="Medium (wound up).",
+              variants=[("bronze", "Bronze (default)", "Bronze and blue enamel"), ("copper", "Copper", "Copper"), ("gold", "Gold", "Gilded"),
+                        ("iron", "Iron", "Iron"), ("verdigris", "Verdigris", "Green with age")]),
+         {"Habitat": "Ruins", "Signature": "Runs on redstone, guards", "Danger": "Medium"})],
+    "merfolk": [
+        (dict(id="mantarrow_mermaid", name="Mantarrow", group="Warm ocean", tag="Graceful · fast", height=1.6,
+              biomes=["warm_ocean", "lukewarm_ocean", "deep_lukewarm_ocean"], temperament="Graceful",
+              ecology="A Harmontide manta ray, her fins spread wide like wings.",
+              interaction="Fish.",
+              signature=("Manta ride", "A friend can ride her across the water, faster than a boat; now and then she leaps clear of the waves."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue, a white belly"), ("black", "Black", "Black"), ("spotted", "Spotted", "Black with white spots"),
+                        ("teal", "Teal", "Teal"), ("violet", "Violet", "Violet")]),
+         {"Habitat": "Warm ocean", "Young": "Live pups", "On land": "Slow", "Signature": "Carries a rider fast", "Danger": "None"})],
+    "centaur": [
+        (dict(id="sphinx_centaur", name="Sphinx", group="Desert temples", tag="Riddling · proud", height=2.2, biomes=["desert"],
+              temperament="Proud, curious",
+              ecology="The riddling guardian of Greek and Egyptian legend: a lioness's body, a woman's head and great wings.",
+              interaction="Answer her riddle with the right item.",
+              signature=("Riddles", "She asks each newcomer a riddle; answer by handing her the item it means. A right answer earns a "
+                                    "reward, a wrong one a pounce."),
+              danger="Medium (a wrong answer).",
+              variants=[("sand", "Sand (default)", "Tawny, gold headdress"), ("night", "Night", "Black, silver"), ("red", "Red", "Red sandstone"),
+                        ("white", "White", "White, lapis"), ("gilded", "Gilded", "Golden")]),
+         {"Habitat": "Desert temples", "Ridden": "Never", "Signature": "Riddles for rewards", "Temperament": "Proud", "Danger": "Medium"})],
+    "elf": [
+        (dict(id="brownie_elf", name="Brownie", group="Villages", tag="Tiny · tidy", height=0.9, biomes=["plains", "meadow", "forest"],
+              temperament="Shy, house-proud",
+              ecology="The small house spirit of Scottish folklore who does the chores at night, for a bowl of milk or bread.",
+              interaction="Leave her milk or bread. Never thank her too much.",
+              signature=("Chores", "At night she tidies the chests near her friend's bed (merging stacks) and gathers loose items lying "
+                                   "nearby into a chest."),
+              danger="None.",
+              variants=[("brown", "Brown (default)", "Brown rags"), ("green", "Green", "Green rags"), ("grey", "Grey", "Grey rags"),
+                        ("red", "Red", "A red cap"), ("patched", "Patched", "Patchwork")]),
+         {"Habitat": "Villages", "Trades": "Chores for milk", "Signature": "Tidies chests at night", "Danger": "None"})],
+}
+for _fid, _entries in ELEVENTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))

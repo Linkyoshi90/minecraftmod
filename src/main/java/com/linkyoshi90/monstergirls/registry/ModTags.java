@@ -18,6 +18,8 @@ public final class ModTags {
     public static final TagKey<Block> SPARROW_HARPY_DUST_BATH = TagKey.create(Registries.BLOCK, MonsterGirlsMod.id("sparrow_harpy_dust_bath"));
 
     /** Every unfertilised egg a harpy lays (tools/gen_laid_eggs.py); cakes and pies take any of them. */
+    /** Predators whose hunt a capybara calls off (Alex's Mobs' big cats, bears and crocodiles as optional entries). */
+    public static final TagKey<net.minecraft.world.entity.EntityType<?>> CALMED_BY_CAPYBARA = TagKey.create(Registries.ENTITY_TYPE, MonsterGirlsMod.id("calmed_by_capybara"));
     public static final TagKey<Item> LAID_EGGS = TagKey.create(Registries.ITEM, MonsterGirlsMod.id("laid_eggs"));
 
     /** Blocks a slime girl loves to bounce on (slime blocks and beds). */

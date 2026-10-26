@@ -98,7 +98,7 @@ public class RelationshipTests {
 
     @GameTest(template = PLATFORM, timeoutTicks = 500, batch = "trustedMobComesToTheBed")
     public static void trustedMobComesToTheBed(GameTestHelper helper) {
-        helper.setDayTime(18000);
+        helper.setDayTime(24000 + 18000);   // midnight, the night after the full moon
         bed(helper, new BlockPos(2, 2, 2));
         ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
         Bullywug friend = helper.spawn(ModEntities.BULLYWUG.get(), new BlockPos(11, 2, 11));
@@ -112,10 +112,52 @@ public class RelationshipTests {
                 check(Math.abs(friend.getY() - (helper.absolutePos(new BlockPos(2, 2, 2)).getY() + 0.5625)) < 0.1, "she should lie on the mattress: " + friend.getY());
                 check(friend.getAction() == AbstractAnuran.Action.SITTING, "snug in the bed");
                 check(player.getUUID().equals(friend.getGestation().getSharingWith()), "she should be sharing the bed");
-                check(stranger.distanceToSqr(player) > 25.0, "someone who doesn't trust you stays away");
+                check(stranger.getGestation().getSharingWith() == null, "someone who doesn't trust you does not come into the bed");   // she may stroll past
                 check(BedSharing.onNightSkipped(helper.getLevel()) == 1, "she should be expecting after the night");
                 player.stopSleeping();
                 HarpyTestUtil.remove(player);
+                helper.setDayTime(1000);   // back to morning: later tests share this world's clock
+            });
+        });
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 1200, batch = "fullMoonEveryoneTakesHerTurn")
+    public static void fullMoonEveryoneTakesHerTurn(GameTestHelper helper) {
+        helper.setDayTime(18000);   // midnight of day 0: a full moon
+        check(BedSharing.fullMoon(helper.getLevel()), "day 0 should be a full moon");
+        bed(helper, new BlockPos(2, 2, 2));
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
+        Bullywug first = helper.spawn(ModEntities.BULLYWUG.get(), new BlockPos(6, 2, 6));
+        Bullywug second = helper.spawn(ModEntities.BULLYWUG.get(), new BlockPos(6, 2, 9));
+        Bullywug stranger = helper.spawn(ModEntities.BULLYWUG.get(), new BlockPos(9, 2, 9));
+        first.addAffection(player, Bonded.BED_AFFECTION);    // only one night in three, but the moon calls them all
+        second.addAffection(player, Bonded.BED_AFFECTION);
+        boolean[] together = {false};
+        helper.runAfterDelay(10, () -> {
+            player.startSleeping(helper.absolutePos(new BlockPos(2, 2, 2)));
+            helper.runAfterDelay(50, () -> {   // she looks around for a sleeper every couple of seconds
+                check(first.isMoonstruck() && second.isMoonstruck(), "the moon should call both of them");
+                check(!stranger.isMoonstruck(), "not someone who doesn't trust you");
+                player.sleepCounter = 100;
+                BedSharing.holdNight(player);
+                check(player.sleepCounter == 99, "the night should wait for them");
+            });
+            helper.succeedWhen(() -> {
+                if (player.getUUID().equals(first.getGestation().getSharingWith()) && player.getUUID().equals(second.getGestation().getSharingWith())) together[0] = true;
+                check(!together[0], "they should take turns, not share the bed at once");
+                check(player.isSleeping(), "the player should still be asleep");
+                check(first.getGestation().isCarrying() && second.getGestation().isCarrying(), "both should have had their turn");
+                check(!first.isMoonstruck() && !second.isMoonstruck(), "their eyes should be back to normal");
+                check(first.getAction() == AbstractAnuran.Action.SITTING && second.getAction() == AbstractAnuran.Action.SITTING, "worn out, asleep by the bed");
+                check(!stranger.getGestation().isCarrying(), "the stranger stays out of it");
+                check(!BedSharing.nightWaits(player), "now the night can pass");
+                player.sleepCounter = 100;
+                BedSharing.holdNight(player);
+                check(player.sleepCounter == 100, "nothing holds the night any more");
+                check(BedSharing.onNightSkipped(helper.getLevel()) == 0, "no one is left in the bed at morning");
+                player.stopSleeping();
+                HarpyTestUtil.remove(player);
+                helper.setDayTime(1000);   // back to morning: later tests share this world's clock
             });
         });
     }
@@ -232,10 +274,9 @@ public class RelationshipTests {
         check(chick.getBbHeight() < 1.0F, "a hatchling is small: " + chick.getBbHeight());
         check(!chick.canShareBed(), "a hatchling is not a partner");
         chick.setGrowTicks(AbstractHarpy.GROW_TICKS - 1);
-        helper.runAfterDelay(5, () -> {
+        helper.succeedWhen(() -> {
             check(!chick.isBaby(), "she should have grown up");
             check(chick.getBbHeight() > 1.5F, "grown up: " + chick.getBbHeight());
-            helper.succeed();
         });
     }
 

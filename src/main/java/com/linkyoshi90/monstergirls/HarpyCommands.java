@@ -18,7 +18,8 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * /monstergirls bonds [radius] : lists the harpies around you (default 32 blocks) and how each one feels about you.
+ * /monstergirls bonds [radius] : lists the monster girls around you (harpies, anurans and every girl family; default 32
+ * blocks) and how each one feels about you.
  * Usable by every player.
  */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)

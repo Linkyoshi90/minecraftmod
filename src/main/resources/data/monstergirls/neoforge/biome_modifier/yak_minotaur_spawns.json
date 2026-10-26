@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_yak_minotaur",
+  "spawners": {
+    "type": "monstergirls:yak_minotaur",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 3
+  }
+}

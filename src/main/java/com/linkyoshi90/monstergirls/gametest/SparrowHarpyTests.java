@@ -121,6 +121,7 @@ public class SparrowHarpyTests {
 
     @GameTest(template = PLATFORM, timeoutTicks = 2000, batch = "dustBathesOnSand")
     public static void dustBathesOnSand(GameTestHelper helper) {
+        helper.setDayTime(1000);                                    // by day (at night she sleeps)
         helper.setBlock(new BlockPos(10, 1, 10), Blocks.SAND);
         SparrowHarpy sparrow = helper.spawn(ModEntities.SPARROW_HARPY.get(), new BlockPos(4, 2, 4));
         helper.succeedWhen(() -> {

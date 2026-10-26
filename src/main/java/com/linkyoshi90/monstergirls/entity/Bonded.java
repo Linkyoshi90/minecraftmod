@@ -36,6 +36,11 @@ public interface Bonded {
 
     void setFather(@Nullable UUID father);
 
+    /** Under a full moon: called to the bed of a player she trusts, eyes aglow, until she has had her turn (synced). */
+    boolean isMoonstruck();
+
+    void setMoonstruck(boolean moonstruck);
+
     /** She has climbed into the bed and settled down for the night. */
     default void settleInBed() {
     }

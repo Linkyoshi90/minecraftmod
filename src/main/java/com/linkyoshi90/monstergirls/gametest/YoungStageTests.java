@@ -35,7 +35,7 @@ import static com.linkyoshi90.monstergirls.gametest.HarpyTestUtil.check;
 @PrefixGameTestTemplate(false)
 public class YoungStageTests {
     private static final List<String> HARPIES = List.of("sparrow_harpy", "crow_harpy", "ostrich_harpy", "owl_harpy", "seagull_harpy",
-            "albatross_harpy", "riflebird_harpy", "phoenix_harpy");
+            "albatross_harpy", "riflebird_harpy", "phoenix_harpy", "tengu_harpy", "toucan_harpy", "penguin_harpy");
 
     private static String readResource(String path) throws Exception {
         try (InputStream in = MonsterGirlsMod.class.getResourceAsStream(path)) {
@@ -61,7 +61,7 @@ public class YoungStageTests {
     public static void everyYoungStageHasAModel(GameTestHelper helper) throws Exception {
         for (String harpy : HARPIES) checkModel(harpy + "_hatchling", harpy, List.of("idle", "walk", "fly"));
         for (String species : ModSounds.ANURAN_SPECIES) {
-            if (species.equals("surinam_toad")) continue;   // her young are miniature adults
+            if (species.equals("surinam_toad") || species.equals("vodyanoy")) continue;   // her young are miniature adults; he is never young
             checkModel(species + "_tadpole", species, List.of("idle", "swim"));
             checkModel(species + "_froglet", species, List.of("idle", "walk", "hop", "swim"));
         }

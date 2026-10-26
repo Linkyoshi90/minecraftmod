@@ -62,12 +62,12 @@ public class Mollusk extends AbstractMonsterGirl {
         super(type, level, species);
         boolean sea = this.isSeaDweller();
         this.setPathfindingMalus(PathType.WATER, 0.0F);
-        if (sea) {
+        if (this.swims()) {                                              // in the water she dives and swims rather than bobbing
             this.moveControl = new AmphibiousMoveControl(this);
             this.goalSelector.removeAllGoals(g -> g instanceof FloatGoal);
-            this.goalSelector.addGoal(1, new TryFindWaterGoal(this));
             this.goalSelector.addGoal(7, new RandomSwimmingGoal(this, 1.0, 20));
         }
+        if (sea) this.goalSelector.addGoal(1, new TryFindWaterGoal(this));
         if (species == GirlSpecies.OCTOPUS_MOLLUSK || species == GirlSpecies.SNAIL_MOLLUSK) {
             this.goalSelector.addGoal(1, new PanicGoal(this, 1.6));
             this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, Player.class, 6.0F, 1.1, 1.5,
@@ -76,7 +76,7 @@ public class Mollusk extends AbstractMonsterGirl {
             this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.3, true) {
                 @Override
                 protected void checkAndPerformAttack(LivingEntity target) {
-                    if (this.canPerformAttack(target) && species != GirlSpecies.AMMONITE_MOLLUSK) {
+                    if (this.canPerformAttack(target) && species != GirlSpecies.AMMONITE_MOLLUSK && species != GirlSpecies.JELLYFISH_MOLLUSK) {
                         Mollusk.this.startTimedAction(species == GirlSpecies.IKA_MOLLUSK ? Action.LASH : Action.GRAB, 20);
                     }
                     super.checkAndPerformAttack(target);
@@ -106,29 +106,35 @@ public class Mollusk extends AbstractMonsterGirl {
             case IKA_MOLLUSK -> girlAttributes(20, 0.28, 4);
             case OCTOPUS_MOLLUSK -> girlAttributes(16, 0.3, 2);
             case SNAIL_MOLLUSK -> girlAttributes(18, 0.16, 1);
+            case JELLYFISH_MOLLUSK -> girlAttributes(18, 0.2, 2);
             default -> girlAttributes(26, 0.2, 3);
         };
     }
 
-    /** The kraken and the ammonite live in the sea and swim; the others walk and only float. */
+    /** The kraken, the ammonite and the jellyfish live in the sea; the others walk. */
     public boolean isSeaDweller() {
-        return this.species == GirlSpecies.KRAKEN_MOLLUSK || this.species == GirlSpecies.AMMONITE_MOLLUSK;
+        return this.species == GirlSpecies.KRAKEN_MOLLUSK || this.species == GirlSpecies.AMMONITE_MOLLUSK || this.species == GirlSpecies.JELLYFISH_MOLLUSK;
+    }
+
+    /** Who swims in the water: the sea dwellers, Ika and the octopus (the snail only floats). */
+    public boolean swims() {
+        return this.isSeaDweller() || this.species == GirlSpecies.IKA_MOLLUSK || this.species == GirlSpecies.OCTOPUS_MOLLUSK;
     }
 
     @Override
     protected PathNavigation createNavigation(Level level) {
-        return new AmphibiousPathNavigation(this, level);
+        return new com.linkyoshi90.monstergirls.entity.ai.SwimmerNavigation(this, level);
     }
 
     @Override
     protected boolean hasSwimAnimation() {
-        return this.isSeaDweller();
+        return this.isSeaDweller() && this.species != GirlSpecies.JELLYFISH_MOLLUSK;   // the jellyfish just drifts
     }
 
     @Override
     public void travel(Vec3 input) {
-        if (this.isSeaDweller() && this.isControlledByLocalInstance() && this.isInWater()) {
-            this.moveRelative(this.getSpeed() * 1.5F, input);
+        if (this.swims() && this.isControlledByLocalInstance() && this.isInWater()) {
+            this.moveRelative(this.getSpeed() * (this.species == GirlSpecies.JELLYFISH_MOLLUSK ? 0.35F : 1.5F), input);   // the jellyfish only drifts
             this.move(net.minecraft.world.entity.MoverType.SELF, this.getDeltaMovement());
             this.setDeltaMovement(this.getDeltaMovement().scale(0.9));
             return;
@@ -229,6 +235,8 @@ public class Mollusk extends AbstractMonsterGirl {
             case SNAIL_MOLLUSK -> new ItemStack(r < 50 ? Items.BROWN_MUSHROOM : r < 80 ? Items.MOSS_BLOCK : Items.SLIME_BALL);
             case AMMONITE_MOLLUSK -> new ItemStack(r < 50 ? Items.BONE : r < 85 ? Items.NAUTILUS_SHELL : Items.PRISMARINE_CRYSTALS);
             case OCTOPUS_MOLLUSK -> new ItemStack(r < 40 ? Items.INK_SAC : r < 80 ? Items.GOLD_NUGGET : Items.AMETHYST_SHARD, r < 80 ? 2 : 1);
+            case JELLYFISH_MOLLUSK -> new ItemStack(r < 40 ? Items.SLIME_BALL : r < 75 ? Items.SEA_PICKLE : r < 95 ? Items.PRISMARINE_CRYSTALS : Items.GLOW_INK_SAC,
+                    r < 75 ? 2 : 1);
             default -> new ItemStack(r < 40 ? Items.INK_SAC : r < 75 ? Items.PRISMARINE_SHARD : r < 95 ? Items.COD : Items.NAUTILUS_SHELL);
         };
     }
@@ -255,6 +263,35 @@ public class Mollusk extends AbstractMonsterGirl {
             return true;
         }
         return water ? super.giveBirth(level, father) : false;
+    }
+
+    // --- the jellyfish ----------------------------------------------------------------------------------------------
+
+    /** Who her sting spares: her friends, other jellyfish, players in creative. */
+    private boolean spares(LivingEntity e) {
+        if (e instanceof Player p) return p.isCreative() || p.isSpectator() || this.getAffection(p) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION;
+        return e instanceof Mollusk m && m.species == GirlSpecies.JELLYFISH_MOLLUSK;
+    }
+
+    /** She stings whatever bumps into her. Returns how many she stung. */
+    public int sting(ServerLevel level) {
+        int n = 0;
+        for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.3), e -> e != this && e.isAlive() && !this.spares(e))) {
+            e.addEffect(new MobEffectInstance(MobEffects.POISON, 60, 0), this);
+            n++;
+        }
+        return n;
+    }
+
+    /** At night she glows; she stings what touches her; friends swimming near her see in the dark. */
+    private void tickJelly(ServerLevel level) {
+        this.glow(level, level.isDay() ? 0 : 9);
+        if (this.tickCount % 10 == 0) this.sting(level);
+        if (this.tickCount % 40 == 0) {
+            for (Player p : level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(8), p -> p.isInWater() && this.spares(p) && !p.isSpectator())) {
+                p.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 260, 0, true, false));
+            }
+        }
     }
 
     // --- tick ----------------------------------------------------------------------------------------------------
@@ -289,6 +326,7 @@ public class Mollusk extends AbstractMonsterGirl {
                 }
             }
         }
+        if (this.species == GirlSpecies.JELLYFISH_MOLLUSK) this.tickJelly(server);
         if (this.tickCount % 40 == 0 && !this.isBaby()) {               // a devoted mollusk shares the sea's breath
             Player p = this.bondedPlayer(60, 10);
             if (p != null && p.isInWater()) p.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 200, 0, true, false));

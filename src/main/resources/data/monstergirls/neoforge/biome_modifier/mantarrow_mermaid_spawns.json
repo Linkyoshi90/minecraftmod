@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_mantarrow_mermaid",
+  "spawners": {
+    "type": "monstergirls:mantarrow_mermaid",
+    "weight": 4,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

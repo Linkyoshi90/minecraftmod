@@ -60,6 +60,23 @@ SPECIES = {
                   "emerald": dict(FUR="#40c070", HAIR="#60d88a", MARK="#1e7a40", EYE="#0e4a24", extra=dict(core="#d8ffe8", crystal="#80f0a8"))}),
 }
 
+SPECIES["ender_slime"] = dict(                         # ninth wave: dark jelly, glowing eyes and core, ender motes floating round her
+    build="slim", outfit=dict(top=[], extras=["armlets"]), extra="motes", hair="hime", bangs="blunt", glow=True,
+    pal=dict(FUR="#2a1a3e", LIGHT="#6a4a9a", MARK="#0e0618", HAIR="#3a2458", EYE="#f088ff", PUPIL="#5a0a7a", extra=dict(core="#f0b0ff", mote="#e080ff")),
+    variants={"chorus": dict(FUR="#9a78b0", LIGHT="#d8c0e8", MARK="#5a3a6a", HAIR="#b898c8", EYE="#f8e0ff", PUPIL="#5a2a6a", extra=dict(core="#fff0ff", mote="#f8d0ff")),
+              "pearl": dict(FUR="#1a4a4a", LIGHT="#3a8a80", MARK="#0a2020", HAIR="#2a6a62", EYE="#a0fff0", PUPIL="#0a3a3a", extra=dict(core="#d0fff8", mote="#80f0e0")),
+              "end_stone": dict(FUR="#d8d49a", LIGHT="#f4f0c8", MARK="#8a865a", HAIR="#e8e4b0", EYE="#c060e8", PUPIL="#3a0a4a", extra=dict(core="#f0b0ff", mote="#c060e8")),
+              "shulker": dict(FUR="#8a5a8a", LIGHT="#c890c0", MARK="#4a2a4a", HAIR="#a070a0", EYE="#f8e060", PUPIL="#5a3a0a", extra=dict(core="#fff0a0", mote="#f8e060"))})
+
+SPECIES["mimic_slime"] = dict(
+    build="curvy", outfit=dict(top=[], extras=["pearls"]), extra="chest", hair="wavy",
+    pal=dict(FUR="#b05ad0", LIGHT="#f0b0ff", MARK="#6a2a8a", HAIR="#c87ae8", EYE="#f8d040", PUPIL="#3a0a1a",
+             extra=dict(core="#ffe060", wood="#8a5a2a", iron="#5a5a60")),
+    variants={"spruce": dict(extra=dict(core="#ffe060", wood="#4a3020", iron="#3a3a40")),
+              "gilded": dict(extra=dict(core="#fff0a0", wood="#6a4020", iron="#e8c040")),
+              "ender": dict(FUR="#2ab890", HAIR="#5ad8b0", MARK="#0e5a4a", LIGHT="#b0f8e0", extra=dict(core="#c8fff0", wood="#1a2a2a", iron="#2a8a7a")),
+              "christmas": dict(FUR="#e85a6a", HAIR="#f88a9a", MARK="#8a1a2a", LIGHT="#ffc8d0", extra=dict(core="#ffffff", wood="#c82a2a", iron="#e8e8e8"))})
+
 # a mixed slime: two kinds of slime flowed into one (variants: every pair, in this order; the first is the default)
 KINDS = ["verdant", "magma", "honey", "frost", "amethyst"]
 PAIRS = [f"{a}_{b}" for i, a in enumerate(KINDS) for b in KINDS[i + 1:]]
@@ -103,6 +120,10 @@ def declare(sp):
         parts += [("crystal", 1, 2.5, 1), ("crystal_s", .75, 1.5, .75)]
     if d["extra"] == "sprout":
         parts += [("leaf", .25, 2, 1.5)]
+    if d["extra"] == "motes":
+        parts += [("mote", .75, .75, .75)]
+    if d["extra"] == "chest":
+        parts += [("box", 11, 6, 10), ("lid", 11, 2.5, 10), ("latch", 1.5, 2, .5), ("tooth", .5, 1, .5)]
     G.declare(parts, ears=None, hair=SPECIES[sp]["hair"],
               build=SPECIES[sp].get("build"), outfit=SPECIES[sp].get("outfit"))
 
@@ -128,8 +149,19 @@ def paint(sp, key, glow=False, base=None):
     for p in ("crystal", "crystal_s"):
         pt(p, "all", lambda f, x, y, w, h: pick(cr, 0.55 + 0.35 * (x == 0) - 0.2 * (f in ("south", "east")), x, y))
     pt("leaf", "all", lambda f, x, y, w, h: pick(shades("#4ab82a"), 0.5 + 0.3 * (x == w // 2), x, y))
+    wood, iron = shades(pal.extra.get("wood", "#8a5a2a")), shades(pal.extra.get("iron", "#5a5a60"))
+
+    def planks(f, x, y, w, h):                 # the mimic's chest: planks, an iron band round each face
+        if x in (0, w - 1) or y in (0, h - 1):
+            return pick(iron, 0.45, x, y)
+        return pick(wood, 0.45 + 0.15 * (y % 4 == 0) + (noise(x // 3, y, 41) - 0.5) * 0.15, x, y)
+    for p in ("box", "lid"):
+        pt(p, "all", planks)
+    pt("latch", "all", lambda f, x, y, w, h: pick(iron, 0.7, x, y))
+    pt("tooth", "all", lambda f, x, y, w, h: pick(shades("#f4f0e0"), 0.7, x, y))
+    pt("mote", "all", lambda f, x, y, w, h: pick(shades(pal.extra.get("mote", "#e080ff")), 0.8, x, y))
     T = pt.T
-    core_rects = [H.RECT[("core", f)] for f in G.H.FACES]
+    core_rects = [H.RECT[(p, f)] for p in ("core", "mote", "box", "lid", "latch", "tooth") if (p, "north") in H.RECT for f in G.H.FACES]
 
     def in_core(x, y):
         return any(cx <= x < cx + cw and cy <= y < cy + ch for cx, cy, cw, ch in core_rects)
@@ -168,6 +200,14 @@ def build(sp):
     if ex == "sprout":
         r.add("sprout", "head", [0, 28.6, 0], [G.rot_cube("leaf", [-0.125, 28.6, -0.75], [0, 28.6, 0], 0, 0, 30),
                                                 G.rot_cube("leaf", [-0.125, 28.6, -0.75], [0, 28.6, 0], 0, 0, -30)])
+    if ex == "chest":                          # she rises out of an open treasure chest; the lid (bone `lid`) snaps shut when she bites
+        r.put("gown", cube("box", [-5.5, 0, -5.0]))
+        teeth = [cube("tooth", [x, 5.0, -5.4]) for x in (-4.5, -2.5, -0.5, 1.5, 3.5)]
+        r.add("lid", "root", [0, 6, 5.0], [G.rot_cube("lid", [-5.5, 6, -5.0], [0, 6, 5.0], -110, 0, 0),
+                                            G.rot_cube("latch", [-0.75, 6.5, -5.5], [0, 6, 5.0], -110, 0, 0)] + teeth)
+    if ex == "motes":                          # specks of the End drifting round her
+        r.add("motes", "body", [0, 16, 0], [cube("mote", [x, y, zz]) for x, y, zz in ((-5.2, 21.5, -1.0), (4.6, 18.0, 1.5), (-4.8, 11.0, 2.4),
+                                                                                       (5.0, 25.5, -2.0), (-1.0, 30.5, 2.6), (2.6, 8.5, -3.4))])
     if ex == "drip":
         for x, y, z in ((-2.0, 24.5, -4.6), (2.4, 23.5, -4.5), (-4.4, 15.5, 0.2), (4.4, 14.5, -0.4)):
             r.put("body" if y < 20 else "head", cube("drip", [x - 0.5, y, z]))
@@ -176,6 +216,10 @@ def build(sp):
 
 def anims(an):
     G.slime_anims(an)
+    if "lid" in an.bones:                      # the mimic's bite: the lid slams down and springs open again
+        T = H.track
+        an.add("bite", 0.6, False, {"lid": {"rotation": T((0, (0, 0, 0)), (0.15, (100, 0, 0)), (0.35, (100, 0, 0)), (0.6, (0, 0, 0)))},
+                                    "body": {"rotation": T((0, (0, 0, 0)), (0.15, (25, 0, 0)), (0.6, (0, 0, 0)))}})
 
 
 VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0, 180, 0),

@@ -13,7 +13,8 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import girl_lib as G  # noqa: E402
-from girl_lib import H, cube, pick, noise, skin, shades  # noqa: E402
+import girl_parts as P  # noqa: E402
+from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
     "horse_centaur": dict(
@@ -61,6 +62,38 @@ SPECIES = {
                   "brown": dict(FUR="#7a5236", HAIR="#8a6044", MARK="#5a3a24", CLOTH="#e0a030"),
                   "black": dict(FUR="#2a2624", HAIR="#3a3430", MARK="#1a1614", LIGHT="#5a5450", CLOTH="#d0d0d0"),
                   "grey": dict(FUR="#a8a6a4", HAIR="#c0bebc", MARK="#8a8886", CLOTH="#6a3a8a")}),
+    # tenth wave: the tusktaur (a woolly mammoth taur: a shaggy fleece, tusks curving up from the front of her barrel)
+    "tusktaur_centaur": dict(
+        build="strong", outfit=dict(top=["sarashi", "mantle"], extras=["bracers"], colors=dict(cloth2="#6a3a22")),
+        hair="shaggy", tail=(1.5, 4, 1.5), fleece=True, tusks=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#2a1a12", FUR="#6a3a22", LIGHT="#9a6a4a", MARK="#3a2012", EYE="#4a2a14", CLOTH="#c8a060", TRIM="#e8d8b0",
+                 pattern="solid", extra=dict(tusk="#f0e6cc")),
+        variants={"black": dict(FUR="#262020", HAIR="#141010", LIGHT="#4a4040", MARK="#0e0a0a", CLOTH="#a83a2a"),
+                  "snow": dict(FUR="#ece6da", HAIR="#f6f2ea", LIGHT="#ffffff", MARK="#c8bca8", CLOTH="#3a6aa8"),
+                  "steppe": dict(FUR="#b08a52", HAIR="#7a5a32", LIGHT="#d8b880", MARK="#6a4a24", CLOTH="#4a7a4a"),
+                  "ember": dict(FUR="#3a2a24", HAIR="#1e1410", LIGHT="#6a5040", MARK="#140e0a", CLOTH="#e8a830", extra=dict(tusk="#e8c050"))}),
+    # tenth wave: the aurorantler, a deer taur whose antlers glow (glow masks) in the colours of the northern lights
+    "aurorantler_centaur": dict(
+        build="slim", outfit=dict(top=["halter", "capelet"], extras=["pearls"], colors=dict(cloth2="#2a3a6a")),
+        hair="flowing", tail=(2, 3, 1.5), antlers=True, glow=["antler_a", "antler_b", "antler_c"],
+        pal=dict(SKIN=skin("pale"), HAIR="#e8f4ff", FUR="#4a5a7a", LIGHT="#c8d8f0", MARK="#2a3450", EYE="#6af0d0", CLOTH="#2a3a6a", TRIM="#a8f0e0",
+                 pattern="solid", extra=dict(antler="#6af0d0", antler2="#8a6af0")),
+        variants={"violet": dict(FUR="#4a3a6a", MARK="#2a1e40", EYE="#c88af8", extra=dict(antler="#c88af8", antler2="#6a8af0")),
+                  "dawn": dict(FUR="#6a4a5a", MARK="#3a2432", HAIR="#ffe8f0", EYE="#f8a0c0", extra=dict(antler="#f8a0c0", antler2="#f8d080")),
+                  "frost": dict(FUR="#a8b8c8", MARK="#6a7a8a", LIGHT="#ffffff", EYE="#e8f8ff", extra=dict(antler="#ffffff", antler2="#a8e8ff")),
+                  "ember": dict(FUR="#5a3a2a", MARK="#2a1a12", HAIR="#ffe0b0", EYE="#f8c050", extra=dict(antler="#f8c050", antler2="#f86a3a"))}),
+    # eleventh wave: the sphinx, a winged lioness taur in a striped nemes headcloth
+    "sphinx_centaur": dict(
+        build="athletic", outfit=dict(top=["bandeau"], extras=["usekh", "armlets", "belt"], colors=dict(usekh2="#2a4a9a")),
+        hair="hime", tail=(1, 9, 1), wings=True, nemes=True, ears="round",
+        pal=dict(SKIN=skin("tan"), HAIR="#2a1e14", FUR="#c8964e", LIGHT="#ecd2a0", MARK="#6a4422", EYE="#3a8ac8", CLOTH="#e8c050", TRIM="#2a4a9a",
+                 pattern="solid", extra=dict(wing="#d8b070", wing_tip="#6a4422", nemes="#e8c050", nemes_band="#2a4a9a")),
+        variants={"night": dict(FUR="#2a2628", LIGHT="#5a5458", MARK="#141214", HAIR="#141214", EYE="#e8c050", CLOTH="#c8ccd4",
+                                extra=dict(wing="#3a3438", wing_tip="#141214", nemes="#c8ccd4", nemes_band="#2a2a3a")),
+                  "red": dict(FUR="#a8582e", LIGHT="#e0a070", MARK="#5a2a12", extra=dict(wing="#c87a4a", wing_tip="#5a2a12", nemes="#e8c050", nemes_band="#a82a2a")),
+                  "white": dict(FUR="#ece4d4", LIGHT="#ffffff", MARK="#b8ac98", HAIR="#3a3a42", CLOTH="#2a4a9a",
+                                extra=dict(wing="#f4f0e8", wing_tip="#b8ac98", nemes="#f4f0e8", nemes_band="#2a4a9a")),
+                  "gilded": dict(FUR="#d8a840", LIGHT="#f8e090", MARK="#8a6418", extra=dict(wing="#f0c850", wing_tip="#8a6418", nemes="#2a4a9a", nemes_band="#f0c850"))}),
     "tapir_centaur": dict(
         build="strong", outfit=dict(top=["kimono"], colors=dict(kimono="#3a3a52", kimono_trim="#e8e0d0", obi="#c8a050")),
         hair="bob", tail=(1.5, 1.5, 1.5),
@@ -70,6 +103,51 @@ SPECIES = {
                   "mountain": dict(FUR="#2e2622", HAIR="#1a1614", LIGHT="#d8d0c8", MARK="#1a1614", pattern="speckle", extra=dict()),
                   "bairds": dict(FUR="#6a625a", HAIR="#3a342e", LIGHT="#c8c0b0", MARK="#3a342e", extra=dict()),
                   "calf": dict(FUR="#5a3e2a", HAIR="#2a1e16", MARK="#e8dcc0", LIGHT="#e8dcc0", pattern="stripes", extra=dict())}),
+    "camel_centaur": dict(
+        build="curvy", outfit=dict(top=["bandeau", "vest"], extras=["scarf", "satchel"], colors=dict(scarf="#c8582a")),
+        hair="braid", tail=(1.5, 6, 1.5), humps=2,
+        pal=dict(SKIN=skin("tan"), HAIR="#5a3a22", FUR="#9a7046", LIGHT="#d8bc90", MARK="#6a4a2c", EYE="#3a2414", CLOTH="#8a3a2a", TRIM="#e8c060",
+                 pattern="solid"),
+        variants={"wild": dict(FUR="#a89a80", HAIR="#7a6a54", LIGHT="#d8d0bc", MARK="#7a6e5a"),
+                  "white": dict(FUR="#ece4d4", HAIR="#f4ece0", LIGHT="#ffffff", MARK="#c8bca8", CLOTH="#2a5a7a"),
+                  "dark": dict(FUR="#5a3a24", HAIR="#2e1e14", MARK="#3a2414", LIGHT="#8a6a4a", CLOTH="#c8a040"),
+                  "winter": dict(FUR="#c8a878", HAIR="#e0c8a0", LIGHT="#f0e0c0", MARK="#a08a64", CLOTH="#4a3a6a")}),
+    "dromedary_centaur": dict(
+        build="athletic", outfit=dict(top=["halter", "capelet"], extras=["armlets", "pearls"]),
+        hair="flowing", tail=(1.5, 6, 1.5), humps=1,
+        pal=dict(SKIN=skin("brown"), HAIR="#2a1e16", FUR="#c8a06a", LIGHT="#ecd8b0", MARK="#a07a4a", EYE="#3a2414", CLOTH="#2a5a8a", TRIM="#e8c060",
+                 pattern="solid"),
+        variants={"white": dict(FUR="#efe6d6", LIGHT="#ffffff", MARK="#d8ccb8", CLOTH="#8a2a3a"),
+                  "black": dict(FUR="#2e2420", MARK="#1a1410", LIGHT="#5a4a40", CLOTH="#c8a040"),
+                  "red": dict(FUR="#a8582e", MARK="#7a3a1e", LIGHT="#d89a6a", CLOTH="#2a6a5a"),
+                  "piebald": dict(pattern="patches", MARK="#f2ece0")}),
+    "kelpie_centaur": dict(
+        build="slim", outfit=dict(top=["bandeau"], extras=["pearls"]),
+        hair="wavy", tail=(2, 9, 2), kelp=True,
+        pal=dict(SKIN=skin("pale"), HAIR="#1e3a2e", FUR="#1e2a26", LIGHT="#3a4a44", MARK="#141c1a", EYE="#5ac8a0", CLOTH="#2a4a3a", TRIM="#8ab8a8",
+                 pattern="solid", extra=dict(kelp="#4a8a3a")),
+        variants={"grey": dict(FUR="#8a9294", HAIR="#c8ccc8", LIGHT="#b8c0c0", MARK="#5a6264"),
+                  "white": dict(FUR="#e8eeee", HAIR="#f4f8f8", LIGHT="#ffffff", MARK="#c0c8c8", EYE="#3a8ab8"),
+                  "peat": dict(FUR="#4a3424", HAIR="#2a1e14", LIGHT="#6a5444", MARK="#2a1c12"),
+                  "sea": dict(FUR="#2a5a64", HAIR="#2a7a7a", LIGHT="#5a8a94", MARK="#1a3a44")}),
+    "unicorn_centaur": dict(
+        build="slim", outfit=dict(top=["halter", "capelet"], extras=["armlets", "pearls"], colors=dict(cloth2="#e8c050")),
+        hair="flowing", tail=(2, 9, 2), uhorn=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#f8f4ff", FUR="#f6f4f8", LIGHT="#ffffff", MARK="#d8d0e0", EYE="#a86ad8", CLOTH="#c8a8e8", TRIM="#e8c050",
+                 pattern="solid", extra=dict(horn="#f0c850")),
+        variants={"silver": dict(FUR="#c0c4cc", HAIR="#e8ecf4", MARK="#8a90a0", CLOTH="#5a6a9a", extra=dict(horn="#e8e8f0")),
+                  "rose": dict(FUR="#f8d8e4", HAIR="#f8b8d0", MARK="#e0a0b8", CLOTH="#e86a9a", extra=dict(horn="#f8e0a0")),
+                  "midnight": dict(FUR="#2a2e5a", HAIR="#c8d0ff", MARK="#1a1e3a", LIGHT="#4a4e7a", EYE="#e8c050", CLOTH="#e8c050", extra=dict(horn="#c8d8ff")),
+                  "rainbow": dict(HAIR="#f8a8c8", extra=dict(horn="#f0c850", rainbow=True))}),
+    "pegasus_centaur": dict(
+        build="slim", outfit=dict(top=["halter", "capelet"], extras=["armlets", "pearls"], colors=dict(cloth2="#e8c050")),
+        hair="flowing", tail=(2, 9, 2), wings=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#f4f0e8", FUR="#f2f0ec", LIGHT="#ffffff", MARK="#c8c4bc", EYE="#4a8ac8", CLOTH="#3a6aa8", TRIM="#e8c050",
+                 pattern="solid", extra=dict(wing="#f6f4f0", wing_tip="#c8c4bc")),
+        variants={"grey": dict(FUR="#b0b0b4", HAIR="#e0e0e4", MARK="#7a7a80", pattern="dapple", extra=dict(wing="#e8e8ec", wing_tip="#8a8a90")),
+                  "palomino": dict(FUR="#e0bc70", HAIR="#f8f0d8", MARK="#c89a50", CLOTH="#8a2a3a", extra=dict(wing="#f8ecc8", wing_tip="#d8b060")),
+                  "black": dict(FUR="#1e1c22", HAIR="#141218", MARK="#0e0c10", LIGHT="#3a3640", CLOTH="#c8a040", extra=dict(wing="#2a2830", wing_tip="#0e0c12")),
+                  "dawn": dict(FUR="#f4dcd8", HAIR="#f8c8a0", MARK="#e0a890", CLOTH="#c84a6a", extra=dict(wing="#f8e0d0", wing_tip="#e8a060"))}),
 }
 
 
@@ -82,9 +160,21 @@ def declare(sp):
         parts += [("antler_a", .75, 5, .75), ("antler_b", .75, 2.5, .75), ("antler_c", .5, 2, .5)]
     if d.get("horns"):
         parts += [("horn_a", 1, 3, 1), ("horn_b", .75, 2.5, .75)]
+    if d.get("uhorn"):                                   # the unicorn's single spiral horn
+        parts += [("uhorn_a", 1.5, 6, 1.5), ("uhorn_b", 1, 2.5, 1)]
     if d.get("fleece"):
         parts += [("fleece", 7.5, 4, 14)]
-    G.declare(parts, ears="horse", hair=SPECIES[sp]["hair"],
+    if d.get("tusks"):
+        parts += [("tusk_a", 1.25, 1.25, 5), ("tusk_b", 1, 1, 3.5), ("woolskirt", 7.75, 3, 14.5)]
+    if d.get("humps"):
+        parts += [("hump", 5, 3, 4.5), ("hump_top", 3.5, 1.5, 3)]
+    if d.get("kelp"):
+        parts += [("frond", .25, 6, 1.25)]
+    if d.get("wings"):
+        parts += P.wing_parts("feather", 1.4)
+    if d.get("nemes"):                                   # the striped headcloth: a cap and two lappets over her shoulders
+        parts += [("nemes_cap", 9, 3, 9), ("nemes_lappet", 2.5, 6, 1)]
+    G.declare(parts, ears=d.get("ears", "horse"), hair=SPECIES[sp]["hair"],
               build=SPECIES[sp].get("build"), outfit=SPECIES[sp].get("outfit"))
 
 
@@ -107,15 +197,45 @@ def paint(sp, key):
     pt("lleg_f", "all", lower)
     pt("lleg_b", "all", lower)
     pt("hoof", "all", lambda f, x, y, w, h: pick(shades("#3a302a"), 0.45 + 0.2 * (y == 0) + (noise(x, y, 3) - 0.5) * 0.1, x, y))
-    pt("htail", "all", lambda f, x, y, w, h: pick(pal.HAIR, 0.45 + 0.25 * ((x + y // 3) % 3 == 0) + (noise(x, y, 5) - 0.5) * 0.15, x, y)
+    kelp = shades(pal.extra.get("kelp", "#4a8a3a"))
+    pt("htail", "all", lambda f, x, y, w, h: pick(kelp, 0.45 + (noise(x, y, 6) - 0.5) * 0.3, x, y) if d.get("kelp") and (x + y // 2) % 3 == 0
+       else pick(pal.HAIR, 0.45 + 0.25 * ((x + y // 3) % 3 == 0) + (noise(x, y, 5) - 0.5) * 0.15, x, y)
        if sp != "zebra_centaur" or y > h * 0.6 else pick(pal.FUR, 0.5, x, y))
+    pt("hump_top", "all", lambda f, x, y, w, h: pick(pal.FUR, 0.62 + (noise(x, y, 13) - 0.5) * 0.12, x, y))
+    pt("hump", "all", lambda f, x, y, w, h: pick(pal.FUR, 0.55 + 0.12 * (f == "up") + (noise(x, y, 12) - 0.5) * 0.12, x, y))
+    pt("frond", "all", lambda f, x, y, w, h: pick(kelp, 0.5 + 0.15 * (y % 2) - 0.2 * (y == h - 1), x, y))
+    if d.get("wings"):
+        P.paint_feather_wings(pt, pal.extra.get("wing", "#f6f4f0"), pal.extra.get("wing_tip", "#c8c4bc"))
     ant = shades(pal.extra.get("antler", "#c8b090"))
-    for p in ("antler_a", "antler_b", "antler_c"):
-        pt(p, "all", lambda f, x, y, w, h: pick(ant, 0.5 + (noise(x, y, 7) - 0.5) * 0.2 + (0.2 if y == 0 else 0), x, y))
+    ant2 = shades(pal.extra.get("antler2", pal.extra.get("antler", "#c8b090")))
+    for p in ("antler_a", "antler_b", "antler_c"):                # the aurorantler's shade from one end to the other
+        pt(p, "all", lambda f, x, y, w, h: pick(ant2 if pal.extra.get("antler2") and y < h * 0.4 else ant,
+                                                0.5 + (noise(x, y, 7) - 0.5) * 0.2 + (0.2 if y == 0 else 0), x, y))
+    nm, nb = shades(pal.extra.get("nemes", "#e8c050")), shades(pal.extra.get("nemes_band", "#2a4a9a"))
+    stripes = lambda f, x, y, w, h: pick(nb if (y // 2) % 2 else nm, 0.55, x, y)
+    pt("nemes_cap", "all", stripes)
+    pt("nemes_lappet", "all", stripes)
+    tusk = shades(pal.extra.get("tusk", "#f0e6cc"))
+    for p in ("tusk_a", "tusk_b"):
+        pt(p, "all", lambda f, x, y, w, h: pick(tusk, 0.55 + 0.15 * (f == "up") - 0.1 * (f == "down"), x, y))
+    pt("woolskirt", "all", lambda f, x, y, w, h: CLEAR if f in ("up", "down") or (y == h - 1 and x % 2) else
+       pick(pal.FUR, 0.5 + 0.2 * (x % 2) + (noise(x, y, 19) - 0.5) * 0.15, x, y))
     horn = shades(pal.extra.get("horn", "#2a2826"))
     for p in ("horn_a", "horn_b"):
         pt(p, "all", lambda f, x, y, w, h: pick(horn, 0.45 + 0.25 * (y % 3 == 0), x, y))
     pt("fleece", "all", lambda f, x, y, w, h: pick(pal.FUR, 0.62 + 0.18 * (noise(x // 2, y // 2, 9) > 0.5) + (noise(x, y, 8) - 0.5) * 0.1, x, y))
+    gold = shades(pal.extra.get("horn", "#f0c850"))
+    for p in ("uhorn_a", "uhorn_b"):                      # a spiral: a stripe winding round the horn
+        pt(p, "all", lambda f, x, y, w, h: pick(gold, 0.45 + 0.35 * ((x + y) % 4 == 0), x, y))
+    if pal.extra.get("rainbow"):                          # a rainbow mane and tail
+        import colorsys
+        hairy = [p for p in H.PARTS if any(t in p for t in ("hair", "strand", "bang", "frame", "htail", "lock", "pony", "wave"))]
+
+        def bow(f, x, y, w, h):
+            r_, g_, b_ = colorsys.hsv_to_rgb((y / max(1, h) * 0.85 + x * 0.01) % 1.0, 0.45, 0.98)
+            return (int(r_ * 255), int(g_ * 255), int(b_ * 255), 255)
+        for p in hairy:
+            pt(p, "all", bow)
     pt("armor_ref", "all", lambda f, x, y, w, h: G.CLEAR)
     return pt.T
 
@@ -124,7 +244,8 @@ def build(sp):
     d = SPECIES[sp]
     r = G.Rig()
     r.add("root", None, [0, 0, 0])
-    g = G.upper(r, 19.5, dict(hair=d["hair"], bangs=d.get("bangs"), build=d.get("build"), outfit=d.get("outfit"), ears="horse", skirt=False), z0=-2.25)
+    g = G.upper(r, 19.5, dict(hair=d["hair"], bangs=d.get("bangs"), build=d.get("build"), outfit=d.get("outfit"), ears=d.get("ears", "horse"),
+                              skirt=False), z0=-2.25)
     G.taur(r, None, d)
     hy, z = g.hy, g.z
     r.add("armor_torso", "body", [0, 19.5, z], [cube("armor_ref", [-3, 19.25, z - 2])])
@@ -145,13 +266,40 @@ def build(sp):
             cs.append(G.rot_cube("horn_a", [x - 0.5, hy + 8.4, -0.8 + z], [x, hy + 8.4, -0.3 + z], -28, 0, 6 * sg))
             cs.append(G.rot_cube("horn_b", [x - 0.375, hy + 10.9, 0.6 + z], [x, hy + 10.9, 0.9 + z], -62, 0, 6 * sg))
         r.add("horns", "head", [0, hy + 8.4, z], cs)
+    if d.get("uhorn"):
+        r.add("uhorn", "head", [0, hy + 8, -3 + z], [G.rot_cube("uhorn_a", [-0.75, hy + 8, -3.75 + z], [0, hy + 8, -3 + z], -25, 0, 0),
+                                                    G.rot_cube("uhorn_b", [-0.5, hy + 13.9, -3.5 + z], [0, hy + 8, -3 + z], -25, 0, 0)])
     if d.get("fleece"):
         r.put("barrel", cube("fleece", [-3.75, 13.25, -4.0]))
+    if d.get("nemes"):
+        hy, z = g.hy, g.z
+        r.add("nemes", "head", [0, hy + 4, z], [cube("nemes_cap", [-4.5, hy + 6.0, -4.3 + z], inflate=0.6),
+                                                cube("nemes_lappet", [-5.3, hy - 2.5, -2.0 + z]), cube("nemes_lappet", [2.8, hy - 2.5, -2.0 + z])])
+    if d.get("tusks"):                                  # long hair hanging round the barrel; tusks sweeping forward and up
+        r.put("barrel", cube("woolskirt", [-3.875, 7.5, -4.25]))
+        cs = []
+        for sg in (-1, 1):
+            x = sg * 2.2
+            cs.append(G.rot_cube("tusk_a", [x - 0.625, 11.0, -9.0], [x, 11.6, -4.0], 28, 0, -8 * sg))
+            cs.append(G.rot_cube("tusk_b", [x - 0.5 + sg * 0.5, 8.8, -11.9], [x + sg * 0.5, 9.3, -8.4], -60, 0, -8 * sg))
+        r.add("tusks", "barrel", [0, 11.6, -4.0], cs)
+    if d.get("humps"):                                  # the Bactrian's two humps, the dromedary's one, behind the rider's seat
+        for zc in ((2.25, 7.0) if d["humps"] == 2 else (5.0,)):
+            r.put("barrel", cube("hump", [-2.5, 18.75, zc - 2.25]), cube("hump_top", [-1.75, 21.5, zc - 1.5]))
+    if d.get("kelp"):                                   # the kelpie's weed, hanging off her flanks
+        r.put("barrel", *[cube("frond", [sg * 3.6 - 0.125, 11.0, zz]) for sg in (-1, 1) for zz in (0.5, 5.5)])
+    if d.get("wings"):                                  # the pegasus' wings rise from her withers, at the front of the horse body
+        P.wings(r, "feather", "barrel", y=19.0, z=-1.0, root_x=3.0)
     return r.model(sp)
 
 
 def anims(an):
     G.taur_anims(an)
+    import girl_family as F
+    names = ["wing_r", "wing_l"]                         # only the pegasus has them; the others ignore these tracks
+    for key in ("idle", "walk", "sit", "lie", "graze", "rear", "kick"):
+        F._inject(an, key, P.folded(names, fold=82, droop=-22))
+    F._inject(an, "run", P.flap(names, 0.6, 35, 25))
 
 
 VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0, 180, 0),
@@ -160,3 +308,10 @@ FACE = [("idle", 0, 0, 0, 31.5), ("idle", 2.75, 0, 0, 31.5), ("rear", 0.8, 0, 0,
 
 if __name__ == "__main__":
     G.run_family("centaur", SPECIES, declare, paint, build, anims, VIEWS, FACE)
+    import girl_family as F
+    want = [a for a in sys.argv[1:] if not a.startswith("--")]
+    for sp, d in SPECIES.items():                        # glow masks: the aurorantler's antlers
+        if d.get("glow") and (not want or sp in want):
+            declare(sp)
+            for k in [None] + list(d["variants"]):
+                F.write_glowmask(sp + ("_" + k if k else ""), paint(sp, k), d["glow"])

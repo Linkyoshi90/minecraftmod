@@ -13,7 +13,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import girl_family as F  # noqa: E402
 import girl_lib as G  # noqa: E402
-from girl_lib import H, cube, pick, noise, skin  # noqa: E402
+from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
     "night_elf": dict(
@@ -63,6 +63,28 @@ SPECIES = {
                   "sage": dict(extra=dict(scarf="#5a7a5a", hat="#8a8a72", boot="#4a4a3a"), CLOTH="#9aa08a"),
                   "rust": dict(extra=dict(scarf="#a83a1a", hat="#7a3a1a", boot="#4a2010"), CLOTH="#c8784a", HAIR="#7a3a1a"),
                   "bone": dict(extra=dict(scarf="#3a6ab0", hat="#f0e8d8", boot="#c8b8a0"), CLOTH="#f0e8d8", HAIR="#2a2420")}),
+    # eleventh wave: the brownie, a tiny house spirit in ragged clothes (the red variant wears a little cap)
+    "brownie_elf": dict(
+        build="petite", outfit=dict(top=["sweater"], bottom="shorts", extras=["satchel"], colors=dict(cloth2="#4a3424", leather="#5a3a22")),
+        hair="shaggy", bangs="messy", ears="elf", legs="bare", foot="shoe", brownie=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#5a3a22", FUR="#5a3a22", LIGHT="#c8a880", MARK="#3a2414", EYE="#3a7a3a", CLOTH="#7a5a3a", TRIM="#a88a5a",
+                 extra=dict(boot="#3a2414", rags=True)),
+        variants={"green": dict(CLOTH="#4a6a3a", HAIR="#3a2a1a"),
+                  "grey": dict(CLOTH="#6a6a6e", HAIR="#8a8a8e", EYE="#5a6a8a"),
+                  "red": dict(CLOTH="#8a4a2a", HAIR="#c8682a", extra=dict(boot="#3a2414", rags=True, cap="#b82a2a")),
+                  "patched": dict(CLOTH="#8a6a4a", HAIR="#4a3424", extra=dict(boot="#3a2414", rags=True, patches=True))}),
+    # ninth wave: the deep dark's elf, a sculk circlet and a sculk gem at her collar that glow teal (glow masks)
+    "dark_elf": dict(
+        build="slim", outfit=dict(top=["halter", "capelet"], bottom="sarong", extras=["bracers"], colors=dict(cloth2="#141c24")),
+        hair="hime", bangs="wispy", ears="elf", legs="stockings", foot="shoe", sculk=True, glow=["sculk_band", "sculk_gem"],
+        pal=dict(SKIN="#6a7a8a", HAIR="#e8eef4", FUR="#6a7a8a", LIGHT="#a8b8c8", MARK="#0e2a32", EYE="#4ae8e0", CLOTH="#1a2630", TRIM="#2ab8b0",
+                 extra=dict(boot="#0e141a", stocking="#141c24", sculk="#0e3a44", sculk_glow="#4ae8e0")),
+        variants={"ash": dict(SKIN="#8a8a8e", HAIR="#2a2a2e", CLOTH="#2a2a2e", TRIM="#7ad8e8"),
+                  "abyss": dict(SKIN="#3a404a", HAIR="#b8c8d8", CLOTH="#0a0e12", TRIM="#2a8ab0", EYE="#2ab8e8",
+                                extra=dict(boot="#06080a", stocking="#0a0e12", sculk="#0a2030", sculk_glow="#2ab8e8")),
+                  "echo": dict(SKIN="#5a8a8e", HAIR="#0e3a44", CLOTH="#0e3a44", TRIM="#8af8f0",
+                               extra=dict(boot="#06141a", stocking="#0e2a32", sculk="#062a32", sculk_glow="#8af8f0")),
+                  "pale": dict(SKIN=skin("pale"), HAIR="#fbfbff", CLOTH="#2a3440", EYE="#8ad8f8")}),
 }
 
 
@@ -76,6 +98,10 @@ def declare_hook(sp, d):
         out += [("brim", 12, .5, 12), ("crown", 7, 3.5, 7), ("hatband", 7.25, .75, 7.25)]
     if d.get("sword"):
         out += [("scabbard", 1, 7, 1.5), ("hilt", 2.5, .75, .75)]
+    if d.get("sculk"):
+        out += [("sculk_band", 8.75, 1, 8.75), ("sculk_gem", 1.5, 1.5, .5)]
+    if d.get("brownie"):
+        out += [("bcap", 5.5, 3, 5.5), ("bcap_tip", 2, 2, 2)]
     return out
 
 
@@ -92,6 +118,18 @@ def paint_hook(pt, pal, d):
     pt("hatband", "all", lambda f, x, y, w, h: pick(G.shades("#3a2a1e"), 0.4, x, y))
     pt("scabbard", "all", lambda f, x, y, w, h: pick(G.shades("#2a1a1a"), 0.45 + 0.3 * (y == 0), x, y))
     pt("hilt", "all", lambda f, x, y, w, h: pick(gold, 0.6, x, y))
+    capc = G.shades(pal.extra.get("cap", "#b82a2a"))
+    pt("bcap", "all", lambda f, x, y, w, h: pick(capc, 0.5 + 0.1 * (y == 0), x, y) if pal.extra.get("cap") else CLEAR)
+    pt("bcap_tip", "all", lambda f, x, y, w, h: pick(capc, 0.55, x, y) if pal.extra.get("cap") else CLEAR)
+    if pal.extra.get("rags"):                            # ragged hems, and patches for the patched one
+        for p in [p for p in H.PARTS if p.startswith(("sh_", "knit", "turtle", "short"))]:
+            pt(p, "all", lambda f, x, y, w, h: CLEAR if f in ("north", "south", "east", "west") and y == h - 1 and x % 3 == 1
+               else pick(G.shades("#c8a050" if (x // 3 + y // 3) % 3 == 0 else "#5a7a4a"), 0.5, x, y) if pal.extra.get("patches") and (x // 3 + y // 2) % 4 == 0
+               else None)
+    sk = G.shades(pal.extra.get("sculk", "#0e3a44"))
+    glow = G.shades(pal.extra.get("sculk_glow", "#4ae8e0"))
+    pt("sculk_band", "all", lambda f, x, y, w, h: pick(glow, 0.6, x, y) if (x * 7 + y * 3) % 9 == 0 else pick(sk, 0.4 + (noise(x, y, 41) - 0.5) * 0.2, x, y))
+    pt("sculk_gem", "all", lambda f, x, y, w, h: pick(glow, 0.55 + 0.3 * (x == 0 and y == h - 1), x, y))
 
 
 def build_hook(r, g, d):
@@ -104,6 +142,11 @@ def build_hook(r, g, d):
     if d.get("hat"):
         r.add("hat", "head", [0, hy + 8.5, z], [cube("brim", [-6, hy + 8.3, -6 + z]), cube("crown", [-3.5, hy + 8.7, -3.5 + z]),
                                                 cube("hatband", [-3.625, hy + 8.75, -3.625 + z])])
+    if d.get("brownie"):                                 # a little pointed cap (drawn only on the red one)
+        r.add("bcap", "head", [0, hy + 8.4, z], [cube("bcap", [-2.75, hy + 8.4, -2.75 + z]), cube("bcap_tip", [-1, hy + 11.2, -0.5 + z])])
+    if d.get("sculk"):
+        r.put("head", cube("sculk_band", [-4.375, hy + 6.0, -4.375 + z], inflate=0.55))
+        r.put("body", cube("sculk_gem", [-0.75, 18.2, -2.4 + z]))
     if d.get("sword"):
         hw = G.S("hips")[0]
         r.put("body", G.rot_cube("scabbard", [-hw / 2 - 1.1, 6.0, -0.75 + z], [-hw / 2 - 0.6, 12.5, z], 20, 0, 0),

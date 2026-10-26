@@ -227,6 +227,7 @@ public class AnuranTests {
             helper.setDayTime(14000);
             helper.runAfterDelay(5, () -> {
                 check(!toad.shouldBeBuried(), "she should come out at dusk");
+                helper.setDayTime(1000);   // back to morning: later tests share this world's clock
                 helper.succeed();
             });
         });

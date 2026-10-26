@@ -80,7 +80,7 @@ public final class ModSounds {
 
     /** Every frog and toad species in the mod. */
     public static final java.util.List<String> ANURAN_SPECIES = java.util.List.of("bullywug", "bullfrog", "tree_frog", "poison_dart_frog",
-            "glass_frog", "goliath_frog", "desert_rain_frog", "mucus_toad", "fire_bellied_toad", "cane_toad", "natterjack", "surinam_toad");
+            "glass_frog", "goliath_frog", "desert_rain_frog", "mucus_toad", "fire_bellied_toad", "cane_toad", "natterjack", "vodyanoy", "surinam_toad");
     private static final java.util.Map<String, AnuranSounds> ANURAN = new java.util.HashMap<>();
 
     static {
@@ -92,7 +92,7 @@ public final class ModSounds {
     }
 
     public static AnuranSounds anuran(String species) {
-        return ANURAN.get(species);
+        return ANURAN.get("mailtoad".equals(species) ? "cane_toad" : species);   // the mailtoad croaks like the cane toad she is
     }
 
     private ModSounds() {}

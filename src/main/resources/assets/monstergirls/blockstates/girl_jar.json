@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "kind=firefly": {
+      "model": "monstergirls:block/girl_jar_firefly"
+    },
+    "kind=fairy": {
+      "model": "monstergirls:block/girl_jar_fairy"
+    }
+  }
+}

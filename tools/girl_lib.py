@@ -736,6 +736,13 @@ def facemark_fn(pal):
             return M[2]
         if kind == "fox" and y >= 24 and (x <= 1 or x >= 30):
             return pal.LIGHT[3]
+        if kind == "panda":                              # dark patches round the eyes, sloping down and out; the eyes themselves stay
+            for cx, sg in ((8, -1), (24, 1)):
+                ea, eb = getattr(pal, "eye_a", 4.4), getattr(pal, "eye_b", 5.0)
+                eye = ((x + 0.5 - cx) / ea) ** 2 + ((y + 0.5 - 18) / eb) ** 2
+                patch = ((x + 0.5 - (cx + sg * 1.2)) / 7.4) ** 2 + ((y + 0.5 - 20.5) / 7.0) ** 2
+                if patch <= 1.0 and eye > 1.25:
+                    return M[0]
         return None
     return fn
 
@@ -877,6 +884,16 @@ def biped_anims(an, tail_bones, extra_tail_bones=(), pounce=True, fox=False):
         }, sym("arm", hold(-30, 0, 20)), sym("forearm", hold(-90, 0, 0)), tail_sway(0.6, 22)))
 
 
+def flat_lie(chain, curl):
+    """lie for a tail instead of legs: on her back like everyone else (a bed is flat; the old coiled pose floated), shifted
+    toward the foot so her head is on the pillow, the waist carrying on toward the foot and the rest of the tail curled up
+    flat on the mattress (towards whoever she shares it with)."""
+    lie = {"root": {"rotation": H.hold(-90, 0, 0), "position": H.hold(0, 3, -6)}, chain[1]: {"rotation": H.hold(90, 0, 0)},
+           "head": {"rotation": H.hold(-8, 0, 0)}, "eyelids": {"position": H.hold(*OUT_)}}
+    lie.update({s_: {"rotation": H.hold(0, curl, 0)} for s_ in chain[2:]})
+    return lie
+
+
 def serpent_anims(an, segs, extra=None):
     """lamia: idle, walk/run (slither), sit (coiled), lie (coiled flat, head down), rear, coil (constrict), hiss, bask"""
     Tk, sym, hold, merge = H.track, H.sym, H.hold, H.merge
@@ -891,11 +908,7 @@ def serpent_anims(an, segs, extra=None):
     coil = {s_: {"rotation": hold(0, -48 if i else 0, 0)} for i, s_ in enumerate(segs)}
     coil[segs[0]] = {"rotation": hold(0, 0, 0)}
     an.add("sit", 4.0, True, merge(upper_idle(), coil, {"body": {"position": hold(0, -1.5, 0)}}))
-    lie = {s_: {"rotation": hold(0, -42 if i else 0, 0)} for i, s_ in enumerate(segs)}
-    lie["root"] = {"rotation": hold(0, 0, 0)}
-    lie[segs[0]] = {"rotation": hold(70, 0, 0)}
-    an.add("lie", 4.0, True, merge(lie, {"body": {"rotation": hold(-70, 0, 0), "position": hold(0, -3.5, 0)}, "head": {"rotation": hold(-6, 0, 0)},
-                                         "eyelids": {"position": hold(*OUT_)}}, sym("arm", hold(-20, 0, -10))))
+    an.add("lie", 4.0, True, merge(flat_lie(segs, -40), sym("arm", hold(-30, 0, -10))))
     an.add("rear", 1.5, True, merge({
         "body": {"rotation": hold(-14, 0, 0)}, "head": {"rotation": hold(6, 0, 0)},
         "mouth": {"position": Tk((0, REST), (0.6, REST), (0.7, OUT_), (1.1, OUT_), (1.2, REST), (1.5, REST))},
@@ -1027,8 +1040,7 @@ def fish_anims(an):
     an.add("run", 0.6, True, merge(swim_base, wave(fins, 0.6, [8, 12, 18, 22, 28], axis=0, phase=0.9, base=inline), sym("arm", hold(10, 0, 4))))
     curl = {f_: {"rotation": hold(0, -50 if i else 0, 0)} for i, f_ in enumerate(fins)}
     an.add("sit", 4.0, True, merge(upper_idle(), curl, {"body": {"position": hold(0, -1.5, 0)}}))
-    an.add("lie", 4.0, True, merge(curl, {"fin_1": {"rotation": hold(70, 0, 0)}, "body": {"rotation": hold(-70, 0, 0), "position": hold(0, -3.5, 0)},
-                                          "eyelids": {"position": hold(*OUT_)}}, sym("arm", hold(-20, 0, -10))))
+    an.add("lie", 4.0, True, merge(flat_lie(fins, -30), sym("arm", hold(-30, 0, -10))))
     notes = [(0, REST), (0.2, OUT_), (0.9, OUT_), (1.1, REST), (1.5, REST), (1.7, OUT_), (2.2, OUT_), (2.4, REST), (3, REST)]
     an.add("sing", 3.0, True, merge(upper_idle(), {"mouth": {"position": Tk(*notes)}, "eyelids": {"position": hold(*OUT_)},
                                                    "head": {"rotation": Tk((0, (-14, 0, -4)), (1.5, (-12, 0, 4)), (3, (-14, 0, -4)))}},
@@ -1191,7 +1203,7 @@ def run_family(fid, species, declare_fn, paint_fn, build_fn, anim_fn, views, fac
     entries = []
     for s in fam["species"]:
         sp = s["id"]
-        if want and sp not in want:
+        if (want and sp not in want) or sp not in species:
             continue
         declare_fn(sp)
         tex = paint_fn(sp, None)

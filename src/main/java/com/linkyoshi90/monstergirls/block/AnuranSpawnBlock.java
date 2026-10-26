@@ -47,7 +47,7 @@ public class AnuranSpawnBlock extends Block implements EntityBlock {
     public enum Species implements StringRepresentable {
         BULLYWUG("bullywug"), BULLFROG("bullfrog"), TREE_FROG("tree_frog"), POISON_DART_FROG("poison_dart_frog"),
         GLASS_FROG("glass_frog"), GOLIATH_FROG("goliath_frog"), DESERT_RAIN_FROG("desert_rain_frog"),
-        MUCUS_TOAD("mucus_toad"), FIRE_BELLIED_TOAD("fire_bellied_toad"), CANE_TOAD("cane_toad"), NATTERJACK("natterjack");
+        MUCUS_TOAD("mucus_toad"), FIRE_BELLIED_TOAD("fire_bellied_toad"), CANE_TOAD("cane_toad"), NATTERJACK("natterjack"), MAILTOAD("mailtoad");
 
         private final String entityId;
 
@@ -150,16 +150,29 @@ public class AnuranSpawnBlock extends Block implements EntityBlock {
     public static void hatch(ServerLevel level, BlockPos pos, BlockState state) {
         level.playSound(null, pos, SoundEvents.FROGSPAWN_HATCH, SoundSource.BLOCKS, 0.5F, 1.0F);
         UUID father = ParentageBlockEntity.fatherAt(level, pos);
+        int paint = ParentageBlockEntity.paintAt(level, pos);
         level.removeBlock(pos, false);
         EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(MonsterGirlsMod.id(state.getValue(SPECIES).entityId()));
         int count = 2 + level.random.nextInt(3);
+        boolean frogSired = AbstractAnuran.FROG_FATHER.equals(father);
         for (int i = 0; i < count; i++) {
+            if (frogSired && level.random.nextInt(3) == 0) {                    // sired by a vanilla frog: some hatch as its tadpoles
+                net.minecraft.world.entity.animal.frog.Tadpole tadpole = EntityType.TADPOLE.create(level);
+                if (tadpole != null) {
+                    tadpole.moveTo(pos.getX() + 0.5 + (level.random.nextDouble() - 0.5), pos.getY(), pos.getZ() + 0.5 + (level.random.nextDouble() - 0.5),
+                            level.random.nextFloat() * 360.0F, 0.0F);
+                    level.addFreshEntity(tadpole);
+                }
+                continue;
+            }
             if (!(type.create(level) instanceof AbstractAnuran young)) return;
             young.moveTo(pos.getX() + 0.5 + (level.random.nextDouble() - 0.5), pos.getY(), pos.getZ() + 0.5 + (level.random.nextDouble() - 0.5),
                     level.random.nextFloat() * 360.0F, 0.0F);
             young.setTadpole();
             young.rollVariant(level.getBiome(pos)); // her colour is chosen for the pond she hatches in
+            young.setPaint(paint);                                      // a painted mother's young are painted too
             level.addFreshEntity(young);
+            if (frogSired) continue;                                           // a frog's daughter is devoted to nobody in particular
             young.bornTo(father);
             if (father != null) young.setPersistenceRequired();
         }

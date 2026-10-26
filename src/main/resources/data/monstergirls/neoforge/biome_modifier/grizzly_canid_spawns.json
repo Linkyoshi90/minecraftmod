@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_grizzly_canid",
+  "spawners": {
+    "type": "monstergirls:grizzly_canid",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

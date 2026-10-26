@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_llorona_undead",
+  "spawners": {
+    "type": "monstergirls:llorona_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -96,6 +96,7 @@ public class LaySpawnGoal extends Goal {
             BlockState state = ModBlocks.ANURAN_SPAWN.get().defaultBlockState().setValue(AnuranSpawnBlock.SPECIES, species);
             if (this.mob.level().isEmptyBlock(spawnPos) && this.mob.level().setBlock(spawnPos, state, 3)) {
                 ParentageBlockEntity.setFatherAt(this.mob.level(), spawnPos, this.mob.getGestation().getFather());
+                ParentageBlockEntity.setPaintAt(this.mob.level(), spawnPos, this.mob.getPaint());
                 this.mob.level().playSound(null, spawnPos, SoundEvents.FROG_LAY_SPAWN, SoundSource.NEUTRAL, 1.0F, 1.0F);
                 this.mob.getGestation().clear();
             }

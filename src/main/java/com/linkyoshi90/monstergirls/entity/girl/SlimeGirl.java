@@ -46,12 +46,17 @@ import java.util.UUID;
  * absorbs what she picks up (a 9-slot living storage once devoted), takes her colour from dyes, splits in two
  * instead of dying (once a day; the halves merge again), bounces without fall damage, and carries her element:
  * verdant grows crops, magma cooks food and glows, honey sticks and fills bottles, frost freezes water and puts out
- * fires, amethyst rings near ore. Hits are hard on her trust: one halves it.
+ * fires, amethyst rings near ore. Hits are hard on her trust: one halves it. The ender slime teleports away from blows
+ * and water like an enderman, and while she is wild she picks up loose blocks and sets them down somewhere else.
  */
 public class SlimeGirl extends AbstractMonsterGirl {
     private static final long SPLIT_COOLDOWN = 24000L;
 
     private final SimpleContainer belly = new SimpleContainer(9);
+    /** The mimic's hoard: the loot of the chest she was. */
+    private final SimpleContainer hoard = new SimpleContainer(27);
+    /** One unopened loot chest in this many is a mimic. */
+    public static final int MIMIC_ODDS = 8;
     private long lastSplit = -SPLIT_COOLDOWN;
     @Nullable
     private UUID partner;
@@ -60,6 +65,9 @@ public class SlimeGirl extends AbstractMonsterGirl {
     private long nextHoney;
     private long nextChill;
     private int resonance;
+    @Nullable
+    private BlockState carried;
+    private long nextMove;
 
     public SlimeGirl(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
@@ -68,9 +76,13 @@ public class SlimeGirl extends AbstractMonsterGirl {
         this.goalSelector.addGoal(5, new FollowEntityGoal(this, this::partnerEntity, 1.2, 1.0F, 0.5F));
         this.goalSelector.addGoal(6, new BounceGoal(this));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 0.8));
+        if (species == GirlSpecies.MIMIC_SLIME) {                         // a walking chest: she keeps close to her friend
+            this.goalSelector.addGoal(4, new FollowEntityGoal(this, () -> this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24), 1.2, 4.0F, 2.0F));
+        }
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        if (s == GirlSpecies.ENDER_SLIME) return girlAttributes(20, 0.26, 3);
         return girlAttributes(s == GirlSpecies.MAGMA_SLIME ? 24 : 18, 0.24, s == GirlSpecies.MAGMA_SLIME ? 4 : 2);
     }
 
@@ -81,6 +93,8 @@ public class SlimeGirl extends AbstractMonsterGirl {
             case HONEY_SLIME -> List.of(Items.HONEY_BOTTLE, Items.HONEYCOMB, Items.SWEET_BERRIES);
             case FROST_SLIME -> List.of(Items.ICE, Items.SNOWBALL, Items.PACKED_ICE);
             case AMETHYST_SLIME -> List.of(Items.AMETHYST_SHARD, Items.QUARTZ);
+            case MIMIC_SLIME -> List.of(Items.GOLD_INGOT, Items.GOLD_NUGGET, Items.GOLD_BLOCK);
+            case ENDER_SLIME -> List.of(Items.CHORUS_FRUIT, Items.POPPED_CHORUS_FRUIT, Items.ENDER_PEARL);
             default -> List.of(Items.SLIME_BALL, Items.MELON_SLICE, Items.APPLE);
         };
     }
@@ -92,7 +106,8 @@ public class SlimeGirl extends AbstractMonsterGirl {
             case HONEY_SLIME -> List.of(DyeColor.YELLOW, DyeColor.ORANGE, DyeColor.WHITE, DyeColor.BROWN, DyeColor.PINK);
             case FROST_SLIME -> List.of(DyeColor.LIGHT_BLUE, DyeColor.WHITE, DyeColor.LIME, DyeColor.BLUE, DyeColor.PINK);
             case AMETHYST_SLIME -> List.of(DyeColor.PURPLE, DyeColor.PINK, DyeColor.YELLOW, DyeColor.GRAY, DyeColor.GREEN);
-            case MIXED_SLIME -> List.of();                                  // her colours are her two halves
+            case ENDER_SLIME -> List.of(DyeColor.BLACK, DyeColor.MAGENTA, DyeColor.CYAN, DyeColor.YELLOW, DyeColor.PURPLE);
+            case MIXED_SLIME, MIMIC_SLIME -> List.of();                     // her colours are her two halves; the mimic's, her chest
             default -> List.of(DyeColor.LIME, DyeColor.WHITE, DyeColor.BROWN, DyeColor.CYAN, DyeColor.YELLOW);
         };
     }
@@ -165,6 +180,14 @@ public class SlimeGirl extends AbstractMonsterGirl {
             }
             return InteractionResult.sidedSuccess(client);
         }
+        if (this.species == GirlSpecies.MIMIC_SLIME && stack.isEmpty() && player.isShiftKeyDown()
+                && this.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {   // the mimic opens up for a friend
+            if (!client) {
+                player.openMenu(new SimpleMenuProvider((id, inv, p) -> ChestMenu.threeRows(id, inv, this.hoard), this.getDisplayName()));
+                this.playSound(SoundEvents.CHEST_OPEN, 0.8F, 1.1F);
+            }
+            return InteractionResult.sidedSuccess(client);
+        }
         if (stack.isEmpty() && player.isShiftKeyDown() && this.getAffection(player) >= 60) {   // her living storage
             if (!client) player.openMenu(new SimpleMenuProvider((id, inv, p) -> new ChestMenu(MenuType.GENERIC_9x1, id, inv, this.belly, 1), this.getDisplayName()));
             return InteractionResult.sidedSuccess(client);
@@ -229,6 +252,44 @@ public class SlimeGirl extends AbstractMonsterGirl {
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
         for (int i = 0; i < this.belly.getContainerSize(); i++) if (!this.belly.getItem(i).isEmpty()) this.spawnAtLocation(this.belly.getItem(i));
+        for (int i = 0; i < this.hoard.getContainerSize(); i++) if (!this.hoard.getItem(i).isEmpty()) this.spawnAtLocation(this.hoard.getItem(i));
+        if (this.carried != null) this.spawnAtLocation(this.carried.getBlock());       // the ender slime's block
+    }
+
+    // --- the mimic -----------------------------------------------------------------------------------------------
+
+    public SimpleContainer getHoard() {
+        return this.hoard;
+    }
+
+    /** Whether this unopened loot chest is a mimic: one in MIMIC_ODDS, fixed by the world seed so a kobold can smell it first. */
+    public static boolean isMimicChest(ServerLevel level, BlockPos pos) {
+        return level.getBlockEntity(pos) instanceof net.minecraft.world.level.block.entity.ChestBlockEntity chest && chest.getLootTable() != null
+                && Math.floorMod(net.minecraft.util.Mth.getSeed(pos) ^ level.getSeed(), MIMIC_ODDS) == 0;
+    }
+
+    /**
+     * The chest a player just tried to open was a mimic: only an unopened loot chest (one that still has its loot
+     * table), never a chest anyone placed. She takes the chest's place and its loot, bites once and settles. Returns
+     * the mimic, or null when the chest is a plain chest.
+     */
+    @Nullable
+    public static SlimeGirl springMimic(ServerLevel level, BlockPos pos, Player player) {
+        if (!(level.getBlockEntity(pos) instanceof net.minecraft.world.level.block.entity.ChestBlockEntity chest) || chest.getLootTable() == null) return null;
+        if (!(com.linkyoshi90.monstergirls.registry.ModGirls.type(GirlSpecies.MIMIC_SLIME).create(level) instanceof SlimeGirl mimic)) return null;
+        chest.unpackLootTable(player);
+        for (int i = 0; i < chest.getContainerSize(); i++) mimic.hoard.addItem(chest.removeItemNoUpdate(i));
+        level.removeBlock(pos, false);
+        mimic.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, player.getYRot() + 180.0F, 0.0F);
+        mimic.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), net.minecraft.world.entity.MobSpawnType.EVENT, null);
+        mimic.setPersistenceRequired();
+        level.addFreshEntity(mimic);
+        mimic.getLookControl().setLookAt(player);
+        mimic.startTimedAction(Action.BITE, 12);
+        player.hurt(mimic.damageSources().mobAttack(mimic), 4.0F);       // one bite, then she settles
+        level.playSound(null, pos, SoundEvents.CHEST_CLOSE, net.minecraft.sounds.SoundSource.HOSTILE, 1.0F, 0.6F);
+        player.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.mimic"), true);
+        return mimic;
     }
 
     // --- splitting -----------------------------------------------------------------------------------------------
@@ -247,7 +308,67 @@ public class SlimeGirl extends AbstractMonsterGirl {
             if (source.getEntity() instanceof Player p) this.onHurtByPlayer(p);
             return false;
         }
-        return super.hurt(source, amount);
+        boolean hurt = super.hurt(source, amount);
+        if (hurt && this.species == GirlSpecies.ENDER_SLIME && this.isAlive() && this.level() instanceof ServerLevel server) this.blink(server);
+        return hurt;
+    }
+
+    /** The ender slime flickers away: somewhere within 16 blocks she can stand. */
+    public boolean blink(ServerLevel level) {
+        for (int i = 0; i < 16; i++) {
+            double x = this.getX() + (this.random.nextDouble() - 0.5) * 32, z = this.getZ() + (this.random.nextDouble() - 0.5) * 32;
+            double y = Math.min(level.getMaxBuildHeight() - 1, this.getY() + this.random.nextInt(16) - 8);
+            net.minecraft.world.phys.Vec3 from = this.position();
+            if (this.randomTeleport(x, y, z, true)) {
+                level.gameEvent(net.minecraft.world.level.gameevent.GameEvent.TELEPORT, from, net.minecraft.world.level.gameevent.GameEvent.Context.of(this));
+                level.playSound(null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.2F);
+                this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.2F);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** While she is wild she moves the world around: up with a loose block, and down with it again somewhere else. */
+    private void tickEnder(ServerLevel level) {
+        if (this.isInWaterRainOrBubble() && this.tickCount % 20 == 0) {             // water stings her, and she flees it
+            this.hurt(this.damageSources().drown(), 1.0F);
+            return;
+        }
+        if (this.tickCount % 20 != 0 || level.getGameTime() < this.nextMove || this.isBaby()
+                || !net.neoforged.neoforge.event.EventHooks.canEntityGrief(level, this)) return;
+        this.nextMove = level.getGameTime() + 600 + this.random.nextInt(1200);
+        BlockPos o = this.blockPosition();
+        if (this.carried == null) {
+            if (this.bestAffection() >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) return;      // a friend's slime leaves things be
+            BlockPos p = o.offset(this.random.nextInt(5) - 2, this.random.nextInt(3) - 1, this.random.nextInt(5) - 2);
+            BlockState s = level.getBlockState(p);
+            if (!s.is(net.minecraft.tags.BlockTags.ENDERMAN_HOLDABLE)) return;
+            level.removeBlock(p, false);
+            this.setCarried(s);
+        } else {
+            for (int i = 0; i < 8; i++) {
+                BlockPos p = o.offset(this.random.nextInt(9) - 4, this.random.nextInt(3) - 1, this.random.nextInt(9) - 4);
+                if (level.getBlockState(p).isAir() && level.getBlockState(p.below()).isCollisionShapeFullBlock(level, p.below())
+                        && this.carried.canSurvive(level, p)) {
+                    level.setBlock(p, this.carried, 3);
+                    this.setCarried(null);
+                    return;
+                }
+            }
+        }
+    }
+
+    @Nullable
+    public BlockState getCarried() {
+        return this.carried;
+    }
+
+    /** What she holds shows in her hand. */
+    public void setCarried(@Nullable BlockState state) {
+        this.carried = state;
+        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, state == null ? ItemStack.EMPTY : new ItemStack(state.getBlock()));
+        this.setDropChance(net.minecraft.world.entity.EquipmentSlot.MAINHAND, 0.0F);
     }
 
     private void split(ServerLevel level) {
@@ -309,6 +430,7 @@ public class SlimeGirl extends AbstractMonsterGirl {
             case FROST_SLIME -> this.frost(server);
             case HONEY_SLIME -> this.sticky(server);
             case AMETHYST_SLIME -> this.resonate(server);
+            case ENDER_SLIME -> this.tickEnder(server);
             default -> {
             }
         }
@@ -398,6 +520,8 @@ public class SlimeGirl extends AbstractMonsterGirl {
             case HONEY_SLIME -> new ItemStack(r < 50 ? Items.HONEYCOMB : Items.HONEY_BOTTLE);
             case MAGMA_SLIME -> new ItemStack(r < 60 ? Items.MAGMA_CREAM : Items.BLAZE_POWDER);
             case FROST_SLIME -> new ItemStack(r < 60 ? Items.SNOWBALL : Items.BLUE_ICE, r < 60 ? 8 : 1);
+            case MIMIC_SLIME -> new ItemStack(r < 70 ? Items.GOLD_NUGGET : Items.EMERALD, r < 70 ? 4 : 1);
+            case ENDER_SLIME -> new ItemStack(r < 55 ? Items.CHORUS_FRUIT : r < 85 ? Items.END_STONE : Items.ENDER_PEARL, r < 85 ? 3 : 1);
             default -> new ItemStack(r < 60 ? Items.SLIME_BALL : Items.BONE_MEAL, 3);
         };
     }
@@ -445,6 +569,7 @@ public class SlimeGirl extends AbstractMonsterGirl {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         if (this.hasCustomColour()) tag.putInt("Colour", this.colour());
+        tag.put("Hoard", this.hoard.createTag(this.registryAccess()));
         if (!this.parts.isEmpty()) {
             net.minecraft.nbt.ListTag list = new net.minecraft.nbt.ListTag();
             list.addAll(this.parts);
@@ -452,6 +577,7 @@ public class SlimeGirl extends AbstractMonsterGirl {
         }
         tag.put("Belly", this.belly.createTag(this.registryAccess()));
         tag.putLong("LastSplit", this.lastSplit);
+        if (this.carried != null) tag.put("Carried", net.minecraft.nbt.NbtUtils.writeBlockState(this.carried));
         if (this.partner != null) tag.putUUID("Partner", this.partner);
     }
 
@@ -462,7 +588,10 @@ public class SlimeGirl extends AbstractMonsterGirl {
         this.parts.clear();
         for (var t : tag.getList("Parts", net.minecraft.nbt.Tag.TAG_COMPOUND)) this.parts.add((CompoundTag) t);
         this.belly.fromTag(tag.getList("Belly", 10), this.registryAccess());
+        this.hoard.fromTag(tag.getList("Hoard", 10), this.registryAccess());
         if (tag.contains("LastSplit")) this.lastSplit = tag.getLong("LastSplit");
+        if (tag.contains("Carried")) this.setCarried(net.minecraft.nbt.NbtUtils.readBlockState(this.level().holderLookup(net.minecraft.core.registries.Registries.BLOCK),
+                tag.getCompound("Carried")));
         this.partner = tag.hasUUID("Partner") ? tag.getUUID("Partner") : null;
     }
 

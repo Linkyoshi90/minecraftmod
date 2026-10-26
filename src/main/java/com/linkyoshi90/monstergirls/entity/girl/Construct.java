@@ -1,0 +1,264 @@
+package com.linkyoshi90.monstergirls.entity.girl;
+
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+
+import javax.annotation.Nullable;
+import java.util.UUID;
+
+/**
+ * The golem family (construct_field_guide.html): the clay golem. Tougher than an iron golem (120 health), she fights
+ * monsters near villagers and, once devoted, near her friend; iron golems are her kin. She is made, not born (no young,
+ * no bed), clay patches her up, and when she falls she breaks into pieces.
+ */
+public class Construct extends AbstractMonsterGirl {
+    public static final double HEALTH = 120.0;
+
+    public Construct(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
+        super(type, level, species);
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0, true));
+        this.goalSelector.addGoal(4, new TemptGoal(this, 1.0, this::isFood, false));
+        this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 0.6));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, 10, true, false, this::isThreat));
+    }
+
+    public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        if (s == GirlSpecies.TALOSLING_CONSTRUCT) return girlAttributes(40, 0.3, 6).add(Attributes.ARMOR, 6);
+        if (s == GirlSpecies.GARGOYLE_CONSTRUCT) return girlAttributes(40, 0.27, 7).add(Attributes.ARMOR, 6).add(Attributes.KNOCKBACK_RESISTANCE, 0.6);
+        return girlAttributes(HEALTH, 0.22, 12).add(Attributes.KNOCKBACK_RESISTANCE, 1.0).add(Attributes.ARMOR, 4);
+    }
+
+    // --- the talosling --------------------------------------------------------------------------------------------------
+
+    /** Ticks a redstone dust winds her for, and the most her spring holds. */
+    public static final int WIND_PER_DUST = 6000, MAX_WIND = 24000;
+    private int wound = MAX_WIND;
+
+    public boolean isTalos() {
+        return this.species == GirlSpecies.TALOSLING_CONSTRUCT;
+    }
+
+    public int getWound() {
+        return this.wound;
+    }
+
+    @Override
+    public void addAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        if (this.isTalos()) tag.putInt("Wound", this.wound);
+    }
+
+    @Override
+    public void readAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        if (tag.contains("Wound")) this.wound = tag.getInt("Wound");
+    }
+
+    /** Redstone dust winds her spring. */
+    public boolean windUp(Player player, ItemStack dust) {
+        if (!this.isTalos() || !dust.is(Items.REDSTONE) || this.wound >= MAX_WIND) return false;
+        dust.consume(1, player);
+        this.wound = Math.min(MAX_WIND, this.wound + WIND_PER_DUST);
+        if (this.getAction() == Action.RUNDOWN) this.setAction(Action.NONE);
+        this.playSound(SoundEvents.LEVER_CLICK, 1.0F, 1.4F);
+        return true;
+    }
+
+    @Nullable
+    @Override
+    protected net.minecraft.world.InteractionResult familyInteract(Player player, net.minecraft.world.InteractionHand hand, ItemStack stack) {
+        if (this.isTalos() && stack.is(Items.REDSTONE)) {
+            if (!this.level().isClientSide && this.windUp(player, stack)) this.addAffection(player, 1);
+            return net.minecraft.world.InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+        return null;
+    }
+
+    private void tickTalos() {
+        if (this.wound > 0) {
+            this.wound--;
+            if (this.wound == 0) {
+                this.setAction(Action.RUNDOWN);
+                this.setTarget(null);
+                this.playSound(SoundEvents.LEVER_CLICK, 0.6F, 0.6F);
+            }
+        } else {
+            this.getNavigation().stop();
+            if (this.getAction() != Action.RUNDOWN) this.setAction(Action.RUNDOWN);
+        }
+    }
+
+    // --- the gargoyle ---------------------------------------------------------------------------------------------------
+
+    public boolean isGargoyle() {
+        return this.species == GirlSpecies.GARGOYLE_CONSTRUCT;
+    }
+
+    @Override
+    public boolean canFly() {
+        return this.species == GirlSpecies.GARGOYLE_CONSTRUCT;
+    }
+
+    /** By day, with nothing to fight, the gargoyle is stone. */
+    public boolean isStone() {
+        return this.isGargoyle() && this.getAction() == Action.PERCH;
+    }
+
+    private void tickGargoyle() {
+        boolean day = this.level().isDay() && this.getTarget() == null;
+        if (day && !this.isStone() && (this.getAction() == Action.NONE || this.getAction() == Action.LYING)) this.setAction(Action.PERCH);
+        if (!day && this.isStone()) this.setAction(Action.NONE);
+        if (this.isStone()) {
+            this.getNavigation().stop();
+            this.setNoGravity(false);
+            this.setDeltaMovement(0, this.getDeltaMovement().y, 0);
+        }
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (this.isStone() && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {   // nothing hurts stone
+            if (!this.level().isClientSide) this.playSound(SoundEvents.STONE_HIT, 1.0F, 0.8F);
+            return false;
+        }
+        return super.hurt(source, amount);
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (this.isGargoyle() && !this.level().isClientSide) this.tickGargoyle();
+        if (this.isTalos() && !this.level().isClientSide) this.tickTalos();
+    }
+
+    /** A monster near a villager (or, once she is devoted, near her friend). Creepers are left alone, as iron golems do. */
+    private boolean isThreat(LivingEntity m) {
+        if (m instanceof Creeper) return false;
+        if (this.isTalos()) {                                           // wound up, the talosling guards her friend
+            Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+            return this.wound > 0 && friend != null && m.distanceToSqr(friend) < 16 * 16;
+        }
+        if (this.isGargoyle()) {                                        // the gargoyle keeps watch over her friend, at night
+            Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+            return !this.level().isDay() && friend != null && m.distanceToSqr(friend) < 16 * 16;
+        }
+        if (!this.level().getEntitiesOfClass(AbstractVillager.class, m.getBoundingBox().inflate(16)).isEmpty()) return true;
+        Player p = this.bondedPlayer(60, 24);
+        return p != null && m.distanceToSqr(p) < 12 * 12;
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        this.startTimedAction(Action.SLAM, 14);
+        boolean hit = super.doHurtTarget(target);
+        if (hit) target.setDeltaMovement(target.getDeltaMovement().add(0, 0.4, 0));   // a blow that lifts, like an iron golem's
+        return hit;
+    }
+
+    // --- made, not born --------------------------------------------------------------------------------------------
+
+    @Override
+    public boolean canShareBed() {
+        return false;
+    }
+
+    @Override
+    protected boolean giveBirth(ServerLevel level, @Nullable UUID father) {
+        return true;                                                    // nothing to bear (the gestation just clears)
+    }
+
+    // --- breaking apart ----------------------------------------------------------------------------------------------
+
+    @Override
+    public boolean hasDeathAnimation() {
+        return true;
+    }
+
+    /** Clay crumbles off her while she breaks apart. */
+    @Override
+    protected void tickDeath() {
+        super.tickDeath();
+        if (this.level() instanceof ServerLevel server && this.deathTime % 2 == 0) {
+            server.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, (this.isGargoyle() ? Blocks.STONE : this.isTalos() ? Blocks.COPPER_BLOCK : Blocks.CLAY).defaultBlockState()),
+                    this.getX(), this.getY() + this.getBbHeight() * 0.5,
+                    this.getZ(), 12, 0.4, this.getBbHeight() * 0.3, 0.4, 0.1);
+            if (this.deathTime == 2) this.playSound(SoundEvents.DECORATED_POT_SHATTER, 1.2F, 0.7F);
+        }
+    }
+
+    @Override
+    protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
+        super.dropCustomDeathLoot(level, source, recentlyHit);
+        this.spawnAtLocation(new ItemStack(this.isGargoyle() ? Items.COBBLESTONE : this.isTalos() ? Items.COPPER_INGOT : Items.CLAY_BALL, 4 + this.random.nextInt(5)));
+    }
+
+    // --- food, presents ----------------------------------------------------------------------------------------------
+
+    @Override
+    public boolean isFood(ItemStack stack) {
+        if (this.isTalos()) return stack.is(Items.COPPER_INGOT) || stack.is(Items.IRON_NUGGET);
+        if (this.isGargoyle()) return stack.is(Items.COBBLESTONE) || stack.is(Items.STONE) || stack.is(Items.STONE_BRICKS);
+        return stack.is(Items.CLAY_BALL) || stack.is(Items.CLAY);
+    }
+
+    @Override
+    protected int foodValue(Player player, ItemStack stack) {
+        return stack.is(Items.CLAY) || stack.is(Items.STONE_BRICKS) ? 3 : 1;
+    }
+
+    @Override
+    public ItemStack rollGift(Player player) {
+        int r = this.random.nextInt(100);
+        if (this.isTalos()) return new ItemStack(r < 40 ? Items.COPPER_INGOT : r < 75 ? Items.REDSTONE : r < 95 ? Items.IRON_NUGGET : Items.CLOCK,
+                r < 40 ? 2 : r < 75 ? 4 : r < 95 ? 6 : 1);
+        if (this.isGargoyle()) return r < 45 ? new ItemStack(Items.COBBLESTONE, 4) : r < 80 ? new ItemStack(Items.FLINT, 2) : r < 95 ? new ItemStack(Items.AMETHYST_SHARD)
+                : new ItemStack(Items.CHISELED_STONE_BRICKS);
+        return r < 45 ? new ItemStack(Items.CLAY_BALL, 4) : r < 75 ? new ItemStack(Items.BRICK, 3) : r < 95 ? new ItemStack(Items.FLOWER_POT)
+                : new ItemStack(Items.POPPY);
+    }
+
+    // --- sounds ----------------------------------------------------------------------------------------------------
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return null;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return this.isGargoyle() ? SoundEvents.STONE_HIT : SoundEvents.MUD_BRICKS_HIT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.DECORATED_POT_BREAK;
+    }
+
+    @Override
+    public SoundEvent getEatSound() {
+        return SoundEvents.MUD_PLACE;
+    }
+}

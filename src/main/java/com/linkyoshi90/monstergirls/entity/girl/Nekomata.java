@@ -102,6 +102,8 @@ public class Nekomata extends AbstractMonsterGirl {
             case SNOW_LEOPARD_NEKOMATA -> girlAttributes(22, 0.3, 4).add(Attributes.JUMP_STRENGTH, 0.62);
             case SERVAL_NEKOMATA -> girlAttributes(16, 0.3, 3).add(Attributes.JUMP_STRENGTH, 0.66);
             case OCELOT_NEKOMATA -> girlAttributes(16, 0.32, 3);
+            case BLAZE_CAT_NEKOMATA -> girlAttributes(24, 0.32, 5);
+            case WATERLIL_NEKOMATA -> girlAttributes(16, 0.3, 2);
             default -> girlAttributes(18, 0.3, 3);
         };
     }
@@ -136,8 +138,89 @@ public class Nekomata extends AbstractMonsterGirl {
 
     // --- food, petting, presents ---------------------------------------------------------------------------------
 
+    // --- the waterlil ----------------------------------------------------------------------------------------------------
+
+    /** The lily pads she has grown, and when each fades. */
+    private final java.util.Map<BlockPos, Long> pads = new java.util.HashMap<>();
+
+    /** Lily pads on the water under and ahead of this walker; true if one grew. */
+    public boolean growPads(ServerLevel level, net.minecraft.world.entity.LivingEntity walker) {
+        Vec3 step = walker.getDeltaMovement().multiply(1, 0, 1);
+        BlockPos feet = walker.blockPosition();
+        boolean grew = false;
+        for (BlockPos at : new BlockPos[]{feet, step.lengthSqr() > 1.0E-4 ? BlockPos.containing(walker.position().add(step.normalize())) : feet}) {
+            BlockPos water = at.below();
+            if (level.getFluidState(water).isSourceOfType(net.minecraft.world.level.material.Fluids.WATER) && level.getBlockState(at).isAir()) {
+                level.setBlock(at, net.minecraft.world.level.block.Blocks.LILY_PAD.defaultBlockState(), 3);
+                this.pads.put(at.immutable(), level.getGameTime() + 200);
+                grew = true;
+            }
+        }
+        return grew;
+    }
+
+    private void tickPads(ServerLevel level) {
+        this.growPads(level, this);
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 6);
+        if (friend != null) this.growPads(level, friend);
+        if (this.tickCount % 20 == 0) {                              // the old ones fade, unless someone stands on them
+            this.pads.entrySet().removeIf(e -> {
+                if (level.getGameTime() < e.getValue()) return false;
+                BlockPos p = e.getKey();
+                if (!level.getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, new net.minecraft.world.phys.AABB(p).inflate(0.5)).isEmpty()) return false;
+                if (level.getBlockState(p).is(net.minecraft.world.level.block.Blocks.LILY_PAD)) level.removeBlock(p, false);
+                return true;
+            });
+        }
+    }
+
+    @Override
+    public void remove(RemovalReason reason) {
+        if (this.level() instanceof ServerLevel level) {
+            for (BlockPos p : this.pads.keySet()) if (level.getBlockState(p).is(net.minecraft.world.level.block.Blocks.LILY_PAD)) level.removeBlock(p, false);
+            this.pads.clear();
+        }
+        super.remove(reason);
+    }
+
+    // --- the blaze cat --------------------------------------------------------------------------------------------------
+
+    @Override
+    public boolean fireImmune() {
+        return this.species == GirlSpecies.BLAZE_CAT_NEKOMATA || super.fireImmune();
+    }
+
+    /** Her burning paws set whatever she hits alight. */
+    @Override
+    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
+        boolean hit = super.doHurtTarget(target);
+        if (hit && this.species == GirlSpecies.BLAZE_CAT_NEKOMATA) target.igniteForSeconds(4);
+        return hit;
+    }
+
+    /** Campfires and candles near her light up; her friend beside her takes no harm from fire. */
+    public int kindle(ServerLevel level) {
+        int lit = 0;
+        BlockPos o = this.blockPosition();
+        for (BlockPos p : BlockPos.betweenClosed(o.offset(-4, -2, -4), o.offset(4, 2, 4))) {
+            var s = level.getBlockState(p);
+            if (s.hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT)
+                    && (s.getBlock() instanceof net.minecraft.world.level.block.CampfireBlock || s.getBlock() instanceof net.minecraft.world.level.block.AbstractCandleBlock)
+                    && !s.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT)
+                    && !(s.hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED)
+                    && s.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED))) {
+                level.setBlock(p, s.setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT, true), 3);
+                lit++;
+            }
+        }
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend != null) friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.FIRE_RESISTANCE, 100, 0, true, false));
+        return lit;
+    }
+
     @Override
     public boolean isFood(ItemStack stack) {
+        if (this.species == GirlSpecies.BLAZE_CAT_NEKOMATA && stack.is(Items.BLAZE_POWDER)) return true;
         return stack.is(ItemTags.FISHES) || stack.is(Items.CHICKEN) || stack.is(Items.RABBIT) || stack.is(Items.COOKED_CHICKEN)
                 || stack.is(Items.COOKED_RABBIT) || stack.is(Items.MILK_BUCKET);
     }
@@ -179,6 +262,7 @@ public class Nekomata extends AbstractMonsterGirl {
             case TIGER_NEKOMATA -> new ItemStack(this.random.nextBoolean() ? Items.COD : Items.SALMON);
             case CHEETAH_NEKOMATA, LYNX_NEKOMATA -> new ItemStack(r < 50 ? Items.RABBIT : r < 85 ? Items.RABBIT_HIDE : Items.RABBIT_FOOT);
             case OCELOT_NEKOMATA -> new ItemStack(r < 45 ? Items.COCOA_BEANS : r < 80 ? Items.FEATHER : Items.MELON_SLICE, r < 45 ? 3 : 1);
+            case BLAZE_CAT_NEKOMATA -> new ItemStack(r < 50 ? Items.BLAZE_POWDER : r < 85 ? Items.MAGMA_CREAM : Items.BLAZE_ROD, r < 50 ? 2 : 1);
             default -> new ItemStack(r < 30 ? Items.FEATHER : r < 50 ? Items.RABBIT_HIDE : r < 70 ? Items.STRING : r < 85 ? Items.CHICKEN : r < 97 ? Items.RABBIT : Items.PHANTOM_MEMBRANE);
         };
     }
@@ -278,6 +362,8 @@ public class Nekomata extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.BLAZE_CAT_NEKOMATA && this.level() instanceof ServerLevel fire && this.tickCount % 40 == 0 && !this.isBaby()) this.kindle(fire);
+        if (this.species == GirlSpecies.WATERLIL_NEKOMATA && this.level() instanceof ServerLevel pond && this.tickCount % 4 == 0) this.tickPads(pond);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.isTrueForm() && this.tickCount % 20 == 0 && !server.isDay()) {
             server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, this.getRandomX(0.6), this.getY() + this.getBbHeight() * this.random.nextDouble(), this.getRandomZ(0.6), 1, 0, 0.02, 0, 0);

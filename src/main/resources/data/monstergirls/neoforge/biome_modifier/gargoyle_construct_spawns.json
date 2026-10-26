@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_gargoyle_construct",
+  "spawners": {
+    "type": "monstergirls:gargoyle_construct",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

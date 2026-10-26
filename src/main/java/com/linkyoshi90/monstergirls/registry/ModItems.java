@@ -34,6 +34,28 @@ public final class ModItems {
             () -> new DeferredSpawnEggItem(ModEntities.RIFLEBIRD_HARPY, 0x101018, 0x30B0A0, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> PHOENIX_HARPY_SPAWN_EGG = ITEMS.register("phoenix_harpy_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.PHOENIX_HARPY, 0xC81E10, 0xFFD060, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> TENGU_HARPY_SPAWN_EGG = ITEMS.register("tengu_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.TENGU_HARPY, 0x16151F, 0xF0EAD6, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> ZHUQUE_HARPY_SPAWN_EGG = ITEMS.register("zhuque_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.ZHUQUE_HARPY, 0xD8301A, 0x2A9A6A, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> ROOKMOURN_HARPY_SPAWN_EGG = ITEMS.register("rookmourn_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.ROOKMOURN_HARPY, 0x16141E, 0xD8C8A0, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> CASSOWRATH_HARPY_SPAWN_EGG = ITEMS.register("cassowrath_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.CASSOWRATH_HARPY, 0x14161E, 0x2C5CAA, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> MAILTOAD_SPAWN_EGG = ITEMS.register("mailtoad_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.MAILTOAD, 0x325CB4, 0xD2A632, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> COIN_MAGPIE_HARPY_SPAWN_EGG = ITEMS.register("coin_magpie_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.COIN_MAGPIE_HARPY, 0x1A3440, 0xF0F0F4, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> TRICKSTER_RAVEN_HARPY_SPAWN_EGG = ITEMS.register("trickster_raven_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.TRICKSTER_RAVEN_HARPY, 0x16141E, 0x6A6496, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> FLAMINGO_HARPY_SPAWN_EGG = ITEMS.register("flamingo_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.FLAMINGO_HARPY, 0xF08AA8, 0x1E1E22, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> FINCH_HARPY_SPAWN_EGG = ITEMS.register("finch_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.FINCH_HARPY, 0x6A3A24, 0xE8C060, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> TOUCAN_HARPY_SPAWN_EGG = ITEMS.register("toucan_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.TOUCAN_HARPY, 0x141418, 0xF08A18, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> PENGUIN_HARPY_SPAWN_EGG = ITEMS.register("penguin_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.PENGUIN_HARPY, 0x141820, 0xF4F6FA, new Item.Properties()));
 
     public static final DeferredItem<DeferredSpawnEggItem> BULLYWUG_SPAWN_EGG = ITEMS.register("bullywug_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.BULLYWUG, 0x5E9E3C, 0xE9D874, new Item.Properties()));
@@ -57,6 +79,8 @@ public final class ModItems {
             () -> new DeferredSpawnEggItem(ModEntities.CANE_TOAD, 0x8A6A44, 0xC8B27A, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> NATTERJACK_SPAWN_EGG = ITEMS.register("natterjack_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.NATTERJACK, 0x8A7A52, 0xE2D24A, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> VODYANOY_SPAWN_EGG = ITEMS.register("vodyanoy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.VODYANOY, 0x4E6024, 0x46923A, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> SURINAM_TOAD_SPAWN_EGG = ITEMS.register("surinam_toad_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.SURINAM_TOAD, 0x624A2E, 0xDCC8A4, new Item.Properties()));
 
@@ -72,6 +96,16 @@ public final class ModItems {
     public static final DeferredItem<Item> OWL_EGG = laidEgg("owl_egg", 3, 0.2F);
     public static final DeferredItem<Item> ALBATROSS_EGG = laidEgg("albatross_egg", 5, 0.4F);
     public static final DeferredItem<Item> OSTRICH_EGG = laidEgg("ostrich_egg", 8, 0.6F);
+    public static final DeferredItem<Item> TENGU_EGG = laidEgg("tengu_egg", 3, 0.2F);
+    public static final DeferredItem<Item> TOUCAN_EGG = laidEgg("toucan_egg", 2, 0.2F);
+    public static final DeferredItem<Item> FINCH_EGG = laidEgg("finch_egg", 1, 0.1F);
+    public static final DeferredItem<Item> FLAMINGO_EGG = laidEgg("flamingo_egg", 3, 0.2F);
+    public static final DeferredItem<Item> MAGPIE_EGG = laidEgg("magpie_egg", 2, 0.2F);
+    public static final DeferredItem<Item> ROOK_EGG = laidEgg("rook_egg", 2, 0.2F);
+    public static final DeferredItem<Item> CASSOWARY_EGG = laidEgg("cassowary_egg", 8, 0.6F);
+    public static final DeferredItem<Item> RAVEN_EGG = laidEgg("raven_egg", 2, 0.2F);
+    public static final DeferredItem<Item> ZHUQUE_EGG = laidEgg("zhuque_egg", 4, 0.3F);
+    public static final DeferredItem<Item> PENGUIN_EGG = laidEgg("penguin_egg", 5, 0.4F);
     /** The phoenix's: still warm, it leaves you fire resistant for a little while. */
     public static final DeferredItem<Item> EMBER_EGG = ITEMS.registerItem("ember_egg",
             props -> new Item(props.stacksTo(16).food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.3F).alwaysEdible()
@@ -146,6 +180,8 @@ public final class ModItems {
                     props.durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(8))));
 
     /** An alraune rooted as a flower, to plant somewhere new. */
+    public static final DeferredItem<BlockItem> GIRL_JAR = ITEMS.register("girl_jar",
+            () -> new BlockItem(ModBlocks.GIRL_JAR.get(), new Item.Properties().stacksTo(1)));
     public static final DeferredItem<BlockItem> ALRAUNE_BLOOM = ITEMS.register("alraune_bloom",
             () -> new BlockItem(ModBlocks.ALRAUNE_BLOOM.get(), new Item.Properties().stacksTo(1)));
 
@@ -155,6 +191,10 @@ public final class ModItems {
 
     /** Brought by healer girls (or made from nectar and honey): heals a befriended girl or vanilla friend. */
     public static final DeferredItem<Item> HEALING_BALM = ITEMS.registerSimpleItem("healing_balm", new Item.Properties().stacksTo(16));
+
+    /** Shows tonight's moon phase, and how many nights until the full moon. */
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.MoonDialItem> MOON_DIAL = ITEMS.registerItem("moon_dial",
+            props -> new com.linkyoshi90.monstergirls.item.MoonDialItem(props.stacksTo(1)));
 
     /** Creative only (no recipe): fills a girl's friendship with you to the full, for testing. */
     public static final DeferredItem<Item> FRIENDSHIP_CHARM = ITEMS.registerSimpleItem("friendship_charm", new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));

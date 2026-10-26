@@ -49,13 +49,17 @@ public class AnuranRenderer<T extends AbstractAnuran> extends GeoEntityRenderer<
 
             @Override
             public ResourceLocation getTextureResource(T animatable) {
-                if (animatable.isBaby() && animatable.hasYoungModels()) return YoungModels.tex(animatable.modelName());
+                String paint = animatable.getPaintName();                    // a painted one: her paint over the default colours
+                if (animatable.isBaby() && animatable.hasYoungModels()) return Paints.of(YoungModels.tex(animatable.modelName()), paint);
+                if (paint != null) return Paints.of(MonsterGirlsMod.id("textures/entity/" + species + ".png"), paint);
                 // colour variants: textures/entity/<species>_<variant>.png (the default colours have no suffix)
                 return this.textures.computeIfAbsent(animatable.getVariantSuffix(),
                         suffix -> MonsterGirlsMod.id("textures/entity/" + species + suffix + ".png"));
             }
         });
         this.withScale(scale);
+        this.addRenderLayer(new MoonEyesLayer<>(this));
+        this.addRenderLayer(new PaintGlowLayer<>(this, a -> a.getPaintName()));
         this.shadowRadius = shadowRadius;
     }
 
@@ -69,5 +73,13 @@ public class AnuranRenderer<T extends AbstractAnuran> extends GeoEntityRenderer<
             float scale = animatable.isBaby() ? AbstractAnuran.BABY_SCALE : 1.0F;
             super.scaleModelForRender(widthScale * scale, heightScale * scale, poseStack, animatable, model, isReRender, partialTick, packedLight, packedOverlay);
         }
+    }
+
+    /** A jello-painted one is see-through. */
+    @Override
+    public net.minecraft.client.renderer.RenderType getRenderType(T animatable, net.minecraft.resources.ResourceLocation texture,
+                                                                @javax.annotation.Nullable net.minecraft.client.renderer.MultiBufferSource buffers, float partialTick) {
+        return Paints.translucent(animatable.getPaintName()) ? net.minecraft.client.renderer.RenderType.entityTranslucent(texture)
+                : super.getRenderType(animatable, texture, buffers, partialTick);
     }
 }

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_firefly_bug",
+  "spawners": {
+    "type": "monstergirls:firefly_bug",
+    "weight": 6,
+    "minCount": 3,
+    "maxCount": 6
+  }
+}

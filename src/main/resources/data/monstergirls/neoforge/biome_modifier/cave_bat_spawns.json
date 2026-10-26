@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_cave_bat",
+  "spawners": {
+    "type": "monstergirls:cave_bat",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 3
+  }
+}

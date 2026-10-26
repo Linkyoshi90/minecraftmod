@@ -46,11 +46,13 @@ import java.util.UUID;
 
 /**
  * The insect family (bug_field_guide.html): mosquito, moth and her caterpillar, fairy and the Fairy Queen, scorpion, bee
- * and the Queen Bee, papillon and her caterpillar. Instinct first: the mosquito drinks blood (from you until calmed with
+ * and the Queen Bee, papillon and her caterpillar, hornet. Instinct first: the mosquito drinks blood (from you until calmed with
  * honey, from your enemies after), the moth flies to the brightest light at night, caterpillars eat and in five days turn
  * into moths and papillons, fairies heal and build a fountain of flowers and water from which a Fairy Queen may rise, the
  * scorpion stings and carries her young, bees pollinate, grow crops and fill hives (twice as fast near their queen), the
- * papillon plants flowers.
+ * papillon plants flowers, and the hornet stings anyone who comes close and hunts bees until she is befriended. The
+ * mantis holds her prayer pose until a silverfish, endermite or spider comes near, then strikes in a flash; the orchid
+ * mantis cannot be seen among flowers.
  */
 public class Bug extends AbstractMonsterGirl {
     /** Five days as a caterpillar. */
@@ -67,6 +69,7 @@ public class Bug extends AbstractMonsterGirl {
     private BlockPos light;
     private long nextHeal;
     private int carryTicks;
+    private long nextLunge;
 
     public Bug(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
@@ -78,15 +81,55 @@ public class Bug extends AbstractMonsterGirl {
             this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Monster.class, true,
                     m -> { Player p = this.bondedPlayer(10, 16); return p != null && m.distanceToSqr(p) < 10 * 10; }));
         }
+        if (species == GirlSpecies.MANTIS_BUG) {                            // the ambush: the arthropods that wander into reach
+            this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false,
+                    e -> (e instanceof net.minecraft.world.entity.monster.Silverfish || e instanceof net.minecraft.world.entity.monster.Endermite
+                            || e instanceof net.minecraft.world.entity.monster.Spider) && e.distanceToSqr(this) < 10 * 10));
+        }
+        if (species == GirlSpecies.HORNET_BUG) {
+            this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, false,      // on patrol she tears into monsters
+                    m -> this.getOrders().command(this) == com.linkyoshi90.monstergirls.entity.Orders.Command.PATROL));
+            this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, this::isHornetPrey));
+        }
+    }
+
+    // --- the hornet ----------------------------------------------------------------------------------------------
+
+    /** Bees and bee girls, until someone has befriended her. */
+    private boolean isHornetPrey(LivingEntity e) {
+        if (this.bestAffection() >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) return false;
+        return e instanceof net.minecraft.world.entity.animal.Bee
+                || e instanceof Bug b && (b.species == GirlSpecies.BEE_BUG || b.species == GirlSpecies.QUEEN_BEE_BUG);
+    }
+
+    /** She stings any player who comes within 5 blocks, unless she is fond of them. */
+    @Override
+    public boolean isHostileTo(Player player) {
+        if (this.species != GirlSpecies.HORNET_BUG) return super.isHostileTo(player);
+        return this.distanceToSqr(player) < 5 * 5 && this.getAffection(player) < com.linkyoshi90.monstergirls.entity.Orders.AFFECTION && this.couldAttack(player);
+    }
+
+    /** Hornets are often found with a broken wing, and the one who mends it has her for life. */
+    @Override
+    protected int injuredRarity() {
+        return this.species == GirlSpecies.HORNET_BUG ? 5 : super.injuredRarity();
+    }
+
+    @Override
+    protected int mendAffection() {
+        return this.species == GirlSpecies.HORNET_BUG ? FULL_AFFECTION : super.mendAffection();
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
             case MOSQUITO_BUG -> girlAttributes(14, 0.3, 3);
             case FAIRY_BUG -> girlAttributes(8, 0.3, 1);
+            case FIREFLY_BUG -> girlAttributes(8, 0.3, 1);
             case FAIRY_QUEEN_BUG -> girlAttributes(60, 0.3, 4);
             case SCORPION_BUG -> girlAttributes(30, 0.28, 5);
             case QUEEN_BEE_BUG -> girlAttributes(44, 0.28, 5);
+            case HORNET_BUG -> girlAttributes(22, 0.32, 5);
+            case MANTIS_BUG -> girlAttributes(20, 0.32, 6);
             case MOTH_LARVA_BUG, PAPILLON_LARVA_BUG -> girlAttributes(10, 0.14, 0);
             default -> girlAttributes(16, 0.3, 2);
         };
@@ -98,7 +141,8 @@ public class Bug extends AbstractMonsterGirl {
 
     @Override
     public boolean canFly() {
-        return this.species != GirlSpecies.SCORPION_BUG && this.species != GirlSpecies.MOTH_LARVA_BUG && this.species != GirlSpecies.PAPILLON_LARVA_BUG;
+        return this.species != GirlSpecies.SCORPION_BUG && this.species != GirlSpecies.MOTH_LARVA_BUG && this.species != GirlSpecies.PAPILLON_LARVA_BUG
+                && this.species != GirlSpecies.MANTIS_BUG;
     }
 
     /** A caterpillar is already small: she hatches full size and grows by turning into her adult form instead. */
@@ -124,9 +168,37 @@ public class Bug extends AbstractMonsterGirl {
         return stack.is(Items.HONEY_BOTTLE);
     }
 
+    /** The mantis: still in prayer while nothing is near; a lunge at her prey; the orchid hides among flowers. */
+    private void ambush(ServerLevel level) {
+        LivingEntity t = this.getTarget();
+        if (t == null && this.getAction() == Action.NONE && this.tickCount % 40 == 0 && this.getNavigation().isDone() && this.random.nextInt(3) == 0) {
+            this.startTimedAction(Action.PRAY, 200);
+        }
+        if (this.getAction() == Action.PRAY) {
+            if (t != null) this.setAction(Action.NONE);
+            else this.getNavigation().stop();
+        }
+        if (t != null && this.onGround() && level.getGameTime() >= this.nextLunge && this.distanceToSqr(t) < 4 * 4) {   // faster than the eye
+            this.nextLunge = level.getGameTime() + 30;
+            Vec3 d = t.position().subtract(this.position()).normalize();
+            this.setDeltaMovement(d.x * 0.8, 0.25, d.z * 0.8);
+            this.startTimedAction(Action.STRIKE, 8);
+        }
+        if ("orchid".equals(this.getVariantName()) && this.tickCount % 20 == 0) {
+            BlockPos o = this.blockPosition();
+            for (BlockPos p : BlockPos.betweenClosed(o.offset(-1, -1, -1), o.offset(1, 0, 1))) {
+                if (level.getBlockState(p).is(net.minecraft.tags.BlockTags.FLOWERS)) {
+                    this.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 40, 0, true, false));
+                    break;
+                }
+            }
+        }
+    }
+
     @Override
     public boolean doHurtTarget(Entity target) {
         boolean hit = super.doHurtTarget(target);
+        if (hit && this.species == GirlSpecies.MANTIS_BUG) this.startTimedAction(Action.STRIKE, 8);
         if (!hit || !(target instanceof LivingEntity l)) return hit;
         if (this.species == GirlSpecies.MOSQUITO_BUG) {                      // she drinks, and something nasty follows
             List<Holder<MobEffect>> nasty = List.of(MobEffects.HUNGER, MobEffects.WEAKNESS, MobEffects.POISON);
@@ -134,7 +206,8 @@ public class Bug extends AbstractMonsterGirl {
             this.heal(2.0F);
             this.startTimedAction(Action.DRINK, 20);
         }
-        if (this.species == GirlSpecies.SCORPION_BUG || this.species == GirlSpecies.BEE_BUG || this.species == GirlSpecies.QUEEN_BEE_BUG) {
+        if (this.species == GirlSpecies.SCORPION_BUG || this.species == GirlSpecies.BEE_BUG || this.species == GirlSpecies.QUEEN_BEE_BUG
+                || this.species == GirlSpecies.HORNET_BUG) {
             l.addEffect(new MobEffectInstance(MobEffects.POISON, 100, this.species == GirlSpecies.SCORPION_BUG ? 1 : 0));
             this.startTimedAction(this.species == GirlSpecies.SCORPION_BUG ? Action.STING : Action.POUNCE, 16);
         }
@@ -146,12 +219,54 @@ public class Bug extends AbstractMonsterGirl {
     @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(Items.HONEY_BOTTLE) || stack.is(Items.SUGAR) || stack.is(Items.HONEYCOMB) || stack.is(net.minecraft.tags.ItemTags.SMALL_FLOWERS)
-                || (this.isLarva() && (stack.is(net.minecraft.tags.ItemTags.LEAVES) || stack.is(Items.SHORT_GRASS)));
+                || (this.isLarva() && (stack.is(net.minecraft.tags.ItemTags.LEAVES) || stack.is(Items.SHORT_GRASS)))
+                || (this.species == GirlSpecies.MANTIS_BUG && stack.is(Items.SPIDER_EYE))
+                || (this.species == GirlSpecies.HORNET_BUG && (stack.is(Items.APPLE) || stack.is(Items.SWEET_BERRIES) || stack.is(Items.GLOW_BERRIES)
+                        || stack.is(Items.MELON_SLICE)));                   // an omnivore: fruit, and meat like everyone
     }
 
     @Override
     protected int foodValue(Player player, ItemStack stack) {
-        return stack.is(Items.HONEY_BOTTLE) ? 2 : 1;
+        return stack.is(Items.HONEY_BOTTLE) || stack.is(Items.SPIDER_EYE) ? 2 : 1;
+    }
+
+    /** A glass bottle catches a firefly or a fairy in a jar (why?). */
+    @Override
+    @javax.annotation.Nullable
+    protected net.minecraft.world.InteractionResult familyInteract(Player player, net.minecraft.world.InteractionHand hand, ItemStack stack) {
+        if ((this.species != GirlSpecies.FIREFLY_BUG && this.species != GirlSpecies.FAIRY_BUG) || !stack.is(Items.GLASS_BOTTLE)) return null;
+        if (this.level() instanceof ServerLevel server) {
+            stack.consume(1, player);
+            ItemStack jar = jar(this);
+            if (!player.getInventory().add(jar)) player.drop(jar, false);
+            this.playSound(SoundEvents.BOTTLE_FILL, 1.0F, 1.4F);
+            this.clearLight();
+            this.discard();
+            if (player instanceof net.minecraft.server.level.ServerPlayer sp) {
+                var why = server.getServer().getAdvancements().get(com.linkyoshi90.monstergirls.MonsterGirlsMod.id("why"));
+                if (why != null) sp.getAdvancements().award(why, "jarred");
+            }
+        }
+        return net.minecraft.world.InteractionResult.sidedSuccess(this.level().isClientSide);
+    }
+
+    /** The jar she goes into: her species and everything she is, kept for when she is let out. */
+    public static ItemStack jar(AbstractMonsterGirl girl) {
+        net.minecraft.nbt.CompoundTag saved = new net.minecraft.nbt.CompoundTag();
+        girl.saveWithoutId(saved);
+        saved.remove("UUID");
+        net.minecraft.nbt.CompoundTag data = new net.minecraft.nbt.CompoundTag();
+        data.putString("Species", girl.getSpecies().id());
+        data.put("Girl", saved);
+        ItemStack jar = new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.GIRL_JAR.get());
+        net.minecraft.world.item.BlockItem.setBlockEntityData(jar, com.linkyoshi90.monstergirls.registry.ModBlockEntities.GIRL_JAR.get(), data);
+        boolean fairy = girl.getSpecies() == GirlSpecies.FAIRY_BUG;
+        jar.set(net.minecraft.core.component.DataComponents.BLOCK_STATE, net.minecraft.world.item.component.BlockItemStateProperties.EMPTY
+                .with(com.linkyoshi90.monstergirls.block.GirlJarBlock.KIND, fairy ? com.linkyoshi90.monstergirls.block.GirlJarBlock.Kind.FAIRY
+                        : com.linkyoshi90.monstergirls.block.GirlJarBlock.Kind.FIREFLY));
+        jar.set(net.minecraft.core.component.DataComponents.ITEM_NAME, net.minecraft.network.chat.Component.translatable(
+                fairy ? "item.monstergirls.fairy_jar" : "item.monstergirls.firefly_jar"));
+        return jar;
     }
 
     @Override
@@ -160,8 +275,11 @@ public class Bug extends AbstractMonsterGirl {
         return switch (this.species) {
             case BEE_BUG, QUEEN_BEE_BUG -> new ItemStack(r < 60 ? Items.HONEYCOMB : Items.HONEY_BOTTLE);
             case FAIRY_BUG, FAIRY_QUEEN_BUG -> new ItemStack(r < 50 ? Items.GLOW_BERRIES : r < 85 ? Items.GLOWSTONE_DUST : Items.GOLDEN_APPLE);
+            case FIREFLY_BUG -> new ItemStack(r < 50 ? Items.GLOWSTONE_DUST : r < 85 ? Items.GLOW_BERRIES : Items.GLOW_INK_SAC, r < 85 ? 2 : 1);
             case MOTH_BUG -> new ItemStack(r < 70 ? Items.STRING : Items.WHITE_WOOL);
             case SCORPION_BUG -> new ItemStack(r < 60 ? Items.SPIDER_EYE : Items.GOLD_NUGGET, r < 60 ? 1 : 3);
+            case HORNET_BUG -> new ItemStack(r < 55 ? Items.PAPER : Items.CLAY_BALL, r < 55 ? 2 : 3);
+            case MANTIS_BUG -> new ItemStack(r < 50 ? Items.STRING : r < 85 ? Items.SPIDER_EYE : Items.ENDER_PEARL, r < 50 ? 3 : 1);
             default -> new ItemStack(r < 50 ? Items.POPPY : r < 80 ? Items.DANDELION : Items.CORNFLOWER, 2);
         };
     }
@@ -219,6 +337,8 @@ public class Bug extends AbstractMonsterGirl {
         super.aiStep();
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.carryTicks > 0 && --this.carryTicks == 0) this.setFlag(FLAG_CARRYING, false);
+        if (this.species == GirlSpecies.FIREFLY_BUG) this.glow(server, server.isDay() ? 0 : 7);   // her lantern lights the night
+        if (this.species == GirlSpecies.MANTIS_BUG && !this.isBaby()) this.ambush(server);
         if (this.isLarva()) {
             if (++this.age >= METAMORPHOSIS) {
                 this.metamorphose(server);
@@ -543,7 +663,7 @@ public class Bug extends AbstractMonsterGirl {
     protected SoundEvent getAmbientSound() {
         return switch (this.species) {
             case BEE_BUG, QUEEN_BEE_BUG -> SoundEvents.BEE_LOOP;
-            case MOSQUITO_BUG -> SoundEvents.BEE_LOOP_AGGRESSIVE;
+            case MOSQUITO_BUG, HORNET_BUG -> SoundEvents.BEE_LOOP_AGGRESSIVE;
             case FAIRY_BUG, FAIRY_QUEEN_BUG -> SoundEvents.AMETHYST_BLOCK_CHIME;
             default -> null;
         };

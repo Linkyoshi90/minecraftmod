@@ -1,0 +1,159 @@
+package com.linkyoshi90.monstergirls.entity.girl;
+
+import com.linkyoshi90.monstergirls.block.GirlEggBlock;
+import com.linkyoshi90.monstergirls.block.GirlEggBlockEntity;
+import com.linkyoshi90.monstergirls.registry.ModBlocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.PathType;
+
+import javax.annotation.Nullable;
+import java.util.UUID;
+
+/**
+ * The crab family (crustacean_field_guide.html): crab, hermit crab. Neutral: whoever hits one first gets pinched
+ * (Slowness for a moment); a devoted crab pinches whatever goes for her friend. The hermit crab moves into a better
+ * shell: give her a nautilus shell or a shulker shell and you get her old one back.
+ */
+public class Crustacean extends AbstractMonsterGirl {
+    public Crustacean(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
+        super(type, level, species);
+        this.setPathfindingMalus(PathType.WATER, 0.0F);
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, true));
+        this.goalSelector.addGoal(4, new TemptGoal(this, 1.0, this::isFood, false));
+        this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 0.8));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, e -> {   // devoted: her friend's attacker
+            Player p = this.bondedPlayer(60, 16);
+            return p != null && e != p && p.getLastHurtByMob() == e;
+        }));
+    }
+
+    public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        return s == GirlSpecies.CRAB_CRUSTACEAN ? girlAttributes(24, 0.26, 5).add(Attributes.ARMOR, 6)
+                : girlAttributes(18, 0.24, 4).add(Attributes.ARMOR, 4);
+    }
+
+    /** The pinch: a moment's Slowness on whatever she grabs. */
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        this.startTimedAction(Action.PINCH, 12);
+        boolean hit = super.doHurtTarget(target);
+        if (hit && target instanceof LivingEntity l) l.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 1));
+        return hit;
+    }
+
+    // --- the hermit crab's shells ----------------------------------------------------------------------------------
+
+    /** The shell item for a hermit crab's variant, or empty for the shells no item can stand for. */
+    private static ItemStack shellItem(String variant) {
+        return switch (variant) {
+            case "nautilus" -> new ItemStack(Items.NAUTILUS_SHELL);
+            case "shulker" -> new ItemStack(Items.SHULKER_SHELL);
+            default -> ItemStack.EMPTY;
+        };
+    }
+
+    @Override
+    @Nullable
+    protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        if (this.species != GirlSpecies.HERMIT_CRAB_CRUSTACEAN || this.isBaby()) return null;
+        String shell = stack.is(Items.NAUTILUS_SHELL) ? "nautilus" : stack.is(Items.SHULKER_SHELL) ? "shulker" : null;
+        if (shell == null || shell.equals(this.getVariantName())) return null;
+        if (!this.level().isClientSide) this.moveInto(player, stack, shell);
+        return InteractionResult.sidedSuccess(this.level().isClientSide);
+    }
+
+    /** She moves into the new shell; the old one, if it is something you can hold, goes to the player. */
+    public void moveInto(Player player, ItemStack stack, String shell) {
+        ItemStack old = shellItem(this.getVariantName());
+        this.setVariant(shell);
+        stack.consume(1, player);
+        if (!old.isEmpty() && !player.getInventory().add(old)) player.drop(old, false);
+        this.addAffection(player, 3);
+        this.playSound(SoundEvents.ARMOR_EQUIP_TURTLE.value(), 1.0F, 1.4F);
+        if (this.level() instanceof ServerLevel server) this.hearts(server, 3);
+    }
+
+    // --- food, presents, young -------------------------------------------------------------------------------------
+
+    @Override
+    public boolean isFood(ItemStack stack) {
+        return stack.is(ItemTags.FISHES) || stack.is(Items.KELP) || stack.is(Items.SEA_PICKLE);
+    }
+
+    @Override
+    protected int foodValue(Player player, ItemStack stack) {
+        return stack.is(Items.KELP) || stack.is(Items.SEA_PICKLE) ? 2 : 1;
+    }
+
+    @Override
+    public ItemStack rollGift(Player player) {
+        int r = this.random.nextInt(100);
+        return r < 40 ? new ItemStack(Items.KELP, 3) : r < 70 ? new ItemStack(Items.SEA_PICKLE) : r < 95 ? new ItemStack(Items.PRISMARINE_SHARD, 2)
+                : new ItemStack(Items.NAUTILUS_SHELL);
+    }
+
+    @Override
+    protected int litterSize() {
+        return 2 + this.random.nextInt(3);
+    }
+
+    /** A clutch in sand near the water. */
+    @Override
+    protected boolean giveBirth(ServerLevel level, @Nullable UUID father) {
+        BlockPos o = this.blockPosition();
+        for (BlockPos p : BlockPos.betweenClosed(o.offset(-5, -2, -5), o.offset(5, 2, 5))) {
+            if (!canHoldBlock(level, p) || !level.getBlockState(p.below()).is(BlockTags.SAND)) continue;
+            level.setBlock(p, ModBlocks.GIRL_EGG.get().defaultBlockState().setValue(GirlEggBlock.KIND, GirlEggBlock.Kind.LEATHERY), 3);
+            if (level.getBlockEntity(p) instanceof GirlEggBlockEntity be) be.setup(this.species.id(), this.litterSize(), father).withPaint(this.getPaint());
+            return true;
+        }
+        return super.giveBirth(level, father);
+    }
+
+    // --- sounds ----------------------------------------------------------------------------------------------------
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return SoundEvents.TURTLE_AMBIENT_LAND;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SoundEvents.TURTLE_HURT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.TURTLE_DEATH;
+    }
+
+    @Override
+    public SoundEvent getEatSound() {
+        return SoundEvents.GENERIC_EAT;
+    }
+}

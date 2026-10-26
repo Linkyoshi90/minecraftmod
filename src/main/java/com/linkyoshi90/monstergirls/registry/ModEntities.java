@@ -13,12 +13,24 @@ import com.linkyoshi90.monstergirls.entity.DesertRainFrog;
 import com.linkyoshi90.monstergirls.entity.FireBelliedToad;
 import com.linkyoshi90.monstergirls.entity.CaneToad;
 import com.linkyoshi90.monstergirls.entity.Natterjack;
+import com.linkyoshi90.monstergirls.entity.Vodyanoy;
 import com.linkyoshi90.monstergirls.entity.SurinamToad;
 import com.linkyoshi90.monstergirls.entity.CrowHarpy;
 import com.linkyoshi90.monstergirls.entity.MucusToad;
 import com.linkyoshi90.monstergirls.entity.OstrichHarpy;
 import com.linkyoshi90.monstergirls.entity.OwlHarpy;
 import com.linkyoshi90.monstergirls.entity.PhoenixHarpy;
+import com.linkyoshi90.monstergirls.entity.PenguinHarpy;
+import com.linkyoshi90.monstergirls.entity.TenguHarpy;
+import com.linkyoshi90.monstergirls.entity.FinchHarpy;
+import com.linkyoshi90.monstergirls.entity.FlamingoHarpy;
+import com.linkyoshi90.monstergirls.entity.CoinMagpieHarpy;
+import com.linkyoshi90.monstergirls.entity.RookmournHarpy;
+import com.linkyoshi90.monstergirls.entity.CassowrathHarpy;
+import com.linkyoshi90.monstergirls.entity.Mailtoad;
+import com.linkyoshi90.monstergirls.entity.TricksterRavenHarpy;
+import com.linkyoshi90.monstergirls.entity.ToucanHarpy;
+import com.linkyoshi90.monstergirls.entity.ZhuqueHarpy;
 import com.linkyoshi90.monstergirls.entity.RiflebirdHarpy;
 import com.linkyoshi90.monstergirls.entity.SeagullHarpy;
 import com.linkyoshi90.monstergirls.entity.SparrowHarpy;
@@ -98,6 +110,85 @@ public final class ModEntities {
                     .fireImmune()
                     .clientTrackingRange(10)
                     .build("phoenix_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<TenguHarpy>> TENGU_HARPY =
+            ENTITY_TYPES.register("tengu_harpy", () -> EntityType.Builder.of(TenguHarpy::new, MobCategory.CREATURE)
+                    .sized(0.55F, 1.6F)
+                    .eyeHeight(1.45F)
+                    .clientTrackingRange(12)
+                    .build("tengu_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ZhuqueHarpy>> ZHUQUE_HARPY =
+            ENTITY_TYPES.register("zhuque_harpy", () -> EntityType.Builder.of(ZhuqueHarpy::new, MobCategory.CREATURE)
+                    .sized(0.6F, 1.75F)
+                    .eyeHeight(1.55F)
+                    .fireImmune()
+                    .clientTrackingRange(10)
+                    .build("zhuque_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<CoinMagpieHarpy>> COIN_MAGPIE_HARPY =
+            ENTITY_TYPES.register("coin_magpie_harpy", () -> EntityType.Builder.of(CoinMagpieHarpy::new, MobCategory.CREATURE)
+                    .sized(0.55F, 1.65F)
+                    .eyeHeight(1.45F)
+                    .clientTrackingRange(10)
+                    .build("coin_magpie_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<TricksterRavenHarpy>> TRICKSTER_RAVEN_HARPY =
+            ENTITY_TYPES.register("trickster_raven_harpy", () -> EntityType.Builder.of(TricksterRavenHarpy::new, MobCategory.CREATURE)
+                    .sized(0.6F, 1.8F)
+                    .eyeHeight(1.6F)
+                    .clientTrackingRange(10)
+                    .build("trickster_raven_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<RookmournHarpy>> ROOKMOURN_HARPY =
+            ENTITY_TYPES.register("rookmourn_harpy", () -> EntityType.Builder.of(RookmournHarpy::new, MobCategory.CREATURE)
+                    .sized(0.55F, 1.75F)
+                    .eyeHeight(1.5F)
+                    .clientTrackingRange(10)
+                    .build("rookmourn_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<CassowrathHarpy>> CASSOWRATH_HARPY =
+            ENTITY_TYPES.register("cassowrath_harpy", () -> EntityType.Builder.of(CassowrathHarpy::new, MobCategory.CREATURE)
+                    .sized(0.7F, 2.4F)
+                    .eyeHeight(2.15F)
+                    .passengerAttachments(new Vec3(0.0, 1.45, -0.3))
+                    .clientTrackingRange(10)
+                    .build("cassowrath_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<Mailtoad>> MAILTOAD =
+            ENTITY_TYPES.register("mailtoad", () -> EntityType.Builder.of(Mailtoad::new, MobCategory.CREATURE)
+                    .sized(0.65F, 1.55F)
+                    .eyeHeight(1.4F)
+                    .clientTrackingRange(10)
+                    .build("mailtoad"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<FlamingoHarpy>> FLAMINGO_HARPY =
+            ENTITY_TYPES.register("flamingo_harpy", () -> EntityType.Builder.of(FlamingoHarpy::new, MobCategory.CREATURE)
+                    .sized(0.55F, 1.95F)
+                    .eyeHeight(1.75F)
+                    .clientTrackingRange(10)
+                    .build("flamingo_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<FinchHarpy>> FINCH_HARPY =
+            ENTITY_TYPES.register("finch_harpy", () -> EntityType.Builder.of(FinchHarpy::new, MobCategory.CREATURE)
+                    .sized(0.5F, 1.45F)
+                    .eyeHeight(1.3F)
+                    .clientTrackingRange(10)
+                    .build("finch_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ToucanHarpy>> TOUCAN_HARPY =
+            ENTITY_TYPES.register("toucan_harpy", () -> EntityType.Builder.of(ToucanHarpy::new, MobCategory.CREATURE)
+                    .sized(0.5F, 1.5F)
+                    .eyeHeight(1.35F)
+                    .clientTrackingRange(10)
+                    .build("toucan_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PenguinHarpy>> PENGUIN_HARPY =
+            ENTITY_TYPES.register("penguin_harpy", () -> EntityType.Builder.of(PenguinHarpy::new, MobCategory.CREATURE)
+                    .sized(0.6F, 1.3F)
+                    .eyeHeight(1.15F)
+                    .clientTrackingRange(10)
+                    .build("penguin_harpy"));
 
     // The frog family's archetype: about 1.8 blocks, drawn at full model scale.
     public static final DeferredHolder<EntityType<?>, EntityType<Bullywug>> BULLYWUG =
@@ -179,6 +270,13 @@ public final class ModEntities {
                     .clientTrackingRange(10)
                     .build("natterjack"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<Vodyanoy>> VODYANOY =
+            ENTITY_TYPES.register("vodyanoy", () -> EntityType.Builder.of(Vodyanoy::new, MobCategory.CREATURE)
+                    .sized(0.8F, 1.9F)
+                    .eyeHeight(1.7F)
+                    .clientTrackingRange(10)
+                    .build("vodyanoy"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<SurinamToad>> SURINAM_TOAD =
             ENTITY_TYPES.register("surinam_toad", () -> EntityType.Builder.of(SurinamToad::new, MobCategory.CREATURE)
                     .sized(0.6F, 1.25F)
@@ -197,6 +295,17 @@ public final class ModEntities {
         event.put(ALBATROSS_HARPY.get(), AlbatrossHarpy.createAttributes().build());
         event.put(RIFLEBIRD_HARPY.get(), RiflebirdHarpy.createAttributes().build());
         event.put(PHOENIX_HARPY.get(), PhoenixHarpy.createAttributes().build());
+        event.put(TENGU_HARPY.get(), TenguHarpy.createAttributes().build());
+        event.put(TOUCAN_HARPY.get(), ToucanHarpy.createAttributes().build());
+        event.put(FINCH_HARPY.get(), FinchHarpy.createAttributes().build());
+        event.put(FLAMINGO_HARPY.get(), FlamingoHarpy.createAttributes().build());
+        event.put(COIN_MAGPIE_HARPY.get(), CoinMagpieHarpy.createAttributes().build());
+        event.put(ROOKMOURN_HARPY.get(), RookmournHarpy.createAttributes().build());
+        event.put(CASSOWRATH_HARPY.get(), CassowrathHarpy.createAttributes().build());
+        event.put(MAILTOAD.get(), Mailtoad.createAttributes().build());
+        event.put(TRICKSTER_RAVEN_HARPY.get(), TricksterRavenHarpy.createAttributes().build());
+        event.put(ZHUQUE_HARPY.get(), ZhuqueHarpy.createAttributes().build());
+        event.put(PENGUIN_HARPY.get(), PenguinHarpy.createAttributes().build());
         event.put(BULLYWUG.get(), Bullywug.createAttributes().build());
         event.put(MUCUS_TOAD.get(), MucusToad.createAttributes().build());
         event.put(BULLFROG.get(), Bullfrog.createAttributes().build());
@@ -208,6 +317,7 @@ public final class ModEntities {
         event.put(FIRE_BELLIED_TOAD.get(), FireBelliedToad.createAttributes().build());
         event.put(CANE_TOAD.get(), CaneToad.createAttributes().build());
         event.put(NATTERJACK.get(), Natterjack.createAttributes().build());
+        event.put(VODYANOY.get(), Vodyanoy.createAttributes().build());
         event.put(SURINAM_TOAD.get(), SurinamToad.createAttributes().build());
     }
 
@@ -228,6 +338,28 @@ public final class ModEntities {
                 RiflebirdHarpy::checkRiflebirdHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(PHOENIX_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 PhoenixHarpy::checkPhoenixHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(TENGU_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                TenguHarpy::checkTenguHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(TOUCAN_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                ToucanHarpy::checkToucanHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(FINCH_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                FinchHarpy::checkFinchHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(FLAMINGO_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                FlamingoHarpy::checkFlamingoHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(ROOKMOURN_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                RookmournHarpy::checkRookmournHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(CASSOWRATH_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                CassowrathHarpy::checkCassowrathHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(MAILTOAD.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                AbstractAnuran::checkSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(COIN_MAGPIE_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                CoinMagpieHarpy::checkCoinMagpieHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(TRICKSTER_RAVEN_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                TricksterRavenHarpy::checkTricksterRavenHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(ZHUQUE_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                ZhuqueHarpy::checkZhuqueHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(PENGUIN_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                PenguinHarpy::checkPenguinHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(BULLYWUG.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 AbstractAnuran::checkWaterSideSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(MUCUS_TOAD.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
@@ -250,6 +382,8 @@ public final class ModEntities {
                 AbstractAnuran::checkSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(NATTERJACK.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 AbstractAnuran::checkSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(VODYANOY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                AbstractAnuran::checkWaterSideSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(SURINAM_TOAD.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 SurinamToad::checkSurinamSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }

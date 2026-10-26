@@ -65,7 +65,8 @@ public class GirlFamilyTests {
             AbstractMonsterGirl girl = spawn(helper, s, new BlockPos(1 + (i % 6) * 2, 2, 1 + (i / 6) * 2));
             i++;
             check(girl.getSpecies() == s, s + " has the wrong species");
-            check(s.variants().size() == (s == GirlSpecies.MIXED_SLIME ? 10 : 5), s + " should have five colours (a mixed slime: one per pair of kinds)");
+            check(s == GirlSpecies.MIXED_SLIME ? s.variants().size() == 10 : s.variants().size() >= 5,
+                    s + " should have at least five colours (homage variants come on top; a mixed slime: one per pair of kinds)");
             girl.setVariant(s.variants().get(3));
             check(girl.getVariantSuffix().equals("_" + s.variants().get(3)), s + " variant suffix: " + girl.getVariantSuffix());
             girl.setAffection(father, 42);

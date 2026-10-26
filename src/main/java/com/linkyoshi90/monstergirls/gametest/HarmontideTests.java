@@ -182,4 +182,29 @@ public class HarmontideTests {
         check(hatched.size() == 1 && hatched.get(0).getPaint() == 3, "a painted clutch hatches painted young");
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "harpyAndFrogPaintsAreInherited")
+    public static void harpyAndFrogPaintsAreInherited(GameTestHelper helper) {
+        var level = helper.getLevel();
+        BlockPos nest = new BlockPos(4, 2, 4);
+        helper.setBlock(nest, com.linkyoshi90.monstergirls.registry.ModBlocks.HARPY_EGG.get().defaultBlockState()
+                .setValue(com.linkyoshi90.monstergirls.block.HarpyEggBlock.SPECIES, com.linkyoshi90.monstergirls.block.HarpyEggBlock.Species.OWL));
+        com.linkyoshi90.monstergirls.block.ParentageBlockEntity.setPaintAt(level, helper.absolutePos(nest), 2);
+        com.linkyoshi90.monstergirls.block.HarpyEggBlock.hatch(level, helper.absolutePos(nest), helper.getBlockState(nest));
+        var chicks = level.getEntitiesOfClass(com.linkyoshi90.monstergirls.entity.OwlHarpy.class, new net.minecraft.world.phys.AABB(helper.absolutePos(nest)).inflate(2));
+        check(!chicks.isEmpty() && chicks.stream().allMatch(c -> "red".equals(c.getPaintName())), "a painted clutch hatches painted chicks");
+        BlockPos spawn = new BlockPos(10, 2, 10);
+        helper.setBlock(spawn, net.minecraft.world.level.block.Blocks.WATER);
+        helper.setBlock(spawn.above(), com.linkyoshi90.monstergirls.registry.ModBlocks.ANURAN_SPAWN.get());
+        com.linkyoshi90.monstergirls.block.ParentageBlockEntity.setPaintAt(level, helper.absolutePos(spawn.above()), 7);
+        com.linkyoshi90.monstergirls.block.AnuranSpawnBlock.hatch(level, helper.absolutePos(spawn.above()), helper.getBlockState(spawn.above()));
+        var tadpoles = level.getEntitiesOfClass(com.linkyoshi90.monstergirls.entity.AbstractAnuran.class, new net.minecraft.world.phys.AABB(helper.absolutePos(spawn)).inflate(3));
+        check(!tadpoles.isEmpty() && tadpoles.stream().allMatch(t -> "inverted".equals(t.getPaintName())), "painted frogspawn hatches painted tadpoles");
+        var tag = new net.minecraft.nbt.CompoundTag();
+        chicks.get(0).saveWithoutId(tag);
+        var copy = com.linkyoshi90.monstergirls.registry.ModEntities.OWL_HARPY.get().create(level);
+        copy.load(tag);
+        check("red".equals(copy.getPaintName()), "and the paint is saved");
+        helper.succeed();
+    }
 }

@@ -45,7 +45,8 @@ public class AnuranRestGoal<T extends AbstractAnuran> extends Goal {
     public boolean canUse() {
         AbstractAnuran.Action current = this.mob.getAction();
         // a sitting anuran can still be called to a more important rest (digging in, burrowing, sleeping)
-        boolean free = current == AbstractAnuran.Action.NONE || (current == AbstractAnuran.Action.SITTING && this.action != AbstractAnuran.Action.SITTING);
+        boolean free = !this.mob.isInBed()                  // asleep by the bed after her turn: she stays there
+                && (current == AbstractAnuran.Action.NONE || (current == AbstractAnuran.Action.SITTING && this.action != AbstractAnuran.Action.SITTING));
         return free && this.placeOk()
                 && this.mob.getTarget() == null && this.condition.test(this.mob)
                 && this.mob.getRandom().nextInt(this.chance) == 0;

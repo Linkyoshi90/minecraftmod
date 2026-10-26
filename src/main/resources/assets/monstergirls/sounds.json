@@ -1506,5 +1506,65 @@
         "pitch": 0.36
       }
     ]
+  },
+  "entity.vodyanoy.ambient": {
+    "subtitle": "subtitles.monstergirls.entity.vodyanoy.ambient",
+    "sounds": [
+      {
+        "name": "minecraft:entity.frog.ambient",
+        "type": "event",
+        "pitch": 0.55
+      }
+    ]
+  },
+  "entity.vodyanoy.hurt": {
+    "subtitle": "subtitles.monstergirls.entity.vodyanoy.hurt",
+    "sounds": [
+      {
+        "name": "minecraft:entity.frog.hurt",
+        "type": "event",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.vodyanoy.death": {
+    "subtitle": "subtitles.monstergirls.entity.vodyanoy.death",
+    "sounds": [
+      {
+        "name": "minecraft:entity.frog.death",
+        "type": "event",
+        "pitch": 0.55
+      }
+    ]
+  },
+  "entity.vodyanoy.eat": {
+    "subtitle": "subtitles.monstergirls.entity.vodyanoy.eat",
+    "sounds": [
+      {
+        "name": "minecraft:entity.frog.eat",
+        "type": "event",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.vodyanoy.tongue": {
+    "subtitle": "subtitles.monstergirls.entity.vodyanoy.tongue",
+    "sounds": [
+      {
+        "name": "minecraft:entity.frog.tongue",
+        "type": "event",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.vodyanoy.bellow": {
+    "subtitle": "subtitles.monstergirls.entity.vodyanoy.bellow",
+    "sounds": [
+      {
+        "name": "minecraft:entity.frog.ambient",
+        "type": "event",
+        "pitch": 0.35
+      }
+    ]
   }
 }

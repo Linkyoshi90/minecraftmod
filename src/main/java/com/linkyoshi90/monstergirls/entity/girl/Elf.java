@@ -55,7 +55,8 @@ import java.util.List;
  * society: every elf trades with friends through the vanilla trading screen (fond, 10+), what she sells depends on her
  * people. Night elves walk only by night; high elves raise a pavilion where their group settles and drive strangers
  * off it; wood and desert elves live in villages and shoot what threatens them; blood elves are fireproof, set their
- * enemies alight and trade for gold.
+ * enemies alight and trade for gold. The dark elf of the deep dark makes no vibrations (sculk never hears her), trades
+ * echo shards and sculk, and the Wardens are her kin: one near her lets her friends be.
  */
 public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMob {
     public static final int TRADE_AFFECTION = 10;
@@ -109,6 +110,8 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
             case HIGH_ELF -> girlAttributes(26, 0.28, 5);
             case BLOOD_ELF -> girlAttributes(28, 0.3, 6);
             case WOOD_ELF, DESERT_ELF -> girlAttributes(24, 0.3, 3);
+            case DARK_ELF -> girlAttributes(26, 0.3, 5);
+            case BROWNIE_ELF -> girlAttributes(8, 0.3, 1);
             default -> girlAttributes(22, 0.3, 4);
         };
     }
@@ -245,6 +248,13 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
                 o.add(offer(E, 2, new ItemStack(Items.HONEY_BOTTLE, 2), 12));
                 o.add(offer(Items.SWEET_BERRIES, 16, new ItemStack(E), 16));
             }
+            case DARK_ELF -> {
+                o.add(offer(E, 6, new ItemStack(Items.ECHO_SHARD), 6));
+                o.add(offer(E, 2, new ItemStack(Items.SCULK, 8), 16));
+                o.add(offer(E, 4, new ItemStack(Items.SCULK_SENSOR), 8));
+                o.add(offer(E, 10, new ItemStack(Items.SCULK_CATALYST), 4));
+                o.add(offer(Items.CANDLE, 6, new ItemStack(E), 16));
+            }
             case BLOOD_ELF -> {
                 var G = Items.GOLD_INGOT;
                 o.add(offer(G, 2, new ItemStack(Items.QUARTZ, 12), 16));
@@ -326,7 +336,7 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
     @Nullable
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
-        if (!stack.isEmpty() || this.isBaby()) return null;
+        if (!stack.isEmpty() || this.isBaby() || this.species == GirlSpecies.BROWNIE_ELF) return null;   // the brownie does not trade
         if (player.isShiftKeyDown()) return this.pet(player);
         if (this.getAffection(player) < TRADE_AFFECTION || this.getTradingPlayer() != null || this.getTarget() == player) return null;
         if (!this.level().isClientSide) {
@@ -341,6 +351,7 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
     @Override
     public boolean isFood(ItemStack stack) {
         if (this.species == GirlSpecies.BLOOD_ELF) return stack.is(Items.GOLDEN_APPLE) || stack.is(Items.APPLE);
+        if (this.species == GirlSpecies.BROWNIE_ELF) return stack.is(Items.MILK_BUCKET) || stack.is(Items.BREAD);
         return stack.is(Items.SWEET_BERRIES) || stack.is(Items.GLOW_BERRIES) || stack.is(Items.HONEY_BOTTLE);
     }
 
@@ -351,6 +362,10 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
 
     @Override
     public ItemStack rollGift(Player player) {
+        if (this.species == GirlSpecies.BROWNIE_ELF) {
+            int r = this.random.nextInt(100);
+            return new ItemStack(r < 35 ? Items.GOLD_NUGGET : r < 65 ? Items.SWEET_BERRIES : r < 90 ? Items.HONEYCOMB : Items.EMERALD, r < 90 ? 2 : 1);
+        }
         MerchantOffers o = this.makeOffers();
         return o.get(this.random.nextInt(o.size())).getResult().copy();
     }
@@ -395,6 +410,66 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
         }
         if (this.species == GirlSpecies.HIGH_ELF && this.leader && this.settlement != null && this.getTarget() == null && this.tickCount % BUILD_INTERVAL == 0) {
             this.build(server);
+        }
+        if (this.species == GirlSpecies.DARK_ELF && this.tickCount % 20 == 0) this.calmWardens(server);
+        if (this.species == GirlSpecies.BROWNIE_ELF && this.tickCount % 200 == 0 && !server.isDay()
+                && this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 48) != null) this.tidy(server);
+    }
+
+    /**
+     * The brownie's night's work: the chests within 8 blocks of her get their stacks merged, and loose items lying
+     * around go into them. Returns how many stacks she merged or put away.
+     */
+    public int tidy(ServerLevel level) {
+        java.util.List<net.minecraft.world.Container> chests = new java.util.ArrayList<>();
+        for (BlockPos p : BlockPos.betweenClosed(this.blockPosition().offset(-8, -3, -8), this.blockPosition().offset(8, 3, 8))) {
+            if (level.getBlockEntity(p) instanceof net.minecraft.world.level.block.entity.ChestBlockEntity chest) chests.add(chest);
+        }
+        int n = 0;
+        for (net.minecraft.world.Container c : chests) {                 // merge part stacks of the same thing
+            for (int i = 0; i < c.getContainerSize(); i++) {
+                ItemStack a = c.getItem(i);
+                if (a.isEmpty() || a.getCount() >= a.getMaxStackSize()) continue;
+                for (int j = i + 1; j < c.getContainerSize() && a.getCount() < a.getMaxStackSize(); j++) {
+                    ItemStack b = c.getItem(j);
+                    if (b.isEmpty() || !ItemStack.isSameItemSameComponents(a, b)) continue;
+                    int move = Math.min(b.getCount(), a.getMaxStackSize() - a.getCount());
+                    a.grow(move);
+                    b.shrink(move);
+                    if (b.isEmpty()) c.setItem(j, ItemStack.EMPTY);
+                    n++;
+                }
+            }
+            c.setChanged();
+        }
+        if (!chests.isEmpty()) {                                        // and put the loose things away
+            for (net.minecraft.world.entity.item.ItemEntity item : level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
+                    this.getBoundingBox().inflate(8), e -> e.isAlive() && !e.hasPickUpDelay())) {
+                for (net.minecraft.world.Container c : chests) {
+                    if (net.minecraft.world.level.block.entity.HopperBlockEntity.addItem(c, item)) {
+                        n++;
+                        break;
+                    }
+                }
+            }
+        }
+        if (n > 0) this.playSound(SoundEvents.BUNDLE_INSERT, 0.6F, 1.4F);
+        return n;
+    }
+
+    /** The dark elf walks without a sound: no sculk sensor or shrieker ever hears her. */
+    @Override
+    public boolean dampensVibrations() {
+        return this.species == GirlSpecies.DARK_ELF || super.dampensVibrations();
+    }
+
+    /** Every Warden within 16 blocks of a dark elf forgets its anger at her friends (Kinship keeps it from targeting them). */
+    public void calmWardens(ServerLevel level) {
+        for (var warden : level.getEntitiesOfClass(net.minecraft.world.entity.monster.warden.Warden.class, this.getBoundingBox().inflate(16))) {
+            for (Player p : level.getEntitiesOfClass(Player.class, warden.getBoundingBox().inflate(32), p -> this.getAffection(p) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION)) {
+                warden.clearAnger(p);
+                if (warden.getTarget() == p) warden.getBrain().eraseMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET);
+            }
         }
     }
 

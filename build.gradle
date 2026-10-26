@@ -32,6 +32,11 @@ repositories {
         url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
         content { includeGroup('software.bernie.geckolib') }
     }
+    maven {
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
+        content { includeGroup('maven.modrinth') }
+    }
 }
 
 base {
@@ -121,6 +126,12 @@ configurations {
 
 dependencies {
     implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
+    // Jade (optional): our tooltip lines for pregnancy and friendship (compat/JadePlugin); in the dev client too
+    compileOnly "maven.modrinth:jade:${jade_version}"
+    // not on the game test server: Jade greets every joining player, and the tests' fake players cannot take its packet
+    if (!gradle.startParameter.taskNames.any { it.toLowerCase().contains('gametest') }) {
+        localRuntime "maven.modrinth:jade:${jade_version}"
+    }
 
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime

@@ -10,6 +10,8 @@
     octopus   girl_family biped with a round mantle cap (`hat`) and a skirt of eight short tentacles (tskirt1..8); "ink"
     snail     girl_family biped with a spiral shell on her back (`shell`) and eye-stalk antennae; "retract"
     ammonite  girl_lib upper body rising out of a great coiled shell (`coil`); "retract" pulls her in
+    jellyfish girl_family biped under a see-through bell (`bell`, glowing) with ten long tentacles trailing from its rim
+              (bell_tent1..10); not a mollusk, but she drifts with them
 Five colours per species.
 """
 import os
@@ -58,6 +60,15 @@ SPECIES = {
                   "lilac": dict(extra=dict(antenna="#a89ab8", shell="#b8a0d8", shell_band="#6a508a"), HAIR="#8a7a9a"),
                   "mint": dict(extra=dict(antenna="#8aa89a", shell="#a8e0c8", shell_band="#4a8a6a"), HAIR="#6a8a7a"),
                   "amber": dict(extra=dict(antenna="#a8906a", shell="#d8902a", shell_band="#7a4410"), HAIR="#8a5a3a")}),
+    "jellyfish_mollusk": dict(
+        build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["pearls"], colors=dict(cloth2="#c8e0f4")),
+        hair="flowing", bangs="wispy", ears=None, legs="stockings", foot="shoe", body="jelly", glow=["bell_a", "bell_b", "bell_c", "jtent_a", "jtent_b"],
+        pal=dict(SKIN=skin("#e4eef6"), HAIR="#a8d0f0", FUR="#c8e4f8", LIGHT="#f4faff", MARK="#7ab0e0", EYE="#3a7ac8", CLOTH="#e0eef8", TRIM="#a8c8f0",
+                 INNER="#f0d0e8", extra=dict(stocking="#d8eaf8", boot="#a8c8f0")),
+        variants={"pink": dict(FUR="#f8c8e0", HAIR="#f0a8cc", MARK="#d878a8", EYE="#c84a8a", CLOTH="#f8e0ee", TRIM="#f0a8cc"),
+                  "box": dict(FUR="#e8f4f4", HAIR="#d0ecec", MARK="#a8d8d8", EYE="#2a8a8a", CLOTH="#f4fafa", TRIM="#a8d8d8"),
+                  "lion": dict(FUR="#f0a050", HAIR="#e8783a", MARK="#c8502a", EYE="#a83a1a", CLOTH="#f8e0c0", TRIM="#e8783a"),
+                  "purple": dict(FUR="#c8a8e8", HAIR="#9a78d8", MARK="#6a4ab0", EYE="#6a3ac8", CLOTH="#e8dcf8", TRIM="#9a78d8", pattern="stripes")}),
     "ammonite_mollusk": dict(
         build="slim", outfit=dict(top=["shells"], extras=["pearls"]),
         hair="flowing", bangs="parted", ears="fin", body="ammonite",
@@ -81,6 +92,8 @@ def declare_hook(sp, d):
         return [("hat_a", 9.5, 3, 9.5), ("hat_b", 7, 3, 7), ("stent_a", 1.5, 4, 1.5), ("stent_b", 1.25, 3.5, 1.25)]
     if b == "snail":
         return [("shell_a", 7, 7, 4), ("shell_b", 5, 5, 3), ("shell_c", 3, 3, 2)]
+    if b == "jelly":
+        return [("bell_a", 10, 3, 10), ("bell_b", 8, 2.5, 8), ("bell_c", 5, 1.5, 5), ("jtent_a", .5, 7, .5), ("jtent_b", .5, 6, .5)]
     return []
 
 
@@ -105,6 +118,12 @@ def paint_hook(pt, pal, d):
     for p in ("shell_a", "shell_b", "shell_c", "coil_a", "coil_b", "coil_c", "coil_rim"):
         pt(p, "all", lambda f, x, y, w, h: pick(band if (x + y) % 5 == 0 or (y % 6 == 0) else shell, 0.45 + 0.2 * (noise(x // 2, y // 2, 8) > 0.6), x, y))
     pt("skirt_m", "all", spotted)
+    bell = G.shades(pal.FUR) if isinstance(pal.FUR, str) else pal.FUR             # the jellyfish's bell: see-through, ringed
+    for p in ("bell_a", "bell_b", "bell_c"):
+        pt(p, "all", lambda f, x, y, w, h: G.with_alpha(pick(pal.MARK if (pal.pattern == "stripes" and x % 4 == 0) or (f == "up" and (x + y) % 7 == 0)
+                                                              else bell, 0.55 + 0.25 * (y == 0), x, y), 170))
+    for p in ("jtent_a", "jtent_b"):
+        pt(p, "all", lambda f, x, y, w, h: G.with_alpha(pick(pal.MARK, 0.5 + 0.3 * (y % 3 == 0), x, y), 200))
 
 
 def build_hook(r, g, d):
@@ -124,6 +143,14 @@ def build_hook(r, g, d):
             import math
             x, zz = 2.4 * math.sin(math.radians(ang)), 1.8 * math.cos(math.radians(ang))
             P.chain(r, f"tskirt{i + 1}", "body", (round(x, 2), 12.6, round(zz, 2)), ["stent_a", "stent_b"], rx=-16, ry=ang + 180, bend=-14)
+    if b == "jelly":
+        import math
+        r.add("bell", "head", [0, hy + 8.5, z], [cube("bell_a", [-5, hy + 7.4, -5 + z]), cube("bell_b", [-4, hy + 10.4, -4 + z]),
+                                                 cube("bell_c", [-2.5, hy + 12.9, -2.5 + z])])
+        for i in range(10):
+            a = 360 * i / 10
+            x, zz = 4.4 * math.sin(math.radians(a)), 4.4 * math.cos(math.radians(a))
+            P.chain(r, f"bell_tent{i + 1}", "bell", (round(x, 2), hy + 7.6, round(zz + z, 2)), ["jtent_a", "jtent_b"], rx=8, ry=a, bend=6)
     if b == "snail":
         r.add("shell", "body", [0, 17, 2.0 + z], [cube("shell_a", [-3.5, 13.5, 1.8 + z]), cube("shell_b", [-2.5, 14.5, 5.3 + z]), cube("shell_c", [-1.5, 15.5, 7.8 + z])])
 
@@ -217,6 +244,12 @@ def bip_extra(an, sp, d):
         T = [[f"tskirt{i}", f"tskirt{i}_b"] for i in range(1, 9)]
         for key, per, amp in (("idle", 3.0, 4), ("walk", 1.0, 10), ("run", 0.6, 14)):
             F._inject(an, key, merge(*[G.wave(t, per, [amp, amp * 1.5], axis=0, phase=0.8 + i * 0.7) for i, t in enumerate(T)]))
+    if b == "jelly":
+        T = [[f"bell_tent{i}", f"bell_tent{i}_b"] for i in range(1, 11)]
+        for key, per, amp in (("idle", 3.0, 5), ("walk", 1.2, 8), ("run", 0.7, 10), ("swim", 1.0, 14)):
+            F._inject(an, key, merge(*[G.wave(t, per, [amp, amp * 1.4], axis=0, phase=0.6 + i * 0.6) for i, t in enumerate(T)]))
+        pulse = Tk((0, (0, 0, 0)), (0.5, (0, 0.8, 0)), (1.0, (0, 0, 0)))
+        F._inject(an, "swim", {"bell": {"position": pulse}})
     if b in ("ika", "octopus"):
         an.add("ink", 0.8, False, merge({"body": {"rotation": Tk((0, (0, 0, 0)), (0.2, (-15, 0, 0)), (0.8, (0, 0, 0)))},
                                          "mouth": {"position": Tk((0, H.REST), (0.15, H.OUT_), (0.5, H.OUT_), (0.6, H.REST))}},
@@ -265,7 +298,7 @@ if __name__ == "__main__":
         if not want or sp in want:
             g, t, a, h = run_custom(sp, decl, bld, anm, prev)
             entries[sp] = (g, t, a, heights[sp], h)
-    bip = {k: v for k, v in SPECIES.items() if v["body"] in ("ika", "octopus", "snail")}
+    bip = {k: v for k, v in SPECIES.items() if v["body"] in ("ika", "octopus", "snail", "jelly")}
     for e, sp in zip(F.run_family("mollusk", bip, declare_hook, paint_hook, build_hook, bip_extra, views=VIEWS, only=[k for k in bip if not want or k in want]),
                      [k for k in [s["id"] for s in FC.family("mollusk")["species"]] if k in bip and (not want or k in want)]):
         entries[sp] = e

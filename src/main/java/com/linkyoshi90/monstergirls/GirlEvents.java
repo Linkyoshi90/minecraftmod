@@ -20,6 +20,14 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 /** World rules the later families bring along (see their field guides). */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class GirlEvents {
+    /** An aegis boar takes a share of every blow meant for her friend (Armoured.shield). */
+    @SubscribeEvent
+    public static void onPlayerHurt(net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent event) {
+        if (event.getEntity() instanceof net.minecraft.world.entity.player.Player p && !p.level().isClientSide) {
+            event.setAmount(com.linkyoshi90.monstergirls.entity.girl.Armoured.shield(p, event.getSource(), event.getAmount()));
+        }
+    }
+
     private GirlEvents() {}
 
     /** Beehives placed near a queen bee win her heart. */
@@ -73,7 +81,10 @@ public final class GirlEvents {
         }
     }
 
-    /** A naga keeps strangers from the treasure she guards (opening or breaking an unopened structure chest near her). */
+    /**
+     * A naga keeps strangers from the treasure she guards (opening or breaking an unopened structure chest near her),
+     * Anubis everyone she has not weighed light, and one unopened loot chest in eight is a mimic.
+     */
     @SubscribeEvent
     public static void onOpenChest(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock event) {
         if (event.getLevel().isClientSide()) return;
@@ -81,6 +92,24 @@ public final class GirlEvents {
         if (naga != null) {
             naga.warnOff(event.getEntity());
             event.setCanceled(true);
+            return;
+        }
+        com.linkyoshi90.monstergirls.entity.girl.Canid anubis = com.linkyoshi90.monstergirls.entity.girl.Canid.tombGuardOf(event.getLevel(), event.getPos(), event.getEntity());
+        if (anubis != null) {                                               // Anubis lets only light hearts into the tomb
+            anubis.warnOff(event.getEntity());
+            event.setCanceled(true);
+            return;
+        }
+        com.linkyoshi90.monstergirls.entity.girl.Undead mummy = com.linkyoshi90.monstergirls.entity.girl.Undead.mummyGuardOf(event.getLevel(), event.getPos(), event.getEntity());
+        if (mummy != null) {                                                // and a mummy keeps strangers from it too
+            mummy.warnOffTomb(event.getEntity());
+            event.setCanceled(true);
+            return;
+        }
+        if (event.getLevel() instanceof net.minecraft.server.level.ServerLevel level && !event.getEntity().isCreative()
+                && com.linkyoshi90.monstergirls.entity.girl.SlimeGirl.isMimicChest(level, event.getPos())
+                && com.linkyoshi90.monstergirls.entity.girl.SlimeGirl.springMimic(level, event.getPos(), event.getEntity()) != null) {
+            event.setCanceled(true);                                        // it was a mimic
         }
     }
 
@@ -91,7 +120,49 @@ public final class GirlEvents {
         if (naga != null) {
             naga.warnOff(event.getPlayer());
             event.setCanceled(true);
+            return;
         }
+        com.linkyoshi90.monstergirls.entity.girl.Canid anubis = com.linkyoshi90.monstergirls.entity.girl.Canid.tombGuardOf(level, event.getPos(), event.getPlayer());
+        if (anubis != null) {
+            anubis.warnOff(event.getPlayer());
+            event.setCanceled(true);
+            return;
+        }
+        if (event.getState().is(net.minecraft.tags.BlockTags.LOGS) && level instanceof net.minecraft.server.level.ServerLevel server) {   // the leshy counts every tree
+            com.linkyoshi90.monstergirls.entity.girl.Flora leshy = com.linkyoshi90.monstergirls.entity.girl.Flora.leshyNear(level, event.getPos());
+            if (leshy != null) leshy.onLogCut(server, event.getPlayer());
+        }
+    }
+
+    /** A sapling planted near a leshy counts in the planter's favour. */
+    @SubscribeEvent
+    public static void onPlaceSapling(net.neoforged.neoforge.event.level.BlockEvent.EntityPlaceEvent event) {
+        if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel server) || !(event.getEntity() instanceof net.minecraft.world.entity.player.Player player)
+                || !event.getPlacedBlock().is(net.minecraft.tags.BlockTags.SAPLINGS)) return;
+        com.linkyoshi90.monstergirls.entity.girl.Flora leshy = com.linkyoshi90.monstergirls.entity.girl.Flora.leshyNear(server, event.getPos());
+        if (leshy != null) leshy.onSaplingPlanted(server, player);
+    }
+
+    /** Loud noises startle black bears: explosions, bells, goat horns. */
+    @SubscribeEvent
+    public static void onLoudNoise(net.neoforged.neoforge.event.VanillaGameEvent event) {
+        if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel level)) return;
+        var e = event.getVanillaEvent();
+        boolean boom = e.is(net.minecraft.world.level.gameevent.GameEvent.EXPLODE);
+        boolean horn = e.is(net.minecraft.world.level.gameevent.GameEvent.INSTRUMENT_PLAY);
+        boolean bell = e.is(net.minecraft.world.level.gameevent.GameEvent.BLOCK_CHANGE)
+                && level.getBlockState(net.minecraft.core.BlockPos.containing(event.getEventPosition())).getBlock() instanceof net.minecraft.world.level.block.BellBlock;
+        if (boom || horn || bell) com.linkyoshi90.monstergirls.entity.girl.Canid.startle(level, event.getEventPosition(), boom);
+    }
+
+    /** A wild ahuizotl near the hook steals the catch off your line. */
+    @SubscribeEvent
+    public static void onFished(net.neoforged.neoforge.event.entity.player.ItemFishedEvent event) {
+        if (!(event.getEntity().level() instanceof net.minecraft.server.level.ServerLevel level)) return;
+        com.linkyoshi90.monstergirls.entity.girl.Merfolk thief = com.linkyoshi90.monstergirls.entity.girl.Merfolk.thiefNear(event.getHookEntity(), event.getEntity());
+        if (thief == null) return;
+        thief.stealCatch(level, event.getEntity());
+        event.setCanceled(true);
     }
 
     /** Creepers keep away from nekomata, as they do from vanilla cats. */

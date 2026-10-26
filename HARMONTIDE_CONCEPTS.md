@@ -11,7 +11,7 @@ Rough notes for the next wave of species. Nothing here is built yet. Each entry 
 
 - **Vanilla friendly:** obey `mobGriefing`, take no spawns from vanilla mobs, use vanilla items for every interaction (feeding, taming, trading), and never touch player-placed chests or blocks unless tamed and asked.
 - **Believable ecology:** every species gets a biome, a time of day, a food, a predator or rival, and at least one useful link with vanilla mobs or blocks. That link is what keeps them from being plain reskins.
-- **Low ecchi:** fully clothed or naturally covered (fur, feathers, scales, shell). No fanservice poses or animations. Adult proportions only.
+- **High ecchi:** sometimes partially clothed or naturally uncovered (fur, feathers, scales, shell). Fanservice poses and animations. Adult proportions only.
 - **Boys too:** where the myth is male (leshy, vodyanoy, gandharva, charro negro, tengu, the giants), make the male the default, or add both, as the mod already does for some species.
 - **Living traditions:** Kachina, Thunderbird, Uktena, Wayob and Naga still belong to living religions. Keep them respectful, never sexualised, and check sources before release. Kachina is the most sensitive one (see the Celestials section).
 
@@ -139,7 +139,7 @@ Reference art: `D:\wamp64\www\images\creatures\<name>_<f|m>_<paint>.webp`. "Ref"
 | **Golem** | `golem` | Constructs (new) | Golem of Jewish folklore; kin of the vanilla iron golem | Villages. A defender who befriends iron golems. |
 | **Dolphin** | `dolphin` | Merfolk, *exists* | `dolphin_mermaid` | Refs feed paints. |
 | **Ziz** | `ziz` | Harpy | The giant bird of Jewish legend | Mountain peaks, huge. |
-| **Lilith** | `lilith` | Devil | A night demoness of Mesopotamian and Jewish lore | Nocturnal. Keep her low ecchi (no succubus overlap). |
+| **Lilith** | `lilith` | Devil | A night demoness of Mesopotamian and Jewish lore | Nocturnal. Keep her High ecchi (no succubus overlap). |
 | **Anubis** | `anubis` | Canids (new) | Egyptian god of the dead, a jackal | Desert pyramids. Guards tombs, nocturnal. |
 | **Wadjet** | `wadjet` | Lamia (cobra) | Egyptian cobra goddess, protector | Desert rivers. Protects her player. |
 | **Spinosaur** | `spinosaur` | Dinosaurs | *Spinosaurus aegyptiacus* (Theropoda › Spinosauridae) | Rivers. A fisher, half aquatic. |
@@ -178,3 +178,169 @@ Nearly every creature in the references comes in the same seven **colour paints*
 - A wild girl has a rare chance (1 in 64?) to spawn **painted** in one of the seven, like a shiny. The paint is saved on her and her daughters may inherit it.
 - The paints are generated offline: every species' default texture recoloured (hue-shifted, keeping the shading), plus an inverted copy. That is about 7 × 104 textures, roughly 25 MB.
 - Open questions: how rare? Inherited or not? A way to repaint (a rare item)?
+
+---
+
+## Fourth wave (2026-10-24)
+
+Picked for reusing families that already exist. The attributes are the design notes of 2026-10-24.
+
+| Species | Home | Design |
+|---|---|---|
+| **Tengu** | Harpy (crow base) | Neutral. Fights with her fan: wind attacks with high knockback and low damage. On patrol she scans hard for hostile mobs (creepers and endermen too) and pushes them out of her territory. She lives high in the sky like the albatross, so you meet a wild one when she comes down to drink at water. |
+| **Penguin** | Harpy (flightless, short legs) | Snowy and icy biomes, in big groups. A good swimmer who hunts fish and shares her catch once befriended. Now and then you meet one alone, walking off by herself (Werner Herzog's penguin). Wild orca mermaids hunt her, and she attacks wild koi mermaids. |
+| **Toucan** | Harpy | Jungle. Eats fruit. Clacks her big beak to talk, and toucans that meet hold a clack-off: they clack at each other for fun. |
+| **Camel, Dromedary** | Centaur | Bactrian on cold desert and steppe, dromedary on hot desert. Anyone can ride them, with no friendship needed. They can breed with vanilla camels, and a bucket milks them. |
+| **Kelpie** | Centaur (water) | Rivers. Ridden with a saddle, and faster than a boat. Neutral by day. At night she attacks players unless she is befriended. |
+| **Wadjet** | Lamia (on two legs, nekomata body with a cobra hood) | Desert rivers. Gives buffs to any player passing by, and to the girls following them. Very aggressive towards hostile mobs. Often hands befriended players emeralds. Name her **Nekhbet** and her buffs and her damage against mobs go up. |
+| **Hornet** | Bug | Forests. Attacks players who come too close. Unless befriended, she attacks bees and bee girls. On patrol she is a fierce fighter against hostile mobs. Omnivore: she can be befriended with meat or fruit, and gives paper and clay. |
+| **Dugong** | Merfolk | Warm shallow seagrass, nearly always in pairs. She is befriended with seagrass and gives sea loot. |
+
+### Encounter: the injured girl
+- Now and then a wild girl spawns **injured**: low health, slow, and she cannot fight. An injured flier cannot fly (a hornet with a broken wing).
+- She is rare for most species and common for hornets.
+- A **healing balm** fixes her even though she is not your friend yet. Friendship jumps up, and a hornet goes straight to full friendship.
+
+---
+
+## Fifth wave (2026-10-24)
+
+Agreed on 2026-10-24. It opens one new family, the **canid girls** (with the bears).
+
+| Species | Home | Design |
+|---|---|---|
+| **Wolf** | Canids (new) | Taiga and forests, in packs led by an alpha. Wild, the pack hunts sheep and rabbits. Bones win her over. Kin of vanilla wolves: once she is befriended, her player's tamed wolves join her fights. |
+| **Polar bear** | Canids | Snow and ice. Hunts seal mermaids and penguin harpies. Fishes at open water. Guards her cubs as fiercely as a vanilla polar bear. Kin of vanilla polar bears. |
+| **Panda** | Canids | Bamboo jungles. Born with a personality like vanilla pandas: normal, lazy, worried, playful, aggressive, weak (brown is a colour). Eats bamboo and sneezes. Kin of vanilla pandas. |
+| **Anubis** | Canids | Deserts at night. Weighs the heart of every player who comes near against the feather: anyone who killed villagers or iron golems is condemned and hunted. Light hearts may open the tomb chests she guards. |
+| **Pegasus** | Centaur | Meadows near mountains. Tamed with a golden bridle (gold horse armour) or golden apples. Ridden, she leaps and glides: no true flight. |
+| **Lich** | Undead | Deep dark. Hostile, casts slowness and weakness. While her phylactery stands she cannot die: she reforms beside it. Break it and she becomes peaceful. Befriended, she trades experience for books. |
+| **Mimic** | Slime | Waits as an unopened structure chest (never a player's chest). Open her and she bites once, keeping the loot inside her. Gold wins her over, and she becomes a walking chest. |
+| **Vodyanoy** | Anuran (male) | Deep river pools near villages, friends with fishermen. Gives fish while his pool stays clean. |
+
+**Also:** anurans count vanilla frogs as kin and can breed with them.
+
+---
+
+## Sixth wave (2026-10-24)
+
+Agreed on 2026-10-24. It opens the **rodent** family and completes the Four Symbols.
+
+| Species | Home | Design |
+|---|---|---|
+| **Kobold** | Canids | Caves and mountains. A dog-girl miner (cobalt is named after kobolds). Befriended, she sniffs out the nearest diamond, gold or emerald ore and points the way. She yelps when the block you are about to dig holds up sand or gravel, and she smells mimics: a mimic chest near her rattles. |
+| **Grizzly bear** | Canids | Taiga. Fishes salmon from rivers, raids full beehives for honey (the bees sting her for it), and hibernates while it snows. Kin of vanilla polar bears, the closest bear Minecraft has. |
+| **Capybara** | Rodents (new) | Rivers and swamps. The calmest animal alive: no wolf, fox, cat or ocelot hunts within 8 blocks of her, and idle girls nearby like to sit beside her. |
+| **Ratatoskr** | Rodents | Forests. Scatter-hoards seeds and saplings; the ones she forgets sprout into trees. A messenger: hand her an item and she carries it to the nearest other player she is fond of (now and then swapping it as a prank). |
+| **Leshy** | Flora (male) | Old-growth taiga. The forest lord, and the Vodyanoy's rival. He counts the logs you cut and the saplings you plant near him: a planter gets saplings and apples, a clear-cutter gets lost in his fog. Meets a vodyanoy, and they bellow at each other. |
+| **Black Tortoise (Xuanwu)** | Lizardfolk | Frozen rivers. A tortoise shell with a serpent coiled round it. Arrows glance off her shell. The north of the Four Symbols. |
+| **Vermilion Bird (Zhuque)** | Harpy (phoenix line) | Savanna and badlands. Summer's bird: her fire ripens crops near her instead of burning them. The south of the Four Symbols. |
+| **La Llorona** | Undead | Rivers, at night, weeping. She escorts lost young animals and village children home to their own kind. Bring a lost one home with her and she stops weeping for a night. |
+
+**Four Symbols advancement:** befriend the long dragon (east), a white tiger nekomata (west), Zhuque (south) and Xuanwu (north).
+
+## Seventh wave (2026-10-25)
+
+Agreed on 2026-10-25. Four new families (**crustaceans, marsupials, the armoured, constructs**), two newcomers to old families, and homage variants.
+
+| Species | Home | Design |
+|---|---|---|
+| **Crab** | Crustaceans (new) | Beaches. Walks sideways. Neutral: whoever hits her first gets pinched (Slowness). A decorator variant dresses her shell in kelp and coral, like the spider crab's relatives. |
+| **Hermit crab** | Crustaceans | Beaches. Lives in a borrowed shell: give her a nautilus or a shulker shell and she moves in (you get the old one back). Pinches whoever hits her first. |
+| **Kangaroo** | Marsupials (new) | Savanna and badlands, in mobs. Her joey rides in her pouch until it is grown. Kicks with big knockback. The **outback** variant (a red hoodie and sunglasses) is a nod to Kangaroo Jack. |
+| **Armadillo** | Armoured (new) | Savanna and badlands. Rolls up into a ball when scared (no damage gets through); befriended, she rolls into monsters. Kin of vanilla armadillos; sheds scutes. The **ranger** variant (rust-orange, a cowboy hat and a red scarf) is a nod to Dillon's Rolling Western. |
+| **Golem** | Constructs (new) | Near villages. A clay golem with more health than an iron golem (120). Guards villagers; iron golems are her kin (no longer Frankenstein's monster's). When she falls she breaks into pieces. |
+| **Jellyfish** | Mollusks (not a mollusk, but she drifts with them) | Warm ocean. Glows at night, stings what bumps into her; friends swimming near her see in the dark. |
+| **Ahuizotl** | Merfolk (otter line) | Rivers. The hand on her tail steals fish off your line unless you hold a lantern; befriended, she fishes for you. |
+
+**Homage variants** (Gregory Horror Show and friends; generic names, no logos, rolled rarely in the wild):
+
+| Species | Variant | Look |
+|---|---|---|
+| Cactus girl | `gunman` | Yellow straw sombrero with a green band, big black mustache, red bandana, maroon zigzag poncho with bullet holes, bandolier (Cactus Gunman) |
+| Cactus girl | `blossom` | Orange straw sombrero, dark green braids with red bows, red bandana, cow-print top over a blue zigzag poncho, a lasso, puffy blue sleeves, freckles, red eyes (Cactus Girl) |
+| Living doll | `lost` | Red curls with purple bows, freckles and a puppet jaw, patched green dress, round red feet, and Katie's blue face with zigzag teeth on the back of her head (Lost Doll) |
+| Ocelot nekomata | `stitched` | Grey-beige and sewn together, a purple patch over half her head, purple ears, red eyes, a stitched muzzle, red and blue striped top (no lettering), khaki shorts (Neko Zombie) |
+| Salamander | `nurse` | Pink with magenta spots, a lizard snout, white nurse's dress and red-cross cap and armbands, black shoes, a huge syringe in her hand (Catherine) |
+| Wolf girl | `mummy` | Bandaged head with brown fur round the eyes, a muzzle, red shirt and blue overalls with gold buttons, blue shoes, a cleaver stuck in the head (Mummy Dog) |
+| Anubis | `mummy` | Bandaged head, a muzzle, grey suit and dark trousers, black shoes, a machete stuck in the head (Mummy Papa) |
+
+The mummies have the show's blood (drips from the blade down the face, spatter on the blade and on Papa's suit), on these two variants only. The show's lettering is left off.
+
+**Paints:** copper (weathers stage by stage like copper blocks; honeycomb waxes it, an axe scrapes it back), glow (neon markings that glow in the dark), ink (manga line art), magma (glowing cracks), and the seasonal pumpkin (October) and candy cane (December).
+
+## Eighth wave (2026-10-25, in the game)
+
+| Species | Home | Design (with the user's notes) |
+|---|---|---|
+| **Unicorn** | Centaur | Kin of horses like the pegasus. Her horn cures poison and wither on friends; only players with no villager kills may come near (Anubis's heart check). |
+| **Black bear** | Canids | Forests. Climbs trees and raids sweet berry bushes. **Scares easily.** |
+| **Koala** | Marsupials | Sleeps most of the day and only eats leaves. A rare **drop bear** variant drops on you from trees as a joke. |
+| **Gecko** | Lizardfolk | Climbs walls. **Fast little buggers, curious, and they like fruit.** Sheds her tail when hit (it grows back). |
+| **Flamingo** | Harpy | Stands on one leg in warm shallows. Her pink fades without fish and comes back with it. |
+| **Firefly** | Bug | Meadows at night; fireflies blink in sync. A jar of one is a light. **Advancement "Why?"** for catching her or a fairy in a jar. |
+| **Mummy** | Undead | Desert pyramids, guards the sarcophagus (with Anubis); hits unravel her bandages (string and paper). **Befriended, she can be unravelled until she is dressed skimpily, then hurries and spins, wrapping herself up again.** |
+| **Chupacabra** | Lizardfolk (spiny) | Mountain edges at night; hunts wild goats only. **Fed, she lingers around the player; she can never be given commands; at high friendship she often leaves half a stack of mutton.** |
+
+Also agreed and built: the flamingo as a harpy (her shade follows her diet: pink, pale, white), the four paints frost, sakura, stained glass and sepia, and the "Why?" advancement for jarring a firefly or a fairy.
+
+## Ninth wave (2026-10-25, in the game)
+
+| Species | Home | Design |
+|---|---|---|
+| **Sheep** | Minotaur | Shears take her wool, which grows back once she grazes; dye her like a sheep. Vanilla sheep follow her. |
+| **Highland** | Minotaur | Shaggy, a fringe over her eyes; never freezes, walks on powder snow. |
+| **Yak** | Minotaur | High mountains. A friend's chest goes on her back: two rows of cargo. Never freezes. |
+| **Bat** | Bats (new family, volume XXVI) | Roosts upside down from ceilings by day; befriended, she pings and monsters near her friend glow through walls. Fruit bat variant with a fox face. Kin of vanilla bats. |
+| **Dark elf** | Elf | The deep dark. Sets off no sculk; a Warden near her spares her friends (the Warden is her kin). Trades echo shards and sculk. |
+| **Medusa** | Lamia | Her gaze slows strangers and monsters nearly to a stop; befriended, she wears a blindfold. |
+| **Oni** | Devil | Night mountains, an iron club, hits hard. Cocoa beans drive her off (Setsubun); a honey bottle calms her; befriended, she guards your door at night. |
+| **Mantis** | Bug | Prays still, then lunges at silverfish, endermites and spiders. The orchid mantis vanishes among flowers. |
+| **Ender slime** | Slime | The End. Teleports from blows and water, moves loose blocks around. Kin of endermites. |
+| **Wolpertinger** | Jackalope | Antlers and little wings: double jumps and glides. Swaps your boots for leather ones (feed her to get them back). |
+| **Venus flytrap** | Flora | Swamps, rooted. Snaps shut on whatever steps into reach; befriended, only monsters. |
+| **Siren** | Merfolk | Rocky coasts. Her song draws strangers toward her; friends swimming near her get Conduit Power. |
+
+Paints: opal, chrome, aurora and camo (35 in all). The firefly's blink is now a smooth pulse.
+
+## Tenth wave (2026-10-25, in the game): Harmontide's own creatures
+
+From the reference art (`HARMONTIDE_ROSTER.md` tracks which are done).
+
+| Species | Home | Design |
+|---|---|---|
+| **Tusktaur** | Centaur | A woolly mammoth taur of the snowy plains. Her tusk sweep knocks back everything in front of her; friends ride her; never freezes. |
+| **Aurorantler** | Centaur | A deer taur of the snowy taiga whose antlers glow at night; Night Vision for her friend. |
+| **Rhiwool** | Minotaur | A woolly rhino: a straight-line charge; shear and dye her like the sheep. |
+| **Meloncollie** | Canid | A watermelon herding dog: drives stray farm animals to the nearest fence gate, plants melon seeds. |
+| **Needlehog** | Rodent | A hedgehog: rolls into a ball of quills, hunts silverfish, keeps the paper and books she finds. |
+| **Clockhare** | Jackalope | A hare in a top hat: her watch chimes at dawn and dusk and warns of phantoms; Haste for her friend. |
+| **Axolume** | Merfolk | A glowing axolotl of the lush caves; Regeneration for her friend. |
+| **Aegis boar** | Armoured | A boar in plate armour who takes a third of every blow meant for her friend. Hoglins are her kin. |
+| **Blaze cat** | Nekomata | A Nether cat with burning paws: fireproof, lights campfires and candles, Fire Resistance for her friend. Blazes are her kin. |
+| **Gargoyle** | Construct | Stone by day (nothing hurts her), flies and fights at night. |
+| **Coin magpie** | Harpy | Hoards shinies; pay her a gold nugget for something from her hoard. |
+| **Trickster raven** | Harpy | Pranks strangers with monster voices; befriended, she lures monsters away from her friend. |
+
+Paints: plush, pixel, origami and gummy (39 in all).
+
+## Eleventh wave (2026-10-26, in the game): Harmontide's helpers
+
+From the reference art. The Thunderbird is left out on purpose (a living tradition, like the Kachina).
+
+| Species | Home | Design |
+|---|---|---|
+| **Anvil tortoise** | Lizardfolk | An iron-shelled tortoise with an anvil on her back. Mends tools and armour for their repair material, no experience; too heavy to push. |
+| **Mailtoad** | Anuran | A postwoman toad. Give her an item, then a paper renamed to a player's name: she delivers it. |
+| **Gliderune** | Marsupial | A sugar glider. Glides; befriended, she rides on your shoulder and gives you Slow Falling. |
+| **Slothren** | Armoured | A mossy sloth. Hangs from branches by day; spreads moss and flowers; befriended, she grows your crops. |
+| **Coatimano** | Rodent | A coati with a brush of a nose. Digs out suspicious sand and gravel and brings you the find. |
+| **Waterlil** | Nekomata | A big cat's head on a tiny body, a small bloom on top, riding her own lily pad. Lily pads grow under her and her friend on water. |
+| **Rookmourn** | Harpy | A rook in a plague doctor's hat. Cures poison, nausea, hunger and wither nearby; a golden apple has her cure a zombie villager. |
+| **Cassowrath** | Harpy | A cassowary. Territorial, kicks hard; befriended, a stick's patrol order has her guard a spot. |
+| **Talosling** | Construct | A bronze clockwork girl with a wind-up key. Redstone winds her; she guards her friend; run down, she sits still. |
+| **Mantarrow** | Merfolk | A manta ray. A friend rides her across the water, fast; she leaps. |
+| **Sphinx** | Centaur | A winged lioness. Riddles answered with an item: a prize if right, a pounce if wrong. Never ridden. |
+| **Brownie** | Elf | A tiny house spirit. At night she tidies chests and puts loose items away; paid in milk and bread. |
+
+Paints: synthwave, cookie, cloud and the seasonal valentine (February only), so 43 in all.

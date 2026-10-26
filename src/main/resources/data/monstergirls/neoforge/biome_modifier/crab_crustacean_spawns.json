@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_crab_crustacean",
+  "spawners": {
+    "type": "monstergirls:crab_crustacean",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_kangaroo_marsupial",
+  "spawners": {
+    "type": "monstergirls:kangaroo_marsupial",
+    "weight": 6,
+    "minCount": 3,
+    "maxCount": 5
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_zhuque_harpy",
+  "spawners": {
+    "type": "monstergirls:zhuque_harpy",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

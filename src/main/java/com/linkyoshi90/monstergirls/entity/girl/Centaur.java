@@ -47,13 +47,15 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 /**
- * The hoofed family (centaur_field_guide.html): horse, zebra, reindeer, mountain goat, alpaca. Herd and hoof:
+ * The hoofed family (centaur_field_guide.html): horse, zebra, reindeer, mountain goat, alpaca, tapir, camel, dromedary,
+ * kelpie. Herd and hoof:
  * they graze, follow their lead mare, kick back at whatever hurts them from behind, and are won over by grooming
  * (a brush). At high friendship she lets you ride on her back (a saddle makes her faster) and wears a chestplate you
  * give her (it shows over her torso and adds to her health); the devoted alpaca carries a chest. Any centaur who sees
- * a player sprinting by gallops alongside, grinning from ear to ear.
+ * a player sprinting by gallops alongside, grinning from ear to ear. Camels carry anyone, give milk and breed with
+ * vanilla camels; the kelpie is ridden under a saddle, swims faster than a boat, and hunts strangers at night.
  */
-public class Centaur extends AbstractMonsterGirl {
+public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.entity.PlayerRideableJumping {
     public static final int RIDE_AFFECTION = BED_AFFECTION;
     public static final int ARMOUR_AFFECTION = 10;
     private static final net.minecraft.resources.ResourceLocation ARMOUR_HEALTH = com.linkyoshi90.monstergirls.MonsterGirlsMod.id("centaur_armour_health");
@@ -69,6 +71,10 @@ public class Centaur extends AbstractMonsterGirl {
     private boolean winded;
     private boolean leadMare;
     private final SimpleContainer pack = new SimpleContainer(27);
+    private int camelLove;
+    private long nextMilk;
+    /** Expecting by a vanilla camel: half her young are camel calves. */
+    private boolean camelSired;
 
     public Centaur(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
@@ -86,6 +92,9 @@ public class Centaur extends AbstractMonsterGirl {
             }
         });
         this.goalSelector.addGoal(3, new RunAlongGoal());
+        if (species == GirlSpecies.UNICORN_CENTAUR) {                    // she keeps away from impure hearts
+            this.goalSelector.addGoal(1, new net.minecraft.world.entity.ai.goal.AvoidEntityGoal<>(this, Player.class, 10.0F, 1.1, 1.5, e -> e instanceof Player p && impure(p)));
+        }
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.1, Ingredient.of(Items.APPLE, Items.GOLDEN_CARROT, Items.CARROT, Items.SUGAR, Items.WHEAT), false));
         this.goalSelector.addGoal(5, new FollowEntityGoal(this, this::leader, 1.0, 10.0F, 5.0F));
         this.goalSelector.addGoal(6, new EatBlockGoal(this));
@@ -97,6 +106,89 @@ public class Centaur extends AbstractMonsterGirl {
         }
     }
 
+    // --- the sphinx -------------------------------------------------------------------------------------------------
+
+    /** Her riddles, each answered with an item (the lang key is riddle.monstergirls.N). */
+    public static final java.util.List<net.minecraft.world.item.Item> RIDDLE_ANSWERS = java.util.List.of(Items.CLOCK, Items.COMPASS, Items.SPONGE,
+            Items.NOTE_BLOCK, Items.GLASS_BOTTLE, Items.TORCH, Items.BELL, Items.BOOK, Items.WATER_BUCKET);
+    private final java.util.Map<java.util.UUID, Integer> riddles = new java.util.HashMap<>();
+
+    /** The riddle she has put to this player, or -1. */
+    public int riddleFor(Player player) {
+        return this.riddles.getOrDefault(player.getUUID(), -1);
+    }
+
+    public void askRiddle(Player player, int which) {
+        this.riddles.put(player.getUUID(), which);
+        this.getLookControl().setLookAt(player);
+        player.displayClientMessage(Component.translatable("message.monstergirls.sphinx_asks", this.getDisplayName(),
+                Component.translatable("riddle.monstergirls." + which)), false);
+    }
+
+    /** The answer, held out: right earns a reward, wrong earns a pounce. Returns whether it was right. */
+    public boolean answer(ServerLevel level, Player player, ItemStack held) {
+        int which = this.riddleFor(player);
+        this.riddles.remove(player.getUUID());
+        if (which >= 0 && held.is(RIDDLE_ANSWERS.get(which))) {
+            ItemStack reward = this.random.nextInt(3) == 0
+                    ? net.minecraft.world.item.enchantment.EnchantmentHelper.enchantItem(this.random, new ItemStack(Items.BOOK), 20, level.registryAccess(), java.util.Optional.empty())
+                    : new ItemStack(this.random.nextBoolean() ? Items.EMERALD : Items.GOLD_INGOT, 3);
+            if (!player.getInventory().add(reward)) player.drop(reward, false);
+            this.addAffection(player, 5);
+            this.hearts(level, 4);
+            player.displayClientMessage(Component.translatable("message.monstergirls.sphinx_right", this.getDisplayName()), false);
+            return true;
+        }
+        this.startTimedAction(Action.REAR, 20);                      // the pounce
+        player.hurt(this.damageSources().mobAttack(this), 4.0F);
+        Vec3 away = player.position().subtract(this.position()).normalize();
+        player.knockback(1.2, -away.x, -away.z);
+        this.addAffection(player, -2);
+        player.displayClientMessage(Component.translatable("message.monstergirls.sphinx_wrong", this.getDisplayName()), false);
+        return false;
+    }
+
+    // --- the tusktaur and the aurorantler ------------------------------------------------------------------------
+
+    /** The shaggy ones of the snow never freeze. */
+    @Override
+    public boolean canFreeze() {
+        return this.species != GirlSpecies.TUSKTAUR_CENTAUR && this.species != GirlSpecies.AURORANTLER_CENTAUR && super.canFreeze();
+    }
+
+    /** The tusk sweep: her blow knocks back everything in front of her, not just what she aimed at (never her friends). */
+    @Override
+    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
+        boolean hit = super.doHurtTarget(target);
+        if (hit && this.species == GirlSpecies.TUSKTAUR_CENTAUR) this.sweep(target);
+        return hit;
+    }
+
+    public int sweep(net.minecraft.world.entity.Entity aimed) {
+        net.minecraft.world.phys.Vec3 look = this.getLookAngle().multiply(1, 0, 1).normalize();
+        int n = 0;
+        for (LivingEntity e : this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(3.0), e -> e != this && e != aimed && e.isAlive()
+                && !(e instanceof Player p && this.getAffection(p) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) && !(e instanceof com.linkyoshi90.monstergirls.entity.Bonded))) {
+            net.minecraft.world.phys.Vec3 to = e.position().subtract(this.position()).multiply(1, 0, 1);
+            if (to.lengthSqr() < 1.0E-4 || to.normalize().dot(look) < 0.3) continue;      // only what is in front of her
+            e.hurt(this.damageSources().mobAttack(this), 4.0F);
+            e.knockback(1.5, -to.x, -to.z);
+            n++;
+        }
+        this.playSound(net.minecraft.sounds.SoundEvents.RAVAGER_ATTACK, 1.0F, 0.7F);
+        return n;
+    }
+
+    /** At night the aurorantler's antlers light the snow, and her friend sees in the dark beside her. */
+    public void aurora(ServerLevel level) {
+        boolean night = !level.isDay();
+        this.glow(level, night ? 10 : 0);
+        if (night && this.tickCount % 40 == 0) {
+            Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+            if (friend != null) friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.NIGHT_VISION, 300, 0, true, false));
+        }
+    }
+
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
             case HORSE_CENTAUR -> girlAttributes(30, 0.3, 4);
@@ -104,9 +196,126 @@ public class Centaur extends AbstractMonsterGirl {
             case GOAT_CENTAUR -> girlAttributes(26, 0.28, 5).add(Attributes.JUMP_STRENGTH, 0.75);
             case ALPACA_CENTAUR -> girlAttributes(24, 0.25, 2);
             case TAPIR_CENTAUR -> girlAttributes(32, 0.24, 3);
+            case CAMEL_CENTAUR -> girlAttributes(36, 0.26, 3);
+            case DROMEDARY_CENTAUR -> girlAttributes(32, 0.28, 3);
+            case KELPIE_CENTAUR -> girlAttributes(30, 0.32, 6);
+            case UNICORN_CENTAUR -> girlAttributes(30, 0.32, 3);
+            case TUSKTAUR_CENTAUR -> girlAttributes(60, 0.24, 9).add(Attributes.ATTACK_KNOCKBACK, 2.0).add(Attributes.KNOCKBACK_RESISTANCE, 0.8);
+            case AURORANTLER_CENTAUR -> girlAttributes(26, 0.3, 3);
+            case SPHINX_CENTAUR -> girlAttributes(50, 0.3, 8);
             default -> girlAttributes(28, 0.28, 3);
         };
     }
+
+    // --- the unicorn ----------------------------------------------------------------------------------------------
+
+    /** A heart weighed down by villager or iron golem kills (Anubis's measure): the unicorn will have nothing to do with it. */
+    public static boolean impure(Player player) {
+        return player instanceof net.minecraft.server.level.ServerPlayer sp && Canid.heartWeight(sp) > 0;
+    }
+
+    @Override
+    public void addAffection(Player player, int amount) {
+        if (this.species == GirlSpecies.UNICORN_CENTAUR && amount > 0 && impure(player)) return;   // nothing she will take from those hands
+        super.addAffection(player, amount);
+    }
+
+    /** Her horn: poison and wither leave her friends, and zombie villagers near her are cured much faster. */
+    public void tendWithHorn(ServerLevel level) {
+        for (Player p : level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(8), p -> this.getAffection(p) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION)) {
+            if (p.hasEffect(net.minecraft.world.effect.MobEffects.POISON) || p.hasEffect(net.minecraft.world.effect.MobEffects.WITHER)) {
+                p.removeEffect(net.minecraft.world.effect.MobEffects.POISON);
+                p.removeEffect(net.minecraft.world.effect.MobEffects.WITHER);
+                level.sendParticles(net.minecraft.core.particles.ParticleTypes.END_ROD, p.getX(), p.getY() + 1, p.getZ(), 8, 0.3, 0.5, 0.3, 0.02);
+            }
+        }
+        for (net.minecraft.world.entity.monster.ZombieVillager zv : level.getEntitiesOfClass(net.minecraft.world.entity.monster.ZombieVillager.class,
+                this.getBoundingBox().inflate(8), net.minecraft.world.entity.monster.ZombieVillager::isConverting)) {
+            hastenCure(zv, 200);
+        }
+    }
+
+    // ponytail: reflection on the cure's countdown (Mojang name, which NeoForge keeps at runtime); swap for an access transformer if it ever breaks
+    private static final java.lang.reflect.Field CURE_TIME = cureField();
+
+    @Nullable
+    private static java.lang.reflect.Field cureField() {
+        try {
+            java.lang.reflect.Field f = net.minecraft.world.entity.monster.ZombieVillager.class.getDeclaredField("villagerConversionTime");
+            f.setAccessible(true);
+            return f;
+        } catch (ReflectiveOperationException e) {
+            return null;
+        }
+    }
+
+    /** Takes this many ticks off a zombie villager's cure. */
+    public static void hastenCure(net.minecraft.world.entity.monster.ZombieVillager zv, int ticks) {
+        if (CURE_TIME == null) return;
+        try {
+            CURE_TIME.setInt(zv, Math.max(1, CURE_TIME.getInt(zv) - ticks));
+        } catch (IllegalAccessException ignored) {
+        }
+    }
+
+    public boolean isCamel() {
+        return this.species == GirlSpecies.CAMEL_CENTAUR || this.species == GirlSpecies.DROMEDARY_CENTAUR;
+    }
+
+    /** Camels carry anyone; the kelpie only under a saddle and the pegasus under her golden bridle (put on by a friend); the others at high friendship. */
+    private boolean letsRide(Player player) {
+        if (this.isCamel()) return true;
+        if (this.needsTack()) return this.hasFlag(FLAG_SADDLED);
+        return this.getAffection(player) >= RIDE_AFFECTION;
+    }
+
+    /** The kelpie and the pegasus are ridden only with tack on (a saddle; for the pegasus, Bellerophon's golden bridle). */
+    private boolean needsTack() {
+        return this.species == GirlSpecies.KELPIE_CENTAUR || this.species == GirlSpecies.PEGASUS_CENTAUR;
+    }
+
+    private int saddleAffection() {
+        return this.isCamel() ? 0 : this.needsTack() ? com.linkyoshi90.monstergirls.entity.Orders.AFFECTION : RIDE_AFFECTION;
+    }
+
+    /** What she wears to be ridden: a saddle, or gold horse armour as the pegasus' golden bridle. */
+    private net.minecraft.world.item.Item tack() {
+        return this.species == GirlSpecies.PEGASUS_CENTAUR ? Items.GOLDEN_HORSE_ARMOR : Items.SADDLE;
+    }
+
+    // --- the pegasus: a leap and a long glide ----------------------------------------------------------------------
+
+    private float jumpPending;
+
+    @Override
+    public void onPlayerJump(int power) {
+        if (this.canJump()) this.jumpPending = power >= 90 ? 1.0F : 0.4F + 0.6F * power / 90.0F;
+    }
+
+    @Override
+    public boolean canJump() {
+        return this.species == GirlSpecies.PEGASUS_CENTAUR && this.hasFlag(FLAG_SADDLED);
+    }
+
+    @Override
+    public void handleStartJump(int power) {
+        this.playSound(SoundEvents.ENDER_DRAGON_FLAP, 0.6F, 1.6F);
+    }
+
+    @Override
+    public void handleStopJump() {
+    }
+
+    // --- the kelpie by night -------------------------------------------------------------------------------------
+
+    /** By day she is calm; at night she attacks any player she is not fond of. */
+    @Override
+    public boolean isHostileTo(Player player) {
+        if (this.species != GirlSpecies.KELPIE_CENTAUR) return super.isHostileTo(player);
+        long time = this.level().getDayTime() % 24000L;                 // the clock, not the sky: night is 13000 to 23000
+        return time >= 13000L && time < 23000L && this.getAffection(player) < com.linkyoshi90.monstergirls.entity.Orders.AFFECTION && this.couldAttack(player);
+    }
+
 
     // --- herd ----------------------------------------------------------------------------------------------------
 
@@ -142,7 +351,11 @@ public class Centaur extends AbstractMonsterGirl {
     @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(Items.APPLE) || stack.is(Items.CARROT) || stack.is(Items.GOLDEN_CARROT) || stack.is(Items.SUGAR) || stack.is(Items.WHEAT) || stack.is(Items.HAY_BLOCK)
-                || (this.species == GirlSpecies.TAPIR_CENTAUR && stack.is(Items.MELON_SLICE));
+                || (this.species == GirlSpecies.TAPIR_CENTAUR && stack.is(Items.MELON_SLICE))
+                || (this.isCamel() && stack.is(Items.CACTUS))
+                || (this.species == GirlSpecies.KELPIE_CENTAUR && (stack.is(Items.KELP) || stack.is(Items.DRIED_KELP)))
+                || (this.species == GirlSpecies.PEGASUS_CENTAUR && stack.is(Items.GOLDEN_APPLE))
+                || (this.species == GirlSpecies.AURORANTLER_CENTAUR && (stack.is(Items.SWEET_BERRIES) || stack.is(Items.GLOW_BERRIES)));
     }
 
     /** The baku: no phantom (vanilla or girl) comes for a player within 32 blocks of a tapir. */
@@ -153,6 +366,7 @@ public class Centaur extends AbstractMonsterGirl {
 
     @Override
     protected int foodValue(Player player, ItemStack stack) {
+        if (stack.is(Items.GOLDEN_APPLE)) return 10;                       // the pegasus' great weakness
         return stack.is(Items.GOLDEN_CARROT) || stack.is(Items.HAY_BLOCK) ? 3 : stack.is(Items.APPLE) ? 2 : 1;
     }
 
@@ -180,6 +394,15 @@ public class Centaur extends AbstractMonsterGirl {
     @Nullable
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        if (this.species == GirlSpecies.SPHINX_CENTAUR && !this.isBaby()) {
+            if (this.level() instanceof ServerLevel server) {
+                int which = this.riddleFor(player);
+                if (which < 0) this.askRiddle(player, this.random.nextInt(RIDDLE_ANSWERS.size()));
+                else if (stack.isEmpty()) this.askRiddle(player, which);           // asked again
+                else this.answer(server, player, stack);
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         boolean client = this.level().isClientSide;
         if (stack.is(Items.BRUSH)) {                                   // grooming: the herd's way of saying trust
             if (this.level() instanceof ServerLevel server && server.getGameTime() >= this.nextGroom) {
@@ -192,6 +415,28 @@ public class Centaur extends AbstractMonsterGirl {
             return InteractionResult.sidedSuccess(client);
         }
         if (this.isBaby()) return null;
+        if (this.isCamel() && stack.is(Items.CACTUS) && this.camelLove <= 0) {   // cactus: in the mood, and a vanilla camel in love will do
+            if (this.level() instanceof ServerLevel server) {
+                this.camelLove = 600;
+                server.sendParticles(ParticleTypes.HEART, this.getX(), this.getY() + this.getBbHeight(), this.getZ(), 3, 0.3, 0.2, 0.3, 0);
+            }
+            return null;                                               // and it still counts as food
+        }
+        if (this.isCamel() && stack.is(Items.BUCKET)) {               // camel milk
+            if (this.level() instanceof ServerLevel server) {
+                if (server.getGameTime() < this.nextMilk) {
+                    player.displayClientMessage(Component.translatable("message.monstergirls.no_milk", this.getDisplayName()), true);
+                } else {
+                    this.nextMilk = server.getGameTime() + Minotaur.MILK_COOLDOWN;
+                    stack.consume(1, player);
+                    ItemStack milk = new ItemStack(Items.MILK_BUCKET);
+                    if (!player.getInventory().add(milk)) player.drop(milk, false);
+                    this.addAffection(player, 1);
+                    this.playSound(SoundEvents.COW_MILK, 1.0F, 0.9F);
+                }
+            }
+            return InteractionResult.sidedSuccess(client);
+        }
         if (isChestplate(stack)) {                                     // torso armour
             if (this.getAffection(player) < ARMOUR_AFFECTION) return InteractionResult.PASS;
             if (!client) {
@@ -204,8 +449,8 @@ public class Centaur extends AbstractMonsterGirl {
             }
             return InteractionResult.sidedSuccess(client);
         }
-        if (stack.is(Items.SADDLE) && !this.hasFlag(FLAG_SADDLED)) {
-            if (this.getAffection(player) < RIDE_AFFECTION || !this.mayCarry(player)) {
+        if (stack.is(this.tack()) && !this.hasFlag(FLAG_SADDLED)) {
+            if (this.getAffection(player) < this.saddleAffection() || !this.mayCarry(player)) {
                 if (!client) player.displayClientMessage(Component.translatable("message.monstergirls.ride_refused", this.getDisplayName()), true);
                 return InteractionResult.sidedSuccess(client);
             }
@@ -250,9 +495,9 @@ public class Centaur extends AbstractMonsterGirl {
                 }
                 return InteractionResult.sidedSuccess(client);
             }
-            return this.getAffection(player) >= RIDE_AFFECTION ? this.pet(player) : null;   // riders pat her while crouching
+            return this.letsRide(player) ? this.pet(player) : null;      // riders pat her while crouching
         }
-        if (stack.isEmpty() && !this.isVehicle() && this.getAffection(player) >= RIDE_AFFECTION) {   // high friendship: up on her back
+        if (stack.isEmpty() && !this.isVehicle() && this.letsRide(player)) {   // up on her back
             if (!this.mayCarry(player)) {
                 if (!client) player.displayClientMessage(Component.translatable("message.monstergirls.ride_refused", this.getDisplayName()), true);
                 return InteractionResult.sidedSuccess(client);
@@ -290,9 +535,18 @@ public class Centaur extends AbstractMonsterGirl {
         int r = this.random.nextInt(100);
         return switch (this.species) {
             case REINDEER_CENTAUR -> new ItemStack(r < 40 ? Items.SWEET_BERRIES : r < 75 ? Items.MOSS_BLOCK : Items.GLOW_LICHEN, r < 40 ? 4 : 1);
+            case TUSKTAUR_CENTAUR -> new ItemStack(r < 45 ? Items.BROWN_WOOL : r < 80 ? Items.BONE : Items.PACKED_ICE, r < 80 ? 2 : 4);
+            case SPHINX_CENTAUR -> new ItemStack(r < 40 ? Items.GOLD_NUGGET : r < 75 ? Items.LAPIS_LAZULI : r < 95 ? Items.SANDSTONE : Items.GOLD_INGOT,
+                    r < 40 ? 4 : r < 75 ? 3 : r < 95 ? 4 : 1);
+            case AURORANTLER_CENTAUR -> new ItemStack(r < 45 ? Items.GLOW_BERRIES : r < 80 ? Items.GLOW_LICHEN : Items.AMETHYST_SHARD, r < 45 ? 3 : 2);
             case GOAT_CENTAUR -> new ItemStack(r < 60 ? Items.MILK_BUCKET : Items.EMERALD);
             case ALPACA_CENTAUR -> new ItemStack(this.woolColour(), 2);
             case TAPIR_CENTAUR -> new ItemStack(r < 50 ? Items.MELON_SLICE : r < 85 ? Items.SWEET_BERRIES : Items.GLOW_BERRIES, 3);
+            case CAMEL_CENTAUR -> r < 40 ? new ItemStack(Items.BROWN_WOOL, 2) : new ItemStack(r < 75 ? Items.MILK_BUCKET : Items.CACTUS, r < 75 ? 1 : 2);
+            case DROMEDARY_CENTAUR -> r < 45 ? new ItemStack(Items.MILK_BUCKET) : new ItemStack(r < 80 ? Items.CACTUS : Items.GOLD_NUGGET, r < 80 ? 2 : 3);
+            case KELPIE_CENTAUR -> r < 40 ? new ItemStack(Items.KELP, 4) : r < 70 ? new ItemStack(Items.SALMON, 2) : new ItemStack(r < 95 ? Items.LILY_PAD : Items.NAUTILUS_SHELL);
+            case UNICORN_CENTAUR -> new ItemStack(r < 40 ? Items.GLOW_BERRIES : r < 75 ? Items.AMETHYST_SHARD : r < 95 ? Items.GOLDEN_CARROT : Items.TOTEM_OF_UNDYING,
+                    r < 75 ? 2 : 1);
             default -> new ItemStack(r < 50 ? Items.APPLE : r < 85 ? Items.WHEAT : Items.GOLDEN_CARROT, r < 85 ? 2 : 1);
         };
     }
@@ -302,12 +556,13 @@ public class Centaur extends AbstractMonsterGirl {
     @Nullable
     @Override
     public LivingEntity getControllingPassenger() {
-        return this.getFirstPassenger() instanceof Player p && (this.hasFlag(FLAG_SADDLED) || this.getAffection(p) >= RIDE_AFFECTION) ? p : super.getControllingPassenger();
+        // no friendship check: the client decides who steers and does not know her friendship (it is checked when you get on)
+        return this.getFirstPassenger() instanceof Player p ? p : super.getControllingPassenger();
     }
 
     /** The zebra is famously never tamed: only her father may ride her. */
     public boolean mayCarry(Player player) {
-        return this.species != GirlSpecies.ZEBRA_CENTAUR || player.getUUID().equals(this.getFather());
+        return this.species != GirlSpecies.SPHINX_CENTAUR && (this.species != GirlSpecies.ZEBRA_CENTAUR || player.getUUID().equals(this.getFather()));
     }
 
     public float getStamina() {
@@ -328,6 +583,22 @@ public class Centaur extends AbstractMonsterGirl {
         Vec2 rot = new Vec2(player.getXRot() * 0.5F, player.getYRot());
         this.setRot(rot.y, rot.x);
         this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
+        if (this.species == GirlSpecies.PEGASUS_CENTAUR) {
+            if (this.jumpPending > 0 && this.onGround()) {              // the leap: up and forward on her wings
+                Vec3 fwd = Vec3.directionFromRotation(0, this.getYRot()).scale(1.2 * this.jumpPending);
+                this.setDeltaMovement(fwd.x, 0.5 + 0.9 * this.jumpPending, fwd.z);
+                this.hasImpulse = true;
+            } else if (!this.onGround() && this.getDeltaMovement().y < -0.12) {   // then a slow glide down
+                this.setDeltaMovement(this.getDeltaMovement().x, -0.12, this.getDeltaMovement().z);
+            }
+            this.jumpPending = 0;
+        }
+        if (this.species == GirlSpecies.KELPIE_CENTAUR && this.isInWater()) {   // the water horse: faster than a boat, her rider kept dry
+            float speed = player.zza > 0 ? (player.isSprinting() ? 0.5F : 0.42F) : 0.0F;
+            Vec3 fwd = Vec3.directionFromRotation(0, this.getYRot()).scale(speed);
+            double up = this.getFluidHeight(net.minecraft.tags.FluidTags.WATER) > 1.0 ? 0.08 : this.horizontalCollision ? 0.4 : 0.0;
+            this.setDeltaMovement(fwd.x, Math.max(this.getDeltaMovement().y, up), fwd.z);
+        }
     }
 
     @Override
@@ -338,7 +609,7 @@ public class Centaur extends AbstractMonsterGirl {
 
     @Override
     protected float getRiddenSpeed(Player player) {
-        float base = (this.species == GirlSpecies.HORSE_CENTAUR ? 0.32F : 0.26F) * (this.hasFlag(FLAG_SADDLED) ? 1.15F : 1.0F);
+        float base = (this.species == GirlSpecies.HORSE_CENTAUR || this.species == GirlSpecies.KELPIE_CENTAUR || this.species == GirlSpecies.PEGASUS_CENTAUR ? 0.32F : 0.26F) * (this.hasFlag(FLAG_SADDLED) ? 1.15F : 1.0F);
         return player.isSprinting() && !this.winded ? base * 1.45F : this.winded ? base * 0.7F : base;
     }
 
@@ -354,7 +625,7 @@ public class Centaur extends AbstractMonsterGirl {
 
     @Override
     public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
-        return this.species != GirlSpecies.GOAT_CENTAUR && super.causeFallDamage(distance, multiplier, source);
+        return this.species != GirlSpecies.GOAT_CENTAUR && this.species != GirlSpecies.PEGASUS_CENTAUR && super.causeFallDamage(distance, multiplier, source);
     }
 
     // --- combat --------------------------------------------------------------------------------------------------
@@ -386,8 +657,13 @@ public class Centaur extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.AURORANTLER_CENTAUR && this.level() instanceof ServerLevel aurora && !this.isBaby()) this.aurora(aurora);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.ALPACA_CENTAUR && this.fleeceTicks < 24000) this.fleeceTicks++;
+        if (this.camelLove > 0 && --this.camelLove % 10 == 0) this.courtCamel(server);
+        if (this.species == GirlSpecies.KELPIE_CENTAUR && this.getTarget() instanceof Player p && !this.isHostileTo(p) && this.getLastHurtByMob() != p) {
+            this.setTarget(null);                                     // morning: the hunt is over
+        }
         if (this.species == GirlSpecies.ZEBRA_CENTAUR && server.getGameTime() >= this.nextAlarm && this.tickCount % 20 == 0
                 && this.bondedPlayer(BED_AFFECTION, 32) != null) {
             Monster m = this.nearest(Monster.class, 16, x -> true);
@@ -400,10 +676,48 @@ public class Centaur extends AbstractMonsterGirl {
         }
     }
 
+    /** A camel girl in love walks up to a vanilla camel in love (fed cactus) within 8 blocks, and they raise a calf. */
+    private void courtCamel(ServerLevel level) {
+        if (!this.getGestation().canConceive()) return;
+        net.minecraft.world.entity.animal.camel.Camel camel = this.nearest(net.minecraft.world.entity.animal.camel.Camel.class, 8,
+                c -> c.isInLove() && !c.isBaby());
+        if (camel == null) return;
+        if (this.distanceToSqr(camel) > 3.0 * 3.0) {
+            this.getNavigation().moveTo(camel, 1.0);
+            return;
+        }
+        this.getGestation().conceive(null);
+        this.camelSired = true;
+        this.camelLove = 0;
+        camel.resetLove();
+        this.hearts(level, 6);
+    }
+
+    public int getCamelLove() {
+        return this.camelLove;
+    }
+
+    /** Sired by a vanilla camel: a camel calf or a foal of her own, even odds. */
+    @Override
+    protected boolean giveBirth(ServerLevel level, @Nullable java.util.UUID father) {
+        if (this.camelSired && this.random.nextBoolean()) {
+            net.minecraft.world.entity.animal.camel.Camel calf = EntityType.CAMEL.create(level);
+            if (calf != null) {
+                calf.setAge(-24000);
+                calf.moveTo(this.getX(), this.getY(), this.getZ(), this.random.nextFloat() * 360.0F, 0.0F);
+                level.addFreshEntity(calf);
+                this.camelSired = false;
+                return true;
+            }
+        }
+        this.camelSired = false;
+        return super.giveBirth(level, father);
+    }
+
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
-        if (this.hasFlag(FLAG_SADDLED)) this.spawnAtLocation(Items.SADDLE);
+        if (this.hasFlag(FLAG_SADDLED)) this.spawnAtLocation(this.tack());
         if (this.hasFlag(FLAG_CHEST)) {
             this.spawnAtLocation(Items.CHEST);
             for (int i = 0; i < this.pack.getContainerSize(); i++) if (!this.pack.getItem(i).isEmpty()) this.spawnAtLocation(this.pack.getItem(i));
@@ -418,12 +732,14 @@ public class Centaur extends AbstractMonsterGirl {
             case ZEBRA_CENTAUR -> SoundEvents.DONKEY_AMBIENT;
             case GOAT_CENTAUR -> SoundEvents.GOAT_AMBIENT;
             case ALPACA_CENTAUR -> SoundEvents.LLAMA_AMBIENT;
+            case CAMEL_CENTAUR, DROMEDARY_CENTAUR -> SoundEvents.CAMEL_AMBIENT;
             default -> SoundEvents.HORSE_AMBIENT;
         };
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
+        if (this.isCamel()) return SoundEvents.CAMEL_HURT;
         return this.species == GirlSpecies.GOAT_CENTAUR ? SoundEvents.GOAT_HURT : this.species == GirlSpecies.ALPACA_CENTAUR ? SoundEvents.LLAMA_HURT : SoundEvents.HORSE_HURT;
     }
 
@@ -455,6 +771,8 @@ public class Centaur extends AbstractMonsterGirl {
         tag.putBoolean("LeadMare", this.leadMare);
         tag.putInt("Fleece", this.fleeceTicks);
         tag.put("Pack", this.pack.createTag(this.registryAccess()));
+        tag.putLong("NextMilk", this.nextMilk);
+        tag.putBoolean("CamelSired", this.camelSired);
     }
 
     @Override
@@ -463,6 +781,8 @@ public class Centaur extends AbstractMonsterGirl {
         this.leadMare = tag.getBoolean("LeadMare");
         this.fleeceTicks = tag.getInt("Fleece");
         this.pack.fromTag(tag.getList("Pack", 10), this.registryAccess());
+        this.nextMilk = tag.getLong("NextMilk");
+        this.camelSired = tag.getBoolean("CamelSired");
         this.refreshArmourHealth();
         if (tag.contains("Health")) this.setHealth(tag.getFloat("Health"));
     }

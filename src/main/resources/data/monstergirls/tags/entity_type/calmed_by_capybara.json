@@ -1,0 +1,53 @@
+{
+  "values": [
+    "minecraft:wolf",
+    "minecraft:fox",
+    "minecraft:cat",
+    "minecraft:ocelot",
+    "minecraft:polar_bear",
+    {
+      "id": "alexsmobs:tiger",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:snow_leopard",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:grizzly_bear",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:maned_wolf",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:crocodile",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:caiman",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:komodo_dragon",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:anaconda",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:jaguar",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:dropbear",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:tasmanian_devil",
+      "required": false
+    }
+  ]
+}

@@ -383,6 +383,486 @@
     },
     "eggs=4,hatch=3,species=phoenix_harpy": {
       "model": "monstergirls:block/harpy_egg_phoenix_harpy_3_x4"
+    },
+    "eggs=1,hatch=0,species=tengu_harpy": {
+      "model": "monstergirls:block/harpy_egg_tengu_harpy_0"
+    },
+    "eggs=2,hatch=0,species=tengu_harpy": {
+      "model": "monstergirls:block/harpy_egg_tengu_harpy_0_x2"
+    },
+    "eggs=3,hatch=0,species=tengu_harpy": {
+      "model": "monstergirls:block/harpy_egg_tengu_harpy_0_x3"
+    },
+    "eggs=4,hatch=0,species=tengu_harpy": {
+      "model": "monstergirls:block/harpy_egg_tengu_harpy_0_x4"
+    },
+    "eggs=1,hatch=1,species=tengu_harpy": {
+      "model": "monstergirls:block/harpy_egg_tengu_harpy_1"
+    },
+    "eggs=2,hatch=1,species=tengu_harpy": {
+      "model": "monstergirls:block/harpy_egg_tengu_harpy_1_x2"
+    },
+    "eggs=3,hatch=1,species=tengu_harpy": {
+      "model": "monstergirls:block/harpy_egg_tengu_harpy_1_x3"
+    },
+    "eggs=4,hatch=1,species=tengu_harpy": {
+      "model": "monstergirls:block/harpy_egg_tengu_harpy_1_x4"
+    },
+    "eggs=1,hatch=2,species=tengu_harpy": {
+      "model": "monstergirls:block/harpy_egg_tengu_harpy_2"
+    },
+    "eggs=2,hatch=2,species=tengu_harpy": {
+      "model": "monstergirls:block/harpy_egg_tengu_harpy_2_x2"
+    },
+    "eggs=3,hatch=2,species=tengu_harpy": {
+      "model": "monstergirls:block/harpy_egg_tengu_harpy_2_x3"
+    },
+    "eggs=4,hatch=2,species=tengu_harpy": {
+      "model": "monstergirls:block/harpy_egg_tengu_harpy_2_x4"
+    },
+    "eggs=1,hatch=3,species=tengu_harpy": {
+      "model": "monstergirls:block/harpy_egg_tengu_harpy_3"
+    },
+    "eggs=2,hatch=3,species=tengu_harpy": {
+      "model": "monstergirls:block/harpy_egg_tengu_harpy_3_x2"
+    },
+    "eggs=3,hatch=3,species=tengu_harpy": {
+      "model": "monstergirls:block/harpy_egg_tengu_harpy_3_x3"
+    },
+    "eggs=4,hatch=3,species=tengu_harpy": {
+      "model": "monstergirls:block/harpy_egg_tengu_harpy_3_x4"
+    },
+    "eggs=1,hatch=0,species=zhuque_harpy": {
+      "model": "monstergirls:block/harpy_egg_zhuque_harpy_0"
+    },
+    "eggs=2,hatch=0,species=zhuque_harpy": {
+      "model": "monstergirls:block/harpy_egg_zhuque_harpy_0_x2"
+    },
+    "eggs=3,hatch=0,species=zhuque_harpy": {
+      "model": "monstergirls:block/harpy_egg_zhuque_harpy_0_x3"
+    },
+    "eggs=4,hatch=0,species=zhuque_harpy": {
+      "model": "monstergirls:block/harpy_egg_zhuque_harpy_0_x4"
+    },
+    "eggs=1,hatch=1,species=zhuque_harpy": {
+      "model": "monstergirls:block/harpy_egg_zhuque_harpy_1"
+    },
+    "eggs=2,hatch=1,species=zhuque_harpy": {
+      "model": "monstergirls:block/harpy_egg_zhuque_harpy_1_x2"
+    },
+    "eggs=3,hatch=1,species=zhuque_harpy": {
+      "model": "monstergirls:block/harpy_egg_zhuque_harpy_1_x3"
+    },
+    "eggs=4,hatch=1,species=zhuque_harpy": {
+      "model": "monstergirls:block/harpy_egg_zhuque_harpy_1_x4"
+    },
+    "eggs=1,hatch=2,species=zhuque_harpy": {
+      "model": "monstergirls:block/harpy_egg_zhuque_harpy_2"
+    },
+    "eggs=2,hatch=2,species=zhuque_harpy": {
+      "model": "monstergirls:block/harpy_egg_zhuque_harpy_2_x2"
+    },
+    "eggs=3,hatch=2,species=zhuque_harpy": {
+      "model": "monstergirls:block/harpy_egg_zhuque_harpy_2_x3"
+    },
+    "eggs=4,hatch=2,species=zhuque_harpy": {
+      "model": "monstergirls:block/harpy_egg_zhuque_harpy_2_x4"
+    },
+    "eggs=1,hatch=3,species=zhuque_harpy": {
+      "model": "monstergirls:block/harpy_egg_zhuque_harpy_3"
+    },
+    "eggs=2,hatch=3,species=zhuque_harpy": {
+      "model": "monstergirls:block/harpy_egg_zhuque_harpy_3_x2"
+    },
+    "eggs=3,hatch=3,species=zhuque_harpy": {
+      "model": "monstergirls:block/harpy_egg_zhuque_harpy_3_x3"
+    },
+    "eggs=4,hatch=3,species=zhuque_harpy": {
+      "model": "monstergirls:block/harpy_egg_zhuque_harpy_3_x4"
+    },
+    "eggs=1,hatch=0,species=toucan_harpy": {
+      "model": "monstergirls:block/harpy_egg_toucan_harpy_0"
+    },
+    "eggs=2,hatch=0,species=toucan_harpy": {
+      "model": "monstergirls:block/harpy_egg_toucan_harpy_0_x2"
+    },
+    "eggs=3,hatch=0,species=toucan_harpy": {
+      "model": "monstergirls:block/harpy_egg_toucan_harpy_0_x3"
+    },
+    "eggs=4,hatch=0,species=toucan_harpy": {
+      "model": "monstergirls:block/harpy_egg_toucan_harpy_0_x4"
+    },
+    "eggs=1,hatch=1,species=toucan_harpy": {
+      "model": "monstergirls:block/harpy_egg_toucan_harpy_1"
+    },
+    "eggs=2,hatch=1,species=toucan_harpy": {
+      "model": "monstergirls:block/harpy_egg_toucan_harpy_1_x2"
+    },
+    "eggs=3,hatch=1,species=toucan_harpy": {
+      "model": "monstergirls:block/harpy_egg_toucan_harpy_1_x3"
+    },
+    "eggs=4,hatch=1,species=toucan_harpy": {
+      "model": "monstergirls:block/harpy_egg_toucan_harpy_1_x4"
+    },
+    "eggs=1,hatch=2,species=toucan_harpy": {
+      "model": "monstergirls:block/harpy_egg_toucan_harpy_2"
+    },
+    "eggs=2,hatch=2,species=toucan_harpy": {
+      "model": "monstergirls:block/harpy_egg_toucan_harpy_2_x2"
+    },
+    "eggs=3,hatch=2,species=toucan_harpy": {
+      "model": "monstergirls:block/harpy_egg_toucan_harpy_2_x3"
+    },
+    "eggs=4,hatch=2,species=toucan_harpy": {
+      "model": "monstergirls:block/harpy_egg_toucan_harpy_2_x4"
+    },
+    "eggs=1,hatch=3,species=toucan_harpy": {
+      "model": "monstergirls:block/harpy_egg_toucan_harpy_3"
+    },
+    "eggs=2,hatch=3,species=toucan_harpy": {
+      "model": "monstergirls:block/harpy_egg_toucan_harpy_3_x2"
+    },
+    "eggs=3,hatch=3,species=toucan_harpy": {
+      "model": "monstergirls:block/harpy_egg_toucan_harpy_3_x3"
+    },
+    "eggs=4,hatch=3,species=toucan_harpy": {
+      "model": "monstergirls:block/harpy_egg_toucan_harpy_3_x4"
+    },
+    "eggs=1,hatch=0,species=penguin_harpy": {
+      "model": "monstergirls:block/harpy_egg_penguin_harpy_0"
+    },
+    "eggs=2,hatch=0,species=penguin_harpy": {
+      "model": "monstergirls:block/harpy_egg_penguin_harpy_0_x2"
+    },
+    "eggs=3,hatch=0,species=penguin_harpy": {
+      "model": "monstergirls:block/harpy_egg_penguin_harpy_0_x3"
+    },
+    "eggs=4,hatch=0,species=penguin_harpy": {
+      "model": "monstergirls:block/harpy_egg_penguin_harpy_0_x4"
+    },
+    "eggs=1,hatch=1,species=penguin_harpy": {
+      "model": "monstergirls:block/harpy_egg_penguin_harpy_1"
+    },
+    "eggs=2,hatch=1,species=penguin_harpy": {
+      "model": "monstergirls:block/harpy_egg_penguin_harpy_1_x2"
+    },
+    "eggs=3,hatch=1,species=penguin_harpy": {
+      "model": "monstergirls:block/harpy_egg_penguin_harpy_1_x3"
+    },
+    "eggs=4,hatch=1,species=penguin_harpy": {
+      "model": "monstergirls:block/harpy_egg_penguin_harpy_1_x4"
+    },
+    "eggs=1,hatch=2,species=penguin_harpy": {
+      "model": "monstergirls:block/harpy_egg_penguin_harpy_2"
+    },
+    "eggs=2,hatch=2,species=penguin_harpy": {
+      "model": "monstergirls:block/harpy_egg_penguin_harpy_2_x2"
+    },
+    "eggs=3,hatch=2,species=penguin_harpy": {
+      "model": "monstergirls:block/harpy_egg_penguin_harpy_2_x3"
+    },
+    "eggs=4,hatch=2,species=penguin_harpy": {
+      "model": "monstergirls:block/harpy_egg_penguin_harpy_2_x4"
+    },
+    "eggs=1,hatch=3,species=penguin_harpy": {
+      "model": "monstergirls:block/harpy_egg_penguin_harpy_3"
+    },
+    "eggs=2,hatch=3,species=penguin_harpy": {
+      "model": "monstergirls:block/harpy_egg_penguin_harpy_3_x2"
+    },
+    "eggs=3,hatch=3,species=penguin_harpy": {
+      "model": "monstergirls:block/harpy_egg_penguin_harpy_3_x3"
+    },
+    "eggs=4,hatch=3,species=penguin_harpy": {
+      "model": "monstergirls:block/harpy_egg_penguin_harpy_3_x4"
+    },
+    "eggs=1,hatch=0,species=finch_harpy": {
+      "model": "monstergirls:block/harpy_egg_finch_harpy_0"
+    },
+    "eggs=2,hatch=0,species=finch_harpy": {
+      "model": "monstergirls:block/harpy_egg_finch_harpy_0_x2"
+    },
+    "eggs=3,hatch=0,species=finch_harpy": {
+      "model": "monstergirls:block/harpy_egg_finch_harpy_0_x3"
+    },
+    "eggs=4,hatch=0,species=finch_harpy": {
+      "model": "monstergirls:block/harpy_egg_finch_harpy_0_x4"
+    },
+    "eggs=1,hatch=1,species=finch_harpy": {
+      "model": "monstergirls:block/harpy_egg_finch_harpy_1"
+    },
+    "eggs=2,hatch=1,species=finch_harpy": {
+      "model": "monstergirls:block/harpy_egg_finch_harpy_1_x2"
+    },
+    "eggs=3,hatch=1,species=finch_harpy": {
+      "model": "monstergirls:block/harpy_egg_finch_harpy_1_x3"
+    },
+    "eggs=4,hatch=1,species=finch_harpy": {
+      "model": "monstergirls:block/harpy_egg_finch_harpy_1_x4"
+    },
+    "eggs=1,hatch=2,species=finch_harpy": {
+      "model": "monstergirls:block/harpy_egg_finch_harpy_2"
+    },
+    "eggs=2,hatch=2,species=finch_harpy": {
+      "model": "monstergirls:block/harpy_egg_finch_harpy_2_x2"
+    },
+    "eggs=3,hatch=2,species=finch_harpy": {
+      "model": "monstergirls:block/harpy_egg_finch_harpy_2_x3"
+    },
+    "eggs=4,hatch=2,species=finch_harpy": {
+      "model": "monstergirls:block/harpy_egg_finch_harpy_2_x4"
+    },
+    "eggs=1,hatch=3,species=finch_harpy": {
+      "model": "monstergirls:block/harpy_egg_finch_harpy_3"
+    },
+    "eggs=2,hatch=3,species=finch_harpy": {
+      "model": "monstergirls:block/harpy_egg_finch_harpy_3_x2"
+    },
+    "eggs=3,hatch=3,species=finch_harpy": {
+      "model": "monstergirls:block/harpy_egg_finch_harpy_3_x3"
+    },
+    "eggs=4,hatch=3,species=finch_harpy": {
+      "model": "monstergirls:block/harpy_egg_finch_harpy_3_x4"
+    },
+    "eggs=1,hatch=0,species=flamingo_harpy": {
+      "model": "monstergirls:block/harpy_egg_flamingo_harpy_0"
+    },
+    "eggs=2,hatch=0,species=flamingo_harpy": {
+      "model": "monstergirls:block/harpy_egg_flamingo_harpy_0_x2"
+    },
+    "eggs=3,hatch=0,species=flamingo_harpy": {
+      "model": "monstergirls:block/harpy_egg_flamingo_harpy_0_x3"
+    },
+    "eggs=4,hatch=0,species=flamingo_harpy": {
+      "model": "monstergirls:block/harpy_egg_flamingo_harpy_0_x4"
+    },
+    "eggs=1,hatch=1,species=flamingo_harpy": {
+      "model": "monstergirls:block/harpy_egg_flamingo_harpy_1"
+    },
+    "eggs=2,hatch=1,species=flamingo_harpy": {
+      "model": "monstergirls:block/harpy_egg_flamingo_harpy_1_x2"
+    },
+    "eggs=3,hatch=1,species=flamingo_harpy": {
+      "model": "monstergirls:block/harpy_egg_flamingo_harpy_1_x3"
+    },
+    "eggs=4,hatch=1,species=flamingo_harpy": {
+      "model": "monstergirls:block/harpy_egg_flamingo_harpy_1_x4"
+    },
+    "eggs=1,hatch=2,species=flamingo_harpy": {
+      "model": "monstergirls:block/harpy_egg_flamingo_harpy_2"
+    },
+    "eggs=2,hatch=2,species=flamingo_harpy": {
+      "model": "monstergirls:block/harpy_egg_flamingo_harpy_2_x2"
+    },
+    "eggs=3,hatch=2,species=flamingo_harpy": {
+      "model": "monstergirls:block/harpy_egg_flamingo_harpy_2_x3"
+    },
+    "eggs=4,hatch=2,species=flamingo_harpy": {
+      "model": "monstergirls:block/harpy_egg_flamingo_harpy_2_x4"
+    },
+    "eggs=1,hatch=3,species=flamingo_harpy": {
+      "model": "monstergirls:block/harpy_egg_flamingo_harpy_3"
+    },
+    "eggs=2,hatch=3,species=flamingo_harpy": {
+      "model": "monstergirls:block/harpy_egg_flamingo_harpy_3_x2"
+    },
+    "eggs=3,hatch=3,species=flamingo_harpy": {
+      "model": "monstergirls:block/harpy_egg_flamingo_harpy_3_x3"
+    },
+    "eggs=4,hatch=3,species=flamingo_harpy": {
+      "model": "monstergirls:block/harpy_egg_flamingo_harpy_3_x4"
+    },
+    "eggs=1,hatch=0,species=rookmourn_harpy": {
+      "model": "monstergirls:block/harpy_egg_rookmourn_harpy_0"
+    },
+    "eggs=2,hatch=0,species=rookmourn_harpy": {
+      "model": "monstergirls:block/harpy_egg_rookmourn_harpy_0_x2"
+    },
+    "eggs=3,hatch=0,species=rookmourn_harpy": {
+      "model": "monstergirls:block/harpy_egg_rookmourn_harpy_0_x3"
+    },
+    "eggs=4,hatch=0,species=rookmourn_harpy": {
+      "model": "monstergirls:block/harpy_egg_rookmourn_harpy_0_x4"
+    },
+    "eggs=1,hatch=1,species=rookmourn_harpy": {
+      "model": "monstergirls:block/harpy_egg_rookmourn_harpy_1"
+    },
+    "eggs=2,hatch=1,species=rookmourn_harpy": {
+      "model": "monstergirls:block/harpy_egg_rookmourn_harpy_1_x2"
+    },
+    "eggs=3,hatch=1,species=rookmourn_harpy": {
+      "model": "monstergirls:block/harpy_egg_rookmourn_harpy_1_x3"
+    },
+    "eggs=4,hatch=1,species=rookmourn_harpy": {
+      "model": "monstergirls:block/harpy_egg_rookmourn_harpy_1_x4"
+    },
+    "eggs=1,hatch=2,species=rookmourn_harpy": {
+      "model": "monstergirls:block/harpy_egg_rookmourn_harpy_2"
+    },
+    "eggs=2,hatch=2,species=rookmourn_harpy": {
+      "model": "monstergirls:block/harpy_egg_rookmourn_harpy_2_x2"
+    },
+    "eggs=3,hatch=2,species=rookmourn_harpy": {
+      "model": "monstergirls:block/harpy_egg_rookmourn_harpy_2_x3"
+    },
+    "eggs=4,hatch=2,species=rookmourn_harpy": {
+      "model": "monstergirls:block/harpy_egg_rookmourn_harpy_2_x4"
+    },
+    "eggs=1,hatch=3,species=rookmourn_harpy": {
+      "model": "monstergirls:block/harpy_egg_rookmourn_harpy_3"
+    },
+    "eggs=2,hatch=3,species=rookmourn_harpy": {
+      "model": "monstergirls:block/harpy_egg_rookmourn_harpy_3_x2"
+    },
+    "eggs=3,hatch=3,species=rookmourn_harpy": {
+      "model": "monstergirls:block/harpy_egg_rookmourn_harpy_3_x3"
+    },
+    "eggs=4,hatch=3,species=rookmourn_harpy": {
+      "model": "monstergirls:block/harpy_egg_rookmourn_harpy_3_x4"
+    },
+    "eggs=1,hatch=0,species=cassowrath_harpy": {
+      "model": "monstergirls:block/harpy_egg_cassowrath_harpy_0"
+    },
+    "eggs=2,hatch=0,species=cassowrath_harpy": {
+      "model": "monstergirls:block/harpy_egg_cassowrath_harpy_0_x2"
+    },
+    "eggs=3,hatch=0,species=cassowrath_harpy": {
+      "model": "monstergirls:block/harpy_egg_cassowrath_harpy_0_x3"
+    },
+    "eggs=4,hatch=0,species=cassowrath_harpy": {
+      "model": "monstergirls:block/harpy_egg_cassowrath_harpy_0_x4"
+    },
+    "eggs=1,hatch=1,species=cassowrath_harpy": {
+      "model": "monstergirls:block/harpy_egg_cassowrath_harpy_1"
+    },
+    "eggs=2,hatch=1,species=cassowrath_harpy": {
+      "model": "monstergirls:block/harpy_egg_cassowrath_harpy_1_x2"
+    },
+    "eggs=3,hatch=1,species=cassowrath_harpy": {
+      "model": "monstergirls:block/harpy_egg_cassowrath_harpy_1_x3"
+    },
+    "eggs=4,hatch=1,species=cassowrath_harpy": {
+      "model": "monstergirls:block/harpy_egg_cassowrath_harpy_1_x4"
+    },
+    "eggs=1,hatch=2,species=cassowrath_harpy": {
+      "model": "monstergirls:block/harpy_egg_cassowrath_harpy_2"
+    },
+    "eggs=2,hatch=2,species=cassowrath_harpy": {
+      "model": "monstergirls:block/harpy_egg_cassowrath_harpy_2_x2"
+    },
+    "eggs=3,hatch=2,species=cassowrath_harpy": {
+      "model": "monstergirls:block/harpy_egg_cassowrath_harpy_2_x3"
+    },
+    "eggs=4,hatch=2,species=cassowrath_harpy": {
+      "model": "monstergirls:block/harpy_egg_cassowrath_harpy_2_x4"
+    },
+    "eggs=1,hatch=3,species=cassowrath_harpy": {
+      "model": "monstergirls:block/harpy_egg_cassowrath_harpy_3"
+    },
+    "eggs=2,hatch=3,species=cassowrath_harpy": {
+      "model": "monstergirls:block/harpy_egg_cassowrath_harpy_3_x2"
+    },
+    "eggs=3,hatch=3,species=cassowrath_harpy": {
+      "model": "monstergirls:block/harpy_egg_cassowrath_harpy_3_x3"
+    },
+    "eggs=4,hatch=3,species=cassowrath_harpy": {
+      "model": "monstergirls:block/harpy_egg_cassowrath_harpy_3_x4"
+    },
+    "eggs=1,hatch=0,species=coin_magpie_harpy": {
+      "model": "monstergirls:block/harpy_egg_coin_magpie_harpy_0"
+    },
+    "eggs=2,hatch=0,species=coin_magpie_harpy": {
+      "model": "monstergirls:block/harpy_egg_coin_magpie_harpy_0_x2"
+    },
+    "eggs=3,hatch=0,species=coin_magpie_harpy": {
+      "model": "monstergirls:block/harpy_egg_coin_magpie_harpy_0_x3"
+    },
+    "eggs=4,hatch=0,species=coin_magpie_harpy": {
+      "model": "monstergirls:block/harpy_egg_coin_magpie_harpy_0_x4"
+    },
+    "eggs=1,hatch=1,species=coin_magpie_harpy": {
+      "model": "monstergirls:block/harpy_egg_coin_magpie_harpy_1"
+    },
+    "eggs=2,hatch=1,species=coin_magpie_harpy": {
+      "model": "monstergirls:block/harpy_egg_coin_magpie_harpy_1_x2"
+    },
+    "eggs=3,hatch=1,species=coin_magpie_harpy": {
+      "model": "monstergirls:block/harpy_egg_coin_magpie_harpy_1_x3"
+    },
+    "eggs=4,hatch=1,species=coin_magpie_harpy": {
+      "model": "monstergirls:block/harpy_egg_coin_magpie_harpy_1_x4"
+    },
+    "eggs=1,hatch=2,species=coin_magpie_harpy": {
+      "model": "monstergirls:block/harpy_egg_coin_magpie_harpy_2"
+    },
+    "eggs=2,hatch=2,species=coin_magpie_harpy": {
+      "model": "monstergirls:block/harpy_egg_coin_magpie_harpy_2_x2"
+    },
+    "eggs=3,hatch=2,species=coin_magpie_harpy": {
+      "model": "monstergirls:block/harpy_egg_coin_magpie_harpy_2_x3"
+    },
+    "eggs=4,hatch=2,species=coin_magpie_harpy": {
+      "model": "monstergirls:block/harpy_egg_coin_magpie_harpy_2_x4"
+    },
+    "eggs=1,hatch=3,species=coin_magpie_harpy": {
+      "model": "monstergirls:block/harpy_egg_coin_magpie_harpy_3"
+    },
+    "eggs=2,hatch=3,species=coin_magpie_harpy": {
+      "model": "monstergirls:block/harpy_egg_coin_magpie_harpy_3_x2"
+    },
+    "eggs=3,hatch=3,species=coin_magpie_harpy": {
+      "model": "monstergirls:block/harpy_egg_coin_magpie_harpy_3_x3"
+    },
+    "eggs=4,hatch=3,species=coin_magpie_harpy": {
+      "model": "monstergirls:block/harpy_egg_coin_magpie_harpy_3_x4"
+    },
+    "eggs=1,hatch=0,species=trickster_raven_harpy": {
+      "model": "monstergirls:block/harpy_egg_trickster_raven_harpy_0"
+    },
+    "eggs=2,hatch=0,species=trickster_raven_harpy": {
+      "model": "monstergirls:block/harpy_egg_trickster_raven_harpy_0_x2"
+    },
+    "eggs=3,hatch=0,species=trickster_raven_harpy": {
+      "model": "monstergirls:block/harpy_egg_trickster_raven_harpy_0_x3"
+    },
+    "eggs=4,hatch=0,species=trickster_raven_harpy": {
+      "model": "monstergirls:block/harpy_egg_trickster_raven_harpy_0_x4"
+    },
+    "eggs=1,hatch=1,species=trickster_raven_harpy": {
+      "model": "monstergirls:block/harpy_egg_trickster_raven_harpy_1"
+    },
+    "eggs=2,hatch=1,species=trickster_raven_harpy": {
+      "model": "monstergirls:block/harpy_egg_trickster_raven_harpy_1_x2"
+    },
+    "eggs=3,hatch=1,species=trickster_raven_harpy": {
+      "model": "monstergirls:block/harpy_egg_trickster_raven_harpy_1_x3"
+    },
+    "eggs=4,hatch=1,species=trickster_raven_harpy": {
+      "model": "monstergirls:block/harpy_egg_trickster_raven_harpy_1_x4"
+    },
+    "eggs=1,hatch=2,species=trickster_raven_harpy": {
+      "model": "monstergirls:block/harpy_egg_trickster_raven_harpy_2"
+    },
+    "eggs=2,hatch=2,species=trickster_raven_harpy": {
+      "model": "monstergirls:block/harpy_egg_trickster_raven_harpy_2_x2"
+    },
+    "eggs=3,hatch=2,species=trickster_raven_harpy": {
+      "model": "monstergirls:block/harpy_egg_trickster_raven_harpy_2_x3"
+    },
+    "eggs=4,hatch=2,species=trickster_raven_harpy": {
+      "model": "monstergirls:block/harpy_egg_trickster_raven_harpy_2_x4"
+    },
+    "eggs=1,hatch=3,species=trickster_raven_harpy": {
+      "model": "monstergirls:block/harpy_egg_trickster_raven_harpy_3"
+    },
+    "eggs=2,hatch=3,species=trickster_raven_harpy": {
+      "model": "monstergirls:block/harpy_egg_trickster_raven_harpy_3_x2"
+    },
+    "eggs=3,hatch=3,species=trickster_raven_harpy": {
+      "model": "monstergirls:block/harpy_egg_trickster_raven_harpy_3_x3"
+    },
+    "eggs=4,hatch=3,species=trickster_raven_harpy": {
+      "model": "monstergirls:block/harpy_egg_trickster_raven_harpy_3_x4"
     }
   }
 }

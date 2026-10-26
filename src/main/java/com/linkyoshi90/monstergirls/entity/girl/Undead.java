@@ -57,6 +57,10 @@ public class Undead extends AbstractMonsterGirl {
     @Nullable
     private BlockPos treasure;
     private final java.util.Map<java.util.UUID, Long> keened = new java.util.HashMap<>();
+    /** The lich's phylactery, once she has placed it. */
+    @Nullable
+    private BlockPos phylactery;
+    private long nextCast;
 
     public Undead(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
@@ -95,6 +99,9 @@ public class Undead extends AbstractMonsterGirl {
             case DULLAHAN_UNDEAD -> girlAttributes(30, 0.28, 5).add(net.minecraft.world.entity.ai.attributes.Attributes.ARMOR, 4);
             case BANSHEE_UNDEAD -> girlAttributes(22, 0.28, 2);
             case FRANKENSTEIN_UNDEAD -> girlAttributes(50, 0.25, 10).add(net.minecraft.world.entity.ai.attributes.Attributes.KNOCKBACK_RESISTANCE, 0.8);
+            case LICH_UNDEAD -> girlAttributes(60, 0.25, 6).add(net.minecraft.world.entity.ai.attributes.Attributes.KNOCKBACK_RESISTANCE, 0.5);
+            case LLORONA_UNDEAD -> girlAttributes(26, 0.28, 2);
+            case MUMMY_UNDEAD -> girlAttributes(28, 0.24, 4).add(net.minecraft.world.entity.ai.attributes.Attributes.ARMOR, 3);
             default -> girlAttributes(24, 0.25, 4);
         };
     }
@@ -115,7 +122,7 @@ public class Undead extends AbstractMonsterGirl {
     @Override
     protected boolean wildHostile() {
         return switch (this.species) {
-            case ZOMBIE_UNDEAD, LIVING_DOLL_UNDEAD, YUKI_ONNA_UNDEAD, PHANTOM_UNDEAD -> true;
+            case ZOMBIE_UNDEAD, LIVING_DOLL_UNDEAD, YUKI_ONNA_UNDEAD, PHANTOM_UNDEAD, LICH_UNDEAD -> true;
             default -> false;
         };
     }
@@ -132,9 +139,220 @@ public class Undead extends AbstractMonsterGirl {
         return player instanceof ServerPlayer sp && sp.getStats().getValue(Stats.CUSTOM.get(Stats.TIME_SINCE_REST)) >= INSOMNIA;
     }
 
+    /** No food calms a lich: only breaking her phylactery does. */
     @Override
     protected boolean calmsHer(ItemStack stack) {
+        if (this.species == GirlSpecies.LICH_UNDEAD) return false;
         return this.species == GirlSpecies.ZOMBIE_UNDEAD ? stack.is(Items.ROTTEN_FLESH) : stack.is(Items.PUMPKIN_PIE);
+    }
+
+    // --- the mummy -------------------------------------------------------------------------------------------------
+
+    private long rewrapAt = -1, spinEnds = -1, nextUnravel;
+
+    /** How far her bandages have come off: 0 wrapped, 1 the outer layer gone, 2 down to her skimpy wraps. */
+    public int unwrapped() {
+        return this.hasFlag(FLAG_UNWRAP_B) ? 2 : this.hasFlag(FLAG_UNWRAP_A) ? 1 : 0;
+    }
+
+    public void setUnwrapped(int n) {
+        this.setFlag(FLAG_UNWRAP_A, n >= 1);
+        this.setFlag(FLAG_UNWRAP_B, n >= 2);
+    }
+
+    /** One more layer off (string and paper drop); at her skimpy wraps she hurries to wrap herself up again. */
+    public void unravel(ServerLevel level, @Nullable Player puller) {
+        int n = this.unwrapped();
+        if (n >= 2 || this.spinEnds > level.getGameTime() || level.getGameTime() < this.nextUnravel) return;
+        this.setUnwrapped(n + 1);
+        this.spawnAtLocation(new ItemStack(this.random.nextBoolean() ? Items.STRING : Items.PAPER, 1 + this.random.nextInt(2)));
+        this.playSound(SoundEvents.WOOL_BREAK, 1.0F, 1.2F);
+        if (n + 1 == 2) {
+            this.rewrapAt = level.getGameTime() + 30;
+            if (puller != null) puller.displayClientMessage(Component.translatable("message.monstergirls.mummy_flustered", this.getDisplayName()), true);
+        }
+    }
+
+    private void tickWrapping(ServerLevel level) {
+        long now = level.getGameTime();
+        if (this.rewrapAt > 0 && now >= this.rewrapAt) {                   // flustered, she spins round and round, wrapping up again
+            this.rewrapAt = -1;
+            this.spinEnds = now + 40;
+            this.startTimedAction(Action.SPIN, 40);
+            this.getNavigation().stop();
+            this.playSound(SoundEvents.ARMOR_EQUIP_LEATHER.value(), 1.0F, 1.4F);
+        }
+        if (this.spinEnds > 0 && now >= this.spinEnds) {
+            this.spinEnds = -1;
+            this.setUnwrapped(0);
+            this.nextUnravel = now + 1200;
+        }
+    }
+
+    /** A wild mummy near an unopened tomb chest keeps whoever she does not know from it (as Anubis does). */
+    @Nullable
+    public static Undead mummyGuardOf(Level level, BlockPos pos, Player player) {
+        if (player.isCreative() || !(level.getBlockEntity(pos) instanceof net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity box)
+                || box.getLootTable() == null) return null;
+        for (Undead u : level.getEntitiesOfClass(Undead.class, new net.minecraft.world.phys.AABB(pos).inflate(8),
+                u -> u.isAlive() && !u.isBaby() && u.species == GirlSpecies.MUMMY_UNDEAD && u.getAffection(player) < com.linkyoshi90.monstergirls.entity.Orders.AFFECTION)) {
+            return u;
+        }
+        return null;
+    }
+
+    public void warnOffTomb(Player player) {
+        this.getLookControl().setLookAt(player);
+        this.playSound(SoundEvents.HUSK_AMBIENT, 1.0F, 1.2F);
+        player.displayClientMessage(Component.translatable("message.monstergirls.mummy_guard", this.getDisplayName()), true);
+    }
+
+    // --- La Llorona ----------------------------------------------------------------------------------------------
+
+    /** The night she last brought a lost one home: she does not weep for the rest of it. */
+    private long comfortedNight = -1;
+    @Nullable
+    private net.minecraft.world.entity.AgeableMob lost;
+
+    /** Which night it is (13000..23000 of a day and the dawn after count as one). */
+    private static long nightOf(ServerLevel level) {
+        return (level.getDayTime() + 11000L) / 24000L;
+    }
+
+    public static boolean isNight(ServerLevel level) {
+        long t = level.getDayTime() % 24000L;
+        return t >= 13000 && t < 23000;
+    }
+
+    public boolean isWeeping() {
+        return this.level() instanceof ServerLevel server && isNight(server) && this.comfortedNight != nightOf(server);
+    }
+
+    /** A young one far from any grown one of its kind. */
+    private static boolean isLost(ServerLevel level, net.minecraft.world.entity.AgeableMob m) {
+        return m.isBaby() && m.isAlive() && level.getEntitiesOfClass(net.minecraft.world.entity.AgeableMob.class, m.getBoundingBox().inflate(12),
+                a -> a.getType() == m.getType() && !a.isBaby()).isEmpty();
+    }
+
+    /** The nearest grown one of its kind, where she takes it. */
+    @Nullable
+    private static net.minecraft.world.entity.AgeableMob homeOf(ServerLevel level, net.minecraft.world.entity.AgeableMob m) {
+        net.minecraft.world.entity.AgeableMob best = null;
+        for (var a : level.getEntitiesOfClass(net.minecraft.world.entity.AgeableMob.class, m.getBoundingBox().inflate(48), a -> a.getType() == m.getType() && !a.isBaby())) {
+            if (best == null || a.distanceToSqr(m) < best.distanceToSqr(m)) best = a;
+        }
+        return best;
+    }
+
+    /** At night she weeps and searches for lost young ones, and leads them home to their own kind. */
+    public void searchTheRiver(ServerLevel level) {
+        if (!isNight(level)) {
+            this.lost = null;
+            return;
+        }
+        if (this.isWeeping() && this.tickCount % 40 == 0) {
+            level.sendParticles(ParticleTypes.FALLING_WATER, this.getX(), this.getEyeY(), this.getZ(), 3, 0.15, 0.05, 0.15, 0.0);
+            if (this.random.nextInt(3) == 0) this.playSound(SoundEvents.ALLAY_HURT, 0.6F, 0.5F);
+        }
+        if (this.lost == null || !this.lost.isAlive()) {
+            this.lost = this.nearest(net.minecraft.world.entity.AgeableMob.class, 16, m -> isLost(level, m) && homeOf(level, m) != null);
+            if (this.lost == null) return;
+        }
+        net.minecraft.world.entity.AgeableMob home = homeOf(level, this.lost);
+        if (home == null) {
+            this.lost = null;
+            return;
+        }
+        if (this.lost.distanceToSqr(home) < 6 * 6) {                    // home: she can rest tonight
+            this.bringHome(level, this.lost);
+            this.lost = null;
+            return;
+        }
+        if (this.distanceToSqr(this.lost) > 4 * 4) this.getNavigation().moveTo(this.lost, 1.0);
+        else {
+            this.getNavigation().moveTo(home, 0.8);
+            this.lost.getNavigation().moveTo(this, 1.0);               // the little one follows her
+        }
+    }
+
+    /** A lost one is home: she stops weeping for the night, and the players who walked with her are thanked. */
+    public void bringHome(ServerLevel level, net.minecraft.world.entity.LivingEntity found) {
+        this.comfortedNight = nightOf(level);
+        this.hearts(level, 4);
+        level.sendParticles(ParticleTypes.HEART, found.getX(), found.getY() + found.getBbHeight() + 0.2, found.getZ(), 2, 0.2, 0.2, 0.2, 0.0);
+        this.playSound(SoundEvents.ALLAY_AMBIENT_WITH_ITEM, 1.0F, 0.9F);
+        for (Player p : level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(16), p -> !p.isSpectator())) {
+            this.addAffection(p, 3);
+            p.displayClientMessage(Component.translatable("message.monstergirls.llorona_home", this.getDisplayName()), true);
+        }
+    }
+
+    // --- the lich ------------------------------------------------------------------------------------------------
+
+    @Nullable
+    public BlockPos getPhylactery() {
+        return this.phylactery;
+    }
+
+    /** She hides her soul in a phylactery close by (only while she is wild). */
+    private void placePhylactery(ServerLevel level) {
+        BlockPos o = this.blockPosition();
+        for (int i = 0; i < 24; i++) {
+            BlockPos p = o.offset(this.random.nextInt(9) - 4, this.random.nextInt(3) - 1, this.random.nextInt(9) - 4);
+            if (!canHoldBlock(level, p)) continue;
+            level.setBlock(p, com.linkyoshi90.monstergirls.registry.ModBlocks.PHYLACTERY.get().defaultBlockState(), 3);
+            this.phylactery = p.immutable();
+            this.setPersistenceRequired();                             // a mini-boss with a soul to guard stays put
+            return;
+        }
+    }
+
+    private boolean phylacteryStands() {
+        return this.phylactery != null && this.level().getBlockState(this.phylactery).is(com.linkyoshi90.monstergirls.registry.ModBlocks.PHYLACTERY.get());
+    }
+
+    /** Her phylactery is gone: she is free, and peaceful from now on. */
+    public void free(ServerLevel level) {
+        this.phylactery = null;
+        this.setFlag(FLAG_CALM, true);
+        this.setTarget(null);
+        this.setLastHurtByMob(null);
+        level.sendParticles(ParticleTypes.SOUL, this.getX(), this.getY() + 1.2, this.getZ(), 30, 0.5, 0.8, 0.5, 0.05);
+        this.playSound(SoundEvents.SOUL_ESCAPE.value(), 1.5F, 0.8F);
+        for (Player p : level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(32))) {
+            p.displayClientMessage(Component.translatable("message.monstergirls.lich_freed", this.getDisplayName()), true);
+        }
+    }
+
+    /** A phylactery was removed: whichever lich it belonged to is freed. */
+    public static void phylacteryBroken(ServerLevel level, BlockPos pos) {
+        for (Undead lich : level.getEntitiesOfClass(Undead.class, new net.minecraft.world.phys.AABB(pos).inflate(64), u -> pos.equals(u.phylactery))) {
+            lich.free(level);
+        }
+    }
+
+    /** Slowness and weakness on her target, every four seconds she can see it. */
+    private void cast(ServerLevel level) {
+        LivingEntity target = this.getTarget();
+        if (target == null || level.getGameTime() < this.nextCast || this.distanceToSqr(target) > 16 * 16 || !this.hasLineOfSight(target)) return;
+        this.nextCast = level.getGameTime() + 80;
+        this.startTimedAction(Action.CAST, 20);
+        target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120, 1));
+        target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 120, 0));
+        level.sendParticles(ParticleTypes.SCULK_SOUL, target.getX(), target.getY() + 1, target.getZ(), 12, 0.3, 0.5, 0.3, 0.02);
+        this.playSound(SoundEvents.EVOKER_CAST_SPELL, 1.0F, 0.8F);
+    }
+
+    /** Freed and fond of you, she trades what she knows for books: experience for each one. */
+    private boolean takeBook(ServerLevel level, Player player, ItemStack stack) {
+        int xp = stack.is(Items.ENCHANTED_BOOK) ? 30 : stack.is(Items.WRITTEN_BOOK) || stack.is(Items.WRITABLE_BOOK) ? 20 : stack.is(Items.BOOK) ? 10 : 0;
+        if (xp == 0) return false;
+        stack.consume(1, player);
+        net.minecraft.world.entity.ExperienceOrb.award(level, player.position(), xp);
+        this.addAffection(player, 2);
+        this.startTimedAction(Action.CAST, 20);
+        this.playSound(SoundEvents.BOOK_PAGE_TURN, 1.0F, 1.0F);
+        return true;
     }
 
     @Override
@@ -165,6 +383,18 @@ public class Undead extends AbstractMonsterGirl {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        if (this.species == GirlSpecies.MUMMY_UNDEAD && source.getEntity() != null && this.level() instanceof ServerLevel server && !this.isInvulnerableTo(source)) {
+            this.unravel(server, null);                                      // a blow loosens her bandages
+        }
+        if (this.species == GirlSpecies.LICH_UNDEAD && amount >= this.getHealth() && this.level() instanceof ServerLevel server && this.phylacteryStands()
+                && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            BlockPos p = this.phylactery;                                    // she cannot die: she reforms beside her phylactery
+            server.sendParticles(ParticleTypes.SOUL, this.getX(), this.getY() + 1, this.getZ(), 20, 0.4, 0.8, 0.4, 0.05);
+            this.teleportTo(p.getX() + 0.5, p.getY() + 1.0, p.getZ() + 0.5);
+            this.setHealth(this.getMaxHealth() / 2);
+            this.playSound(SoundEvents.SOUL_ESCAPE.value(), 1.5F, 0.6F);
+            return false;
+        }
         boolean hurt = super.hurt(source, amount);
         if (hurt && this.species == GirlSpecies.WILL_O_WISP_UNDEAD && source.getEntity() instanceof LivingEntity a && a.distanceToSqr(this) < 9) {
             a.igniteForSeconds(3);                                           // touch the flame, catch fire
@@ -202,6 +432,15 @@ public class Undead extends AbstractMonsterGirl {
     @Nullable
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        if (this.species == GirlSpecies.MUMMY_UNDEAD && stack.isEmpty() && player.isShiftKeyDown() && !this.isBaby()
+                && this.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {   // a gentle pull at a loose end
+            if (this.level() instanceof ServerLevel server) this.unravel(server, player);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+        if (this.species == GirlSpecies.LICH_UNDEAD && this.isCalm() && this.getAffection(player) >= 10 && this.level() instanceof ServerLevel server
+                && this.takeBook(server, player, stack)) {
+            return InteractionResult.SUCCESS;
+        }
         if (this.species == GirlSpecies.VAMPIRE_UNDEAD && stack.isEmpty() && !player.isShiftKeyDown() && !this.isBaby()
                 && this.level().getGameTime() < this.nextDrinkOffer + 600 && this.nextDrinkOffer > 0) {
             if (!this.level().isClientSide) {
@@ -217,6 +456,7 @@ public class Undead extends AbstractMonsterGirl {
 
     @Override
     public boolean isFood(ItemStack stack) {
+        if (this.species == GirlSpecies.MUMMY_UNDEAD && (stack.is(Items.PAPER) || stack.is(Items.GOLD_NUGGET))) return true;
         return stack.is(Items.PUMPKIN_PIE) || (this.species == GirlSpecies.ZOMBIE_UNDEAD && stack.is(Items.ROTTEN_FLESH));
     }
 
@@ -240,7 +480,10 @@ public class Undead extends AbstractMonsterGirl {
             case VAMPIRE_UNDEAD -> new ItemStack(r < 50 ? Items.GOLD_NUGGET : Items.ROSE_BUSH, r < 50 ? 4 : 1);
             case PHANTOM_UNDEAD -> new ItemStack(Items.PHANTOM_MEMBRANE);
             case BANSHEE_UNDEAD -> new ItemStack(r < 75 ? Items.IRON_NUGGET : Items.GHAST_TEAR, r < 75 ? 3 : 1);
+            case LICH_UNDEAD -> new ItemStack(r < 50 ? Items.LAPIS_LAZULI : r < 85 ? Items.EXPERIENCE_BOTTLE : Items.ENCHANTED_BOOK, r < 50 ? 4 : 1);
             case LIVING_DOLL_UNDEAD -> new ItemStack(r < 50 ? Items.STRING : Items.PINK_WOOL);
+            case LLORONA_UNDEAD -> new ItemStack(r < 50 ? Items.ORANGE_TULIP : r < 85 ? Items.CANDLE : Items.GHAST_TEAR, r < 50 ? 3 : 1);
+            case MUMMY_UNDEAD -> new ItemStack(r < 40 ? Items.GOLD_NUGGET : r < 70 ? Items.PAPER : r < 95 ? Items.LAPIS_LAZULI : Items.GOLD_INGOT, r < 70 ? 4 : 2);
             default -> new ItemStack(r < 50 ? Items.BONE : r < 85 ? Items.SOUL_SAND : Items.ROTTEN_FLESH);
         };
     }
@@ -251,12 +494,19 @@ public class Undead extends AbstractMonsterGirl {
     public void aiStep() {
         super.aiStep();
         if (!(this.level() instanceof ServerLevel server)) return;
+        if (this.species == GirlSpecies.MUMMY_UNDEAD) this.tickWrapping(server);
         if (this.species == GirlSpecies.WILL_O_WISP_UNDEAD) {
             this.glow(server, 11);
             if (this.tickCount % 4 == 0) server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, this.getX(), this.getY() + 0.3, this.getZ(), 1, 0.2, 0.2, 0.2, 0.01);
             this.guide(server);
         }
         if (this.species == GirlSpecies.BANSHEE_UNDEAD && this.tickCount % 20 == 0) this.keen(server);
+        if (this.species == GirlSpecies.LICH_UNDEAD && !this.isBaby()) {
+            if (this.phylactery == null && !this.isCalm() && !this.hasAnyAffection() && this.tickCount % 20 == 0) this.placePhylactery(server);
+            else if (this.phylactery != null && this.tickCount % 20 == 0 && server.isLoaded(this.phylactery) && !this.phylacteryStands()) this.free(server);
+            if (!this.isCalm()) this.cast(server);
+        }
+        if (this.species == GirlSpecies.LLORONA_UNDEAD && !this.isBaby() && this.tickCount % 10 == 0) this.searchTheRiver(server);
         if (this.wantsSteed) this.mountSteed(server);
         if (this.tickCount % 40 != 0) return;
         boolean sun = server.isDay() && server.canSeeSky(this.blockPosition().above());
@@ -347,6 +597,7 @@ public class Undead extends AbstractMonsterGirl {
             case PHANTOM_UNDEAD -> SoundEvents.PHANTOM_AMBIENT;
             case WILL_O_WISP_UNDEAD -> SoundEvents.SOUL_ESCAPE.value();
             case LIVING_DOLL_UNDEAD -> null;
+            case MUMMY_UNDEAD -> SoundEvents.HUSK_AMBIENT;
             default -> SoundEvents.ALLAY_AMBIENT_WITHOUT_ITEM;
         };
     }
@@ -372,12 +623,16 @@ public class Undead extends AbstractMonsterGirl {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putLong("StrongUntil", this.strongUntil);
+        tag.putLong("ComfortedNight", this.comfortedNight);
+        if (this.phylactery != null) tag.put("Phylactery", net.minecraft.nbt.NbtUtils.writeBlockPos(this.phylactery));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.strongUntil = tag.getLong("StrongUntil");
+        this.comfortedNight = tag.contains("ComfortedNight") ? tag.getLong("ComfortedNight") : -1;
+        this.phylactery = net.minecraft.nbt.NbtUtils.readBlockPos(tag, "Phylactery").orElse(null);
     }
 
     // --- the doll's perch ---------------------------------------------------------------------------------------------
@@ -500,6 +755,7 @@ public class Undead extends AbstractMonsterGirl {
         if (horse == null) return;
         horse.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
         horse.finalizeSpawn(level, level.getCurrentDifficultyAt(this.blockPosition()), net.minecraft.world.entity.MobSpawnType.JOCKEY, null);
+        horse.setTamed(true);                                               // an untamed horse bucks its rider off (vanilla's skeleton riders do the same)
         level.addFreshEntity(horse);
         this.startRiding(horse, true);
     }

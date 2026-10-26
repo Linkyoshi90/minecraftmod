@@ -42,7 +42,9 @@ import java.util.EnumSet;
 import java.util.UUID;
 
 /**
- * The cattle family (minotaur_field_guide.html): cattle, Minoan, bison, aurochs, water buffalo. The only family with men:
+ * The cattle family (minotaur_field_guide.html): cattle, Minoan, bison, aurochs, water buffalo, sheep, highland, yak. The
+ * sheep's wool comes off with shears ({@link #FLAG_SHORN}, back once she has grazed) and takes any dye; the highland and
+ * the yak never freeze, and the yak carries a chest of cargo. The only family with men:
  * about one in three is a bull ({@link #FLAG_MALE}, drawn with the &lt;species&gt;_male model). A cow and a bull fed
  * wheat raise a calf with no player involved, so herds can be farmed. Cows give milk to a bucket. Hurt one and she
  * charges; the Minoan guards her ground, bison stampede, the aurochs cannot be pushed, the water buffalo wallows in water,
@@ -52,6 +54,9 @@ public class Minotaur extends AbstractMonsterGirl {
     public static final int MILK_COOLDOWN = 6000;
     public static final int LOVE_TICKS = 600;
     public static final int GUARD_RADIUS = 10;
+    private static final net.minecraft.network.syncher.EntityDataAccessor<Byte> DATA_WOOL =
+            net.minecraft.network.syncher.SynchedEntityData.defineId(Minotaur.class, net.minecraft.network.syncher.EntityDataSerializers.BYTE);
+    private final net.minecraft.world.SimpleContainer pack = new net.minecraft.world.SimpleContainer(18);
 
     private long nextMilk;
     private int inLove;
@@ -89,8 +94,81 @@ public class Minotaur extends AbstractMonsterGirl {
             case BISON_MINOTAUR -> girlAttributes(40, 0.28, 6).add(Attributes.ATTACK_KNOCKBACK, 1.5);
             case AUROCHS_MINOTAUR -> girlAttributes(48, 0.27, 9).add(Attributes.ATTACK_KNOCKBACK, 2.5).add(Attributes.KNOCKBACK_RESISTANCE, 1.0);
             case WATER_BUFFALO_MINOTAUR -> girlAttributes(36, 0.25, 6).add(Attributes.ATTACK_KNOCKBACK, 1.2);
+            case SHEEP_MINOTAUR -> girlAttributes(24, 0.25, 2);
+            case HIGHLAND_MINOTAUR -> girlAttributes(34, 0.25, 5).add(Attributes.ATTACK_KNOCKBACK, 1.0);
+            case YAK_MINOTAUR -> girlAttributes(40, 0.24, 5).add(Attributes.ATTACK_KNOCKBACK, 1.0);
+            case RHIWOOL_MINOTAUR -> girlAttributes(44, 0.26, 8).add(Attributes.ATTACK_KNOCKBACK, 2.5).add(Attributes.KNOCKBACK_RESISTANCE, 0.8);
             default -> girlAttributes(30, 0.25, 4).add(Attributes.ATTACK_KNOCKBACK, 1.0);
         };
+    }
+
+    @Override
+    protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_WOOL, (byte) 0);
+    }
+
+    // --- the sheep's wool, the cold, the yak's pack ----------------------------------------------------------------
+
+    /** The dye on a sheep's wool, or null for her natural colour. */
+    @Nullable
+    public net.minecraft.world.item.DyeColor getWoolDye() {
+        int w = this.entityData.get(DATA_WOOL);
+        return w == 0 ? null : net.minecraft.world.item.DyeColor.byId(w - 1);
+    }
+
+    public void setWoolDye(@Nullable net.minecraft.world.item.DyeColor dye) {
+        this.entityData.set(DATA_WOOL, (byte) (dye == null ? 0 : dye.getId() + 1));
+    }
+
+    /** The sheep and the rhiwool: wool to shear and to dye. */
+    public boolean isWoolly() {
+        return this.species == GirlSpecies.SHEEP_MINOTAUR || this.species == GirlSpecies.RHIWOOL_MINOTAUR;
+    }
+
+    public boolean isShorn() {
+        return this.hasFlag(FLAG_SHORN);
+    }
+
+    /** What her fleece gives: the dye's wool, else her own colour's. */
+    public net.minecraft.world.item.DyeColor woolColour() {
+        if (this.getWoolDye() != null) return this.getWoolDye();
+        return switch (this.getVariantName()) {
+            case "black" -> net.minecraft.world.item.DyeColor.BLACK;
+            case "brown" -> net.minecraft.world.item.DyeColor.BROWN;
+            case "grey" -> net.minecraft.world.item.DyeColor.GRAY;
+            case "red" -> net.minecraft.world.item.DyeColor.RED;
+            default -> net.minecraft.world.item.DyeColor.WHITE;
+        };
+    }
+
+    public static ItemStack wool(net.minecraft.world.item.DyeColor colour, int count) {
+        return new ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.get(
+                net.minecraft.resources.ResourceLocation.withDefaultNamespace(colour.getName() + "_wool")), count);
+    }
+
+    public void shear(ServerLevel level) {
+        this.setFlag(FLAG_SHORN, true);
+        this.spawnAtLocation(wool(this.woolColour(), 1 + this.random.nextInt(3)), 1.0F);
+        level.playSound(null, this, SoundEvents.SHEEP_SHEAR, net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F);
+    }
+
+    /** Grazing grows a shorn sheep's wool back. */
+    @Override
+    public void ate() {
+        super.ate();
+        if (this.isShorn()) this.setFlag(FLAG_SHORN, false);
+    }
+
+    /** The highland (and the cattle's highland colouring) and the yak keep out any cold. */
+    @Override
+    public boolean canFreeze() {
+        return this.species != GirlSpecies.HIGHLAND_MINOTAUR && this.species != GirlSpecies.YAK_MINOTAUR
+                && !(this.species == GirlSpecies.CATTLE_MINOTAUR && "highland".equals(this.getVariantName())) && super.canFreeze();
+    }
+
+    public net.minecraft.world.SimpleContainer getPack() {
+        return this.pack;
     }
 
     // --- bulls and cows ------------------------------------------------------------------------------------------
@@ -154,6 +232,38 @@ public class Minotaur extends AbstractMonsterGirl {
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
         boolean client = this.level().isClientSide;
+        if (this.isWoolly() && !this.isBaby()) {
+            if (stack.is(Items.SHEARS) && !this.isShorn()) {
+                if (this.level() instanceof ServerLevel server) {
+                    this.shear(server);
+                    stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
+                }
+                return InteractionResult.sidedSuccess(client);
+            }
+            if (stack.getItem() instanceof net.minecraft.world.item.DyeItem dye && !this.isShorn() && this.woolColour() != dye.getDyeColor()) {
+                if (!client) {
+                    this.setWoolDye(dye.getDyeColor());
+                    stack.consume(1, player);
+                    this.playSound(SoundEvents.DYE_USE, 1.0F, 1.0F);
+                }
+                return InteractionResult.sidedSuccess(client);
+            }
+        }
+        if (this.species == GirlSpecies.YAK_MINOTAUR && !this.isBaby() && this.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {
+            if (stack.is(Items.CHEST) && !this.hasFlag(FLAG_CHEST)) {                  // she takes a chest on her back
+                if (!client) {
+                    this.setFlag(FLAG_CHEST, true);
+                    stack.consume(1, player);
+                    this.playSound(SoundEvents.DONKEY_CHEST, 1.0F, 1.0F);
+                }
+                return InteractionResult.sidedSuccess(client);
+            }
+            if (stack.isEmpty() && player.isShiftKeyDown() && this.hasFlag(FLAG_CHEST)) {
+                if (!client) player.openMenu(new net.minecraft.world.SimpleMenuProvider((id, inv, p) -> new net.minecraft.world.inventory.ChestMenu(
+                        net.minecraft.world.inventory.MenuType.GENERIC_9x2, id, inv, this.pack, 2), this.getDisplayName()));
+                return InteractionResult.sidedSuccess(client);
+            }
+        }
         if (stack.is(Items.WHEAT) && !this.isBaby() && !this.isInLove()) {             // wheat puts her in the mood for courting
             if (!client) {
                 this.inLove = LOVE_TICKS;
@@ -214,6 +324,10 @@ public class Minotaur extends AbstractMonsterGirl {
             case WATER_BUFFALO_MINOTAUR -> r < 20 ? new ItemStack(Items.CAKE) : r < 60 ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.CHEESE.get(), 2)
                     : new ItemStack(Items.MILK_BUCKET);
             case MINOAN_MINOTAUR -> new ItemStack(r < 10 ? Items.GOLD_INGOT : r < 50 ? Items.COPPER_INGOT : Items.BRICK, r < 50 ? 1 : 3);
+            case SHEEP_MINOTAUR -> r < 60 ? wool(this.woolColour(), 2) : new ItemStack(r < 85 ? Items.STRING : Items.MUTTON, 2);
+            case RHIWOOL_MINOTAUR -> r < 50 ? wool(this.woolColour(), 3) : new ItemStack(r < 85 ? Items.LEATHER : Items.FLINT, 2);
+            case YAK_MINOTAUR -> r < 40 ? new ItemStack(Items.MILK_BUCKET) : r < 70 ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.CHEESE.get(), 2)
+                    : new ItemStack(Items.LEATHER, 2);
             default -> new ItemStack(r < 50 ? Items.LEATHER : Items.WHEAT, 2);
         };
     }
@@ -270,6 +384,7 @@ public class Minotaur extends AbstractMonsterGirl {
         if (this.inLove > 0) this.inLove--;
         if (this.stampede > 0) this.stampede--;
         if (this.nextMilk > 0 && server.getGameTime() >= this.nextMilk) this.ringBell(server);
+        if (this.species == GirlSpecies.RHIWOOL_MINOTAUR) this.tickCharge(server);
         if (this.tickCount % 40 == 0 && !this.isBaby()) {
             Player p = this.bondedPlayer(60, 16);
             if (p != null) {
@@ -277,6 +392,49 @@ public class Minotaur extends AbstractMonsterGirl {
                 this.plough(server);
             }
         }
+    }
+
+    // --- the rhiwool's charge --------------------------------------------------------------------------------------
+
+    private int chargeTicks;
+    private long nextCharge;
+    @Nullable
+    private Vec3 chargeDir;
+
+    public boolean isCharging() {
+        return this.chargeTicks > 0;
+    }
+
+    /** Head down and straight ahead at her target: whatever she meets on the way is sent flying. */
+    public void startCharge(Vec3 towards) {
+        Vec3 d = towards.subtract(this.position()).multiply(1, 0, 1);
+        if (d.lengthSqr() < 1.0E-4) return;
+        this.chargeDir = d.normalize();
+        this.chargeTicks = 25;
+        this.nextCharge = this.level().getGameTime() + 120;
+        this.startTimedAction(Action.CHARGE, 25);
+        this.playSound(SoundEvents.RAVAGER_ROAR, 1.0F, 1.2F);
+    }
+
+    private void tickCharge(ServerLevel level) {
+        LivingEntity t = this.getTarget();
+        if (!this.isCharging() && t != null && level.getGameTime() >= this.nextCharge && this.distanceToSqr(t) > 4 * 4 && this.distanceToSqr(t) < 14 * 14) {
+            this.startCharge(t.position());
+        }
+        if (!this.isCharging() || this.chargeDir == null) return;
+        this.chargeTicks--;
+        this.getNavigation().stop();
+        this.setYRot((float) (Math.atan2(-this.chargeDir.x, this.chargeDir.z) * 180.0 / Math.PI));
+        this.setDeltaMovement(this.chargeDir.x * 0.55, this.getDeltaMovement().y, this.chargeDir.z * 0.55);
+        for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.4), e -> e != this && e.isAlive()
+                && !(e instanceof Player p && this.getAffection(p) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION))) {
+            e.hurt(this.damageSources().mobAttack(this), 8.0F);
+            e.knockback(2.5, -this.chargeDir.x, -this.chargeDir.z);
+            e.setDeltaMovement(e.getDeltaMovement().add(0, 0.4, 0));
+            this.chargeTicks = 0;
+            this.playSound(SoundEvents.RAVAGER_ATTACK, 1.0F, 0.8F);
+        }
+        if (this.horizontalCollision) this.chargeTicks = 0;                            // into a wall: the charge ends
     }
 
     /** A devoted minotaur tills the grass and dirt she walks on into farmland, if there is farmland nearby already. */
@@ -403,17 +561,17 @@ public class Minotaur extends AbstractMonsterGirl {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.COW_AMBIENT;
+        return this.species == GirlSpecies.SHEEP_MINOTAUR ? SoundEvents.SHEEP_AMBIENT : SoundEvents.COW_AMBIENT;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.COW_HURT;
+        return this.species == GirlSpecies.SHEEP_MINOTAUR ? SoundEvents.SHEEP_HURT : SoundEvents.COW_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.COW_DEATH;
+        return this.species == GirlSpecies.SHEEP_MINOTAUR ? SoundEvents.SHEEP_DEATH : SoundEvents.COW_DEATH;
     }
 
     @Override
@@ -435,7 +593,17 @@ public class Minotaur extends AbstractMonsterGirl {
 
     @Override
     protected boolean isSettled() {
-        return this.isBaby() && this.getFather() != null;
+        return this.isBaby() && this.getFather() != null || this.hasFlag(FLAG_CHEST);
+    }
+
+    @Override
+    protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
+        super.dropCustomDeathLoot(level, source, recentlyHit);
+        if (this.hasFlag(FLAG_CHEST)) {
+            this.spawnAtLocation(Items.CHEST);
+            for (int i = 0; i < this.pack.getContainerSize(); i++) if (!this.pack.getItem(i).isEmpty()) this.spawnAtLocation(this.pack.getItem(i));
+        }
+        if (this.isWoolly() && !this.isShorn() && !this.isBaby()) this.spawnAtLocation(wool(this.woolColour(), 1));
     }
 
     @Override
@@ -444,6 +612,8 @@ public class Minotaur extends AbstractMonsterGirl {
         tag.putLong("NextMilk", this.nextMilk);
         tag.putInt("InLove", this.inLove);
         if (this.post != null) tag.putLong("Post", this.post.asLong());
+        if (this.getWoolDye() != null) tag.putString("WoolDye", this.getWoolDye().getName());
+        if (this.hasFlag(FLAG_CHEST)) tag.put("Pack", this.pack.createTag(this.registryAccess()));
     }
 
     @Override
@@ -452,6 +622,8 @@ public class Minotaur extends AbstractMonsterGirl {
         this.nextMilk = tag.getLong("NextMilk");
         this.inLove = tag.getInt("InLove");
         this.post = tag.contains("Post") ? BlockPos.of(tag.getLong("Post")) : null;
+        this.setWoolDye(tag.contains("WoolDye") ? net.minecraft.world.item.DyeColor.byName(tag.getString("WoolDye"), null) : null);
+        this.pack.fromTag(tag.getList("Pack", 10), this.registryAccess());
         this.refreshDimensions();
     }
 }

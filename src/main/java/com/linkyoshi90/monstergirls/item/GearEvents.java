@@ -31,7 +31,8 @@ public final class GearEvents {
 
     /**
      * A healing balm on a befriended girl (fond of you) or a vanilla friend of yours: 10 health back and some
-     * regeneration. A wild one will not let you near enough.
+     * regeneration. A wild one will not let you near enough, unless she is injured: then the balm mends her wound (see
+     * AbstractMonsterGirl#mend).
      */
     @SubscribeEvent
     public static void onBalm(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract event) {
@@ -42,6 +43,12 @@ public final class GearEvents {
         event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
         if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel level)) return;
         Player p = event.getEntity();
+        if (target instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl girl && girl.isInjured()) {   // a wounded wild one lets you
+            applyBalm(level, target);
+            girl.mend(level, p);
+            stack.consume(1, p);
+            return;
+        }
         if (!befriended(target, p)) {
             p.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.balm_refused", target.getDisplayName()), true);
             return;

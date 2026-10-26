@@ -66,7 +66,9 @@ import java.util.UUID;
  * heart: her warmth (sun, campfires, lava) decides how quick she is, and in the cold she brumates. She holds enemies
  * in her coils, tastes the air for hidden mobs, can freeze a monster with her gaze, swallows eggs whole, sheds her
  * skin every few days, and bonds with whoever shares a fire with her. Python and cobra lay eggs; the others give
- * birth to live young.
+ * birth to live young. The naga guards treasure; the wadjet walks on two legs, blesses everyone who passes and hunts
+ * every monster in sight. Meet a stranger medusa's eyes and you are slowed nearly to a stop, and so are the monsters she
+ * looks at; once she has a friend she wears a blindfold ({@link #FLAG_BLINDFOLD}) and her gaze is harmless.
  */
 public class Lamia extends AbstractMonsterGirl {
     private static final ResourceLocation COLD = MonsterGirlsMod.id("lamia_cold");
@@ -117,6 +119,9 @@ public class Lamia extends AbstractMonsterGirl {
         if (species == GirlSpecies.RATTLESNAKE_LAMIA) {
             this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true, p -> p.getUUID().equals(this.warned) && this.warning >= 3));
         }
+        if (species == GirlSpecies.WADJET_LAMIA) {                      // merciless to monsters, any she sees
+            this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, false));
+        }
         this.setCanPickUpLoot(true);
     }
 
@@ -125,6 +130,8 @@ public class Lamia extends AbstractMonsterGirl {
             case PYTHON_LAMIA -> girlAttributes(32, 0.22, 5);
             case COBRA_LAMIA -> girlAttributes(24, 0.26, 4);
             case NAGA_LAMIA -> girlAttributes(32, 0.26, 5);
+            case WADJET_LAMIA -> girlAttributes(30, 0.3, 6);
+            case MEDUSA_LAMIA -> girlAttributes(30, 0.26, 4);
             case BOA_LAMIA -> girlAttributes(28, 0.24, 4);
             default -> girlAttributes(22, 0.26, 3);
         };
@@ -132,7 +139,7 @@ public class Lamia extends AbstractMonsterGirl {
 
     @Override
     protected PathNavigation createNavigation(Level level) {
-        if (this.species == GirlSpecies.SEA_SNAKE_LAMIA) return new AmphibiousPathNavigation(this, level);
+        if (this.species == GirlSpecies.SEA_SNAKE_LAMIA) return new com.linkyoshi90.monstergirls.entity.ai.SwimmerNavigation(this, level);
         if (this.species == GirlSpecies.BOA_LAMIA) return new WallClimberNavigation(this, level);
         return super.createNavigation(level);
     }
@@ -255,6 +262,7 @@ public class Lamia extends AbstractMonsterGirl {
         int r = this.random.nextInt(100);
         return switch (this.species) {
             case NAGA_LAMIA -> new ItemStack(r < 50 ? Items.GOLD_NUGGET : r < 90 ? Items.EMERALD : r < 98 ? Items.GOLD_INGOT : Items.DIAMOND, r < 50 ? 4 : 1);
+            case WADJET_LAMIA -> r < 70 ? new ItemStack(Items.EMERALD, 1 + r % 2) : new ItemStack(r < 90 ? Items.GOLD_NUGGET : Items.LAPIS_LAZULI, 3);
             case SEA_SNAKE_LAMIA -> new ItemStack(r < 50 ? Items.COD : r < 80 ? Items.PRISMARINE_SHARD : Items.NAUTILUS_SHELL);
             case RATTLESNAKE_LAMIA -> new ItemStack(r < 50 ? Items.RABBIT_HIDE : r < 85 ? Items.CACTUS : Items.GOLD_NUGGET);
             default -> new ItemStack(r < 40 ? Items.EGG : r < 70 ? Items.RABBIT : r < 90 ? Items.FEATHER : Items.EMERALD);
@@ -336,7 +344,7 @@ public class Lamia extends AbstractMonsterGirl {
         boolean hit = super.doHurtTarget(target);
         if (hit && target instanceof LivingEntity l) {
             l.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 3));
-            if (this.species == GirlSpecies.RATTLESNAKE_LAMIA || this.species == GirlSpecies.COBRA_LAMIA) {
+            if (this.species == GirlSpecies.RATTLESNAKE_LAMIA || this.species == GirlSpecies.COBRA_LAMIA || this.species == GirlSpecies.WADJET_LAMIA) {
                 l.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 1));
             }
         }
@@ -365,9 +373,86 @@ public class Lamia extends AbstractMonsterGirl {
             case COBRA_LAMIA -> this.hoodDisplay(server);
             case RATTLESNAKE_LAMIA -> this.rattle(server);
             case SEA_SNAKE_LAMIA -> this.reefGuide(server);
+            case WADJET_LAMIA -> {
+                if (this.tickCount % 40 == 0) this.bless(server);
+            }
+            case MEDUSA_LAMIA -> {
+                if (this.tickCount % 10 == 0) this.petrify(server);
+            }
             default -> {
             }
         }
+    }
+
+    // --- the medusa ----------------------------------------------------------------------------------------------
+
+    private long nextStoneMessage;
+
+    /** Whether this player is looking her in the eyes (the enderman's test) with nothing in between. */
+    public boolean meetsHerEyes(Player p) {
+        Vec3 view = p.getViewVector(1.0F).normalize();
+        Vec3 toEyes = new Vec3(this.getX() - p.getX(), this.getEyeY() - p.getEyeY(), this.getZ() - p.getZ());
+        double d = toEyes.length();
+        return view.dot(toEyes.normalize()) > 1.0 - 0.025 / d && p.hasLineOfSight(this);
+    }
+
+    /** Her gaze: strangers who meet her eyes and the monsters she sees all but stop (Slowness VI). Blindfolded, she is harmless. */
+    public void petrify(ServerLevel level) {
+        this.setFlag(FLAG_BLINDFOLD, this.bestAffection() >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION);
+        if (this.hasFlag(FLAG_BLINDFOLD) || this.isBaby()) return;
+        for (Player p : level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(16), p -> !p.isSpectator() && !p.isCreative()
+                && this.getAffection(p) < com.linkyoshi90.monstergirls.entity.Orders.AFFECTION && this.meetsHerEyes(p))) {
+            stone(level, p);
+            if (level.getGameTime() >= this.nextStoneMessage) {
+                this.nextStoneMessage = level.getGameTime() + 200;
+                p.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.petrified", this.getDisplayName()), true);
+            }
+        }
+        for (Monster m : level.getEntitiesOfClass(Monster.class, this.getBoundingBox().inflate(10), m -> m.isAlive() && this.hasLineOfSight(m))) {
+            stone(level, m);
+        }
+    }
+
+    private static void stone(ServerLevel level, LivingEntity e) {
+        e.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 5));
+        level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK, Blocks.STONE.defaultBlockState()),
+                e.getX(), e.getY() + e.getBbHeight() * 0.5, e.getZ(), 4, 0.3, 0.4, 0.3, 0.0);
+    }
+
+    // --- the wadjet ----------------------------------------------------------------------------------------------
+
+    private static final ResourceLocation NEKHBET = MonsterGirlsMod.id("nekhbet");
+
+    /** Named Nekhbet, after her sister the vulture goddess: a stronger blessing and a harder bite. */
+    public boolean isNekhbet() {
+        return this.hasCustomName() && "Nekhbet".equalsIgnoreCase(this.getCustomName().getString());
+    }
+
+    /**
+     * Every player within 8 blocks, and the girls (any family) fond of them close by, get Regeneration and Resistance
+     * (level II from Nekhbet). Not from an injured or young one.
+     */
+    public void bless(ServerLevel level) {
+        boolean nekhbet = this.isNekhbet();
+        AttributeInstance damage = this.getAttribute(Attributes.ATTACK_DAMAGE);
+        if (damage != null && nekhbet != damage.hasModifier(NEKHBET)) {
+            if (nekhbet) damage.addTransientModifier(new AttributeModifier(NEKHBET, 4.0, AttributeModifier.Operation.ADD_VALUE));
+            else damage.removeModifier(NEKHBET);
+        }
+        if (this.isBaby() || this.isInjured()) return;
+        int amp = nekhbet ? 1 : 0;
+        for (Player p : level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(8), p -> !p.isSpectator())) {
+            blessOne(p, amp);
+            for (LivingEntity girl : level.getEntitiesOfClass(LivingEntity.class, p.getBoundingBox().inflate(8),
+                    e -> e != this && e instanceof com.linkyoshi90.monstergirls.entity.Bonded b && b.getAffection(p) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION)) {
+                blessOne(girl, amp);
+            }
+        }
+    }
+
+    private static void blessOne(LivingEntity e, int amp) {
+        e.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, amp, true, true));
+        e.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, amp, true, true));
     }
 
     /** Tongue sense (invisible mobs glow for her favourite), heat sight at night (rattlesnake), and the hypnotic gaze. */
@@ -622,11 +707,12 @@ public class Lamia extends AbstractMonsterGirl {
 
     // --- riding in her coils -------------------------------------------------------------------------------------
 
-    /** At high friendship an empty hand climbs into her coils (crouch to pat her instead). */
+    /** At high friendship an empty hand climbs into her coils (crouch to pat her instead). The wadjet walks on legs: no coils to ride. */
     @Nullable
     @Override
     protected InteractionResult familyInteract(Player player, net.minecraft.world.InteractionHand hand, ItemStack stack) {
-        if (!stack.isEmpty() || player.isShiftKeyDown() || this.isBaby() || this.isVehicle() || this.getAffection(player) < BED_AFFECTION) return null;
+        if (!stack.isEmpty() || player.isShiftKeyDown() || this.isBaby() || this.isVehicle() || this.getAffection(player) < BED_AFFECTION
+                || this.species == GirlSpecies.WADJET_LAMIA) return null;
         if (!this.level().isClientSide) {
             this.getNavigation().stop();
             this.setTarget(null);
@@ -636,10 +722,14 @@ public class Lamia extends AbstractMonsterGirl {
         return InteractionResult.sidedSuccess(this.level().isClientSide);
     }
 
+    /**
+     * Whoever she let into her coils steers. No friendship check here: the client decides who steers, and friendship is
+     * not synced to it (the check is made when you climb in).
+     */
     @Nullable
     @Override
     public LivingEntity getControllingPassenger() {
-        return this.getFirstPassenger() instanceof Player p && this.getAffection(p) >= BED_AFFECTION ? p : super.getControllingPassenger();
+        return this.getFirstPassenger() instanceof Player p ? p : super.getControllingPassenger();
     }
 
     @Override

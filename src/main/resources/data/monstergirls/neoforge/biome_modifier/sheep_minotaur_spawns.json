@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_sheep_minotaur",
+  "spawners": {
+    "type": "monstergirls:sheep_minotaur",
+    "weight": 6,
+    "minCount": 3,
+    "maxCount": 5
+  }
+}

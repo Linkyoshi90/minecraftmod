@@ -134,6 +134,7 @@ public class BuildNestGoal extends Goal {
         BlockState nest = ModBlocks.HARPY_EGG.get().defaultBlockState().setValue(HarpyEggBlock.SPECIES, species).setValue(HarpyEggBlock.EGGS, eggs);
         if (!level.setBlock(pos, nest, 3)) return;
         ParentageBlockEntity.setFatherAt(level, pos, this.harpy.getGestation().getFather());
+        ParentageBlockEntity.setPaintAt(level, pos, this.harpy.getPaint());
         level.playSound(null, pos, SoundEvents.TURTLE_EGG_CRACK, SoundSource.NEUTRAL, 0.8F, 1.2F);
         this.harpy.getGestation().clear();
         this.harpy.setHomePos(pos);

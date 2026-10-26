@@ -32,6 +32,9 @@
     },
     "species=natterjack": {
       "model": "minecraft:block/frogspawn"
+    },
+    "species=mailtoad": {
+      "model": "minecraft:block/frogspawn"
     }
   }
 }

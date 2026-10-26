@@ -6,6 +6,7 @@ import com.linkyoshi90.monstergirls.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -42,7 +43,10 @@ import java.util.UUID;
  * heals and the crops around her grow faster (much faster once she is devoted). They want bone meal and water. The
  * alraune dusts attackers with pollen, the matango sinks into mycelium and comes up elsewhere (her spores sicken
  * attackers), the ent plants saplings and hits very hard, the cactus pricks whatever hits her, and the mandragora hides
- * in the ground until someone pulls her out, when she screams.
+ * in the ground until someone pulls her out, when she screams. The leshy (male, like the vodyanoy, so he never shares
+ * a bed) keeps count of the trees each player plants and fells near him: planters get saplings and apples, clear-cutters
+ * get lost in his fog. He bellows at any vodyanoy he meets. The venus flytrap snaps her trap shut on whatever steps into
+ * reach (once befriended, only monsters), holding it fast and biting.
  */
 public class Flora extends AbstractMonsterGirl {
     /** Nectar can be gathered once every half day. */
@@ -72,8 +76,16 @@ public class Flora extends AbstractMonsterGirl {
     }
 
     private int stillTicks;
+    /** The leshy's tally per player: + for every sapling planted near him, - for every log cut. */
+    private final java.util.Map<UUID, Integer> treeTally = new java.util.HashMap<>();
+    private long nextBellow;
+    public static final int PLANTER_REWARD = 6, CLEAR_CUT = -12;
     private int sunk;
     private long nextPlant;
+    @Nullable
+    private LivingEntity caught;
+    private int holdTicks;
+    private long nextSnap;
 
     public Flora(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
@@ -94,6 +106,8 @@ public class Flora extends AbstractMonsterGirl {
             case MATANGO_FLORA -> girlAttributes(20, 0.2, 2);
             case ENT_FLORA -> girlAttributes(80, 0.2, 14).add(Attributes.KNOCKBACK_RESISTANCE, 0.9).add(Attributes.ATTACK_KNOCKBACK, 2.0);
             case CACTUS_FLORA -> girlAttributes(28, 0.18, 4).add(Attributes.ARMOR, 4);
+            case LESHY_FLORA -> girlAttributes(60, 0.24, 6).add(Attributes.KNOCKBACK_RESISTANCE, 0.7);
+            case VENUS_FLYTRAP_FLORA -> girlAttributes(32, 0.1, 4).add(Attributes.KNOCKBACK_RESISTANCE, 0.8);
             default -> girlAttributes(10, 0.24, 1);
         };
     }
@@ -111,7 +125,8 @@ public class Flora extends AbstractMonsterGirl {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return stack.is(Items.BONE_MEAL) || stack.is(Items.POTION);
+        return stack.is(Items.BONE_MEAL) || stack.is(Items.POTION)
+                || this.species == GirlSpecies.VENUS_FLYTRAP_FLORA && (stack.is(Items.SPIDER_EYE) || stack.is(Items.ROTTEN_FLESH));
     }
 
     @Override
@@ -173,9 +188,11 @@ public class Flora extends AbstractMonsterGirl {
         int r = this.random.nextInt(100);
         return switch (this.species) {
             case ENT_FLORA -> new ItemStack(r < 50 ? Items.OAK_SAPLING : r < 75 ? Items.APPLE : Items.BIRCH_SAPLING, 2);
+            case LESHY_FLORA -> new ItemStack(r < 40 ? Items.SPRUCE_SAPLING : r < 70 ? Items.SWEET_BERRIES : Items.MOSS_BLOCK, 2);
             case MATANGO_FLORA -> new ItemStack(r < 50 ? Items.RED_MUSHROOM : Items.BROWN_MUSHROOM, 2);
             case CACTUS_FLORA -> new ItemStack(r < 60 ? Items.CACTUS : Items.GREEN_DYE, 2);
             case MANDRAGORA_FLORA -> new ItemStack(r < 50 ? Items.POTATO : Items.CARROT, 3);
+            case VENUS_FLYTRAP_FLORA -> new ItemStack(r < 50 ? Items.BONE_MEAL : r < 80 ? Items.SLIME_BALL : Items.SPIDER_EYE, r < 50 ? 3 : 1);
             default -> new ItemStack(r < 40 ? Items.WHEAT_SEEDS : r < 80 ? Items.PINK_TULIP : Items.HONEY_BOTTLE, r < 40 ? 4 : 1);
         };
     }
@@ -260,6 +277,51 @@ public class Flora extends AbstractMonsterGirl {
             if (this.species == GirlSpecies.ENT_FLORA) this.plantSapling(server);
             if (this.species == GirlSpecies.ALRAUNE_FLORA) this.plant(server, Blocks.PINK_TULIP);
         }
+        if (this.species == GirlSpecies.LESHY_FLORA && this.tickCount % 40 == 0) this.bellowAtRival(server);
+        if (this.species == GirlSpecies.VENUS_FLYTRAP_FLORA && !this.isBaby()) this.tickTrap(server);
+    }
+
+    // --- the venus flytrap ----------------------------------------------------------------------------------------
+
+    /** What her trap closes on: monsters always; while she is wild, any animal or stranger too. Never girls, villagers or pets. */
+    public boolean snapsAt(LivingEntity e) {
+        if (!e.isAlive() || e == this || e instanceof com.linkyoshi90.monstergirls.entity.Bonded || e instanceof net.minecraft.world.entity.npc.AbstractVillager
+                || e instanceof net.minecraft.world.entity.animal.IronGolem || e instanceof net.minecraft.world.entity.TamableAnimal t && t.isTame()) return false;
+        if (e instanceof net.minecraft.world.entity.monster.Enemy) return true;
+        boolean wild = this.bestAffection() < com.linkyoshi90.monstergirls.entity.Orders.AFFECTION;
+        if (e instanceof Player p) return wild && !p.isCreative() && !p.isSpectator() && this.getAffection(p) < com.linkyoshi90.monstergirls.entity.Orders.AFFECTION;
+        return wild && e instanceof net.minecraft.world.entity.animal.Animal;
+    }
+
+    @Nullable
+    public LivingEntity getCaught() {
+        return this.caught;
+    }
+
+    /** Snap: she holds what she caught for three seconds, biting every second, then lets it go and opens again. */
+    private void tickTrap(ServerLevel level) {
+        if (this.caught != null) {
+            if (!this.caught.isAlive() || --this.holdTicks <= 0 || this.caught.distanceToSqr(this) > 4 * 4) {
+                this.caught = null;
+                this.nextSnap = level.getGameTime() + 60;
+                return;
+            }
+            this.caught.setDeltaMovement(0, Math.min(0, this.caught.getDeltaMovement().y), 0);
+            this.caught.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 9, true, false));
+            if (this.holdTicks % 20 == 0) {
+                this.caught.hurt(this.damageSources().mobAttack(this), 3.0F);
+                this.playSound(net.minecraft.sounds.SoundEvents.FOX_BITE, 0.8F, 0.7F);
+            }
+            return;
+        }
+        if (this.tickCount % 5 != 0 || level.getGameTime() < this.nextSnap || this.isHidden()) return;
+        LivingEntity victim = this.nearest(LivingEntity.class, 1.6, this::snapsAt);
+        if (victim == null) return;
+        this.caught = victim;
+        this.holdTicks = 60;
+        this.getLookControl().setLookAt(victim);
+        this.startTimedAction(Action.SNAP, 12);
+        this.playSound(net.minecraft.sounds.SoundEvents.EVOKER_FANGS_ATTACK, 1.0F, 1.3F);
     }
 
     private void plantSapling(ServerLevel level) {
@@ -283,6 +345,72 @@ public class Flora extends AbstractMonsterGirl {
             }
         }
         return false;
+    }
+
+    // --- the leshy ----------------------------------------------------------------------------------------------
+
+    public int getTreeTally(Player player) {
+        return this.treeTally.getOrDefault(player.getUUID(), 0);
+    }
+
+    /** A sapling planted near him: the planter gets saplings and apples now and then. */
+    public void onSaplingPlanted(ServerLevel level, Player player) {
+        int t = this.treeTally.merge(player.getUUID(), 1, Integer::sum);
+        this.getLookControl().setLookAt(player);
+        this.hearts(level, 1);
+        if (t >= PLANTER_REWARD) {
+            this.treeTally.put(player.getUUID(), 0);
+            this.addAffection(player, 2);
+            this.startTimedAction(Action.PLANT, 30);
+            this.spawnAtLocation(new ItemStack(Items.SPRUCE_SAPLING, 2));
+            this.spawnAtLocation(new ItemStack(Items.APPLE, 2));
+            player.displayClientMessage(Component.translatable("message.monstergirls.leshy_thanks", this.getDisplayName()), true);
+        }
+    }
+
+    /** A log cut near him: a clear-cutter gets lost in his fog. */
+    public void onLogCut(ServerLevel level, Player player) {
+        int t = this.treeTally.merge(player.getUUID(), -1, Integer::sum);
+        this.getLookControl().setLookAt(player);
+        if (t > CLEAR_CUT) return;
+        this.treeTally.put(player.getUUID(), CLEAR_CUT / 2);           // a second warning comes sooner
+        this.addAffection(player, -5);
+        player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 300, 0));
+        player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 160, 0));
+        player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 300, 1));
+        level.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, player.getX(), player.getY() + 1, player.getZ(), 30, 2, 1, 2, 0.01);
+        this.startTimedAction(Action.SCREAM, 24);
+        this.playSound(SoundEvents.RAVAGER_ROAR, 1.0F, 0.6F);
+        player.displayClientMessage(Component.translatable("message.monstergirls.leshy_fog", this.getDisplayName()), true);
+    }
+
+    /** The leshy nearest a block that just changed, or null. */
+    @Nullable
+    public static Flora leshyNear(Level level, BlockPos pos) {
+        Flora best = null;
+        for (Flora f : level.getEntitiesOfClass(Flora.class, new net.minecraft.world.phys.AABB(pos).inflate(24),
+                f -> f.isAlive() && f.species == GirlSpecies.LESHY_FLORA)) {
+            if (best == null || f.distanceToSqr(pos.getCenter()) < best.distanceToSqr(pos.getCenter())) best = f;
+        }
+        return best;
+    }
+
+    /** Two lords of the wild who cannot stand each other: he bellows, the vodyanoy croaks back. */
+    private void bellowAtRival(ServerLevel level) {
+        if (level.getGameTime() < this.nextBellow) return;
+        com.linkyoshi90.monstergirls.entity.Vodyanoy v = this.nearest(com.linkyoshi90.monstergirls.entity.Vodyanoy.class, 12, x -> x.isAlive());
+        if (v == null) return;
+        this.nextBellow = level.getGameTime() + 600 + this.random.nextInt(600);
+        this.getLookControl().setLookAt(v);
+        v.getLookControl().setLookAt(this);
+        this.startTimedAction(Action.SCREAM, 24);
+        this.playSound(SoundEvents.RAVAGER_ROAR, 1.2F, 0.7F);
+        v.playSound(SoundEvents.FROG_AMBIENT, 2.0F, 0.5F);
+    }
+
+    @Override
+    public boolean canShareBed() {
+        return this.species != GirlSpecies.LESHY_FLORA && super.canShareBed();
     }
 
     public void setNextPlant(long t) {
@@ -331,6 +459,9 @@ public class Flora extends AbstractMonsterGirl {
         super.addAdditionalSaveData(tag);
         tag.putLong("NextPlant", this.nextPlant);
         tag.putBoolean("Buried", this.isHidden());
+        CompoundTag tally = new CompoundTag();
+        this.treeTally.forEach((u, t) -> tally.putInt(u.toString(), t));
+        tag.put("TreeTally", tally);
     }
 
     @Override
@@ -338,6 +469,9 @@ public class Flora extends AbstractMonsterGirl {
         super.readAdditionalSaveData(tag);
         this.nextPlant = tag.getLong("NextPlant");
         this.setFlag(FLAG_HIDDEN, tag.getBoolean("Buried"));
+        this.treeTally.clear();
+        CompoundTag tally = tag.getCompound("TreeTally");
+        for (String k : tally.getAllKeys()) this.treeTally.put(UUID.fromString(k), tally.getInt(k));
     }
 
     @Override

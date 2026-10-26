@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import girl_family as F  # noqa: E402
 import girl_lib as G  # noqa: E402
 import girl_parts as P  # noqa: E402
-from girl_lib import H, cube, pick, noise, skin  # noqa: E402
+from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 LARVA_SEGS = [("seg_1", 4, 6.5, 3.5), ("seg_2", 4.25, 3.5, 3.5), ("seg_3", 4, 3.25, 3.5), ("seg_4", 3.75, 3, 3.5),
               ("seg_5", 3.5, 2.75, 3), ("seg_6", 3, 2.5, 3), ("seg_7", 2.5, 2.25, 2.5), ("seg_8", 2, 2, 2)]
@@ -42,6 +42,34 @@ SPECIES = {
                   "rosy": dict(HAIR="#f8d0e0", FUR="#f8e0a0", MARK="#e888b0", CLOTH="#f0a8c8", extra=dict(antenna="#e8c070", wing="#f0a0c0", wing_vein="#f0d070", wing_alpha=240, wing_pattern="bands")),
                   "silk": dict(HAIR="#f8f4ec", FUR="#f4f0e4", MARK="#c8c0b0", CLOTH="#e8e0d0", extra=dict(antenna="#c8c0b0", wing="#f8f4ec", wing_vein="#c8c0b0", wing_alpha=230)),
                   "hawk": dict(HAIR="#8a7a6a", FUR="#7a6a5a", MARK="#3a3028", CLOTH="#6a5a4a", extra=dict(antenna="#4a3a2a", wing="#8a7a6a", wing_vein="#3a3028", wing_alpha=240, wing_pattern="bands"))}),
+    "firefly_bug": dict(
+        build="petite", outfit=dict(top=["halter"], bottom="wrap_skirt", colors=dict(cloth2="#3a2a24")), hair="bob", bangs="blunt", ears="antenna",
+        legs="bare", foot="shoe", wings="insect", flies=True, lantern=True, glow=["lantern"],
+        pal=dict(SKIN=skin("fair"), HAIR="#2a2420", FUR="#3a2a24", LIGHT="#f8e8a0", MARK="#e85a2a", EYE="#3a2a20", CLOTH="#e85a2a", TRIM="#f8d040",
+                 extra=dict(wing="#4a3a30", wing_vein="#2a1e18", wing_alpha=230, antenna="#2a2420", boot="#2a2420", lantern="#f8e070")),
+        variants={"green": dict(extra=dict(wing="#3a4a30", wing_vein="#1e2a18", wing_alpha=230, antenna="#2a2420", boot="#2a2420", lantern="#b8f870")),
+                  "blue": dict(HAIR="#1e2a3a", CLOTH="#3a5aa8", extra=dict(wing="#2a3448", wing_vein="#141a28", wing_alpha=230, antenna="#1e2a3a",
+                                                                           boot="#1e2a3a", lantern="#80d8f8")),
+                  "pink": dict(CLOTH="#e86aa8", extra=dict(wing="#4a3040", wing_vein="#2a1a24", wing_alpha=230, antenna="#2a2420", boot="#2a2420",
+                                                           lantern="#f8a0d8")),
+                  "white": dict(HAIR="#e8e4d8", CLOTH="#a8a8b0", extra=dict(wing="#d8d4c8", wing_vein="#8a8478", wing_alpha=220, antenna="#8a8478",
+                                                                            boot="#8a8478", lantern="#ffffff"))}),
+    "mantis_bug": dict(                                  # ninth wave: scythe forearms, long folded wings, the prayer pose
+        build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["bracers"], colors=dict(cloth2="#4a7a2a")), hair="ponytail", bangs="parted",
+        ears="antenna", legs="stockings", foot="shoe", wings="insect", scythes=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#7ab84a", FUR="#8ac85a", LIGHT="#d8f0b0", MARK="#4a7a2a", EYE="#5aa82a", CLOTH="#6aa83a", TRIM="#e8d870",
+                 extra=dict(wing="#b8e0a0", wing_vein="#4a7a2a", wing_alpha=210, antenna="#5a8a3a", stocking="#6aa83a", boot="#3a5a24", scythe="#8ac85a")),
+        variants={"brown": dict(HAIR="#8a6a42", FUR="#9a7a52", LIGHT="#d8c0a0", MARK="#5a4028", EYE="#a87a3a", CLOTH="#7a5a3a",
+                                extra=dict(wing="#c8b090", wing_vein="#5a4028", wing_alpha=220, antenna="#5a4028", stocking="#7a5a3a", boot="#3a2a1a", scythe="#9a7a52")),
+                  "orchid": dict(SKIN=skin("pale"), HAIR="#f8d0e4", FUR="#f8e0ec", LIGHT="#ffffff", MARK="#e888b8", EYE="#d84a8a", CLOTH="#f8c0d8", TRIM="#f8e8a0",
+                                 extra=dict(wing="#fbe8f0", wing_vein="#e8a8c8", wing_alpha=200, antenna="#e8a8c8", stocking="#f8e0ec", boot="#e888b8",
+                                            scythe="#f8e0ec", petals=True)),
+                  "leaf": dict(HAIR="#5a9a2a", FUR="#6aaa3a", MARK="#3a6a1e", CLOTH="#4a8a2a",
+                               extra=dict(wing="#8ac85a", wing_vein="#3a6a1e", wing_alpha=240, antenna="#3a6a1e", stocking="#4a8a2a", boot="#2a4a14",
+                                          scythe="#6aaa3a", leafcape=True)),
+                  "ghost": dict(SKIN=skin("pale"), HAIR="#e8e4d4", FUR="#ece8dc", LIGHT="#ffffff", MARK="#a8a490", EYE="#8a8a7a", CLOTH="#c8c4b0",
+                                extra=dict(wing="#f4f2ea", wing_vein="#a8a490", wing_alpha=190, antenna="#a8a490", stocking="#d8d4c4", boot="#8a8678",
+                                           scythe="#ece8dc"))}),
     "fairy_bug": dict(
         build="petite", outfit=dict(top=["halter"], bottom="wrap_skirt", colors=dict(cloth2="#f8c8e0")), hair="twintails", bangs="swept", ears="elf",
         legs="bare", foot="shoe", wings="fairy", flies=True, flower=True,
@@ -76,6 +104,17 @@ SPECIES = {
                   "carpenter": dict(HAIR="#2a2a32", FUR="#2a2a32", MARK="#141418", LIGHT="#5a5a6a", CLOTH="#2a2a32", extra=dict(antenna="#141418", wing="#b8a8e8", wing_vein="#3a2a6a", stocking="#141418", boot="#141418")),
                   "orchid": dict(HAIR="#3ab878", FUR="#3ab878", MARK="#1a5a3a", LIGHT="#a8f0c8", CLOTH="#2a8a5a"),
                   "red": dict(HAIR="#2a2420", FUR="#2a2420", MARK="#d84a2a", LIGHT="#f8a080", CLOTH="#d84a2a")}),
+    "hornet_bug": dict(
+        build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#5a2a14")), hair="ponytail", bangs="jagged",
+        ears="antenna", legs="stockings", foot="shoe", wings="insect", flies=True, gaster=True, collar=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#8a3a1e", FUR="#e8b830", LIGHT="#f8e08a", MARK="#5a2a14", EYE="#3a1a0e", CLOTH="#8a3a1e", TRIM="#e8b830",
+                 extra=dict(antenna="#5a2a14", wing="#e8d8b0", wing_vein="#8a5a2a", stocking="#5a2a14", boot="#3a1a0e")),
+        variants={"giant": dict(HAIR="#e8902a", FUR="#e8a030", MARK="#2a1a10", CLOTH="#2a1a10", TRIM="#e8902a"),
+                  "baldfaced": dict(HAIR="#f0f0f0", FUR="#1a1a1e", MARK="#f0f0f0", LIGHT="#5a5a6a", CLOTH="#1a1a1e", TRIM="#f0f0f0",
+                                    extra=dict(antenna="#1a1a1e", wing="#d8dce8", wing_vein="#3a3a40", stocking="#1a1a1e", boot="#1a1a1e")),
+                  "yellowlegged": dict(HAIR="#2a2018", FUR="#2a2018", MARK="#e8902a", LIGHT="#6a5a4a", CLOTH="#2a2018", TRIM="#e8902a",
+                                       extra=dict(antenna="#2a2018", wing="#c8b8a8", wing_vein="#3a2a1e", stocking="#e8c040", boot="#e8c040")),
+                  "oriental": dict(HAIR="#8a3a1e", FUR="#8a3a1e", MARK="#f0c830", LIGHT="#c8784a", CLOTH="#8a3a1e", TRIM="#f0c830")}),
     "queen_bee_bug": dict(
         build="curvy", outfit=dict(top=["corset", "capelet"], bottom="wrap_skirt", extras=["pearls"], colors=dict(cloth2="#2a2420")), hair="drills", bangs="parted",
         ears="antenna", legs="stockings", foot="shoe", wings="insect", wing_scale=1.3, flies=True, gaster=True, collar=True, crown=True, four_arms=True,
@@ -130,6 +169,10 @@ def declare_hook(sp, d):
         out += [("crown", 4, 1.5, 4), ("jewel", 1, 1, .5)]
     if d.get("flower"):
         out += [("petal", 2, 2, .5)]
+    if d.get("lantern"):                                 # the firefly's glowing abdomen
+        out += [("lantern", 3.5, 3, 4)]
+    if d.get("scythes"):                                 # the mantis: a toothed blade along each forearm; the orchid's petal hips; the leaf's cape
+        out += [("scythe", .75, 4.5, 1.5), ("petal_hip", 3.25, 2.5, .5), ("leafcape", 6, 9, .5)]
     return out
 
 
@@ -143,6 +186,17 @@ def paint_hook(pt, pal, d):
     pt("crown", "all", lambda f, x, y, w, h: pick(gold, 0.55 + 0.3 * (x % 2 == 0 and y == h - 1), x, y))
     pt("jewel", "all", lambda f, x, y, w, h: pick(G.shades("#e83a6a"), 0.7, x, y))
     pt("petal", "all", lambda f, x, y, w, h: pick(pal.MARK, 0.6 + 0.2 * ((x + y) % 2), x, y))
+    blade = G.shades(pal.extra.get("scythe", "#8ac85a"))
+    pt("scythe", "all", lambda f, x, y, w, h: pick(blade, 0.45 + 0.3 * (f == "north" and y % 2 == 0), x, y))
+    pt("petal_hip", "all", lambda f, x, y, w, h: pick(pal.MARK if y < 1 else pal.FUR, 0.6 + 0.15 * ((x + y) % 2), x, y)
+       if pal.extra.get("petals") else CLEAR)
+    leaf = G.shades("#4a8a2a")
+    pt("leafcape", "all", lambda f, x, y, w, h: (pick(leaf, 0.5 + 0.25 * (x == w // 2) + 0.12 * ((x - w // 2) == (y // 2) % 3), x, y)
+                                                 if abs(x + 0.5 - w / 2) < w / 2 * (1 - (y / h) ** 2) + 0.6 else CLEAR)
+       if pal.extra.get("leafcape") else CLEAR)
+    lamp = G.shades(pal.extra.get("lantern", "#f8e070"))
+    pt("lantern", "all", lambda f, x, y, w, h: pick(lamp, 0.65 + 0.25 * ((x + y) % 3 == 0), x, y) if y >= h * 0.35 or f == "down"
+       else pick(pal.FUR, 0.45, x, y))
     # caterpillars and the scorpion
     sc = G.chitin_fn(pal, base=0.5)
     for p in [n for n, *_ in LARVA_SEGS]:
@@ -165,6 +219,13 @@ def build_hook(r, g, d):
                                                        G.rot_cube("stinger", [-0.25, 9.2, 7.8 + z], [0, 12.5, 1.5 + z], 35, 0, 0)])
     if d.get("crown"):
         r.put("head", cube("crown", [-2, hy + 8.6, -2 + z]), cube("jewel", [-0.5, hy + 9.0, -2.4 + z]))
+    if d.get("lantern"):                                 # her lantern, under her wings at the small of her back
+        r.add("lantern", "body", [0, 12.5, 1.5 + z], [G.rot_cube("lantern", [-1.75, 9.5, 1.2 + z], [0, 12.5, 1.5 + z], 30, 0, 0)])
+    if d.get("scythes"):
+        px, py, pz = r.b["forearm_r"]["pivot"]
+        r.put("forearm_r", G.rot_cube("scythe", [px - 0.375, py - 4.0, pz - 1.9], [px, py, pz], -12, 0, 0))
+        r.put("body", cube("petal_hip", [-4.6, 10.75, -1.0 + z]), H.mirror_cube(cube("petal_hip", [-4.6, 10.75, -1.0 + z])))
+        r.put("body", cube("leafcape", [-3.0, 10.5, 2.2 + z]))
     if d.get("flower"):
         r.put("head", G.rot_cube("petal", [3.0, hy + 6.5, -1.0 + z], [4.0, hy + 7.5, z], 0, 0, 30), G.rot_cube("petal", [3.3, hy + 6.0, -0.5 + z], [4.0, hy + 7.0, z], 0, 0, -20))
     if d.get("four_arms"):                               # a second, lower pair of arms
@@ -185,6 +246,12 @@ def bip_extra(an, sp, d):
                                          sym("arm", Tk((0, (-60, 0, 10)), (1, (-80, 0, 10)), (2, (-60, 0, 10))))))
     an.add("heal", 1.5, False, merge({"head": {"rotation": hold(-10, 0, 0)}, "eyelids": {"position": hold(*H.OUT_)}},
                                      sym("arm", Tk((0, (0, 0, 0)), (0.5, (-120, 0, 30)), (1.2, (-120, 0, 30)), (1.5, (0, 0, 0))))))
+    if d.get("scythes"):                                 # the prayer pose: forearms folded up before her chest, very still
+        an.add("pray", 3.0, True, merge({"head": {"rotation": Tk((0, (6, 0, 0)), (1.5, (6, 14, 4)), (3, (6, 0, 0)))}, "body": {"rotation": hold(4, 0, 0)}},
+                                        sym("arm", hold(-55, 0, -8)), sym("forearm", hold(-95, 0, 0))))
+        an.add("strike", 0.4, False, merge({"body": {"rotation": Tk((0, (4, 0, 0)), (0.12, (24, 0, 0)), (0.4, (4, 0, 0)))}},
+                                           sym("arm", Tk((0, (-55, 0, -8)), (0.12, (-110, 0, -8)), (0.4, (-55, 0, -8)))),
+                                           sym("forearm", Tk((0, (-95, 0, 0)), (0.12, (-10, 0, 0)), (0.4, (-95, 0, 0))))))
     if d.get("four_arms"):
         for key in ("idle", "walk", "sit", "fly"):
             F._inject(an, key, merge(sym("arm2", hold(-20, 0, 14)), sym("forearm2", hold(-50, 0, 0))))

@@ -13,7 +13,7 @@ import harpy_lib as H
 ASSETS = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls")
 FAMILIES = {
     "frogs": ["desert_rain_frog", "glass_frog", "tree_frog", "poison_dart_frog", "bullywug", "bullfrog", "goliath_frog"],
-    "toads": ["natterjack", "surinam_toad", "fire_bellied_toad", "mucus_toad", "cane_toad"],
+    "toads": ["natterjack", "surinam_toad", "fire_bellied_toad", "mucus_toad", "cane_toad", "mailtoad"],
 }
 
 

@@ -65,14 +65,24 @@ import java.util.concurrent.ConcurrentHashMap;
  * devotion (the nekomata's second tail, the kitsune's nine tails, the dragon koi). Each family class adds its own
  * bond action, signature behaviours and way of bearing young.
  */
-public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEntity, Bonded, GiftGiver {
+public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEntity, Bonded, GiftGiver, com.linkyoshi90.monstergirls.entity.Painted {
     private static final EntityDataAccessor<Byte> DATA_ACTION = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> DATA_YOUNG = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> DATA_VARIANT = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> DATA_BELLY = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> DATA_PAINT = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
     /** The Harmontide paints (textures/entity/&lt;model&gt;_paint_&lt;name&gt;.png, tools/gen_paints.py); 0 is unpainted. */
-    public static final java.util.List<String> PAINTS = java.util.List.of("blue", "red", "green", "yellow", "purple", "black", "inverted");
+    public static final java.util.List<String> PAINTS = java.util.List.of("blue", "red", "green", "yellow", "purple", "black", "inverted",
+            "chocolate", "icecream", "strawberry", "jello", "milk",           // treats: drips, patterns, see-through jello
+            "gold", "marble", "galaxy", "ghost", "honey", "rainbow",           // finishes: statues, a night sky, a see-through ghost (append only: synced by index)
+            "copper", "copper_exposed", "copper_weathered", "copper_oxidized",   // copper weathers stage by stage (Painted)
+            "glow", "ink", "magma", "pumpkin", "candy_cane",                   // glow and magma glow in the dark; pumpkin and candy cane are seasonal
+            "frost", "sakura", "stained_glass", "sepia",                       // stained glass is see-through
+            "opal", "chrome", "aurora", "camo",
+            "plush", "pixel", "origami", "gummy",                              // gummy is see-through
+            "synthwave", "cookie", "cloud", "valentine");                      // valentine is seasonal, February only
+    /** Homage variants (the look of a favourite character): a wild one rolls them only rarely. */
+    public static final java.util.Set<String> HOMAGES = java.util.Set.of("gunman", "blossom", "lost", "stitched", "nurse", "mummy", "ranger", "outback");
     /** One wild girl in this many is painted, like a shiny. */
     public static final int PAINT_RARITY = 64;
     private static final EntityDataAccessor<Integer> DATA_FLAGS = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.INT);
@@ -82,9 +92,12 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     /** Synced flags (bits of DATA_FLAGS). */
     public static final int FLAG_TRUE_FORM = 1, FLAG_HIDDEN = 2, FLAG_DECOY = 4, FLAG_HALF = 8, FLAG_CARRYING = 16, FLAG_SADDLED = 32, FLAG_CHEST = 64,
             FLAG_CALM = 128, FLAG_SHELLS = 256, FLAG_SMILE = 512, FLAG_MALE = 1024, FLAG_RETRACTED = 2048, FLAG_LIT = 4096, FLAG_MASKED = 8192,
-            FLAG_MERCHANT = 16384, FLAG_TOWING = 32768;
+            FLAG_MERCHANT = 16384, FLAG_TOWING = 32768, FLAG_MOONSTRUCK = 65536, FLAG_INJURED = 131072, FLAG_WAXED = 262144,
+            FLAG_TAILLESS = 524288, FLAG_UNWRAP_A = 1048576, FLAG_UNWRAP_B = 2097152, FLAG_SHORN = 4194304, FLAG_BLINDFOLD = 8388608;
     /** The flags that are saved (the others are moment-to-moment state). */
-    private static final int SAVED_FLAGS = FLAG_TRUE_FORM | FLAG_SADDLED | FLAG_CHEST | FLAG_HALF | FLAG_CALM | FLAG_SHELLS | FLAG_MALE | FLAG_MASKED | FLAG_MERCHANT;
+    private static final int SAVED_FLAGS = FLAG_TRUE_FORM | FLAG_SADDLED | FLAG_CHEST | FLAG_HALF | FLAG_CALM | FLAG_SHELLS | FLAG_MALE | FLAG_MASKED | FLAG_MERCHANT
+            | FLAG_INJURED | FLAG_WAXED | FLAG_TAILLESS | FLAG_UNWRAP_A | FLAG_UNWRAP_B | FLAG_SHORN;
+    private static final net.minecraft.resources.ResourceLocation INJURED_SLOW = com.linkyoshi90.monstergirls.MonsterGirlsMod.id("injured");
 
     /** Five in-game days from newborn to grown up. */
     public static final int GROW_TICKS = 5 * 24000;
@@ -100,7 +113,12 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         NONE(null, false), SITTING("sit", false), LYING("lie", false), POUNCE("pounce", true), GROOM("groom", false), HISS("hiss", false),
         DIG("dig", false), LAUGH("laugh", false), REAR("rear", false), COIL("coil", false), BASK("bask", false), LEAP("leap", true),
         SPIN("spin", false), KICK("kick", true), GRAZE("graze", false), SING("sing", false), ABSORB("absorb", true), SPLIT("split", true),
-        STALK("stalk", false), BOUNCE("bounce", false), PANT("pant", false), CHARGE("charge", false), MILK("milk", false), GRAB("grab", false), INK("ink", true), RETRACT("retract", true), LASH("lash", true), SHOOT("shoot", true), TRADE("trade", true), DRINK("drink", false), ROLL("roll", false), CALL("call", true), STING("sting", true), BREATHE("breathe", true), CHARM("charm", false), HOP("hop", false), EAT("eat", false), HEAL("heal", true), POLLINATE("pollinate", false), SCREAM("scream", true), PUFF("puff", true), PLANT("plant", true);
+        STALK("stalk", false), BOUNCE("bounce", false), PANT("pant", false), CHARGE("charge", false), MILK("milk", false), GRAB("grab", false), INK("ink", true), RETRACT("retract", true), LASH("lash", true), SHOOT("shoot", true), TRADE("trade", true), DRINK("drink", false), ROLL("roll", false), CALL("call", true), STING("sting", true), BREATHE("breathe", true), CHARM("charm", false), HOP("hop", false), EAT("eat", false), HEAL("heal", true), POLLINATE("pollinate", false), SCREAM("scream", true), PUFF("puff", true), PLANT("plant", true),
+        HOWL("howl", true), FISH("fish", false), SNEEZE("sneeze", true), JUDGE("judge", true), CAST("cast", true), BITE("bite", true),
+        POINT("point", true), SOAK("soak", false), SCAMPER("scamper", false),
+        PINCH("pinch", true), CURL("curl", false), SLAM("slam", true), CLING("cling", false),
+        ROOST("roost", false), PRAY("pray", false), STRIKE("strike", true), SNAP("snap", true), PERCH("perch", false),
+        HANG("hang", false), RUNDOWN("rundown", false);
 
         public final String animation;
         public final boolean once;
@@ -144,12 +162,23 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.targetSelector.addGoal(2, new net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal<>(this, Player.class, 10, true, false,
                 p -> p instanceof Player pl && this.isHostileTo(pl)));
         if (this.canFly()) {                                // the winged and the floating: fly instead of walking
+            this.useFlight(true);
+            this.goalSelector.addGoal(8, new net.minecraft.world.entity.ai.goal.WaterAvoidingRandomFlyingGoal(this, 1.0));
+        }
+    }
+
+    /** Flying movement and navigation, or walking ones (a flier who cannot fly: a broken wing). */
+    private void useFlight(boolean fly) {
+        if (fly) {
             this.moveControl = new net.minecraft.world.entity.ai.control.FlyingMoveControl(this, 20, true);
-            net.minecraft.world.entity.ai.navigation.FlyingPathNavigation nav = new net.minecraft.world.entity.ai.navigation.FlyingPathNavigation(this, level);
+            net.minecraft.world.entity.ai.navigation.FlyingPathNavigation nav = new net.minecraft.world.entity.ai.navigation.FlyingPathNavigation(this, this.level());
             nav.setCanOpenDoors(false);
             nav.setCanFloat(true);
             this.navigation = nav;
-            this.goalSelector.addGoal(8, new net.minecraft.world.entity.ai.goal.WaterAvoidingRandomFlyingGoal(this, 1.0));
+        } else {
+            this.moveControl = new net.minecraft.world.entity.ai.control.MoveControl(this);
+            this.navigation = new net.minecraft.world.entity.ai.navigation.GroundPathNavigation(this, this.level());
+            this.setNoGravity(false);
         }
     }
 
@@ -180,6 +209,11 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     /** Whether her animation file has a "fly" animation (a floating will-o'-wisp has none: she just idles in the air). */
     protected boolean hasFlyAnimation() {
         return this.canFly();
+    }
+
+    /** Gliding down on wings that cannot fly (the wolpertinger): she plays her "fly" animation while she does. */
+    protected boolean isGliding() {
+        return false;
     }
 
     @Override
@@ -277,7 +311,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     /** Wild spawns: the default colours half the time, the four others share the rest. */
     protected int rollWildVariant(RandomSource random) {
-        return random.nextBoolean() ? 0 : 1 + random.nextInt(this.species.variants().size() - 1);
+        int v = random.nextBoolean() ? 0 : 1 + random.nextInt(this.species.variants().size() - 1);
+        return HOMAGES.contains(this.species.variants().get(v)) && random.nextInt(8) != 0 ? 0 : v;   // homages are rare
     }
 
     public void randomizeVariant() {
@@ -287,13 +322,61 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData groupData) {
         if (!this.variantFromData && spawnType != MobSpawnType.BREEDING && this.random.nextInt(PAINT_RARITY) == 0) {
-            this.setPaint(1 + this.random.nextInt(PAINTS.size()));       // a painted one: rare, like a shiny
+            this.setPaint(com.linkyoshi90.monstergirls.entity.Painted.roll(this.random));   // a painted one: rare, like a shiny
         }
         if (!this.variantFromData) {
             this.setVariantIndex(this.rollWildVariant(this.random));
             this.setTails(this.rollTails(this.random));
         }
-        return super.finalizeSpawn(level, difficulty, spawnType, groupData);
+        SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, groupData);
+        if ((spawnType == MobSpawnType.NATURAL || spawnType == MobSpawnType.CHUNK_GENERATION) && !this.isBaby() && this.random.nextInt(this.injuredRarity()) == 0) {
+            this.setInjured(true);                                       // a wild one, hurt: the healing balm encounter
+            this.setHealth(this.getMaxHealth() * 0.3F);
+        }
+        return data;
+    }
+
+    // --- injured (the balm encounter) ------------------------------------------------------------------------------
+
+    /** One wild girl in this many is found injured. */
+    protected int injuredRarity() {
+        return 50;
+    }
+
+    /** How much friendship mending her wound is worth. */
+    protected int mendAffection() {
+        return 40;
+    }
+
+    public boolean isInjured() {
+        return this.hasFlag(FLAG_INJURED);
+    }
+
+    /** Injured: slow, she cannot fight, and a flier cannot fly (a broken wing). */
+    public void setInjured(boolean injured) {
+        this.setFlag(FLAG_INJURED, injured);
+        this.applyInjury();
+    }
+
+    private void applyInjury() {
+        boolean injured = this.isInjured();
+        var speed = this.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (speed != null) {
+            speed.removeModifier(INJURED_SLOW);
+            if (injured) speed.addTransientModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(INJURED_SLOW, -0.5,
+                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        }
+        if (this.canFly()) this.useFlight(!injured);
+        if (injured) this.setTarget(null);
+    }
+
+    /** A healing balm on her wound: she is whole again, and she will not forget who did it. */
+    public void mend(ServerLevel level, Player player) {
+        this.setInjured(false);
+        this.addAffection(player, this.mendAffection());
+        this.setLastHurtByMob(null);
+        level.sendParticles(ParticleTypes.HEART, this.getX(), this.getY() + this.getBbHeight(), this.getZ(), 12, 0.5, 0.4, 0.5, 0.0);
+        player.displayClientMessage(Component.translatable("message.monstergirls.mended", this.getDisplayName()), true);
     }
 
     // --- relationships -------------------------------------------------------------------------------------------
@@ -311,11 +394,13 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     public void addAffection(Player player, int amount) {
         this.affection.merge(player.getUUID(), amount, (a, b) -> Math.max(0, Math.min(FULL_AFFECTION, a + b)));
         this.affection.computeIfPresent(player.getUUID(), (k, v) -> Math.max(0, Math.min(FULL_AFFECTION, v)));
+        com.linkyoshi90.monstergirls.entity.FourSymbols.onAffection(this, player, this.getAffection(player));
     }
 
     @Override
     public void setAffection(UUID player, int amount) {
         this.affection.put(player, Math.max(0, Math.min(FULL_AFFECTION, amount)));
+        com.linkyoshi90.monstergirls.entity.FourSymbols.onAffection(this, this.level().getPlayerByUUID(player), this.getAffection(player));
     }
 
     public boolean hasAnyAffection() {
@@ -373,6 +458,16 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     }
 
     @Override
+    public boolean isMoonstruck() {
+        return this.hasFlag(FLAG_MOONSTRUCK);
+    }
+
+    @Override
+    public void setMoonstruck(boolean moonstruck) {
+        this.setFlag(FLAG_MOONSTRUCK, moonstruck);
+    }
+
+    @Override
     public void settleInBed() {
         this.setAction(Action.LYING);
     }
@@ -396,7 +491,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     /** Her stance has the last word on whom she fights (and companions never fight each other). */
     @Override
     public void setTarget(@Nullable net.minecraft.world.entity.LivingEntity target) {
-        super.setTarget(this.orders == null || this.orders.allows(this, target) ? target : null);
+        boolean allowed = (this.orders == null || this.orders.allows(this, target)) && !this.isInjured();
+        super.setTarget(allowed ? target : null);
     }
 
     @Override
@@ -449,7 +545,12 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     /** Whether she would attack this player on sight right now. */
     public boolean isHostileTo(Player player) {
-        return this.wildHostile() && !this.isCalm() && !this.isBaby() && this.father == null && this.getAffection(player) <= 0
+        return this.wildHostile() && !this.isCalm() && this.getAffection(player) <= 0 && this.couldAttack(player);
+    }
+
+    /** What every wild hostility needs: a grown, wild, unhurt girl, and a player in survival on a difficulty above peaceful. */
+    protected boolean couldAttack(Player player) {
+        return !this.isBaby() && this.father == null && !this.isInjured()
                 && !player.isCreative() && !player.isSpectator() && this.level().getDifficulty() != net.minecraft.world.Difficulty.PEACEFUL;
     }
 
@@ -487,7 +588,13 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.wokenUntil = this.level().getGameTime() + 600;               // a hand wakes her (for half a minute)
         ItemStack stack = player.getItemInHand(hand);
         if (hand != InteractionHand.MAIN_HAND) return super.mobInteract(player, hand);
+        InteractionResult paint = com.linkyoshi90.monstergirls.entity.Painted.interact(this, this, player, hand);
+        if (paint != null) return paint;
         if (stack.is(Items.STICK)) {
+            if (!this.takesOrders()) {                                     // the chupacabra answers to nobody
+                if (!this.level().isClientSide) player.displayClientMessage(Component.translatable("message.monstergirls.ignores_orders", this.getDisplayName()), true);
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
+            }
             if (!this.level().isClientSide) com.linkyoshi90.monstergirls.entity.Orders.onStick(this, this.orders, player);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
@@ -683,9 +790,13 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         super.aiStep();
         if (this.level() instanceof ServerLevel healerLevel && this.tickCount % 600 == 0) this.tendCompanions(healerLevel);
         if (!(this.level() instanceof ServerLevel server)) return;
+        com.linkyoshi90.monstergirls.entity.Painted.tickCopper(this, this);
         this.gestation.tick();
         if (this.tickCount % 10 == 0) this.entityData.set(DATA_BELLY, (byte) Math.round(this.bellyProgress() * 100));
         if (this.isBaby() && ++this.growTicks >= GROW_TICKS) this.setBaby(false);
+        if (this.isInjured() && this.tickCount % 60 == 0) {
+            server.sendParticles(ParticleTypes.DAMAGE_INDICATOR, this.getX(), this.getY() + this.getBbHeight() * 0.6, this.getZ(), 2, 0.3, 0.2, 0.3, 0.0);
+        }
         if (this.timedActionTicks > 0 && --this.timedActionTicks == 0) this.setAction(this.orderedToSit ? Action.SITTING : Action.NONE);
         if (this.orderedToSit && this.getAction() == Action.NONE) this.setAction(Action.SITTING);
         if (this.gestation.isReady() && this.tickCount % 40 == 0 && this.giveBirth(server, this.gestation.getFather())) {
@@ -729,15 +840,17 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         }
         if (here.equals(this.lightPos)) return;
         this.clearLight();
-        if (level.getBlockState(here).isAir()) {
-            level.setBlock(here, Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, lightLevel), 3);
+        boolean water = level.getBlockState(here).is(Blocks.WATER) && level.getFluidState(here).isSource();
+        if (level.getBlockState(here).isAir() || water) {
+            level.setBlock(here, Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, lightLevel).setValue(LightBlock.WATERLOGGED, water), 3);
             this.lightPos = here;
         }
     }
 
     protected void clearLight() {
-        if (this.lightPos != null && this.level().getBlockState(this.lightPos).is(Blocks.LIGHT)) {
-            this.level().setBlock(this.lightPos, Blocks.AIR.defaultBlockState(), 3);
+        var light = this.lightPos == null ? null : this.level().getBlockState(this.lightPos);
+        if (light != null && light.is(Blocks.LIGHT)) {
+            this.level().setBlock(this.lightPos, light.getValue(LightBlock.WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState(), 3);
         }
         this.lightPos = null;
     }
@@ -798,6 +911,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             this.setVariant(tag.getString("Variant"));
         }
         this.entityData.set(DATA_FLAGS, tag.getInt("Flags") & SAVED_FLAGS);
+        if (this.isInjured()) this.applyInjury();
         if (tag.contains("Tails")) this.setTails(tag.getByte("Tails"));
         if (tag.contains("Paint")) this.setPaint(PAINTS.indexOf(tag.getString("Paint")) + 1);
         this.devotedSince = tag.contains("DevotedSince") ? tag.getLong("DevotedSince") : NOT_DEVOTED;
@@ -822,10 +936,11 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     }
 
     private PlayState animate(AnimationState<AbstractMonsterGirl> state) {
+        if (this.isDeadOrDying() && this.hasDeathAnimation()) return state.setAndContinue(this.anim("death", true));
         Action action = this.getAction();
         if (action.animation != null) return state.setAndContinue(this.anim(action.animation, action.once));
         if (this.isInWater() && this.hasSwimAnimation()) return state.setAndContinue(this.anim(state.isMoving() ? "swim" : "idle", false));
-        if (this.canFly() && !this.onGround() && !this.isInWater() && this.hasFlyAnimation()) return state.setAndContinue(this.anim("fly", false));
+        if ((this.canFly() && this.hasFlyAnimation() || this.isGliding()) && !this.onGround() && !this.isInWater()) return state.setAndContinue(this.anim("fly", false));
         if (state.isMoving()) {
             boolean fast = this.isSprinting() || this.isAggressive() || this.getDeltaMovement().horizontalDistanceSqr() > 0.02;
             return state.setAndContinue(this.anim(fast ? "run" : "walk", false));
@@ -892,7 +1007,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     /** Up at night, asleep by day: the undead, foxes, moths and mosquitoes, the night elf, the succubus, the jiang shi and the jack o'lantern, the tapir. */
     public boolean isNocturnal() {
         return switch (this.species) {
-            case NIGHT_ELF, MOTH_BUG, MOSQUITO_BUG, SUCCUBUS_DEVIL, JIANG_SHI_DEVIL, JACK_O_LANTERN_DEVIL, TAPIR_CENTAUR, OCELOT_NEKOMATA -> true;
+            case NIGHT_ELF, MOTH_BUG, MOSQUITO_BUG, SUCCUBUS_DEVIL, JIANG_SHI_DEVIL, JACK_O_LANTERN_DEVIL, TAPIR_CENTAUR, OCELOT_NEKOMATA, ANUBIS_CANID,
+                 CHUPACABRA_LIZARDFOLK, FIREFLY_BUG, CAVE_BAT, ONI_DEVIL, GARGOYLE_CONSTRUCT, SLOTHREN_ARMOURED, BROWNIE_ELF -> true;
             default -> this.species.family() == GirlSpecies.Family.UNDEAD || this.species.family() == GirlSpecies.Family.KITSUNE;
         };
     }
@@ -912,5 +1028,27 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     public String getPaintName() {
         int p = this.getPaint();
         return p == 0 ? null : PAINTS.get(p - 1);
+    }
+
+    @Override
+    public boolean isWaxed() {
+        return this.hasFlag(FLAG_WAXED);
+    }
+
+    @Override
+    public void setWaxed(boolean waxed) {
+        this.setFlag(FLAG_WAXED, waxed);
+    }
+
+    // --- dying -----------------------------------------------------------------------------------------------------
+
+    /** Whether a stick gives her orders (the chupacabra takes none). */
+    protected boolean takesOrders() {
+        return true;
+    }
+
+    /** Whether she has her own "death" animation (the golem breaks apart); the renderer then does not tip her over. */
+    public boolean hasDeathAnimation() {
+        return false;
     }
 }

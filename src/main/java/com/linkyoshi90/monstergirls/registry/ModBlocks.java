@@ -39,11 +39,22 @@ public final class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.2F).sound(SoundType.DECORATED_POT).noOcclusion()
                     .pushReaction(PushReaction.DESTROY));
 
+    /** A firefly or a fairy caught in a jar: a light (she flies out when it is opened or broken). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.GirlJarBlock> GIRL_JAR = BLOCKS.registerBlock("girl_jar",
+            com.linkyoshi90.monstergirls.block.GirlJarBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.NONE).strength(0.3F).sound(SoundType.GLASS).noOcclusion().lightLevel(s -> 12)
+                    .pushReaction(PushReaction.DESTROY));
     /** An alraune rooted as a flower (she unfolds when it is used or broken). */
     public static final DeferredBlock<com.linkyoshi90.monstergirls.block.AlrauneBloomBlock> ALRAUNE_BLOOM = BLOCKS.registerBlock("alraune_bloom",
             com.linkyoshi90.monstergirls.block.AlrauneBloomBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).instabreak().noCollission().sound(SoundType.AZALEA_LEAVES)
                     .offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY));
+
+    /** A lich's phylactery: the vessel of her soul (she places it herself). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.PhylacteryBlock> PHYLACTERY = BLOCKS.registerBlock("phylactery",
+            com.linkyoshi90.monstergirls.block.PhylacteryBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_CYAN).strength(2.0F, 6.0F).sound(SoundType.AMETHYST).noOcclusion()
+                    .lightLevel(s -> 10).pushReaction(PushReaction.BLOCK));
 
     /** The nectar fluid's block (see ModFluids). */
     public static final DeferredBlock<net.minecraft.world.level.block.LiquidBlock> NECTAR = BLOCKS.register("nectar",

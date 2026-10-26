@@ -99,7 +99,7 @@ public class AnuranSpeciesTests {
                 check(animations.contains("animation." + species + "." + extra), species + " lacks animation " + extra);
             }
         }
-        check(eggs.size() == 12, "expected twelve different spawn eggs");
+        check(eggs.size() == ModSounds.ANURAN_SPECIES.size(), "expected a different spawn egg for every species");
         check(MonsterGirlsMod.class.getResource("/assets/monstergirls/textures/entity/fire_bellied_toad_glowmask.png") != null, "missing glow mask");
         helper.succeed();
     }

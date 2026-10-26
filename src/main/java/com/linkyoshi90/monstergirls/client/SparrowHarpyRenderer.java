@@ -53,13 +53,17 @@ public class SparrowHarpyRenderer extends GeoEntityRenderer<SparrowHarpy> {
 
             @Override
             public ResourceLocation getTextureResource(SparrowHarpy harpy) {
-                if (harpy.isBaby()) return YoungModels.tex(harpy.modelName());
+                if (harpy.isBaby()) return Paints.of(YoungModels.tex(harpy.modelName()), harpy.getPaintName());
+                if (harpy.getPaintName() != null) return Paints.of(MonsterGirlsMod.id(MonsterGirlsClientConfig.detailedSparrow()
+                        ? "textures/entity/sparrow_harpy_detailed.png" : "textures/entity/sparrow_harpy.png"), harpy.getPaintName());
                 return (MonsterGirlsClientConfig.detailedSparrow() ? DETAILED_TEXTURES : TEXTURES).get(harpy.getVariant());
             }
         });
         this.withScale(SCALE);
         this.shadowRadius = 0.3F;
         this.addRenderLayer(new HeldItemLayer<>(this));
+        this.addRenderLayer(new MoonEyesLayer<>(this));
+        this.addRenderLayer(new PaintGlowLayer<>(this, SparrowHarpy::getPaintName));
     }
 
     /** Hatchlings are the adult model at a small scale. */
@@ -69,5 +73,13 @@ public class SparrowHarpyRenderer extends GeoEntityRenderer<SparrowHarpy> {
         // the hatchling model is drawn at its own size, whatever the species' scale is
         if (animatable.isBaby()) super.scaleModelForRender(1.0F, 1.0F, poseStack, animatable, model, isReRender, partialTick, packedLight, packedOverlay);
         else super.scaleModelForRender(widthScale, heightScale, poseStack, animatable, model, isReRender, partialTick, packedLight, packedOverlay);
+    }
+
+    /** A jello-painted one is see-through. */
+    @Override
+    public net.minecraft.client.renderer.RenderType getRenderType(com.linkyoshi90.monstergirls.entity.SparrowHarpy animatable, net.minecraft.resources.ResourceLocation texture,
+                                                                @javax.annotation.Nullable net.minecraft.client.renderer.MultiBufferSource buffers, float partialTick) {
+        return Paints.translucent(animatable.getPaintName()) ? net.minecraft.client.renderer.RenderType.entityTranslucent(texture)
+                : super.getRenderType(animatable, texture, buffers, partialTick);
     }
 }

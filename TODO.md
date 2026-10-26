@@ -33,16 +33,216 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Kappa** (lizardfolk): rivers and swamps. Shell and water dish. Strong when wet, weak and slow after two minutes dry. Bow to her (crouch, facing her) and she bows back and spills her dish (weak, and she stops fighting you), +1 friendship once every 5 minutes. Melon slices and kelp stand in for cucumbers.
   - **Naga** (lamia): jungles. King cobra hood and a gold crown. Nobody she is not fond of opens or breaks an unopened structure chest within 10 blocks of her. Player chests are never affected.
   - **Dullahan** (undead): plains and meadows at night. She carries her head in the crook of her arm, with a blue spirit flame at the neck. Half of them ride a skeleton horse. She backs away from anyone holding gold.
-- [ ] Next: the harpy and anuran systems. Tengu, Thunderbird, then Vodyanoy (the first monster boy, which needs male support in the anuran rig).
-- [ ] Flaky test: `strandedTadpoleFindsThePond` failed once and then passed.
+- [x] Fourth wave (2026-10-24), the design notes in HARMONTIDE_CONCEPTS.md "Fourth wave", tested in `FourthWaveTests`:
+  - **Camel** and **Dromedary** (centaur): anyone may ride them, with no friendship needed. Cactus puts one in the mood, and next to a vanilla camel in love she conceives (half the young are camel calves). A bucket milks her once every 5 minutes. Kin of vanilla camels.
+  - **Kelpie** (centaur): rivers. She is ridden only under a saddle, put on at fond (10). In water she carries you faster than a boat (0.42 a tick, 0.5 sprinting). She attacks players she is not fond of between 13000 and 23000 on the clock.
+  - **Wadjet** (lamia, on two legs with a cobra hood): desert. Every 2 s she gives Regeneration and Resistance to players within 8 blocks and to the girls (any family) fond of them. She hunts every hostile mob and often brings emeralds. Named **Nekhbet**: level II effects and +4 attack damage.
+  - **Hornet** (bug): forests. She stings players within 5 blocks unless fond of them. Until befriended she hunts bees and bee girls. On patrol she goes for hostile mobs. Eats meat and fruit, gives paper and clay.
+  - **Dugong** (merfolk): warm and lukewarm ocean, always spawns in pairs. Seagrass (3 friendship) wins her over, and she gives sea treasure.
+  - **Tengu harpy:** peaks and cherry groves. Neutral. Her fan does 2 damage and throws the target away from her territory. On patrol she attacks hostile mobs (creepers and endermen too) within 18 blocks of her spot. Wild, she soars 28 blocks up and comes down to drink at water.
+  - **Toucan harpy:** jungles. Eats fruit and clacks her beak (her ambient sound). Two toucans within 8 blocks now and then hold a 6-second clack-off.
+  - **Penguin harpy:** snowy beaches, ice and frozen ocean, in colonies of 4 to 8. Fast underwater. She hunts fish, and when befriended she brings her player one for every fish she catches. One in 12 is a wanderer who walks off alone in a straight line until befriended. Orca mermaids hunt penguins nobody has befriended, and wild penguins go for koi mermaids.
+  - **The injured girl:** 1 wild girl in 50 (1 hornet in 5) spawns at 30% health, half speed, unable to fight. A flier cannot fly, and a broken wing hangs limp. A healing balm mends her even when she is wild: +40 friendship, and a hornet goes straight to full.
+- [ ] Playtest the fourth wave: does the broken wing droop the right way (`GirlRenderer`, the angle was never seen in a client)? Is the kelpie's water speed fun and does it keep the rider dry? Do tengu ever come down to drink often enough to meet? Does the penguin wanderer get stuck on the first cliff? Is the wadjet's blessing too strong for a desert you just walk through?
+- [ ] Not done for the fourth wave: injured harpies and anurans (only the girl families get injured), the harpy field guide entries for the tengu, toucan and penguin (that guide is hand-written), and sounds of their own (they borrow the crow's, the parrot's and a pitched-up donkey bray).
+- [x] Playtest fixes (2026-10-24):
+  - The penguin swims face down; her swim pose had her on her back.
+  - The wadjet cannot be ridden; she walks on legs and has no coils.
+  - `/monstergirls bonds` says "monster girls", not "harpies".
+  - Swimmers (merfolk, sea snake, mollusks, penguin) turn before they go and accept a waypoint within 1.5 blocks, so they stop circling a target overhead (`AmphibiousMoveControl`, `SwimmerNavigation`).
+  - Ika and the octopus swim instead of bobbing on the surface.
+  - Dolphin, orca, kraken, ammonite, ika and octopus are on `can_breathe_under_water`. Every merfolk still rises for a breath every 1 to 3 minutes, to sell it.
+  - A girl climbing into your bed says so in chat.
+- [ ] Playtest: do the orca and the seal still circle in open water? The tests only reproduced the sea snake's orbit, around a target mostly overhead.
+- [ ] Flaky test: `nekomataPatienceAndSwat` failed once, `toadEatsPests` once; `strandedTadpoleFindsThePond` fails about one run in three now.
+- [x] Riders steer lamias and unsaddled centaurs again (2026-10-24). Who steers was gated on friendship, which the client never knows, so nobody steered. The friendship check stays where you climb on. Test: `ridersSteerWithoutKnowingFriendship`.
+- [x] Fifth wave (2026-10-24), the design in HARMONTIDE_CONCEPTS.md "Fifth wave", tested in `FifthWaveTests`:
+  - **New family, the canids** (`Canid.java`, `tools/gen_canid.py`, field guide volume XX):
+    - **Wolf:** packs led by an alpha. Wild, she hunts sheep and rabbits. Bones win her over, she howls at night, and her player's tamed wolves join her fights.
+    - **Polar bear:** wild, she hunts seal mermaids and penguin harpies that nobody has befriended. She fishes at open water and attacks strangers within 8 blocks of her cubs.
+    - **Panda:** born with a personality. Lazy pandas lie about and walk slower, worried ones avoid strangers, playful ones roll, aggressive ones guard their friends, and weak ones have 20 health and sneeze often. Every panda sneezes up slimeballs.
+    - **Anubis:** nocturnal. She weighs every player within 10 blocks: anyone with villager or iron golem kills (a stat) is condemned and hunted. Unopened loot chests within 12 blocks are closed to anyone she has not weighed light.
+  - **Pegasus** (centaur): ridden only under a golden bridle (gold horse armour, put on at fond). Golden apples are worth 10 friendship. Hold jump: she leaps (the horse jump bar) and glides down at 0.12 a tick. No fall damage.
+  - **Lich** (undead, deep dark): she places a phylactery block near her. While it stands, a killing blow sends her back beside it at half health. Remove it (break or blast) and she is freed and peaceful. She casts Slowness II and Weakness every 4 s. Freed and fond, she trades books for XP (10, 20 for a written book, 30 for an enchanted book).
+  - **Mimic** (slime): one unopened loot chest in eight, when a player opens it. Never a chest without a loot table. She takes the loot into her 27-slot hoard and bites once. Gold wins her over; then she follows her friend, and crouch-right-click opens her.
+  - **Vodyanoy** (anuran, the first man): rivers. While no dropped item floats within 8 blocks, his friends get a fish every 2 to 4 minutes (2 with a fisherman villager within 24 blocks). With litter in the water he is grumpy: he drags swimmers under once every 10 s. He has no bed sharing, no young and no tadpole stage.
+  - **Frog kin:** vanilla frogs within 16 blocks walk to any anuran girl. A slimeball puts her in the mood; next to a vanilla frog in love she conceives. A third of that spawn hatches as vanilla tadpoles, and the rest are hers (devoted to nobody).
+- [ ] Playtest the fifth wave: the pegasus leap and glide feel (the jump bar is client-side, never seen), how often you meet a mimic, whether Anubis condemning on lifetime stats is too harsh (there is no atonement yet), and whether the lich respawning at her phylactery is findable.
+- [ ] Not done: frog kin introductions (Kinship's introduce-with-food covers girl families only), and harpy guide entries.
+- [x] Sixth wave (2026-10-24), the design in HARMONTIDE_CONCEPTS.md "Sixth wave", tested in `SixthWaveTests`:
+  - **Kobold** (canid, caves and mountains): befriended, every 10 s she points out the nearest diamond, gold or emerald ore within 10 blocks (once per ore, on the action bar with the distance). She yelps when the block her friend looks at holds up sand or gravel. Every 5 s she growls at a mimic chest within 6 blocks, which rattles. Mimic chests are now fixed by the world seed (`SlimeGirl.isMimicChest`), so a kobold can smell one before it is opened. Kin: wolves.
+  - **Grizzly** (canid, taiga): she fishes salmon at open water and raids full beehives within 8 blocks (the honey goes to 0, the bees go for her, and her friend gets 3 honeycomb). She hibernates (lying, no hostility) while it snows where she stands; a hit or a hand wakes her. She guards her cubs like the polar bear. Kin: polar bears.
+  - **New family, the rodents** (`Rodent.java`, `tools/gen_rodent.py`, field guide volume XXI):
+    - **Capybara:** wolves, foxes, cats and ocelots within 8 blocks drop their targets. Idle girls within 6 blocks sit down beside her (1 in 3, every 5 s). She soaks in water. Devoted friends near her get Regeneration.
+    - **Ratatoskr:** she gathers dropped seeds and saplings into a 9-slot cache, and every minute or so she forgets a sapling, which takes root where she stands. Hand her any item (fond, not food) and she runs it to the nearest other player she is fond of. One delivery in 8 is a prank (a stick, seeds, a dead bush or a poisonous potato), and the real item goes into her cache to come back later as a present.
+  - **Leshy** (flora, male, old-growth taiga, no bed sharing): he keeps a tally per player within 24 blocks. Every 6 saplings planted earn 2 friendship, 2 spruce saplings and 2 apples. At 12 logs cut (net) the cutter gets Blindness, Nausea and Slowness ("lost in his fog") and loses 5 friendship. He bellows at a vodyanoy within 12 blocks.
+  - **Black Tortoise / Xuanwu** (lizardfolk, frozen rivers): projectiles do nothing. She hides in her shell like the turtles. Kin: turtles.
+  - **La Llorona** (undead, rivers and swamps): at night she weeps and looks for a baby animal or village child with no grown one of its kind within 12 blocks, then leads it to the nearest grown one within 48 blocks. Once it is home she stops weeping for the rest of the night, and every player within 16 blocks gains 3 friendship.
+  - **Zhuque, the Vermilion Bird** (`ZhuqueHarpy`, the phoenix's model in her own colours, savanna and badlands): she is fireproof, sets whatever she strikes alight, and once befriended ripens crops within 6 blocks every 3 s. She has her own egg (Vermilion Egg), eggs and hatchling.
+  - **The Four Symbols** (advancement, challenge): befriend (10+) a long dragon (east), a white tiger nekomata (west), Zhuque (south) and the Black Tortoise (north).
+- [ ] Playtest the sixth wave: how chatty the kobold is underground, whether the Ratatoskr prank is funny or annoying, how the leshy's tally feels for a normal tree farm (12 logs is about two trees), and whether La Llorona finds lost young often enough.
+- [ ] Not done for the sixth wave: Zhuque has no harpy field guide entry (nor have the tengu, toucan and penguin). The grizzly cannot hibernate in a den (she sleeps where the snow catches her).
+- [x] **Turtles** (2026-10-25, lizardfolk), tested in `TurtleAndKinTests`:
+  - **Red-eared slider** (rivers, swamps, in groups of 2 to 4): when a stranger comes within 6 blocks, every slider within 8 slides into the nearest water. Her food is worth double.
+  - **Galapagos tortoise** (beaches, stony shores, savanna): 70 health, armour 12, speed 0.12. Once she is fond of you, an empty hand climbs onto her shell (crouch to pat her, as with centaurs). She keeps going where she was going, and cactus does not hurt her.
+  - **Box turtle** (forests): shut in her shell she takes no damage at all. A stranger sprinting within 4 blocks makes her shut, and she stays within 16 blocks of home until someone befriends her.
+  - **Softshell turtle** (rivers): no armour, quick. Still in water on sand, mud, gravel, dirt or clay, she is buried (invisible) and bites any stranger within 1.5 blocks for 6 damage. She can breathe underwater.
+  - **Matamata** (swamps, mangroves): still in water she is invisible (dead leaves). Fish within 4 blocks get sucked in; her friend gets the fish. She can breathe underwater.
+  - All of them count vanilla turtles as kin, and all but the softshell hide in their shells.
+- [x] **Kinship for every vanilla counterpart** (2026-10-25). New: bat to vampire, snow golem to yuki-onna, iron golem to Frankenstein's monster, skeleton horse to dullahan, skeleton and stray to lich, allay to the fairy and fairy queen, vex to lesser devil, tropical fish to koi, and mooshroom to matango. Horses go to the pegasus (not the kelpie), and wolves stay with the wolf girl and the kobold (not Anubis). Harpies now have kin too: parrots, or chickens for the ostrich and the penguin. So do the anurans: frogs. Still none (no vanilla animal): shark, seal, dugong, reindeer, tapir, snail, ammonite, capybara, Ratatoskr, the dragons and most plants.
+- [x] **Finch harpy** (2026-10-25, model by Kimi: `tools/gen_finch_harpy.py`, checked by `tools/validate_finch_harpy.py`), wired as `FinchHarpy`:
+  - She flocks in groups of 3 to 5 on meadows, flower forests, sunflower plains and cherry groves, and eats seeds and sweet berries.
+  - At dawn one finch starts the chorus, every finch within 16 blocks joins in (at most once every 2 minutes), and her friends nearby get a minute of Luck.
+  - She has her own pale blue, speckled Finch Egg, eggs, hatchling, belly, sit and lie poses, paints and spawn egg. Her kin are parrots.
+  - No colour variants yet, because the model has none.
+- [x] **Alex's Mobs (optional)** (`compat/AlexsMobs.java`). Its animals are looked up by id, so the mod is not a dependency, and without it nothing changes.
+  - With it, these become kin: tiger, snow leopard, grizzly bear, seal, orca, sharks, crocodile and caiman, alligator snapping turtle, terrapin (the slider), rattlesnake, anaconda, giant squid, mimic octopus, banana slug, mimicube, bison, moose (reindeer), crimson mosquito, bald eagle (gryphon), crow, seagull, toucan, emu (ostrich) and rain frog.
+  - Polar bears and orcas hunt its seals.
+  - The capybara's calm now comes from the tag `monstergirls:calmed_by_capybara`, which has Alex's Mobs predators as optional entries.
+- [ ] Alex's Mobs is a 1.20.1 Forge mod. I could not check that a 1.21.1 NeoForge build exists, or that its entity ids are unchanged there. Confirm the ids in a pack that has it.
+- [ ] Playtest: whether parrots and chickens trailing every harpy (and iron golems following Frankenstein's monster out of the village) is charming or a nuisance.
+- [x] **Seventh wave** (2026-10-25), see HARMONTIDE_CONCEPTS.md "Seventh wave", tested in `SeventhWaveTests`:
+  - **Crustaceans** (`Crustacean.java`, `tools/gen_crustacean.py`, volume XXII):
+    - Crab and hermit crab. They walk sideways (the walk and run animations turn the body), and are neutral: whoever hits one first gets pinched (Slowness II for 2 s). Devoted, she pinches whatever hurts her friend. They lay eggs in sand.
+    - The hermit crab moves into a nautilus or shulker shell you hand her, and you get her old shell back if it is one of those two.
+  - **Marsupials** (`Marsupial.java`, `tools/gen_marsupial.py`, volume XXIII):
+    - Kangaroo. Her joey climbs into her pouch (she carries it as a passenger) and hops out once grown. Her kicks carry knockback 2.5, her mob joins in when one is hit, and devoted she kicks whatever hurts her friend.
+  - **Armoured** (`Armoured.java`, `tools/gen_armoured.py`, volume XXIV):
+    - Armadillo. A hit or a sprinting stranger curls her up for 4 s, with no damage at all. Befriended, she charges monsters near her friend as a rolling ball (speed and knockback).
+    - Kin of vanilla armadillos. She gives scutes, and one litter in four is quadruplets.
+  - **Constructs** (`Construct.java`, `tools/gen_construct.py`, volume XXV):
+    - Golem: 120 health, 12 damage, full knockback resistance. She fights monsters near villagers (never creepers), and near her friend once devoted.
+    - Iron golems are now her kin (no longer Frankenstein's monster's). She has no bed and no young, and clay heals her.
+    - When she dies she plays a break-apart animation without tipping over, sheds clay particles and drops 4 to 8 clay balls.
+  - **Jellyfish** (mollusk family): she glows at night (light blocks now work under water), stings whatever touches her with Poison (never her friends), and friends swimming near her get Night Vision.
+  - **Ahuizotl** (merfolk): a wild one within 12 blocks of your hook steals the catch (`ItemFishedEvent` is cancelled) unless you hold a lantern, which also keeps her away. Befriended, she fishes for you.
+  - **Homage variants**, rolled rarely in the wild (one roll in 8 keeps them):
+    - Cactus `gunman` and `blossom`, the living doll's `lost`, the ocelot nekomata's `stitched`, the salamander's `nurse`, and the wolf's and Anubis's `mummy`, redone from the user's references to match Gregory Horror Show closely (HARMONTIDE_CONCEPTS.md has the details).
+    - Their props are extra cubes painted transparent on every other variant. That covers the sombreros, braids, ponchos, bandolier, mustache, lasso, Catherine's dress, snout and syringe, Katie's face, the muzzles, the machete and the cleaver.
+    - The two mummies have the show's blood, on those variants only (the user asked for it as part of the homage). There is no lettering on Neko Zombie's shirt.
+    - The Dillon look is the armadillo's `ranger`; the Kangaroo Jack look is the kangaroo's `outback`.
+    - Generic names and no logos, so they can ship. Keep it that way for a public release.
+  - **Paints** (27 in all):
+    - Copper weathers (copper, exposed, weathered, oxidized), about one stage every 40 minutes unless waxed with honeycomb; an axe takes the wax off, then scrapes back a stage (`Painted`).
+    - Glow and magma glow in the dark (`PaintGlowLayer`, with their own glowmasks). Ink is manga line art.
+    - Pumpkin rolls only in October, candy cane only in December.
+- [x] Flaky tests fixed (2026-10-25). `dustBathesOnSand` now sets daytime, since at night the sparrow sleeps instead. `fullMoonEveryoneTakesHerTurn` failed because a random rest goal (digging in, burrowing) could pull an anuran away from the bed after her turn; `AnuranRestGoal` now leaves her there (`AbstractAnuran.isInBed`).
+- [x] **Eighth wave** (2026-10-25), tested in `EighthWaveTests`:
+  - **Unicorn** (centaur, flower forests, cherry groves, meadows):
+    - A player with villager or iron golem kills (`Canid.heartWeight`) cannot raise her affection, and she keeps 10 blocks away from them.
+    - Every 2 s her horn clears Poison and Wither from friends within 8 blocks, and takes 10 s off the cure of each zombie villager being cured near her. This uses reflection on `villagerConversionTime`.
+    - She is kin to horses, and friends can ride her like the other centaurs. She has a rainbow-mane variant.
+  - **Black bear** (canid, forests):
+    - She climbs trees (`onClimbable` while bumping into something) and eats ripe sweet berry bushes back to bare.
+    - A sprinting stranger, a hit, an explosion, a bell or a goat horn (`VanillaGameEvent`) makes her drop what she holds and run for 5 s. Once she is befriended, only explosions still do.
+  - **Koala** (marsupial, forests):
+    - She is awake only from 22500 to 1500 and from 11500 to 13500. The rest of the time she sleeps, clinging two logs up the side of a trunk with no gravity, or where she stands if there is no tree.
+    - She eats leaves only, and her joey rides on her back.
+    - The drop bear variant drops onto a player walking underneath: 2 damage and Nausea, or a hug for a friend. Then she waits a minute.
+  - **Gecko** (lizardfolk): speed 0.38, and she climbs walls.
+    - She trails the nearest player and inspects items they drop: she picks one up, turns it over for 2 s and puts it back, once per item.
+    - A hit makes her shed her tail (the bone is hidden by `FLAG_TAILLESS`), and it grows back after 3 minutes. She eats fruit.
+  - **Chupacabra** (lizardfolk, nocturnal):
+    - She hunts goats that are not named, leashed, befriended or within 2 blocks of a fence or wall.
+    - She turns invisible while someone looks straight at her, and ignores sticks (`takesOrders`).
+    - Fed mutton, she lingers 6 to 12 blocks from her friend. Her gifts are mostly 32 mutton.
+  - **Firefly** (bug): she lights the night, and her lantern glowmask blinks on the world clock, so every firefly blinks in time.
+    - A glass bottle catches her or a fairy in a jar (`GirlJarBlock`, light 12), as an item that keeps her data. Opening or breaking the jar lets her out and leaves the bottle.
+    - Catching one awards the "Why?" advancement.
+  - **Mummy** (undead, deserts):
+    - Hits, or a crouching empty-hand pull once befriended, take off one bandage layer at a time (`FLAG_UNWRAP_A`/`_B` hide the layer bones), dropping string and paper. The lowest layer is skimpy wraps.
+    - From there she spins back up within 3.5 s and won't unravel again for a minute.
+    - She keeps strangers from unopened tomb chests, as Anubis does.
+  - **Flamingo harpy** (`FlamingoHarpy`, `tools/gen_flamingo_harpy.py`, mangroves, swamps and beaches, flocks of 3 to 6):
+    - Each day without fish fades her a shade (pink, pale, white), and each fish she eats brings her back a shade.
+    - She stands on one leg (the new harpy action `PERCHING`), and now and then a flock of three or more marches together.
+    - She has her own eggs, Flamingo Egg, hatchling and spawn egg.
+  - **Paints:** frost, sakura, stained_glass (translucent) and sepia, so 31 in all. `gen_paints.py` now tells paint names from model names properly; underscores used to confuse it.
+  - The jellyfish swims at a quarter of her old speed now (user report).
+- [x] Playtest fixes (2026-10-25):
+  - **Catfish:** the penguin harpy and the matamata also hunt Alex's Mobs catfish (`AlexsMobs.isFish`; it gives the mod's raw catfish if there is one, else a cod).
+  - **Climbing:** the bear and the gecko now climb on purpose (`ClimbGoal`).
+    - They head into a trunk or wall at least 3 blocks tall within 8 blocks and stay up for 8 to 10 s. Neither takes fall damage.
+    - The gecko does it about once every 15 s.
+    - The black bear does it now and then, and straight away when scared and a tree is near.
+  - **Drop bear:** she looks for a trunk within 8 blocks (was 4) and drops on anyone within 3.5 blocks under her (was 2.5).
+- [x] **Ninth wave** (2026-10-25), tested in `NinthWaveTests`:
+  - **Sheep** (minotaur): shears (`FLAG_SHORN` hides the bones `wool`, `wool_hips`, `wool_head`), wool back after grazing (`ate`), any dye (synced; `DyedWoolLayer` tints `<model>_wool.png`). Vanilla sheep are her kin, so they follow her.
+  - **Highland** and **yak** (minotaur): `canFreeze` false (so is the cattle's highland colouring); the yak takes a friend's chest (`FLAG_CHEST`, the `pack` bone) and opens two rows of cargo on a crouching empty hand. The cargo drops when she dies.
+  - **Bat** (new family `bat`, `BatGirl`, `tools/gen_bat.py`): she flies; by day `RoostGoal` hangs her from the nearest ceiling within 8 blocks ("roost" turns the model over inside its own height). Befriended, she pings every 3 s: monsters within 16 of her friend glow. Kin of vanilla bats.
+  - **Dark elf** (elf, deep dark): `dampensVibrations`; the Warden is her kin, but `Kinship.ignores` spares only her friends and Wardens cannot be introduced; she clears a Warden's anger at her friends every second. Echo shard and sculk trades.
+  - **Medusa** (lamia): strangers who meet her eyes (the enderman's test) and the monsters she sees get Slowness VI; `FLAG_BLINDFOLD` (shown, and harmless) once anyone is her friend.
+  - **Oni** (devil, nocturnal): hostile at night, a honey bottle calms her, cocoa beans make her flee the thrower for a minute; befriended, she walks to the door nearest her friend at night and fights monsters there.
+  - **Mantis** (bug, walks): the new actions `PRAY` and `STRIKE`; she targets silverfish, endermites and spiders and lunges when within 4 blocks. The orchid variant turns invisible next to flowers.
+  - **Ender slime** (slime, the End): teleports when hurt or wet; while wild she picks up `ENDERMAN_HOLDABLE` blocks (mob griefing on) and puts them down later. Kin of endermites.
+  - **Wolpertinger** (jackalope): a second jump at the top of the first, glides at -0.15 (the new `isGliding` hook plays "fly"), no fall damage; once a day she swaps a nearby player's boots for leather ones, and gives them back when that player feeds her.
+  - **Venus flytrap** (flora, swamps): `SNAP` holds a mob or stranger within 1.6 blocks for 3 s and bites every second; befriended, only monsters (never girls, villagers, golems or pets).
+  - **Siren** (merfolk): strangers within 24 blocks are pulled toward her; friends swimming within 16 get Conduit Power.
+  - **Paints:** opal, chrome, aurora and camo (35 in all). The firefly's blink is now a smooth pulse on the world clock (`GirlRenderer.fireflyPulse`); her light block is unchanged.
+  - **Roster:** `tools/harmontide_roster.py` writes `HARMONTIDE_ROSTER.md` (the reference creatures, done and left).
+- [ ] Dev client for the ninth wave: the bat's roost pose under a real ceiling (is she flush, does she clip?), the sheep's dyed wool layer and shorn look, the yak's pack, the medusa's blindfold, the flytrap's snap, the wolpertinger's glide, the dark elf's glow, and the four new paints.
+- [x] **Tenth wave** (2026-10-25), Harmontide's own creatures, tested in `TenthWaveTests`:
+  - **Tusktaur** (centaur): her hits also `sweep` everything in a cone in front of her (4 damage, knockback; never friends or girls); never freezes.
+  - **Aurorantler** (centaur): a light block at her feet at night and Night Vision for a friend within 8; glowing antlers (glow masks).
+  - **Rhiwool** (minotaur): `startCharge` at a target 4 to 14 blocks off runs her straight at it for 25 ticks, 8 damage and a big knockback to the first thing she hits; shears and dye as for the sheep (`isWoolly`).
+  - **Meloncollie** (canid): every 2 s, befriended, `herd` drives the nearest stray cow, sheep, pig or chicken to the fence gate nearest her; every 2 minutes she plants a melon stem in empty farmland.
+  - **Needlehog** (rodent): `curlUp` for 3 s after a hit or near a sprinting stranger, immune and pricking attackers (thorns, 2); targets silverfish; paper, books and maps go into her notes (her presents, dropped on death).
+  - **Clockhare** (jackalope): chimes at dawn and dusk, warns her friend when `TIME_SINCE_REST` passes three nights, Haste within 8 blocks.
+  - **Axolume** (merfolk, lush caves): a light where she is and Regeneration for her friend within 8; glowing gills, crest and fluke.
+  - **Aegis boar** (armoured): no rolling up; `Armoured.shield` (on `LivingIncomingDamageEvent`) moves a third of any blow on her friend within 8 blocks to her and sets her on the attacker.
+  - **Blaze cat** (nekomata, the Nether): `fireImmune`, sets what she hits alight, `kindle` lights campfires and candles within 4, Fire Resistance for her friend. Blazes and hoglins, like the Warden, spare only their girl's friends (`Kinship.ignores`).
+  - **Gargoyle** (construct): flies; by day with no target she takes the `PERCH` pose and cannot be hurt; at night she fights monsters within 16 of her friend. Stone, not clay, when she breaks.
+  - **Coin magpie** and **trickster raven** (`CoinMagpieHarpy`, `TricksterRavenHarpy`, the crow's rig in `tools/gen_coin_magpie_harpy.py` and `tools/gen_trickster_raven_harpy.py`): the magpie hoards the shinies she carries (9 slots) and pays a gold nugget with one; the raven plays a monster's voice beside strangers and, every 5 s, calls monsters that target her friend 14 blocks away. Each has her own egg, hatchling and spawn egg.
+  - **Paints:** plush, pixel, origami and gummy (translucent), so 39 in all.
+- [ ] Dev client for the tenth wave: the tusk sweep and rhiwool charge in play, the gargoyle's perch pose and flight, the aurorantler's and axolume's glow, the blaze cat's flames, the needlehog's ball, and the corvids' new colours. Not done: the harpy field guide has no entries for the coin magpie and the trickster raven (that guide is hand-written).
+- [x] **Eleventh wave** (2026-10-26), Harmontide's helpers, tested in `EleventhWaveTests`:
+  - **Anvil tortoise** (lizardfolk): a damaged tool or armour piece in hand gets a quarter of its durability back for one repair material from your inventory (`Lizardfolk.repair`, `isValidRepairItem`), no experience; not pushable, knockback resistant.
+  - **Mailtoad** (`Mailtoad`, the cane toad's rig in `tools/gen_mailtoad.py`): a friend (10+) gives her an item, then a paper renamed in an anvil to a player's name. She walks to them within 48 blocks and hops straight to them beyond it, in the same dimension; offline or elsewhere, she waits and tells the sender every 5 minutes. A crouching empty hand from the sender takes it back; she drops it on death and never despawns while carrying.
+  - **Gliderune** (marsupial): glides (falls at most 0.12 a tick, no fall damage); a friend's crouching empty hand puts her on their shoulder (Slow Falling for them; two seconds of crouching sets her down).
+  - **Slothren** (armoured, nocturnal): by day `hangFrom` the nearest leaves or log within 8 above her (`HANG`); every 20 s `tend`: a flower on grass or moss on stone under her, and befriended, bone meal on crops and saplings within 4.
+  - **Coatimano** (rodent): `findDig` suspicious sand or gravel within 12, `brushAt` it until it gives up its find, which goes to her friend's inventory.
+  - **Waterlil** (nekomata): lily pads under and ahead of her and of her friend within 6, gone 10 s later unless someone is standing on them (and when she goes).
+  - **Rookmourn** (`RookmournHarpy`, the crow's rig): every 2 s clears Poison, Nausea, Hunger and Wither from players and friends within 8; a golden apple has her start curing the nearest zombie villager.
+  - **Cassowrath** (`CassowrathHarpy`, the ostrich's rig): the ostrich's behaviour with 40 health and 9 damage kicks; green cassowary eggs.
+  - **Talosling** (construct): `windUp` with redstone (+5 minutes, 20 at most); wound, she fights monsters within 16 of her friend; run down (`RUNDOWN`), she stops where she is. Her spring is saved.
+  - **Mantarrow** (merfolk): a friend's empty hand mounts her; she swims at boat-plus speed under her rider's steering, keeps them at the surface with Water Breathing, and leaps now and then.
+  - **Sphinx** (centaur, never ridden): a hand asks a riddle (nine, `riddle.monstergirls.N`); the item held out next answers it: right gives an enchanted book, gold or emeralds (+5), wrong gives a pounce (4 damage, -2).
+  - **Brownie** (elf, nocturnal, no trading): every 10 s at night, befriended, `tidy` merges part stacks in the chests within 8 and puts loose items into them.
+  - **Paints:** synthwave, cookie, cloud and valentine (February only, like pumpkin in October), so 43 in all.
+- [ ] Server playtest for the mailtoad and the brownie (they need heavy testing on a server): delivery to a player who logs off mid-walk, to another dimension, to a name with different case, two mailtoads to one player; the brownie with modded containers, double chests, shulker boxes inside chests, and item frames.
+- [ ] Dev client for the eleventh wave: the slothren's hang pose under a real branch, the gliderune on a shoulder, the mantarrow ride and leap, the sphinx's wings and pounce, the talosling run down, the waterlil's pads under a sprinting friend, and the four new paints.
+- [x] **Jade** (optional, `compat/JadePlugin`): every girl, harpy and frog shows "Pregnant: yes/no" (not on bulls, the leshy, the vodyanoy, constructs or young) and "Friendship: 12/25" (the looking player's affection out of the next milestone, 10/25/60/100; `BondInfo`). The server sends both, so a server without Jade shows neither. Jade is in the dev client but kept off the game test server (its join packet breaks the tests' fake players). `dustBathesOnSand` failed once more (2026-10-25), unrelated.
+- [ ] Dev client: check the two Jade lines look right under a girl's name, and can be toggled in Jade's plugin settings.
+- [ ] Dev client: the drop bear with the wider trigger (`/summon monstergirls:koala_marsupial ~ ~ ~ {Variant:"drop_bear"}` by day near a tree, then walk under her), and the bear and gecko climbing.
+- [ ] Dev client for the eighth wave:
+  - the black bear and the gecko climbing
+  - the koala on her trunk, and where the joey sits on her back
+  - the drop bear's drop
+  - the firefly blink and the jar model
+  - the mummy's layers and spin
+  - the flamingo's one-leg pose and march
+  - stained glass in game
+- [ ] Dev client for the seventh wave: the crabs' sideways walk, the joey's seat in the pouch, the golem's break-apart (and that she does not tip over), the jellyfish's translucency and glow, and the glow and magma paints in the dark.
+- [ ] Flaky tests: `strandedTadpoleFindsThePond`, `wrecksBoatsAtTheRock` and `orbWeaverSpinsAHuntingWeb` each failed one full run (2026-10-25) and passed the others. On 2026-10-26 `trustedMobComesToTheBed`, `strandedTadpoleFindsThePond`, `dustBathesOnSand` and `rootedFloraGrowsCrops` each failed one of two runs. `oniFleesBeansAndTakesADrink` failed once because `isDay` lags `setDayTime` by a tick; it now waits a tick.
+- [ ] Flaky tests (2026-10-24): `mermaidFindsSeashells` failed twice in a row, then passed. `pythonLaysAClutchThatHatches` failed once: she can wander more than 5 blocks before laying, out of the area the test searches.
 - [x] **Sleep schedules** (`SleepGoal`): day girls lie down and sleep at night, nocturnal ones by day. The nocturnal ones are the undead, foxes, moths and mosquitoes, the night elf, the succubus, the jiang shi, the jack o'lantern, the tapir and the ocelot. A hit or a hand wakes her for 30 s. Bed-sharing comes first, a follow order keeps her up, and nekomata (their own naps), merfolk, harpies and anurans keep their own rest.
 - [ ] Third wave of creatures: see HARMONTIDE_CONCEPTS.md "Third wave", with reference art in `D:\wamp64\www\images\creatures\`.
-- [x] **Harmontide paints:** a girl who spawns (naturally or from a spawn egg) is painted 1 time in 64, in blue, red, green, yellow, purple, black or inverted. Daughters inherit it, whether born or hatched from her clutch, and it is saved. Textures come from `tools/gen_paints.py` (run it after the model scripts): her body takes the paint's colour and clothes shift with it, like the references. Girl families only for now; harpies and anurans have their own variants.
+- [x] **Harmontide paints:** a girl who spawns (naturally or from a spawn egg) is painted 1 time in 64, in blue, red, green, yellow, purple, black or inverted. Daughters inherit it, whether born or hatched from her clutch, and it is saved. Textures come from `tools/gen_paints.py` (run it after the model scripts): her body takes the paint's colour and clothes shift with it, like the references. Harpies and anurans too (since 2026-10-24): a painted mother's eggs and frogspawn hatch painted young, and hatchlings, tadpoles and froglets have painted textures as well. Limit: a harpy egg picked up as an item loses its paint, as it already loses the father.
+- [x] **Treat paints** (2026-10-24), five more that are not palette swaps. Each one is drawn per cube face from the geo file, so drips run down from each face's top edge:
+  - **Chocolate:** a milk-chocolate girl with glossy dark chocolate dripping down every part (only a rim on her face).
+  - **Ice cream:** strawberry ice cream with sprinkles melting off her hair.
+  - **Strawberry:** strawberry hair with seeds and a leafy crown.
+  - **Jello:** glossy and see-through, drawn translucent.
+  - **Milk:** creamy porcelain white, keeping her eyes and outlines.
+  They join the 1-in-64 roll, so there are 12 paints in all.
+- [x] **Six more paints** (2026-10-24), whole-body finishes: **gold** (a gilded statue with glints), **marble** (white stone with grey veins across every part), **galaxy** (a deep violet night sky with a drifting nebula and stars), **ghost** (pale blue and see-through, drawn translucent like jello), **honey** (amber honey dripping from her hair and pooled on every top), **rainbow** (each part its own colour, softly graded). Eyes and outlines stay. 18 paints in all. `python tools/gen_paints.py gold marble` now regenerates only the paints named.
+- [ ] Dev client: ghost's translucency (on top of jello's), and whether rainbow reads as fun or as noise at game scale.
+- [ ] Dev client: how the drips read at game scale, and jello's translucency on the harpies' wings.
 - [x] **Expecting bellies** no longer stretch abs over the bump: the belly bone has its own smooth skin texture (`belly_skin`). All 17 girl families were regenerated.
 - [x] Decided: no Kachina and no Rainbow Serpent. Bears share a family with kobolds and the other canids ("canid girls").
 - Not doing: the full-moon "phantom pregnancy" of every befriended girl. It is still the whole household getting pregnant by the player in one night. Normal single bed-sharing stays as it is.
 - Not doing: the full-moon event where every befriended girl queues at the bed to mate (a group sex scene; the mod is low ecchi). A non-sexual full moon is fine: a moonlit vigil, or moods.
-- [ ] Decide on the sensitive ones: Kachina (recommendation: drop it), Thunderbird, Uktena, Wayob.
+- [ ] Decide on the sensitive ones: Kachina (recommendation: drop it), Uktena, Wayob. Decided (2026-10-26): no Thunderbird.
 - [ ] Decide which new families are worth their own class: Giants, Celestials, Horsemen, Fury, Crustaceans.
 
 ## 0d. Kinship (girls and their vanilla counterparts)
