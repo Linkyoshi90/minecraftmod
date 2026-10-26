@@ -34,7 +34,7 @@ public class FleeIntoWaterGoal extends Goal {
     @Override
     public void start() {
         this.mob.setAggressive(true); // drives the fast "hop" animation
-        BlockPos water = AbstractAnuran.findWater(this.mob.level(), this.mob.blockPosition(), 16);
+        BlockPos water = AbstractAnuran.findReachableWater(this.mob, 16);
         if (water != null) {
             this.mob.getNavigation().moveTo(water.getX() + 0.5, water.getY(), water.getZ() + 0.5, 1.5);
             return;

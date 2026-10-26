@@ -369,6 +369,29 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         return best;
     }
 
+    /**
+     * The nearest water she can actually get to. The nearest by distance can lie below a ledge or past a drop, and
+     * heading for it strands her at the edge; this tries the nearest few ponds and takes the first she has a path to.
+     */
+    @Nullable
+    public static BlockPos findReachableWater(PathfinderMob mob, int radius) {
+        BlockPos origin = mob.blockPosition();
+        java.util.List<BlockPos> water = new java.util.ArrayList<>();
+        for (BlockPos pos : BlockPos.betweenClosed(origin.offset(-radius, -3, -radius), origin.offset(radius, 3, radius))) {
+            if (mob.level().getFluidState(pos).is(FluidTags.WATER)) water.add(pos.immutable());
+        }
+        water.sort(java.util.Comparator.comparingDouble(p -> p.distSqr(origin)));
+        java.util.List<BlockPos> tried = new java.util.ArrayList<>();
+        for (BlockPos pos : water) {
+            if (tried.size() >= 6) break;
+            if (tried.stream().anyMatch(t -> t.distSqr(pos) <= 9)) continue; // one try per pond, not per block
+            tried.add(pos);
+            net.minecraft.world.level.pathfinder.Path path = mob.getNavigation().createPath(pos, 0);
+            if (path != null && path.canReach()) return pos;
+        }
+        return null;
+    }
+
     public static boolean waterNearby(LevelReader level, BlockPos origin, int radius) {
         return findWater(level, origin, radius) != null;
     }

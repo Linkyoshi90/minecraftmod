@@ -27,7 +27,7 @@ public class SeekWaterGoal extends Goal {
             return false;
         }
         this.searchCooldown = 40;
-        this.target = AbstractAnuran.findWater(this.mob.level(), this.mob.blockPosition(), SEARCH_RADIUS);
+        this.target = AbstractAnuran.findReachableWater(this.mob, SEARCH_RADIUS);
         return this.target != null;
     }
 
