@@ -226,6 +226,28 @@ public class EleventhWaveTests {
         helper.succeed();
     }
 
+    @GameTest(template = PLATFORM, timeoutTicks = 200, batch = "brownieWorksWhileHerFriendSleeps")
+    public static void brownieWorksWhileHerFriendSleeps(GameTestHelper helper) {
+        helper.getLevel().setDayTime(1000);                               // day: she works anyway, because her friend is asleep
+        var bed = Blocks.RED_BED.defaultBlockState().setValue(net.minecraft.world.level.block.BedBlock.FACING, net.minecraft.core.Direction.NORTH);
+        helper.setBlock(new BlockPos(2, 2, 2), bed.setValue(net.minecraft.world.level.block.BedBlock.PART, net.minecraft.world.level.block.state.properties.BedPart.HEAD));
+        helper.setBlock(new BlockPos(2, 2, 3), bed.setValue(net.minecraft.world.level.block.BedBlock.PART, net.minecraft.world.level.block.state.properties.BedPart.FOOT));
+        helper.setBlock(new BlockPos(5, 2, 2), Blocks.CHEST);
+        ChestBlockEntity chest = (ChestBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(new BlockPos(5, 2, 2)));
+        chest.setItem(0, new ItemStack(Items.COBBLESTONE, 10));
+        chest.setItem(5, new ItemStack(Items.COBBLESTONE, 20));
+        ServerPlayer friend = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
+        Elf b = spawn(helper, GirlSpecies.BROWNIE_ELF, new BlockPos(8, 2, 8));
+        b.setNoAi(true);
+        b.addAffection(friend, Orders.AFFECTION);
+        friend.startSleeping(helper.absolutePos(new BlockPos(2, 2, 2)));
+        helper.succeedWhen(() -> {
+            check(chest.getItem(0).getCount() == 30, "she tidies the chest by her sleeping friend");
+            friend.stopSleeping();
+            HarpyTestUtil.remove(friend);
+        });
+    }
+
     @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "brownieTidiesChests")
     public static void brownieTidiesChests(GameTestHelper helper) {
         BlockPos at = new BlockPos(3, 2, 3);
@@ -236,7 +258,7 @@ public class EleventhWaveTests {
         helper.spawnItem(Items.STICK, 6, 2, 6);
         Elf b = spawn(helper, GirlSpecies.BROWNIE_ELF, new BlockPos(5, 2, 5));
         b.setNoAi(true);
-        check(b.tidy(helper.getLevel()) >= 2, "she tidies");
+        check(b.tidy(helper.getLevel(), null) >= 2, "she tidies");
         check(chest.getItem(0).getCount() == 30 && chest.getItem(5).isEmpty(), "the cobblestone in one stack");
         check(chest.countItem(Items.STICK) == 1, "and the stick put away");
         helper.succeed();

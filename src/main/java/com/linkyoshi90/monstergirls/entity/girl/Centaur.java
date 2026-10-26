@@ -106,6 +106,44 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
         }
     }
 
+    // --- the halberelk ---------------------------------------------------------------------------------------------
+
+    /**
+     * Her friend has cut a log: a befriended halberelk within 8 blocks fells the rest of the tree. Only a tree (natural
+     * leaves touch it), never a log cabin, and no more than 96 logs. Returns how many logs she felled.
+     */
+    public static int fell(ServerLevel level, Player player, net.minecraft.core.BlockPos cut, net.minecraft.world.level.block.state.BlockState log) {
+        if (player.isShiftKeyDown() || !log.is(net.minecraft.tags.BlockTags.LOGS)) return 0;
+        Centaur elk = null;
+        for (Centaur c : level.getEntitiesOfClass(Centaur.class, new net.minecraft.world.phys.AABB(cut).inflate(8),
+                c -> c.species == GirlSpecies.HALBERELK_CENTAUR && !c.isBaby() && c.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION)) {
+            elk = c;
+        }
+        if (elk == null) return 0;
+        java.util.Set<net.minecraft.core.BlockPos> tree = new java.util.LinkedHashSet<>();
+        java.util.ArrayDeque<net.minecraft.core.BlockPos> open = new java.util.ArrayDeque<>(java.util.List.of(cut));
+        boolean natural = false;
+        while (!open.isEmpty() && tree.size() < 96) {
+            net.minecraft.core.BlockPos p = open.poll();
+            if (!tree.add(p)) continue;
+            for (net.minecraft.core.BlockPos q : net.minecraft.core.BlockPos.betweenClosed(p.offset(-1, 0, -1), p.offset(1, 1, 1))) {
+                var s = level.getBlockState(q);
+                if (s.is(log.getBlock()) && !tree.contains(q) && q.getY() >= cut.getY()) open.add(q.immutable());
+                if (s.getBlock() instanceof net.minecraft.world.level.block.LeavesBlock && !s.getValue(net.minecraft.world.level.block.LeavesBlock.PERSISTENT)) natural = true;
+            }
+        }
+        if (!natural) return 0;
+        int n = 0;
+        for (net.minecraft.core.BlockPos p : tree) {
+            if (p.equals(cut)) continue;
+            if (level.destroyBlock(p, true, player)) n++;
+        }
+        elk.getLookControl().setLookAt(cut.getX() + 0.5, cut.getY() + 0.5, cut.getZ() + 0.5);
+        elk.startTimedAction(Action.REAR, 20);
+        elk.playSound(SoundEvents.ZOMBIE_ATTACK_WOODEN_DOOR, 0.8F, 0.9F);
+        return n;
+    }
+
     // --- the momoshika ----------------------------------------------------------------------------------------------
 
     /** By day her friend within 8 blocks of her regenerates. True if she healed them. */
@@ -216,6 +254,8 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
             case AURORANTLER_CENTAUR -> girlAttributes(26, 0.3, 3);
             case SPHINX_CENTAUR -> girlAttributes(50, 0.3, 8);
             case MOMOSHIKA_CENTAUR -> girlAttributes(26, 0.3, 3);
+            case PRAIRHORN_CENTAUR -> girlAttributes(26, 0.42, 3).add(Attributes.JUMP_STRENGTH, 0.8);
+            case HALBERELK_CENTAUR -> girlAttributes(40, 0.28, 6).add(Attributes.ATTACK_KNOCKBACK, 1.0);
             default -> girlAttributes(28, 0.28, 3);
         };
     }
@@ -369,7 +409,8 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
                 || (this.species == GirlSpecies.KELPIE_CENTAUR && (stack.is(Items.KELP) || stack.is(Items.DRIED_KELP)))
                 || (this.species == GirlSpecies.PEGASUS_CENTAUR && stack.is(Items.GOLDEN_APPLE))
                 || (this.species == GirlSpecies.AURORANTLER_CENTAUR && (stack.is(Items.SWEET_BERRIES) || stack.is(Items.GLOW_BERRIES)))
-                || (this.species == GirlSpecies.MOMOSHIKA_CENTAUR && (stack.is(Items.APPLE) || stack.is(Items.SWEET_BERRIES)));
+                || (this.species == GirlSpecies.MOMOSHIKA_CENTAUR && (stack.is(Items.APPLE) || stack.is(Items.SWEET_BERRIES)))
+                || (this.species == GirlSpecies.HALBERELK_CENTAUR && (stack.is(Items.APPLE) || stack.is(Items.SWEET_BERRIES)));
     }
 
     /** The baku: no phantom (vanilla or girl) comes for a player within 32 blocks of a tapir. */
@@ -552,6 +593,8 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
             case TUSKTAUR_CENTAUR -> new ItemStack(r < 45 ? Items.BROWN_WOOL : r < 80 ? Items.BONE : Items.PACKED_ICE, r < 80 ? 2 : 4);
             case SPHINX_CENTAUR -> new ItemStack(r < 40 ? Items.GOLD_NUGGET : r < 75 ? Items.LAPIS_LAZULI : r < 95 ? Items.SANDSTONE : Items.GOLD_INGOT,
                     r < 40 ? 4 : r < 75 ? 3 : r < 95 ? 4 : 1);
+            case PRAIRHORN_CENTAUR -> new ItemStack(r < 50 ? Items.WHEAT : r < 85 ? Items.LEATHER : Items.RABBIT_FOOT, r < 85 ? 3 : 1);
+            case HALBERELK_CENTAUR -> new ItemStack(r < 40 ? Items.SPRUCE_LOG : r < 75 ? Items.STICK : r < 95 ? Items.SPRUCE_SAPLING : Items.IRON_AXE, r < 75 ? 4 : r < 95 ? 2 : 1);
             case MOMOSHIKA_CENTAUR -> new ItemStack(r < 45 ? Items.PINK_PETALS : r < 80 ? Items.APPLE : r < 95 ? Items.CHERRY_SAPLING : Items.GOLDEN_APPLE,
                     r < 80 ? 3 : 1);
             case AURORANTLER_CENTAUR -> new ItemStack(r < 45 ? Items.GLOW_BERRIES : r < 80 ? Items.GLOW_LICHEN : Items.AMETHYST_SHARD, r < 45 ? 3 : 2);

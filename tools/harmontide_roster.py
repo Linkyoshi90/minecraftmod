@@ -52,6 +52,10 @@ IN_GAME = {
     "rust_otter": "rust_otter_mermaid", "tin_squirrel": "tin_squirrel_construct", "peaflare": "peaflare_harpy", "wattlefox": "wattlefox_kitsune",
     "scarabronze": "scarabronze_bug", "datebat": "date_bat", "snowloper": "snowloper_nekomata", "jaglare": "jaglare_nekomata",
     "squirricerat": "squirricerat_rodent", "kamaitachi": "kamaitachi_rodent", "momoshika": "momoshika_centaur", "japanese_lantern": "chochin_obake_devil",
+    # fourteenth wave (2026-10-27)
+    "gribboar": "gribboar_armoured", "silkcoon": "silkcoon_rodent", "bronzejaw_ox": "bronzejaw_minotaur", "cocoskink": "cocoskink_lizardfolk",
+    "prairhorn": "prairhorn_centaur", "halberelk": "halberelk_centaur", "vulphea": "vulphea_kitsune", "cait_sith": "cait_sith_nekomata",
+    "cu_sith": "cu_sith_canid", "yeti": "yeti_canid", "undine": "undine_slime", "ittan_momen": "ittan_momen_devil",
 }
 # not a creature to make, and the ones set aside on purpose
 EXCLUDED = {

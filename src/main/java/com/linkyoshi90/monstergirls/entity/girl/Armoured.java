@@ -41,7 +41,7 @@ public class Armoured extends AbstractMonsterGirl {
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.3) {
             @Override
             public boolean canUse() {
-                return !Armoured.this.isBoar() && !Armoured.this.isSloth() && !Armoured.this.isCurled() && Armoured.this.bestAffection() < Orders.AFFECTION
+                return !Armoured.this.isBoar() && !Armoured.this.isSloth() && !Armoured.this.isGrib() && !Armoured.this.isCurled() && Armoured.this.bestAffection() < Orders.AFFECTION
                         && super.canUse();
             }
         });
@@ -65,9 +65,30 @@ public class Armoured extends AbstractMonsterGirl {
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        if (s == GirlSpecies.GRIBBOAR_ARMOURED) return girlAttributes(26, 0.27, 4).add(Attributes.KNOCKBACK_RESISTANCE, 0.4);
         if (s == GirlSpecies.SLOTHREN_ARMOURED) return girlAttributes(30, 0.12, 2).add(Attributes.ARMOR, 2);
         if (s == GirlSpecies.AEGIS_BOAR_ARMOURED) return girlAttributes(50, 0.27, 7).add(Attributes.ARMOR, 10).add(Attributes.ATTACK_KNOCKBACK, 1.5);
         return girlAttributes(22, 0.25, 4).add(Attributes.ARMOR, 8).add(Attributes.ATTACK_KNOCKBACK, 2.0);
+    }
+
+    // --- the gribboar ------------------------------------------------------------------------------------------------
+
+    public boolean isGrib() {
+        return this.species == GirlSpecies.GRIBBOAR_ARMOURED;
+    }
+
+    /** She roots in the earth she stands on and digs something up. The find, or empty if there is nothing to root in. */
+    public ItemStack root(ServerLevel level) {
+        var under = level.getBlockState(this.blockPosition().below());
+        if (!under.is(net.minecraft.tags.BlockTags.DIRT) && !under.is(net.minecraft.world.level.block.Blocks.MYCELIUM)) return ItemStack.EMPTY;
+        int r = this.random.nextInt(100);
+        ItemStack find = new ItemStack(r < 20 ? Items.BROWN_MUSHROOM : r < 35 ? Items.RED_MUSHROOM : r < 60 ? Items.POTATO : r < 80 ? Items.CARROT
+                : r < 92 ? Items.BEETROOT_SEEDS : r < 99 ? Items.GOLD_NUGGET : Items.EMERALD, r < 92 ? 1 + this.random.nextInt(2) : 1);
+        this.spawnAtLocation(find);
+        this.startTimedAction(Action.DIG, 30);
+        level.levelEvent(2001, this.blockPosition().below(), net.minecraft.world.level.block.Block.getId(under));
+        this.playSound(SoundEvents.HOGLIN_AMBIENT, 0.6F, 1.4F);
+        return find;
     }
 
     // --- the slothren -------------------------------------------------------------------------------------------------
@@ -210,7 +231,7 @@ public class Armoured extends AbstractMonsterGirl {
         }
         boolean hurt = super.hurt(source, amount);
         if (hurt && this.isSloth()) this.letGo();
-        if (hurt && !this.level().isClientSide && this.getTarget() == null && !this.isBoar() && !this.isSloth()) this.curlUp();   // not while charging a monster
+        if (hurt && !this.level().isClientSide && this.getTarget() == null && !this.isBoar() && !this.isSloth() && !this.isGrib()) this.curlUp();   // not while charging a monster
         return hurt;
     }
 
@@ -232,13 +253,14 @@ public class Armoured extends AbstractMonsterGirl {
         }
         LivingEntity target = this.getTarget();
         if (this.isSloth()) this.tickSloth(server);
-        if (target != null && !this.isCurled() && !this.isBoar() && !this.isSloth()) {     // charging: a rolling ball
+        if (this.isGrib() && !this.isBaby() && this.tickCount % 600 == 0 && this.onGround()) this.root(server);
+        if (target != null && !this.isCurled() && !this.isBoar() && !this.isSloth() && !this.isGrib()) {     // charging: a rolling ball
             if (this.getAction() != Action.ROLL) this.setAction(Action.ROLL);
             if (this.tickCount % 20 == 0) this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 30, 1, true, false));
         } else if (this.getAction() == Action.ROLL) {
             this.setAction(Action.NONE);
         }
-        if (this.tickCount % 10 == 0 && !this.isCurled() && target == null && !this.isBaby() && !this.isBoar() && !this.isSloth()) {
+        if (this.tickCount % 10 == 0 && !this.isCurled() && target == null && !this.isBaby() && !this.isBoar() && !this.isSloth() && !this.isGrib()) {
             for (Player p : server.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(4),
                     p -> p.isSprinting() && !p.isSpectator() && !p.isCreative() && this.getAffection(p) < Orders.AFFECTION)) {
                 this.curlUp();
@@ -253,6 +275,7 @@ public class Armoured extends AbstractMonsterGirl {
     public boolean isFood(ItemStack stack) {
         if (this.isBoar()) return stack.is(Items.CARROT) || stack.is(Items.POTATO) || stack.is(Items.BEETROOT);
         if (this.isSloth()) return stack.is(net.minecraft.tags.ItemTags.LEAVES) || stack.is(Items.GLOW_BERRIES);
+        if (this.isGrib()) return stack.is(Items.CARROT) || stack.is(Items.POTATO) || stack.is(Items.BROWN_MUSHROOM) || stack.is(Items.RED_MUSHROOM);
         return stack.is(Items.SPIDER_EYE) || stack.is(Items.BEETROOT) || stack.is(Items.SWEET_BERRIES);
     }
 
@@ -264,6 +287,7 @@ public class Armoured extends AbstractMonsterGirl {
     @Override
     public ItemStack rollGift(Player player) {
         int r = this.random.nextInt(100);
+        if (this.isGrib()) return new ItemStack(r < 40 ? Items.BROWN_MUSHROOM : r < 75 ? Items.POTATO : r < 95 ? Items.CARROT : Items.GOLD_NUGGET, r < 95 ? 3 : 2);
         if (this.isSloth()) return new ItemStack(r < 45 ? Items.MOSS_BLOCK : r < 80 ? Items.GLOW_BERRIES : Items.VINE, 2);
         if (this.isBoar()) return r < 50 ? new ItemStack(Items.IRON_NUGGET, 4) : r < 85 ? new ItemStack(Items.BEETROOT, 3) : r < 97 ? new ItemStack(Items.LEATHER, 2)
                 : new ItemStack(Items.SHIELD);

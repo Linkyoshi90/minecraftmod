@@ -38,6 +38,17 @@ SPECIES = {
                   "blossom": dict(extra=dict(nobands=True, moss="#5a9a3a", bloom="#f8a0c0")),
                   "fungal": dict(HAIR="#5a4636", extra=dict(nobands=True, moss="#7a6a4a", bloom="#c8302a"))}),
     # tenth wave: the aegis boar, plate armour on her back (the family's bands, in metal), pauldrons and bracers, tusks
+    # fourteenth wave: the gribboar, a stout boar with a shaggy blue mane and little tusks, a truffle-hunter's satchel
+    "gribboar_armoured": dict(
+        build="curvy", outfit=dict(top=["sweater"], bottom="shorts", extras=["satchel", "belt"], colors=dict(leather="#6a4a2a", cloth2="#3a2a1e")),
+        hair="mane", bangs="messy", ears="fox", legs="fur", foot="hoof", tail=[(1, 1, 2), (.75, .75, 1.5)], tail_rest=[(-40, 0, 0), (60, 0, 0)],
+        tail_look="fur", boar=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e2e6a", FUR="#2a4a9a", LIGHT="#8aa0d8", MARK="#141e4a", EYE="#e8a030", CLOTH="#c8a060", TRIM="#7a5a3a",
+                 pattern="solid", extra=dict(nobands=True, tusk="#f0e6cc", hoof="#1e1a2a")),
+        variants={"brown": dict(HAIR="#3a2a1e", FUR="#5a4232", LIGHT="#a08870", MARK="#2a1e16", extra=dict(nobands=True, tusk="#f0e6cc", hoof="#2a2420")),
+                  "black": dict(HAIR="#141210", FUR="#2a2624", LIGHT="#5a5450", MARK="#0a0808", extra=dict(nobands=True, tusk="#f0e6cc", hoof="#141210")),
+                  "red": dict(HAIR="#5a1e12", FUR="#8a3a22", LIGHT="#c88a6a", MARK="#3a120a", extra=dict(nobands=True, tusk="#f0e6cc", hoof="#2a1a14")),
+                  "grey": dict(HAIR="#4a4a50", FUR="#6a6a72", LIGHT="#b0b0b8", MARK="#2a2a30", extra=dict(nobands=True, tusk="#f0e6cc", hoof="#2a2a2e"))}),
     "aegis_boar_armoured": dict(
         build="strong", outfit=dict(top=["sports", "harness"], bottom="loincloth", extras=["pauldron", "bracers", "belt"],
                                     colors=dict(leather="#5a3a22", cloth2="#3a2a1e")),

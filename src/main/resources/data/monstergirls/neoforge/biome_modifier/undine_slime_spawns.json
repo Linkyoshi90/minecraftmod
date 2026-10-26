@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_undine_slime",
+  "spawners": {
+    "type": "monstergirls:undine_slime",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -21,7 +21,9 @@ white with sky-blue shade underneath) and the seasonal valentine (pink and red w
 porcelain (white glaze with blue painted motifs), denim (blue twill with orange stitching), moss (grey stone overgrown with
 moss) and the seasonal easter (pastel egg stripes, April only). And (thirteenth wave): tartan (a woven plaid), watercolour
 (soft washes bleeding at the edges), hologram (see-through cyan with scanlines, drawn translucent) and the seasonal
-fireworks (bursts on a night-blue body, January only). The drips and
+fireworks (bursts on a night-blue body, January only). And (fourteenth wave): mosaic (little glazed tiles in grout),
+chalk (chalk lines on a blackboard), leopard (rosettes on gold) and the seasonal autumn (falling-leaf colours, November
+only). The drips and
 patterns follow the model: they are drawn per cube face from the geo file, running down each side from its top edge.
 
     python tools/gen_paints.py [paint ...] [model ...]   # everything, or just the paints and/or models named
@@ -184,7 +186,8 @@ def treat(img, name, model):
     if name in PATINA_SHARE or name in ("glow", "ink", "magma", "pumpkin", "candy_cane", "frost", "sakura", "stained_glass", "sepia",
                                         "opal", "chrome", "aurora", "camo", "plush", "pixel", "origami", "gummy",
                                         "synthwave", "cookie", "cloud", "valentine", "porcelain", "denim", "moss", "easter",
-                                        "tartan", "watercolour", "hologram", "fireworks"):
+                                        "tartan", "watercolour", "hologram", "fireworks",
+                                        "mosaic", "chalk", "leopard", "autumn"):
         return finish(img, name, model)[0]
     W = len(img[0])
     out = [list(row) for row in img]
@@ -310,7 +313,8 @@ TREATS = ["chocolate", "icecream", "strawberry", "jello", "milk", "gold", "marbl
           "copper", "copper_exposed", "copper_weathered", "copper_oxidized", "glow", "ink", "magma", "pumpkin", "candy_cane",
           "frost", "sakura", "stained_glass", "sepia", "opal", "chrome", "aurora", "camo", "plush", "pixel", "origami", "gummy",
           "synthwave", "cookie", "cloud", "valentine", "porcelain", "denim", "moss", "easter",
-          "tartan", "watercolour", "hologram", "fireworks"]
+          "tartan", "watercolour", "hologram", "fireworks",
+          "mosaic", "chalk", "leopard", "autumn"]
 PEARL = hexes("#b8b0c0", "#d8d2e0", "#ece8f2", "#f8f6fc", "#ffffff")
 CHROME = hexes("#1e2024", "#4a4e56", "#8a909a", "#c8ccd4", "#ffffff")
 AURORA = hexes("#2af08a", "#3ad8c8", "#5aa0f0", "#8a6af0", "#c86ae8")
@@ -327,6 +331,9 @@ EMBER = hexes("#a8280a", "#e85a14", "#f8901e", "#ffc84a", "#fff0a0")
 NEON = hexes("#1a8a8a", "#2ad0c8", "#5af8f0", "#b0fff8")
 NIGHTBODY = hexes("#0a0a14", "#14141e", "#20202e", "#2e2e40", "#40405a")
 PUMPKIN = hexes("#7a2e06", "#b04a0e", "#e0701a", "#f89a3a", "#ffc070")
+TILES = [(40, 90, 170), (230, 190, 60), (190, 60, 50), (60, 150, 120), (240, 240, 230)]
+LEOPARD = hexes("#8a5a24", "#c8903a", "#e8b860", "#f8e0a0")
+AUTUMN = [(200, 70, 30), (230, 140, 40), (240, 190, 60), (150, 50, 30), (120, 90, 40)]
 TARTAN = [(160, 30, 40), (30, 60, 40), (240, 210, 90)]               # red ground, green bands, a yellow overcheck
 WASH = [(120, 180, 230), (240, 150, 170), (160, 210, 140), (250, 210, 120), (190, 160, 230)]
 DENIM = hexes("#1e2e5a", "#2e4a82", "#4a6aa8", "#7a96c8")
@@ -572,6 +579,36 @@ def finish(img, name, model):
                         c = col                                             # the burst's rays
                     elif fw > 7 and fh > 7 and r2 < 1.2:
                         c = (255, 255, 230)                                 # its bright heart
+            elif name == "mosaic":
+                if l < 0.22 and face:
+                    continue
+                if xx % 4 == 3 or yy % 4 == 3:
+                    c = (196, 190, 178)                                     # the grout
+                else:
+                    t = TILES[int(H.noise(x // 4, y // 4, 131) * len(TILES)) % len(TILES)]
+                    c = tuple(int(v * (0.75 + 0.3 * l)) for v in t)
+            elif name == "chalk":
+                if l < 0.22 and face:
+                    continue
+                c = (40, 52, 46)                                            # the blackboard
+                if edge or (l > 0.62 and (xx + yy) % 3 == 0) or ((xx * 5 + yy * 7) % 23 == 0):
+                    c = (236, 236, 228) if H.noise(x, y, 137) > 0.25 else (200, 204, 196)   # dusty chalk lines and doodles
+            elif name == "leopard":
+                if l < 0.22 and face:
+                    continue
+                c = ramp_pick(LEOPARD, 0.3 + 0.6 * l)
+                n = H.noise(x // 2, y // 2, 139)
+                if 0.62 < n < 0.72:
+                    c = (40, 28, 18)                                        # the rosette's ring
+                elif 0.72 <= n < 0.78:
+                    c = (150, 96, 40)                                       # its darker heart
+            elif name == "autumn":
+                if l < 0.22 and face:
+                    continue
+                leaf = AUTUMN[int(H.noise(x // 4 + i, y // 4, 141) * len(AUTUMN)) % len(AUTUMN)]
+                c = tuple(int(v * (0.65 + 0.4 * l)) for v in leaf)
+                if fw > 3 and fh > 3 and (xx + 2 * yy + i) % 9 == 0:
+                    c = tuple(int(v * 0.6) for v in leaf)                   # the veins of the leaves
             else:                                                       # candy cane: red and white stripes, round and round
                 if l < 0.22 and face:
                     continue

@@ -82,8 +82,38 @@ public class Rodent extends AbstractMonsterGirl {
         if (s == GirlSpecies.MARMOTAUR_RODENT) return girlAttributes(28, 0.26, 5).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 1.2);
         if (s == GirlSpecies.BAMBADGER_RODENT) return girlAttributes(16, 0.28, 2);
         if (s == GirlSpecies.SQUIRRICERAT_RODENT) return girlAttributes(24, 0.3, 5).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 1.5);
+        if (s == GirlSpecies.SILKCOON_RODENT) return girlAttributes(14, 0.3, 1);
         if (s == GirlSpecies.KAMAITACHI_RODENT) return girlAttributes(18, 0.38, 4).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 1.2);
         return s == GirlSpecies.CAPYBARA_RODENT ? girlAttributes(26, 0.23, 2) : girlAttributes(14, 0.34, 1);
+    }
+
+    // --- the silkcoon -------------------------------------------------------------------------------------------------
+
+    /** Water within 3 blocks of her: where she can wash. */
+    public boolean nearWater() {
+        for (BlockPos p : BlockPos.betweenClosed(this.blockPosition().offset(-3, -2, -3), this.blockPosition().offset(3, 1, 3))) {
+            if (this.level().getFluidState(p).is(net.minecraft.tags.FluidTags.WATER)) return true;
+        }
+        return false;
+    }
+
+    /** The stack with its dye washed out (the same count), or null if there is no dye to wash out. */
+    @Nullable
+    public static ItemStack washed(ItemStack stack) {
+        if (stack.isEmpty()) return null;
+        if (stack.has(net.minecraft.core.component.DataComponents.DYED_COLOR)) {
+            ItemStack c = stack.copy();
+            c.remove(net.minecraft.core.component.DataComponents.DYED_COLOR);
+            return c;
+        }
+        net.minecraft.world.item.Item plain = null;
+        if (stack.is(net.minecraft.tags.ItemTags.WOOL) && !stack.is(Items.WHITE_WOOL)) plain = Items.WHITE_WOOL;
+        else if (stack.is(net.minecraft.tags.ItemTags.WOOL_CARPETS) && !stack.is(Items.WHITE_CARPET)) plain = Items.WHITE_CARPET;
+        else if (stack.is(net.minecraft.tags.ItemTags.BEDS) && !stack.is(Items.WHITE_BED)) plain = Items.WHITE_BED;
+        else if (stack.is(net.minecraft.tags.ItemTags.TERRACOTTA) && !stack.is(Items.TERRACOTTA)) plain = Items.TERRACOTTA;
+        else if (stack.getItem() instanceof net.minecraft.world.item.BlockItem bi && bi.getBlock() instanceof net.minecraft.world.level.block.StainedGlassBlock) plain = Items.GLASS;
+        else if (stack.getItem() instanceof net.minecraft.world.item.BlockItem bi && bi.getBlock() instanceof net.minecraft.world.level.block.StainedGlassPaneBlock) plain = Items.GLASS_PANE;
+        return plain == null ? null : new ItemStack(plain, stack.getCount());
     }
 
     // --- the squirricerat and the kamaitachi ---------------------------------------------------------------------------
@@ -400,6 +430,22 @@ public class Rodent extends AbstractMonsterGirl {
     @Override
     @Nullable
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        if (this.species == GirlSpecies.SILKCOON_RODENT && !this.isBaby()) {
+            ItemStack clean = washed(stack);
+            if (clean != null) {
+                if (!this.nearWater()) {
+                    if (!this.level().isClientSide) player.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.silkcoon_water", this.getDisplayName()), true);
+                    return InteractionResult.sidedSuccess(this.level().isClientSide);
+                }
+                if (!this.level().isClientSide) {
+                    player.setItemInHand(hand, clean);
+                    this.playSound(SoundEvents.GENERIC_SPLASH, 0.8F, 1.3F);
+                    this.startTimedAction(Action.SOAK, 30);
+                    this.addAffection(player, 1);
+                }
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
+            }
+        }
         if (this.species != GirlSpecies.RATATOSKR_RODENT || this.isBaby() || stack.isEmpty() || this.isFood(stack) || stack.is(ModTags.MEAT)
                 || this.getAffection(player) < Orders.AFFECTION || !this.parcel.isEmpty()) return null;
         if (!this.level().isClientSide) this.takeParcel(player, stack);
@@ -449,6 +495,7 @@ public class Rodent extends AbstractMonsterGirl {
         if (this.species == GirlSpecies.MARMOTAUR_RODENT) return stack.is(Items.SHORT_GRASS) || stack.is(Items.SWEET_BERRIES) || stack.is(Items.WHEAT);
         if (this.species == GirlSpecies.BAMBADGER_RODENT) return stack.is(Items.BAMBOO) || stack.is(Items.SWEET_BERRIES);
         if (this.species == GirlSpecies.SQUIRRICERAT_RODENT) return stack.is(Items.SWEET_BERRIES) || stack.is(Items.WHEAT_SEEDS) || stack.is(Items.PUMPKIN_SEEDS);
+        if (this.species == GirlSpecies.SILKCOON_RODENT) return stack.is(net.minecraft.tags.ItemTags.FISHES) || stack.is(Items.EGG) || stack.is(Items.SWEET_BERRIES);
         if (this.species == GirlSpecies.KAMAITACHI_RODENT) return stack.is(Items.CHICKEN) || stack.is(Items.COOKED_CHICKEN) || stack.is(Items.EGG);
         return this.species == GirlSpecies.CAPYBARA_RODENT ? stack.is(Items.MELON_SLICE) || stack.is(Items.SUGAR_CANE) || stack.is(Items.APPLE)
                 : stack.is(Tags.Items.SEEDS) || stack.is(Items.SWEET_BERRIES) || stack.is(Items.GLOW_BERRIES);
@@ -470,6 +517,10 @@ public class Rodent extends AbstractMonsterGirl {
             int r = this.random.nextInt(100);
             return new ItemStack(r < 30 ? Items.OAK_SAPLING : r < 55 ? Items.BIRCH_SAPLING : r < 75 ? Items.DARK_OAK_SAPLING : r < 95 ? Items.SWEET_BERRIES : Items.BONE_BLOCK,
                     r < 95 ? 2 : 1);
+        }
+        if (this.species == GirlSpecies.SILKCOON_RODENT) {
+            int r = this.random.nextInt(100);
+            return new ItemStack(r < 40 ? Items.STRING : r < 70 ? Items.WHITE_WOOL : r < 95 ? Items.CLAY_BALL : Items.NAME_TAG, r < 95 ? 3 : 1);
         }
         if (this.species == GirlSpecies.KAMAITACHI_RODENT) {
             int r = this.random.nextInt(100);

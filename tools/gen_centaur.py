@@ -82,6 +82,26 @@ SPECIES = {
                   "dawn": dict(FUR="#6a4a5a", MARK="#3a2432", HAIR="#ffe8f0", EYE="#f8a0c0", extra=dict(antler="#f8a0c0", antler2="#f8d080")),
                   "frost": dict(FUR="#a8b8c8", MARK="#6a7a8a", LIGHT="#ffffff", EYE="#e8f8ff", extra=dict(antler="#ffffff", antler2="#a8e8ff")),
                   "ember": dict(FUR="#5a3a2a", MARK="#2a1a12", HAIR="#ffe0b0", EYE="#f8c050", extra=dict(antler="#f8c050", antler2="#f86a3a"))}),
+    # fourteenth wave: the prairhorn, a pronghorn taur banded tan and white, with short pronged horns
+    "prairhorn_centaur": dict(
+        build="athletic", outfit=dict(top=["sports"], extras=["armlets"], colors=dict(cloth2="#5a3a22")),
+        hair="ponytail", tail=(2, 2.5, 1.5), horns=True, ears="round",
+        pal=dict(SKIN=skin("tan"), HAIR="#5a3a22", FUR="#c8884a", LIGHT="#f8f0e4", MARK="#3a2414", EYE="#3a2412", CLOTH="#3a6a8a", TRIM="#f0e8d8",
+                 pattern="solid", extra=dict(horn="#2a2420")),
+        variants={"red": dict(FUR="#b8582a", HAIR="#7a3418", MARK="#3a1408"),
+                  "dark": dict(FUR="#6a4a30", HAIR="#3a2614", MARK="#1e140a"),
+                  "pale": dict(FUR="#e8d0a8", HAIR="#a88a64", MARK="#6a5434"),
+                  "blue": dict(FUR="#5a7ac8", HAIR="#2a3a7a", MARK="#141e4a", CLOTH="#c8a050")}),
+    # fourteenth wave: the halberelk, an elk taur whose antler tines end in steel-bright blades
+    "halberelk_centaur": dict(
+        build="strong", outfit=dict(top=["sarashi", "vest"], extras=["bracers", "belt"], colors=dict(cloth2="#3a2a1e", leather="#5a3a22")),
+        hair="mane", tail=(2, 2.5, 1.5), antlers=True, blades=True, ears="round",
+        pal=dict(SKIN=skin("fair"), HAIR="#e8dcc0", FUR="#3a5ab0", LIGHT="#e8dcc0", MARK="#1e2e6a", EYE="#e8a030", CLOTH="#c8a060", TRIM="#e8dcc0",
+                 pattern="solid", extra=dict(antler="#e8dcc0", antler2="#c8b898", blade="#c8d0dc")),
+        variants={"brown": dict(FUR="#6a4a2e", MARK="#3a2414", HAIR="#d8c8a0"),
+                  "grey": dict(FUR="#7a7a82", MARK="#3a3a42", HAIR="#e0e0e4"),
+                  "white": dict(FUR="#ece8e0", MARK="#a8a49c", HAIR="#ffffff", EYE="#4a8ac8"),
+                  "black": dict(FUR="#26242a", MARK="#0e0c10", HAIR="#c8c0b0", EYE="#e8d040")}),
     # thirteenth wave: the momoshika, a white-and-blue deer taur with peach blossoms in her antlers
     "momoshika_centaur": dict(
         build="slim", outfit=dict(top=["halter", "capelet"], extras=["pearls"], colors=dict(cloth2="#f4c0d0")),
@@ -174,6 +194,8 @@ def declare(sp):
         parts += [("antler_a", .75, 5, .75), ("antler_b", .75, 2.5, .75), ("antler_c", .5, 2, .5)]
     if d.get("blossoms"):
         parts += [("blossom", 1.5, 1.5, 1.5), ("blossom_in", .75, .75, .75)]
+    if d.get("blades"):
+        parts += [("antler_blade", 2.5, 2, .25)]
     if d.get("horns"):
         parts += [("horn_a", 1, 3, 1), ("horn_b", .75, 2.5, .75)]
     if d.get("uhorn"):                                   # the unicorn's single spiral horn
@@ -216,6 +238,8 @@ def paint(sp, key):
     bloom, bloom_in = shades(pal.extra.get("bloom", "#f8a8c8")), shades(pal.extra.get("bloom_in", "#f8e070"))
     pt("blossom", "all", lambda f, x, y, w, h: pick(bloom, 0.55 + 0.25 * ((x + y) % 2), x, y))
     pt("blossom_in", "all", lambda f, x, y, w, h: pick(bloom_in, 0.7, x, y))
+    steel = shades(pal.extra.get("blade", "#c8d0dc"))
+    pt("antler_blade", "all", lambda f, x, y, w, h: pick(steel, 0.55 + 0.3 * (y == 0), x, y) if y < h - (abs(x + 0.5 - w / 2) * 1.2) else CLEAR)
     kelp = shades(pal.extra.get("kelp", "#4a8a3a"))
     pt("htail", "all", lambda f, x, y, w, h: pick(kelp, 0.45 + (noise(x, y, 6) - 0.5) * 0.3, x, y) if d.get("kelp") and (x + y // 2) % 3 == 0
        else pick(pal.HAIR, 0.45 + 0.25 * ((x + y // 3) % 3 == 0) + (noise(x, y, 5) - 0.5) * 0.15, x, y)
@@ -277,6 +301,9 @@ def build(sp):
             cs.append(G.rot_cube("antler_b", [x + sg * 1.8 - 0.375, hy + 11.0, -1.4 + z], [x + sg * 1.8, hy + 11.0, -1.0 + z], -45, 0, -10 * sg))
             cs.append(G.rot_cube("antler_c", [x + sg * 2.6 - 0.25, hy + 12.4, 0.8 + z], [x + sg * 2.6, hy + 12.4, 1.0 + z], 10, 0, 30 * sg))
             cs.append(G.rot_cube("antler_b", [x + sg * 0.6 - 0.375, hy + 9.6, -1.9 + z], [x + sg * 0.6, hy + 9.6, -1.6 + z], -60, 0, 0))
+        if d.get("blades"):                              # a halberd's blade on the top tine of each antler
+            for sg in (-1, 1):
+                cs.append(G.rot_cube("antler_blade", [sg * 5.2 - 1.25, hy + 13.4, 0.9 + z], [sg * 5.2, hy + 13.4, 1.0 + z], 0, 0, 25 * sg))
         if d.get("blossoms"):                            # peach blossoms caught in the tines
             for sg in (-1, 1):
                 for bx, by, bz in ((2.6 + 1.8, 11.4, -1.6), (2.6 + 2.6, 13.6, 1.2), (2.6 + 0.6, 10.6, -2.4), (2.6 + 1.2, 9.4, 0.2)):

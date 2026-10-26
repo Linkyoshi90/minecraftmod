@@ -95,6 +95,7 @@ public class SlimeGirl extends AbstractMonsterGirl {
             case AMETHYST_SLIME -> List.of(Items.AMETHYST_SHARD, Items.QUARTZ);
             case MIMIC_SLIME -> List.of(Items.GOLD_INGOT, Items.GOLD_NUGGET, Items.GOLD_BLOCK);
             case ENDER_SLIME -> List.of(Items.CHORUS_FRUIT, Items.POPPED_CHORUS_FRUIT, Items.ENDER_PEARL);
+            case UNDINE_SLIME -> List.of(Items.POTION, Items.KELP, Items.DRIED_KELP);
             default -> List.of(Items.SLIME_BALL, Items.MELON_SLICE, Items.APPLE);
         };
     }
@@ -107,6 +108,7 @@ public class SlimeGirl extends AbstractMonsterGirl {
             case FROST_SLIME -> List.of(DyeColor.LIGHT_BLUE, DyeColor.WHITE, DyeColor.LIME, DyeColor.BLUE, DyeColor.PINK);
             case AMETHYST_SLIME -> List.of(DyeColor.PURPLE, DyeColor.PINK, DyeColor.YELLOW, DyeColor.GRAY, DyeColor.GREEN);
             case ENDER_SLIME -> List.of(DyeColor.BLACK, DyeColor.MAGENTA, DyeColor.CYAN, DyeColor.YELLOW, DyeColor.PURPLE);
+            case UNDINE_SLIME -> List.of(DyeColor.LIGHT_BLUE, DyeColor.CYAN, DyeColor.WHITE, DyeColor.BLUE, DyeColor.GREEN);
             case MIXED_SLIME, MIMIC_SLIME -> List.of();                     // her colours are her two halves; the mimic's, her chest
             default -> List.of(DyeColor.LIME, DyeColor.WHITE, DyeColor.BROWN, DyeColor.CYAN, DyeColor.YELLOW);
         };
@@ -431,9 +433,38 @@ public class SlimeGirl extends AbstractMonsterGirl {
             case HONEY_SLIME -> this.sticky(server);
             case AMETHYST_SLIME -> this.resonate(server);
             case ENDER_SLIME -> this.tickEnder(server);
+            case UNDINE_SLIME -> {
+                if (this.tickCount % 100 == 0 && !this.isBaby()) this.water(server);
+            }
             default -> {
             }
         }
+    }
+
+    /**
+     * The undine, befriended: the farmland within 6 blocks of her stays wet, the cauldrons fill, and her friend in the
+     * water breathes it. Returns how many blocks she watered or filled.
+     */
+    public int water(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null) return 0;
+        if (friend.isInWater() && friend.distanceToSqr(this) < 8 * 8) {
+            friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WATER_BREATHING, 200, 0, true, false));
+        }
+        int n = 0;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(this.blockPosition().offset(-6, -2, -6), this.blockPosition().offset(6, 2, 6))) {
+            var s = level.getBlockState(p);
+            if (s.is(net.minecraft.world.level.block.Blocks.FARMLAND) && s.getValue(net.minecraft.world.level.block.FarmBlock.MOISTURE) < 7) {
+                level.setBlock(p, s.setValue(net.minecraft.world.level.block.FarmBlock.MOISTURE, 7), 2);
+                n++;
+            } else if (s.is(net.minecraft.world.level.block.Blocks.CAULDRON) || s.is(net.minecraft.world.level.block.Blocks.WATER_CAULDRON)
+                    && s.getValue(net.minecraft.world.level.block.LayeredCauldronBlock.LEVEL) < 3) {
+                level.setBlock(p, net.minecraft.world.level.block.Blocks.WATER_CAULDRON.defaultBlockState().setValue(net.minecraft.world.level.block.LayeredCauldronBlock.LEVEL, 3), 3);
+                n++;
+            }
+        }
+        if (n > 0) level.sendParticles(ParticleTypes.SPLASH, this.getX(), this.getY() + 1, this.getZ(), 12, 1.0, 0.5, 1.0, 0.1);
+        return n;
     }
 
     /** Verdant: crops and saplings around where she rests grow faster. */
@@ -521,6 +552,8 @@ public class SlimeGirl extends AbstractMonsterGirl {
             case MAGMA_SLIME -> new ItemStack(r < 60 ? Items.MAGMA_CREAM : Items.BLAZE_POWDER);
             case FROST_SLIME -> new ItemStack(r < 60 ? Items.SNOWBALL : Items.BLUE_ICE, r < 60 ? 8 : 1);
             case MIMIC_SLIME -> new ItemStack(r < 70 ? Items.GOLD_NUGGET : Items.EMERALD, r < 70 ? 4 : 1);
+            case UNDINE_SLIME -> new ItemStack(r < 45 ? Items.KELP : r < 80 ? Items.PRISMARINE_SHARD : r < 97 ? Items.NAUTILUS_SHELL : Items.HEART_OF_THE_SEA,
+                    r < 80 ? 3 : 1);
             case ENDER_SLIME -> new ItemStack(r < 55 ? Items.CHORUS_FRUIT : r < 85 ? Items.END_STONE : Items.ENDER_PEARL, r < 85 ? 3 : 1);
             default -> new ItemStack(r < 60 ? Items.SLIME_BALL : Items.BONE_MEAL, 3);
         };

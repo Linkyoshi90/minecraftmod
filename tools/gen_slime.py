@@ -18,6 +18,15 @@ from girl_lib import H, cube, pick, noise, shades, CLEAR  # noqa: E402
 ALPHA = 200
 
 SPECIES = {
+    # fourteenth wave: the undine, a girl of living water, bubbles drifting round her
+    "undine_slime": dict(
+        build="slim", outfit=dict(top=[], extras=["pearls"]),
+        extra="motes", hair="flowing",
+        pal=dict(FUR="#5ab0f0", LIGHT="#d8f0ff", MARK="#2a6ab8", HAIR="#8ac8f8", EYE="#1e4a8a", PUPIL="#0e2450", extra=dict(core="#ffffff")),
+        variants={"teal": dict(FUR="#40c8c0", HAIR="#70dcd4", MARK="#1e7a74", EYE="#0e4a46", extra=dict(core="#e0fffc")),
+                  "clear": dict(FUR="#d0ecf8", HAIR="#e4f4fc", MARK="#8ab8d0", EYE="#3a6a8a", extra=dict(core="#ffffff")),
+                  "deep": dict(FUR="#2a4ab8", HAIR="#4a6ad0", LIGHT="#8ab0f0", MARK="#14286a", EYE="#c8e0ff", PUPIL="#0e1a4a", extra=dict(core="#a8c8ff")),
+                  "sea": dict(FUR="#4ab89a", HAIR="#6ad0b4", MARK="#1e6a54", EYE="#0e3a2e", extra=dict(core="#d8fff0"))}),
     "verdant_slime": dict(
         build="curvy", outfit=dict(top=[]),
         extra="sprout", hair="bob",

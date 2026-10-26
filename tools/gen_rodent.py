@@ -95,6 +95,17 @@ SPECIES = {
                   "brown": dict(HAIR="#6a4a2e", FUR="#7a5636", LIGHT="#e8d4bc", MARK="#3a2416", CLOTH="#5a3a6a"),
                   "grey": dict(HAIR="#7a7a80", FUR="#8a8a90", LIGHT="#e8e8ec", MARK="#3a3a40", CLOTH="#3a6a5a"),
                   "black": dict(HAIR="#1e1c1e", FUR="#2a282a", LIGHT="#8a8488", MARK="#0e0c0e", EYE="#e8d040", CLOTH="#a83a3a")}),
+    # fourteenth wave: the silkcoon, a raccoon of silky white fur swirled in blue, a ringed bushy tail
+    "silkcoon_rodent": dict(
+        build="petite", outfit=dict(top=["halter", "capelet"], bottom="shorts", extras=["pearls"], colors=dict(cloth2="#2a4a9a")),
+        hair="bob", bangs="parted", ears="round", legs="fur", foot="paw",
+        tail=[(2, 2, 4), (2.25, 2.25, 4), (2, 2, 3)], tail_rest=[(-30, 0, 0), (15, 0, 0), (12, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("fair"), HAIR="#e8eef8", FUR="#f0f4fa", LIGHT="#ffffff", MARK="#3a5ab8", EYE="#2a3a8a", CLOTH="#3a5ab8", TRIM="#f0f4fa",
+                 pattern="bars"),
+        variants={"grey": dict(HAIR="#6a6a72", FUR="#8a8a92", LIGHT="#e0e0e6", MARK="#2a2a30", CLOTH="#4a6a3a"),
+                  "brown": dict(HAIR="#6a4a2e", FUR="#8a6644", LIGHT="#e8d4bc", MARK="#3a2414", CLOTH="#3a5a7a"),
+                  "white": dict(HAIR="#f4f2ee", FUR="#f6f4f0", LIGHT="#ffffff", MARK="#c8c4be", EYE="#c84a5a", CLOTH="#c8a8e8"),
+                  "black": dict(HAIR="#1e1c22", FUR="#2a2830", LIGHT="#6a6870", MARK="#0e0c10", EYE="#e8c040", CLOTH="#a83a4a")}),
     "ratatoskr_rodent": dict(
         build="petite", outfit=dict(top=["bandeau", "vest"], bottom="shorts", extras=["satchel", "scarf"], colors=dict(scarf="#3a7a4a", leather="#5a3a22")),
         hair="ponytail", bangs="messy", ears="tuft", legs="fur", foot="paw",

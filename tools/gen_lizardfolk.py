@@ -159,6 +159,18 @@ SPECIES = {
                   "dark": dict(FUR="#3a2e1e", HAIR="#2a2014", extra=dict(shell="#2a2014", shell_band="#4a3a24")),
                   "orinoco": dict(FUR="#8a5a3a", HAIR="#6a3a22", MARK="#a83a2a", extra=dict(shell="#5a3a22", shell_band="#8a5a32")),
                   "pale": dict(FUR="#a89a7a", HAIR="#8a7a5a", LIGHT="#e0d4b8", extra=dict(shell="#7a6a4e", shell_band="#a89a72"))}),
+    # fourteenth wave: the cocoskink, a slim blue skink with a crest of leaves and little bells in her hair
+    "cocoskink_lizardfolk": dict(
+        build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["armlets"], colors=dict(cloth2="#c8902a")),
+        hair="ponytail", bangs="swept", ears=None, legs="scales", foot="claw",
+        tail=[(1.5, 1.5, 4), (1.25, 1.25, 4), (1, 1, 4), (.75, .75, 3)], tail_rest=[(-20, 0, 0), (8, 0, 0), (8, 0, 0), (6, 0, 0)], tail_look="scale",
+        skink=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#2a5ac8", FUR="#3a6ad8", LIGHT="#e8eef8", MARK="#1e2a6a", EYE="#e8a030", CLOTH="#5a9a3a", TRIM="#e8c050",
+                 pattern="bars", extra=dict(leaf="#5a9a3a", bell="#e8c050")),
+        variants={"green": dict(HAIR="#2a8a4a", FUR="#3aa85a", MARK="#145a2a", CLOTH="#c8902a", extra=dict(leaf="#7ac84a", bell="#e8c050")),
+                  "gold": dict(HAIR="#c8902a", FUR="#e0b040", MARK="#7a5410", CLOTH="#2a6a3a", extra=dict(leaf="#5a9a3a", bell="#f8f0c0")),
+                  "orange": dict(HAIR="#d8601e", FUR="#e8782a", MARK="#7a2a0a", CLOTH="#2a5a7a", extra=dict(leaf="#5a9a3a", bell="#e8c050")),
+                  "black": dict(HAIR="#1e1c22", FUR="#2a2830", MARK="#0a080e", LIGHT="#a8a4b0", EYE="#e8d040", extra=dict(leaf="#3a7a2a", bell="#e8c050"))}),
     "gecko_lizardfolk": dict(
         build="petite", outfit=dict(top=["sports"], bottom="shorts", extras=["armlets"], colors=dict(cloth2="#3a4a5a")),
         hair="bob", bangs="messy", ears=None, legs="scales", foot="claw", tail=[(2, 2, 3), (2.25, 2.25, 3), (1.75, 1.75, 3), (1, 1, 2.5)],
@@ -208,6 +220,8 @@ def declare_hook(sp, d):
         out += [("snout", 1.5, 1, 2)]
     if d.get("dish"):
         out += [("dish", 4, .5, 4), ("dish_water", 3, .25, 3)]
+    if d.get("skink"):
+        out += [("skink_leaf", 1.5, .25, 4), ("bell", .75, .75, .75)]
     if d.get("anvil"):                                   # the anvil on her back: base, waist, the face and its horn
         out += [("anvil_base", 6, 2, 4.5), ("anvil_waist", 3.5, 2, 3), ("anvil_face", 8, 2.5, 4.5), ("anvil_horn", 2.5, 1.75, 2.5)]
     if d.get("nurse_kit"):
@@ -217,6 +231,9 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    leafc, bell = G.shades(pal.extra.get("leaf", "#5a9a3a")), G.shades(pal.extra.get("bell", "#e8c050"))
+    pt("skink_leaf", "all", lambda f, x, y, w, h: pick(leafc, 0.45 + 0.25 * (x == w // 2) + 0.1 * (y % 2), x, y))
+    pt("bell", "all", lambda f, x, y, w, h: pick(bell, 0.55 + 0.3 * (f == "up"), x, y))
     iron = G.shades(pal.extra.get("anvil", "#5a5e66"))
     chipped = pal.extra.get("chipped")
     for p in ("anvil_base", "anvil_waist", "anvil_face", "anvil_horn"):
@@ -275,6 +292,11 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     z = g.z
+    if d.get("skink"):                                   # a crest of leaves fanned on her head, little bells hanging by her ears
+        hy = g.hy
+        r.add("crest", "head", [0, g.hy + 8.4, z], [G.rot_cube("skink_leaf", [-0.75, hy + 8.6, -1.0 + z], [0, hy + 8.6, -0.5 + z], -30 + 12 * i, a, 0)
+                                                    for i, a in enumerate((150, 175, 200, 125, 225))])
+        r.put("head", cube("bell", [-4.9, hy + 2.6, -1.0 + z]), cube("bell", [4.15, hy + 2.6, -1.0 + z]), cube("bell", [-4.8, hy + 1.6, 0.2 + z]))
     if d.get("anvil"):                                   # lying along her back like a shell, the face outward
         cd = G.S("chest")[2]
         b = cd / 2 - 0.2 + z

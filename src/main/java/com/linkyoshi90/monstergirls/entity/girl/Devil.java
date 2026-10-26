@@ -81,13 +81,15 @@ public class Devil extends AbstractMonsterGirl {
             case GREMLIN_DEVIL -> girlAttributes(12, 0.3, 1);
             case KARAKASA_OBAKE_DEVIL -> girlAttributes(20, 0.3, 2);
             case CHOCHIN_OBAKE_DEVIL -> girlAttributes(18, 0.3, 2);
+            case ITTAN_MOMEN_DEVIL -> girlAttributes(16, 0.3, 1);
             default -> girlAttributes(30, 0.26, 5);
         };
     }
 
     @Override
     public boolean canFly() {
-        return this.species == GirlSpecies.LESSER_DEVIL || this.species == GirlSpecies.SUCCUBUS_DEVIL || this.species == GirlSpecies.GREATER_DEVIL;
+        return this.species == GirlSpecies.LESSER_DEVIL || this.species == GirlSpecies.SUCCUBUS_DEVIL || this.species == GirlSpecies.GREATER_DEVIL
+                || this.species == GirlSpecies.ITTAN_MOMEN_DEVIL;
     }
 
     // --- hostility -----------------------------------------------------------------------------------------------
@@ -161,10 +163,39 @@ public class Devil extends AbstractMonsterGirl {
         return true;
     }
 
+    // --- the ittan-momen's flight: a friend rides her through the air, steering where they look -------------------------
+
+    @javax.annotation.Nullable
+    @Override
+    public LivingEntity getControllingPassenger() {
+        return this.species == GirlSpecies.ITTAN_MOMEN_DEVIL && this.getFirstPassenger() instanceof Player p ? p : super.getControllingPassenger();
+    }
+
+    @Override
+    protected Vec3 getPassengerAttachmentPoint(Entity passenger, net.minecraft.world.entity.EntityDimensions dims, float scale) {
+        return this.species == GirlSpecies.ITTAN_MOMEN_DEVIL ? new Vec3(0.0, dims.height() * 0.35, 0.6) : super.getPassengerAttachmentPoint(passenger, dims, scale);
+    }
+
+    @Override
+    public void travel(Vec3 input) {
+        if (this.species == GirlSpecies.ITTAN_MOMEN_DEVIL && this.isVehicle() && this.getControllingPassenger() instanceof Player p) {
+            this.setYRot(p.getYRot());
+            this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
+            this.setNoGravity(true);
+            Vec3 v = this.getDeltaMovement().scale(0.85);
+            if (p.zza > 0) v = v.add(p.getLookAngle().scale(0.11));             // she flies where her rider looks
+            else if (p.zza < 0) v = v.scale(0.6);
+            this.setDeltaMovement(v);
+            this.move(net.minecraft.world.entity.MoverType.SELF, this.getDeltaMovement());
+            return;
+        }
+        super.travel(input);
+    }
+
     /** The chochin-obake's lantern lights where she is at night; befriended, she keeps beside her friend through the dark. */
     private void tickLantern(ServerLevel level) {
         boolean night = !level.isDay();
-        this.glow(level, night ? 12 : 0);
+        this.glow(level, night ? 15 : 0);
         if (!night || this.isBaby() || this.tickCount % 20 != 0 || this.isOrderedToSit()) return;
         Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
         if (friend != null && this.distanceToSqr(friend) > 3 * 3) this.getNavigation().moveTo(friend, 1.2);
@@ -332,6 +363,7 @@ public class Devil extends AbstractMonsterGirl {
     public boolean isFood(ItemStack stack) {
         if (this.species == GirlSpecies.KARAKASA_OBAKE_DEVIL && (stack.is(Items.PAPER) || stack.is(Items.STRING))) return true;
         if (this.species == GirlSpecies.CHOCHIN_OBAKE_DEVIL && (stack.is(Items.PAPER) || stack.is(net.minecraft.tags.ItemTags.CANDLES))) return true;
+        if (this.species == GirlSpecies.ITTAN_MOMEN_DEVIL && (stack.is(Items.STRING) || stack.is(net.minecraft.tags.ItemTags.WOOL))) return true;
         return stack.is(Items.SUGAR) || stack.is(Items.COOKIE) || stack.is(Items.CAKE) || stack.is(Items.PUMPKIN_PIE) || stack.is(Items.HONEY_BOTTLE);
     }
 
@@ -344,6 +376,15 @@ public class Devil extends AbstractMonsterGirl {
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
         if (this.isDisguised() && !this.level().isClientSide) this.setDisguised(false);
+        if (this.species == GirlSpecies.ITTAN_MOMEN_DEVIL && stack.isEmpty() && !player.isShiftKeyDown() && !this.isBaby() && !this.isVehicle()
+                && this.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {   // a friend climbs aboard
+            if (!this.level().isClientSide) {
+                this.setOrderedToSit(false);
+                this.getNavigation().stop();
+                player.startRiding(this);
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         if (this.species == GirlSpecies.GREMLIN_DEVIL && stack.is(Items.COOKIE)) this.calmUntil = this.level().getGameTime() + 24000;   // no pranks for a day
         if (this.species == GirlSpecies.ONI_DEVIL && stack.is(Items.COCOA_BEANS) && this.getAffection(player) < com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {
             if (this.level() instanceof ServerLevel server) {
@@ -363,6 +404,7 @@ public class Devil extends AbstractMonsterGirl {
             case JACK_O_LANTERN_DEVIL -> new ItemStack(r < 50 ? Items.PUMPKIN_SEEDS : r < 80 ? Items.TORCH : Items.JACK_O_LANTERN, r < 80 ? 4 : 1);
             case GREMLIN_DEVIL -> new ItemStack(r < 40 ? Items.REDSTONE : r < 75 ? Items.IRON_NUGGET : r < 95 ? Items.REPEATER : Items.COMPARATOR, r < 75 ? 4 : 1);
             case KARAKASA_OBAKE_DEVIL -> new ItemStack(r < 40 ? Items.PAPER : r < 75 ? Items.STRING : Items.BAMBOO, 3);
+            case ITTAN_MOMEN_DEVIL -> new ItemStack(r < 45 ? Items.STRING : r < 80 ? Items.WHITE_WOOL : r < 97 ? Items.FEATHER : Items.PHANTOM_MEMBRANE, r < 97 ? 3 : 1);
             case CHOCHIN_OBAKE_DEVIL -> new ItemStack(r < 40 ? Items.PAPER : r < 75 ? Items.CANDLE : r < 95 ? Items.TORCH : Items.LANTERN, r < 95 ? 3 : 1);
             case ONI_DEVIL -> new ItemStack(r < 45 ? Items.IRON_INGOT : r < 80 ? Items.BAMBOO : Items.HONEY_BOTTLE, r < 45 ? 2 : r < 80 ? 8 : 1);
             default -> new ItemStack(r < 40 ? Items.BLAZE_POWDER : r < 75 ? Items.MAGMA_CREAM : Items.QUARTZ, 2);

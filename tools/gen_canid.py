@@ -84,6 +84,27 @@ SPECIES = {
                   "black": dict(FUR="#2a2624", HAIR="#141210", LIGHT="#6a6260", MARK="#0a0808"),
                   "cream": dict(FUR="#e8d8b8", HAIR="#d8c098", LIGHT="#fff8e8", MARK="#a89070"),
                   "red": dict(FUR="#a84a2a", HAIR="#7a2e18", LIGHT="#e8a07a", MARK="#4a1a0a")}),
+    # fourteenth wave: the cu sith, the great green fairy hound, her tail curled up over her back
+    "cu_sith_canid": dict(
+        build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["belt", "scarf"], colors=dict(scarf="#e8dcb0", cloth2="#2a3a2a")),
+        hair="shaggy", bangs="messy", ears="fox", legs="fur", foot="paw", tail=[(1.75, 1.75, 4), (1.5, 1.5, 4), (1.25, 1.25, 3)],
+        tail_rest=[(-70, 0, 0), (45, 0, 0), (40, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("fair"), HAIR="#1e4a2a", FUR="#2a5a34", LIGHT="#7aa880", MARK="#0e2a16", EYE="#e8e870", CLOTH="#e8dcb0", TRIM="#1e4a2a",
+                 pattern="solid"),
+        variants={"moss": dict(HAIR="#4a6a2a", FUR="#5a7a34", LIGHT="#a8c080", MARK="#2a3a14"),
+                  "dark": dict(HAIR="#0e1a12", FUR="#16241a", LIGHT="#3a4a3e", MARK="#060c08", EYE="#a8f0a0"),
+                  "pale": dict(HAIR="#8ab894", FUR="#9ac8a4", LIGHT="#e0f0e2", MARK="#4a6a50", EYE="#2a4a2a"),
+                  "teal": dict(HAIR="#1e5a5a", FUR="#2a6a6a", LIGHT="#80b8b8", MARK="#0e2e2e")}),
+    # fourteenth wave: the yeti, a huge shaggy snow woman with a blue-grey face
+    "yeti_canid": dict(
+        build="strong", outfit=dict(top=["sarashi"], bottom="loincloth", extras=["arm_wraps"], colors=dict(bandage="#c8d8e8", cloth2="#7a8a9a")),
+        hair="mane", bangs="messy", ears="round", legs="fur", foot="paw", tail=[(1.5, 1.25, 1.25)], tail_rest=[(-20, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("#a8b8cc"), HAIR="#f4f6fa", FUR="#eef2f8", LIGHT="#ffffff", MARK="#a8b4c4", EYE="#3a6ad8", CLOTH="#5a7aa8", TRIM="#c8d8e8",
+                 pattern="solid"),
+        variants={"grey": dict(HAIR="#a8acb4", FUR="#b8bcc4", LIGHT="#e0e2e8", MARK="#6a6e76"),
+                  "blue": dict(HAIR="#c8dcf8", FUR="#b8d0f4", LIGHT="#eef6ff", MARK="#6a8ac8"),
+                  "golden": dict(HAIR="#e8d4a8", FUR="#e0c890", LIGHT="#fff4dc", MARK="#a88a50", SKIN=skin("#c8b0a0")),
+                  "brown": dict(HAIR="#8a6a4e", FUR="#9a7a5a", LIGHT="#d8c0a4", MARK="#5a4028", SKIN=skin("#8a7064"))}),
     "black_bear_canid": dict(
         build="curvy", outfit=dict(top=["sports"], bottom="shorts", extras=["belt", "scarf"], colors=dict(scarf="#c85a2a", cloth2="#4a3a2a")),
         hair="shaggy", bangs="messy", ears="round", legs="fur", foot="paw", tail=[(1.5, 1.25, 1.25)], tail_rest=[(-20, 0, 0)], tail_look="fur",

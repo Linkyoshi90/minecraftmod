@@ -121,6 +121,68 @@ public class Canid extends AbstractMonsterGirl {
         }
     }
 
+    // --- the cu sith and the yeti ------------------------------------------------------------------------------------
+
+    private int barks;
+
+    /** Monsters near her friend: she barks; at the third bark they flee. True on the third bark. */
+    public boolean bark(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        java.util.List<net.minecraft.world.entity.monster.Monster> near = friend == null ? java.util.List.of()
+                : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(10));
+        if (near.isEmpty()) {
+            this.barks = 0;
+            return false;
+        }
+        this.playSound(SoundEvents.WOLF_GROWL, 1.6F, 0.6F);
+        if (++this.barks < 3) return false;
+        this.barks = 0;
+        for (net.minecraft.world.entity.monster.Monster m : near) {
+            m.setTarget(null);
+            net.minecraft.world.phys.Vec3 away = m.position().add(m.position().subtract(friend.position()).normalize().scale(14));
+            m.getNavigation().moveTo(away.x, away.y, away.z, 1.5);
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WEAKNESS, 200, 0));
+        }
+        this.startTimedAction(Action.HOWL, 30);
+        return true;
+    }
+
+    /** A snowball at the nearest monster within 12 blocks of her friend. True if she threw one. */
+    public boolean throwSnowball(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return false;
+        net.minecraft.world.entity.monster.Monster m = level.getNearestEntity(net.minecraft.world.entity.monster.Monster.class,
+                net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat().range(16), this, this.getX(), this.getY(), this.getZ(),
+                friend.getBoundingBox().inflate(12));
+        if (m == null || !this.hasLineOfSight(m)) return false;
+        net.minecraft.world.entity.projectile.Snowball ball = new net.minecraft.world.entity.projectile.Snowball(level, this);
+        double dx = m.getX() - this.getX(), dy = m.getEyeY() - 0.5 - ball.getY(), dz = m.getZ() - this.getZ();
+        ball.shoot(dx, dy + Math.sqrt(dx * dx + dz * dz) * 0.15, dz, 1.6F, 2.0F);
+        level.addFreshEntity(ball);
+        this.getLookControl().setLookAt(m);
+        this.playSound(SoundEvents.SNOW_GOLEM_SHOOT, 1.0F, 0.8F);
+        return true;
+    }
+
+    /** Now and then, befriended and on snow, she builds a snow golem (no more than two near her). True if she built one. */
+    public boolean buildSnowGolem(ServerLevel level) {
+        if (this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32) == null) return false;
+        var under = level.getBlockState(this.blockPosition().below());
+        if (!under.is(net.minecraft.tags.BlockTags.SNOW) && !level.getBlockState(this.blockPosition()).is(net.minecraft.world.level.block.Blocks.SNOW)) return false;
+        if (level.getEntitiesOfClass(net.minecraft.world.entity.animal.SnowGolem.class, this.getBoundingBox().inflate(16)).size() >= 2) return false;
+        net.minecraft.world.entity.animal.SnowGolem golem = EntityType.SNOW_GOLEM.create(level);
+        if (golem == null) return false;
+        golem.moveTo(this.getX() + 1.5, this.getY(), this.getZ(), this.getYRot(), 0.0F);
+        level.addFreshEntity(golem);
+        this.playSound(SoundEvents.SNOW_PLACE, 1.0F, 1.0F);
+        return true;
+    }
+
+    @Override
+    public boolean canFreeze() {
+        return this.species != GirlSpecies.YETI_CANID && super.canFreeze();
+    }
+
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
             case WOLF_CANID -> girlAttributes(24, 0.32, 5);
@@ -130,6 +192,8 @@ public class Canid extends AbstractMonsterGirl {
             case GRIZZLY_CANID -> girlAttributes(44, 0.27, 8);
             case BLACK_BEAR_CANID -> girlAttributes(34, 0.29, 6);
             case MELONCOLLIE_CANID -> girlAttributes(20, 0.32, 3);
+            case CU_SITH_CANID -> girlAttributes(36, 0.33, 6);
+            case YETI_CANID -> girlAttributes(50, 0.27, 8).add(net.minecraft.world.entity.ai.attributes.Attributes.KNOCKBACK_RESISTANCE, 0.6);
             default -> girlAttributes(40, 0.3, 8);                       // Anubis
         };
     }
@@ -468,6 +532,11 @@ public class Canid extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.CU_SITH_CANID && this.level() instanceof ServerLevel moor && !this.isBaby() && this.tickCount % 40 == 0) this.bark(moor);
+        if (this.species == GirlSpecies.YETI_CANID && this.level() instanceof ServerLevel peak && !this.isBaby()) {
+            if (this.tickCount % 30 == 0) this.throwSnowball(peak);
+            if (this.tickCount % 6000 == 0) this.buildSnowGolem(peak);
+        }
         if (this.species == GirlSpecies.MELONCOLLIE_CANID && this.level() instanceof ServerLevel farm && !this.isBaby()) {
             if (this.tickCount % 40 == 0) this.herd(farm);
             if (this.tickCount % 2400 == 0) this.plantMelon(farm);
@@ -591,6 +660,8 @@ public class Canid extends AbstractMonsterGirl {
             case GRIZZLY_CANID -> stack.is(Items.SALMON) || stack.is(Items.COOKED_SALMON) || stack.is(Items.HONEY_BOTTLE) || stack.is(Items.HONEYCOMB);
             case BLACK_BEAR_CANID -> stack.is(Items.SWEET_BERRIES) || stack.is(Items.GLOW_BERRIES) || stack.is(Items.HONEY_BOTTLE);
             case MELONCOLLIE_CANID -> stack.is(Items.MELON_SLICE) || stack.is(Items.BONE);
+            case CU_SITH_CANID -> stack.is(Items.BEEF) || stack.is(Items.COOKED_BEEF) || stack.is(Items.MUTTON) || stack.is(Items.COOKED_MUTTON);
+            case YETI_CANID -> stack.is(Items.SWEET_BERRIES) || stack.is(ItemTags.FISHES);
             default -> stack.is(Items.BREAD) || stack.is(Items.HONEY_BOTTLE);
         };
     }
@@ -612,6 +683,8 @@ public class Canid extends AbstractMonsterGirl {
             case KOBOLD_CANID -> r < 50 ? new ItemStack(Items.RAW_IRON, 2) : r < 80 ? new ItemStack(Items.RAW_COPPER, 3) : new ItemStack(r < 95 ? Items.RAW_GOLD : Items.DIAMOND);
             case GRIZZLY_CANID -> r < 50 ? new ItemStack(Items.SALMON, 2) : r < 85 ? new ItemStack(Items.HONEYCOMB, 2) : new ItemStack(Items.SWEET_BERRIES, 6);
             case BLACK_BEAR_CANID -> r < 60 ? new ItemStack(Items.SWEET_BERRIES, 6) : r < 90 ? new ItemStack(Items.GLOW_BERRIES, 3) : new ItemStack(Items.HONEYCOMB);
+            case CU_SITH_CANID -> new ItemStack(r < 45 ? Items.BONE : r < 80 ? Items.MOSS_BLOCK : r < 97 ? Items.FERN : Items.EMERALD, r < 97 ? 2 : 1);
+            case YETI_CANID -> new ItemStack(r < 45 ? Items.SNOWBALL : r < 80 ? Items.ICE : r < 97 ? Items.PACKED_ICE : Items.BLUE_ICE, r < 45 ? 8 : 2);
             case MELONCOLLIE_CANID -> r < 50 ? new ItemStack(Items.MELON_SLICE, 4) : r < 90 ? new ItemStack(Items.MELON_SEEDS, 3) : new ItemStack(Items.GLISTERING_MELON_SLICE);
             default -> r < 45 ? new ItemStack(Items.GOLD_NUGGET, 3) : r < 80 ? new ItemStack(Items.LAPIS_LAZULI, 2) : new ItemStack(r < 95 ? Items.BONE : Items.GOLD_INGOT);
         };

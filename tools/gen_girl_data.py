@@ -74,7 +74,10 @@ GROUP = {"lioness_nekomata": (3, 5), "orca_mermaid": (2, 3), "fennec_kitsune": (
          "karakasa_obake_devil": (1, 1), "alebrije_dragon": (1, 1),
          "rust_otter_mermaid": (1, 2), "tin_squirrel_construct": (1, 1), "wattlefox_kitsune": (1, 2), "scarabronze_bug": (1, 1), "date_bat": (1, 3),
          "snowloper_nekomata": (1, 2), "jaglare_nekomata": (1, 1), "squirricerat_rodent": (1, 2), "kamaitachi_rodent": (1, 2), "momoshika_centaur": (1, 2),
-         "chochin_obake_devil": (1, 1)}
+         "chochin_obake_devil": (1, 1),
+         "gribboar_armoured": (1, 3), "silkcoon_rodent": (1, 2), "bronzejaw_minotaur": (1, 3), "cocoskink_lizardfolk": (1, 2), "prairhorn_centaur": (2, 4),
+         "halberelk_centaur": (1, 2), "vulphea_kitsune": (1, 1), "cait_sith_nekomata": (1, 1), "cu_sith_canid": (1, 1), "yeti_canid": (1, 1),
+         "undine_slime": (1, 1), "ittan_momen_devil": (1, 1)}
 CATEGORY = {"axolotl_mermaid": "underground_water_creature", "amethyst_slime": "monster", "magma_slime": "monster",
             "seal_mermaid": "creature", "kraken_mollusk": "water_creature", "ammonite_mollusk": "water_creature",
             "night_elf": "monster", "blood_elf": "monster", "salamander_lizardfolk": "monster", "turtle_lizardfolk": "creature",
@@ -83,7 +86,7 @@ CATEGORY = {"axolotl_mermaid": "underground_water_creature", "amethyst_slime": "
             "dark_elf": "monster", "oni_devil": "monster", "ender_slime": "monster", "siren_mermaid": "water_creature",
             "axolume_mermaid": "underground_water_creature", "blaze_cat_nekomata": "monster", "gargoyle_construct": "monster",
             "mantarrow_mermaid": "water_creature", "moonseal_mermaid": "creature", "gremlin_devil": "creature", "karakasa_obake_devil": "creature",
-            "rust_otter_mermaid": "creature", "chochin_obake_devil": "creature"}
+            "rust_otter_mermaid": "creature", "chochin_obake_devil": "creature", "undine_slime": "creature", "ittan_momen_devil": "creature"}
 # hitbox widths that differ from the family's
 WIDTH = {"kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alraune_flora": 1.2, "frankenstein_undead": 0.8,
          "gryphon_dragon": 1.3, "long_dragon": 1.0, "jormungandr_dragon": 1.2, "wyvern_dragon": 1.2, "wyrm_dragon": 1.3,
@@ -93,7 +96,7 @@ WIDTH = {"kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alra
          "yak_minotaur": 1.0, "oni_devil": 0.8, "venus_flytrap_flora": 1.2, "cave_bat": 0.5, "wolpertinger_jackalope": 0.5,
          "tusktaur_centaur": 1.5, "rhiwool_minotaur": 0.9, "needlehog_rodent": 0.6, "aegis_boar_armoured": 0.8, "gargoyle_construct": 0.8,
          "anvil_tortoise_lizardfolk": 0.9, "gliderune_marsupial": 0.5, "sphinx_centaur": 1.3, "brownie_elf": 0.4,
-         "kesaran_pasaran_flora": 0.45, "tsuchinoko_lamia": 0.8, "gremlin_devil": 0.5, "tin_squirrel_construct": 0.55}
+         "kesaran_pasaran_flora": 0.45, "tsuchinoko_lamia": 0.8, "gremlin_devil": 0.5, "tin_squirrel_construct": 0.55, "yeti_canid": 0.9}
 # the name shown in game: the species name plus the family's word, unless NAME says otherwise
 SUFFIX = {"nekomata": " Nekomata", "kitsune": " Kitsune", "lamia": " Lamia", "arachne": " Arachne", "centaur": " Centaur", "merfolk": " Mermaid",
           "slime": "", "jackalope": "", "minotaur": " Minotaur", "mollusk": "", "elf": "", "undead": "", "lizardfolk": "", "dragon": "",
@@ -119,7 +122,10 @@ NAME = {"jack_jackalope": "Jack Jackalope", "kraken_mollusk": "Kraken", "octopus
         "gremlin_devil": "Gremlin", "karakasa_obake_devil": "Karakasa Obake", "alebrije_dragon": "Alebrije",
         "rust_otter_mermaid": "Rust Otter", "tin_squirrel_construct": "Tin Squirrel", "wattlefox_kitsune": "Wattlefox", "scarabronze_bug": "Scarabronze",
         "date_bat": "Datebat", "snowloper_nekomata": "Snowloper", "jaglare_nekomata": "Jaglare", "squirricerat_rodent": "Squirricerat",
-        "kamaitachi_rodent": "Kamaitachi", "momoshika_centaur": "Momoshika", "chochin_obake_devil": "Chochin-obake"}
+        "kamaitachi_rodent": "Kamaitachi", "momoshika_centaur": "Momoshika", "chochin_obake_devil": "Chochin-obake",
+        "gribboar_armoured": "Gribboar", "silkcoon_rodent": "Silkcoon", "bronzejaw_minotaur": "Bronzejaw Ox", "cocoskink_lizardfolk": "Cocoskink",
+        "prairhorn_centaur": "Prairhorn", "halberelk_centaur": "Halberelk", "vulphea_kitsune": "Vulphea", "cait_sith_nekomata": "Cait Sìth",
+        "cu_sith_canid": "Cù-sìth", "yeti_canid": "Yeti", "undine_slime": "Undine", "ittan_momen_devil": "Ittan-momen"}
 
 
 def gen_module(fid):
@@ -189,7 +195,7 @@ def main():
         lang[f"entity.monstergirls.{sp}"] = NAME.get(sp, s["name"] + SUFFIX[fid])
         lang[f"item.monstergirls.{sp}_spawn_egg"] = lang[f"entity.monstergirls.{sp}"] + " Spawn Egg"
         if sp in ("snow_leopard_nekomata", "lynx_nekomata", "arctic_kitsune", "reindeer_centaur", "highland_minotaur", "yak_minotaur", "tusktaur_centaur",
-                  "aurorantler_centaur", "snowloper_nekomata"):
+                  "aurorantler_centaur", "snowloper_nekomata", "yeti_canid"):
             snow_walkers.append("monstergirls:" + sp)
     dump(os.path.join(RES, "data", "minecraft", "tags", "entity_type", "powder_snow_walkable_mobs.json"), {"replace": False, "values": snow_walkers})
 

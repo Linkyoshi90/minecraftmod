@@ -113,7 +113,7 @@ SPECIES = {
     # twelfth wave: the moonseal, a night-blue seal with crescent moons on her tail (they glow) and little antlers
     "moonseal_mermaid": dict(
         build="curvy", outfit=dict(top=["bandeau"], extras=["pearls"], colors=dict(cloth2="#e8f0f8")),
-        ears=None, hair="wavy", bangs="swept", fluke=(7, .75, 3.5), seal=True, moon=True, glow=["crescent"],
+        ears=None, hair="wavy", bangs="swept", fluke=(7, .75, 3.5), seal=True, moon=True, glow=["crescent"], glow_boost=1.5,
         pal=dict(SKIN=skin("pale"), HAIR="#e8eef8", FUR="#2a3a8a", LIGHT="#e8eef8", MARK="#14204a", EYE="#5ab8f0", CLOTH="#e8eef8", TRIM="#5ab8f0",
                  pattern="solid", extra=dict(belly_white=True, moon="#f4f8ff", antler="#e8e0d0")),
         variants={"purple": dict(HAIR="#f0e8f8", FUR="#5a3a8a", MARK="#2a1a4a", EYE="#c88af0", TRIM="#c88af0", extra=dict(belly_white=True, moon="#f8f0ff", antler="#e8e0d0")),
@@ -174,7 +174,7 @@ def declare(sp):
     if d.get("charms"):
         parts += [("charm", 1.25, 1.5, .25), ("charm_cord", 4.5, .25, .25)]
     if d.get("moon"):
-        parts += [("crescent", 2.5, 2.5, .25), ("antler_a", .5, 3, .5), ("antler_b", .5, 1.5, .5)]
+        parts += [("crescent", 3.5, 3.5, .25), ("antler_a", .5, 3, .5), ("antler_b", .5, 1.5, .5)]
     parts.append(("shell", 2, 1.75, .5))
     G.declare(parts, ears=d["ears"], hair=SPECIES[sp]["hair"],
               build=SPECIES[sp].get("build"), outfit=SPECIES[sp].get("outfit"))
@@ -282,9 +282,9 @@ def build(sp):
         hy = 12 + 8 + 0.0
         r.add("pcap", "head", [0, 28, 0], [cube("pcap", [-4.75, 26.2, -4.75]), G.rot_cube("bill", [-3, 25.9, -8.9], [0, 26.4, -4.6], 12, 0, 0)])
     if d.get("moon"):                                    # crescents down her tail (they glow), little antlers in her hair
-        r.put("fin_1", cube("crescent", [-1.25, 4.0, -2.2]))
-        r.put("fin_2", cube("crescent", [-1.25, 0.6, -1.0]))
-        r.put("fin_3", cube("crescent", [-1.0, 0.4, 5.6]))
+        r.put("fin_1", cube("crescent", [-1.75, 3.6, -2.2]))
+        r.put("fin_2", cube("crescent", [-1.75, 0.3, -1.0]))
+        r.put("fin_3", cube("crescent", [-1.75, 0.1, 5.4]))
         for sg in (-1, 1):
             r.put("head", G.rot_cube("antler_a", [sg * 2.4 - 0.25, 28.0, -0.5], [sg * 2.4, 28.0, -0.25], -10, 0, -18 * sg),
                   G.rot_cube("antler_b", [sg * 2.9 - 0.25, 29.4, -0.5], [sg * 2.9, 29.4, -0.25], -10, 0, -60 * sg))
@@ -311,4 +311,4 @@ if __name__ == "__main__":
         if d.get("glow") and (not want or sp in want):
             declare(sp)
             for k in [None] + list(d["variants"]):
-                F.write_glowmask(sp + ("_" + k if k else ""), paint(sp, k), d["glow"])
+                F.write_glowmask(sp + ("_" + k if k else ""), paint(sp, k), d["glow"], d.get("glow_boost", 1.0))

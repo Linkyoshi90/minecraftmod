@@ -388,3 +388,24 @@ Eight Harmontide originals from the reference art and four spirits of Japanese f
 | **Chochin-obake** | Devil | A girl under a living paper lantern with one great eye. Her light follows her friend at night. |
 
 Paints: tartan, watercolour, hologram (see-through) and the seasonal fireworks (January only), so 51 in all.
+
+## Fourteenth wave (2026-10-27, in the game)
+
+Seven Harmontide originals from the reference art and five spirits of folklore.
+
+| Species | Home | Design |
+|---|---|---|
+| **Gribboar** | Armoured | A shaggy blue boar who roots up truffle finds: mushrooms, potatoes, carrots, now and then gold. |
+| **Silkcoon** | Rodent | A silky raccoon who washes the dye out of wool, carpets, beds, terracotta, glass and leather by water. |
+| **Bronzejaw ox** | Minotaur | A brass-plated ox: led on a lead, she ploughs the ground into farmland. |
+| **Cocoskink** | Lizardfolk | A leafy skink with bells: grows cocoa pods on jungle logs near her friend. |
+| **Prairhorn** | Centaur | A pronghorn taur: the fastest ride in the mod. |
+| **Halberelk** | Centaur | An elk taur with bladed antlers: fells the whole tree when her friend cuts a log. |
+| **Vulphea** | Kitsune | A fire fox: fireproof, a burning bite, and once a day she rises from her ashes. |
+| **Cait Sìth** | Nekomata | The Highland fairy cat: keeps phantoms away; milk brings her friend Luck. |
+| **Cù-sìth** | Canid | The green fairy hound: at her third bark the monsters near her friend flee. |
+| **Yeti** | Canid | A huge snow woman: snowballs at monsters, snow golems now and then. |
+| **Undine** | Slime | Living water: waters farmland, fills cauldrons, Water Breathing for her friend. |
+| **Ittan-momen** | Devil | A girl trailing a cotton ribbon: she flies, and her friend can ride her through the air. |
+
+Paints: mosaic, chalk, leopard and the seasonal autumn (November only), so 55 in all.

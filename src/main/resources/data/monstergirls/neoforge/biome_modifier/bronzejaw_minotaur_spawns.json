@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_bronzejaw_minotaur",
+  "spawners": {
+    "type": "monstergirls:bronzejaw_minotaur",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

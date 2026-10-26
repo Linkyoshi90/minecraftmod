@@ -106,6 +106,17 @@ SPECIES = {
                   "white": dict(FUR="#ece8e0", HAIR="#f6f2ea", LIGHT="#ffffff", MARK="#c8c0b4", CLOTH="#c83a4a"),
                   "golden": dict(FUR="#a8783a", HAIR="#c8944a", LIGHT="#e0c08a", MARK="#7a5428", CLOTH="#4a5aa8"),
                   "pied": dict(FUR="#1e1c1c", HAIR="#f2eee6", MARK="#f2eee6", LIGHT="#f8f4ee", pattern="patches", CLOTH="#d8a838")}),
+    # fourteenth wave: the bronzejaw ox, a blue ox in brass: a bronze guard over her jaw and a yoke across her shoulders
+    "bronzejaw_minotaur": dict(
+        build="strong", outfit=dict(top=["sarashi"], bottom="hakama", extras=["armlets", "belt"], colors=dict(cloth2="#2a3a6a", leather="#8a6a2a")),
+        hair="shaggy", bangs="messy", ears="cow", legs="fur", foot="hoof", horns="bull", tail=COW_TAIL, tail_look="tuft", tail_rest=TAIL_REST,
+        bronze=True, male=dict(hair="shaggy", outfit=dict(bottom="loincloth", extras=["armlets", "belt"])),
+        pal=dict(SKIN=skin("tan"), HAIR="#1e2a5a", FUR="#2a3a7a", LIGHT="#7a8ac8", MARK="#141e4a", EYE="#e8a030", CLOTH="#e8dcc0", TRIM="#c8902a",
+                 INNER="#a88a7a", pattern="solid", extra=dict(horn="#e8dcc0", hoof="#1a1614", brass="#c8902a")),
+        variants={"brown": dict(HAIR="#3a2416", FUR="#5a3a24", LIGHT="#8a6a50", MARK="#2a1a10", extra=dict(horn="#e8dcc0", hoof="#1a1614", brass="#c8902a")),
+                  "black": dict(HAIR="#141212", FUR="#22201e", LIGHT="#4a4644", MARK="#0a0808", extra=dict(horn="#e8dcc0", hoof="#0e0c0c", brass="#d8a840")),
+                  "grey": dict(HAIR="#4a4644", FUR="#6a6662", LIGHT="#a8a4a0", MARK="#2a2826", extra=dict(horn="#e8dcc0", hoof="#1a1614", brass="#a8acb4")),
+                  "red": dict(HAIR="#5a1e12", FUR="#7a2e1e", LIGHT="#b0604a", MARK="#3a1208", extra=dict(horn="#e8dcc0", hoof="#1a1614", brass="#c8902a"))}),
     # tenth wave: the rhiwool, a woolly rhino (the sheep's shearable fleece in dark wool, a great horn on her brow)
     "rhiwool_minotaur": dict(
         build="strong", outfit=dict(top=["sarashi"], bottom="loincloth", extras=["arm_wraps", "belt"], colors=dict(cloth2="#5a4030")),
@@ -138,6 +149,8 @@ def declare_hook(sp, d):
         out += [("rhorn_a", 2, 4.5, 2), ("rhorn_b", 1.25, 2.5, 1.25)]
     if d.get("fringe"):                                 # the highland's fringe, over her eyes
         out += [("fringe", 7.5, 3.25, .75)]
+    if d.get("bronze"):                                 # the bronze jaw guard and the yoke
+        out += [("bjaw", 5, 1.25, 1.5), ("yoke", 11, 1.25, 1.5)]
     if d.get("yak"):                                    # a long hair skirt; the pack chest (bone pack, shown once she carries one)
         out += [("yak_skirt", 7, 4.5, 5.25), ("pack", 5, 4, 3.25), ("pack_lid", 5.25, 1.25, 3.5)]
     return out
@@ -156,6 +169,10 @@ def wool_fn(pal):
 
 
 def paint_hook(pt, pal, d):
+    brass = G.shades(pal.extra.get("brass", "#c8902a"))
+    pt("bjaw", "all", lambda f, x, y, w, h: pick(brass, 0.5 + 0.25 * (y == 0) + 0.15 * (x % 4 == 0), x, y))
+    pt("yoke", "all", lambda f, x, y, w, h: pick(G.shades("#6a4a2a"), 0.45 + 0.15 * (x % 6 == 0), x, y) if 2 < x < w - 3
+       else pick(brass, 0.6, x, y))
     for p in ("wool_c", "wool_s", "wool_h"):
         pt(p, "all", wool_fn(pal))
     horn = G.shades(pal.extra.get("horn", "#d8ccb0"))
@@ -176,6 +193,9 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
+    if d.get("bronze"):
+        r.put("head", cube("bjaw", [-2.5, hy - 0.1, -4.9 + z]))
+        r.put("body", cube("yoke", [-5.5, 19.4, -0.75 + z]))
     if d.get("wool"):
         r.add("wool", "body", [0, 18, z], [cube("wool_c", [-4.5, 17.25, -2.5 + z])])
         r.add("wool_hips", "body", [0, 12, z], [cube("wool_s", [-3.75, 11.25, -2.625 + z])])

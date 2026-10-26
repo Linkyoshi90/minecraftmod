@@ -1448,3 +1448,142 @@ for _fid, _entries in THIRTEENTH.items():
         _fam["species"].append(_species)
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
+
+
+# --- the fourteenth wave (2026-10-27): more of the Harmontide reference art, and five spirits of folklore ---------------
+FOURTEENTH = {
+    "armoured": [
+        (dict(id="gribboar_armoured", name="Gribboar", group="Forests", tag="Snuffling · stubborn", height=1.4,
+              biomes=["forest", "dark_forest", "old_growth_spruce_taiga"], temperament="Stubborn, greedy",
+              ecology="A Harmontide boar with a shaggy blue mane, who roots through the forest floor for treasure.",
+              interaction="Carrots, potatoes and mushrooms.",
+              signature=("Truffle hunter", "Every half minute she roots in the dirt she stands on and digs something up: mushrooms, "
+                                           "potatoes, carrots, now and then a gold nugget."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue mane"), ("brown", "Brown", "A wild boar"), ("black", "Black", "Black"),
+                        ("red", "Red", "Red"), ("grey", "Grey", "Grey")]),
+         {"Habitat": "Forests", "Signature": "Digs up truffle finds", "Danger": "None"})],
+    "rodent": [
+        (dict(id="silkcoon_rodent", name="Silkcoon", group="Rivers", tag="Fussy · clean", height=1.3, biomes=["forest", "swamp", "river"],
+              temperament="Fussy, curious",
+              ecology="A Harmontide raccoon of silky fur swirled in blue, who washes everything she touches.",
+              interaction="Fish, eggs and berries.",
+              signature=("Washer", "By water, hand her dyed wool, carpet, a bed, terracotta, glass or leather armour and she washes the "
+                                   "dye out."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "White, blue swirls"), ("grey", "Grey", "A classic raccoon"), ("brown", "Brown", "Brown"),
+                        ("white", "White", "White"), ("black", "Black", "Black")]),
+         {"Habitat": "Rivers", "Signature": "Washes the dye out", "Danger": "None"})],
+    "minotaur": [
+        (dict(id="bronzejaw_minotaur", name="Bronzejaw Ox", group="Farmland", tag="Steady · strong", height=1.9, biomes=["plains", "savanna"],
+              temperament="Steady, patient",
+              ecology="A Harmontide ox in brass, with a bronze guard over her jaw and a yoke on her shoulders.",
+              interaction="Wheat and hay.",
+              signature=("Plough", "Led on a lead, she ploughs as she walks: the grass and dirt she passes over turns to farmland."),
+              danger="Low (her horns).",
+              variants=[("blue", "Blue (default)", "Blue, brass"), ("brown", "Brown", "Brown"), ("black", "Black", "Black"), ("grey", "Grey", "Grey"),
+                        ("red", "Red", "Red")]),
+         {"Habitat": "Farmland", "Bulls": "One in three", "Signature": "Ploughs as she walks", "Danger": "Low"})],
+    "lizardfolk": [
+        (dict(id="cocoskink_lizardfolk", name="Cocoskink", group="Jungles", tag="Jingling · sunny", height=1.45, biomes=["jungle", "sparse_jungle", "beach"],
+              temperament="Sunny, chatty",
+              ecology="A Harmontide skink with a crest of leaves and little bells on her tail, who loves the cocoa trees.",
+              interaction="Melon and cocoa beans.",
+              signature=("Cocoa", "Befriended, she grows cocoa pods on the jungle logs near her friend."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue, leafy crest"), ("green", "Green", "Green"), ("gold", "Gold", "Gold"),
+                        ("orange", "Orange", "Orange"), ("black", "Black", "Black")]),
+         {"Habitat": "Jungles", "Signature": "Grows cocoa pods", "Danger": "None"})],
+    "centaur": [
+        (dict(id="prairhorn_centaur", name="Prairhorn", group="Plains", tag="Swift · skittish", height=2.0, biomes=["plains", "sunflower_plains", "savanna"],
+              temperament="Swift, skittish",
+              ecology="A Harmontide pronghorn taur, banded tan and white, the fastest runner of the plains.",
+              interaction="Wheat and apples.",
+              signature=("Swift", "The fastest ride there is: friends ride her faster than any horse can gallop."),
+              danger="None.",
+              variants=[("tan", "Tan (default)", "Tan and white bands"), ("red", "Red", "Red"), ("dark", "Dark", "Dark"), ("pale", "Pale", "Pale"),
+                        ("blue", "Blue", "Blue")]),
+         {"Habitat": "Plains", "Ridden": "By friends", "Signature": "The fastest ride", "Temperament": "Skittish", "Danger": "None"}),
+        (dict(id="halberelk_centaur", name="Halberelk", group="Taiga", tag="Sturdy · handy", height=2.0,
+              biomes=["taiga", "old_growth_pine_taiga", "snowy_taiga"], temperament="Sturdy, helpful",
+              ecology="A Harmontide elk taur whose antlers end in blades like a halberd's.",
+              interaction="Apples and sweet berries.",
+              signature=("Woodcutter", "Befriended, when her friend chops a log of a tree within 8 blocks of her, she fells the whole "
+                                       "tree (crouch to cut one log)."),
+              danger="Low (her antlers).",
+              variants=[("blue", "Blue (default)", "Blue, steel blades"), ("brown", "Brown", "Brown"), ("grey", "Grey", "Grey"),
+                        ("white", "White", "White"), ("black", "Black", "Black")]),
+         {"Habitat": "Taiga", "Ridden": "By friends", "Signature": "Fells whole trees", "Temperament": "Helpful", "Danger": "Low"})],
+    "kitsune": [
+        (dict(id="vulphea_kitsune", name="Vulphea", group="Badlands", tag="Fiery · undying", height=1.4, biomes=["badlands", "savanna_plateau", "desert"],
+              temperament="Fiery, proud",
+              ecology="A Harmontide fire fox, all flame-coloured fur, who rises again from her own ashes.",
+              interaction="Chicken and blaze powder.",
+              signature=("Rebirth", "She cannot burn and her bite sets things alight. Once a day, a killing blow leaves only ashes, and a "
+                                    "minute later she rises from them."),
+              danger="Low (her bite burns).",
+              variants=[("red", "Red (default)", "Red flame"), ("gold", "Gold", "Golden flame"), ("blue", "Blue", "Blue flame"),
+                        ("violet", "Violet", "Violet flame"), ("white", "White", "White flame")]),
+         {"Habitat": "Badlands", "Tails": "One to three", "Signature": "Rises from her ashes", "Danger": "Low"})],
+    "nekomata": [
+        (dict(id="cait_sith_nekomata", name="Cait Sìth", group="Highlands", tag="Aloof · uncanny", height=1.45,
+              biomes=["windswept_hills", "taiga", "dark_forest"], temperament="Aloof, uncanny",
+              ecology="The fairy cat of the Scottish Highlands, black as night with a white star on her chest.",
+              interaction="Fish, and a saucer of milk.",
+              signature=("Fairy cat", "Phantoms keep away from her friend. A saucer of milk (a milk bucket) brings her friend Luck "
+                                      "for five minutes."),
+              danger="None.",
+              variants=[("black", "Black (default)", "Black, a white star"), ("smoke", "Smoke", "Smoky grey"), ("grey", "Grey", "Grey"),
+                        ("tabby", "Tabby", "Dark tabby"), ("midnight", "Midnight", "Blue-black")]),
+         {"Habitat": "Highlands", "Social": "Alone", "Water": "Avoids it", "Signature": "Keeps phantoms away", "Danger": "None"})],
+    "canid": [
+        (dict(id="cu_sith_canid", name="Cù-sìth", group="Highlands", tag="Silent · fearsome", height=1.7, biomes=["windswept_hills", "meadow", "taiga"],
+              temperament="Silent, watchful",
+              ecology="The great green fairy hound of the Scottish Highlands, who barks three times.",
+              interaction="Meat.",
+              signature=("Three barks", "When monsters come near her friend she barks; at her third bark they flee."),
+              danger="Low.",
+              variants=[("green", "Green (default)", "Dark green"), ("moss", "Moss", "Moss green"), ("dark", "Dark", "Near black"),
+                        ("pale", "Pale", "Pale green"), ("teal", "Teal", "Teal")]),
+         {"Habitat": "Highlands", "Social": "Alone", "Signature": "Her third bark scatters monsters", "Danger": "Low"}),
+        (dict(id="yeti_canid", name="Yeti", group="Peaks", tag="Shy · huge", height=2.1, biomes=["snowy_slopes", "frozen_peaks", "jagged_peaks", "snowy_taiga"],
+              temperament="Shy, gentle",
+              ecology="A huge shaggy snow woman of the high peaks, gentle with friends and a fine shot with a snowball.",
+              interaction="Sweet berries and fish.",
+              signature=("Snowballs", "She throws snowballs at the monsters near her friend, and now and then builds a snow golem. "
+                                      "She walks on powder snow and never freezes."),
+              danger="None.",
+              variants=[("white", "White (default)", "White fur"), ("grey", "Grey", "Grey"), ("blue", "Blue", "Ice blue"), ("golden", "Golden", "Golden"),
+                        ("brown", "Brown", "Brown")]),
+         {"Habitat": "Peaks", "Social": "Alone", "Signature": "Snowballs and snow golems", "Danger": "None"})],
+    "slime": [
+        (dict(id="undine_slime", name="Undine", group="Rivers", tag="Flowing · nurturing", height=1.6, biomes=["river", "swamp", "mangrove_swamp"],
+              temperament="Calm, nurturing",
+              ecology="A water elemental of European legend, a girl of living water.",
+              interaction="Water bottles and kelp.",
+              signature=("Living water", "Befriended, she keeps the farmland near her watered, fills the cauldrons near her, and gives "
+                                         "her friend Water Breathing in the water."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Clear blue"), ("teal", "Teal", "Teal"), ("clear", "Clear", "Nearly clear"), ("deep", "Deep", "Deep blue"),
+                        ("sea", "Sea", "Sea green")]),
+         {"Habitat": "Rivers", "Signature": "Waters farms, fills cauldrons", "Danger": "None"})],
+    "devil": [
+        (dict(id="ittan_momen_devil", name="Ittan-momen", group="Night skies", tag="Fluttering · free", height=1.6,
+              biomes=["cherry_grove", "plains", "forest"], temperament="Playful, free",
+              ecology="The flying strip of cotton of Japanese folklore, here a girl trailing a long cotton ribbon in place of legs.",
+              interaction="String and wool.",
+              signature=("Flying cloth", "She flies. Befriended, her friend climbs on with an empty hand and rides her through the air, "
+                                         "steering where they look."),
+              danger="None.",
+              variants=[("white", "White (default)", "White cotton"), ("indigo", "Indigo", "Indigo-dyed"), ("red", "Red", "Red"), ("gold", "Gold", "Gold"),
+                        ("black", "Black", "Black")]),
+         {"Habitat": "Night skies", "Signature": "A flying ride", "Danger": "None"})],
+}
+for _fid, _entries in FOURTEENTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))

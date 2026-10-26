@@ -97,6 +97,7 @@ public class Minotaur extends AbstractMonsterGirl {
             case SHEEP_MINOTAUR -> girlAttributes(24, 0.25, 2);
             case HIGHLAND_MINOTAUR -> girlAttributes(34, 0.25, 5).add(Attributes.ATTACK_KNOCKBACK, 1.0);
             case YAK_MINOTAUR -> girlAttributes(40, 0.24, 5).add(Attributes.ATTACK_KNOCKBACK, 1.0);
+            case BRONZEJAW_MINOTAUR -> girlAttributes(44, 0.24, 6).add(Attributes.ARMOR, 4).add(Attributes.KNOCKBACK_RESISTANCE, 0.6);
             case RHIWOOL_MINOTAUR -> girlAttributes(44, 0.26, 8).add(Attributes.ATTACK_KNOCKBACK, 2.5).add(Attributes.KNOCKBACK_RESISTANCE, 0.8);
             default -> girlAttributes(30, 0.25, 4).add(Attributes.ATTACK_KNOCKBACK, 1.0);
         };
@@ -218,6 +219,19 @@ public class Minotaur extends AbstractMonsterGirl {
 
     // --- interaction ---------------------------------------------------------------------------------------------
 
+    /** Led on a lead and walking, she ploughs: the grass or dirt under her turns to farmland. True if she tilled. */
+    public boolean ploughOnLead(ServerLevel level) {
+        if (this.isBaby() || !(this.getLeashHolder() instanceof Player) || this.getDeltaMovement().horizontalDistanceSqr() < 0.0004) return false;
+        BlockPos under = this.blockPosition().below();
+        var s = level.getBlockState(under);
+        if (!(s.is(net.minecraft.world.level.block.Blocks.GRASS_BLOCK) || s.is(net.minecraft.world.level.block.Blocks.DIRT) || s.is(net.minecraft.world.level.block.Blocks.DIRT_PATH))
+                || !level.getBlockState(under.above()).isAir() && !level.getBlockState(under.above()).canBeReplaced()) return false;
+        if (!level.getBlockState(under.above()).isAir()) level.destroyBlock(under.above(), true, this);   // grass and flowers in the way
+        level.setBlock(under, net.minecraft.world.level.block.Blocks.FARMLAND.defaultBlockState(), 3);
+        level.playSound(null, under, SoundEvents.HOE_TILL, this.getSoundSource(), 0.6F, 0.9F);
+        return true;
+    }
+
     @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(Items.WHEAT) || stack.is(Items.HAY_BLOCK);
@@ -325,6 +339,7 @@ public class Minotaur extends AbstractMonsterGirl {
                     : new ItemStack(Items.MILK_BUCKET);
             case MINOAN_MINOTAUR -> new ItemStack(r < 10 ? Items.GOLD_INGOT : r < 50 ? Items.COPPER_INGOT : Items.BRICK, r < 50 ? 1 : 3);
             case SHEEP_MINOTAUR -> r < 60 ? wool(this.woolColour(), 2) : new ItemStack(r < 85 ? Items.STRING : Items.MUTTON, 2);
+            case BRONZEJAW_MINOTAUR -> new ItemStack(r < 40 ? Items.WHEAT : r < 70 ? Items.LEATHER : r < 95 ? Items.COPPER_INGOT : Items.GOLD_INGOT, r < 95 ? 3 : 1);
             case RHIWOOL_MINOTAUR -> r < 50 ? wool(this.woolColour(), 3) : new ItemStack(r < 85 ? Items.LEATHER : Items.FLINT, 2);
             case YAK_MINOTAUR -> r < 40 ? new ItemStack(Items.MILK_BUCKET) : r < 70 ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.CHEESE.get(), 2)
                     : new ItemStack(Items.LEATHER, 2);
@@ -382,6 +397,7 @@ public class Minotaur extends AbstractMonsterGirl {
         super.aiStep();
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.inLove > 0) this.inLove--;
+        if (this.species == GirlSpecies.BRONZEJAW_MINOTAUR && this.tickCount % 4 == 0) this.ploughOnLead(server);
         if (this.stampede > 0) this.stampede--;
         if (this.nextMilk > 0 && server.getGameTime() >= this.nextMilk) this.ringBell(server);
         if (this.species == GirlSpecies.RHIWOOL_MINOTAUR) this.tickCharge(server);

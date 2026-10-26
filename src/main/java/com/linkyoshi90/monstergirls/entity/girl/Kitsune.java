@@ -139,7 +139,63 @@ public class Kitsune extends AbstractMonsterGirl {
     /** The wattlefox cannot burn: wattle blooms after the fire. */
     @Override
     public boolean fireImmune() {
-        return this.species == GirlSpecies.WATTLEFOX_KITSUNE || super.fireImmune();
+        return this.species == GirlSpecies.WATTLEFOX_KITSUNE || this.species == GirlSpecies.VULPHEA_KITSUNE || super.fireImmune();
+    }
+
+    // --- the vulphea ----------------------------------------------------------------------------------------------------
+
+    /** Ticks left as ashes (0 when she is herself), and the day she last rose from them. */
+    private int ashes;
+    private long lastRebirth = -1;
+
+    public boolean isAshes() {
+        return this.ashes > 0;
+    }
+
+    /** A killing blow, once a day: she falls to ashes, and rises from them a minute later. */
+    public void toAshes(ServerLevel level) {
+        this.ashes = 1200;
+        this.lastRebirth = level.getDayTime() / 24000;
+        this.setHealth(1.0F);
+        this.setInvisible(true);
+        this.setTarget(null);
+        this.getNavigation().stop();
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.LARGE_SMOKE, this.getX(), this.getY() + 0.5, this.getZ(), 30, 0.3, 0.4, 0.3, 0.02);
+        this.playSound(SoundEvents.FIRE_EXTINGUISH, 1.0F, 0.8F);
+    }
+
+    private void tickAshes(ServerLevel level) {
+        this.getNavigation().stop();
+        this.setDeltaMovement(0, this.getDeltaMovement().y, 0);
+        if (this.tickCount % 10 == 0) level.sendParticles(net.minecraft.core.particles.ParticleTypes.SMOKE, this.getX(), this.getY() + 0.1, this.getZ(), 3, 0.2, 0.05, 0.2, 0.0);
+        if (--this.ashes == 0) {                                         // she rises again
+            this.setInvisible(false);
+            this.setHealth(this.getMaxHealth());
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.FLAME, this.getX(), this.getY() + 0.8, this.getZ(), 40, 0.4, 0.6, 0.4, 0.05);
+            this.playSound(SoundEvents.BLAZE_SHOOT, 1.0F, 0.7F);
+        }
+    }
+
+    @Override
+    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
+        boolean hit = super.doHurtTarget(target);
+        if (hit && this.species == GirlSpecies.VULPHEA_KITSUNE) target.igniteForSeconds(3);   // her bite burns
+        return hit;
+    }
+
+    @Override
+    public void addAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        if (this.ashes > 0) tag.putInt("Ashes", this.ashes);
+        tag.putLong("LastRebirth", this.lastRebirth);
+    }
+
+    @Override
+    public void readAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.ashes = tag.getInt("Ashes");
+        if (tag.contains("LastRebirth")) this.lastRebirth = tag.getLong("LastRebirth");
+        if (this.ashes > 0) this.setInvisible(true);
     }
 
     /** Fires within 6 blocks of her friend go out (and her friend stops burning). Returns how many she put out. */
@@ -182,7 +238,8 @@ public class Kitsune extends AbstractMonsterGirl {
     @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(Items.SWEET_BERRIES) || stack.is(Items.GLOW_BERRIES) || stack.is(Items.CHICKEN) || stack.is(Items.COOKED_CHICKEN) || stack.is(ItemTags.FISHES)
-                || this.species == GirlSpecies.WATTLEFOX_KITSUNE && stack.is(Items.HONEYCOMB);
+                || this.species == GirlSpecies.WATTLEFOX_KITSUNE && stack.is(Items.HONEYCOMB)
+                || this.species == GirlSpecies.VULPHEA_KITSUNE && stack.is(Items.BLAZE_POWDER);
     }
 
     @Override
@@ -194,6 +251,7 @@ public class Kitsune extends AbstractMonsterGirl {
     public ItemStack rollGift(Player player) {
         int r = this.random.nextInt(100);
         if (this.species == GirlSpecies.FENNEC_KITSUNE) return this.digFind();
+        if (this.species == GirlSpecies.VULPHEA_KITSUNE) return new ItemStack(r < 45 ? Items.BLAZE_POWDER : r < 80 ? Items.COOKED_CHICKEN : r < 97 ? Items.FIRE_CHARGE : Items.BLAZE_ROD, 2);
         if (this.species == GirlSpecies.WATTLEFOX_KITSUNE) return new ItemStack(r < 50 ? Items.ACACIA_SAPLING : r < 85 ? Items.YELLOW_DYE : Items.HONEYCOMB, 2);
         if (this.species == GirlSpecies.RED_KITSUNE && this.getAffection(player) >= 60) {
             return new ItemStack(r < 10 ? Items.EMERALD : r < 45 ? Items.GOLD_NUGGET : Items.SWEET_BERRIES, r < 45 ? 1 : 3);
@@ -260,6 +318,12 @@ public class Kitsune extends AbstractMonsterGirl {
             this.discard();
             return false;
         }
+        if (this.ashes > 0) return false;                                // only ashes: nothing to hurt
+        if (this.species == GirlSpecies.VULPHEA_KITSUNE && this.level() instanceof ServerLevel server && amount >= this.getHealth()
+                && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY) && server.getDayTime() / 24000 != this.lastRebirth) {
+            this.toAshes(server);
+            return false;
+        }
         boolean hurt = super.hurt(source, amount);
         if (hurt && this.level() instanceof ServerLevel server && this.getHealth() < this.getMaxHealth() * 0.6F
                 && server.getGameTime() >= this.nextDecoyTime && source.getEntity() instanceof LivingEntity attacker) {
@@ -302,6 +366,10 @@ public class Kitsune extends AbstractMonsterGirl {
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.isDecoy()) {
             if (++this.decoyAge > DECOY_LIFE) this.discard();
+            return;
+        }
+        if (this.ashes > 0) {
+            this.tickAshes(server);
             return;
         }
         if (this.species == GirlSpecies.WATTLEFOX_KITSUNE && !this.isBaby()) {

@@ -21,6 +21,26 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class GirlEvents {
     /** An aegis boar takes a share of every blow meant for her friend (Armoured.shield). */
+    /** A befriended halberelk near a player who cuts a log fells the rest of the tree. */
+    @SubscribeEvent
+    public static void onLogCut(net.neoforged.neoforge.event.level.BlockEvent.BreakEvent event) {
+        if (event.getLevel() instanceof net.minecraft.server.level.ServerLevel level && !event.isCanceled()) {
+            com.linkyoshi90.monstergirls.entity.girl.Centaur.fell(level, event.getPlayer(), event.getPos(), event.getState());
+        }
+    }
+
+    /** Like a tamed wolf's owner, everyone who befriended a girl, harpy or frog hears how she died. */
+    @SubscribeEvent(priority = net.neoforged.bus.api.EventPriority.LOWEST)
+    public static void onFriendDeath(net.neoforged.neoforge.event.entity.living.LivingDeathEvent event) {
+        if (event.isCanceled() || !(event.getEntity() instanceof com.linkyoshi90.monstergirls.entity.Bonded bonded)
+                || !(event.getEntity().level() instanceof net.minecraft.server.level.ServerLevel level)
+                || !level.getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_SHOWDEATHMESSAGES)) return;
+        net.minecraft.network.chat.Component message = event.getEntity().getCombatTracker().getDeathMessage();
+        for (net.minecraft.server.level.ServerPlayer p : level.getServer().getPlayerList().getPlayers()) {
+            if (bonded.getAffection(p) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) p.sendSystemMessage(message);
+        }
+    }
+
     /** A befriended karakasa obake near a player catches the projectiles about to hit them. */
     @SubscribeEvent
     public static void onProjectileImpact(net.neoforged.neoforge.event.entity.ProjectileImpactEvent event) {

@@ -410,6 +410,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         if (this.species == GirlSpecies.PLATYPUS_MERMAID && !this.isBaby() && this.tickCount % 20 == 0) this.electrosense(server);
         if (this.species == GirlSpecies.RUST_OTTER_MERMAID && !this.isBaby() && this.tickCount % 1200 == 0) this.scrape(server);
         if (this.species == GirlSpecies.MOONSEAL_MERMAID && !this.isBaby() && this.tickCount % 40 == 0) this.moonSong(server);
+        if (this.species == GirlSpecies.MOONSEAL_MERMAID && this.tickCount % 20 == 0) this.glow(server, server.isDay() ? 0 : 9);   // her crescents light the night
         if (this.species == GirlSpecies.AXOLUME_MERMAID && !this.isBaby()) {        // she lights the water, and her friend heals beside her
             this.glow(server, 10);
             Player healed = this.tickCount % 40 == 0 ? this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8) : null;

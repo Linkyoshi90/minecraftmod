@@ -227,9 +227,10 @@ VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0
 FACE = [("idle", 0, 0, 0, 24), ("idle", 2.75, 0, 0, 24), ("hiss", 0.5, 0, 0, 24), ("idle", 0, -30, 8, 24)]
 
 
-def write_glowmask(name, tex, parts):
+def write_glowmask(name, tex, parts, boost=1.0):
     """<name>_glowmask.png: the texture's pixels on the given parts, transparent everywhere else (GeckoLib's
-    AutoGlowingGeoLayer draws it full-bright)"""
+    AutoGlowingGeoLayer draws it full-bright). `boost` > 1 brightens them: mid-tone colours glow dimly."""
+    lift = lambda px: px if not px[3] or boost == 1.0 else tuple(min(255, int(v * boost + 40 * (boost - 1))) for v in px[:3]) + (px[3],)
     n = len(tex)
     mask = [[(0, 0, 0, 0)] * n for _ in range(n)]
     for (p, f), (x0, y0, w, h) in H.RECT.items():
@@ -238,7 +239,7 @@ def write_glowmask(name, tex, parts):
         for y in range(y0, y0 + h):
             for x in range(x0, x0 + w):
                 if 0 <= y < n and 0 <= x < n:
-                    mask[y][x] = tex[y][x]
+                    mask[y][x] = lift(tex[y][x])
     H.write_png(os.path.join(G.ASSETS, "textures", "entity", name + "_glowmask.png"), mask)
 
 
@@ -262,7 +263,7 @@ def run_family(fid, species, declare_hook=None, paint_hook=None, build_hook=None
                                    keys, lambda k, d=d: paint(sp, d, pal_for(d, k), paint_hook))
         if d.get("glow"):
             for k, t in texes.items():
-                write_glowmask(sp + ("_" + k if k else ""), t, d["glow"])
+                write_glowmask(sp + ("_" + k if k else ""), t, d["glow"], d.get("glow_boost", 1.0))
         height = G.model_height(geo)
         if prev:
             G.previews(sp, geo, adoc, texes, views or VIEWS, face or FACE, height)

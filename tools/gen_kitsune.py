@@ -16,6 +16,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades  # noqa: E402
 
 SPECIES = {
+    # fourteenth wave: the vulphea, a fire fox in flame colours, tails tipped with yellow fire
+    "vulphea_kitsune": dict(
+        build="slim", outfit=dict(top=["halter", "capelet"], bottom="wrap_skirt", extras=["armlets"], colors=dict(cloth2="#3a1a14")),
+        ears="fox", hair="flowing", stockings=False, tip="light",
+        pal=dict(SKIN=skin("fair"), HAIR="#f0602a", FUR="#e8502a", LIGHT="#ffd860", MARK="#8a1e10", EYE="#ffd040", CLOTH="#3a1a14", TRIM="#ffb030",
+                 facemark="fox"),
+        variants={"gold": dict(HAIR="#f8b030", FUR="#f0a020", LIGHT="#fff0a0", MARK="#a85a10"),
+                  "blue": dict(HAIR="#3a8af0", FUR="#2a7ae8", LIGHT="#c8f0ff", MARK="#14306a", EYE="#c8f0ff", CLOTH="#14182a"),
+                  "violet": dict(HAIR="#a04af0", FUR="#9038e0", LIGHT="#f0c8ff", MARK="#40146a", EYE="#f0c8ff"),
+                  "white": dict(HAIR="#fff4e0", FUR="#fff0d8", LIGHT="#ffffff", MARK="#e8a040", EYE="#e85a2a", CLOTH="#a83a2a")}),
     # thirteenth wave: the wattlefox, a blue fox wreathed in golden wattle blossom
     "wattlefox_kitsune": dict(
         build="slim", outfit=dict(top=["halter", "capelet"], bottom="wrap_skirt", extras=["pearls"], colors=dict(cloth2="#e8c040")),

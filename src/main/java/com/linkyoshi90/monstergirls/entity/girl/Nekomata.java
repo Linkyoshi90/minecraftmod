@@ -106,6 +106,7 @@ public class Nekomata extends AbstractMonsterGirl {
             case WATERLIL_NEKOMATA -> girlAttributes(16, 0.3, 2);
             case CHESHIRE_NEKOMATA -> girlAttributes(20, 0.32, 3);
             case SNOWLOPER_NEKOMATA -> girlAttributes(18, 0.34, 2);
+            case CAIT_SITH_NEKOMATA -> girlAttributes(18, 0.32, 3);
             case JAGLARE_NEKOMATA -> girlAttributes(30, 0.32, 7).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 0.8);
             default -> girlAttributes(18, 0.3, 3);
         };
@@ -217,6 +218,35 @@ public class Nekomata extends AbstractMonsterGirl {
     }
 
     // --- the snowloper and the jaglare --------------------------------------------------------------------------------
+
+    /** The cait sith keeps phantoms off her friend: those near them lose interest and are pushed away. Returns how many. */
+    public int warnOffPhantoms(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null) return 0;
+        int n = 0;
+        for (net.minecraft.world.entity.monster.Phantom ph : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Phantom.class, friend.getBoundingBox().inflate(24))) {
+            if (ph.getTarget() == friend) ph.setTarget(null);
+            Vec3 away = ph.position().subtract(friend.position()).normalize();
+            ph.setDeltaMovement(away.x * 0.6, 0.4, away.z * 0.6);
+            n++;
+        }
+        if (n > 0) this.playSound(SoundEvents.CAT_HISS, 0.8F, 0.9F);
+        return n;
+    }
+
+    /** A saucer of milk for the cait sith: her friend has Luck for five minutes. */
+    @Nullable
+    @Override
+    protected net.minecraft.world.InteractionResult familyInteract(Player player, net.minecraft.world.InteractionHand hand, ItemStack stack) {
+        if (this.species != GirlSpecies.CAIT_SITH_NEKOMATA || !stack.is(net.minecraft.world.item.Items.MILK_BUCKET) || this.isBaby()) return null;
+        if (!this.level().isClientSide) {
+            player.setItemInHand(hand, new ItemStack(net.minecraft.world.item.Items.BUCKET));
+            player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.LUCK, 6000, 0));
+            this.addAffection(player, 2);
+            this.playSound(SoundEvents.CAT_PURR, 1.0F, 1.0F);
+        }
+        return net.minecraft.world.InteractionResult.sidedSuccess(this.level().isClientSide);
+    }
 
     /** Speed for the snowloper's friend while they stand on snow. True if she gave it. */
     public boolean snowStride(ServerLevel level) {
@@ -448,6 +478,7 @@ public class Nekomata extends AbstractMonsterGirl {
         if (this.species == GirlSpecies.WATERLIL_NEKOMATA && this.level() instanceof ServerLevel pond && this.tickCount % 4 == 0) this.tickPads(pond);
         if (this.species == GirlSpecies.CHESHIRE_NEKOMATA && this.level() instanceof ServerLevel wonder && this.tickCount % 20 == 0) this.blinkToFriend(wonder);
         if (this.species == GirlSpecies.SNOWLOPER_NEKOMATA && this.level() instanceof ServerLevel snow && this.tickCount % 20 == 0) this.snowStride(snow);
+        if (this.species == GirlSpecies.CAIT_SITH_NEKOMATA && this.level() instanceof ServerLevel fairy && this.tickCount % 20 == 0) this.warnOffPhantoms(fairy);
         if (this.species == GirlSpecies.JAGLARE_NEKOMATA && this.level() instanceof ServerLevel jungle && !this.isBaby()) {
             if (this.tickCount % 10 == 0) this.dropOnPrey(jungle);
             if (this.tickCount % 400 == 0 && this.onGround() && this.getTarget() == null && this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32) == null

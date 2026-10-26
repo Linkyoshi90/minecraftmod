@@ -73,6 +73,16 @@ SPECIES = {
                   "iberian": dict(FUR="#c8a060", HAIR="#b88c50", pattern="spots", CLOTH="#6a3a2a"),
                   "bobcat": dict(FUR="#b07850", HAIR="#9a6440", pattern="spots", pattern_scale=0.8),
                   "silver": dict(FUR="#d4d6da", HAIR="#dcdee4", LIGHT="#ffffff", MARK="#4a4c52", CLOTH="#3a4a6a")}),
+    # fourteenth wave: the cait sith, the black fairy cat of the Highlands with a white star on her chest
+    "cait_sith_nekomata": dict(star=True,
+        build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["scarf"], colors=dict(cloth2="#2a5a3a", scarf="#2a5a3a")),
+        ears="cat", hair="flowing", bangs="swept", tail=((1.25, 1.25, 4), (1.25, 1.25, 4), (1.25, 1.25, 3.5)), tail_pattern="solid",
+        pal=dict(SKIN=skin("pale"), HAIR="#141218", FUR="#18161c", LIGHT="#3a3640", MARK="#0a080c", EYE="#4ae070", CLOTH="#2a5a3a", TRIM="#e8e4dc",
+                 INNER="#d8a0b0", pattern="solid"),
+        variants={"smoke": dict(HAIR="#4a4a54", FUR="#5a5a64", LIGHT="#8a8a94", MARK="#2a2a30", EYE="#e8c040"),
+                  "grey": dict(HAIR="#7a7a82", FUR="#8a8a92", LIGHT="#c8c8d0", MARK="#4a4a52", EYE="#5ab0e8"),
+                  "tabby": dict(HAIR="#2a2420", FUR="#4a3e34", LIGHT="#8a7a6a", MARK="#141010", pattern="stripes", EYE="#e8a030"),
+                  "midnight": dict(HAIR="#141a3a", FUR="#1a2048", LIGHT="#3a4a8a", MARK="#0a0e24", EYE="#c8e8ff", CLOTH="#3a2a5a")}),
     # thirteenth wave: the snowloper, a white snow-leopard cub with blue snowflake rosettes and a thick tail
     "snowloper_nekomata": dict(
         build="petite", outfit=dict(top=["sweater"], bottom="shorts", extras=["scarf"], colors=dict(cloth2="#3a5a8a", scarf="#8ab0e8")),
@@ -162,6 +172,8 @@ def declare(sp):
         extra += [("lily_pad", 16, .5, 16)]
     if d.get("grin"):
         extra += [("grin", 4.5, 1.5, .25)]
+    if d.get("star"):
+        extra += [("star", 2.5, 2.5, .25)]
     G.declare(leg_parts(d.get("build")) + [("tail_a",) + a, ("tail_b",) + b, ("tail_c",) + c] + extra, ears=d["ears"], hair=d["hair"],
               build=d.get("build"), outfit=d.get("outfit"))
 
@@ -231,6 +243,11 @@ def paint(sp, pal):
         lp, li = G.shades(pal.extra.get("lotus", "#f8b0cc")), G.shades(pal.extra.get("lotus_in", "#fff0a0"))
         pt("lotus_petal", "all", lambda f, x, y, w, h: pick(lp, 0.55 + 0.2 * (f == "up") - 0.15 * (x == 0 or x == w - 1), x, y))
         pt("lotus_heart", "all", lambda f, x, y, w, h: pick(li, 0.65, x, y))
+    if d.get("star"):                                    # the cait sith's white star
+        white = G.shades("#f8f6f0")
+        pt("star", "all", lambda f, x, y, w, h: pick(white, 0.85, x, y)
+           if f in ("north", "south") and (abs(x + 0.5 - w / 2) < 1.1 or abs(y + 0.5 - h / 2) < 1.1 or abs(abs(x + 0.5 - w / 2) - abs(y + 0.5 - h / 2)) < 0.8)
+           and (x + 0.5 - w / 2) ** 2 + (y + 0.5 - h / 2) ** 2 < (w / 2) ** 2 else CLEAR)
     if d.get("grin"):                                    # a crescent of white teeth, outlined: all of her that stays when she fades
         teeth, line = G.shades("#fbf8f0"), G.shades("#2a1420")
 
@@ -308,6 +325,8 @@ def build(sp):
         r.put("foot_r", cube("flame", [cx - 1.375, 0.1, -2.0]))
         hx, hyy, hz = r.b["hand_r"]["pivot"]
         r.put("hand_r", cube("flame_hand", [hx - 1.125, hyy - 2.6, hz - 1.0]))
+    if d.get("star"):                                    # on her breastbone, above her top
+        r.put("body", cube("star", [-1.25, 18.4, -G.S("chest")[2] / 2 - G.S("bust")[2] - 0.7 + g.z]))
     if d.get("grin"):                                    # the grin, wide across her lower face
         r.put("head", cube("grin", [-2.25, g.hy + 0.6, -4.2 + g.z]))
     if "stitched" in d["variants"]:                      # Neko Zombie's muzzle (drawn only on that variant)

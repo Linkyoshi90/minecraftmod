@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_cu_sith_canid",
+  "spawners": {
+    "type": "monstergirls:cu_sith_canid",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -357,7 +357,8 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
 
     @Override
     protected int foodValue(Player player, ItemStack stack) {
-        return stack.is(Items.HONEY_BOTTLE) || stack.is(Items.GOLDEN_APPLE) ? 2 : 1;
+        if (stack.is(Items.MILK_BUCKET) && !player.getInventory().add(new ItemStack(Items.BUCKET))) player.drop(new ItemStack(Items.BUCKET), false);
+        return stack.is(Items.HONEY_BOTTLE) || stack.is(Items.GOLDEN_APPLE) || stack.is(Items.MILK_BUCKET) ? 2 : 1;
     }
 
     @Override
@@ -412,19 +413,27 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
             this.build(server);
         }
         if (this.species == GirlSpecies.DARK_ELF && this.tickCount % 20 == 0) this.calmWardens(server);
-        if (this.species == GirlSpecies.BROWNIE_ELF && this.tickCount % 200 == 0 && !server.isDay()
-                && this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 48) != null) this.tidy(server);
+        if (this.species == GirlSpecies.BROWNIE_ELF && this.tickCount % 40 == 0 && !this.isBaby()) {
+            Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 48);
+            if (friend != null && (!server.isDay() || friend.isSleeping())) {   // sleeping skips the night: she works while her friend sleeps
+                if (friend.isSleeping() && this.distanceToSqr(friend) > 4 * 4) this.getNavigation().moveTo(friend, 1.1);
+                this.tidy(server, friend);
+            }
+        }
     }
 
     /**
-     * The brownie's night's work: the chests within 8 blocks of her get their stacks merged, and loose items lying
-     * around go into them. Returns how many stacks she merged or put away.
+     * The brownie's night's work: the chests within 8 blocks of her and of her friend (by their bed, most nights) get
+     * their stacks merged, and loose items lying around go into them. Returns how many stacks she merged or put away.
      */
-    public int tidy(ServerLevel level) {
-        java.util.List<net.minecraft.world.Container> chests = new java.util.ArrayList<>();
-        for (BlockPos p : BlockPos.betweenClosed(this.blockPosition().offset(-8, -3, -8), this.blockPosition().offset(8, 3, 8))) {
-            if (level.getBlockEntity(p) instanceof net.minecraft.world.level.block.entity.ChestBlockEntity chest) chests.add(chest);
+    public int tidy(ServerLevel level, @Nullable Player friend) {
+        java.util.Set<net.minecraft.world.Container> found = new java.util.LinkedHashSet<>();
+        for (BlockPos o : friend == null ? java.util.List.of(this.blockPosition()) : java.util.List.of(this.blockPosition(), friend.blockPosition())) {
+            for (BlockPos p : BlockPos.betweenClosed(o.offset(-8, -3, -8), o.offset(8, 3, 8))) {
+                if (level.getBlockEntity(p) instanceof net.minecraft.world.level.block.entity.ChestBlockEntity chest) found.add(chest);
+            }
         }
+        java.util.List<net.minecraft.world.Container> chests = new java.util.ArrayList<>(found);
         int n = 0;
         for (net.minecraft.world.Container c : chests) {                 // merge part stacks of the same thing
             for (int i = 0; i < c.getContainerSize(); i++) {
@@ -443,8 +452,9 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
             c.setChanged();
         }
         if (!chests.isEmpty()) {                                        // and put the loose things away
+            net.minecraft.world.phys.AABB area = friend == null ? this.getBoundingBox().inflate(8) : this.getBoundingBox().inflate(8).minmax(friend.getBoundingBox().inflate(8));
             for (net.minecraft.world.entity.item.ItemEntity item : level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
-                    this.getBoundingBox().inflate(8), e -> e.isAlive() && !e.hasPickUpDelay())) {
+                    area, e -> e.isAlive() && !e.hasPickUpDelay())) {
                 for (net.minecraft.world.Container c : chests) {
                     if (net.minecraft.world.level.block.entity.HopperBlockEntity.addItem(c, item)) {
                         n++;

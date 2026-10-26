@@ -67,11 +67,21 @@ SPECIES = {
                   "green": dict(extra=dict(kimono="#2a6a4a", obi="#e8c040", kimono_trim="#e8c040", cloth2="#1e4a34", hat="#1a1a22")),
                   "black": dict(extra=dict(kimono="#1a1a22", obi="#a81a2a", kimono_trim="#a81a2a", cloth2="#141418", hat="#1a1a22")),
                   "gold": dict(extra=dict(kimono="#c8a030", obi="#a81a2a", kimono_trim="#a81a2a", cloth2="#8a6a1a", hat="#1a1a22"))}),
+    # fourteenth wave: the ittan-momen, a girl who ends at the waist in a long ribbon of cotton cloth (no legs); she flies
+    "ittan_momen_devil": dict(
+        build="petite", outfit=dict(top=["kimono"], extras=[], colors=dict(kimono="#f4f2ec", kimono_trim="#c8c4bc", obi="#3a5ab0")),
+        hair="flowing", bangs="swept", ears=None, lower="none", ribbon=True,
+        pal=dict(SKIN=skin("pale"), HAIR="#f0eee8", FUR="#f0eee8", LIGHT="#ffffff", MARK="#b8b4ac", EYE="#3a5ab0", CLOTH="#f4f2ec", TRIM="#3a5ab0",
+                 extra=dict(cotton="#f4f2ec", fold="#c8c4bc")),
+        variants={"indigo": dict(HAIR="#2a3a7a", extra=dict(cotton="#2a3a8a", fold="#1a2458", kimono="#2a3a8a", kimono_trim="#e8e8f0", obi="#f4f2ec")),
+                  "red": dict(HAIR="#a82a2a", extra=dict(cotton="#c83a3a", fold="#7a1a1a", kimono="#c83a3a", kimono_trim="#f4f2ec", obi="#2a2a32")),
+                  "gold": dict(HAIR="#d8a840", extra=dict(cotton="#e8c060", fold="#a87a2a", kimono="#e8c060", kimono_trim="#7a5410", obi="#2a3a8a")),
+                  "black": dict(HAIR="#1e1c22", EYE="#e83a3a", extra=dict(cotton="#2a2830", fold="#141218", kimono="#2a2830", kimono_trim="#8a8890", obi="#c83a3a"))}),
     # thirteenth wave: the chochin-obake, a girl under a living paper lantern (it glows) with one great eye and a lolling tongue
     "chochin_obake_devil": dict(
         build="petite", outfit=dict(top=["kimono"], bottom="hakama", extras=[],
                                     colors=dict(kimono="#f4f0e8", kimono_trim="#c83a3a", obi="#c83a3a", cloth2="#2a2a32")),
-        hair="hime", bangs="blunt", ears=None, legs="bare", foot="shoe", lantern=True, glow=["lantern"],
+        hair="hime", bangs="blunt", ears=None, legs="bare", foot="shoe", lantern=True, glow=["lantern"], glow_boost=1.6,
         pal=dict(SKIN=skin("pale"), HAIR="#1e1a22", FUR="#1e1a22", LIGHT="#f4f0e8", MARK="#c83a3a", EYE="#e8a030", CLOTH="#f4f0e8", TRIM="#c83a3a",
                  extra=dict(paper="#f8e8c0", band="#c83a3a", rim="#1e1a1e", boot="#2a2a32")),
         variants={"white": dict(extra=dict(paper="#fbf8f0", band="#2a2a32", rim="#1e1a1e", boot="#2a2a32")),
@@ -127,6 +137,8 @@ def declare_hook(sp, d):
         out += [("cap", 9, 3, 9), ("cap_brim", 10.5, .75, 10.5), ("button", 1.5, 1.5, 1.5), ("talisman", 3, 6, .25)]
     if d.get("spanner"):
         out += [("spanner", .75, 4, .75), ("spanner_head", 2, 1, .75)]
+    if d.get("ribbon"):
+        out += [("cloth_a", 6, 6, .5), ("cloth_b", 5.5, 6, .5), ("cloth_c", 5, 6, .5), ("cloth_d", 4.5, 5, .5)]
     if d.get("lantern"):
         out += [("lantern", 8.5, 8, 8.5), ("lantern_rim", 6.5, 1, 6.5), ("tongue", 2, .5, 3.5)]
     if d.get("umbrella"):
@@ -177,6 +189,9 @@ def paint_hook(pt, pal, d):
     pt("lantern", "all", lantern)
     pt("lantern_rim", "all", lambda f, x, y, w, h: pick(rim, 0.45 + 0.15 * (f == "up"), x, y))
     pt("tongue", "all", lambda f, x, y, w, h: pick(G.shades("#e85a6a"), 0.55 + 0.2 * (f == "up"), x, y))
+    cotton, fold = G.shades(pal.extra.get("cotton", "#f4f2ec")), G.shades(pal.extra.get("fold", "#c8c4bc"))
+    for p in ("cloth_a", "cloth_b", "cloth_c", "cloth_d"):
+        pt(p, "all", lambda f, x, y, w, h: pick(fold if x % 5 == 2 or y % 6 == 5 else cotton, 0.55 + 0.1 * (noise(x, y, 41) - 0.5), x, y))
     steel = G.shades("#9a9aa6")
     pt("spanner", "all", lambda f, x, y, w, h: pick(G.shades("#c83a3a") if y >= h - 5 else steel, 0.55, x, y))
     pt("spanner_head", "all", lambda f, x, y, w, h: CLEAR if f in ("north", "south") and x in (w // 2 - 1, w // 2) and y < h // 2 else pick(steel, 0.6, x, y))
@@ -221,6 +236,12 @@ def build_hook(r, g, d):
         studs = [cube("stud", [px - 1.45 + 2.4 * (i % 2), py + 1.5 + 2.2 * (i // 2), cz - 0.25]) for i in range(8)]
         studs += [cube("stud", [px - 0.25, py + 2.6 + 2.2 * i, cz - 1.45]) for i in range(3)]
         r.add("club", "hand_r", [px, py - 1.5, pz], [cube("grip", [px - 0.625, py - 2.5, cz - 0.625]), cube("club", [px - 1.125, py + 1.0, cz - 1.125])] + studs)
+    if d.get("ribbon"):                                  # the long cotton ribbon she ends in, in four bones so it can ripple
+        z0 = z
+        r.add("ribbon_1", "body", [0, 12.5, z0], [cube("cloth_a", [-3, 6.5, -0.25 + z0])])
+        r.add("ribbon_2", "ribbon_1", [0, 6.5, z0], [cube("cloth_b", [-2.75, 0.5, -0.25 + z0])])
+        r.add("ribbon_3", "ribbon_2", [0, 0.5, z0], [cube("cloth_c", [-2.5, -5.5, -0.25 + z0])])
+        r.add("ribbon_4", "ribbon_3", [0, -5.5, z0], [cube("cloth_d", [-2.25, -10.5, -0.25 + z0])])
     if d.get("lantern"):                                 # the lantern rests on her head like a tall hat; the tongue hangs from its mouth
         r.add("lantern", "head", [0, hy + 8, z], [cube("lantern", [-4.25, hy + 8.6, -4.25 + z]), cube("lantern_rim", [-3.25, hy + 8.0, -3.25 + z]),
                                                     cube("lantern_rim", [-3.25, hy + 16.6, -3.25 + z]),
@@ -251,6 +272,18 @@ def anim_extra(an, sp, d):
     if d.get("pumpkin"):                                 # the disguise stays shrunk away unless the game shows it (see GirlRenderer)
         for key in [k.split(".")[-1] for k in an.A]:
             F._inject(an, key, {"disguise": {"scale": hold(0, 0, 0)}})
+    if d.get("ribbon"):                                  # the ribbon trails out behind her, rippling; flying, it streams straight back
+        wave = lambda a, ph: Tk((0, (a, 0, 0)), (1.0, (a + 12 * ph, 0, 4)), (2.0, (a, 0, 0)))
+        rest = {"ribbon_1": {"rotation": wave(40, 1)}, "ribbon_2": {"rotation": wave(25, -1)}, "ribbon_3": {"rotation": wave(20, 1)},
+                "ribbon_4": {"rotation": wave(15, -1)}, "root": {"position": Tk((0, (0, 1.5, 0)), (1.0, (0, 2.2, 0)), (2.0, (0, 1.5, 0)))}}
+        for key in [k.split(".")[-1] for k in an.A]:
+            F._inject(an, key, rest)
+        an.add("fly", 1.0, True, merge(G.upper_idle(), {"body": {"rotation": hold(20, 0, 0)},
+                                                        "ribbon_1": {"rotation": Tk((0, (60, 0, 0)), (0.5, (70, 0, 0)), (1.0, (60, 0, 0)))},
+                                                        "ribbon_2": {"rotation": Tk((0, (10, 0, 0)), (0.5, (-10, 0, 0)), (1.0, (10, 0, 0)))},
+                                                        "ribbon_3": {"rotation": Tk((0, (-10, 0, 0)), (0.5, (10, 0, 0)), (1.0, (-10, 0, 0)))},
+                                                        "ribbon_4": {"rotation": Tk((0, (10, 0, 0)), (0.5, (-15, 0, 0)), (1.0, (10, 0, 0)))}},
+                                       sym("arm", hold(-20, 0, 25))))
     if d.get("spanner"):                                 # the gremlin's big ears stick out sideways
         for key in [k.split(".")[-1] for k in an.A]:
             F._inject(an, key, {"ear_r": {"rotation": hold(0, 0, 65)}, "ear_l": {"rotation": hold(0, 0, -65)}})

@@ -104,6 +104,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
             case MATAMATA_LIZARDFOLK -> girlAttributes(22, 0.18, 4).add(Attributes.ARMOR, 4);
             case GECKO_LIZARDFOLK -> girlAttributes(16, 0.38, 2).add(Attributes.ARMOR, 1);
             case CHUPACABRA_LIZARDFOLK -> girlAttributes(26, 0.31, 5).add(Attributes.ARMOR, 3);
+            case COCOSKINK_LIZARDFOLK -> girlAttributes(16, 0.32, 2);
             case ANVIL_TORTOISE_LIZARDFOLK -> girlAttributes(40, 0.16, 3).add(Attributes.ARMOR, 12).add(Attributes.KNOCKBACK_RESISTANCE, 1.0);
             default -> girlAttributes(26, 0.2, 2).add(Attributes.ARMOR, 6);
         };
@@ -127,7 +128,8 @@ public class Lizardfolk extends AbstractMonsterGirl {
                 || (this.species == GirlSpecies.GECKO_LIZARDFOLK && (stack.is(Items.APPLE) || stack.is(Items.MELON_SLICE) || stack.is(Items.SWEET_BERRIES)
                     || stack.is(Items.GLOW_BERRIES)))
                 || (this.species == GirlSpecies.CHUPACABRA_LIZARDFOLK && (stack.is(Items.MUTTON) || stack.is(Items.COOKED_MUTTON)))
-                || (this.species == GirlSpecies.ANVIL_TORTOISE_LIZARDFOLK && (stack.is(Items.MELON_SLICE) || stack.is(Items.IRON_NUGGET)));
+                || (this.species == GirlSpecies.ANVIL_TORTOISE_LIZARDFOLK && (stack.is(Items.MELON_SLICE) || stack.is(Items.IRON_NUGGET)))
+                || (this.species == GirlSpecies.COCOSKINK_LIZARDFOLK && (stack.is(Items.MELON_SLICE) || stack.is(Items.COCOA_BEANS)));
     }
 
     @Override
@@ -148,6 +150,25 @@ public class Lizardfolk extends AbstractMonsterGirl {
                 || this.getAffection(player) < com.linkyoshi90.monstergirls.entity.Orders.AFFECTION || this.isVehicle()) return null;
         if (!this.level().isClientSide) player.startRiding(this);
         return net.minecraft.world.InteractionResult.sidedSuccess(this.level().isClientSide);
+    }
+
+    // --- the cocoskink ------------------------------------------------------------------------------------------------
+
+    /** A cocoa pod on a bare side of a jungle log within 6 blocks of her friend. True if she grew one. */
+    public boolean growCocoa(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null) return false;
+        for (net.minecraft.core.BlockPos log : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-6, -2, -6), friend.blockPosition().offset(6, 6, 6))) {
+            if (!level.getBlockState(log).is(net.minecraft.tags.BlockTags.JUNGLE_LOGS)) continue;
+            for (net.minecraft.core.Direction d : net.minecraft.core.Direction.Plane.HORIZONTAL) {
+                net.minecraft.core.BlockPos p = log.relative(d);
+                if (!level.getBlockState(p).isAir()) continue;
+                level.setBlock(p, net.minecraft.world.level.block.Blocks.COCOA.defaultBlockState().setValue(net.minecraft.world.level.block.CocoaBlock.FACING, d.getOpposite()), 3);
+                level.levelEvent(2005, p, 0);
+                return true;
+            }
+        }
+        return false;
     }
 
     // --- the anvil tortoise ----------------------------------------------------------------------------------------------
@@ -177,6 +198,9 @@ public class Lizardfolk extends AbstractMonsterGirl {
     @Override
     public ItemStack rollGift(Player player) {
         int r = this.random.nextInt(100);
+        if (this.species == GirlSpecies.COCOSKINK_LIZARDFOLK) {
+            return new ItemStack(r < 50 ? Items.COCOA_BEANS : r < 85 ? Items.MELON_SLICE : r < 98 ? Items.JUNGLE_SAPLING : Items.BELL, r < 85 ? 3 : 1);
+        }
         if (this.species == GirlSpecies.ANVIL_TORTOISE_LIZARDFOLK) {
             return new ItemStack(r < 50 ? Items.IRON_NUGGET : r < 80 ? Items.IRON_INGOT : r < 97 ? Items.MELON_SLICE : Items.ANVIL, r < 50 ? 6 : r < 80 ? 1 : r < 97 ? 3 : 1);
         }
@@ -295,6 +319,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
     public void aiStep() {
         super.aiStep();
         if (!(this.level() instanceof ServerLevel server)) return;
+        if (this.species == GirlSpecies.COCOSKINK_LIZARDFOLK && !this.isBaby() && this.tickCount % 600 == 0) this.growCocoa(server);
         if (this.retracted > 0 && --this.retracted == 0) {
             this.setFlag(FLAG_RETRACTED, false);
             if (this.getAction() == Action.RETRACT) this.setAction(Action.NONE);
