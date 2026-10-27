@@ -194,6 +194,8 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         public void setCustomAnimations(AbstractMonsterGirl girl, long instanceId, AnimationState<AbstractMonsterGirl> state) {
             super.setCustomAnimations(girl, instanceId, state);
             var proc = this.getAnimationProcessor();
+            var look = state.getData(software.bernie.geckolib.constant.DataTickets.ENTITY_MODEL_DATA);
+            AimPose.apply(proc, girl, look == null ? 0.0F : look.headPitch(), state.getPartialTick());   // a weapon raised over any animation
             // the jack o'lantern hiding as a pumpkin: only the disguise bone shows (it is shrunk away in every animation)
             GeoBone disguise = proc.getBone("disguise");
             boolean hiding = disguise != null && girl.hasFlag(AbstractMonsterGirl.FLAG_HIDDEN);

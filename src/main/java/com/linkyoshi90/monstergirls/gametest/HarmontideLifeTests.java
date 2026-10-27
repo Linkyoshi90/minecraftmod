@@ -64,7 +64,12 @@ public class HarmontideLifeTests {
         z.setNoAi(true);
         girl.setTarget(z);
         check(new GirlArms.RangedGoal(girl).canUse(), "armed, with a target, she shoots");
+        check(GirlArms.aimOf(girl.getMainHandItem()) == AbstractMonsterGirl.AIM_BOW && GirlArms.aimOf(new ItemStack(Items.CROSSBOW)) == AbstractMonsterGirl.AIM_CROSSBOW,
+                "a bow is drawn, a crossbow levelled");
+        girl.setAim(GirlArms.aimOf(girl.getMainHandItem()));
+        check(girl.getAim() == AbstractMonsterGirl.AIM_BOW, "she raises her bow");
         GirlArms.shootArrow(girl, z, girl.getMainHandItem());
+        check(girl.lastShotTick() == girl.tickCount, "the shot is announced (the client's release and recoil)");
         List<Arrow> arrows = helper.getLevel().getEntitiesOfClass(Arrow.class, new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(16));
         check(!arrows.isEmpty() && arrows.get(0).getOwner() == girl, "an arrow of hers is flying");
         p.setShiftKeyDown(true);
@@ -86,6 +91,18 @@ public class HarmontideLifeTests {
         check(GirlArms.pickUp(girl, fromFriend) && girl.getMainHandItem().is(Items.CROSSBOW) && fromFriend.isRemoved(), "she picks it up and holds it");
         HarpyTestUtil.remove(stranger);
         HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    /** A trapdoor spider saved out of her burrow but still weightless (as old saves are) comes back with her gravity. */
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "trapdoorSpiderKeepsHerWeight")
+    public static void trapdoorSpiderKeepsHerWeight(GameTestHelper helper) {
+        AbstractMonsterGirl spider = still(helper, GirlSpecies.TRAPDOOR_SPIDER_ARACHNE, new BlockPos(3, 2, 3));
+        spider.setNoGravity(true);
+        net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
+        spider.saveWithoutId(tag);
+        spider.load(tag);
+        check(!spider.isNoGravity(), "reloaded outside her burrow, she falls like anyone");
         helper.succeed();
     }
 

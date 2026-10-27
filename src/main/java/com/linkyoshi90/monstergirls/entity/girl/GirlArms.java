@@ -230,6 +230,7 @@ public final class GirlArms {
         public void stop() {
             this.seen = 0;
             this.girl.getNavigation().stop();
+            this.girl.setAim(AbstractMonsterGirl.AIM_NONE);
         }
 
         @Override
@@ -245,6 +246,7 @@ public final class GirlArms {
             boolean sees = this.girl.getSensing().hasLineOfSight(t);
             this.seen = sees ? this.seen + 1 : 0;
             this.girl.getLookControl().setLookAt(t, 30.0F, 30.0F);
+            this.girl.setAim(aimOf(this.girl.getMainHandItem()));
             if (d2 > 14 * 14 || !sees) this.girl.getNavigation().moveTo(t, 1.0);
             else if (d2 < 4 * 4) this.girl.getNavigation().moveTo(this.girl.getX() * 2 - t.getX(), this.girl.getY(), this.girl.getZ() * 2 - t.getZ(), 1.1);
             else this.girl.getNavigation().stop();
@@ -252,12 +254,19 @@ public final class GirlArms {
             if (!sees || this.seen < 5 || d2 > 24 * 24 || !(this.girl.level() instanceof ServerLevel)) return;
             ItemStack weapon = this.girl.getMainHandItem();
             if (TaczCompat.isGun(weapon)) {
-                TaczCompat.fireAt(this.girl, t);                         // TaCZ keeps the gun's own fire rate and reloads
+                if (TaczCompat.fireAt(this.girl, t)) this.girl.announceShot();   // TaCZ keeps the gun's own fire rate and reloads
             } else if (this.cooldown <= 0) {
                 shootArrow(this.girl, t, weapon);
                 this.cooldown = weapon.getItem() instanceof CrossbowItem ? 40 : 30;
             }
         }
+    }
+
+    /** The pose a weapon calls for (client.AimPose). */
+    public static int aimOf(ItemStack weapon) {
+        if (weapon.getItem() instanceof BowItem) return AbstractMonsterGirl.AIM_BOW;
+        if (weapon.getItem() instanceof CrossbowItem) return AbstractMonsterGirl.AIM_CROSSBOW;
+        return TaczCompat.isGun(weapon) ? AbstractMonsterGirl.AIM_GUN : AbstractMonsterGirl.AIM_NONE;
     }
 
     /** A skeleton's shot, from her bow or crossbow (the crossbow's bolt flies faster and straighter). */
@@ -271,6 +280,7 @@ public final class GirlArms {
         arrow.shoot(dx, dy + flat * 0.2, dz, crossbow ? 2.2F : 1.6F, crossbow ? 4.0F : 8.0F);
         arrow.pickup = AbstractArrow.Pickup.DISALLOWED;
         girl.level().addFreshEntity(arrow);
+        girl.announceShot();
         girl.playSound(crossbow ? SoundEvents.CROSSBOW_SHOOT : SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (girl.getRandom().nextFloat() * 0.4F + 0.8F));
     }
 }

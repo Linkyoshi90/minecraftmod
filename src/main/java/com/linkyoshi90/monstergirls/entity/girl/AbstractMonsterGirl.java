@@ -93,6 +93,12 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     public static final int PAINT_RARITY = 64;
     private static final EntityDataAccessor<Integer> DATA_FLAGS = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> DATA_TAILS = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
+    /** What she is aiming (GirlArms.RangedGoal), for the client's aiming pose (client.AimPose). */
+    private static final EntityDataAccessor<Byte> DATA_AIM = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
+    public static final int AIM_NONE = 0, AIM_BOW = 1, AIM_CROSSBOW = 2, AIM_GUN = 3;
+    /** The entity event of a shot she fires: the client's recoil and bow release. */
+    public static final byte EVENT_SHOT = 101;
+    private int lastShotTick = Integer.MIN_VALUE / 2;
     private static final Map<String, RawAnimation> ANIMATIONS = new ConcurrentHashMap<>();
 
     /** Synced flags (bits of DATA_FLAGS). */
@@ -265,6 +271,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         builder.define(DATA_FLAGS, 0);
         builder.define(DATA_PAINT, (byte) 0);
         builder.define(DATA_TAILS, (byte) 1);
+        builder.define(DATA_AIM, (byte) AIM_NONE);
     }
 
     public Action getAction() {
@@ -962,6 +969,32 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         net.minecraft.core.Direction d = net.minecraft.core.Direction.byName(tag.getString("HutDoor"));
         this.hutDoor = d == null || d.getAxis().isVertical() ? net.minecraft.core.Direction.NORTH : d;
         this.hutStep = tag.getInt("HutStep");
+    }
+
+    // --- aiming a weapon (GirlArms) --------------------------------------------------------------------------------
+
+    public int getAim() {
+        return this.entityData.get(DATA_AIM);
+    }
+
+    public void setAim(int aim) {
+        if (this.getAim() != aim) this.entityData.set(DATA_AIM, (byte) aim);
+    }
+
+    /** She fired: everyone watching sees the recoil (or the bowstring released). */
+    public void announceShot() {
+        this.lastShotTick = this.tickCount;
+        this.level().broadcastEntityEvent(this, EVENT_SHOT);
+    }
+
+    public int lastShotTick() {
+        return this.lastShotTick;
+    }
+
+    @Override
+    public void handleEntityEvent(byte id) {
+        if (id == EVENT_SHOT) this.lastShotTick = this.tickCount;
+        else super.handleEntityEvent(id);
     }
 
     // --- her home at a hearth (Settlement) --------------------------------------------------------------------------

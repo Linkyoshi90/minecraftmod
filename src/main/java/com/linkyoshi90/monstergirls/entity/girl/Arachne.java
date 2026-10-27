@@ -514,6 +514,7 @@ public class Arachne extends AbstractMonsterGirl {
         tag.put("TrapWebs", tw);
         if (this.trapCentre != null) tag.putLong("TrapCentre", this.trapCentre.asLong());
         if (this.burrow != null) tag.putLong("Burrow", this.burrow.asLong());
+        tag.putBoolean("InBurrow", this.inBurrow);
     }
 
     @Override
@@ -531,6 +532,12 @@ public class Arachne extends AbstractMonsterGirl {
         for (Tag t : tag.getList("TrapWebs", Tag.TAG_LONG)) this.trapWebs.add(BlockPos.of(((LongTag) t).getAsLong()));
         this.trapCentre = tag.contains("TrapCentre") ? BlockPos.of(tag.getLong("TrapCentre")) : null;
         this.burrow = tag.contains("Burrow") ? BlockPos.of(tag.getLong("Burrow")) : null;
+        if (this.species == GirlSpecies.TRAPDOOR_SPIDER_ARACHNE) {       // vanilla saves NoGravity: weightless only while she is down her hole
+            this.inBurrow = tag.getBoolean("InBurrow") && this.burrow != null;
+            this.noPhysics = this.inBurrow;
+            this.setNoGravity(this.inBurrow);
+            this.setHidden(this.inBurrow);
+        }
     }
 
     /** Devoted (60+): an arachne within 32 blocks extends the spider truce to her player. */

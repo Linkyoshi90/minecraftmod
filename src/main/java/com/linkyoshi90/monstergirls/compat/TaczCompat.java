@@ -37,9 +37,9 @@ public final class TaczCompat {
         if (LOADED && Tacz.isGun(shooter.getMainHandItem())) Tacz.draw(shooter);
     }
 
-    /** One trigger pull at the target, or a reload when the magazine is empty. */
-    public static void fireAt(LivingEntity shooter, LivingEntity target) {
-        if (LOADED) Tacz.fireAt(shooter, target);
+    /** One trigger pull at the target, or a reload when the magazine is empty. Whether a shot went off. */
+    public static boolean fireAt(LivingEntity shooter, LivingEntity target) {
+        return LOADED && Tacz.fireAt(shooter, target);
     }
 
     /** Everything that names a TaCZ class: loaded only once TaCZ is known to be there. */
@@ -60,12 +60,12 @@ public final class TaczCompat {
             op.draw(shooter::getMainHandItem);
         }
 
-        static void fireAt(LivingEntity shooter, LivingEntity target) {
+        static boolean fireAt(LivingEntity shooter, LivingEntity target) {
             ItemStack gunStack = shooter.getMainHandItem();
             var gun = com.tacz.guns.api.item.IGun.getIGunOrNull(gunStack);
-            if (gun == null) return;
+            if (gun == null) return false;
             var op = com.tacz.guns.api.entity.IGunOperator.fromLivingEntity(shooter);
-            if (op.getSynReloadState().getStateType().isReloading()) return;
+            if (op.getSynReloadState().getStateType().isReloading()) return false;
             double dx = target.getX() - shooter.getX();
             double dy = target.getEyeY() - 0.2 - shooter.getEyeY();
             double dz = target.getZ() - shooter.getZ();
@@ -78,6 +78,7 @@ public final class TaczCompat {
                 default -> {
                 }
             }
+            return result == com.tacz.guns.api.entity.ShootResult.SUCCESS;
         }
     }
 }
