@@ -9,6 +9,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -19,13 +20,15 @@ import net.minecraft.world.item.Items;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 
 /**
  * Weapons for the girls who fight for their friend: the ones who go after the monsters near a befriended player (or
  * that player's attackers) on their own, not only when they are hurt themselves. Her friend (friendship 10 or more)
- * hands her a bow, a crossbow or, with TaCZ installed, a gun; she shoots the monsters she would have fought anyway.
- * A TaCZ gun's ammunition goes into her ammo pouch (right-click her with it), where TaCZ finds it when she reloads.
+ * hands her a bow, a crossbow or, with TaCZ installed, a gun (or throws it her way: she fetches it, {@link FetchGoal});
+ * she shoots the monsters she would have fought anyway. A TaCZ gun's ammunition goes into her ammo pouch (right-click
+ * her with it, or throw it to her), where TaCZ finds it when she reloads.
  * Sneak + right-click with an empty hand takes the weapon and the pouch back. Bows and crossbows never run out of
  * arrows, like a skeleton's.
  *
@@ -71,20 +74,12 @@ public final class GirlArms {
         if (isRangedWeapon(stack)) {
             if (!client) {
                 giveBack(girl, player);
-                girl.setItemSlot(EquipmentSlot.MAINHAND, stack.split(1));
-                girl.setDropChance(EquipmentSlot.MAINHAND, 2.0F);           // hers to keep: it always drops if she dies
-                TaczCompat.draw(girl);
-                girl.playSound(SoundEvents.ARMOR_EQUIP_GENERIC.value(), 1.0F, 1.0F);
-                player.displayClientMessage(Component.translatable("message.monstergirls.armed", girl.getDisplayName()), true);
+                arm(girl, stack.split(1), player);
             }
             return InteractionResult.sidedSuccess(client);
         }
         if (TaczCompat.isAmmoFor(girl.getMainHandItem(), stack)) {
-            if (!client) {
-                ItemStack rest = girl.ammoPouch().addItem(stack.copy());
-                stack.setCount(rest.getCount());
-                girl.playSound(SoundEvents.ARMOR_EQUIP_LEATHER.value(), 1.0F, 1.2F);
-            }
+            if (!client) stock(girl, stack);
             return InteractionResult.sidedSuccess(client);
         }
         if (stack.isEmpty() && player.isShiftKeyDown() && (isArmed(girl) || !girl.ammoPouch().isEmpty())) {
@@ -95,6 +90,103 @@ public final class GirlArms {
             return InteractionResult.sidedSuccess(client);
         }
         return null;
+    }
+
+    /** She takes the weapon in hand (one item). */
+    static void arm(AbstractMonsterGirl girl, ItemStack weapon, @Nullable Player friend) {
+        girl.setItemSlot(EquipmentSlot.MAINHAND, weapon);
+        girl.setDropChance(EquipmentSlot.MAINHAND, 2.0F);                   // hers to keep: it always drops if she dies
+        TaczCompat.draw(girl);
+        girl.playSound(SoundEvents.ARMOR_EQUIP_GENERIC.value(), 1.0F, 1.0F);
+        if (friend != null) friend.displayClientMessage(Component.translatable("message.monstergirls.armed", girl.getDisplayName()), true);
+    }
+
+    /** Ammunition into her pouch; what does not fit stays in the stack. */
+    static void stock(AbstractMonsterGirl girl, ItemStack ammo) {
+        ItemStack rest = girl.ammoPouch().addItem(ammo.copy());
+        ammo.setCount(rest.getCount());
+        girl.playSound(SoundEvents.ARMOR_EQUIP_LEATHER.value(), 1.0F, 1.2F);
+    }
+
+    /** Whether she would fetch this item lying on the ground: a weapon or ammunition for her gun, thrown by a friend. */
+    public static boolean wantsThrown(AbstractMonsterGirl girl, ItemEntity item) {
+        if (!item.isAlive() || item.getItem().isEmpty() || girl.isBaby() || !isFighter(girl.getSpecies())) return false;
+        if (!(item.getOwner() instanceof Player thrower) || girl.getAffection(thrower) < Orders.AFFECTION) return false;
+        ItemStack s = item.getItem();
+        return isRangedWeapon(s) || TaczCompat.isAmmoFor(girl.getMainHandItem(), s) && girl.ammoPouch().canAddItem(s);
+    }
+
+    /** She picks up a thrown weapon (her old one drops at her feet) or ammunition. Whether she took anything. */
+    public static boolean pickUp(AbstractMonsterGirl girl, ItemEntity item) {
+        if (!wantsThrown(girl, item)) return false;
+        ItemStack s = item.getItem().copy();
+        Player friend = item.getOwner() instanceof Player p ? p : null;
+        if (isRangedWeapon(s)) {
+            ItemStack old = girl.getMainHandItem();
+            if (isRangedWeapon(old)) girl.spawnAtLocation(old.copy());
+            arm(girl, s.split(1), friend);
+        } else {
+            stock(girl, s);
+        }
+        girl.take(item, 1);
+        if (s.isEmpty()) item.discard();
+        else item.setItem(s);
+        return true;
+    }
+
+    /** How far she looks for a weapon or ammunition thrown her way. */
+    public static final double FETCH_RANGE = 10.0;
+
+    /** Thrown her way by her friend: she goes and gets it, even mid-fight (a gun or ammunition is what she needs then). */
+    public static class FetchGoal extends Goal {
+        private final AbstractMonsterGirl girl;
+        @Nullable
+        private ItemEntity item;
+
+        public FetchGoal(AbstractMonsterGirl girl) {
+            this.girl = girl;
+            this.setFlags(EnumSet.of(Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            if (this.girl.tickCount % 10 != 0 || this.girl.getOrders().command(this.girl) == Orders.Command.SIT) return false;
+            List<ItemEntity> near = this.girl.level().getEntitiesOfClass(ItemEntity.class, this.girl.getBoundingBox().inflate(FETCH_RANGE),
+                    i -> wantsThrown(this.girl, i));
+            this.item = near.isEmpty() ? null : near.get(0);
+            return this.item != null;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.item != null && wantsThrown(this.girl, this.item) && this.item.distanceToSqr(this.girl) < FETCH_RANGE * FETCH_RANGE * 2;
+        }
+
+        @Override
+        public void start() {
+            if (this.item != null) this.girl.getNavigation().moveTo(this.item, 1.2);
+        }
+
+        @Override
+        public void stop() {
+            this.item = null;
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+        @Override
+        public void tick() {
+            if (this.item == null) return;
+            if (this.girl.distanceToSqr(this.item) < 2.25) {
+                pickUp(this.girl, this.item);
+                this.item = null;
+            } else if (this.girl.tickCount % 10 == 0) {
+                this.girl.getNavigation().moveTo(this.item, 1.2);
+            }
+        }
     }
 
     /** Her weapon and whatever is in her pouch go back to the player. */

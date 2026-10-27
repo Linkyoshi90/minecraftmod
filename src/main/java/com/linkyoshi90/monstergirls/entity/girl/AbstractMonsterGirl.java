@@ -177,7 +177,10 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.goalSelector.addGoal(5, new FollowEntityGoal(this, this::mother, 1.1, 6.0F, 2.5F));
         this.targetSelector.addGoal(2, new net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal<>(this, Player.class, 10, true, false,
                 p -> p instanceof Player pl && this.isHostileTo(pl)));
-        if (GirlArms.isFighter(species)) this.goalSelector.addGoal(1, new GirlArms.RangedGoal(this));   // a weapon from her friend
+        if (GirlArms.isFighter(species)) {                    // a weapon from her friend: handed over or thrown her way
+            this.goalSelector.addGoal(0, new GirlArms.FetchGoal(this));
+            this.goalSelector.addGoal(1, new GirlArms.RangedGoal(this));
+        }
         this.goalSelector.addGoal(6, new Settlement.HomeGoal(this));
         if (this.canFly()) {                                // the winged and the floating: fly instead of walking
             this.useFlight(true);

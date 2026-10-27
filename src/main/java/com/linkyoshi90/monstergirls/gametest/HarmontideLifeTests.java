@@ -74,6 +74,21 @@ public class HarmontideLifeTests {
         helper.succeed();
     }
 
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "fighterFetchesAThrownWeapon")
+    public static void fighterFetchesAThrownWeapon(GameTestHelper helper) {
+        AbstractMonsterGirl girl = still(helper, GirlSpecies.KAMAITACHI_RODENT, new BlockPos(3, 2, 3));
+        ServerPlayer stranger = HarpyTestUtil.survivalPlayer(helper, new BlockPos(7, 2, 7), "stranger");
+        ServerPlayer p = friendOf(helper, girl, new BlockPos(5, 2, 5));
+        net.minecraft.world.entity.item.ItemEntity fromStranger = stranger.drop(new ItemStack(Items.BOW), true, true);
+        net.minecraft.world.entity.item.ItemEntity fromFriend = p.drop(new ItemStack(Items.CROSSBOW), true, true);
+        check(fromStranger != null && !GirlArms.wantsThrown(girl, fromStranger), "a stranger's bow is not for her");
+        check(fromFriend != null && GirlArms.wantsThrown(girl, fromFriend), "her friend's crossbow is");
+        check(GirlArms.pickUp(girl, fromFriend) && girl.getMainHandItem().is(Items.CROSSBOW) && fromFriend.isRemoved(), "she picks it up and holds it");
+        HarpyTestUtil.remove(stranger);
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
     @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "journalRecordsMeetingsAndFriends")
     public static void journalRecordsMeetingsAndFriends(GameTestHelper helper) {
         AbstractMonsterGirl girl = still(helper, GirlSpecies.YUREI_UNDEAD, new BlockPos(3, 2, 3));
