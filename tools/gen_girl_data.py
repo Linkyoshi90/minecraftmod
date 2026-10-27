@@ -97,7 +97,7 @@ CATEGORY = {"axolotl_mermaid": "underground_water_creature", "amethyst_slime": "
             "mantarrow_mermaid": "water_creature", "moonseal_mermaid": "creature", "gremlin_devil": "creature", "karakasa_obake_devil": "creature",
             "rust_otter_mermaid": "creature", "chochin_obake_devil": "creature", "undine_slime": "creature", "ittan_momen_devil": "creature",
             "rokurokubi_devil": "creature", "jorogumo_arachne": "creature", "sword_koi_mermaid": "water_creature", "kikimora_devil": "creature",
-            "cockatrice_dragon": "creature", "sawfin_mermaid": "water_creature", "klabuster_slime": "monster", "yurei_undead": "monster"}
+            "cockatrice_dragon": "creature", "sawfin_mermaid": "water_creature", "yurei_undead": "monster"}
 # hitbox widths that differ from the family's
 WIDTH = {"kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alraune_flora": 1.2, "frankenstein_undead": 0.8,
          "gryphon_dragon": 1.3, "long_dragon": 1.0, "jormungandr_dragon": 1.2, "wyvern_dragon": 1.2, "wyrm_dragon": 1.3,
@@ -216,6 +216,10 @@ def main():
         dump(os.path.join(ASSETS, "models", "item", f"{sp}_spawn_egg.json"), {"parent": "minecraft:item/template_spawn_egg"})
         lang[f"entity.monstergirls.{sp}"] = NAME.get(sp, s["name"] + SUFFIX[fid])
         lang[f"item.monstergirls.{sp}_spawn_egg"] = lang[f"entity.monstergirls.{sp}"] + " Spawn Egg"
+        lang[f"journal.monstergirls.{sp}.home"] = s.get("group", "")                       # her page in the Harmontide journal
+        sig = s.get("signature")
+        if sig:
+            lang[f"journal.monstergirls.{sp}.signature"] = f"{sig[0]}: {sig[1]}"
         if sp in ("snow_leopard_nekomata", "lynx_nekomata", "arctic_kitsune", "reindeer_centaur", "highland_minotaur", "yak_minotaur", "tusktaur_centaur",
                   "aurorantler_centaur", "snowloper_nekomata", "yeti_canid"):
             snow_walkers.append("monstergirls:" + sp)
@@ -330,6 +334,22 @@ public enum GirlSpecies {
         "message.monstergirls.keening": "%s keens. Danger is close",
         "message.monstergirls.mended": "You mend %s's wound. She won't forget it",
         "message.monstergirls.introduced": "%s introduces you to her %s. It is yours now",
+        "message.monstergirls.armed": "%s takes the weapon. She'll use it on your enemies",
+        "message.monstergirls.disarmed": "%s hands back her weapon",
+        "journal.monstergirls.title": "Harmontide Journal",
+        "journal.monstergirls.girls": "Monster girls met: %s of %s",
+        "journal.monstergirls.friends": "Befriended: %s",
+        "journal.monstergirls.others": "Other creatures met: %s",
+        "journal.monstergirls.empty": "No one yet. Go and meet someone!",
+        "journal.monstergirls.home": "Lives: %s",
+        "journal.monstergirls.met": "Met",
+        "journal.monstergirls.befriended": "Befriended",
+        "block.monstergirls.hearth": "Harmontide Hearth",
+        "message.monstergirls.hearth": "%s live here",
+        "message.monstergirls.settled": "%s settles at your hearth",
+        "message.monstergirls.expedition_set_off": "%s sets off with your map. She'll be back in a day",
+        "message.monstergirls.expedition_back": "%s is back from her expedition, and brought you something!",
+        "message.monstergirls.expedition_companion": "%s brought a friend home: %s",
         "itemGroup.monstergirls": "Harmontide",
     })
     path = os.path.join(ASSETS, "lang", "en_us.json")
@@ -338,7 +358,21 @@ public enum GirlSpecies {
     cur.update(lang)
     with open(path, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(json.dumps(cur, indent=2, ensure_ascii=False) + "\n")
-    print(f"{len(rows)} species: GirlSpecies.java, spawns, item models, lang ({len(lang)} keys)")
+    write_water_breathers(rows)
+    print(f"{len(rows)} species: GirlSpecies.java, spawns, item models, lang ({len(lang)} keys), water breathers")
+
+
+# who breathes water (minecraft:can_breathe_under_water): every mermaid and every mollusk but the land snail, plus these
+WATER_BREATHERS = ["bullywug", "bullfrog", "tree_frog", "poison_dart_frog", "glass_frog", "goliath_frog", "desert_rain_frog", "surinam_toad",
+                   "sea_snake_lamia", "kelpie_centaur", "penguin_harpy", "softshell_turtle_lizardfolk", "matamata_lizardfolk"]
+NOT_WATER_BREATHERS = {"snail_mollusk"}
+
+
+def write_water_breathers(rows):
+    ids = list(WATER_BREATHERS) + [r[0] for r in rows if r[1] in ("MERFOLK", "MOLLUSK") and r[0] not in NOT_WATER_BREATHERS]
+    path = os.path.join(RES, "data", "minecraft", "tags", "entity_type", "can_breathe_under_water.json")
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(json.dumps({"values": ["monstergirls:" + i for i in dict.fromkeys(ids)]}, indent=2) + "\n")
 
 
 def eggs_block():

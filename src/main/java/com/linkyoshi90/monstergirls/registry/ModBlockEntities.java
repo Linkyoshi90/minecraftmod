@@ -32,5 +32,9 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("alraune_bloom", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.AlrauneBloomBlockEntity::new,
                     ModBlocks.ALRAUNE_BLOOM.get()).build(null));
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.linkyoshi90.monstergirls.block.HearthBlockEntity>> HEARTH =
+            BLOCK_ENTITIES.register("hearth", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.HearthBlockEntity::new,
+                    ModBlocks.HEARTH.get()).build(null));
+
     private ModBlockEntities() {}
 }

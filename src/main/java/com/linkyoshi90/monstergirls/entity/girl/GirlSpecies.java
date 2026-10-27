@@ -97,7 +97,7 @@ public enum GirlSpecies {
     MIMIC_SLIME("mimic_slime", Family.SLIME, 1.5F, 28.5F, 0.8F, MobCategory.CREATURE, 0xB05AD0, 0xC87AE8, "oak", "spruce", "gilded", "ender", "christmas"),
     ENDER_SLIME("ender_slime", Family.SLIME, 1.7F, 31.25F, 0.8F, MobCategory.MONSTER, 0x2A1A3E, 0x3A2458, "void", "chorus", "pearl", "end_stone", "shulker"),
     UNDINE_SLIME("undine_slime", Family.SLIME, 1.6F, 31.25F, 0.8F, MobCategory.CREATURE, 0x5AB0F0, 0x8AC8F8, "blue", "teal", "clear", "deep", "sea"),
-    KLABUSTER_SLIME("klabuster_slime", Family.SLIME, 1.2F, 28.5F, 0.6F, MobCategory.MONSTER, 0x3A8AE8, 0x5AA8F8, "blue", "aqua", "clear", "murk", "dusk"),
+    KLABUSTER_SLIME("klabuster_slime", Family.SLIME, 1.2F, 28.5F, 0.6F, MobCategory.CREATURE, 0x5E3818, 0x6E4420, "brown", "blue", "green", "purple", "gold"),
     INABA_JACKALOPE("inaba_jackalope", Family.JACKALOPE, 1.55F, 28.5F, 0.6F, MobCategory.CREATURE, 0xF6F6F4, 0xF2F0F4, "moon", "harvest", "blood", "blue", "eclipse"),
     JACK_JACKALOPE("jack_jackalope", Family.JACKALOPE, 1.7F, 28.6F, 0.6F, MobCategory.CREATURE, 0x8A6A48, 0x6A4A2E, "brown", "grey", "tan", "snowshoe", "black"),
     EASTER_JACKALOPE("easter_jackalope", Family.JACKALOPE, 1.5F, 28.5F, 0.6F, MobCategory.CREATURE, 0xF8D4DE, 0xF4C0D0, "pink", "mint", "lavender", "butter", "sky"),

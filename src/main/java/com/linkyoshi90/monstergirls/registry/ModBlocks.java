@@ -56,6 +56,12 @@ public final class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_CYAN).strength(2.0F, 6.0F).sound(SoundType.AMETHYST).noOcclusion()
                     .lightLevel(s -> 10).pushReaction(PushReaction.BLOCK));
 
+    /** The Harmontide hearth: the heart of a settlement of befriended girls (HearthBlock). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.HearthBlock> HEARTH = BLOCKS.registerBlock("hearth",
+            com.linkyoshi90.monstergirls.block.HearthBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F).sound(SoundType.STONE).lightLevel(s -> 13)
+                    .requiresCorrectToolForDrops());
+
     /** The nectar fluid's block (see ModFluids). */
     public static final DeferredBlock<net.minecraft.world.level.block.LiquidBlock> NECTAR = BLOCKS.register("nectar",
             () -> new net.minecraft.world.level.block.LiquidBlock(ModFluids.NECTAR.get(),

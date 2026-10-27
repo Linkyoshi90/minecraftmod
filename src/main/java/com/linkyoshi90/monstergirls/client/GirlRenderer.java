@@ -50,6 +50,7 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         if (species.family() == GirlSpecies.Family.CENTAUR) this.addRenderLayer(new TorsoArmourLayer(this));
         if (species == GirlSpecies.SHEEP_MINOTAUR || species == GirlSpecies.RHIWOOL_MINOTAUR) this.addRenderLayer(new DyedWoolLayer(this));
         this.addRenderLayer(new MoonEyesLayer<>(this));
+        this.addRenderLayer(new HeldItemLayer(this));
         this.addRenderLayer(new PaintGlowLayer<>(this, AbstractMonsterGirl::getPaintName));
         if (species == GirlSpecies.CHESHIRE_NEKOMATA) {                    // her grin glows, whole, however faded the rest of her is
             this.addRenderLayer(new AutoGlowingGeoLayer<>(this) {
@@ -282,5 +283,27 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
     public RenderType getRenderType(AbstractMonsterGirl girl, ResourceLocation texture, @Nullable MultiBufferSource buffers, float partialTick) {
         return this.species.family() == GirlSpecies.Family.SLIME || TRANSLUCENT.contains(this.species.id()) || this.species.id().endsWith("_bug")
                 || Paints.translucent(girl.getPaintName()) ? RenderType.entityTranslucent(texture) : super.getRenderType(girl, texture, buffers, partialTick);
+    }
+
+    /** What she holds in her right hand (a weapon from her friend, an elf's bow), drawn at her hand bone. */
+    static class HeldItemLayer extends software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer<AbstractMonsterGirl> {
+        HeldItemLayer(GirlRenderer renderer) {
+            super(renderer, (bone, girl) -> "hand_r".equals(bone.getName()) ? girl.getMainHandItem() : null, (bone, girl) -> null);
+        }
+
+        @Override
+        protected net.minecraft.world.item.ItemDisplayContext getTransformTypeForStack(software.bernie.geckolib.cache.object.GeoBone bone,
+                                                                                      net.minecraft.world.item.ItemStack stack, AbstractMonsterGirl girl) {
+            return net.minecraft.world.item.ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
+        }
+
+        @Override
+        protected void renderStackForBone(com.mojang.blaze3d.vertex.PoseStack pose, software.bernie.geckolib.cache.object.GeoBone bone,
+                                          net.minecraft.world.item.ItemStack stack, AbstractMonsterGirl girl,
+                                          net.minecraft.client.renderer.MultiBufferSource buffers, float partialTick, int light, int overlay) {
+            pose.mulPose(com.mojang.math.Axis.XP.rotationDegrees(-90.0F));         // out of her fist, pointing forward
+            pose.translate(0.0F, 0.06F, -0.1F);
+            super.renderStackForBone(pose, bone, stack, girl, buffers, partialTick, light, overlay);
+        }
     }
 }

@@ -1,0 +1,184 @@
+package com.linkyoshi90.monstergirls.entity.girl;
+
+import com.linkyoshi90.monstergirls.compat.TaczCompat;
+import com.linkyoshi90.monstergirls.entity.Orders;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+
+import javax.annotation.Nullable;
+import java.util.EnumSet;
+import java.util.Set;
+
+/**
+ * Weapons for the girls who fight for their friend: the ones who go after the monsters near a befriended player (or
+ * that player's attackers) on their own, not only when they are hurt themselves. Her friend (friendship 10 or more)
+ * hands her a bow, a crossbow or, with TaCZ installed, a gun; she shoots the monsters she would have fought anyway.
+ * A TaCZ gun's ammunition goes into her ammo pouch (right-click her with it), where TaCZ finds it when she reloads.
+ * Sneak + right-click with an empty hand takes the weapon and the pouch back. Bows and crossbows never run out of
+ * arrows, like a skeleton's.
+ *
+ * <p>The elves are not on the list: the archers carry their own bows already (Elf).
+ */
+public final class GirlArms {
+    private GirlArms() {
+    }
+
+    public static final Set<GirlSpecies> FIGHTERS = EnumSet.of(
+            GirlSpecies.TRAPDOOR_SPIDER_ARACHNE, GirlSpecies.WOLF_SPIDER_ARACHNE,
+            GirlSpecies.MOSQUITO_BUG, GirlSpecies.HORNET_BUG,
+            GirlSpecies.PANDA_CANID,
+            GirlSpecies.GOAT_CENTAUR, GirlSpecies.ZEBRA_CENTAUR,
+            GirlSpecies.ONI_DEVIL,
+            GirlSpecies.WADJET_LAMIA,
+            GirlSpecies.IKA_MOLLUSK,
+            GirlSpecies.SQUIRRICERAT_RODENT, GirlSpecies.KAMAITACHI_RODENT,
+            GirlSpecies.FRANKENSTEIN_UNDEAD);
+
+    /** Whether she fights the monsters near her friend on her own (so she can carry a weapon). */
+    public static boolean isFighter(GirlSpecies s) {
+        return FIGHTERS.contains(s) || s.family() == GirlSpecies.Family.ARMOURED || s.family() == GirlSpecies.Family.CONSTRUCT
+                || s.family() == GirlSpecies.Family.CRUSTACEAN || s.family() == GirlSpecies.Family.MARSUPIAL;
+    }
+
+    public static boolean isRangedWeapon(ItemStack stack) {
+        return stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem || TaczCompat.isGun(stack);
+    }
+
+    public static boolean isArmed(AbstractMonsterGirl girl) {
+        return isRangedWeapon(girl.getMainHandItem());
+    }
+
+    /**
+     * Her friend offers her a weapon or ammunition, or (sneaking, empty hand) asks for them back. The result, or null
+     * when this has nothing to do with weapons.
+     */
+    @Nullable
+    public static InteractionResult interact(AbstractMonsterGirl girl, Player player, ItemStack stack) {
+        if (!isFighter(girl.getSpecies()) || girl.isBaby() || girl.getAffection(player) < Orders.AFFECTION) return null;
+        boolean client = girl.level().isClientSide;
+        if (isRangedWeapon(stack)) {
+            if (!client) {
+                giveBack(girl, player);
+                girl.setItemSlot(EquipmentSlot.MAINHAND, stack.split(1));
+                girl.setDropChance(EquipmentSlot.MAINHAND, 2.0F);           // hers to keep: it always drops if she dies
+                TaczCompat.draw(girl);
+                girl.playSound(SoundEvents.ARMOR_EQUIP_GENERIC.value(), 1.0F, 1.0F);
+                player.displayClientMessage(Component.translatable("message.monstergirls.armed", girl.getDisplayName()), true);
+            }
+            return InteractionResult.sidedSuccess(client);
+        }
+        if (TaczCompat.isAmmoFor(girl.getMainHandItem(), stack)) {
+            if (!client) {
+                ItemStack rest = girl.ammoPouch().addItem(stack.copy());
+                stack.setCount(rest.getCount());
+                girl.playSound(SoundEvents.ARMOR_EQUIP_LEATHER.value(), 1.0F, 1.2F);
+            }
+            return InteractionResult.sidedSuccess(client);
+        }
+        if (stack.isEmpty() && player.isShiftKeyDown() && (isArmed(girl) || !girl.ammoPouch().isEmpty())) {
+            if (!client) {
+                giveBack(girl, player);
+                player.displayClientMessage(Component.translatable("message.monstergirls.disarmed", girl.getDisplayName()), true);
+            }
+            return InteractionResult.sidedSuccess(client);
+        }
+        return null;
+    }
+
+    /** Her weapon and whatever is in her pouch go back to the player. */
+    static void giveBack(AbstractMonsterGirl girl, Player player) {
+        ItemStack held = girl.getMainHandItem();
+        if (isRangedWeapon(held)) {
+            girl.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+            if (!player.getInventory().add(held)) player.drop(held, false);
+        }
+        for (ItemStack s : girl.ammoPouch().removeAllItems()) {
+            if (!player.getInventory().add(s)) player.drop(s, false);
+        }
+    }
+
+    /**
+     * Armed and with someone to shoot: she keeps her distance and looses arrows (or fires her gun). It outranks her
+     * own melee goals while she holds a weapon, and steps aside when she doesn't.
+     */
+    public static class RangedGoal extends Goal {
+        private final AbstractMonsterGirl girl;
+        private int cooldown;
+        private int seen;
+
+        public RangedGoal(AbstractMonsterGirl girl) {
+            this.girl = girl;
+            this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+        }
+
+        @Override
+        public boolean canUse() {
+            LivingEntity t = this.girl.getTarget();
+            return t != null && t.isAlive() && isArmed(this.girl);
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.canUse();
+        }
+
+        @Override
+        public void stop() {
+            this.seen = 0;
+            this.girl.getNavigation().stop();
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+        @Override
+        public void tick() {
+            LivingEntity t = this.girl.getTarget();
+            if (t == null) return;
+            double d2 = this.girl.distanceToSqr(t);
+            boolean sees = this.girl.getSensing().hasLineOfSight(t);
+            this.seen = sees ? this.seen + 1 : 0;
+            this.girl.getLookControl().setLookAt(t, 30.0F, 30.0F);
+            if (d2 > 14 * 14 || !sees) this.girl.getNavigation().moveTo(t, 1.0);
+            else if (d2 < 4 * 4) this.girl.getNavigation().moveTo(this.girl.getX() * 2 - t.getX(), this.girl.getY(), this.girl.getZ() * 2 - t.getZ(), 1.1);
+            else this.girl.getNavigation().stop();
+            if (this.cooldown > 0) this.cooldown--;
+            if (!sees || this.seen < 5 || d2 > 24 * 24 || !(this.girl.level() instanceof ServerLevel)) return;
+            ItemStack weapon = this.girl.getMainHandItem();
+            if (TaczCompat.isGun(weapon)) {
+                TaczCompat.fireAt(this.girl, t);                         // TaCZ keeps the gun's own fire rate and reloads
+            } else if (this.cooldown <= 0) {
+                shootArrow(this.girl, t, weapon);
+                this.cooldown = weapon.getItem() instanceof CrossbowItem ? 40 : 30;
+            }
+        }
+    }
+
+    /** A skeleton's shot, from her bow or crossbow (the crossbow's bolt flies faster and straighter). */
+    public static void shootArrow(AbstractMonsterGirl girl, LivingEntity target, ItemStack weapon) {
+        boolean crossbow = weapon.getItem() instanceof CrossbowItem;
+        AbstractArrow arrow = ProjectileUtil.getMobArrow(girl, new ItemStack(Items.ARROW), crossbow ? 1.6F : 1.0F, weapon);
+        double dx = target.getX() - girl.getX();
+        double dy = target.getY(0.3333333333333333) - arrow.getY();
+        double dz = target.getZ() - girl.getZ();
+        double flat = Math.sqrt(dx * dx + dz * dz);
+        arrow.shoot(dx, dy + flat * 0.2, dz, crossbow ? 2.2F : 1.6F, crossbow ? 4.0F : 8.0F);
+        arrow.pickup = AbstractArrow.Pickup.DISALLOWED;
+        girl.level().addFreshEntity(arrow);
+        girl.playSound(crossbow ? SoundEvents.CROSSBOW_SHOOT : SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (girl.getRandom().nextFloat() * 0.4F + 0.8F));
+    }
+}

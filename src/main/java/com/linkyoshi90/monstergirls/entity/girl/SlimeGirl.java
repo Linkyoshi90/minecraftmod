@@ -410,7 +410,7 @@ public class SlimeGirl extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
-        if (this.species == GirlSpecies.KLABUSTER_SLIME && this.level() instanceof ServerLevel drip && !this.isBaby() && this.tickCount % 40 == 0) this.drip(drip);
+        if (this.species == GirlSpecies.KLABUSTER_SLIME && this.level() instanceof ServerLevel field && !this.isBaby() && this.tickCount % 600 == 0) this.manure(field);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.isHalf()) {                                             // find the other half and merge
             this.halfAge++;
@@ -769,21 +769,17 @@ public class SlimeGirl extends AbstractMonsterGirl {
 
     // --- the klabuster -------------------------------------------------------------------------------------------
 
-    /** Within 6 blocks of her friend she puts out the fires and fills the cauldrons with water. How many blocks she changed, or -1 without a friend. */
-    public int drip(ServerLevel level) {
+    /** The crops within 6 blocks of her friend grow a stage, as if given bone meal. How many, or -1 without a friend. */
+    public int manure(ServerLevel level) {
         net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
         if (friend == null) return -1;
         int n = 0;
-        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-6, -3, -6), friend.blockPosition().offset(6, 3, 6))) {
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-6, -2, -6), friend.blockPosition().offset(6, 2, 6))) {
             var st = level.getBlockState(p);
-            if (st.is(net.minecraft.tags.BlockTags.FIRE)) {
-                level.removeBlock(p, false);
-                level.levelEvent(1009, p, 0);                                      // the fizz
-                n++;
-            } else if (st.is(net.minecraft.world.level.block.Blocks.CAULDRON) || st.is(net.minecraft.world.level.block.Blocks.WATER_CAULDRON)
-                    && st.getValue(net.minecraft.world.level.block.LayeredCauldronBlock.LEVEL) < 3) {
-                level.setBlockAndUpdate(p, net.minecraft.world.level.block.Blocks.WATER_CAULDRON.defaultBlockState().setValue(net.minecraft.world.level.block.LayeredCauldronBlock.LEVEL, 3));
-                level.playSound(null, p, net.minecraft.sounds.SoundEvents.POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON, net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
+            if (st.is(net.minecraft.tags.BlockTags.CROPS) && st.getBlock() instanceof net.minecraft.world.level.block.BonemealableBlock b && b.isValidBonemealTarget(level, p, st)) {
+                net.minecraft.core.BlockPos at = p.immutable();
+                b.performBonemeal(level, this.random, at, st);
+                level.levelEvent(1505, at, 6);                                     // the bone meal sparkles
                 n++;
             }
         }

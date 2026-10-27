@@ -120,7 +120,7 @@ CHANGES = {
                  "Ahuizotl: steals the catch off your fishing line unless you hold a lantern (which keeps her away); befriended, she fishes for you",
                  "Dolphin (sixth species): teasing, Dolphin's Grace", "Sharks attack anything in the water (swimmers until fed)",
                  "Orcas and dolphins tease swimmers, boats and sea life", "Seashells found on sandy bottoms, worn as a shell top"], ["Orca breaching"], ["Shark blood scent"]),
-    "slime": (["Klabuster: befriended, she puts out the fires near her friend and fills their cauldrons with water",
+    "slime": (["Klabuster: befriended, every half minute the crops near her friend grow a stage",
                  "Undine: keeps the farmland near her watered, fills cauldrons, Water Breathing for her friend in the water",
                  "Bouncing happily on slime blocks and beds",
                "Ender slime: teleports away from blows and water; while wild she picks up loose blocks and sets them down elsewhere; endermites are her kin"], [], []),

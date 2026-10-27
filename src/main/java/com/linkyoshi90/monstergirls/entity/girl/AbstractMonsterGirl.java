@@ -153,6 +153,16 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     private boolean variantFromData;
     @Nullable
     private BlockPos lightPos;
+    /** A TaCZ gun's ammunition, given by her friend (GirlArms); TaCZ reloads from it through her item-handler capability. */
+    private final net.minecraft.world.SimpleContainer ammoPouch = new net.minecraft.world.SimpleContainer(9);
+    /** Her home (Settlement): the hearth she lives at, since when, and the hut she builds near it. */
+    @Nullable
+    private BlockPos homeHearth;
+    private long settledSince;
+    @Nullable
+    private BlockPos hutOrigin;
+    private net.minecraft.core.Direction hutDoor = net.minecraft.core.Direction.NORTH;
+    private int hutStep;
 
     protected AbstractMonsterGirl(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level);
@@ -167,6 +177,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.goalSelector.addGoal(5, new FollowEntityGoal(this, this::mother, 1.1, 6.0F, 2.5F));
         this.targetSelector.addGoal(2, new net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal<>(this, Player.class, 10, true, false,
                 p -> p instanceof Player pl && this.isHostileTo(pl)));
+        if (GirlArms.isFighter(species)) this.goalSelector.addGoal(1, new GirlArms.RangedGoal(this));   // a weapon from her friend
+        this.goalSelector.addGoal(6, new Settlement.HomeGoal(this));
         if (this.canFly()) {                                // the winged and the floating: fly instead of walking
             this.useFlight(true);
             this.goalSelector.addGoal(8, new net.minecraft.world.entity.ai.goal.WaterAvoidingRandomFlyingGoal(this, 1.0));
@@ -612,6 +624,12 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
+        if (stack.is(Items.MAP) && !this.isBaby() && this.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {   // off on an expedition
+            if (!this.level().isClientSide) com.linkyoshi90.monstergirls.entity.Expeditions.send(this, player, stack);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+        InteractionResult arms = GirlArms.interact(this, player, stack);
+        if (arms != null) return arms;
         InteractionResult family = this.familyInteract(player, hand, stack);
         if (family != null) return family;
         if (!this.isBaby() && (this.isFood(stack) || stack.is(ModTags.MEAT))) {
@@ -797,6 +815,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (this.level() instanceof ServerLevel healerLevel && this.tickCount % 600 == 0) this.tendCompanions(healerLevel);
         if (!(this.level() instanceof ServerLevel server)) return;
         com.linkyoshi90.monstergirls.entity.Painted.tickCopper(this, this);
+        if (this.tickCount % 100 == 0) Settlement.tick(server, this);
+        if (this.hutOrigin != null && this.tickCount % 10 == 0) Settlement.buildStep(server, this);
         this.gestation.tick();
         if (this.tickCount % 10 == 0) this.entityData.set(DATA_BELLY, (byte) Math.round(this.bellyProgress() * 100));
         if (this.isBaby() && ++this.growTicks >= GROW_TICKS) this.setBaby(false);
@@ -897,6 +917,16 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         tag.putByte("Tails", (byte) this.getTails());
         if (this.getPaint() > 0) tag.putString("Paint", this.getPaintName());
         tag.putLong("DevotedSince", this.devotedSince);
+        if (!this.ammoPouch.isEmpty()) tag.put("AmmoPouch", this.ammoPouch.createTag(this.registryAccess()));
+        if (this.homeHearth != null) {
+            tag.put("HomeHearth", net.minecraft.nbt.NbtUtils.writeBlockPos(this.homeHearth));
+            tag.putLong("SettledSince", this.settledSince);
+        }
+        if (this.hutOrigin != null) {
+            tag.put("HutOrigin", net.minecraft.nbt.NbtUtils.writeBlockPos(this.hutOrigin));
+            tag.putString("HutDoor", this.hutDoor.getName());
+            tag.putInt("HutStep", this.hutStep);
+        }
     }
 
     @Override
@@ -921,6 +951,76 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (tag.contains("Tails")) this.setTails(tag.getByte("Tails"));
         if (tag.contains("Paint")) this.setPaint(PAINTS.indexOf(tag.getString("Paint")) + 1);
         this.devotedSince = tag.contains("DevotedSince") ? tag.getLong("DevotedSince") : NOT_DEVOTED;
+        this.ammoPouch.clearContent();
+        if (tag.contains("AmmoPouch")) this.ammoPouch.fromTag(tag.getList("AmmoPouch", net.minecraft.nbt.Tag.TAG_COMPOUND), this.registryAccess());
+        this.homeHearth = net.minecraft.nbt.NbtUtils.readBlockPos(tag, "HomeHearth").orElse(null);
+        this.settledSince = tag.getLong("SettledSince");
+        this.hutOrigin = net.minecraft.nbt.NbtUtils.readBlockPos(tag, "HutOrigin").orElse(null);
+        net.minecraft.core.Direction d = net.minecraft.core.Direction.byName(tag.getString("HutDoor"));
+        this.hutDoor = d == null || d.getAxis().isVertical() ? net.minecraft.core.Direction.NORTH : d;
+        this.hutStep = tag.getInt("HutStep");
+    }
+
+    // --- her home at a hearth (Settlement) --------------------------------------------------------------------------
+
+    @Nullable
+    public BlockPos homeHearth() {
+        return this.homeHearth;
+    }
+
+    public long settledSince() {
+        return this.settledSince;
+    }
+
+    void settleAt(BlockPos hearth, long time) {
+        this.homeHearth = hearth.immutable();
+        this.settledSince = time;
+        this.hutOrigin = null;
+        this.hutStep = 0;
+    }
+
+    /** Her hearth is gone (or no longer has her): she roams free again. Her hut, if she built one, stays standing. */
+    public void leaveHearth() {
+        this.homeHearth = null;
+        this.hutOrigin = null;
+        this.hutStep = 0;
+    }
+
+    @Nullable
+    public BlockPos hutOrigin() {
+        return this.hutOrigin;
+    }
+
+    public net.minecraft.core.Direction hutDoor() {
+        return this.hutDoor;
+    }
+
+    public int hutStep() {
+        return this.hutStep;
+    }
+
+    void setHutStep(int step) {
+        this.hutStep = step;
+    }
+
+    public void planHutAt(BlockPos origin, net.minecraft.core.Direction door) {
+        this.hutOrigin = origin.immutable();
+        this.hutDoor = door;
+        this.hutStep = 0;
+    }
+
+    public boolean hutDone() {
+        return this.hutOrigin != null && this.hutStep >= Settlement.hut(this.species, this.hutOrigin, this.hutDoor).size();
+    }
+
+    public net.minecraft.world.SimpleContainer ammoPouch() {
+        return this.ammoPouch;
+    }
+
+    @Override
+    protected void dropCustomDeathLoot(ServerLevel level, net.minecraft.world.damagesource.DamageSource source, boolean recentlyHit) {
+        super.dropCustomDeathLoot(level, source, recentlyHit);
+        for (ItemStack s : this.ammoPouch.removeAllItems()) this.spawnAtLocation(s);   // her friend's ammunition is not lost with her
     }
 
     // --- animation -----------------------------------------------------------------------------------------------

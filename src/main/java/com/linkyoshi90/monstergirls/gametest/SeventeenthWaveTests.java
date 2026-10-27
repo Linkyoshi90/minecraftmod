@@ -27,7 +27,6 @@ import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.gametest.GameTestHolder;
@@ -159,17 +158,15 @@ public class SeventeenthWaveTests {
         helper.succeed();
     }
 
-    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "klabusterDripsOnFires")
-    public static void klabusterDripsOnFires(GameTestHelper helper) {
-        SlimeGirl drop = still(helper, GirlSpecies.KLABUSTER_SLIME, new BlockPos(3, 2, 3));
-        check(drop.drip(helper.getLevel()) == -1, "no friend, nothing");
-        ServerPlayer p = friendOf(helper, drop, new BlockPos(5, 2, 5));
-        helper.setBlock(new BlockPos(7, 2, 5), Blocks.FIRE);
-        helper.setBlock(new BlockPos(5, 2, 7), Blocks.CAULDRON);
-        check(drop.drip(helper.getLevel()) >= 2, "she puts out the fire and fills the cauldron");
-        check(!helper.getBlockState(new BlockPos(7, 2, 5)).is(Blocks.FIRE), "the fire is out");
-        BlockState c = helper.getBlockState(new BlockPos(5, 2, 7));
-        check(c.is(Blocks.WATER_CAULDRON) && c.getValue(LayeredCauldronBlock.LEVEL) == 3, "the cauldron is full");
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "klabusterManuresCrops")
+    public static void klabusterManuresCrops(GameTestHelper helper) {
+        SlimeGirl klab = still(helper, GirlSpecies.KLABUSTER_SLIME, new BlockPos(3, 2, 3));
+        check(klab.manure(helper.getLevel()) == -1, "no friend, nothing");
+        ServerPlayer p = friendOf(helper, klab, new BlockPos(5, 2, 5));
+        helper.setBlock(new BlockPos(7, 1, 5), Blocks.FARMLAND);
+        helper.setBlock(new BlockPos(7, 2, 5), Blocks.WHEAT);
+        check(klab.manure(helper.getLevel()) == 1, "she manures the wheat");
+        check(helper.getBlockState(new BlockPos(7, 2, 5)).getValue(net.minecraft.world.level.block.CropBlock.AGE) > 0, "and it grows");
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
@@ -199,6 +196,18 @@ public class SeventeenthWaveTests {
         check(amarok.packMother(helper.getLevel()) == 1, "only her friend's wolf");
         check(tame.hasEffect(MobEffects.DAMAGE_BOOST) && !wild.hasEffect(MobEffects.DAMAGE_BOOST), "the tamed wolf is stronger, the wild one not");
         HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    /** Every mermaid and every sea mollusk breathes water (the tag gen_girl_data.py writes): the sword koi and the sawfin once drowned. */
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "everySeaGirlBreathesWater")
+    public static void everySeaGirlBreathesWater(GameTestHelper helper) {
+        for (GirlSpecies s : GirlSpecies.values()) {
+            if (s.family() != GirlSpecies.Family.MERFOLK && s.family() != GirlSpecies.Family.MOLLUSK || s == GirlSpecies.SNAIL_MOLLUSK) continue;
+            AbstractMonsterGirl girl = still(helper, s, new BlockPos(4, 2, 4));
+            check(girl.canBreatheUnderwater(), s.id() + " breathes water");
+            girl.discard();
+        }
         helper.succeed();
     }
 

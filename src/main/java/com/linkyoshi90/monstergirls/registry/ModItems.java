@@ -133,6 +133,7 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> RIFLEBIRD_NEST = ITEMS.registerSimpleBlockItem(ModBlocks.RIFLEBIRD_NEST);
     /** An Easter Bunny's painted egg (place it to hide it again). */
     public static final DeferredItem<BlockItem> PAINTED_EGG = ITEMS.registerSimpleBlockItem(ModBlocks.PAINTED_EGG);
+    public static final DeferredItem<BlockItem> HEARTH = ITEMS.registerSimpleBlockItem(ModBlocks.HEARTH);
     /** A fertilised harpy egg: place it somewhere solid and it hatches in about a day. */
     public static final DeferredItem<BlockItem> HARPY_EGG = ITEMS.register("harpy_egg",
             () -> new HarpyEggItem(ModBlocks.HARPY_EGG.get(), new Item.Properties().stacksTo(16)));
@@ -205,6 +206,10 @@ public final class ModItems {
     /** Shows tonight's moon phase, and how many nights until the full moon. */
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.MoonDialItem> MOON_DIAL = ITEMS.registerItem("moon_dial",
             props -> new com.linkyoshi90.monstergirls.item.MoonDialItem(props.stacksTo(1)));
+
+    /** The Harmontide journal: the creatures you have met and befriended (book + feather). */
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.JournalItem> HARMONTIDE_JOURNAL = ITEMS.registerItem("harmontide_journal",
+            props -> new com.linkyoshi90.monstergirls.item.JournalItem(props.stacksTo(1)));
 
     /** Creative only (no recipe): fills a girl's friendship with you to the full, for testing. */
     public static final DeferredItem<Item> FRIENDSHIP_CHARM = ITEMS.registerSimpleItem("friendship_charm", new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));

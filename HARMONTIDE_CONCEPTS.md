@@ -471,7 +471,7 @@ yurei and lamassu, from their reference looks).
 | **Frondbat** | Bat | A blue bat with leafy wings and a crown of white flowers: she shakes saplings, sticks and apples from the leaves near her friend. |
 | **Sawfin** | Merfolk | A sawfish girl in blue barding with a fleur-de-lis shield and a toothed saw of a snout: Haste II for her friend underwater. |
 | **Stagel** | Centaur | A fawn taur, cream dappled with blue, with budding antlers: Jump Boost II for her friend. |
-| **Klabuster** | Slime | A round little drop of water from the cave ceilings: she puts out fires and fills cauldrons near her friend. |
+| **Klabuster** | Slime | The “Klabusterbeere”: a glossy brown swirl of a slime dangling on a strand from a tuft of hair (her other looks: blue, green, purple, gold). The crops near her friend grow. |
 | **Dryad** | Flora | The Greek tree nymph, a girl of pale blue wood with leafy branches for antlers: the saplings near her friend grow. |
 | **Amarok** | Canid | The giant lone wolf of Inuit legend, slate grey and shaggy: her friend's tamed wolves near her fight harder. |
 | **Yurei** | Undead | The Japanese ghost in a school uniform, long black hair, legs fading into a white wisp; she floats. At night the monsters near her friend grow weak. |

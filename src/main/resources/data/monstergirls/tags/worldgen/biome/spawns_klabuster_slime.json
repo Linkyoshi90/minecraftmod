@@ -1,6 +1,7 @@
 {
   "values": [
-    "minecraft:dripstone_caves",
-    "minecraft:lush_caves"
+    "minecraft:plains",
+    "minecraft:meadow",
+    "minecraft:swamp"
   ]
 }

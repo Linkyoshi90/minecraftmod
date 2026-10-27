@@ -18,14 +18,20 @@ from girl_lib import H, cube, pick, noise, shades, CLEAR  # noqa: E402
 ALPHA = 200
 
 SPECIES = {
-    # seventeenth wave: the klabuster, a round little blue water drop of a slime who drips from cave ceilings
+    # seventeenth wave: the klabuster (German "Klabusterbeere", a dingleberry): a glossy brown swirl of a slime, dangling
+    # on a single strand from a tuft of hair
     "klabuster_slime": dict(
-        build="petite", outfit=dict(top=[]), extra="drip", hair="bob", bangs="blunt",
-        pal=dict(FUR="#3a8ae8", LIGHT="#c8e8ff", MARK="#1e5ab8", HAIR="#5aa8f8", EYE="#0e2a6a", PUPIL="#0a1a4a", extra=dict(core="#e8f8ff")),
-        variants={"aqua": dict(FUR="#3ac8d8", HAIR="#6ae0e8", MARK="#1e8a94", EYE="#0e4a50", extra=dict(core="#e8ffff")),
-                  "clear": dict(FUR="#d0ecf8", HAIR="#e4f4fc", MARK="#8ab8d0", EYE="#3a6a8a", extra=dict(core="#ffffff")),
-                  "murk": dict(FUR="#5a7a6a", HAIR="#7a9a88", MARK="#2a4a3a", EYE="#14281e", extra=dict(core="#d8f0e0")),
-                  "dusk": dict(FUR="#6a4ac8", HAIR="#8a6ae0", MARK="#3a1e8a", EYE="#1a0e4a", extra=dict(core="#f0e0ff"))}),
+        build="petite", outfit=dict(top=[]), extra="swirl", hair="bob", bangs="blunt",
+        pal=dict(FUR="#5e3818", LIGHT="#a87040", MARK="#2e1a0a", HAIR="#6e4420", EYE="#1e120a", PUPIL="#0e0804",
+                 extra=dict(core="#f0c890", tuft="#5a3a22")),
+        variants={"blue": dict(FUR="#3a8ae8", LIGHT="#c8e8ff", MARK="#1e5ab8", HAIR="#5aa8f8", EYE="#0e2a6a", PUPIL="#0a1a4a",
+                               extra=dict(core="#e8f8ff", tuft="#4a3a2a")),
+                  "green": dict(FUR="#6aa82a", LIGHT="#d0f0a0", MARK="#3a6a14", HAIR="#80c03a", EYE="#1a2a0a", PUPIL="#0e1804",
+                                extra=dict(core="#f0ffd0", tuft="#4a4a22")),
+                  "purple": dict(FUR="#9a3ac8", LIGHT="#e8b0f8", MARK="#5a1a7a", HAIR="#b05ae0", EYE="#2a0a3a", PUPIL="#1a0428",
+                                 extra=dict(core="#f8e0ff", tuft="#5a2a6a")),
+                  "gold": dict(FUR="#e0a820", LIGHT="#fff0a0", MARK="#8a5a10", HAIR="#f0c040", EYE="#3a2408", PUPIL="#1e1404",
+                               extra=dict(core="#fff8d0", tuft="#8a6a2a"))}),
     # fourteenth wave: the undine, a girl of living water, bubbles drifting round her
     "undine_slime": dict(
         build="slim", outfit=dict(top=[], extras=["pearls"]),
@@ -139,6 +145,8 @@ def declare(sp):
         parts += [("leaf", .25, 2, 1.5)]
     if d["extra"] == "motes":
         parts += [("mote", .75, .75, .75)]
+    if d["extra"] == "swirl":                  # the klabuster's swirl, its strand and the tuft of hair it hangs from
+        parts += [("swirl_a", 7, 2, 7), ("swirl_b", 5, 2, 5), ("swirl_c", 3, 1.75, 3), ("strand", .5, 6, .5), ("tuft", 4, 1.5, 4), ("tuft_hair", 1, 2, 1)]
     if d["extra"] == "chest":
         parts += [("box", 11, 6, 10), ("lid", 11, 2.5, 10), ("latch", 1.5, 2, .5), ("tooth", .5, 1, .5)]
     G.declare(parts, ears=None, hair=SPECIES[sp]["hair"],
@@ -177,8 +185,14 @@ def paint(sp, key, glow=False, base=None):
     pt("latch", "all", lambda f, x, y, w, h: pick(iron, 0.7, x, y))
     pt("tooth", "all", lambda f, x, y, w, h: pick(shades("#f4f0e0"), 0.7, x, y))
     pt("mote", "all", lambda f, x, y, w, h: pick(shades(pal.extra.get("mote", "#e080ff")), 0.8, x, y))
+    for p in ("swirl_a", "swirl_b", "swirl_c"):            # glossy coils: a darker groove at the bottom of each, a shine on top
+        pt(p, "all", lambda f, x, y, w, h: pick(pal.FUR, 0.3 if y == h - 1 and f != "up" else 0.7 if f == "up" and (x + y) % 5 == 0 else 0.55, x, y))
+    pt("strand", "all", lambda f, x, y, w, h: pick(pal.MARK, 0.45, x, y))
+    tuft = shades(pal.extra.get("tuft", "#5a3a22"))
+    pt("tuft", "all", lambda f, x, y, w, h: pick(tuft, 0.35 + 0.3 * ((x + 2 * y) % 3 == 0), x, y))
+    pt("tuft_hair", "all", lambda f, x, y, w, h: pick(tuft, 0.4 + 0.2 * (y % 2), x, y))
     T = pt.T
-    core_rects = [H.RECT[(p, f)] for p in ("core", "mote", "box", "lid", "latch", "tooth") if (p, "north") in H.RECT for f in G.H.FACES]
+    core_rects = [H.RECT[(p, f)] for p in ("core", "mote", "box", "lid", "latch", "tooth", "strand", "tuft", "tuft_hair") if (p, "north") in H.RECT for f in G.H.FACES]
 
     def in_core(x, y):
         return any(cx <= x < cx + cw and cy <= y < cy + ch for cx, cy, cw, ch in core_rects)
@@ -225,6 +239,11 @@ def build(sp):
     if ex == "motes":                          # specks of the End drifting round her
         r.add("motes", "body", [0, 16, 0], [cube("mote", [x, y, zz]) for x, y, zz in ((-5.2, 21.5, -1.0), (4.6, 18.0, 1.5), (-4.8, 11.0, 2.4),
                                                                                        (5.0, 25.5, -2.0), (-1.0, 30.5, 2.6), (2.6, 8.5, -3.4))])
+    if ex == "swirl":                          # a soft-serve swirl on her head; above it the strand and the tuft (hair_: not her height)
+        r.add("hair_swirl", "head", [0, 34.0, 0], [cube("swirl_a", [-3.5, 28.2, -3.5]), cube("swirl_b", [-2.5, 30.2, -2.5]), cube("swirl_c", [-1.5, 32.2, -1.5]),
+                                                    cube("strand", [-0.25, 34.0, -0.25]), cube("tuft", [-2, 40.0, -2]),
+                                                     G.rot_cube("tuft_hair", [-1.8, 39.0, -1.0], [-1.3, 40.5, -0.5], 0, 0, 25),
+                                                     G.rot_cube("tuft_hair", [0.8, 39.0, 0.2], [1.3, 40.5, 0.7], 0, 0, -25)])
     if ex == "drip":
         for x, y, z in ((-2.0, 24.5, -4.6), (2.4, 23.5, -4.5), (-4.4, 15.5, 0.2), (4.4, 14.5, -0.4)):
             r.put("body" if y < 20 else "head", cube("drip", [x - 0.5, y, z]))

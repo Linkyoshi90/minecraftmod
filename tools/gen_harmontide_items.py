@@ -256,6 +256,22 @@ ICONS = {
                           ".......a........",
                           "................",
                           "................"], {"a": "#8a1a3a", "b": "#d8406a", "c": "#f07898", "d": "#ffd8e4"}),
+    "harmontide_journal": (["................",
+                            "..aaaaaaaaaaa...",
+                            "..abbbbbbbbbca..",
+                            "..abbbbbbbbbca..",
+                            "..abbbddbbbbca..",
+                            "..abbddddbbbca..",
+                            "..abbbddbbbbca..",
+                            "..abbdbbdbbbca..",
+                            "..abbbbbbbbbca..",
+                            "..abbbbbbbbbca..",
+                            "..abbbbbbbbbca..",
+                            "..abbbbbbbbbca..",
+                            "..aeeeeeeeeeea..",
+                            "...aaaaaaaaaaa..",
+                            "................",
+                            "................"], {"a": "#14204a", "b": "#2a4aa8", "c": "#1e3480", "d": "#e8c050", "e": "#f4ecd8"}),
     "snakeskin_cloak": (["................",
                          "..aa........aa..",
                          ".abba......abba.",
@@ -495,6 +511,9 @@ def recipes():
     R["nectar_bucket"] = {"type": "minecraft:crafting_shapeless", "category": "misc",
                           "ingredients": [item("minecraft:bucket")] + [item("monstergirls:nectar_bottle")] * 3,
                           "result": {"id": "monstergirls:nectar_bucket", "count": 1}}
+    R["harmontide_journal"] = {"type": "minecraft:crafting_shapeless", "category": "misc",
+                                "ingredients": [item("minecraft:book"), item("minecraft:feather")],
+                                "result": {"id": "monstergirls:harmontide_journal", "count": 1}}
     R["healing_balm"] = {"type": "minecraft:crafting_shapeless", "category": "misc",
                          "ingredients": [item("monstergirls:nectar_bottle"), item("minecraft:honey_bottle"), {"tag": "minecraft:small_flowers"}],
                          "result": {"id": "monstergirls:healing_balm", "count": 3}}
@@ -514,6 +533,8 @@ def recipes():
 
 
 LANG = {
+    "item.monstergirls.harmontide_journal": "Harmontide Journal",
+    "item.monstergirls.harmontide_journal.desc": "Every creature you have met, and the ones you have befriended.",
     "item.monstergirls.cheese": "Cheese", "item.monstergirls.rice_cake": "Rice Cake",
     "item.monstergirls.apple_mochi": "Apple Mochi", "item.monstergirls.melon_mochi": "Melon Mochi", "item.monstergirls.berry_mochi": "Berry Mochi",
     "item.monstergirls.chocolate_mochi": "Chocolate Mochi", "item.monstergirls.honey_mochi": "Honey Mochi", "item.monstergirls.pumpkin_mochi": "Pumpkin Mochi",
