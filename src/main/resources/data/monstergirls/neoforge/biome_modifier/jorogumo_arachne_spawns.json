@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_jorogumo_arachne",
+  "spawners": {
+    "type": "monstergirls:jorogumo_arachne",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

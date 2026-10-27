@@ -152,6 +152,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
             case MOONSEAL_MERMAID -> girlAttributes(28, 0.24, 2);
             case RUST_OTTER_MERMAID -> girlAttributes(20, 0.27, 3);
             case REEFFIN_MERMAID -> girlAttributes(22, 0.26, 2);
+            case SWORD_KOI_MERMAID -> girlAttributes(24, 0.28, 6);
             default -> girlAttributes(20, 0.24, 2);
         };
     }
@@ -1146,5 +1147,17 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     @Override
     public boolean isHealer() {
         return this.species == GirlSpecies.AXOLOTL_MERMAID;
+    }
+
+    // --- the sword koi -------------------------------------------------------------------------------------------
+
+    /** Her duel with a drowned: whatever it holds is hers to win, and it falls when the drowned does. */
+    @Override
+    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
+        if (this.species == GirlSpecies.SWORD_KOI_MERMAID && target instanceof Drowned d) {
+            d.setDropChance(net.minecraft.world.entity.EquipmentSlot.MAINHAND, 2.0F);
+            d.setDropChance(net.minecraft.world.entity.EquipmentSlot.OFFHAND, 2.0F);
+        }
+        return super.doHurtTarget(target);
     }
 }

@@ -107,6 +107,7 @@ public class Mollusk extends AbstractMonsterGirl {
             case OCTOPUS_MOLLUSK -> girlAttributes(16, 0.3, 2);
             case SNAIL_MOLLUSK -> girlAttributes(18, 0.16, 1);
             case JELLYFISH_MOLLUSK -> girlAttributes(18, 0.2, 2);
+            case SQUIDKIN_MOLLUSK -> girlAttributes(18, 0.28, 2);
             default -> girlAttributes(26, 0.2, 3);
         };
     }
@@ -301,6 +302,7 @@ public class Mollusk extends AbstractMonsterGirl {
         super.aiStep();
         if (this.species == GirlSpecies.KRAKEN_MOLLUSK && this.hasFlag(FLAG_TOWING)) this.tow();
         if (!(this.level() instanceof ServerLevel server)) return;
+        if (this.species == GirlSpecies.SQUIDKIN_MOLLUSK && this.tickCount % 5 == 0) this.inkCloud(server);
         if (this.species == GirlSpecies.KRAKEN_MOLLUSK && this.tickCount % 10 == 0) this.checkTow();
         boolean squid = this.species == GirlSpecies.KRAKEN_MOLLUSK || this.species == GirlSpecies.IKA_MOLLUSK || this.species == GirlSpecies.OCTOPUS_MOLLUSK;
         if (squid && !this.isBaby() && this.random.nextInt(9000) == 0) {           // about once every 7.5 minutes, like a chicken's egg
@@ -402,5 +404,27 @@ public class Mollusk extends AbstractMonsterGirl {
     @Override
     public boolean isHealer() {
         return this.species == GirlSpecies.SNAIL_MOLLUSK;
+    }
+
+    // --- the squidkin --------------------------------------------------------------------------------------------
+
+    private long nextInk;
+
+    /** Her friend hurt within 12 blocks of her: ink. Monsters within 6 of her friend go blind, her friend turns invisible for 3 s. How many monsters, or -1. */
+    public int inkCloud(ServerLevel level) {
+        if (this.isBaby() || level.getGameTime() < this.nextInk) return -1;
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 12);
+        if (friend == null || friend.hurtTime <= 0) return -1;
+        java.util.List<Monster> near = level.getEntitiesOfClass(Monster.class, friend.getBoundingBox().inflate(6));
+        for (Monster m : near) {
+            m.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 0), this);
+            if (m.getTarget() == friend) m.setTarget(null);
+        }
+        friend.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 60, 0, false, false, true));
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.SQUID_INK, friend.getX(), friend.getY() + 1, friend.getZ(), 40, 1.2, 0.8, 1.2, 0.05);
+        this.playSound(net.minecraft.sounds.SoundEvents.SQUID_SQUIRT, 1.0F, 1.0F);
+        this.startTimedAction(Action.INK, 20);
+        this.nextInk = level.getGameTime() + 200;
+        return near.size();
     }
 }

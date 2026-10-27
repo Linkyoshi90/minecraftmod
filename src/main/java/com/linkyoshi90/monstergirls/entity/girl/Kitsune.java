@@ -82,6 +82,7 @@ public class Kitsune extends AbstractMonsterGirl {
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        if (s == GirlSpecies.DUNEFENNEC_KITSUNE) return girlAttributes(14, 0.34, 2);
         return girlAttributes(s == GirlSpecies.FENNEC_KITSUNE ? 12 : s == GirlSpecies.WATTLEFOX_KITSUNE ? 18 : s == GirlSpecies.HULI_JING_KITSUNE ? 22 : 16, s == GirlSpecies.CORSAC_KITSUNE ? 0.33 : 0.3, 3);
     }
 
@@ -378,6 +379,7 @@ public class Kitsune extends AbstractMonsterGirl {
     public void aiStep() {
         super.aiStep();
         if (!(this.level() instanceof ServerLevel server)) return;
+        if (this.species == GirlSpecies.DUNEFENNEC_KITSUNE && this.tickCount % 20 == 0) this.desertGuide(server);
         if (this.isDecoy()) {
             if (++this.decoyAge > DECOY_LIFE) this.discard();
             return;
@@ -614,5 +616,24 @@ public class Kitsune extends AbstractMonsterGirl {
 
     public static boolean isOwnStash(UUID owner, @Nullable net.minecraft.world.entity.Entity e) {
         return e instanceof Kitsune && e.getUUID().equals(owner);
+    }
+
+    // --- the dunefennec ------------------------------------------------------------------------------------------
+
+    /** Her friend within 8 blocks runs fast on sand (Speed II), and husks within 16 of her lose interest in her friend. Whether she helped. */
+    public boolean desertGuide(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null || this.isBaby()) return false;
+        boolean helped = false;
+        if (level.getBlockState(friend.getBlockPosBelowThatAffectsMyMovement()).is(net.minecraft.tags.BlockTags.SAND)) {
+            friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 40, 1, false, false, true));
+            helped = true;
+        }
+        for (var husk : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Husk.class, this.getBoundingBox().inflate(16), h -> h.getTarget() == friend)) {
+            husk.setTarget(null);
+            husk.setLastHurtByMob(null);
+            helped = true;
+        }
+        return helped;
     }
 }

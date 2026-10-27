@@ -24,6 +24,16 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # sixteenth wave: the squidkin, a violet squid girl in a hooded mantle (the ika's rig)
+    "squidkin_mollusk": dict(
+        build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["pearls"], colors=dict(cloth2="#5a3a8a")),
+        hair="bob", bangs="parted", ears=None, legs="stockings", foot="shoe", body="ika",
+        pal=dict(SKIN=skin("pale"), HAIR="#8a5ac8", FUR="#7a4ab8", LIGHT="#e0d0f8", MARK="#3a1e6a", EYE="#3a1e6a", CLOTH="#7a4ab8", TRIM="#e0d0f8",
+                 INNER="#f8d0e0", extra=dict(stocking="#3a1e6a", boot="#2a1450")),
+        variants={"red": dict(FUR="#c83a3a", HAIR="#e85a4a", MARK="#5a1414", LIGHT="#f8c8c0", CLOTH="#c83a3a", extra=dict(cloth2="#5a1414", stocking="#5a1414")),
+                  "glow": dict(FUR="#1e5a6a", HAIR="#3ad8c8", MARK="#8af8e8", LIGHT="#a8f0e8", CLOTH="#1e5a6a", EYE="#3ad8c8", extra=dict(cloth2="#0e3a44", stocking="#0e3a44")),
+                  "white": dict(FUR="#f0eef4", HAIR="#e8e4f0", MARK="#a8a0c0", LIGHT="#ffffff", CLOTH="#f0eef4", extra=dict(cloth2="#a8a0c0", stocking="#f0eef4")),
+                  "black": dict(FUR="#1e1a24", HAIR="#2a2430", MARK="#8a5ac8", LIGHT="#5a5068", CLOTH="#1e1a24", extra=dict(cloth2="#3a2a4a", stocking="#1e1a24"))}),
     "kraken_mollusk": dict(
         build="curvy", outfit=dict(top=["corset"], extras=["pearls"], colors=dict(cloth2="#2a1a3a")),
         hair="wavy", bangs="parted", ears="fin", body="kraken",

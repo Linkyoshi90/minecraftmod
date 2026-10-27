@@ -16,6 +16,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades  # noqa: E402
 
 SPECIES = {
+    # sixteenth wave: the dunefennec, a Harmontide fennec in a sand-coloured wrap, ears bigger than her head
+    "dunefennec_kitsune": dict(
+        build="petite", outfit=dict(top=["bandeau", "capelet"], bottom="sarong", extras=["pouch"], colors=dict(cloth2="#e8d8b0", leather="#a87a48")),
+        ears="big", hair="pixie", bangs="messy", stockings=False, tip="dark",
+        pal=dict(SKIN=skin("tan"), HAIR="#f4e2bc", FUR="#f0d8a8", LIGHT="#fffaf0", MARK="#8a6a40", EYE="#3a8ab8", CLOTH="#d8b878", TRIM="#3a8ab8",
+                 facemark="fox"),
+        variants={"red": dict(FUR="#d8864a", HAIR="#e09058", MARK="#6a3018", CLOTH="#c8683a", extra=dict(cloth2="#e8c8a0")),
+                  "cream": dict(FUR="#fbf2e2", HAIR="#fff8ee", MARK="#b89a78", CLOTH="#f0e4cc"),
+                  "dusk": dict(FUR="#b8aca0", HAIR="#c8bcb0", MARK="#4a4038", CLOTH="#6a5a7a", extra=dict(cloth2="#4a3a5a")),
+                  "gold": dict(FUR="#e8c060", HAIR="#f0cc70", MARK="#7a5a1e", CLOTH="#2a5a8a", TRIM="#f0d070")}),
     # fifteenth wave: the huli jing, a silver-blue fox spirit with long black hair (nine tails, the game shows them all)
     "huli_jing_kitsune": dict(
         build="slim", outfit=dict(top=["kimono"], extras=["armlets"], colors=dict(kimono="#c83a3a", kimono_trim="#e8c050", obi="#1e1c22")),

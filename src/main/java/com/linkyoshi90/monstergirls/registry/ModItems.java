@@ -48,6 +48,10 @@ public final class ModItems {
             () -> new DeferredSpawnEggItem(ModEntities.DODOBOLD_HARPY, 0x2A3C74, 0xF0C450, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> PEAFLARE_HARPY_SPAWN_EGG = ITEMS.register("peaflare_harpy_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.PEAFLARE_HARPY, 0x1E62B4, 0x2AA87A, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> PUMPKINGULL_HARPY_SPAWN_EGG = ITEMS.register("pumpkingull_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.PUMPKINGULL_HARPY, 0xE88A2A, 0x1E1A1C, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> CONDORUNE_HARPY_SPAWN_EGG = ITEMS.register("condorune_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.CONDORUNE_HARPY, 0x18181C, 0xF0F0F2, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> COIN_MAGPIE_HARPY_SPAWN_EGG = ITEMS.register("coin_magpie_harpy_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.COIN_MAGPIE_HARPY, 0x1A3440, 0xF0F0F4, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> TRICKSTER_RAVEN_HARPY_SPAWN_EGG = ITEMS.register("trickster_raven_harpy_spawn_egg",

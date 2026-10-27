@@ -268,6 +268,24 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Huli jing** (kitsune): always nine tails (`rollTails`); every 2 s, `charm` gives her friend within 8 Hero of the Village in a village or with a villager within 16.
   - **Paints:** checkered, sunset, thunder (bolts glow: `PaintGlowLayer`, `gen_paints.GLOWING`) and burlap, so 59 in all.
   - The preview renderer (`harpy_lib.render`) now applies bone scale, so shrunk-away bones stay hidden in previews.
+- [x] **Sixteenth wave** (2026-10-27), tested in `SixteenthWaveTests`:
+  - **Jorogumo** (arachne, on two legs: `gen_arachne.py` legged_*, bones `bleg1..4_r/l` with knee `b` and claw `c` joints, `hair_bow`): every 2 s at night, befriended, `bindingWeb` drops a cobweb at the feet of a monster within 8 of her friend; `meltSnares` takes it away after 10 s (saved; all of them go when she does). The kimono's web print is `outfits._webbed` (`kimono_web`, `kimono_flower`).
+  - **Dunefennec** (kitsune): every second, `desertGuide` gives her friend within 8 Speed II on sand and clears husks' aim at her friend.
+  - **Floodcrab** (crustacean): every 20 s, befriended, `puddle` turns dirt or grass beside water within 4 of her into mud (mobGriefing).
+  - **Temple mantis** (bug): every second, `cutTripwire` cuts (disarmed, like shears) a tripwire within 8 of her friend that is inside a structure.
+  - **Sword koi** (merfolk): her hits set a drowned's hand drop chances to 2, so it always drops what it held.
+  - **Squidkin** (mollusk, the ika's rig): when her friend within 12 is hurt, `inkCloud` blinds the monsters within 6 and gives her friend 3 s of Invisibility (every 10 s at most).
+  - **Reedbull** (minotaur, bulls one in three; `hair_reeds`): every 30 s, `plantReeds` puts sugar cane where it can grow within 6 of her friend (mobGriefing).
+  - **Kikimora** (devil, `kerchief`): every 2 s at night, `nightLatch` shuts wooden doors, trapdoors and fence gates open within 8 of her friend (not the one they stand in).
+  - **Cockatrice** (dragon, flies, `hair_comb`): every 3 s, `glare` gives Slowness IV for 5 s to a monster within 12 of her and her friend.
+  - **Valkyrie** (elf, flies, `helm`): `GirlEvents.onPlayerDrops` lets a befriended valkyrie within 32 take a dead friend's drops (`gatherFallen`, saved); `returnFallen` gives them back once the friend is within 6. She does not despawn while she holds them, and drops them if she dies.
+  - **Pumpkingull** (`PumpkingullHarpy`, `tools/gen_pumpkingull_harpy.py` on the gull's rig, `pumpkin_hat`): every second, `calmEndermen` clears the aim of endermen within 16 of her at her friend. Gull eggs.
+  - **Condorune** (`CondoruneHarpy`, `tools/gen_condorune_harpy.py` on the crow's rig): `catchFall` gives her friend within 16 Slow Falling and resets the fall once they have fallen over 6 blocks. Crow eggs.
+  - **Paints:** neon (glows: `PaintGlowLayer`, `gen_paints.GLOWING`), zebra, terrazzo and clover (March only, `Painted.roll`), so 63 in all. `gen_paints.py` needs Pillow: `uv run --no-project --with pillow python tools/gen_paints.py`.
+  - `add_harpy_extras.py` was re-run: the coin magpie, trickster raven, rookmourn, cassowrath, dodobold and peaflare had no belly bone or sit/lie poses until now.
+- [ ] Dev client for the sixteenth wave: the jorogumo's back legs at game scale (do they clip walls or doorways?), her four eyes, the kikimora at a real house at night, the valkyrie holding and returning a real death's drops (with keepInventory off and on), the condorune catching a real fall, the pumpkin hat, and the four paints (neon at night).
+- [ ] Check the eight sixteenth-wave originals against the reference art (it was not reachable while they were built), and re-run `tools/harmontide_roster.py` once it is (`HARMONTIDE_ROSTER.md` was edited by hand).
+- [ ] Not done for the sixteenth wave: harpy field guide entries for the pumpkingull and condorune (that guide is hand-written).
 - [ ] Dev client for the fifteenth wave: the rokurokubi's neck at night (does the head ride up smoothly, and come back down at dawn?), the crocora rescue in deep water, the bellmare walking a herd home, the vicunero's spit, the reeffin's coral, and the four paints (thunder at night).
 - [ ] Dev client for the fourteenth wave: the ittan-momen ride (does the rider sit well on the ribbon, can you land?), the halberelk felling a big spruce and leaving a log cabin alone, the vulphea's ashes and rising, the bronzejaw ox ploughing on a lead, the silkcoon washing, and the four paints.
 - [ ] Dev client for the thirteenth wave: the peaflare's display fan in play, the jaglare in real jungle trees, the kamaitachi's gusts near a player's leaf builds (persistent leaves should be spared), the chochin-obake's light, and the hologram paint.

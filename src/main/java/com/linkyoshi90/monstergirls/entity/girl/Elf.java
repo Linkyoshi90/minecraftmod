@@ -112,6 +112,7 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
             case WOOD_ELF, DESERT_ELF -> girlAttributes(24, 0.3, 3);
             case DARK_ELF -> girlAttributes(26, 0.3, 5);
             case BROWNIE_ELF -> girlAttributes(8, 0.3, 1);
+            case VALKYRIE_ELF -> girlAttributes(30, 0.3, 6).add(net.minecraft.world.entity.ai.attributes.Attributes.ARMOR, 6);
             default -> girlAttributes(22, 0.3, 4);
         };
     }
@@ -400,6 +401,7 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
     public void aiStep() {
         super.aiStep();
         if (!(this.level() instanceof ServerLevel server)) return;
+        if (this.species == GirlSpecies.VALKYRIE_ELF && this.tickCount % 20 == 0) this.returnFallen(server);
         if (this.tradingPlayer != null && (!this.tradingPlayer.isAlive() || this.tradingPlayer.distanceToSqr(this) > 16 * 16)) this.tradingPlayer = null;
         if (this.species == GirlSpecies.NIGHT_ELF && this.tickCount % 20 == 0) {
             if (this.isResting() && this.getAction() == Action.NONE) {
@@ -533,6 +535,12 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        if (this.fallenOwner != null && !this.fallen.isEmpty()) {
+            net.minecraft.nbt.ListTag items = new net.minecraft.nbt.ListTag();
+            for (ItemStack st : this.fallen) items.add(st.save(this.registryAccess()));
+            tag.put("Fallen", items);
+            tag.putUUID("FallenOwner", this.fallenOwner);
+        }
         tag.putBoolean("Leader", this.leader);
         if (this.settlement != null) tag.putLong("Settlement", this.settlement.asLong());
         tag.putInt("Built", this.built);
@@ -542,6 +550,9 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.fallen.clear();
+        this.fallenOwner = tag.hasUUID("FallenOwner") ? tag.getUUID("FallenOwner") : null;
+        for (net.minecraft.nbt.Tag t : tag.getList("Fallen", net.minecraft.nbt.Tag.TAG_COMPOUND)) ItemStack.parse(this.registryAccess(), t).ifPresent(this.fallen::add);
         this.leader = tag.getBoolean("Leader");
         this.settlement = tag.contains("Settlement") ? BlockPos.of(tag.getLong("Settlement")) : null;
         this.built = tag.getInt("Built");
@@ -549,5 +560,66 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
             MerchantOffers.CODEC.parse(this.registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), tag.get("Offers"))
                     .resultOrPartial(e -> {}).ifPresent(o -> this.offers = o);
         }
+    }
+
+    // --- the valkyrie --------------------------------------------------------------------------------------------
+
+    @Override
+    public boolean canFly() {
+        return this.species == GirlSpecies.VALKYRIE_ELF || super.canFly();
+    }
+
+    /** What she gathered up where her friend fell, and whose it is. */
+    private final List<ItemStack> fallen = new ArrayList<>();
+    @Nullable
+    private java.util.UUID fallenOwner;
+
+    /** Her friend died within 32 blocks of her: she takes up everything they dropped (the item entities are discarded and `drops` emptied). Whether she did. */
+    public boolean gatherFallen(net.minecraft.server.level.ServerPlayer player, java.util.Collection<net.minecraft.world.entity.item.ItemEntity> drops) {
+        if (this.species != GirlSpecies.VALKYRIE_ELF || this.isBaby() || drops.isEmpty() || this.getAffection(player) < com.linkyoshi90.monstergirls.entity.Orders.AFFECTION
+                || player.distanceToSqr(this) > 32 * 32 || this.fallenOwner != null && !this.fallenOwner.equals(player.getUUID())) return false;
+        for (var e : drops) {
+            this.fallen.add(e.getItem().copy());
+            e.discard();
+        }
+        drops.clear();
+        this.fallenOwner = player.getUUID();
+        if (this.level() instanceof ServerLevel server) {
+            server.sendParticles(net.minecraft.core.particles.ParticleTypes.END_ROD, player.getX(), player.getY() + 1, player.getZ(), 20, 0.5, 0.8, 0.5, 0.05);
+        }
+        player.sendSystemMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.valkyrie.gathered", this.getDisplayName()));
+        return true;
+    }
+
+    /** Her friend back within 6 blocks of her, alive: everything she kept goes back to them. How many stacks. */
+    public int returnFallen(ServerLevel level) {
+        if (this.fallenOwner == null) return 0;
+        Player p = level.getPlayerByUUID(this.fallenOwner);
+        if (p == null || !p.isAlive() || p.distanceToSqr(this) > 6 * 6) return 0;
+        int n = this.fallen.size();
+        for (ItemStack st : this.fallen) if (!p.getInventory().add(st)) p.drop(st, false);
+        this.fallen.clear();
+        this.fallenOwner = null;
+        p.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.valkyrie.returned", this.getDisplayName()), true);
+        this.playSound(net.minecraft.sounds.SoundEvents.ITEM_PICKUP, 1.0F, 0.8F);
+        return n;
+    }
+
+    public int fallenCount() {
+        return this.fallen.size();
+    }
+
+    /** She never wanders off with someone's things. */
+    @Override
+    public boolean removeWhenFarAway(double distance) {
+        return this.fallen.isEmpty() && super.removeWhenFarAway(distance);
+    }
+
+    /** If she falls herself, what she kept falls with her. */
+    @Override
+    protected void dropCustomDeathLoot(ServerLevel level, net.minecraft.world.damagesource.DamageSource source, boolean recentlyHit) {
+        super.dropCustomDeathLoot(level, source, recentlyHit);
+        for (ItemStack st : this.fallen) this.spawnAtLocation(st);
+        this.fallen.clear();
     }
 }

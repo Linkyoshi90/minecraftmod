@@ -60,6 +60,23 @@ SPECIES = {
                   "sand": dict(FUR="#c8b088", MARK="#8a7458", HAIR="#a89068"),
                   "dark": dict(FUR="#2a2420", MARK="#5a4e44", HAIR="#2a2420", CLOTH="#2a2a2a"),
                   "raft": dict(FUR="#2a2420", MARK="#f0ece0", pattern="bars", pattern_scale=2.0, HAIR="#3a3028", CLOTH="#2a4a5a")}),
+    # sixteenth wave: the jorogumo, a spider who walks on two legs in a web-printed kimono, her eight long legs spread
+    # behind her back like a fan (built by legged_* below, on girl_family's biped)
+    "jorogumo_arachne": dict(
+        biped=True, build="slim", outfit=dict(top=["kimono"], bottom="wrap_skirt",
+                                             colors=dict(kimono="#9a7ad0", kimono_trim="#4a2e78", obi="#d8483a", cloth2="#9a7ad0",
+                                                         kimono_web="#3a2458", kimono_flower="#f08aa8")),
+        hair="bob", bangs="parted", ears=None, legs="bare", foot="shoe", pupil=(2.2, 3.4),
+        pal=dict(SKIN=skin("pale"), HAIR="#6a5ab8", FUR="#1a1820", LIGHT="#3a3644", MARK="#e8c040", EYE="#c81a2a", CLOTH="#9a7ad0", TRIM="#f4f2f0",
+                 extra=dict(boot="#a81a22", bow="#c81a22", rose="#f0a0b8", band="#e8c040")),
+        variants={"crimson": dict(HAIR="#3a1a2a", extra=dict(kimono="#a8243a", kimono_trim="#5a0e1a", cloth2="#a8243a", obi="#1e1a22",
+                                                             kimono_web="#2a0a12", kimono_flower="#f4d0a0", bow="#1e1a22")),
+                  "indigo": dict(HAIR="#2a2a5a", extra=dict(kimono="#2a3a7a", kimono_trim="#141a3a", cloth2="#2a3a7a", obi="#e8c040",
+                                                            kimono_web="#c8d0f0", kimono_flower="#a8c8f0")),
+                  "white": dict(HAIR="#e8e4ec", EYE="#a81a2a", extra=dict(kimono="#f0eef2", kimono_trim="#9a96a8", cloth2="#f0eef2", obi="#1e1a22",
+                                                                         kimono_web="#6a6678", kimono_flower="#e8a0b8", bow="#1e1a22")),
+                  "black": dict(HAIR="#141218", MARK="#f0d050", extra=dict(kimono="#1e1a24", kimono_trim="#8a6a1e", cloth2="#1e1a24", obi="#c8a030",
+                                                                         kimono_web="#c8a030", kimono_flower="#a81a2a", band="#f0d050"))}),
 }
 
 
@@ -128,5 +145,98 @@ VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0
          ("walk", 0.2, -30, 12), ("leap", 0.4, -60, 8), ("sit", 0, -30, 12), ("rear", 0.5, -30, 8)]
 FACE = [("idle", 0, 0, 0, 24), ("idle", 2.75, 0, 0, 24), ("rear", 0.5, 0, 0, 24), ("idle", 0, -30, 8, 24)]
 
+# --- the two-legged ones (the jorogumo): girl_family's biped with eight spider legs fanned out from her back ----------
+
+# per leg (top pair first): how far the femur, tibia and claw lift from level (degrees, negative = down), how far it
+# sweeps back from her shoulders, and the height on her back it grows from. These are the right legs; the left mirror them.
+BACK_LEGS = [(42, 24, -62, 26, 19.0), (16, -38, -76, 32, 18.0), (-8, -64, -84, 38, 17.0), (-30, -80, -88, 44, 16.0)]
+FEMUR, TIBIA, CLAW = (8, 1.25, 1.25), (10, 1, 1), (4.5, .75, .75)
+
+
+def legged_declare(sp, d):
+    return [("bfemur",) + FEMUR, ("btibia",) + TIBIA, ("bclaw",) + CLAW, ("bow", 3, 1.75, 1), ("bow_knot", 1, 1.25, 1.25), ("rose", 1.5, 1.5, 1)]
+
+
+def legged_paint(pt, pal, d):
+    black, band = pal.FUR, G.shades(pal.extra.get("band", "#e8c040"))
+
+    def chitin(f, x, y, w, h):
+        if f in ("east", "west") or x < 2 or x >= w - 2:     # the joints: a gold band at each end
+            return pick(band, 0.5 + 0.2 * (f == "up"), x, y)
+        return pick(black, 0.35 + 0.25 * (f == "up") + (noise(x, y, 71) - 0.5) * 0.1, x, y)
+    pt("bfemur", "all", chitin)
+    pt("btibia", "all", chitin)
+    pt("bclaw", "all", lambda f, x, y, w, h: pick(black, 0.3 + 0.3 * (f == "up"), x, y))
+    bow, rose = G.shades(pal.extra.get("bow", "#c81a22")), G.shades(pal.extra.get("rose", "#f0a0b8"))
+    pt("bow", "all", lambda f, x, y, w, h: pick(bow, 0.5 + 0.2 * (f == "north") - 0.15 * (abs(x - w / 2) < 1.5), x, y))
+    pt("bow_knot", "all", lambda f, x, y, w, h: pick(bow, 0.4, x, y))
+    pt("rose", "all", lambda f, x, y, w, h: pick(rose, 0.45 + 0.3 * ((x + y) % 2), x, y))
+
+    def forehead_eyes(f, x, y, w, h):                        # a second, smaller pair of red eyes above her own
+        for cx in (11.5, 20.5):
+            dx, dy = abs(x - cx), abs(y - 7.5)
+            if dx < 2 and dy < 2 and dx + dy < 3:
+                if x == round(cx - 1) and y == 6:
+                    return pal.WHITE
+                return pick(pal.EYE, 0.15 if dx + dy >= 2 else 0.45 + 0.15 * (y >= 8), x, y)
+        return None
+    pt("head", ("north",), forehead_eyes)
+
+
+def legged_build(r, g, d):
+    for i, (lf, lt, lc, back, y) in enumerate(BACK_LEGS):
+        n = i + 1
+        piv = [-1.5, y, g.z + 1.75]
+
+        def seg(part, size, start, lift):
+            """a segment reaching out (-X) from `start`, lifted by `lift` and swept back; and the point where it ends"""
+            L = size[0]
+            c = G.rot_cube(part, [start[0] - L, start[1] - size[1] / 2, start[2] - size[2] / 2], start, 0, -back, -lift)
+            end = H.rot_about((start[0] - L, start[1], start[2]), start, H.rot_matrix(*c["rotation"]))
+            return c, [round(v, 3) for v in end]
+        fem, knee = seg("bfemur", FEMUR, piv, lf)
+        r.add(f"bleg{n}_r", "body", piv, [fem], mirror=True)
+        tib, ankle = seg("btibia", TIBIA, knee, lt)
+        r.add(f"bleg{n}b_r", f"bleg{n}_r", knee, [tib], mirror=True)
+        claw, _ = seg("bclaw", CLAW, ankle, lc)
+        r.add(f"bleg{n}c_r", f"bleg{n}b_r", ankle, [claw], mirror=True)
+    hy, z = g.hy, g.z                                       # a red bow on top of her head, a pink rose beside it
+    r.add("hair_bow", "head", [1.5, hy + 8.5, z], [cube("bow", [0.25, hy + 8.0, -1.5 + z]), cube("bow_knot", [1.25, hy + 7.9, -1.6 + z]),
+                                              cube("rose", [2.5, hy + 6.9, -3.0 + z])])
+
+
+def legged_anims(an, sp, d):
+    import math
+    import girl_family as F
+    Tk, hold, sym, merge = H.track, H.hold, H.sym, H.merge
+    legs = [f"bleg{i}" for i in range(1, 5)]
+    sides = (("_r", -1), ("_l", 1))
+
+    def sway(period, amp):
+        out = {}
+        for i, l in enumerate(legs):
+            for side, sg in sides:
+                ph = i * 0.25 + (0.5 if side == "_l" else 0)
+                out[l + side] = {"rotation": Tk(*[(period * k / 4, (0, 0, round(sg * amp * math.sin(2 * math.pi * (k / 4 + ph)), 2))) for k in range(5)])}
+        return out
+    for key, period, amp in (("idle", 4.0, 3), ("walk", 1.0, 6), ("run", 0.6, 9), ("sit", 4.0, 2), ("groom", 2.0, 3), ("hiss", 1.5, 2), ("stalk", 1.8, 4)):
+        F._inject(an, key, sway(period, amp))
+    raised = {l + s: {"rotation": hold(0, 0, sg * 22)} for l in legs for s, sg in sides}          # legs raised, spread wide
+    an.add("rear", 1.5, True, merge(G.upper_idle(), raised, {"body": {"rotation": hold(-8, 0, 0)}, "mouth": {"position": hold(*H.OUT_)}},
+                                    sym("arm", hold(-40, 0, 25))))
+    an.add("leap", 0.8, False, merge({"root": {"position": Tk((0, (0, 0, 0)), (0.25, (0, -1.5, 0)), (0.45, (0, 3, -3)), (0.8, (0, 0, 0)))}},
+                                     {l + s: {"rotation": Tk((0, (0, 0, 0)), (0.3, (0, 0, sg * 30)), (0.8, (0, 0, 0)))} for l in legs for s, sg in sides},
+                                     sym("arm", Tk((0, (0, 0, 0)), (0.35, (-120, 0, 10)), (0.8, (0, 0, 0))))))
+    an.add("spin", 2.0, True, merge(G.upper_idle(),
+                                    {"bleg1_r": {"rotation": Tk((0, (0, 0, 0)), (0.5, (0, 20, -15)), (1, (0, 0, 0)), (1.5, (0, -20, -15)), (2, (0, 0, 0)))},
+                                     "bleg1_l": {"rotation": Tk((0, (0, 0, 0)), (0.5, (0, -20, 15)), (1, (0, 0, 0)), (1.5, (0, 20, 15)), (2, (0, 0, 0)))}},
+                                    sym("arm", Tk((0, (-60, 0, 10)), (1, (-70, 0, 25)), (2, (-60, 0, 10))))))
+    an.add("dig", 0.8, True, merge({"body": {"rotation": hold(35, 0, 0)}, "head": {"rotation": hold(-20, 0, 0)}},
+                                   sym("arm", Tk((0, (-60, 0, 5)), (0.4, (-20, 0, 5)), (0.8, (-60, 0, 5))))))
+
+
 if __name__ == "__main__":
-    G.run_family("arachne", SPECIES, declare, paint, build, anims, VIEWS, FACE)
+    import girl_family as F
+    legged = {k: v for k, v in SPECIES.items() if v.get("biped")}
+    F.run_family("arachne", legged, legged_declare, legged_paint, legged_build, legged_anims)
+    G.run_family("arachne", {k: v for k, v in SPECIES.items() if k not in legged}, declare, paint, build, anims, VIEWS, FACE)

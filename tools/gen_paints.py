@@ -24,7 +24,9 @@ moss) and the seasonal easter (pastel egg stripes, April only). And (thirteenth 
 fireworks (bursts on a night-blue body, January only). And (fourteenth wave): mosaic (little glazed tiles in grout),
 chalk (chalk lines on a blackboard), leopard (rosettes on gold) and the seasonal autumn (falling-leaf colours, November
 only). And (fifteenth wave): checkered (a chessboard), sunset (orange melting into violet), thunder (storm grey,
-lightning bolts that glow in the dark) and burlap (sackcloth with stitched seams). The drips and
+lightning bolts that glow in the dark) and burlap (sackcloth with stitched seams). And (sixteenth wave): neon (dark,
+with glowing tubes along every edge), zebra (wavy black and white stripes), terrazzo (cream stone set with coloured
+chips) and clover (green with little shamrocks and flecks of gold, March only). The drips and
 patterns follow the model: they are drawn per cube face from the geo file, running down each side from its top edge.
 
     python tools/gen_paints.py [paint ...] [model ...]   # everything, or just the paints and/or models named
@@ -49,7 +51,7 @@ GEO = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls", "
 JAVA = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "girl", "GirlSpecies.java")
 HUES = {"blue": 0.58, "red": 0.0, "green": 0.33, "yellow": 0.14, "purple": 0.77}
 # the harpies and anurans (their own entity classes): the adult texture and the young ones (hatchling, tadpole, froglet)
-OTHERS = ["sparrow_harpy", "crow_harpy", "ostrich_harpy", "owl_harpy", "seagull_harpy", "albatross_harpy", "riflebird_harpy", "phoenix_harpy", "tengu_harpy", "toucan_harpy", "penguin_harpy", "vodyanoy", "zhuque_harpy", "finch_harpy", "flamingo_harpy", "coin_magpie_harpy", "trickster_raven_harpy", "rookmourn_harpy", "cassowrath_harpy", "dodobold_harpy", "peaflare_harpy",
+OTHERS = ["sparrow_harpy", "crow_harpy", "ostrich_harpy", "owl_harpy", "seagull_harpy", "albatross_harpy", "riflebird_harpy", "phoenix_harpy", "tengu_harpy", "toucan_harpy", "penguin_harpy", "vodyanoy", "zhuque_harpy", "finch_harpy", "flamingo_harpy", "coin_magpie_harpy", "trickster_raven_harpy", "rookmourn_harpy", "cassowrath_harpy", "dodobold_harpy", "peaflare_harpy", "pumpkingull_harpy", "condorune_harpy",
           "bullywug", "mucus_toad", "bullfrog", "tree_frog", "poison_dart_frog", "glass_frog", "goliath_frog", "desert_rain_frog",
           "fire_bellied_toad", "cane_toad", "natterjack", "surinam_toad", "mailtoad"]
 
@@ -189,7 +191,8 @@ def treat(img, name, model):
                                         "synthwave", "cookie", "cloud", "valentine", "porcelain", "denim", "moss", "easter",
                                         "tartan", "watercolour", "hologram", "fireworks",
                                         "mosaic", "chalk", "leopard", "autumn",
-                                        "checkered", "sunset", "thunder", "burlap"):
+                                        "checkered", "sunset", "thunder", "burlap",
+                                        "neon", "zebra", "terrazzo", "clover"):
         return finish(img, name, model)[0]
     W = len(img[0])
     out = [list(row) for row in img]
@@ -317,7 +320,8 @@ TREATS = ["chocolate", "icecream", "strawberry", "jello", "milk", "gold", "marbl
           "synthwave", "cookie", "cloud", "valentine", "porcelain", "denim", "moss", "easter",
           "tartan", "watercolour", "hologram", "fireworks",
           "mosaic", "chalk", "leopard", "autumn",
-          "checkered", "sunset", "thunder", "burlap"]
+          "checkered", "sunset", "thunder", "burlap",
+          "neon", "zebra", "terrazzo", "clover"]
 PEARL = hexes("#b8b0c0", "#d8d2e0", "#ece8f2", "#f8f6fc", "#ffffff")
 CHROME = hexes("#1e2024", "#4a4e56", "#8a909a", "#c8ccd4", "#ffffff")
 AURORA = hexes("#2af08a", "#3ad8c8", "#5aa0f0", "#8a6af0", "#c86ae8")
@@ -334,9 +338,12 @@ EMBER = hexes("#a8280a", "#e85a14", "#f8901e", "#ffc84a", "#fff0a0")
 NEON = hexes("#1a8a8a", "#2ad0c8", "#5af8f0", "#b0fff8")
 NIGHTBODY = hexes("#0a0a14", "#14141e", "#20202e", "#2e2e40", "#40405a")
 PUMPKIN = hexes("#7a2e06", "#b04a0e", "#e0701a", "#f89a3a", "#ffc070")
-GLOWING = ("glow", "magma", "thunder")                             # the paints with a glow mask of their own (PaintGlowLayer)
+GLOWING = ("glow", "magma", "thunder", "neon")                             # the paints with a glow mask of their own (PaintGlowLayer)
 SUNSET = hexes("#f8c040", "#f88a3a", "#e8584a", "#b8407a", "#6a3a9a")
 STORM = hexes("#2a2e3a", "#3e4452", "#5a6070", "#7a8090", "#a0a6b4")
+NEON = [(255, 60, 200), (60, 230, 255), (150, 255, 70), (255, 230, 60)]
+TERRAZZO = [(214, 96, 70), (70, 120, 170), (230, 180, 70), (90, 150, 110), (60, 56, 60)]
+CLOVER = hexes("#1e4a24", "#2a6a30", "#3a8a3a", "#5aaa4a", "#9ad87a")
 TILES = [(40, 90, 170), (230, 190, 60), (190, 60, 50), (60, 150, 120), (240, 240, 230)]
 LEOPARD = hexes("#8a5a24", "#c8903a", "#e8b860", "#f8e0a0")
 AUTUMN = [(200, 70, 30), (230, 140, 40), (240, 190, 60), (150, 50, 30), (120, 90, 40)]
@@ -642,6 +649,39 @@ def finish(img, name, model):
                 c = tuple(int(v * (0.7 + 0.35 * l + n - 0.08 * weft)) for v in (190, 156, 108))
                 if edge and (xx + yy) % 3 == 0 and fw > 3 and fh > 3:
                     c = (92, 64, 40)                                        # the stitched seams
+            elif name == "neon":
+                if l < 0.22 and face:
+                    continue
+                tube = NEON[i % len(NEON)]
+                if edge and fw > 1 and fh > 1:                              # glowing tubes along every edge
+                    c = tube
+                    mask[y][x] = c + (255,)
+                else:
+                    c = tuple(int(v * (0.25 + 0.5 * l)) for v in (34, 30, 52))
+            elif name == "zebra":
+                if l < 0.22 and face:
+                    continue
+                band = int((yy + 2.2 * math.sin(xx * 0.55 + i * 1.7)) // 3) % 2 == 0
+                v = int(22 + 30 * l) if band else int(214 + 41 * l)
+                c = (v, v, v)
+            elif name == "terrazzo":
+                if l < 0.22 and face:
+                    continue
+                n = H.noise(x // 2, y // 2, 163)
+                if n > 0.8:
+                    chip = TERRAZZO[int(H.noise(x // 2, y // 2, 167) * len(TERRAZZO)) % len(TERRAZZO)]
+                    c = tuple(int(v * (0.75 + 0.3 * l)) for v in chip)
+                else:
+                    c = tuple(int(v * (0.72 + 0.3 * l)) for v in (238, 230, 214))
+            elif name == "clover":
+                if l < 0.22 and face:
+                    continue
+                c = ramp_pick(CLOVER, 0.2 + 0.65 * l)
+                cx, cy = (xx + 3 * i) % 7, (yy + i) % 7                       # a little three-leaf clover in every 7x7 tile
+                if (cx, cy) in ((3, 1), (2, 2), (4, 2), (3, 3), (3, 4)):
+                    c = ramp_pick(CLOVER, 0.95)
+                elif (cx, cy) == (5, 5) and H.noise(x, y, 169) > 0.6:
+                    c = (240, 204, 90)                                        # a fleck of gold
             else:                                                       # candy cane: red and white stripes, round and round
                 if l < 0.22 and face:
                     continue

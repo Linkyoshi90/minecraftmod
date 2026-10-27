@@ -1721,3 +1721,122 @@ for _fid, _entries in FIFTEENTH.items():
         _fam["species"].append(_species)
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
+
+# --- the sixteenth wave (2026-10-27): more of the Harmontide reference art, and four creatures of folklore ---------------
+SIXTEENTH = {
+    "arachne": [
+        (dict(id="jorogumo_arachne", name="Jorogumo", group="Bamboo forests at night", tag="Sweet · patient", height=1.6,
+              biomes=["bamboo_jungle", "cherry_grove", "dark_forest"], temperament="Sweet, patient",
+              ecology="The “binding bride” of Japanese folklore: a spider who walks as a girl in a web-patterned kimono, with four "
+                      "red eyes and eight long legs spread behind her back.",
+              interaction="Chicken, rabbit and string.",
+              signature=("Binding web", "At night, a monster that comes within 8 blocks of her friend is caught in a cobweb at its feet. "
+                                        "The web melts away after 10 seconds."),
+              danger="Low (her bite).",
+              variants=[("violet", "Violet (default)", "Violet kimono, red obi"), ("crimson", "Crimson", "Crimson"), ("indigo", "Indigo", "Night blue"),
+                        ("white", "White", "White, a black obi"), ("black", "Black", "Black, gold legs")]),
+         {"Habitat": "Bamboo forests", "Active": "Night", "Silk use": "Snares monsters", "Signature": "Binds monsters at night", "Danger": "Low"})],
+    "kitsune": [
+        (dict(id="dunefennec_kitsune", name="Dunefennec", group="Deserts", tag="Bright · restless", height=1.3, biomes=["desert", "badlands"],
+              temperament="Restless, cheerful",
+              ecology="A Harmontide fennec with ears bigger than her head, in a sand-coloured wrap against the sun.",
+              interaction="Rabbit and sweet berries.",
+              signature=("Desert guide", "Her friend near her runs fast on sand (Speed II), and husks near her lose interest in her friend."),
+              danger="None.",
+              variants=[("sand", "Sand (default)", "Pale sand"), ("red", "Red sand", "Red, like the badlands"), ("cream", "Cream", "Cream"),
+                        ("dusk", "Dusk", "Dusky grey"), ("gold", "Gold", "Gold")]),
+         {"Habitat": "Deserts", "Size": "One tail", "Signature": "Fast on sand", "Temperament": "Restless", "Danger": "None"})],
+    "crustacean": [
+        (dict(id="floodcrab_crustacean", name="Floodcrab", group="Riverbanks", tag="Busy · muddy", height=1.3, biomes=["river", "swamp", "mangrove_swamp"],
+              temperament="Busy, cheerful",
+              ecology="A Harmontide river crab who digs muddy burrows in the banks, and is happiest after rain.",
+              interaction="Cod, salmon and kelp.",
+              signature=("Puddler", "Befriended, every 20 seconds she turns a block of dirt beside the water near her into mud."),
+              danger="Low (her pinch).",
+              variants=[("blue", "Blue (default)", "Blue-grey shell"), ("brown", "Brown", "Brown"), ("green", "Green", "Olive"),
+                        ("red", "Red", "Red"), ("purple", "Purple", "Purple")]),
+         {"Habitat": "Riverbanks", "Signature": "Makes mud", "Danger": "Low"})],
+    "bug": [
+        (dict(id="temple_mantis_bug", name="Temple Mantis", group="Jungle temples", tag="Solemn · watchful", height=1.6,
+              biomes=["jungle", "sparse_jungle", "desert"], temperament="Solemn, watchful",
+              ecology="A Harmontide mantis who keeps the old temples, robed and hooded, her scythes folded as if in prayer.",
+              interaction="Spider eyes and rotten flesh.",
+              signature=("Trapbreaker", "Befriended, she cuts the tripwires of old temples and other structures within 8 blocks of her "
+                                     "friend before anyone can trip them. Wires a player strung up are left alone."),
+              danger="Low (her scythes).",
+              variants=[("jade", "Jade (default)", "Jade, a gold robe"), ("sand", "Sand", "Sand, for the pyramids"), ("orchid", "Orchid", "Orchid pink"),
+                        ("bark", "Bark", "Brown"), ("ghost", "Ghost", "Pale")]),
+         {"Habitat": "Jungle temples", "Signature": "Cuts temple tripwires", "Danger": "Low"})],
+    "merfolk": [
+        (dict(id="sword_koi_mermaid", name="Sword Koi", group="Warm ocean", tag="Bold · proud", height=1.6, biomes=["warm_ocean", "lukewarm_ocean", "deep_lukewarm_ocean"],
+              temperament="Proud, bold",
+              ecology="A Harmontide koi with a fin like a blade, who duels the drowned for the sea's treasures.",
+              interaction="Cod, salmon and kelp.",
+              signature=("Duellist", "Befriended, she hunts the drowned near her friend, and a drowned she defeats always drops what it held "
+                                     "(a trident, a nautilus shell, a fishing rod)."),
+              danger="Low, unless you are drowned.",
+              variants=[("kohaku", "Kohaku (default)", "White and red"), ("gold", "Gold", "Gold"), ("blue", "Blue", "Blue"),
+                        ("black", "Black", "Black and red"), ("silver", "Silver", "Silver")]),
+         {"Habitat": "Warm ocean", "Young": "Eggs", "On land": "Flops", "Signature": "Drowned drop their gear", "Danger": "Low"})],
+    "mollusk": [
+        (dict(id="squidkin_mollusk", name="Squidkin", group="Ocean shores", tag="Shy · inky", height=1.4, biomes=["ocean", "beach", "deep_ocean"],
+              temperament="Shy, protective",
+              ecology="A Harmontide squid girl in a hooded mantle, who hides behind clouds of ink.",
+              interaction="Cod and kelp.",
+              signature=("Ink cloud", "Befriended, when her friend is hurt near her, she squirts ink: the monsters around go blind and "
+                                      "her friend turns invisible for a moment."),
+              danger="None.",
+              variants=[("violet", "Violet (default)", "Violet"), ("red", "Red", "Red"), ("glow", "Glow", "Glow-squid teal"),
+                        ("white", "White", "White"), ("black", "Black", "Black")]),
+         {"Habitat": "Ocean shores", "Body": "Two legs, squid hood", "Signature": "Ink cloud", "Danger": "None"})],
+    "minotaur": [
+        (dict(id="reedbull_minotaur", name="Reedbull", group="River marshes", tag="Calm · steady", height=1.9, biomes=["river", "swamp", "mangrove_swamp"],
+              temperament="Calm, steady",
+              ecology="A Harmontide marsh cow with reeds and cattails growing from her horns and back.",
+              interaction="Wheat and sugar cane.",
+              signature=("Reed planter", "Befriended, every half minute she plants sugar cane on bare sand or dirt beside the water near her friend."),
+              danger="Low.",
+              variants=[("marsh", "Marsh (default)", "Mud brown, green reeds"), ("grey", "Grey", "Grey"), ("tan", "Tan", "Tan"),
+                        ("black", "Black", "Black"), ("autumn", "Autumn", "Golden reeds")]),
+         {"Habitat": "River marshes", "Temper": "Calm", "Signature": "Plants sugar cane", "Danger": "Low"})],
+    "devil": [
+        (dict(id="kikimora_devil", name="Kikimora", group="Villages at night", tag="Fussy · house-proud", height=1.4, biomes=["taiga", "old_growth_spruce_taiga", "plains"],
+              temperament="Fussy, house-proud",
+              ecology="The house spirit of Slavic folklore, a little woman in a headscarf who spins by night and scolds the careless.",
+              interaction="Bread and milk.",
+              signature=("Night latch", "At night, befriended, she shuts the wooden doors, trapdoors and fence gates left open near her friend."),
+              danger="None.",
+              variants=[("red", "Red (default)", "Red sarafan"), ("blue", "Blue", "Blue"), ("green", "Green", "Green"),
+                        ("black", "Black", "Black"), ("white", "White", "White")]),
+         {"Habitat": "Villages", "Signature": "Shuts doors at night", "Danger": "None"})],
+    "dragon": [
+        (dict(id="cockatrice_dragon", name="Cockatrice", group="Badlands", tag="Haughty · fierce", height=1.6, biomes=["badlands", "wooded_badlands", "savanna"],
+              temperament="Haughty, fierce",
+              ecology="The rooster-dragon of European legend, with a red comb, feathered wings and a scaly tail, whose glare stops "
+                      "creatures in their tracks.",
+              interaction="Seeds and chicken.",
+              signature=("Stony glare", "Befriended, every 3 seconds she glares at a monster near her friend and it is slowed almost to a stop."),
+              danger="Moderate (her glare and claws).",
+              variants=[("red", "Red (default)", "Red comb, bronze feathers"), ("white", "White", "White"), ("black", "Black", "Black"),
+                        ("gold", "Gold", "Gold"), ("green", "Green", "Green")]),
+         {"Habitat": "Badlands", "Moves by": "Wings and legs", "Signature": "Slowing glare", "Danger": "Moderate"})],
+    "elf": [
+        (dict(id="valkyrie_elf", name="Valkyrie", group="Mountain peaks", tag="Stern · faithful", height=1.8,
+              biomes=["jagged_peaks", "frozen_peaks", "snowy_slopes"], temperament="Stern, faithful",
+              ecology="The chooser of the slain of Norse myth, armoured and winged, who carries the fallen home.",
+              interaction="Cooked beef and honey bottles.",
+              signature=("Chooser of the slain", "Befriended, when her friend dies within 32 blocks of her, she gathers everything they drop "
+                                                 "and gives it back when they come within 6 blocks of her again."),
+              danger="Low (her spear).",
+              variants=[("silver", "Silver (default)", "Silver mail, white wings"), ("gold", "Gold", "Gold"), ("raven", "Raven", "Black wings"),
+                        ("red", "Red", "Red"), ("blue", "Blue", "Blue")]),
+         {"Habitat": "Mountain peaks", "Trades": "No", "Signature": "Keeps a fallen friend's things", "Danger": "Low"})],
+}
+for _fid, _entries in SIXTEENTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))

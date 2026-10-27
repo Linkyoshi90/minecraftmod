@@ -80,7 +80,10 @@ GROUP = {"lioness_nekomata": (3, 5), "orca_mermaid": (2, 3), "fennec_kitsune": (
          "undine_slime": (1, 1), "ittan_momen_devil": (1, 1),
          "crocora_lizardfolk": (1, 2), "iron_kobold_lizardfolk": (1, 3), "mooskuh_minotaur": (1, 3), "bellmare_centaur": (1, 2), "vicunero_centaur": (2, 3),
          "rockhyrax_rodent": (2, 4), "riverdillo_armoured": (1, 2), "reeffin_mermaid": (1, 2), "caraviper_lamia": (1, 1), "bakeneko_nekomata": (1, 1),
-         "rokurokubi_devil": (1, 1), "huli_jing_kitsune": (1, 1)}
+         "rokurokubi_devil": (1, 1), "huli_jing_kitsune": (1, 1),
+         "jorogumo_arachne": (1, 1), "dunefennec_kitsune": (1, 3), "floodcrab_crustacean": (2, 4), "temple_mantis_bug": (1, 1),
+         "sword_koi_mermaid": (1, 2), "squidkin_mollusk": (1, 3), "reedbull_minotaur": (1, 3), "kikimora_devil": (1, 1),
+         "cockatrice_dragon": (1, 1), "valkyrie_elf": (1, 1)}
 CATEGORY = {"axolotl_mermaid": "underground_water_creature", "amethyst_slime": "monster", "magma_slime": "monster",
             "seal_mermaid": "creature", "kraken_mollusk": "water_creature", "ammonite_mollusk": "water_creature",
             "night_elf": "monster", "blood_elf": "monster", "salamander_lizardfolk": "monster", "turtle_lizardfolk": "creature",
@@ -90,7 +93,8 @@ CATEGORY = {"axolotl_mermaid": "underground_water_creature", "amethyst_slime": "
             "axolume_mermaid": "underground_water_creature", "blaze_cat_nekomata": "monster", "gargoyle_construct": "monster",
             "mantarrow_mermaid": "water_creature", "moonseal_mermaid": "creature", "gremlin_devil": "creature", "karakasa_obake_devil": "creature",
             "rust_otter_mermaid": "creature", "chochin_obake_devil": "creature", "undine_slime": "creature", "ittan_momen_devil": "creature",
-            "rokurokubi_devil": "creature"}
+            "rokurokubi_devil": "creature", "jorogumo_arachne": "creature", "sword_koi_mermaid": "water_creature", "kikimora_devil": "creature",
+            "cockatrice_dragon": "creature"}
 # hitbox widths that differ from the family's
 WIDTH = {"kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alraune_flora": 1.2, "frankenstein_undead": 0.8,
          "gryphon_dragon": 1.3, "long_dragon": 1.0, "jormungandr_dragon": 1.2, "wyvern_dragon": 1.2, "wyrm_dragon": 1.3,
@@ -100,7 +104,8 @@ WIDTH = {"kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alra
          "yak_minotaur": 1.0, "oni_devil": 0.8, "venus_flytrap_flora": 1.2, "cave_bat": 0.5, "wolpertinger_jackalope": 0.5,
          "tusktaur_centaur": 1.5, "rhiwool_minotaur": 0.9, "needlehog_rodent": 0.6, "aegis_boar_armoured": 0.8, "gargoyle_construct": 0.8,
          "anvil_tortoise_lizardfolk": 0.9, "gliderune_marsupial": 0.5, "sphinx_centaur": 1.3, "brownie_elf": 0.4,
-         "kesaran_pasaran_flora": 0.45, "tsuchinoko_lamia": 0.8, "gremlin_devil": 0.5, "tin_squirrel_construct": 0.55, "yeti_canid": 0.9, "iron_kobold_lizardfolk": 0.55}
+         "kesaran_pasaran_flora": 0.45, "tsuchinoko_lamia": 0.8, "gremlin_devil": 0.5, "tin_squirrel_construct": 0.55, "yeti_canid": 0.9, "iron_kobold_lizardfolk": 0.55,
+         "kikimora_devil": 0.5, "dunefennec_kitsune": 0.55}
 # the name shown in game: the species name plus the family's word, unless NAME says otherwise
 SUFFIX = {"nekomata": " Nekomata", "kitsune": " Kitsune", "lamia": " Lamia", "arachne": " Arachne", "centaur": " Centaur", "merfolk": " Mermaid",
           "slime": "", "jackalope": "", "minotaur": " Minotaur", "mollusk": "", "elf": "", "undead": "", "lizardfolk": "", "dragon": "",
@@ -132,7 +137,10 @@ NAME = {"jack_jackalope": "Jack Jackalope", "kraken_mollusk": "Kraken", "octopus
         "cu_sith_canid": "Cù-sìth", "yeti_canid": "Yeti", "undine_slime": "Undine", "ittan_momen_devil": "Ittan-momen",
         "crocora_lizardfolk": "Crocora", "iron_kobold_lizardfolk": "Iron Kobold", "mooskuh_minotaur": "Mooskuh", "bellmare_centaur": "Bellmare",
         "vicunero_centaur": "Vicunero", "rockhyrax_rodent": "Rockhyrax", "riverdillo_armoured": "Riverdillo", "reeffin_mermaid": "Reeffin",
-        "caraviper_lamia": "Caraviper", "bakeneko_nekomata": "Bakeneko", "rokurokubi_devil": "Rokurokubi", "huli_jing_kitsune": "Huli Jing"}
+        "caraviper_lamia": "Caraviper", "bakeneko_nekomata": "Bakeneko", "rokurokubi_devil": "Rokurokubi", "huli_jing_kitsune": "Huli Jing",
+        "jorogumo_arachne": "Jorogumo", "dunefennec_kitsune": "Dunefennec", "floodcrab_crustacean": "Floodcrab", "temple_mantis_bug": "Temple Mantis",
+        "sword_koi_mermaid": "Sword Koi", "squidkin_mollusk": "Squidkin", "reedbull_minotaur": "Reedbull", "kikimora_devil": "Kikimora",
+        "cockatrice_dragon": "Cockatrice", "valkyrie_elf": "Valkyrie"}
 
 
 def gen_module(fid):

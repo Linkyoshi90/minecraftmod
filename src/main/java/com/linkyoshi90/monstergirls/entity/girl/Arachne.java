@@ -116,6 +116,7 @@ public class Arachne extends AbstractMonsterGirl {
             case JUMPING_SPIDER_ARACHNE -> girlAttributes(14, 0.3, 2);
             case TRAPDOOR_SPIDER_ARACHNE -> girlAttributes(24, 0.28, 7);
             case WOLF_SPIDER_ARACHNE -> girlAttributes(22, 0.34, 4);
+            case JOROGUMO_ARACHNE -> girlAttributes(24, 0.28, 4);
             default -> girlAttributes(20, 0.28, 3);
         };
     }
@@ -302,6 +303,10 @@ public class Arachne extends AbstractMonsterGirl {
     public void aiStep() {
         super.aiStep();
         if (!(this.level() instanceof ServerLevel server)) return;
+        if (this.species == GirlSpecies.JOROGUMO_ARACHNE) {
+            if (this.tickCount % 40 == 0) this.bindingWeb(server, !server.isDay());
+            if (!this.snares.isEmpty() && this.tickCount % 10 == 0) this.meltSnares(server, false);
+        }
         if (this.silkTicks < SILK_REGROW) this.silkTicks++;
         long now = server.getGameTime();
         if (this.carryTicks > 0 && --this.carryTicks == 0) this.setFlag(FLAG_CARRYING, false);
@@ -484,6 +489,7 @@ public class Arachne extends AbstractMonsterGirl {
         if (this.level() instanceof ServerLevel server && reason.shouldDestroy()) {
             this.clearWebs(server);
             this.clearTrap(server);
+            this.meltSnares(server, true);
         }
         super.remove(reason);
     }
@@ -493,6 +499,9 @@ public class Arachne extends AbstractMonsterGirl {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        net.minecraft.nbt.ListTag sn = new net.minecraft.nbt.ListTag();
+        for (BlockPos p : this.snares.keySet()) sn.add(LongTag.valueOf(p.asLong()));
+        tag.put("Snares", sn);
         tag.putInt("Silk", this.silkTicks);
         tag.putLong("NextMoult", this.nextMoult);
         tag.putInt("Carry", this.carryTicks);
@@ -510,6 +519,8 @@ public class Arachne extends AbstractMonsterGirl {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.snares.clear();                                               // webs left from before the save melt at once
+        for (Tag t : tag.getList("Snares", Tag.TAG_LONG)) this.snares.put(BlockPos.of(((LongTag) t).getAsLong()), 0L);
         this.silkTicks = tag.getInt("Silk");
         this.nextMoult = tag.getLong("NextMoult");
         this.carryTicks = tag.getInt("Carry");
@@ -528,5 +539,42 @@ public class Arachne extends AbstractMonsterGirl {
             if (a.getAffection(player) >= 60) return true;
         }
         return false;
+    }
+
+    // --- the jorogumo's binding web ------------------------------------------------------------------------------
+
+    /** The cobwebs she threw over monsters near her friend, and the game time each one melts away. */
+    private final java.util.Map<BlockPos, Long> snares = new java.util.HashMap<>();
+
+    /** At night, a monster within 8 blocks of her friend (and 16 of her) is caught in a cobweb at its feet for ten seconds. The monster, or null. */
+    @Nullable
+    public Monster bindingWeb(ServerLevel level, boolean night) {
+        if (!night || this.isBaby() || !level.getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_MOBGRIEFING)) return null;
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return null;
+        Monster m = this.nearest(Monster.class, 16, x -> x.distanceToSqr(friend) < 8 * 8 && level.getBlockState(x.blockPosition()).isAir());
+        if (m == null) return null;
+        BlockPos at = m.blockPosition().immutable();
+        level.setBlock(at, Blocks.COBWEB.defaultBlockState(), 3);
+        this.snares.put(at, level.getGameTime() + 200);
+        this.getLookControl().setLookAt(m);
+        this.startTimedAction(Action.SPIN, 30);
+        level.sendParticles(ParticleTypes.WHITE_ASH, m.getX(), m.getY() + 0.5, m.getZ(), 12, 0.4, 0.4, 0.4, 0.02);
+        this.playSound(SoundEvents.SPIDER_AMBIENT, 0.8F, 1.4F);
+        return m;
+    }
+
+    /** Her snares whose time is up melt away (all of them, with `all`). */
+    public void meltSnares(ServerLevel level, boolean all) {
+        long now = level.getGameTime();
+        this.snares.entrySet().removeIf(e -> {
+            if (!all && now < e.getValue()) return false;
+            if (level.getBlockState(e.getKey()).is(Blocks.COBWEB)) level.removeBlock(e.getKey(), false);
+            return true;
+        });
+    }
+
+    public int snareCount() {
+        return this.snares.size();
     }
 }

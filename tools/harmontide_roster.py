@@ -60,6 +60,10 @@ IN_GAME = {
     "crocora": "crocora_lizardfolk", "iron_kobold": "iron_kobold_lizardfolk", "mooskuh": "mooskuh_minotaur", "bellmare": "bellmare_centaur",
     "vicunero": "vicunero_centaur", "rockhyrax": "rockhyrax_rodent", "riverdillo": "riverdillo_armoured", "reeffin": "reeffin_mermaid",
     "caraviper": "caraviper_lamia", "bakeneko": "bakeneko_nekomata", "rokurokubi": "rokurokubi_devil", "huli_jing": "huli_jing_kitsune",
+    # sixteenth wave (2026-10-27)
+    "jorogumo": "jorogumo_arachne", "dunefennec": "dunefennec_kitsune", "floodcrab": "floodcrab_crustacean", "temple_mantis": "temple_mantis_bug",
+    "sword_koi": "sword_koi_mermaid", "squidkin": "squidkin_mollusk", "reedbull": "reedbull_minotaur", "kikimora": "kikimora_devil",
+    "cockatrice": "cockatrice_dragon", "valkyrie": "valkyrie_elf", "pumpkingull": "pumpkingull_harpy", "condorune": "condorune_harpy",
 }
 # not a creature to make, and the ones set aside on purpose
 EXCLUDED = {

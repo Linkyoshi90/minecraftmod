@@ -53,6 +53,7 @@ public class Crustacean extends AbstractMonsterGirl {
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        if (s == GirlSpecies.FLOODCRAB_CRUSTACEAN) return girlAttributes(20, 0.26, 3).add(Attributes.ARMOR, 5);
         return s == GirlSpecies.CRAB_CRUSTACEAN ? girlAttributes(24, 0.26, 5).add(Attributes.ARMOR, 6)
                 : girlAttributes(18, 0.24, 4).add(Attributes.ARMOR, 4);
     }
@@ -155,5 +156,36 @@ public class Crustacean extends AbstractMonsterGirl {
     @Override
     public SoundEvent getEatSound() {
         return SoundEvents.GENERIC_EAT;
+    }
+
+    // --- the floodcrab -------------------------------------------------------------------------------------------
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (this.species == GirlSpecies.FLOODCRAB_CRUSTACEAN && !this.isBaby() && this.tickCount % 400 == 0 && this.level() instanceof ServerLevel server) this.puddle(server);
+    }
+
+    /** Befriended: a block of dirt or grass beside water within 4 blocks of her turns to mud. Where, or null. */
+    @Nullable
+    public BlockPos puddle(ServerLevel level) {
+        if (this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24) == null || !level.getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_MOBGRIEFING)) return null;
+        java.util.List<BlockPos> spots = new java.util.ArrayList<>();
+        for (BlockPos p : BlockPos.betweenClosed(this.blockPosition().offset(-4, -2, -4), this.blockPosition().offset(4, 1, 4))) {
+            var s = level.getBlockState(p);
+            if (!(s.is(net.minecraft.world.level.block.Blocks.DIRT) || s.is(net.minecraft.world.level.block.Blocks.COARSE_DIRT) || s.is(net.minecraft.world.level.block.Blocks.GRASS_BLOCK))) continue;
+            for (net.minecraft.core.Direction d : net.minecraft.core.Direction.values()) {
+                if (d != net.minecraft.core.Direction.DOWN && level.getFluidState(p.relative(d)).is(net.minecraft.tags.FluidTags.WATER)) {
+                    spots.add(p.immutable());
+                    break;
+                }
+            }
+        }
+        if (spots.isEmpty()) return null;
+        BlockPos at = spots.get(this.random.nextInt(spots.size()));
+        level.setBlock(at, net.minecraft.world.level.block.Blocks.MUD.defaultBlockState(), 3);
+        level.playSound(null, at, net.minecraft.sounds.SoundEvents.MUD_PLACE, net.minecraft.sounds.SoundSource.NEUTRAL, 1.0F, 1.0F);
+        this.startTimedAction(Action.PINCH, 12);
+        return at;
     }
 }

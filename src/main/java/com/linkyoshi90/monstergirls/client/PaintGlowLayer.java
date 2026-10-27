@@ -12,7 +12,7 @@ import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 import java.util.function.Function;
 
 /**
- * The glowing paints (glow, magma, thunder) light up in the dark: textures/entity/&lt;texture&gt;_paint_&lt;paint&gt;_glowmask.png
+ * The glowing paints (glow, magma, thunder, neon) light up in the dark: textures/entity/&lt;texture&gt;_paint_&lt;paint&gt;_glowmask.png
  * (tools/gen_paints.py), drawn full-bright. Every other creature skips this layer.
  */
 public class PaintGlowLayer<T extends GeoAnimatable> extends AutoGlowingGeoLayer<T> {
@@ -24,7 +24,7 @@ public class PaintGlowLayer<T extends GeoAnimatable> extends AutoGlowingGeoLayer
     }
 
     static boolean glows(String paint) {
-        return "glow".equals(paint) || "magma".equals(paint) || "thunder".equals(paint);
+        return "glow".equals(paint) || "magma".equals(paint) || "thunder".equals(paint) || "neon".equals(paint);
     }
 
     @Override

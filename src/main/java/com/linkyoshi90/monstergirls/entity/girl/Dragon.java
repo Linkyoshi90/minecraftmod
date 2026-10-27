@@ -80,6 +80,7 @@ public class Dragon extends AbstractMonsterGirl {
             case KANNAE_DRAGON -> girlAttributes(40, 0.3, 8);
             case WYVERN_DRAGON -> girlAttributes(44, 0.3, 6);
             case ALEBRIJE_DRAGON -> girlAttributes(30, 0.3, 4);
+            case COCKATRICE_DRAGON -> girlAttributes(30, 0.28, 5).add(Attributes.ARMOR, 2);
             default -> girlAttributes(70, 0.26, 9).add(Attributes.ARMOR, 4);
         };
     }
@@ -87,7 +88,7 @@ public class Dragon extends AbstractMonsterGirl {
     @Override
     public boolean canFly() {
         return switch (this.species) {
-            case LONG_DRAGON, WYRM_DRAGON, GRYPHON_DRAGON, WYVERN_DRAGON, ALEBRIJE_DRAGON -> true;
+            case LONG_DRAGON, WYRM_DRAGON, GRYPHON_DRAGON, WYVERN_DRAGON, ALEBRIJE_DRAGON, COCKATRICE_DRAGON -> true;
             default -> false;
         };
     }
@@ -323,6 +324,7 @@ public class Dragon extends AbstractMonsterGirl {
     public void aiStep() {
         super.aiStep();
         if (!(this.level() instanceof ServerLevel server)) return;
+        if (this.species == GirlSpecies.COCKATRICE_DRAGON && !this.isBaby() && this.tickCount % 60 == 0) this.glare(server);
         if (this.lair == null && this.onGround()) this.lair = this.blockPosition();
         if (this.species == GirlSpecies.ALEBRIJE_DRAGON && !this.isBaby() && this.tickCount % 1200 == 0
                 && this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32) != null) this.paintSheep(server);
@@ -431,5 +433,22 @@ public class Dragon extends AbstractMonsterGirl {
         this.hoard.fromTag(tag.getList("Hoard", 10), this.registryAccess());
         this.lair = tag.contains("Lair") ? BlockPos.of(tag.getLong("Lair")) : null;
         this.nextRain = tag.getLong("NextRain");
+    }
+
+    // --- the cockatrice -------------------------------------------------------------------------------------------
+
+    /** Befriended: her glare stops a monster within 12 blocks of her and her friend almost dead (Slowness IV, 5 s). The monster, or null. */
+    @Nullable
+    public net.minecraft.world.entity.monster.Monster glare(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return null;
+        var m = this.nearest(net.minecraft.world.entity.monster.Monster.class, 12,
+                x -> x.distanceToSqr(friend) < 12 * 12 && this.hasLineOfSight(x) && !x.hasEffect(MobEffects.MOVEMENT_SLOWDOWN));
+        if (m == null) return null;
+        m.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 3), this);
+        this.getLookControl().setLookAt(m);
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.ASH, m.getX(), m.getY() + 1, m.getZ(), 30, 0.4, 0.6, 0.4, 0.0);
+        this.playSound(net.minecraft.sounds.SoundEvents.CHICKEN_AMBIENT, 1.2F, 0.6F);
+        return m;
     }
 }

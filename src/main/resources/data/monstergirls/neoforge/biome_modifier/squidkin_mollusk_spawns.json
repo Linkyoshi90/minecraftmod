@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_squidkin_mollusk",
+  "spawners": {
+    "type": "monstergirls:squidkin_mollusk",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

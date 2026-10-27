@@ -433,3 +433,26 @@ Paints: checkered, sunset, thunder (its lightning bolts glow) and burlap, so 59 
 
 Set aside as living traditions: alux (Maya), curupira, mapinguari and ypupiara (Indigenous Brazil), the horned serpent
 uktena (Cherokee), and terniq (an Inuit name).
+
+## Sixteenth wave (2026-10-27, in the game)
+
+Eight Harmontide originals from the reference art and four creatures of folklore. The reference art folder was not
+reachable while these were built, so the originals' looks are read from their names; check them against the art.
+
+| Species | Home | Design |
+|---|---|---|
+| **Jorogumo** | Arachne | The binding bride: a girl in a web-printed kimono with four red eyes and eight long black-and-gold legs fanned out behind her back (her own two-legged rig, from the user's reference). At night her webs bind the monsters near her friend. |
+| **Dunefennec** | Kitsune | A fennec in a sand-coloured wrap: her friend runs fast on sand, and husks near her lose interest in her friend. |
+| **Floodcrab** | Crustacean | A blue-grey river crab: she turns the dirt beside the water into mud. |
+| **Temple Mantis** | Bug | Robed and hooded in gold: she cuts the tripwires of old temples near her friend. Wires a player strung up are left alone. |
+| **Sword Koi** | Merfolk | A kohaku koi with a blade of a dorsal fin: a drowned she defeats always drops what it held. |
+| **Squidkin** | Mollusk | A violet squid girl (the ika's rig): when her friend is hurt, ink blinds the monsters and hides her friend. |
+| **Reedbull** | Minotaur | A marsh cow with reeds and cattails growing up her back: she plants sugar cane by the water. |
+| **Pumpkingull** | Harpy | An autumn gull under a carved pumpkin: endermen near her friend take no offence at being looked at. |
+| **Condorune** | Harpy | A condor on the crow's rig with a white ruff: she catches her friend when they fall. |
+| **Kikimora** | Devil | The Slavic house spirit in a sarafan and a polka-dot headscarf: at night she shuts the doors left open near her friend. |
+| **Cockatrice** | Dragon | The rooster-dragon with a red comb and feathered wings: her glare stops a monster almost dead. |
+| **Valkyrie** | Elf | Mail, a winged helm and great white wings: when her friend dies near her she keeps what they dropped and gives it back. |
+
+Paints: neon (its tubes glow), zebra, terrazzo and the seasonal clover (March only), so 63 in all. Porcelain, denim and
+sakura were already taken, so the proposed paints changed.

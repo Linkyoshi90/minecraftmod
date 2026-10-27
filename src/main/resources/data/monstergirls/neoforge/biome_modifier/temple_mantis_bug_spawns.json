@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_temple_mantis_bug",
+  "spawners": {
+    "type": "monstergirls:temple_mantis_bug",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

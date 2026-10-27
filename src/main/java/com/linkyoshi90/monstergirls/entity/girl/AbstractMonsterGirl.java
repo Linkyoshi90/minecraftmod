@@ -84,7 +84,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             "porcelain", "denim", "moss", "easter",                            // easter is seasonal, April only
             "tartan", "watercolour", "hologram", "fireworks",                  // hologram is see-through; fireworks is seasonal, January only
             "mosaic", "chalk", "leopard", "autumn",                            // autumn is seasonal, November only
-            "checkered", "sunset", "thunder", "burlap");                       // thunder's bolts glow
+            "checkered", "sunset", "thunder", "burlap",                        // thunder's bolts glow
+            "neon", "zebra", "terrazzo", "clover");                          // neon glows; clover is seasonal, March only
     /** Homage variants (the look of a favourite character): a wild one rolls them only rarely. */
     public static final java.util.Set<String> HOMAGES = java.util.Set.of("gunman", "blossom", "lost", "stitched", "nurse", "mummy", "ranger", "outback");
     /** One wild girl in this many is painted, like a shiny. */

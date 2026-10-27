@@ -409,6 +409,7 @@ public class Minotaur extends AbstractMonsterGirl {
     public void aiStep() {
         super.aiStep();
         if (!(this.level() instanceof ServerLevel server)) return;
+        if (this.species == GirlSpecies.REEDBULL_MINOTAUR && !this.isBaby() && this.tickCount % 600 == 0) this.plantReeds(server);
         if (this.inLove > 0) this.inLove--;
         if (this.species == GirlSpecies.BRONZEJAW_MINOTAUR && this.tickCount % 4 == 0) this.ploughOnLead(server);
         if (this.species == GirlSpecies.MOOSKUH_MINOTAUR && this.tickCount % 400 == 0 && this.getDeltaMovement().horizontalDistanceSqr() < 1.0E-4) this.growMoss(server);
@@ -655,5 +656,24 @@ public class Minotaur extends AbstractMonsterGirl {
         this.setWoolDye(tag.contains("WoolDye") ? net.minecraft.world.item.DyeColor.byName(tag.getString("WoolDye"), null) : null);
         this.pack.fromTag(tag.getList("Pack", 10), this.registryAccess());
         this.refreshDimensions();
+    }
+
+    // --- the reedbull --------------------------------------------------------------------------------------------
+
+    /** Befriended: sugar cane on a bare spot beside the water within 6 blocks of her friend. Where, or null. */
+    @Nullable
+    public BlockPos plantReeds(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null || !level.getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_MOBGRIEFING)) return null;
+        var cane = net.minecraft.world.level.block.Blocks.SUGAR_CANE.defaultBlockState();
+        java.util.List<BlockPos> spots = new java.util.ArrayList<>();
+        for (BlockPos p : BlockPos.betweenClosed(friend.blockPosition().offset(-6, -3, -6), friend.blockPosition().offset(6, 3, 6))) {
+            if (level.isEmptyBlock(p) && !level.getBlockState(p.below()).is(net.minecraft.world.level.block.Blocks.SUGAR_CANE) && cane.canSurvive(level, p)) spots.add(p.immutable());
+        }
+        if (spots.isEmpty()) return null;
+        BlockPos at = spots.get(this.random.nextInt(spots.size()));
+        level.setBlock(at, cane, 3);
+        level.levelEvent(2005, at, 0);
+        return at;
     }
 }

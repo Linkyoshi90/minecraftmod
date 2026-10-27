@@ -83,6 +83,7 @@ public class Devil extends AbstractMonsterGirl {
             case CHOCHIN_OBAKE_DEVIL -> girlAttributes(18, 0.3, 2);
             case ITTAN_MOMEN_DEVIL -> girlAttributes(16, 0.3, 1);
             case ROKUROKUBI_DEVIL -> girlAttributes(18, 0.28, 2);
+            case KIKIMORA_DEVIL -> girlAttributes(14, 0.3, 2);
             default -> girlAttributes(30, 0.26, 5);
         };
     }
@@ -452,6 +453,7 @@ public class Devil extends AbstractMonsterGirl {
     public void aiStep() {
         super.aiStep();
         if (!(this.level() instanceof ServerLevel server)) return;
+        if (this.species == GirlSpecies.KIKIMORA_DEVIL && !this.isBaby() && this.tickCount % 40 == 0) this.nightLatch(server, !server.isDay());
         switch (this.species) {
             case LESSER_DEVIL -> {
                 if (this.tickCount % 20 == 0 && server.getGameTime() >= this.nextPrank && !this.isBaby()) {
@@ -565,5 +567,31 @@ public class Devil extends AbstractMonsterGirl {
         super.readAdditionalSaveData(tag);
         this.loot = tag.contains("Loot") ? ItemStack.parseOptional(this.registryAccess(), tag.getCompound("Loot")) : ItemStack.EMPTY;
         this.nextPrank = tag.getLong("NextPrank");
+    }
+
+    // --- the kikimora --------------------------------------------------------------------------------------------
+
+    /** At night, befriended: the wooden doors, trapdoors and fence gates left open within 8 blocks of her friend (not the one they stand in) are shut. How many. */
+    public int nightLatch(ServerLevel level, boolean night) {
+        if (!night) return 0;
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return 0;
+        var OPEN = net.minecraft.world.level.block.state.properties.BlockStateProperties.OPEN;
+        int n = 0;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-8, -3, -8), friend.blockPosition().offset(8, 3, 8))) {
+            var s = level.getBlockState(p);
+            if (!s.hasProperty(OPEN) || !s.getValue(OPEN) || p.distSqr(friend.blockPosition()) <= 4) continue;
+            if (s.getBlock() instanceof net.minecraft.world.level.block.DoorBlock door && s.is(net.minecraft.tags.BlockTags.WOODEN_DOORS)) {
+                if (s.getValue(net.minecraft.world.level.block.DoorBlock.HALF) != net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER) continue;
+                door.setOpen(this, level, s, p, false);
+                n++;
+            } else if (s.is(net.minecraft.tags.BlockTags.WOODEN_TRAPDOORS) || s.is(net.minecraft.tags.BlockTags.FENCE_GATES)) {
+                level.setBlock(p, s.setValue(OPEN, false), 10);
+                level.gameEvent(this, net.minecraft.world.level.gameevent.GameEvent.BLOCK_CLOSE, p);
+                n++;
+            }
+        }
+        if (n > 0) this.playSound(net.minecraft.sounds.SoundEvents.WOODEN_TRAPDOOR_CLOSE, 0.8F, 1.2F);
+        return n;
     }
 }

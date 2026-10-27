@@ -18,6 +18,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # sixteenth wave: the sword koi, a kohaku koi with a tall blade of a dorsal fin
+    "sword_koi_mermaid": dict(
+        build="athletic", outfit=dict(top=["sarashi"], extras=["arm_wraps"], colors=dict(bandage="#f4f0e8")),
+        ears="fin", hair="ponytail", bangs="swept", fluke=(.5, 6, 5), long_fins=True, dorsal=(.5, 8, 4.5),
+        pal=dict(SKIN=skin("fair"), HAIR="#f4f2ee", FUR="#f6f4f0", LIGHT="#ffffff", MARK="#d8302a", EYE="#c82a2a", CLOTH="#f4f0e8", TRIM="#d8302a",
+                 pattern="patches"),
+        variants={"gold": dict(FUR="#e8c050", MARK="#f8e090", HAIR="#f0d070", pattern="speckle"),
+                  "blue": dict(FUR="#6a88b8", MARK="#e8f0f8", HAIR="#4a6a98", pattern="net"),
+                  "black": dict(FUR="#1a1a1c", MARK="#d8302a", HAIR="#1a1a1c", pattern="patches"),
+                  "silver": dict(FUR="#c8ccd4", MARK="#f4f6f8", HAIR="#d8dce4", pattern="speckle")}),
     "orca_mermaid": dict(
         build="strong", outfit=dict(top=["sports"], extras=["armlets"]),
         ears="fin", hair="ponytail", fluke=(9, .75, 4), dorsal=(.75, 6, 3.5), size=1.15,

@@ -27,6 +27,8 @@ bracers, satchel.
 Colours (outfit["colors"] or the palette's extra dict): tops use CLOTH, bottoms CLOTH2 (pal.extra["cloth2"], else a darker CLOTH), leather pal.extra["leather"],
 bindings pal.extra["bandage"], metal TRIM. Without the knobs girl_lib builds the old body byte for byte.
 """
+import math
+
 import harpy_lib as H
 from harpy_lib import cube, hang, mirror_cube, pick, noise, rgb, ramp, CLEAR, BROAD
 
@@ -346,6 +348,30 @@ def paint_build(pt, pal, build):
     pt("midriff", ("north",), abs_)
 
 
+def _webbed(fn, pal):
+    """a cloth painter with a spider-web print and scattered flowers over it, when pal.extra has "kimono_web" (the
+    jorogumo's kimono); otherwise the painter unchanged"""
+    web = pal.extra.get("kimono_web") if pal.extra else None
+    if not web:
+        return fn
+    W, FL = _ramp(web), _ramp(pal.extra.get("kimono_flower", "#e88aa8"))
+
+    def out(f, x, y, w, h):
+        base = fn(f, x, y, w, h)
+        if base is None or base == CLEAR or f in ("up", "down"):
+            return base
+        if noise(x // 3, y // 3, 61) > 0.86 and noise(x, y, 67) > 0.25:                          # flowers
+            return pick(FL, 0.5 + 0.25 * ((x + y) % 2), x, y)
+        cx, cy = (w - 1) * (0.15 if f in ("north", "east") else 0.85), 1.0
+        dx, dy = x - cx, y - cy
+        r = math.hypot(dx, dy)
+        a = math.atan2(dy, dx) * 6 / math.pi                          # twelve spokes round the centre
+        if r > 1.5 and abs(a - round(a)) * r * math.pi / 6 < 0.45 or r > 2 and abs(r % 7 - 3.5) > 3.0:
+            return pick(W, 0.55, x, y)
+        return base
+    return out
+
+
 def paint(pt, pal, outfit, build=None):
     paint_build(pt, pal, build)
     if not outfit:
@@ -466,7 +492,7 @@ def paint(pt, pal, outfit, build=None):
     if "kimono" in tops:
         K = _ramp(pal.extra.get("kimono")) if pal.extra.get("kimono") else C1
         KT = _ramp(pal.extra.get("kimono_trim")) if pal.extra.get("kimono_trim") else pal.TRIM
-        kc = cloth(K, 0.6, hem=False)
+        kc = _webbed(cloth(K, 0.6, hem=False), pal)
 
         def kimono(f, x, y, w, h):
             if f in ("up", "down"):
@@ -556,7 +582,7 @@ def paint(pt, pal, outfit, build=None):
         pt("flap_f", "all", flap)
         pt("flap_b", "all", flap)
     if bottom == "wrap_skirt":
-        c = cloth(C2, 0.54)
+        c = _webbed(cloth(C2, 0.54), pal)
 
         def panel(f, x, y, w, h):
             if y == h - 1 and f not in ("up", "down"):

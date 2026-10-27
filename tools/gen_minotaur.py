@@ -21,6 +21,17 @@ COW_TAIL = [(1, 1, 3.5), (.75, .75, 3.5), (1.5, 1.75, 1.75)]
 TAIL_REST = [(-62, 0, 0), (-14, 0, 0), (-6, 0, 0)]
 
 SPECIES = {
+    # sixteenth wave: the reedbull, a marsh cow with reeds and cattails growing up her back
+    "reedbull_minotaur": dict(
+        build="curvy", outfit=dict(top=["halter"], bottom="sarong", extras=["satchel"], colors=dict(cloth2="#4a7a3a")),
+        hair="wavy", bangs="wispy", ears="cow", legs="hoof", foot="hoof", horns="buffalo", tail=COW_TAIL, tail_look="tuft", tail_rest=TAIL_REST,
+        reeds=True, male=dict(hair="shaggy", outfit=dict(bottom="sarong", extras=["satchel"], colors=dict(cloth2="#4a7a3a"))),
+        pal=dict(SKIN=skin("tan"), HAIR="#5a4a30", FUR="#6a5038", LIGHT="#a8906a", MARK="#3a2a1a", EYE="#4a7a3a", CLOTH="#c8b880", TRIM="#4a7a3a",
+                 INNER="#a88a8a", extra=dict(horn="#3a3226", hoof="#2a2218", reed="#5a8a3a", cattail="#6a4a2a")),
+        variants={"grey": dict(FUR="#7a7a78", HAIR="#4a4a48", LIGHT="#a8a8a4"),
+                  "tan": dict(FUR="#b8946a", HAIR="#8a6a40", LIGHT="#e0c8a0"),
+                  "black": dict(FUR="#2a2624", HAIR="#1a1816", LIGHT="#5a5450"),
+                  "autumn": dict(FUR="#8a5a30", HAIR="#a8682a", LIGHT="#d8a870", extra=dict(reed="#c8a040", cattail="#5a3a1e"))}),
     "cattle_minotaur": dict(
         build="curvy", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["bell_collar"], colors=dict(cloth2="#4a6aa8")),
         hair="wavy", bangs="swept", ears="cow", legs="hoof", foot="hoof", horns="bull", tail=COW_TAIL, tail_look="tuft", tail_rest=TAIL_REST,
@@ -164,6 +175,8 @@ def declare_hook(sp, d):
         out += [("bjaw", 5, 1.25, 1.5), ("yoke", 11, 1.25, 1.5)]
     if d.get("yak"):                                    # a long hair skirt; the pack chest (bone pack, shown once she carries one)
         out += [("yak_skirt", 7, 4.5, 5.25), ("pack", 5, 4, 3.25), ("pack_lid", 5.25, 1.25, 3.5)]
+    if d.get("reeds"):                                  # the reedbull's reeds and cattails, growing up her back
+        out += [("reed", .5, 11, .5), ("cattail", 1, 2.25, 1)]
     return out
 
 
@@ -180,6 +193,9 @@ def wool_fn(pal):
 
 
 def paint_hook(pt, pal, d):
+    reed, cat = G.shades(pal.extra.get("reed", "#5a8a3a")), G.shades(pal.extra.get("cattail", "#6a4a2a"))
+    pt("reed", "all", lambda f, x, y, w, h: pick(reed, 0.45 + 0.2 * (y % 3 == 0), x, y))
+    pt("cattail", "all", lambda f, x, y, w, h: pick(cat, 0.45 + 0.15 * ((x + y) % 2), x, y))
     brass = G.shades(pal.extra.get("brass", "#c8902a"))
     pt("bjaw", "all", lambda f, x, y, w, h: pick(brass, 0.5 + 0.25 * (y == 0) + 0.15 * (x % 4 == 0), x, y))
     pt("yoke", "all", lambda f, x, y, w, h: pick(G.shades("#6a4a2a"), 0.45 + 0.15 * (x % 6 == 0), x, y) if 2 < x < w - 3
@@ -204,6 +220,12 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
+    if d.get("reeds"):
+        cs = []
+        for i, (x, top, tilt) in enumerate(((-2.6, 31.0, 16), (0.2, 33.5, -3), (2.4, 30.5, -18))):
+            cs.append(G.rot_cube("reed", [x - 0.25, top - 11, 3.4 + z], [x, top - 11, 3.65 + z], -10, 0, tilt))
+            cs.append(G.rot_cube("cattail", [x - 0.5, top - 3.5, 3.15 + z], [x, top - 11, 3.65 + z], -10, 0, tilt))
+        r.add("hair_reeds", "body", [0, 20, 3.65 + z], cs)
     if d.get("bronze"):
         r.put("head", cube("bjaw", [-2.5, hy - 0.1, -4.9 + z]))
         r.put("body", cube("yoke", [-5.5, 19.4, -0.75 + z]))

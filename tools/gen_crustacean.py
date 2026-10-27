@@ -18,6 +18,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin  # noqa: E402
 
 SPECIES = {
+    # sixteenth wave: the floodcrab, a blue-grey river crab who loves mud
+    "floodcrab_crustacean": dict(
+        build="standard", outfit=dict(top=["bandeau"], bottom="sarong", extras=["pouch"], colors=dict(cloth2="#6a5a3a", leather="#5a4a30")),
+        hair="bob", bangs="messy", ears=None, legs="scales", foot="claw", carapace=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#4a6a8a", FUR="#5a7a98", LIGHT="#c8d8e4", MARK="#2a3a4a", EYE="#1a1a1a", CLOTH="#8a7a58", TRIM="#c8b888",
+                 pattern="solid", extra=dict(shell="#4a6a88", claw="#6a8aa8", claw_tip="#e8e0c8")),
+        variants={"brown": dict(FUR="#8a6a4a", HAIR="#6a4a2a", MARK="#3a2a1a", extra=dict(shell="#7a5a3a", claw="#9a7a5a", claw_tip="#2a1e14")),
+                  "green": dict(FUR="#6a7a4a", HAIR="#4a5a2a", MARK="#2a3418", extra=dict(shell="#5a6a3a", claw="#7a8a5a", claw_tip="#e8d8a0")),
+                  "red": dict(FUR="#b84a3a", HAIR="#8a2a1e", MARK="#4a140e", extra=dict(shell="#a83a2a", claw="#d8604a", claw_tip="#f0e8d8")),
+                  "purple": dict(FUR="#7a5a98", HAIR="#5a3a7a", MARK="#2a1a3a", extra=dict(shell="#6a4a8a", claw="#9a7ab8", claw_tip="#f0d860"))}),
     "crab_crustacean": dict(
         build="athletic", outfit=dict(top=["bandeau"], bottom="shorts", extras=["armlets"], colors=dict(cloth2="#3a4a6a")),
         hair="bob", bangs="jagged", ears=None, legs="scales", foot="claw", carapace=True,

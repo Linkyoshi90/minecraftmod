@@ -24,6 +24,20 @@ LARVA_SEGS = [("seg_1", 4, 6.5, 3.5), ("seg_2", 4.25, 3.5, 3.5), ("seg_3", 4, 3.
               ("seg_5", 3.5, 2.75, 3), ("seg_6", 3, 2.5, 3), ("seg_7", 2.5, 2.25, 2.5), ("seg_8", 2, 2, 2)]
 
 SPECIES = {
+    # sixteenth wave: the temple mantis, robed and hooded in gold, keeper of the old temples
+    "temple_mantis_bug": dict(
+        build="slim", outfit=dict(top=["halter", "capelet"], bottom="sarong", extras=["bracers", "usekh"], colors=dict(cloth2="#c8a040")),
+        hair="hime", bangs="blunt", ears="antenna", legs="stockings", foot="shoe", wings="insect", scythes=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#3a8a6a", FUR="#4aa87a", LIGHT="#c8f0d8", MARK="#2a6a4a", EYE="#e8c040", CLOTH="#e8d8a8", TRIM="#e8b840",
+                 extra=dict(wing="#a8e0c0", wing_vein="#2a6a4a", wing_alpha=210, antenna="#2a6a4a", stocking="#4aa87a", boot="#7a5a1e", scythe="#4aa87a")),
+        variants={"sand": dict(HAIR="#a8885a", FUR="#c8a870", LIGHT="#f0e0c0", MARK="#7a5a30", EYE="#3a8ab8", CLOTH="#f0e8d0",
+                               extra=dict(wing="#e8d8b0", wing_vein="#7a5a30", wing_alpha=220, antenna="#7a5a30", stocking="#c8a870", boot="#5a3a1a", scythe="#c8a870")),
+                  "orchid": dict(SKIN=skin("pale"), HAIR="#f0a8c8", FUR="#f8d0e0", LIGHT="#ffffff", MARK="#d870a0", EYE="#a83a7a", CLOTH="#f8e8f0",
+                                 extra=dict(wing="#fbe8f0", wing_vein="#e8a8c8", wing_alpha=200, antenna="#d870a0", stocking="#f8d0e0", boot="#d870a0", scythe="#f8d0e0")),
+                  "bark": dict(HAIR="#5a3a22", FUR="#7a5a3a", LIGHT="#c8a888", MARK="#3a2414", EYE="#e8c040", CLOTH="#c8b890",
+                               extra=dict(wing="#a8886a", wing_vein="#3a2414", wing_alpha=230, antenna="#3a2414", stocking="#7a5a3a", boot="#2a1a0e", scythe="#7a5a3a")),
+                  "ghost": dict(SKIN=skin("pale"), HAIR="#e8e8e0", FUR="#f0f0e8", LIGHT="#ffffff", MARK="#a8a898", EYE="#5a5a6a", CLOTH="#f4f2ec",
+                                extra=dict(wing="#f4f4f0", wing_vein="#a8a898", wing_alpha=190, antenna="#a8a898", stocking="#e0e0d8", boot="#8a8a80", scythe="#f0f0e8"))}),
     "mosquito_bug": dict(
         build="slim", outfit=dict(top=["sports"], bottom="shorts", colors=dict(cloth2="#2a2a2e")), hair="shaggy", bangs="messy", ears="antenna",
         legs="stockings", foot="shoe", wings="insect", flies=True, proboscis=True,

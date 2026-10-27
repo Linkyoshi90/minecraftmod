@@ -29,6 +29,16 @@ public final class GirlEvents {
         }
     }
 
+    /** The valkyrie: a befriended one within 32 blocks gathers up what her fallen friend drops, to give back later. */
+    @SubscribeEvent
+    public static void onPlayerDrops(net.neoforged.neoforge.event.entity.living.LivingDropsEvent event) {
+        if (!(event.getEntity() instanceof net.minecraft.server.level.ServerPlayer p) || event.getDrops().isEmpty()) return;
+        for (var v : p.serverLevel().getEntitiesOfClass(com.linkyoshi90.monstergirls.entity.girl.Elf.class, p.getBoundingBox().inflate(32),
+                e -> e.getSpecies() == com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.VALKYRIE_ELF && e.isAlive())) {
+            if (v.gatherFallen(p, event.getDrops())) return;
+        }
+    }
+
     /** Like a tamed wolf's owner, everyone who befriended a girl, harpy or frog hears how she died. */
     @SubscribeEvent(priority = net.neoforged.bus.api.EventPriority.LOWEST)
     public static void onFriendDeath(net.neoforged.neoforge.event.entity.living.LivingDeathEvent event) {

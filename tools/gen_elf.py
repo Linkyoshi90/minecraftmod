@@ -16,6 +16,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # sixteenth wave: the valkyrie, in mail and a winged helm, with great white wings and a sword at her hip
+    "valkyrie_elf": dict(
+        build="athletic", outfit=dict(top=["corset", "capelet"], bottom="wrap_skirt", extras=["bracers", "belt"], colors=dict(cloth2="#3a5a8a")),
+        hair="braid", bangs="swept", ears=None, legs="boots", foot="shoe", wings="feather", wing_scale=1.15, flies=True, helm=True, sword=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#f0d890", FUR="#f0d890", LIGHT="#fff8e0", MARK="#a8a8b0", EYE="#4a7ab8", CLOTH="#b8bcc8", TRIM="#e8c050",
+                 extra=dict(boot="#5a4a3a", helm="#c8ccd4", wing="#f4f2ee", wing_tip="#c8c4bc")),
+        variants={"gold": dict(CLOTH="#d8b048", extra=dict(helm="#e8c050", cloth2="#7a2a2a")),
+                  "raven": dict(HAIR="#1e1c24", EYE="#8a8a9a", extra=dict(wing="#2a2830", wing_tip="#141218", helm="#5a5a64", cloth2="#2a2a32")),
+                  "red": dict(HAIR="#c8502a", extra=dict(cloth2="#8a1e1e", wing="#f4ece4", wing_tip="#a83a2a")),
+                  "blue": dict(HAIR="#e8e4f0", EYE="#3a5ab8", extra=dict(cloth2="#1e3a7a", helm="#a8b8d8", wing="#e8f0fa", wing_tip="#6a8ab8"))}),
     "night_elf": dict(
         build="slim", outfit=dict(top=["halter", "capelet"], bottom="sarong", extras=["armlets"], colors=dict(cloth2="#2a2a4a")),
         hair="flowing", bangs="parted", ears="elf", legs="boots", foot="shoe",
@@ -102,10 +112,15 @@ def declare_hook(sp, d):
         out += [("sculk_band", 8.75, 1, 8.75), ("sculk_gem", 1.5, 1.5, .5)]
     if d.get("brownie"):
         out += [("bcap", 5.5, 3, 5.5), ("bcap_tip", 2, 2, 2)]
+    if d.get("helm"):                                    # the valkyrie's winged helm
+        out += [("helm", 8.75, 3, 8.75), ("helm_wing", .5, 3.5, 3)]
     return out
 
 
 def paint_hook(pt, pal, d):
+    helm = G.shades(pal.extra.get("helm", "#c8ccd4"))
+    pt("helm", "all", lambda f, x, y, w, h: pick(helm, 0.55 + 0.25 * (f == "up") + 0.15 * (y == h - 1) - 0.12 * (x % 6 == 0), x, y))
+    pt("helm_wing", "all", lambda f, x, y, w, h: pick(G.shades(pal.extra.get("wing", "#f4f2ee")), 0.6 + 0.15 * (y % 2), x, y))
     gold = G.shades("#e8b840")
     pt("circlet", "all", lambda f, x, y, w, h: pick(gold, 0.6 + 0.25 * (x % 3 == 0), x, y))
     pt("gem", "all", lambda f, x, y, w, h: pick(G.shades("#3ad0a0"), 0.7, x, y))
@@ -134,6 +149,10 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
+    if d.get("helm"):
+        r.put("head", cube("helm", [-4.375, hy + 5.9, -4.375 + z], inflate=0.6),
+              G.rot_cube("helm_wing", [-5.2, hy + 6.2, -1.0 + z], [-5.0, hy + 6.2, z], 0, 0, 20),
+              G.rot_cube("helm_wing", [4.7, hy + 6.2, -1.0 + z], [5.0, hy + 6.2, z], 0, 0, -20))
     if d.get("circlet"):
         r.put("head", cube("circlet", [-4.375, hy + 5.6, -4.375 + z], inflate=0.55), cube("gem", [-0.5, hy + 5.5, -5.35 + z]))
     if d.get("quiver"):

@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import girl_family as F  # noqa: E402
 import girl_lib as G  # noqa: E402
 import girl_parts as P  # noqa: E402
-from girl_lib import H, cube, pick, noise, skin  # noqa: E402
+from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 DRAGON_TAIL = [(3, 3, 4.5), (2.5, 2.5, 4.5), (2, 2, 4.5), (1.25, 1.25, 4)]
 SEGS = [("seg_1", 4.5, 10.5, 4), ("seg_2", 4.25, 4, 5.5), ("seg_3", 4, 3.75, 5.5), ("seg_4", 3.5, 3.25, 5),
@@ -30,6 +30,17 @@ SEGS = [("seg_1", 4.5, 10.5, 4), ("seg_2", 4.25, 4, 5.5), ("seg_3", 4, 3.75, 5.5
 BIG_SEGS = [(n, round(w * 1.3 * 4) / 4, h if n == "seg_1" else round(h * 1.3 * 4) / 4, round(d * 1.25 * 4) / 4) for n, w, h, d in SEGS]
 
 SPECIES = {
+    # sixteenth wave: the cockatrice, a rooster-dragon with a red comb, feathered wings and a scaly tail
+    "cockatrice_dragon": dict(
+        build="athletic", outfit=dict(top=["bandeau", "harness"], bottom="loincloth", extras=["bracers"]), hair="pixie", bangs="jagged", ears=None,
+        legs="scales", foot="claw", tail=DRAGON_TAIL, tail_look="scale", tail_rest=[(-30, 0, 0), (8, 0, 0), (8, 0, 0), (6, 0, 0)],
+        wings="feather", wing_scale=1.0, flies=True, comb=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#9a3a1e", FUR="#a86a2a", LIGHT="#e8c890", MARK="#5a3a14", EYE="#e8c020", CLOTH="#3a2a1e", TRIM="#c8a040",
+                 pupil=(0.9, 3.4), extra=dict(wing="#e8c070", wing_tip="#2a4a3a", comb="#d8201e", claw="#e8c060")),
+        variants={"white": dict(HAIR="#f4f0e8", FUR="#e8e4dc", LIGHT="#ffffff", MARK="#a8a090", extra=dict(wing="#f4f0e8", wing_tip="#c8c0b0")),
+                  "black": dict(HAIR="#1e1c24", FUR="#2a2830", LIGHT="#5a5a6a", MARK="#0e0e12", extra=dict(wing="#2a2a3a", wing_tip="#3a6a5a")),
+                  "gold": dict(HAIR="#e8b840", FUR="#d8a030", LIGHT="#f8e8b0", MARK="#7a5010", extra=dict(wing="#e8b040", wing_tip="#a83a1e")),
+                  "green": dict(HAIR="#3a7a3a", FUR="#4a8a3a", LIGHT="#c8e8a0", MARK="#1e3a14", extra=dict(wing="#3a7a3a", wing_tip="#d8201e"))}),
     "long_dragon": dict(
         build="slim", outfit=dict(top=["kimono"], extras=["pearls"], colors=dict(kimono="#2a7a5a", kimono_trim="#e8c040", obi="#e8c040")),
         hair="flowing", bangs="parted", ears="fin", body="serpent", segs=SEGS, horns="antlers", mane=True, flies=True,
@@ -123,10 +134,15 @@ def declare_hook(sp, d):
         out += [("neck_a", 1.75, 8, 1.75), ("neck_b", 1.5, 8, 1.5), ("dhead", 3.5, 3, 4), ("dsnout", 2.25, 1.75, 2.5)]
     if d.get("mane"):
         out += [("mane", 1, 4, 2.5)]
+    if d.get("comb"):                                    # the cockatrice's rooster comb
+        out += [("comb", 1, 3.5, 5), ("wattle", 1.5, 1.75, .5)]
     return out
 
 
 def paint_hook(pt, pal, d):
+    comb = G.shades(pal.extra.get("comb", "#d8201e"))
+    pt("comb", "all", lambda f, x, y, w, h: CLEAR if f in ("east", "west") and y < 2 and x % 3 == 1 else pick(comb, 0.5 + 0.2 * (f == "up"), x, y))
+    pt("wattle", "all", lambda f, x, y, w, h: pick(comb, 0.45, x, y))
     sc = G.scale_fn(pal)
     for p in [n for n, *_ in SEGS] + ["neck_a", "neck_b", "dhead", "dsnout"]:
         pt(p, "all", sc)
@@ -161,6 +177,8 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
+    if d.get("comb"):
+        r.add("hair_comb", "head", [0, hy + 8, z], [cube("comb", [-0.5, hy + 8.0, -3.5 + z])])
     if d.get("heads"):                                    # seven dragon heads rising behind and around her own
         for i in range(7):
             ry = -135 + i * 45                              # fanned round the sides and back, none in front of her face

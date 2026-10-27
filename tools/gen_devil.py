@@ -20,6 +20,16 @@ SPADE = [(.75, .75, 4), (.5, .5, 4), (2, 2, .5)]
 SPADE_REST = [(-20, 0, 0), (25, 0, 0), (10, 0, 0)]
 
 SPECIES = {
+    # sixteenth wave: the kikimora, a little house spirit in a sarafan and a knotted headscarf
+    "kikimora_devil": dict(
+        build="petite", outfit=dict(top=["sweater"], bottom="wrap_skirt", extras=["belt"], colors=dict(cloth2="#c83a2a")),
+        hair="braid", bangs="parted", ears=None, legs="stockings", foot="shoe", kerchief=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#8a6a3a", FUR="#8a6a3a", LIGHT="#f4f0e4", MARK="#3a2a1a", EYE="#4a6a3a", CLOTH="#f4f0e4", TRIM="#e8c040",
+                 extra=dict(kerchief="#c83a2a", kerchief_dot="#f4f0e4", stocking="#f4f0e4", boot="#5a3a22")),
+        variants={"blue": dict(extra=dict(cloth2="#2a4a8a", kerchief="#2a4a8a")),
+                  "green": dict(HAIR="#5a4a2a", extra=dict(cloth2="#3a6a3a", kerchief="#3a6a3a", kerchief_dot="#e8c040")),
+                  "black": dict(HAIR="#2a2420", extra=dict(cloth2="#1e1c22", kerchief="#1e1c22", kerchief_dot="#c83a2a")),
+                  "white": dict(HAIR="#c8b890", extra=dict(cloth2="#f0ece4", kerchief="#f0ece4", kerchief_dot="#2a4a8a"))}),
     "lesser_devil": dict(
         build="petite", outfit=dict(top=["sports"], bottom="shorts", extras=["belt"]), hair="twintails", bangs="messy", ears="elf",
         legs="bare", foot="shoe", tail=SPADE, tail_look="spade", tail_rest=SPADE_REST, horns="devil", wings="devil_small", flies=True,
@@ -154,10 +164,17 @@ def declare_hook(sp, d):
         out += [("lantern", 8.5, 8, 8.5), ("lantern_rim", 6.5, 1, 6.5), ("tongue", 2, .5, 3.5)]
     if d.get("umbrella"):
         out += [("canopy", 14, 1, 14), ("canopy_b", 10.5, 1.25, 10.5), ("canopy_c", 7, 1.25, 7), ("canopy_top", 3.5, 1, 3.5), ("umb_tip", 1, 2, 1)]
+    if d.get("kerchief"):                                # the kikimora's headscarf, knotted at the nape
+        out += [("kerchief", 8.75, 4.5, 8.75), ("kerchief_knot", 2.5, 1.5, 1), ("kerchief_end", 1.5, 3, .25)]
     return out
 
 
 def paint_hook(pt, pal, d):
+    kc, kd = G.shades(pal.extra.get("kerchief", "#c83a2a")), G.shades(pal.extra.get("kerchief_dot", "#f4f0e4"))
+    pt("kerchief", "all", lambda f, x, y, w, h: CLEAR if f == "down" or (f == "north" and y > 1) else
+       pick(kd, 0.6, x, y) if (x % 4 == 1 and y % 4 == 1) else pick(kc, 0.5 + 0.15 * (f == "up"), x, y))
+    pt("kerchief_knot", "all", lambda f, x, y, w, h: pick(kc, 0.4, x, y))
+    pt("kerchief_end", "all", lambda f, x, y, w, h: pick(kc, 0.45 + 0.1 * (y % 2), x, y))
     pk = G.shades(pal.extra.get("pumpkin", "#e8822a"))
     candle = G.shades(pal.extra.get("candle", "#f8d83a"))
     ribs = lambda f, x, y, w, h: pick(pk, 0.5 + 0.18 * (x % 4 == 0) + (noise(x, y, 3) - 0.5) * 0.08, x, y)
@@ -238,6 +255,10 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
+    if d.get("kerchief"):
+        r.put("head", cube("kerchief", [-4.375, hy + 4.4, -4.375 + z], inflate=0.7), cube("kerchief_knot", [-1.25, hy + 2.3, 4.6 + z]),
+              G.rot_cube("kerchief_end", [-1.6, hy - 0.6, 4.9 + z], [-0.85, hy + 2.3, 5.0 + z], 0, 0, 14),
+              G.rot_cube("kerchief_end", [0.1, hy - 0.6, 4.9 + z], [0.85, hy + 2.3, 5.0 + z], 0, 0, -14))
     if d.get("pumpkin"):                                 # a carved pumpkin worn as a hat, the candle shining through
         r.add("pumpkin_hat", "head", [0, hy + 8, z], [cube("pumpkin", [-4.75, hy + 7.4, -4.75 + z]), cube("pumpkin_f", [-4.75, hy + 8.2, -4.85 + z]),
                                                     cube("stem", [-0.75, hy + 12.3, -0.75 + z])])

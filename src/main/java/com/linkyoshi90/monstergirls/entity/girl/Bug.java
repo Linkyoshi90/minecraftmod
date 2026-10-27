@@ -132,6 +132,7 @@ public class Bug extends AbstractMonsterGirl {
             case MANTIS_BUG -> girlAttributes(20, 0.32, 6);
             case SCARABRONZE_BUG -> girlAttributes(30, 0.26, 4).add(net.minecraft.world.entity.ai.attributes.Attributes.ARMOR, 10);
             case MOTH_LARVA_BUG, PAPILLON_LARVA_BUG -> girlAttributes(10, 0.14, 0);
+            case TEMPLE_MANTIS_BUG -> girlAttributes(22, 0.3, 5);
             default -> girlAttributes(16, 0.3, 2);
         };
     }
@@ -361,6 +362,7 @@ public class Bug extends AbstractMonsterGirl {
     public void aiStep() {
         super.aiStep();
         if (!(this.level() instanceof ServerLevel server)) return;
+        if (this.species == GirlSpecies.TEMPLE_MANTIS_BUG && !this.isBaby() && this.tickCount % 20 == 0) this.cutTripwire(server, false);
         if (this.carryTicks > 0 && --this.carryTicks == 0) this.setFlag(FLAG_CARRYING, false);
         if (this.species == GirlSpecies.FIREFLY_BUG) this.glow(server, server.isDay() ? 0 : 7);   // her lantern lights the night
         if (this.species == GirlSpecies.MANTIS_BUG && !this.isBaby()) this.ambush(server);
@@ -738,5 +740,27 @@ public class Bug extends AbstractMonsterGirl {
     @Override
     public boolean isHealer() {
         return this.species == GirlSpecies.FAIRY_BUG || this.species == GirlSpecies.FAIRY_QUEEN_BUG;
+    }
+
+    // --- the temple mantis ---------------------------------------------------------------------------------------
+
+    /** A tripwire within 8 blocks of her friend, inside a structure (or `anywhere`), cut before anyone trips it. Where, or null. */
+    @Nullable
+    public BlockPos cutTripwire(ServerLevel level, boolean anywhere) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return null;
+        for (BlockPos p : BlockPos.betweenClosed(friend.blockPosition().offset(-8, -4, -8), friend.blockPosition().offset(8, 4, 8))) {
+            var s = level.getBlockState(p);
+            if (!s.is(Blocks.TRIPWIRE)) continue;
+            if (!anywhere && !level.structureManager().getStructureWithPieceAt(p, h -> true).isValid()) continue;   // a player's own wires stay
+            BlockPos at = p.immutable();
+            level.setBlock(at, s.setValue(net.minecraft.world.level.block.TripWireBlock.DISARMED, true), 4);   // cut like shears: nothing fires
+            level.destroyBlock(at, true, this);
+            this.getLookControl().setLookAt(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+            this.startTimedAction(Action.STRIKE, 12);
+            this.playSound(net.minecraft.sounds.SoundEvents.SHEEP_SHEAR, 1.0F, 1.2F);
+            return at;
+        }
+        return null;
     }
 }
