@@ -67,6 +67,15 @@ SPECIES = {
                   "green": dict(extra=dict(kimono="#2a6a4a", obi="#e8c040", kimono_trim="#e8c040", cloth2="#1e4a34", hat="#1a1a22")),
                   "black": dict(extra=dict(kimono="#1a1a22", obi="#a81a2a", kimono_trim="#a81a2a", cloth2="#141418", hat="#1a1a22")),
                   "gold": dict(extra=dict(kimono="#c8a030", obi="#a81a2a", kimono_trim="#a81a2a", cloth2="#8a6a1a", hat="#1a1a22"))}),
+    # fifteenth wave: the rokurokubi, a shy girl in a blue kimono whose neck stretches up long at night ("watch")
+    "rokurokubi_devil": dict(
+        build="slim", outfit=dict(top=["kimono"], extras=[], colors=dict(kimono="#5a7ac8", kimono_trim="#f4f2ec", obi="#2a3a7a")),
+        hair="bob", bangs="blunt", ears=None, legs="bare", foot="shoe", neck=True,
+        pal=dict(SKIN=skin("pale"), HAIR="#3a2a22", FUR="#3a2a22", LIGHT="#f4f2ec", MARK="#2a1e18", EYE="#6a4aa8", CLOTH="#5a7ac8", TRIM="#f4f2ec"),
+        variants={"red": dict(extra=dict(kimono="#c83a3a", kimono_trim="#f4f2ec", obi="#2a2a32")),
+                  "green": dict(HAIR="#1e1a18", extra=dict(kimono="#3a8a5a", kimono_trim="#f4f2ec", obi="#c8a040")),
+                  "white": dict(HAIR="#141214", EYE="#3a3a3a", extra=dict(kimono="#f4f2ec", kimono_trim="#c8c4bc", obi="#a83a3a")),
+                  "black": dict(HAIR="#141214", EYE="#c83a3a", extra=dict(kimono="#2a2830", kimono_trim="#8a8890", obi="#c83a3a"))}),
     # fourteenth wave: the ittan-momen, a girl who ends at the waist in a long ribbon of cotton cloth (no legs); she flies
     "ittan_momen_devil": dict(
         build="petite", outfit=dict(top=["kimono"], extras=[], colors=dict(kimono="#f4f2ec", kimono_trim="#c8c4bc", obi="#3a5ab0")),
@@ -137,6 +146,8 @@ def declare_hook(sp, d):
         out += [("cap", 9, 3, 9), ("cap_brim", 10.5, .75, 10.5), ("button", 1.5, 1.5, 1.5), ("talisman", 3, 6, .25)]
     if d.get("spanner"):
         out += [("spanner", .75, 4, .75), ("spanner_head", 2, 1, .75)]
+    if d.get("neck"):
+        out += [("neck_long", 2, 12, 2)]
     if d.get("ribbon"):
         out += [("cloth_a", 6, 6, .5), ("cloth_b", 5.5, 6, .5), ("cloth_c", 5, 6, .5), ("cloth_d", 4.5, 5, .5)]
     if d.get("lantern"):
@@ -189,6 +200,7 @@ def paint_hook(pt, pal, d):
     pt("lantern", "all", lantern)
     pt("lantern_rim", "all", lambda f, x, y, w, h: pick(rim, 0.45 + 0.15 * (f == "up"), x, y))
     pt("tongue", "all", lambda f, x, y, w, h: pick(G.shades("#e85a6a"), 0.55 + 0.2 * (f == "up"), x, y))
+    pt("neck_long", "all", H.skin_fn(pal, 0.6))
     cotton, fold = G.shades(pal.extra.get("cotton", "#f4f2ec")), G.shades(pal.extra.get("fold", "#c8c4bc"))
     for p in ("cloth_a", "cloth_b", "cloth_c", "cloth_d"):
         pt(p, "all", lambda f, x, y, w, h: pick(fold if x % 5 == 2 or y % 6 == 5 else cotton, 0.55 + 0.1 * (noise(x, y, 41) - 0.5), x, y))
@@ -236,6 +248,8 @@ def build_hook(r, g, d):
         studs = [cube("stud", [px - 1.45 + 2.4 * (i % 2), py + 1.5 + 2.2 * (i // 2), cz - 0.25]) for i in range(8)]
         studs += [cube("stud", [px - 0.25, py + 2.6 + 2.2 * i, cz - 1.45]) for i in range(3)]
         r.add("club", "hand_r", [px, py - 1.5, pz], [cube("grip", [px - 0.625, py - 2.5, cz - 0.625]), cube("club", [px - 1.125, py + 1.0, cz - 1.125])] + studs)
+    if d.get("neck"):                                    # the long neck, rising from her collar (shrunk away until she stretches it)
+        r.add("neck", "body", [0, hy - 0.5, z], [cube("neck_long", [-1, hy - 0.5, -1 + z])])
     if d.get("ribbon"):                                  # the long cotton ribbon she ends in, in four bones so it can ripple
         z0 = z
         r.add("ribbon_1", "body", [0, 12.5, z0], [cube("cloth_a", [-3, 6.5, -0.25 + z0])])
@@ -284,6 +298,16 @@ def anim_extra(an, sp, d):
                                                         "ribbon_3": {"rotation": Tk((0, (-10, 0, 0)), (0.5, (10, 0, 0)), (1.0, (-10, 0, 0)))},
                                                         "ribbon_4": {"rotation": Tk((0, (10, 0, 0)), (0.5, (-15, 0, 0)), (1.0, (10, 0, 0)))}},
                                        sym("arm", hold(-20, 0, 25))))
+    if d.get("neck"):                                    # the neck stays shrunk away; "watch" stretches it, her head riding up on top
+        for key in [k.split(".")[-1] for k in an.A]:
+            F._inject(an, key, {"neck": {"scale": hold(1, 0, 1)}})
+        import copy
+        watch = copy.deepcopy(an.A[f"animation.{sp}.idle"])
+        watch["bones"].setdefault("head", {})["position"] = Tk((0, (0, 0, 0)), (1.0, (0, 11.5, 0)), (4.0, (0, 11.5, 0)))
+        watch["bones"]["head"]["rotation"] = Tk((0, (0, 0, 0)), (1.0, (-5, 0, 0)), (2.5, (-5, 25, 0)), (4.0, (-5, -25, 0)))
+        watch["bones"]["neck"] = {"scale": Tk((0, (1, 0, 1)), (1.0, (1, 1, 1)), (4.0, (1, 1, 1)))}
+        watch["loop"], watch["animation_length"] = False, 4.0
+        an.A[f"animation.{sp}.watch"] = watch
     if d.get("spanner"):                                 # the gremlin's big ears stick out sideways
         for key in [k.split(".")[-1] for k in an.A]:
             F._inject(an, key, {"ear_r": {"rotation": hold(0, 0, 65)}, "ear_l": {"rotation": hold(0, 0, -65)}})

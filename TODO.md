@@ -253,6 +253,22 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Undine** (slime): every 5 s, befriended, `water` sets farmland within 6 to full moisture and fills cauldrons; Water Breathing for her friend in the water.
   - **Ittan-momen** (devil): no legs, a four-bone cotton ribbon; she flies; a friend's empty hand mounts her and she flies where they look (the dragons' ride).
   - **Paints:** mosaic, chalk, leopard and autumn (November only), so 55 in all.
+- [x] **Fifteenth wave** (2026-10-27), tested in `FifteenthWaveTests`:
+  - **Crocora** (lizardfolk): every 0.5 s `rescue` checks her friend within 16; with 1 bubble of air left or less, eyes under water, she hauls them up to open air above the water and fills their air.
+  - **Iron kobold** (lizardfolk): `isIronGear` stacks (anything an iron ingot repairs) are mended a quarter by the anvil tortoise's `repair`, for an iron ingot.
+  - **Mooskuh** (minotaur, bulls one in three): every 20 s, standing still, `growMoss` turns the stone or cobblestone under her to moss. Milked like the cows.
+  - **Bellmare** (centaur): every 2 s, befriended, `leadHerd` walks cows, sheep, goats and pigs within 12 (and over 4 away, not leashed) over to her.
+  - **Vicunero** (centaur): every 1.5 s, `spitAtMonster` fires a llama spit at a monster within 12 of her and 10 of her friend.
+  - **Rockhyrax** (rodent): every 1 s, `sentinel` makes the creepers within 12 of her friend glow for 10 s, with a flute whistle.
+  - **Riverdillo** (armoured): every 30 s in the water, `angle` drops a cod, salmon or tropical fish at her friend's feet.
+  - **Reeffin** (merfolk): every 10 s in the water, `tendReef` puts a coral, coral fan or sea pickle on bare sand or gravel under water within 4 of her.
+  - **Caraviper** (lamia, the cobra's hood display too): every 2 s, `spitVenom` blinds and poisons a monster within 10 of her and her friend.
+  - **Bakeneko** (nekomata): `ghostLights` gives light 7 at night, 13 beside her friend; her wisps, paws and tail tip glow (glow masks).
+  - **Rokurokubi** (devil): `nightWatch` at night starts the "watch" action (a new `Action.WATCH`: the neck bone, shrunk away in every other animation, stretches 11.5 px) and makes the monsters within 24 of her friend glow.
+  - **Huli jing** (kitsune): always nine tails (`rollTails`); every 2 s, `charm` gives her friend within 8 Hero of the Village in a village or with a villager within 16.
+  - **Paints:** checkered, sunset, thunder (bolts glow: `PaintGlowLayer`, `gen_paints.GLOWING`) and burlap, so 59 in all.
+  - The preview renderer (`harpy_lib.render`) now applies bone scale, so shrunk-away bones stay hidden in previews.
+- [ ] Dev client for the fifteenth wave: the rokurokubi's neck at night (does the head ride up smoothly, and come back down at dawn?), the crocora rescue in deep water, the bellmare walking a herd home, the vicunero's spit, the reeffin's coral, and the four paints (thunder at night).
 - [ ] Dev client for the fourteenth wave: the ittan-momen ride (does the rider sit well on the ribbon, can you land?), the halberelk felling a big spruce and leaving a log cabin alone, the vulphea's ashes and rising, the bronzejaw ox ploughing on a lead, the silkcoon washing, and the four paints.
 - [ ] Dev client for the thirteenth wave: the peaflare's display fan in play, the jaglare in real jungle trees, the kamaitachi's gusts near a player's leaf builds (persistent leaves should be spared), the chochin-obake's light, and the hologram paint.
 - [ ] Dev client for the twelfth wave: the cheshire fade and grin in first and third person, the kesaran's drift (does she get stuck under trees?), the tsuchinoko's roll, the dodobold's saddlebags screen, the karakasa catching skeleton arrows, the gremlin's furnace speed, and the waterlil's body under the water.

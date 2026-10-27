@@ -95,6 +95,16 @@ SPECIES = {
                   "brown": dict(HAIR="#6a4a2e", FUR="#7a5636", LIGHT="#e8d4bc", MARK="#3a2416", CLOTH="#5a3a6a"),
                   "grey": dict(HAIR="#7a7a80", FUR="#8a8a90", LIGHT="#e8e8ec", MARK="#3a3a40", CLOTH="#3a6a5a"),
                   "black": dict(HAIR="#1e1c1e", FUR="#2a282a", LIGHT="#8a8488", MARK="#0e0c0e", EYE="#e8d040", CLOTH="#a83a3a")}),
+    # fifteenth wave: the rockhyrax, a stocky rock hyrax with small round ears and a back of blue scales, no tail to speak of
+    "rockhyrax_rodent": dict(
+        build="curvy", outfit=dict(top=["sweater"], bottom="shorts", extras=["satchel"], colors=dict(cloth2="#3a4a7a", leather="#6a4a2a")),
+        hair="bob", bangs="parted", ears="round", legs="fur", foot="paw", tail=[(1, 1, .5)], tail_rest=[(-20, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("fair"), HAIR="#2a3a7a", FUR="#4a6ab8", LIGHT="#e8d8b8", MARK="#1e2a5a", EYE="#2a3a8a", CLOTH="#e8c070", TRIM="#2a3a7a",
+                 pattern="bars"),
+        variants={"brown": dict(HAIR="#4a3424", FUR="#7a5a3e", LIGHT="#d8c0a0", MARK="#3a2818", CLOTH="#3a6a8a"),
+                  "grey": dict(HAIR="#4a4a50", FUR="#7a7a82", LIGHT="#d8d8dc", MARK="#2a2a30", CLOTH="#c84a3a"),
+                  "sand": dict(HAIR="#a88a5a", FUR="#d0b080", LIGHT="#f4e8d0", MARK="#8a6a3a", CLOTH="#3a6a5a"),
+                  "dark": dict(HAIR="#141218", FUR="#2a2830", LIGHT="#8a8890", MARK="#0a080e", EYE="#e8a030", CLOTH="#c8a050")}),
     # fourteenth wave: the silkcoon, a raccoon of silky white fur swirled in blue, a ringed bushy tail
     "silkcoon_rodent": dict(
         build="petite", outfit=dict(top=["halter", "capelet"], bottom="shorts", extras=["pearls"], colors=dict(cloth2="#2a4a9a")),

@@ -65,6 +65,7 @@ public class Armoured extends AbstractMonsterGirl {
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        if (s == GirlSpecies.RIVERDILLO_ARMOURED) return girlAttributes(18, 0.28, 2).add(Attributes.ARMOR, 4);
         if (s == GirlSpecies.GRIBBOAR_ARMOURED) return girlAttributes(26, 0.27, 4).add(Attributes.KNOCKBACK_RESISTANCE, 0.4);
         if (s == GirlSpecies.SLOTHREN_ARMOURED) return girlAttributes(30, 0.12, 2).add(Attributes.ARMOR, 2);
         if (s == GirlSpecies.AEGIS_BOAR_ARMOURED) return girlAttributes(50, 0.27, 7).add(Attributes.ARMOR, 10).add(Attributes.ATTACK_KNOCKBACK, 1.5);
@@ -89,6 +90,20 @@ public class Armoured extends AbstractMonsterGirl {
         level.levelEvent(2001, this.blockPosition().below(), net.minecraft.world.level.block.Block.getId(under));
         this.playSound(SoundEvents.HOGLIN_AMBIENT, 0.6F, 1.4F);
         return find;
+    }
+
+    // --- the riverdillo -----------------------------------------------------------------------------------------------
+
+    /** The angler: in the water near her friend she catches a fish and drops it at their feet. The fish, or empty. */
+    public ItemStack angle(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null || this.isBaby() || !this.isInWater()) return ItemStack.EMPTY;
+        int r = this.random.nextInt(100);
+        ItemStack fish = new ItemStack(r < 55 ? Items.COD : r < 90 ? Items.SALMON : Items.TROPICAL_FISH);
+        level.addFreshEntity(new net.minecraft.world.entity.item.ItemEntity(level, friend.getX(), friend.getY() + 0.5, friend.getZ(), fish.copy()));
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.SPLASH, this.getX(), this.getY() + 0.5, this.getZ(), 12, 0.3, 0.2, 0.3, 0.1);
+        this.playSound(SoundEvents.FISHING_BOBBER_SPLASH, 0.8F, 1.2F);
+        return fish;
     }
 
     // --- the slothren -------------------------------------------------------------------------------------------------
@@ -254,6 +269,7 @@ public class Armoured extends AbstractMonsterGirl {
         LivingEntity target = this.getTarget();
         if (this.isSloth()) this.tickSloth(server);
         if (this.isGrib() && !this.isBaby() && this.tickCount % 600 == 0 && this.onGround()) this.root(server);
+        if (this.species == GirlSpecies.RIVERDILLO_ARMOURED && this.tickCount % 600 == 0) this.angle(server);
         if (target != null && !this.isCurled() && !this.isBoar() && !this.isSloth() && !this.isGrib()) {     // charging: a rolling ball
             if (this.getAction() != Action.ROLL) this.setAction(Action.ROLL);
             if (this.tickCount % 20 == 0) this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 30, 1, true, false));
@@ -275,6 +291,7 @@ public class Armoured extends AbstractMonsterGirl {
     public boolean isFood(ItemStack stack) {
         if (this.isBoar()) return stack.is(Items.CARROT) || stack.is(Items.POTATO) || stack.is(Items.BEETROOT);
         if (this.isSloth()) return stack.is(net.minecraft.tags.ItemTags.LEAVES) || stack.is(Items.GLOW_BERRIES);
+        if (this.species == GirlSpecies.RIVERDILLO_ARMOURED && stack.is(net.minecraft.tags.ItemTags.FISHES)) return true;
         if (this.isGrib()) return stack.is(Items.CARROT) || stack.is(Items.POTATO) || stack.is(Items.BROWN_MUSHROOM) || stack.is(Items.RED_MUSHROOM);
         return stack.is(Items.SPIDER_EYE) || stack.is(Items.BEETROOT) || stack.is(Items.SWEET_BERRIES);
     }
@@ -287,6 +304,7 @@ public class Armoured extends AbstractMonsterGirl {
     @Override
     public ItemStack rollGift(Player player) {
         int r = this.random.nextInt(100);
+        if (this.species == GirlSpecies.RIVERDILLO_ARMOURED) return new ItemStack(r < 40 ? Items.COD : r < 75 ? Items.SALMON : r < 95 ? Items.TROPICAL_FISH : Items.ARMADILLO_SCUTE, r < 95 ? 2 : 1);
         if (this.isGrib()) return new ItemStack(r < 40 ? Items.BROWN_MUSHROOM : r < 75 ? Items.POTATO : r < 95 ? Items.CARROT : Items.GOLD_NUGGET, r < 95 ? 3 : 2);
         if (this.isSloth()) return new ItemStack(r < 45 ? Items.MOSS_BLOCK : r < 80 ? Items.GLOW_BERRIES : Items.VINE, 2);
         if (this.isBoar()) return r < 50 ? new ItemStack(Items.IRON_NUGGET, 4) : r < 85 ? new ItemStack(Items.BEETROOT, 3) : r < 97 ? new ItemStack(Items.LEATHER, 2)

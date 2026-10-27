@@ -97,6 +97,7 @@ public class Minotaur extends AbstractMonsterGirl {
             case SHEEP_MINOTAUR -> girlAttributes(24, 0.25, 2);
             case HIGHLAND_MINOTAUR -> girlAttributes(34, 0.25, 5).add(Attributes.ATTACK_KNOCKBACK, 1.0);
             case YAK_MINOTAUR -> girlAttributes(40, 0.24, 5).add(Attributes.ATTACK_KNOCKBACK, 1.0);
+            case MOOSKUH_MINOTAUR -> girlAttributes(22, 0.22, 1);
             case BRONZEJAW_MINOTAUR -> girlAttributes(44, 0.24, 6).add(Attributes.ARMOR, 4).add(Attributes.KNOCKBACK_RESISTANCE, 0.6);
             case RHIWOOL_MINOTAUR -> girlAttributes(44, 0.26, 8).add(Attributes.ATTACK_KNOCKBACK, 2.5).add(Attributes.KNOCKBACK_RESISTANCE, 0.8);
             default -> girlAttributes(30, 0.25, 4).add(Attributes.ATTACK_KNOCKBACK, 1.0);
@@ -234,7 +235,17 @@ public class Minotaur extends AbstractMonsterGirl {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return stack.is(Items.WHEAT) || stack.is(Items.HAY_BLOCK);
+        return stack.is(Items.WHEAT) || stack.is(Items.HAY_BLOCK) || this.species == GirlSpecies.MOOSKUH_MINOTAUR && stack.is(Items.GLOW_BERRIES);
+    }
+
+    /** The stone she rests on grows into moss. True if it did. */
+    public boolean growMoss(ServerLevel level) {
+        BlockPos under = this.blockPosition().below();
+        var s = level.getBlockState(under);
+        if (this.isBaby() || !this.onGround() || !(s.is(net.minecraft.tags.BlockTags.BASE_STONE_OVERWORLD) || s.is(net.minecraft.world.level.block.Blocks.COBBLESTONE))) return false;
+        level.setBlock(under, net.minecraft.world.level.block.Blocks.MOSS_BLOCK.defaultBlockState(), 3);
+        level.levelEvent(2005, under.above(), 0);
+        return true;
     }
 
     @Override
@@ -339,6 +350,8 @@ public class Minotaur extends AbstractMonsterGirl {
                     : new ItemStack(Items.MILK_BUCKET);
             case MINOAN_MINOTAUR -> new ItemStack(r < 10 ? Items.GOLD_INGOT : r < 50 ? Items.COPPER_INGOT : Items.BRICK, r < 50 ? 1 : 3);
             case SHEEP_MINOTAUR -> r < 60 ? wool(this.woolColour(), 2) : new ItemStack(r < 85 ? Items.STRING : Items.MUTTON, 2);
+            case MOOSKUH_MINOTAUR -> r < 40 ? new ItemStack(Items.MOSS_BLOCK, 2) : r < 70 ? new ItemStack(Items.GLOW_BERRIES, 3) : r < 95 ? new ItemStack(Items.MILK_BUCKET)
+                    : new ItemStack(Items.FLOWERING_AZALEA);
             case BRONZEJAW_MINOTAUR -> new ItemStack(r < 40 ? Items.WHEAT : r < 70 ? Items.LEATHER : r < 95 ? Items.COPPER_INGOT : Items.GOLD_INGOT, r < 95 ? 3 : 1);
             case RHIWOOL_MINOTAUR -> r < 50 ? wool(this.woolColour(), 3) : new ItemStack(r < 85 ? Items.LEATHER : Items.FLINT, 2);
             case YAK_MINOTAUR -> r < 40 ? new ItemStack(Items.MILK_BUCKET) : r < 70 ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.CHEESE.get(), 2)
@@ -398,6 +411,7 @@ public class Minotaur extends AbstractMonsterGirl {
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.inLove > 0) this.inLove--;
         if (this.species == GirlSpecies.BRONZEJAW_MINOTAUR && this.tickCount % 4 == 0) this.ploughOnLead(server);
+        if (this.species == GirlSpecies.MOOSKUH_MINOTAUR && this.tickCount % 400 == 0 && this.getDeltaMovement().horizontalDistanceSqr() < 1.0E-4) this.growMoss(server);
         if (this.stampede > 0) this.stampede--;
         if (this.nextMilk > 0 && server.getGameTime() >= this.nextMilk) this.ringBell(server);
         if (this.species == GirlSpecies.RHIWOOL_MINOTAUR) this.tickCharge(server);

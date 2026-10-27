@@ -133,6 +133,7 @@ public class Lamia extends AbstractMonsterGirl {
             case WADJET_LAMIA -> girlAttributes(30, 0.3, 6);
             case MEDUSA_LAMIA -> girlAttributes(30, 0.26, 4);
             case TSUCHINOKO_LAMIA -> girlAttributes(18, 0.24, 2);
+            case CARAVIPER_LAMIA -> girlAttributes(24, 0.28, 4);
             case BOA_LAMIA -> girlAttributes(28, 0.24, 4);
             default -> girlAttributes(22, 0.26, 3);
         };
@@ -283,11 +284,31 @@ public class Lamia extends AbstractMonsterGirl {
         }
     }
 
+    /** The spitting cobra: venom in the eyes of a monster near her friend, blinding and poisoning it. The monster, or null. */
+    @Nullable
+    public net.minecraft.world.entity.monster.Monster spitVenom(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null || this.isBaby()) return null;
+        net.minecraft.world.entity.monster.Monster m = this.nearest(net.minecraft.world.entity.monster.Monster.class, 10, x -> x.distanceToSqr(friend) < 10 * 10 && this.hasLineOfSight(x) && !x.hasEffect(net.minecraft.world.effect.MobEffects.BLINDNESS));
+        if (m == null) return null;
+        m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.BLINDNESS, 100, 0), this);
+        m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.POISON, 100, 0), this);
+        net.minecraft.world.phys.Vec3 from = this.getEyePosition(), to = m.getEyePosition();
+        for (int i = 1; i <= 6; i++) {
+            net.minecraft.world.phys.Vec3 at = from.lerp(to, i / 6.0);
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.SPIT, at.x, at.y, at.z, 1, 0, 0, 0, 0);
+        }
+        this.getLookControl().setLookAt(m);
+        this.playSound(net.minecraft.sounds.SoundEvents.LLAMA_SPIT, 1.0F, 1.6F);
+        return m;
+    }
+
     @Override
     public ItemStack rollGift(Player player) {
         if (this.level().getGameTime() >= this.nextShed - 2400) return new ItemStack(ModItems.SHED_SKIN.get());
         int r = this.random.nextInt(100);
         return switch (this.species) {
+            case CARAVIPER_LAMIA -> new ItemStack(r < 40 ? Items.EGG : r < 75 ? Items.RABBIT_HIDE : r < 97 ? Items.GOLD_NUGGET : Items.EMERALD, r < 97 ? 3 : 1);
             case TSUCHINOKO_LAMIA -> new ItemStack(r < 50 ? Items.GOLD_NUGGET : r < 80 ? Items.GOLDEN_CARROT : r < 97 ? Items.GOLD_INGOT : Items.GOLDEN_APPLE,
                     r < 50 ? 5 : 1);
             case NAGA_LAMIA -> new ItemStack(r < 50 ? Items.GOLD_NUGGET : r < 90 ? Items.EMERALD : r < 98 ? Items.GOLD_INGOT : Items.DIAMOND, r < 50 ? 4 : 1);
@@ -400,6 +421,10 @@ public class Lamia extends AbstractMonsterGirl {
         if (this.tickCount % 20 == 0) this.campfireBond(server);
         switch (this.species) {
             case COBRA_LAMIA -> this.hoodDisplay(server);
+            case CARAVIPER_LAMIA -> {
+                this.hoodDisplay(server);
+                if (this.tickCount % 40 == 0) this.spitVenom(server);
+            }
             case RATTLESNAKE_LAMIA -> this.rattle(server);
             case SEA_SNAKE_LAMIA -> this.reefGuide(server);
             case WADJET_LAMIA -> {

@@ -409,3 +409,27 @@ Seven Harmontide originals from the reference art and five spirits of folklore.
 | **Ittan-momen** | Devil | A girl trailing a cotton ribbon: she flies, and her friend can ride her through the air. |
 
 Paints: mosaic, chalk, leopard and the seasonal autumn (November only), so 55 in all.
+
+## Fifteenth wave (2026-10-27, in the game)
+
+Eight Harmontide originals from the reference art and four spirits of folklore.
+
+| Species | Home | Design |
+|---|---|---|
+| **Crocora** | Lizardfolk | A round little blue crocodile in a gold collar: she hauls her drowning friend up to the surface. |
+| **Iron Kobold** | Lizardfolk | A kobold smith in iron plate with a big hammer: mends iron and chainmail gear for an iron ingot. |
+| **Mooskuh** | Minotaur | A calf grown all over with moss: the stone she rests on turns to moss; she gives milk. |
+| **Bellmare** | Centaur | A blue donkey taur with goat's horns and bells: the farm animals near her follow her. |
+| **Vicunero** | Centaur | A vicuña taur in a woven saddle blanket: she spits at the monsters near her friend. |
+| **Rockhyrax** | Rodent | A stocky hyrax with blue scales: she whistles when a creeper creeps up, and it glows. |
+| **Riverdillo** | Armoured | A river armadillo with a fish's fin on her tail: she catches fish for her friend. |
+| **Reeffin** | Merfolk | A reef mermaid crowned with coral: she grows coral and sea pickles on the sea floor. |
+| **Caraviper** | Lamia | A hooded blue cobra with gold glyphs: her venom blinds and poisons monsters. |
+| **Bakeneko** | Nekomata | The Japanese ghost cat, will-o'-wisps round her: they light the night. |
+| **Rokurokubi** | Devil | The yōkai whose neck stretches at night: from up there she spots every monster near her friend. |
+| **Huli Jing** | Kitsune | The Chinese fox spirit with nine tails: villagers trade cheaper with her friend. |
+
+Paints: checkered, sunset, thunder (its lightning bolts glow) and burlap, so 59 in all.
+
+Set aside as living traditions: alux (Maya), curupira, mapinguari and ypupiara (Indigenous Brazil), the horned serpent
+uktena (Cherokee), and terniq (an Inuit name).

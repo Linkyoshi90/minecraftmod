@@ -107,6 +107,7 @@ public class Nekomata extends AbstractMonsterGirl {
             case CHESHIRE_NEKOMATA -> girlAttributes(20, 0.32, 3);
             case SNOWLOPER_NEKOMATA -> girlAttributes(18, 0.34, 2);
             case CAIT_SITH_NEKOMATA -> girlAttributes(18, 0.32, 3);
+            case BAKENEKO_NEKOMATA -> girlAttributes(18, 0.32, 3);
             case JAGLARE_NEKOMATA -> girlAttributes(30, 0.32, 7).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 0.8);
             default -> girlAttributes(18, 0.3, 3);
         };
@@ -373,6 +374,7 @@ public class Nekomata extends AbstractMonsterGirl {
             case TIGER_NEKOMATA -> new ItemStack(this.random.nextBoolean() ? Items.COD : Items.SALMON);
             case CHEETAH_NEKOMATA, LYNX_NEKOMATA -> new ItemStack(r < 50 ? Items.RABBIT : r < 85 ? Items.RABBIT_HIDE : Items.RABBIT_FOOT);
             case OCELOT_NEKOMATA -> new ItemStack(r < 45 ? Items.COCOA_BEANS : r < 80 ? Items.FEATHER : Items.MELON_SLICE, r < 45 ? 3 : 1);
+            case BAKENEKO_NEKOMATA -> new ItemStack(r < 45 ? Items.COD : r < 80 ? Items.SALMON : r < 97 ? Items.CANDLE : Items.SOUL_LANTERN, r < 80 ? 2 : 1);
             case BLAZE_CAT_NEKOMATA -> new ItemStack(r < 50 ? Items.BLAZE_POWDER : r < 85 ? Items.MAGMA_CREAM : Items.BLAZE_ROD, r < 50 ? 2 : 1);
             default -> new ItemStack(r < 30 ? Items.FEATHER : r < 50 ? Items.RABBIT_HIDE : r < 70 ? Items.STRING : r < 85 ? Items.CHICKEN : r < 97 ? Items.RABBIT : Items.PHANTOM_MEMBRANE);
         };
@@ -471,6 +473,16 @@ public class Nekomata extends AbstractMonsterGirl {
 
     // --- tick ----------------------------------------------------------------------------------------------------
 
+    /** The bakeneko's wisps light the night around her (brighter beside her friend); by day they fade. The light level she gives. */
+    public int ghostLights(ServerLevel level, boolean night) {
+        int light = !night ? 0 : this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 12) != null ? 13 : 7;
+        this.glow(level, light);
+        if (light > 0 && this.random.nextInt(3) == 0) {
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.SOUL_FIRE_FLAME, this.getX(), this.getY() + 1.2, this.getZ(), 2, 0.6, 0.5, 0.6, 0.01);
+        }
+        return light;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
@@ -479,6 +491,7 @@ public class Nekomata extends AbstractMonsterGirl {
         if (this.species == GirlSpecies.CHESHIRE_NEKOMATA && this.level() instanceof ServerLevel wonder && this.tickCount % 20 == 0) this.blinkToFriend(wonder);
         if (this.species == GirlSpecies.SNOWLOPER_NEKOMATA && this.level() instanceof ServerLevel snow && this.tickCount % 20 == 0) this.snowStride(snow);
         if (this.species == GirlSpecies.CAIT_SITH_NEKOMATA && this.level() instanceof ServerLevel fairy && this.tickCount % 20 == 0) this.warnOffPhantoms(fairy);
+        if (this.species == GirlSpecies.BAKENEKO_NEKOMATA && this.level() instanceof ServerLevel ghost && this.tickCount % 20 == 0) this.ghostLights(ghost, !ghost.isDay());
         if (this.species == GirlSpecies.JAGLARE_NEKOMATA && this.level() instanceof ServerLevel jungle && !this.isBaby()) {
             if (this.tickCount % 10 == 0) this.dropOnPrey(jungle);
             if (this.tickCount % 400 == 0 && this.onGround() && this.getTarget() == null && this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32) == null

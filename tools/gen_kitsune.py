@@ -16,6 +16,17 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades  # noqa: E402
 
 SPECIES = {
+    # fifteenth wave: the huli jing, a silver-blue fox spirit with long black hair (nine tails, the game shows them all)
+    "huli_jing_kitsune": dict(
+        build="slim", outfit=dict(top=["kimono"], extras=["armlets"], colors=dict(kimono="#c83a3a", kimono_trim="#e8c050", obi="#1e1c22")),
+        ears="fox", hair="hime", stockings=False, tip="light",
+        pal=dict(SKIN=skin("fair"), HAIR="#141218", FUR="#8aa0c8", LIGHT="#f0f4fa", MARK="#3a4a6a", EYE="#c83a3a", CLOTH="#c83a3a", TRIM="#e8c050",
+                 facemark="fox"),
+        variants={"red": dict(FUR="#d8602a", LIGHT="#fff0e0", MARK="#7a2a10", HAIR="#3a1410", EYE="#e8c040"),
+                  "white": dict(FUR="#f4f2ee", LIGHT="#ffffff", MARK="#c8c0b4", HAIR="#f8f6f0", EYE="#c83a3a"),
+                  "gold": dict(FUR="#e0b040", LIGHT="#fff4c0", MARK="#8a5a10", HAIR="#3a2410", EYE="#c83a3a"),
+                  "black": dict(FUR="#2a2830", LIGHT="#8a8890", MARK="#0a080e", HAIR="#0a080e", EYE="#e8c040",
+                                extra=dict(kimono="#2a2830", kimono_trim="#c83a3a", obi="#c83a3a"))}),
     # fourteenth wave: the vulphea, a fire fox in flame colours, tails tipped with yellow fire
     "vulphea_kitsune": dict(
         build="slim", outfit=dict(top=["halter", "capelet"], bottom="wrap_skirt", extras=["armlets"], colors=dict(cloth2="#3a1a14")),

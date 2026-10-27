@@ -82,6 +82,26 @@ SPECIES = {
                   "dawn": dict(FUR="#6a4a5a", MARK="#3a2432", HAIR="#ffe8f0", EYE="#f8a0c0", extra=dict(antler="#f8a0c0", antler2="#f8d080")),
                   "frost": dict(FUR="#a8b8c8", MARK="#6a7a8a", LIGHT="#ffffff", EYE="#e8f8ff", extra=dict(antler="#ffffff", antler2="#a8e8ff")),
                   "ember": dict(FUR="#5a3a2a", MARK="#2a1a12", HAIR="#ffe0b0", EYE="#f8c050", extra=dict(antler="#f8c050", antler2="#f86a3a"))}),
+    # fifteenth wave: the bellmare, a blue donkey taur with little goat's horns, hung with silver bells
+    "bellmare_centaur": dict(
+        build="curvy", outfit=dict(top=["halter", "harness"], extras=["bell_collar", "armlets"], colors=dict(cloth2="#2a3a7a")),
+        hair="braid", tail=(1.5, 5, 1.5), horns=True, bells=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#e8ecf4", FUR="#8aa0d8", LIGHT="#e8eef8", MARK="#3a4a8a", EYE="#3a4a8a", CLOTH="#3a4a9a", TRIM="#d8dce8",
+                 pattern="solid", extra=dict(horn="#e8dcc0", bell="#d8dce8")),
+        variants={"grey": dict(FUR="#8a8a8e", HAIR="#d8d8dc", MARK="#3a3a3e", LIGHT="#e0e0e4", extra=dict(horn="#5a5048", bell="#e8c050")),
+                  "brown": dict(FUR="#7a5a3e", HAIR="#3a2a1e", MARK="#2a1e14", LIGHT="#e0d0bc", extra=dict(horn="#e0d0b0", bell="#e8c050")),
+                  "white": dict(FUR="#f0eee8", HAIR="#ffffff", MARK="#a8a49c", LIGHT="#ffffff", EYE="#5a8ac8", extra=dict(horn="#c8b898", bell="#e8c050")),
+                  "black": dict(FUR="#2a282c", HAIR="#141216", MARK="#0e0c10", LIGHT="#6a686e", EYE="#e8c040", extra=dict(horn="#e8dcc0", bell="#d8dce8"))}),
+    # fifteenth wave: the vicunero, a slim blue vicuña taur with a fine fleece and a woven saddle blanket
+    "vicunero_centaur": dict(
+        build="slim", outfit=dict(top=["halter", "capelet"], extras=["armlets"], colors=dict(cloth2="#2a3a8a")),
+        hair="ponytail", tail=(1.5, 3, 1.5), fleece=True, blanket=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#f4f2ee", FUR="#5a7ac8", LIGHT="#f4f4f8", MARK="#2a3a7a", EYE="#2a2a4a", CLOTH="#2a3a8a", TRIM="#e8e8f0",
+                 pattern="solid", extra=dict(blanket="#2a3a8a", blanket2="#e8e8f0", blanket3="#e8b040")),
+        variants={"tan": dict(FUR="#c8925a", HAIR="#f4ece0", MARK="#8a5a2a", extra=dict(blanket="#a83a2a", blanket2="#f4ece0", blanket3="#2a6a5a")),
+                  "cream": dict(FUR="#ece0c8", HAIR="#ffffff", MARK="#b8a888", extra=dict(blanket="#6a3a8a", blanket2="#f4ece0", blanket3="#e8b040")),
+                  "brown": dict(FUR="#6a4a30", HAIR="#e8dcc8", MARK="#3a2818", extra=dict(blanket="#2a6a4a", blanket2="#f4ece0", blanket3="#e8b040")),
+                  "grey": dict(FUR="#8a8a90", HAIR="#e8e8ec", MARK="#4a4a50", extra=dict(blanket="#a8282a", blanket2="#f4f4f4", blanket3="#2a2a30"))}),
     # fourteenth wave: the prairhorn, a pronghorn taur banded tan and white, with short pronged horns
     "prairhorn_centaur": dict(
         build="athletic", outfit=dict(top=["sports"], extras=["armlets"], colors=dict(cloth2="#5a3a22")),
@@ -196,6 +216,10 @@ def declare(sp):
         parts += [("blossom", 1.5, 1.5, 1.5), ("blossom_in", .75, .75, .75)]
     if d.get("blades"):
         parts += [("antler_blade", 2.5, 2, .25)]
+    if d.get("bells"):
+        parts += [("cbell", 1.25, 1.25, 1.25), ("bell_strap", 7.5, .5, .75)]
+    if d.get("blanket"):
+        parts += [("blanket", 7.75, 3.5, 6)]
     if d.get("horns"):
         parts += [("horn_a", 1, 3, 1), ("horn_b", .75, 2.5, .75)]
     if d.get("uhorn"):                                   # the unicorn's single spiral horn
@@ -238,6 +262,22 @@ def paint(sp, key):
     bloom, bloom_in = shades(pal.extra.get("bloom", "#f8a8c8")), shades(pal.extra.get("bloom_in", "#f8e070"))
     pt("blossom", "all", lambda f, x, y, w, h: pick(bloom, 0.55 + 0.25 * ((x + y) % 2), x, y))
     pt("blossom_in", "all", lambda f, x, y, w, h: pick(bloom_in, 0.7, x, y))
+    bellc = shades(pal.extra.get("bell", "#d8dce8"))
+    pt("cbell", "all", lambda f, x, y, w, h: pick(bellc, 0.5 + 0.3 * (f == "up") - 0.2 * (y == h - 1), x, y))
+    pt("bell_strap", "all", lambda f, x, y, w, h: pick(pal.CLOTH, 0.45, x, y))
+    b1, b2, b3 = (shades(pal.extra.get(k, c)) for k, c in (("blanket", "#2a3a8a"), ("blanket2", "#e8e8f0"), ("blanket3", "#e8b040")))
+
+    def weave(f, x, y, w, h):                            # a woven blanket: bands of stepped diamonds, a fringe at the bottom
+        if f == "down":
+            return CLEAR
+        if f in ("east", "west") and y == h - 1:
+            return pick(b2, 0.6, x, y) if x % 2 else CLEAR
+        band = (y if f in ("east", "west", "north", "south") else x) % 6
+        dx = abs((x % 6) - 2.5)
+        if band in (0, 5):
+            return pick(b3, 0.55, x, y)
+        return pick(b2 if dx + abs(band - 2.5) < 2.2 else b1, 0.5 + 0.1 * ((x + y) % 2), x, y)
+    pt("blanket", "all", weave)
     steel = shades(pal.extra.get("blade", "#c8d0dc"))
     pt("antler_blade", "all", lambda f, x, y, w, h: pick(steel, 0.55 + 0.3 * (y == 0), x, y) if y < h - (abs(x + 0.5 - w / 2) * 1.2) else CLEAR)
     kelp = shades(pal.extra.get("kelp", "#4a8a3a"))
@@ -322,6 +362,12 @@ def build(sp):
                                                     G.rot_cube("uhorn_b", [-0.5, hy + 13.9, -3.5 + z], [0, hy + 8, -3 + z], -25, 0, 0)])
     if d.get("fleece"):
         r.put("barrel", cube("fleece", [-3.75, 13.25, -4.0]))
+    if d.get("blanket"):                                # the saddle blanket over the middle of her back, hanging down her flanks
+        r.put("barrel", cube("blanket", [-3.875, 14.0, 0.0], inflate=0.35))
+    if d.get("bells"):                                  # a strap of bells across her chest, more bells hung on her flanks
+        r.put("barrel", cube("bell_strap", [-3.75, 15.5, -4.4]),
+              *[cube("cbell", [-3.0 + 2.5 * i, 14.2, -4.9]) for i in range(3)],
+              *[cube("cbell", [sg * 3.75 - 0.625, 12.0, zz]) for sg in (-1, 1) for zz in (1.0, 6.0)])
     if d.get("nemes"):
         hy, z = g.hy, g.z
         r.add("nemes", "head", [0, hy + 4, z], [cube("nemes_cap", [-4.5, hy + 6.0, -4.3 + z], inflate=0.6),

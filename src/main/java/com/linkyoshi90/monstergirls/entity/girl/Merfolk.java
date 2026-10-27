@@ -151,6 +151,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
             case PLATYPUS_MERMAID -> girlAttributes(16, 0.26, 2);
             case MOONSEAL_MERMAID -> girlAttributes(28, 0.24, 2);
             case RUST_OTTER_MERMAID -> girlAttributes(20, 0.27, 3);
+            case REEFFIN_MERMAID -> girlAttributes(22, 0.26, 2);
             default -> girlAttributes(20, 0.24, 2);
         };
     }
@@ -299,6 +300,8 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         return switch (this.species) {
             case SHARK_MERMAID -> new ItemStack(this.random.nextBoolean() ? Items.BONE : Items.COD);
             case SEAL_MERMAID, ORCA_MERMAID -> new ItemStack(this.random.nextBoolean() ? Items.COD : Items.SALMON, 2);
+            case REEFFIN_MERMAID -> new ItemStack(this.random.nextInt(20) == 0 ? Items.NAUTILUS_SHELL : this.random.nextBoolean() ? Items.SEA_PICKLE
+                    : this.random.nextBoolean() ? Items.TUBE_CORAL : Items.PRISMARINE_SHARD, 2);
             case RUST_OTTER_MERMAID -> new ItemStack(this.random.nextInt(3) == 0 ? Items.COPPER_INGOT : Items.RAW_COPPER, 2);
             case PLATYPUS_MERMAID -> new ItemStack(this.random.nextBoolean() ? Items.CLAY_BALL : Items.SALMON, 2);
             case MOONSEAL_MERMAID -> new ItemStack(this.random.nextInt(4) == 0 ? Items.PRISMARINE_CRYSTALS : this.random.nextBoolean() ? Items.COD : Items.SNOWBALL, 2);
@@ -398,6 +401,30 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
 
     // --- tick ----------------------------------------------------------------------------------------------------
 
+    private static final java.util.List<net.minecraft.world.level.block.Block> REEF = java.util.List.of(
+            net.minecraft.world.level.block.Blocks.TUBE_CORAL, net.minecraft.world.level.block.Blocks.BRAIN_CORAL, net.minecraft.world.level.block.Blocks.BUBBLE_CORAL, net.minecraft.world.level.block.Blocks.FIRE_CORAL, net.minecraft.world.level.block.Blocks.HORN_CORAL,
+            net.minecraft.world.level.block.Blocks.TUBE_CORAL_FAN, net.minecraft.world.level.block.Blocks.BRAIN_CORAL_FAN, net.minecraft.world.level.block.Blocks.BUBBLE_CORAL_FAN, net.minecraft.world.level.block.Blocks.FIRE_CORAL_FAN, net.minecraft.world.level.block.Blocks.HORN_CORAL_FAN,
+            net.minecraft.world.level.block.Blocks.SEA_PICKLE);
+
+    /** The reef keeper: coral, a coral fan or a sea pickle on a bare bit of sea floor near her (water above sand or gravel). Where, or null. */
+    @Nullable
+    public net.minecraft.core.BlockPos tendReef(ServerLevel level) {
+        if (!this.isInWater()) return null;
+        java.util.List<net.minecraft.core.BlockPos> spots = new java.util.ArrayList<>();
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(this.blockPosition().offset(-4, -4, -4), this.blockPosition().offset(4, 1, 4))) {
+            var below = level.getBlockState(p.below());
+            if (level.getBlockState(p).is(net.minecraft.world.level.block.Blocks.WATER) && level.getFluidState(p).isSource() && level.getFluidState(p.above()).is(net.minecraft.tags.FluidTags.WATER)
+                    && (below.is(net.minecraft.tags.BlockTags.SAND) || below.is(net.minecraft.world.level.block.Blocks.GRAVEL))) spots.add(p.immutable());
+        }
+        if (spots.isEmpty()) return null;
+        net.minecraft.core.BlockPos at = spots.get(this.random.nextInt(spots.size()));
+        var block = REEF.get(this.random.nextInt(REEF.size()));
+        var state = block.defaultBlockState().setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED, true);
+        level.setBlock(at, state, 3);
+        level.levelEvent(2005, at, 0);
+        return at;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
@@ -410,6 +437,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         if (this.species == GirlSpecies.PLATYPUS_MERMAID && !this.isBaby() && this.tickCount % 20 == 0) this.electrosense(server);
         if (this.species == GirlSpecies.RUST_OTTER_MERMAID && !this.isBaby() && this.tickCount % 1200 == 0) this.scrape(server);
         if (this.species == GirlSpecies.MOONSEAL_MERMAID && !this.isBaby() && this.tickCount % 40 == 0) this.moonSong(server);
+        if (this.species == GirlSpecies.REEFFIN_MERMAID && !this.isBaby() && this.tickCount % 200 == 0) this.tendReef(server);
         if (this.species == GirlSpecies.MOONSEAL_MERMAID && this.tickCount % 20 == 0) this.glow(server, server.isDay() ? 0 : 9);   // her crescents light the night
         if (this.species == GirlSpecies.AXOLUME_MERMAID && !this.isBaby()) {        // she lights the water, and her friend heals beside her
             this.glow(server, 10);

@@ -256,6 +256,8 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
             case MOMOSHIKA_CENTAUR -> girlAttributes(26, 0.3, 3);
             case PRAIRHORN_CENTAUR -> girlAttributes(26, 0.42, 3).add(Attributes.JUMP_STRENGTH, 0.8);
             case HALBERELK_CENTAUR -> girlAttributes(40, 0.28, 6).add(Attributes.ATTACK_KNOCKBACK, 1.0);
+            case BELLMARE_CENTAUR -> girlAttributes(28, 0.28, 2);
+            case VICUNERO_CENTAUR -> girlAttributes(24, 0.32, 2).add(Attributes.JUMP_STRENGTH, 0.75);
             default -> girlAttributes(28, 0.28, 3);
         };
     }
@@ -411,6 +413,42 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
                 || (this.species == GirlSpecies.AURORANTLER_CENTAUR && (stack.is(Items.SWEET_BERRIES) || stack.is(Items.GLOW_BERRIES)))
                 || (this.species == GirlSpecies.MOMOSHIKA_CENTAUR && (stack.is(Items.APPLE) || stack.is(Items.SWEET_BERRIES)))
                 || (this.species == GirlSpecies.HALBERELK_CENTAUR && (stack.is(Items.APPLE) || stack.is(Items.SWEET_BERRIES)));
+    }
+
+    // --- the bellmare and the vicunero -----------------------------------------------------------------------------------
+
+    /** The bellwether: the farm animals within 12 blocks of her walk over to her while her friend is near. How many came. */
+    public int leadHerd(ServerLevel level) {
+        if (this.isBaby() || this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24) == null) return 0;
+        int n = 0;
+        for (var a : level.getEntitiesOfClass(net.minecraft.world.entity.animal.Animal.class, this.getBoundingBox().inflate(12),
+                a -> (a instanceof net.minecraft.world.entity.animal.Cow || a instanceof net.minecraft.world.entity.animal.Sheep
+                        || a instanceof net.minecraft.world.entity.animal.goat.Goat || a instanceof net.minecraft.world.entity.animal.Pig)
+                        && !a.isLeashed() && a.distanceToSqr(this) > 16)) {
+            a.getNavigation().moveTo(this, 1.1);
+            n++;
+        }
+        if (n > 0 && this.random.nextInt(3) == 0) this.playSound(net.minecraft.sounds.SoundEvents.NOTE_BLOCK_BELL.value(), 0.6F, 1.6F);
+        return n;
+    }
+
+    /** The vicuna spits at a monster near her friend, like a llama. The spit, or null if there was nothing to spit at. */
+    @Nullable
+    public net.minecraft.world.entity.projectile.LlamaSpit spitAtMonster(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null || this.isBaby()) return null;
+        net.minecraft.world.entity.monster.Monster m = this.nearest(net.minecraft.world.entity.monster.Monster.class, 12, x -> x.distanceToSqr(friend) < 10 * 10 && this.hasLineOfSight(x));
+        if (m == null) return null;
+        var spit = net.minecraft.world.entity.EntityType.LLAMA_SPIT.create(level);
+        if (spit == null) return null;
+        spit.setOwner(this);
+        spit.setPos(this.getX(), this.getEyeY() - 0.1, this.getZ());
+        double dx = m.getX() - this.getX(), dz = m.getZ() - this.getZ(), dy = m.getY(0.33) - spit.getY();
+        spit.shoot(dx, dy + Math.sqrt(dx * dx + dz * dz) * 0.2, dz, 1.5F, 10.0F);
+        level.addFreshEntity(spit);
+        this.getLookControl().setLookAt(m);
+        this.playSound(net.minecraft.sounds.SoundEvents.LLAMA_SPIT, 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
+        return spit;
     }
 
     /** The baku: no phantom (vanilla or girl) comes for a player within 32 blocks of a tapir. */
@@ -594,6 +632,8 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
             case SPHINX_CENTAUR -> new ItemStack(r < 40 ? Items.GOLD_NUGGET : r < 75 ? Items.LAPIS_LAZULI : r < 95 ? Items.SANDSTONE : Items.GOLD_INGOT,
                     r < 40 ? 4 : r < 75 ? 3 : r < 95 ? 4 : 1);
             case PRAIRHORN_CENTAUR -> new ItemStack(r < 50 ? Items.WHEAT : r < 85 ? Items.LEATHER : Items.RABBIT_FOOT, r < 85 ? 3 : 1);
+            case BELLMARE_CENTAUR -> new ItemStack(r < 40 ? Items.WHEAT : r < 75 ? Items.CARROT : r < 95 ? Items.LEAD : Items.BELL, r < 75 ? 3 : 1);
+            case VICUNERO_CENTAUR -> new ItemStack(r < 45 ? Items.WHITE_WOOL : r < 80 ? Items.WHEAT : r < 97 ? Items.HAY_BLOCK : Items.LIGHT_BLUE_CARPET, r < 80 ? 2 : 1);
             case HALBERELK_CENTAUR -> new ItemStack(r < 40 ? Items.SPRUCE_LOG : r < 75 ? Items.STICK : r < 95 ? Items.SPRUCE_SAPLING : Items.IRON_AXE, r < 75 ? 4 : r < 95 ? 2 : 1);
             case MOMOSHIKA_CENTAUR -> new ItemStack(r < 45 ? Items.PINK_PETALS : r < 80 ? Items.APPLE : r < 95 ? Items.CHERRY_SAPLING : Items.GOLDEN_APPLE,
                     r < 80 ? 3 : 1);
@@ -718,6 +758,8 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
         super.aiStep();
         if (this.species == GirlSpecies.AURORANTLER_CENTAUR && this.level() instanceof ServerLevel aurora && !this.isBaby()) this.aurora(aurora);
         if (this.species == GirlSpecies.MOMOSHIKA_CENTAUR && this.level() instanceof ServerLevel grove && !this.isBaby() && this.tickCount % 40 == 0) this.blossom(grove);
+        if (this.species == GirlSpecies.BELLMARE_CENTAUR && this.level() instanceof ServerLevel herd && this.tickCount % 40 == 0) this.leadHerd(herd);
+        if (this.species == GirlSpecies.VICUNERO_CENTAUR && this.level() instanceof ServerLevel hills && this.tickCount % 30 == 0) this.spitAtMonster(hills);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.ALPACA_CENTAUR && this.fleeceTicks < 24000) this.fleeceTicks++;
         if (this.camelLove > 0 && --this.camelLove % 10 == 0) this.courtCamel(server);

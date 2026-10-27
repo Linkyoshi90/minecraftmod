@@ -23,7 +23,8 @@ moss) and the seasonal easter (pastel egg stripes, April only). And (thirteenth 
 (soft washes bleeding at the edges), hologram (see-through cyan with scanlines, drawn translucent) and the seasonal
 fireworks (bursts on a night-blue body, January only). And (fourteenth wave): mosaic (little glazed tiles in grout),
 chalk (chalk lines on a blackboard), leopard (rosettes on gold) and the seasonal autumn (falling-leaf colours, November
-only). The drips and
+only). And (fifteenth wave): checkered (a chessboard), sunset (orange melting into violet), thunder (storm grey,
+lightning bolts that glow in the dark) and burlap (sackcloth with stitched seams). The drips and
 patterns follow the model: they are drawn per cube face from the geo file, running down each side from its top edge.
 
     python tools/gen_paints.py [paint ...] [model ...]   # everything, or just the paints and/or models named
@@ -187,7 +188,8 @@ def treat(img, name, model):
                                         "opal", "chrome", "aurora", "camo", "plush", "pixel", "origami", "gummy",
                                         "synthwave", "cookie", "cloud", "valentine", "porcelain", "denim", "moss", "easter",
                                         "tartan", "watercolour", "hologram", "fireworks",
-                                        "mosaic", "chalk", "leopard", "autumn"):
+                                        "mosaic", "chalk", "leopard", "autumn",
+                                        "checkered", "sunset", "thunder", "burlap"):
         return finish(img, name, model)[0]
     W = len(img[0])
     out = [list(row) for row in img]
@@ -314,7 +316,8 @@ TREATS = ["chocolate", "icecream", "strawberry", "jello", "milk", "gold", "marbl
           "frost", "sakura", "stained_glass", "sepia", "opal", "chrome", "aurora", "camo", "plush", "pixel", "origami", "gummy",
           "synthwave", "cookie", "cloud", "valentine", "porcelain", "denim", "moss", "easter",
           "tartan", "watercolour", "hologram", "fireworks",
-          "mosaic", "chalk", "leopard", "autumn"]
+          "mosaic", "chalk", "leopard", "autumn",
+          "checkered", "sunset", "thunder", "burlap"]
 PEARL = hexes("#b8b0c0", "#d8d2e0", "#ece8f2", "#f8f6fc", "#ffffff")
 CHROME = hexes("#1e2024", "#4a4e56", "#8a909a", "#c8ccd4", "#ffffff")
 AURORA = hexes("#2af08a", "#3ad8c8", "#5aa0f0", "#8a6af0", "#c86ae8")
@@ -331,6 +334,9 @@ EMBER = hexes("#a8280a", "#e85a14", "#f8901e", "#ffc84a", "#fff0a0")
 NEON = hexes("#1a8a8a", "#2ad0c8", "#5af8f0", "#b0fff8")
 NIGHTBODY = hexes("#0a0a14", "#14141e", "#20202e", "#2e2e40", "#40405a")
 PUMPKIN = hexes("#7a2e06", "#b04a0e", "#e0701a", "#f89a3a", "#ffc070")
+GLOWING = ("glow", "magma", "thunder")                             # the paints with a glow mask of their own (PaintGlowLayer)
+SUNSET = hexes("#f8c040", "#f88a3a", "#e8584a", "#b8407a", "#6a3a9a")
+STORM = hexes("#2a2e3a", "#3e4452", "#5a6070", "#7a8090", "#a0a6b4")
 TILES = [(40, 90, 170), (230, 190, 60), (190, 60, 50), (60, 150, 120), (240, 240, 230)]
 LEOPARD = hexes("#8a5a24", "#c8903a", "#e8b860", "#f8e0a0")
 AUTUMN = [(200, 70, 30), (230, 140, 40), (240, 190, 60), (150, 50, 30), (120, 90, 40)]
@@ -360,7 +366,7 @@ def finish(img, name, model):
     """the 2026-10-25 paints: returns (texture, glowmask or None)"""
     W, Hh = len(img[0]), len(img)
     out = [list(row) for row in img]
-    mask = [[(0, 0, 0, 0)] * W for _ in range(Hh)] if name in ("glow", "magma") else None
+    mask = [[(0, 0, 0, 0)] * W for _ in range(Hh)] if name in GLOWING else None
     fm = face_map(faces(model, W), W, Hh)
     for y, row in enumerate(out):
         for x, (r, g, b, a) in enumerate(row):
@@ -609,6 +615,33 @@ def finish(img, name, model):
                 c = tuple(int(v * (0.65 + 0.4 * l)) for v in leaf)
                 if fw > 3 and fh > 3 and (xx + 2 * yy + i) % 9 == 0:
                     c = tuple(int(v * 0.6) for v in leaf)                   # the veins of the leaves
+            elif name == "checkered":
+                if l < 0.22 and face:
+                    continue
+                dark = (xx // 4 + yy // 4) % 2 == 0
+                v = int(34 + 40 * l) if dark else int(220 + 35 * l)
+                c = (v, v, v)
+            elif name == "sunset":
+                if l < 0.22 and face:
+                    continue
+                t = 0.75 * (1 - l) + 0.25 * (yy + 0.5) / max(1, fh)          # lit like a sunset: gold where she is bright, violet in shadow
+                c = ramp_pick(SUNSET, 0.05 + 0.9 * min(1.0, t))
+            elif name == "thunder":
+                if l < 0.22 and face:
+                    continue
+                c = ramp_pick(STORM, 0.2 + 0.6 * l + (H.noise(x // 3, y // 3, 151) - 0.5) * 0.25)
+                bx = int(fw * 0.45) + (0, 1, 2, 1)[yy % 4] - 1               # a zigzag bolt down every other face
+                if fw > 4 and fh > 7 and i % 5 == 0 and xx == bx and fh * 0.15 <= yy <= fh * 0.8:
+                    c = (250, 246, 170)
+                    mask[y][x] = c + (255,)
+            elif name == "burlap":
+                if l < 0.22 and face:
+                    continue
+                n = (H.noise(x, y, 157) - 0.5) * 0.12
+                weft = (xx + yy) % 2 == 0
+                c = tuple(int(v * (0.7 + 0.35 * l + n - 0.08 * weft)) for v in (190, 156, 108))
+                if edge and (xx + yy) % 3 == 0 and fw > 3 and fh > 3:
+                    c = (92, 64, 40)                                        # the stitched seams
             else:                                                       # candy cane: red and white stripes, round and round
                 if l < 0.22 and face:
                     continue
@@ -642,7 +675,7 @@ def main():
         img = load(os.path.join(ENT, m + ".png"))
         for p in [p for p in ["blue", "red", "green", "yellow", "purple", "black", "inverted"] + TREATS if not only or p in only]:
             glow = os.path.join(ENT, m + "_glowmask.png")
-            if p in ("glow", "magma"):                             # her own glowing markings (the species' own glow on top)
+            if p in GLOWING:                                       # her own glowing markings (the species' own glow on top)
                 tex, mask = finish(img, p, m)
                 if os.path.exists(glow):
                     base = load(glow)

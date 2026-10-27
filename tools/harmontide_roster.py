@@ -56,6 +56,10 @@ IN_GAME = {
     "gribboar": "gribboar_armoured", "silkcoon": "silkcoon_rodent", "bronzejaw_ox": "bronzejaw_minotaur", "cocoskink": "cocoskink_lizardfolk",
     "prairhorn": "prairhorn_centaur", "halberelk": "halberelk_centaur", "vulphea": "vulphea_kitsune", "cait_sith": "cait_sith_nekomata",
     "cu_sith": "cu_sith_canid", "yeti": "yeti_canid", "undine": "undine_slime", "ittan_momen": "ittan_momen_devil",
+    # fifteenth wave (2026-10-27)
+    "crocora": "crocora_lizardfolk", "iron_kobold": "iron_kobold_lizardfolk", "mooskuh": "mooskuh_minotaur", "bellmare": "bellmare_centaur",
+    "vicunero": "vicunero_centaur", "rockhyrax": "rockhyrax_rodent", "riverdillo": "riverdillo_armoured", "reeffin": "reeffin_mermaid",
+    "caraviper": "caraviper_lamia", "bakeneko": "bakeneko_nekomata", "rokurokubi": "rokurokubi_devil", "huli_jing": "huli_jing_kitsune",
 }
 # not a creature to make, and the ones set aside on purpose
 EXCLUDED = {
@@ -71,6 +75,9 @@ EXCLUDED = {
     "yara_ma_yha_who": "set aside: living Aboriginal tradition", "menehune": "set aside: living Hawaiian tradition",
     "akhlut": "set aside: living Inuit tradition", "ijiraq": "set aside: living Inuit tradition", "keelut": "set aside: living Inuit tradition",
     "peacepipe_bison": "set aside: a sacred pipe of living Plains traditions",
+    "alux": "set aside: living Maya tradition", "curupira": "set aside: living Indigenous Brazilian tradition",
+    "mapinguari": "set aside: living Indigenous Brazilian tradition", "ypupiara": "set aside: living Indigenous Brazilian tradition",
+    "horned_serpent_uktena": "set aside: living Cherokee tradition", "terniq": "set aside: an Inuit name",
 }
 
 

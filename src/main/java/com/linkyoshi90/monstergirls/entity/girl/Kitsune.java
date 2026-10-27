@@ -82,7 +82,7 @@ public class Kitsune extends AbstractMonsterGirl {
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
-        return girlAttributes(s == GirlSpecies.FENNEC_KITSUNE ? 12 : s == GirlSpecies.WATTLEFOX_KITSUNE ? 18 : 16, s == GirlSpecies.CORSAC_KITSUNE ? 0.33 : 0.3, 3);
+        return girlAttributes(s == GirlSpecies.FENNEC_KITSUNE ? 12 : s == GirlSpecies.WATTLEFOX_KITSUNE ? 18 : s == GirlSpecies.HULI_JING_KITSUNE ? 22 : 16, s == GirlSpecies.CORSAC_KITSUNE ? 0.33 : 0.3, 3);
     }
 
     @Override
@@ -109,6 +109,7 @@ public class Kitsune extends AbstractMonsterGirl {
     /** One wild kitsune in four is an older fox spirit, born with two or three split tails (one in twenty-five: up to five). */
     @Override
     protected int rollTails(net.minecraft.util.RandomSource random) {
+        if (this.species == GirlSpecies.HULI_JING_KITSUNE) return 9;            // a thousand years old: always all nine
         if (random.nextInt(25) == 0) return 4 + random.nextInt(2);
         return random.nextInt(4) == 0 ? 2 + random.nextInt(2) : 1;
     }
@@ -251,6 +252,8 @@ public class Kitsune extends AbstractMonsterGirl {
     public ItemStack rollGift(Player player) {
         int r = this.random.nextInt(100);
         if (this.species == GirlSpecies.FENNEC_KITSUNE) return this.digFind();
+        if (this.species == GirlSpecies.HULI_JING_KITSUNE) return new ItemStack(r < 40 ? Items.SWEET_BERRIES : r < 75 ? Items.COOKED_CHICKEN : r < 97 ? Items.EMERALD : Items.GOLDEN_APPLE,
+                r < 75 ? 3 : 1);
         if (this.species == GirlSpecies.VULPHEA_KITSUNE) return new ItemStack(r < 45 ? Items.BLAZE_POWDER : r < 80 ? Items.COOKED_CHICKEN : r < 97 ? Items.FIRE_CHARGE : Items.BLAZE_ROD, 2);
         if (this.species == GirlSpecies.WATTLEFOX_KITSUNE) return new ItemStack(r < 50 ? Items.ACACIA_SAPLING : r < 85 ? Items.YELLOW_DYE : Items.HONEYCOMB, 2);
         if (this.species == GirlSpecies.RED_KITSUNE && this.getAffection(player) >= 60) {
@@ -360,6 +363,17 @@ public class Kitsune extends AbstractMonsterGirl {
 
     // --- tick ----------------------------------------------------------------------------------------------------
 
+    /** The fox spirit's charm: with villagers about, her friend near her has Hero of the Village (cheaper trades). True if she charmed. */
+    public boolean charm(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null || this.isBaby()) return false;
+        boolean village = level.isVillage(friend.blockPosition())
+                || !level.getEntitiesOfClass(net.minecraft.world.entity.npc.Villager.class, friend.getBoundingBox().inflate(16)).isEmpty();
+        if (!village) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.HERO_OF_THE_VILLAGE, 100, 0, true, false));
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
@@ -376,6 +390,7 @@ public class Kitsune extends AbstractMonsterGirl {
             if (this.tickCount % 20 == 0) this.douse(server);
             if (this.tickCount % 2400 == 0 && this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32) != null) this.plantAcacia(server);
         }
+        if (this.species == GirlSpecies.HULI_JING_KITSUNE && this.tickCount % 40 == 0) this.charm(server);
         if (this.tickCount % 20 == 0) this.entityData.set(DATA_TAILS, (byte) this.tailsFor(this.bestAffection()));
         // foxfire: real light at night once she has two tails (a kyubi carries a brighter lantern)
         boolean night = !server.isDay() || server.getBrightness(net.minecraft.world.level.LightLayer.SKY, this.blockPosition()) < 4;

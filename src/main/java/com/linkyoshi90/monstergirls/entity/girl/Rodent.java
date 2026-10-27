@@ -83,8 +83,25 @@ public class Rodent extends AbstractMonsterGirl {
         if (s == GirlSpecies.BAMBADGER_RODENT) return girlAttributes(16, 0.28, 2);
         if (s == GirlSpecies.SQUIRRICERAT_RODENT) return girlAttributes(24, 0.3, 5).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 1.5);
         if (s == GirlSpecies.SILKCOON_RODENT) return girlAttributes(14, 0.3, 1);
+        if (s == GirlSpecies.ROCKHYRAX_RODENT) return girlAttributes(14, 0.3, 1);
         if (s == GirlSpecies.KAMAITACHI_RODENT) return girlAttributes(18, 0.38, 4).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 1.2);
         return s == GirlSpecies.CAPYBARA_RODENT ? girlAttributes(26, 0.23, 2) : girlAttributes(14, 0.34, 1);
+    }
+
+    // --- the rockhyrax ------------------------------------------------------------------------------------------------
+
+    /** The sentinel: a creeper within 12 blocks of her friend makes her whistle, and it glows. The creeper she spotted, or null. */
+    @Nullable
+    public net.minecraft.world.entity.monster.Creeper sentinel(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null || this.isBaby()) return null;
+        var creepers = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Creeper.class, friend.getBoundingBox().inflate(12),
+                c -> c.isAlive() && !c.hasEffect(net.minecraft.world.effect.MobEffects.GLOWING));
+        if (creepers.isEmpty()) return null;
+        for (var c : creepers) c.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.GLOWING, 200, 0, false, false));
+        this.playSound(net.minecraft.sounds.SoundEvents.NOTE_BLOCK_FLUTE.value(), 1.2F, 2.0F);
+        this.getLookControl().setLookAt(creepers.get(0));
+        return creepers.get(0);
     }
 
     // --- the silkcoon -------------------------------------------------------------------------------------------------
@@ -461,6 +478,7 @@ public class Rodent extends AbstractMonsterGirl {
         if (this.species == GirlSpecies.SQUIRRICERAT_RODENT && this.level() instanceof ServerLevel acorn && !this.isBaby() && this.tickCount % 2400 == 0) this.buryAcorn(acorn);
         if (this.species == GirlSpecies.KAMAITACHI_RODENT && this.level() instanceof ServerLevel gale && !this.isBaby() && this.tickCount % 20 == 0) this.gust(gale);
         if (this.species == GirlSpecies.MARMOTAUR_RODENT && this.level() instanceof ServerLevel lookout && !this.isBaby() && this.tickCount % 20 == 0) this.keepWatch(lookout);
+        if (this.species == GirlSpecies.ROCKHYRAX_RODENT && this.level() instanceof ServerLevel rocks && this.tickCount % 20 == 0) this.sentinel(rocks);
         if (this.species == GirlSpecies.BAMBADGER_RODENT && this.level() instanceof ServerLevel grove && !this.isBaby() && this.tickCount % 600 == 0
                 && this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32) != null) this.playFlute(grove);
         if (this.species == GirlSpecies.NEEDLEHOG_RODENT && !this.level().isClientSide) {
@@ -495,6 +513,7 @@ public class Rodent extends AbstractMonsterGirl {
         if (this.species == GirlSpecies.MARMOTAUR_RODENT) return stack.is(Items.SHORT_GRASS) || stack.is(Items.SWEET_BERRIES) || stack.is(Items.WHEAT);
         if (this.species == GirlSpecies.BAMBADGER_RODENT) return stack.is(Items.BAMBOO) || stack.is(Items.SWEET_BERRIES);
         if (this.species == GirlSpecies.SQUIRRICERAT_RODENT) return stack.is(Items.SWEET_BERRIES) || stack.is(Items.WHEAT_SEEDS) || stack.is(Items.PUMPKIN_SEEDS);
+        if (this.species == GirlSpecies.ROCKHYRAX_RODENT) return stack.is(Items.APPLE) || stack.is(Items.SWEET_BERRIES);
         if (this.species == GirlSpecies.SILKCOON_RODENT) return stack.is(net.minecraft.tags.ItemTags.FISHES) || stack.is(Items.EGG) || stack.is(Items.SWEET_BERRIES);
         if (this.species == GirlSpecies.KAMAITACHI_RODENT) return stack.is(Items.CHICKEN) || stack.is(Items.COOKED_CHICKEN) || stack.is(Items.EGG);
         return this.species == GirlSpecies.CAPYBARA_RODENT ? stack.is(Items.MELON_SLICE) || stack.is(Items.SUGAR_CANE) || stack.is(Items.APPLE)
@@ -517,6 +536,10 @@ public class Rodent extends AbstractMonsterGirl {
             int r = this.random.nextInt(100);
             return new ItemStack(r < 30 ? Items.OAK_SAPLING : r < 55 ? Items.BIRCH_SAPLING : r < 75 ? Items.DARK_OAK_SAPLING : r < 95 ? Items.SWEET_BERRIES : Items.BONE_BLOCK,
                     r < 95 ? 2 : 1);
+        }
+        if (this.species == GirlSpecies.ROCKHYRAX_RODENT) {
+            int r = this.random.nextInt(100);
+            return new ItemStack(r < 40 ? Items.SWEET_BERRIES : r < 75 ? Items.FLINT : r < 95 ? Items.APPLE : Items.AMETHYST_SHARD, r < 95 ? 2 : 1);
         }
         if (this.species == GirlSpecies.SILKCOON_RODENT) {
             int r = this.random.nextInt(100);

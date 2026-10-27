@@ -89,6 +89,16 @@ SPECIES = {
                   "pale": dict(FUR="#e0d8cc", HAIR="#ece4d8", LIGHT="#ffffff", MARK="#c8c0b4"),
                   "slate": dict(FUR="#5a6068", HAIR="#4a5058", MARK="#3a4048", CLOTH="#c8a040"),
                   "sandy": dict(FUR="#c8b490", HAIR="#b8a07a", MARK="#a08a64", CLOTH="#2a7a8a")}),
+    # fifteenth wave: the reeffin, a blue reef mermaid crowned with branching coral, long trailing fins
+    "reeffin_mermaid": dict(
+        build="slim", outfit=dict(top=["halter"], extras=["pearls", "armlets"], colors=dict(cloth2="#e86a5a")),
+        ears="fin", hair="flowing", bangs="wispy", fluke=(.5, 6.5, 5.5), long_fins=True, scales=True, coral=True,
+        pal=dict(SKIN=skin("#8ab0e0"), HAIR="#2a5ab8", FUR="#3a7ad8", LIGHT="#c8e0f8", MARK="#1e3a8a", EYE="#f8d040", CLOTH="#f07a6a", TRIM="#f8d8a0",
+                 pattern="solid", extra=dict(coral="#f86a7a", coral_tip="#f8c8a0")),
+        variants={"pink": dict(HAIR="#e86a9a", FUR="#f08ab0", LIGHT="#fcd8e8", MARK="#a83a6a", CLOTH="#3ab8c0", extra=dict(coral="#f8a040", coral_tip="#f8e0a0")),
+                  "orange": dict(HAIR="#e8783a", FUR="#f0904a", LIGHT="#fce0c8", MARK="#a84a1a", CLOTH="#3a7ad8", extra=dict(coral="#a84af0", coral_tip="#e8c8ff")),
+                  "purple": dict(HAIR="#7a4ac8", FUR="#9060d8", LIGHT="#e8d8f8", MARK="#4a2a8a", CLOTH="#f8d040", extra=dict(coral="#f8d040", coral_tip="#fff4c0")),
+                  "green": dict(HAIR="#2a9a7a", FUR="#3ab890", LIGHT="#c8f0e0", MARK="#1a5a4a", CLOTH="#f86a7a", extra=dict(coral="#f86a7a", coral_tip="#f8c8a0"))}),
     # thirteenth wave: the rust otter, a dark otter hung with copper charms
     "rust_otter_mermaid": dict(
         build="athletic", outfit=dict(top=["sports"], extras=["armlets", "belt"], colors=dict(cloth2="#5a3a22", leather="#7a4a24")),
@@ -175,6 +185,8 @@ def declare(sp):
         parts += [("charm", 1.25, 1.5, .25), ("charm_cord", 4.5, .25, .25)]
     if d.get("moon"):
         parts += [("crescent", 3.5, 3.5, .25), ("antler_a", .5, 3, .5), ("antler_b", .5, 1.5, .5)]
+    if d.get("coral"):
+        parts += [("coral_a", .75, 4, .75), ("coral_b", .5, 2.5, .5), ("coral_tip", .75, .75, .75)]
     parts.append(("shell", 2, 1.75, .5))
     G.declare(parts, ears=d["ears"], hair=SPECIES[sp]["hair"],
               build=SPECIES[sp].get("build"), outfit=SPECIES[sp].get("outfit"))
@@ -232,6 +244,10 @@ def paint(sp, key):
     ant = shades(pal.extra.get("antler", "#e8e0d0"))
     pt("antler_a", "all", lambda f, x, y, w, h: pick(ant, 0.55 + 0.1 * (y % 2), x, y))
     pt("antler_b", "all", lambda f, x, y, w, h: pick(ant, 0.6, x, y))
+    coral, ctip = shades(pal.extra.get("coral", "#f86a7a")), shades(pal.extra.get("coral_tip", "#f8c8a0"))
+    pt("coral_a", "all", lambda f, x, y, w, h: pick(coral, 0.5 + 0.15 * (y % 2), x, y))
+    pt("coral_b", "all", lambda f, x, y, w, h: pick(coral, 0.6, x, y))
+    pt("coral_tip", "all", lambda f, x, y, w, h: pick(ctip, 0.65, x, y))
     if pal.extra.get("gills"):
         pt("fin_1", ("east", "west"), lambda f, x, y, w, h: pick(pal.MARK, 0.25, x, y) if (y in (1, 3, 5) and 2 <= x < w - 2) else None)
     if pal.extra.get("spot"):                                     # tancho: one red spot on the head
@@ -288,6 +304,16 @@ def build(sp):
         for sg in (-1, 1):
             r.put("head", G.rot_cube("antler_a", [sg * 2.4 - 0.25, 28.0, -0.5], [sg * 2.4, 28.0, -0.25], -10, 0, -18 * sg),
                   G.rot_cube("antler_b", [sg * 2.9 - 0.25, 29.4, -0.5], [sg * 2.9, 29.4, -0.25], -10, 0, -60 * sg))
+    if d.get("coral"):                                   # a crown of branching coral in her hair
+        cs = []
+        for sg in (-1, 1):
+            for x0, tilt in ((1.2, 10), (2.8, 28)):
+                x = sg * x0
+                cs.append(G.rot_cube("coral_a", [x - 0.375, 28.0, -1.2], [x, 28.0, -0.8], -8, 0, -tilt * sg))
+                tx = x + sg * 4 * __import__("math").sin(__import__("math").radians(tilt))
+                cs.append(G.rot_cube("coral_b", [tx - 0.25, 30.6, -1.0], [tx, 30.6, -0.8], -20, 0, -60 * sg))
+                cs.append(cube("coral_tip", [tx + sg * 0.3 - 0.375, 31.5, -1.4]))
+        r.put("head", *cs)
     if d.get("seal"):
         f2 = G.S("fin_2")
         for sg in (-1, 1):

@@ -82,6 +82,7 @@ public class Devil extends AbstractMonsterGirl {
             case KARAKASA_OBAKE_DEVIL -> girlAttributes(20, 0.3, 2);
             case CHOCHIN_OBAKE_DEVIL -> girlAttributes(18, 0.3, 2);
             case ITTAN_MOMEN_DEVIL -> girlAttributes(16, 0.3, 1);
+            case ROKUROKUBI_DEVIL -> girlAttributes(18, 0.28, 2);
             default -> girlAttributes(30, 0.26, 5);
         };
     }
@@ -114,6 +115,19 @@ public class Devil extends AbstractMonsterGirl {
             case ONI_DEVIL -> stack.is(Items.HONEY_BOTTLE);
             default -> stack.is(Items.PUMPKIN_PIE);
         };
+    }
+
+    // --- the rokurokubi -----------------------------------------------------------------------------------------------
+
+    /** After dark her neck rises high ("watch") and the monsters within 24 blocks of her friend glow. How many she spotted. */
+    public int nightWatch(ServerLevel level, boolean night) {
+        if (!night || this.isBaby()) return 0;
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (this.getAction() == Action.NONE || this.getAction() == Action.WATCH) this.startTimedAction(Action.WATCH, 40);
+        if (friend == null) return 0;
+        var seen = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(24), m -> m.isAlive());
+        for (var m : seen) m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.GLOWING, 60, 0, false, false));
+        return seen.size();
     }
 
     // --- the gremlin and the karakasa obake ---------------------------------------------------------------------------
@@ -364,6 +378,7 @@ public class Devil extends AbstractMonsterGirl {
         if (this.species == GirlSpecies.KARAKASA_OBAKE_DEVIL && (stack.is(Items.PAPER) || stack.is(Items.STRING))) return true;
         if (this.species == GirlSpecies.CHOCHIN_OBAKE_DEVIL && (stack.is(Items.PAPER) || stack.is(net.minecraft.tags.ItemTags.CANDLES))) return true;
         if (this.species == GirlSpecies.ITTAN_MOMEN_DEVIL && (stack.is(Items.STRING) || stack.is(net.minecraft.tags.ItemTags.WOOL))) return true;
+        if (this.species == GirlSpecies.ROKUROKUBI_DEVIL && stack.is(Items.SWEET_BERRIES)) return true;
         return stack.is(Items.SUGAR) || stack.is(Items.COOKIE) || stack.is(Items.CAKE) || stack.is(Items.PUMPKIN_PIE) || stack.is(Items.HONEY_BOTTLE);
     }
 
@@ -404,6 +419,8 @@ public class Devil extends AbstractMonsterGirl {
             case JACK_O_LANTERN_DEVIL -> new ItemStack(r < 50 ? Items.PUMPKIN_SEEDS : r < 80 ? Items.TORCH : Items.JACK_O_LANTERN, r < 80 ? 4 : 1);
             case GREMLIN_DEVIL -> new ItemStack(r < 40 ? Items.REDSTONE : r < 75 ? Items.IRON_NUGGET : r < 95 ? Items.REPEATER : Items.COMPARATOR, r < 75 ? 4 : 1);
             case KARAKASA_OBAKE_DEVIL -> new ItemStack(r < 40 ? Items.PAPER : r < 75 ? Items.STRING : Items.BAMBOO, 3);
+            case ROKUROKUBI_DEVIL -> new ItemStack(r < 40 ? Items.SWEET_BERRIES : r < 75 ? Items.HONEY_BOTTLE : r < 97 ? Items.GLOW_INK_SAC : Items.SPYGLASS,
+                    r < 40 ? 3 : r < 75 ? 1 : r < 97 ? 2 : 1);
             case ITTAN_MOMEN_DEVIL -> new ItemStack(r < 45 ? Items.STRING : r < 80 ? Items.WHITE_WOOL : r < 97 ? Items.FEATHER : Items.PHANTOM_MEMBRANE, r < 97 ? 3 : 1);
             case CHOCHIN_OBAKE_DEVIL -> new ItemStack(r < 40 ? Items.PAPER : r < 75 ? Items.CANDLE : r < 95 ? Items.TORCH : Items.LANTERN, r < 95 ? 3 : 1);
             case ONI_DEVIL -> new ItemStack(r < 45 ? Items.IRON_INGOT : r < 80 ? Items.BAMBOO : Items.HONEY_BOTTLE, r < 45 ? 2 : r < 80 ? 8 : 1);
@@ -493,6 +510,9 @@ public class Devil extends AbstractMonsterGirl {
             }
             case GREMLIN_DEVIL -> this.tickGremlin(server);
             case CHOCHIN_OBAKE_DEVIL -> this.tickLantern(server);
+            case ROKUROKUBI_DEVIL -> {
+                if (this.tickCount % 20 == 0) this.nightWatch(server, !server.isDay());
+            }
             case JIANG_SHI_DEVIL -> {                                         // she can only hop
                 if (!this.getNavigation().isDone() && this.onGround() && !this.level().isDay()) {
                     this.setDeltaMovement(this.getDeltaMovement().add(0, 0.42, 0));

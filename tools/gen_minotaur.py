@@ -106,6 +106,17 @@ SPECIES = {
                   "white": dict(FUR="#ece8e0", HAIR="#f6f2ea", LIGHT="#ffffff", MARK="#c8c0b4", CLOTH="#c83a4a"),
                   "golden": dict(FUR="#a8783a", HAIR="#c8944a", LIGHT="#e0c08a", MARK="#7a5428", CLOTH="#4a5aa8"),
                   "pied": dict(FUR="#1e1c1c", HAIR="#f2eee6", MARK="#f2eee6", LIGHT="#f8f4ee", pattern="patches", CLOTH="#d8a838")}),
+    # fifteenth wave: the mooskuh, a small calf grown all over with soft green moss (the sheep's fleece, in moss)
+    "mooskuh_minotaur": dict(
+        build="petite", outfit=dict(top=["halter"], bottom="shorts", extras=["bell_collar"], colors=dict(cloth2="#5a7a3a")),
+        hair="wavy", bangs="blunt", ears="cow", legs="fur", foot="hoof", horns="bull", tail=[(2, 2, 1.75)], tail_look="puff", tail_rest=[(-20, 0, 0)],
+        wool=True, male=dict(hair="shaggy", outfit=dict(bottom="loincloth", extras=["bell_collar"])),
+        pal=dict(SKIN=skin("fair"), HAIR="#4a8a3a", FUR="#5a9a44", LIGHT="#c8e0a0", MARK="#2a5a22", EYE="#e8a030", CLOTH="#e8dcb0", TRIM="#e8c050",
+                 INNER="#f0c0b0", pattern="solid", extra=dict(horn="#c8d098", hoof="#3a3424", wool="#6aa848")),
+        variants={"lime": dict(HAIR="#7ab83a", FUR="#8ac84a", LIGHT="#e0f0b0", MARK="#4a7a22", extra=dict(horn="#e0e0a8", hoof="#3a3424", wool="#9ad84a")),
+                  "russet": dict(HAIR="#8a5a2a", FUR="#9a6a34", LIGHT="#e0c8a0", MARK="#5a3a1a", extra=dict(horn="#e0d0a8", hoof="#2a2018", wool="#b07a3a")),
+                  "lichen": dict(HAIR="#7a8a72", FUR="#8a9a82", LIGHT="#d8e0d0", MARK="#4a5a44", extra=dict(horn="#e0e0d0", hoof="#2a2a24", wool="#9aaa8a")),
+                  "blue": dict(HAIR="#2a6a8a", FUR="#3a7a9a", LIGHT="#b8d8e8", MARK="#1a3a5a", extra=dict(horn="#d8e0e8", hoof="#1a2430", wool="#4a8ab0"))}),
     # fourteenth wave: the bronzejaw ox, a blue ox in brass: a bronze guard over her jaw and a yoke across her shoulders
     "bronzejaw_minotaur": dict(
         build="strong", outfit=dict(top=["sarashi"], bottom="hakama", extras=["armlets", "belt"], colors=dict(cloth2="#2a3a6a", leather="#8a6a2a")),

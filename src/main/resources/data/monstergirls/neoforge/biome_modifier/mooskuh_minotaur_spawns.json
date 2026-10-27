@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_mooskuh_minotaur",
+  "spawners": {
+    "type": "monstergirls:mooskuh_minotaur",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

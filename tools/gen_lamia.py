@@ -50,6 +50,16 @@ SPECIES = {
                                  extra=dict(snake="#d8d4cc", snake_band="#9a968e", blindfold="#3a3a40")),
                   "coral": dict(HAIR="#c83a2a", FUR="#c84a3a", MARK="#1e1a18", LIGHT="#f8e0c0", EYE="#f8d040",
                                 extra=dict(snake="#d8402a", snake_band="#1e1a18", snake_band2="#f0d040", blindfold="#1e1a18"))}),
+    # fifteenth wave: the caraviper, a blue cobra with a wide hood, banded and patterned with gold glyphs
+    "caraviper_lamia": dict(
+        build="slim", outfit=dict(top=["bandeau"], bottom="loincloth", extras=["usekh", "armlets"], colors=dict(cloth2="#e8c050")),
+        thick=1.0, hair="bob", hood=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e2a6a", FUR="#2a4ab0", LIGHT="#e8dcb0", MARK="#e8b840", EYE="#f8c030", CLOTH="#1e2a6a", TRIM="#e8c050",
+                 pattern="bands", facemark="scales"),
+        variants={"sand": dict(FUR="#c8a46a", MARK="#5a3a1a", LIGHT="#f4e8c8", HAIR="#6a4a22", CLOTH="#2a5a7a"),
+                  "black": dict(FUR="#1e1e22", MARK="#e8b840", LIGHT="#d8d0b8", HAIR="#141416", CLOTH="#3a2a5a"),
+                  "red": dict(FUR="#a82a2a", MARK="#f0d040", LIGHT="#f4d8c0", HAIR="#5a1410", CLOTH="#1e1a1a"),
+                  "green": dict(FUR="#2a7a4a", MARK="#e8c050", LIGHT="#d8f0c8", HAIR="#14402a", CLOTH="#6a2a2a")}),
     "cobra_lamia": dict(
         build="slim", outfit=dict(top=["bandeau"], bottom="loincloth", extras=["usekh", "armlets"], colors=dict(cloth2="#f0ead8")),
         thick=1.0, hair="bob", hood=True,

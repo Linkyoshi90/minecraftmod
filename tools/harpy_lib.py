@@ -739,6 +739,9 @@ def render(model, tex, anim, tm, yaw, pitch, W, H, scale, bg, center=None):
         while name:
             b = bones[name]
             ps = pose.get(name, {})
+            sc = ps.get("scale")
+            if sc and tuple(sc) != (1, 1, 1):                # scale about the pivot, before the bone's rotation (as GeckoLib does)
+                p = tuple(b["pivot"][i] + (p[i] - b["pivot"][i]) * sc[i] for i in range(3))
             rot = ps.get("rotation", (0, 0, 0))
             if any(rot):
                 p = rot_about(p, b["pivot"], rot_matrix(*rot))

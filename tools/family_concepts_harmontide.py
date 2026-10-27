@@ -1587,3 +1587,137 @@ for _fid, _entries in FOURTEENTH.items():
         _fam["species"].append(_species)
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
+
+# --- the fifteenth wave (2026-10-27): more of the Harmontide reference art, and four spirits of folklore -----------------
+FIFTEENTH = {
+    "lizardfolk": [
+        (dict(id="crocora_lizardfolk", name="Crocora", group="Rivers", tag="Snappy · loyal", height=1.3, biomes=["river", "swamp", "mangrove_swamp"],
+              temperament="Snappy, loyal",
+              ecology="A Harmontide crocodile in gold-and-blue river finery: small, round and fiercely protective.",
+              interaction="Fish and chicken.",
+              signature=("Lifeguard", "Befriended, if her friend runs out of air near her, she hauls them up to the surface and their air "
+                                      "fills back up."),
+              danger="Low (her bite).",
+              variants=[("blue", "Blue (default)", "Blue, a cream belly"), ("green", "Green", "Green"), ("olive", "Olive", "Olive, like the Nile"),
+                        ("gold", "Gold", "Gold"), ("black", "Black", "Black")]),
+         {"Habitat": "Rivers", "Signature": "Saves her friend from drowning", "Danger": "Low"}),
+        (dict(id="iron_kobold_lizardfolk", name="Iron Kobold", group="Mountains", tag="Gruff · handy", height=1.1,
+              biomes=["windswept_hills", "windswept_gravelly_hills", "stony_peaks"], temperament="Gruff, hard-working",
+              ecology="A Harmontide kobold smith in plated armour, who carries a hammer as big as her head.",
+              interaction="Cooked beef and mutton.",
+              signature=("Smith", "Hand her a damaged iron or chainmail tool or piece of armour and she mends a quarter of it, for one "
+                                  "iron ingot from your pack."),
+              danger="Low (her hammer).",
+              variants=[("blue", "Blue (default)", "Blue scales, iron plate"), ("copper", "Copper", "Copper plate"), ("red", "Red", "Red"),
+                        ("green", "Green", "Green"), ("black", "Black", "Black")]),
+         {"Habitat": "Mountains", "Signature": "Mends iron gear", "Danger": "Low"})],
+    "minotaur": [
+        (dict(id="mooskuh_minotaur", name="Mooskuh", group="Lush caves", tag="Soft · sleepy", height=1.4, biomes=["lush_caves", "swamp", "dark_forest"],
+              temperament="Sleepy, gentle",
+              ecology="A Harmontide calf grown all over with soft green moss.",
+              interaction="Wheat and glow berries.",
+              signature=("Moss", "The stone she rests on slowly grows into moss. You can milk her with a bucket."),
+              danger="None.",
+              variants=[("green", "Green (default)", "Moss green"), ("lime", "Lime", "Bright moss"), ("russet", "Russet", "Russet moss"),
+                        ("lichen", "Lichen", "Grey-green lichen"), ("blue", "Blue", "Blue moss")]),
+         {"Habitat": "Lush caves", "Temper": "Gentle", "Signature": "Grows moss", "Danger": "None"})],
+    "centaur": [
+        (dict(id="bellmare_centaur", name="Bellmare", group="Meadows", tag="Jingling · bossy", height=1.9, biomes=["meadow", "plains", "sunflower_plains"],
+              temperament="Bossy, cheerful",
+              ecology="A Harmontide donkey with little goat's horns, hung all over with bells, who leads the herd.",
+              interaction="Wheat and carrots.",
+              signature=("Bellwether", "Befriended, the cows, sheep, goats and pigs within 12 blocks follow her while she follows her friend."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue, silver bells"), ("grey", "Grey", "A grey donkey"), ("brown", "Brown", "Brown"),
+                        ("white", "White", "White"), ("black", "Black", "Black")]),
+         {"Habitat": "Meadows", "Ridden": "By friends", "Signature": "Leads the herd", "Temperament": "Bossy", "Danger": "None"}),
+        (dict(id="vicunero_centaur", name="Vicunero", group="Highlands", tag="Proud · prickly", height=2.0,
+              biomes=["windswept_hills", "meadow", "savanna_plateau"], temperament="Proud, prickly",
+              ecology="A Harmontide vicuña in a woven saddle blanket, with the finest fleece in the hills.",
+              interaction="Wheat and hay bales.",
+              signature=("Spitter", "She spits at the monsters near her friend, like a llama. Friends can ride her."),
+              danger="Low (she spits).",
+              variants=[("blue", "Blue (default)", "Blue, a white chest"), ("tan", "Tan", "A wild vicuña"), ("cream", "Cream", "Cream"),
+                        ("brown", "Brown", "Brown"), ("grey", "Grey", "Grey")]),
+         {"Habitat": "Highlands", "Ridden": "By friends", "Signature": "Spits at monsters", "Temperament": "Prickly", "Danger": "Low"})],
+    "rodent": [
+        (dict(id="rockhyrax_rodent", name="Rockhyrax", group="Stony hills", tag="Watchful · sunny", height=1.2,
+              biomes=["stony_shores", "windswept_hills", "savanna_plateau"], temperament="Watchful, sociable",
+              ecology="A Harmontide rock hyrax with a back of blue scales, who loves nothing more than a sun-warmed stone.",
+              interaction="Apples and sweet berries.",
+              signature=("Sentinel", "Befriended, she whistles when a creeper comes within 12 blocks of her friend, and the creeper glows."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue scales"), ("brown", "Brown", "Brown"), ("grey", "Grey", "Grey"), ("sand", "Sand", "Sand"),
+                        ("dark", "Dark", "Dark")]),
+         {"Habitat": "Stony hills", "Signature": "Warns of creepers", "Danger": "None"})],
+    "armoured": [
+        (dict(id="riverdillo_armoured", name="Riverdillo", group="Rivers", tag="Busy · cheerful", height=1.3, biomes=["river", "swamp", "mangrove_swamp"],
+              temperament="Busy, cheerful",
+              ecology="A Harmontide armadillo of the rivers, with a long snout and a fish's tail, banded in blue and gold.",
+              interaction="Fish and spider eyes.",
+              signature=("Angler", "In the water near her friend she catches fish and brings them: cod and salmon, now and then a "
+                                   "tropical fish."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue, gold bands"), ("green", "Green", "Green"), ("brown", "Brown", "Brown"),
+                        ("teal", "Teal", "Teal"), ("grey", "Grey", "Grey")]),
+         {"Habitat": "Rivers", "Signature": "Catches fish", "Danger": "None"})],
+    "merfolk": [
+        (dict(id="reeffin_mermaid", name="Reeffin", group="Warm seas", tag="Gentle · bright", height=1.65, biomes=["warm_ocean", "lukewarm_ocean", "beach"],
+              temperament="Gentle, house-proud",
+              ecology="A Harmontide reef mermaid crowned with coral, who tends the reef like a garden.",
+              interaction="Tropical fish and kelp.",
+              signature=("Reef keeper", "Underwater she grows coral, coral fans and sea pickles on the sand around her."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue, a coral crown"), ("pink", "Pink", "Pink"), ("orange", "Orange", "Orange"),
+                        ("purple", "Purple", "Purple"), ("green", "Green", "Green")]),
+         {"Habitat": "Warm seas", "Young": "Live young", "On land": "Slow", "Signature": "Grows coral", "Danger": "None"})],
+    "lamia": [
+        (dict(id="caraviper_lamia", name="Caraviper", group="Deserts", tag="Haughty · fierce", height=1.6, biomes=["desert", "badlands"],
+              temperament="Haughty, protective",
+              ecology="A Harmontide cobra with a wide hood, patterned with glyphs in gold.",
+              interaction="Eggs and rabbit.",
+              signature=("Spitting cobra", "Befriended, she spits venom at the monsters near her friend: they are blinded and poisoned."),
+              danger="Low (her venom).",
+              variants=[("blue", "Blue (default)", "Blue, gold glyphs"), ("sand", "Sand", "Sand"), ("black", "Black", "Black"), ("red", "Red", "Red"),
+                        ("green", "Green", "Green")]),
+         {"Habitat": "Deserts", "Young": "Eggs", "Defence": "Spits venom", "Signature": "Blinds monsters", "Danger": "Low"})],
+    "nekomata": [
+        (dict(id="bakeneko_nekomata", name="Bakeneko", group="Villages at night", tag="Mischievous · spooky", height=1.45,
+              biomes=["plains", "forest", "cherry_grove"], temperament="Mischievous, playful",
+              ecology="The shapeshifting ghost cat of Japanese folklore, with will-o'-wisps dancing round her.",
+              interaction="Fish.",
+              signature=("Ghost lights", "At night her wisps light up the ground around her friend."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue, pale wisps"), ("calico", "Calico", "Calico"), ("black", "Black", "Black"),
+                        ("white", "White", "White"), ("ginger", "Ginger", "Ginger")]),
+         {"Habitat": "Villages at night", "Social": "Alone", "Water": "Avoids it", "Signature": "Lights the night", "Danger": "None"})],
+    "devil": [
+        (dict(id="rokurokubi_devil", name="Rokurokubi", group="Villages at night", tag="Shy · nosy", height=1.6, biomes=["cherry_grove", "plains", "forest"],
+              temperament="Shy, nosy",
+              ecology="The yōkai of Japanese folklore who seems an ordinary girl by day, but at night her neck stretches out long.",
+              interaction="Sweet berries and honey.",
+              signature=("Night watch", "After dark her neck rises high, and the monsters within 24 blocks of her friend glow."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue kimono"), ("red", "Red", "Red"), ("green", "Green", "Green"), ("white", "White", "White"),
+                        ("black", "Black", "Black")]),
+         {"Habitat": "Villages at night", "Signature": "Spots monsters at night", "Danger": "None"})],
+    "kitsune": [
+        (dict(id="huli_jing_kitsune", name="Huli Jing", group="Bamboo forests", tag="Charming · clever", height=1.55,
+              biomes=["bamboo_jungle", "cherry_grove", "forest"], temperament="Clever, charming",
+              ecology="The fox spirit of Chinese legend, who has lived a thousand years and has nine tails to show for it.",
+              interaction="Chicken and sweet berries.",
+              signature=("Charm", "In a village with her friend the villagers trade cheaper: her friend has Hero of the Village while "
+                                  "near her."),
+              danger="None.",
+              variants=[("silver", "Silver (default)", "Silver-blue, black hair"), ("red", "Red", "Red"), ("white", "White", "White"),
+                        ("gold", "Gold", "Gold"), ("black", "Black", "Black")]),
+         {"Habitat": "Bamboo forests", "Size": "Nine tails", "Signature": "Cheaper trades", "Temperament": "Clever", "Danger": "None"})],
+}
+for _fid, _entries in FIFTEENTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))

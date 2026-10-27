@@ -83,7 +83,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             "synthwave", "cookie", "cloud", "valentine",                       // valentine is seasonal, February only
             "porcelain", "denim", "moss", "easter",                            // easter is seasonal, April only
             "tartan", "watercolour", "hologram", "fireworks",                  // hologram is see-through; fireworks is seasonal, January only
-            "mosaic", "chalk", "leopard", "autumn");                           // autumn is seasonal, November only
+            "mosaic", "chalk", "leopard", "autumn",                            // autumn is seasonal, November only
+            "checkered", "sunset", "thunder", "burlap");                       // thunder's bolts glow
     /** Homage variants (the look of a favourite character): a wild one rolls them only rarely. */
     public static final java.util.Set<String> HOMAGES = java.util.Set.of("gunman", "blossom", "lost", "stitched", "nurse", "mummy", "ranger", "outback");
     /** One wild girl in this many is painted, like a shiny. */
@@ -121,7 +122,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         POINT("point", true), SOAK("soak", false), SCAMPER("scamper", false),
         PINCH("pinch", true), CURL("curl", false), SLAM("slam", true), CLING("cling", false),
         ROOST("roost", false), PRAY("pray", false), STRIKE("strike", true), SNAP("snap", true), PERCH("perch", false),
-        HANG("hang", false), RUNDOWN("rundown", false);
+        HANG("hang", false), RUNDOWN("rundown", false), WATCH("watch", true);
 
         public final String animation;
         public final boolean once;

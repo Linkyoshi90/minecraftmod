@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_huli_jing_kitsune",
+  "spawners": {
+    "type": "monstergirls:huli_jing_kitsune",
+    "weight": 7,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

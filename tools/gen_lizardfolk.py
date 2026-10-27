@@ -22,6 +22,29 @@ LIZARD_TAIL = [(2.5, 2.5, 4), (2, 2, 4), (1.5, 1.5, 4), (1, 1, 3.5)]
 DROOP = [(-38, 0, 0), (10, 0, 0), (10, 0, 0), (8, 0, 0)]
 
 SPECIES = {
+    # fifteenth wave: the crocora, a round little blue crocodile in a gold collar, a cream belly
+    "crocora_lizardfolk": dict(
+        build="petite", outfit=dict(top=["bandeau"], bottom="wrap_skirt", extras=["usekh", "armlets"], colors=dict(cloth2="#2a4a9a")),
+        hair="bob", bangs="blunt", ears=None, legs="scales", foot="claw", tail=[(3, 2.5, 4), (2.5, 2, 4), (2, 1.5, 3.5), (1.25, 1.25, 3)],
+        tail_rest=[(-25, 0, 0), (8, 0, 0), (6, 0, 0), (4, 0, 0)], tail_look="scale", spines=True, teeth=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#2a5ad8", FUR="#3a7ae8", LIGHT="#f4ecd0", MARK="#1e3a8a", EYE="#e8a030", CLOTH="#e8c050", TRIM="#2a4a9a",
+                 pattern="bands", pupil=(0.9, 3.4)),
+        variants={"green": dict(HAIR="#2a7a3a", FUR="#3a9a4a", MARK="#1a4a22"),
+                  "olive": dict(HAIR="#4a5a2a", FUR="#6a7a3a", MARK="#2a3a1a", CLOTH="#c8a040"),
+                  "gold": dict(HAIR="#c8902a", FUR="#e0b040", MARK="#7a5410", CLOTH="#2a4a9a", TRIM="#e8c050"),
+                  "black": dict(HAIR="#1e1c22", FUR="#2a2830", MARK="#0a080e", LIGHT="#a8a4b0", EYE="#e8d040")}),
+    # fifteenth wave: the iron kobold, a little blue kobold smith in iron plate, a big hammer in her right hand
+    "iron_kobold_lizardfolk": dict(
+        build="petite", outfit=dict(top=["sarashi", "vest"], bottom="shorts", extras=["pauldron", "bracers", "belt"],
+                                    colors=dict(cloth2="#5a5e6a", leather="#4a3a2a")),
+        hair="shaggy", bangs="messy", ears=None, legs="scales", foot="claw", horns="devil", tail=LIZARD_TAIL, tail_rest=DROOP, tail_look="scale",
+        spines=True, teeth=True, hammer=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e2e6a", FUR="#3a5ab8", LIGHT="#c8d4f0", MARK="#1e2a5a", EYE="#e8a030", CLOTH="#7a7e8a", TRIM="#c8a050",
+                 pattern="bands", pupil=(0.9, 3.4), extra=dict(horn="#e8dcc0", steel="#8a8e9a")),
+        variants={"copper": dict(CLOTH="#b8642a", TRIM="#e8b860", extra=dict(horn="#e8dcc0", steel="#c87a3a")),
+                  "red": dict(HAIR="#6a1a12", FUR="#b83a2a", LIGHT="#f0c0a8", MARK="#5a1a10"),
+                  "green": dict(HAIR="#1e4a2a", FUR="#3a8a4a", LIGHT="#c8e8c0", MARK="#1a3a22"),
+                  "black": dict(HAIR="#141218", FUR="#2a2830", LIGHT="#8a8890", MARK="#0a080e", EYE="#e83a2a")}),
     "salamander_lizardfolk": dict(
         build="athletic", outfit=dict(top=["bandeau"], bottom="loincloth", extras=["armlets", "belt"], colors=dict(cloth2="#3a1a14")),
         hair="ponytail", bangs="jagged", ears=None, legs="scales", foot="claw", tail=LIZARD_TAIL, tail_rest=DROOP, tail_look="flame",
@@ -222,6 +245,8 @@ def declare_hook(sp, d):
         out += [("dish", 4, .5, 4), ("dish_water", 3, .25, 3)]
     if d.get("skink"):
         out += [("skink_leaf", 1.5, .25, 4), ("bell", .75, .75, .75)]
+    if d.get("hammer"):                                  # the smith's hammer: haft and head
+        out += [("haft", 1, 9, 1), ("hammer_head", 4, 2.5, 2.5)]
     if d.get("anvil"):                                   # the anvil on her back: base, waist, the face and its horn
         out += [("anvil_base", 6, 2, 4.5), ("anvil_waist", 3.5, 2, 3), ("anvil_face", 8, 2.5, 4.5), ("anvil_horn", 2.5, 1.75, 2.5)]
     if d.get("nurse_kit"):
@@ -234,6 +259,9 @@ def paint_hook(pt, pal, d):
     leafc, bell = G.shades(pal.extra.get("leaf", "#5a9a3a")), G.shades(pal.extra.get("bell", "#e8c050"))
     pt("skink_leaf", "all", lambda f, x, y, w, h: pick(leafc, 0.45 + 0.25 * (x == w // 2) + 0.1 * (y % 2), x, y))
     pt("bell", "all", lambda f, x, y, w, h: pick(bell, 0.55 + 0.3 * (f == "up"), x, y))
+    steel = G.shades(pal.extra.get("steel", "#8a8e9a"))
+    pt("haft", "all", lambda f, x, y, w, h: pick(G.shades("#5a3a22"), 0.45 + 0.1 * (y % 3 == 0), x, y))
+    pt("hammer_head", "all", lambda f, x, y, w, h: pick(steel, 0.45 + 0.25 * (f in ("east", "west")) + 0.1 * (y == 0), x, y))
     iron = G.shades(pal.extra.get("anvil", "#5a5e66"))
     chipped = pal.extra.get("chipped")
     for p in ("anvil_base", "anvil_waist", "anvil_face", "anvil_horn"):
@@ -297,6 +325,10 @@ def build_hook(r, g, d):
         r.add("crest", "head", [0, g.hy + 8.4, z], [G.rot_cube("skink_leaf", [-0.75, hy + 8.6, -1.0 + z], [0, hy + 8.6, -0.5 + z], -30 + 12 * i, a, 0)
                                                     for i, a in enumerate((150, 175, 200, 125, 225))])
         r.put("head", cube("bell", [-4.9, hy + 2.6, -1.0 + z]), cube("bell", [4.15, hy + 2.6, -1.0 + z]), cube("bell", [-4.8, hy + 1.6, 0.2 + z]))
+    if d.get("hammer"):                                  # held upright in her right hand, the head above her fist
+        px, py, pz = r.b["hand_r"]["pivot"]
+        cz = pz - 2.0
+        r.add("hammer", "hand_r", [px, py - 1.5, pz], [cube("haft", [px - 0.5, py - 4.5, cz - 0.5]), cube("hammer_head", [px - 2.0, py + 4.0, cz - 1.25])])
     if d.get("anvil"):                                   # lying along her back like a shell, the face outward
         cd = G.S("chest")[2]
         b = cd / 2 - 0.2 + z

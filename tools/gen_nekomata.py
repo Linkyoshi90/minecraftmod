@@ -73,6 +73,17 @@ SPECIES = {
                   "iberian": dict(FUR="#c8a060", HAIR="#b88c50", pattern="spots", CLOTH="#6a3a2a"),
                   "bobcat": dict(FUR="#b07850", HAIR="#9a6440", pattern="spots", pattern_scale=0.8),
                   "silver": dict(FUR="#d4d6da", HAIR="#dcdee4", LIGHT="#ffffff", MARK="#4a4c52", CLOTH="#3a4a6a")}),
+    # fifteenth wave: the bakeneko, a blue ghost cat with pale ghost-fire paws and tail tip, will-o'-wisps floating round her (all glow)
+    "bakeneko_nekomata": dict(wisps=True,
+        build="slim", outfit=dict(top=["kimono"], extras=["bell_collar"], colors=dict(kimono="#2a3a7a", kimono_trim="#c8d8f8", obi="#8a5ac8")),
+        ears="cat", hair="flowing", bangs="swept", tail=((1.25, 1.25, 3.5), (1.25, 1.25, 3.5), (1.5, 1.5, 2.5)), tail_pattern="solid", flames=True,
+        glow=["flame", "flame_hand", "tail_c", "wisp"],
+        pal=dict(SKIN=skin("pale"), HAIR="#2a3a8a", FUR="#3a4aa8", LIGHT="#a8b8f0", MARK="#1a2260", EYE="#e8c8ff", CLOTH="#2a3a7a", TRIM="#c8d8f8",
+                 INNER="#d8b0d8", pattern="solid", extra=dict(flame="#a8d8ff", flame_hot="#f4fcff")),
+        variants={"calico": dict(HAIR="#f4ece0", FUR="#f4ece0", LIGHT="#ffffff", MARK="#d8803a", pattern="patches", EYE="#e8c040"),
+                  "black": dict(HAIR="#141218", FUR="#1e1c22", LIGHT="#4a4650", MARK="#0a080c", EYE="#f0c040", extra=dict(flame="#b8f8c8", flame_hot="#f4fff8")),
+                  "white": dict(HAIR="#f8f6f0", FUR="#f8f6f0", LIGHT="#ffffff", MARK="#c8c4bc", EYE="#5ab0e8"),
+                  "ginger": dict(HAIR="#d8783a", FUR="#e0884a", LIGHT="#f8d8b0", MARK="#8a3e14", EYE="#4ac87a", extra=dict(flame="#f8c080", flame_hot="#fff4e0"))}),
     # fourteenth wave: the cait sith, the black fairy cat of the Highlands with a white star on her chest
     "cait_sith_nekomata": dict(star=True,
         build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["scarf"], colors=dict(cloth2="#2a5a3a", scarf="#2a5a3a")),
@@ -174,6 +185,8 @@ def declare(sp):
         extra += [("grin", 4.5, 1.5, .25)]
     if d.get("star"):
         extra += [("star", 2.5, 2.5, .25)]
+    if d.get("wisps"):
+        extra += [("wisp", 1.5, 1.5, 1.5)]
     G.declare(leg_parts(d.get("build")) + [("tail_a",) + a, ("tail_b",) + b, ("tail_c",) + c] + extra, ears=d["ears"], hair=d["hair"],
               build=d.get("build"), outfit=d.get("outfit"))
 
@@ -243,6 +256,9 @@ def paint(sp, pal):
         lp, li = G.shades(pal.extra.get("lotus", "#f8b0cc")), G.shades(pal.extra.get("lotus_in", "#fff0a0"))
         pt("lotus_petal", "all", lambda f, x, y, w, h: pick(lp, 0.55 + 0.2 * (f == "up") - 0.15 * (x == 0 or x == w - 1), x, y))
         pt("lotus_heart", "all", lambda f, x, y, w, h: pick(li, 0.65, x, y))
+    if d.get("wisps"):                                   # the will-o'-wisps: pale ghost fire, brighter at the heart
+        hot, wc = G.shades(pal.extra.get("flame_hot", "#f4fcff")), G.shades(pal.extra.get("flame", "#a8d8ff"))
+        pt("wisp", "all", lambda f, x, y, w, h: pick(hot if (x, y) == (0, 0) else wc, 0.7, x, y))
     if d.get("star"):                                    # the cait sith's white star
         white = G.shades("#f8f6f0")
         pt("star", "all", lambda f, x, y, w, h: pick(white, 0.85, x, y)
@@ -325,6 +341,8 @@ def build(sp):
         r.put("foot_r", cube("flame", [cx - 1.375, 0.1, -2.0]))
         hx, hyy, hz = r.b["hand_r"]["pivot"]
         r.put("hand_r", cube("flame_hand", [hx - 1.125, hyy - 2.6, hz - 1.0]))
+    if d.get("wisps"):                                   # three wisps floating at her shoulders and hip
+        r.add("wisps", "body", [0, 18, g.z], [cube("wisp", [-7.5, 22.5, -1.5 + g.z]), cube("wisp", [6.0, 20.0, 0.5 + g.z]), cube("wisp", [-6.0, 13.0, 2.5 + g.z])])
     if d.get("star"):                                    # on her breastbone, above her top
         r.put("body", cube("star", [-1.25, 18.4, -G.S("chest")[2] / 2 - G.S("bust")[2] - 0.7 + g.z]))
     if d.get("grin"):                                    # the grin, wide across her lower face
