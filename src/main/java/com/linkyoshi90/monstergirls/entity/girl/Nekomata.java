@@ -96,6 +96,7 @@ public class Nekomata extends AbstractMonsterGirl {
 
     public static net.minecraft.world.entity.ai.attributes.AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
+            case CENSER_LION_NEKOMATA -> girlAttributes(28, 0.3, 5);
             case TIGER_NEKOMATA -> girlAttributes(30, 0.3, 6);
             case LIONESS_NEKOMATA -> girlAttributes(26, 0.3, 5);
             case CHEETAH_NEKOMATA -> girlAttributes(18, 0.34, 3);
@@ -486,6 +487,7 @@ public class Nekomata extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.CENSER_LION_NEKOMATA && this.level() instanceof ServerLevel incense && !this.isBaby() && this.tickCount % 20 == 0) this.incense(incense);
         if (this.species == GirlSpecies.BLAZE_CAT_NEKOMATA && this.level() instanceof ServerLevel fire && this.tickCount % 40 == 0 && !this.isBaby()) this.kindle(fire);
         if (this.species == GirlSpecies.WATERLIL_NEKOMATA && this.level() instanceof ServerLevel pond && this.tickCount % 4 == 0) this.tickPads(pond);
         if (this.species == GirlSpecies.CHESHIRE_NEKOMATA && this.level() instanceof ServerLevel wonder && this.tickCount % 20 == 0) this.blinkToFriend(wonder);
@@ -735,5 +737,22 @@ public class Nekomata extends AbstractMonsterGirl {
 
     public static boolean isNekomata(@Nullable Entity e) {
         return e instanceof Nekomata;
+    }
+
+    // --- the censer lion -----------------------------------------------------------------------------------------
+
+    /** Her friend within 16 blocks rests easy (no phantoms come for the sleepless), and phantoms within 32 of her stop
+     *  hunting her friend. How many phantoms she calmed, or -1 without a friend. */
+    public int incense(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        friend.resetStat(net.minecraft.stats.Stats.CUSTOM.get(net.minecraft.stats.Stats.TIME_SINCE_REST));
+        int calmed = 0;
+        for (var ph : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Phantom.class, this.getBoundingBox().inflate(32), ph -> ph.getTarget() == friend)) {
+            ph.setTarget(null);
+            calmed++;
+        }
+        if (this.tickCount % 60 == 0) level.sendParticles(net.minecraft.core.particles.ParticleTypes.CAMPFIRE_COSY_SMOKE, this.getX(), this.getY() + 0.6, this.getZ(), 1, 0.1, 0.1, 0.1, 0.005);
+        return calmed;
     }
 }

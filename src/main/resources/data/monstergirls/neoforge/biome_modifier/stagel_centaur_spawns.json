@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_stagel_centaur",
+  "spawners": {
+    "type": "monstergirls:stagel_centaur",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

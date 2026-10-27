@@ -90,6 +90,7 @@ public class Minotaur extends AbstractMonsterGirl {
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
+            case DUSTBISON_MINOTAUR -> girlAttributes(26, 0.28, 3);
             case MINOAN_MINOTAUR -> girlAttributes(40, 0.27, 8).add(Attributes.ATTACK_KNOCKBACK, 1.5).add(Attributes.ARMOR, 4);
             case BISON_MINOTAUR -> girlAttributes(40, 0.28, 6).add(Attributes.ATTACK_KNOCKBACK, 1.5);
             case AUROCHS_MINOTAUR -> girlAttributes(48, 0.27, 9).add(Attributes.ATTACK_KNOCKBACK, 2.5).add(Attributes.KNOCKBACK_RESISTANCE, 1.0);
@@ -408,6 +409,7 @@ public class Minotaur extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.DUSTBISON_MINOTAUR && this.level() instanceof ServerLevel dust && !this.isBaby() && this.tickCount % 10 == 0) this.dustBath(dust);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.REEDBULL_MINOTAUR && !this.isBaby() && this.tickCount % 600 == 0) this.plantReeds(server);
         if (this.inLove > 0) this.inLove--;
@@ -675,5 +677,18 @@ public class Minotaur extends AbstractMonsterGirl {
         level.setBlock(at, cane, 3);
         level.levelEvent(2005, at, 0);
         return at;
+    }
+
+    // --- the dustbison -------------------------------------------------------------------------------------------
+
+    /** Her friend within 8 blocks, on fire, is rolled in the dust: the fire goes out, and five seconds of Fire Resistance. Whether she did. */
+    public boolean dustBath(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null || !friend.isOnFire()) return false;
+        friend.clearFire();
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.FIRE_RESISTANCE, 100, 0, false, true, true));
+        level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(net.minecraft.core.particles.ParticleTypes.BLOCK,
+                net.minecraft.world.level.block.Blocks.SAND.defaultBlockState()), friend.getX(), friend.getY() + 0.5, friend.getZ(), 30, 0.4, 0.4, 0.4, 0.1);
+        return true;
     }
 }

@@ -18,6 +18,14 @@ from girl_lib import H, cube, pick, noise, shades, CLEAR  # noqa: E402
 ALPHA = 200
 
 SPECIES = {
+    # seventeenth wave: the klabuster, a round little blue water drop of a slime who drips from cave ceilings
+    "klabuster_slime": dict(
+        build="petite", outfit=dict(top=[]), extra="drip", hair="bob", bangs="blunt",
+        pal=dict(FUR="#3a8ae8", LIGHT="#c8e8ff", MARK="#1e5ab8", HAIR="#5aa8f8", EYE="#0e2a6a", PUPIL="#0a1a4a", extra=dict(core="#e8f8ff")),
+        variants={"aqua": dict(FUR="#3ac8d8", HAIR="#6ae0e8", MARK="#1e8a94", EYE="#0e4a50", extra=dict(core="#e8ffff")),
+                  "clear": dict(FUR="#d0ecf8", HAIR="#e4f4fc", MARK="#8ab8d0", EYE="#3a6a8a", extra=dict(core="#ffffff")),
+                  "murk": dict(FUR="#5a7a6a", HAIR="#7a9a88", MARK="#2a4a3a", EYE="#14281e", extra=dict(core="#d8f0e0")),
+                  "dusk": dict(FUR="#6a4ac8", HAIR="#8a6ae0", MARK="#3a1e8a", EYE="#1a0e4a", extra=dict(core="#f0e0ff"))}),
     # fourteenth wave: the undine, a girl of living water, bubbles drifting round her
     "undine_slime": dict(
         build="slim", outfit=dict(top=[], extras=["pearls"]),

@@ -138,6 +138,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
+            case SAWFIN_MERMAID -> girlAttributes(24, 0.25, 5);
             case ORCA_MERMAID -> girlAttributes(36, 0.25, 6);
             case SHARK_MERMAID -> girlAttributes(30, 0.25, 7);
             case SEAL_MERMAID -> girlAttributes(22, 0.22, 2);
@@ -429,6 +430,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.SAWFIN_MERMAID && this.level() instanceof ServerLevel sea && !this.isBaby() && this.tickCount % 20 == 0) this.sapperAid(sea);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.playDead > 0 && --this.playDead == 0 && this.getAction() == Action.LYING) this.setAction(Action.NONE);
         if (this.tickCount % 10 == 0) this.breathe(server);
@@ -1159,5 +1161,15 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
             d.setDropChance(net.minecraft.world.entity.EquipmentSlot.OFFHAND, 2.0F);
         }
         return super.doHurtTarget(target);
+    }
+
+    // --- the sawfin ----------------------------------------------------------------------------------------------
+
+    /** Her friend within 8 blocks, underwater, digs fast (Haste II). Whether she helped. */
+    public boolean sapperAid(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null || !level.getFluidState(net.minecraft.core.BlockPos.containing(friend.getEyePosition())).is(net.minecraft.tags.FluidTags.WATER)) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DIG_SPEED, 60, 1, true, true, true));
+        return true;
     }
 }

@@ -17,6 +17,17 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # seventeenth wave: the amarok, the giant lone wolf of Inuit legend: tall, shaggy, slate grey with a pale ruff
+    "amarok_canid": dict(
+        build="strong", outfit=dict(top=["bandeau", "mantle"], bottom="loincloth", extras=["arm_wraps", "belt"], colors=dict(cloth2="#3a3e48", leather="#3a3a40")),
+        hair="mane", bangs="messy", ears="fox", legs="fur", foot="paw", tail=[(2.25, 2.25, 4), (2.5, 2.5, 4), (2, 2, 3)],
+        tail_rest=[(-25, 0, 0), (10, 0, 0), (12, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("fair"), HAIR="#5a6270", FUR="#6a7280", LIGHT="#d8dce2", MARK="#3a3e48", EYE="#8ab8e8", CLOTH="#3a3e48", TRIM="#c8ccd4",
+                 pattern="solid", pupil=(1.6, 2.6)),
+        variants={"white": dict(FUR="#eef0f2", HAIR="#ffffff", LIGHT="#ffffff", MARK="#a8acb4", EYE="#6ab0e8"),
+                  "black": dict(FUR="#2a2a30", HAIR="#1a1a20", LIGHT="#6a6a72", MARK="#0e0e12", EYE="#e8c040"),
+                  "storm": dict(FUR="#4a5a7a", HAIR="#3a4868", LIGHT="#a8b8d8", MARK="#1e2840", EYE="#e8f0ff"),
+                  "tundra": dict(FUR="#a89a84", HAIR="#8a7c66", LIGHT="#ece4d4", MARK="#5a4e3e", EYE="#e8b030")}),
     "wolf_canid": dict(
         mummy_kit=True,
         build="athletic", outfit=dict(top=["bandeau", "vest"], bottom="shorts", extras=["arm_wraps", "belt"], colors=dict(leather="#5a4a3a")),

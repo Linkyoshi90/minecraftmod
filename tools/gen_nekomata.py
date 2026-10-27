@@ -19,6 +19,20 @@ FAMILY = C.family("nekomata")
 
 # per species: body knobs, then the default palette and the four other colours as palette overrides
 SPECIES = {
+    # seventeenth wave: the censer lion, a lapis lion in gold filigree, a smoking censer hanging at her hip
+    "censer_lion_nekomata": dict(
+        build="athletic", outfit=dict(top=["bandeau", "mantle"], bottom="strips", extras=["armlets", "belt", "usekh"], colors=dict(cloth2="#1e2a6a")),
+        ears="round", hair="mane", tail=((1.25, 1.25, 4), (1.25, 1.25, 4), (1.75, 1.75, 2)), tail_pattern="solid", tuft=True, censer=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e3080", FUR="#2a40a0", LIGHT="#6a80d0", MARK="#c8a040", EYE="#e8c050", CLOTH="#1e2a6a", TRIM="#e0b840",
+                 pattern="solid", facemark="whisker", extra=dict(dark_tips=True, censer="#d8b040", smoke="#9ae0f0")),
+        variants={"desert": dict(FUR="#dcc08c", HAIR="#a8783a", LIGHT="#fbf4e6", MARK="#7a5a2a", EYE="#3a8ac8", CLOTH="#8a2a2a",
+                                 extra=dict(dark_tips=True, censer="#d8b040", smoke="#f0e8d8")),
+                  "white": dict(FUR="#efe8da", HAIR="#f0eadc", LIGHT="#ffffff", EYE="#3a8ac8", MARK="#c8a040", CLOTH="#2a40a0",
+                                extra=dict(dark_tips=True, censer="#d8b040", smoke="#c8e8ff")),
+                  "jade": dict(FUR="#2a7a5a", HAIR="#1e4a3a", LIGHT="#7ac8a0", MARK="#d8b040", CLOTH="#1e3a2a",
+                               extra=dict(dark_tips=True, censer="#d8b040", smoke="#a8f0c8")),
+                  "ember": dict(FUR="#8a2a1e", HAIR="#4a1410", LIGHT="#d87a4a", MARK="#e8c050", EYE="#f0d060", CLOTH="#2a1410",
+                                extra=dict(dark_tips=True, censer="#d8b040", smoke="#f8b070"))}),
     "serval_nekomata": dict(
         build="slim", outfit=dict(top=["halter"], bottom="sarong", extras=["belt", "pouch"]),
         ears="big", hair="bob", tail=((1.25, 1.25, 3.5), (1.25, 1.25, 3.5), (1.25, 1.25, 2.5)), tail_pattern="bars",
@@ -187,6 +201,8 @@ def declare(sp):
         extra += [("star", 2.5, 2.5, .25)]
     if d.get("wisps"):
         extra += [("wisp", 1.5, 1.5, 1.5)]
+    if d.get("censer"):
+        extra += [("censer", 2, 2.25, 2), ("censer_cap", 1.25, 1, 1.25), ("censer_chain", .25, 4, .25), ("smoke", 1, 1.5, 1)]
     G.declare(leg_parts(d.get("build")) + [("tail_a",) + a, ("tail_b",) + b, ("tail_c",) + c] + extra, ears=d["ears"], hair=d["hair"],
               build=d.get("build"), outfit=d.get("outfit"))
 
@@ -256,6 +272,13 @@ def paint(sp, pal):
         lp, li = G.shades(pal.extra.get("lotus", "#f8b0cc")), G.shades(pal.extra.get("lotus_in", "#fff0a0"))
         pt("lotus_petal", "all", lambda f, x, y, w, h: pick(lp, 0.55 + 0.2 * (f == "up") - 0.15 * (x == 0 or x == w - 1), x, y))
         pt("lotus_heart", "all", lambda f, x, y, w, h: pick(li, 0.65, x, y))
+    if d.get("censer"):                                  # a pierced gold censer and a wisp of incense
+        gold, smoke = G.shades(pal.extra.get("censer", "#d8b040")), G.shades(pal.extra.get("smoke", "#9ae0f0"))
+        pt("censer", "all", lambda f, x, y, w, h: pick(G.shades("#2a1a10"), 0.4, x, y) if f in ("north", "south", "east", "west") and y == h // 2 and x % 2
+           else pick(gold, 0.5 + 0.25 * (y == 0) + 0.1 * (x % 2), x, y))
+        pt("censer_cap", "all", lambda f, x, y, w, h: pick(gold, 0.65, x, y))
+        pt("censer_chain", "all", lambda f, x, y, w, h: pick(gold, 0.45 + 0.3 * (y % 2), x, y))
+        pt("smoke", "all", lambda f, x, y, w, h: G.with_alpha(pick(smoke, 0.7 + 0.2 * ((x + y) % 2), x, y), 150))
     if d.get("wisps"):                                   # the will-o'-wisps: pale ghost fire, brighter at the heart
         hot, wc = G.shades(pal.extra.get("flame_hot", "#f4fcff")), G.shades(pal.extra.get("flame", "#a8d8ff"))
         pt("wisp", "all", lambda f, x, y, w, h: pick(hot if (x, y) == (0, 0) else wc, 0.7, x, y))
@@ -343,6 +366,10 @@ def build(sp):
         r.put("hand_r", cube("flame_hand", [hx - 1.125, hyy - 2.6, hz - 1.0]))
     if d.get("wisps"):                                   # three wisps floating at her shoulders and hip
         r.add("wisps", "body", [0, 18, g.z], [cube("wisp", [-7.5, 22.5, -1.5 + g.z]), cube("wisp", [6.0, 20.0, 0.5 + g.z]), cube("wisp", [-6.0, 13.0, 2.5 + g.z])])
+    if d.get("censer"):                                  # hung from her belt at the right hip
+        hx = -G.S("hips")[0] / 2 - 1.1
+        r.add("censer", "body", [hx, 12.0, g.z], [cube("censer_chain", [hx - 0.125, 8.0, -0.125 + g.z]), cube("censer_cap", [hx - 0.625, 7.6, -0.625 + g.z]),
+                                                   cube("censer", [hx - 1.0, 5.4, -1.0 + g.z]), cube("smoke", [hx - 1.6, 9.0, -0.5 + g.z])])
     if d.get("star"):                                    # on her breastbone, above her top
         r.put("body", cube("star", [-1.25, 18.4, -G.S("chest")[2] / 2 - G.S("bust")[2] - 0.7 + g.z]))
     if d.get("grin"):                                    # the grin, wide across her lower face

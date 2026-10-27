@@ -185,6 +185,7 @@ public class Canid extends AbstractMonsterGirl {
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
+            case AMAROK_CANID -> girlAttributes(40, 0.33, 8);
             case WOLF_CANID -> girlAttributes(24, 0.32, 5);
             case POLAR_BEAR_CANID -> girlAttributes(40, 0.27, 7);
             case PANDA_CANID -> girlAttributes(30, 0.22, 4);
@@ -532,6 +533,7 @@ public class Canid extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.AMAROK_CANID && this.level() instanceof ServerLevel pack && !this.isBaby() && this.tickCount % 20 == 0) this.packMother(pack);
         if (this.species == GirlSpecies.CU_SITH_CANID && this.level() instanceof ServerLevel moor && !this.isBaby() && this.tickCount % 40 == 0) this.bark(moor);
         if (this.species == GirlSpecies.YETI_CANID && this.level() instanceof ServerLevel peak && !this.isBaby()) {
             if (this.tickCount % 30 == 0) this.throwSnowball(peak);
@@ -771,5 +773,19 @@ public class Canid extends AbstractMonsterGirl {
         for (var t : tag.getList("Weighed", 11)) this.weighed.add(NbtUtils.loadUUID(t));
         this.condemned.clear();
         for (var t : tag.getList("Condemned", 11)) this.condemned.add(NbtUtils.loadUUID(t));
+    }
+
+    // --- the amarok ----------------------------------------------------------------------------------------------
+
+    /** Her friend's tamed wolves within 12 blocks of her fight harder (Strength I). How many, or -1 without a friend. */
+    public int packMother(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null) return -1;
+        int n = 0;
+        for (var wolf : level.getEntitiesOfClass(net.minecraft.world.entity.animal.Wolf.class, this.getBoundingBox().inflate(12), w -> w.isTame() && w.isOwnedBy(friend))) {
+            wolf.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DAMAGE_BOOST, 60, 0, true, true));
+            n++;
+        }
+        return n;
     }
 }

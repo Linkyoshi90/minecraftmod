@@ -241,6 +241,8 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
+            case STAGEL_CENTAUR -> girlAttributes(20, 0.32, 2).add(Attributes.JUMP_STRENGTH, 0.8);
+            case LAMASSU_CENTAUR -> girlAttributes(50, 0.3, 8);
             case HORSE_CENTAUR -> girlAttributes(30, 0.3, 4);
             case ZEBRA_CENTAUR -> girlAttributes(30, 0.3, 6);
             case GOAT_CENTAUR -> girlAttributes(26, 0.28, 5).add(Attributes.JUMP_STRENGTH, 0.75);
@@ -756,6 +758,7 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
     @Override
     public void aiStep() {
         super.aiStep();
+        if ((this.species == GirlSpecies.STAGEL_CENTAUR || this.species == GirlSpecies.LAMASSU_CENTAUR) && this.level() instanceof ServerLevel ward && !this.isBaby() && this.tickCount % 20 == 0) this.blessFriend(ward);
         if (this.species == GirlSpecies.AURORANTLER_CENTAUR && this.level() instanceof ServerLevel aurora && !this.isBaby()) this.aurora(aurora);
         if (this.species == GirlSpecies.MOMOSHIKA_CENTAUR && this.level() instanceof ServerLevel grove && !this.isBaby() && this.tickCount % 40 == 0) this.blossom(grove);
         if (this.species == GirlSpecies.BELLMARE_CENTAUR && this.level() instanceof ServerLevel herd && this.tickCount % 40 == 0) this.leadHerd(herd);
@@ -964,5 +967,17 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
             if (c.tickCount % 3 == 0) c.getNavigation().moveTo(spot.x, spot.y, spot.z, c.distanceToSqr(spot) > 16 ? 1.9 : 1.5);
             c.getLookControl().setLookAt(p, 30.0F, 30.0F);
         }
+    }
+
+    // --- the stagel and the lamassu ------------------------------------------------------------------------------
+
+    /** Her friend within 8 blocks: the stagel gives Jump Boost II, the lamassu Resistance I. Whether she did. */
+    public boolean blessFriend(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null) return false;
+        if (this.species == GirlSpecies.STAGEL_CENTAUR) friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.JUMP, 60, 1, true, true, true));
+        else if (this.species == GirlSpecies.LAMASSU_CENTAUR) friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DAMAGE_RESISTANCE, 60, 0, true, true, true));
+        else return false;
+        return true;
     }
 }

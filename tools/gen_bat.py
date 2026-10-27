@@ -17,6 +17,21 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # seventeenth wave: the frondbat, a blue bat with leafy wings and a crown of white flowers, at home in the canopy
+    "frond_bat": dict(
+        build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["armlets", "pearls"], colors=dict(cloth2="#3a7a5a")),
+        hair="wavy", bangs="parted", ears="big", legs="bare", foot="paw", wings="bat", wing_scale=1.0, flies=True, flowers=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#2a50b8", FUR="#3a60c8", LIGHT="#c8d8f4", MARK="#14286a", EYE="#3a7ae8", CLOTH="#3a7a5a", TRIM="#e8c060",
+                 INNER="#e8c0a0", pattern="solid", extra=dict(wing="#3a8a8a", wing_bone="#1e3a6a", boot="#1e2a5a", bloom="#f8f4ec", bloom_in="#f0c040",
+                                                              crown_leaf="#5a9a5a")),
+        variants={"green": dict(HAIR="#3a7a3a", FUR="#4a8a4a", LIGHT="#c8e8c0", MARK="#1e3a1e",
+                                extra=dict(wing="#5a9a3a", wing_bone="#2a4a1e", boot="#1e3a1e", bloom="#f8a8c8", bloom_in="#f0e070", crown_leaf="#3a6a2a")),
+                  "brown": dict(HAIR="#5a3a22", FUR="#6a4a2e", LIGHT="#c8a880", MARK="#2e1e12",
+                                extra=dict(wing="#6a7a3a", wing_bone="#2a1a10", boot="#2a1a10", bloom="#f8f4ec", bloom_in="#f0c040", crown_leaf="#5a8a3a")),
+                  "autumn": dict(HAIR="#a84a1e", FUR="#b8582a", LIGHT="#f0c8a0", MARK="#4a1e0e",
+                                 extra=dict(wing="#d8782a", wing_bone="#5a2a10", boot="#4a1e0e", bloom="#f8e070", bloom_in="#c83a1e", crown_leaf="#c86a2a")),
+                  "black": dict(HAIR="#1e1a1e", FUR="#2a2428", LIGHT="#6a6468", MARK="#0e0c0e", EYE="#e8d040",
+                                extra=dict(wing="#2a4a3a", wing_bone="#0e0c0e", boot="#0e0c0e", bloom="#f8f4ec", bloom_in="#f0c040", crown_leaf="#3a6a3a"))}),
     # thirteenth wave: the datebat, a fruit bat of the oasis with date-palm fronds in her hair and a cluster of dates
     "date_bat": dict(
         build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["belt", "armlets"], colors=dict(cloth2="#c89a3a")),
@@ -48,7 +63,10 @@ SPECIES = {
 
 
 def declare_hook(sp, d):
-    return [("snout", 3, 2, 2), ("snout_n", 1.25, .75, .5), ("ruff", 5.5, 1.75, 4.25), ("frond", 1.5, .25, 6.5), ("date", 1, 1.25, 1)]
+    out = [("snout", 3, 2, 2), ("snout_n", 1.25, .75, .5), ("ruff", 5.5, 1.75, 4.25), ("frond", 1.5, .25, 6.5), ("date", 1, 1.25, 1)]
+    if d.get("flowers"):                                 # the frondbat's crown: white blooms between leaves
+        out += [("bloom", 1.5, .75, 1.5), ("bloom_in", .75, .5, .75), ("crown_leaf", 1, .25, 2.25)]
+    return out
 
 
 def paint_hook(pt, pal, d):
@@ -63,6 +81,10 @@ def paint_hook(pt, pal, d):
     pt("frond", "all", lambda f, x, y, w, h: pick(frond, 0.45 + 0.25 * (x == w // 2) + 0.1 * (y % 2), x, y) if f in ("up", "down") or y == 0
        else pick(frond, 0.4, x, y))
     pt("date", "all", lambda f, x, y, w, h: pick(date, 0.45 + 0.25 * (f == "up") + 0.1 * (x % 2), x, y))
+    bloom, bin_, cleaf = G.shades(pal.extra.get("bloom", "#f8f4ec")), G.shades(pal.extra.get("bloom_in", "#f0c040")), G.shades(pal.extra.get("crown_leaf", "#5a9a5a"))
+    pt("bloom", "all", lambda f, x, y, w, h: pick(bloom, 0.6 + 0.2 * (f == "up") - 0.15 * (x in (0, w - 1) and y in (0, h - 1)), x, y))
+    pt("bloom_in", "all", lambda f, x, y, w, h: pick(bin_, 0.6, x, y))
+    pt("crown_leaf", "all", lambda f, x, y, w, h: pick(cleaf, 0.45 + 0.25 * (x == w // 2) + 0.1 * (y % 2), x, y))
     if pal.extra.get("frost"):                           # the hoary bat's frosted tips
         for p in [p for p in H.PARTS if p.startswith(("hair", "strand", "bang")) and p != "hair_cap"]:
             pt(p, "all", lambda f, x, y, w, h: pick(pal.LIGHT, 0.7, x, y) if (x * 5 + y * 3) % 7 == 0 else None)
@@ -77,6 +99,13 @@ def build_hook(r, g, d):
         fr = [G.rot_cube("frond", [-0.625, hy + 9.6, z], [0, hy + 9.7, z], 30 + 15 * (i % 2), i * 60 + 15, 0) for i in range(6)]
         fr += [cube("date", [3.6, hy + 5.2, -1.0 + z]), cube("date", [4.2, hy + 4.2, -0.4 + z]), cube("date", [3.4, hy + 4.0, 0.2 + z])]
         r.add("palm", "head", [0, hy + 8.5, z], fr)
+    if d.get("flowers"):                                 # round the crown of her head, a bloom over each temple and one in front
+        cs = []
+        for x, zz, a in ((-3.6, -2.2, 30), (3.6, -2.2, -30), (0.0, -3.8, 0), (-2.2, -3.4, 15), (2.2, -3.4, -15)):
+            cs.append(G.rot_cube("crown_leaf", [x - 0.5, hy + 7.9, zz - 1.1 + z], [x, hy + 8.0, zz + z], 0, a, 0))
+        for x, zz in ((-3.0, -2.8), (3.0, -2.8), (0.0, -3.9)):
+            cs += [cube("bloom", [x - 0.75, hy + 8.0, zz - 0.75 + z]), cube("bloom_in", [x - 0.375, hy + 8.6, zz - 0.375 + z])]
+        r.add("hair_crown", "head", [0, hy + 8.0, z], cs)
     d["tall"] = round(G.model_height(r.model("probe").doc()), 2)   # for "roost" (the animations are made after the rig)
 
 

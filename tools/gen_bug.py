@@ -24,6 +24,25 @@ LARVA_SEGS = [("seg_1", 4, 6.5, 3.5), ("seg_2", 4.25, 3.5, 3.5), ("seg_3", 4, 3.
               ("seg_5", 3.5, 2.75, 3), ("seg_6", 3, 2.5, 3), ("seg_7", 2.5, 2.25, 2.5), ("seg_8", 2, 2, 2)]
 
 SPECIES = {
+    # seventeenth wave: the date palm beetle, a round little blue beetle with a cluster of dates and palm leaves in her hair
+    "date_beetle_bug": dict(
+        build="petite", outfit=dict(top=["halter", "capelet"], bottom="wrap_skirt", extras=["belt"], colors=dict(cloth2="#6a8a4a")),
+        hair="bob", bangs="blunt", ears="antenna", legs="stockings", foot="shoe", elytra=True, wings="insect", dates=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#4a6ac8", FUR="#5a7ad0", LIGHT="#b8c8f0", MARK="#2a3a8a", EYE="#8a5a2a", CLOTH="#6a8a4a", TRIM="#d8b040",
+                 extra=dict(antenna="#2a3a8a", stocking="#4a6ac8", boot="#2a3a8a", shell="#4a6ac8", shell2="#a8c0f0", wing="#e8d8f8", wing_vein="#a890c8",
+                            wing_alpha=190, date="#6a1e1a", dleaf="#6a8a4a")),
+        variants={"green": dict(HAIR="#3a8a4a", FUR="#4a9a5a", LIGHT="#b8e8c0", MARK="#1e4a2a",
+                                extra=dict(antenna="#1e4a2a", stocking="#3a8a4a", boot="#1e4a2a", shell="#3a8a4a", shell2="#a8e0b0", wing="#e8f0d8",
+                                           wing_vein="#8ab07a", wing_alpha=190, date="#6a1e1a", dleaf="#6a8a4a")),
+                  "amber": dict(HAIR="#c8802a", FUR="#d8903a", LIGHT="#f8d8a0", MARK="#6a3a10", CLOTH="#4a6a3a",
+                                extra=dict(antenna="#6a3a10", stocking="#c8802a", boot="#6a3a10", shell="#c8802a", shell2="#f8d090", wing="#f8ecd8",
+                                           wing_vein="#c89a6a", wing_alpha=190, date="#4a1410", dleaf="#5a7a3a")),
+                  "plum": dict(HAIR="#6a3a8a", FUR="#7a4a9a", LIGHT="#d8b8e8", MARK="#3a1a4a",
+                               extra=dict(antenna="#3a1a4a", stocking="#6a3a8a", boot="#3a1a4a", shell="#6a3a8a", shell2="#d0a8e8", wing="#f0e0f8",
+                                          wing_vein="#b08ac8", wing_alpha=190, date="#6a1e1a", dleaf="#6a8a4a")),
+                  "black": dict(HAIR="#2a2630", FUR="#3a3440", LIGHT="#8a8494", MARK="#141018", EYE="#e8b040",
+                                extra=dict(antenna="#141018", stocking="#2a2630", boot="#141018", shell="#2a2630", shell2="#6a8ac8", wing="#e0e0ec",
+                                           wing_vein="#8a8a9a", wing_alpha=190, date="#6a1e1a", dleaf="#6a8a4a"))}),
     # sixteenth wave: the temple mantis, lapis blue worked with gold filigree, a jewelled crown and a gold ring arch behind her head
     "temple_mantis_bug": dict(
         build="slim", outfit=dict(top=["halter", "capelet"], bottom="sarong", extras=["bracers", "usekh"], colors=dict(cloth2="#f0e4c0")),
@@ -200,6 +219,8 @@ def declare_hook(sp, d):
         out += [("gaster", 5, 5, 6.5), ("stinger", .5, .5, 1.5)]
     if d.get("crown"):
         out += [("crown", 4, 1.5, 4), ("jewel", 1, 1, .5)]
+    if d.get("dates"):                                   # a cluster of dates and two palm leaflets by her ear
+        out += [("date", 1, 1.25, 1), ("dleaf", 1, .25, 3.5)]
     if d.get("halo"):                                    # the temple mantis' gold ring arch, hung with jewelled tassels
         out += [("arch_bar", 13, .75, .5), ("arch_post", .75, 14, .5), ("arch_ring", 6, 6, .25), ("drop", .5, 2.5, .5)]
     if d.get("flower"):
@@ -221,6 +242,9 @@ def paint_hook(pt, pal, d):
     pt("stinger", "all", lambda f, x, y, w, h: pick(pal.MARK, 0.3, x, y))
     gold = G.shades("#e8c040")
     pt("crown", "all", lambda f, x, y, w, h: pick(gold, 0.55 + 0.3 * (x % 2 == 0 and y == h - 1), x, y))
+    date, dleaf = G.shades(pal.extra.get("date", "#6a1e1a")), G.shades(pal.extra.get("dleaf", "#6a8a4a"))
+    pt("date", "all", lambda f, x, y, w, h: pick(date, 0.45 + 0.3 * (f == "up" or (x == 0 and y == 0)), x, y))
+    pt("dleaf", "all", lambda f, x, y, w, h: pick(dleaf, 0.45 + 0.25 * (x == w // 2) + 0.1 * (y % 2), x, y))
     jewel = G.shades(pal.extra.get("jewel", "#e83a6a"))
     pt("jewel", "all", lambda f, x, y, w, h: pick(jewel, 0.7, x, y))
     for p in ("arch_bar", "arch_post"):
@@ -266,6 +290,10 @@ def build_hook(r, g, d):
                                                        G.rot_cube("stinger", [-0.25, 9.2, 7.8 + z], [0, 12.5, 1.5 + z], 35, 0, 0)])
     if d.get("crown"):
         r.put("head", cube("crown", [-2, hy + 8.6, -2 + z]), cube("jewel", [-0.5, hy + 9.0, -2.4 + z]))
+    if d.get("dates"):
+        cs = [G.rot_cube("dleaf", [2.8, hy + 7.4, -1.6 + z], [3.3, hy + 7.4, -1.0 + z], -20, a, -30) for a in (-20, 35)]
+        cs += [cube("date", [3.4, hy + 5.6, -1.4 + z]), cube("date", [4.0, hy + 4.6, -0.9 + z]), cube("date", [3.2, hy + 4.4, -0.3 + z])]
+        r.add("dates", "head", [3.3, hy + 7.0, -1.0 + z], cs)
     if d.get("halo"):                                    # behind her head; hair_ so it does not count to her height
         bz = 5.5 + z
         r.add("hair_arch", "head", [0, hy + 4, bz], [cube("arch_post", [-6.5, hy - 1.0, bz]), cube("arch_post", [5.75, hy - 1.0, bz]),

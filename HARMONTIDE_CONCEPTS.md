@@ -456,3 +456,27 @@ their names alone (the art was not reachable), then reworked against `harmontide
 
 Paints: neon (its tubes glow), zebra, terrazzo and the seasonal clover (March only), so 63 in all. Porcelain, denim and
 sakura were already taken, so the proposed paints changed.
+
+## Seventeenth wave (2026-10-27, in the game)
+
+Eight Harmontide originals from the reference art (their blue looks) and four creatures of folklore (the dryad, amarok,
+yurei and lamassu, from their reference looks).
+
+| Species | Home | Design |
+|---|---|---|
+| **Censer Lion** | Nekomata | A lapis lion in gold filigree with a smoking censer at her hip: her friend near her sleeps soundly, so no phantoms come, and phantoms hunting her friend lose interest. |
+| **Conch Mail Turtle** | Lizardfolk | A little sea turtle in a scaled blue shell with a conch's spire rising from it: her friend underwater near her has Conduit Power. |
+| **Date Palm Beetle** | Bug | A round blue beetle with dates and palm leaves in her hair: she shares a date with her hungry friend. |
+| **Dustbison** | Minotaur | A fluffy blue bison calf with cream tips and gold spots: she rolls her burning friend in the dust, putting the fire out. |
+| **Frondbat** | Bat | A blue bat with leafy wings and a crown of white flowers: she shakes saplings, sticks and apples from the leaves near her friend. |
+| **Sawfin** | Merfolk | A sawfish girl in blue barding with a fleur-de-lis shield and a toothed saw of a snout: Haste II for her friend underwater. |
+| **Stagel** | Centaur | A fawn taur, cream dappled with blue, with budding antlers: Jump Boost II for her friend. |
+| **Klabuster** | Slime | A round little drop of water from the cave ceilings: she puts out fires and fills cauldrons near her friend. |
+| **Dryad** | Flora | The Greek tree nymph, a girl of pale blue wood with leafy branches for antlers: the saplings near her friend grow. |
+| **Amarok** | Canid | The giant lone wolf of Inuit legend, slate grey and shaggy: her friend's tamed wolves near her fight harder. |
+| **Yurei** | Undead | The Japanese ghost in a school uniform, long black hair, legs fading into a white wisp; she floats. At night the monsters near her friend grow weak. |
+| **Lamassu** | Centaur | The winged, horned, lion-bodied guardian of Assyria's gates, long grey curls: Resistance I for her friend. |
+
+Paints: polka (white dots on bright colours), circuit (a green circuit board whose traces glow), giraffe (brown patches
+in a net of cream lines) and the seasonal watermelon (July only), so 67 in all.
+

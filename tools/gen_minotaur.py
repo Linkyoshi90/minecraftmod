@@ -21,6 +21,17 @@ COW_TAIL = [(1, 1, 3.5), (.75, .75, 3.5), (1.5, 1.75, 1.75)]
 TAIL_REST = [(-62, 0, 0), (-14, 0, 0), (-6, 0, 0)]
 
 SPECIES = {
+    # seventeenth wave: the dustbison, a fluffy blue bison calf with cream-tipped fur and gold spots, a bell at her neck
+    "dustbison_minotaur": dict(
+        build="petite", outfit=dict(top=["bandeau", "mantle"], bottom="loincloth", extras=["bell_collar"], colors=dict(cloth2="#e8d0a8")),
+        hair="mane", bangs="messy", ears="cow", legs="hoof", foot="hoof", horns="bull", tail=COW_TAIL, tail_look="tuft", tail_rest=TAIL_REST,
+        male=dict(hair="mane", horns="bull", outfit=dict(top=["mantle"], bottom="loincloth", extras=["bell_collar"])),
+        pal=dict(SKIN=skin("fair"), HAIR="#3a5ac8", FUR="#4a6ad8", LIGHT="#f0dcb8", MARK="#e8b878", EYE="#2a5ab0", CLOTH="#3a5ac8", TRIM="#e8c070",
+                 INNER="#c8a8b8", pattern="spots", extra=dict(horn="#c8ccd4", hoof="#1e2a5a")),
+        variants={"plains": dict(FUR="#5a3e28", HAIR="#3a2618", LIGHT="#c8a880", MARK="#8a6a4a", EYE="#2a1a10", CLOTH="#a87a4a", extra=dict(horn="#2a2420", hoof="#1e1a18")),
+                  "white": dict(FUR="#ece6da", HAIR="#f4f0e6", LIGHT="#ffffff", MARK="#c8bca8", CLOTH="#4a6ad8", extra=dict(horn="#8a8478", hoof="#3a3430")),
+                  "rose": dict(FUR="#d888a8", HAIR="#b8587a", LIGHT="#f8e0e8", MARK="#f8c8a0", CLOTH="#b8587a", extra=dict(horn="#e8e0d8", hoof="#5a2a3a")),
+                  "dusk": dict(FUR="#4a3a6a", HAIR="#2a1e44", LIGHT="#b8a8d0", MARK="#e8b878", CLOTH="#2a1e44", extra=dict(horn="#c8ccd4", hoof="#1a1428"))}),
     # sixteenth wave: the reedbull, a shaggy lapis-blue marsh bull: gold-banded horns hung with tassels, a white rune on her brow,
     # a woven blanket over her back, a pendant and gold anklets
     "reedbull_minotaur": dict(

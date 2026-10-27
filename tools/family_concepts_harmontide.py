@@ -1840,3 +1840,136 @@ for _fid, _entries in SIXTEENTH.items():
         _fam["species"].append(_species)
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
+
+# seventeenth wave (2026-10-27): eight Harmontide originals from the reference art (their blue looks) and four of folklore
+SEVENTEENTH = {
+    "nekomata": [
+        (dict(id="censer_lion_nekomata", name="Censer Lion", group="Savanna", tag="Stately · serene", height=1.8, biomes=["savanna", "savanna_plateau", "desert"],
+              temperament="Stately, serene",
+              ecology="A Harmontide lion of lapis and gold filigree who carries a smoking censer, its incense sweet and drowsy.",
+              interaction="Cooked beef and cooked mutton.",
+              signature=("Incense", "Befriended, her friend near her sleeps soundly in her incense, so no phantoms come for them, and "
+                                   "phantoms already hunting her friend lose interest."),
+              danger="Moderate (her claws).",
+              variants=[("lapis", "Lapis (default)", "Lapis and gold"), ("desert", "Desert", "Sand, a red mantle"), ("white", "White", "White lion"),
+                        ("jade", "Jade", "Jade"), ("ember", "Ember", "Ember red")]),
+         {"Habitat": "Savanna", "Social": "Alone", "Water": "Avoids", "Signature": "Keeps phantoms off", "Danger": "Moderate"})],
+    "lizardfolk": [
+        (dict(id="conch_turtle_lizardfolk", name="Conch Mail Turtle", group="Warm beaches", tag="Gentle · steady", height=1.2, biomes=["beach", "warm_ocean"],
+              temperament="Gentle, steady",
+              ecology="A little Harmontide sea turtle in a scaled blue shell with a conch's spire rising from it, strung with pearls.",
+              interaction="Seagrass and kelp.",
+              signature=("Conch call", "Befriended, her friend underwater near her has Conduit Power: they breathe, see and dig as if beside a conduit."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue shell, cream conch"), ("coral", "Coral", "Coral pink"), ("kelp", "Kelp", "Kelp green"),
+                        ("sand", "Sand", "Sandy"), ("abyss", "Abyss", "Deep blue, glowing bands")]),
+         {"Habitat": "Warm beaches", "Signature": "Conduit Power underwater", "Danger": "None"})],
+    "bug": [
+        (dict(id="date_beetle_bug", name="Date Palm Beetle", group="Oases", tag="Sweet · busy", height=1.1, biomes=["desert", "savanna"],
+              temperament="Sweet, busy",
+              ecology="A round little Harmontide beetle of the oasis palms, who always carries a cluster of dates in her hair.",
+              interaction="Sweet berries and apples.",
+              signature=("Date share", "Befriended, when her friend near her is hungry she shares a date with them (three hunger points)."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue shell, violet wings"), ("green", "Green", "Green"), ("amber", "Amber", "Amber"),
+                        ("plum", "Plum", "Plum"), ("black", "Black", "Black")]),
+         {"Habitat": "Oases", "Signature": "Feeds her friend", "Danger": "None"})],
+    "minotaur": [
+        (dict(id="dustbison_minotaur", name="Dustbison", group="Badlands and plains", tag="Playful · sturdy", height=1.4, biomes=["badlands", "savanna", "plains"],
+              temperament="Playful, sturdy",
+              ecology="A fluffy Harmontide bison calf with cream-tipped fur and gold spots, who loves nothing more than a roll in the dust.",
+              interaction="Wheat and hay.",
+              signature=("Dust bath", "Befriended, when her friend near her catches fire she rolls them in the dust: the fire goes out and they "
+                                      "are fireproof for a few seconds."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Blue, cream tips, gold spots"), ("plains", "Plains", "Brown bison"), ("white", "White", "White"),
+                        ("rose", "Rose", "Rose"), ("dusk", "Dusk", "Dusk violet")]),
+         {"Habitat": "Badlands and plains", "Temper": "Playful", "Signature": "Puts out fire", "Danger": "Low"})],
+    "bat": [
+        (dict(id="frond_bat", name="Frondbat", group="Jungle canopy", tag="Merry · flighty", height=1.5, biomes=["jungle", "sparse_jungle", "bamboo_jungle"],
+              temperament="Merry, flighty",
+              ecology="A blue Harmontide bat of the canopy with leafy wings and a crown of white flowers, who naps hanging in the leaves.",
+              interaction="Apples, melon and sweet berries.",
+              signature=("Leaf shaker", "Befriended, every half minute she shakes the leaves near her friend: saplings, sticks and apples fall."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue, teal wings"), ("green", "Green", "Green"), ("brown", "Brown", "Brown"),
+                        ("autumn", "Autumn", "Autumn orange"), ("black", "Black", "Black")]),
+         {"Habitat": "Jungle canopy", "Signature": "Shakes down saplings and apples", "Danger": "None"})],
+    "merfolk": [
+        (dict(id="sawfin_mermaid", name="Sawfin", group="Warm seas and mangroves", tag="Earnest · brave", height=1.7,
+              biomes=["warm_ocean", "lukewarm_ocean", "mangrove_swamp"], temperament="Earnest, brave",
+              ecology="A Harmontide sawfish in blue barding with a fleur-de-lis shield, her long toothed saw of a snout out in front.",
+              interaction="Cod, salmon and tropical fish.",
+              signature=("Undersea sapper", "Befriended, her friend underwater near her digs fast (Haste II)."),
+              danger="Low (her saw).",
+              variants=[("blue", "Blue (default)", "Blue, white belly"), ("grey", "Grey", "Grey, a red shield"), ("green", "Green", "Green"),
+                        ("sand", "Sand", "Sand"), ("royal", "Royal", "Violet, a gold shield")]),
+         {"Habitat": "Warm seas", "Young": "Live young", "On land": "Flops", "Signature": "Haste underwater", "Danger": "Low"})],
+    "centaur": [
+        (dict(id="stagel_centaur", name="Stagel", group="Flower forests", tag="Shy · springy", height=1.5, biomes=["flower_forest", "forest", "birch_forest"],
+              temperament="Shy, springy",
+              ecology="A Harmontide fawn taur, cream dappled with blue, with budding antlers and a bound in her step.",
+              interaction="Apples and sweet berries.",
+              signature=("Springing step", "Befriended, her friend near her jumps high (Jump Boost II)."),
+              danger="None.",
+              variants=[("cream", "Cream (default)", "Cream, blue dapples"), ("brown", "Brown", "Brown fawn"), ("white", "White", "White"),
+                        ("rose", "Rose", "Rose"), ("moss", "Moss", "Moss green")]),
+         {"Habitat": "Flower forests", "Ridden": "No: too small", "Signature": "Jump Boost", "Temperament": "Shy", "Danger": "None"}),
+        (dict(id="lamassu_centaur", name="Lamassu", group="Deserts and badlands", tag="Solemn · steadfast", height=2.2,
+              biomes=["desert", "badlands", "savanna_plateau"], temperament="Solemn, steadfast",
+              ecology="The winged, horned, lion-bodied guardian of the gates of Assyria, with long grey curls falling down her back.",
+              interaction="Cooked beef and golden carrots.",
+              signature=("Gate guardian", "Befriended, her friend near her shrugs off blows (Resistance I)."),
+              danger="Moderate (her claws and horns).",
+              variants=[("grey", "Grey (default)", "Grey stone"), ("gold", "Gold", "Lion gold"), ("alabaster", "Alabaster", "White"),
+                        ("lapis", "Lapis", "Lapis and gold"), ("basalt", "Basalt", "Black")]),
+         {"Habitat": "Deserts", "Ridden": "Yes: by her friend", "Signature": "Resistance", "Temperament": "Steadfast", "Danger": "Moderate"})],
+    "slime": [
+        (dict(id="klabuster_slime", name="Klabuster", group="Dripstone caves", tag="Bubbly · clingy", height=1.2, biomes=["dripstone_caves", "lush_caves"],
+              temperament="Bubbly, clingy",
+              ecology="A round little Harmontide drop of water that drips from cave ceilings and giggles when it lands.",
+              interaction="Glow berries and kelp.",
+              signature=("Drip", "Befriended, she puts out the fires near her friend and tops up their cauldrons with water."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Water blue"), ("aqua", "Aqua", "Aqua"), ("clear", "Clear", "Clear"),
+                        ("murk", "Murk", "Murky green"), ("dusk", "Dusk", "Violet")]),
+         {"Habitat": "Dripstone caves", "Favourite food": "Glow berries", "Element": "Water", "Weakness": "Heat", "Danger": "None"})],
+    "flora": [
+        (dict(id="dryad_flora", name="Dryad", group="Forests", tag="Kind · rooted", height=1.7, biomes=["forest", "flower_forest", "old_growth_birch_forest"],
+              temperament="Kind, rooted",
+              ecology="The tree nymph of Greek myth, bound to her tree: a girl of smooth pale wood, with leafy branches for antlers.",
+              interaction="Bone meal and apples.",
+              signature=("Tree mother", "Befriended, every half minute the saplings near her friend grow as if given bone meal."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Pale blue wood"), ("oak", "Oak", "Oak"), ("birch", "Birch", "Birch"),
+                        ("cherry", "Cherry", "Cherry"), ("autumn", "Autumn", "Autumn")]),
+         {"Habitat": "Forests", "Signature": "Grows saplings", "Danger": "None"})],
+    "canid": [
+        (dict(id="amarok_canid", name="Amarok", group="Snowy taiga", tag="Lone · fierce", height=2.0, biomes=["snowy_taiga", "snowy_plains", "grove"],
+              temperament="Solitary, fierce",
+              ecology="The giant lone wolf of Inuit legend, slate grey and shaggy, who hunts alone and fears nothing.",
+              interaction="Beef, mutton and bones.",
+              signature=("Pack mother", "Befriended, her friend's tamed wolves near her fight harder (Strength I)."),
+              danger="High (her jaws).",
+              variants=[("slate", "Slate (default)", "Slate grey, pale ruff"), ("white", "White", "White"), ("black", "Black", "Black"),
+                        ("storm", "Storm", "Storm blue"), ("tundra", "Tundra", "Tundra brown")]),
+         {"Habitat": "Snowy taiga", "Kin": "Wolves", "Signature": "Strength for tamed wolves", "Danger": "High"})],
+    "undead": [
+        (dict(id="yurei_undead", name="Yurei", group="Cherry groves at night", tag="Wistful · faithful", height=1.6, biomes=["cherry_grove", "dark_forest"],
+              temperament="Wistful, faithful",
+              ecology="The ghost of Japanese folklore: a girl in a school uniform with long black hair, her legs fading into a white wisp.",
+              interaction="Bread and flowers.",
+              signature=("Haunting", "At night, befriended, she haunts the monsters near her friend: they grow weak (Weakness I)."),
+              danger="Low.",
+              variants=[("red", "Red (default)", "Red skirt"), ("navy", "Navy", "Navy skirt"), ("white", "White", "All white"),
+                        ("pale", "Pale", "Pale teal"), ("plum", "Plum", "Plum")]),
+         {"Haunts": "Cherry groves", "Signature": "Weakens monsters at night", "Danger": "Low"})],
+}
+for _fid, _entries in SEVENTEENTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))

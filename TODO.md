@@ -283,6 +283,20 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Condorune** (`CondoruneHarpy`, `tools/gen_condorune_harpy.py` on the crow's rig): `catchFall` gives her friend within 16 Slow Falling and resets the fall once they have fallen over 6 blocks. Crow eggs.
   - **Paints:** neon (glows: `PaintGlowLayer`, `gen_paints.GLOWING`), zebra, terrazzo and clover (March only, `Painted.roll`), so 63 in all. `gen_paints.py` needs Pillow: `uv run --no-project --with pillow python tools/gen_paints.py`.
   - `add_harpy_extras.py` was re-run: the coin magpie, trickster raven, rookmourn, cassowrath, dodobold and peaflare had no belly bone or sit/lie poses until now.
+- [x] **Seventeenth wave** (2026-10-27), tested in `SeventeenthWaveTests`:
+  - **Censer lion** (nekomata, `censer` at her hip): every second, `incense` resets her friend's time since rest (within 16, so no phantoms spawn for them) and clears the aim of phantoms within 32 of her at her friend.
+  - **Conch mail turtle** (lizardfolk, dome shell with a `conch` spire): every second, `conchCall` gives her friend within 8, eyes underwater, Conduit Power.
+  - **Date palm beetle** (bug, `elytra`, `dates`): every 10 s, `shareDate` feeds her friend within 6 three hunger points when they have 14 or fewer.
+  - **Dustbison** (minotaur, bulls one in three): every half second, `dustBath` puts out her burning friend within 8 and gives 5 s of Fire Resistance.
+  - **Frondbat** (bat, flies, `hair_crown` of flowers): every 30 s, `shakeLeaves` drops what a leaf block within 6 of her friend drops when broken (a stick at least), and an apple one time in four.
+  - **Sawfin** (merfolk, `saw` rostrum and fleur-de-lis shield): every second, `sapperAid` gives her friend within 8, eyes underwater, Haste II.
+  - **Stagel** and **Lamassu** (centaurs; the lamassu on the sphinx's body with goat horns): every second, `blessFriend` gives her friend within 8 Jump Boost II (stagel) or Resistance I (lamassu).
+  - **Klabuster** (slime, `drip`, a cave monster spawn): every 2 s, `drip` removes fire within 6 of her friend and fills cauldrons to the brim.
+  - **Dryad** (flora, `plant="dryad"`: antlers with leaves, `hair_leaves`): every 30 s, `nurture` bone-meals the saplings within 8 of her friend.
+  - **Amarok** (canid): every second, `packMother` gives her friend's tamed wolves within 12 of her Strength I.
+  - **Yurei** (undead, floats on the will-o'-wisp's wisp in white, no glow; a night monster spawn): every second at night, `haunt` gives the monsters within 8 of her friend Weakness I.
+  - **Paints:** polka, circuit (traces glow: `PaintGlowLayer`, `gen_paints.GLOWING`), giraffe and watermelon (July only, `Painted.roll`), so 67 in all.
+- [ ] Dev client for the seventeenth wave: the conch spire and the sawfin's saw at game scale, the yurei floating (and her satchel), the frondbat's crown, the four paints (circuit at night).
 - [ ] Dev client for the sixteenth wave: the jorogumo's back legs at game scale (do they clip walls or doorways?), her four eyes, the kikimora at a real house at night, the valkyrie holding and returning a real death's drops (with keepInventory off and on), the condorune catching a real fall, the pumpkin hat, and the four paints (neon at night).
 - [x] The eight sixteenth-wave originals reworked against `harmontide-creature-images/` (their blue looks): the floodcrab's stone fan shell (`hair_fan`), the temple mantis' ring arch (`halo`, `hair_arch`), the sword koi's katana (`katana`), the reedbull's regalia, the squidkin on the octopus body, the pumpkingull in a pumpkin (old look: the `orange` variant), the dunefennec and condorune recoloured. `tools/harmontide_roster.py` now reads that folder.
 - [ ] Not done for the sixteenth wave: harpy field guide entries for the pumpkingull and condorune (that guide is hand-written).

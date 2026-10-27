@@ -26,7 +26,9 @@ chalk (chalk lines on a blackboard), leopard (rosettes on gold) and the seasonal
 only). And (fifteenth wave): checkered (a chessboard), sunset (orange melting into violet), thunder (storm grey,
 lightning bolts that glow in the dark) and burlap (sackcloth with stitched seams). And (sixteenth wave): neon (dark,
 with glowing tubes along every edge), zebra (wavy black and white stripes), terrazzo (cream stone set with coloured
-chips) and clover (green with little shamrocks and flecks of gold, March only). The drips and
+chips) and clover (green with little shamrocks and flecks of gold, March only). And (seventeenth wave): polka (white dots
+on bright colours), circuit (a green circuit board whose traces glow in the dark), giraffe (brown patches in a net of cream
+lines) and watermelon (red flesh with seeds over a striped green rind, July only). The drips and
 patterns follow the model: they are drawn per cube face from the geo file, running down each side from its top edge.
 
     python tools/gen_paints.py [paint ...] [model ...]   # everything, or just the paints and/or models named
@@ -192,7 +194,8 @@ def treat(img, name, model):
                                         "tartan", "watercolour", "hologram", "fireworks",
                                         "mosaic", "chalk", "leopard", "autumn",
                                         "checkered", "sunset", "thunder", "burlap",
-                                        "neon", "zebra", "terrazzo", "clover"):
+                                        "neon", "zebra", "terrazzo", "clover",
+                                        "polka", "circuit", "giraffe", "watermelon"):
         return finish(img, name, model)[0]
     W = len(img[0])
     out = [list(row) for row in img]
@@ -321,7 +324,8 @@ TREATS = ["chocolate", "icecream", "strawberry", "jello", "milk", "gold", "marbl
           "tartan", "watercolour", "hologram", "fireworks",
           "mosaic", "chalk", "leopard", "autumn",
           "checkered", "sunset", "thunder", "burlap",
-          "neon", "zebra", "terrazzo", "clover"]
+          "neon", "zebra", "terrazzo", "clover",
+          "polka", "circuit", "giraffe", "watermelon"]
 PEARL = hexes("#b8b0c0", "#d8d2e0", "#ece8f2", "#f8f6fc", "#ffffff")
 CHROME = hexes("#1e2024", "#4a4e56", "#8a909a", "#c8ccd4", "#ffffff")
 AURORA = hexes("#2af08a", "#3ad8c8", "#5aa0f0", "#8a6af0", "#c86ae8")
@@ -338,12 +342,14 @@ EMBER = hexes("#a8280a", "#e85a14", "#f8901e", "#ffc84a", "#fff0a0")
 NEON = hexes("#1a8a8a", "#2ad0c8", "#5af8f0", "#b0fff8")
 NIGHTBODY = hexes("#0a0a14", "#14141e", "#20202e", "#2e2e40", "#40405a")
 PUMPKIN = hexes("#7a2e06", "#b04a0e", "#e0701a", "#f89a3a", "#ffc070")
-GLOWING = ("glow", "magma", "thunder", "neon")                             # the paints with a glow mask of their own (PaintGlowLayer)
+GLOWING = ("glow", "magma", "thunder", "neon", "circuit")                             # the paints with a glow mask of their own (PaintGlowLayer)
 SUNSET = hexes("#f8c040", "#f88a3a", "#e8584a", "#b8407a", "#6a3a9a")
 STORM = hexes("#2a2e3a", "#3e4452", "#5a6070", "#7a8090", "#a0a6b4")
 NEON = [(255, 60, 200), (60, 230, 255), (150, 255, 70), (255, 230, 60)]
 TERRAZZO = [(214, 96, 70), (70, 120, 170), (230, 180, 70), (90, 150, 110), (60, 56, 60)]
 CLOVER = hexes("#1e4a24", "#2a6a30", "#3a8a3a", "#5aaa4a", "#9ad87a")
+POLKA = [(232, 70, 90), (60, 120, 210), (250, 200, 60), (70, 170, 120), (160, 90, 200)]
+GIRAFFE = [(150, 86, 34), (176, 104, 44), (128, 70, 28)]
 TILES = [(40, 90, 170), (230, 190, 60), (190, 60, 50), (60, 150, 120), (240, 240, 230)]
 LEOPARD = hexes("#8a5a24", "#c8903a", "#e8b860", "#f8e0a0")
 AUTUMN = [(200, 70, 30), (230, 140, 40), (240, 190, 60), (150, 50, 30), (120, 90, 40)]
@@ -682,12 +688,56 @@ def finish(img, name, model):
                     c = ramp_pick(CLOVER, 0.95)
                 elif (cx, cy) == (5, 5) and H.noise(x, y, 169) > 0.6:
                     c = (240, 204, 90)                                        # a fleck of gold
+            elif name == "polka":
+                if l < 0.22 and face:
+                    continue
+                ground = POLKA[i % len(POLKA)]
+                c = tuple(int(v * (0.7 + 0.35 * l)) for v in ground)
+                ox = 3 if (yy // 6) % 2 else 0                              # rows of dots, every other row shifted half a step
+                dx, dy = (xx + ox) % 6 - 2.5, yy % 6 - 2.5
+                if dx * dx + dy * dy < 3.2:
+                    c = (int(236 + 19 * l), int(234 + 19 * l), int(228 + 19 * l))
+            elif name == "circuit":
+                if l < 0.22 and face:
+                    continue
+                c = tuple(int(v * (0.55 + 0.45 * l)) for v in (24, 84, 52))  # the green board
+                run = H.noise(x // 6, y // 6, 171)
+                trace = (yy % 6 == 2 and run > 0.4) or (xx % 6 == 4 and run < 0.6)
+                pad = xx % 6 == 4 and yy % 6 == 2
+                if pad and fw > 2 and fh > 2:
+                    c = (232, 196, 90)                                      # solder pads, gold
+                elif trace and fw > 2 and fh > 2:
+                    c = (110, 250, 170)                                     # copper traces, glowing green
+                    mask[y][x] = c + (255,)
+            elif name == "giraffe":
+                if l < 0.22 and face:
+                    continue
+                jx = int(1.5 * math.sin(yy * 0.7 + i))                      # wobbly cream lines round brown patches
+                jy = int(1.5 * math.sin(xx * 0.6 + i * 2))
+                line = (xx + jx) % 6 == 0 or (yy + jy) % 6 == 0
+                if line:
+                    c = tuple(int(v * (0.75 + 0.3 * l)) for v in (240, 222, 184))
+                else:
+                    patch = GIRAFFE[int(H.noise((xx + jx) // 6 + 7 * i, (yy + jy) // 6, 173) * len(GIRAFFE)) % len(GIRAFFE)]
+                    c = tuple(int(v * (0.7 + 0.4 * l)) for v in patch)
+            elif name == "watermelon":
+                if l < 0.22 and face:
+                    continue
+                t = (yy + 0.5) / max(1, fh)
+                if fh > 4 and t > 0.82:                                     # the striped green rind at the bottom of each face
+                    c = (60, 140, 50) if (xx // 2) % 2 else (130, 200, 90)
+                elif fh > 4 and t > 0.72:
+                    c = (240, 236, 210)                                     # the pale band inside the rind
+                else:
+                    c = (int(200 + 40 * l), int(50 + 40 * l), int(64 + 30 * l))   # the red flesh
+                    if H.noise(x, y, 179) > 0.94 and (xx + yy) % 2 == 0 and fw > 2:
+                        c = (30, 24, 24)                                    # a seed
             else:                                                       # candy cane: red and white stripes, round and round
                 if l < 0.22 and face:
                     continue
                 red = ((xx + yy) // 5) % 2 == 0 and not face
                 c = (int(200 + 40 * l), int(30 + 30 * l), int(40 + 30 * l)) if red else (int(236 + 19 * l), int(232 + 19 * l), int(232 + 19 * l))
-            out[y][x] = c + (a,)
+            out[y][x] = tuple(max(0, min(255, v)) for v in c) + (a,)
     return out, mask
 
 

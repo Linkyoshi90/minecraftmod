@@ -17,6 +17,29 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # seventeenth wave: the stagel, a fawn taur, cream and blue-dappled, with budding antlers
+    "stagel_centaur": dict(
+        build="petite", outfit=dict(top=["halter", "capelet"], extras=["pearls"], colors=dict(cloth2="#a8c0f0")),
+        hair="wavy", tail=(2, 3, 1.5), antlers=True, ears="round",
+        pal=dict(SKIN=skin("fair"), HAIR="#e8d8c8", FUR="#e0cdb8", LIGHT="#ffffff", MARK="#4a7ad8", EYE="#2a5ab0", CLOTH="#4a7ad8", TRIM="#f8f4ec",
+                 pattern="spots", extra=dict(antler="#e8d0a8", antler2="#c8a878")),
+        variants={"brown": dict(FUR="#a8784a", HAIR="#7a5432", MARK="#f8f0e4", CLOTH="#3a6a3a", EYE="#2a1a10", extra=dict(antler="#e8d8b8", antler2="#a8885a")),
+                  "white": dict(FUR="#f8f8fa", HAIR="#ffffff", MARK="#c8d0e0", CLOTH="#8ab0e8", extra=dict(antler="#f0e8d8", antler2="#d8c8b0")),
+                  "rose": dict(FUR="#f0d0d8", HAIR="#f8e0e8", MARK="#d86a8a", CLOTH="#d86a8a", extra=dict(antler="#f0e0d0", antler2="#d8b8a8")),
+                  "moss": dict(FUR="#c8d0b0", HAIR="#a8b88a", MARK="#4a7a3a", CLOTH="#4a7a3a", extra=dict(antler="#d8c8a0", antler2="#8a9a5a"))}),
+    # seventeenth wave: the lamassu, the winged, horned lion-bodied guardian of Assyrian gates, long grey curls down her back
+    "lamassu_centaur": dict(
+        build="athletic", outfit=dict(top=["bandeau"], extras=["usekh", "armlets", "belt"], colors=dict(usekh2="#3a4a6a")),
+        hair="wavy", tail=(1, 9, 1), wings=True, horns=True, ears="round",
+        pal=dict(SKIN=skin("fair"), HAIR="#5a6474", FUR="#7a8494", LIGHT="#c8ccd4", MARK="#3a424c", EYE="#3a6a9a", CLOTH="#c8a050", TRIM="#3a4a6a",
+                 pattern="solid", extra=dict(wing="#a8acb4", wing_tip="#4a525c", horn="#5a4a3a")),
+        variants={"gold": dict(FUR="#c8964e", LIGHT="#ecd2a0", MARK="#6a4422", HAIR="#3a2a1a", CLOTH="#2a4a9a",
+                               extra=dict(wing="#e8c870", wing_tip="#8a6418", horn="#3a2a1a")),
+                  "alabaster": dict(FUR="#ece4d4", LIGHT="#ffffff", MARK="#b8ac98", HAIR="#d8d0c0", extra=dict(wing="#f4f0e8", wing_tip="#b8ac98", horn="#8a7a6a")),
+                  "lapis": dict(FUR="#2a40a0", LIGHT="#6a80d0", MARK="#141e5a", HAIR="#141e4a", CLOTH="#e8c050",
+                                extra=dict(wing="#3a5ab8", wing_tip="#e8c050", horn="#e8c050")),
+                  "basalt": dict(FUR="#2a2628", LIGHT="#5a5458", MARK="#141214", HAIR="#141214", EYE="#e8c050",
+                                 extra=dict(wing="#3a3438", wing_tip="#141214", horn="#c8a050"))}),
     "horse_centaur": dict(
         build="athletic", outfit=dict(top=["bandeau", "harness"], extras=["bracers", "belt"]),
         hair="flowing", tail=(2, 9, 2),

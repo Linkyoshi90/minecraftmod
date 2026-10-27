@@ -47,6 +47,7 @@ public class BatGirl extends AbstractMonsterGirl {
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        if (s == GirlSpecies.FROND_BAT) return girlAttributes(14, 0.3, 2);
         return girlAttributes(s == GirlSpecies.DATE_BAT ? 12 : 14, 0.3, 2);
     }
 
@@ -159,6 +160,7 @@ public class BatGirl extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.FROND_BAT && this.level() instanceof ServerLevel canopy && !this.isBaby() && this.tickCount % 600 == 0) this.shakeLeaves(canopy);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.isRoosting()) {
             if (this.roost == null) this.setAction(Action.NONE);
@@ -235,5 +237,29 @@ public class BatGirl extends AbstractMonsterGirl {
     @Override
     public float getVoicePitch() {
         return super.getVoicePitch() * 1.3F;
+    }
+
+    // --- the frondbat --------------------------------------------------------------------------------------------
+
+    /** She shakes a leaf block within 6 blocks of her friend: what falls is what the leaves drop when broken (a sapling,
+     *  sticks, now and then an apple), or a stick at least. What fell, or null without a friend or leaves. */
+    @javax.annotation.Nullable
+    public java.util.List<ItemStack> shakeLeaves(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return null;
+        java.util.List<net.minecraft.core.BlockPos> leaves = new java.util.ArrayList<>();
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-6, -2, -6), friend.blockPosition().offset(6, 6, 6))) {
+            if (level.getBlockState(p).is(net.minecraft.tags.BlockTags.LEAVES)) leaves.add(p.immutable());
+        }
+        if (leaves.isEmpty()) return null;
+        net.minecraft.core.BlockPos at = leaves.get(this.random.nextInt(leaves.size()));
+        var state = level.getBlockState(at);
+        java.util.List<ItemStack> drops = new java.util.ArrayList<>();
+        for (int i = 0; i < 8 && drops.isEmpty(); i++) drops.addAll(net.minecraft.world.level.block.Block.getDrops(state, level, at, null));
+        if (drops.isEmpty()) drops.add(new ItemStack(Items.STICK));
+        if (this.random.nextInt(4) == 0) drops.add(new ItemStack(Items.APPLE));
+        for (ItemStack st : drops) net.minecraft.world.level.block.Block.popResource(level, at.below(), st);
+        level.levelEvent(2001, at, net.minecraft.world.level.block.Block.getId(state));
+        return drops;
     }
 }

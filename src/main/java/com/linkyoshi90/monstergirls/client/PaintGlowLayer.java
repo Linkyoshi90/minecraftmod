@@ -24,7 +24,7 @@ public class PaintGlowLayer<T extends GeoAnimatable> extends AutoGlowingGeoLayer
     }
 
     static boolean glows(String paint) {
-        return "glow".equals(paint) || "magma".equals(paint) || "thunder".equals(paint) || "neon".equals(paint);
+        return "glow".equals(paint) || "magma".equals(paint) || "thunder".equals(paint) || "neon".equals(paint) || "circuit".equals(paint);
     }
 
     @Override

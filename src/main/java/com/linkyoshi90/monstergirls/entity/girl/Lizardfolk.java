@@ -90,6 +90,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
+            case CONCH_TURTLE_LIZARDFOLK -> girlAttributes(20, 0.22, 2).add(Attributes.ARMOR, 4);
             case SALAMANDER_LIZARDFOLK -> girlAttributes(26, 0.3, 5).add(Attributes.ARMOR, 4);
             case CHAMELEON_LIZARDFOLK -> girlAttributes(18, 0.24, 3).add(Attributes.ARMOR, 2);
             case IGUANA_LIZARDFOLK -> girlAttributes(22, 0.4, 3).add(Attributes.ARMOR, 3);
@@ -358,6 +359,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.CONCH_TURTLE_LIZARDFOLK && this.level() instanceof ServerLevel shore && !this.isBaby() && this.tickCount % 20 == 0) this.conchCall(shore);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.COCOSKINK_LIZARDFOLK && !this.isBaby() && this.tickCount % 600 == 0) this.growCocoa(server);
         if (this.species == GirlSpecies.CROCORA_LIZARDFOLK && !this.isBaby() && this.tickCount % 10 == 0) this.rescue(server);
@@ -748,5 +750,15 @@ public class Lizardfolk extends AbstractMonsterGirl {
         level.sendParticles(net.minecraft.core.particles.ParticleTypes.SPLASH, this.getX(), this.getY() + this.getBbHeight(), this.getZ(), 16, 0.3, 0.1, 0.3, 0.1);
         this.playSound(SoundEvents.GENERIC_SPLASH, 0.6F, 1.4F);
         p.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.kappa_bow", this.getDisplayName()), true);
+    }
+
+    // --- the conch mail turtle -----------------------------------------------------------------------------------
+
+    /** Her friend within 8 blocks, underwater, has Conduit Power. Whether she gave it. */
+    public boolean conchCall(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null || !level.getFluidState(net.minecraft.core.BlockPos.containing(friend.getEyePosition())).is(net.minecraft.tags.FluidTags.WATER)) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.CONDUIT_POWER, 100, 0, true, true, true));
+        return true;
     }
 }

@@ -102,6 +102,7 @@ public class Flora extends AbstractMonsterGirl {
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
+            case DRYAD_FLORA -> girlAttributes(24, 0.25, 3);
             case ALRAUNE_FLORA -> girlAttributes(30, 0.1, 3);
             case MATANGO_FLORA -> girlAttributes(20, 0.2, 2);
             case ENT_FLORA -> girlAttributes(80, 0.2, 14).add(Attributes.KNOCKBACK_RESISTANCE, 0.9).add(Attributes.ATTACK_KNOCKBACK, 2.0);
@@ -265,6 +266,7 @@ public class Flora extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.DRYAD_FLORA && this.level() instanceof ServerLevel grove && !this.isBaby() && this.tickCount % 600 == 0) this.nurture(grove);
         if (!(this.level() instanceof ServerLevel server)) return;
         boolean still = this.getDeltaMovement().horizontalDistanceSqr() < 1.0E-4 && this.getTarget() == null;
         this.stillTicks = still ? this.stillTicks + 1 : 0;
@@ -547,5 +549,24 @@ public class Flora extends AbstractMonsterGirl {
     @Override
     public boolean isHealer() {
         return true;
+    }
+
+    // --- the dryad -----------------------------------------------------------------------------------------------
+
+    /** The saplings within 8 blocks of her friend grow as if given bone meal. How many, or -1 without a friend. */
+    public int nurture(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int n = 0;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-8, -3, -8), friend.blockPosition().offset(8, 3, 8))) {
+            var st = level.getBlockState(p);
+            if (st.is(net.minecraft.tags.BlockTags.SAPLINGS) && st.getBlock() instanceof net.minecraft.world.level.block.BonemealableBlock b && b.isValidBonemealTarget(level, p, st)) {
+                net.minecraft.core.BlockPos at = p.immutable();
+                b.performBonemeal(level, this.random, at, st);
+                level.levelEvent(1505, at, 15);                                    // the bone meal sparkles
+                n++;
+            }
+        }
+        return n;
     }
 }

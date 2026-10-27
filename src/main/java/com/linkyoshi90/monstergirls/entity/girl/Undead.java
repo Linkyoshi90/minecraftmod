@@ -91,6 +91,7 @@ public class Undead extends AbstractMonsterGirl {
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
+            case YUREI_UNDEAD -> girlAttributes(18, 0.3, 2);
             case LIVING_DOLL_UNDEAD -> girlAttributes(14, 0.3, 0);
             case WILL_O_WISP_UNDEAD -> girlAttributes(16, 0.3, 3);
             case YUKI_ONNA_UNDEAD -> girlAttributes(24, 0.28, 3);
@@ -108,7 +109,7 @@ public class Undead extends AbstractMonsterGirl {
 
     @Override
     public boolean canFly() {
-        return this.species == GirlSpecies.PHANTOM_UNDEAD || this.species == GirlSpecies.WILL_O_WISP_UNDEAD;
+        return this.species == GirlSpecies.PHANTOM_UNDEAD || this.species == GirlSpecies.WILL_O_WISP_UNDEAD || this.species == GirlSpecies.YUREI_UNDEAD;
     }
 
     @Override
@@ -493,6 +494,7 @@ public class Undead extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.YUREI_UNDEAD && this.level() instanceof ServerLevel night && !this.isBaby() && this.tickCount % 20 == 0) this.haunt(night, !night.isDay());
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.MUMMY_UNDEAD) this.tickWrapping(server);
         if (this.species == GirlSpecies.WILL_O_WISP_UNDEAD) {
@@ -758,5 +760,19 @@ public class Undead extends AbstractMonsterGirl {
         horse.setTamed(true);                                               // an untamed horse bucks its rider off (vanilla's skeleton riders do the same)
         level.addFreshEntity(horse);
         this.startRiding(horse, true);
+    }
+
+    // --- the yurei -----------------------------------------------------------------------------------------------
+
+    /** At night the monsters within 8 blocks of her friend grow weak (Weakness I). How many, or -1 by day or without a friend. */
+    public int haunt(ServerLevel level, boolean night) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (!night || friend == null) return -1;
+        int n = 0;
+        for (var m : level.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, friend.getBoundingBox().inflate(8), m -> m instanceof net.minecraft.world.entity.monster.Enemy && m.isAlive())) {
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WEAKNESS, 60, 0, true, true));
+            n++;
+        }
+        return n;
     }
 }

@@ -22,6 +22,15 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # seventeenth wave: the dryad, a tree nymph of Greek myth: a girl of pale blue wood with leafy branches for antlers
+    "dryad_flora": dict(
+        build="slim", outfit=dict(top=[]), hair="wavy", bangs="swept", ears="elf", legs="bare", foot="claw", plant="dryad", horns="antlers",
+        pal=dict(SKIN="#8ab0e0", HAIR="#6a98d8", FUR="#7aa0d8", LIGHT="#c8dcf8", MARK="#4a6aa8", EYE="#1e3a7a", CLOTH="#5a8ad0", TRIM="#4a6aa8",
+                 extra=dict(horn="#6a88b8", leaf="#6ac0a0", claw="#6a88b8")),
+        variants={"oak": dict(SKIN="#a8805a", HAIR="#5a8a3a", FUR="#8a6a4a", LIGHT="#d8c0a0", MARK="#5a3e26", EYE="#3a5a1e", extra=dict(horn="#6a4a2e", leaf="#5aa84a", claw="#6a4a2e")),
+                  "birch": dict(SKIN="#ece8dc", HAIR="#9ac87a", FUR="#e0dccc", LIGHT="#ffffff", MARK="#3a3a3a", EYE="#3a6a2a", extra=dict(horn="#e8e4d8", leaf="#8ac85a", claw="#e8e4d8")),
+                  "cherry": dict(SKIN="#c88a8a", HAIR="#f4b8c8", FUR="#a86a6a", LIGHT="#f8d8e0", MARK="#6a3a3a", EYE="#6a2a3a", extra=dict(horn="#5a2e2e", leaf="#f8c0d0", claw="#5a2e2e")),
+                  "autumn": dict(SKIN="#b88a5a", HAIR="#e07a2a", FUR="#9a6a3a", LIGHT="#f0d0a8", MARK="#5a3418", EYE="#6a2a10", extra=dict(horn="#6a4a2e", leaf="#e8902a", claw="#6a4a2e"))}),
     # twelfth wave: the kesaran pasaran, a little dandelion-seed girl hanging under her fluffy puff, legs dangling ("drift")
     "kesaran_pasaran_flora": dict(
         build="petite", outfit=dict(top=["halter"], bottom="wrap_skirt", colors=dict(cloth2="#f0ece4")), hair="bob", bangs="blunt", ears=None,
@@ -121,6 +130,8 @@ def declare_hook(sp, d):
         return [("rbulb", 5, 6, 5), ("rtend_a", 1, 4, 1), ("rtend_b", .75, 3, .75), ("leafy", 1.5, 6, .25), ("tuft", 4, 1, 4)]
     if k == "leshy":
         return [("beard", 1.5, 7, .75), ("beard_s", 1.5, 5, .75), ("moss", 5.5, 1.5, 3.5)]
+    if k == "dryad":
+        return [("dleaf", 1.75, .25, 2.5), ("dleaf_s", 1.25, .25, 1.75)]
     if k == "puff":
         return [("seed_stalk", .5, 5, .5), ("puff_ball", 4.5, 3, 4.5), ("puff_ray", .5, .5, 8), ("puff_tip", 1.5, 1.5, 1.5)]
     return []
@@ -166,6 +177,8 @@ def paint_hook(pt, pal, d):
     for p in ("rbulb", "rtend_a", "rtend_b"):
         pt(p, "all", lambda f, x, y, w, h: pick(root, 0.45 + 0.2 * (y % 3 == 0) + (noise(x, y, 4) - 0.5) * 0.1, x, y))
     pt("leafy", "all", lambda f, x, y, w, h: pick(leaf, 0.5 + 0.25 * (x == w // 2), x, y))
+    for p in ("dleaf", "dleaf_s"):
+        pt(p, "all", lambda f, x, y, w, h: pick(leaf, 0.45 + 0.25 * (x == w // 2) + 0.1 * (y % 2), x, y))
     pt("tuft", "all", lambda f, x, y, w, h: pick(leaf, 0.45, x, y))
     moss = G.shades(e.get("moss", "#4a7a3a"))                         # the leshy's beard and shoulders of moss
     for p in ("beard", "beard_s", "moss"):
@@ -230,6 +243,13 @@ def build_hook(r, g, d):
     import math
     k = d["plant"]
     hy, z = g.hy, g.z
+    if k == "dryad":                                           # leaves sprouting at the tips and forks of her antler branches
+        cs = []
+        for sg in (-1, 1):
+            for x, y, zz, p, a in ((4.6, 12.8, 1.0, "dleaf", 20), (3.8, 11.2, -0.2, "dleaf_s", -30), (5.4, 11.0, 2.0, "dleaf_s", 60)):
+                w = G.S(p)[0]
+                cs.append(G.rot_cube(p, [sg * x - w / 2, hy + y, zz - 1.0 + z], [sg * x, hy + y, zz + z], -25, a * sg, 0))
+        r.add("hair_leaves", "head", [0, hy + 8.0, z], cs)
     if k == "puff":                                            # the seed stalk rising from her head into the puff, rays all round
         top = hy + 13.0
         cs = [cube("seed_stalk", [-0.25, hy + 8.0, -0.25 + z]), cube("puff_ball", [-2.25, top - 1.0, -2.25 + z])]

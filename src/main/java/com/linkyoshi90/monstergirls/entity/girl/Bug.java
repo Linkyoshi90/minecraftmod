@@ -122,6 +122,7 @@ public class Bug extends AbstractMonsterGirl {
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
+            case DATE_BEETLE_BUG -> girlAttributes(12, 0.28, 1);
             case MOSQUITO_BUG -> girlAttributes(14, 0.3, 3);
             case FAIRY_BUG -> girlAttributes(8, 0.3, 1);
             case FIREFLY_BUG -> girlAttributes(8, 0.3, 1);
@@ -361,6 +362,7 @@ public class Bug extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.DATE_BEETLE_BUG && this.level() instanceof ServerLevel oasis && !this.isBaby() && this.tickCount % 200 == 0) this.shareDate(oasis);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.TEMPLE_MANTIS_BUG && !this.isBaby() && this.tickCount % 20 == 0) this.cutTripwire(server, false);
         if (this.carryTicks > 0 && --this.carryTicks == 0) this.setFlag(FLAG_CARRYING, false);
@@ -762,5 +764,17 @@ public class Bug extends AbstractMonsterGirl {
             return at;
         }
         return null;
+    }
+
+    // --- the date palm beetle ------------------------------------------------------------------------------------
+
+    /** Her friend within 6 blocks, hungry (14 or fewer hunger points), gets a date: three hunger points. Whether she shared. */
+    public boolean shareDate(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 6);
+        if (friend == null || friend.getFoodData().getFoodLevel() > 14) return false;
+        friend.getFoodData().eat(3, 0.6F);
+        level.playSound(null, friend.blockPosition(), net.minecraft.sounds.SoundEvents.GENERIC_EAT, net.minecraft.sounds.SoundSource.PLAYERS, 0.6F, 1.2F);
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.HEART, this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ(), 1, 0, 0, 0, 0);
+        return true;
     }
 }

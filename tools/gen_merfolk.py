@@ -18,6 +18,20 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # seventeenth wave: the sawfin, a sawfish girl in blue barding with a fleur-de-lis shield, her saw of a snout out in front
+    "sawfin_mermaid": dict(
+        build="athletic", outfit=dict(top=["bandeau", "harness"], extras=["pauldron", "belt"], colors=dict(leather="#3a5ab0")),
+        ears="fin", hair="shaggy", bangs="swept", fluke=(.75, 7, 5), dorsal=(.75, 5, 4), saw=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#4a6ab8", FUR="#5a7ac8", LIGHT="#f0ece4", MARK="#2a4a9a", EYE="#2a4a9a", CLOTH="#3a5ab0", TRIM="#e8e8f0",
+                 pattern="solid", extra=dict(belly_white=True, gills=True, saw="#f0ece4", shield="#3a5ab0", lily="#e8e8f0")),
+        variants={"grey": dict(FUR="#7a8490", HAIR="#5a6470", MARK="#3a424c", CLOTH="#2a3a4a",
+                               extra=dict(belly_white=True, gills=True, saw="#e8e4dc", shield="#8a2a2a", lily="#e8c040")),
+                  "green": dict(FUR="#5a8a6a", HAIR="#3a6a4a", MARK="#1e4a2e", CLOTH="#2a5a3a",
+                                extra=dict(belly_white=True, gills=True, saw="#f0ece0", shield="#2a5a3a", lily="#e8c040")),
+                  "sand": dict(FUR="#b8a070", HAIR="#8a7048", MARK="#5a4a2a", CLOTH="#5a3a2a",
+                               extra=dict(belly_white=True, gills=True, saw="#fff4e0", shield="#5a3a2a", lily="#f0e0b0")),
+                  "royal": dict(FUR="#3a2a8a", HAIR="#2a1e6a", MARK="#141040", CLOTH="#e8c040",
+                                extra=dict(belly_white=True, gills=True, saw="#f0ece4", shield="#e8c040", lily="#3a2a8a"))}),
     # sixteenth wave: the sword koi, a lapis-blue koi patched with white, gold-trimmed armour and a katana slung across her back
     "sword_koi_mermaid": dict(
         build="athletic", outfit=dict(top=["sarashi"], extras=["pauldron", "arm_wraps"], colors=dict(bandage="#2a4aa8", leather="#d8b040")),
@@ -196,6 +210,8 @@ def declare(sp):
         parts += [("charm", 1.25, 1.5, .25), ("charm_cord", 4.5, .25, .25)]
     if d.get("moon"):
         parts += [("crescent", 3.5, 3.5, .25), ("antler_a", .5, 3, .5), ("antler_b", .5, 1.5, .5)]
+    if d.get("saw"):
+        parts += [("saw", 2.25, 1, 7.5), ("saw_tooth", .75, .5, .5), ("shield", 2.25, 2.75, .25)]
     if d.get("katana"):
         parts += [("saya", 1, 10, 1.25), ("tsuba", 2, .5, 2), ("tsuka", .75, 4, .75)]
     if d.get("coral"):
@@ -261,6 +277,19 @@ def paint(sp, key):
     pt("coral_a", "all", lambda f, x, y, w, h: pick(coral, 0.5 + 0.15 * (y % 2), x, y))
     pt("coral_b", "all", lambda f, x, y, w, h: pick(coral, 0.6, x, y))
     pt("coral_tip", "all", lambda f, x, y, w, h: pick(ctip, 0.65, x, y))
+    saw, shield, lily = shades(pal.extra.get("saw", "#f0ece4")), shades(pal.extra.get("shield", "#3a5ab0")), shades(pal.extra.get("lily", "#e8e8f0"))
+    pt("saw", "all", lambda f, x, y, w, h: pick(saw, 0.55 + 0.15 * (f == "up") - 0.1 * (f == "down"), x, y))
+    pt("saw_tooth", "all", lambda f, x, y, w, h: pick(saw, 0.75, x, y))
+
+    def fleur(f, x, y, w, h):                                     # a fleur-de-lis on a heater shield
+        if f not in ("north",):
+            return pick(shield, 0.45, x, y)
+        if y > h - 3 and abs(x + 0.5 - w / 2) > (h - y) * w / 6:
+            return CLEAR
+        c = w / 2 - 0.5
+        on = abs(x - c) < 1 and 1 <= y < h - 2 or (y in (3, 4) and 1 <= abs(x - c) < 3) or (y == 2 and abs(x - c) == 2)
+        return pick(lily if on else shield, 0.6, x, y)
+    pt("shield", "all", fleur)
     saya, tsuka, gold = shades(pal.extra.get("saya", "#1e2a6a")), shades(pal.extra.get("tsuka", "#e8e0d0")), shades("#d8b040")
     pt("saya", "all", lambda f, x, y, w, h: pick(gold if y % 6 == 0 else saya, 0.5 + 0.2 * (f == "north"), x, y))
     pt("tsuba", "all", lambda f, x, y, w, h: pick(gold, 0.6, x, y))
@@ -321,6 +350,15 @@ def build(sp):
         for sg in (-1, 1):
             r.put("head", G.rot_cube("antler_a", [sg * 2.4 - 0.25, 28.0, -0.5], [sg * 2.4, 28.0, -0.25], -10, 0, -18 * sg),
                   G.rot_cube("antler_b", [sg * 2.9 - 0.25, 29.4, -0.5], [sg * 2.9, 29.4, -0.25], -10, 0, -60 * sg))
+    if d.get("saw"):                                     # the rostrum straight out from her nose, teeth along both edges; a shield on her chest
+        hy = 20.0
+        cs = [cube("saw", [-1.125, hy + 2.0, -11.9])]
+        for i in range(5):
+            zz = -11.4 + i * 1.5
+            cs += [cube("saw_tooth", [-1.875, hy + 2.25, zz]), cube("saw_tooth", [1.125, hy + 2.25, zz])]
+        r.add("saw", "head", [0, hy + 1.4, -4.4], cs)
+        cd, bd = G.S("chest")[2], G.S("bust")[2]
+        r.put("body", cube("shield", [-1.125, 14.4, -cd / 2 - bd - 0.4]))
     if d.get("katana"):                                  # a katana slung across her back, hilt over her right shoulder
         cd = G.S("chest")[2]
         bz = cd / 2 + 0.3

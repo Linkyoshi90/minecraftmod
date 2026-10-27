@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_date_beetle_bug",
+  "spawners": {
+    "type": "monstergirls:date_beetle_bug",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

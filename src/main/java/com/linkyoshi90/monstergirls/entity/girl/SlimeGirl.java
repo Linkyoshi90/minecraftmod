@@ -82,6 +82,7 @@ public class SlimeGirl extends AbstractMonsterGirl {
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        if (s == GirlSpecies.KLABUSTER_SLIME) return girlAttributes(16, 0.24, 1);
         if (s == GirlSpecies.ENDER_SLIME) return girlAttributes(20, 0.26, 3);
         return girlAttributes(s == GirlSpecies.MAGMA_SLIME ? 24 : 18, 0.24, s == GirlSpecies.MAGMA_SLIME ? 4 : 2);
     }
@@ -409,6 +410,7 @@ public class SlimeGirl extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.KLABUSTER_SLIME && this.level() instanceof ServerLevel drip && !this.isBaby() && this.tickCount % 40 == 0) this.drip(drip);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.isHalf()) {                                             // find the other half and merge
             this.halfAge++;
@@ -763,5 +765,28 @@ public class SlimeGirl extends AbstractMonsterGirl {
     @Override
     public boolean isHealer() {
         return this.species == GirlSpecies.VERDANT_SLIME || this.species == GirlSpecies.HONEY_SLIME;
+    }
+
+    // --- the klabuster -------------------------------------------------------------------------------------------
+
+    /** Within 6 blocks of her friend she puts out the fires and fills the cauldrons with water. How many blocks she changed, or -1 without a friend. */
+    public int drip(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int n = 0;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-6, -3, -6), friend.blockPosition().offset(6, 3, 6))) {
+            var st = level.getBlockState(p);
+            if (st.is(net.minecraft.tags.BlockTags.FIRE)) {
+                level.removeBlock(p, false);
+                level.levelEvent(1009, p, 0);                                      // the fizz
+                n++;
+            } else if (st.is(net.minecraft.world.level.block.Blocks.CAULDRON) || st.is(net.minecraft.world.level.block.Blocks.WATER_CAULDRON)
+                    && st.getValue(net.minecraft.world.level.block.LayeredCauldronBlock.LEVEL) < 3) {
+                level.setBlockAndUpdate(p, net.minecraft.world.level.block.Blocks.WATER_CAULDRON.defaultBlockState().setValue(net.minecraft.world.level.block.LayeredCauldronBlock.LEVEL, 3));
+                level.playSound(null, p, net.minecraft.sounds.SoundEvents.POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON, net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
+                n++;
+            }
+        }
+        return n;
     }
 }

@@ -22,6 +22,21 @@ LIZARD_TAIL = [(2.5, 2.5, 4), (2, 2, 4), (1.5, 1.5, 4), (1, 1, 3.5)]
 DROOP = [(-38, 0, 0), (10, 0, 0), (10, 0, 0), (8, 0, 0)]
 
 SPECIES = {
+    # seventeenth wave: the conch mail turtle, a little sea turtle in a scaled blue shell with a conch's spire rising from it, pearls
+    "conch_turtle_lizardfolk": dict(
+        build="petite", outfit=dict(top=["bandeau", "capelet"], bottom="shorts", extras=["pearls"], colors=dict(cloth2="#3a8ad8", leather="#e8c060")),
+        hair="bob", bangs="jagged", ears=None, legs="scales", foot="claw", tail=[(1.25, 1.25, 1.5), (0.75, 0.75, 1)], tail_rest=[(-50, 0, 0), (10, 0, 0)],
+        tail_look="scale", shell="dome", conch=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#3a7ad8", FUR="#4a8ae0", LIGHT="#c8e0f8", MARK="#1e4a9a", EYE="#a8682a", CLOTH="#2a5ab0", TRIM="#e8c060",
+                 pattern="spots", extra=dict(shell="#2a5ab0", shell_band="#8ac0f0", conch="#f0e4d0", conch_band="#3a7ad8")),
+        variants={"coral": dict(HAIR="#e8705a", FUR="#f08a6a", LIGHT="#ffe0d0", MARK="#a83a2a", CLOTH="#c84a3a",
+                                extra=dict(shell="#c84a3a", shell_band="#f8c0a8", conch="#fff0e4", conch_band="#e8705a")),
+                  "kelp": dict(HAIR="#3a8a5a", FUR="#4a9a6a", LIGHT="#c8f0d0", MARK="#1e5a3a", CLOTH="#2a6a4a",
+                               extra=dict(shell="#2a6a4a", shell_band="#a8e0b0", conch="#f0ecd8", conch_band="#3a8a5a")),
+                  "sand": dict(HAIR="#c8a060", FUR="#d8b070", LIGHT="#fff4dc", MARK="#8a6a3a", CLOTH="#3a7ad8",
+                               extra=dict(shell="#a8803a", shell_band="#f0d890", conch="#fff8ec", conch_band="#e8a060")),
+                  "abyss": dict(HAIR="#1e2450", FUR="#2a3060", LIGHT="#6a7ac8", MARK="#0e1230", EYE="#5ae8f0", CLOTH="#14183a",
+                                extra=dict(shell="#1e2450", shell_band="#5ae8f0", conch="#d8e0f0", conch_band="#2a3a8a"))}),
     # fifteenth wave: the crocora, a round little blue crocodile in a gold collar, a cream belly
     "crocora_lizardfolk": dict(
         build="petite", outfit=dict(top=["bandeau"], bottom="wrap_skirt", extras=["usekh", "armlets"], colors=dict(cloth2="#2a4a9a")),
@@ -237,6 +252,8 @@ def declare_hook(sp, d):
         out += [("carapace", 7, 8, 2.5), ("carapace_top", 5.5, 6, 1.25), ("plastron", 5, 5, .5)]
     if d.get("shell") == "dome":                         # the tortoises' high dome
         out += [("carapace_dome", 4, 4.5, 1.5)]
+    if d.get("conch"):                                   # a conch's spire rising from the top of her shell
+        out += [("conch_a", 3.5, 3, 3.5), ("conch_b", 2.5, 2.5, 2.5), ("conch_c", 1.5, 2.25, 1.5), ("conch_d", .75, 1.75, .75)]
     if d.get("teeth"):
         out += [("snout", 3.5, 1, 1.5)]
     elif d.get("snout"):                                 # a snorkel nose (softshell, matamata)
@@ -256,6 +273,9 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    conch, cband = G.shades(pal.extra.get("conch", "#f0e4d0")), G.shades(pal.extra.get("conch_band", "#3a7ad8"))
+    for p in ("conch_a", "conch_b", "conch_c", "conch_d"):          # a spiral band winding up the spire
+        pt(p, "all", lambda f, x, y, w, h: pick(cband if (x + 2 * y) % 6 in (0, 1) else conch, 0.5 + 0.2 * (f == "up") + (noise(x, y, 51) - 0.5) * 0.1, x, y))
     leafc, bell = G.shades(pal.extra.get("leaf", "#5a9a3a")), G.shades(pal.extra.get("bell", "#e8c050"))
     pt("skink_leaf", "all", lambda f, x, y, w, h: pick(leafc, 0.45 + 0.25 * (x == w // 2) + 0.1 * (y % 2), x, y))
     pt("bell", "all", lambda f, x, y, w, h: pick(bell, 0.55 + 0.3 * (f == "up"), x, y))
@@ -320,6 +340,12 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     z = g.z
+    if d.get("conch"):                                   # leaning back off the top of the dome
+        cd = G.S("chest")[2]
+        bz = cd / 2 + 3.6 + z
+        rot = dict(pivot=[0, 17.0, bz], rotation=[-35, 0, 0])
+        r.add("conch", "body", [0, 17.0, bz], [cube("conch_a", [-1.75, 17.0, bz - 1.75], **rot), cube("conch_b", [-1.25, 19.8, bz - 1.25], **rot),
+                                               cube("conch_c", [-0.75, 22.1, bz - 0.75], **rot), cube("conch_d", [-0.375, 24.2, bz - 0.375], **rot)])
     if d.get("skink"):                                   # a crest of leaves fanned on her head, little bells hanging by her ears
         hy = g.hy
         r.add("crest", "head", [0, g.hy + 8.4, z], [G.rot_cube("skink_leaf", [-0.75, hy + 8.6, -1.0 + z], [0, hy + 8.6, -0.5 + z], -30 + 12 * i, a, 0)

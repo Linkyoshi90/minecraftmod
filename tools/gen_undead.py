@@ -17,6 +17,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # seventeenth wave: the yurei, a Japanese ghost in a school uniform, long black hair, her legs fading into a white wisp
+    "yurei_undead": dict(
+        build="slim", outfit=dict(top=["sweater"], bottom="wrap_skirt", extras=["satchel"], colors=dict(cloth2="#c82a2a", leather="#7a4a2a")),
+        lower="none", hair="hime", bangs="blunt", ears=None, wisp=True,
+        pal=dict(SKIN="#f4e8e4", HAIR="#141218", FUR="#f4f4f6", LIGHT="#ffffff", MARK="#c8ccd4", EYE="#c82a2a", CLOTH="#f4f4f6", TRIM="#c82a2a",
+                 extra=dict(flame="#f0f2f6")),
+        variants={"navy": dict(TRIM="#2a3a6a", extra=dict(flame="#f0f2f6", cloth2="#2a3a6a")),
+                  "white": dict(CLOTH="#f8f8f8", TRIM="#e8e8ec", EYE="#5a6a8a", extra=dict(flame="#ffffff", cloth2="#f0f0f4")),
+                  "pale": dict(SKIN="#e0ecf0", HAIR="#3a3a48", EYE="#3ac8c8", extra=dict(flame="#c8f0f0", cloth2="#2a6a6a")),
+                  "plum": dict(HAIR="#2a1a2a", EYE="#a83ac8", TRIM="#6a2a8a", extra=dict(flame="#e8d8f4", cloth2="#6a2a8a"))}),
     "living_doll_undead": dict(
         build="petite", outfit=dict(top=["corset", "capelet"], bottom="wrap_skirt", extras=["pearls"], colors=dict(cloth2="#1e1a22")),
         hair="drills", bangs="blunt", ears=None, legs="stockings", foot="shoe", doll=True,
