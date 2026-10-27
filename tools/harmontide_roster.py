@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""HARMONTIDE_ROSTER.md: every creature in the Harmontide reference art (D:\\wamp64\\www\\images\\creatures\\, one file per
+"""HARMONTIDE_ROSTER.md: every creature in the Harmontide reference art (harmontide-creature-images/, one file per
 creature and look, named <creature>_<f|m>_<look>), and whether it is in the game yet.
 
     python tools/harmontide_roster.py
@@ -11,7 +11,7 @@ import os
 import re
 import sys
 
-ART = r"D:\wamp64\www\images\creatures"
+ART = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "harmontide-creature-images")
 OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "HARMONTIDE_ROSTER.md")
 
 # reference creature -> what plays it in the game

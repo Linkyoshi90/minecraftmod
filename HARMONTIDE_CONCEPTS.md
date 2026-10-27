@@ -436,20 +436,20 @@ uktena (Cherokee), and terniq (an Inuit name).
 
 ## Sixteenth wave (2026-10-27, in the game)
 
-Eight Harmontide originals from the reference art and four creatures of folklore. The reference art folder was not
-reachable while these were built, so the originals' looks are read from their names; check them against the art.
+Eight Harmontide originals from the reference art and four creatures of folklore. The originals were first built from
+their names alone (the art was not reachable), then reworked against `harmontide-creature-images/` (their blue looks).
 
 | Species | Home | Design |
 |---|---|---|
 | **Jorogumo** | Arachne | The binding bride: a girl in a web-printed kimono with four red eyes and eight long black-and-gold legs fanned out behind her back (her own two-legged rig, from the user's reference). At night her webs bind the monsters near her friend. |
-| **Dunefennec** | Kitsune | A fennec in a sand-coloured wrap: her friend runs fast on sand, and husks near her lose interest in her friend. |
-| **Floodcrab** | Crustacean | A blue-grey river crab: she turns the dirt beside the water into mud. |
-| **Temple Mantis** | Bug | Robed and hooded in gold: she cuts the tripwires of old temples near her friend. Wires a player strung up are left alone. |
-| **Sword Koi** | Merfolk | A kohaku koi with a blade of a dorsal fin: a drowned she defeats always drops what it held. |
-| **Squidkin** | Mollusk | A violet squid girl (the ika's rig): when her friend is hurt, ink blinds the monsters and hides her friend. |
-| **Reedbull** | Minotaur | A marsh cow with reeds and cattails growing up her back: she plants sugar cane by the water. |
-| **Pumpkingull** | Harpy | An autumn gull under a carved pumpkin: endermen near her friend take no offence at being looked at. |
-| **Condorune** | Harpy | A condor on the crow's rig with a white ruff: she catches her friend when they fall. |
+| **Dunefennec** | Kitsune | A night-blue fennec with gold crescents, a purple saddle-cloth, a jewelled collar and a bell: her friend runs fast on sand, and husks near her lose interest in her friend. |
+| **Floodcrab** | Crustacean | A blue-grey river crab with red eyes under a ridged stone fan of a shell, grown with moss and barnacles and hung with brass bells: she turns the dirt beside the water into mud. |
+| **Temple Mantis** | Bug | Lapis blue and gold, a jewelled crown and a gold ring arch behind her head: she cuts the tripwires of old temples near her friend. Wires a player strung up are left alone. |
+| **Sword Koi** | Merfolk | A lapis-blue koi patched with white, gold-trimmed armour and a katana across her back: a drowned she defeats always drops what it held. |
+| **Squidkin** | Mollusk | A sky-blue squid girl, long hair curling into tentacles over a skirt of eight more (the octopus' rig, no cap): when her friend is hurt, ink blinds the monsters and hides her friend. |
+| **Reedbull** | Minotaur | A shaggy lapis-blue bull: gold-banded horns with tassels, a white brow rune, a woven blanket, a pendant and gold anklets. She plants sugar cane by the water. |
+| **Pumpkingull** | Harpy | A sky-blue and white gull dressed in a pumpkin, with a little pumpkin cap and vine leaf: endermen near her friend take no offence at being looked at. |
+| **Condorune** | Harpy | A lapis-blue condor on the crow's rig with a cream ruff and gold beadwork: she catches her friend when they fall. |
 | **Kikimora** | Devil | The Slavic house spirit in a sarafan and a polka-dot headscarf: at night she shuts the doors left open near her friend. |
 | **Cockatrice** | Dragon | The rooster-dragon with a red comb and feathered wings: her glare stops a monster almost dead. |
 | **Valkyrie** | Elf | Mail, a winged helm and great white wings: when her friend dies near her she keeps what they dropped and gives it back. |

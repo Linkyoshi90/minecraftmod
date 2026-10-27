@@ -18,16 +18,17 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
-    # sixteenth wave: the sword koi, a kohaku koi with a tall blade of a dorsal fin
+    # sixteenth wave: the sword koi, a lapis-blue koi patched with white, gold-trimmed armour and a katana slung across her back
     "sword_koi_mermaid": dict(
-        build="athletic", outfit=dict(top=["sarashi"], extras=["arm_wraps"], colors=dict(bandage="#f4f0e8")),
-        ears="fin", hair="ponytail", bangs="swept", fluke=(.5, 6, 5), long_fins=True, dorsal=(.5, 8, 4.5),
-        pal=dict(SKIN=skin("fair"), HAIR="#f4f2ee", FUR="#f6f4f0", LIGHT="#ffffff", MARK="#d8302a", EYE="#c82a2a", CLOTH="#f4f0e8", TRIM="#d8302a",
-                 pattern="patches"),
-        variants={"gold": dict(FUR="#e8c050", MARK="#f8e090", HAIR="#f0d070", pattern="speckle"),
-                  "blue": dict(FUR="#6a88b8", MARK="#e8f0f8", HAIR="#4a6a98", pattern="net"),
-                  "black": dict(FUR="#1a1a1c", MARK="#d8302a", HAIR="#1a1a1c", pattern="patches"),
-                  "silver": dict(FUR="#c8ccd4", MARK="#f4f6f8", HAIR="#d8dce4", pattern="speckle")}),
+        build="athletic", outfit=dict(top=["sarashi"], extras=["pauldron", "arm_wraps"], colors=dict(bandage="#2a4aa8", leather="#d8b040")),
+        ears="fin", hair="ponytail", bangs="swept", fluke=(.5, 6.5, 5.5), long_fins=True, dorsal=(.5, 8, 4.5), scales=True, katana=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e3a98", FUR="#2a4ab8", LIGHT="#e8f0fa", MARK="#e4ecf8", EYE="#2a5ac8", CLOTH="#2a4aa8", TRIM="#d8b040",
+                 pattern="patches", extra=dict(fin_mark=True, saya="#1e2a6a", tsuka="#e8e0d0")),
+        variants={"kohaku": dict(FUR="#f6f4f0", MARK="#d8302a", HAIR="#f4f2ee", LIGHT="#ffffff", EYE="#c82a2a", CLOTH="#f4f0e8", TRIM="#d8302a",
+                                 extra=dict(fin_mark=True, saya="#1a1a1c", tsuka="#d8302a")),
+                  "gold": dict(FUR="#e8c050", MARK="#f8e090", HAIR="#f0d070", pattern="speckle", extra=dict(fin_mark=True, saya="#5a3a1a", tsuka="#1a1a1c")),
+                  "black": dict(FUR="#1a1a1c", MARK="#d8302a", HAIR="#1a1a1c", CLOTH="#2a2a2e", extra=dict(fin_mark=True, saya="#8a1e1e", tsuka="#e8c040")),
+                  "silver": dict(FUR="#c8ccd4", MARK="#f4f6f8", HAIR="#d8dce4", pattern="speckle", extra=dict(fin_mark=True, saya="#3a4a6a", tsuka="#f4f6f8"))}),
     "orca_mermaid": dict(
         build="strong", outfit=dict(top=["sports"], extras=["armlets"]),
         ears="fin", hair="ponytail", fluke=(9, .75, 4), dorsal=(.75, 6, 3.5), size=1.15,
@@ -195,6 +196,8 @@ def declare(sp):
         parts += [("charm", 1.25, 1.5, .25), ("charm_cord", 4.5, .25, .25)]
     if d.get("moon"):
         parts += [("crescent", 3.5, 3.5, .25), ("antler_a", .5, 3, .5), ("antler_b", .5, 1.5, .5)]
+    if d.get("katana"):
+        parts += [("saya", 1, 10, 1.25), ("tsuba", 2, .5, 2), ("tsuka", .75, 4, .75)]
     if d.get("coral"):
         parts += [("coral_a", .75, 4, .75), ("coral_b", .5, 2.5, .5), ("coral_tip", .75, .75, .75)]
     parts.append(("shell", 2, 1.75, .5))
@@ -223,7 +226,7 @@ def paint(sp, key):
 
     def fin(f, x, y, w, h):
         t = 0.5 + 0.2 * (x % 3 == 0) + (noise(x, y, 6) - 0.5) * 0.1
-        col = pick(pal.MARK if sp.startswith("koi") else pal.FUR, t, x, y)
+        col = pick(pal.MARK if sp.startswith("koi") or pal.extra.get("fin_mark") else pal.FUR, t, x, y)
         if pal.extra.get("belly_white") is None and sp.startswith("axolotl"):
             col = pick(pal.LIGHT, t, x, y)
         return col
@@ -258,6 +261,10 @@ def paint(sp, key):
     pt("coral_a", "all", lambda f, x, y, w, h: pick(coral, 0.5 + 0.15 * (y % 2), x, y))
     pt("coral_b", "all", lambda f, x, y, w, h: pick(coral, 0.6, x, y))
     pt("coral_tip", "all", lambda f, x, y, w, h: pick(ctip, 0.65, x, y))
+    saya, tsuka, gold = shades(pal.extra.get("saya", "#1e2a6a")), shades(pal.extra.get("tsuka", "#e8e0d0")), shades("#d8b040")
+    pt("saya", "all", lambda f, x, y, w, h: pick(gold if y % 6 == 0 else saya, 0.5 + 0.2 * (f == "north"), x, y))
+    pt("tsuba", "all", lambda f, x, y, w, h: pick(gold, 0.6, x, y))
+    pt("tsuka", "all", lambda f, x, y, w, h: pick(tsuka if (x + y) % 3 else saya, 0.55, x, y))
     if pal.extra.get("gills"):
         pt("fin_1", ("east", "west"), lambda f, x, y, w, h: pick(pal.MARK, 0.25, x, y) if (y in (1, 3, 5) and 2 <= x < w - 2) else None)
     if pal.extra.get("spot"):                                     # tancho: one red spot on the head
@@ -314,6 +321,12 @@ def build(sp):
         for sg in (-1, 1):
             r.put("head", G.rot_cube("antler_a", [sg * 2.4 - 0.25, 28.0, -0.5], [sg * 2.4, 28.0, -0.25], -10, 0, -18 * sg),
                   G.rot_cube("antler_b", [sg * 2.9 - 0.25, 29.4, -0.5], [sg * 2.9, 29.4, -0.25], -10, 0, -60 * sg))
+    if d.get("katana"):                                  # a katana slung across her back, hilt over her right shoulder
+        cd = G.S("chest")[2]
+        bz = cd / 2 + 0.3
+        rot = dict(pivot=[0, 16, bz], rotation=[0, 0, -38])
+        r.add("katana", "body", [0, 16, bz], [cube("saya", [-0.5, 10.0, bz], **rot), cube("tsuba", [-1.0, 20.0, bz - 0.375], **rot),
+                                              cube("tsuka", [-0.375, 20.5, bz + 0.25], **rot)])
     if d.get("coral"):                                   # a crown of branching coral in her hair
         cs = []
         for sg in (-1, 1):

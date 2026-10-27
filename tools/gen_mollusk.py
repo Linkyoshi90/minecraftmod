@@ -24,16 +24,17 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
-    # sixteenth wave: the squidkin, a violet squid girl in a hooded mantle (the ika's rig)
+    # sixteenth wave: the squidkin, a sky-blue squid girl: long wavy hair curling into tentacles, a slip dress over a skirt of
+    # eight tentacles (the octopus' body without its cap, the ika's tentacle locks)
     "squidkin_mollusk": dict(
-        build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["pearls"], colors=dict(cloth2="#5a3a8a")),
-        hair="bob", bangs="parted", ears=None, legs="stockings", foot="shoe", body="ika",
-        pal=dict(SKIN=skin("pale"), HAIR="#8a5ac8", FUR="#7a4ab8", LIGHT="#e0d0f8", MARK="#3a1e6a", EYE="#3a1e6a", CLOTH="#7a4ab8", TRIM="#e0d0f8",
-                 INNER="#f8d0e0", extra=dict(stocking="#3a1e6a", boot="#2a1450")),
-        variants={"red": dict(FUR="#c83a3a", HAIR="#e85a4a", MARK="#5a1414", LIGHT="#f8c8c0", CLOTH="#c83a3a", extra=dict(cloth2="#5a1414", stocking="#5a1414")),
-                  "glow": dict(FUR="#1e5a6a", HAIR="#3ad8c8", MARK="#8af8e8", LIGHT="#a8f0e8", CLOTH="#1e5a6a", EYE="#3ad8c8", extra=dict(cloth2="#0e3a44", stocking="#0e3a44")),
-                  "white": dict(FUR="#f0eef4", HAIR="#e8e4f0", MARK="#a8a0c0", LIGHT="#ffffff", CLOTH="#f0eef4", extra=dict(cloth2="#a8a0c0", stocking="#f0eef4")),
-                  "black": dict(FUR="#1e1a24", HAIR="#2a2430", MARK="#8a5ac8", LIGHT="#5a5068", CLOTH="#1e1a24", extra=dict(cloth2="#3a2a4a", stocking="#1e1a24"))}),
+        build="slim", outfit=dict(top=["halter"]), hat=False, tent_hair=True,
+        hair="wavy", bangs="swept", ears=None, legs="bare", foot="shoe", body="octopus",
+        pal=dict(SKIN=skin("fair"), HAIR="#6a94c8", FUR="#6a94c8", LIGHT="#c8dcf0", MARK="#3a5a8a", EYE="#3a5a9a", CLOTH="#6a94c8", TRIM="#c8dcf0",
+                 INNER="#f8d0e0", extra=dict(boot="#3a5a8a")),
+        variants={"violet": dict(FUR="#7a4ab8", HAIR="#8a5ac8", MARK="#3a1e6a", LIGHT="#e0d0f8", CLOTH="#7a4ab8", EYE="#3a1e6a", extra=dict(boot="#2a1450")),
+                  "red": dict(FUR="#c83a3a", HAIR="#e85a4a", MARK="#5a1414", LIGHT="#f8c8c0", CLOTH="#c83a3a", extra=dict(boot="#5a1414")),
+                  "glow": dict(FUR="#1e5a6a", HAIR="#3ad8c8", MARK="#8af8e8", LIGHT="#a8f0e8", CLOTH="#1e5a6a", EYE="#3ad8c8", extra=dict(boot="#0e3a44")),
+                  "white": dict(FUR="#f0eef4", HAIR="#e8e4f0", MARK="#a8a0c0", LIGHT="#ffffff", CLOTH="#f0eef4", extra=dict(boot="#a8a0c0"))}),
     "kraken_mollusk": dict(
         build="curvy", outfit=dict(top=["corset"], extras=["pearls"], colors=dict(cloth2="#2a1a3a")),
         hair="wavy", bangs="parted", ears="fin", body="kraken",
@@ -99,7 +100,12 @@ def declare_hook(sp, d):
         return [("hat_a", 9, 2.5, 9), ("hat_b", 6.5, 3, 6.5), ("hat_c", 3.5, 2, 3.5), ("hat_fin", 4, 3, .5),
                 ("htent_a", 1.5, 6, 1.5), ("htent_b", 1.25, 6, 1.25)]
     if b == "octopus":
-        return [("hat_a", 9.5, 3, 9.5), ("hat_b", 7, 3, 7), ("stent_a", 1.5, 4, 1.5), ("stent_b", 1.25, 3.5, 1.25)]
+        out = [("stent_a", 1.5, 4, 1.5), ("stent_b", 1.25, 3.5, 1.25)]
+        if d.get("hat", True):
+            out += [("hat_a", 9.5, 3, 9.5), ("hat_b", 7, 3, 7)]
+        if d.get("tent_hair"):
+            out += [("htent_a", 1.5, 6, 1.5), ("htent_b", 1.25, 6, 1.25)]
+        return out
     if b == "snail":
         return [("shell_a", 7, 7, 4), ("shell_b", 5, 5, 3), ("shell_c", 3, 3, 2)]
     if b == "jelly":
@@ -146,8 +152,11 @@ def build_hook(r, g, d):
                                                 G.mirror_cube(G.rot_cube("hat_fin", [-7.4, hy + 10.5, -0.25 + z], [-4.0, hy + 11.5, z], 0, 0, 20))])
         for i, (x, zz, ry) in enumerate(((-3.4, 2.6, 20), (-1.2, 3.6, 8), (1.2, 3.6, -8), (3.4, 2.6, -20), (-4.4, 0.4, 70), (4.4, 0.4, -70))):
             P.chain(r, f"hair_tent{i + 1}", "head", (x, hy + 4.5, zz + z), ["htent_a", "htent_b"], rx=-12, ry=ry, bend=-8)
-    if b == "octopus":
+    if b == "octopus" and d.get("hat", True):
         r.add("hat", "head", [0, hy + 8.5, z], [cube("hat_a", [-4.75, hy + 7.8, -4.5 + z]), cube("hat_b", [-3.5, hy + 10.6, -3.0 + z])])
+    if b == "octopus" and d.get("tent_hair"):              # the squidkin's hair curls into tentacles at the ends
+        for i, (x, zz, ry) in enumerate(((-3.4, 2.6, 20), (-1.2, 3.6, 8), (1.2, 3.6, -8), (3.4, 2.6, -20), (-4.4, 0.4, 70), (4.4, 0.4, -70))):
+            P.chain(r, f"hair_tent{i + 1}", "head", (x, hy + 2.5, zz + z), ["htent_a", "htent_b"], rx=-12, ry=ry, bend=-14)
         for i in range(8):
             ang = 360 * i / 8 + 22.5
             import math
@@ -244,6 +253,10 @@ def bip_extra(an, sp, d):
     """Ika's hair lash, the ink squirt, the snail's retreat into her shell"""
     Tk, hold, sym, merge = H.track, H.hold, H.sym, H.merge
     b = d["body"]
+    if b == "octopus" and d.get("tent_hair"):
+        locks = [[f"hair_tent{i}", f"hair_tent{i}_b"] for i in range(1, 7)]
+        for key in ("idle", "walk", "sit"):
+            F._inject(an, key, merge(*[G.wave(l, 3.0, [4, 6], axis=0, phase=0.7 + i) for i, l in enumerate(locks)]))
     if b == "ika":
         locks = [[f"hair_tent{i}", f"hair_tent{i}_b"] for i in range(1, 7)]
         an.add("lash", 0.8, False, merge({l[0]: {"rotation": Tk((0, (0, 0, 0)), (0.3, (60, 0, 0)), (0.5, (-110, 0, 0)), (0.8, (0, 0, 0)))} for l in locks},

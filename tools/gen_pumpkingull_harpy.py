@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Pumpkingull Harpy - the seagull harpy's rig and animations (gen_seagull_harpy.py) in autumn colours, with a carved
-pumpkin worn as a hat (bone `pumpkin_hat`).
+"""Pumpkingull Harpy - the seagull harpy's rig and animations (gen_seagull_harpy.py) in sky blue and white, dressed in
+a pumpkin (her top and lobed skirt) with a little pumpkin cap, stem and vine leaf (bone `pumpkin_hat`).
 
     python tools/gen_pumpkingull_harpy.py              # write the three asset files and the variants
     python tools/gen_pumpkingull_harpy.py --preview x  # also render preview sheets
 
-Field guide (sixteenth wave): a Harmontide gull of the autumn shores, orange and black. While she wears her pumpkin the
+Field guide (sixteenth wave): a Harmontide gull of the autumn shores, sky blue and white in a pumpkin. While she wears her pumpkin the
 endermen near her friend take no offence at being looked at. Variants (pumpkingull_harpy_<variant>.png): ghost, black,
-harvest, cinder. Keep in sync with PumpkingullHarpy.Variant.
+harvest, cinder, orange. Keep in sync with PumpkingullHarpy.Variant.
 """
 import os
 import sys
@@ -32,10 +32,18 @@ STEM = ramp([rgb(50, 60, 20), rgb(80, 96, 34), rgb(118, 136, 54)])
 GLOW = ramp([rgb(200, 140, 20), rgb(250, 210, 60), rgb(255, 246, 170)])
 INK_TIPS = S.INK_TIPS
 
-DEFAULT = (S.variant_pal(ORANGE_HAIR, ORANGE_FEA, AMBER_EYES, BLACK_LEGS), INK_TIPS,
-           ramp([rgb(30, 22, 30), rgb(60, 44, 62), rgb(96, 70, 100)]))
+BLUE_HAIR = [rgb(30, 70, 150), rgb(48, 96, 186), rgb(70, 124, 214), rgb(104, 156, 232), rgb(150, 192, 244), rgb(206, 228, 252)]
+BLUE_FEA = [rgb(16, 30, 70), rgb(34, 66, 140), rgb(60, 110, 200), rgb(96, 150, 228), rgb(170, 200, 240), rgb(232, 240, 250), rgb(254, 254, 255)]
+BLUE_EYES = [rgb(14, 40, 100), rgb(30, 76, 160), rgb(60, 120, 210), rgb(120, 170, 240), rgb(200, 226, 255)]
+ORANGE_LEGS = [rgb(150, 80, 10), rgb(206, 120, 20), rgb(236, 160, 40), rgb(248, 196, 80), rgb(252, 226, 150)]
+LEAF = ramp([rgb(60, 90, 30), rgb(100, 136, 50), rgb(150, 176, 80), rgb(196, 210, 120)])
+SWIRL = ramp([rgb(240, 196, 130), rgb(252, 226, 180)])
+
+DEFAULT = (S.variant_pal(BLUE_HAIR, BLUE_FEA, BLUE_EYES, ORANGE_LEGS), S.WINGS, LEAF)
 VARIANTS = {
-    # ghost: pale grey-white, a pale pumpkin
+    # orange: an orange-and-black autumn gull
+    "orange": (S.variant_pal(ORANGE_HAIR, ORANGE_FEA, AMBER_EYES, BLACK_LEGS), INK_TIPS, LEAF),
+    # ghost: pale grey-white
     "ghost": (S.variant_pal(S.WHITE_HAIR, S.GULL_FEA, DARK_EYES, S.PINK_LEGS), S.INK_TIPS, ramp([rgb(80, 60, 110), rgb(120, 96, 160), rgb(170, 146, 210)])),
     # black: a black-cat gull, orange eyes
     "black": (S.variant_pal([rgb(10, 10, 12), rgb(22, 22, 26), rgb(36, 36, 42), rgb(54, 54, 62), rgb(76, 76, 86), rgb(104, 104, 116)],
@@ -56,36 +64,44 @@ _declare, _build, _paint = S.declare_parts, S.build_model, S.paint
 
 def declare_parts():
     _declare()
-    for args in [("pumpkin", 6, 4.5, 6), ("pumpkin_face", 6, 4.5, .25), ("pstem", 1, 1.5, 1)]:
+    for args in [("pumpkin", 6, 2.5, 6), ("pstem", 1, 2, 1), ("pleaf", 2.5, .25, 2.5), ("tendril", .25, 1.5, .25)]:
         H.part(*args)
 
 
 def paint(v=None):
-    pal, wings, kerchief = v or DEFAULT
+    pal, wings, _ = v or DEFAULT
     pt = H.Painter()
-    pt.T = _paint(pal, wings, kerchief)
-    pt("pumpkin", "all", lambda f, x, y, w, h: pick(PUMPKIN, 0.5 + 0.2 * (f == "up") - 0.18 * (x % 4 == 0 and f != "up"), x, y))
+    pt.T = _paint(pal, wings, LEAF)
+    SKIN = pal.SKIN
 
-    def face(f, x, y, w, h):                       # a carved grin, lit from inside
-        if f != "north":
-            return None
-        eyes = y in (3, 4, 5) and (abs(x - 6) <= 5 - y or abs(x - 17) <= 5 - y)
-        grin = 10 <= y <= 13 and 4 <= x <= 19 and (y < 12 or x % 4 != 0) and abs(x - 11.5) < 8 - (13 - y)
-        return pick(GLOW, 0.6 + 0.3 * noise(x, y, 7), x, y) if eyes or grin else CLEAR_
-    pt("pumpkin_face", "all", face)
-    pt("pstem", "all", lambda f, x, y, w, h: pick(STEM, 0.5, x, y))
+    def pumpkin(f, x, y, w, h):                    # ribbed orange, cream vine swirls on the front
+        if f == "up" and h > 3:
+            return pick(SKIN, 0.66, x, y)
+        swirl = f == "north" and h > 3 and noise(x, y, 41) > 0.7 and (x + y) % 3 == 0
+        if swirl:
+            return pick(SWIRL, 0.5, x, y)
+        return pick(PUMPKIN, 0.55 + 0.15 * (f == "up") - 0.22 * (x % 3 == 0 and f != "up") + (noise(x, y, 42) - 0.5) * 0.08, x, y)
+    for p in ("chest", "bust", "pumpkin"):
+        pt(p, "all", pumpkin)
+    for p in ("leaf_m", "leaf_l", "leaf_s", "leaf_side"):   # the skirt: pumpkin lobes
+        pt(p, "all", lambda f, x, y, w, h: pick(PUMPKIN, 0.6 - 0.25 * (x == 0 or x == w - 1) - 0.2 * y / max(h, 1), x, y))
+    pt("pstem", "all", lambda f, x, y, w, h: pick(STEM_BROWN, 0.5 + 0.2 * (f == "up"), x, y))
+    pt("pleaf", "all", lambda f, x, y, w, h: pick(LEAF, 0.55 + 0.2 * (x == y) - 0.1 * (x + y > 3), x, y))
+    pt("tendril", "all", lambda f, x, y, w, h: pick(LEAF, 0.5, x, y))
     return pt.T
 
 
-CLEAR_ = H.CLEAR
+STEM_BROWN = ramp([rgb(70, 46, 20), rgb(110, 76, 36), rgb(150, 110, 56)])
 
 
 def build_model():
     m = _build()
-    y = 28.3 + L                                    # just above her hair, tipped back a little
-    m.bone("pumpkin_hat", "head", [0, y, 0], [S.C("pumpkin", [-3, y, -3.2], pivot=[0, y, 0], rotation=[-8, 0, 0]),
-                                             S.C("pumpkin_face", [-3, y, -3.45], pivot=[0, y, 0], rotation=[-8, 0, 0]),
-                                             S.C("pstem", [-0.5, y + 4.5, -0.7], pivot=[0, y, 0], rotation=[-8, 0, 0])])
+    y = 28.3 + L                                    # a small pumpkin cap on her crown, its vine leaf over one ear
+    rot = dict(pivot=[0, y, 0], rotation=[-6, 0, 0])
+    m.bone("pumpkin_hat", "head", [0, y, 0], [S.C("pumpkin", [-3, y - 0.6, -3.0], **rot),
+                                             S.C("pstem", [-0.5, y + 1.9, -0.6], pivot=[0, y + 1.9, 0], rotation=[-6, 0, -18]),
+                                             S.C("pleaf", [2.4, y + 0.6, -2.5], pivot=[2.4, y + 0.6, -1.0], rotation=[0, 0, -35]),
+                                             S.C("tendril", [3.2, y - 0.9, -2.2], **rot)])
     return m
 
 

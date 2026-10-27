@@ -33,7 +33,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 
 /**
  * The pumpkingull (HARMONTIDE_CONCEPTS.md, sixteenth wave; model tools/gen_pumpkingull_harpy.py, the seagull's rig in
- * autumn colours under a carved pumpkin): endermen near her friend take no offence at being looked at. Every second,
+ * sky blue and white, dressed in a pumpkin): endermen near her friend take no offence at being looked at. Every second,
  * an enderman within 16 blocks of her that has her friend in its sights calms down and looks away.
  */
 public class PumpkingullHarpy extends AbstractHarpy {
@@ -43,7 +43,7 @@ public class PumpkingullHarpy extends AbstractHarpy {
 
     /** Her colours (tools/gen_pumpkingull_harpy.py). Saved by name, synced by ordinal: append new ones at the end. */
     public enum Variant {
-        PUMPKIN("pumpkin"), GHOST("ghost"), BLACK("black"), HARVEST("harvest"), CINDER("cinder");
+        PUMPKIN("pumpkin"), GHOST("ghost"), BLACK("black"), HARVEST("harvest"), CINDER("cinder"), ORANGE("orange");
 
         private final String name;
 

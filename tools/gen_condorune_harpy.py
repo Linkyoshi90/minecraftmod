@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Condorune Harpy - the crow harpy's rig and animations (gen_crow_harpy.py) in condor colours: black plumage, a white
-ruff round her neck, white-edged wings and a pale, bare-looking face.
+"""Condorune Harpy - the crow harpy's rig and animations (gen_crow_harpy.py) in the reference's lapis blue: blue plumage,
+a cream ruff round her neck, cream-edged wings and gold beadwork.
 
     python tools/gen_condorune_harpy.py              # write the three asset files and the variants
     python tools/gen_condorune_harpy.py --preview x  # also render preview sheets
@@ -30,7 +30,15 @@ BONE_CLOTH = [(60, 52, 44), (100, 88, 74), (144, 128, 108), (190, 174, 150), (22
 TURQUOISE = [(30, 100, 100), (50, 150, 146), (110, 206, 196)]
 SKIN = [(196, 150, 140), (222, 182, 168), (240, 208, 194), (250, 228, 216)]
 
-DEFAULT = CR.cvariant(BLACK_HAIR, BLACK_FEA, RED_EYES, GREY_LEGS, BONE_CLOTH, TURQUOISE, ruff=WHITE_RUFF, skin=SKIN)
+BLUE_HAIR = [(14, 30, 90), (24, 50, 140), (36, 76, 190), (60, 104, 220), (100, 144, 240), (150, 186, 250)]
+BLUE_FEA = [(8, 16, 50), (16, 34, 100), (28, 60, 160), (44, 90, 210), (210, 194, 160), (236, 224, 196), (250, 244, 228)]   # cream edges
+CREAM_RUFF = [(120, 104, 78), (160, 144, 114), (196, 182, 150), (222, 210, 182), (238, 230, 208), (248, 244, 230), (255, 252, 244)]
+SKY_EYES = [(20, 60, 110), (40, 110, 170), (80, 170, 220), (150, 214, 240), (210, 240, 255)]
+BLUE_LEGS = [(14, 24, 60), (26, 44, 100), (44, 70, 150), (70, 104, 196), (110, 146, 230)]
+LAPIS_CLOTH = [(14, 24, 70), (24, 44, 120), (40, 70, 170), (80, 110, 200), (200, 170, 100)]
+GOLD = [(140, 100, 30), (200, 160, 60), (246, 214, 120)]
+
+DEFAULT = CR.cvariant(BLUE_HAIR, BLUE_FEA, SKY_EYES, BLUE_LEGS, LAPIS_CLOTH, GOLD, ruff=CREAM_RUFF, skin=SKIN)
 VARIANTS = {
     # California condor: black with an orange-pink face, grey ruff
     "california": CR.cvariant(BLACK_HAIR, BLACK_FEA, [(110, 40, 14), (170, 70, 20), (220, 110, 40), (240, 150, 80), (250, 200, 150)], GREY_LEGS,

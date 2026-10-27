@@ -18,16 +18,18 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin  # noqa: E402
 
 SPECIES = {
-    # sixteenth wave: the floodcrab, a blue-grey river crab who loves mud
+    # sixteenth wave: the floodcrab, a blue-grey river crab under a ridged stone fan of a shell, hung with brass bells, moss and barnacles
     "floodcrab_crustacean": dict(
-        build="standard", outfit=dict(top=["bandeau"], bottom="sarong", extras=["pouch"], colors=dict(cloth2="#6a5a3a", leather="#5a4a30")),
-        hair="bob", bangs="messy", ears=None, legs="scales", foot="claw", carapace=True,
-        pal=dict(SKIN=skin("fair"), HAIR="#4a6a8a", FUR="#5a7a98", LIGHT="#c8d8e4", MARK="#2a3a4a", EYE="#1a1a1a", CLOTH="#8a7a58", TRIM="#c8b888",
-                 pattern="solid", extra=dict(shell="#4a6a88", claw="#6a8aa8", claw_tip="#e8e0c8")),
-        variants={"brown": dict(FUR="#8a6a4a", HAIR="#6a4a2a", MARK="#3a2a1a", extra=dict(shell="#7a5a3a", claw="#9a7a5a", claw_tip="#2a1e14")),
-                  "green": dict(FUR="#6a7a4a", HAIR="#4a5a2a", MARK="#2a3418", extra=dict(shell="#5a6a3a", claw="#7a8a5a", claw_tip="#e8d8a0")),
-                  "red": dict(FUR="#b84a3a", HAIR="#8a2a1e", MARK="#4a140e", extra=dict(shell="#a83a2a", claw="#d8604a", claw_tip="#f0e8d8")),
-                  "purple": dict(FUR="#7a5a98", HAIR="#5a3a7a", MARK="#2a1a3a", extra=dict(shell="#6a4a8a", claw="#9a7ab8", claw_tip="#f0d860"))}),
+        build="standard", outfit=dict(top=["bandeau"], bottom="sarong", extras=["pouch"], colors=dict(cloth2="#4a5a3a", leather="#5a4a30")),
+        hair="bob", bangs="messy", ears=None, legs="scales", foot="claw", fanshell=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#3e5a72", FUR="#3e5e7a", LIGHT="#b8c8d4", MARK="#1e2e3e", EYE="#c82a1e", CLOTH="#5a6a48", TRIM="#c8a040",
+                 pattern="solid", extra=dict(shell="#8a8a80", claw="#3e6a8a", claw_tip="#e8e0c8", brass="#c8a040")),
+        variants={"brown": dict(FUR="#8a6a4a", HAIR="#6a4a2a", MARK="#3a2a1a", extra=dict(shell="#9a8a70", claw="#9a7a5a", claw_tip="#2a1e14", brass="#c8a040")),
+                  "green": dict(FUR="#5a7a4a", HAIR="#3a5a2a", MARK="#2a3418", extra=dict(shell="#7a8a6a", claw="#6a8a4a", claw_tip="#e8d8a0", brass="#c8a040")),
+                  "red": dict(FUR="#a84a3a", HAIR="#7a2a1e", MARK="#4a140e", EYE="#f0c040",
+                              extra=dict(shell="#a89a88", claw="#c8503a", claw_tip="#f0e8d8", brass="#d8b050")),
+                  "black": dict(FUR="#2a2e36", HAIR="#1a1e24", MARK="#0a0c10",
+                                extra=dict(shell="#4a4a4e", claw="#3a3e48", claw_tip="#c8c0b0", brass="#a88a3a"))}),
     "crab_crustacean": dict(
         build="athletic", outfit=dict(top=["bandeau"], bottom="shorts", extras=["armlets"], colors=dict(cloth2="#3a4a6a")),
         hair="bob", bangs="jagged", ears=None, legs="scales", foot="claw", carapace=True,
@@ -55,6 +57,8 @@ def declare_hook(sp, d):
     out = [("pincer", 2.5, 2.5, 3), ("snip", 1, 1, 3), ("stalk", .5, 2, .5), ("stalk_eye", 1, 1, 1)]
     if d.get("carapace"):
         out += [("carapace", 8, 7, 1.5), ("carapace_rim", 9, 1.5, 2)]
+    if d.get("fanshell"):
+        out += [("fan_rib", 2.5, 17, 1), ("fan_base", 7, 2, 2), ("fbell", 1.5, 1.5, 1.5), ("barnacle", 1, 1, 1)]
     if d.get("hermit"):
         out += [("hshell_a", 6, 6, 4), ("hshell_b", 4.5, 4.5, 3), ("hshell_c", 3, 3, 2)]
     return out
@@ -75,6 +79,18 @@ def paint_hook(pt, pal, d):
     pt("snip", "all", lambda f, x, y, w, h: pick(tip if f == "north" or y == 0 else claw, 0.5, x, y))
     pt("stalk", "all", lambda f, x, y, w, h: pick(claw, 0.5, x, y))
     pt("stalk_eye", "all", lambda f, x, y, w, h: pick(tip, 0.35 + 0.4 * (f == "north" and x == 0 and y == 0), x, y))
+    brass, moss, white = G.shades(e.get("brass", "#c8a040")), G.shades("#5a7a3a"), G.shades("#ece6d8")
+
+    def fan(f, x, y, w, h):                                # a ridged stone plate, moss creeping up from the base
+        if y > h - 3 - 2 * noise(x, 0, 21) and noise(x, y, 22) > 0.35:
+            return pick(moss, 0.4 + 0.15 * (noise(x, y, 23) > 0.5), x, y)
+        if noise(x, y, 24) > 0.93 and y > 3:
+            return pick(white, 0.5, x, y)                  # barnacles
+        return pick(shell, 0.62 - 0.22 * (x == 0 or x == w - 1) + 0.08 * (x == w // 2) + (noise(x // 2, y // 3, 25) - 0.5) * 0.12, x, y)
+    pt("fan_rib", "all", fan)
+    pt("fan_base", "all", fan)
+    pt("fbell", "all", lambda f, x, y, w, h: pick(brass, 0.25 if f == "down" else 0.5 + 0.25 * (x == 0) + 0.1 * (y == 0), x, y))
+    pt("barnacle", "all", lambda f, x, y, w, h: pick(white, 0.45 + 0.2 * (f == "up"), x, y))
     band = G.shades(e.get("shell_band", "#a87a4a"))
     for p in ("hshell_a", "hshell_b", "hshell_c"):
         pt(p, "all", lambda f, x, y, w, h: pick(band if (x + y) % 5 == 0 or y % 6 == 0 else shell, 0.45 + 0.2 * (noise(x // 2, y // 2, 8) > 0.6), x, y))
@@ -92,6 +108,20 @@ def build_hook(r, g, d):
     cd = G.S("chest")[2]
     if d.get("carapace"):
         r.add("carapace", "body", [0, 17, cd / 2 + z], [cube("carapace", [-4, 12.5, cd / 2 + 0.1 + z]), cube("carapace_rim", [-4.5, 18.25, cd / 2 - 0.2 + z])])
+    if d.get("fanshell"):                                  # a fan of seven stone ribs over her back; named hair_ so it does not count to her height
+        bz = cd / 2 + z
+        ribs = [cube("fan_base", [-3.5, 13.0, bz])]
+        for i, ang in enumerate((-48, -32, -16, 0, 16, 32, 48)):
+            dz = bz + 0.6 + 0.15 * abs(i - 3)
+            rot = dict(pivot=[0, 14.0, bz + 1], rotation=[-10, 0, ang])
+            ribs.append(cube("fan_rib", [-1.25, 14.0, dz], **rot))
+            if i in (0, 2, 4, 6):                          # brass bells at the rib tips, barnacles on the others
+                ribs.append(cube("fbell", [-0.75, 30.0 - (i in (2, 4)) * 2, dz + 0.9], **rot))
+            elif i in (1, 5):
+                ribs.append(cube("barnacle", [-0.5, 25.0, dz + 0.9], **rot))
+        r.add("hair_fan", "body", [0, 14.0, bz], ribs)
+        px, py, pz = r.b["hand_r"]["pivot"]               # a bell tied to each claw
+        r.add("cbell_r", "pincer_r", [px, py, pz], [cube("fbell", [px + 1.25, py - 2.5, pz - 1.0])], mirror=True)
     if d.get("hermit"):
         r.add("hshell", "body", [0, 17, 2.0 + z], [cube("hshell_a", [-3, 12.5, cd / 2 + z]), cube("hshell_b", [-2.25, 13.5, cd / 2 + 3.5 + z]),
                                                     cube("hshell_c", [-1.5, 14.5, cd / 2 + 6.0 + z])])

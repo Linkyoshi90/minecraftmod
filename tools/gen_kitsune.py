@@ -16,16 +16,18 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades  # noqa: E402
 
 SPECIES = {
-    # sixteenth wave: the dunefennec, a Harmontide fennec in a sand-coloured wrap, ears bigger than her head
+    # sixteenth wave: the dunefennec, a Harmontide fennec in night blue with gold crescents, a purple saddle-cloth and a bell
     "dunefennec_kitsune": dict(
-        build="petite", outfit=dict(top=["bandeau", "capelet"], bottom="sarong", extras=["pouch"], colors=dict(cloth2="#e8d8b0", leather="#a87a48")),
-        ears="big", hair="pixie", bangs="messy", stockings=False, tip="dark",
-        pal=dict(SKIN=skin("tan"), HAIR="#f4e2bc", FUR="#f0d8a8", LIGHT="#fffaf0", MARK="#8a6a40", EYE="#3a8ab8", CLOTH="#d8b878", TRIM="#3a8ab8",
+        build="petite", outfit=dict(top=["bandeau", "capelet"], bottom="sarong", extras=["usekh", "bell_collar"],
+                                    colors=dict(cloth2="#5a3a8a", leather="#b8903a")),
+        ears="big", hair="pixie", bangs="messy", stockings=False, tip="light",
+        pal=dict(SKIN=skin("fair"), HAIR="#2a4ac8", FUR="#2e50d0", LIGHT="#c8dcff", MARK="#14246a", EYE="#d89a3a", CLOTH="#6a3ea8", TRIM="#e0b84a",
                  facemark="fox"),
-        variants={"red": dict(FUR="#d8864a", HAIR="#e09058", MARK="#6a3018", CLOTH="#c8683a", extra=dict(cloth2="#e8c8a0")),
-                  "cream": dict(FUR="#fbf2e2", HAIR="#fff8ee", MARK="#b89a78", CLOTH="#f0e4cc"),
-                  "dusk": dict(FUR="#b8aca0", HAIR="#c8bcb0", MARK="#4a4038", CLOTH="#6a5a7a", extra=dict(cloth2="#4a3a5a")),
-                  "gold": dict(FUR="#e8c060", HAIR="#f0cc70", MARK="#7a5a1e", CLOTH="#2a5a8a", TRIM="#f0d070")}),
+        variants={"sand": dict(FUR="#f0d8a8", HAIR="#f4e2bc", LIGHT="#fffaf0", MARK="#8a6a40", EYE="#3a8ab8", CLOTH="#d8b878", TRIM="#3a8ab8",
+                               extra=dict(cloth2="#e8d8b0")),
+                  "red": dict(FUR="#d8864a", HAIR="#e09058", LIGHT="#fff0e0", MARK="#6a3018", CLOTH="#c8683a", extra=dict(cloth2="#e8c8a0")),
+                  "cream": dict(FUR="#fbf2e2", HAIR="#fff8ee", LIGHT="#ffffff", MARK="#b89a78", CLOTH="#2a4ac8", EYE="#3a8ab8"),
+                  "dusk": dict(FUR="#5a3a8a", HAIR="#6a4a9a", LIGHT="#e0d0ff", MARK="#2a1a4a", CLOTH="#1e2a5a", extra=dict(cloth2="#1e2a5a"))}),
     # fifteenth wave: the huli jing, a silver-blue fox spirit with long black hair (nine tails, the game shows them all)
     "huli_jing_kitsune": dict(
         build="slim", outfit=dict(top=["kimono"], extras=["armlets"], colors=dict(kimono="#c83a3a", kimono_trim="#e8c050", obi="#1e1c22")),

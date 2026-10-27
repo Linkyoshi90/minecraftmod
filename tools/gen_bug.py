@@ -24,20 +24,25 @@ LARVA_SEGS = [("seg_1", 4, 6.5, 3.5), ("seg_2", 4.25, 3.5, 3.5), ("seg_3", 4, 3.
               ("seg_5", 3.5, 2.75, 3), ("seg_6", 3, 2.5, 3), ("seg_7", 2.5, 2.25, 2.5), ("seg_8", 2, 2, 2)]
 
 SPECIES = {
-    # sixteenth wave: the temple mantis, robed and hooded in gold, keeper of the old temples
+    # sixteenth wave: the temple mantis, lapis blue worked with gold filigree, a jewelled crown and a gold ring arch behind her head
     "temple_mantis_bug": dict(
-        build="slim", outfit=dict(top=["halter", "capelet"], bottom="sarong", extras=["bracers", "usekh"], colors=dict(cloth2="#c8a040")),
-        hair="hime", bangs="blunt", ears="antenna", legs="stockings", foot="shoe", wings="insect", scythes=True,
-        pal=dict(SKIN=skin("tan"), HAIR="#3a8a6a", FUR="#4aa87a", LIGHT="#c8f0d8", MARK="#2a6a4a", EYE="#e8c040", CLOTH="#e8d8a8", TRIM="#e8b840",
-                 extra=dict(wing="#a8e0c0", wing_vein="#2a6a4a", wing_alpha=210, antenna="#2a6a4a", stocking="#4aa87a", boot="#7a5a1e", scythe="#4aa87a")),
-        variants={"sand": dict(HAIR="#a8885a", FUR="#c8a870", LIGHT="#f0e0c0", MARK="#7a5a30", EYE="#3a8ab8", CLOTH="#f0e8d0",
-                               extra=dict(wing="#e8d8b0", wing_vein="#7a5a30", wing_alpha=220, antenna="#7a5a30", stocking="#c8a870", boot="#5a3a1a", scythe="#c8a870")),
+        build="slim", outfit=dict(top=["halter", "capelet"], bottom="sarong", extras=["bracers", "usekh"], colors=dict(cloth2="#f0e4c0")),
+        hair="bob", bangs="blunt", ears="antenna", legs="stockings", foot="shoe", wings="insect", scythes=True, crown=True, halo=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e3a9a", FUR="#2a4ab8", LIGHT="#c8d8f8", MARK="#14246a", EYE="#3a8ae8", CLOTH="#2a44a8", TRIM="#e8c040",
+                 extra=dict(wing="#f0e4c0", wing_vein="#c8a040", wing_alpha=200, antenna="#14246a", stocking="#2a4ab8", boot="#c8a040",
+                            scythe="#3a5ac8", jewel="#3a6ae8")),
+        variants={"jade": dict(HAIR="#2a7a5a", FUR="#3a9a6a", LIGHT="#c8f0d8", MARK="#1e4a3a", EYE="#e8c040", CLOTH="#2a7a5a",
+                               extra=dict(wing="#e8f0d8", wing_vein="#c8a040", wing_alpha=210, antenna="#1e4a3a", stocking="#3a9a6a", boot="#c8a040",
+                                          scythe="#3a9a6a", jewel="#3ae8a0")),
                   "orchid": dict(SKIN=skin("pale"), HAIR="#f0a8c8", FUR="#f8d0e0", LIGHT="#ffffff", MARK="#d870a0", EYE="#a83a7a", CLOTH="#f8e8f0",
-                                 extra=dict(wing="#fbe8f0", wing_vein="#e8a8c8", wing_alpha=200, antenna="#d870a0", stocking="#f8d0e0", boot="#d870a0", scythe="#f8d0e0")),
-                  "bark": dict(HAIR="#5a3a22", FUR="#7a5a3a", LIGHT="#c8a888", MARK="#3a2414", EYE="#e8c040", CLOTH="#c8b890",
-                               extra=dict(wing="#a8886a", wing_vein="#3a2414", wing_alpha=230, antenna="#3a2414", stocking="#7a5a3a", boot="#2a1a0e", scythe="#7a5a3a")),
-                  "ghost": dict(SKIN=skin("pale"), HAIR="#e8e8e0", FUR="#f0f0e8", LIGHT="#ffffff", MARK="#a8a898", EYE="#5a5a6a", CLOTH="#f4f2ec",
-                                extra=dict(wing="#f4f4f0", wing_vein="#a8a898", wing_alpha=190, antenna="#a8a898", stocking="#e0e0d8", boot="#8a8a80", scythe="#f0f0e8"))}),
+                                 extra=dict(wing="#fbe8f0", wing_vein="#e8a8c8", wing_alpha=200, antenna="#d870a0", stocking="#f8d0e0", boot="#d870a0",
+                                            scythe="#f8d0e0", jewel="#e83a8a")),
+                  "sand": dict(HAIR="#a8885a", FUR="#c8a870", LIGHT="#f0e0c0", MARK="#7a5a30", EYE="#3a8ab8", CLOTH="#f0e8d0",
+                               extra=dict(wing="#e8d8b0", wing_vein="#7a5a30", wing_alpha=220, antenna="#7a5a30", stocking="#c8a870", boot="#5a3a1a",
+                                          scythe="#c8a870", jewel="#3a8ab8")),
+                  "ruby": dict(HAIR="#8a1e2a", FUR="#a82a3a", LIGHT="#f8c8d0", MARK="#4a0e14", EYE="#e8c040", CLOTH="#8a1e2a",
+                               extra=dict(wing="#f0e0c8", wing_vein="#c8a040", wing_alpha=210, antenna="#4a0e14", stocking="#a82a3a", boot="#c8a040",
+                                          scythe="#a82a3a", jewel="#e83a4a"))}),
     "mosquito_bug": dict(
         build="slim", outfit=dict(top=["sports"], bottom="shorts", colors=dict(cloth2="#2a2a2e")), hair="shaggy", bangs="messy", ears="antenna",
         legs="stockings", foot="shoe", wings="insect", flies=True, proboscis=True,
@@ -195,6 +200,8 @@ def declare_hook(sp, d):
         out += [("gaster", 5, 5, 6.5), ("stinger", .5, .5, 1.5)]
     if d.get("crown"):
         out += [("crown", 4, 1.5, 4), ("jewel", 1, 1, .5)]
+    if d.get("halo"):                                    # the temple mantis' gold ring arch, hung with jewelled tassels
+        out += [("arch_bar", 13, .75, .5), ("arch_post", .75, 14, .5), ("arch_ring", 6, 6, .25), ("drop", .5, 2.5, .5)]
     if d.get("flower"):
         out += [("petal", 2, 2, .5)]
     if d.get("lantern"):                                 # the firefly's glowing abdomen
@@ -214,7 +221,14 @@ def paint_hook(pt, pal, d):
     pt("stinger", "all", lambda f, x, y, w, h: pick(pal.MARK, 0.3, x, y))
     gold = G.shades("#e8c040")
     pt("crown", "all", lambda f, x, y, w, h: pick(gold, 0.55 + 0.3 * (x % 2 == 0 and y == h - 1), x, y))
-    pt("jewel", "all", lambda f, x, y, w, h: pick(G.shades("#e83a6a"), 0.7, x, y))
+    jewel = G.shades(pal.extra.get("jewel", "#e83a6a"))
+    pt("jewel", "all", lambda f, x, y, w, h: pick(jewel, 0.7, x, y))
+    for p in ("arch_bar", "arch_post"):
+        pt(p, "all", lambda f, x, y, w, h: pick(gold, 0.5 + 0.3 * ((x + y) % 3 == 0), x, y))
+    pt("arch_ring", "all", lambda f, x, y, w, h: (pick(gold, 0.6 + 0.2 * ((x + y) % 4 == 0), x, y) if 0.32 * w < ((x + 0.5 - w / 2) ** 2 + (y + 0.5 - h / 2) ** 2) ** 0.5 < 0.5 * w
+                                                  else pick(jewel, 0.75, x, y) if ((x + 0.5 - w / 2) ** 2 + (y + 0.5 - h / 2) ** 2) ** 0.5 < 0.14 * w
+                                                  else CLEAR))
+    pt("drop", "all", lambda f, x, y, w, h: pick(jewel if y < 2 else gold, 0.6, x, y))
     pt("petal", "all", lambda f, x, y, w, h: pick(pal.MARK, 0.6 + 0.2 * ((x + y) % 2), x, y))
     blade = G.shades(pal.extra.get("scythe", "#8ac85a"))
     pt("scythe", "all", lambda f, x, y, w, h: pick(blade, 0.45 + 0.3 * (f == "north" and y % 2 == 0), x, y))
@@ -252,6 +266,12 @@ def build_hook(r, g, d):
                                                        G.rot_cube("stinger", [-0.25, 9.2, 7.8 + z], [0, 12.5, 1.5 + z], 35, 0, 0)])
     if d.get("crown"):
         r.put("head", cube("crown", [-2, hy + 8.6, -2 + z]), cube("jewel", [-0.5, hy + 9.0, -2.4 + z]))
+    if d.get("halo"):                                    # behind her head; hair_ so it does not count to her height
+        bz = 5.5 + z
+        r.add("hair_arch", "head", [0, hy + 4, bz], [cube("arch_post", [-6.5, hy - 1.0, bz]), cube("arch_post", [5.75, hy - 1.0, bz]),
+                                                     cube("arch_bar", [-6.5, hy + 13.0, bz]), cube("arch_ring", [-3, hy + 7.0, bz - 0.1]),
+                                                     cube("drop", [-6.4, hy - 2.0, bz]), cube("drop", [5.9, hy - 2.0, bz]),
+                                                     cube("drop", [-0.25, hy + 10.5, bz + 0.2])])
     if d.get("elytra"):                                  # two domed wing-cases closed over her back
         cd = G.S("chest")[2]
         r.add("elytra", "body", [0, 19.5, cd / 2 + z], [G.rot_cube("elytra", [-3.5, 10.8, cd / 2 + 0.2 + z], [-1.75, 19.5, cd / 2 + z], 8, 0, 4),
