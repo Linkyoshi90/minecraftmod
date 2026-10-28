@@ -19,6 +19,17 @@ FAMILY = C.family("nekomata")
 
 # per species: body knobs, then the default palette and the four other colours as palette overrides
 SPECIES = {
+    # nineteenth wave: the sabre, a shaggy blue sabre-tooth in black leather, a white ruff, two long fangs
+    "sabre_nekomata": dict(
+        build="athletic", outfit=dict(top=["bandeau", "harness"], bottom="shorts", extras=["pauldron", "bracers", "belt"],
+                                      colors=dict(cloth2="#1e1e24", leather="#1e1e24")),
+        ears="cat", hair="shaggy", bangs="messy", tail=((1.75, 1.75, 2.5), (1.75, 1.75, 1.5), (1.5, 1.5, 1.25)), tail_pattern="solid", sabre=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#3a5ab8", FUR="#3a5ab8", LIGHT="#e8eef8", MARK="#1a2a6a", EYE="#b88af0", CLOTH="#1e1e24", TRIM="#a8b0c0",
+                 INNER="#e8a8b8", pattern="stripes", facemark="whisker"),
+        variants={"tawny": dict(HAIR="#a8783a", FUR="#b8884a", LIGHT="#f4e8d0", MARK="#6a4a1e", EYE="#e8c040", CLOTH="#4a3a2a"),
+                  "snow": dict(HAIR="#e8ecf4", FUR="#e0e6f0", LIGHT="#ffffff", MARK="#8a94a8", EYE="#3a8ad8", CLOTH="#3a4a6a"),
+                  "black": dict(HAIR="#26242a", FUR="#2a282e", LIGHT="#8a8690", MARK="#0e0c10", EYE="#e8d040", CLOTH="#5a1e24"),
+                  "dun": dict(HAIR="#8a6a42", FUR="#a88a5a", LIGHT="#ece0c4", MARK="#5a3e1e", EYE="#5aa84a", CLOTH="#3a4a3a", pattern="spots")}),
     # eighteenth wave: Bastet, the cat goddess of Egypt, a black cat girl in gold, with green eyes
     "bastet_nekomata": dict(
         build="slim", outfit=dict(top=["bandeau"], bottom="wrap_skirt", extras=["usekh", "armlets", "bracers"], colors=dict(cloth2="#e8c050")),
@@ -209,6 +220,8 @@ def declare(sp):
         extra += [("grin", 4.5, 1.5, .25)]
     if d.get("star"):
         extra += [("star", 2.5, 2.5, .25)]
+    if d.get("sabre"):
+        extra += [("sabre_fang", .5, 1.75, .5)]
     if d.get("wisps"):
         extra += [("wisp", 1.5, 1.5, 1.5)]
     if d.get("censer"):
@@ -323,6 +336,7 @@ def paint(sp, pal):
                 return pick(pad, 0.42 + 0.18 * (f == "up") + 0.12 * vein + (noise(x, y, 81) - 0.5) * 0.08, x, y)
             return pick(pad, 0.35, x, y) if abs(x + 0.5 - w / 2) < w * 0.22 else CLEAR
         pt("lily_pad", "all", lily)
+    pt("sabre_fang", "all", lambda f, x, y, w, h: pick(G.shades("#f4eee0"), 0.6 + 0.15 * (f == "north") - 0.15 * (y == h - 1), x, y))
     zombie = pal.extra.get("stitched")
     thread, hole, purple = G.shades("#e0dccc"), G.shades("#141414"), G.shades("#7a4a7a")
     ink = G.shades("#141414")
@@ -384,6 +398,8 @@ def build(sp):
         r.put("body", cube("star", [-1.25, 18.4, -G.S("chest")[2] / 2 - G.S("bust")[2] - 0.7 + g.z]))
     if d.get("grin"):                                    # the grin, wide across her lower face
         r.put("head", cube("grin", [-2.25, g.hy + 0.6, -4.2 + g.z]))
+    if d.get("sabre"):                                   # two long fangs from her upper lip, down past her chin
+        r.put("head", cube("sabre_fang", [-1.25, g.hy - 0.45, -4.4 + g.z]), cube("sabre_fang", [0.75, g.hy - 0.45, -4.4 + g.z]))
     if "stitched" in d["variants"]:                      # Neko Zombie's muzzle (drawn only on that variant)
         r.put("head", cube("nz_muzzle", [-1.75, g.hy + 0.4, -6.3 + g.z]))
     if d.get("chibi"):

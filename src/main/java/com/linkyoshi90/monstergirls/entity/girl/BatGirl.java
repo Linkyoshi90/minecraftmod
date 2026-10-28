@@ -160,6 +160,7 @@ public class BatGirl extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.CAMAZOTZ_BAT && this.level() instanceof ServerLevel dark && !this.isBaby() && this.tickCount % 40 == 0) this.nightBite(dark, !dark.isDay());
         if (this.species == GirlSpecies.FROND_BAT && this.level() instanceof ServerLevel canopy && !this.isBaby() && this.tickCount % 600 == 0) this.shakeLeaves(canopy);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.isRoosting()) {
@@ -261,5 +262,22 @@ public class BatGirl extends AbstractMonsterGirl {
         for (ItemStack st : drops) net.minecraft.world.level.block.Block.popResource(level, at.below(), st);
         level.levelEvent(2001, at, net.minecraft.world.level.block.Block.getId(state));
         return drops;
+    }
+
+    // --- Camazotz (nineteenth wave) ---------------------------------------------------------------------------------
+
+    /** At night she bites the nearest monster within 8 blocks of her friend for two points, and the stolen strength heals her
+     *  friend by as much. 1 if she bit, 0 if not (day, or none near), -1 without a friend. */
+    public int nightBite(ServerLevel level, boolean night) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        if (!night) return 0;
+        net.minecraft.world.entity.monster.Monster m = level.getNearestEntity(net.minecraft.world.entity.monster.Monster.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat(), friend,
+                friend.getX(), friend.getY(), friend.getZ(), friend.getBoundingBox().inflate(8));
+        if (m == null) return 0;
+        m.hurt(level.damageSources().mobAttack(this), 2.0F);
+        friend.heal(2.0F);
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.DAMAGE_INDICATOR, m.getX(), m.getY(0.7), m.getZ(), 3, 0.2, 0.2, 0.2, 0.0);
+        return 1;
     }
 }

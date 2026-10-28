@@ -106,7 +106,9 @@ SPECIES = {
         variants={"red": dict(SKIN="#e8a090", extra=dict(root="#c86a5a", leaf="#4a9a3a")),
                   "purple": dict(SKIN="#c8a8d8", extra=dict(root="#9a6ab8", leaf="#4a9a3a")),
                   "golden": dict(SKIN="#f0d890", extra=dict(root="#d8b050", leaf="#7ab84a")),
-                  "dark": dict(SKIN="#a8886a", extra=dict(root="#5a3e2a", leaf="#2a6a2a"))}),
+                  "dark": dict(SKIN="#a8886a", extra=dict(root="#5a3e2a", leaf="#2a6a2a")),
+                  # homage (2026-10-28): a Pikmin: blue skin, a single leaf on a long stalk
+                  "leaf_sprout": dict(SKIN="#4a6ae8", HAIR="#3a5ad8", EYE="#1e1e24", CLOTH="#3a5ad8", extra=dict(root="#3a5ad8", leaf="#5ab84a"))}),
 }
 
 

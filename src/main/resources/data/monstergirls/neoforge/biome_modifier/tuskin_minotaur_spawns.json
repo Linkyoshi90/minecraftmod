@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_tuskin_minotaur",
+  "spawners": {
+    "type": "monstergirls:tuskin_minotaur",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

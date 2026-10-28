@@ -20,6 +20,20 @@ SPADE = [(.75, .75, 4), (.5, .5, 4), (2, 2, .5)]
 SPADE_REST = [(-20, 0, 0), (25, 0, 0), (10, 0, 0)]
 
 SPECIES = {
+    # nineteenth wave: the akaname, the filth-licker of the bathhouses: blue hair, a simple dress, a long tongue out
+    "akaname_devil": dict(
+        build="petite", outfit=dict(top=["sweater"], bottom="wrap_skirt", extras=["belt"], colors=dict(cloth2="#3a5ab8", leather="#2a3a7a")),
+        hair="wavy", bangs="parted", ears="elf", legs="bare", foot="shoe", tongue=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#3a6ad8", FUR="#3a6ad8", LIGHT="#c8d8f8", MARK="#1e3a8a", EYE="#2a4ab0", CLOTH="#3a5ab8", TRIM="#a8c0f0",
+                 extra=dict(boot="#2a3a7a", tongue="#5a8af0")),
+        variants={"red": dict(SKIN=skin("#e0786a"), HAIR="#2a1e1e", FUR="#2a1e1e", EYE="#f8d040", CLOTH="#5a3a2a", TRIM="#e8c060",
+                              extra=dict(boot="#3a2418", tongue="#d84a5a", cloth2="#5a3a2a")),
+                  "green": dict(HAIR="#3a9a5a", FUR="#3a9a5a", EYE="#2a6a3a", CLOTH="#3a8a5a", TRIM="#c8f0c8",
+                                extra=dict(boot="#1e4a2a", tongue="#e86a8a", cloth2="#3a8a5a")),
+                  "purple": dict(HAIR="#7a4ab8", FUR="#7a4ab8", EYE="#5a2a8a", CLOTH="#6a3aa8", TRIM="#e0c8f8",
+                                 extra=dict(boot="#3a1e5a", tongue="#a86af0", cloth2="#6a3aa8")),
+                  "pink": dict(HAIR="#f08ab8", FUR="#f08ab8", EYE="#a83a6a", CLOTH="#f0a0c0", TRIM="#fff0f6",
+                               extra=dict(boot="#a83a6a", tongue="#e84a7a", cloth2="#f0a0c0"))}),
     # sixteenth wave: the kikimora, a little house spirit in a sarafan and a knotted headscarf
     "kikimora_devil": dict(
         build="petite", outfit=dict(top=["sweater"], bottom="wrap_skirt", extras=["belt"], colors=dict(cloth2="#c83a2a")),
@@ -166,10 +180,14 @@ def declare_hook(sp, d):
         out += [("canopy", 14, 1, 14), ("canopy_b", 10.5, 1.25, 10.5), ("canopy_c", 7, 1.25, 7), ("canopy_top", 3.5, 1, 3.5), ("umb_tip", 1, 2, 1)]
     if d.get("kerchief"):                                # the kikimora's headscarf, knotted at the nape
         out += [("kerchief", 8.75, 4.5, 8.75), ("kerchief_knot", 2.5, 1.5, 1), ("kerchief_end", 1.5, 3, .25)]
+    if d.get("tongue"):                                  # the akaname's long tongue, lolling out over her chin
+        out += [("long_tongue", 1.25, 3, .25)]
     return out
 
 
 def paint_hook(pt, pal, d):
+    tg = G.shades(pal.extra.get("tongue", "#5a8af0"))
+    pt("long_tongue", "all", lambda f, x, y, w, h: pick(tg, 0.55 + 0.15 * (x == w // 2) - 0.1 * (y == h - 1), x, y))
     kc, kd = G.shades(pal.extra.get("kerchief", "#c83a2a")), G.shades(pal.extra.get("kerchief_dot", "#f4f0e4"))
     pt("kerchief", "all", lambda f, x, y, w, h: CLEAR if f == "down" or (f == "north" and y > 1) else
        pick(kd, 0.6, x, y) if (x % 4 == 1 and y % 4 == 1) else pick(kc, 0.5 + 0.15 * (f == "up"), x, y))
@@ -255,6 +273,8 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
+    if d.get("tongue"):
+        r.put("head", G.rot_cube("long_tongue", [-0.625, hy - 1.6, -4.35 + z], [0, hy + 1.4, -4.35 + z], 18, 0, 0))
     if d.get("kerchief"):
         r.put("head", cube("kerchief", [-4.375, hy + 4.4, -4.375 + z], inflate=0.7), cube("kerchief_knot", [-1.25, hy + 2.3, 4.6 + z]),
               G.rot_cube("kerchief_end", [-1.6, hy - 0.6, 4.9 + z], [-0.85, hy + 2.3, 5.0 + z], 0, 0, 14),

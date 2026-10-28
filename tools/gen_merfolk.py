@@ -18,6 +18,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # nineteenth wave: the moopie, a sea cow: cream and brown spots, cow's ears and little horns, a mane of sea-green curls
+    "moopie_mermaid": dict(
+        build="curvy", outfit=dict(top=["bandeau"], extras=["pearls", "bell_collar"], colors=dict(cloth2="#3ab89a")),
+        ears="cow", hair="wavy", bangs="swept", fluke=(7, .75, 3.5), size=1.1, cowhorns=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#3ab89a", FUR="#e8dcc4", LIGHT="#f8f0e0", MARK="#8a5a3a", EYE="#7a4ab8", CLOTH="#3ab89a", TRIM="#f0d070",
+                 INNER="#f0a8b0", pattern="patches", extra=dict(horn="#e8dcc0")),
+        variants={"brown": dict(HAIR="#7a4a2a", FUR="#a8784a", MARK="#5a3a1e", CLOTH="#c87a3a"),
+                  "black": dict(HAIR="#2a2a30", FUR="#f4f2ee", MARK="#1e1e22", EYE="#3a6ac8", CLOTH="#2a2a30"),
+                  "pink": dict(HAIR="#f0a0c0", FUR="#f8e0e8", MARK="#d87098", EYE="#3a8ad8", CLOTH="#f0a0c0"),
+                  "blue": dict(HAIR="#3a6ad8", FUR="#d8e4f8", MARK="#3a5aa8", EYE="#e8a030", CLOTH="#3a6ad8")}),
     # eighteenth wave: the rusalka, the water spirit of Slavic rivers, pale, long loose green hair, a white shift
     "rusalka_mermaid": dict(
         build="slim", outfit=dict(top=["halter", "capelet"], extras=["pearls"], colors=dict(cloth2="#e8ece4")),
@@ -78,7 +88,9 @@ SPECIES = {
         variants={"tiger": dict(FUR="#8a7a62", MARK="#3a3024", pattern="stripes", HAIR="#6a5a46"),
                   "whale": dict(FUR="#2a3a5a", MARK="#f0f0ea", pattern="spots", HAIR="#3a4a6a", CLOTH="#c8b880"),
                   "mako": dict(FUR="#2a4a8a", HAIR="#3a5a9a", MARK="#1a2a5a"),
-                  "lemon": dict(FUR="#b8a868", HAIR="#c8b878", MARK="#8a7a48", CLOTH="#3a5a3a")}),
+                  "lemon": dict(FUR="#b8a868", HAIR="#c8b878", MARK="#8a7a48", CLOTH="#3a5a3a"),
+                  # homage (2026-10-28): Gawr Gura (VTuber): white hair with blue streaks, a blue hoodie
+                  "trident_hood": dict(HAIR="#f4f6fa", FUR="#5a8ad8", MARK="#2a4a9a", LIGHT="#f0f4fa", CLOTH="#5a8ad8", TRIM="#f4f6fa", EYE="#3a8ae8")}),
     "seal_mermaid": dict(
         build="curvy", outfit=dict(top=["bandeau"], extras=["pearls"]),
         ears=None, hair="bob", fluke=(7, .75, 3.5), seal=True,
@@ -96,7 +108,9 @@ SPECIES = {
         variants={"wild": dict(FUR="#6a5a3a", HAIR="#7a6a48", LIGHT="#8a7a58", MARK="#3a2e1e", pattern="speckle", INNER="#8a4a4a", CLOTH="#4a6a3a"),
                   "gold": dict(FUR="#f0c858", HAIR="#f4d070", LIGHT="#f8e4a0", INNER="#e8a040", CLOTH="#c87a30"),
                   "cyan": dict(FUR="#c8eef4", HAIR="#d8f4f8", LIGHT="#eafafc", INNER="#e86a8a", CLOTH="#5ab0c8"),
-                  "blue": dict(FUR="#4a5ac8", HAIR="#5a6ad8", LIGHT="#7a88e0", MARK="#2a3a8a", INNER="#8a5ad8", CLOTH="#3a3a8a")}),
+                  "blue": dict(FUR="#4a5ac8", HAIR="#5a6ad8", LIGHT="#7a88e0", MARK="#2a3a8a", INNER="#8a5ad8", CLOTH="#3a3a8a"),
+                  # homage (2026-10-28): Mudkip (Pokemon): blue with orange cheek gills, a pale belly
+                  "mud_fin": dict(FUR="#5aa8e8", HAIR="#5aa8e8", LIGHT="#c8e8f8", MARK="#2a6ab8", INNER="#f8902a", CLOTH="#2a6ab8", EYE="#1e1a18")}),
     "dolphin_mermaid": dict(
         build="slim", outfit=dict(top=["halter"], extras=["armlets"]),
         ears="fin", hair="twintails", bangs="swept", fluke=(8, .75, 3.5), dorsal=(.75, 4.5, 3.5), size=1.05,
@@ -226,6 +240,8 @@ def declare(sp):
         parts += [("saya", 1, 10, 1.25), ("tsuba", 2, .5, 2), ("tsuka", .75, 4, .75)]
     if d.get("coral"):
         parts += [("coral_a", .75, 4, .75), ("coral_b", .5, 2.5, .5), ("coral_tip", .75, .75, .75)]
+    if d.get("cowhorns"):
+        parts += [("mhorn_a", .75, 1.5, .75), ("mhorn_b", .5, 1, .5)]
     parts.append(("shell", 2, 1.75, .5))
     G.declare(parts, ears=d["ears"], hair=SPECIES[sp]["hair"],
               build=SPECIES[sp].get("build"), outfit=SPECIES[sp].get("outfit"))
@@ -310,6 +326,11 @@ def paint(sp, key):
         pt("hair_cap", ("up",), lambda f, x, y, w, h: pick(shades("#d8402a"), 0.55, x, y) if (x - w / 2) ** 2 + (y - h / 2) ** 2 < 30 else None)
     if d["ears"] == "round":
         G.paint_ears(pt, pal, G.fur_fn(pal, pattern="solid"))
+    if d["ears"] == "cow":
+        G.paint_ears(pt, pal, G.fur_fn(pal, pattern="solid"))
+    horn = shades(pal.extra.get("horn", "#e8dcc0"))
+    pt("mhorn_a", "all", lambda f, x, y, w, h: pick(horn, 0.5 + 0.1 * (f == "up"), x, y))
+    pt("mhorn_b", "all", lambda f, x, y, w, h: pick(horn, 0.65, x, y))
     if d["ears"] == "gill":
         pt("ear_a", "all", lambda f, x, y, w, h: pick(pal.INNER, 0.55 + 0.25 * (y % 2 == 0), x, y))
     elif d["ears"] == "fin":
@@ -385,6 +406,12 @@ def build(sp):
                 cs.append(G.rot_cube("coral_b", [tx - 0.25, 30.6, -1.0], [tx, 30.6, -0.8], -20, 0, -60 * sg))
                 cs.append(cube("coral_tip", [tx + sg * 0.3 - 0.375, 31.5, -1.4]))
         r.put("head", *cs)
+    if d.get("cowhorns"):                                # two little horns curving out of her curls
+        cs = []
+        for sg in (-1, 1):
+            cs += [G.rot_cube("mhorn_a", [sg * 2.6 - 0.375, 28.0, -1.0], [sg * 2.6, 28.0, -0.6], -10, 0, -35 * sg),
+                   G.rot_cube("mhorn_b", [sg * 3.5 - 0.25, 29.2, -1.0], [sg * 3.5, 29.2, -0.75], -10, 0, -70 * sg)]
+        r.add("hair_horns", "head", [0, 28, 0], cs)
     if d.get("seal"):
         f2 = G.S("fin_2")
         for sg in (-1, 1):

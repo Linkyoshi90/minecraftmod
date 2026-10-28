@@ -121,7 +121,9 @@ SPECIES = {
                                           scythe="#6aaa3a", leafcape=True)),
                   "ghost": dict(SKIN=skin("pale"), HAIR="#e8e4d4", FUR="#ece8dc", LIGHT="#ffffff", MARK="#a8a490", EYE="#8a8a7a", CLOTH="#c8c4b0",
                                 extra=dict(wing="#f4f2ea", wing_vein="#a8a490", wing_alpha=190, antenna="#a8a490", stocking="#d8d4c4", boot="#8a8678",
-                                           scythe="#ece8dc"))}),
+                                           scythe="#ece8dc")),
+                  # homage (2026-10-28): Scyther (Pokemon): bright green, a cream belly, pale blades and wings
+                  "scythe_green": dict(HAIR="#5ad84a", FUR="#6ae05a", LIGHT="#f8f0c0", MARK="#2a8a2a", EYE="#1e1e1e", CLOTH="#f0e8b0", TRIM="#2a8a2a", extra=dict(wing="#f8f8ff", wing_vein="#c8c8d0", wing_alpha=200, antenna="#2a8a2a", stocking="#6ae05a", boot="#2a8a2a", scythe="#f0f0e8"))}),
     "fairy_bug": dict(
         build="petite", outfit=dict(top=["halter"], bottom="wrap_skirt", colors=dict(cloth2="#f8c8e0")), hair="twintails", bangs="swept", ears="elf",
         legs="bare", foot="shoe", wings="fairy", flies=True, flower=True,

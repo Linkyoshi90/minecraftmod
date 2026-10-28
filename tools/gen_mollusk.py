@@ -64,7 +64,9 @@ SPECIES = {
         variants={"blueringed": dict(FUR="#e8c840", HAIR="#d8a830", MARK="#2a5ad8", LIGHT="#f8e8a0", pattern="rings"),
                   "mimic": dict(FUR="#8a6a4a", HAIR="#5a3e26", MARK="#f2ece0", LIGHT="#e8dccc"),
                   "red": dict(FUR="#c83a2a", HAIR="#a82a1a", MARK="#6a1a10", LIGHT="#f0a090"),
-                  "dumbo": dict(FUR="#f0b0c8", HAIR="#e890b0", MARK="#c8608a", LIGHT="#fce0ea")}),
+                  "dumbo": dict(FUR="#f0b0c8", HAIR="#e890b0", MARK="#c8608a", LIGHT="#fce0ea"),
+                  # homage (2026-10-28): an Octoling (Splatoon): magenta tentacle hair, a black bodysuit with teal trim
+                  "octo_agent": dict(FUR="#e8308a", HAIR="#e8308a", MARK="#7a0e48", LIGHT="#ff8ac0", EYE="#2ae8c8", CLOTH="#1e1e24", TRIM="#2ae8c8", extra=dict(cloth2="#1e1e24"))}),
     "snail_mollusk": dict(
         build="petite", outfit=dict(top=["sweater"], bottom="wrap_skirt", colors=dict(cloth2="#8a9a5a")),
         hair="bun", bangs="wispy", ears="antenna", legs="bare", foot="shoe", body="snail",
@@ -160,6 +162,7 @@ def build_hook(r, g, d):
     if b == "octopus" and d.get("tent_hair"):              # the squidkin's hair curls into tentacles at the ends
         for i, (x, zz, ry) in enumerate(((-3.4, 2.6, 20), (-1.2, 3.6, 8), (1.2, 3.6, -8), (3.4, 2.6, -20), (-4.4, 0.4, 70), (4.4, 0.4, -70))):
             P.chain(r, f"hair_tent{i + 1}", "head", (x, hy + 2.5, zz + z), ["htent_a", "htent_b"], rx=-12, ry=ry, bend=-14)
+    if b == "octopus":                                     # the skirt of eight short tentacles (every octopus body)
         for i in range(8):
             ang = 360 * i / 8 + 22.5
             import math

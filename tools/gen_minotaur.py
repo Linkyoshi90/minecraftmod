@@ -21,6 +21,22 @@ COW_TAIL = [(1, 1, 3.5), (.75, .75, 3.5), (1.5, 1.75, 1.75)]
 TAIL_REST = [(-62, 0, 0), (-14, 0, 0), (-6, 0, 0)]
 
 SPECIES = {
+    # nineteenth wave: the tuskin, a shaggy blue mammoth girl, white cheeks, great tusks bound with iron
+    "tuskin_minotaur": dict(
+        build="strong", outfit=dict(top=["sarashi"], bottom="loincloth", extras=["arm_wraps", "belt", "bracers"], colors=dict(cloth2="#3a3a4a")),
+        hair="shaggy", bangs="messy", ears="cow", legs="fur", foot="hoof", tail=[(1, 1, 3), (1.5, 1.5, 1.5)], tail_look="tuft",
+        tail_rest=[(-15, 0, 0), (10, 0, 0)], wool=True, tusks=True,
+        male=dict(hair="shaggy", outfit=dict(bottom="loincloth", extras=["arm_wraps", "belt", "bracers"], colors=dict(cloth2="#3a3a4a"))),
+        pal=dict(SKIN=skin("fair"), HAIR="#2a4ab8", FUR="#2a48b0", LIGHT="#8aa8f0", MARK="#14246a", EYE="#c83a5a", CLOTH="#3a3a4a", TRIM="#8a8a9a",
+                 INNER="#f0b0c0", pattern="solid", extra=dict(tusk="#f4ecd8", tusk_band="#5a5e6a", hoof="#1e1e28", wool="#3a5ac8")),
+        variants={"brown": dict(HAIR="#6a4228", FUR="#7a4e2e", LIGHT="#c8a078", MARK="#3a2414", EYE="#2a6a3a",
+                                extra=dict(tusk="#f4ecd8", tusk_band="#8a5a2a", hoof="#2a1a12", wool="#8a5a34")),
+                  "grey": dict(HAIR="#6a6a74", FUR="#7a7a84", LIGHT="#c8c8d0", MARK="#3a3a42", EYE="#3a6ac8",
+                               extra=dict(tusk="#f4ecd8", tusk_band="#3a3a42", hoof="#2a2a30", wool="#8a8a94")),
+                  "white": dict(HAIR="#e8ecf4", FUR="#e0e4ec", LIGHT="#ffffff", MARK="#a8acb8", EYE="#3a8ad8",
+                                extra=dict(tusk="#e8d8b0", tusk_band="#5a7ac0", hoof="#5a5a64", wool="#f4f6fa")),
+                  "red": dict(HAIR="#a8402a", FUR="#b04a30", LIGHT="#f0b090", MARK="#5a1e12", EYE="#e8c040",
+                              extra=dict(tusk="#f4ecd8", tusk_band="#2a2a30", hoof="#2a1610", wool="#c85a3a"))}),
     # eighteenth wave: the skjoldram, a shaggy teal ram in a steel brow plate, her curling horns red as rust
     "skjoldram_minotaur": dict(
         build="strong", outfit=dict(top=["sarashi"], bottom="loincloth", extras=["pauldron", "arm_wraps", "belt"], colors=dict(cloth2="#5a3a3a")),
@@ -214,6 +230,8 @@ def declare_hook(sp, d):
     if d.get("regalia"):                                # the reedbull's horn bands and tassels, brow rune, woven blanket, pendant and anklets
         out += [("hband", 1.75, 1.75, 1.75), ("htassel", .5, 2.5, .5), ("rune", 3, 2.5, .25), ("blanket", 7, 7, .5), ("blanket_s", .5, 4.5, 4),
                 ("pendant", 1.75, 2, .25), ("anklet", 3.5, 1, 3.5)]
+    if d.get("tusks"):                                  # the tuskin's tusks, from her cheeks, curving forward and up, an iron band on each
+        out += [("tusk_a", 1.25, 1.25, 4.5), ("tusk_b", 1, 1, 4), ("tusk_band", 1.5, .5, 1.5)]
     return out
 
 
@@ -230,6 +248,10 @@ def wool_fn(pal):
 
 
 def paint_hook(pt, pal, d):
+    tusk, tband = G.shades(pal.extra.get("tusk", "#f4ecd8")), G.shades(pal.extra.get("tusk_band", "#5a5e6a"))
+    pt("tusk_a", "all", lambda f, x, y, w, h: pick(tusk, 0.5 + 0.15 * (f == "up") - 0.1 * (f == "down"), x, y))
+    pt("tusk_b", "all", lambda f, x, y, w, h: pick(tusk, 0.62 + 0.1 * (f == "up"), x, y))
+    pt("tusk_band", "all", lambda f, x, y, w, h: pick(tband, 0.5 + 0.2 * (f == "up"), x, y))
     brass = G.shades(pal.extra.get("brass", "#c8902a"))
     rune, blanket, weave = G.shades(pal.extra.get("rune", "#e8eef8")), G.shades(pal.extra.get("blanket", "#2a3a8a")), G.shades(pal.extra.get("weave", "#d8c08a"))
     pt("hband", "all", lambda f, x, y, w, h: pick(brass, 0.5 + 0.25 * (y % 3 == 0), x, y))
@@ -277,6 +299,14 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
+    if d.get("tusks"):
+        cs = []
+        for sg in (-1, 1):
+            x = sg * 3.0
+            cs += [G.rot_cube("tusk_a", [x - 0.625, hy - 0.4, -8.6 + z], [x, hy + 0.2, -4.1 + z], 15, -25 * sg, 0),
+                   G.rot_cube("tusk_band", [x - 0.75, hy - 0.55, -6.0 + z], [x, hy + 0.2, -4.1 + z], 15, -25 * sg, 0),
+                   G.rot_cube("tusk_b", [x - 0.5 + sg * 1.9, hy - 1.5, -11.6 + z], [x + sg * 1.9, hy - 1.0, -7.6 + z], -40, -40 * sg, 0)]
+        r.add("tusks", "head", [0, hy + 1, -4 + z], cs)
     if d.get("regalia"):
         cd = G.S("chest")[2]
         r.put("head", cube("rune", [-1.5, hy + 4.6, -4.4 + z]))

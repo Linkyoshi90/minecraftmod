@@ -293,6 +293,23 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
 - [x] Journal and hearth discoverable (2026-10-28): the journal opens again (its pages are synced to the client before the book screen opens), it starts with four guide pages (making friends, the hearth, expeditions, weapons), both recipes are unlocked at login, and every player gets a journal on their first visit (not on the GameTest server).
 - [x] Homage variants from POP_CULTURE_VARIANTS.md: `jewel_thief` (cave bat), `ink_kid` (ika), `pink_dairy` (cattle minotaur), `sun_goddess` (wolf girl); palettes only, rare in the wild (`HOMAGES`). The rest of that list wants a prop each.
 - [ ] Dev client for the life features: a held bow and a TaCZ gun in a girl's hand (position on `hand_r`; the item may need vanilla's extra 180-degree turn once the arm is raised), the aiming poses and recoil, TaCZ shooting and reloading from the pouch, the journal's pages, a hut going up and the market's presents, an expedition's return.
+- [x] **Nineteenth wave** (2026-10-28), tested in `NineteenthWaveTests`:
+  - **Tin Jack** (construct, `witch_hat`: `hair_hat`, a lantern that glows): every second, `scarePhantoms` gives the phantoms within 24 of her friend Weakness II, clears their target and sends them off.
+  - **Turquoise serpent** (lamia): every second, `scaleWard` gives her friend within 10, below half health, Resistance I.
+  - **Hoop snake** (lamia): every 5 s, `sting` poisons the nearest monster within 8 of her friend.
+  - **Moopie** (merfolk, `cowhorns`: `hair_horns`, cow ears, patches; a water creature): every 5 s, `seaMilk` clears Poison, Hunger and Nausea from her friend within 8.
+  - **Tuskin** (minotaur, `tusks`, wool; bulls too): every second, `snowplough` packs the powder snow within 3 of her friend into snow blocks and thaws them.
+  - **Sabre** (nekomata, `sabre` fangs): every 2 s, `finishingBite` kills a monster within 8 of her friend that has a quarter of its health or less.
+  - **Obsidian hound** (canid, `club`: a macuahuitl on her back): every second, `coolLava` turns still lava within 2 of her friend's feet to obsidian.
+  - **Kasurenijimi** (undead, `smudge` over her face): every second, `smudge` gives her sneaking friend within 12 Invisibility.
+  - **Draugr** (undead, torn hem): every second, `layDead` makes the undead within 16 that hunt her friend forget them.
+  - **Camazotz** (bat, `leafnose`): every 2 s at night, `nightBite` hurts the nearest monster within 8 of her friend for 2 and heals her friend by 2.
+  - **Akaname** (devil, `tongue`): every 2 s, `scrub` turns one mossy cobblestone or stone brick block (stairs, slabs, walls too) within 6 of her friend clean.
+  - **Emberu** (`EmberuHarpy`, `tools/gen_emberu_harpy.py`: the ostrich's rig recoloured; runs, cannot fly; hatchling, eggs, spawns in savannas and badlands, chickens are kin): every second, `kickAway` kicks the monsters within 3 of her friend away.
+  - **Paints:** comic, blueprint, koi and lemonade (June only, `Painted.roll`), so 75 in all.
+  - **Homage variants** (`AbstractMonsterGirl.HOMAGES`): octo_agent, ninja_chameleon, shell_trooper, town_clerk, scythe_green, leaf_sprout, mud_fin, trident_hood.
+- [ ] Dev client for the nineteenth wave: Tin Jack's hat and lantern, the tuskin's tusks and the sabre's fangs at game scale, the kasurenijimi's smudged face, the emberu running and kicking, the four paints, the eight homage looks.
+- [ ] Not done for the nineteenth wave: a harpy field guide entry for the emberu (that guide is hand-written).
 - [x] **Eighteenth wave** (2026-10-28), tested in `EighteenthWaveTests`:
   - **Spoodr** (arachne, `tufts`: `hair_tufts`): every 2 s, `sweepWebs` clears a cobweb within 6 of her friend and gives them its string.
   - **Ushi-oni** (arachne, `ox_horns`: `hair_horns`): `bellow`, at most every 20 s: the monsters within 10 of her friend drop their target, get Slowness II and run.

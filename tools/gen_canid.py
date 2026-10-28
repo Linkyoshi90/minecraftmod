@@ -17,6 +17,18 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # nineteenth wave: the obsidian macuahuitl hound, a temple dog in navy and gold, an obsidian-edged war club across her back
+    "obsidian_hound_canid": dict(
+        build="athletic", outfit=dict(top=["bandeau", "harness"], bottom="loincloth", extras=["pauldron", "bracers", "usekh"],
+                                      colors=dict(cloth2="#2a3a8a", leather="#c8a040")),
+        hair="ponytail", bangs="blunt", ears="fox", legs="fur", foot="paw", club=True,
+        tail=[(1.5, 1.5, 4), (1.25, 1.25, 4)], tail_rest=[(-35, 0, 0), (15, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("brown"), HAIR="#1a1e3a", FUR="#1e2448", LIGHT="#4a5a9a", MARK="#0e1024", EYE="#e8c040", CLOTH="#2a3a8a", TRIM="#e8c050",
+                 pattern="solid", extra=dict(club="#6a4a2a", glass="#1a1420")),
+        variants={"black": dict(HAIR="#141216", FUR="#1a181c", LIGHT="#4a464e", MARK="#060508", CLOTH="#7a1e24", EYE="#e83a3a"),
+                  "jade": dict(HAIR="#1e3a2e", FUR="#2a5a44", LIGHT="#6aa888", MARK="#0e2a1e", CLOTH="#e8c050", TRIM="#2a8a6a"),
+                  "red": dict(HAIR="#4a1414", FUR="#7a2420", LIGHT="#c8644a", MARK="#2a0808", CLOTH="#1e1e24", EYE="#f8d040"),
+                  "gold": dict(HAIR="#7a5418", FUR="#b8862a", LIGHT="#f0d080", MARK="#4a3010", CLOTH="#1e2a6a", EYE="#3ad8c8")}),
     # seventeenth wave: the amarok, the giant lone wolf of Inuit legend: tall, shaggy, slate grey with a pale ruff
     "amarok_canid": dict(
         build="strong", outfit=dict(top=["bandeau", "mantle"], bottom="loincloth", extras=["arm_wraps", "belt"], colors=dict(cloth2="#3a3e48", leather="#3a3a40")),
@@ -113,7 +125,9 @@ SPECIES = {
         variants={"cobalt": dict(FUR="#3a5aa8", HAIR="#2a3a7a", LIGHT="#a8c0f0", MARK="#1a2a5a", EYE="#e8b030"),
                   "black": dict(FUR="#2a2624", HAIR="#141210", LIGHT="#6a6260", MARK="#0a0808"),
                   "cream": dict(FUR="#e8d8b8", HAIR="#d8c098", LIGHT="#fff8e8", MARK="#a89070"),
-                  "red": dict(FUR="#a84a2a", HAIR="#7a2e18", LIGHT="#e8a07a", MARK="#4a1a0a")}),
+                  "red": dict(FUR="#a84a2a", HAIR="#7a2e18", LIGHT="#e8a07a", MARK="#4a1a0a"),
+                  # homage (2026-10-28): Isabelle (Animal Crossing): golden fur, a green vest over a white blouse, a red bell
+                  "town_clerk": dict(FUR="#f0c860", HAIR="#f0c860", LIGHT="#fff0c0", MARK="#c89a3a", EYE="#1e1a18", CLOTH="#3a8a4a", TRIM="#d82a2a")}),
     # fourteenth wave: the cu sith, the great green fairy hound, her tail curled up over her back
     "cu_sith_canid": dict(
         build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["belt", "scarf"], colors=dict(scarf="#e8dcb0", cloth2="#2a3a2a")),
@@ -175,6 +189,8 @@ def build_melon(r, g):
 
 
 def declare_hook(sp, d):
+    if d.get("club"):                                    # the macuahuitl: a flat wooden club edged with obsidian blades
+        return [("club", 1.75, 11, .75), ("club_edge", .5, 1.25, .5), ("club_grip", 1, 3.5, 1)]
     if d.get("melon"):
         return melon_parts(d)
     if d.get("mummy_kit"):                              # the mummy variants' muzzle and the blade in the head
@@ -189,6 +205,10 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    wood, glass = G.shades(pal.extra.get("club", "#6a4a2a")), G.shades(pal.extra.get("glass", "#1a1420"))
+    pt("club", "all", lambda f, x, y, w, h: pick(wood, 0.45 + 0.12 * (x % 2) + 0.15 * (y % 5 == 0), x, y))
+    pt("club_edge", "all", lambda f, x, y, w, h: pick(glass, 0.35 + 0.45 * (x == 0 and y == 0), x, y))
+    pt("club_grip", "all", lambda f, x, y, w, h: pick(G.shades("#c8a040") if y % 2 else wood, 0.5, x, y))
     paint_melon(pt, pal)
     gold = G.shades("#e8c050")
     pt("scale_beam", "all", lambda f, x, y, w, h: pick(gold, 0.6, x, y))
@@ -264,6 +284,13 @@ def paint_hook(pt, pal, d):
 
 
 def build_hook(r, g, d):
+    if d.get("club"):                                    # slung across her back, the grip over her right shoulder
+        bz = G.S("chest")[2] / 2 + 0.3 + g.z
+        rot = dict(pivot=[0, 16, bz], rotation=[0, 0, -38])
+        cs = [cube("club", [-0.875, 8.5, bz], **rot), cube("club_grip", [-0.5, 19.5, bz - 0.125], **rot)]
+        for k in range(5):
+            cs += [cube("club_edge", [-1.375, 9.5 + 2 * k, bz + 0.125], **rot), cube("club_edge", [0.875, 9.5 + 2 * k, bz + 0.125], **rot)]
+        r.add("club", "body", [0, 16, bz], cs)
     if d.get("melon"):
         build_melon(r, g)
     if d.get("mummy_kit"):                              # a muzzle; a machete (Papa) or a cleaver (the dog) stuck in the top of the head

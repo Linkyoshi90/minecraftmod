@@ -487,6 +487,7 @@ public class Nekomata extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.SABRE_NEKOMATA && this.level() instanceof ServerLevel hunt && !this.isBaby() && this.tickCount % 40 == 0) this.finishingBite(hunt);
         if (this.species == GirlSpecies.BASTET_NEKOMATA && this.level() instanceof ServerLevel home && !this.isBaby() && this.tickCount % 10 == 0) this.wardCreepers(home);
         if (this.species == GirlSpecies.CENSER_LION_NEKOMATA && this.level() instanceof ServerLevel incense && !this.isBaby() && this.tickCount % 20 == 0) this.incense(incense);
         if (this.species == GirlSpecies.BLAZE_CAT_NEKOMATA && this.level() instanceof ServerLevel fire && this.tickCount % 40 == 0 && !this.isBaby()) this.kindle(fire);
@@ -773,5 +774,21 @@ public class Nekomata extends AbstractMonsterGirl {
             n++;
         }
         return n;
+    }
+
+    // --- the sabre (nineteenth wave) --------------------------------------------------------------------------------
+
+    /** A monster within 8 blocks of her friend with a quarter of its health or less: she finishes it. 1 if she did, 0 if none
+     *  was that hurt, -1 without a friend. */
+    public int finishingBite(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8), m -> m.isAlive() && m.getHealth() <= m.getMaxHealth() / 4)) {
+            m.hurt(level.damageSources().mobAttack(this), m.getHealth() + 1.0F);
+            this.getLookControl().setLookAt(m);
+            this.playSound(net.minecraft.sounds.SoundEvents.CAT_HISS, 1.0F, 0.7F);
+            return 1;
+        }
+        return 0;
     }
 }

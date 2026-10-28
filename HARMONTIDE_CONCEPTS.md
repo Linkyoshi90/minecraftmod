@@ -503,3 +503,29 @@ rusalka, the ushi-oni and the domovoi).
 Paints: cow (black patches on white), rust (rust eating through riveted steel), lava lamp (warm blobs rising through
 violet; the blobs glow) and the seasonal sunflower (August only), so 71 in all.
 
+## Nineteenth wave (2026-10-28, in the game)
+
+Eight Harmontide originals from the reference art (their blue looks) and four creatures of folklore (Camazotz, the
+akaname, the hoop snake and the draugr).
+
+| Species | Home | Design |
+|---|---|---|
+| **Tin Jack** | Construct | A scarecrow of riveted blue tin in a tattered cloak and a pointed hat, a lantern at her hip (it glows): phantoms near her friend lose heart, weakened, and wheel away. |
+| **Turquoise Serpent** | Lamia | A royal blue river serpent with a turquoise belly and a feathered crest, hung with gold and turquoise: her friend near her has Resistance while badly hurt. |
+| **Moopie** | Merfolk | A sea cow: a cream and brown spotted tail, cow's ears and little horns in a mane of sea-green curls, a bell at her throat: poison, hunger and nausea wear off her friend near her. |
+| **Tuskin** | Minotaur | A shaggy blue mammoth girl, white cheeks, great tusks bound with iron sweeping out from her jaw: the powder snow round her friend packs into snow blocks, and the cold lets go of them. |
+| **Sabre** | Nekomata | A shaggy blue sabre-tooth in black leather, a white ruff, two long fangs: she finishes off a badly wounded monster near her friend. |
+| **Obsidian Hound** | Canid | The obsidian macuahuitl hound: a temple dog in navy and gold, an obsidian-edged war club across her back: still lava near her friend's feet cools to obsidian. |
+| **Kasurenijimi** | Undead | A ghost in a school uniform whose face is smeared out like an old photograph: her friend, sneaking near her, blurs out of sight. |
+| **Emberu** | Harpy | A tall blue emu on the ostrich's long legs, her plumage painted with pale lines, turquoise beads: she kicks away the monsters that come at her friend. |
+| **Camazotz** | Bat | The Maya death bat, blue-grey, great pink ears and a leaf nose, jade at her arms: at night she bites a monster near her friend and the stolen strength heals them. |
+| **Akaname** | Devil | The filth-licker of Japanese bathhouses, blue-haired, her long tongue out: she scrubs the moss off the mossy stone near her friend. |
+| **Hoop Snake** | Lamia | The hoop snake of American tall tales, sky blue with a cream belly: every few seconds she stings a monster near her friend: poisoned. |
+| **Draugr** | Undead | The barrow-dweller of the sagas, corpse grey with pale glowing eyes, in torn grave clothes: the undead hunting her friend give up. |
+
+Paints: comic (flat tones, halftone dots and inked outlines), blueprint (white lines and a grid on blueprint blue), koi
+(red-orange patches on pearl white) and the seasonal lemonade (lemon slices on pale yellow, June only), so 75 in all.
+
+Homage variants (POP_CULTURE_VARIANTS.md): octo agent (octopus), ninja chameleon, shell trooper (turtle), town clerk
+(kobold), scythe green (mantis), leaf sprout (mandragora), mud fin (axolotl) and trident hood (shark).
+

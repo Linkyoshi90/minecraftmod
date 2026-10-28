@@ -204,6 +204,7 @@ public class Construct extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.TIN_JACK_CONSTRUCT && this.level() instanceof ServerLevel field && !this.isBaby() && this.tickCount % 20 == 0) this.scarePhantoms(field);
         if (this.isGargoyle() && !this.level().isClientSide) this.tickGargoyle();
         if (this.isTalos() && !this.level().isClientSide) this.tickTalos();
         if (this.isTin() && this.level() instanceof net.minecraft.server.level.ServerLevel tinLevel && this.tickCount % 5 == 0) this.tickHoard(tinLevel);
@@ -320,5 +321,25 @@ public class Construct extends AbstractMonsterGirl {
     @Override
     public SoundEvent getEatSound() {
         return SoundEvents.MUD_PLACE;
+    }
+
+    // --- Tin Jack (nineteenth wave) ---------------------------------------------------------------------------------
+
+    /** Phantoms within 24 blocks of her friend lose heart: Weakness II, no target, and they wheel up and away. How many, or -1
+     *  without a friend. */
+    public int scarePhantoms(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        int n = 0;
+        for (var phantom : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Phantom.class, friend.getBoundingBox().inflate(24))) {
+            phantom.setTarget(null);
+            phantom.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WEAKNESS, 200, 1));
+            net.minecraft.world.phys.Vec3 away = phantom.position().subtract(friend.position()).multiply(1, 0, 1);
+            if (away.lengthSqr() < 1.0E-4) away = new net.minecraft.world.phys.Vec3(1, 0, 0);
+            away = away.normalize();
+            phantom.setDeltaMovement(away.x * 0.8, 0.6, away.z * 0.8);
+            n++;
+        }
+        return n;
     }
 }

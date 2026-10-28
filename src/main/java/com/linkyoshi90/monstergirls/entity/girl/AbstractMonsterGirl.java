@@ -87,10 +87,12 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             "checkered", "sunset", "thunder", "burlap",                        // thunder's bolts glow
             "neon", "zebra", "terrazzo", "clover",                           // neon glows; clover is seasonal, March only
             "polka", "circuit", "giraffe", "watermelon",                     // circuit glows; watermelon is seasonal, July only
-            "cow", "rust", "lava_lamp", "sunflower");                        // lava lamp's blobs glow; sunflower is seasonal, August only
+            "cow", "rust", "lava_lamp", "sunflower",                         // lava lamp's blobs glow; sunflower is seasonal, August only
+            "comic", "blueprint", "koi", "lemonade");                        // lemonade is seasonal, June only
     /** Homage variants (the look of a favourite character): a wild one rolls them only rarely. */
     public static final java.util.Set<String> HOMAGES = java.util.Set.of("gunman", "blossom", "lost", "stitched", "nurse", "mummy", "ranger", "outback",
-            "jewel_thief", "ink_kid", "pink_dairy", "sun_goddess");                           // POP_CULTURE_VARIANTS.md
+            "jewel_thief", "ink_kid", "pink_dairy", "sun_goddess",                            // POP_CULTURE_VARIANTS.md
+            "octo_agent", "ninja_chameleon", "shell_trooper", "town_clerk", "scythe_green", "leaf_sprout", "mud_fin", "trident_hood");
     /** One wild girl in this many is painted, like a shiny. */
     public static final int PAINT_RARITY = 64;
     private static final EntityDataAccessor<Integer> DATA_FLAGS = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.INT);

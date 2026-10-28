@@ -30,7 +30,10 @@ chips) and clover (green with little shamrocks and flecks of gold, March only). 
 on bright colours), circuit (a green circuit board whose traces glow in the dark), giraffe (brown patches in a net of cream
 lines) and watermelon (red flesh with seeds over a striped green rind, July only). And (eighteenth wave): cow (black
 patches on white), rust (orange-brown rust eating through grey steel), lava lamp (warm blobs rising through violet, the
-blobs glow) and sunflower (golden petals round brown seed heads, August only). The drips and
+blobs glow) and sunflower (golden petals round brown seed heads, August only). And (nineteenth wave): comic (flat
+colours, halftone dots and bold black outlines, like a printed comic), blueprint (white lines and a grid on blueprint
+blue), koi (red-orange patches and a few black specks on pearl white) and lemonade (lemon slices on pale yellow, June
+only). The drips and
 patterns follow the model: they are drawn per cube face from the geo file, running down each side from its top edge.
 
     python tools/gen_paints.py [paint ...] [model ...]   # everything, or just the paints and/or models named
@@ -56,7 +59,7 @@ GEO = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls", "
 JAVA = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "girl", "GirlSpecies.java")
 HUES = {"blue": 0.58, "red": 0.0, "green": 0.33, "yellow": 0.14, "purple": 0.77}
 # the harpies and anurans (their own entity classes): the adult texture and the young ones (hatchling, tadpole, froglet)
-OTHERS = ["sparrow_harpy", "crow_harpy", "ostrich_harpy", "owl_harpy", "seagull_harpy", "albatross_harpy", "riflebird_harpy", "phoenix_harpy", "tengu_harpy", "toucan_harpy", "penguin_harpy", "vodyanoy", "zhuque_harpy", "finch_harpy", "flamingo_harpy", "coin_magpie_harpy", "trickster_raven_harpy", "rookmourn_harpy", "cassowrath_harpy", "dodobold_harpy", "peaflare_harpy", "pumpkingull_harpy", "condorune_harpy", "mirror_crane_harpy",
+OTHERS = ["sparrow_harpy", "crow_harpy", "ostrich_harpy", "owl_harpy", "seagull_harpy", "albatross_harpy", "riflebird_harpy", "phoenix_harpy", "tengu_harpy", "toucan_harpy", "penguin_harpy", "vodyanoy", "zhuque_harpy", "finch_harpy", "flamingo_harpy", "coin_magpie_harpy", "trickster_raven_harpy", "rookmourn_harpy", "cassowrath_harpy", "dodobold_harpy", "peaflare_harpy", "pumpkingull_harpy", "condorune_harpy", "mirror_crane_harpy", "emberu_harpy",
           "bullywug", "mucus_toad", "bullfrog", "tree_frog", "poison_dart_frog", "glass_frog", "goliath_frog", "desert_rain_frog",
           "fire_bellied_toad", "cane_toad", "natterjack", "surinam_toad", "mailtoad"]
 
@@ -199,7 +202,8 @@ def treat(img, name, model):
                                         "checkered", "sunset", "thunder", "burlap",
                                         "neon", "zebra", "terrazzo", "clover",
                                         "polka", "circuit", "giraffe", "watermelon",
-                                        "cow", "rust", "lava_lamp", "sunflower"):
+                                        "cow", "rust", "lava_lamp", "sunflower",
+                                        "comic", "blueprint", "koi", "lemonade"):
         return finish(img, name, model)[0]
     W = len(img[0])
     out = [list(row) for row in img]
@@ -330,7 +334,8 @@ TREATS = ["chocolate", "icecream", "strawberry", "jello", "milk", "gold", "marbl
           "checkered", "sunset", "thunder", "burlap",
           "neon", "zebra", "terrazzo", "clover",
           "polka", "circuit", "giraffe", "watermelon",
-          "cow", "rust", "lava_lamp", "sunflower"]
+          "cow", "rust", "lava_lamp", "sunflower",
+          "comic", "blueprint", "koi", "lemonade"]
 PEARL = hexes("#b8b0c0", "#d8d2e0", "#ece8f2", "#f8f6fc", "#ffffff")
 CHROME = hexes("#1e2024", "#4a4e56", "#8a909a", "#c8ccd4", "#ffffff")
 AURORA = hexes("#2af08a", "#3ad8c8", "#5aa0f0", "#8a6af0", "#c86ae8")
@@ -762,6 +767,48 @@ def finish(img, name, model):
                 if b > 0.1:
                     c = (255, int(140 + 70 * l), int(40 + 40 * l)) if b > 0.5 else (250, int(96 + 60 * l), 50)   # warm wax blobs
                     mask[y][x] = c + (255,)
+            elif name == "comic":
+                if l < 0.22 and face:
+                    continue
+                k = 0.45 if l < 0.35 else 0.75 if l < 0.62 else 1.0             # three flat tones of the girl's own colour
+                c = tuple(min(255, int(v * k + 40 * (k == 1.0))) for v in (r, g, b))
+                if l < 0.62 and (xx + yy) % 3 == 0 and yy % 3 == 0:
+                    c = tuple(int(v * 0.55) for v in c)                     # halftone dots in the shade
+                if edge and fw > 2 and fh > 2:
+                    c = (20, 18, 24)                                        # the inked outline
+            elif name == "blueprint":
+                if l < 0.22 and face:
+                    continue
+                c = tuple(int(v * (0.75 + 0.3 * l)) for v in (30, 74, 150))     # blueprint blue
+                if xx % 4 == 0 or yy % 4 == 0:
+                    c = tuple(int(v * (0.75 + 0.3 * l)) for v in (60, 110, 190))   # the faint grid
+                if edge and fw > 2 and fh > 2:
+                    c = (230, 240, 255)                                     # every edge drawn in white
+                elif (xx * 3 + yy * 7 + i) % 23 == 0 and fw > 4:
+                    c = (200, 216, 240)                                     # a dimension tick
+            elif name == "koi":
+                if l < 0.22 and face:
+                    continue
+                c = (int(232 + 22 * l), int(230 + 22 * l), int(226 + 22 * l))   # pearl white
+                if G_blob(xx + 9 * i, yy + 2 * i, 191, 12, 3.0, 5.5) > 0.12:
+                    c = (int(214 + 30 * l), int(70 + 40 * l), int(30 + 20 * l))   # red-orange patches
+                elif H.noise(x, y, 192) > 0.97:
+                    c = (24, 22, 26)                                        # a black speck
+            elif name == "lemonade":
+                if l < 0.22 and face:
+                    continue
+                c = (int(246 + 9 * l), int(236 + 14 * l), int(160 + 40 * l))    # pale lemonade yellow
+                cx, cy = (xx + 3 * i) % 8 - 4, (yy + 5 * i) % 8 - 4             # a lemon slice in every 8x8 tile
+                d2 = cx * cx + cy * cy
+                if d2 <= 10:
+                    if d2 >= 8:
+                        c = (236, 200, 30)                                  # the rind
+                    elif cx == 0 or cy == 0 or abs(cx) == abs(cy):
+                        c = (252, 248, 220)                                 # the pith between segments
+                    else:
+                        c = (250, int(220 + 20 * l), 70)                    # the juicy segments
+                elif H.noise(x, y, 193) > 0.96:
+                    c = (255, 255, 255)                                     # a bubble
             elif name == "sunflower":
                 if l < 0.22 and face:
                     continue

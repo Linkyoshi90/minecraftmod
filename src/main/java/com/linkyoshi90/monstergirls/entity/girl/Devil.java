@@ -452,6 +452,7 @@ public class Devil extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.AKANAME_DEVIL && this.level() instanceof ServerLevel bath && !this.isBaby() && this.tickCount % 40 == 0) this.scrub(bath);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.KIKIMORA_DEVIL && !this.isBaby() && this.tickCount % 40 == 0) this.nightLatch(server, !server.isDay());
         switch (this.species) {
@@ -593,5 +594,31 @@ public class Devil extends AbstractMonsterGirl {
         }
         if (n > 0) this.playSound(net.minecraft.sounds.SoundEvents.WOODEN_TRAPDOOR_CLOSE, 0.8F, 1.2F);
         return n;
+    }
+
+    // --- the akaname (nineteenth wave) ------------------------------------------------------------------------------
+
+    /** Mossy stone she licks clean, mossy block by mossy block. */
+    private static final java.util.Map<net.minecraft.world.level.block.Block, net.minecraft.world.level.block.Block> CLEAN = java.util.Map.of(
+            net.minecraft.world.level.block.Blocks.MOSSY_COBBLESTONE, net.minecraft.world.level.block.Blocks.COBBLESTONE, net.minecraft.world.level.block.Blocks.MOSSY_STONE_BRICKS, net.minecraft.world.level.block.Blocks.STONE_BRICKS,
+            net.minecraft.world.level.block.Blocks.MOSSY_COBBLESTONE_STAIRS, net.minecraft.world.level.block.Blocks.COBBLESTONE_STAIRS, net.minecraft.world.level.block.Blocks.MOSSY_STONE_BRICK_STAIRS, net.minecraft.world.level.block.Blocks.STONE_BRICK_STAIRS,
+            net.minecraft.world.level.block.Blocks.MOSSY_COBBLESTONE_SLAB, net.minecraft.world.level.block.Blocks.COBBLESTONE_SLAB, net.minecraft.world.level.block.Blocks.MOSSY_STONE_BRICK_SLAB, net.minecraft.world.level.block.Blocks.STONE_BRICK_SLAB,
+            net.minecraft.world.level.block.Blocks.MOSSY_COBBLESTONE_WALL, net.minecraft.world.level.block.Blocks.COBBLESTONE_WALL, net.minecraft.world.level.block.Blocks.MOSSY_STONE_BRICK_WALL, net.minecraft.world.level.block.Blocks.STONE_BRICK_WALL);
+
+    /** One mossy block within 6 blocks of her friend is scrubbed clean (its shape kept). 1 if she cleaned one, 0 if none was left,
+     *  -1 without a friend. */
+    public int scrub(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-6, -3, -6), friend.blockPosition().offset(6, 4, 6))) {
+            var state = level.getBlockState(p);
+            var clean = CLEAN.get(state.getBlock());
+            if (clean == null) continue;
+            level.setBlockAndUpdate(p, clean.withPropertiesOf(state));
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.SPLASH, p.getX() + 0.5, p.getY() + 1.0, p.getZ() + 0.5, 8, 0.3, 0.1, 0.3, 0.0);
+            this.getLookControl().setLookAt(p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5);
+            return 1;
+        }
+        return 0;
     }
 }

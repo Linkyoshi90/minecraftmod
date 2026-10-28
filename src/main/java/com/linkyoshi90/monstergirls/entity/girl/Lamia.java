@@ -407,6 +407,8 @@ public class Lamia extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.TURQUOISE_SERPENT_LAMIA && this.level() instanceof ServerLevel ward && !this.isBaby() && this.tickCount % 20 == 0) this.scaleWard(ward);
+        if (this.species == GirlSpecies.HOOP_SNAKE_LAMIA && this.level() instanceof ServerLevel hills && !this.isBaby() && this.tickCount % 100 == 0) this.sting(hills);
         if (!(this.level() instanceof ServerLevel server)) return;
         this.tickWarmth(server);
         if (this.digest > 0) this.digest--;
@@ -868,5 +870,29 @@ public class Lamia extends AbstractMonsterGirl {
             return l;
         }
         return null;
+    }
+
+    // --- the turquoise serpent and the hoop snake (nineteenth wave) -------------------------------------------------
+
+    /** Her friend within 10 blocks, below half health, gets Resistance I. True if she warded them. */
+    public boolean scaleWard(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 10);
+        if (friend == null || friend.getHealth() >= friend.getMaxHealth() / 2) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DAMAGE_RESISTANCE, 60, 0, true, true));
+        return true;
+    }
+
+    /** The hoop snake stings the nearest monster within 8 blocks of her friend: Poison I for five seconds. 1 if she stung one,
+     *  0 if none was near, -1 without a friend. */
+    public int sting(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster m = level.getNearestEntity(net.minecraft.world.entity.monster.Monster.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat(), friend,
+                friend.getX(), friend.getY(), friend.getZ(), friend.getBoundingBox().inflate(8));
+        if (m == null) return 0;
+        m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.POISON, 100, 0), this);
+        this.getLookControl().setLookAt(m);
+        this.playSound(net.minecraft.sounds.SoundEvents.BEE_STING, 1.0F, 0.8F);
+        return 1;
     }
 }

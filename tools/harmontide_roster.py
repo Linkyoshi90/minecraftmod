@@ -71,6 +71,12 @@ IN_GAME = {
     # eighteenth wave (2026-10-28)
     "spoodr": "spoodr_arachne", "urchskin": "urchskin_lamia", "pineskrell": "pineskrell_rodent", "turtfolk": "turtfolk_lizardfolk",
     "tarnhelm": "tarnhelm_canid", "palmyr": "palmyr_centaur", "skjoldram": "skjoldram_minotaur", "mirror_crane": "mirror_crane_harpy",
+    # nineteenth wave (2026-10-28)
+    "tin_jack": "tin_jack_construct", "turquoise_scale_serpent": "turquoise_serpent_lamia", "moopie": "moopie_mermaid", "tuskin": "tuskin_minotaur",
+    "sabre": "sabre_nekomata", "obsidian_macuahuitl_hound": "obsidian_hound_canid", "kasurenijimi": "kasurenijimi_undead", "emberu": "emberu_harpy",
+    "camazotz": "camazotz_bat", "akaname": "akaname_devil", "hoop_snake": "hoop_snake_lamia", "draugr": "draugr_undead",
+    # folklore of the eighteenth wave
+    "bastet": "bastet_nekomata", "rusalka": "rusalka_mermaid", "ushi-oni": "ushi_oni_arachne", "domovoi": "domovoi_elf",
 }
 # not a creature to make, and the ones set aside on purpose
 EXCLUDED = {

@@ -16,6 +16,21 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # nineteenth wave: Tin Jack, a scarecrow of riveted blue tin in a tattered cloak and a pointed hat, a lantern at her hip
+    "tin_jack_construct": dict(
+        build="slim", outfit=dict(top=["corset", "capelet"], bottom="wrap_skirt", extras=["belt", "bracers"],
+                                  colors=dict(cloth2="#2a3a6a", leather="#5a4a3a")),
+        hair="shaggy", bangs="messy", ears=None, legs="bare", foot="shoe", tin=True, witch_hat=True, glow=["lantern"],
+        pal=dict(SKIN=skin("#8aa0c8"), HAIR="#2a3a6a", FUR="#5a7ac0", LIGHT="#c8d8f0", MARK="#1e2a5a", EYE="#5ae8f8", CLOTH="#3a4a8a", TRIM="#d8b060",
+                 pattern="solid", extra=dict(boot="#2a3a6a", key="#d8b060", hat="#25305a", hat_band="#d8b060", lantern="#7af0f8")),
+        variants={"silver": dict(SKIN=skin("#c8ccd4"), HAIR="#5a5e66", FUR="#a8acb4", LIGHT="#eceef2", MARK="#4a4e56", EYE="#f8c040", CLOTH="#4a4e5a",
+                                 extra=dict(boot="#3a3e46", key="#d8b060", hat="#2a2c32", hat_band="#a8323a", lantern="#f8d070")),
+                  "copper": dict(SKIN=skin("#d89a6a"), HAIR="#6a2a10", FUR="#c8703a", LIGHT="#f0b890", MARK="#5a2410", EYE="#7af0b0", CLOTH="#2a5a4a",
+                                 extra=dict(boot="#4a2410", key="#e8b040", hat="#2a5a3a", hat_band="#e8b040", lantern="#9af0b0")),
+                  "green": dict(SKIN=skin("#8ab890"), HAIR="#2a4a2e", FUR="#5a9a62", LIGHT="#c8ecc8", MARK="#1e3a22", EYE="#f8e060", CLOTH="#3a5a3a",
+                                extra=dict(boot="#1e3a22", key="#d8b060", hat="#1e2a1e", hat_band="#c8402a", lantern="#f8e070")),
+                  "purple": dict(SKIN=skin("#a898c8"), HAIR="#3a2a5a", FUR="#7a62b0", LIGHT="#e0d8f0", MARK="#2a1e4a", EYE="#f8a040", CLOTH="#4a3a7a",
+                                 extra=dict(boot="#2a1e4a", key="#d8b060", hat="#e8742a", hat_band="#2a1e4a", lantern="#f8a840"))}),
     "golem_construct": dict(
         build="strong", outfit=dict(top=["sarashi"], bottom="loincloth", extras=["arm_wraps"], colors=dict(bandage="#d8cfc0", cloth2="#7a6a58")),
         hair="hime", bangs="parted", ears=None, legs="bare", foot="shoe",
@@ -70,10 +85,23 @@ SPECIES = {
 
 
 def declare_hook(sp, d):
+    if d.get("witch_hat"):                               # Tin Jack's pointed hat (bent at the tip) and her lantern
+        return [("hat_brim", 13, .5, 13), ("hat_cone", 6, 4, 6), ("hat_mid", 4, 3.5, 4), ("hat_tip", 2, 3, 2), ("hat_band", 6.25, 1, 6.25),
+                ("lantern", 2, 2.5, 2), ("lantern_cap", 2.5, .5, 2.5), ("lantern_ring", .25, 1.5, .25),
+                ("shem", 3, 1, .25), ("key_shaft", .75, .75, 3), ("key_bow", 3.5, 3, .5), ("gear", 1.5, 1.5, .25)]
     return [("shem", 3, 1, .25), ("key_shaft", .75, .75, 3), ("key_bow", 3.5, 3, .5), ("gear", 1.5, 1.5, .25)]
 
 
 def paint_hook(pt, pal, d):
+    hat, band, lamp = G.shades(pal.extra.get("hat", "#25305a")), G.shades(pal.extra.get("hat_band", "#d8b060")), G.shades(pal.extra.get("lantern", "#7af0f8"))
+    patched = lambda f, x, y, w, h: pick(hat, 0.42 + 0.14 * (f == "up") + 0.12 * ((x // 3 + y // 3) % 3 == 0) + (noise(x, y, 97) - 0.5) * 0.1, x, y)
+    for p in ("hat_brim", "hat_cone", "hat_mid", "hat_tip"):
+        pt(p, "all", patched)
+    pt("hat_band", "all", lambda f, x, y, w, h: CLEAR if f in ("up", "down") else pick(band, 0.55 + 0.2 * (x % 4 == 0), x, y))
+    pt("lantern", "all", lambda f, x, y, w, h: pick(lamp, 0.7 + 0.15 * (f != "up"), x, y) if 0 < x < w - 1 and f not in ("up", "down")
+       else pick(G.shades("#2a2a30"), 0.4, x, y))
+    pt("lantern_cap", "all", lambda f, x, y, w, h: pick(G.shades("#2a2a30"), 0.45 + 0.15 * (f == "up"), x, y))
+    pt("lantern_ring", "all", lambda f, x, y, w, h: pick(G.shades("#2a2a30"), 0.5, x, y))
     brass = G.shades(pal.extra.get("key", "#d8a840"))
     pt("key_shaft", "all", lambda f, x, y, w, h: pick(brass, 0.55, x, y))
     pt("key_bow", "all", lambda f, x, y, w, h: CLEAR if 0 < x < w - 1 and 0 < y < h - 1 and f in ("north", "south") else pick(brass, 0.6 + 0.2 * (y == 0), x, y))
@@ -91,6 +119,15 @@ def paint_hook(pt, pal, d):
 
 
 def build_hook(r, g, d):
+    if d.get("witch_hat"):                               # the hat on her head, its tip bent back; the lantern at her right hip
+        hy, z = g.hy, g.z
+        r.add("hair_hat", "head", [0, hy + 9, z], [G.rot_cube("hat_brim", [-6.5, hy + 8.7, -6.5 + z], [0, hy + 8.7, z], 6, 0, 0),
+                                                    cube("hat_band", [-3.125, hy + 9.1, -3.125 + z]), cube("hat_cone", [-3, hy + 9.1, -3 + z]),
+                                                    G.rot_cube("hat_mid", [-2, hy + 12.8, -1.6 + z], [0, hy + 13.0, 0.4 + z], -15, 0, 0),
+                                                    G.rot_cube("hat_tip", [-1, hy + 15.6, 0.2 + z], [0, hy + 15.8, 1.2 + z], -60, 0, 0)])
+        hx = -G.S("hips")[0] / 2 - 1.2
+        r.add("lantern", "body", [hx, 11.5, g.z], [cube("lantern_ring", [hx - 0.125, 10.0, -0.125 + g.z]), cube("lantern_cap", [hx - 1.25, 9.6, -1.25 + g.z]),
+                                                    cube("lantern", [hx - 1.0, 7.1, -1.0 + g.z])])
     if d.get("talos"):                                   # the wind-up key in her back (bone `key`, it turns while she is wound), gears on her arms
         cd = G.S("chest")[2]
         r.add("key", "body", [0, 17, cd / 2 + g.z], [cube("key_shaft", [-0.375, 16.6, cd / 2 + g.z]), cube("key_bow", [-1.75, 15.75, cd / 2 + 3.0 + g.z])])

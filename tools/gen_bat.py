@@ -17,6 +17,20 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # nineteenth wave: Camazotz, the death bat of the Maya: blue-grey, great pink ears, a leaf nose, jade at her arms
+    "camazotz_bat": dict(
+        build="curvy", outfit=dict(top=["bandeau"], bottom="loincloth", extras=["armlets", "usekh"], colors=dict(cloth2="#2a8a6a")),
+        hair="shaggy", bangs="messy", ears="big", legs="bare", foot="claw", wings="bat", wing_scale=1.05, flies=True, leafnose=True,
+        pal=dict(SKIN=skin("#9aaad8"), HAIR="#5a6aa8", FUR="#7a8ac0", LIGHT="#c8d0f0", MARK="#3a4a7a", EYE="#2a2a4a", CLOTH="#2a8a6a", TRIM="#e8c050",
+                 INNER="#f0a0a8", pattern="solid", extra=dict(wing="#5a6aa0", wing_bone="#3a4a7a", boot="#3a4a7a", nose="#f0a0a8")),
+        variants={"black": dict(SKIN=skin("#5a5a64"), HAIR="#1e1e24", FUR="#2a2a32", LIGHT="#6a6a74", MARK="#0e0e12", EYE="#e83a3a",
+                                extra=dict(wing="#2a2a32", wing_bone="#0e0e12", boot="#0e0e12", nose="#c87a80")),
+                  "brown": dict(SKIN=skin("#b08a6a"), HAIR="#4a3020", FUR="#6a4a32", LIGHT="#c8a888", MARK="#2a1a10",
+                                extra=dict(wing="#4a3424", wing_bone="#2a1a10", boot="#2a1a10", nose="#e8a0a0")),
+                  "red": dict(SKIN=skin("#c88a7a"), HAIR="#6a1e1a", FUR="#8a2e24", LIGHT="#e0a090", MARK="#3a0e0a", EYE="#f8d040", CLOTH="#1e1e24",
+                              extra=dict(wing="#6a1e1a", wing_bone="#3a0e0a", boot="#3a0e0a", nose="#f0a0a8")),
+                  "jade": dict(SKIN=skin("#8ab8a0"), HAIR="#1e5a44", FUR="#3a7a5e", LIGHT="#b8e0c8", MARK="#0e3a2a", CLOTH="#e8c050", TRIM="#2a8a6a",
+                               extra=dict(wing="#2a6a54", wing_bone="#0e3a2a", boot="#0e3a2a", nose="#f0b0a8"))}),
     # seventeenth wave: the frondbat, a blue bat with leafy wings and a crown of white flowers, at home in the canopy
     "frond_bat": dict(
         build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["armlets", "pearls"], colors=dict(cloth2="#3a7a5a")),
@@ -69,10 +83,16 @@ def declare_hook(sp, d):
     out = [("snout", 3, 2, 2), ("snout_n", 1.25, .75, .5), ("ruff", 5.5, 1.75, 4.25), ("frond", 1.5, .25, 6.5), ("date", 1, 1.25, 1)]
     if d.get("flowers"):                                 # the frondbat's crown: white blooms between leaves
         out += [("bloom", 1.5, .75, 1.5), ("bloom_in", .75, .5, .75), ("crown_leaf", 1, .25, 2.25)]
+    if d.get("leafnose"):                                # Camazotz's nose: a pig-like snout and a leaf standing up over it
+        out += [("leafnose", 1.75, 1.25, .75), ("noseleaf", 1, 1.5, .25)]
     return out
 
 
 def paint_hook(pt, pal, d):
+    nose = G.shades(pal.extra.get("nose", "#f0a0a8"))
+    pt("leafnose", "all", lambda f, x, y, w, h: pick(G.shades("#5a2a30"), 0.35, x, y) if f == "north" and y == 0 and x in (0, w - 1)
+       else pick(nose, 0.55 + 0.1 * (f == "up"), x, y))
+    pt("noseleaf", "all", lambda f, x, y, w, h: pick(nose, 0.48 + 0.12 * (x == 0), x, y))
     fox = pal.extra.get("fox")
     fur = G.fur_fn(pal, seed=61)
     pt("snout", "all", lambda f, x, y, w, h: (pick(pal.LIGHT, 0.55, x, y) if f in ("down",) or (f == "north" and y >= h - 1) else fur(f, x, y, w, h))
@@ -95,7 +115,9 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
-    if not d.get("palm"):
+    if d.get("leafnose"):
+        r.put("head", cube("leafnose", [-0.875, hy + 2.0, -4.6 + z]), cube("noseleaf", [-0.5, hy + 3.2, -4.3 + z]))
+    if not d.get("palm") and not d.get("leafnose"):
         r.put("head", cube("snout", [-1.5, hy + 0.4, -6.0 + z]), cube("snout_n", [-0.625, hy + 1.65, -6.4 + z]))
         r.put("body", cube("ruff", [-2.75, 18.4, -2.125 + z]))
     if d.get("palm"):                                    # date-palm fronds fanned on her head, a cluster of dates by her ear

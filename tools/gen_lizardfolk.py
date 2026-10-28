@@ -98,7 +98,9 @@ SPECIES = {
         variants={"panther": dict(FUR="#3ac8c0", HAIR="#e84a3a", MARK="#e84a3a", LIGHT="#a8f0f0"),
                   "yellow": dict(FUR="#c8e04a", HAIR="#a8c83a", MARK="#7a9a2a"),
                   "veiled": dict(FUR="#4ab05a", HAIR="#3a8a4a", MARK="#e8c83a", pattern="bands"),
-                  "brown": dict(FUR="#8a6a4a", HAIR="#6a4a2a", MARK="#4a3420", LIGHT="#c8a880")}),
+                  "brown": dict(FUR="#8a6a4a", HAIR="#6a4a2a", MARK="#4a3420", LIGHT="#c8a880"),
+                  # homage (2026-10-28): Espio (Sonic): purple scales, a black ninja wrap, yellow trim
+                  "ninja_chameleon": dict(FUR="#8a4ac8", HAIR="#7a3ab8", MARK="#4a1e7a", LIGHT="#e0c8f0", EYE="#e8c83a", CLOTH="#1e1a22", TRIM="#e8c83a", pattern="solid", extra=dict(cloth2="#1e1a22"))}),
     "iguana_lizardfolk": dict(
         build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#3a5a7a")),
         hair="sidetail", bangs="messy", ears=None, legs="scales", foot="claw", tail=LIZARD_TAIL, tail_rest=DROOP, tail_look="scale", spines=True,
@@ -127,7 +129,9 @@ SPECIES = {
         variants={"hawksbill": dict(extra=dict(shell="#c88a3a", shell_band="#5a2a10"), HAIR="#6a4a2a"),
                   "leatherback": dict(FUR="#4a4a52", HAIR="#2a2a32", extra=dict(shell="#2a2a32", shell_band="#7a7a8a")),
                   "loggerhead": dict(FUR="#a87a4a", HAIR="#8a4a2a", extra=dict(shell="#8a3a1a", shell_band="#c8784a")),
-                  "olive": dict(FUR="#8a8a4a", HAIR="#5a5a2a", extra=dict(shell="#6a6a2a", shell_band="#a8a85a"))}),
+                  "olive": dict(FUR="#8a8a4a", HAIR="#5a5a2a", extra=dict(shell="#6a6a2a", shell_band="#a8a85a")),
+                  # homage (2026-10-28): a Koopa (Mario): yellow skin, a green shell with a white rim
+                  "shell_trooper": dict(SKIN=skin("#f0d060"), FUR="#f0d060", HAIR="#e8c040", LIGHT="#fff0b0", MARK="#c8a030", EYE="#1e1e1e", CLOTH="#f8f4ec", TRIM="#d82a2a", extra=dict(shell="#3aa83a", shell_band="#f8f8f4", cloth2="#d82a2a"))}),
     "snapping_turtle_lizardfolk": dict(
         build="strong", outfit=dict(top=["halter", "vest"], bottom="sarong", extras=["belt", "pouch"], colors=dict(cloth2="#3a4a2a", leather="#4a3a2a")),
         hair="shaggy", bangs="messy", ears=None, legs="scales", foot="claw", tail=[(2.5, 2, 4), (2, 1.75, 4), (1.5, 1.25, 3.5), (1, 1, 3)],

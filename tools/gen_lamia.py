@@ -18,6 +18,26 @@ SEGS = [("seg_1", 4.5, 10.5, 4), ("seg_2", 4.25, 4, 5.5), ("seg_3", 4, 3.75, 5.5
         ("seg_5", 3, 2.75, 5), ("seg_6", 2.5, 2.25, 4.5), ("seg_7", 2, 1.75, 4), ("seg_8", 1.25, 1.25, 3.5)]
 
 SPECIES = {
+    # nineteenth wave: the turquoise serpent, royal blue with a turquoise belly, a feathered crest, gold and turquoise jewellery
+    "turquoise_serpent_lamia": dict(
+        build="curvy", outfit=dict(top=["bandeau"], extras=["usekh", "armlets", "bracers"], colors=dict(cloth2="#e8c050")),
+        thick=1.1, hair="mane", bangs="jagged",
+        pal=dict(SKIN=skin("fair"), HAIR="#2a9aa8", FUR="#2a4ab0", LIGHT="#5ad8c8", MARK="#1a2a6a", EYE="#e8c040", CLOTH="#e8c050", TRIM="#3ad8c8",
+                 pattern="solid", facemark="scales"),
+        variants={"jade": dict(HAIR="#5a3a8a", FUR="#2a7a4a", LIGHT="#a8e8a0", MARK="#14402a", EYE="#e8c040"),
+                  "gold": dict(HAIR="#2a9aa8", FUR="#c8962a", LIGHT="#fff0b0", MARK="#6a4a10", EYE="#3ad8c8", CLOTH="#3ad8c8", TRIM="#e8c050"),
+                  "coral": dict(HAIR="#3ad8c8", FUR="#d84a3a", LIGHT="#f8c8a0", MARK="#6a1a14", EYE="#3ad8c8"),
+                  "obsidian": dict(HAIR="#7a3ab8", FUR="#1e1e28", LIGHT="#5a5a7a", MARK="#0a0a10", EYE="#e83a3a")}),
+    # nineteenth wave: the hoop snake of the tall tales, sky blue with a cream belly
+    "hoop_snake_lamia": dict(
+        build="petite", outfit=dict(top=["halter"], extras=["armlets"], colors=dict(cloth2="#4a8ac8")),
+        thick=0.9, hair="bob", bangs="blunt",
+        pal=dict(SKIN=skin("fair"), HAIR="#7ab8e8", FUR="#8ac8f0", LIGHT="#f4ecd8", MARK="#4a8ac8", EYE="#2a5aa8", CLOTH="#4a8ac8", TRIM="#f4ecd8",
+                 pattern="solid"),
+        variants={"green": dict(HAIR="#6ab85a", FUR="#7ac86a", MARK="#3a7a3a", EYE="#3a5a2a", CLOTH="#3a7a3a"),
+                  "red": dict(HAIR="#d86a5a", FUR="#e87a6a", MARK="#9a3a2e", EYE="#5a1a14", CLOTH="#9a3a2e"),
+                  "black": dict(HAIR="#3a3a44", FUR="#3a3a46", LIGHT="#c8c0b0", MARK="#14141a", EYE="#e8c040", CLOTH="#2a2a34"),
+                  "yellow": dict(HAIR="#e8c050", FUR="#f0d060", MARK="#a8862a", EYE="#5a3a10", CLOTH="#a8862a")}),
     # eighteenth wave: the urchskin, a teal sea serpent with a cream belly, purple urchin spines along her back and a spiny crest
     "urchskin_lamia": dict(
         build="slim", outfit=dict(top=["shells"], extras=["pearls", "armlets"], colors=dict(shell="#c8a0e0")),

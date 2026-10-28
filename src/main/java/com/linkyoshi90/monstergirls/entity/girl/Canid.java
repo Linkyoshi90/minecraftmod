@@ -533,6 +533,7 @@ public class Canid extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.OBSIDIAN_HOUND_CANID && this.level() instanceof ServerLevel badlands && !this.isBaby() && this.tickCount % 20 == 0) this.coolLava(badlands);
         if (this.species == GirlSpecies.TARNHELM_CANID && this.level() instanceof ServerLevel watch && !this.isBaby() && this.tickCount % 100 == 0) this.sentinel(watch);
         if (this.species == GirlSpecies.AMAROK_CANID && this.level() instanceof ServerLevel pack && !this.isBaby() && this.tickCount % 20 == 0) this.packMother(pack);
         if (this.species == GirlSpecies.CU_SITH_CANID && this.level() instanceof ServerLevel moor && !this.isBaby() && this.tickCount % 40 == 0) this.bark(moor);
@@ -797,6 +798,24 @@ public class Canid extends AbstractMonsterGirl {
         int n = 0;
         for (var raider : level.getEntitiesOfClass(net.minecraft.world.entity.raid.Raider.class, friend.getBoundingBox().inflate(48))) {
             raider.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.GLOWING, 220, 0, true, false));
+            n++;
+        }
+        return n;
+    }
+
+    // --- the obsidian hound (nineteenth wave) -----------------------------------------------------------------------
+
+    /** Still lava within 2 blocks of her friend's feet (and the layer below) cools to obsidian. How many blocks, or -1 without a
+     *  friend. */
+    public int coolLava(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int n = 0;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-2, -1, -2), friend.blockPosition().offset(2, 0, 2))) {
+            var fluid = level.getFluidState(p);
+            if (!fluid.is(net.minecraft.tags.FluidTags.LAVA) || !fluid.isSource()) continue;
+            level.setBlockAndUpdate(p, net.minecraft.world.level.block.Blocks.OBSIDIAN.defaultBlockState());
+            level.levelEvent(1501, p, 0);                // the hiss and smoke of lava going out
             n++;
         }
         return n;

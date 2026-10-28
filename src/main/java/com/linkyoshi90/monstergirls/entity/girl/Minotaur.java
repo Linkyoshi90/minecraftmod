@@ -409,6 +409,7 @@ public class Minotaur extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.TUSKIN_MINOTAUR && this.level() instanceof ServerLevel snow && !this.isBaby() && this.tickCount % 20 == 0) this.snowplough(snow);
         if (this.species == GirlSpecies.SKJOLDRAM_MINOTAUR && this.level() instanceof ServerLevel ram && !this.isBaby() && this.tickCount % 10 == 0) this.ramCharge(ram);
         if (this.species == GirlSpecies.DUSTBISON_MINOTAUR && this.level() instanceof ServerLevel dust && !this.isBaby() && this.tickCount % 10 == 0) this.dustBath(dust);
         if (!(this.level() instanceof ServerLevel server)) return;
@@ -711,6 +712,24 @@ public class Minotaur extends AbstractMonsterGirl {
             n++;
         }
         if (n > 0) this.playSound(net.minecraft.sounds.SoundEvents.GOAT_RAM_IMPACT, 1.2F, 0.9F);
+        return n;
+    }
+
+    // --- the tuskin (nineteenth wave) -------------------------------------------------------------------------------
+
+    /** The powder snow within 3 blocks of her friend packs into snow blocks, and the cold lets go of them. How many blocks she
+     *  packed, or -1 without a friend. */
+    public int snowplough(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        friend.setTicksFrozen(0);
+        int n = 0;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-3, -2, -3), friend.blockPosition().offset(3, 1, 3))) {
+            if (!level.getBlockState(p).is(net.minecraft.world.level.block.Blocks.POWDER_SNOW)) continue;
+            level.setBlockAndUpdate(p, net.minecraft.world.level.block.Blocks.SNOW_BLOCK.defaultBlockState());
+            n++;
+        }
+        if (n > 0) this.playSound(net.minecraft.sounds.SoundEvents.SNOW_PLACE, 1.0F, 0.8F);
         return n;
     }
 }

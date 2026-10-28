@@ -430,6 +430,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.MOOPIE_MERMAID && this.level() instanceof ServerLevel shallows && !this.isBaby() && this.tickCount % 100 == 0) this.seaMilk(shallows);
         if (this.species == GirlSpecies.RUSALKA_MERMAID && this.level() instanceof ServerLevel river && !this.isBaby() && this.tickCount % 20 == 0) this.riverLuck(river);
         if (this.species == GirlSpecies.SAWFIN_MERMAID && this.level() instanceof ServerLevel sea && !this.isBaby() && this.tickCount % 20 == 0) this.sapperAid(sea);
         if (!(this.level() instanceof ServerLevel server)) return;
@@ -1182,5 +1183,19 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         if (friend == null || friend.fishing == null) return false;
         friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.LUCK, 60, 0, true, true));
         return true;
+    }
+
+    // --- the moopie (nineteenth wave) -------------------------------------------------------------------------------
+
+    /** Poison, hunger and nausea wear off her friend within 8 blocks. How many effects she cleared, or -1 without a friend. */
+    public int seaMilk(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null) return -1;
+        int n = 0;
+        for (var effect : java.util.List.of(net.minecraft.world.effect.MobEffects.POISON, net.minecraft.world.effect.MobEffects.HUNGER, net.minecraft.world.effect.MobEffects.CONFUSION)) {
+            if (friend.removeEffect(effect)) n++;
+        }
+        if (n > 0) this.playSound(net.minecraft.sounds.SoundEvents.COW_MILK, 1.0F, 1.2F);
+        return n;
     }
 }

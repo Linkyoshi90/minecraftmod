@@ -494,6 +494,8 @@ public class Undead extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.KASURENIJIMI_UNDEAD && this.level() instanceof ServerLevel blur && !this.isBaby() && this.tickCount % 20 == 0) this.smudge(blur);
+        if (this.species == GirlSpecies.DRAUGR_UNDEAD && this.level() instanceof ServerLevel barrow && !this.isBaby() && this.tickCount % 20 == 0) this.layDead(barrow);
         if (this.species == GirlSpecies.YUREI_UNDEAD && this.level() instanceof ServerLevel night && !this.isBaby() && this.tickCount % 20 == 0) this.haunt(night, !night.isDay());
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.MUMMY_UNDEAD) this.tickWrapping(server);
@@ -771,6 +773,29 @@ public class Undead extends AbstractMonsterGirl {
         int n = 0;
         for (var m : level.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, friend.getBoundingBox().inflate(8), m -> m instanceof net.minecraft.world.entity.monster.Enemy && m.isAlive())) {
             m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WEAKNESS, 60, 0, true, true));
+            n++;
+        }
+        return n;
+    }
+
+    // --- the kasurenijimi and the draugr (nineteenth wave) ----------------------------------------------------------
+
+    /** Her friend within 12 blocks, sneaking, blurs out of sight (Invisibility for two seconds). True if she hid them. */
+    public boolean smudge(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 12);
+        if (friend == null || !friend.isShiftKeyDown()) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.INVISIBILITY, 40, 0, true, false));
+        return true;
+    }
+
+    /** The undead within 16 blocks of her friend that are after them give up. How many, or -1 without a friend. */
+    public int layDead(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        int n = 0;
+        for (net.minecraft.world.entity.Mob m : level.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, friend.getBoundingBox().inflate(16),
+                m -> m.getType().is(net.minecraft.tags.EntityTypeTags.UNDEAD) && m.getTarget() == friend)) {
+            m.setTarget(null);
             n++;
         }
         return n;

@@ -89,7 +89,10 @@ GROUP = {"lioness_nekomata": (3, 5), "orca_mermaid": (2, 3), "fennec_kitsune": (
          "amarok_canid": (1, 1), "yurei_undead": (1, 1), "lamassu_centaur": (1, 1),
          "spoodr_arachne": (1, 3), "urchskin_lamia": (1, 2), "pineskrell_rodent": (1, 3), "turtfolk_lizardfolk": (1, 2), "tarnhelm_canid": (1, 1),
          "palmyr_centaur": (1, 2), "skjoldram_minotaur": (1, 3), "bastet_nekomata": (1, 1), "rusalka_mermaid": (1, 1), "ushi_oni_arachne": (1, 1),
-         "domovoi_elf": (1, 1)}
+         "domovoi_elf": (1, 1),
+         "tin_jack_construct": (1, 1), "turquoise_serpent_lamia": (1, 1), "moopie_mermaid": (1, 2), "tuskin_minotaur": (1, 3), "sabre_nekomata": (1, 2),
+         "obsidian_hound_canid": (1, 1), "kasurenijimi_undead": (1, 1), "camazotz_bat": (1, 2), "akaname_devil": (1, 1), "hoop_snake_lamia": (1, 2),
+         "draugr_undead": (1, 2)}
 CATEGORY = {"axolotl_mermaid": "underground_water_creature", "amethyst_slime": "monster", "magma_slime": "monster",
             "seal_mermaid": "creature", "kraken_mollusk": "water_creature", "ammonite_mollusk": "water_creature",
             "night_elf": "monster", "blood_elf": "monster", "salamander_lizardfolk": "monster", "turtle_lizardfolk": "creature",
@@ -101,7 +104,8 @@ CATEGORY = {"axolotl_mermaid": "underground_water_creature", "amethyst_slime": "
             "rust_otter_mermaid": "creature", "chochin_obake_devil": "creature", "undine_slime": "creature", "ittan_momen_devil": "creature",
             "rokurokubi_devil": "creature", "jorogumo_arachne": "creature", "sword_koi_mermaid": "water_creature", "kikimora_devil": "creature",
             "cockatrice_dragon": "creature", "sawfin_mermaid": "water_creature", "yurei_undead": "monster",
-            "rusalka_mermaid": "water_creature", "ushi_oni_arachne": "creature", "spoodr_arachne": "creature"}
+            "rusalka_mermaid": "water_creature", "ushi_oni_arachne": "creature", "spoodr_arachne": "creature",
+            "moopie_mermaid": "water_creature", "kasurenijimi_undead": "creature", "akaname_devil": "creature", "tin_jack_construct": "creature"}
 # hitbox widths that differ from the family's
 WIDTH = {"kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alraune_flora": 1.2, "frankenstein_undead": 0.8,
          "gryphon_dragon": 1.3, "long_dragon": 1.0, "jormungandr_dragon": 1.2, "wyvern_dragon": 1.2, "wyrm_dragon": 1.3,
@@ -114,7 +118,8 @@ WIDTH = {"kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alra
          "kesaran_pasaran_flora": 0.45, "tsuchinoko_lamia": 0.8, "gremlin_devil": 0.5, "tin_squirrel_construct": 0.55, "yeti_canid": 0.9, "iron_kobold_lizardfolk": 0.55,
          "kikimora_devil": 0.5, "dunefennec_kitsune": 0.55,
          "klabuster_slime": 0.6, "date_beetle_bug": 0.5, "conch_turtle_lizardfolk": 0.6, "lamassu_centaur": 1.3, "stagel_centaur": 1.0, "amarok_canid": 0.8,
-         "spoodr_arachne": 0.9, "ushi_oni_arachne": 1.5, "domovoi_elf": 0.45, "skjoldram_minotaur": 0.8}
+         "spoodr_arachne": 0.9, "ushi_oni_arachne": 1.5, "domovoi_elf": 0.45, "skjoldram_minotaur": 0.8,
+         "tuskin_minotaur": 1.0, "akaname_devil": 0.5}
 # the name shown in game: the species name plus the family's word, unless NAME says otherwise
 SUFFIX = {"nekomata": " Nekomata", "kitsune": " Kitsune", "lamia": " Lamia", "arachne": " Arachne", "centaur": " Centaur", "merfolk": " Mermaid",
           "slime": "", "jackalope": "", "minotaur": " Minotaur", "mollusk": "", "elf": "", "undead": "", "lizardfolk": "", "dragon": "",
@@ -155,7 +160,10 @@ NAME = {"jack_jackalope": "Jack Jackalope", "kraken_mollusk": "Kraken", "octopus
         "dryad_flora": "Dryad", "amarok_canid": "Amarok", "yurei_undead": "Yurei", "lamassu_centaur": "Lamassu",
         "spoodr_arachne": "Spoodr", "urchskin_lamia": "Urchskin", "pineskrell_rodent": "Pineskrell", "turtfolk_lizardfolk": "Turtfolk",
         "tarnhelm_canid": "Tarnhelm", "palmyr_centaur": "Palmyr", "skjoldram_minotaur": "Skjoldram", "bastet_nekomata": "Bastet",
-        "rusalka_mermaid": "Rusalka", "ushi_oni_arachne": "Ushi-oni", "domovoi_elf": "Domovoi"}
+        "rusalka_mermaid": "Rusalka", "ushi_oni_arachne": "Ushi-oni", "domovoi_elf": "Domovoi",
+        "tin_jack_construct": "Tin Jack", "turquoise_serpent_lamia": "Turquoise Serpent", "moopie_mermaid": "Moopie", "tuskin_minotaur": "Tuskin",
+        "sabre_nekomata": "Sabre", "obsidian_hound_canid": "Obsidian Hound", "kasurenijimi_undead": "Kasurenijimi", "camazotz_bat": "Camazotz",
+        "akaname_devil": "Akaname", "hoop_snake_lamia": "Hoop Snake", "draugr_undead": "Draugr"}
 
 
 def gen_module(fid):

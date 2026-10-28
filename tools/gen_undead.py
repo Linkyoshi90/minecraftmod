@@ -17,6 +17,29 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # nineteenth wave: the kasurenijimi, a ghost in a school uniform whose face is smeared out like an old photograph
+    "kasurenijimi_undead": dict(
+        build="slim", outfit=dict(top=["sweater", "capelet"], bottom="wrap_skirt", extras=["satchel", "scarf"],
+                                  colors=dict(cloth2="#1e2a5a", leather="#6a4228", scarf="#c82a2a")),
+        hair="flowing", bangs="blunt", ears=None, legs="stockings", foot="shoe", smudge=True,
+        pal=dict(SKIN="#f4e8e4", HAIR="#1a1e3a", FUR="#f4e8e4", LIGHT="#ffffff", MARK="#c8ccd4", EYE="#3a4a8a", CLOTH="#f4f4f8", TRIM="#1e2a5a",
+                 extra=dict(stocking="#141418", boot="#2a1e18")),
+        variants={"black": dict(CLOTH="#1e1e24", TRIM="#e8e8ec", extra=dict(stocking="#141418", boot="#2a1e18", cloth2="#1e1e24")),
+                  "grey": dict(CLOTH="#e8e8ec", TRIM="#6a6a74", HAIR="#3a3a44", extra=dict(stocking="#4a4a52", boot="#2a2a30", cloth2="#6a6a74")),
+                  "green": dict(TRIM="#2a5a3a", HAIR="#1a2a1e", extra=dict(stocking="#141418", boot="#2a1e18", cloth2="#2a5a3a", scarf="#e8c040")),
+                  "red": dict(TRIM="#8a1e24", HAIR="#2a1414", extra=dict(stocking="#141418", boot="#2a1e18", cloth2="#8a1e24", scarf="#1e2a5a"))}),
+    # nineteenth wave: the draugr, the barrow-dweller of the sagas, corpse grey with pale glowing eyes, in a tattered dress
+    "draugr_undead": dict(
+        build="slim", outfit=dict(top=["sweater"], bottom="wrap_skirt", extras=["belt", "arm_wraps"], colors=dict(cloth2="#4a5a7a", bandage="#8a8478")),
+        hair="shaggy", bangs="messy", ears=None, legs="bare", foot="shoe", tattered=True,
+        pal=dict(SKIN="#a8aca0", HAIR="#8a7e70", FUR="#a8aca0", LIGHT="#d0d4c8", MARK="#5a5e54", EYE="#a8e8f8", CLOTH="#5a6a8a", TRIM="#3a4a6a",
+                 extra=dict(boot="#3a3430")),
+        variants={"blue": dict(SKIN="#7a8aa8", FUR="#7a8aa8", HAIR="#3a3e4a", EYE="#e8f8ff", CLOTH="#4a4a5a"),
+                  "black": dict(SKIN="#5a5a5e", FUR="#5a5a5e", HAIR="#1e1e22", EYE="#e83a3a", CLOTH="#2a2a30", TRIM="#141418"),
+                  "bronze": dict(SKIN="#a8a08a", HAIR="#c8a060", EYE="#f8d040", CLOTH="#6a4a2a", TRIM="#c8902a",
+                                 extra=dict(boot="#4a3420", cloth2="#c8902a")),
+                  "frost": dict(SKIN="#c8d8e4", FUR="#c8d8e4", HAIR="#e8f0f8", EYE="#5ad8f8", CLOTH="#8aa0b8", TRIM="#e8f0f8",
+                                extra=dict(boot="#5a6a7a", cloth2="#a8b8c8"))}),
     # seventeenth wave: the yurei, a Japanese ghost in a school uniform, long black hair, her legs fading into a white wisp
     "yurei_undead": dict(
         build="slim", outfit=dict(top=["sweater"], bottom="wrap_skirt", extras=["satchel"], colors=dict(cloth2="#c82a2a", leather="#7a4a2a")),
@@ -164,6 +187,13 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    if d.get("smudge"):                                  # her face smeared and scratched out, like an old photograph
+        smear = G.shades("#e8e8ec")
+        pt("head", ("north",), lambda f, x, y, w, h: G.with_alpha(pick(smear, 0.55 + 0.3 * noise(x, y, 141), x, y), 215)
+           if h * 0.38 <= y <= h * 0.82 and w * 0.12 <= x <= w * 0.88 and ((y * 7 + x // 3) % 5 < 2 or noise(x // 2, y, 142) > 0.72) else None)
+    if d.get("tattered"):                                # the draugr's grave clothes, torn at the hem
+        for p in ("skirt_f", "skirt_b", "skirt_l", "skirt_r", "wrap_f", "wrap_b"):
+            pt(p, "all", lambda f, x, y, w, h: CLEAR if y >= h - 2 and noise(x, 0, 143) > 0.45 else None)
     if d.get("wisp"):
         fl = G.shades(pal.extra.get("flame", "#5ab8f8"))
 
