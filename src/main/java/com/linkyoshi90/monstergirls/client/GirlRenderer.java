@@ -164,9 +164,15 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
             this.species = species;
         }
 
-        /** The minotaur bulls have their own model, textures and animation file: &lt;species&gt;_male. */
+        /** The minotaur bulls have their own model, textures and animation file: &lt;species&gt;_male; so do the homage looks
+         *  in {@link AbstractMonsterGirl#OWN_MODELS}: &lt;species&gt;_&lt;variant&gt;. */
         private String modelName(AbstractMonsterGirl girl) {
-            return girl.hasFlag(AbstractMonsterGirl.FLAG_MALE) ? this.species.id() + "_male" : this.species.id();
+            if (girl.hasFlag(AbstractMonsterGirl.FLAG_MALE)) return this.species.id() + "_male";
+            return ownModel(girl) ? this.species.id() + "_" + girl.getVariantName() : this.species.id();
+        }
+
+        private static boolean ownModel(AbstractMonsterGirl girl) {
+            return AbstractMonsterGirl.OWN_MODELS.contains(girl.getVariantName());
         }
 
         @Override
@@ -187,7 +193,8 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
             }
             String paint = girl.getPaintName();
             if (paint != null) return this.textures.computeIfAbsent(name + "_paint_" + paint, s -> MonsterGirlsMod.id("textures/entity/" + s + ".png"));
-            return this.textures.computeIfAbsent(name + girl.getVariantSuffix(), s -> MonsterGirlsMod.id("textures/entity/" + s + ".png"));
+            String suffix = ownModel(girl) ? "" : girl.getVariantSuffix();         // an own model's texture is its own name
+            return this.textures.computeIfAbsent(name + suffix, s -> MonsterGirlsMod.id("textures/entity/" + s + ".png"));
         }
 
         @Override

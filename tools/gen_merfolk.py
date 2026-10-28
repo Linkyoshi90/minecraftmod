@@ -223,6 +223,26 @@ SPECIES = {
                   "storm": dict(HAIR="#8a8e98", FUR="#6a707a", LIGHT="#c8ccd4", MARK="#3a3e48", EYE="#e8e8f8", CLOTH="#3a4a5a")}),
 }
 
+# homage looks with a model of their own (2026-10-28): the game draws <species>_<variant> instead of the species' model
+# when a girl has that variant (AbstractMonsterGirl.OWN_MODELS); they are written after their species, so their texture
+# replaces the species' plain recolour of the same name
+HOMAGE_MODELS = {"axolotl_mermaid_mud_fin": "axolotl_mermaid", "shark_mermaid_trident_hood": "shark_mermaid"}
+# Mudkip (Pokemon): light blue, a cream belly, a big fan fin on her head, star-shaped orange gills on her cheeks, a broad tail fin
+SPECIES["axolotl_mermaid_mud_fin"] = dict(
+    build="petite", outfit=dict(top=["shells"], extras=["pearls"]),
+    ears=None, hair="bob", bangs="blunt", fluke=(.75, 7, 6), dorsal=(.5, 2.5, 9), axolotl=True, mudkip=True,
+    pal=dict(SKIN=skin("pale"), HAIR="#5aa8e8", FUR="#5aa8e8", LIGHT="#eef4fa", MARK="#2a5aa8", EYE="#1e1a18", CLOTH="#f8902a", TRIM="#fce0c0",
+             pattern="solid", INNER="#f8902a", extra=dict(belly_white=True, shell="#f8902a", gill="#f8902a", headfin="#5aa8e8", rim="#2a5aa8")),
+    variants={})
+# Gawr Gura (VTuber): white hair streaked blue in low twintails, an oversized blue hoodie whose hood is a shark's head (snout,
+# teeth, eyes, gills and a dorsal fin), white drawstrings, a blue shark's tail, a trident in her right hand
+SPECIES["shark_mermaid_trident_hood"] = dict(
+    build="petite", outfit=dict(top=["sweater"], colors=dict(cloth2="#5a8ad8")),
+    ears=None, hair="twintails", bangs="blunt", fluke=(.75, 7, 5), dorsal=(.75, 5, 4), size=1.0, ghood=True, trident=True,
+    pal=dict(SKIN=skin("fair"), HAIR="#f4f6fa", FUR="#5a8ad8", LIGHT="#f0f4fa", MARK="#2a4a9a", EYE="#3a8ae8", CLOTH="#5a8ad8", TRIM="#f4f6fa",
+             pattern="solid", extra=dict(belly_white=True, streak="#6aa8f0", hood="#5a8ad8", hood_dark="#2a4a9a", trident="#8ad0f0", trident_dark="#3a6ab0")),
+    variants={})
+
 
 def declare(sp):
     d = SPECIES[sp]
@@ -252,6 +272,13 @@ def declare(sp):
         parts += [("coral_a", .75, 4, .75), ("coral_b", .5, 2.5, .5), ("coral_tip", .75, .75, .75)]
     if d.get("cowhorns"):
         parts += [("mhorn_a", .75, 1.5, .75), ("mhorn_b", .5, 1, .5)]
+    if d.get("mudkip"):                                  # the head fin, and the cheek gills: a base and three points each
+        parts += [("mk_headfin", .5, 6.5, 7.5), ("mk_gill", .75, 1.5, 1.5), ("mk_spike", 2.25, .75, .75)]
+    if d.get("ghood"):                                   # the shark hood: crown, snout, teeth, fin; the hoodie's drawstrings and pocket
+        parts += [("ghood", 9.75, 5.25, 9.75), ("ghood_snout", 7, 2, 3), ("ghood_teeth", 6.5, .75, .25), ("ghood_fin", .75, 3.5, 4),
+                  ("gstring", .5, 3.5, .5), ("gpocket", 4, 1.75, .25), ("ghoodie", 5.25, 5.5, 3.75)]
+    if d.get("trident"):
+        parts += [("tri_shaft", .75, 21, .75), ("tri_bar", 4, .75, .75), ("tri_prong", .5, 2.75, .5), ("tri_mid", .5, 3.5, .5)]
     parts.append(("shell", 2, 1.75, .5))
     G.declare(parts, ears=d["ears"], hair=SPECIES[sp]["hair"],
               build=SPECIES[sp].get("build"), outfit=SPECIES[sp].get("outfit"))
@@ -316,6 +343,73 @@ def paint(sp, key):
     saw, shield, lily = shades(pal.extra.get("saw", "#f0ece4")), shades(pal.extra.get("shield", "#3a5ab0")), shades(pal.extra.get("lily", "#e8e8f0"))
     pt("saw", "all", lambda f, x, y, w, h: pick(saw, 0.55 + 0.15 * (f == "up") - 0.1 * (f == "down"), x, y))
     pt("saw_tooth", "all", lambda f, x, y, w, h: pick(saw, 0.75, x, y))
+    e = pal.extra
+    if d.get("mudkip"):
+        hf, rim, gill = shades(e.get("headfin", "#5aa8e8")), shades(e.get("rim", "#2a5aa8")), shades(e.get("gill", "#f8902a"))
+
+        def headfin(f, x, y, w, h):                       # a half-disc fan standing on her head, ribbed, a dark rim
+            if f in ("up", "down", "north", "south"):
+                return CLEAR                             # a thin fan: only its two broad sides
+            dx = (x + 0.5 - w / 2) / (w / 2)
+            top = (h - 1) * dx * dx                      # y counts down from the top edge
+            if y < top:
+                return CLEAR
+            if y < top + 1.2:
+                return pick(rim, 0.5, x, y)
+            return pick(hf, 0.55 + 0.12 * (x % 2 == 0), x, y)
+        pt("mk_headfin", "all", headfin)
+        pt("mk_gill", "all", lambda f, x, y, w, h: pick(gill, 0.55 + 0.1 * (f == "up"), x, y))
+        pt("mk_spike", "all", lambda f, x, y, w, h: pick(gill, 0.6 - 0.15 * (x == 0), x, y))
+        # two orange cheek spots under her eyes, Mudkip's
+        pt("head", ("north",), lambda f, x, y, w, h: pick(gill, 0.6, x, y) if y in (26, 27) and x in (6, 7, 24, 25) else None)
+    if d.get("ghood"):
+        hood, dark, white = shades(e.get("hood", "#5a8ad8")), shades(e.get("hood_dark", "#2a4a9a")), shades("#f4f6fa")
+        ink = shades("#141418")
+
+        def crown(f, x, y, w, h):                         # over the top and back of her head; the front left open for her face
+            if f == "down":
+                return CLEAR
+            if f == "north":
+                return pick(hood, 0.5, x, y) if y < 2 else CLEAR
+            if f in ("east", "west"):
+                if y >= h * 0.55 and (x < w * 0.35 if f == "west" else x > w * 0.65):
+                    return CLEAR                         # the opening round her cheeks
+                if y == h // 2 and (x % 3 == 1) and (w * 0.35 < x < w * 0.75):
+                    return pick(dark, 0.35, x, y)        # gill slits
+            return pick(hood, 0.5 + 0.08 * ((x + y) % 5 == 0), x, y)
+        pt("ghood", "all", crown)
+
+        def snout(f, x, y, w, h):                         # the shark's upper jaw over her brow: blue above, white below, eyes at the sides
+            if f == "down":
+                return pick(white, 0.75, x, y)
+            if f in ("east", "west") and y == 0 and x == 1:
+                return pick(ink, 0.3, x, y)              # the hood's eye
+            if f == "north" and y == h - 1:
+                return pick(white, 0.7, x, y)
+            return pick(hood, 0.55, x, y)
+        pt("ghood_snout", "all", snout)
+        pt("ghood_teeth", "all", lambda f, x, y, w, h: pick(white, 0.85, x, y) if f in ("north", "south") and y <= (x % 2) else CLEAR)
+
+        def dorsal_fin(f, x, y, w, h):                    # a triangle, swept back
+            if f in ("east", "west"):
+                xb = x if f == "east" else w - 1 - x     # 0 at the front
+                return pick(hood, 0.5 + 0.1 * (y == h - 1), x, y) if y >= h - 1 - (h * (xb + 0.5) / w) * 1.2 else CLEAR
+            return CLEAR                                 # a thin fin: only its two broad sides
+        pt("ghood_fin", "all", dorsal_fin)
+        pt("ghoodie", "all", lambda f, x, y, w, h: CLEAR if f in ("up", "down")
+           else pick(white, 0.6, x, y) if y == h - 1 else pick(hood, 0.5 + 0.06 * ((x * 3 + y) % 7 == 0), x, y))
+        pt("gstring", "all", lambda f, x, y, w, h: pick(white, 0.75 - 0.25 * (y == h - 1), x, y))
+        pt("gpocket", "all", lambda f, x, y, w, h: pick(dark if y == 0 else hood, 0.45, x, y))
+        # white hair with blue streaks
+        streak = shades(e.get("streak", "#6aa8f0"))
+        for part in [q for q in H.PARTS if q.startswith(("strand_", "lock_", "tail_lock", "tail_long", "bang_", "frame"))]:
+            pt(part, ("north", "south", "east", "west"), lambda f, x, y, w, h: pick(streak, 0.55, x, y) if (x + y // 6) % 4 == 1 else None)
+    if d.get("trident"):
+        tr, trd = shades(e.get("trident", "#8ad0f0")), shades(e.get("trident_dark", "#3a6ab0"))
+        pt("tri_shaft", "all", lambda f, x, y, w, h: pick(trd if y % 5 == 0 else tr, 0.45 + 0.1 * (f == "north"), x, y))
+        pt("tri_bar", "all", lambda f, x, y, w, h: pick(trd, 0.5, x, y))
+        pt("tri_prong", "all", lambda f, x, y, w, h: pick(tr, 0.6 + 0.2 * (y == 0), x, y))
+        pt("tri_mid", "all", lambda f, x, y, w, h: pick(tr, 0.65 + 0.2 * (y == 0), x, y))
 
     def fleur(f, x, y, w, h):                                     # a fleur-de-lis on a heater shield
         if f not in ("north",):
@@ -422,6 +516,35 @@ def build(sp):
             cs += [G.rot_cube("mhorn_a", [sg * 2.6 - 0.375, 28.0, -1.0], [sg * 2.6, 28.0, -0.6], -10, 0, -35 * sg),
                    G.rot_cube("mhorn_b", [sg * 3.5 - 0.25, 29.2, -1.0], [sg * 3.5, 29.2, -0.75], -10, 0, -70 * sg)]
         r.add("hair_horns", "head", [0, 28, 0], cs)
+    if d.get("mudkip"):                                  # the fan fin along the top of her head; star gills on her cheeks
+        fw, fh, fd = G.S("mk_headfin")
+        r.add("hair_mkfin", "head", [0, 28.4, 0], [cube("mk_headfin", [-fw / 2, 28.0, -fd / 2 + 0.5])])
+        cs = []
+        for sg in (-1, 1):
+            gx = sg * 4.4
+            base = cube("mk_gill", [gx - 0.375, 20.8, -2.2])
+            cs.append(base)
+            for tilt in (-40, 0, 40):                   # three points fanned outward, like a little orange star
+                piv = [gx, 21.55, -1.45]
+                x0 = gx if sg > 0 else gx - 2.25
+                cs.append(G.rot_cube("mk_spike", [x0, 21.175, -1.825], piv, 0, 0, tilt))
+        r.add("cheek_gills", "head", [0, 21.5, -1.5], cs)
+    if d.get("ghood"):                                   # the hood over her hair, the shark's snout and teeth over her brow, a fin on top
+        r.add("hair_hood", "head", [0, 26, 0], [cube("ghood", [-4.875, 24.4, -4.875]), cube("ghood_snout", [-3.5, 27.6, -7.4]),
+                                                 cube("ghood_teeth", [-3.25, 26.9, -7.1]),
+                                                 G.rot_cube("ghood_fin", [-0.375, 29.4, -0.5], [0, 29.6, 1.0], 0, 0, 0)])
+        cd, bd = G.S("chest")[2], G.S("bust")[2]
+        fz = -cd / 2 - bd - 0.6
+        hw, hh, hd = G.S("ghoodie")                       # the hoodie's long body down over her waist, white at the hem
+        r.put("body", cube("ghoodie", [-hw / 2, 11.0, -hd / 2]), cube("gstring", [-1.25, 15.2, fz]), cube("gstring", [0.75, 15.4, fz]),
+              cube("gpocket", [-2.0, 12.4, -hd / 2 - 0.25]))
+    if d.get("trident"):                                 # upright in her right hand, the three prongs above her fist
+        px, py, pz = r.b["hand_r"]["pivot"]
+        cx, cz = px - 1.2, pz - 3.6                      # held out in front of her hair
+        top = py - 1.5 + 15.5
+        r.add("trident", "hand_r", [px, py - 1.5, pz], [cube("tri_shaft", [cx, py - 1.5 - 5.5, cz]), cube("tri_bar", [cx - 1.625, top, cz]),
+                                                        cube("tri_prong", [cx - 1.5, top + 0.75, cz + 0.125]), cube("tri_prong", [cx + 1.75, top + 0.75, cz + 0.125]),
+                                                        cube("tri_mid", [cx + 0.125, top + 0.75, cz + 0.125])])
     if d.get("seal"):
         f2 = G.S("fin_2")
         for sg in (-1, 1):
@@ -441,6 +564,13 @@ if __name__ == "__main__":
     G.run_family("merfolk", SPECIES, declare, paint, build, anims, VIEWS, FACE)
     import girl_family as F
     want = [a for a in sys.argv[1:] if not a.startswith("--")]
+    for m, base in HOMAGE_MODELS.items():                # after their species: their texture is the one the game draws for that look
+        if want and m not in want and base not in want:
+            continue
+        declare(m)
+        geo, adoc, texes = G.write(m, paint(m, None), build(m), anims, [], None)
+        if "--previews" in sys.argv:
+            G.previews(m, geo, adoc, texes, VIEWS, FACE, G.model_height(geo))
     for sp, d in SPECIES.items():                        # glow masks: the axolume's gills, crest and fluke
         if d.get("glow") and (not want or sp in want):
             declare(sp)

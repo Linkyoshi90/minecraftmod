@@ -35,9 +35,9 @@ the homage set is keyed by name.
 | Will-o'-wisp (`will_o_wisp_undead`) | Boo (Mario) | `shy_ghost` | All white, a pink tongue, hands over her face when looked at | ★★ |
 | Vampire (`vampire_undead`) | Alucard (Castlevania) | `night_heir` | Silver hair, black and gold coat, red cape lining | ★★ |
 | Zombie (`zombie_undead`) | Plants vs. Zombies zombie | `lawn_zombie` | Grey-green skin, brown suit, red tie, a traffic cone on her head | ★★★ |
-| Shark (`shark_mermaid`) | Gawr Gura (VTuber) | `trident_hood` ✅ | White hair with blue streaks, a shark hood, blue hoodie | ★★★ (not a game) |
+| Shark (`shark_mermaid`) | Gawr Gura (VTuber) | `trident_hood` ✅ | White hair with blue streaks, a shark hood, blue hoodie; **own model** (`shark_mermaid_trident_hood`): low twintails, a long hoodie whose hood is a shark's head (snout, teeth, eyes, gills, a dorsal fin), white drawstrings, a trident | ★★★ (not a game) |
 | Dolphin (`dolphin_mermaid`) | Ecco the Dolphin | `star_song` | Grey-blue with five star marks on her forehead | ★★ |
-| Axolotl (`axolotl_mermaid`) | Mudkip (Pokémon) | `mud_fin` ✅ | Blue with an orange cheek fan and a tail fin crest | ★★ |
+| Axolotl (`axolotl_mermaid`) | Mudkip (Pokémon) | `mud_fin` ✅ | Blue with an orange cheek fan and a tail fin crest; **own model** (`axolotl_mermaid_mud_fin`): a fan fin on her head, star-shaped orange cheek gills, a cream belly, a broad tail fin | ★★ |
 | Moth (`moth_bug`) | Mothra (Toho) | `kaiju_moth` | Gold and orange wings with eye spots, a white fur ruff | ★★ |
 | Mantis (`mantis_bug`) | Scyther (Pokémon) | `scythe_green` ✅ | Bright green, cream belly, wing membranes, big scythes | ★★★ |
 | Golem (`golem_construct`) | Clank (Ratchet & Clank) | `pocket_bot` | Silver with green eyes and a little antenna | ★★ |
@@ -77,5 +77,8 @@ pink nose. Each homage's prop is drawn only on its own variant. They follow the 
 - The ★★★ ones need only a palette and at most one prop that the family generator already has (a hat, a tail, a crest).
   The rest want one new prop each (goggles, a traffic cone, a teacup).
 - Name them after what the character is, not who: `jewel_thief`, not `rouge`.
+- A look that needs more than a recolour can have a model of its own: an entry `<species>_<variant>` in the family
+  script's `HOMAGE_MODELS` (built after its species, so its texture replaces the plain recolour of the same name) and the
+  variant in `AbstractMonsterGirl.OWN_MODELS`; the renderer then draws that model, and gen_paints paints it too.
 - Each new homage variant goes at the end of the species' variant list (gen script and concept entry, kept in sync),
   and its name into `AbstractMonsterGirl.HOMAGES`.

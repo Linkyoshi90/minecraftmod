@@ -309,6 +309,8 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Mothman** (bug, moth wings, red eyes): every second at night, `omen` makes the monsters within 16 of her friend glow.
   - **Paints:** tie_dye, jade, lace and bluebell (May only, `Painted.roll`), so 79 in all.
   - **Homage variants** (`AbstractMonsterGirl.HOMAGES`): innkeeper, prankster, soul_keeper (house mouse), sage_princess (high elf), green_hero (wood elf, `hero_cap`: `hair_hcap`), tree_guard (ent), snow_wraith (yuki-onna), headless_rider and death_envoy (dullahan).
+- [x] Own models for two homage looks (2026-10-28): `axolotl_mermaid_mud_fin` (Mudkip) and `shark_mermaid_trident_hood` (Gawr Gura), in `gen_merfolk.HOMAGE_MODELS`; `AbstractMonsterGirl.OWN_MODELS` makes `GirlRenderer` draw them; painted like any model. Tested in `TwentiethWaveTests.homagesWithTheirOwnModels`.
+- [ ] Dev client: the Mudkip and Gura models (the trident in her hand while she swims and sits, the hood's fin, the head fan).
 - [ ] Dev client for the twentieth wave: the turtworld's island, the fernstalker's fronds, the moo's frill, the manticore's sting, the mouse's ears and the Gregory props at game scale; the four paints; the nine homage looks.
 - [ ] Not done for the twentieth wave: Celty's cat-eared helmet and Lala's scythe (both are palette-only for now); a dullahan-only prop each would do it.
 - [x] **Nineteenth wave** (2026-10-28), tested in `NineteenthWaveTests`:

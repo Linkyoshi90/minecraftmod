@@ -869,11 +869,15 @@ def finish(img, name, model):
     return out, mask
 
 
+# homage looks with a model of their own (AbstractMonsterGirl.OWN_MODELS): <species>_<variant> is a model to paint too
+OWN_MODELS = ("mud_fin", "trident_hood")
+
+
 def models():
     ids = re.findall(r'\("([a-z_]+)", Family\.', open(JAVA, encoding="utf-8").read())
     out = []
     for sp in ids:
-        for m in (sp, sp + "_male"):
+        for m in (sp, sp + "_male") + tuple(f"{sp}_{v}" for v in OWN_MODELS):
             if os.path.exists(os.path.join(GEO, m + ".geo.json")) and os.path.exists(os.path.join(ENT, m + ".png")):
                 out.append(m)
     for sp in OTHERS:
