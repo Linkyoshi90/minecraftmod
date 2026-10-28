@@ -28,6 +28,22 @@ SPECIES = {
                   "black": dict(FUR="#2a2a30", HAIR="#1a1a20", LIGHT="#6a6a72", MARK="#0e0e12", EYE="#e8c040"),
                   "storm": dict(FUR="#4a5a7a", HAIR="#3a4868", LIGHT="#a8b8d8", MARK="#1e2840", EYE="#e8f0ff"),
                   "tundra": dict(FUR="#a89a84", HAIR="#8a7c66", LIGHT="#ece4d4", MARK="#5a4e3e", EYE="#e8b030")}),
+    # eighteenth wave: the tarnhelm, a war wolf in blue enamelled plate and a silver helm with an aurora-bright gem
+    "tarnhelm_canid": dict(
+        build="athletic", outfit=dict(top=["bandeau", "harness"], bottom="wrap_skirt", extras=["pauldron", "bracers", "belt"],
+                                      colors=dict(cloth2="#2a3a8a", leather="#a8b4c8")),
+        hair="shaggy", bangs="messy", ears="fox", legs="fur", foot="paw", tarnhelm=True, glow=["helm_gem"],
+        tail=[(2, 2, 4), (2.5, 2.5, 4), (2, 2, 3)], tail_rest=[(-25, 0, 0), (10, 0, 0), (12, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("fair"), HAIR="#c8d0e0", FUR="#4a5a9a", LIGHT="#dce4f4", MARK="#1e2a5a", EYE="#5ae8e0", CLOTH="#2a3a8a", TRIM="#c8d0dc",
+                 pattern="solid", pupil=(1.6, 2.6), extra=dict(helm="#5a6aa8", gem="#5ae8c8")),
+        variants={"silver": dict(FUR="#9aa0ac", HAIR="#e8ecf4", LIGHT="#f4f6fa", MARK="#5a606c", CLOTH="#4a5068", EYE="#8ab0f8",
+                                 extra=dict(helm="#6a7080", gem="#8ab0f8")),
+                  "black": dict(FUR="#26262c", HAIR="#3a3a42", LIGHT="#8a8a94", MARK="#0e0e12", CLOTH="#1e1e24", TRIM="#a8323a", EYE="#e83a3a",
+                                extra=dict(helm="#4a4a52", gem="#e83a3a")),
+                  "gold": dict(FUR="#a87a3a", HAIR="#f0dca8", LIGHT="#f8ecd0", MARK="#5a3a14", CLOTH="#7a2a2a", TRIM="#e8c050", EYE="#f8d040",
+                               extra=dict(helm="#e8c050", gem="#e83a3a")),
+                  "storm": dict(FUR="#5a6070", HAIR="#a8b0bc", LIGHT="#d0d4dc", MARK="#2a2e38", CLOTH="#3a4a5a", EYE="#c8e8ff",
+                                extra=dict(helm="#8a929e", gem="#c8a8ff"))}),
     "wolf_canid": dict(
         mummy_kit=True,
         build="athletic", outfit=dict(top=["bandeau", "vest"], bottom="shorts", extras=["arm_wraps", "belt"], colors=dict(leather="#5a4a3a")),
@@ -165,6 +181,8 @@ def declare_hook(sp, d):
         out = [("muzzle", 3.5, 2.25, 3.5), ("machete_blade", 14, 3, .5), ("machete_guard", .75, 3, 2), ("machete_grip", 4, 1.25, 1.25),
                ("cleaver_blade", 5, 4.5, .5), ("cleaver_handle", 1, 1, 7)]
         return out + ([("scale_beam", 5, .5, .5), ("scale_pan", 1.5, .25, 1.5)] if d.get("scales") else [])
+    if d.get("tarnhelm"):
+        return [("helm_cap", 8.75, 3.25, 8.75), ("nasal", .75, 3, .5), ("helm_gem", 1.25, 1.25, .5), ("helm_crest", 1, 1.5, 6)]
     if d.get("helmet"):
         return [("helmet", 5, 2, 5), ("helmet_brim", 6, .5, 6), ("lamp", 1.5, 1.5, .5)]
     return [("scale_beam", 5, .5, .5), ("scale_pan", 1.5, .25, 1.5)] if d.get("scales") else []
@@ -175,6 +193,11 @@ def paint_hook(pt, pal, d):
     gold = G.shades("#e8c050")
     pt("scale_beam", "all", lambda f, x, y, w, h: pick(gold, 0.6, x, y))
     pt("scale_pan", "all", lambda f, x, y, w, h: pick(gold, 0.7, x, y))
+    helm, gem = G.shades(pal.extra.get("helm", "#b8c4d8")), G.shades(pal.extra.get("gem", "#5ae8c8"))
+    pt("helm_cap", "all", lambda f, x, y, w, h: CLEAR if f == "down" else pick(helm, 0.5 + 0.25 * (f == "up") + 0.15 * (y == h - 1) - 0.12 * ((x + y) % 7 == 0), x, y))
+    pt("nasal", "all", lambda f, x, y, w, h: pick(helm, 0.6, x, y))
+    pt("helm_crest", "all", lambda f, x, y, w, h: pick(helm, 0.45 + 0.2 * (f == "up") + 0.1 * (z := (x + y) % 2), x, y))
+    pt("helm_gem", "all", lambda f, x, y, w, h: pick(gem, 0.55 + 0.3 * (x == 0 and y == h - 1), x, y))
     tin = G.shades("#e8c040")                                          # the kobold's miner's helmet and its lamp
     pt("helmet", "all", lambda f, x, y, w, h: pick(tin, 0.5 + 0.25 * (f == "up"), x, y))
     pt("helmet_brim", "all", lambda f, x, y, w, h: pick(tin, 0.4, x, y))
@@ -251,6 +274,10 @@ def build_hook(r, g, d):
                                                G.rot_cube("machete_grip", [5.3, hy + 7.9, -0.625 + z], [0, hy + 8, z], 0, 0, -12),
                                                G.rot_cube("cleaver_blade", [-2.5, hy + 6.5, -0.25 + z], [0, hy + 8, z], 0, 0, 8),
                                                G.rot_cube("cleaver_handle", [1.4, hy + 9.6, -0.5 + z], [0, hy + 8, z], -20, 30, 8)])
+    if d.get("tarnhelm"):                               # a silver helm over her hair, a nose guard, a crest, the gem on her brow
+        hy, z = g.hy, g.z
+        r.add("helm", "head", [0, hy + 6, z], [cube("helm_cap", [-4.375, hy + 5.4, -4.375 + z], inflate=0.6), cube("nasal", [-0.375, hy + 3.0, -5.1 + z]),
+                                               cube("helm_gem", [-0.625, hy + 6.3, -5.25 + z]), cube("helm_crest", [-0.5, hy + 9.2, -3 + z])])
     if d.get("helmet"):
         r.add("helmet", "head", [0, g.hy + 8, g.z], [cube("helmet", [-2.5, g.hy + 8.0, -2.5 + g.z]), cube("helmet_brim", [-3, g.hy + 7.8, -3 + g.z]),
                                                     cube("lamp", [-0.75, g.hy + 8.3, -3.2 + g.z])])

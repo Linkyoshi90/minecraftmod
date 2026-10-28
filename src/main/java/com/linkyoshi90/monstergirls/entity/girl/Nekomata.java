@@ -487,6 +487,7 @@ public class Nekomata extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.BASTET_NEKOMATA && this.level() instanceof ServerLevel home && !this.isBaby() && this.tickCount % 10 == 0) this.wardCreepers(home);
         if (this.species == GirlSpecies.CENSER_LION_NEKOMATA && this.level() instanceof ServerLevel incense && !this.isBaby() && this.tickCount % 20 == 0) this.incense(incense);
         if (this.species == GirlSpecies.BLAZE_CAT_NEKOMATA && this.level() instanceof ServerLevel fire && this.tickCount % 40 == 0 && !this.isBaby()) this.kindle(fire);
         if (this.species == GirlSpecies.WATERLIL_NEKOMATA && this.level() instanceof ServerLevel pond && this.tickCount % 4 == 0) this.tickPads(pond);
@@ -754,5 +755,23 @@ public class Nekomata extends AbstractMonsterGirl {
         }
         if (this.tickCount % 60 == 0) level.sendParticles(net.minecraft.core.particles.ParticleTypes.CAMPFIRE_COSY_SMOKE, this.getX(), this.getY() + 0.6, this.getZ(), 1, 0.1, 0.1, 0.1, 0.005);
         return calmed;
+    }
+
+    // --- Bastet (eighteenth wave) -----------------------------------------------------------------------------------
+
+    /** Creepers within 12 blocks of her friend (who is within 16 of her) stop hunting them, stamp out their fuse and slink away.
+     *  How many, or -1 without a friend. */
+    public int wardCreepers(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int n = 0;
+        for (var creeper : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Creeper.class, friend.getBoundingBox().inflate(12))) {
+            if (creeper.getTarget() == friend) creeper.setTarget(null);
+            creeper.setSwellDir(-1);
+            net.minecraft.world.phys.Vec3 away = creeper.position().add(creeper.position().subtract(friend.position()).normalize().scale(10));
+            creeper.getNavigation().moveTo(away.x, away.y, away.z, 1.2);
+            n++;
+        }
+        return n;
     }
 }

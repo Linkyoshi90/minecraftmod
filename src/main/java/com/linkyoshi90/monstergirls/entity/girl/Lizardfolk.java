@@ -359,6 +359,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.TURTFOLK_LIZARDFOLK && this.level() instanceof ServerLevel guard && !this.isBaby() && this.tickCount % 20 == 0) this.shellGuard(guard);
         if (this.species == GirlSpecies.CONCH_TURTLE_LIZARDFOLK && this.level() instanceof ServerLevel shore && !this.isBaby() && this.tickCount % 20 == 0) this.conchCall(shore);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.COCOSKINK_LIZARDFOLK && !this.isBaby() && this.tickCount % 600 == 0) this.growCocoa(server);
@@ -759,6 +760,21 @@ public class Lizardfolk extends AbstractMonsterGirl {
         Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
         if (friend == null || !level.getFluidState(net.minecraft.core.BlockPos.containing(friend.getEyePosition())).is(net.minecraft.tags.FluidTags.WATER)) return false;
         friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.CONDUIT_POWER, 100, 0, true, true, true));
+        return true;
+    }
+
+    // --- the turtfolk (eighteenth wave) -----------------------------------------------------------------------------
+
+    private long nextShield;
+
+    /** Every half minute her friend within 10 blocks gets two hearts of absorption, unless they still have some. True if she
+     *  shielded them. */
+    public boolean shellGuard(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 10);
+        if (friend == null || level.getGameTime() < this.nextShield || friend.getAbsorptionAmount() > 0) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.ABSORPTION, 600, 0, true, true));
+        this.nextShield = level.getGameTime() + 600;
+        this.playSound(net.minecraft.sounds.SoundEvents.TURTLE_SHAMBLE, 1.0F, 0.8F);
         return true;
     }
 }

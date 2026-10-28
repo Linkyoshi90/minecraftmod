@@ -18,6 +18,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # eighteenth wave: the rusalka, the water spirit of Slavic rivers, pale, long loose green hair, a white shift
+    "rusalka_mermaid": dict(
+        build="slim", outfit=dict(top=["halter", "capelet"], extras=["pearls"], colors=dict(cloth2="#e8ece4")),
+        ears="human", hair="flowing", bangs="wispy", fluke=(.5, 5.5, 5), long_fins=True, scales=True,
+        pal=dict(SKIN=skin("pale"), HAIR="#5a9a6a", FUR="#7a9a8a", LIGHT="#d8ece0", MARK="#3a5a4a", EYE="#a8e0e8", CLOTH="#f0f2ec", TRIM="#a8c8a0",
+                 pattern="solid"),
+        variants={"moonlit": dict(HAIR="#d8e0ec", FUR="#a8b4c4", LIGHT="#f4f8ff", MARK="#6a748a", EYE="#c8d8ff", CLOTH="#e8ecf8"),
+                  "reed": dict(HAIR="#c8a85a", FUR="#a89a6a", LIGHT="#f0e8c8", MARK="#6a5a2e", EYE="#5a8a4a", CLOTH="#f4ecd8"),
+                  "ash": dict(HAIR="#5a5a5e", FUR="#6a6a70", LIGHT="#c8c8cc", MARK="#2a2a2e", EYE="#c8d0d8", CLOTH="#d8d8dc"),
+                  "lily": dict(HAIR="#e8a0b8", FUR="#c8a0b0", LIGHT="#fcecf2", MARK="#8a5a6a", EYE="#5ab0a0", CLOTH="#fff4f8")}),
     # seventeenth wave: the sawfin, a sawfish girl in blue barding with a fleur-de-lis shield, her saw of a snout out in front
     "sawfin_mermaid": dict(
         build="athletic", outfit=dict(top=["bandeau", "harness"], extras=["pauldron", "belt"], colors=dict(leather="#3a5ab0")),

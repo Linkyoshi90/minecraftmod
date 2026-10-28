@@ -19,6 +19,16 @@ FAMILY = C.family("nekomata")
 
 # per species: body knobs, then the default palette and the four other colours as palette overrides
 SPECIES = {
+    # eighteenth wave: Bastet, the cat goddess of Egypt, a black cat girl in gold, with green eyes
+    "bastet_nekomata": dict(
+        build="slim", outfit=dict(top=["bandeau"], bottom="wrap_skirt", extras=["usekh", "armlets", "bracers"], colors=dict(cloth2="#e8c050")),
+        ears="big", hair="hime", bangs="blunt", tail=((1.25, 1.25, 4), (1.25, 1.25, 4), (1.25, 1.25, 3)), tail_pattern="solid",
+        pal=dict(SKIN=skin("brown"), HAIR="#141216", FUR="#1a181e", LIGHT="#3a3640", MARK="#e8c050", EYE="#4ad86a", CLOTH="#f4f0e4", TRIM="#e8c050",
+                 INNER="#c8a050", pattern="solid", facemark="whisker"),
+        variants={"sand": dict(FUR="#c8a46a", HAIR="#7a5a2e", LIGHT="#f0e0bc", MARK="#e8c050", EYE="#3a8ad8", CLOTH="#2a4a9a"),
+                  "silver": dict(FUR="#9a9aa4", HAIR="#d8d8e0", LIGHT="#e8e8ee", MARK="#e8c050", EYE="#e8c040", CLOTH="#1e2a5a"),
+                  "night": dict(FUR="#1e2450", HAIR="#141838", LIGHT="#3a4480", MARK="#8ae0f8", EYE="#8ae0f8", TRIM="#8ae0f8", CLOTH="#e8e8f4"),
+                  "white": dict(FUR="#f4f2ec", HAIR="#ffffff", LIGHT="#ffffff", MARK="#e8c050", EYE="#3a8ad8", CLOTH="#2a2a3a", SKIN=skin("fair"))}),
     # seventeenth wave: the censer lion, a lapis lion in gold filigree, a smoking censer hanging at her hip
     "censer_lion_nekomata": dict(
         build="athletic", outfit=dict(top=["bandeau", "mantle"], bottom="strips", extras=["armlets", "belt", "usekh"], colors=dict(cloth2="#1e2a6a")),

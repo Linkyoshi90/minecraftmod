@@ -409,6 +409,7 @@ public class Minotaur extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.SKJOLDRAM_MINOTAUR && this.level() instanceof ServerLevel ram && !this.isBaby() && this.tickCount % 10 == 0) this.ramCharge(ram);
         if (this.species == GirlSpecies.DUSTBISON_MINOTAUR && this.level() instanceof ServerLevel dust && !this.isBaby() && this.tickCount % 10 == 0) this.dustBath(dust);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.REEDBULL_MINOTAUR && !this.isBaby() && this.tickCount % 600 == 0) this.plantReeds(server);
@@ -690,5 +691,26 @@ public class Minotaur extends AbstractMonsterGirl {
         level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(net.minecraft.core.particles.ParticleTypes.BLOCK,
                 net.minecraft.world.level.block.Blocks.SAND.defaultBlockState()), friend.getX(), friend.getY() + 0.5, friend.getZ(), 30, 0.4, 0.4, 0.4, 0.1);
         return true;
+    }
+
+    // --- the skjoldram (eighteenth wave) ----------------------------------------------------------------------------
+
+    /** Creepers within 6 blocks of her friend are butted away from them, their fuses stamped out. How many, or -1 without a friend. */
+    public int ramCharge(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        int n = 0;
+        for (var creeper : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Creeper.class, friend.getBoundingBox().inflate(6))) {
+            creeper.setSwellDir(-1);
+            net.minecraft.world.phys.Vec3 away = creeper.position().subtract(friend.position()).multiply(1, 0, 1);
+            if (away.lengthSqr() < 1.0E-4) away = new net.minecraft.world.phys.Vec3(1, 0, 0);
+            away = away.normalize();
+            creeper.setDeltaMovement(away.x * 1.6, 0.45, away.z * 1.6);
+            creeper.hurtMarked = true;
+            creeper.hurt(level.damageSources().mobAttack(this), 2.0F);
+            n++;
+        }
+        if (n > 0) this.playSound(net.minecraft.sounds.SoundEvents.GOAT_RAM_IMPACT, 1.2F, 0.9F);
+        return n;
     }
 }

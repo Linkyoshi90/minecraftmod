@@ -21,6 +21,21 @@ COW_TAIL = [(1, 1, 3.5), (.75, .75, 3.5), (1.5, 1.75, 1.75)]
 TAIL_REST = [(-62, 0, 0), (-14, 0, 0), (-6, 0, 0)]
 
 SPECIES = {
+    # eighteenth wave: the skjoldram, a shaggy teal ram in a steel brow plate, her curling horns red as rust
+    "skjoldram_minotaur": dict(
+        build="strong", outfit=dict(top=["sarashi"], bottom="loincloth", extras=["pauldron", "arm_wraps", "belt"], colors=dict(cloth2="#5a3a3a")),
+        hair="shaggy", bangs="messy", ears="cow", legs="fur", foot="hoof", horns="ram", tail=[(2, 2, 1.75)], tail_look="puff", tail_rest=[(-20, 0, 0)],
+        wool=True, browplate=True, male=dict(hair="shaggy", outfit=dict(bottom="loincloth", extras=["pauldron", "arm_wraps", "belt"])),
+        pal=dict(SKIN=skin("fair"), HAIR="#7ac8c0", FUR="#4a9a98", LIGHT="#c8f0ec", MARK="#2a6a6a", EYE="#c82a2a", CLOTH="#6a7a8a", TRIM="#a8b4c0",
+                 INNER="#e0a8a8", pattern="solid", extra=dict(horn="#a83a32", hoof="#2a2a30", wool="#8ad4cc", plate="#a8b4c4")),
+        variants={"black": dict(FUR="#2a2a30", HAIR="#3a3a42", LIGHT="#6a6a74", MARK="#141418", EYE="#e8c040",
+                                extra=dict(horn="#8a7a6a", hoof="#141418", wool="#34343c", plate="#6a707c")),
+                  "brown": dict(FUR="#7a5232", HAIR="#9a6a42", LIGHT="#d8b890", MARK="#4a2e18", EYE="#3a6a2a",
+                                extra=dict(horn="#e8dcc0", hoof="#2a2018", wool="#a87a50", plate="#b88a4a")),
+                  "purple": dict(FUR="#5a4a8a", HAIR="#9a84d0", LIGHT="#e0d8f8", MARK="#2e2458", EYE="#e8c040",
+                                 extra=dict(horn="#e8c040", hoof="#1e1a2a", wool="#a890e0", plate="#c8ccd8")),
+                  "red": dict(FUR="#9a3a2e", HAIR="#c8604a", LIGHT="#f8c8b8", MARK="#5a1a12", EYE="#3a8ad8",
+                              extra=dict(horn="#3a6a8a", hoof="#2a1a14", wool="#d8705a", plate="#a8b4c4"))}),
     # seventeenth wave: the dustbison, a fluffy blue bison calf with cream-tipped fur and gold spots, a bell at her neck
     "dustbison_minotaur": dict(
         build="petite", outfit=dict(top=["bandeau", "mantle"], bottom="loincloth", extras=["bell_collar"], colors=dict(cloth2="#e8d0a8")),
@@ -186,6 +201,8 @@ def declare_hook(sp, d):
     out = [("haft", .75, 13, .75), ("blade", 3, 3.5, .5)] if d.get("labrys") else []
     if d.get("wool"):                                   # the fleece: a shawl, a fluffy band at the hips and a cap (bones wool, wool_hips, wool_head)
         out += [("wool_c", 9, 2.75, 5), ("wool_s", 7.5, 2.5, 5.25), ("wool_h", 7, 1.75, 6.5)]
+    if d.get("browplate"):                              # a steel plate over her brow, riveted, with a ridge down its middle
+        out += [("brow_plate", 5, 3, .75), ("brow_ridge", 1, 3.5, 1)]
     if d.get("rhorn"):                                  # the rhiwool's horn: a big one rising from her brow, a little one above it
         out += [("rhorn_a", 2, 4.5, 2), ("rhorn_b", 1.25, 2.5, 1.25)]
     if d.get("fringe"):                                 # the highland's fringe, over her eyes
@@ -238,6 +255,10 @@ def paint_hook(pt, pal, d):
        else pick(brass, 0.6, x, y))
     for p in ("wool_c", "wool_s", "wool_h"):
         pt(p, "all", wool_fn(pal))
+    plate = G.shades(pal.extra.get("plate", "#a8b4c4"))
+    pt("brow_plate", "all", lambda f, x, y, w, h: pick(plate, 0.3, x, y) if f == "north" and (x, y) in ((0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1))
+       else pick(plate, 0.5 + 0.2 * (y == 0) + (noise(x, y, 91) - 0.5) * 0.12, x, y))
+    pt("brow_ridge", "all", lambda f, x, y, w, h: pick(plate, 0.65 + 0.15 * (f == "up"), x, y))
     horn = G.shades(pal.extra.get("horn", "#d8ccb0"))
     for p in ("rhorn_a", "rhorn_b"):
         pt(p, "all", lambda f, x, y, w, h: pick(horn, 0.5 + 0.2 * (y == 0) - 0.1 * (y > h * 0.7), x, y))
@@ -278,6 +299,8 @@ def build_hook(r, g, d):
         r.add("wool_head", "head", [0, hy + 8, z], [cube("wool_h", [-3.5, hy + 7.4, -3.0 + z])])
     if d.get("fringe"):
         r.put("head", cube("fringe", [-3.75, hy + 2.6, -4.85 + z]))
+    if d.get("browplate"):
+        r.add("brow_plate", "head", [0, hy + 6, -4.5 + z], [cube("brow_plate", [-2.5, hy + 5.6, -5.4 + z]), cube("brow_ridge", [-0.5, hy + 5.6, -5.75 + z])])
     if d.get("rhorn"):
         r.add("rhorn", "head", [0, hy + 5.6, -5.0 + z], [G.rot_cube("rhorn_a", [-1, hy + 5.4, -6.2 + z], [0, hy + 5.6, -5.0 + z], -30, 0, 0),
                                                         G.rot_cube("rhorn_b", [-0.625, hy + 7.6, -4.6 + z], [0, hy + 7.8, -4.0 + z], -25, 0, 0)])

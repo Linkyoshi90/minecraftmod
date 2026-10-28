@@ -19,7 +19,7 @@ SPECIES = {
     # eighteenth wave: the spoodr, a round, fluffy little navy spider with pale blue tips and two tufts on her head
     "spoodr_arachne": dict(
         build="petite", outfit=dict(top=["sweater"], extras=["scarf"], colors=dict(scarf="#8ac8f0")),
-        abdomen=(10, 9, 10), hair="bob", bangs="blunt", hairy=0.3, tufts=True,
+        abdomen=(10, 9, 10), hair="bob", bangs="blunt", hairy=0.1, tufts=True,
         pal=dict(SKIN=skin("fair"), HAIR="#2a3a6a", FUR="#26305a", LIGHT="#8ac8f0", MARK="#6ab0f0", EYE="#2a3a6a", CLOTH="#3a4a8a", TRIM="#8ac8f0",
                  pattern="spots", facemark="eyes", extra=dict(tuft="#8ac8f0")),
         variants={"green": dict(FUR="#2a4a2e", HAIR="#2a4a2e", LIGHT="#a8e08a", MARK="#7ac86a", CLOTH="#3a6a3a", TRIM="#a8e08a", extra=dict(tuft="#a8e08a")),

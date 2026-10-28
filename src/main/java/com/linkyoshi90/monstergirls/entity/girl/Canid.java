@@ -533,6 +533,7 @@ public class Canid extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.TARNHELM_CANID && this.level() instanceof ServerLevel watch && !this.isBaby() && this.tickCount % 100 == 0) this.sentinel(watch);
         if (this.species == GirlSpecies.AMAROK_CANID && this.level() instanceof ServerLevel pack && !this.isBaby() && this.tickCount % 20 == 0) this.packMother(pack);
         if (this.species == GirlSpecies.CU_SITH_CANID && this.level() instanceof ServerLevel moor && !this.isBaby() && this.tickCount % 40 == 0) this.bark(moor);
         if (this.species == GirlSpecies.YETI_CANID && this.level() instanceof ServerLevel peak && !this.isBaby()) {
@@ -784,6 +785,18 @@ public class Canid extends AbstractMonsterGirl {
         int n = 0;
         for (var wolf : level.getEntitiesOfClass(net.minecraft.world.entity.animal.Wolf.class, this.getBoundingBox().inflate(12), w -> w.isTame() && w.isOwnedBy(friend))) {
             wolf.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DAMAGE_BOOST, 60, 0, true, true));
+            n++;
+        }
+        return n;
+    }
+
+    /** The tarnhelm: raiders and illagers within 48 blocks of her friend glow for eleven seconds. How many, or -1 without a friend. */
+    public int sentinel(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null) return -1;
+        int n = 0;
+        for (var raider : level.getEntitiesOfClass(net.minecraft.world.entity.raid.Raider.class, friend.getBoundingBox().inflate(48))) {
+            raider.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.GLOWING, 220, 0, true, false));
             n++;
         }
         return n;

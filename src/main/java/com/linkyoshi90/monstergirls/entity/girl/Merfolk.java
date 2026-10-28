@@ -430,6 +430,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.RUSALKA_MERMAID && this.level() instanceof ServerLevel river && !this.isBaby() && this.tickCount % 20 == 0) this.riverLuck(river);
         if (this.species == GirlSpecies.SAWFIN_MERMAID && this.level() instanceof ServerLevel sea && !this.isBaby() && this.tickCount % 20 == 0) this.sapperAid(sea);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.playDead > 0 && --this.playDead == 0 && this.getAction() == Action.LYING) this.setAction(Action.NONE);
@@ -1170,6 +1171,16 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
         if (friend == null || !level.getFluidState(net.minecraft.core.BlockPos.containing(friend.getEyePosition())).is(net.minecraft.tags.FluidTags.WATER)) return false;
         friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DIG_SPEED, 60, 1, true, true, true));
+        return true;
+    }
+
+    // --- the rusalka (eighteenth wave) ------------------------------------------------------------------------------
+
+    /** Her friend within 16 blocks, fishing, has Luck. True if she gave it. */
+    public boolean riverLuck(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null || friend.fishing == null) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.LUCK, 60, 0, true, true));
         return true;
     }
 }

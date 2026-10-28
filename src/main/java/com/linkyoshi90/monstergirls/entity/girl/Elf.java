@@ -400,6 +400,7 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.DOMOVOI_ELF && this.level() instanceof ServerLevel house && !this.isBaby()) this.keepHearth(house, this.tickCount % 40 == 0);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.VALKYRIE_ELF && this.tickCount % 20 == 0) this.returnFallen(server);
         if (this.tradingPlayer != null && (!this.tradingPlayer.isAlive() || this.tradingPlayer.distanceToSqr(this) > 16 * 16)) this.tradingPlayer = null;
@@ -621,5 +622,32 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
         super.dropCustomDeathLoot(level, source, recentlyHit);
         for (ItemStack st : this.fallen) this.spawnAtLocation(st);
         this.fallen.clear();
+    }
+
+    // --- the domovoi (eighteenth wave) ------------------------------------------------------------------------------
+
+    /** The furnaces (and smokers and blast furnaces) within 6 blocks of her friend, found every two seconds. */
+    private final java.util.List<net.minecraft.core.BlockPos> hearths = new java.util.ArrayList<>();
+
+    /** Each tick the furnaces near her friend get a second tick: they smelt (and burn) twice as fast. `look`: find them afresh
+     *  first. How many she tended. */
+    public int keepHearth(ServerLevel level, boolean look) {
+        if (look) {
+            this.hearths.clear();
+            net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+            if (friend != null) {
+                for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-6, -3, -6), friend.blockPosition().offset(6, 3, 6))) {
+                    if (level.getBlockEntity(p) instanceof net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity) this.hearths.add(p.immutable());
+                }
+            }
+        }
+        int n = 0;
+        for (net.minecraft.core.BlockPos p : this.hearths) {
+            if (level.getBlockEntity(p) instanceof net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity furnace) {
+                net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity.serverTick(level, p, level.getBlockState(p), furnace);
+                n++;
+            }
+        }
+        return n;
     }
 }

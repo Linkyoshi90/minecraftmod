@@ -28,7 +28,9 @@ lightning bolts that glow in the dark) and burlap (sackcloth with stitched seams
 with glowing tubes along every edge), zebra (wavy black and white stripes), terrazzo (cream stone set with coloured
 chips) and clover (green with little shamrocks and flecks of gold, March only). And (seventeenth wave): polka (white dots
 on bright colours), circuit (a green circuit board whose traces glow in the dark), giraffe (brown patches in a net of cream
-lines) and watermelon (red flesh with seeds over a striped green rind, July only). The drips and
+lines) and watermelon (red flesh with seeds over a striped green rind, July only). And (eighteenth wave): cow (black
+patches on white), rust (orange-brown rust eating through grey steel), lava lamp (warm blobs rising through violet, the
+blobs glow) and sunflower (golden petals round brown seed heads, August only). The drips and
 patterns follow the model: they are drawn per cube face from the geo file, running down each side from its top edge.
 
     python tools/gen_paints.py [paint ...] [model ...]   # everything, or just the paints and/or models named
@@ -46,6 +48,7 @@ from collections import Counter
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import harpy_lib as H  # noqa: E402
+from girl_lib import blob as G_blob  # noqa: E402
 
 REPO = H.REPO
 ENT = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls", "textures", "entity")
@@ -53,7 +56,7 @@ GEO = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls", "
 JAVA = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "girl", "GirlSpecies.java")
 HUES = {"blue": 0.58, "red": 0.0, "green": 0.33, "yellow": 0.14, "purple": 0.77}
 # the harpies and anurans (their own entity classes): the adult texture and the young ones (hatchling, tadpole, froglet)
-OTHERS = ["sparrow_harpy", "crow_harpy", "ostrich_harpy", "owl_harpy", "seagull_harpy", "albatross_harpy", "riflebird_harpy", "phoenix_harpy", "tengu_harpy", "toucan_harpy", "penguin_harpy", "vodyanoy", "zhuque_harpy", "finch_harpy", "flamingo_harpy", "coin_magpie_harpy", "trickster_raven_harpy", "rookmourn_harpy", "cassowrath_harpy", "dodobold_harpy", "peaflare_harpy", "pumpkingull_harpy", "condorune_harpy",
+OTHERS = ["sparrow_harpy", "crow_harpy", "ostrich_harpy", "owl_harpy", "seagull_harpy", "albatross_harpy", "riflebird_harpy", "phoenix_harpy", "tengu_harpy", "toucan_harpy", "penguin_harpy", "vodyanoy", "zhuque_harpy", "finch_harpy", "flamingo_harpy", "coin_magpie_harpy", "trickster_raven_harpy", "rookmourn_harpy", "cassowrath_harpy", "dodobold_harpy", "peaflare_harpy", "pumpkingull_harpy", "condorune_harpy", "mirror_crane_harpy",
           "bullywug", "mucus_toad", "bullfrog", "tree_frog", "poison_dart_frog", "glass_frog", "goliath_frog", "desert_rain_frog",
           "fire_bellied_toad", "cane_toad", "natterjack", "surinam_toad", "mailtoad"]
 
@@ -195,7 +198,8 @@ def treat(img, name, model):
                                         "mosaic", "chalk", "leopard", "autumn",
                                         "checkered", "sunset", "thunder", "burlap",
                                         "neon", "zebra", "terrazzo", "clover",
-                                        "polka", "circuit", "giraffe", "watermelon"):
+                                        "polka", "circuit", "giraffe", "watermelon",
+                                        "cow", "rust", "lava_lamp", "sunflower"):
         return finish(img, name, model)[0]
     W = len(img[0])
     out = [list(row) for row in img]
@@ -325,7 +329,8 @@ TREATS = ["chocolate", "icecream", "strawberry", "jello", "milk", "gold", "marbl
           "mosaic", "chalk", "leopard", "autumn",
           "checkered", "sunset", "thunder", "burlap",
           "neon", "zebra", "terrazzo", "clover",
-          "polka", "circuit", "giraffe", "watermelon"]
+          "polka", "circuit", "giraffe", "watermelon",
+          "cow", "rust", "lava_lamp", "sunflower"]
 PEARL = hexes("#b8b0c0", "#d8d2e0", "#ece8f2", "#f8f6fc", "#ffffff")
 CHROME = hexes("#1e2024", "#4a4e56", "#8a909a", "#c8ccd4", "#ffffff")
 AURORA = hexes("#2af08a", "#3ad8c8", "#5aa0f0", "#8a6af0", "#c86ae8")
@@ -342,7 +347,7 @@ EMBER = hexes("#a8280a", "#e85a14", "#f8901e", "#ffc84a", "#fff0a0")
 NEON = hexes("#1a8a8a", "#2ad0c8", "#5af8f0", "#b0fff8")
 NIGHTBODY = hexes("#0a0a14", "#14141e", "#20202e", "#2e2e40", "#40405a")
 PUMPKIN = hexes("#7a2e06", "#b04a0e", "#e0701a", "#f89a3a", "#ffc070")
-GLOWING = ("glow", "magma", "thunder", "neon", "circuit")                             # the paints with a glow mask of their own (PaintGlowLayer)
+GLOWING = ("glow", "magma", "thunder", "neon", "circuit", "lava_lamp")                             # the paints with a glow mask of their own (PaintGlowLayer)
 SUNSET = hexes("#f8c040", "#f88a3a", "#e8584a", "#b8407a", "#6a3a9a")
 STORM = hexes("#2a2e3a", "#3e4452", "#5a6070", "#7a8090", "#a0a6b4")
 NEON = [(255, 60, 200), (60, 230, 255), (150, 255, 70), (255, 230, 60)]
@@ -732,6 +737,44 @@ def finish(img, name, model):
                     c = (int(200 + 40 * l), int(50 + 40 * l), int(64 + 30 * l))   # the red flesh
                     if H.noise(x, y, 179) > 0.94 and (xx + yy) % 2 == 0 and fw > 2:
                         c = (30, 24, 24)                                    # a seed
+            elif name == "cow":
+                if l < 0.22 and face:
+                    continue
+                c = (int(226 + 26 * l), int(224 + 26 * l), int(218 + 26 * l))   # white hide
+                if max(G_blob(xx + 11 * i, yy, 181, 14, 3.5, 6.5), G_blob(xx + 11 * i + 5, yy + 4, 182, 10, 2.5, 5.0)) > 0.15:
+                    c = (int(20 + 30 * l), int(18 + 28 * l), int(20 + 28 * l))   # big black patches
+            elif name == "rust":
+                if l < 0.22 and face:
+                    continue
+                c = tuple(int(v * (0.6 + 0.45 * l)) for v in (128, 134, 142))    # grey steel
+                r = H.noise(x // 3, y // 3, 183) * 0.7 + H.noise(x, y, 184) * 0.3
+                if r > 0.62:
+                    c = tuple(int(v * (0.65 + 0.4 * l)) for v in ((150, 60, 20) if r > 0.78 else (196, 98, 40)))   # rust, deep where it bites
+                elif r > 0.56:
+                    c = tuple(int(v * (0.7 + 0.3 * l)) for v in (100, 78, 60))   # a stain round its edge
+                if (xx % 8 == 1 and yy % 8 == 1) and fw > 3 and fh > 3:
+                    c = (70, 72, 78)                                            # a rivet
+            elif name == "lava_lamp":
+                if l < 0.22 and face:
+                    continue
+                c = tuple(int(v * (0.55 + 0.45 * l)) for v in (70, 30, 110))    # the violet liquid
+                b = G_blob(xx + 5 * i, yy + 3 * i, 187, 10, 2.4, 4.5)
+                if b > 0.1:
+                    c = (255, int(140 + 70 * l), int(40 + 40 * l)) if b > 0.5 else (250, int(96 + 60 * l), 50)   # warm wax blobs
+                    mask[y][x] = c + (255,)
+            elif name == "sunflower":
+                if l < 0.22 and face:
+                    continue
+                cx, cy = (xx + 4 * i) % 9 - 4, (yy + 2 * i) % 9 - 4             # a sunflower in every 9x9 tile
+                d2 = cx * cx + cy * cy
+                if d2 <= 2:
+                    c = (int(70 + 30 * l), int(44 + 20 * l), int(20 + 10 * l))   # the brown seed head
+                    if (xx + yy) % 2 == 0:
+                        c = (40, 26, 14)
+                elif d2 <= 12 and (abs(cx) <= 1 or abs(cy) <= 1 or abs(cx) == abs(cy)):
+                    c = (int(236 + 19 * l), int(176 + 50 * l), int(20 + 30 * l))   # golden petals
+                else:
+                    c = tuple(int(v * (0.65 + 0.4 * l)) for v in (70, 130, 60))   # leaf green between
             else:                                                       # candy cane: red and white stripes, round and round
                 if l < 0.22 and face:
                     continue

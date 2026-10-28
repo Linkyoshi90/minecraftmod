@@ -8,6 +8,7 @@ import com.linkyoshi90.monstergirls.entity.FinchHarpy;
 import com.linkyoshi90.monstergirls.entity.FlamingoHarpy;
 import com.linkyoshi90.monstergirls.entity.CoinMagpieHarpy;
 import com.linkyoshi90.monstergirls.entity.PeaflareHarpy;
+import com.linkyoshi90.monstergirls.entity.MirrorCraneHarpy;
 import com.linkyoshi90.monstergirls.entity.PumpkingullHarpy;
 import com.linkyoshi90.monstergirls.entity.CondoruneHarpy;
 import com.linkyoshi90.monstergirls.entity.DodoboldHarpy;
@@ -110,6 +111,7 @@ public final class MonsterGirlsClient {
         event.registerEntityRenderer(ModEntities.PEAFLARE_HARPY.get(), ctx -> new HarpyRenderer<PeaflareHarpy>(ctx, "peaflare_harpy", 0.85F, 0.35F, PeaflareHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.PUMPKINGULL_HARPY.get(), ctx -> new HarpyRenderer<PumpkingullHarpy>(ctx, "pumpkingull_harpy", 0.75F, 0.3F, PumpkingullHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.CONDORUNE_HARPY.get(), ctx -> new HarpyRenderer<CondoruneHarpy>(ctx, "condorune_harpy", 0.85F, 0.35F, CondoruneHarpy::getVariantSuffix));
+        event.registerEntityRenderer(ModEntities.MIRROR_CRANE_HARPY.get(), ctx -> new HarpyRenderer<MirrorCraneHarpy>(ctx, "mirror_crane_harpy", 0.85F, 0.35F, MirrorCraneHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.COIN_MAGPIE_HARPY.get(), ctx -> new HarpyRenderer<CoinMagpieHarpy>(ctx, "coin_magpie_harpy", 0.8F, 0.3F, CoinMagpieHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.TRICKSTER_RAVEN_HARPY.get(), ctx -> new HarpyRenderer<TricksterRavenHarpy>(ctx, "trickster_raven_harpy", 0.85F, 0.35F, TricksterRavenHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.FLAMINGO_HARPY.get(), ctx -> new HarpyRenderer<FlamingoHarpy>(ctx, "flamingo_harpy", 0.8F, 0.35F, FlamingoHarpy::getVariantSuffix));

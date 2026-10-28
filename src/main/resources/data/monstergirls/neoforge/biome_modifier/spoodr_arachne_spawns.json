@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_spoodr_arachne",
+  "spawners": {
+    "type": "monstergirls:spoodr_arachne",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

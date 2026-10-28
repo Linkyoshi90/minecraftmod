@@ -86,7 +86,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             "mosaic", "chalk", "leopard", "autumn",                            // autumn is seasonal, November only
             "checkered", "sunset", "thunder", "burlap",                        // thunder's bolts glow
             "neon", "zebra", "terrazzo", "clover",                           // neon glows; clover is seasonal, March only
-            "polka", "circuit", "giraffe", "watermelon");                    // circuit glows; watermelon is seasonal, July only
+            "polka", "circuit", "giraffe", "watermelon",                     // circuit glows; watermelon is seasonal, July only
+            "cow", "rust", "lava_lamp", "sunflower");                        // lava lamp's blobs glow; sunflower is seasonal, August only
     /** Homage variants (the look of a favourite character): a wild one rolls them only rarely. */
     public static final java.util.Set<String> HOMAGES = java.util.Set.of("gunman", "blossom", "lost", "stitched", "nurse", "mummy", "ranger", "outback",
             "jewel_thief", "ink_kid", "pink_dairy", "sun_goddess");                           // POP_CULTURE_VARIANTS.md

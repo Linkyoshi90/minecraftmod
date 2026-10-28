@@ -68,6 +68,9 @@ IN_GAME = {
     "censer_lion": "censer_lion_nekomata", "conch_mail_turtle": "conch_turtle_lizardfolk", "date_palm_beetle": "date_beetle_bug",
     "dustbison": "dustbison_minotaur", "frondbat": "frond_bat", "sawfin": "sawfin_mermaid", "stagel": "stagel_centaur", "klabuster": "klabuster_slime",
     "dryad": "dryad_flora", "amarok": "amarok_canid", "yurei": "yurei_undead", "lamassu": "lamassu_centaur",
+    # eighteenth wave (2026-10-28)
+    "spoodr": "spoodr_arachne", "urchskin": "urchskin_lamia", "pineskrell": "pineskrell_rodent", "turtfolk": "turtfolk_lizardfolk",
+    "tarnhelm": "tarnhelm_canid", "palmyr": "palmyr_centaur", "skjoldram": "skjoldram_minotaur", "mirror_crane": "mirror_crane_harpy",
 }
 # not a creature to make, and the ones set aside on purpose
 EXCLUDED = {

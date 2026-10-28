@@ -758,6 +758,7 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.PALMYR_CENTAUR && this.level() instanceof ServerLevel meadow && !this.isBaby() && this.tickCount % 20 == 0) this.fleetFoot(meadow);
         if ((this.species == GirlSpecies.STAGEL_CENTAUR || this.species == GirlSpecies.LAMASSU_CENTAUR) && this.level() instanceof ServerLevel ward && !this.isBaby() && this.tickCount % 20 == 0) this.blessFriend(ward);
         if (this.species == GirlSpecies.AURORANTLER_CENTAUR && this.level() instanceof ServerLevel aurora && !this.isBaby()) this.aurora(aurora);
         if (this.species == GirlSpecies.MOMOSHIKA_CENTAUR && this.level() instanceof ServerLevel grove && !this.isBaby() && this.tickCount % 40 == 0) this.blossom(grove);
@@ -978,6 +979,16 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
         if (this.species == GirlSpecies.STAGEL_CENTAUR) friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.JUMP, 60, 1, true, true, true));
         else if (this.species == GirlSpecies.LAMASSU_CENTAUR) friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DAMAGE_RESISTANCE, 60, 0, true, true, true));
         else return false;
+        return true;
+    }
+
+    // --- the palmyr (eighteenth wave) -------------------------------------------------------------------------------
+
+    /** Her friend within 12 blocks runs faster while sprinting (Speed I). True if she sped them up. */
+    public boolean fleetFoot(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 12);
+        if (friend == null || !friend.isSprinting()) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 40, 0, true, true));
         return true;
     }
 }

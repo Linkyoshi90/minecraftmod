@@ -480,3 +480,26 @@ yurei and lamassu, from their reference looks).
 Paints: polka (white dots on bright colours), circuit (a green circuit board whose traces glow), giraffe (brown patches
 in a net of cream lines) and the seasonal watermelon (July only), so 67 in all.
 
+## Eighteenth wave (2026-10-28, in the game)
+
+Eight Harmontide originals from the reference art (their blue looks) and four creatures of folklore (Bastet, the
+rusalka, the ushi-oni and the domovoi).
+
+| Species | Home | Design |
+|---|---|---|
+| **Spoodr** | Arachne | A round, fluffy little navy spider with pale blue tips, two tufts on her head and big shining eyes: she clears the cobwebs near her friend and gives them the string. |
+| **Urchskin** | Lamia | A teal sea serpent with a cream belly, purple urchin spines down her tail and a spiny crest: monsters that hurt her friend near her are pricked in return. |
+| **Pineskrell** | Rodent | A blue pine squirrel with a huge frosted tail and two glowing crystal pinecones by her ear: the ores near her friend sparkle. |
+| **Turtfolk** | Lizardfolk | A tall blue-scaled turtle warrior in bronze, a big brown shell, long brown hair and a yellow flower: every half minute two hearts of absorption for her friend. |
+| **Tarnhelm** | Canid | A war wolf in blue enamelled plate and a steel helm with a glowing gem: raiders within 48 blocks of her friend glow. |
+| **Palmyr** | Centaur | A blue deer taur in a lattice of white diamonds, with feathery frond antlers and a fan of a tail: Speed I for her sprinting friend. |
+| **Skjoldram** | Minotaur | A shaggy teal ram in a steel brow plate, her curling horns rust red: she butts creepers away from her friend and stamps out their fuses. |
+| **Mirror Crane** | Harpy | A tall blue and white crane on the flamingo's long legs, in gold bracers: one arrow in three aimed at her friend glances off her feathers and flies back. |
+| **Bastet** | Nekomata | The cat goddess of Egypt, a black cat girl in gold with green eyes: creepers near her friend stop hunting them and slink away. |
+| **Rusalka** | Merfolk | The Slavic river spirit, pale, long loose green hair and a white shift: Luck for her friend while they fish near her. |
+| **Ushi-oni** | Arachne | The ox-horned spider demon of Japanese coasts, black and red: her bellow sends the monsters near her friend fleeing, slowed. |
+| **Domovoi** | Elf | The Slavic house spirit behind the stove: a little straw-haired girl in a smock and a dotted red kerchief: the furnaces near her friend smelt twice as fast. |
+
+Paints: cow (black patches on white), rust (rust eating through riveted steel), lava lamp (warm blobs rising through
+violet; the blobs glow) and the seasonal sunflower (August only), so 71 in all.
+

@@ -70,6 +70,7 @@ import java.util.UUID;
  * every monster in sight. Meet a stranger medusa's eyes and you are slowed nearly to a stop, and so are the monsters she
  * looks at; once she has a friend she wears a blindfold ({@link #FLAG_BLINDFOLD}) and her gaze is harmless.
  */
+@net.neoforged.fml.common.EventBusSubscriber(modid = com.linkyoshi90.monstergirls.MonsterGirlsMod.MODID)
 public class Lamia extends AbstractMonsterGirl {
     private static final ResourceLocation COLD = MonsterGirlsMod.id("lamia_cold");
     public static final int WARM = 60, COOL = 30, COLDEST = 12;
@@ -838,5 +839,34 @@ public class Lamia extends AbstractMonsterGirl {
         this.getLookControl().setLookAt(player);
         this.playSound(SoundEvents.CAT_HISS, 1.0F, 0.6F);
         player.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.naga_guard", this.getDisplayName()), true);
+    }
+
+    // --- the urchskin (eighteenth wave) -----------------------------------------------------------------------------
+
+    /** Her spines prick a monster that hurt her friend: three points of thorns damage. True if it was pricked. */
+    public boolean prick(net.minecraft.world.entity.LivingEntity attacker) {
+        if (!(this.level() instanceof ServerLevel level) || attacker == this || !attacker.isAlive()) return false;
+        attacker.hurt(level.damageSources().thorns(this), 3.0F);
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.CRIT, attacker.getX(), attacker.getY(0.6), attacker.getZ(), 6, 0.3, 0.3, 0.3, 0.1);
+        return true;
+    }
+
+    /** A monster hurt a player: a befriended urchskin near them pricks it. */
+    @net.neoforged.bus.api.SubscribeEvent
+    public static void onFriendHurt(net.neoforged.neoforge.event.entity.living.LivingDamageEvent.Post event) {
+        if (!(event.getEntity() instanceof net.minecraft.world.entity.player.Player player) || player.level().isClientSide) return;
+        if (!(event.getSource().getEntity() instanceof net.minecraft.world.entity.monster.Monster attacker)) return;
+        Lamia urchskin = urchskinOf(player);
+        if (urchskin != null) urchskin.prick(attacker);
+    }
+
+    /** A befriended urchskin within 8 blocks of the player, if any. */
+    @Nullable
+    public static Lamia urchskinOf(net.minecraft.world.entity.player.Player player) {
+        for (Lamia l : player.level().getEntitiesOfClass(Lamia.class, player.getBoundingBox().inflate(8),
+                l -> l.species == GirlSpecies.URCHSKIN_LAMIA && !l.isBaby() && l.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION)) {
+            return l;
+        }
+        return null;
     }
 }

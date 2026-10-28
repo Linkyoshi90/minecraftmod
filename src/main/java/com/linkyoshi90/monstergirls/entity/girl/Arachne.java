@@ -302,6 +302,8 @@ public class Arachne extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.SPOODR_ARACHNE && this.level() instanceof ServerLevel webs && !this.isBaby() && this.tickCount % 40 == 0) this.sweepWebs(webs);
+        if (this.species == GirlSpecies.USHI_ONI_ARACHNE && this.level() instanceof ServerLevel shore && !this.isBaby() && this.tickCount % 20 == 0) this.bellow(shore);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.JOROGUMO_ARACHNE) {
             if (this.tickCount % 40 == 0) this.bindingWeb(server, !server.isDay());
@@ -583,5 +585,45 @@ public class Arachne extends AbstractMonsterGirl {
 
     public int snareCount() {
         return this.snares.size();
+    }
+
+    // --- the spoodr and the ushi-oni (eighteenth wave) --------------------------------------------------------------
+
+    /** The spoodr clears a cobweb within 6 blocks of her friend and gives them its string. 1 if she cleared one, 0 if none was
+     *  left, -1 without a friend. */
+    public int sweepWebs(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-6, -3, -6), friend.blockPosition().offset(6, 4, 6))) {
+            if (!level.getBlockState(p).is(net.minecraft.world.level.block.Blocks.COBWEB)) continue;
+            level.destroyBlock(p, false, this);
+            net.minecraft.world.item.ItemStack string = new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.STRING);
+            if (!friend.getInventory().add(string)) friend.drop(string, false);
+            this.getLookControl().setLookAt(p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5);
+            return 1;
+        }
+        return 0;
+    }
+
+    private long nextBellow;
+
+    /** The ushi-oni bellows at the monsters within 10 blocks of her friend: they forget their target, slowed, and run. At most
+     *  every 20 seconds. How many fled, or -1 without a friend. */
+    public int bellow(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        if (level.getGameTime() < this.nextBellow) return 0;
+        java.util.List<net.minecraft.world.entity.monster.Monster> near = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class,
+                friend.getBoundingBox().inflate(10));
+        if (near.isEmpty()) return 0;
+        for (net.minecraft.world.entity.monster.Monster m : near) {
+            m.setTarget(null);
+            net.minecraft.world.phys.Vec3 away = m.position().add(m.position().subtract(friend.position()).normalize().scale(14));
+            m.getNavigation().moveTo(away.x, away.y, away.z, 1.4);
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 100, 1));
+        }
+        this.playSound(net.minecraft.sounds.SoundEvents.RAVAGER_ROAR, 1.5F, 0.8F);
+        this.nextBellow = level.getGameTime() + 400;
+        return near.size();
     }
 }

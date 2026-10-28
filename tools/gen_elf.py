@@ -74,6 +74,17 @@ SPECIES = {
                   "rust": dict(extra=dict(scarf="#a83a1a", hat="#7a3a1a", boot="#4a2010"), CLOTH="#c8784a", HAIR="#7a3a1a"),
                   "bone": dict(extra=dict(scarf="#3a6ab0", hat="#f0e8d8", boot="#c8b8a0"), CLOTH="#f0e8d8", HAIR="#2a2420")}),
     # eleventh wave: the brownie, a tiny house spirit in ragged clothes (the red variant wears a little cap)
+    # eighteenth wave: the domovoi, the Slavic house spirit behind the stove: straw hair, an embroidered smock, a red kerchief
+    "domovoi_elf": dict(
+        build="petite", outfit=dict(top=["sweater"], bottom="wrap_skirt", extras=["belt"], colors=dict(cloth2="#c82a2a", leather="#7a5a3a")),
+        hair="braid", bangs="parted", ears="elf", legs="bare", foot="shoe", kerchief=True,
+        pal=dict(SKIN=skin("peach"), HAIR="#d8b868", FUR="#d8b868", LIGHT="#f4e8c0", MARK="#3a2a1e", EYE="#3a6ac8", CLOTH="#f4f0e4", TRIM="#c82a2a",
+                 extra=dict(boot="#5a3a22", kerchief="#c82a2a", kerchief_dot="#f4f0e4", soot=True)),
+        variants={"blue": dict(TRIM="#2a4ab0", extra=dict(boot="#5a3a22", kerchief="#2a4ab0", kerchief_dot="#f4f0e4", soot=True, cloth2="#2a4ab0")),
+                  "green": dict(TRIM="#2a7a3a", HAIR="#a87a3a", extra=dict(boot="#5a3a22", kerchief="#2a7a3a", kerchief_dot="#f8e070", soot=True, cloth2="#2a7a3a")),
+                  "soot": dict(CLOTH="#8a8680", HAIR="#5a4a3a", TRIM="#3a3632",
+                               extra=dict(boot="#2a2420", kerchief="#3a3632", kerchief_dot="#8a8680", soot=True, cloth2="#3a3632")),
+                  "gold": dict(TRIM="#c8902a", HAIR="#f0e0a8", extra=dict(boot="#5a3a22", kerchief="#e8b030", kerchief_dot="#c82a2a", soot=True, cloth2="#c8902a"))}),
     "brownie_elf": dict(
         build="petite", outfit=dict(top=["sweater"], bottom="shorts", extras=["satchel"], colors=dict(cloth2="#4a3424", leather="#5a3a22")),
         hair="shaggy", bangs="messy", ears="elf", legs="bare", foot="shoe", brownie=True,
@@ -110,6 +121,8 @@ def declare_hook(sp, d):
         out += [("scabbard", 1, 7, 1.5), ("hilt", 2.5, .75, .75)]
     if d.get("sculk"):
         out += [("sculk_band", 8.75, 1, 8.75), ("sculk_gem", 1.5, 1.5, .5)]
+    if d.get("kerchief"):
+        out += [("kerchief", 8.75, 3.5, 8.75), ("kerchief_knot", 2, 1.5, 1), ("kerchief_tail", 1.5, 2.5, .25)]
     if d.get("brownie"):
         out += [("bcap", 5.5, 3, 5.5), ("bcap_tip", 2, 2, 2)]
     if d.get("helm"):                                    # the valkyrie's winged helm
@@ -133,6 +146,13 @@ def paint_hook(pt, pal, d):
     pt("hatband", "all", lambda f, x, y, w, h: pick(G.shades("#3a2a1e"), 0.4, x, y))
     pt("scabbard", "all", lambda f, x, y, w, h: pick(G.shades("#2a1a1a"), 0.45 + 0.3 * (y == 0), x, y))
     pt("hilt", "all", lambda f, x, y, w, h: pick(gold, 0.6, x, y))
+    kc, kd = G.shades(pal.extra.get("kerchief", "#c82a2a")), G.shades(pal.extra.get("kerchief_dot", "#f4f0e4"))
+    dotted = lambda f, x, y, w, h: pick(kd, 0.7, x, y) if (x % 3 == 1 and y % 3 == 1) else pick(kc, 0.5 + 0.12 * (f == "up"), x, y)
+    pt("kerchief", "all", lambda f, x, y, w, h: CLEAR if f == "down" else dotted(f, x, y, w, h))
+    pt("kerchief_knot", "all", lambda f, x, y, w, h: pick(kc, 0.45, x, y))
+    pt("kerchief_tail", "all", dotted)
+    if pal.extra.get("soot"):                            # a smudge of soot on her nose and cheek
+        pt("head", ("north",), lambda f, x, y, w, h: pick(G.shades("#3a3432"), 0.45, x, y) if (x, y) in ((15, 22), (16, 22), (16, 21), (22, 24), (23, 24)) else None)
     capc = G.shades(pal.extra.get("cap", "#b82a2a"))
     pt("bcap", "all", lambda f, x, y, w, h: pick(capc, 0.5 + 0.1 * (y == 0), x, y) if pal.extra.get("cap") else CLEAR)
     pt("bcap_tip", "all", lambda f, x, y, w, h: pick(capc, 0.55, x, y) if pal.extra.get("cap") else CLEAR)
@@ -161,6 +181,11 @@ def build_hook(r, g, d):
     if d.get("hat"):
         r.add("hat", "head", [0, hy + 8.5, z], [cube("brim", [-6, hy + 8.3, -6 + z]), cube("crown", [-3.5, hy + 8.7, -3.5 + z]),
                                                 cube("hatband", [-3.625, hy + 8.75, -3.625 + z])])
+    if d.get("kerchief"):                                # a dotted kerchief over her hair, knotted at the nape, its ends hanging down
+        r.add("kerchief", "head", [0, hy + 6, z], [cube("kerchief", [-4.375, hy + 5.4, -4.375 + z], inflate=0.65),
+                                                   cube("kerchief_knot", [-1, hy + 4.6, 4.9 + z]),
+                                                   G.rot_cube("kerchief_tail", [-1.6, hy + 2.2, 5.4 + z], [-0.6, hy + 4.6, 5.4 + z], 10, 0, -15),
+                                                   G.rot_cube("kerchief_tail", [0.1, hy + 2.2, 5.4 + z], [0.6, hy + 4.6, 5.4 + z], 10, 0, 15)])
     if d.get("brownie"):                                 # a little pointed cap (drawn only on the red one)
         r.add("bcap", "head", [0, hy + 8.4, z], [cube("bcap", [-2.75, hy + 8.4, -2.75 + z]), cube("bcap_tip", [-1, hy + 11.2, -0.5 + z])])
     if d.get("sculk"):

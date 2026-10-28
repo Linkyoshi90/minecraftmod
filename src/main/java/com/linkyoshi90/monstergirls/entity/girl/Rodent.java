@@ -474,6 +474,7 @@ public class Rodent extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.PINESKRELL_RODENT && this.level() instanceof ServerLevel ores && !this.isBaby() && this.tickCount % 100 == 0) this.oreSense(ores);
         if (this.species == GirlSpecies.COATIMANO_RODENT && this.level() instanceof ServerLevel diggingLevel && !this.isBaby()) this.tickDig(diggingLevel);
         if (this.species == GirlSpecies.SQUIRRICERAT_RODENT && this.level() instanceof ServerLevel acorn && !this.isBaby() && this.tickCount % 2400 == 0) this.buryAcorn(acorn);
         if (this.species == GirlSpecies.KAMAITACHI_RODENT && this.level() instanceof ServerLevel gale && !this.isBaby() && this.tickCount % 20 == 0) this.gust(gale);
@@ -628,5 +629,20 @@ public class Rodent extends AbstractMonsterGirl {
         this.parcel = ItemStack.parseOptional(this.registryAccess(), tag.getCompound("Parcel"));
         this.sender = tag.hasUUID("Sender") ? tag.getUUID("Sender") : null;
         this.recipient = tag.hasUUID("Recipient") ? tag.getUUID("Recipient") : null;
+    }
+
+    // --- the pineskrell (eighteenth wave) ---------------------------------------------------------------------------
+
+    /** The ores within 6 blocks of her friend sparkle (at most 16 of them). How many sparkled, or -1 without a friend. */
+    public int oreSense(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        int n = 0;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-6, -6, -6), friend.blockPosition().offset(6, 6, 6))) {
+            if (!level.getBlockState(p).is(net.neoforged.neoforge.common.Tags.Blocks.ORES)) continue;
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.WAX_ON, p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5, 6, 0.4, 0.4, 0.4, 0.0);
+            if (++n >= 16) break;
+        }
+        return n;
     }
 }

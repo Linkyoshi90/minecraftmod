@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_urchskin_lamia",
+  "spawners": {
+    "type": "monstergirls:urchskin_lamia",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

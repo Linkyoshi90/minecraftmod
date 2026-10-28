@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_turtfolk_lizardfolk",
+  "spawners": {
+    "type": "monstergirls:turtfolk_lizardfolk",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

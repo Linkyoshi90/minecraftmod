@@ -22,6 +22,21 @@ LIZARD_TAIL = [(2.5, 2.5, 4), (2, 2, 4), (1.5, 1.5, 4), (1, 1, 3.5)]
 DROOP = [(-38, 0, 0), (10, 0, 0), (10, 0, 0), (8, 0, 0)]
 
 SPECIES = {
+    # eighteenth wave: the turtfolk, a tall blue-scaled turtle warrior in bronze, a big brown shell, long brown hair, a yellow flower
+    "turtfolk_lizardfolk": dict(
+        build="athletic", outfit=dict(top=["bandeau"], bottom="loincloth", extras=["bracers", "belt"], colors=dict(cloth2="#7a5a2a", leather="#8a6a3a")),
+        hair="flowing", bangs="swept", ears=None, legs="scales", foot="claw", tail=[(1.75, 1.75, 2.5), (1.25, 1.25, 2)], tail_rest=[(-50, 0, 0), (10, 0, 0)],
+        tail_look="scale", shell=True, flower=True,
+        pal=dict(SKIN="#7aa0d8", HAIR="#7a4a22", FUR="#5a88d0", LIGHT="#c8dcf4", MARK="#3a5a9a", EYE="#c83a5a", CLOTH="#a8783a", TRIM="#e8c060",
+                 pattern="spots", extra=dict(shell="#7a5228", shell_band="#c89a50", flower="#f8d040", flower_in="#f89a3a")),
+        variants={"black": dict(SKIN="#6a6a74", FUR="#4a4a54", LIGHT="#a8a8b4", MARK="#2a2a32", HAIR="#1e1a1a", EYE="#e8c040",
+                                extra=dict(shell="#2a2622", shell_band="#7a6a5a", flower="#f4f0f0", flower_in="#e8c040")),
+                  "green": dict(SKIN="#7ab88a", FUR="#5aa06a", LIGHT="#d0f0c8", MARK="#2e6a3e", HAIR="#5a3a1e",
+                                extra=dict(shell="#5a4a22", shell_band="#a8904a", flower="#f87aa8", flower_in="#f8e070")),
+                  "purple": dict(SKIN="#9a84c8", FUR="#7a64b0", LIGHT="#e0d4f4", MARK="#4a3a7a", HAIR="#3a2a4a", EYE="#e8c040",
+                                 extra=dict(shell="#5a3a3a", shell_band="#a87a6a", flower="#f8f0a0", flower_in="#f8a03a")),
+                  "red": dict(SKIN="#d88a7a", FUR="#c8604a", LIGHT="#f8dccc", MARK="#7a2a1e", HAIR="#3a1e14", EYE="#3a8ad8",
+                              extra=dict(shell="#6a3a1e", shell_band="#c8803a", flower="#f8f8f0", flower_in="#f8d040"))}),
     # seventeenth wave: the conch mail turtle, a little sea turtle in a scaled blue shell with a conch's spire rising from it, pearls
     "conch_turtle_lizardfolk": dict(
         build="petite", outfit=dict(top=["bandeau", "capelet"], bottom="shorts", extras=["pearls"], colors=dict(cloth2="#3a8ad8", leather="#e8c060")),
@@ -252,6 +267,8 @@ def declare_hook(sp, d):
         out += [("carapace", 7, 8, 2.5), ("carapace_top", 5.5, 6, 1.25), ("plastron", 5, 5, .5)]
     if d.get("shell") == "dome":                         # the tortoises' high dome
         out += [("carapace_dome", 4, 4.5, 1.5)]
+    if d.get("flower"):
+        out += [("petal", .5, 1.5, 1.5), ("bloom_in", .5, 1, 1)]
     if d.get("conch"):                                   # a conch's spire rising from the top of her shell
         out += [("conch_a", 3.5, 3, 3.5), ("conch_b", 2.5, 2.5, 2.5), ("conch_c", 1.5, 2.25, 1.5), ("conch_d", .75, 1.75, .75)]
     if d.get("teeth"):
@@ -273,6 +290,9 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    fl, fin = G.shades(pal.extra.get("flower", "#f8d040")), G.shades(pal.extra.get("flower_in", "#f89a3a"))
+    pt("petal", "all", lambda f, x, y, w, h: pick(fl, 0.6 + 0.2 * (f == "north"), x, y))
+    pt("bloom_in", "all", lambda f, x, y, w, h: pick(fin, 0.6, x, y))
     conch, cband = G.shades(pal.extra.get("conch", "#f0e4d0")), G.shades(pal.extra.get("conch_band", "#3a7ad8"))
     for p in ("conch_a", "conch_b", "conch_c", "conch_d"):          # a spiral band winding up the spire
         pt(p, "all", lambda f, x, y, w, h: pick(cband if (x + 2 * y) % 6 in (0, 1) else conch, 0.5 + 0.2 * (f == "up") + (noise(x, y, 51) - 0.5) * 0.1, x, y))
@@ -340,6 +360,11 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     z = g.z
+    if d.get("flower"):                                  # a flower behind her left ear: four petals round a heart
+        hy, z = g.hy, g.z
+        fx, fy, fz = 4.6, hy + 4.5, -0.5 + z
+        r.add("flower", "head", [fx, fy, fz], [cube("petal", [fx, fy - 0.75 + dy, fz - 0.75 + dz]) for dy, dz in ((1.0, 0), (-1.0, 0), (0, 1.0), (0, -1.0))]
+              + [cube("bloom_in", [fx + 0.1, fy - 0.5, fz - 0.5])])
     if d.get("conch"):                                   # leaning back off the top of the dome
         cd = G.S("chest")[2]
         bz = cd / 2 + 3.6 + z

@@ -17,6 +17,20 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # eighteenth wave: the palmyr, a blue deer taur in white diamonds with feathery frond antlers and a fan of a tail
+    "palmyr_centaur": dict(
+        build="slim", outfit=dict(top=["halter", "capelet"], extras=["pearls", "armlets"], colors=dict(cloth2="#c8d8f8")),
+        hair="flowing", bangs="wispy", tail=(4, 7, 1.25), antlers=True, fronds=True, ears="round",
+        pal=dict(SKIN=skin("fair"), HAIR="#a8c0f0", FUR="#3a5ac8", LIGHT="#d8e4fc", MARK="#f0f4ff", EYE="#2a3a9a", CLOTH="#2a48b0", TRIM="#e8f0ff",
+                 pattern="diamonds", pattern_scale=2.4, extra=dict(antler="#c8d8f8", antler2="#3a5ac8", frond="#8aa8f0", frond_edge="#f0f4ff")),
+        variants={"white": dict(FUR="#eef2fa", HAIR="#ffffff", LIGHT="#ffffff", MARK="#8aa8e0", CLOTH="#8aa8e0",
+                                extra=dict(antler="#f4f6fc", antler2="#a8b8e0", frond="#dce4f8", frond_edge="#8aa8e0")),
+                  "teal": dict(FUR="#2a8a9a", HAIR="#a8e8e8", LIGHT="#d8f4f4", MARK="#e8fcfc", CLOTH="#1e6a7a",
+                               extra=dict(antler="#c8f0f0", antler2="#2a8a9a", frond="#7ad0d8", frond_edge="#e8fcfc")),
+                  "violet": dict(FUR="#6a4ab8", HAIR="#d0b8f8", LIGHT="#ece0fc", MARK="#f4ecff", CLOTH="#5a3aa8",
+                                 extra=dict(antler="#e0d0f8", antler2="#6a4ab8", frond="#b898f0", frond_edge="#f4ecff")),
+                  "dusk": dict(FUR="#3a2a5a", HAIR="#f0a8c0", LIGHT="#c8a8d8", MARK="#f8c0a0", CLOTH="#a83a5a", EYE="#f8a040",
+                               extra=dict(antler="#f8d0b8", antler2="#a83a5a", frond="#e87a8a", frond_edge="#f8d0a0"))}),
     # seventeenth wave: the stagel, a fawn taur, cream and blue-dappled, with budding antlers
     "stagel_centaur": dict(
         build="petite", outfit=dict(top=["halter", "capelet"], extras=["pearls"], colors=dict(cloth2="#a8c0f0")),
@@ -237,6 +251,8 @@ def declare(sp):
         parts += [("antler_a", .75, 5, .75), ("antler_b", .75, 2.5, .75), ("antler_c", .5, 2, .5)]
     if d.get("blossoms"):
         parts += [("blossom", 1.5, 1.5, 1.5), ("blossom_in", .75, .75, .75)]
+    if d.get("fronds"):
+        parts += [("frond_leaf", .25, 4, 2)]
     if d.get("blades"):
         parts += [("antler_blade", 2.5, 2, .25)]
     if d.get("bells"):
@@ -302,6 +318,16 @@ def paint(sp, key):
         return pick(b2 if dx + abs(band - 2.5) < 2.2 else b1, 0.5 + 0.1 * ((x + y) % 2), x, y)
     pt("blanket", "all", weave)
     steel = shades(pal.extra.get("blade", "#c8d0dc"))
+    frond, fedge = shades(pal.extra.get("frond", "#8aa8f0")), shades(pal.extra.get("frond_edge", "#f0f4ff"))
+
+    def leaf(f, x, y, w, h):                             # a feather-leaf: tapering to its tip, a pale rib and pale barbs
+        half = (w if f in ("north", "south") else 2) / 2
+        if f in ("east", "west"):
+            if abs(x + 0.5 - w / 2) > (w / 2) * (1 - y / h * 0.0) * (0.3 + 0.7 * (1 - y / h)):
+                return CLEAR
+            return pick(fedge if abs(x + 0.5 - w / 2) < 0.6 or (x + y) % 3 == 0 else frond, 0.5 + 0.15 * (y % 2), x, y)
+        return pick(frond, 0.45, x, y)
+    pt("frond_leaf", "all", leaf)
     pt("antler_blade", "all", lambda f, x, y, w, h: pick(steel, 0.55 + 0.3 * (y == 0), x, y) if y < h - (abs(x + 0.5 - w / 2) * 1.2) else CLEAR)
     kelp = shades(pal.extra.get("kelp", "#4a8a3a"))
     pt("htail", "all", lambda f, x, y, w, h: pick(kelp, 0.45 + (noise(x, y, 6) - 0.5) * 0.3, x, y) if d.get("kelp") and (x + y // 2) % 3 == 0
@@ -367,6 +393,10 @@ def build(sp):
         if d.get("blades"):                              # a halberd's blade on the top tine of each antler
             for sg in (-1, 1):
                 cs.append(G.rot_cube("antler_blade", [sg * 5.2 - 1.25, hy + 13.4, 0.9 + z], [sg * 5.2, hy + 13.4, 1.0 + z], 0, 0, 25 * sg))
+        if d.get("fronds"):                              # feathery fronds sprouting from the tines, fanned outwards
+            for sg in (-1, 1):
+                for bx, by, bz, tilt in ((2.6 + 1.8, 11.0, -1.4, 25), (2.6 + 2.6, 12.6, 1.0, 40), (2.6 + 0.6, 9.8, -1.8, 10)):
+                    cs.append(G.rot_cube("frond_leaf", [sg * bx - 0.125, hy + by, bz - 1 + z], [sg * bx, hy + by, bz + z], 0, 0, -tilt * sg))
         if d.get("blossoms"):                            # peach blossoms caught in the tines
             for sg in (-1, 1):
                 for bx, by, bz in ((2.6 + 1.8, 11.4, -1.6), (2.6 + 2.6, 13.6, 1.2), (2.6 + 0.6, 10.6, -2.4), (2.6 + 1.2, 9.4, 0.2)):

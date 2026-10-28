@@ -86,7 +86,10 @@ GROUP = {"lioness_nekomata": (3, 5), "orca_mermaid": (2, 3), "fennec_kitsune": (
          "cockatrice_dragon": (1, 1), "valkyrie_elf": (1, 1),
          "censer_lion_nekomata": (1, 1), "conch_turtle_lizardfolk": (1, 3), "date_beetle_bug": (1, 3), "dustbison_minotaur": (2, 4),
          "frond_bat": (1, 3), "sawfin_mermaid": (1, 2), "stagel_centaur": (1, 3), "klabuster_slime": (1, 2), "dryad_flora": (1, 1),
-         "amarok_canid": (1, 1), "yurei_undead": (1, 1), "lamassu_centaur": (1, 1)}
+         "amarok_canid": (1, 1), "yurei_undead": (1, 1), "lamassu_centaur": (1, 1),
+         "spoodr_arachne": (1, 3), "urchskin_lamia": (1, 2), "pineskrell_rodent": (1, 3), "turtfolk_lizardfolk": (1, 2), "tarnhelm_canid": (1, 1),
+         "palmyr_centaur": (1, 2), "skjoldram_minotaur": (1, 3), "bastet_nekomata": (1, 1), "rusalka_mermaid": (1, 1), "ushi_oni_arachne": (1, 1),
+         "domovoi_elf": (1, 1)}
 CATEGORY = {"axolotl_mermaid": "underground_water_creature", "amethyst_slime": "monster", "magma_slime": "monster",
             "seal_mermaid": "creature", "kraken_mollusk": "water_creature", "ammonite_mollusk": "water_creature",
             "night_elf": "monster", "blood_elf": "monster", "salamander_lizardfolk": "monster", "turtle_lizardfolk": "creature",
@@ -97,7 +100,8 @@ CATEGORY = {"axolotl_mermaid": "underground_water_creature", "amethyst_slime": "
             "mantarrow_mermaid": "water_creature", "moonseal_mermaid": "creature", "gremlin_devil": "creature", "karakasa_obake_devil": "creature",
             "rust_otter_mermaid": "creature", "chochin_obake_devil": "creature", "undine_slime": "creature", "ittan_momen_devil": "creature",
             "rokurokubi_devil": "creature", "jorogumo_arachne": "creature", "sword_koi_mermaid": "water_creature", "kikimora_devil": "creature",
-            "cockatrice_dragon": "creature", "sawfin_mermaid": "water_creature", "yurei_undead": "monster"}
+            "cockatrice_dragon": "creature", "sawfin_mermaid": "water_creature", "yurei_undead": "monster",
+            "rusalka_mermaid": "water_creature", "ushi_oni_arachne": "creature", "spoodr_arachne": "creature"}
 # hitbox widths that differ from the family's
 WIDTH = {"kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alraune_flora": 1.2, "frankenstein_undead": 0.8,
          "gryphon_dragon": 1.3, "long_dragon": 1.0, "jormungandr_dragon": 1.2, "wyvern_dragon": 1.2, "wyrm_dragon": 1.3,
@@ -109,7 +113,8 @@ WIDTH = {"kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alra
          "anvil_tortoise_lizardfolk": 0.9, "gliderune_marsupial": 0.5, "sphinx_centaur": 1.3, "brownie_elf": 0.4,
          "kesaran_pasaran_flora": 0.45, "tsuchinoko_lamia": 0.8, "gremlin_devil": 0.5, "tin_squirrel_construct": 0.55, "yeti_canid": 0.9, "iron_kobold_lizardfolk": 0.55,
          "kikimora_devil": 0.5, "dunefennec_kitsune": 0.55,
-         "klabuster_slime": 0.6, "date_beetle_bug": 0.5, "conch_turtle_lizardfolk": 0.6, "lamassu_centaur": 1.3, "stagel_centaur": 1.0, "amarok_canid": 0.8}
+         "klabuster_slime": 0.6, "date_beetle_bug": 0.5, "conch_turtle_lizardfolk": 0.6, "lamassu_centaur": 1.3, "stagel_centaur": 1.0, "amarok_canid": 0.8,
+         "spoodr_arachne": 0.9, "ushi_oni_arachne": 1.5, "domovoi_elf": 0.45, "skjoldram_minotaur": 0.8}
 # the name shown in game: the species name plus the family's word, unless NAME says otherwise
 SUFFIX = {"nekomata": " Nekomata", "kitsune": " Kitsune", "lamia": " Lamia", "arachne": " Arachne", "centaur": " Centaur", "merfolk": " Mermaid",
           "slime": "", "jackalope": "", "minotaur": " Minotaur", "mollusk": "", "elf": "", "undead": "", "lizardfolk": "", "dragon": "",
@@ -147,7 +152,10 @@ NAME = {"jack_jackalope": "Jack Jackalope", "kraken_mollusk": "Kraken", "octopus
         "cockatrice_dragon": "Cockatrice", "valkyrie_elf": "Valkyrie",
         "censer_lion_nekomata": "Censer Lion", "conch_turtle_lizardfolk": "Conch Mail Turtle", "date_beetle_bug": "Date Palm Beetle",
         "dustbison_minotaur": "Dustbison", "frond_bat": "Frondbat", "sawfin_mermaid": "Sawfin", "stagel_centaur": "Stagel", "klabuster_slime": "Klabuster",
-        "dryad_flora": "Dryad", "amarok_canid": "Amarok", "yurei_undead": "Yurei", "lamassu_centaur": "Lamassu"}
+        "dryad_flora": "Dryad", "amarok_canid": "Amarok", "yurei_undead": "Yurei", "lamassu_centaur": "Lamassu",
+        "spoodr_arachne": "Spoodr", "urchskin_lamia": "Urchskin", "pineskrell_rodent": "Pineskrell", "turtfolk_lizardfolk": "Turtfolk",
+        "tarnhelm_canid": "Tarnhelm", "palmyr_centaur": "Palmyr", "skjoldram_minotaur": "Skjoldram", "bastet_nekomata": "Bastet",
+        "rusalka_mermaid": "Rusalka", "ushi_oni_arachne": "Ushi-oni", "domovoi_elf": "Domovoi"}
 
 
 def gen_module(fid):
@@ -372,7 +380,7 @@ public enum GirlSpecies {
 
 # who breathes water (minecraft:can_breathe_under_water): every mermaid and every mollusk but the land snail, plus these
 WATER_BREATHERS = ["bullywug", "bullfrog", "tree_frog", "poison_dart_frog", "glass_frog", "goliath_frog", "desert_rain_frog", "surinam_toad",
-                   "sea_snake_lamia", "kelpie_centaur", "penguin_harpy", "softshell_turtle_lizardfolk", "matamata_lizardfolk"]
+                   "sea_snake_lamia", "kelpie_centaur", "penguin_harpy", "softshell_turtle_lizardfolk", "matamata_lizardfolk", "urchskin_lamia"]
 NOT_WATER_BREATHERS = {"snail_mollusk"}
 
 

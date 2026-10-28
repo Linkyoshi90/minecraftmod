@@ -18,6 +18,20 @@ SEGS = [("seg_1", 4.5, 10.5, 4), ("seg_2", 4.25, 4, 5.5), ("seg_3", 4, 3.75, 5.5
         ("seg_5", 3, 2.75, 5), ("seg_6", 2.5, 2.25, 4.5), ("seg_7", 2, 1.75, 4), ("seg_8", 1.25, 1.25, 3.5)]
 
 SPECIES = {
+    # eighteenth wave: the urchskin, a teal sea serpent with a cream belly, purple urchin spines along her back and a spiny crest
+    "urchskin_lamia": dict(
+        build="slim", outfit=dict(top=["shells"], extras=["pearls", "armlets"], colors=dict(shell="#c8a0e0")),
+        thick=1.0, hair="mane", bangs="jagged", spines=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#2a6a8a", FUR="#2a7a8a", LIGHT="#e8dcb0", MARK="#1a4a6a", EYE="#d83a8a", CLOTH="#3a8a9a", TRIM="#c8a0e0",
+                 pattern="speckle", facemark="scales", extra=dict(spine="#6a2a7a", spine_tip="#e878c8")),
+        variants={"black": dict(HAIR="#1e1e2a", FUR="#24242e", LIGHT="#8a8a9a", MARK="#0e0e14", EYE="#e8c040", CLOTH="#2a2a3a",
+                                extra=dict(spine="#141418", spine_tip="#e8c040")),
+                  "green": dict(HAIR="#2a6a3a", FUR="#3a8a4a", LIGHT="#e8f0c0", MARK="#1e4a2a", EYE="#e8703a", CLOTH="#3a7a4a",
+                                extra=dict(spine="#5a2a1e", spine_tip="#f0a03a")),
+                  "red": dict(HAIR="#8a2a2a", FUR="#a83a32", LIGHT="#f8dcc0", MARK="#5a1a14", EYE="#f8d040", CLOTH="#8a2a2a",
+                              extra=dict(spine="#2a1418", spine_tip="#f8d040")),
+                  "yellow": dict(HAIR="#c8962a", FUR="#d8a83a", LIGHT="#fff0c8", MARK="#8a5a14", EYE="#3a8ad8", CLOTH="#c8902a",
+                                 extra=dict(spine="#2a3a6a", spine_tip="#6ab0f0"))}),
     # twelfth wave: the tsuchinoko, a short fat snake body (thick, stubby) that curls up and rolls ("roll")
     "tsuchinoko_lamia": dict(
         build="petite", outfit=dict(top=["sweater"], extras=["scarf"], colors=dict(scarf="#c83a3a")),
@@ -132,6 +146,8 @@ def declare(sp):
         extra.append(("rattle", 1.25, 1, .75))
     if d.get("paddle"):
         extra.append(("paddle", .5, 3.5, 4))
+    if d.get("spines"):
+        extra += [("spine", .5, 3.5, .5), ("spine_s", .5, 2, .5)]
     if d.get("medusa"):
         extra += [("snake", 1, 5.5, 1), ("snake_h", 1.5, 1, 2), ("blindfold", 8.5, 1.75, 8.5), ("blind_tail", 1, 3, .25)]
     G.declare(parts + extra, ears=None, hair=SPECIES[sp]["hair"],
@@ -167,6 +183,9 @@ def paint(sp, key):
     pt("crown_gem", "all", lambda f, x, y, w, h: pick(shades("#3ac87a"), 0.7, x, y))
     pt("rattle", "all", lambda f, x, y, w, h: pick(shades("#c8b896"), 0.55 - (0.25 if y == h - 1 else 0), x, y))
     pt("paddle", "all", lambda f, x, y, w, h: pick(pal.FUR, 0.5, x, y) if (y // 3) % 2 else pick(pal.MARK, 0.4, x, y))
+    spine, spine_tip = shades(pal.extra.get("spine", "#6a2a7a")), shades(pal.extra.get("spine_tip", "#e878c8"))
+    for p in ("spine", "spine_s"):
+        pt(p, "all", lambda f, x, y, w, h: pick(spine_tip if y >= h - 1 else spine, 0.5 + 0.15 * (f == "north"), x, y))
     sn, band = shades(pal.extra.get("snake", "#4a9a3a")), shades(pal.extra.get("snake_band", "#2a5a24"))
     band2 = shades(pal.extra.get("snake_band2", pal.extra.get("snake_band", "#2a5a24")))
     pt("snake", "all", lambda f, x, y, w, h: pick(band if y % 4 == 0 else band2 if y % 4 == 2 and pal.extra.get("snake_band2") else sn, 0.5 + 0.15 * (f == "north"), x, y))
@@ -200,6 +219,19 @@ def build(sp):
             r.put("seg_8", cube("rattle", [-0.625, 0.1, end_z - 0.25 + i * 0.7]))
     if d.get("paddle"):
         r.put("seg_8", cube("paddle", [-0.25, 0, end_z - 1.5]))
+    if d.get("spines"):                                 # urchin spines fanning up from each segment, a crest of them over her head
+        z = G.S("seg_1")[2] / 2 - 1.0
+        for i in range(2, 9):
+            w, h, dd = G.S(f"seg_{i}")
+            part = "spine" if i < 7 else "spine_s"
+            for k, zz in enumerate((z + dd * 0.3, z + dd * 0.75)):
+                for sg in (-1, 1):
+                    x = sg * w * 0.25
+                    r.put(f"seg_{i}", G.rot_cube(part, [x - 0.25, h - 0.3, zz - 0.25], [x, h - 0.3, zz], 25, 0, sg * (18 + 10 * k)))
+            z += dd - 0.25
+        hy, gz = g.hy, g.z
+        r.add("hair_spines", "head", [0, hy + 8, gz], [G.rot_cube("spine", [x - 0.25, hy + 7.6, zz - 0.25 + gz], [x, hy + 7.6, zz + gz], 35, 0, -x * 6)
+                                                        for x, zz in ((-2.2, 0.5), (0, -0.5), (2.2, 0.5), (-1.1, 2.4), (1.1, 2.4))])
     if d.get("medusa"):                                 # nine snakes rising from her head and curling out, each with its own head
         hy, z = g.hy, g.z
         cs = []

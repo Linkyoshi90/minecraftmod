@@ -293,6 +293,23 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
 - [x] Journal and hearth discoverable (2026-10-28): the journal opens again (its pages are synced to the client before the book screen opens), it starts with four guide pages (making friends, the hearth, expeditions, weapons), both recipes are unlocked at login, and every player gets a journal on their first visit (not on the GameTest server).
 - [x] Homage variants from POP_CULTURE_VARIANTS.md: `jewel_thief` (cave bat), `ink_kid` (ika), `pink_dairy` (cattle minotaur), `sun_goddess` (wolf girl); palettes only, rare in the wild (`HOMAGES`). The rest of that list wants a prop each.
 - [ ] Dev client for the life features: a held bow and a TaCZ gun in a girl's hand (position on `hand_r`; the item may need vanilla's extra 180-degree turn once the arm is raised), the aiming poses and recoil, TaCZ shooting and reloading from the pouch, the journal's pages, a hut going up and the market's presents, an expedition's return.
+- [x] **Eighteenth wave** (2026-10-28), tested in `EighteenthWaveTests`:
+  - **Spoodr** (arachne, `tufts`: `hair_tufts`): every 2 s, `sweepWebs` clears a cobweb within 6 of her friend and gives them its string.
+  - **Ushi-oni** (arachne, `ox_horns`: `hair_horns`): `bellow`, at most every 20 s: the monsters within 10 of her friend drop their target, get Slowness II and run.
+  - **Urchskin** (lamia, `spines` on every tail segment, `hair_spines`; breathes water): `Lamia.onFriendHurt` (LivingDamageEvent.Post): a monster that hurts her friend within 8 of her takes 3 thorns damage (`prick`).
+  - **Pineskrell** (rodent, `cones` by her ear, glow mask): every 5 s, `oreSense` sparkles up to 16 ores (`c:ores`) within 6 of her friend.
+  - **Turtfolk** (lizardfolk, shell, `flower`): `shellGuard`, at most every 30 s: Absorption I for 30 s for her friend within 10 who has none.
+  - **Tarnhelm** (canid, `tarnhelm` helm, its gem glows): every 5 s, `sentinel` gives raiders within 48 of her friend Glowing.
+  - **Palmyr** (centaur, `fronds` on the antlers, a fan tail, `diamonds` at scale 2.4): every second, `fleetFoot` gives her sprinting friend within 12 Speed I.
+  - **Skjoldram** (minotaur, ram horns, wool, `browplate`; bulls too): every half second, `ramCharge` butts the creepers within 6 of her friend away and resets their fuse.
+  - **Bastet** (nekomata): every half second, `wardCreepers` clears creepers within 12 of her friend off them, resets their fuse and sends them away.
+  - **Rusalka** (merfolk): every second, `riverLuck` gives her friend within 16 Luck while their hook is out.
+  - **Domovoi** (elf, `kerchief`, soot on her nose): `keepHearth` gives the furnaces within 6 of her friend (found every 2 s) a second tick every tick.
+  - **Mirror crane** (`MirrorCraneHarpy`, `tools/gen_mirror_crane_harpy.py`: the flamingo's rig recoloured; hatchling, eggs, spawns in rivers, swamps, cherry groves and mangroves): `onProjectileImpact`: one projectile in three that would hit her friend within 16 of her is turned back (`deflect`), not her friend's own.
+  - **Paints:** cow, rust, lava lamp (blobs glow: `PaintGlowLayer`, `gen_paints.GLOWING`) and sunflower (August only, `Painted.roll`), so 71 in all.
+  - `tools/add_harpy_extras.py` also gave the condorune and pumpkingull their belly, sit and lie, which the sixteenth wave had missed.
+- [ ] Dev client for the eighteenth wave: the urchskin's spines and the ushi-oni's horns at game scale, the pineskrell's cones and the tarnhelm's gem at night, the mirror crane turning a skeleton's arrows, the domovoi at a furnace row, the four paints (lava lamp at night).
+- [ ] Not done for the eighteenth wave: a harpy field guide entry for the mirror crane (that guide is hand-written).
 - [x] **Seventeenth wave** (2026-10-27), tested in `SeventeenthWaveTests`:
   - **Censer lion** (nekomata, `censer` at her hip): every second, `incense` resets her friend's time since rest (within 16, so no phantoms spawn for them) and clears the aim of phantoms within 32 of her at her friend.
   - **Conch mail turtle** (lizardfolk, dome shell with a `conch` spire): every second, `conchCall` gives her friend within 8, eyes underwater, Conduit Power.

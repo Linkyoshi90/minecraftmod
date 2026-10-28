@@ -1975,6 +1975,132 @@ for _fid, _entries in SEVENTEENTH.items():
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
 
+# eighteenth wave (2026-10-28): eight Harmontide originals from the reference art (their blue looks; the mirror crane, a
+# harpy, lives in the harpy tools) and four of folklore
+EIGHTEENTH = {
+    "arachne": [
+        (dict(id="spoodr_arachne", name="Spoodr", group="Old houses and caves", tag="Cuddly · curious", height=1.1,
+              biomes=["forest", "dark_forest", "dripstone_caves"], temperament="Cuddly, curious",
+              ecology="A round, fluffy little Harmontide spider, navy with pale blue tips, all big shining eyes, who tidies up old webs.",
+              interaction="Spider eyes and sweet berries.",
+              signature=("Web sweeper", "Befriended, every few seconds she clears a cobweb near her friend and keeps the string for them."),
+              danger="None.",
+              variants=[("navy", "Navy (default)", "Navy, pale blue tips"), ("green", "Green", "Green"), ("purple", "Purple", "Purple"),
+                        ("red", "Red", "Red"), ("yellow", "Yellow", "Yellow")]),
+         {"Habitat": "Old houses and caves", "Signature": "Clears cobwebs", "Danger": "None"}),
+        (dict(id="ushi_oni_arachne", name="Ushi-oni", group="Rocky shores", tag="Fearsome · loyal", height=2.0,
+              biomes=["stony_shore", "beach", "windswept_hills"], temperament="Fearsome, loyal",
+              ecology="The ox-headed spider demon of Japanese coasts: a great black and red spider body, an ox's horns and a bellow "
+                      "that carries over the waves.",
+              interaction="Beef and cod.",
+              signature=("Bellow", "Befriended, when monsters come near her friend she bellows: they flee, slowed."),
+              danger="High (her fangs and horns).",
+              variants=[("black", "Black (default)", "Black and red"), ("crimson", "Crimson", "Red and black"), ("indigo", "Indigo", "Indigo and gold"),
+                        ("ash", "Ash", "Ash grey"), ("ochre", "Ochre", "Ochre")]),
+         {"Habitat": "Rocky shores", "Signature": "Monsters flee", "Danger": "High"})],
+    "lamia": [
+        (dict(id="urchskin_lamia", name="Urchskin", group="Reefs and warm shores", tag="Prickly · protective", height=1.7,
+              biomes=["warm_ocean", "beach", "lukewarm_ocean"], temperament="Prickly, protective",
+              ecology="A Harmontide sea serpent, teal with a cream belly, bristling with purple urchin spines from her crest to her tail tip.",
+              interaction="Cod, salmon and kelp.",
+              signature=("Urchin spines", "Befriended, monsters that hurt her friend near her are pricked by her spines in return."),
+              danger="Moderate (her spines).",
+              variants=[("teal", "Teal (default)", "Teal, purple spines"), ("black", "Black", "Black"), ("green", "Green", "Green"),
+                        ("red", "Red", "Red"), ("yellow", "Yellow", "Yellow")]),
+         {"Habitat": "Reefs", "Signature": "Thorns for her friend", "Danger": "Moderate"})],
+    "rodent": [
+        (dict(id="pineskrell_rodent", name="Pineskrell", group="Taiga", tag="Bright · nosy", height=1.3, biomes=["taiga", "old_growth_pine_taiga", "snowy_taiga"],
+              temperament="Bright, nosy",
+              ecology="A blue Harmontide squirrel of the pine woods, with a huge frosted tail and glowing crystal pinecones she gathers "
+                      "from deep under the roots.",
+              interaction="Sweet berries and seeds.",
+              signature=("Ore sense", "Befriended, every few seconds the ores near her friend sparkle."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue, glowing cones"), ("brown", "Brown", "Brown"), ("green", "Green", "Green"),
+                        ("purple", "Purple", "Purple"), ("red", "Red", "Red")]),
+         {"Habitat": "Taiga", "Signature": "Shows ores", "Danger": "None"})],
+    "lizardfolk": [
+        (dict(id="turtfolk_lizardfolk", name="Turtfolk", group="Beaches and rivers", tag="Bold · warm", height=1.75, biomes=["beach", "river", "swamp"],
+              temperament="Bold, warm",
+              ecology="A tall Harmontide turtle warrior, blue-scaled, in bronze, with a great brown shell, long brown hair and a "
+                      "yellow flower behind her ear.",
+              interaction="Seagrass and melon.",
+              signature=("Shell guard", "Befriended, every half minute she shields her friend near her: two hearts of absorption."),
+              danger="Moderate.",
+              variants=[("blue", "Blue (default)", "Blue, brown shell"), ("black", "Black", "Black"), ("green", "Green", "Green"),
+                        ("purple", "Purple", "Purple"), ("red", "Red", "Red")]),
+         {"Habitat": "Beaches and rivers", "Signature": "Absorption hearts", "Danger": "Moderate"})],
+    "canid": [
+        (dict(id="tarnhelm_canid", name="Tarnhelm", group="Snowy taiga and groves", tag="Watchful · stern", height=1.85,
+              biomes=["snowy_taiga", "grove", "taiga"], temperament="Watchful, stern",
+              ecology="A Harmontide war wolf in blue enamelled plate and a silver helm, its gem shining like the northern lights.",
+              interaction="Beef, mutton and bones.",
+              signature=("Sentinel", "Befriended, raiders and illagers within 48 blocks of her friend glow through walls."),
+              danger="High (her jaws).",
+              variants=[("blue", "Blue (default)", "Blue plate, silver fur"), ("silver", "Silver", "Silver"), ("black", "Black", "Black"),
+                        ("gold", "Gold", "Gold"), ("storm", "Storm", "Storm grey")]),
+         {"Habitat": "Snowy taiga", "Kin": "Wolves", "Signature": "Raiders glow", "Danger": "High"})],
+    "centaur": [
+        (dict(id="palmyr_centaur", name="Palmyr", group="Flower forests and meadows", tag="Graceful · quick", height=1.9,
+              biomes=["flower_forest", "meadow", "cherry_grove"], temperament="Graceful, quick",
+              ecology="A blue Harmontide deer taur patterned in white diamonds, with feathery frond antlers and a fan of a tail.",
+              interaction="Apples and sweet berries.",
+              signature=("Fleet foot", "Befriended, her friend near her runs faster while sprinting (Speed I)."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Blue, white diamonds"), ("white", "White", "White"), ("teal", "Teal", "Teal"),
+                        ("violet", "Violet", "Violet"), ("dusk", "Dusk", "Dusk")]),
+         {"Habitat": "Flower forests", "Ridden": "Yes: by her friend", "Signature": "Speed while sprinting", "Temperament": "Graceful", "Danger": "Low"})],
+    "minotaur": [
+        (dict(id="skjoldram_minotaur", name="Skjoldram", group="Windswept hills", tag="Stubborn · staunch", height=1.7,
+              biomes=["windswept_hills", "meadow", "snowy_slopes"], temperament="Stubborn, staunch",
+              ecology="A shaggy teal Harmontide ram in a steel brow plate, her curling horns red as rust, who charges anything that hisses.",
+              interaction="Wheat and hay.",
+              signature=("Ram charge", "Befriended, she charges creepers that come near her friend and knocks them away before they blow."),
+              danger="Moderate (her horns).",
+              variants=[("teal", "Teal (default)", "Teal wool, red horns"), ("black", "Black", "Black"), ("brown", "Brown", "Brown"),
+                        ("purple", "Purple", "Purple"), ("red", "Red", "Red")]),
+         {"Habitat": "Windswept hills", "Temper": "Stubborn", "Signature": "Knocks creepers away", "Danger": "Moderate"})],
+    "nekomata": [
+        (dict(id="bastet_nekomata", name="Bastet", group="Deserts", tag="Regal · aloof", height=1.75, biomes=["desert", "badlands"],
+              temperament="Regal, aloof",
+              ecology="The cat goddess of Egypt, guardian of the home: a black cat girl in gold, with a goddess's green eyes.",
+              interaction="Cod and salmon.",
+              signature=("Home guardian", "Befriended, creepers will not hunt her friend near her: they lose interest and slink away."),
+              danger="Low.",
+              variants=[("black", "Black (default)", "Black, gold"), ("sand", "Sand", "Sand"), ("silver", "Silver", "Silver"),
+                        ("night", "Night", "Night blue"), ("white", "White", "White")]),
+         {"Habitat": "Desert", "Social": "Alone", "Water": "Avoids", "Signature": "Creepers keep away", "Danger": "Low"})],
+    "merfolk": [
+        (dict(id="rusalka_mermaid", name="Rusalka", group="Rivers and lakes", tag="Wistful · playful", height=1.7, biomes=["river", "swamp", "birch_forest"],
+              temperament="Wistful, playful",
+              ecology="The water spirit of Slavic rivers, pale, with long loose green hair and a white shift, who sings to fishers.",
+              interaction="Cod, salmon and flowers.",
+              signature=("River's luck", "Befriended, her friend fishing near her has the Luck of the Sea."),
+              danger="Low.",
+              variants=[("river", "River (default)", "Green hair, a grey-green tail"), ("moonlit", "Moonlit", "Silver"), ("reed", "Reed", "Reed gold"),
+                        ("ash", "Ash", "Ash"), ("lily", "Lily", "Lily pink")]),
+         {"Habitat": "Rivers", "Young": "Live young", "On land": "Flops", "Signature": "Fishing luck", "Danger": "Low"})],
+    "elf": [
+        (dict(id="domovoi_elf", name="Domovoi", group="Villages", tag="Homely · fussy", height=1.2, biomes=["plains", "taiga", "meadow"],
+              temperament="Homely, fussy",
+              ecology="The house spirit of Slavic folklore, who lives behind the stove: a little straw-haired girl in an embroidered "
+                      "smock and a red kerchief, a smudge of soot on her nose.",
+              interaction="Bread and milk.",
+              signature=("Hearth keeper", "Befriended, the lit furnaces, smokers and blast furnaces near her friend smelt faster."),
+              danger="None.",
+              variants=[("red", "Red (default)", "Red kerchief, white smock"), ("blue", "Blue", "Blue kerchief"), ("green", "Green", "Green kerchief"),
+                        ("soot", "Soot", "Sooty"), ("gold", "Gold", "Gold kerchief")]),
+         {"Habitat": "Villages", "Signature": "Faster furnaces", "Danger": "None"})],
+}
+for _fid, _entries in EIGHTEENTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 # homage variants of 2026-10-28 (POP_CULTURE_VARIANTS.md): appended after every wave, so every species exists by now
 for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, a black bodysuit with a pink heart, white gloves and boots")),
                        ("ika_mollusk", ("ink_kid", "Ink Kid", "Bright orange tentacle hair, a white tee and black shorts")),

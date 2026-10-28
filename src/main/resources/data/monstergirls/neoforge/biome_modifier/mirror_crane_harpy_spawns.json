@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_mirror_crane_harpy",
+  "spawners": {
+    "type": "monstergirls:mirror_crane_harpy",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

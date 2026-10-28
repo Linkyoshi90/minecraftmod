@@ -116,6 +116,21 @@ SPECIES = {
                   "brown": dict(HAIR="#6a4a2e", FUR="#8a6644", LIGHT="#e8d4bc", MARK="#3a2414", CLOTH="#3a5a7a"),
                   "white": dict(HAIR="#f4f2ee", FUR="#f6f4f0", LIGHT="#ffffff", MARK="#c8c4be", EYE="#c84a5a", CLOTH="#c8a8e8"),
                   "black": dict(HAIR="#1e1c22", FUR="#2a2830", LIGHT="#6a6870", MARK="#0e0c10", EYE="#e8c040", CLOTH="#a83a4a")}),
+    # eighteenth wave: the pineskrell, a blue squirrel with a huge frosted tail and glowing crystal pinecones in her hair
+    "pineskrell_rodent": dict(
+        build="petite", outfit=dict(top=["sweater"], bottom="shorts", extras=["satchel"], colors=dict(cloth2="#2a3a6a", leather="#5a3a5a")),
+        hair="ponytail", bangs="messy", ears="tuft", legs="fur", foot="paw", cones=True, glow=["pinecone"],
+        tail=[(2.5, 2.5, 4), (3.25, 3.25, 4), (3, 3, 4), (2.25, 2.25, 3)], tail_rest=[(-70, 0, 0), (55, 0, 0), (45, 0, 0), (40, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("fair"), HAIR="#3a6ac8", FUR="#3a70c8", LIGHT="#d8ecff", MARK="#1e3a8a", EYE="#a87ae8", CLOTH="#4a8ad8", TRIM="#c8a0f0",
+                 pattern="solid", extra=dict(cone="#8ae8ff", cone_scale="#4a8ae8")),
+        variants={"brown": dict(FUR="#8a5a32", HAIR="#6a4224", LIGHT="#f0dcc0", MARK="#4a2a14", EYE="#3a8a4a", CLOTH="#4a6a3a",
+                                extra=dict(cone="#f8c060", cone_scale="#a8682a")),
+                  "green": dict(FUR="#3a8a5a", HAIR="#2a6a42", LIGHT="#d8f8e0", MARK="#1e4a2e", EYE="#e8c040", CLOTH="#3a7a6a",
+                                extra=dict(cone="#b8f870", cone_scale="#4a9a3a")),
+                  "purple": dict(FUR="#6a4aa8", HAIR="#523a8a", LIGHT="#ecdcff", MARK="#2e1e5a", EYE="#5ae8d0", CLOTH="#7a5ab8",
+                                 extra=dict(cone="#f0a0ff", cone_scale="#8a4ab8")),
+                  "red": dict(FUR="#b8402a", HAIR="#8a2a1e", LIGHT="#ffe0d0", MARK="#5a140e", EYE="#3a6ac8", CLOTH="#a83a3a",
+                              extra=dict(cone="#ffb070", cone_scale="#c8502a"))}),
     "ratatoskr_rodent": dict(
         build="petite", outfit=dict(top=["bandeau", "vest"], bottom="shorts", extras=["satchel", "scarf"], colors=dict(scarf="#3a7a4a", leather="#5a3a22")),
         hair="ponytail", bangs="messy", ears="tuft", legs="fur", foot="paw",
@@ -143,6 +158,8 @@ def declare_hook(sp, d):
         out += [("frill", 12, 8, .75), ("trihorn", 1, 4, 1), ("nosehorn", .75, 1.25, .75)]
     if d.get("sickles"):
         out += [("sickle", .5, 5, 2.25)]
+    if d.get("cones"):
+        out += [("pinecone", 1.75, 2.5, 1.75), ("cone_cap", 1, .5, 1)]
     return out
 
 
@@ -173,6 +190,9 @@ def paint_hook(pt, pal, d):
     blade = G.shades(pal.extra.get("blade", "#c8d0dc"))
     pt("sickle", "all", lambda f, x, y, w, h: pick(blade, 0.55 + 0.3 * (f in ("north", "east") and x == w - 1), x, y)
        if f not in ("east", "west") or y > h * 0.15 else CLEAR)
+    cone, scale = G.shades(pal.extra.get("cone", "#8ae8ff")), G.shades(pal.extra.get("cone_scale", "#4a8ae8"))
+    pt("pinecone", "all", lambda f, x, y, w, h: pick(scale if (x + y * 2) % 3 == 0 else cone, 0.55 + 0.25 * ((x + y) % 2), x, y))
+    pt("cone_cap", "all", lambda f, x, y, w, h: pick(G.shades("#5a3a22"), 0.45, x, y))
     amber = G.shades(pal.extra.get("amber", "#e8701e"))
     pt("pendant", "all", lambda f, x, y, w, h: pick(amber, 0.55 + 0.3 * (f == "north" and 0 < x < w - 1 and y in (2, 3)), x, y)
        if 0 < y < h - 1 or 0 < x < w - 1 else pick(G.shades("#e8c050"), 0.6, x, y))
@@ -212,6 +232,10 @@ def build_hook(r, g, d):
         r.add("quills_head", "head", [0, hy + 4, 2 + z], hq)
         bq = [G.rot_cube("quill", [x - 0.5, y, 1.5 + z], [x, y + 0.5, 1.7 + z], 40, x * 6, 0) for x in (-2.2, -0.75, 0.75, 2.2) for y in (13.5, 16.0, 18.5)]
         r.add("quills", "body", [0, 16, 1.6 + z], bq + [G.rot_cube("note", [-1.8, 16.0, 3.0 + z], [-0.8, 17.0, 3.0 + z], 10, 0, -12)])
+    if d.get("cones"):                                  # two crystal pinecones hanging by her right ear
+        hy, z = g.hy, g.z
+        r.add("cones", "head", [-4.2, hy + 5, z], [cube("cone_cap", [-5.5, hy + 5.0, -0.5 + z]), cube("pinecone", [-5.875, hy + 2.5, -0.875 + z]),
+                                                    cube("cone_cap", [-5.5, hy + 4.2, 1.6 + z]), cube("pinecone", [-5.875, hy + 1.7, 1.225 + z])])
     if d.get("yuzu"):                                   # the capybara's famous yuzu, balanced on her head
         r.add("yuzu", "head", [0, g.hy + 8.5, g.z], [cube("yuzu", [-1, g.hy + 8.6, -1 + g.z]), cube("yuzu_leaf", [-0.5, g.hy + 10.6, -0.5 + g.z])])
 
