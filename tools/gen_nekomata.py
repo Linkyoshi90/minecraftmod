@@ -19,6 +19,17 @@ FAMILY = C.family("nekomata")
 
 # per species: body knobs, then the default palette and the four other colours as palette overrides
 SPECIES = {
+    # twentieth wave (folklore): the manticore of Persian legend, a pale blue lion girl with a great mane, her tail ending in a
+    # scorpion's sting
+    "manticore_nekomata": dict(
+        build="curvy", outfit=dict(top=["bandeau", "mantle"], bottom="strips", extras=["armlets", "belt"]),
+        ears="cat", hair="mane", bangs="swept", tail=((1.5, 1.5, 4), (1.5, 1.5, 4), (1.75, 1.75, 3)), tail_pattern="solid", stinger=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#7a9ae0", FUR="#7a94d8", LIGHT="#e0e8fa", MARK="#3a4a8a", EYE="#2a4a9a", CLOTH="#3a4a8a", TRIM="#e8c050",
+                 INNER="#e8a8c0", pattern="solid", facemark="whisker", extra=dict(sting="#2a2a3a")),
+        variants={"sand": dict(HAIR="#c8783a", FUR="#d8a868", LIGHT="#f8ecd4", MARK="#7a4a1e", EYE="#c8902a", CLOTH="#7a2a1e", extra=dict(sting="#3a1e14")),
+                  "red": dict(HAIR="#a82a1e", FUR="#c8604a", LIGHT="#f8d8c8", MARK="#5a1a10", EYE="#e8c040", CLOTH="#2a2a30", extra=dict(sting="#1e1e24")),
+                  "black": dict(HAIR="#1e1c22", FUR="#2a282e", LIGHT="#8a8690", MARK="#0e0c10", EYE="#e83a2a", CLOTH="#5a1e24", extra=dict(sting="#a8182a")),
+                  "white": dict(HAIR="#f4f0e8", FUR="#ece6dc", LIGHT="#ffffff", MARK="#a89a88", EYE="#3a8ad8", CLOTH="#3a5a9a", extra=dict(sting="#3a3a44"))}),
     # nineteenth wave: the sabre, a shaggy blue sabre-tooth in black leather, a white ruff, two long fangs
     "sabre_nekomata": dict(
         build="athletic", outfit=dict(top=["bandeau", "harness"], bottom="shorts", extras=["pauldron", "bracers", "belt"],
@@ -222,6 +233,8 @@ def declare(sp):
         extra += [("star", 2.5, 2.5, .25)]
     if d.get("sabre"):
         extra += [("sabre_fang", .5, 1.75, .5)]
+    if d.get("stinger"):
+        extra += [("sting_bulb", 2, 2, 2.5), ("sting_barb", .75, .75, 2.5)]
     if d.get("wisps"):
         extra += [("wisp", 1.5, 1.5, 1.5)]
     if d.get("censer"):
@@ -305,6 +318,11 @@ def paint(sp, pal):
     if d.get("wisps"):                                   # the will-o'-wisps: pale ghost fire, brighter at the heart
         hot, wc = G.shades(pal.extra.get("flame_hot", "#f4fcff")), G.shades(pal.extra.get("flame", "#a8d8ff"))
         pt("wisp", "all", lambda f, x, y, w, h: pick(hot if (x, y) == (0, 0) else wc, 0.7, x, y))
+    if d.get("stinger"):                                 # the manticore's sting: a dark bulb and a curved barb
+        st = G.shades(pal.extra.get("sting", "#2a2a3a"))
+        pt("sting_bulb", "all", lambda f, x, y, w, h: pick(st, 0.5 + 0.2 * (f == "up") + 0.1 * (y % 2), x, y))
+        pt("sting_barb", "all", lambda f, x, y, w, h: pick(st, 0.35 + 0.3 * (y == 0), x, y))
+        pt("tail_b", ("north", "south", "east", "west", "up", "down"), lambda f, x, y, w, h: pick(pal.MARK, 0.45, x, y) if y % 4 == 3 or x % 4 == 3 and f in ("up", "down") else None)
     if d.get("star"):                                    # the cait sith's white star
         white = G.shades("#f8f6f0")
         pt("star", "all", lambda f, x, y, w, h: pick(white, 0.85, x, y)
@@ -400,6 +418,11 @@ def build(sp):
         r.put("head", cube("grin", [-2.25, g.hy + 0.6, -4.2 + g.z]))
     if d.get("sabre"):                                   # two long fangs from her upper lip, down past her chin
         r.put("head", cube("sabre_fang", [-1.25, g.hy - 0.45, -4.4 + g.z]), cube("sabre_fang", [0.75, g.hy - 0.45, -4.4 + g.z]))
+    if d.get("stinger"):                                 # on the end of her tail (not the hidden second one): the bulb, the barb curving down
+        a, b, c = G.S("tail_a"), G.S("tail_b"), G.S("tail_c")
+        ze = 1.6 + a[2] - 0.25 + b[2] - 0.25 + c[2] - 0.25
+        r.put("tail_tip", cube("sting_bulb", [-1.0, 12.6 - 1.0, ze]),
+              G.rot_cube("sting_barb", [-0.375, 12.6 - 0.375, ze + 2.2], [0, 12.6, ze + 2.2], 45, 0, 0))
     if "stitched" in d["variants"]:                      # Neko Zombie's muzzle (drawn only on that variant)
         r.put("head", cube("nz_muzzle", [-1.75, g.hy + 0.4, -6.3 + g.z]))
     if d.get("chibi"):

@@ -7,7 +7,7 @@ rolled rarely in the wild (`AbstractMonsterGirl.HOMAGES`). Variant names must be
 the homage set is keyed by name.
 
 **Fit** is how naturally the character sits on that girl (the same animal, the same rig, the props we can model).
-✅ = in the game (2026-10-28: four with the journal, eight with the nineteenth wave).
+✅ = in the game (2026-10-28: four with the journal, eight with the nineteenth wave, nine with the twentieth).
 
 ## Strong fits
 
@@ -48,14 +48,28 @@ the homage set is keyed by name.
 | Jumping spider | Spider from Webbed | `tiny_jumper` | Round black and gold body, big eyes, tiny bow | ★★ |
 | Ratatoskr squirrel | Conker (Conker's Bad Fur Day) | `hoodie_squirrel` | Red-orange fur, blue hoodie | ★★ |
 | Tengu (harpy) | Falco (Star Fox) | `sky_ace` | Blue feathers, red beak marks, flight jacket | ★★ (harpy: own variant code) |
+| High elf (`high_elf`) | Princess Zelda (Zelda) | `sage_princess` ✅ | Golden-brown hair, a gold circlet with a red gem, a white and lilac gown with a gold-trimmed tabard | ★★★ |
+| Wood elf (`wood_elf`) | Link (Zelda) | `green_hero` ✅ | Blonde hair, a long green cap and green tunic over white sleeves, brown belt and boots, a sword and a round shield on her back | ★★★ (a girl's take on him) |
+| Ent (`ent_flora`) | Groot (Marvel) | `tree_guard` ✅ | Brown bark skin with grain lines, little branches and a few leaves sprouting from her head and shoulders, warm amber eyes | ★★ (not a game) |
+| Yuki-onna (`yuki_onna_undead`) | Froslass (Pokémon) | `snow_wraith` ✅ | White body like a snow kimono with a red-purple obi sash, a pale blue face, **purple eyes** (this variant's own; the yuki-onna's other looks have blue or red eyes) | ★★ (close to her base look, so the eyes and sash carry it) |
+| Dullahan (`dullahan_undead`) | Celty Sturluson (Durarara!!) | `headless_rider` ✅ | Black rider's suit with yellow trim, a yellow helmet with cat ears held under her arm, black shadow wisps at the neck | ★★ (anime; the helmet is not built yet) |
+| Dullahan (`dullahan_undead`) | Lala (Monster Musume) | `death_envoy` ✅ | Silver-white hair, red eyes, a black and red gothic dress with a high collar and cape, blue flame at the neck, a scythe | ★★★ (already a dullahan; the scythe is not built yet) |
+
+## Gregory Horror Show: on the house mouse
+
+The house mouse (`house_mouse_rodent`, twentieth wave) came in for these three: big round ears, a long bare tail and a
+pink nose. Each homage's prop is drawn only on its own variant. They follow the other Gregory Horror Show homages
+(HARMONTIDE_CONCEPTS.md, 2026-10-25).
+
+| Girl | Character | Variant name | The look | Fit |
+|---|---|---|---|---|
+| House mouse (`house_mouse_rodent`) | Gregory | `innkeeper` ✅ | Grey-brown fur, small red eyes, a crooked grin, a worn hotelier's suit, a ring of keys | ★★★ |
+| House mouse (`house_mouse_rodent`) | James (Gregory's grandson) | `prankster` ✅ | Smaller and younger, lighter fur, a big grin, a striped shirt, a slingshot | ★★ (look to be checked against the show) |
+| House mouse (`house_mouse_rodent`) | Gregory's Mama | `soul_keeper` ✅ | An old mouse, white hair in a bun, a long dark robe, glass soul bottles at her belt | ★★ (look to be checked against the show) |
 
 ## Possible but weaker
 
 - Lamia (any) as Solid Snake (Metal Gear): headband, sneaking suit, a cardboard box. Funny, but a lamia has no legs to crouch with.
-- Elf archer as Link (Zelda): the green cap and tunic fit, but the character is male. A Zelda look (princess dress) fits the high elf better.
-- Ent as Groot (Marvel): not a game.
-- Yuki-onna as Frosslass (Pokémon): already close to the yuki-onna's own look.
-- Dullahan as Celty (Durarara!!): anime, and a near match for the base design already.
 - Medusa as Medusa from Kid Icarus: very close to the base design, little to add.
 
 ## Notes for building them

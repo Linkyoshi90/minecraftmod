@@ -24,6 +24,21 @@ LARVA_SEGS = [("seg_1", 4, 6.5, 3.5), ("seg_2", 4.25, 3.5, 3.5), ("seg_3", 4, 3.
               ("seg_5", 3.5, 2.75, 3), ("seg_6", 3, 2.5, 3), ("seg_7", 2.5, 2.25, 2.5), ("seg_8", 2, 2, 2)]
 
 SPECIES = {
+    # twentieth wave (folklore): the Mothman of Point Pleasant, a soft blue moth girl with feathery antennae, a furry ruff, spotted
+    # wings and red eyes that shine in the dark
+    "mothman_bug": dict(
+        build="standard", outfit=dict(top=["sweater"], bottom="wrap_skirt", colors=dict(cloth2="#3a5ab8")), hair="wavy", bangs="wispy", ears="plume",
+        legs="fur", foot="paw", wings="moth", flies=True, collar=True,
+        pal=dict(SKIN="#a8bcec", HAIR="#5a7ad0", FUR="#6a88d8", LIGHT="#c8d8f8", MARK="#2a3a8a", EYE="#e82a2a", CLOTH="#4a6ac8", TRIM="#2a3a8a",
+                 extra=dict(antenna="#2a3a8a", wing="#5a7ad0", wing_vein="#2a3a8a", wing_alpha=240, wing_pattern="eyespot", eyespot="#2a3a8a")),
+        variants={"grey": dict(SKIN="#b8b8c0", HAIR="#5a5a62", FUR="#6a6a74", LIGHT="#c8c8d0", MARK="#2a2a30", CLOTH="#4a4a54",
+                               extra=dict(antenna="#2a2a30", wing="#6a6a74", wing_vein="#2a2a30", wing_alpha=240, wing_pattern="eyespot", eyespot="#c82a2a")),
+                  "black": dict(SKIN="#8a8a98", HAIR="#1e1e24", FUR="#2a2a30", LIGHT="#5a5a64", MARK="#0e0e12", CLOTH="#1e1e24",
+                                extra=dict(antenna="#0e0e12", wing="#2a2a30", wing_vein="#0e0e12", wing_alpha=245, wing_pattern="eyespot", eyespot="#e82a2a")),
+                  "brown": dict(SKIN="#d8c0a8", HAIR="#6a4a2e", FUR="#7a5a3e", LIGHT="#c8a888", MARK="#3a2414", CLOTH="#5a3a22",
+                                extra=dict(antenna="#3a2414", wing="#7a5a3e", wing_vein="#3a2414", wing_alpha=240, wing_pattern="bands")),
+                  "pink": dict(SKIN="#f0c8d8", HAIR="#d870a0", FUR="#e890b8", LIGHT="#fce0ec", MARK="#8a2a5a", CLOTH="#c8508a",
+                               extra=dict(antenna="#8a2a5a", wing="#e890b8", wing_vein="#8a2a5a", wing_alpha=240, wing_pattern="eyespot", eyespot="#f8e070"))}),
     # seventeenth wave: the date palm beetle, a round little blue beetle with a cluster of dates and palm leaves in her hair
     "date_beetle_bug": dict(
         build="petite", outfit=dict(top=["halter", "capelet"], bottom="wrap_skirt", extras=["belt"], colors=dict(cloth2="#6a8a4a")),

@@ -21,6 +21,23 @@ COW_TAIL = [(1, 1, 3.5), (.75, .75, 3.5), (1.5, 1.75, 1.75)]
 TAIL_REST = [(-62, 0, 0), (-14, 0, 0), (-6, 0, 0)]
 
 SPECIES = {
+    # twentieth wave: the brasshorn ram, a shaggy blue mountain ram, great curling horns of brass, brass at her brow and hooves,
+    # a white rune on her brow and a woven blanket
+    "brasshorn_minotaur": dict(
+        build="strong", outfit=dict(top=["halter"], bottom="sarong", extras=["bracers"], colors=dict(cloth2="#2a3a7a")),
+        hair="shaggy", bangs="messy", ears="cow", legs="hoof", foot="hoof", horns="ram", tail=[(2, 2, 1.75)], tail_look="puff", tail_rest=[(-20, 0, 0)],
+        wool=True, regalia=True, male=dict(hair="shaggy", outfit=dict(bottom="sarong", extras=["bracers"], colors=dict(cloth2="#2a3a7a"))),
+        pal=dict(SKIN=skin("fair"), HAIR="#3a5ab8", FUR="#3a5ab8", LIGHT="#a8c0f0", MARK="#1a2a6a", EYE="#c8902a", CLOTH="#2a3a8a", TRIM="#d8b048",
+                 INNER="#c8a0b0", pattern="solid", extra=dict(horn="#d8a838", hoof="#c8a040", brass="#d8b048", rune="#e8eef8", blanket="#2a3a8a",
+                                                               weave="#d8b048", wool="#5a7ad0")),
+        variants={"grey": dict(HAIR="#7a7a84", FUR="#7a7a84", LIGHT="#d0d0d8", MARK="#3a3a42",
+                               extra=dict(horn="#c8a040", hoof="#3a3a42", brass="#c8a040", rune="#f0f0f4", blanket="#8a2a2a", weave="#e8d8b0", wool="#9a9aa4")),
+                  "brown": dict(HAIR="#6a4a2e", FUR="#7a5636", LIGHT="#d8c0a0", MARK="#3a2414",
+                                extra=dict(horn="#d8a838", hoof="#2a1a12", brass="#d8a838", rune="#f0e8d0", blanket="#2a5a3a", weave="#d8a838", wool="#9a7450")),
+                  "white": dict(HAIR="#e8ecf4", FUR="#e8ecf4", LIGHT="#ffffff", MARK="#a8acb8", EYE="#3a6ac8",
+                                extra=dict(horn="#c8ccd4", hoof="#5a5a64", brass="#c8ccd4", rune="#3a5ab8", blanket="#3a5ab8", weave="#e8ecf4", wool="#f4f6fa")),
+                  "black": dict(HAIR="#26242a", FUR="#2a282e", LIGHT="#6a6870", MARK="#0e0c10", EYE="#e8c040",
+                                extra=dict(horn="#d8a838", hoof="#141418", brass="#d8a838", rune="#e8c040", blanket="#5a1e24", weave="#d8a838", wool="#3a3840"))}),
     # nineteenth wave: the tuskin, a shaggy blue mammoth girl, white cheeks, great tusks bound with iron
     "tuskin_minotaur": dict(
         build="strong", outfit=dict(top=["sarashi"], bottom="loincloth", extras=["arm_wraps", "belt", "bracers"], colors=dict(cloth2="#3a3a4a")),

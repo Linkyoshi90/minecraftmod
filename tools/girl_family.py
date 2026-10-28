@@ -62,7 +62,7 @@ def paint(sp, d, pal, hook=None):
     scale = G.scale_fn(pal)
     skin_t = H.skin_fn(pal, 0.68)
     legs = d.get("legs", "bare")
-    if d.get("ears") in ("cat", "big", "fox", "round", "tuft", "horse", "rabbit", "lop", "cow"):
+    if d.get("ears") in ("cat", "big", "fox", "round", "tuft", "horse", "rabbit", "lop", "cow", "mouse"):
         G.paint_ears(pt, pal, G.fur_fn(pal, pattern="solid"))
     elif d.get("ears") == "elf":
         pt("ear_a", "all", H.skin_fn(pal, 0.62))

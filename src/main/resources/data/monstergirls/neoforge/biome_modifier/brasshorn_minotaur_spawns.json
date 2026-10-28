@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_brasshorn_minotaur",
+  "spawners": {
+    "type": "monstergirls:brasshorn_minotaur",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

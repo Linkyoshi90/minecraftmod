@@ -77,6 +77,12 @@ IN_GAME = {
     "camazotz": "camazotz_bat", "akaname": "akaname_devil", "hoop_snake": "hoop_snake_lamia", "draugr": "draugr_undead",
     # folklore of the eighteenth wave
     "bastet": "bastet_nekomata", "rusalka": "rusalka_mermaid", "ushi-oni": "ushi_oni_arachne", "domovoi": "domovoi_elf",
+    # twentieth wave (2026-10-28)
+    "brasshorn_ram": "brasshorn_minotaur", "ceibler": "ceibler_centaur", "sobolnik": "sobolnik_rodent", "turtworld": "turtworld_lizardfolk",
+    "fernstalker": "fernstalker_lizardfolk", "moo": "moo_dragon", "hairypterix": "hairypterix_dragon", "doggo": "doggo_mermaid",
+    "ghoul": "ghoul_undead", "manticore": "manticore_nekomata", "mothman": "mothman_bug", "basilisk": "basilisk_lizardfolk",
+    # already played by older girls
+    "azureus": "poison_dart_frog (cobalt)", "slidred": "red_eared_slider_lizardfolk", "alisnapor": "snapping_turtle_lizardfolk",
 }
 # not a creature to make, and the ones set aside on purpose
 EXCLUDED = {

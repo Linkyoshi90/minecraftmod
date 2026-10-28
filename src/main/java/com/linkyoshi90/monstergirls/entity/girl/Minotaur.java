@@ -409,6 +409,7 @@ public class Minotaur extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.BRASSHORN_MINOTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel crag && !this.isBaby() && this.tickCount % 20 == 0) this.mountainFooting(crag);
         if (this.species == GirlSpecies.TUSKIN_MINOTAUR && this.level() instanceof ServerLevel snow && !this.isBaby() && this.tickCount % 20 == 0) this.snowplough(snow);
         if (this.species == GirlSpecies.SKJOLDRAM_MINOTAUR && this.level() instanceof ServerLevel ram && !this.isBaby() && this.tickCount % 10 == 0) this.ramCharge(ram);
         if (this.species == GirlSpecies.DUSTBISON_MINOTAUR && this.level() instanceof ServerLevel dust && !this.isBaby() && this.tickCount % 10 == 0) this.dustBath(dust);
@@ -731,5 +732,15 @@ public class Minotaur extends AbstractMonsterGirl {
         }
         if (n > 0) this.playSound(net.minecraft.sounds.SoundEvents.SNOW_PLACE, 1.0F, 0.8F);
         return n;
+    }
+
+    // --- the brasshorn ram (twentieth wave) -------------------------------------------------------------------------
+
+    /** Her friend within 10 blocks jumps higher (Jump Boost I for three seconds). True if she steadied them. */
+    public boolean mountainFooting(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 10);
+        if (friend == null) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.JUMP, 60, 0, true, true));
+        return true;
     }
 }

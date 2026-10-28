@@ -2235,6 +2235,159 @@ for _fid, _entries in NINETEENTH.items():
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
 
+# twentieth wave (2026-10-28): eight Harmontide originals from the reference art (their blue looks), four creatures of folklore
+# (the ghoul, the manticore, the Mothman and the basilisk) and the house mouse, for the Gregory Horror Show homages
+TWENTIETH = {
+    "minotaur": [
+        (dict(id="brasshorn_minotaur", name="Brasshorn Ram", group="Mountains", tag="Proud · surefooted", height=2.2,
+              biomes=["windswept_hills", "stony_peaks", "meadow", "jagged_peaks"], temperament="Proud, surefooted",
+              ecology="A Harmontide mountain ram girl, shaggy and blue, her great curling horns grown into brass. Brass bands her brow "
+                      "and hooves, a white rune shines between her eyes and a woven blanket hangs over her back. She leaps from crag to crag.",
+              interaction="Wheat and sweet berries.",
+              signature=("Mountain footing", "Befriended, her friend near her jumps higher (Jump Boost)."),
+              danger="Moderate (her horns).",
+              variants=[("blue", "Blue (default)", "Blue wool, brass horns"), ("grey", "Grey", "Grey, a red blanket"), ("brown", "Brown", "Brown"),
+                        ("white", "White", "White, silver horns"), ("black", "Black", "Black, a red blanket")]),
+         {"Habitat": "Mountains", "Signature": "Jump Boost", "Danger": "Moderate"})],
+    "centaur": [
+        (dict(id="ceibler_centaur", name="Ceibler", group="Meadows and groves", tag="Gentle · festive", height=2.2,
+              biomes=["meadow", "cherry_grove", "grove"], temperament="Gentle, festive",
+              ecology="A slender Harmontide llama-deer, pale blue with blue diamonds over her coat, long ears and little horns. She "
+                      "wears a fringed blanket and a harness hung with tassels and bells, and knows every trail through the hills.",
+              interaction="Wheat, apples and flowers.",
+              signature=("Trail guide", "Befriended, her friend near her runs faster on grass, dirt and paths (Speed)."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Pale blue, blue diamonds"), ("rose", "Rose", "Rose"), ("fawn", "Fawn", "Fawn, a red blanket"),
+                        ("jade", "Jade", "Jade"), ("dusk", "Dusk", "Lavender")]),
+         {"Habitat": "Meadows", "Signature": "Speed on grass", "Danger": "Low"})],
+    "rodent": [
+        (dict(id="sobolnik_rodent", name="Sobolnik", group="Cold forests", tag="Curious · secretive", height=1.5,
+              biomes=["taiga", "snowy_taiga", "old_growth_pine_taiga"], temperament="Curious, secretive",
+              ecology="A Harmontide sable in blue, big dark eyes in a white face, frosty swirls in her fur, a bushy tail and a little blue "
+                      "gem at her throat. She knows every burrow and tunnel under the snow.",
+              interaction="Sweet berries, eggs and fish.",
+              signature=("Burrow eyes", "Befriended, her friend near her sees in the dark when out of the sky's sight (Night Vision)."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Blue, a white face"), ("sable", "Sable", "Dark brown, an amber gem"), ("silver", "Silver", "Silver"),
+                        ("green", "Green", "Green"), ("red", "Red", "Red")]),
+         {"Habitat": "Cold forests", "Signature": "Night Vision underground", "Danger": "Low"}),
+        (dict(id="house_mouse_rodent", name="House Mouse", group="Villages and fields", tag="Timid · thrifty", height=1.4,
+              biomes=["plains", "meadow", "forest", "sunflower_plains"], temperament="Timid, thrifty",
+              ecology="A little mouse girl with big round ears, a twitchy pink nose and a long bare tail. She lives in the walls of "
+                      "farmhouses and never lets a crumb go to waste.",
+              interaction="Bread, wheat and seeds.",
+              signature=("Crumbs", "Befriended, now and then she shares a crumb with her hungry friend (food)."),
+              danger="None.",
+              variants=[("grey", "Grey (default)", "Grey, a tan vest"), ("brown", "Brown", "Brown"), ("white", "White", "White, red eyes"),
+                        ("black", "Black", "Black"), ("fawn", "Fawn", "Fawn")]),
+         {"Habitat": "Villages", "Signature": "Shares food", "Danger": "None"})],
+    "lizardfolk": [
+        (dict(id="turtworld_lizardfolk", name="Turtworld", group="Rivers and coasts", tag="Ancient · serene", height=2.0,
+              biomes=["river", "stony_shore", "beach", "mangrove_swamp"], temperament="Ancient, serene",
+              ecology="A great blue Harmontide tortoise who has carried a little world on her shell for so long it has its own turf, two "
+                      "snowy peaks and a waterfall. Things grow wherever she rests.",
+              interaction="Melon, seagrass and saplings.",
+              signature=("Living island", "Befriended, the saplings and crops near her friend grow."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Blue, a green island"), ("green", "Green", "Green, a brown shell"), ("sand", "Sand", "Sandy"),
+                        ("frost", "Frost", "Frosted"), ("ember", "Ember", "Black, a smouldering island")]),
+         {"Habitat": "Rivers, coasts", "Signature": "Grows plants", "Danger": "Low"}),
+        (dict(id="fernstalker_lizardfolk", name="Fernstalker", group="Jungles and lush forests", tag="Patient · deadly", height=1.9,
+              biomes=["jungle", "sparse_jungle", "old_growth_spruce_taiga", "lush_caves"], temperament="Patient, deadly",
+              ecology="A navy Harmontide raptor feathered white at the breast, with fern fronds fanned up from her back. She waits among "
+                      "the ferns without a sound, then pounces.",
+              interaction="Raw chicken, mutton and rabbit.",
+              signature=("Ambush", "Befriended, every few seconds she pounces on a monster near her friend."),
+              danger="High (her claws).",
+              variants=[("navy", "Navy (default)", "Navy, a white breast"), ("green", "Green", "Green"), ("rust", "Rust", "Rust red"),
+                        ("ash", "Ash", "Ash grey"), ("violet", "Violet", "Violet")]),
+         {"Habitat": "Jungles", "Signature": "Pounces on monsters", "Danger": "High"}),
+        (dict(id="basilisk_lizardfolk", name="Basilisk", group="Badlands and deserts", tag="Regal · stony", height=1.5,
+              biomes=["badlands", "eroded_badlands", "desert"], temperament="Regal, cold",
+              ecology="The king of serpents of European bestiaries, here a little blue lizard girl with a crest of spines down her back "
+                      "and a gold crown. A look from her turns living things to stone.",
+              interaction="Eggs and spider eyes.",
+              signature=("Stone gaze", "Befriended, she stares down a monster near her friend: it can barely move (Slowness)."),
+              danger="Moderate (her gaze).",
+              variants=[("blue", "Blue (default)", "Blue, a gold crown"), ("green", "Green", "Green"), ("stone", "Stone", "Stone grey"),
+                        ("black", "Black", "Black"), ("gold", "Gold", "Gold, a silver crown")]),
+         {"Habitat": "Badlands", "Signature": "Slows monsters", "Danger": "Moderate"})],
+    "dragon": [
+        (dict(id="moo_dragon", name="Moo", group="Plains and savannas", tag="Stubborn · sweet", height=1.4,
+              biomes=["plains", "savanna", "sunflower_plains"], temperament="Stubborn, sweet",
+              ecology="A round little Harmontide triceratops in spotted blue, with a frill rimmed in cream knobs, two brow horns and a "
+                      "nose horn. She charges anything that frightens her, then hides behind her friend.",
+              interaction="Leaves, ferns and wheat.",
+              signature=("Herd stand", "Befriended, when monsters gang up on her friend she stands with them: her friend is stronger (Strength)."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Spotted blue"), ("green", "Green", "Green"), ("orange", "Orange", "Orange"),
+                        ("pink", "Pink", "Pink"), ("purple", "Purple", "Purple")]),
+         {"Habitat": "Plains", "Signature": "Strength against a crowd", "Danger": "Low"}),
+        (dict(id="hairypterix_dragon", name="Hairypterix", group="Cliffs and coasts", tag="Loud · daring", height=1.8,
+              biomes=["stony_shore", "windswept_hills", "jagged_peaks", "stony_peaks"], temperament="Loud, daring",
+              ecology="A shaggy blue Harmontide pterosaur with great membrane wings, a long yellow crest swept back from her head and "
+                      "yellow claws. She dives off sea cliffs and rides the wind back up.",
+              interaction="Cod, salmon and tropical fish.",
+              signature=("Updraft", "Befriended, her friend falling near her drifts down gently (Slow Falling)."),
+              danger="Moderate.",
+              variants=[("blue", "Blue (default)", "Blue, a yellow crest"), ("rust", "Rust", "Rust"), ("grey", "Grey", "Grey, a red crest"),
+                        ("green", "Green", "Green"), ("black", "Black", "Black")]),
+         {"Habitat": "Cliffs", "Signature": "Slow Falling", "Danger": "Moderate"})],
+    "merfolk": [
+        (dict(id="doggo_mermaid", name="Doggo", group="Cold coasts", tag="Eager · loyal", height=1.5,
+              biomes=["cold_ocean", "ocean", "beach", "stony_shore"], temperament="Eager, loyal",
+              ecology="A Harmontide sea dog: a shaggy blue pup with floppy ears and a white chest above, a sparkling fish's tail below. "
+                      "She paddles out to anyone in the water and will not let them go under.",
+              interaction="Cod, salmon and cooked meat.",
+              signature=("Lifeguard", "Befriended, when her friend near her runs short of air underwater she brings them up a breath."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Shaggy blue"), ("golden", "Golden", "Golden"), ("black", "Black", "Black"),
+                        ("white", "White", "White"), ("pink", "Pink", "Pink")]),
+         {"Habitat": "Cold coasts", "Signature": "Refills air", "Danger": "None"})],
+    "undead": [
+        (dict(id="ghoul_undead", name="Ghoul", group="Deserts and graveyards", tag="Hungry · sly", height=1.7,
+              biomes=["desert", "badlands", "dark_forest"], temperament="Hungry, sly",
+              ecology="The ghul of Arabian tales, who haunts graveyards and empty places: blue-grey cracked skin, wild teal hair, claws "
+                      "and a torn shift. She eats what the dead leave behind.",
+              interaction="Rotten flesh and bones.",
+              signature=("Carrion", "Befriended, she eats the rotten flesh lying near her friend, and it heals her."),
+              danger="Moderate.",
+              variants=[("blue", "Blue (default)", "Blue-grey, teal hair"), ("grey", "Grey", "Grey"), ("sand", "Sand", "Sandy"),
+                        ("green", "Green", "Green"), ("violet", "Violet", "Violet")]),
+         {"Habitat": "Deserts", "Signature": "Eats rotten flesh", "Danger": "Moderate"})],
+    "nekomata": [
+        (dict(id="manticore_nekomata", name="Manticore", group="Savannas and deserts", tag="Fierce · vain", height=1.9,
+              biomes=["savanna", "windswept_savanna", "desert"], temperament="Fierce, vain",
+              ecology="The man-eater of Persian legend, here a pale blue lion girl with a great mane, her tail ending in a scorpion's "
+                      "sting that she flicks at anything she dislikes.",
+              interaction="Raw beef and mutton.",
+              signature=("Tail spike", "Befriended, every few seconds she stings a monster near her friend: hurt and slowed."),
+              danger="High (her sting).",
+              variants=[("blue", "Blue (default)", "Pale blue, a dark sting"), ("sand", "Sand", "Sandy, a red mane"), ("red", "Red", "Red"),
+                        ("black", "Black", "Black, a red sting"), ("white", "White", "White")]),
+         {"Habitat": "Savannas", "Signature": "Stings monsters", "Danger": "High"})],
+    "bug": [
+        (dict(id="mothman_bug", name="Mothman", group="Dark forests", tag="Ominous · gentle", height=1.8,
+              biomes=["dark_forest", "taiga", "old_growth_birch_forest"], temperament="Ominous, gentle",
+              ecology="The Mothman of Point Pleasant, here a soft blue moth girl with feathery antennae, a furry ruff and spotted wings, "
+                      "her red eyes shining in the dark. Where she appears, trouble is coming.",
+              interaction="Honey and glow berries.",
+              signature=("Omen", "Befriended, at night the monsters near her friend glow, seen through walls."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue, red eyes"), ("grey", "Grey", "Grey"), ("black", "Black", "Black"),
+                        ("brown", "Brown", "Brown"), ("pink", "Pink", "Pink")]),
+         {"Habitat": "Dark forests", "Signature": "Monsters glow at night", "Danger": "None"})],
+}
+
+for _fid, _entries in TWENTIETH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 # homage variants of 2026-10-28 (POP_CULTURE_VARIANTS.md): appended after every wave, so every species exists by now
 for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, a black bodysuit with a pink heart, white gloves and boots")),
                        ("ika_mollusk", ("ink_kid", "Ink Kid", "Bright orange tentacle hair, a white tee and black shorts")),
@@ -2248,7 +2401,17 @@ for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, 
                        ("mantis_bug", ("scythe_green", "Scythe Green", "Bright green, cream belly, pale blades")),
                        ("mandragora_flora", ("leaf_sprout", "Leaf Sprout", "Blue skin, a leaf on a stalk")),
                        ("axolotl_mermaid", ("mud_fin", "Mud Fin", "Blue with orange cheek gills")),
-                       ("shark_mermaid", ("trident_hood", "Trident Hood", "White hair, a blue hoodie"))]:
+                       ("shark_mermaid", ("trident_hood", "Trident Hood", "White hair, a blue hoodie")),
+                       # twentieth wave
+                       ("house_mouse_rodent", ("innkeeper", "Innkeeper", "Grey-brown, red eyes, a worn suit, a ring of keys")),
+                       ("house_mouse_rodent", ("prankster", "Prankster", "Light fur, a striped shirt, a slingshot")),
+                       ("house_mouse_rodent", ("soul_keeper", "Soul Keeper", "White hair, a dark robe, soul bottles")),
+                       ("high_elf", ("sage_princess", "Sage Princess", "Golden-brown hair, a white and lilac gown")),
+                       ("wood_elf", ("green_hero", "Green Hero", "Blonde, a green tunic and long green cap")),
+                       ("ent_flora", ("tree_guard", "Tree Guard", "Brown bark, a few leaves, amber eyes")),
+                       ("yuki_onna_undead", ("snow_wraith", "Snow Wraith", "White, a red-purple sash, purple eyes")),
+                       ("dullahan_undead", ("headless_rider", "Headless Rider", "A black rider's suit with yellow trim")),
+                       ("dullahan_undead", ("death_envoy", "Death Envoy", "Silver hair, red eyes, a black and red gothic dress"))]:
     for _fam in C.FAMILIES:
         for _s in _fam["species"]:
             if _s["id"] == _sid and all(v[0] != _variant[0] for v in _s["variants"]):

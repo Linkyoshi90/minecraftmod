@@ -430,6 +430,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.DOGGO_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel surf && !this.isBaby() && this.tickCount % 20 == 0) this.lifeguard(surf);
         if (this.species == GirlSpecies.MOOPIE_MERMAID && this.level() instanceof ServerLevel shallows && !this.isBaby() && this.tickCount % 100 == 0) this.seaMilk(shallows);
         if (this.species == GirlSpecies.RUSALKA_MERMAID && this.level() instanceof ServerLevel river && !this.isBaby() && this.tickCount % 20 == 0) this.riverLuck(river);
         if (this.species == GirlSpecies.SAWFIN_MERMAID && this.level() instanceof ServerLevel sea && !this.isBaby() && this.tickCount % 20 == 0) this.sapperAid(sea);
@@ -1197,5 +1198,16 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         }
         if (n > 0) this.playSound(net.minecraft.sounds.SoundEvents.COW_MILK, 1.0F, 1.2F);
         return n;
+    }
+
+    // --- the doggo (twentieth wave) ---------------------------------------------------------------------------------
+
+    /** Her friend within 10 blocks, underwater with a third of their air or less, gets a full breath. True if she brought one. */
+    public boolean lifeguard(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 10);
+        if (friend == null || friend.getAirSupply() > friend.getMaxAirSupply() / 3) return false;
+        friend.setAirSupply(friend.getMaxAirSupply());
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.BUBBLE, friend.getX(), friend.getEyeY(), friend.getZ(), 10, 0.3, 0.3, 0.3, 0.05);
+        return true;
     }
 }

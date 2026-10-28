@@ -18,6 +18,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # twentieth wave: the doggo, a sea dog: a shaggy blue pup's ears and hair, a white chest, a sparkling fish's tail
+    "doggo_mermaid": dict(
+        build="petite", outfit=dict(top=["bandeau"], extras=["pearls"], colors=dict(cloth2="#3ac8d8")),
+        ears="big", hair="bob", bangs="messy", fluke=(7, .75, 3.5), scales=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#3ab0d8", FUR="#3aa8d0", LIGHT="#e8f8fc", MARK="#1e6a9a", EYE="#2a2a4a", CLOTH="#3ac8d8", TRIM="#f0f8fc",
+                 INNER="#a8d8e8", pattern="solid"),
+        variants={"golden": dict(HAIR="#d8a050", FUR="#c8a058", LIGHT="#fcf0dc", MARK="#8a5a24", EYE="#3a2412", CLOTH="#3a8ad8", INNER="#e8c8a0"),
+                  "black": dict(HAIR="#2a2a30", FUR="#2a2e3a", LIGHT="#e8e8f0", MARK="#0e1018", EYE="#c88a2a", CLOTH="#c83a3a", INNER="#8a8a98"),
+                  "white": dict(HAIR="#f4f6fa", FUR="#e0eef4", LIGHT="#ffffff", MARK="#8ab8d0", EYE="#3a6ac8", CLOTH="#f87a9a", INNER="#f0c8d0"),
+                  "pink": dict(HAIR="#f0a0c0", FUR="#e8a8c8", LIGHT="#fcecf4", MARK="#a83a6a", EYE="#5a2a4a", CLOTH="#7ad8c8", INNER="#f8d0e0")}),
     # nineteenth wave: the moopie, a sea cow: cream and brown spots, cow's ears and little horns, a mane of sea-green curls
     "moopie_mermaid": dict(
         build="curvy", outfit=dict(top=["bandeau"], extras=["pearls", "bell_collar"], colors=dict(cloth2="#3ab89a")),
@@ -326,7 +336,7 @@ def paint(sp, key):
         pt("hair_cap", ("up",), lambda f, x, y, w, h: pick(shades("#d8402a"), 0.55, x, y) if (x - w / 2) ** 2 + (y - h / 2) ** 2 < 30 else None)
     if d["ears"] == "round":
         G.paint_ears(pt, pal, G.fur_fn(pal, pattern="solid"))
-    if d["ears"] == "cow":
+    if d["ears"] in ("cow", "big"):
         G.paint_ears(pt, pal, G.fur_fn(pal, pattern="solid"))
     horn = shades(pal.extra.get("horn", "#e8dcc0"))
     pt("mhorn_a", "all", lambda f, x, y, w, h: pick(horn, 0.5 + 0.1 * (f == "up"), x, y))

@@ -474,6 +474,8 @@ public class Rodent extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.SOBOLNIK_RODENT && this.level() instanceof net.minecraft.server.level.ServerLevel burrow && !this.isBaby() && this.tickCount % 20 == 0) this.burrowEyes(burrow);
+        if (this.species == GirlSpecies.HOUSE_MOUSE_RODENT && this.level() instanceof net.minecraft.server.level.ServerLevel pantry && !this.isBaby() && this.tickCount % 600 == 0) this.crumbs(pantry);
         if (this.species == GirlSpecies.PINESKRELL_RODENT && this.level() instanceof ServerLevel ores && !this.isBaby() && this.tickCount % 100 == 0) this.oreSense(ores);
         if (this.species == GirlSpecies.COATIMANO_RODENT && this.level() instanceof ServerLevel diggingLevel && !this.isBaby()) this.tickDig(diggingLevel);
         if (this.species == GirlSpecies.SQUIRRICERAT_RODENT && this.level() instanceof ServerLevel acorn && !this.isBaby() && this.tickCount % 2400 == 0) this.buryAcorn(acorn);
@@ -644,5 +646,25 @@ public class Rodent extends AbstractMonsterGirl {
             if (++n >= 16) break;
         }
         return n;
+    }
+
+    // --- the sobolnik and the house mouse (twentieth wave) ----------------------------------------------------------
+
+    /** Her friend within 10 blocks, out of the sky's sight (underground, indoors), sees in the dark: Night Vision long enough not
+     *  to flicker. True if she lent them her eyes. */
+    public boolean burrowEyes(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 10);
+        if (friend == null || level.canSeeSky(friend.blockPosition())) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.NIGHT_VISION, 300, 0, true, false));
+        return true;
+    }
+
+    /** Her friend within 8 blocks, not quite full, gets a crumb: one point of food. True if she shared one. */
+    public boolean crumbs(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null || !friend.getFoodData().needsFood()) return false;
+        friend.getFoodData().eat(1, 0.1F);
+        this.playSound(net.minecraft.sounds.SoundEvents.GENERIC_EAT, 0.6F, 1.6F);
+        return true;
     }
 }

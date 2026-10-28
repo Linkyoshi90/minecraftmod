@@ -30,6 +30,36 @@ SEGS = [("seg_1", 4.5, 10.5, 4), ("seg_2", 4.25, 4, 5.5), ("seg_3", 4, 3.75, 5.5
 BIG_SEGS = [(n, round(w * 1.3 * 4) / 4, h if n == "seg_1" else round(h * 1.3 * 4) / 4, round(d * 1.25 * 4) / 4) for n, w, h, d in SEGS]
 
 SPECIES = {
+    # twentieth wave: the moo, a round little blue triceratops: a frill rimmed with cream knobs, two brow horns and a nose horn, spots
+    "moo_dragon": dict(
+        build="petite", outfit=dict(top=["bandeau"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#3a6aa8")), hair="bob", bangs="blunt", ears=None,
+        legs="scales", foot="claw", tail=[(2.5, 2.5, 4), (2, 2, 4), (1.25, 1.25, 3.5)], tail_look="scale", tail_rest=[(-30, 0, 0), (8, 0, 0), (6, 0, 0)],
+        trifrill=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#5a8ac8", FUR="#7aa8d8", LIGHT="#d8e8f8", MARK="#3a6aa8", EYE="#2a3a5a", CLOTH="#3a6aa8", TRIM="#f0e0c0",
+                 extra=dict(frill="#7aa8d8", frill_edge="#f0e0c0", horn="#f0e0c0")),
+        variants={"green": dict(HAIR="#4a8a4a", FUR="#6aa86a", LIGHT="#d8f0d0", MARK="#2a5a2a", CLOTH="#2a5a2a",
+                                extra=dict(frill="#6aa86a", frill_edge="#f8e070", horn="#f0e0c0")),
+                  "orange": dict(HAIR="#c86a2a", FUR="#e8904a", LIGHT="#f8e0c8", MARK="#8a3a14", CLOTH="#8a3a14",
+                                 extra=dict(frill="#e8904a", frill_edge="#f8f0d0", horn="#f8f0d0")),
+                  "pink": dict(HAIR="#d870a0", FUR="#f0a0c0", LIGHT="#fce8f0", MARK="#a83a6a", CLOTH="#a83a6a",
+                               extra=dict(frill="#f0a0c0", frill_edge="#f8f0d0", horn="#f8f0d0")),
+                  "purple": dict(HAIR="#6a4aa8", FUR="#8a6ac8", LIGHT="#e8dcf8", MARK="#3a2a6a", CLOTH="#3a2a6a",
+                                 extra=dict(frill="#8a6ac8", frill_edge="#f8e070", horn="#f0e0c0"))}),
+    # twentieth wave: the hairypterix, a shaggy blue pterosaur: great membrane wings, a long head crest swept back, yellow claws
+    "hairypterix_dragon": dict(
+        build="slim", outfit=dict(top=["sports"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#1a2a6a")), hair="shaggy", bangs="jagged",
+        ears=None, legs="scales", foot="claw", tail=[(1, 1, 3)], tail_look="scale", tail_rest=[(-20, 0, 0)], wings="dragon", wing_scale=1.2,
+        flies=True, ptcrest=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#2a4ab0", FUR="#3a5ac8", LIGHT="#e8eef8", MARK="#1a2a6a", EYE="#c82a2a", CLOTH="#1a2a6a", TRIM="#e8c040",
+                 pupil=(0.9, 3.4), extra=dict(wing="#3a5ac8", wing_bone="#1a2a6a", crest="#e8c040", claw="#e8c040")),
+        variants={"rust": dict(HAIR="#8a3a1e", FUR="#a84a2a", LIGHT="#f8e0c8", MARK="#4a1a0a", CLOTH="#4a1a0a",
+                               extra=dict(wing="#a84a2a", wing_bone="#4a1a0a", crest="#f8d040", claw="#f8d040")),
+                  "grey": dict(HAIR="#5a5a64", FUR="#7a7a84", LIGHT="#e8e8ec", MARK="#2a2a32", CLOTH="#2a2a32",
+                               extra=dict(wing="#7a7a84", wing_bone="#2a2a32", crest="#c83a3a", claw="#e8c040")),
+                  "green": dict(HAIR="#2a6a3a", FUR="#3a8a4a", LIGHT="#e0f8e8", MARK="#14401e", CLOTH="#14401e",
+                                extra=dict(wing="#3a8a4a", wing_bone="#14401e", crest="#f8a040", claw="#e8c040")),
+                  "black": dict(HAIR="#1e1c24", FUR="#2a2830", LIGHT="#8a8890", MARK="#0e0c12", CLOTH="#5a1e24", EYE="#e8d040",
+                                extra=dict(wing="#2a2830", wing_bone="#0e0c12", crest="#c83a3a", claw="#c8ccd4"))}),
     # sixteenth wave: the cockatrice, a rooster-dragon with a red comb, feathered wings and a scaly tail
     "cockatrice_dragon": dict(
         build="athletic", outfit=dict(top=["bandeau", "harness"], bottom="loincloth", extras=["bracers"]), hair="pixie", bangs="jagged", ears=None,
@@ -136,6 +166,10 @@ def declare_hook(sp, d):
         out += [("mane", 1, 4, 2.5)]
     if d.get("comb"):                                    # the cockatrice's rooster comb
         out += [("comb", 1, 3.5, 5), ("wattle", 1.5, 1.75, .5)]
+    if d.get("trifrill"):                                # the moo's frill and three horns
+        out += [("tfrill", 11, 7, .75), ("tfrill_knob", 1, 1, 1), ("brow_horn", 1, 3.5, 1), ("nose_horn", 1, 1.5, 1)]
+    if d.get("ptcrest"):                                 # the hairypterix's long head crest
+        out += [("ptcrest", 1, 2.5, 6.5)]
     return out
 
 
@@ -143,6 +177,24 @@ def paint_hook(pt, pal, d):
     comb = G.shades(pal.extra.get("comb", "#d8201e"))
     pt("comb", "all", lambda f, x, y, w, h: CLEAR if f in ("east", "west") and y < 2 and x % 3 == 1 else pick(comb, 0.5 + 0.2 * (f == "up"), x, y))
     pt("wattle", "all", lambda f, x, y, w, h: pick(comb, 0.45, x, y))
+    frill, edge = G.shades(pal.extra.get("frill", "#7aa8d8")), G.shades(pal.extra.get("frill_edge", "#f0e0c0"))
+
+    def tfr(f, x, y, w, h):                              # a half-disc fan plate, rimmed, spotted
+        if f not in ("north", "south"):
+            return CLEAR
+        dx = (x + 0.5 - w / 2) / (w / 2)
+        top = (h - 1) * dx * dx
+        if y < top:
+            return CLEAR
+        if y < top + 1.5:
+            return pick(edge, 0.6, x, y)
+        return pick(pal.MARK, 0.45, x, y) if (x * 7 + y * 5) % 11 == 0 else pick(frill, 0.55 + 0.1 * ((x + y) % 4 == 0), x, y)
+    pt("tfrill", "all", tfr)
+    horn = G.shades(pal.extra.get("horn", "#f0e0c0"))
+    for p in ("tfrill_knob", "brow_horn", "nose_horn"):
+        pt(p, "all", lambda f, x, y, w, h: pick(horn, 0.55 + 0.15 * (y < 1), x, y))
+    crest = G.shades(pal.extra.get("crest", "#e8c040"))
+    pt("ptcrest", "all", lambda f, x, y, w, h: pick(crest, 0.5 + 0.2 * (y == h - 1) - 0.15 * (x % 3 == 0 and f in ("east", "west")), x, y))
     sc = G.scale_fn(pal)
     for p in [n for n, *_ in SEGS] + ["neck_a", "neck_b", "dhead", "dsnout"]:
         pt(p, "all", sc)
@@ -179,6 +231,16 @@ def build_hook(r, g, d):
     hy, z = g.hy, g.z
     if d.get("comb"):
         r.add("hair_comb", "head", [0, hy + 8, z], [cube("comb", [-0.5, hy + 8.0, -3.5 + z])])
+    if d.get("trifrill"):                                # the frill behind her head, knobs round its rim, two brow horns and a nose horn
+        piv = [0, hy + 6, 4.6 + z]
+        knobs = [G.rot_cube("tfrill_knob", [5.5 * math.sin(math.radians(a)) - 0.5, hy + 5.0 + 7.0 * math.cos(math.radians(a)) - 0.5, 4.5 + z], piv, -25, 0, 0)
+                 for a in (-80, -45, 0, 45, 80)]
+        r.add("hair_frill", "head", piv, [G.rot_cube("tfrill", [-5.5, hy + 5.0, 4.6 + z], piv, -25, 0, 0)] + knobs)
+        r.put("head", G.rot_cube("brow_horn", [-2.7, hy + 6.4, -4.4 + z], [-2.2, hy + 6.4, -4.0 + z], -55, 0, 10),
+              G.rot_cube("brow_horn", [1.7, hy + 6.4, -4.4 + z], [2.2, hy + 6.4, -4.0 + z], -55, 0, -10),
+              G.rot_cube("nose_horn", [-0.5, hy + 2.4, -4.8 + z], [0, hy + 2.4, -4.3 + z], -40, 0, 0))
+    if d.get("ptcrest"):                                 # swept straight back from the crown of her head
+        r.add("hair_ptcrest", "head", [0, hy + 8.2, z], [G.rot_cube("ptcrest", [-0.5, hy + 7.4, 1.0 + z], [0, hy + 8.2, 1.0 + z], 20, 0, 0)])
     if d.get("heads"):                                    # seven dragon heads rising behind and around her own
         for i in range(7):
             ry = -135 + i * 45                              # fanned round the sides and back, none in front of her face

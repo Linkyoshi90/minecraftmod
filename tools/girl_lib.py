@@ -140,6 +140,8 @@ EAR_KINDS = {
     "elf": [("ear_a", .75, 1.5, 3.5), ("ear_b", .5, .75, 1.5)],
     "antenna": [("ear_a", .5, 5, .5), ("ear_b", 1, 1, 1)],
     "plume": [("ear_a", .5, 5.5, .5), ("ear_t", .25, 4, 2.5)],
+    # twentieth wave: the house mouse's big round ears
+    "mouse": [("ear_a", 3.75, 3.25, .75), ("ear_b", 2.75, 1.25, .75)],
 }
 
 
@@ -290,14 +292,14 @@ def _after_hair(r, s, hy, z, dy, W):
 
 def add_ears(r, kind, hy, z):
     top = hy + 8.6                                   # above the inflated hair cap
-    if kind in ("cat", "big", "fox", "round", "tuft"):
+    if kind in ("cat", "big", "fox", "round", "tuft", "mouse"):
         aw, ah, ad = S("ear_a")
         bw, bh, bd = S("ear_b")
-        x = -2.6 if kind != "big" else -2.9
+        x = {"big": -2.9, "mouse": -3.4}.get(kind, -2.6)
         cubes = [("ear_a", [x - aw / 2, top - 0.25, -1.0 + z]), ("ear_b", [x - bw / 2, top - 0.25 + ah, -1.0 + z])]
         if kind == "tuft":
             cubes.append(("ear_t", [x - 0.25, top - 0.25 + ah + bh, -0.875 + z]))
-        tilt = {"cat": 10, "big": 8, "fox": 12, "round": 14, "tuft": 8}[kind]
+        tilt = {"cat": 10, "big": 8, "fox": 12, "round": 14, "tuft": 8, "mouse": 22}[kind]
         piv = [x, top - 0.25, -0.6 + z]
         r.add("ear_r", "head", piv, [rot_cube(c_p, c_o, piv, 0, 0, tilt) for c_p, c_o in cubes], mirror=True)
     elif kind == "horse":

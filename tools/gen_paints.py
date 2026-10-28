@@ -33,7 +33,8 @@ patches on white), rust (orange-brown rust eating through grey steel), lava lamp
 blobs glow) and sunflower (golden petals round brown seed heads, August only). And (nineteenth wave): comic (flat
 colours, halftone dots and bold black outlines, like a printed comic), blueprint (white lines and a grid on blueprint
 blue), koi (red-orange patches and a few black specks on pearl white) and lemonade (lemon slices on pale yellow, June
-only). The drips and
+only). And (twentieth wave): tie_dye (a swirl of rainbow dye with white crinkle lines), jade (carved green stone, pale
+veins), lace (ivory open-work lace) and bluebell (little blue bells on green stems over pale periwinkle, May only). The drips and
 patterns follow the model: they are drawn per cube face from the geo file, running down each side from its top edge.
 
     python tools/gen_paints.py [paint ...] [model ...]   # everything, or just the paints and/or models named
@@ -203,7 +204,8 @@ def treat(img, name, model):
                                         "neon", "zebra", "terrazzo", "clover",
                                         "polka", "circuit", "giraffe", "watermelon",
                                         "cow", "rust", "lava_lamp", "sunflower",
-                                        "comic", "blueprint", "koi", "lemonade"):
+                                        "comic", "blueprint", "koi", "lemonade",
+                                        "tie_dye", "jade", "lace", "bluebell"):
         return finish(img, name, model)[0]
     W = len(img[0])
     out = [list(row) for row in img]
@@ -335,7 +337,8 @@ TREATS = ["chocolate", "icecream", "strawberry", "jello", "milk", "gold", "marbl
           "neon", "zebra", "terrazzo", "clover",
           "polka", "circuit", "giraffe", "watermelon",
           "cow", "rust", "lava_lamp", "sunflower",
-          "comic", "blueprint", "koi", "lemonade"]
+          "comic", "blueprint", "koi", "lemonade",
+          "tie_dye", "jade", "lace", "bluebell"]
 PEARL = hexes("#b8b0c0", "#d8d2e0", "#ece8f2", "#f8f6fc", "#ffffff")
 CHROME = hexes("#1e2024", "#4a4e56", "#8a909a", "#c8ccd4", "#ffffff")
 AURORA = hexes("#2af08a", "#3ad8c8", "#5aa0f0", "#8a6af0", "#c86ae8")
@@ -794,6 +797,41 @@ def finish(img, name, model):
                     c = (int(214 + 30 * l), int(70 + 40 * l), int(30 + 20 * l))   # red-orange patches
                 elif H.noise(x, y, 192) > 0.97:
                     c = (24, 22, 26)                                        # a black speck
+            elif name == "tie_dye":
+                if l < 0.22 and face:
+                    continue
+                dx, dy = xx + 0.5 - fw / 2, yy + 0.5 - fh / 2
+                ang = math.atan2(dy, dx) / (2 * math.pi)
+                hue = (ang + math.sqrt(dx * dx + dy * dy) * 0.08 + i * 0.13) % 1.0      # a spiral of dye from each face's middle
+                c = tuple(int(v * 255) for v in colorsys.hsv_to_rgb(hue, 0.55, min(1.0, 0.78 + 0.25 * l)))
+                if (xx + 2 * yy + i) % 9 == 0 and H.noise(x, y, 194) > 0.4:
+                    c = (246, 244, 250)                                     # a white crinkle where the cloth was tied
+            elif name == "jade":
+                if l < 0.22 and face:
+                    continue
+                k = 0.55 + 0.45 * l + (H.noise(x // 2, y // 2, 195) - 0.5) * 0.18
+                c = (int(60 * k), int(168 * k), int(110 * k))                   # deep to pale jade
+                if H.noise(x, y, 196) > 0.86:
+                    c = (int(170 + 40 * l), int(226 + 20 * l), int(190 + 30 * l))   # a pale vein in the stone
+                if edge and fw > 2 and fh > 2:
+                    c = tuple(int(v * 0.72) for v in c)                     # the carved edge in shadow
+            elif name == "lace":
+                if l < 0.22 and face:
+                    continue
+                c = (int(232 + 18 * l), int(226 + 20 * l), int(212 + 24 * l))   # ivory thread
+                cx, cy = (xx + i) % 6 - 2.5, (yy + 2 * i) % 6 - 2.5             # a little flower of open-work in every 6x6
+                d2 = cx * cx + cy * cy
+                if d2 < 1.0 or 3.0 < d2 < 4.6 and (int(cx + 3) + int(cy + 3)) % 2 == 0:
+                    c = (int(120 + 60 * l), int(104 + 56 * l), int(98 + 52 * l))     # the holes, shadowed
+            elif name == "bluebell":
+                if l < 0.22 and face:
+                    continue
+                c = (int(196 + 30 * l), int(204 + 30 * l), int(236 + 18 * l))   # pale periwinkle
+                tx, ty = (xx + 3 * i) % 7, (yy + 5 * i) % 9                       # a stem and its bells in every 7x9
+                if tx == 3 and ty >= 3:
+                    c = (86, 150, 70)                                        # the stem
+                elif ty in (3, 4, 6, 7) and tx in (1, 2, 4, 5) and (tx < 3) == (ty < 5):
+                    c = (int(70 + 30 * l), int(90 + 30 * l), int(200 + 30 * l))     # a nodding bell
             elif name == "lemonade":
                 if l < 0.22 and face:
                     continue

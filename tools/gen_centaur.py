@@ -17,6 +17,21 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # twentieth wave: the ceibler, a slender pale-blue llama-deer, long ears and little horns, blue diamonds over her coat, a fringed
+    # blanket and harness hung with tassels and bells
+    "ceibler_centaur": dict(
+        build="slim", outfit=dict(top=["halter", "capelet"], extras=["armlets"], colors=dict(cloth2="#2a48b0")),
+        hair="flowing", bangs="wispy", tail=(2.5, 4, 1.5), horns=True, fleece=True, blanket=True, bells=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#e8f0fc", FUR="#c8d8f4", LIGHT="#f4f8ff", MARK="#2a48b0", EYE="#2a3a9a", CLOTH="#2a48b0", TRIM="#e8f0fc",
+                 pattern="diamonds", pattern_scale=2.4, extra=dict(horn="#3a5ac8", bell="#e8f0fc", blanket="#2a48b0", blanket2="#f4f8ff", blanket3="#5ac8f0")),
+        variants={"rose": dict(FUR="#f4d8e4", HAIR="#fff4f8", MARK="#c84a7a", CLOTH="#c84a7a", EYE="#8a2a5a",
+                               extra=dict(horn="#c84a7a", bell="#fff4f8", blanket="#c84a7a", blanket2="#fff4f8", blanket3="#f8c040")),
+                  "fawn": dict(FUR="#e0c8a0", HAIR="#f8f0e0", MARK="#8a5a2a", CLOTH="#8a5a2a", EYE="#3a2412",
+                               extra=dict(horn="#5a3a1e", bell="#e8c050", blanket="#a83a2a", blanket2="#f8f0e0", blanket3="#2a6a5a")),
+                  "jade": dict(FUR="#c8ecdc", HAIR="#f0fcf6", MARK="#2a8a5a", CLOTH="#2a8a5a", EYE="#1e5a3a",
+                               extra=dict(horn="#2a8a5a", bell="#f0fcf6", blanket="#2a8a5a", blanket2="#f0fcf6", blanket3="#e8c040")),
+                  "dusk": dict(FUR="#a8a0d8", HAIR="#e8e0fc", MARK="#3a2a7a", CLOTH="#3a2a7a", EYE="#e8a040",
+                               extra=dict(horn="#3a2a7a", bell="#e8c050", blanket="#3a2a7a", blanket2="#e8e0fc", blanket3="#f87a8a"))}),
     # eighteenth wave: the palmyr, a blue deer taur in white diamonds with feathery frond antlers and a fan of a tail
     "palmyr_centaur": dict(
         build="slim", outfit=dict(top=["halter", "capelet"], extras=["pearls", "armlets"], colors=dict(cloth2="#c8d8f8")),

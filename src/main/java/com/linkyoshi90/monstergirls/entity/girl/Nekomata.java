@@ -487,6 +487,7 @@ public class Nekomata extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.MANTICORE_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel spike && !this.isBaby() && this.tickCount % 60 == 0) this.tailSpike(spike);
         if (this.species == GirlSpecies.SABRE_NEKOMATA && this.level() instanceof ServerLevel hunt && !this.isBaby() && this.tickCount % 40 == 0) this.finishingBite(hunt);
         if (this.species == GirlSpecies.BASTET_NEKOMATA && this.level() instanceof ServerLevel home && !this.isBaby() && this.tickCount % 10 == 0) this.wardCreepers(home);
         if (this.species == GirlSpecies.CENSER_LION_NEKOMATA && this.level() instanceof ServerLevel incense && !this.isBaby() && this.tickCount % 20 == 0) this.incense(incense);
@@ -790,5 +791,22 @@ public class Nekomata extends AbstractMonsterGirl {
             return 1;
         }
         return 0;
+    }
+
+    // --- the manticore (twentieth wave) -----------------------------------------------------------------------------
+
+    /** She stings the nearest monster within 10 blocks of her friend: three points and Slowness II for three seconds. 1 if she
+     *  stung, 0 if none was near, -1 without a friend. */
+    public int tailSpike(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster m = level.getNearestEntity(net.minecraft.world.entity.monster.Monster.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat(), friend,
+                friend.getX(), friend.getY(), friend.getZ(), friend.getBoundingBox().inflate(10));
+        if (m == null) return 0;
+        m.hurt(level.damageSources().mobAttack(this), 3.0F);
+        m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 60, 1), this);
+        this.getLookControl().setLookAt(m);
+        this.playSound(net.minecraft.sounds.SoundEvents.BEE_STING, 1.0F, 0.6F);
+        return 1;
     }
 }

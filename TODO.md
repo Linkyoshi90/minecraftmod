@@ -293,6 +293,24 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
 - [x] Journal and hearth discoverable (2026-10-28): the journal opens again (its pages are synced to the client before the book screen opens), it starts with four guide pages (making friends, the hearth, expeditions, weapons), both recipes are unlocked at login, and every player gets a journal on their first visit (not on the GameTest server).
 - [x] Homage variants from POP_CULTURE_VARIANTS.md: `jewel_thief` (cave bat), `ink_kid` (ika), `pink_dairy` (cattle minotaur), `sun_goddess` (wolf girl); palettes only, rare in the wild (`HOMAGES`). The rest of that list wants a prop each.
 - [ ] Dev client for the life features: a held bow and a TaCZ gun in a girl's hand (position on `hand_r`; the item may need vanilla's extra 180-degree turn once the arm is raised), the aiming poses and recoil, TaCZ shooting and reloading from the pouch, the journal's pages, a hut going up and the market's presents, an expedition's return.
+- [x] **Twentieth wave** (2026-10-28), tested in `TwentiethWaveTests`:
+  - **Brasshorn ram** (minotaur, ram horns, wool, regalia; rams too): every second, `mountainFooting` gives her friend within 10 Jump Boost I.
+  - **Ceibler** (centaur, fleece, blanket, bells, horns): every second, `trailGuide` gives her friend within 10 Speed I while they stand on dirt, grass or a path.
+  - **Sobolnik** (rodent, pendant): every second, `burrowEyes` gives her friend within 10 Night Vision while they cannot see the sky.
+  - **House mouse** (rodent, `mouse` ears in girl_lib, `bare_tail`, `whisker_nose`, `ghs_kit` props by variant): every 30 s, `crumbs` gives her hungry friend within 8 one food.
+  - **Turtworld** (lizardfolk, dome shell, `island`): every 5 s, `livingIsland` bonemeals the saplings and crops within 4 of her friend.
+  - **Fernstalker** (lizardfolk, `ferns`: fronds and `hair_crest`; a monster): every 2 s, `ambush` hits the nearest monster within 8 of her friend for 4.
+  - **Basilisk** (lizardfolk, spines, `crown`: `hair_crown`): every 2 s, `stoneGaze` gives the nearest monster within 8 of her friend Slowness IV.
+  - **Moo** (dragon, `trifrill`: `hair_frill`, brow and nose horns): every second, `herdStand` gives her friend within 8 Strength I when two or more monsters are within 8 of them.
+  - **Hairypterix** (dragon, membrane wings, flies, `ptcrest`: `hair_ptcrest`): every half second, `updraft` gives her friend within 12 falling more than 3 blocks Slow Falling.
+  - **Doggo** (merfolk, big ears, a water creature): every second, `lifeguard` refills the air of her friend within 10 when it is down to a third.
+  - **Ghoul** (undead, tattered): every second, `carrion` eats one rotten flesh item within 8 of her friend and heals her by 2.
+  - **Manticore** (nekomata, `stinger` on the tail tip): every 3 s, `tailSpike` hits the nearest monster within 10 of her friend for 3 with Slowness II.
+  - **Mothman** (bug, moth wings, red eyes): every second at night, `omen` makes the monsters within 16 of her friend glow.
+  - **Paints:** tie_dye, jade, lace and bluebell (May only, `Painted.roll`), so 79 in all.
+  - **Homage variants** (`AbstractMonsterGirl.HOMAGES`): innkeeper, prankster, soul_keeper (house mouse), sage_princess (high elf), green_hero (wood elf, `hero_cap`: `hair_hcap`), tree_guard (ent), snow_wraith (yuki-onna), headless_rider and death_envoy (dullahan).
+- [ ] Dev client for the twentieth wave: the turtworld's island, the fernstalker's fronds, the moo's frill, the manticore's sting, the mouse's ears and the Gregory props at game scale; the four paints; the nine homage looks.
+- [ ] Not done for the twentieth wave: Celty's cat-eared helmet and Lala's scythe (both are palette-only for now); a dullahan-only prop each would do it.
 - [x] **Nineteenth wave** (2026-10-28), tested in `NineteenthWaveTests`:
   - **Tin Jack** (construct, `witch_hat`: `hair_hat`, a lantern that glows): every second, `scarePhantoms` gives the phantoms within 24 of her friend Weakness II, clears their target and sends them off.
   - **Turquoise serpent** (lamia): every second, `scaleWard` gives her friend within 10, below half health, Resistance I.

@@ -494,6 +494,7 @@ public class Undead extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.GHOUL_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel grave && !this.isBaby() && this.tickCount % 20 == 0) this.carrion(grave);
         if (this.species == GirlSpecies.KASURENIJIMI_UNDEAD && this.level() instanceof ServerLevel blur && !this.isBaby() && this.tickCount % 20 == 0) this.smudge(blur);
         if (this.species == GirlSpecies.DRAUGR_UNDEAD && this.level() instanceof ServerLevel barrow && !this.isBaby() && this.tickCount % 20 == 0) this.layDead(barrow);
         if (this.species == GirlSpecies.YUREI_UNDEAD && this.level() instanceof ServerLevel night && !this.isBaby() && this.tickCount % 20 == 0) this.haunt(night, !night.isDay());
@@ -799,5 +800,23 @@ public class Undead extends AbstractMonsterGirl {
             n++;
         }
         return n;
+    }
+
+    // --- the ghoul (twentieth wave) ---------------------------------------------------------------------------------
+
+    /** She eats one piece of rotten flesh lying within 8 blocks of her friend, and it heals her by two. 1 if she ate, 0 if there
+     *  was none, -1 without a friend. */
+    public int carrion(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        for (var item : level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, friend.getBoundingBox().inflate(8),
+                e -> e.getItem().is(net.minecraft.world.item.Items.ROTTEN_FLESH))) {
+            item.getItem().shrink(1);
+            if (item.getItem().isEmpty()) item.discard();
+            this.heal(2.0F);
+            this.playSound(net.minecraft.sounds.SoundEvents.GENERIC_EAT, 1.0F, 0.7F);
+            return 1;
+        }
+        return 0;
     }
 }

@@ -44,16 +44,22 @@ SPECIES = {
         variants={"silver": dict(HAIR="#e0e4ec", EYE="#4a6aa8"),
                   "auburn": dict(HAIR="#a84a2a", EYE="#4a8a4a", extra=dict(kimono="#2a6a4a", obi="#d8b040", boot="#5a3a22")),
                   "ivory": dict(HAIR="#fbf8f0", EYE="#8a5ab8"),
-                  "sun": dict(HAIR="#f0a868", EYE="#3a7ab0")}),
+                  "sun": dict(HAIR="#f0a868", EYE="#3a7ab0"),
+                  # homage (2026-10-28): Princess Zelda (Zelda): golden-brown hair, a white and lilac gown, gold trim
+                  "sage_princess": dict(HAIR="#c8944a", EYE="#3a6ac8", TRIM="#e8b840",
+                                        extra=dict(kimono="#f8f6fc", kimono_trim="#e8b840", obi="#9a7ad0", cloth2="#d8c8f0", boot="#e8e0d0"))}),
     "wood_elf": dict(
         build="athletic", outfit=dict(top=["bandeau", "vest"], bottom="shorts", extras=["belt", "pouch", "bracers"], colors=dict(leather="#6a4a2a")),
-        hair="braid", bangs="swept", ears="elf", legs="boots", foot="shoe", quiver=True,
+        hair="braid", bangs="swept", ears="elf", legs="boots", foot="shoe", quiver=True, hero_cap=True,
         pal=dict(SKIN=skin("tan"), HAIR="#6a4422", FUR="#6a4422", LIGHT="#d8c098", MARK="#3a5a2a", EYE="#4a8a3a", CLOTH="#4a7a3a", TRIM="#a8884a",
                  extra=dict(boot="#4a3420")),
         variants={"autumn": dict(CLOTH="#a8582a", HAIR="#c8783a", TRIM="#d8a840"),
                   "moss": dict(CLOTH="#3a5a2a", HAIR="#1e1a16"),
                   "birch": dict(CLOTH="#a8a89a", HAIR="#e8d8a0", SKIN=skin("fair")),
-                  "bark": dict(CLOTH="#4a3424", HAIR="#a8382a")}),
+                  "bark": dict(CLOTH="#4a3424", HAIR="#a8382a"),
+                  # homage (2026-10-28): Link (Zelda): blonde, a green tunic and its long green cap, brown belt and boots
+                  "green_hero": dict(CLOTH="#3a8a3a", HAIR="#f0d070", TRIM="#c8a050", SKIN=skin("fair"), EYE="#3a6ac8",
+                                     extra=dict(boot="#5a3a1e", leather="#6a4a2a", cap="#3a8a3a"))}),
     "blood_elf": dict(
         build="athletic", outfit=dict(top=["corset", "halter"], bottom="loincloth", extras=["pauldron", "bracers", "belt"], colors=dict(cloth2="#5a1a1a")),
         hair="ponytail", bangs="jagged", ears="elf", legs="boots", foot="shoe", sword=True,
@@ -127,6 +133,8 @@ def declare_hook(sp, d):
         out += [("bcap", 5.5, 3, 5.5), ("bcap_tip", 2, 2, 2)]
     if d.get("helm"):                                    # the valkyrie's winged helm
         out += [("helm", 8.75, 3, 8.75), ("helm_wing", .5, 3.5, 3)]
+    if d.get("hero_cap"):                                # the green hero's long cap (drawn only on her)
+        out += [("hcap", 8.75, 2.5, 8.75), ("hcap_tail", 3, 2.5, 6)]
     return out
 
 
@@ -154,6 +162,8 @@ def paint_hook(pt, pal, d):
     if pal.extra.get("soot"):                            # a smudge of soot on her nose and cheek
         pt("head", ("north",), lambda f, x, y, w, h: pick(G.shades("#3a3432"), 0.45, x, y) if (x, y) in ((15, 22), (16, 22), (16, 21), (22, 24), (23, 24)) else None)
     capc = G.shades(pal.extra.get("cap", "#b82a2a"))
+    pt("hcap", "all", lambda f, x, y, w, h: CLEAR if f == "down" or not pal.extra.get("cap") else pick(capc, 0.5 + 0.1 * (f == "up"), x, y))
+    pt("hcap_tail", "all", lambda f, x, y, w, h: pick(capc, 0.45 + 0.1 * (y % 2), x, y) if pal.extra.get("cap") else CLEAR)
     pt("bcap", "all", lambda f, x, y, w, h: pick(capc, 0.5 + 0.1 * (y == 0), x, y) if pal.extra.get("cap") else CLEAR)
     pt("bcap_tip", "all", lambda f, x, y, w, h: pick(capc, 0.55, x, y) if pal.extra.get("cap") else CLEAR)
     if pal.extra.get("rags"):                            # ragged hems, and patches for the patched one
@@ -186,6 +196,9 @@ def build_hook(r, g, d):
                                                    cube("kerchief_knot", [-1, hy + 4.6, 4.9 + z]),
                                                    G.rot_cube("kerchief_tail", [-1.6, hy + 2.2, 5.4 + z], [-0.6, hy + 4.6, 5.4 + z], 10, 0, -15),
                                                    G.rot_cube("kerchief_tail", [0.1, hy + 2.2, 5.4 + z], [0.6, hy + 4.6, 5.4 + z], 10, 0, 15)])
+    if d.get("hero_cap"):                                # a long cap over her hair, its tail flopping down her back (drawn only on the green hero)
+        r.add("hair_hcap", "head", [0, hy + 8, z], [cube("hcap", [-4.375, hy + 6.4, -4.375 + z], inflate=0.7),
+                                                     G.rot_cube("hcap_tail", [-1.5, hy + 6.6, 3.6 + z], [0, hy + 8.4, 3.6 + z], 35, 0, 0)])
     if d.get("brownie"):                                 # a little pointed cap (drawn only on the red one)
         r.add("bcap", "head", [0, hy + 8.4, z], [cube("bcap", [-2.75, hy + 8.4, -2.75 + z]), cube("bcap_tip", [-1, hy + 11.2, -0.5 + z])])
     if d.get("sculk"):

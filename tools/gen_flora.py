@@ -83,7 +83,10 @@ SPECIES = {
         variants={"birch": dict(SKIN="#e8e4d8", FUR="#e8e4d8", MARK="#2a2a2a", HAIR="#7ab85a", extra=dict(bark="#e8e4d8", leaf="#7ab85a", claw="#2a2a2a")),
                   "spruce": dict(SKIN="#5a3e26", FUR="#4a3220", HAIR="#2a5a3a", extra=dict(bark="#4a3220", leaf="#2a5a3a", claw="#2a1a10")),
                   "cherry": dict(SKIN="#6a3a3a", FUR="#5a2e2e", HAIR="#f4b8c8", extra=dict(bark="#5a2e2e", leaf="#f4b8c8", claw="#3a1a1a")),
-                  "autumn": dict(HAIR="#e0782a", extra=dict(bark="#6a4a2e", leaf="#e0782a", claw="#3a2a1a"))}),
+                  "autumn": dict(HAIR="#e0782a", extra=dict(bark="#6a4a2e", leaf="#e0782a", claw="#3a2a1a")),
+                  # homage (2026-10-28): Groot (Marvel): warm brown bark all over, a few green leaves, amber eyes
+                  "tree_guard": dict(SKIN="#8a5a34", FUR="#7a4e2c", HAIR="#7a4e2c", MARK="#4a2a14", EYE="#e8a030", CLOTH="#6a4428",
+                                     extra=dict(bark="#7a4e2c", leaf="#5aa03a", claw="#3a2214"))}),
     "cactus_flora": dict(
         build="slim", outfit=dict(top=["halter"], extras=["armlets"]), hair="ponytail", bangs="swept", ears=None, lower="none", plant="cactus",
         pal=dict(SKIN="#7ab86a", HAIR="#3a8a3a", FUR="#4a9a3a", LIGHT="#a8d88a", MARK="#f8f0d8", EYE="#2a2a2a", CLOTH="#f0a0c0", TRIM="#e8c040",

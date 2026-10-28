@@ -758,6 +758,7 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.CEIBLER_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel trail && !this.isBaby() && this.tickCount % 20 == 0) this.trailGuide(trail);
         if (this.species == GirlSpecies.PALMYR_CENTAUR && this.level() instanceof ServerLevel meadow && !this.isBaby() && this.tickCount % 20 == 0) this.fleetFoot(meadow);
         if ((this.species == GirlSpecies.STAGEL_CENTAUR || this.species == GirlSpecies.LAMASSU_CENTAUR) && this.level() instanceof ServerLevel ward && !this.isBaby() && this.tickCount % 20 == 0) this.blessFriend(ward);
         if (this.species == GirlSpecies.AURORANTLER_CENTAUR && this.level() instanceof ServerLevel aurora && !this.isBaby()) this.aurora(aurora);
@@ -989,6 +990,18 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
         net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 12);
         if (friend == null || !friend.isSprinting()) return false;
         friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 40, 0, true, true));
+        return true;
+    }
+
+    // --- the ceibler (twentieth wave) -------------------------------------------------------------------------------
+
+    /** Her friend within 10 blocks, standing on grass, dirt or a path, runs faster (Speed I for three seconds). True if so. */
+    public boolean trailGuide(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 10);
+        if (friend == null) return false;
+        var ground = level.getBlockState(friend.blockPosition().below());
+        if (!ground.is(net.minecraft.tags.BlockTags.DIRT) && !ground.is(net.minecraft.world.level.block.Blocks.DIRT_PATH)) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 60, 0, true, true));
         return true;
     }
 }

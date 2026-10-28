@@ -529,3 +529,34 @@ Paints: comic (flat tones, halftone dots and inked outlines), blueprint (white l
 Homage variants (POP_CULTURE_VARIANTS.md): octo agent (octopus), ninja chameleon, shell trooper (turtle), town clerk
 (kobold), scythe green (mantis), leaf sprout (mandragora), mud fin (axolotl) and trident hood (shark).
 
+## Twentieth wave (2026-10-28, in the game)
+
+Eight Harmontide originals from the reference art (their blue looks), four creatures of folklore (the ghoul, the manticore,
+the Mothman and the basilisk) and the house mouse, which carries the Gregory Horror Show homages. Three creatures of the
+reference art turned out to be in the game already: Azureus is the poison dart frog, Slidred the red-eared slider and
+Alisnapor the snapping turtle.
+
+| Species | Home | Design |
+|---|---|---|
+| **Brasshorn Ram** | Minotaur | A shaggy blue mountain ram, great curling horns of brass, brass at her brow and hooves, a white rune and a woven blanket (rams too): her friend near her jumps higher. |
+| **Ceibler** | Centaur | A slender pale-blue llama-deer, long ears and little horns, blue diamonds over her coat, a fringed blanket hung with bells: her friend near her runs faster on grass, dirt and paths. |
+| **Sobolnik** | Rodent | A blue sable, big dark eyes in a white face, frosty swirls, a bushy tail and a little blue gem: her friend near her, out of the sky's sight, sees in the dark. |
+| **Turtworld** | Lizardfolk | A great blue tortoise with a little world on her shell: turf, two snowy peaks and a waterfall: the saplings and crops near her friend grow. |
+| **Fernstalker** | Lizardfolk | A navy feathered raptor, white at the breast, fern fronds fanned up from her back and a feather crest: she pounces on a monster near her friend. |
+| **Moo** | Dragon | A round little spotted blue triceratops, a frill rimmed with cream knobs, two brow horns and a nose horn: when monsters crowd her friend, she stands with them (Strength). |
+| **Hairypterix** | Dragon | A shaggy blue pterosaur, great membrane wings, a long yellow crest swept back (she flies): her friend falling near her drifts down gently. |
+| **Doggo** | Merfolk | A sea dog: a shaggy blue pup's ears and hair, a white chest, a sparkling fish's tail: her friend near her, out of air underwater, gets a full breath. |
+| **Ghoul** | Undead | The ghul of Arabian tales, blue-grey cracked skin, wild teal hair, claws and a torn shift: she eats the rotten flesh lying near her friend, and it heals her. |
+| **Manticore** | Nekomata | The man-eater of Persian legend, a pale blue lion girl with a great mane, a scorpion's sting on her tail: she stings a monster near her friend, hurt and slowed. |
+| **Mothman** | Bug | The Mothman of Point Pleasant, a soft blue moth girl, feathery antennae, a furry ruff, spotted wings, red eyes: at night the monsters near her friend glow. |
+| **Basilisk** | Lizardfolk | The king of serpents, a little blue lizard girl with a crest of spines and a gold crown: her gaze all but turns a monster near her friend to stone (Slowness IV). |
+| **House Mouse** | Rodent | A little mouse girl, big round ears, a pink nose and a long bare tail: now and then she shares a crumb with her hungry friend. |
+
+Paints: tie_dye (a swirl of rainbow dye with white crinkle lines), jade (carved green stone with pale veins), lace (ivory
+open-work lace) and the seasonal bluebell (little blue bells on green stems over pale periwinkle, May only), so 79 in all.
+
+Homage variants (POP_CULTURE_VARIANTS.md): the house mouse's innkeeper (Gregory, with a ring of keys), prankster (James, a
+striped shirt and a slingshot) and soul keeper (Gregory Mama, soul bottles at her belt); the high elf's sage princess
+(Zelda), the wood elf's green hero (Link, with the long green cap), the ent's tree guard (Groot), the yuki-onna's snow
+wraith (Froslass, purple eyes) and the dullahan's headless rider (Celty) and death envoy (Lala).
+

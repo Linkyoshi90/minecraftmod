@@ -17,6 +17,40 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # twentieth wave: the house mouse, big round ears and a long bare tail; the Gregory Horror Show homages (POP_CULTURE_VARIANTS.md)
+    # carry their props by variant (`ghs_kit`): Gregory's ring of keys, James's slingshot, Gregory Mama's soul bottles
+    "house_mouse_rodent": dict(
+        build="petite", outfit=dict(top=["halter", "vest"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#5a4a3a", leather="#5a3a22")),
+        hair="bob", bangs="wispy", ears="mouse", legs="fur", foot="paw",
+        tail=[(.75, .75, 4), (.6, .6, 4), (.5, .5, 4), (.4, .4, 3)], tail_rest=[(-10, 0, 0), (15, 0, 0), (15, 0, 0), (10, 0, 0)], tail_look="fur",
+        bare_tail=True, whisker_nose=True, ghs_kit=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#8a8a92", FUR="#9a9aa2", LIGHT="#e8e4e0", MARK="#5a5a62", EYE="#1a1418", CLOTH="#c8a878", TRIM="#7a5a3a",
+                 INNER="#f0a8b0", pattern="solid", extra=dict(tail_col="#e8a8a8")),
+        variants={"brown": dict(HAIR="#7a5a3a", FUR="#8a6a48", LIGHT="#e8d4b8", MARK="#4a3420", CLOTH="#5a8a6a"),
+                  "white": dict(HAIR="#f4f2ee", FUR="#f6f4f0", LIGHT="#ffffff", MARK="#c8c4c0", EYE="#d83a4a", CLOTH="#a8c0e8"),
+                  "black": dict(HAIR="#2a2828", FUR="#343234", LIGHT="#8a8688", MARK="#141214", EYE="#c8a040", CLOTH="#a83a3a",
+                                extra=dict(tail_col="#8a6a70")),
+                  "fawn": dict(HAIR="#c8945a", FUR="#d8a468", LIGHT="#f8ead4", MARK="#8a5a2a", EYE="#3a1a10", CLOTH="#4a6aa8"),
+                  # homage (2026-10-28): Gregory (Gregory Horror Show): grey-brown, small red eyes, a worn hotelier's suit, a ring of keys
+                  "innkeeper": dict(HAIR="#6a5e52", FUR="#7a6e62", LIGHT="#b8aa98", MARK="#3a322a", EYE="#d82a2a", CLOTH="#4a5a3a", TRIM="#c8a040",
+                                    extra=dict(tail_col="#d89a98", cloth2="#3a3a30", leather="#2a221a", keys=True)),
+                  # homage (2026-10-28): James (Gregory's grandson): younger and lighter, a striped shirt, a slingshot at his belt
+                  "prankster": dict(HAIR="#a8968a", FUR="#b8a89a", LIGHT="#f0e8e0", MARK="#6a5a4e", EYE="#d82a2a", CLOTH="#d83a3a", TRIM="#f0f0f0",
+                                    extra=dict(tail_col="#e8a8a8", cloth2="#3a5a9a", stripes=True, slingshot=True)),
+                  # homage (2026-10-28): Gregory Mama: an old mouse, white hair, a long dark robe, glass soul bottles at her belt
+                  "soul_keeper": dict(HAIR="#f0eeea", FUR="#8a8078", LIGHT="#d8d0c8", MARK="#4a423a", EYE="#d82a2a", CLOTH="#3a2a4a", TRIM="#8a6aa8",
+                                      extra=dict(tail_col="#c8908e", cloth2="#2a1e38", leather="#1e1828", bottles=True))}),
+    # twentieth wave: the sobolnik, a blue sable: big dark eyes, a white face and chest, frosty swirls, a bushy tail, a little gem
+    "sobolnik_rodent": dict(
+        build="slim", outfit=dict(top=["halter", "capelet"], bottom="shorts", extras=["scarf"], colors=dict(cloth2="#2a3a6a", scarf="#e8f0f8")),
+        hair="sidetail", bangs="messy", ears="round", legs="fur", foot="paw",
+        tail=[(2, 2, 4), (2.5, 2.5, 4), (2.25, 2.25, 3.5)], tail_rest=[(-25, 0, 0), (15, 0, 0), (12, 0, 0)], tail_look="fur", pendant=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#3a5a9a", FUR="#4a6aa8", LIGHT="#eef4fc", MARK="#1e2e5a", EYE="#1a1e2e", CLOTH="#5a7ac8", TRIM="#e8f0f8",
+                 pattern="dapple", extra=dict(amber="#5ac8f0")),
+        variants={"sable": dict(HAIR="#4a3020", FUR="#5a3a26", LIGHT="#e8c8a0", MARK="#2a1a10", CLOTH="#a87a3a", extra=dict(amber="#e8701e")),
+                  "silver": dict(HAIR="#8a8a96", FUR="#9a9aa6", LIGHT="#ffffff", MARK="#4a4a56", CLOTH="#4a5a7a", extra=dict(amber="#a8e0f8")),
+                  "green": dict(HAIR="#2a6a4a", FUR="#3a7a5a", LIGHT="#e0f8e8", MARK="#1a3e2a", CLOTH="#3a6a8a", extra=dict(amber="#e8c040")),
+                  "red": dict(HAIR="#8a3a2a", FUR="#a84a34", LIGHT="#f8e0d0", MARK="#4a1a10", CLOTH="#3a5a8a", extra=dict(amber="#5ae8a8"))}),
     "capybara_rodent": dict(
         build="curvy", outfit=dict(top=["bandeau"], bottom="sarong", extras=["pearls"], colors=dict(cloth2="#e8a030")),
         hair="bob", bangs="blunt", ears="round", legs="fur", foot="paw", tail=[(1.5, 1, .75)], tail_rest=[(-20, 0, 0)], tail_look="fur", yuzu=True,
@@ -160,6 +194,11 @@ def declare_hook(sp, d):
         out += [("sickle", .5, 5, 2.25)]
     if d.get("cones"):
         out += [("pinecone", 1.75, 2.5, 1.75), ("cone_cap", 1, .5, 1)]
+    if d.get("whisker_nose"):
+        out += [("mouse_nose", 1, .75, .5)]
+    if d.get("ghs_kit"):
+        out += [("keyring", 1.75, 1.75, .25), ("key", .5, 2, .25), ("sling_y", 2, 2.5, .5), ("sling_grip", .75, 2, .75),
+                ("soul_bottle", 1.25, 2, 1.25), ("bottle_cork", .75, .5, .75)]
     return out
 
 
@@ -206,9 +245,53 @@ def paint_hook(pt, pal, d):
     pt("quill", "all", lambda f, x, y, w, h: pick(tip if y >= h - 1 or f == "south" else q, 0.5 + 0.15 * (x % 2), x, y))
     pt("note", "all", lambda f, x, y, w, h: pick(G.shades("#3a3a4a"), 0.45, x, y) if f == "south" and y % 2 == 1 and 0 < x < w - 1
        else pick(G.shades("#f4ecd8"), 0.65, x, y))
+    paint_ghs(pt, pal, d)
+
+
+def paint_ghs(pt, pal, d):
+    """the house mouse's bare tail and pink nose, and the homage props, each painted only on its own variant"""
+    e = pal.extra
+    show = lambda on, fn: (lambda f, x, y, w, h: fn(f, x, y, w, h) if on else CLEAR)
+    if d.get("bare_tail"):
+        tail = G.shades(e.get("tail_col", "#e8a8a8"))
+        for p in ("tail_a", "tail_b", "tail_c", "tail_d"):
+            pt(p, "all", lambda f, x, y, w, h: pick(tail, 0.55 + 0.1 * ((y + x) % 3 == 0), x, y))
+    pt("mouse_nose", "all", lambda f, x, y, w, h: pick(G.shades("#e88a98"), 0.55 + 0.15 * (f == "up"), x, y))
+    brass, steel = G.shades("#c8a040"), G.shades("#8a8a94")
+    pt("keyring", "all", show(e.get("keys"), lambda f, x, y, w, h: pick(brass, 0.6, x, y) if x in (0, w - 1) or y in (0, h - 1) else CLEAR))
+    pt("key", "all", show(e.get("keys"), lambda f, x, y, w, h: pick(brass if y % 3 else steel, 0.55, x, y)))
+    wood = G.shades("#8a5a2e")
+
+    def sling(f, x, y, w, h):                            # a Y: two prongs over a stem
+        if f not in ("north", "south"):
+            return pick(wood, 0.45, x, y)
+        if y < h * 0.5:
+            return pick(wood, 0.5, x, y) if x in (0, w - 1) else CLEAR
+        return pick(wood, 0.5, x, y) if abs(x + 0.5 - w / 2) < 0.8 else CLEAR
+    pt("sling_y", "all", show(e.get("slingshot"), sling))
+    pt("sling_grip", "all", show(e.get("slingshot"), lambda f, x, y, w, h: pick(G.shades("#c83a3a"), 0.45, x, y)))
+    glass = G.shades("#8ad8c8")
+    pt("soul_bottle", "all", show(e.get("bottles"), lambda f, x, y, w, h: pick(G.shades("#f0f8ff"), 0.9, x, y) if f == "north" and y == 1 and x == 1
+                                   else pick(glass, 0.5 + 0.2 * (y < h / 2), x, y)))
+    pt("bottle_cork", "all", show(e.get("bottles"), lambda f, x, y, w, h: pick(wood, 0.6, x, y)))
+    if e.get("stripes"):                                 # James's striped shirt
+        white = G.shades("#f0f0f0")
+        for p in ("chest", "midriff"):
+            pt(p, ("north", "south", "east", "west"), lambda f, x, y, w, h: pick(white, 0.7, x, y) if y % 2 == 0 else None)
 
 
 def build_hook(r, g, d):
+    if d.get("whisker_nose"):                           # a little pink nose
+        r.put("head", cube("mouse_nose", [-0.5, g.hy + 2.5, -4.4 + g.z]))
+    if d.get("ghs_kit"):                                # at her belt: the ring of keys (right), the slingshot (left), three soul bottles (back)
+        bz = -G.S("hips")[2] / 2 + g.z
+        r.add("ghs_kit", "body", [0, 12, g.z], [
+            cube("keyring", [-3.6, 10.6, bz - 0.4]), cube("key", [-3.3, 8.8, bz - 0.5]), cube("key", [-2.6, 9.0, bz - 0.45]),
+            G.rot_cube("sling_y", [2.4, 10.0, bz - 0.6], [3.4, 11.0, bz], 0, 0, -10),
+            G.rot_cube("sling_grip", [2.9, 8.4, bz - 0.7], [3.4, 11.0, bz], 0, 0, -10),
+            cube("soul_bottle", [-2.6, 9.6, -bz + 0.1]), cube("bottle_cork", [-2.35, 11.6, -bz + 0.35]),
+            cube("soul_bottle", [-0.6, 9.4, -bz + 0.1]), cube("bottle_cork", [-0.35, 11.4, -bz + 0.35]),
+            cube("soul_bottle", [1.4, 9.6, -bz + 0.1]), cube("bottle_cork", [1.65, 11.6, -bz + 0.35])])
     if d.get("frill"):                                   # the frill behind her head, two brow horns and a little nose horn
         hy, z = g.hy, g.z
         r.add("frill", "head", [0, hy + 6, 4.8 + z], [G.rot_cube("frill", [-6, hy + 5.0, 4.8 + z], [0, hy + 6, 4.8 + z], -25, 0, 0)])

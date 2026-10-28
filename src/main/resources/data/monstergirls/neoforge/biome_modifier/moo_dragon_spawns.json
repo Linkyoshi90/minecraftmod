@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_moo_dragon",
+  "spawners": {
+    "type": "monstergirls:moo_dragon",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

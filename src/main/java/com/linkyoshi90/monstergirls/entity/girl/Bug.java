@@ -362,6 +362,7 @@ public class Bug extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.MOTHMAN_BUG && this.level() instanceof net.minecraft.server.level.ServerLevel omen && !this.isBaby() && this.tickCount % 20 == 0) this.omen(omen, !omen.isDay());
         if (this.species == GirlSpecies.DATE_BEETLE_BUG && this.level() instanceof ServerLevel oasis && !this.isBaby() && this.tickCount % 200 == 0) this.shareDate(oasis);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.TEMPLE_MANTIS_BUG && !this.isBaby() && this.tickCount % 20 == 0) this.cutTripwire(server, false);
@@ -776,5 +777,21 @@ public class Bug extends AbstractMonsterGirl {
         level.playSound(null, friend.blockPosition(), net.minecraft.sounds.SoundEvents.GENERIC_EAT, net.minecraft.sounds.SoundSource.PLAYERS, 0.6F, 1.2F);
         level.sendParticles(net.minecraft.core.particles.ParticleTypes.HEART, this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ(), 1, 0, 0, 0, 0);
         return true;
+    }
+
+    // --- the Mothman (twentieth wave) -------------------------------------------------------------------------------
+
+    /** At night the monsters within 16 blocks of her friend glow, seen through walls, for two seconds. How many, 0 by day, -1
+     *  without a friend. */
+    public int omen(net.minecraft.server.level.ServerLevel level, boolean night) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        if (!night) return 0;
+        int n = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(16))) {
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.GLOWING, 40, 0, true, false));
+            n++;
+        }
+        return n;
     }
 }

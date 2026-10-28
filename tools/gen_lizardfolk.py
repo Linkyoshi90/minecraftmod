@@ -16,12 +16,55 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import girl_family as F  # noqa: E402
 import girl_lib as G  # noqa: E402
-from girl_lib import H, cube, pick, noise, skin  # noqa: E402
+from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 LIZARD_TAIL = [(2.5, 2.5, 4), (2, 2, 4), (1.5, 1.5, 4), (1, 1, 3.5)]
 DROOP = [(-38, 0, 0), (10, 0, 0), (10, 0, 0), (8, 0, 0)]
 
 SPECIES = {
+    # twentieth wave: the turtworld, a great blue tortoise who carries a little world on her shell: turf, two snowy peaks and a waterfall
+    "turtworld_lizardfolk": dict(
+        build="strong", outfit=dict(top=["halter"], bottom="sarong", extras=["belt"], colors=dict(cloth2="#2a4a8a", leather="#5a4a2a")),
+        hair="bun", bangs="blunt", ears=None, legs="scales", foot="claw", tail=[(1.75, 1.75, 2), (1.25, 1.25, 1.5)], tail_rest=[(-50, 0, 0), (10, 0, 0)],
+        tail_look="scale", shell="dome", island=True,
+        pal=dict(SKIN="#7a9ad8", HAIR="#1e3270", FUR="#3a5ab0", LIGHT="#a8c0e8", MARK="#1e3270", EYE="#c83a3a", CLOTH="#2a4a8a", TRIM="#e8e0c8",
+                 extra=dict(shell="#2a4a9a", shell_band="#6a8ad8", turf="#5aa04a", rock="#8a8a94", snow="#f4f8ff", water="#6ac8f0")),
+        variants={"green": dict(SKIN="#7ab08a", FUR="#4a8a5a", LIGHT="#c8e8c8", MARK="#1e4a2a", HAIR="#3a6a2a",
+                                extra=dict(shell="#5a4a2a", shell_band="#a8904a", turf="#6ab84a", rock="#8a8478", snow="#ffffff", water="#5ab8e8")),
+                  "sand": dict(SKIN="#d8c098", FUR="#b8945a", LIGHT="#f0e0c0", MARK="#6a4a24", HAIR="#c8a050", EYE="#3a6ac8",
+                               extra=dict(shell="#8a6a3a", shell_band="#d8b878", turf="#e8d090", rock="#c8986a", snow="#f8f0e0", water="#3ab8c8")),
+                  "frost": dict(SKIN="#c8dcf0", FUR="#8aa8d0", LIGHT="#f0f8ff", MARK="#3a5a8a", HAIR="#e8f4ff", EYE="#3a8ad8",
+                                extra=dict(shell="#5a7ab0", shell_band="#c8dcf4", turf="#e8f4ff", rock="#8aa0c0", snow="#ffffff", water="#a8e8ff")),
+                  "ember": dict(SKIN="#a87a6a", FUR="#6a3a2e", LIGHT="#d8a890", MARK="#2a1410", HAIR="#3a3a3a", EYE="#f8c040",
+                                extra=dict(shell="#2a2224", shell_band="#c84a1e", turf="#4a4044", rock="#2a2426", snow="#f8a040", water="#f86a1e"))}),
+    # twentieth wave: the fernstalker, a navy feathered raptor with a white breast and fern fronds fanned up from her back
+    "fernstalker_lizardfolk": dict(
+        build="athletic", outfit=dict(top=["bandeau", "harness"], bottom="loincloth", extras=["bracers"], colors=dict(leather="#2a2a3a", cloth2="#2a3a7a")),
+        hair="shaggy", bangs="jagged", ears=None, legs="scales", foot="claw", tail=[(2, 2, 4), (1.5, 1.5, 4), (1, 1, 4)],
+        tail_rest=[(-30, 0, 0), (8, 0, 0), (6, 0, 0)], tail_look="scale", teeth=True, ferns=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e2a5a", FUR="#2a3a7a", LIGHT="#e8eef8", MARK="#0e1630", EYE="#c83a2a", CLOTH="#2a3a7a", TRIM="#e8eef8",
+                 pupil=(0.9, 3.4), extra=dict(frond="#8ab04a", frond_vein="#4a6a1e", feather="#1e2a5a", feather_tip="#e8eef8")),
+        variants={"green": dict(HAIR="#1e4a2a", FUR="#2a6a3a", MARK="#0e2a14", CLOTH="#2a6a3a", EYE="#e8c040",
+                                extra=dict(frond="#a8c860", frond_vein="#5a7a2a", feather="#1e4a2a", feather_tip="#e8f4e0")),
+                  "rust": dict(HAIR="#6a2a1a", FUR="#8a3a22", MARK="#3a120a", CLOTH="#8a3a22", EYE="#e8c040",
+                               extra=dict(frond="#c8a048", frond_vein="#6a4a1e", feather="#6a2a1a", feather_tip="#f8e8d0")),
+                  "ash": dict(HAIR="#3a3a40", FUR="#5a5a62", MARK="#1e1e22", CLOTH="#3a3a40", EYE="#5ad8f0",
+                              extra=dict(frond="#7a9a6a", frond_vein="#3a5a2a", feather="#2a2a30", feather_tip="#e8e8ec")),
+                  "violet": dict(HAIR="#3a1e5a", FUR="#5a3a8a", MARK="#1e0e30", CLOTH="#5a3a8a", EYE="#f8a040",
+                                 extra=dict(frond="#6ab07a", frond_vein="#2a6a3a", feather="#3a1e5a", feather_tip="#f0e8fc"))}),
+    # twentieth wave (folklore): the basilisk, the king of serpents, a little blue lizard with a crest of spines down her back and a gold
+    # crown; her gaze turns things to stone
+    "basilisk_lizardfolk": dict(
+        build="petite", outfit=dict(top=["bandeau", "capelet"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#2a4a8a")),
+        hair="ponytail", bangs="swept", ears=None, legs="scales", foot="claw", tail=[(2, 2, 4), (1.5, 1.5, 4), (1, 1, 4)],
+        tail_rest=[(-25, 0, 0), (10, 0, 0), (10, 0, 0)], tail_look="scale", spines=True, crown=True,
+        pal=dict(SKIN="#a8c8f0", HAIR="#3a6ac8", FUR="#5a8ad8", LIGHT="#d8e8fc", MARK="#2a4a9a", EYE="#e8c030", CLOTH="#2a4a8a", TRIM="#e8c040",
+                 pupil=(0.9, 3.4), extra=dict(crown="#e8c040")),
+        variants={"green": dict(SKIN="#a8d8a0", HAIR="#3a8a3a", FUR="#5aa85a", LIGHT="#d8f0d0", MARK="#2a5a2a", CLOTH="#2a5a2a", EYE="#e83a2a"),
+                  "stone": dict(SKIN="#b8b8b0", HAIR="#6a6a64", FUR="#8a8a84", LIGHT="#d8d8d0", MARK="#4a4a44", CLOTH="#4a4a50", EYE="#e8c030"),
+                  "black": dict(SKIN="#6a6a7a", HAIR="#1e1e28", FUR="#2a2a36", LIGHT="#8a8aa0", MARK="#0e0e14", CLOTH="#5a1e24", EYE="#e83a2a"),
+                  "gold": dict(SKIN="#f0d8a0", HAIR="#c8902a", FUR="#d8a83a", LIGHT="#f8ecc8", MARK="#8a5a14", CLOTH="#3a2a5a", EYE="#5ad83a",
+                               extra=dict(crown="#c8ccd4"))}),
     # eighteenth wave: the turtfolk, a tall blue-scaled turtle warrior in bronze, a big brown shell, long brown hair, a yellow flower
     "turtfolk_lizardfolk": dict(
         build="athletic", outfit=dict(top=["bandeau"], bottom="loincloth", extras=["bracers", "belt"], colors=dict(cloth2="#7a5a2a", leather="#8a6a3a")),
@@ -290,6 +333,12 @@ def declare_hook(sp, d):
     if d.get("nurse_kit"):
         out += [("nurse_cap", 5, 2, 3.5), ("nurse_snout", 4, 2.5, 3.5), ("dress_top", 6, 5, 5), ("dress_hem", 7.5, 4.5, 6),
                 ("syr_barrel", 3, 3, 10), ("syr_plunger", 1, 1, 3), ("syr_thumb", 3.5, 3.5, .5), ("syr_needle", .5, .5, 4.5)]
+    if d.get("island"):                                  # the turtworld's little world: turf, two peaks and a waterfall
+        out += [("isl_turf", 6.5, 6, 1), ("isl_peak", 2.5, 4.5, 2.5), ("isl_peak2", 1.75, 3, 1.75), ("isl_fall", 1.5, 6, .25)]
+    if d.get("ferns"):                                   # the fernstalker's fern fronds and feather crest
+        out += [("frond", 3, .25, 9), ("crest_feather", .5, 1.25, 4.5)]
+    if d.get("crown"):                                   # the basilisk's little crown
+        out += [("bcrown", 4.5, 1, 4.5), ("bcrown_pt", .75, 1.25, .75)]
     return out
 
 
@@ -360,6 +409,29 @@ def paint_hook(pt, pal, d):
                                                                                                  (27, 21), (24, 22), (25, 22), (26, 22), (25, 23)} else None)
     teeth = d.get("teeth")
     pt("snout", "all", lambda f, x, y, w, h: pal.WHITE if teeth and f == "north" and y == h - 1 and x % 2 == 0 else H.skin_fn(pal, 0.66)(f, x, y, w, h))
+    e = pal.extra
+    turf, rock, snow, water = (G.shades(e.get(k, c)) for k, c in (("turf", "#5aa04a"), ("rock", "#8a8a94"), ("snow", "#f4f8ff"), ("water", "#6ac8f0")))
+    pt("isl_turf", "all", lambda f, x, y, w, h: pick(water, 0.6, x, y) if f == "south" and abs(x - w * 0.65) < 0.8
+       else pick(turf, 0.5 + 0.2 * noise(x, y, 71), x, y) if f in ("south", "up") else pick(G.shades("#6a4a2e"), 0.45, x, y))
+    for p in ("isl_peak", "isl_peak2"):
+        pt(p, "all", lambda f, x, y, w, h: pick(snow, 0.8, x, y) if y < h * 0.3 or f == "up" else pick(rock, 0.45 + 0.2 * noise(x, y, 72), x, y))
+    pt("isl_fall", "all", lambda f, x, y, w, h: G.with_alpha(pick(water, 0.6 + 0.3 * ((y + x) % 3 == 0), x, y), 200))
+    frond, vein = G.shades(e.get("frond", "#8ab04a")), G.shades(e.get("frond_vein", "#4a6a1e"))
+
+    def fern(f, x, y, w, h):                            # a frond: a midrib with leaflets off it, narrowing to the tip
+        if f not in ("up", "down"):
+            return CLEAR
+        if x == w // 2:
+            return pick(vein, 0.5, x, y)
+        if y % 2 == 0 or (x in (0, w - 1) and y > h * 0.7):
+            return CLEAR
+        return pick(frond, 0.5 + 0.2 * (y % 4 == 1), x, y)
+    pt("frond", "all", fern)
+    fea, tip = G.shades(e.get("feather", "#1e2a5a")), G.shades(e.get("feather_tip", "#e8eef8"))
+    pt("crest_feather", "all", lambda f, x, y, w, h: pick(tip if y >= h - 1 else fea, 0.5, x, y))
+    gold = G.shades(e.get("crown", "#e8c040"))
+    pt("bcrown", "all", lambda f, x, y, w, h: pick(G.shades("#c83a3a"), 0.6, x, y) if f == "north" and x == w // 2 else pick(gold, 0.55 + 0.2 * (y == 0), x, y))
+    pt("bcrown_pt", "all", lambda f, x, y, w, h: pick(gold, 0.65, x, y))
 
 
 def build_hook(r, g, d):
@@ -418,6 +490,22 @@ def build_hook(r, g, d):
                                                         cube("syr_thumb", [px - 1.75, py - 3.25, pz + 4.5]), cube("syr_needle", [px - 0.25, py - 1.75, pz - 13.0])])
     if d.get("dish"):                                   # the kappa's dish (sara), set into her hair, with water in it
         r.add("dish", "head", [0, g.hy + 8.6, z], [cube("dish", [-2, g.hy + 8.6, -2 + z]), cube("dish_water", [-1.5, g.hy + 9.0, -1.5 + z])])
+    if d.get("island"):                                  # on the back of her dome: turf, the peaks rising from it, the waterfall down her shell
+        cd = G.S("chest")[2]
+        b = cd / 2 + 4.9 + z
+        r.add("island", "body", [0, 16, b], [cube("isl_turf", [-3.25, 13.0, b]), cube("isl_peak", [-2.6, 18.0, b - 0.6]),
+                                             cube("isl_peak2", [0.5, 18.0, b - 0.3]), cube("isl_fall", [1.2, 10.5, b + 1.05])])
+    if d.get("ferns"):                                   # three fronds fanned up and back from the small of her back, feathers swept back on her head
+        cd = G.S("chest")[2]
+        b = cd / 2 - 0.2 + z
+        r.add("ferns", "body", [0, 13, b], [G.rot_cube("frond", [-1.5, 13.0, b], [0, 13.0, b], 25, a, 0) for a in (-30, 0, 30)])
+        hy = g.hy
+        r.add("hair_crest", "head", [0, hy + 8.4, z], [G.rot_cube("crest_feather", [x - 0.25, hy + 8.2, -1.0 + z], [x, hy + 8.4, -1.0 + z], -15, x * 8, 0)
+                                                       for x in (-1.2, 0, 1.2)])
+    if d.get("crown"):                                   # a little gold crown on top of her head, five points
+        hy = g.hy
+        r.add("hair_crown", "head", [0, hy + 8.6, z], [cube("bcrown", [-2.25, hy + 8.6, -2.25 + z])]
+              + [cube("bcrown_pt", [px - 0.375, hy + 9.6, pz - 0.375 + z]) for px, pz in ((-1.9, -1.9), (1.9, -1.9), (-1.9, 1.9), (1.9, 1.9), (0, -1.9))])
 
 
 def anim_extra(an, sp, d):

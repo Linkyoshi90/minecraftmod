@@ -17,6 +17,17 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # twentieth wave (folklore): the ghoul, the grave-haunting ghul of Arabian tales: blue-grey cracked skin, wild teal hair, clawed
+    # hands and feet, a torn shift
+    "ghoul_undead": dict(
+        build="slim", outfit=dict(top=["sports"], bottom="wrap_skirt", extras=["arm_wraps"], colors=dict(cloth2="#2a5a7a", bandage="#7a8a9a")),
+        hair="wavy", bangs="messy", ears=None, legs="bare", foot="claw", tattered=True,
+        pal=dict(SKIN="#8ab0c8", HAIR="#3a8aa8", FUR="#8ab0c8", LIGHT="#c8e0ec", MARK="#2a4a6a", EYE="#e8f0f8", CLOTH="#2a6a8a", TRIM="#1e3a5a",
+                 extra=dict(claw="#2a2a30")),
+        variants={"grey": dict(SKIN="#9a9a94", FUR="#9a9a94", HAIR="#4a4a44", LIGHT="#d0d0c8", MARK="#3a3a34", EYE="#e8d040", CLOTH="#5a5a50"),
+                  "sand": dict(SKIN="#c8b08a", FUR="#c8b08a", HAIR="#6a4a2a", LIGHT="#ecdcbc", MARK="#6a4a2a", EYE="#e83a2a", CLOTH="#8a6a3a"),
+                  "green": dict(SKIN="#8aa88a", FUR="#8aa88a", HAIR="#2a5a3a", LIGHT="#c8e0c8", MARK="#2a4a2a", EYE="#e8e83a", CLOTH="#3a5a3a"),
+                  "violet": dict(SKIN="#a89ac8", FUR="#a89ac8", HAIR="#5a3a8a", LIGHT="#e0d8f0", MARK="#3a2a5a", EYE="#f8a8e8", CLOTH="#4a2a6a")}),
     # nineteenth wave: the kasurenijimi, a ghost in a school uniform whose face is smeared out like an old photograph
     "kasurenijimi_undead": dict(
         build="slim", outfit=dict(top=["sweater", "capelet"], bottom="wrap_skirt", extras=["satchel", "scarf"],
@@ -88,7 +99,10 @@ SPECIES = {
         variants={"frost": dict(HAIR="#a8d0f0", extra=dict(kimono="#dceefa", obi="#6aa0d8")),
                   "lilac": dict(HAIR="#3a2a4a", extra=dict(kimono="#e8dcf4", obi="#9a7ac8", kimono_trim="#9a7ac8")),
                   "silver": dict(HAIR="#d8dce4", EYE="#c8d8f0"),
-                  "crimson": dict(HAIR="#1a1416", extra=dict(obi="#c8283a", kimono_trim="#c8283a"), EYE="#c8283a")}),
+                  "crimson": dict(HAIR="#1a1416", extra=dict(obi="#c8283a", kimono_trim="#c8283a"), EYE="#c8283a"),
+                  # homage (2026-10-28): Froslass (Pokemon): white snow kimono, a red-purple sash, a pale blue face, purple eyes
+                  "snow_wraith": dict(SKIN="#cfe0f4", FUR="#cfe0f4", HAIR="#eef4fc", EYE="#8a3ad8", MARK="#5a7ab8",
+                                      extra=dict(kimono="#f8fbff", kimono_trim="#6a8ac8", obi="#a8286a", cloth2="#eef4fc", boot="#d8e4f4"))}),
     "phantom_undead": dict(
         build="slim", outfit=dict(top=["sports"], bottom="shorts", extras=["arm_wraps"], colors=dict(bandage="#4a5468")),
         hair="shaggy", bangs="messy", ears=None, legs="bare", foot="shoe", wings="bat", wing_scale=1.15, flies=True,
@@ -142,7 +156,13 @@ SPECIES = {
         variants={"crimson": dict(CLOTH="#5a141e", TRIM="#c8a050", extra=dict(boot="#1e0e10", flame="#5ac8f8", cloth2="#3a0e14")),
                   "ash": dict(HAIR="#8a8a90", CLOTH="#4a4a52", TRIM="#8a8a90", extra=dict(boot="#2a2a2e", flame="#a8e0ff", cloth2="#3a3a40")),
                   "gold": dict(HAIR="#e8d090", CLOTH="#1e1e2a", TRIM="#e8c050", extra=dict(boot="#1a1a1e", flame="#f8d070", cloth2="#2a2a36")),
-                  "pale": dict(HAIR="#f4f4f8", CLOTH="#c8ccd4", TRIM="#5a6a8a", EYE="#8a6ad8", extra=dict(boot="#8a8e98", flame="#b08af8", cloth2="#a8acb4"))}),
+                  "pale": dict(HAIR="#f4f4f8", CLOTH="#c8ccd4", TRIM="#5a6a8a", EYE="#8a6ad8", extra=dict(boot="#8a8e98", flame="#b08af8", cloth2="#a8acb4")),
+                  # homage (2026-10-28): Celty Sturluson (Durarara!!): a black rider's suit with yellow trim, black shadow at the neck
+                  "headless_rider": dict(HAIR="#2a2a30", CLOTH="#16161a", TRIM="#e8c020", EYE="#e8c020",
+                                         extra=dict(boot="#16161a", flame="#3a3a44", cloth2="#16161a")),
+                  # homage (2026-10-28): Lala (Monster Musume): silver-white hair, red eyes, a black and red gothic dress, blue flame at the neck
+                  "death_envoy": dict(HAIR="#e8e8f0", CLOTH="#1a1418", TRIM="#a8182a", EYE="#d8182a",
+                                      extra=dict(boot="#1a1418", flame="#4a9af8", cloth2="#5a0e18"))}),
     "llorona_undead": dict(
         build="slim", outfit=dict(top=["corset", "capelet"], bottom="hakama", extras=["pearls"], colors=dict(cloth2="#e8e0d8", leather="#d8d0c8")),
         hair="flowing", bangs="wispy", ears=None, legs="bare", foot="shoe",

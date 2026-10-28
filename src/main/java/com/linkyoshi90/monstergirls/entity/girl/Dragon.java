@@ -323,6 +323,8 @@ public class Dragon extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.MOO_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel frill && !this.isBaby() && this.tickCount % 20 == 0) this.herdStand(frill);
+        if (this.species == GirlSpecies.HAIRYPTERIX_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel wind && !this.isBaby() && this.tickCount % 10 == 0) this.updraft(wind);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.COCKATRICE_DRAGON && !this.isBaby() && this.tickCount % 60 == 0) this.glare(server);
         if (this.lair == null && this.onGround()) this.lair = this.blockPosition();
@@ -450,5 +452,26 @@ public class Dragon extends AbstractMonsterGirl {
         level.sendParticles(net.minecraft.core.particles.ParticleTypes.ASH, m.getX(), m.getY() + 1, m.getZ(), 30, 0.4, 0.6, 0.4, 0.0);
         this.playSound(net.minecraft.sounds.SoundEvents.CHICKEN_AMBIENT, 1.2F, 0.6F);
         return m;
+    }
+
+    // --- the moo and the hairypterix (twentieth wave) ---------------------------------------------------------------
+
+    /** With two or more monsters within 8 blocks of her friend, she and her friend stand together: Strength I for her friend for
+     *  three seconds. True if they made a stand. */
+    public boolean herdStand(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null) return false;
+        if (level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8)).size() < 2) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DAMAGE_BOOST, 60, 0, true, true));
+        return true;
+    }
+
+    /** Her friend within 12 blocks, falling more than three blocks, drifts down gently (Slow Falling for two seconds). True if
+     *  she caught them on the wind. */
+    public boolean updraft(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 12);
+        if (friend == null || friend.fallDistance <= 3.0F) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SLOW_FALLING, 40, 0, true, true));
+        return true;
     }
 }
