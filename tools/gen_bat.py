@@ -58,7 +58,10 @@ SPECIES = {
                   "ghost": dict(SKIN=skin("pale"), HAIR="#f4f2ee", FUR="#ece8e2", LIGHT="#ffffff", MARK="#b8b4ae", EYE="#c84a5a", CLOTH="#a8c8e8",
                                 TRIM="#e8e8f0", INNER="#f0c8c8", extra=dict(wing="#e0d8d4", wing_bone="#b8aea8", stocking="#f0ece8", boot="#c8c0b8")),
                   "hoary": dict(HAIR="#8a7262", FUR="#7a6252", LIGHT="#e0d4c8", MARK="#3a2a22", CLOTH="#4a6a8a",
-                                extra=dict(wing="#5a4438", wing_bone="#2a1e18", stocking="#4a3a30", boot="#2a1e18", frost=True))}),
+                                extra=dict(wing="#5a4438", wing_bone="#2a1e18", stocking="#4a3a30", boot="#2a1e18", frost=True)),
+                  # homage (2026-10-28): Rouge the Bat (Sonic): white hair, black bodysuit with a pink heart, white gloves and boots
+                  "jewel_thief": dict(SKIN=skin("tan"), HAIR="#f4f4f6", FUR="#f0f0f2", LIGHT="#ffffff", MARK="#9a9aa4", EYE="#2a9a8a", CLOTH="#1e1c22",
+                                      TRIM="#f080b0", INNER="#f0b8c8", extra=dict(wing="#2a2a32", wing_bone="#141418", stocking="#f4f4f6", boot="#f4f4f6"))}),
 }
 
 

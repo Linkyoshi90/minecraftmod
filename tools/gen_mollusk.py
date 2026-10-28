@@ -52,7 +52,10 @@ SPECIES = {
         variants={"firefly": dict(FUR="#2a3a6a", HAIR="#3ad0f8", MARK="#8af0ff", LIGHT="#5a6aa8", CLOTH="#2a3a6a"),
                   "red": dict(FUR="#e85a4a", HAIR="#f08a6a", MARK="#a82a2a", LIGHT="#f8b8a8", CLOTH="#f8e8e0"),
                   "pink": dict(FUR="#f8c8d8", HAIR="#f0a0c0", MARK="#d86a98", LIGHT="#fff0f4"),
-                  "teal": dict(FUR="#d8f4f0", HAIR="#3ac0b0", MARK="#2a8a80", LIGHT="#f0fffc")}),
+                  "teal": dict(FUR="#d8f4f0", HAIR="#3ac0b0", MARK="#2a8a80", LIGHT="#f0fffc"),
+                  # homage (2026-10-28): an Inkling girl (Splatoon): bright orange tentacle hair, white tee, black shorts
+                  "ink_kid": dict(FUR="#f8901e", HAIR="#f8901e", MARK="#1e1e24", LIGHT="#ffd8a0", EYE="#f8901e", CLOTH="#f4f4f8", TRIM="#1e1e24",
+                                  extra=dict(cloth2="#24242a", stocking="#24242a", boot="#f8c020"))}),
     "octopus_mollusk": dict(
         build="slim", outfit=dict(top=["sweater"], extras=["satchel"], colors=dict(cloth2="#3a5a7a")),
         hair="ponytail", bangs="swept", ears=None, legs="bare", foot="shoe", body="octopus",

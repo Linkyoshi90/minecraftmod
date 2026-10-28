@@ -41,7 +41,10 @@ SPECIES = {
                   "rusty": dict(FUR="#b0663a", HAIR="#8a4a26", LIGHT="#e0b890", MARK="#4a2a18"),
                   # homage to Gregory Horror Show (2026-10-25): Mummy Dog, bandaged head, red shirt, blue overalls, a cleaver in his head
                   "mummy": dict(SKIN=skin("#b8703e"), FUR="#b06e3e", HAIR="#ece6d4", LIGHT="#d8a070", MARK="#5a2e10", EYE="#1e8a4a", CLOTH="#c81e24",
-                                extra=dict(wrapped=True, blood=True, blade="cleaver", leather="#1a78b0", cloth2="#1a78b0", shoes="#1a5a8a", legs="#1a78b0"))}),
+                                extra=dict(wrapped=True, blood=True, blade="cleaver", leather="#1a78b0", cloth2="#1a78b0", shoes="#1a5a8a", legs="#1a78b0")),
+                  # homage (2026-10-28): Amaterasu (Okami): white with red markings
+                  "sun_goddess": dict(FUR="#f8f8f6", HAIR="#ffffff", LIGHT="#ffffff", MARK="#d82a2a", EYE="#c82a2a", CLOTH="#f4f4f6", TRIM="#d82a2a",
+                                      pattern="stripes")}),
     # tenth wave: the meloncollie, a collie in watermelon colours (rind-green top, melon-red shorts), half a melon on her back
     "meloncollie_canid": dict(
         build="petite", outfit=dict(top=["halter"], bottom="shorts", extras=["bell_collar"], colors=dict(cloth2="#e84a5a")),

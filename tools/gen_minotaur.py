@@ -57,7 +57,10 @@ SPECIES = {
         variants={"jersey": dict(FUR="#c8925a", HAIR="#a8723a", MARK="#8a5a2a", pattern="solid", LIGHT="#ecd0a8"),
                   "highland": dict(FUR="#c8682a", HAIR="#d07a3a", MARK="#9a4a1e", pattern="solid", LIGHT="#e8a870", extra=dict(horn="#f0e6cc")),
                   "angus": dict(FUR="#1e1c1c", HAIR="#141212", MARK="#0a0808", pattern="solid", LIGHT="#3a3636"),
-                  "hereford": dict(FUR="#8a3a22", HAIR="#f2eee6", MARK="#f2eee6", pattern="patches", LIGHT="#f8f4ee")}),
+                  "hereford": dict(FUR="#8a3a22", HAIR="#f2eee6", MARK="#f2eee6", pattern="patches", LIGHT="#f8f4ee"),
+                  # homage (2026-10-28): Miltank (Pokemon): pink with a cream belly, blue eyes
+                  "pink_dairy": dict(FUR="#f0a0bc", HAIR="#f8c8d8", MARK="#f0a0bc", pattern="solid", LIGHT="#fff0dc", EYE="#3a6ac8", CLOTH="#fff0dc",
+                                     INNER="#f8a0b8", extra=dict(horn="#f0e8d8", hoof="#2a2a30"))}),
     "minoan_minotaur": dict(
         build="strong", outfit=dict(top=["sports", "harness"], bottom="loincloth", extras=["pauldron", "bracers", "belt"], colors=dict(leather="#8a5a2a")),
         hair="braid", bangs="blunt", ears="cow", legs="hoof", foot="hoof", horns="bull_big", tail=COW_TAIL, tail_look="tuft", tail_rest=TAIL_REST,

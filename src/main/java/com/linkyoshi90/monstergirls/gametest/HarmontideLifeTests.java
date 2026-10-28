@@ -110,11 +110,11 @@ public class HarmontideLifeTests {
     public static void journalRecordsMeetingsAndFriends(GameTestHelper helper) {
         AbstractMonsterGirl girl = still(helper, GirlSpecies.YUREI_UNDEAD, new BlockPos(3, 2, 3));
         ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
-        check(Journal.book(p).pages().size() == 1, "a fresh journal: the contents page alone");
+        check(Journal.book(p).pages().size() == 1 + Journal.GUIDE.size(), "a fresh journal: the contents and the guide");
         check(Journal.record(p, girl, false) && !Journal.record(p, girl, false), "met once is news, twice is not");
         check(Journal.met(p).contains("yurei_undead") && Journal.friends(p).isEmpty(), "met, not yet befriended");
         check(Journal.record(p, girl, true) && Journal.friends(p).contains("yurei_undead"), "befriended");
-        check(Journal.book(p).pages().size() == 2, "and she has her page");
+        check(Journal.book(p).pages().size() == 2 + Journal.GUIDE.size(), "and she has her page");
         HarpyTestUtil.remove(p);
         helper.succeed();
     }

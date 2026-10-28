@@ -1974,3 +1974,13 @@ for _fid, _entries in SEVENTEENTH.items():
         _fam["species"].append(_species)
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
+
+# homage variants of 2026-10-28 (POP_CULTURE_VARIANTS.md): appended after every wave, so every species exists by now
+for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, a black bodysuit with a pink heart, white gloves and boots")),
+                       ("ika_mollusk", ("ink_kid", "Ink Kid", "Bright orange tentacle hair, a white tee and black shorts")),
+                       ("cattle_minotaur", ("pink_dairy", "Pink Dairy", "Pink with a cream belly and blue eyes")),
+                       ("wolf_canid", ("sun_goddess", "Sun Goddess", "White with red markings"))]:
+    for _fam in C.FAMILIES:
+        for _s in _fam["species"]:
+            if _s["id"] == _sid and all(v[0] != _variant[0] for v in _s["variants"]):
+                _s["variants"].append(_variant)

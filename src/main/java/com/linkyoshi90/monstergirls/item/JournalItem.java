@@ -25,7 +25,8 @@ public class JournalItem extends Item {
         ItemStack stack = player.getItemInHand(hand);
         if (player instanceof ServerPlayer sp) {
             stack.set(DataComponents.WRITTEN_BOOK_CONTENT, Journal.book(sp));
-            sp.openItemGui(stack, hand);                    // vanilla's book screen reads the pages we just wrote
+            sp.containerMenu.broadcastChanges();            // the pages must reach her client's copy before the book opens
+            sp.openItemGui(stack, hand);                    // vanilla's book screen reads them from the held stack
         }
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
     }

@@ -1435,5 +1435,13 @@
   "message.monstergirls.settled": "%s settles at your hearth",
   "message.monstergirls.expedition_set_off": "%s sets off with your map. She'll be back in a day",
   "message.monstergirls.expedition_back": "%s is back from her expedition, and brought you something!",
-  "message.monstergirls.expedition_companion": "%s brought a friend home: %s"
+  "message.monstergirls.expedition_companion": "%s brought a friend home: %s",
+  "journal.monstergirls.guide.friends.title": "Making friends",
+  "journal.monstergirls.guide.friends": "Feed her what she likes and pat her with an empty hand. At 10 friendship she is your friend: her gift of a behaviour starts, and a stick gives her orders (sneak for her stance).",
+  "journal.monstergirls.guide.hearth.title": "A hearth",
+  "journal.monstergirls.guide.hearth": "A campfire ringed by eight stone bricks. Your friends roaming free within 16 blocks settle there; a day later each builds a hut nearby. With three or more, every morning they leave presents in the hearth.",
+  "journal.monstergirls.guide.expedition.title": "Expeditions",
+  "journal.monstergirls.guide.expedition": "Give a grown friend an empty map: she sets off and comes back a day later with finds of her homeland, and now and then a new friend.",
+  "journal.monstergirls.guide.weapons.title": "Weapons",
+  "journal.monstergirls.guide.weapons": "The girls who fight for you take a bow, crossbow or gun: hand it over or throw it near her, and ammunition too. Sneak with an empty hand to take it back."
 }

@@ -34,8 +34,24 @@ import java.util.Set;
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class Journal {
     private static final double SIGHT = 12.0;
+    /** The guide pages after the contents: befriending, the hearth, expeditions, weapons. */
+    public static final List<String> GUIDE = List.of("friends", "hearth", "expedition", "weapons");
 
     private Journal() {
+    }
+
+    /** Every player knows the journal's and the hearth's recipes; a player's first visit brings a journal. */
+    @SubscribeEvent
+    public static void onLogin(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        player.awardRecipesByKey(List.of(MonsterGirlsMod.id("harmontide_journal"), MonsterGirlsMod.id("hearth")));
+        CompoundTag data = player.getData(ModAttachments.JOURNAL);
+        if (!data.getBoolean("Given") && !net.neoforged.neoforge.gametest.GameTestHooks.isGametestServer()) {   // the tests' players keep empty hands
+            data.putBoolean("Given", true);
+            player.setData(ModAttachments.JOURNAL, data);
+            net.minecraft.world.item.ItemStack book = new net.minecraft.world.item.ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.HARMONTIDE_JOURNAL.get());
+            if (!player.getInventory().add(book)) player.drop(book, false);
+        }
     }
 
     @SubscribeEvent
@@ -94,6 +110,10 @@ public final class Journal {
                 .append("\n").append(Component.translatable("journal.monstergirls.others", others.size()).withStyle(ChatFormatting.RESET));
         if (met.isEmpty()) cover.append("\n\n").append(Component.translatable("journal.monstergirls.empty").withStyle(ChatFormatting.RESET, ChatFormatting.ITALIC));
         pages.add(Filterable.passThrough(cover));
+        for (String guide : GUIDE) {                                                 // how to live with them: hearth, expeditions, weapons
+            pages.add(Filterable.passThrough(Component.translatable("journal.monstergirls.guide." + guide + ".title").withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_BLUE)
+                    .append("\n\n").append(Component.translatable("journal.monstergirls.guide." + guide).withStyle(ChatFormatting.RESET, ChatFormatting.BLACK))));
+        }
         List<String> all = new ArrayList<>(girls);
         all.addAll(others);
         for (String id : all) {
