@@ -16,6 +16,26 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades  # noqa: E402
 
 SPECIES = {
+    # eighteenth wave: the spoodr, a round, fluffy little navy spider with pale blue tips and two tufts on her head
+    "spoodr_arachne": dict(
+        build="petite", outfit=dict(top=["sweater"], extras=["scarf"], colors=dict(scarf="#8ac8f0")),
+        abdomen=(10, 9, 10), hair="bob", bangs="blunt", hairy=0.3, tufts=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#2a3a6a", FUR="#26305a", LIGHT="#8ac8f0", MARK="#6ab0f0", EYE="#2a3a6a", CLOTH="#3a4a8a", TRIM="#8ac8f0",
+                 pattern="spots", facemark="eyes", extra=dict(tuft="#8ac8f0")),
+        variants={"green": dict(FUR="#2a4a2e", HAIR="#2a4a2e", LIGHT="#a8e08a", MARK="#7ac86a", CLOTH="#3a6a3a", TRIM="#a8e08a", extra=dict(tuft="#a8e08a")),
+                  "purple": dict(FUR="#3a2a5a", HAIR="#3a2a5a", LIGHT="#c8a0f0", MARK="#a87ae0", CLOTH="#5a3a8a", TRIM="#c8a0f0", extra=dict(tuft="#c8a0f0")),
+                  "red": dict(FUR="#5a1e22", HAIR="#5a1e22", LIGHT="#f0a08a", MARK="#e0604a", CLOTH="#8a2a2a", TRIM="#f0a08a", extra=dict(tuft="#f0a08a")),
+                  "yellow": dict(FUR="#5a4a1e", HAIR="#5a4a1e", LIGHT="#f8e08a", MARK="#f0c84a", CLOTH="#8a6a2a", TRIM="#f8e08a", extra=dict(tuft="#f8e08a"))}),
+    # eighteenth wave: the ushi-oni, the ox-headed spider demon of Japanese coasts, black and red, with an ox's horns
+    "ushi_oni_arachne": dict(
+        build="strong", outfit=dict(top=["sarashi"], extras=["arm_wraps", "belt"]),
+        abdomen=(9.5, 8, 10), hair="shaggy", bangs="messy", hairy=0.15, thick=True, ox_horns=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#1e1a1e", FUR="#1e1a1e", LIGHT="#4a3a3e", MARK="#b82a2a", EYE="#e83a2a", CLOTH="#e8e0d0", TRIM="#b82a2a",
+                 pattern="bands", facemark="eyes", extra=dict(horn="#e8dcc0", horn_tip="#2a2420")),
+        variants={"crimson": dict(FUR="#7a1a1e", HAIR="#3a0e10", LIGHT="#b84a3a", MARK="#1e1a1e", EYE="#f8d03a"),
+                  "indigo": dict(FUR="#1e2a5a", HAIR="#141a3a", LIGHT="#4a5a9a", MARK="#e8c040", EYE="#f8d03a", TRIM="#e8c040"),
+                  "ash": dict(FUR="#6a6664", HAIR="#3a3634", LIGHT="#a8a4a0", MARK="#2a2624", EYE="#e83a2a", SKIN=skin("pale")),
+                  "ochre": dict(FUR="#8a5a1e", HAIR="#3a2410", LIGHT="#c8904a", MARK="#2a1a10", EYE="#e8e0d0", extra=dict(horn="#f4ecd8", horn_tip="#5a3a1a"))}),
     "jumping_spider_arachne": dict(
         build="petite", outfit=dict(top=["sweater"], colors=dict()),
         abdomen=(6.5, 6, 7.5), hair="odango", hairy=0.08,
@@ -87,6 +107,10 @@ def declare(sp):
              ("femur", 7, 1.5 if th else 1.25, 1.5 if th else 1.25), ("tibia", 1.25 if th else 1, 11.5, 1.25 if th else 1), ("tarsus", .75, 3.5, .75)]
     if d.get("brood"):
         parts.append(("spiderling", 1.5, 1, 1.5))
+    if d.get("tufts"):
+        parts.append(("tuft", 1.5, 2, 1.5))
+    if d.get("ox_horns"):
+        parts += [("ox_horn", 4, 1.25, 1.25), ("ox_horn_tip", 1, 2.5, 1)]
     G.declare(parts, ears=None, hair=SPECIES[sp]["hair"],
               build=SPECIES[sp].get("build"), outfit=SPECIES[sp].get("outfit"))
 
@@ -118,6 +142,11 @@ def paint(sp, key):
     pt("tibia", "all", tibia)
     pt("tarsus", "all", lambda f, x, y, w, h: pick(pal.MARK if ex.get("toes") else leg_ramp, 0.35, x, y))
     pt("spiderling", "all", lambda f, x, y, w, h: pick(pal.FUR, 0.6 + 0.3 * ((x + y) % 3 == 0), x, y))
+    tuft = shades(ex.get("tuft", pal.extra.get("tuft", "#8ac8f0")))
+    pt("tuft", "all", lambda f, x, y, w, h: pick(tuft, 0.5 + 0.25 * (y >= h - 1) + (noise(x, y, 81) - 0.5) * 0.2, x, y))
+    horn, horn_tip = shades(ex.get("horn", "#e8dcc0")), shades(ex.get("horn_tip", "#2a2420"))
+    pt("ox_horn", "all", lambda f, x, y, w, h: pick(horn, 0.5 + 0.2 * (f == "up") - 0.12 * (x % 3 == 0), x, y))
+    pt("ox_horn_tip", "all", lambda f, x, y, w, h: pick(horn_tip if y >= h - 1.5 else horn, 0.5 + 0.2 * (f == "up"), x, y))
     skin_t = H.skin_fn(pal, 0.66)
     pt("hips", "all", lambda f, x, y, w, h: skin_t(f, x, y, w, h) if y < h * 0.5 else plain(f, x, y, w, h))
     return pt.T
@@ -127,8 +156,20 @@ def build(sp):
     d = SPECIES[sp]
     r = G.Rig()
     r.add("root", None, [0, 0, 0])
-    G.upper(r, 12, dict(hair=d["hair"], bangs=d.get("bangs"), build=d.get("build"), outfit=d.get("outfit"), ears=None, skirt=False))
+    g = G.upper(r, 12, dict(hair=d["hair"], bangs=d.get("bangs"), build=d.get("build"), outfit=d.get("outfit"), ears=None, skirt=False))
     G.spider(r, None, d)
+    hy, z = g.hy, g.z
+    if d.get("tufts"):                                   # two soft tufts like a jumping spider's, on top of her head
+        r.add("hair_tufts", "head", [0, hy + 8.2, z], [G.rot_cube("tuft", [x - 0.75, hy + 8.0, -1.5 + z], [x, hy + 8.0, -0.75 + z], -10, 0, -18 * sg)
+                                                        for x, sg in ((-2.4, -1), (2.4, 1))])
+    if d.get("ox_horns"):                                # an ox's horns: out to the sides from her temples, then up at the tips
+        cs = []
+        for sg in (-1, 1):
+            base = [sg * 3.9, hy + 7.0, -1.0 + z]
+            x0 = base[0] if sg > 0 else base[0] - 4
+            cs.append(G.rot_cube("ox_horn", [x0, hy + 6.4, -1.6 + z], base, 0, 0, 12 * sg))
+            cs.append(G.rot_cube("ox_horn_tip", [sg * 7.6 - 0.5, hy + 7.2, -1.5 + z], [sg * 7.6, hy + 7.2, -1.0 + z], 0, 0, -20 * sg))
+        r.add("hair_horns", "head", [0, hy + 7, z], cs)
     if d.get("brood"):
         aw, ah, ad = G.S("abdomen")
         top = 6.5 + ah
