@@ -255,6 +255,7 @@ SPECIES = {
 # homage looks with a model of their own (2026-10-28): the game draws <species>_<variant> instead of the species' model
 # when a girl has that variant (AbstractMonsterGirl.OWN_MODELS); they are written after their species, so their texture
 # replaces the species' plain recolour of the same name
+TRIDENT_LEAN = 20
 HOMAGE_MODELS = {"axolotl_mermaid_mud_fin": "axolotl_mermaid", "shark_mermaid_trident_hood": "shark_mermaid"}
 # Mudkip (Pokemon): light blue, a cream belly, a big fan fin on her head, star-shaped orange gills on her cheeks, a broad tail fin
 SPECIES["axolotl_mermaid_mud_fin"] = dict(
@@ -581,13 +582,16 @@ def build(sp):
         hw, hh, hd = G.S("ghoodie")                       # the hoodie's long body down over her waist, white at the hem
         r.put("body", cube("ghoodie", [-hw / 2, 11.0, -hd / 2]), cube("gstring", [-1.25, 15.2, fz]), cube("gstring", [0.75, 15.4, fz]),
               cube("gpocket", [-2.0, 12.4, -hd / 2 - 0.25]))
-    if d.get("trident"):                                 # upright in her right hand, the three prongs above her fist
+    if d.get("trident"):                                 # gripped in her right fist like a staff, leaning out past her hood and twintails
         px, py, pz = r.b["hand_r"]["pivot"]
-        cx, cz = px - 1.2, pz - 3.6                      # held out in front of her hair
-        top = py - 1.5 + 15.5
-        r.add("trident", "hand_r", [px, py - 1.5, pz], [cube("tri_shaft", [cx, py - 1.5 - 5.5, cz]), cube("tri_bar", [cx - 1.625, top, cz]),
-                                                        cube("tri_prong", [cx - 1.5, top + 0.75, cz + 0.125]), cube("tri_prong", [cx + 1.75, top + 0.75, cz + 0.125]),
-                                                        cube("tri_mid", [cx + 0.125, top + 0.75, cz + 0.125])])
+        cx, cz = px - 0.375, pz - 0.9                    # through the fist, just in front of the twintails
+        gy = py - 1.5
+        top = gy + 15.5
+        lean = dict(pivot=[px, gy, pz], rotation=[0, 0, TRIDENT_LEAN])
+        r.add("trident", "hand_r", [px, gy, pz], [cube("tri_shaft", [cx, gy - 5.5, cz], **lean), cube("tri_bar", [cx - 1.625, top, cz], **lean),
+                                                  cube("tri_prong", [cx - 1.5, top + 0.75, cz + 0.125], **lean),
+                                                  cube("tri_prong", [cx + 1.75, top + 0.75, cz + 0.125], **lean),
+                                                  cube("tri_mid", [cx + 0.125, top + 0.75, cz + 0.125], **lean)])
     hx, hy, hz = r.b["head"]["pivot"]
     if d.get("wtusks"):                                  # two long tusks down from the corners of her mouth
         r.put("head", cube("wtusk", [-1.5, hy - 2.6, hz - 4.6]), cube("wtusk", [0.75, hy - 2.6, hz - 4.6]))

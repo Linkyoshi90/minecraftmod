@@ -12,6 +12,7 @@ import com.linkyoshi90.monstergirls.entity.girl.Merfolk;
 import com.linkyoshi90.monstergirls.entity.girl.Minotaur;
 import com.linkyoshi90.monstergirls.entity.girl.Nekomata;
 import com.linkyoshi90.monstergirls.entity.girl.Rodent;
+import com.linkyoshi90.monstergirls.entity.girl.Theropod;
 import com.linkyoshi90.monstergirls.entity.girl.Undead;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
@@ -128,7 +129,7 @@ public class TwentiethWaveTests {
 
     @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "fernstalkerAmbushes")
     public static void fernstalkerAmbushes(GameTestHelper helper) {
-        Lizardfolk stalker = still(helper, GirlSpecies.FERNSTALKER_LIZARDFOLK, new BlockPos(1, 2, 1));
+        Theropod stalker = still(helper, GirlSpecies.FERNSTALKER_THEROPOD, new BlockPos(1, 2, 1));
         check(stalker.ambush(helper.getLevel()) == -1, "no friend, no ambush");
         ServerPlayer p = friendOf(helper, stalker, new BlockPos(3, 2, 3));
         check(stalker.ambush(helper.getLevel()) == 0, "no monster near");

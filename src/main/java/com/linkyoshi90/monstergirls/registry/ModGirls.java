@@ -7,6 +7,7 @@ import com.linkyoshi90.monstergirls.entity.girl.Rodent;
 import com.linkyoshi90.monstergirls.entity.girl.Crustacean;
 import com.linkyoshi90.monstergirls.entity.girl.Marsupial;
 import com.linkyoshi90.monstergirls.entity.girl.BatGirl;
+import com.linkyoshi90.monstergirls.entity.girl.Theropod;
 import com.linkyoshi90.monstergirls.entity.girl.Armoured;
 import com.linkyoshi90.monstergirls.entity.girl.Construct;
 import com.linkyoshi90.monstergirls.entity.girl.Centaur;
@@ -129,6 +130,7 @@ public final class ModGirls {
             case ARMOURED -> new Armoured(type, level, s);
             case CONSTRUCT -> new Construct(type, level, s);
             case BAT -> new BatGirl(type, level, s);
+            case THEROPOD -> new Theropod(type, level, s);
         };
     }
 
@@ -158,6 +160,7 @@ public final class ModGirls {
             case ARMOURED -> Armoured.createAttributes(s);
             case CONSTRUCT -> Construct.createAttributes(s);
             case BAT -> BatGirl.createAttributes(s);
+            case THEROPOD -> Theropod.createAttributes(s);
         };
     }
 

@@ -34,7 +34,7 @@ NEW_STATUS = {
                 "Zombie: hostile until fed rotten flesh", "Will-o'-wisp: floats, glows, burns attackers, guides to treasure at night",
                 "Frankenstein's monster: very shy, lightning heals and strengthens her, a bodyguard when devoted", "Devoted: Weakness on monsters near you"],
                ["A shelf block for the doll"]),
-    "lizardfolk": (["Turtworld: befriended, the saplings and crops near her friend grow. Fernstalker: befriended, she pounces on a monster near her friend. Basilisk: befriended, her gaze all but turns a monster near her friend to stone",
+    "lizardfolk": (["Turtworld: befriended, the saplings and crops near her friend grow. Basilisk: befriended, her gaze all but turns a monster near her friend to stone",
                  "Turtfolk: befriended, every half minute two hearts of absorption for her friend",
                  "Cold-blooded: faster and healing in sun or near fire, slow in the cold; basking", "Scales are armour", "Eggs (any, the harpies' too) and fish",
                     "Salamander: fireproof, glows, burns what she hits", "Chameleon: invisible while still, tongue pulls dropped items over",
@@ -93,6 +93,12 @@ NEW_STATUS = {
              "Echolocation: befriended, she pings every three seconds and the monsters within 16 blocks of her friend glow",
              "Fruit (glow berries +2); gifts of guano (bone meal) and glow berries", "Vanilla bats are her kin", "The fruit bat variant has a fox's face"],
             ["A vampire bat who drinks from sleeping mobs"]),
+    "theropod": (["Hunched forward over a long balancing tail, human legs, arms and face, a sharp-toothed grin (the spinosaur alone has a snout)",
+                  "Cousins of the lizardfolk: cold-blooded, basking, scales are armour, leathery clutches", "Raw meat and eggs",
+                  "Fernstalker (moved from the lizardfolk): befriended, she pounces on a monster near her friend",
+                  "Spinosaur: befriended, her friend near her in water swims like a dolphin (Dolphin's Grace)",
+                  "Australovenator: befriended, when her friend strikes a mob she leaps on it too (never a pet)"],
+                 ["More theropods (a T. rex, a dilophosaurus, a velociraptor)"]),
 }
 
 # family -> (now in the game, no longer "not yet" (substrings), lines to drop from "in the game" (substrings))

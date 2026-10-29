@@ -79,12 +79,14 @@ IN_GAME = {
     "bastet": "bastet_nekomata", "rusalka": "rusalka_mermaid", "ushi-oni": "ushi_oni_arachne", "domovoi": "domovoi_elf",
     # twentieth wave (2026-10-28)
     "brasshorn_ram": "brasshorn_minotaur", "ceibler": "ceibler_centaur", "sobolnik": "sobolnik_rodent", "turtworld": "turtworld_lizardfolk",
-    "fernstalker": "fernstalker_lizardfolk", "moo": "moo_dragon", "hairypterix": "hairypterix_dragon", "doggo": "doggo_mermaid",
+    "fernstalker": "fernstalker_theropod", "moo": "moo_dragon", "hairypterix": "hairypterix_dragon", "doggo": "doggo_mermaid",
     "ghoul": "ghoul_undead", "manticore": "manticore_nekomata", "mothman": "mothman_bug", "basilisk": "basilisk_lizardfolk",
     # twenty-first wave (2026-10-28)
     "nenekea": "nenekea_dragon", "rheintalensis": "rheintalensis_canid", "daeodon": "daeodon_armoured", "ant_eater": "anteater_armoured",
     "oryx": "oryx_minotaur", "caracal": "caracal_nekomata", "walrus": "walrus_mermaid", "anomalocaris": "anomalocaris_mermaid",
     "serpopard": "serpopard_lamia", "urcuchillay": "urcuchillay_centaur", "rakshasa": "rakshasa_nekomata", "gashadokuro": "gashadokuro_undead",
+    # the theropods (2026-10-29)
+    "spinosaur": "spinosaur_theropod", "australovenator": "australovenator_theropod",
     # already played by older girls
     "azureus": "poison_dart_frog (cobalt)", "slidred": "red_eared_slider_lizardfolk", "alisnapor": "snapping_turtle_lizardfolk",
 }

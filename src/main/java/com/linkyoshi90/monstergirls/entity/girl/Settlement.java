@@ -76,7 +76,7 @@ public final class Settlement {
             case UNDEAD, DEVIL -> new Style(Blocks.DARK_OAK_LOG, Blocks.DARK_OAK_PLANKS, Blocks.BLACKSTONE_SLAB, Blocks.PURPLE_BED);
             case SLIME -> new Style(Blocks.MUD_BRICKS, Blocks.PACKED_MUD, Blocks.MUD_BRICK_SLAB, Blocks.LIME_BED);
             case CONSTRUCT, DRAGON -> new Style(Blocks.POLISHED_DEEPSLATE, Blocks.DEEPSLATE_BRICKS, Blocks.DEEPSLATE_BRICK_SLAB, Blocks.GRAY_BED);
-            case LIZARDFOLK, LAMIA -> new Style(Blocks.CUT_SANDSTONE, Blocks.SMOOTH_SANDSTONE, Blocks.SANDSTONE_SLAB, Blocks.GREEN_BED);
+            case LIZARDFOLK, LAMIA, THEROPOD -> new Style(Blocks.CUT_SANDSTONE, Blocks.SMOOTH_SANDSTONE, Blocks.SANDSTONE_SLAB, Blocks.GREEN_BED);
             case KITSUNE, NEKOMATA -> new Style(Blocks.CHERRY_LOG, Blocks.CHERRY_PLANKS, Blocks.CHERRY_SLAB, Blocks.PINK_BED);
             case ELF, FLORA, BUG -> new Style(Blocks.BIRCH_LOG, Blocks.BIRCH_PLANKS, Blocks.MOSS_BLOCK, Blocks.LIME_BED);
             case BAT, ARACHNE -> new Style(Blocks.MANGROVE_LOG, Blocks.MANGROVE_PLANKS, Blocks.MANGROVE_SLAB, Blocks.BLACK_BED);

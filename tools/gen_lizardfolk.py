@@ -37,21 +37,6 @@ SPECIES = {
                                 extra=dict(shell="#5a7ab0", shell_band="#c8dcf4", turf="#e8f4ff", rock="#8aa0c0", snow="#ffffff", water="#a8e8ff")),
                   "ember": dict(SKIN="#a87a6a", FUR="#6a3a2e", LIGHT="#d8a890", MARK="#2a1410", HAIR="#3a3a3a", EYE="#f8c040",
                                 extra=dict(shell="#2a2224", shell_band="#c84a1e", turf="#4a4044", rock="#2a2426", snow="#f8a040", water="#f86a1e"))}),
-    # twentieth wave: the fernstalker, a navy feathered raptor with a white breast and fern fronds fanned up from her back
-    "fernstalker_lizardfolk": dict(
-        build="athletic", outfit=dict(top=["bandeau", "harness"], bottom="loincloth", extras=["bracers"], colors=dict(leather="#2a2a3a", cloth2="#2a3a7a")),
-        hair="shaggy", bangs="jagged", ears=None, legs="scales", foot="claw", tail=[(2, 2, 4), (1.5, 1.5, 4), (1, 1, 4)],
-        tail_rest=[(-30, 0, 0), (8, 0, 0), (6, 0, 0)], tail_look="scale", teeth=True, ferns=True,
-        pal=dict(SKIN=skin("fair"), HAIR="#1e2a5a", FUR="#2a3a7a", LIGHT="#e8eef8", MARK="#0e1630", EYE="#c83a2a", CLOTH="#2a3a7a", TRIM="#e8eef8",
-                 pupil=(0.9, 3.4), extra=dict(frond="#8ab04a", frond_vein="#4a6a1e", feather="#1e2a5a", feather_tip="#e8eef8")),
-        variants={"green": dict(HAIR="#1e4a2a", FUR="#2a6a3a", MARK="#0e2a14", CLOTH="#2a6a3a", EYE="#e8c040",
-                                extra=dict(frond="#a8c860", frond_vein="#5a7a2a", feather="#1e4a2a", feather_tip="#e8f4e0")),
-                  "rust": dict(HAIR="#6a2a1a", FUR="#8a3a22", MARK="#3a120a", CLOTH="#8a3a22", EYE="#e8c040",
-                               extra=dict(frond="#c8a048", frond_vein="#6a4a1e", feather="#6a2a1a", feather_tip="#f8e8d0")),
-                  "ash": dict(HAIR="#3a3a40", FUR="#5a5a62", MARK="#1e1e22", CLOTH="#3a3a40", EYE="#5ad8f0",
-                              extra=dict(frond="#7a9a6a", frond_vein="#3a5a2a", feather="#2a2a30", feather_tip="#e8e8ec")),
-                  "violet": dict(HAIR="#3a1e5a", FUR="#5a3a8a", MARK="#1e0e30", CLOTH="#5a3a8a", EYE="#f8a040",
-                                 extra=dict(frond="#6ab07a", frond_vein="#2a6a3a", feather="#3a1e5a", feather_tip="#f0e8fc"))}),
     # twentieth wave (folklore): the basilisk, the king of serpents, a little blue lizard with a crest of spines down her back and a gold
     # crown; her gaze turns things to stone
     "basilisk_lizardfolk": dict(
@@ -335,7 +320,7 @@ def declare_hook(sp, d):
                 ("syr_barrel", 3, 3, 10), ("syr_plunger", 1, 1, 3), ("syr_thumb", 3.5, 3.5, .5), ("syr_needle", .5, .5, 4.5)]
     if d.get("island"):                                  # the turtworld's little world: turf, two peaks and a waterfall
         out += [("isl_turf", 6.5, 6, 1), ("isl_peak", 2.5, 4.5, 2.5), ("isl_peak2", 1.75, 3, 1.75), ("isl_fall", 1.5, 6, .25)]
-    if d.get("ferns"):                                   # the fernstalker's fern fronds and feather crest
+    if d.get("ferns"):                                   # fern fronds and a feather crest (the theropod fernstalker uses the painting)
         out += [("frond", 3, .25, 9), ("crest_feather", .5, 1.25, 4.5)]
     if d.get("crown"):                                   # the basilisk's little crown
         out += [("bcrown", 4.5, 1, 4.5), ("bcrown_pt", .75, 1.25, .75)]

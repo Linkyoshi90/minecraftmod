@@ -35,8 +35,8 @@ colours, halftone dots and bold black outlines, like a printed comic), blueprint
 blue), koi (red-orange patches and a few black specks on pearl white) and lemonade (lemon slices on pale yellow, June
 only). And (twentieth wave): tie_dye (a swirl of rainbow dye with white crinkle lines), jade (carved green stone, pale
 veins), lace (ivory open-work lace) and bluebell (little blue bells on green stems over pale periwinkle, May only). And
-(twenty-first wave): obsidian (black volcanic glass with purple glints and pale sheen), patchwork (quilted squares of
-different cloth, stitched), sandstone (layered bands of sand and ochre) and acorn (little acorns on warm brown, September
+(twenty-first wave): obsidian (Minecraft's obsidian block, tiled), patchwork (quilted squares of
+different cloth, stitched), sandstone (Minecraft's sandstone side, tiled) and acorn (little acorns on warm brown, September
 only). The drips and
 patterns follow the model: they are drawn per cube face from the geo file, running down each side from its top edge.
 
@@ -158,6 +158,26 @@ def faces(model, width):
                 if fw > 0 and fh > 0:
                     out.append((hair, c is head_cube and fname == "north", fname, x0, y0, fw, fh))
     return out
+
+
+VANILLA_JARS = (os.path.expanduser("~/.gradle/caches/neoformruntime/artifacts/minecraft_1.21.1_client.jar"),
+                os.path.expanduser("~/curseforge/minecraft/Install/versions/1.21.1/1.21.1.jar"))
+_VANILLA = {}
+
+
+def vanilla(block):
+    """a 16x16 block texture from the local Minecraft 1.21.1 client jar, as rows of RGB"""
+    if block not in _VANILLA:
+        import io
+        import zipfile
+        from PIL import Image
+        jar = next((j for j in VANILLA_JARS if os.path.exists(j)), None)
+        if jar is None:
+            raise SystemExit("the Minecraft 1.21.1 client jar was not found (run a Gradle build once): " + ", ".join(VANILLA_JARS))
+        with zipfile.ZipFile(jar) as z:
+            im = Image.open(io.BytesIO(z.read(f"assets/minecraft/textures/block/{block}.png"))).convert("RGB")
+        _VANILLA[block] = [[im.getpixel((x, y)) for x in range(16)] for y in range(16)]
+    return _VANILLA[block]
 
 
 def lum(r, g, b):
@@ -837,15 +857,11 @@ def finish(img, name, model):
                     c = (86, 150, 70)                                        # the stem
                 elif ty in (3, 4, 6, 7) and tx in (1, 2, 4, 5) and (tx < 3) == (ty < 5):
                     c = (int(70 + 30 * l), int(90 + 30 * l), int(200 + 30 * l))     # a nodding bell
-            elif name == "obsidian":
+            elif name == "obsidian":                                     # Minecraft's own obsidian block, tiled
                 if l < 0.22 and face:
                     continue
-                k = 0.35 + 0.5 * l
-                c = (int(26 + 40 * k), int(18 + 26 * k), int(40 + 60 * k))     # glassy black-violet
-                if H.noise(x, y, 197) > 0.9:
-                    c = (int(150 + 60 * l), int(90 + 50 * l), int(220 + 30 * l))  # a purple glint
-                elif (xx + yy + i) % 11 == 0 and yy < fh * 0.5:
-                    c = (int(90 + 60 * l), int(84 + 60 * l), int(110 + 70 * l))   # a pale sheen across the glass
+                k = 0.8 + 0.35 * l
+                c = tuple(min(255, int(v * k)) for v in vanilla("obsidian")[(yy + 5 * i) % 16][(xx + 7 * i) % 16])
             elif name == "patchwork":
                 if l < 0.22 and face:
                     continue
@@ -857,13 +873,11 @@ def finish(img, name, model):
                     c = tuple(min(255, int(v * 1.08)) for v in c)              # a gingham weave on every other patch
                 if (xx + 2 * i) % 5 == 0 and yy % 2 == 0 or (yy + i) % 5 == 0 and xx % 2 == 0:
                     c = (int(70 + 30 * l), int(54 + 24 * l), int(40 + 20 * l))     # the stitched seams
-            elif name == "sandstone":
+            elif name == "sandstone":                                    # Minecraft's own sandstone side, tiled
                 if l < 0.22 and face:
                     continue
-                band = (yy + i * 3 + int(2 * math.sin((xx + i) * 0.45))) // 3 % 4
-                SAND = ((236, 214, 160), (222, 186, 124), (204, 150, 92), (230, 202, 146))
-                k = 0.78 + 0.28 * l + (H.noise(x, y, 198) - 0.5) * 0.1
-                c = tuple(min(255, int(v * k)) for v in SAND[band])
+                k = 0.8 + 0.3 * l
+                c = tuple(min(255, int(v * k)) for v in vanilla("sandstone")[(yy + 3 * i) % 16][(xx + 7 * i) % 16])
             elif name == "acorn":
                 if l < 0.22 and face:
                     continue

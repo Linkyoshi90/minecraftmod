@@ -397,11 +397,16 @@ def paint(sp, key):
         import colorsys
         hairy = [p for p in H.PARTS if any(t in p for t in ("hair", "strand", "bang", "frame", "htail", "lock", "pony", "wave"))]
 
-        def bow(f, x, y, w, h):
-            r_, g_, b_ = colorsys.hsv_to_rgb((y / max(1, h) * 0.85 + x * 0.01) % 1.0, 0.45, 0.98)
-            return (int(r_ * 255), int(g_ * 255), int(b_ * 255), 255)
+        def bow_for(p):                                   # recolour only what the hair already covers, so the cap's open face stays open
+            def bow(f, x, y, w, h):
+                x0, y0 = H.RECT[(p, f)][:2]
+                if pt.T[y0 + y][x0 + x][3] == 0:
+                    return None
+                r_, g_, b_ = colorsys.hsv_to_rgb((y / max(1, h) * 0.85 + x * 0.01) % 1.0, 0.45, 0.98)
+                return (int(r_ * 255), int(g_ * 255), int(b_ * 255), 255)
+            return bow
         for p in hairy:
-            pt(p, "all", bow)
+            pt(p, "all", bow_for(p))
     pt("armor_ref", "all", lambda f, x, y, w, h: G.CLEAR)
     return pt.T
 

@@ -293,6 +293,12 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
 - [x] Journal and hearth discoverable (2026-10-28): the journal opens again (its pages are synced to the client before the book screen opens), it starts with four guide pages (making friends, the hearth, expeditions, weapons), both recipes are unlocked at login, and every player gets a journal on their first visit (not on the GameTest server).
 - [x] Homage variants from POP_CULTURE_VARIANTS.md: `jewel_thief` (cave bat), `ink_kid` (ika), `pink_dairy` (cattle minotaur), `sun_goddess` (wolf girl); palettes only, rare in the wild (`HOMAGES`). The rest of that list wants a prop each.
 - [ ] Dev client for the life features: a held bow and a TaCZ gun in a girl's hand (position on `hand_r`; the item may need vanilla's extra 180-degree turn once the arm is raised), the aiming poses and recoil, TaCZ shooting and reloading from the pouch, the journal's pages, a hut going up and the market's presents, an expedition's return.
+- [x] **Theropods** (2026-10-29), a new family, tested in `TheropodTests` (the fernstalker's ambush still in `TwentiethWaveTests`):
+  - `gen_theropod.py` (girl_family biped, `HUNCH` = 20, tail rest tied to it, the grin in `pal.mouth_px`), `Theropod.java` (extends `Lizardfolk`), `Family.THEROPOD` (settlements and expeditions as the lizardfolk).
+  - **Fernstalker** moved from the lizardfolk: id `fernstalker_lizardfolk` -> `fernstalker_theropod` (old assets, spawns and lang deleted; fernstalkers in old worlds are gone).
+  - **Spinosaur** (`sail`, `croc` snout): every second, `riverWader` gives her friend within 10 in water Dolphin's Grace.
+  - **Australovenator** (`hand_claws`): every 5 ticks, `packHunt` hits the mob her friend struck within the last second for 5, once per hit.
+- [ ] Dev client for the theropods: the hunch and tail in walking and sitting, the spinosaur's snout and sail, the claws at game scale, eggs and hatchlings.
 - [x] **Twenty-first wave** (2026-10-28), tested in `TwentyFirstWaveTests`:
   - **Nenekea** (dragon, `seafin`: a tail fan and `hair_nfin`): every second, `tidalBalm` gives her hurt friend within 8 who stands in water Regeneration I.
   - **Rheintalensis** (canid, `bigclub` in `hand_r`): every 2 s, `bruteSwing` hits the nearest monster within 4 of her friend for 6 and knocks it away from them.

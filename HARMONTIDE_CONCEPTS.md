@@ -586,3 +586,20 @@ has its seasonal paint.
 
 Homage variant (POP_CULTURE_VARIANTS.md): the jorogumo's bake sale (Muffet): lilac skin, a fifth eye, black pigtails with red
 bows, a purple dress and a teacup. The pigtails, the eye and the cup are drawn only on her.
+
+## Theropods (2026-10-29, in the game)
+
+A family of their own (`theropod`, field guide volume XXVII), built like a 1920s museum sketch of a T. rex but human: the upper
+body hunched 20° forward (the head tilted back up to look ahead), a long thick tail held level behind for balance, human legs,
+arms, skin and face, bare feet with small claws, and a wide grin of little pointed teeth. Each kind's own features are kept
+small. They are cousins of the lizardfolk (the Java class `Theropod` extends `Lizardfolk`): cold-blooded, basking, leathery
+clutches; they eat raw meat and eggs.
+
+| Species | Design |
+|---|---|
+| **Fernstalker** | Moved from the lizardfolk (now `fernstalker_theropod`): navy and white, a feathered tail, three small fern fronds at her back and a feather crest. She pounces on a monster near her friend. |
+| **Spinosaur** | Teal, a low ribbed sail down her spine and along her tail, a tall paddle of a tail, and the family's only snout: a short skin-toned crocodile snout with the teeth along its jaw. Her friend near her in water gets Dolphin's Grace. |
+| **Australovenator** | Pale blue with darker bands, two small hooked claws on each hand. When her friend strikes a mob she leaps on it too (never a player, a monster girl or a pet). |
+
+The spinosaur and the australovenator were planned for the twenty-second wave (as a dragon and a lizardfolk); they came
+with the family instead.

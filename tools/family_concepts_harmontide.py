@@ -2292,16 +2292,6 @@ TWENTIETH = {
               variants=[("blue", "Blue (default)", "Blue, a green island"), ("green", "Green", "Green, a brown shell"), ("sand", "Sand", "Sandy"),
                         ("frost", "Frost", "Frosted"), ("ember", "Ember", "Black, a smouldering island")]),
          {"Habitat": "Rivers, coasts", "Signature": "Grows plants", "Danger": "Low"}),
-        (dict(id="fernstalker_lizardfolk", name="Fernstalker", group="Jungles and lush forests", tag="Patient · deadly", height=1.9,
-              biomes=["jungle", "sparse_jungle", "old_growth_spruce_taiga", "lush_caves"], temperament="Patient, deadly",
-              ecology="A navy Harmontide raptor feathered white at the breast, with fern fronds fanned up from her back. She waits among "
-                      "the ferns without a sound, then pounces.",
-              interaction="Raw chicken, mutton and rabbit.",
-              signature=("Ambush", "Befriended, every few seconds she pounces on a monster near her friend."),
-              danger="High (her claws).",
-              variants=[("navy", "Navy (default)", "Navy, a white breast"), ("green", "Green", "Green"), ("rust", "Rust", "Rust red"),
-                        ("ash", "Ash", "Ash grey"), ("violet", "Violet", "Violet")]),
-         {"Habitat": "Jungles", "Signature": "Pounces on monsters", "Danger": "High"}),
         (dict(id="basilisk_lizardfolk", name="Basilisk", group="Badlands and deserts", tag="Regal · stony", height=1.5,
               biomes=["badlands", "eroded_badlands", "desert"], temperament="Regal, cold",
               ecology="The king of serpents of European bestiaries, here a little blue lizard girl with a crest of spines down her back "
@@ -2530,6 +2520,71 @@ for _fid, _entries in TWENTY_FIRST.items():
         _fam["species"].append(_species)
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
+
+# theropods (2026-10-29): a family of their own, built like a 1920s museum sketch of a T. rex but human: hunched forward over a
+# long balancing tail, human legs, arms, skin and face, and a sharp-toothed grin. The fernstalker moved here from the lizardfolk.
+_family(id="theropod", volume="XXVII", title="Theropods", subtitle="the raptor family", food="Raw meat (and eggs)",
+        theme=dict(bg="#10140f", panel="#191f17", panel2="#20281d", ink="#eef2e6", muted="#b6c2a8", accent="#d86a3a",
+                   line="#34402c", green="#8ac85a", grad="#2a3a1a"),
+        lede="Hunters who walk like the old museum sketches of a T. rex: leaning forward over a long tail held out for balance, "
+             "with a grin full of little sharp teeth. Human in every other way.",
+        hero=dict(eyebrow="The central similarity", title="Lean in, tail out.",
+                  text="A theropod girl stands hunched forward, her heavy tail held level behind her to balance. Under it she is human: "
+                       "human legs, arms, skin and face. Each kind keeps a little of her dinosaur: a sail, claws, feathers.",
+                  bullets=[("Posture", "Hunched forward, tail out behind for balance."), ("Teeth", "A grin full of small pointed teeth."),
+                           ("Meat", "The family food: raw meat, and eggs."), ("Cousins", "Like the lizardfolk they bask and lay leathery eggs.")]),
+        lifecycle=[("1. Courtship", "At high friendship she may share your bed."), ("2. Eggs", "She lays a leathery clutch of two to four eggs."),
+                   ("3. Hatching", "After a day the hatchlings break out, each a random colour of her species."), ("4. Grown", "Grown in five days.")],
+        systems=[("Cold-blooded", "Like the lizardfolk: quick and healing in sunlight or by a fire, slow in the cold."),
+                 ("Hunters", "Each of them helps her friend hunt in her own way: an ambush, a pack hunt, the rivers.")],
+        friendship=dict(builds=["Raw meat (+1), eggs (+1)", "A warm spot she can bask by"], costs=["Hitting her"],
+                        devoted="She hunts at your side."),
+        mating=dict(form="A leathery clutch", young="2-4 hatchlings", grows="5 days", where="Warm sand or dirt",
+                    note="Hatchlings use the adult model at 45%."),
+        split=[("Habitat", []), ("Signature", []), ("Danger", [])], species=[],
+        decisions=["Built as their own family on 2026-10-29: the fernstalker moved over from the lizardfolk, the spinosaur and the "
+                   "australovenator came with it (planned for the twenty-second wave)."],
+        questions=["More theropods: a T. rex, a dilophosaurus, a velociraptor?"])
+
+THEROPODS = [
+        (dict(id="fernstalker_theropod", name="Fernstalker", group="Jungles and lush forests", tag="Patient · deadly", height=1.9,
+              biomes=["jungle", "sparse_jungle", "old_growth_spruce_taiga", "lush_caves"], temperament="Patient, deadly",
+              ecology="A navy Harmontide raptor, hunched forward over her long tail, feathered white at the breast, with fern fronds fanned up from her back. She waits among "
+                      "the ferns without a sound, then pounces.",
+              interaction="Raw chicken, mutton and rabbit.",
+              signature=("Ambush", "Befriended, every few seconds she pounces on a monster near her friend."),
+              danger="High (her claws).",
+              variants=[("navy", "Navy (default)", "Navy, a white breast"), ("green", "Green", "Green"), ("rust", "Rust", "Rust red"),
+                        ("ash", "Ash", "Ash grey"), ("violet", "Violet", "Violet")]),
+         {"Habitat": "Jungles", "Signature": "Pounces on monsters", "Danger": "High"}),
+        (dict(id="spinosaur_theropod", name="Spinosaur", group="Rivers and swamps", tag="Bold · watery", height=2.0,
+              biomes=["river", "swamp", "mangrove_swamp", "jungle"], temperament="Bold, playful in water",
+              ecology="A teal Harmontide spinosaur, the river hunter of the Cretaceous: a low ribbed sail down her spine and along her "
+                      "tail, a short crocodile's snout, a tall paddle of a tail. She wades the rivers for fish.",
+              interaction="Raw fish and meat.",
+              signature=("River wader", "Befriended, her friend near her in water swims like a dolphin (Dolphin's Grace)."),
+              danger="Moderate.",
+              variants=[("teal", "Teal (default)", "Teal, a teal sail"), ("green", "Green", "Swamp green"), ("sand", "Sand", "Sandy, a red sail"),
+                        ("black", "Black", "Black, a blue sail"), ("red", "Red", "Rust red")]),
+         {"Habitat": "Rivers, swamps", "Signature": "Dolphin's Grace in water", "Danger": "Moderate"}),
+        (dict(id="australovenator_theropod", name="Australovenator", group="Savannas and badlands", tag="Quick · loyal", height=1.8,
+              biomes=["savanna", "savanna_plateau", "badlands", "wooded_badlands"], temperament="Quick, loyal",
+              ecology="A pale blue Harmontide australovenator, the 'southern hunter' of Australia's dinosaurs: light, striped, with "
+                      "long hooked claws on her hands. She hunts with her pack.",
+              interaction="Raw meat.",
+              signature=("Pack hunt", "Befriended, when her friend strikes a mob she leaps on it too."),
+              danger="Moderate (her claws).",
+              variants=[("blue", "Blue (default)", "Pale blue, darker stripes"), ("tan", "Tan", "Tan, brown stripes"), ("grey", "Grey", "Grey"),
+                        ("green", "Green", "Green"), ("rust", "Rust", "Rust red")]),
+         {"Habitat": "Savannas, badlands", "Signature": "Joins her friend's attacks", "Danger": "Moderate"}),
+]
+_fam = C.family("theropod")
+for _species, _cols in THEROPODS:
+    if any(x["id"] == _species["id"] for x in _fam["species"]):
+        continue
+    _fam["species"].append(_species)
+    for _label, _values in _fam.get("split", []):
+        _values.append(_cols.get(_label, "-"))
 
 # homage variants of 2026-10-28 (POP_CULTURE_VARIANTS.md): appended after every wave, so every species exists by now
 for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, a black bodysuit with a pink heart, white gloves and boots")),

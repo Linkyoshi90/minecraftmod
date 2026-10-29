@@ -360,7 +360,6 @@ public class Lizardfolk extends AbstractMonsterGirl {
     public void aiStep() {
         super.aiStep();
         if (this.species == GirlSpecies.TURTWORLD_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel isle && !this.isBaby() && this.tickCount % 100 == 0) this.livingIsland(isle);
-        if (this.species == GirlSpecies.FERNSTALKER_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel ferns && !this.isBaby() && this.tickCount % 40 == 0) this.ambush(ferns);
         if (this.species == GirlSpecies.BASILISK_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel stare && !this.isBaby() && this.tickCount % 40 == 0) this.stoneGaze(stare);
         if (this.species == GirlSpecies.TURTFOLK_LIZARDFOLK && this.level() instanceof ServerLevel guard && !this.isBaby() && this.tickCount % 20 == 0) this.shellGuard(guard);
         if (this.species == GirlSpecies.CONCH_TURTLE_LIZARDFOLK && this.level() instanceof ServerLevel shore && !this.isBaby() && this.tickCount % 20 == 0) this.conchCall(shore);
@@ -781,7 +780,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
         return true;
     }
 
-    // --- the turtworld, the fernstalker and the basilisk (twentieth wave) -------------------------------------------
+    // --- the turtworld and the basilisk (twentieth wave; the fernstalker is a Theropod now) ----------------------
 
     /** The saplings and crops within 4 blocks of her friend grow, as if bonemealed. How many she grew, or -1 without a friend. */
     public int livingIsland(net.minecraft.server.level.ServerLevel level) {
@@ -797,19 +796,6 @@ public class Lizardfolk extends AbstractMonsterGirl {
             n++;
         }
         return n;
-    }
-
-    /** She pounces on the nearest monster within 8 blocks of her friend: four points of damage. 1 if she struck, 0 if none was
-     *  near, -1 without a friend. */
-    public int ambush(net.minecraft.server.level.ServerLevel level) {
-        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
-        if (friend == null) return -1;
-        net.minecraft.world.entity.monster.Monster m = level.getNearestEntity(net.minecraft.world.entity.monster.Monster.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat(), friend,
-                friend.getX(), friend.getY(), friend.getZ(), friend.getBoundingBox().inflate(8));
-        if (m == null) return 0;
-        m.hurt(level.damageSources().mobAttack(this), 4.0F);
-        this.getLookControl().setLookAt(m);
-        return 1;
     }
 
     /** She stares down the nearest monster within 8 blocks of her friend: Slowness IV for three seconds, as good as stone. 1 if

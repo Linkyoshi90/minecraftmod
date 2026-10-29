@@ -197,7 +197,6 @@ public enum GirlSpecies {
     CONCH_TURTLE_LIZARDFOLK("conch_turtle_lizardfolk", Family.LIZARDFOLK, 1.2F, 28.4F, 0.6F, MobCategory.CREATURE, 0x4A8AE0, 0x3A7AD8, "blue", "coral", "kelp", "sand", "abyss"),
     TURTFOLK_LIZARDFOLK("turtfolk_lizardfolk", Family.LIZARDFOLK, 1.75F, 28.5F, 0.7F, MobCategory.CREATURE, 0x5A88D0, 0x7A4A22, "blue", "black", "green", "purple", "red"),
     TURTWORLD_LIZARDFOLK("turtworld_lizardfolk", Family.LIZARDFOLK, 2.0F, 28.5F, 1.0F, MobCategory.CREATURE, 0x3A5AB0, 0x1E3270, "blue", "green", "sand", "frost", "ember"),
-    FERNSTALKER_LIZARDFOLK("fernstalker_lizardfolk", Family.LIZARDFOLK, 1.9F, 28.4F, 0.7F, MobCategory.MONSTER, 0x2A3A7A, 0x1E2A5A, "navy", "green", "rust", "ash", "violet"),
     BASILISK_LIZARDFOLK("basilisk_lizardfolk", Family.LIZARDFOLK, 1.5F, 28.5F, 0.55F, MobCategory.CREATURE, 0x5A8AD8, 0x3A6AC8, "blue", "green", "stone", "black", "gold"),
     LONG_DRAGON("long_dragon", Family.DRAGON, 2.6F, 28.5F, 1.0F, MobCategory.CREATURE, 0x3A9A6A, 0xE8F0E0, "jade", "azure", "vermilion", "gold", "pearl"),
     JORMUNGANDR_DRAGON("jormungandr_dragon", Family.DRAGON, 2.4F, 28.6F, 1.2F, MobCategory.CREATURE, 0x5A7A5A, 0x2A3A2A, "midgard", "ash", "venom", "abyss", "gold"),
@@ -298,9 +297,12 @@ public enum GirlSpecies {
     CAVE_BAT("cave_bat", Family.BAT, 1.4F, 28.6F, 0.5F, MobCategory.CREATURE, 0x6A4E3A, 0x5A4232, "brown", "fruit", "vampire", "ghost", "hoary", "jewel_thief"),
     DATE_BAT("date_bat", Family.BAT, 1.4F, 29.85F, 0.6F, MobCategory.CREATURE, 0x4A6AC0, 0x3A5AB0, "blue", "sand", "brown", "black", "gold"),
     FROND_BAT("frond_bat", Family.BAT, 1.5F, 28.5F, 0.6F, MobCategory.CREATURE, 0x3A60C8, 0x2A50B8, "blue", "green", "brown", "autumn", "black"),
-    CAMAZOTZ_BAT("camazotz_bat", Family.BAT, 1.6F, 28.6F, 0.6F, MobCategory.CREATURE, 0x7A8AC0, 0x5A6AA8, "blue", "black", "brown", "red", "jade");
+    CAMAZOTZ_BAT("camazotz_bat", Family.BAT, 1.6F, 28.6F, 0.6F, MobCategory.CREATURE, 0x7A8AC0, 0x5A6AA8, "blue", "black", "brown", "red", "jade"),
+    FERNSTALKER_THEROPOD("fernstalker_theropod", Family.THEROPOD, 1.9F, 28.4F, 0.7F, MobCategory.MONSTER, 0x2A3A7A, 0x1E2A5A, "navy", "green", "rust", "ash", "violet"),
+    SPINOSAUR_THEROPOD("spinosaur_theropod", Family.THEROPOD, 2.0F, 28.4F, 0.8F, MobCategory.CREATURE, 0x3A8A96, 0x1E5A66, "teal", "green", "sand", "black", "red"),
+    AUSTRALOVENATOR_THEROPOD("australovenator_theropod", Family.THEROPOD, 1.8F, 28.6F, 0.7F, MobCategory.CREATURE, 0x9AC0E4, 0x8AB0D8, "blue", "tan", "grey", "green", "rust");
 
-    public enum Family { NEKOMATA, KITSUNE, LAMIA, ARACHNE, CENTAUR, MERFOLK, SLIME, JACKALOPE, MINOTAUR, MOLLUSK, ELF, UNDEAD, LIZARDFOLK, DRAGON, DEVIL, BUG, FLORA, CANID, RODENT, CRUSTACEAN, MARSUPIAL, ARMOURED, CONSTRUCT, BAT }
+    public enum Family { NEKOMATA, KITSUNE, LAMIA, ARACHNE, CENTAUR, MERFOLK, SLIME, JACKALOPE, MINOTAUR, MOLLUSK, ELF, UNDEAD, LIZARDFOLK, DRAGON, DEVIL, BUG, FLORA, CANID, RODENT, CRUSTACEAN, MARSUPIAL, ARMOURED, CONSTRUCT, BAT, THEROPOD }
 
     private final String id;
     private final Family family;

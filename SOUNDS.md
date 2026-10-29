@@ -577,7 +577,7 @@ Grouped by class. The code column shows the condition, which usually names the s
 | [598](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lamia.java:598) | `rattle` | `ARMOR_EQUIP_CHAIN` | `this.playSound(SoundEvents.ARMOR_EQUIP_CHAIN.value(), 0.6F + 0.3F * this.warning, 1.6F + 0.2F * this.warning);` |
 | [843](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lamia.java:843) | `warnOff` | `CAT_HISS` | `this.playSound(SoundEvents.CAT_HISS, 1.0F, 0.6F);` |
 | [896](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lamia.java:896) | `sting` | `BEE_STING` | `this.playSound(net.minecraft.sounds.SoundEvents.BEE_STING, 1.0F, 0.8F);` |
-| [912](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lamia.java:912) | `venomBite` | `CAT_HISS` | `this.playSound(net.minecraft.sounds.SoundEvents.CAT_HISS, 1.0F, 0.8F);` |
+| [914](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lamia.java:914) | `venomBite` | `CAT_HISS` | `this.playSound(net.minecraft.sounds.SoundEvents.CAT_HISS, 1.0F, 0.8F);` |
 
 ### LaySpawnGoal
 
@@ -593,20 +593,20 @@ Grouped by class. The code column shows the condition, which usually names the s
 | [219](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:219) | `repair` | `ANVIL_USE` | `this.playSound(SoundEvents.ANVIL_USE, 0.8F, 1.1F);` |
 | [288](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:288) | `hurt` | `SHIELD_BLOCK` | `if (!this.level().isClientSide) this.playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 0.8F);` |
 | [292](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:292) | `hurt` | `SHIELD_BLOCK` | `if (!this.level().isClientSide) this.playSound(SoundEvents.SHIELD_BLOCK, 0.8F, 1.4F);   // shut tight: nothing gets in` |
-| [451](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:451) | `slideIntoWater` | `TURTLE_SHAMBLE` | `this.playSound(SoundEvents.TURTLE_SHAMBLE, 1.0F, 1.3F);` |
-| [483](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:483) | `shedTail` | `SLIME_SQUISH_SMALL` | `this.playSound(SoundEvents.SLIME_SQUISH_SMALL, 1.0F, 1.4F);` |
-| [622](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:622) | `biteFromHiding` | `TURTLE_HURT` | `this.playSound(SoundEvents.TURTLE_HURT, 1.0F, 1.4F);` |
-| [640](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:640) | `gulp` | `GENERIC_EAT` | `this.playSound(SoundEvents.GENERIC_EAT, 0.8F, 0.7F);` |
-| [654](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:654) | `lure` | `FISHING_BOBBER_SPLASH` | `this.playSound(SoundEvents.FISHING_BOBBER_SPLASH, 0.6F, 0.8F);` |
-| [677](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:677) | `snatch` | `FROG_TONGUE` | `this.playSound(SoundEvents.FROG_TONGUE, 1.0F, 1.2F);` |
-| [684](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:684) | `getAmbientSound` | `TURTLE_AMBIENT_LAND` | `return this.shelled() ? SoundEvents.TURTLE_AMBIENT_LAND : null;` |
-| [689](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:689) | `getHurtSound` | `TURTLE_HURT` | `return this.shelled() ? SoundEvents.TURTLE_HURT : SoundEvents.PLAYER_HURT;` |
-| [689](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:689) | `getHurtSound` | `PLAYER_HURT` | `return this.shelled() ? SoundEvents.TURTLE_HURT : SoundEvents.PLAYER_HURT;` |
-| [694](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:694) | `getDeathSound` | `TURTLE_DEATH` | `return this.shelled() ? SoundEvents.TURTLE_DEATH : SoundEvents.PLAYER_DEATH;` |
-| [694](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:694) | `getDeathSound` | `PLAYER_DEATH` | `return this.shelled() ? SoundEvents.TURTLE_DEATH : SoundEvents.PLAYER_DEATH;` |
-| [699](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:699) | `getEatSound` | `TURTLE_EGG_CRACK` | `return SoundEvents.TURTLE_EGG_CRACK;` |
-| [755](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:755) | `bowBack` | `GENERIC_SPLASH` | `this.playSound(SoundEvents.GENERIC_SPLASH, 0.6F, 1.4F);` |
-| [780](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:780) | `shellGuard` | `TURTLE_SHAMBLE` | `this.playSound(net.minecraft.sounds.SoundEvents.TURTLE_SHAMBLE, 1.0F, 0.8F);` |
+| [450](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:450) | `slideIntoWater` | `TURTLE_SHAMBLE` | `this.playSound(SoundEvents.TURTLE_SHAMBLE, 1.0F, 1.3F);` |
+| [482](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:482) | `shedTail` | `SLIME_SQUISH_SMALL` | `this.playSound(SoundEvents.SLIME_SQUISH_SMALL, 1.0F, 1.4F);` |
+| [621](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:621) | `biteFromHiding` | `TURTLE_HURT` | `this.playSound(SoundEvents.TURTLE_HURT, 1.0F, 1.4F);` |
+| [639](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:639) | `gulp` | `GENERIC_EAT` | `this.playSound(SoundEvents.GENERIC_EAT, 0.8F, 0.7F);` |
+| [653](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:653) | `lure` | `FISHING_BOBBER_SPLASH` | `this.playSound(SoundEvents.FISHING_BOBBER_SPLASH, 0.6F, 0.8F);` |
+| [676](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:676) | `snatch` | `FROG_TONGUE` | `this.playSound(SoundEvents.FROG_TONGUE, 1.0F, 1.2F);` |
+| [683](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:683) | `getAmbientSound` | `TURTLE_AMBIENT_LAND` | `return this.shelled() ? SoundEvents.TURTLE_AMBIENT_LAND : null;` |
+| [688](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:688) | `getHurtSound` | `TURTLE_HURT` | `return this.shelled() ? SoundEvents.TURTLE_HURT : SoundEvents.PLAYER_HURT;` |
+| [688](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:688) | `getHurtSound` | `PLAYER_HURT` | `return this.shelled() ? SoundEvents.TURTLE_HURT : SoundEvents.PLAYER_HURT;` |
+| [693](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:693) | `getDeathSound` | `TURTLE_DEATH` | `return this.shelled() ? SoundEvents.TURTLE_DEATH : SoundEvents.PLAYER_DEATH;` |
+| [693](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:693) | `getDeathSound` | `PLAYER_DEATH` | `return this.shelled() ? SoundEvents.TURTLE_DEATH : SoundEvents.PLAYER_DEATH;` |
+| [698](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:698) | `getEatSound` | `TURTLE_EGG_CRACK` | `return SoundEvents.TURTLE_EGG_CRACK;` |
+| [754](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:754) | `bowBack` | `GENERIC_SPLASH` | `this.playSound(SoundEvents.GENERIC_SPLASH, 0.6F, 1.4F);` |
+| [779](src/main/java/com/linkyoshi90/monstergirls/entity/girl/Lizardfolk.java:779) | `shellGuard` | `TURTLE_SHAMBLE` | `this.playSound(net.minecraft.sounds.SoundEvents.TURTLE_SHAMBLE, 1.0F, 0.8F);` |
 
 ### Mailtoad
 
