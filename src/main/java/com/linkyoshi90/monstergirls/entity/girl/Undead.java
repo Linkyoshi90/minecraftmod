@@ -494,6 +494,7 @@ public class Undead extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.GASHADOKURO_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel grasp && !this.isBaby() && this.tickCount % 60 == 0) this.giantsGrasp(grasp);
         if (this.species == GirlSpecies.GHOUL_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel grave && !this.isBaby() && this.tickCount % 20 == 0) this.carrion(grave);
         if (this.species == GirlSpecies.KASURENIJIMI_UNDEAD && this.level() instanceof ServerLevel blur && !this.isBaby() && this.tickCount % 20 == 0) this.smudge(blur);
         if (this.species == GirlSpecies.DRAUGR_UNDEAD && this.level() instanceof ServerLevel barrow && !this.isBaby() && this.tickCount % 20 == 0) this.layDead(barrow);
@@ -818,5 +819,21 @@ public class Undead extends AbstractMonsterGirl {
             return 1;
         }
         return 0;
+    }
+
+    // --- the gashadokuro (twenty-first wave) ------------------------------------------------------------------------
+
+    /** She seizes the nearest monster within 6 blocks of her friend and lifts it up: Levitation II for two seconds, then it falls.
+     *  1 if she seized one, 0 if none was near, -1 without a friend. */
+    public int giantsGrasp(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster m = level.getNearestEntity(net.minecraft.world.entity.monster.Monster.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat(), friend,
+                friend.getX(), friend.getY(), friend.getZ(), friend.getBoundingBox().inflate(6));
+        if (m == null) return 0;
+        m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.LEVITATION, 40, 1), this);
+        this.getLookControl().setLookAt(m);
+        this.playSound(net.minecraft.sounds.SoundEvents.SKELETON_AMBIENT, 1.0F, 0.5F);
+        return 1;
     }
 }

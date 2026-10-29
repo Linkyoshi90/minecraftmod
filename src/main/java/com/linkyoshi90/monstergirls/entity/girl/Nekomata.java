@@ -487,6 +487,8 @@ public class Nekomata extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.CARACAL_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel leap && !this.isBaby() && this.tickCount % 40 == 0) this.birdCatch(leap);
+        if (this.species == GirlSpecies.RAKSHASA_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel maya && !this.isBaby() && this.tickCount % 40 == 0) this.glamour(maya);
         if (this.species == GirlSpecies.MANTICORE_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel spike && !this.isBaby() && this.tickCount % 60 == 0) this.tailSpike(spike);
         if (this.species == GirlSpecies.SABRE_NEKOMATA && this.level() instanceof ServerLevel hunt && !this.isBaby() && this.tickCount % 40 == 0) this.finishingBite(hunt);
         if (this.species == GirlSpecies.BASTET_NEKOMATA && this.level() instanceof ServerLevel home && !this.isBaby() && this.tickCount % 10 == 0) this.wardCreepers(home);
@@ -808,5 +810,37 @@ public class Nekomata extends AbstractMonsterGirl {
         this.getLookControl().setLookAt(m);
         this.playSound(net.minecraft.sounds.SoundEvents.BEE_STING, 1.0F, 0.6F);
         return 1;
+    }
+
+    // --- the caracal and the rakshasa (twenty-first wave) -----------------------------------------------------------
+
+    /** She leaps at the nearest flying monster (a phantom, a ghast, a vex, a blaze) within 10 blocks of her friend: six points. 1 if
+     *  she struck, 0 if none was near, -1 without a friend. */
+    public int birdCatch(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        // phantoms and ghasts are FlyingMobs, not Monsters: look among every hostile mob
+        net.minecraft.world.entity.Mob m = level.getNearestEntity(net.minecraft.world.entity.Mob.class,
+                net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat().selector(e -> e instanceof net.minecraft.world.entity.monster.Enemy
+                        && (e instanceof net.minecraft.world.entity.FlyingMob || e instanceof net.minecraft.world.entity.monster.Vex || e instanceof net.minecraft.world.entity.monster.Blaze)),
+                friend, friend.getX(), friend.getY(), friend.getZ(), friend.getBoundingBox().inflate(10));
+        if (m == null) return 0;
+        m.hurt(level.damageSources().mobAttack(this), 6.0F);
+        this.getLookControl().setLookAt(m);
+        if (this.onGround()) this.setDeltaMovement(this.getDeltaMovement().add(0, 0.6, 0));
+        return 1;
+    }
+
+    /** The monsters within 12 blocks of her friend that are hunting them lose sight of them. How many, or -1 without a friend. */
+    public int glamour(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        int n = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(12), e -> e.getTarget() == friend)) {
+            m.setTarget(null);
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.WITCH, m.getX(), m.getEyeY(), m.getZ(), 6, 0.3, 0.3, 0.3, 0.0);
+            n++;
+        }
+        return n;
     }
 }

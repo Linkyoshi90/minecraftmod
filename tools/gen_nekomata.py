@@ -19,6 +19,27 @@ FAMILY = C.family("nekomata")
 
 # per species: body knobs, then the default palette and the four other colours as palette overrides
 SPECIES = {
+    # twenty-first wave: the caracal, blue-grey with long black ear tufts, a pale chest and dark tear marks
+    "caracal_nekomata": dict(
+        build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["belt"]),
+        ears="tuft", hair="bob", bangs="swept", tail=((1.5, 1.5, 3), (1.5, 1.5, 3), (1.5, 1.5, 2)), tail_pattern="solid",
+        pal=dict(SKIN=skin("fair"), HAIR="#6a7aa8", FUR="#7a8ab4", LIGHT="#e8ecf4", MARK="#1e1e2a", EYE="#3a7ad8", CLOTH="#2a3a6a", TRIM="#e8ecf4",
+                 INNER="#e8b8c8", pattern="solid", facemark="whisker", extra=dict(dark_tips=True)),
+        variants={"sand": dict(HAIR="#b8804a", FUR="#c8925a", LIGHT="#f8ecdc", MARK="#2a1e14", EYE="#c8a03a", CLOTH="#5a3a1e"),
+                  "red": dict(HAIR="#a84a2a", FUR="#b85a34", LIGHT="#f8e0d0", MARK="#2a140c", EYE="#e8c040", CLOTH="#2a2a30"),
+                  "grey": dict(HAIR="#7a7a80", FUR="#8a8a90", LIGHT="#ececee", MARK="#1e1e22", EYE="#5ab03a", CLOTH="#3a4a5a"),
+                  "black": dict(HAIR="#1e1c22", FUR="#2a282e", LIGHT="#6a6870", MARK="#0a080c", EYE="#e8c040", CLOTH="#5a1e24")}),
+    # twenty-first wave (folklore): the rakshasa, the shape-shifting tiger demon of Hindu legend: striped orange and black, long fangs,
+    # a purple robe and gold jewellery
+    "rakshasa_nekomata": dict(
+        build="curvy", outfit=dict(top=["halter", "mantle"], bottom="sarong", extras=["armlets", "pearls", "bracers"], colors=dict(cloth2="#e8c050")),
+        ears="cat", hair="flowing", bangs="parted", tail=((1.75, 1.75, 4), (1.75, 1.75, 4), (1.5, 1.5, 3)), tail_pattern="stripes", sabre=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#1e1a1e", FUR="#e8802a", LIGHT="#fcf0e0", MARK="#1e1414", EYE="#f8c830", CLOTH="#5a2a8a", TRIM="#e8c050",
+                 INNER="#f0b0b0", pattern="stripes", facemark="whisker"),
+        variants={"blue": dict(FUR="#4a6ad0", HAIR="#141a3a", MARK="#0e1230", EYE="#f8e070", CLOTH="#e8c050", TRIM="#2a3a8a"),
+                  "white": dict(FUR="#f4f2ee", HAIR="#e8e4ec", MARK="#2a2a30", EYE="#5ab8f0", CLOTH="#2a5a8a"),
+                  "black": dict(FUR="#2a2830", HAIR="#141218", MARK="#5a2a8a", EYE="#e83a2a", CLOTH="#a81a2a"),
+                  "crimson": dict(FUR="#b8282a", HAIR="#2a0e10", MARK="#1e0a0a", EYE="#f8d040", CLOTH="#1e1a2a")}),
     # twentieth wave (folklore): the manticore of Persian legend, a pale blue lion girl with a great mane, her tail ending in a
     # scorpion's sting
     "manticore_nekomata": dict(

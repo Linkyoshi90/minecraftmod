@@ -758,6 +758,7 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.URCUCHILLAY_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel herd && !this.isBaby() && this.tickCount % 200 == 0) this.herdKeeper(herd);
         if (this.species == GirlSpecies.CEIBLER_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel trail && !this.isBaby() && this.tickCount % 20 == 0) this.trailGuide(trail);
         if (this.species == GirlSpecies.PALMYR_CENTAUR && this.level() instanceof ServerLevel meadow && !this.isBaby() && this.tickCount % 20 == 0) this.fleetFoot(meadow);
         if ((this.species == GirlSpecies.STAGEL_CENTAUR || this.species == GirlSpecies.LAMASSU_CENTAUR) && this.level() instanceof ServerLevel ward && !this.isBaby() && this.tickCount % 20 == 0) this.blessFriend(ward);
@@ -1003,5 +1004,22 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
         if (!ground.is(net.minecraft.tags.BlockTags.DIRT) && !ground.is(net.minecraft.world.level.block.Blocks.DIRT_PATH)) return false;
         friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 60, 0, true, true));
         return true;
+    }
+
+    // --- Urcuchillay (twenty-first wave) ----------------------------------------------------------------------------
+
+    /** The young animals within 12 blocks of her friend grow up a minute sooner (every ten seconds: six times as fast). How many,
+     *  or -1 without a friend. */
+    public int herdKeeper(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        int n = 0;
+        for (var young : level.getEntitiesOfClass(net.minecraft.world.entity.animal.Animal.class, friend.getBoundingBox().inflate(12),
+                net.minecraft.world.entity.animal.Animal::isBaby)) {
+            young.ageUp(60, true);
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.HAPPY_VILLAGER, young.getX(), young.getY(0.8), young.getZ(), 3, 0.2, 0.2, 0.2, 0.0);
+            n++;
+        }
+        return n;
     }
 }

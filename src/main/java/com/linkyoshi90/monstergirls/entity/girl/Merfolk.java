@@ -430,6 +430,8 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.WALRUS_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel floe && !this.isBaby() && this.tickCount % 20 == 0) this.blubber(floe);
+        if (this.species == GirlSpecies.ANOMALOCARIS_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel deep && !this.isBaby() && this.tickCount % 40 == 0) this.raptorGrasp(deep);
         if (this.species == GirlSpecies.DOGGO_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel surf && !this.isBaby() && this.tickCount % 20 == 0) this.lifeguard(surf);
         if (this.species == GirlSpecies.MOOPIE_MERMAID && this.level() instanceof ServerLevel shallows && !this.isBaby() && this.tickCount % 100 == 0) this.seaMilk(shallows);
         if (this.species == GirlSpecies.RUSALKA_MERMAID && this.level() instanceof ServerLevel river && !this.isBaby() && this.tickCount % 20 == 0) this.riverLuck(river);
@@ -1209,5 +1211,31 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         friend.setAirSupply(friend.getMaxAirSupply());
         level.sendParticles(net.minecraft.core.particles.ParticleTypes.BUBBLE, friend.getX(), friend.getEyeY(), friend.getZ(), 10, 0.3, 0.3, 0.3, 0.05);
         return true;
+    }
+
+    // --- the walrus and the anomalocaris (twenty-first wave) --------------------------------------------------------
+
+    /** Her friend within 10 blocks never freezes: any frost on them (powder snow) thaws at once. True if she warmed them. */
+    public boolean blubber(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 10);
+        if (friend == null || friend.getTicksFrozen() <= 0) return false;
+        friend.setTicksFrozen(0);
+        return true;
+    }
+
+    /** She seizes the nearest monster swimming within 8 blocks of her friend with her grasping arms, drags it towards her and
+     *  bites: four points. 1 if she seized one, 0 if none was in the water, -1 without a friend. */
+    public int raptorGrasp(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster m = level.getNearestEntity(net.minecraft.world.entity.monster.Monster.class,
+                net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat().selector(e -> e.isInWater()), friend,
+                friend.getX(), friend.getY(), friend.getZ(), friend.getBoundingBox().inflate(8));
+        if (m == null) return 0;
+        m.hurt(level.damageSources().mobAttack(this), 4.0F);
+        m.setDeltaMovement(this.position().subtract(m.position()).normalize().scale(0.8));
+        m.hurtMarked = true;
+        this.getLookControl().setLookAt(m);
+        return 1;
     }
 }

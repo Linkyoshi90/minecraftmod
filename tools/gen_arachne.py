@@ -13,7 +13,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import girl_lib as G  # noqa: E402
-from girl_lib import H, cube, pick, noise, skin, shades  # noqa: E402
+from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
     # eighteenth wave: the spoodr, a round, fluffy little navy spider with pale blue tips and two tufts on her head
@@ -86,7 +86,7 @@ SPECIES = {
         biped=True, build="slim", outfit=dict(top=["kimono"], bottom="wrap_skirt",
                                              colors=dict(kimono="#9a7ad0", kimono_trim="#4a2e78", obi="#d8483a", cloth2="#9a7ad0",
                                                          kimono_web="#3a2458", kimono_flower="#f08aa8")),
-        hair="bob", bangs="parted", ears=None, legs="bare", foot="shoe", pupil=(2.2, 3.4),
+        hair="bob", bangs="parted", ears=None, legs="bare", foot="shoe", pupil=(2.2, 3.4), muffet_kit=True,
         pal=dict(SKIN=skin("pale"), HAIR="#6a5ab8", FUR="#1a1820", LIGHT="#3a3644", MARK="#e8c040", EYE="#c81a2a", CLOTH="#9a7ad0", TRIM="#f4f2f0",
                  extra=dict(boot="#a81a22", bow="#c81a22", rose="#f0a0b8", band="#e8c040")),
         variants={"crimson": dict(HAIR="#3a1a2a", extra=dict(kimono="#a8243a", kimono_trim="#5a0e1a", cloth2="#a8243a", obi="#1e1a22",
@@ -96,7 +96,13 @@ SPECIES = {
                   "white": dict(HAIR="#e8e4ec", EYE="#a81a2a", extra=dict(kimono="#f0eef2", kimono_trim="#9a96a8", cloth2="#f0eef2", obi="#1e1a22",
                                                                          kimono_web="#6a6678", kimono_flower="#e8a0b8", bow="#1e1a22")),
                   "black": dict(HAIR="#141218", MARK="#f0d050", extra=dict(kimono="#1e1a24", kimono_trim="#8a6a1e", cloth2="#1e1a24", obi="#c8a030",
-                                                                         kimono_web="#c8a030", kimono_flower="#a81a2a", band="#f0d050"))}),
+                                                                         kimono_web="#c8a030", kimono_flower="#a81a2a", band="#f0d050")),
+                  # homage (2026-10-28): Muffet (Undertale): lilac skin, five eyes, black pigtails with red bows, a puffy purple dress, a
+                  # teacup; the pigtails, the fifth eye and the cup are drawn only on her
+                  "bake_sale": dict(SKIN=skin("#c8a0e0"), HAIR="#1e1a24", FUR="#3a2a5a", EYE="#8a1a5a",
+                                    extra=dict(muffet=True, kimono="#6a2a8a", kimono_trim="#3a1458", cloth2="#6a2a8a", obi="#c81a2a",
+                                               kimono_web="#9a5ab8", kimono_flower="#f0a0d0", bow="#d81a2a", band="#e870c0", boot="#3a1458",
+                                               cup="#f4f0f8", tea="#8a4a2a"))}),
 }
 
 
@@ -195,7 +201,10 @@ FEMUR, TIBIA, CLAW = (8, 1.25, 1.25), (10, 1, 1), (4.5, .75, .75)
 
 
 def legged_declare(sp, d):
-    return [("bfemur",) + FEMUR, ("btibia",) + TIBIA, ("bclaw",) + CLAW, ("bow", 3, 1.75, 1), ("bow_knot", 1, 1.25, 1.25), ("rose", 1.5, 1.5, 1)]
+    out = [("bfemur",) + FEMUR, ("btibia",) + TIBIA, ("bclaw",) + CLAW, ("bow", 3, 1.75, 1), ("bow_knot", 1, 1.25, 1.25), ("rose", 1.5, 1.5, 1)]
+    if d.get("muffet_kit"):                              # Muffet's pigtails, their bows, her teacup and saucer (drawn only on her)
+        out += [("mpig", 2.5, 7, 2.5), ("mpig_bow", 3, 1.5, 1), ("mcup", 2, 1.75, 2), ("msaucer", 3, .5, 3)]
+    return out
 
 
 def legged_paint(pt, pal, d):
@@ -209,12 +218,20 @@ def legged_paint(pt, pal, d):
     pt("btibia", "all", chitin)
     pt("bclaw", "all", lambda f, x, y, w, h: pick(black, 0.3 + 0.3 * (f == "up"), x, y))
     bow, rose = G.shades(pal.extra.get("bow", "#c81a22")), G.shades(pal.extra.get("rose", "#f0a0b8"))
-    pt("bow", "all", lambda f, x, y, w, h: pick(bow, 0.5 + 0.2 * (f == "north") - 0.15 * (abs(x - w / 2) < 1.5), x, y))
-    pt("bow_knot", "all", lambda f, x, y, w, h: pick(bow, 0.4, x, y))
-    pt("rose", "all", lambda f, x, y, w, h: pick(rose, 0.45 + 0.3 * ((x + y) % 2), x, y))
+    muffet = pal.extra.get("muffet")
+    pt("bow", "all", lambda f, x, y, w, h: CLEAR if muffet else pick(bow, 0.5 + 0.2 * (f == "north") - 0.15 * (abs(x - w / 2) < 1.5), x, y))
+    pt("bow_knot", "all", lambda f, x, y, w, h: CLEAR if muffet else pick(bow, 0.4, x, y))
+    pt("rose", "all", lambda f, x, y, w, h: CLEAR if muffet else pick(rose, 0.45 + 0.3 * ((x + y) % 2), x, y))
+    if d.get("muffet_kit"):
+        hair, cup, tea = pal.HAIR, G.shades(pal.extra.get("cup", "#f4f0f8")), G.shades(pal.extra.get("tea", "#8a4a2a"))
+        pt("mpig", "all", lambda f, x, y, w, h: pick(hair, 0.35 + 0.15 * (x % 2) - 0.1 * (y == h - 1), x, y) if muffet else CLEAR)
+        pt("mpig_bow", "all", lambda f, x, y, w, h: pick(bow, 0.5 + 0.2 * (f == "north") - 0.15 * (abs(x - w / 2) < 1), x, y) if muffet else CLEAR)
+        pt("mcup", "all", lambda f, x, y, w, h: CLEAR if not muffet or f == "down"
+           else pick(tea, 0.4, x, y) if f == "up" else pick(cup, 0.55 - 0.15 * (y == 0) + 0.1 * (y == h - 1), x, y))
+        pt("msaucer", "all", lambda f, x, y, w, h: pick(cup, 0.5 + 0.1 * (f == "up"), x, y) if muffet else CLEAR)
 
-    def forehead_eyes(f, x, y, w, h):                        # a second, smaller pair of red eyes above her own
-        for cx in (11.5, 20.5):
+    def forehead_eyes(f, x, y, w, h):                        # a second, smaller pair of red eyes above her own (Muffet: a third between them)
+        for cx in ((11.5, 16, 20.5) if pal.extra.get("muffet") else (11.5, 20.5)):
             dx, dy = abs(x - cx), abs(y - 7.5)
             if dx < 2 and dy < 2 and dx + dy < 3:
                 if x == round(cx - 1) and y == 6:
@@ -244,6 +261,13 @@ def legged_build(r, g, d):
     hy, z = g.hy, g.z                                       # a red bow on top of her head, a pink rose beside it
     r.add("hair_bow", "head", [1.5, hy + 8.5, z], [cube("bow", [0.25, hy + 8.0, -1.5 + z]), cube("bow_knot", [1.25, hy + 7.9, -1.6 + z]),
                                               cube("rose", [2.5, hy + 6.9, -3.0 + z])])
+    if d.get("muffet_kit"):                              # pigtails hanging from high on each side of her head, a red bow at each; a teacup in her hand
+        for sg in (-1, 1):
+            r.add("pigtail" + ("_r" if sg < 0 else "_l"), "head", [sg * 5.6, hy + 5, z + 0.5],
+                  [G.rot_cube("mpig", [sg * 6.9 - 1.25, hy - 2.5, z - 0.75], [sg * 5.6, hy + 5, z + 0.5], 0, 0, sg * 8),
+                   G.rot_cube("mpig_bow", [sg * 6.9 - 1.5, hy + 4.2, z - 1.25], [sg * 5.6, hy + 5, z + 0.5], 0, 0, sg * 8)])
+        px, py, pz = r.b["hand_r"]["pivot"]
+        r.add("teacup", "hand_r", [px, py - 2.5, pz], [cube("msaucer", [px - 2.25, py - 3.6, pz - 3.6]), cube("mcup", [px - 1.75, py - 3.1, pz - 3.1])])
 
 
 def legged_anims(an, sp, d):

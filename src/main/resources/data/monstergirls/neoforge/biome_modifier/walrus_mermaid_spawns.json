@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_walrus_mermaid",
+  "spawners": {
+    "type": "monstergirls:walrus_mermaid",
+    "weight": 4,
+    "minCount": 2,
+    "maxCount": 3
+  }
+}

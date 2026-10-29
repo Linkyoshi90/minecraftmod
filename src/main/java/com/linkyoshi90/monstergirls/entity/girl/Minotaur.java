@@ -409,6 +409,8 @@ public class Minotaur extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.ORYX_MINOTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel dune && !this.isBaby() && this.tickCount % 20 == 0)
+            this.desertStride(dune, dune.getBiome(this.blockPosition()).value().getBaseTemperature() >= 1.5F);
         if (this.species == GirlSpecies.BRASSHORN_MINOTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel crag && !this.isBaby() && this.tickCount % 20 == 0) this.mountainFooting(crag);
         if (this.species == GirlSpecies.TUSKIN_MINOTAUR && this.level() instanceof ServerLevel snow && !this.isBaby() && this.tickCount % 20 == 0) this.snowplough(snow);
         if (this.species == GirlSpecies.SKJOLDRAM_MINOTAUR && this.level() instanceof ServerLevel ram && !this.isBaby() && this.tickCount % 10 == 0) this.ramCharge(ram);
@@ -741,6 +743,18 @@ public class Minotaur extends AbstractMonsterGirl {
         net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 10);
         if (friend == null) return false;
         friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.JUMP, 60, 0, true, true));
+        return true;
+    }
+
+    // --- the oryx (twenty-first wave) -------------------------------------------------------------------------------
+
+    /** In the heat (deserts, badlands, savannas), her friend within 10 blocks doesn't tire: their exhaustion is wiped, so running
+     *  and fighting cost no food. True if she spared them. */
+    public boolean desertStride(net.minecraft.server.level.ServerLevel level, boolean hot) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 10);
+        if (friend == null || !hot) return false;
+        var food = friend.getFoodData();
+        food.addExhaustion(-food.getExhaustionLevel());
         return true;
     }
 }

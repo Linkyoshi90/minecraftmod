@@ -30,6 +30,21 @@ SEGS = [("seg_1", 4.5, 10.5, 4), ("seg_2", 4.25, 4, 5.5), ("seg_3", 4, 3.75, 5.5
 BIG_SEGS = [(n, round(w * 1.3 * 4) / 4, h if n == "seg_1" else round(h * 1.3 * 4) / 4, round(d * 1.25 * 4) / 4) for n, w, h, d in SEGS]
 
 SPECIES = {
+    # twenty-first wave: the nenekea, a blue sea dragon who walks on land: fins for ears, a crest of fins, gold beads and pearls,
+    # a long tail ending in a great fan of a fin
+    "nenekea_dragon": dict(
+        build="slim", outfit=dict(top=["bandeau"], bottom="wrap_skirt", extras=["pearls", "armlets"], colors=dict(cloth2="#2a4ab0")),
+        hair="flowing", bangs="swept", ears="fin", legs="scales", foot="claw", tail=[(2, 2, 4), (1.5, 1.5, 4), (1, 1, 4)],
+        tail_look="scale", tail_rest=[(-30, 0, 0), (10, 0, 0), (8, 0, 0)], seafin=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#3a6ad8", FUR="#3a7ae0", LIGHT="#e8f4ff", MARK="#1a3a8a", EYE="#2a8ad8", CLOTH="#2a4ab0", TRIM="#e8c050",
+                 pupil=(0.9, 3.4), extra=dict(fin="#d8ecff", fin_ray="#5aa8f0")),
+        variants={"teal": dict(HAIR="#2a9a9a", FUR="#2aa8a8", MARK="#0e4a4a", CLOTH="#1e6a6a", EYE="#2ad8c8", extra=dict(fin="#d8fcf4", fin_ray="#3ac8b8")),
+                  "coral": dict(HAIR="#e86a7a", FUR="#f08a8a", LIGHT="#fff0ec", MARK="#a83a4a", CLOTH="#3a8ac8", EYE="#e85a6a",
+                                extra=dict(fin="#fff0ec", fin_ray="#f8a8a0")),
+                  "gold": dict(HAIR="#d8a030", FUR="#e8b840", LIGHT="#fff8e0", MARK="#8a5a14", CLOTH="#2a3a8a", EYE="#c8902a",
+                               extra=dict(fin="#fff4d0", fin_ray="#f0c860")),
+                  "violet": dict(HAIR="#7a4ad8", FUR="#8a5ae0", LIGHT="#f4ecff", MARK="#3a1e7a", CLOTH="#4a2a9a", EYE="#c87af8",
+                                 extra=dict(fin="#f0e4ff", fin_ray="#b088f0"))}),
     # twentieth wave: the moo, a round little blue triceratops: a frill rimmed with cream knobs, two brow horns and a nose horn, spots
     "moo_dragon": dict(
         build="petite", outfit=dict(top=["bandeau"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#3a6aa8")), hair="bob", bangs="blunt", ears=None,
@@ -170,10 +185,24 @@ def declare_hook(sp, d):
         out += [("tfrill", 11, 7, .75), ("tfrill_knob", 1, 1, 1), ("brow_horn", 1, 3.5, 1), ("nose_horn", 1, 1.5, 1)]
     if d.get("ptcrest"):                                 # the hairypterix's long head crest
         out += [("ptcrest", 1, 2.5, 6.5)]
+    if d.get("seafin"):                                  # the nenekea's tail fan and head crest
+        out += [("nfan", .5, 6, 5.5), ("nfin", .5, 3.5, 5)]
     return out
 
 
 def paint_hook(pt, pal, d):
+    if d.get("seafin"):                                  # see-through fins with rays, painted only on their broad sides
+        fin, ray = G.shades(pal.extra.get("fin", "#d8ecff")), G.shades(pal.extra.get("fin_ray", "#5aa8f0"))
+
+        def fan(f, x, y, w, h):
+            if f not in ("east", "west"):
+                return CLEAR
+            if y > h * 0.55 + abs(x + 0.5 - w / 2) * 0.5 and y > 1:     # the fan's notched trailing edge
+                return CLEAR
+            return pick(ray, 0.5, x, y) if x % 2 == 0 else G.with_alpha(pick(fin, 0.6, x, y), 220)
+        pt("nfan", "all", fan)
+        pt("nfin", "all", lambda f, x, y, w, h: CLEAR if f not in ("east", "west") or y > h - 1 - x * 0.6
+           else pick(ray, 0.5, x, y) if x % 2 == 0 else G.with_alpha(pick(fin, 0.6, x, y), 220))
     comb = G.shades(pal.extra.get("comb", "#d8201e"))
     pt("comb", "all", lambda f, x, y, w, h: CLEAR if f in ("east", "west") and y < 2 and x % 3 == 1 else pick(comb, 0.5 + 0.2 * (f == "up"), x, y))
     pt("wattle", "all", lambda f, x, y, w, h: pick(comb, 0.45, x, y))
@@ -241,6 +270,10 @@ def build_hook(r, g, d):
               G.rot_cube("nose_horn", [-0.5, hy + 2.4, -4.8 + z], [0, hy + 2.4, -4.3 + z], -40, 0, 0))
     if d.get("ptcrest"):                                 # swept straight back from the crown of her head
         r.add("hair_ptcrest", "head", [0, hy + 8.2, z], [G.rot_cube("ptcrest", [-0.5, hy + 7.4, 1.0 + z], [0, hy + 8.2, 1.0 + z], 20, 0, 0)])
+    if d.get("seafin") and "tail_3" in r.b:              # a tall fan of a fin on the tip of her tail, a crest of fin on her head
+        px, py, pz = r.b["tail_3"]["pivot"]
+        r.put("tail_3", cube("nfan", [px - 0.25, py - 3.0, pz + 2.0]))
+        r.add("hair_nfin", "head", [0, hy + 8, z], [cube("nfin", [-0.25, hy + 7.4, -1.5 + z])])
     if d.get("heads"):                                    # seven dragon heads rising behind and around her own
         for i in range(7):
             ry = -135 + i * 45                              # fanned round the sides and back, none in front of her face

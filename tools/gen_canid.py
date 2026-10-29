@@ -17,6 +17,20 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # twenty-first wave: the rheintalensis, a broad shaggy cave bear: wild blue hair, pelts, a necklace of teeth, a big club
+    "rheintalensis_canid": dict(
+        build="strong", outfit=dict(top=["sarashi"], bottom="loincloth", extras=["arm_wraps", "pearls"], colors=dict(bandage="#3a5ab0", cloth2="#2a3a7a")),
+        hair="mane", bangs="messy", ears="round", legs="fur", foot="paw", tail=[(1.5, 1.25, 1.25)], tail_rest=[(-20, 0, 0)], tail_look="fur",
+        bigclub=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#2a4ab0", FUR="#2a4a9a", LIGHT="#8aa8e0", MARK="#14204a", EYE="#3a8ae8", CLOTH="#3a5ab0", TRIM="#f0e8d4",
+                 pattern="solid", extra=dict(club="#6a7284", club_dark="#3a4050")),
+        variants={"brown": dict(HAIR="#4a2e1a", FUR="#5a3a22", LIGHT="#a8805a", MARK="#2a1a0e", EYE="#c8902a", CLOTH="#6a4a2a",
+                                extra=dict(club="#7a5a3a", club_dark="#3a2a1a")),
+                  "grey": dict(HAIR="#5a5a62", FUR="#6a6a72", LIGHT="#b8b8c0", MARK="#2a2a30", CLOTH="#4a4a54", extra=dict(club="#8a8478", club_dark="#4a463e")),
+                  "black": dict(HAIR="#1a181c", FUR="#222024", LIGHT="#5a565e", MARK="#0a080a", EYE="#e8c040", CLOTH="#5a1e24",
+                                extra=dict(club="#5a4a3a", club_dark="#2a2018")),
+                  "red": dict(HAIR="#6a2a1a", FUR="#7a3a22", LIGHT="#c8805a", MARK="#3a140a", EYE="#e8c040", CLOTH="#2a3a2a",
+                              extra=dict(club="#6a5a4a", club_dark="#3a2e24"))}),
     # nineteenth wave: the obsidian macuahuitl hound, a temple dog in navy and gold, an obsidian-edged war club across her back
     "obsidian_hound_canid": dict(
         build="athletic", outfit=dict(top=["bandeau", "harness"], bottom="loincloth", extras=["pauldron", "bracers", "usekh"],
@@ -189,6 +203,8 @@ def build_melon(r, g):
 
 
 def declare_hook(sp, d):
+    if d.get("bigclub"):                                 # the rheintalensis's club: a thick haft, a knotted head
+        return [("bclub", 2, 8, 2), ("bclub_head", 3.25, 4.5, 3.25), ("bclub_knob", 1, 1, 1)]
     if d.get("club"):                                    # the macuahuitl: a flat wooden club edged with obsidian blades
         return [("club", 1.75, 11, .75), ("club_edge", .5, 1.25, .5), ("club_grip", 1, 3.5, 1)]
     if d.get("melon"):
@@ -205,6 +221,11 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    if d.get("bigclub"):
+        cl, cd = G.shades(pal.extra.get("club", "#6a7284")), G.shades(pal.extra.get("club_dark", "#3a4050"))
+        pt("bclub", "all", lambda f, x, y, w, h: pick(cd if y % 3 == 0 and f != "up" else cl, 0.45 + 0.1 * (x % 2), x, y))
+        pt("bclub_head", "all", lambda f, x, y, w, h: pick(cd if noise(x, y, 61) > 0.7 else cl, 0.5 + 0.15 * (f == "up") + (noise(x, y, 62) - 0.5) * 0.15, x, y))
+        pt("bclub_knob", "all", lambda f, x, y, w, h: pick(cd, 0.45, x, y))
     wood, glass = G.shades(pal.extra.get("club", "#6a4a2a")), G.shades(pal.extra.get("glass", "#1a1420"))
     pt("club", "all", lambda f, x, y, w, h: pick(wood, 0.45 + 0.12 * (x % 2) + 0.15 * (y % 5 == 0), x, y))
     pt("club_edge", "all", lambda f, x, y, w, h: pick(glass, 0.35 + 0.45 * (x == 0 and y == 0), x, y))
@@ -284,6 +305,12 @@ def paint_hook(pt, pal, d):
 
 
 def build_hook(r, g, d):
+    if d.get("bigclub"):                                 # held upright in her right fist, out in front of her arm
+        px, py, pz = r.b["hand_r"]["pivot"]
+        cx, cz = px - 0.6, pz - 2.4
+        r.add("bigclub", "hand_r", [px, py - 1.5, pz], [cube("bclub", [cx - 1, py - 4.0, cz - 1]), cube("bclub_head", [cx - 1.625, py + 3.6, cz - 1.625]),
+                                                        cube("bclub_knob", [cx - 2.3, py + 5.4, cz - 0.5]), cube("bclub_knob", [cx + 1.3, py + 6.4, cz - 0.5]),
+                                                        cube("bclub_knob", [cx - 0.5, py + 5.0, cz - 2.3])])
     if d.get("club"):                                    # slung across her back, the grip over her right shoulder
         bz = G.S("chest")[2] / 2 + 0.3 + g.z
         rot = dict(pivot=[0, 16, bz], rotation=[0, 0, -38])

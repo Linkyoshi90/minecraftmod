@@ -2388,6 +2388,149 @@ for _fid, _entries in TWENTIETH.items():
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
 
+# twenty-first wave (2026-10-28): eight Harmontide creatures from the reference art (their blue looks) and four creatures of
+# folklore (the serpopard, Urcuchillay, the rakshasa and the gashadokuro)
+TWENTY_FIRST = {
+    "dragon": [
+        (dict(id="nenekea_dragon", name="Nenekea", group="Warm oceans and reefs", tag="Graceful · generous", height=1.8,
+              biomes=["warm_ocean", "lukewarm_ocean", "beach"], temperament="Graceful, generous",
+              ecology="A Harmontide sea dragon who walks on land as gladly as she swims: blue scales, fins for ears, a crest of fins on "
+                      "her head and a long tail ending in a great fan of a fin. She hangs herself with beads and pearls from the reef.",
+              interaction="Fish and prismarine crystals.",
+              signature=("Tidal balm", "Befriended, her hurt friend near her heals while they stand in water (Regeneration)."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Blue, white fins, gold beads"), ("teal", "Teal", "Teal"), ("coral", "Coral", "Coral pink"),
+                        ("gold", "Gold", "Gold"), ("violet", "Violet", "Violet")]),
+         {"Habitat": "Warm oceans", "Signature": "Heals in water", "Danger": "Low"})],
+    "canid": [
+        (dict(id="rheintalensis_canid", name="Rheintalensis", group="Caves and old forests", tag="Loud · fearless", height=2.1,
+              biomes=["old_growth_spruce_taiga", "taiga", "windswept_forest", "dripstone_caves"], temperament="Loud, fearless",
+              ecology="A Harmontide cave bear girl, broad and shaggy, wild blue hair, pelts and a necklace of teeth. She carries a club "
+                      "as long as her arm and laughs as she swings it.",
+              interaction="Salmon, honey and sweet berries.",
+              signature=("Brute swing", "Befriended, she clubs a monster that comes close to her friend and knocks it away."),
+              danger="High (her club).",
+              variants=[("blue", "Blue (default)", "Blue fur, a stone-grey club"), ("brown", "Brown", "Brown"), ("grey", "Grey", "Grey"),
+                        ("black", "Black", "Black"), ("red", "Red", "Red-brown")]),
+         {"Habitat": "Caves", "Signature": "Clubs and knocks back", "Danger": "High"})],
+    "armoured": [
+        (dict(id="daeodon_armoured", name="Daeodon", group="Plains and savannas", tag="Hungry · cheerful", height=1.9,
+              biomes=["plains", "savanna", "sunflower_plains"], temperament="Hungry, cheerful",
+              ecology="A Harmontide 'hell pig', a great shaggy pale-blue boar girl with a huge mouth, round ears and pink cheeks. She "
+                      "roots through any soil for something to eat, and shares.",
+              interaction="Potatoes, carrots and beetroots.",
+              signature=("Rooting", "Befriended, now and then she roots up a potato, a carrot or a beetroot at her friend's feet (rarely a golden carrot)."),
+              danger="Moderate (her bite).",
+              variants=[("blue", "Blue (default)", "Pale blue"), ("brown", "Brown", "Brown"), ("grey", "Grey", "Grey"),
+                        ("black", "Black", "Black"), ("ginger", "Ginger", "Ginger")]),
+         {"Habitat": "Plains", "Signature": "Roots up food", "Danger": "Moderate"}),
+        (dict(id="anteater_armoured", name="Anteater", group="Savannas and jungles", tag="Slow · tidy", height=1.6,
+              biomes=["savanna", "jungle", "sparse_jungle"], temperament="Slow, tidy",
+              ecology="A Harmontide anteater girl in soft blue, a long tubular snout with a pink tongue always peeking out, round ears "
+                      "and a great bushy tail. Nothing small escapes her tongue.",
+              interaction="Sugar, honey and sweet berries.",
+              signature=("Long tongue", "Befriended, she licks up the loose items near her friend and brings them to their feet."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue, a cream face"), ("grey", "Grey", "Grey, a black stripe"),
+                        ("tamandua", "Tamandua", "Gold with a black vest"), ("silky", "Silky", "Silky gold"), ("brown", "Brown", "Brown")]),
+         {"Habitat": "Savannas", "Signature": "Gathers loose items", "Danger": "None"})],
+    "minotaur": [
+        (dict(id="oryx_minotaur", name="Oryx", group="Deserts and badlands", tag="Calm · enduring", height=2.0,
+              biomes=["desert", "badlands", "savanna_plateau"], temperament="Calm, enduring",
+              ecology="A Harmontide oryx girl, pale blue with a cream crescent moon on her brow, two long horns swept back and a tufted "
+                      "tail. She crosses the desert for days on a single drink.",
+              interaction="Wheat and cactus fruit (sweet berries).",
+              signature=("Desert stride", "Befriended, her friend near her in the heat of deserts, badlands and savannas doesn't tire (no hunger from exertion)."),
+              danger="Moderate (her horns).",
+              variants=[("blue", "Blue (default)", "Pale blue, a cream crescent"), ("white", "White", "Arabian white"),
+                        ("gemsbok", "Gemsbok", "Grey with black marks"), ("scimitar", "Scimitar", "White and chestnut"), ("sand", "Sand", "Sand")]),
+         {"Habitat": "Deserts", "Signature": "No hunger in the heat", "Danger": "Moderate"})],
+    "nekomata": [
+        (dict(id="caracal_nekomata", name="Caracal", group="Savannas and scrub", tag="Quick · proud", height=1.6,
+              biomes=["savanna", "desert", "badlands"], temperament="Quick, proud",
+              ecology="A Harmontide caracal girl, blue-grey with long black ear tufts and a pale chest. Famous for leaping straight up "
+                      "to swat birds from the air.",
+              interaction="Chicken and rabbit.",
+              signature=("Bird catcher", "Befriended, she leaps at a flying monster near her friend (a phantom, a vex, a blaze, a ghast)."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Blue-grey, black tufts"), ("sand", "Sand", "Sandy"), ("red", "Red", "Red"),
+                        ("grey", "Grey", "Grey"), ("black", "Black", "Black")]),
+         {"Habitat": "Savannas", "Signature": "Strikes flying monsters", "Danger": "Low"}),
+        (dict(id="rakshasa_nekomata", name="Rakshasa", group="Jungles at night", tag="Cunning · courtly", height=1.9,
+              biomes=["jungle", "bamboo_jungle", "savanna"], temperament="Cunning, courtly",
+              ecology="The shape-shifting tiger demon of Hindu legend, striped orange and black, long fangs, a robe and gold jewellery. "
+                      "She weaves glamours that turn eyes aside.",
+              interaction="Gold nuggets and cooked meat.",
+              signature=("Glamour", "Befriended, the monsters hunting her friend lose sight of them."),
+              danger="Moderate.",
+              variants=[("orange", "Orange (default)", "Orange stripes, a purple robe"), ("blue", "Blue", "Blue"), ("white", "White", "White"),
+                        ("black", "Black", "Black"), ("crimson", "Crimson", "Crimson")]),
+         {"Habitat": "Jungles", "Signature": "Monsters lose their target", "Danger": "Moderate"})],
+    "merfolk": [
+        (dict(id="walrus_mermaid", name="Walrus", group="Frozen oceans and shores", tag="Lazy · warm", height=1.8,
+              biomes=["frozen_ocean", "cold_ocean", "snowy_beach"], temperament="Lazy, warm",
+              ecology="A Harmontide walrus girl, round and blue, long pale hair, two white tusks and a broad flipper tail. Her blubber "
+                      "keeps anyone who cuddles up to her warm.",
+              interaction="Fish and kelp.",
+              signature=("Blubber", "Befriended, her friend near her never freezes."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Blue, white tusks"), ("brown", "Brown", "Brown"), ("pink", "Pink", "Sun-pink"),
+                        ("grey", "Grey", "Grey"), ("white", "White", "White")]),
+         {"Habitat": "Frozen oceans", "Signature": "Friend never freezes", "Danger": "Low"}),
+        (dict(id="anomalocaris_mermaid", name="Anomalocaris", group="Deep oceans", tag="Curious · ancient", height=1.7,
+              biomes=["deep_ocean", "deep_lukewarm_ocean", "ocean"], temperament="Curious, ancient",
+              ecology="A Harmontide anomalocaris, a pale blue swimmer from the oldest seas: big round eyes, two spiny grasping arms curling "
+                      "from her brow, flaps along her sides and a fan of a tail. She was the first great hunter of the seas.",
+              interaction="Fish and kelp.",
+              signature=("Raptor grasp", "Befriended, she seizes a monster swimming near her friend, drags it to her and bites."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Pale blue"), ("red", "Red", "Red"), ("purple", "Purple", "Purple"),
+                        ("green", "Green", "Green"), ("gold", "Gold", "Gold")]),
+         {"Habitat": "Deep oceans", "Signature": "Grapples swimming monsters", "Danger": "Low"})],
+    "lamia": [
+        (dict(id="serpopard_lamia", name="Serpopard", group="Deserts and river banks", tag="Watchful · fierce", height=2.1,
+              biomes=["desert", "river", "savanna"], temperament="Watchful, fierce",
+              ecology="The serpent-leopard of ancient Egyptian palettes, a long-necked spotted serpent with a leopard's ears and face. "
+                      "Pairs of them guarded order against chaos.",
+              interaction="Rabbit and chicken.",
+              signature=("Venom bite", "Befriended, she bites a monster near her friend: Poison."),
+              danger="Moderate (her venom).",
+              variants=[("gold", "Gold (default)", "Gold with rosettes"), ("blue", "Blue", "Blue"), ("snow", "Snow", "Snow"),
+                        ("black", "Black", "Black"), ("sand", "Sand", "Sand")]),
+         {"Habitat": "Deserts", "Signature": "Poisons monsters", "Danger": "Moderate"})],
+    "centaur": [
+        (dict(id="urcuchillay_centaur", name="Urcuchillay", group="Mountain meadows", tag="Kind · watchful", height=2.2,
+              biomes=["meadow", "windswept_hills", "grove"], temperament="Kind, watchful",
+              ecology="The Inca god who watches over the herds, a llama of many colours: rainbow hair and fleece, a blue dress and a "
+                      "headband with a blue stone. Animals grow strong in her care.",
+              interaction="Wheat and hay.",
+              signature=("Herd keeper", "Befriended, the young animals near her friend grow up faster."),
+              danger="None.",
+              variants=[("rainbow", "Rainbow (default)", "Rainbow hair and fleece"), ("white", "White", "White"), ("brown", "Brown", "Brown"),
+                        ("grey", "Grey", "Grey"), ("black", "Black", "Black")]),
+         {"Habitat": "Meadows", "Signature": "Young animals grow", "Danger": "None"})],
+    "undead": [
+        (dict(id="gashadokuro_undead", name="Gashadokuro", group="Old battlefields at night", tag="Hungry · lonely", height=2.6,
+              biomes=["plains", "dark_forest", "taiga"], temperament="Hungry, lonely",
+              ecology="The 'starving skeleton' of Japanese folklore, a towering skeleton of the bones of the unburied dead, dark hollows "
+                      "round her glowing eyes, her teeth chattering. She seizes whatever crosses her path.",
+              interaction="Bones and bread.",
+              signature=("Giant's grasp", "Befriended, she seizes a monster near her friend and lifts it into the air (Levitation)."),
+              danger="High.",
+              variants=[("bone", "Bone (default)", "Bone white, red eyes"), ("ash", "Ash", "Ash grey"), ("black", "Black", "Black bones"),
+                        ("blood", "Blood", "Red-stained"), ("jade", "Jade", "Ghostly jade")]),
+         {"Habitat": "Battlefields", "Signature": "Lifts monsters", "Danger": "High"})],
+}
+
+for _fid, _entries in TWENTY_FIRST.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 # homage variants of 2026-10-28 (POP_CULTURE_VARIANTS.md): appended after every wave, so every species exists by now
 for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, a black bodysuit with a pink heart, white gloves and boots")),
                        ("ika_mollusk", ("ink_kid", "Ink Kid", "Bright orange tentacle hair, a white tee and black shorts")),
@@ -2411,7 +2554,8 @@ for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, 
                        ("ent_flora", ("tree_guard", "Tree Guard", "Brown bark, a few leaves, amber eyes")),
                        ("yuki_onna_undead", ("snow_wraith", "Snow Wraith", "White, a red-purple sash, purple eyes")),
                        ("dullahan_undead", ("headless_rider", "Headless Rider", "A black rider's suit with yellow trim")),
-                       ("dullahan_undead", ("death_envoy", "Death Envoy", "Silver hair, red eyes, a black and red gothic dress"))]:
+                       ("dullahan_undead", ("death_envoy", "Death Envoy", "Silver hair, red eyes, a black and red gothic dress")),
+                       ("jorogumo_arachne", ("bake_sale", "Bake Sale", "Lilac skin, five eyes, black pigtails with red bows, a teacup"))]:
     for _fam in C.FAMILIES:
         for _s in _fam["species"]:
             if _s["id"] == _sid and all(v[0] != _variant[0] for v in _s["variants"]):

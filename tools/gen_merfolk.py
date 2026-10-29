@@ -18,6 +18,35 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # twenty-first wave: the walrus, round and blue, long pale hair, two white tusks and a broad flipper tail
+    "walrus_mermaid": dict(
+        build="curvy", outfit=dict(top=["sweater"], extras=["scarf"], colors=dict(scarf="#3a7ac8")),
+        ears=None, hair="flowing", bangs="swept", fluke=(8, .75, 4), size=1.15, seal=True, wtusks=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#a8d8f8", FUR="#7ab0e8", LIGHT="#e0f0fc", MARK="#3a6aa8", EYE="#2a4a8a", CLOTH="#3a7ac8", TRIM="#f4f8fc",
+                 pattern="solid", extra=dict(belly_white=True, tusk="#f8f4e8")),
+        variants={"brown": dict(HAIR="#c8a07a", FUR="#8a6448", LIGHT="#e8d0b8", MARK="#4a3020", EYE="#2a1a10", CLOTH="#3a6a5a",
+                                extra=dict(belly_white=True, tusk="#f8f0dc")),
+                  "pink": dict(HAIR="#f8c8c0", FUR="#e8a08a", LIGHT="#fce8e0", MARK="#a85a4a", EYE="#5a2a24", CLOTH="#3a8ab0",
+                               extra=dict(belly_white=True, tusk="#f8f0dc")),
+                  "grey": dict(HAIR="#c8c8cc", FUR="#8a8a90", LIGHT="#e8e8ea", MARK="#3a3a40", EYE="#2a2a30", CLOTH="#a83a3a",
+                               extra=dict(belly_white=True, tusk="#f8f4e8")),
+                  "white": dict(HAIR="#f4f6fa", FUR="#e0e8f0", LIGHT="#ffffff", MARK="#8a9ab0", EYE="#3a6ac8", CLOTH="#c84a6a",
+                                extra=dict(belly_white=True, tusk="#fffaf0"))}),
+    # twenty-first wave: the anomalocaris, a pale blue swimmer from the oldest seas: big round eyes, two spiny grasping arms curling
+    # from her brow, flaps along her sides and a fan of a tail
+    "anomalocaris_mermaid": dict(
+        build="slim", outfit=dict(top=["bandeau"], extras=["pearls"], colors=dict(cloth2="#5a8ac8")),
+        ears=None, hair="wavy", bangs="blunt", fluke=(9, .75, 4), anomalo=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#a8d4f8", FUR="#a8d0f0", LIGHT="#f4faff", MARK="#5a8ac8", EYE="#1e2a5a", CLOTH="#5a8ac8", TRIM="#f4faff",
+                 pattern="spots", extra=dict(belly_white=True, arm="#5a8ac8", arm_tip="#f4faff", flap="#d0e8fc")),
+        variants={"red": dict(HAIR="#f0a090", FUR="#e8806a", LIGHT="#fff0e8", MARK="#a83a2a", EYE="#2a1a14", CLOTH="#a83a2a",
+                              extra=dict(belly_white=True, arm="#a83a2a", arm_tip="#fff0e8", flap="#f8c8b8")),
+                  "purple": dict(HAIR="#c8a8f0", FUR="#a888e0", LIGHT="#f4ecff", MARK="#5a3aa8", EYE="#1e1440", CLOTH="#5a3aa8",
+                                 extra=dict(belly_white=True, arm="#5a3aa8", arm_tip="#f4ecff", flap="#dccaf8")),
+                  "green": dict(HAIR="#a8e0b8", FUR="#88c8a0", LIGHT="#f0fff4", MARK="#2a7a4a", EYE="#14301e", CLOTH="#2a7a4a",
+                                extra=dict(belly_white=True, arm="#2a7a4a", arm_tip="#f0fff4", flap="#c8f0d4")),
+                  "gold": dict(HAIR="#f0d890", FUR="#e8c060", LIGHT="#fff8e0", MARK="#a87a1e", EYE="#3a2a10", CLOTH="#a87a1e",
+                               extra=dict(belly_white=True, arm="#a87a1e", arm_tip="#fff8e0", flap="#f8e8b0"))}),
     # twentieth wave: the doggo, a sea dog: a shaggy blue pup's ears and hair, a white chest, a sparkling fish's tail
     "doggo_mermaid": dict(
         build="petite", outfit=dict(top=["bandeau"], extras=["pearls"], colors=dict(cloth2="#3ac8d8")),
@@ -279,6 +308,10 @@ def declare(sp):
                   ("gstring", .5, 3.5, .5), ("gpocket", 4, 1.75, .25), ("ghoodie", 5.25, 5.5, 3.75)]
     if d.get("trident"):
         parts += [("tri_shaft", .75, 21, .75), ("tri_bar", 4, .75, .75), ("tri_prong", .5, 2.75, .5), ("tri_mid", .5, 3.5, .5)]
+    if d.get("wtusks"):                                  # the walrus's tusks
+        parts += [("wtusk", .75, 3.75, .75)]
+    if d.get("anomalo"):                                 # the anomalocaris's grasping arms (three bends each) and her side flaps
+        parts += [("ano_a", 1, 1, 3), ("ano_b", 1, 2.5, 1), ("ano_c", 1, 1, 1.75), ("anoflap", 3, .25, 3.5)]
     parts.append(("shell", 2, 1.75, .5))
     G.declare(parts, ears=d["ears"], hair=SPECIES[sp]["hair"],
               build=SPECIES[sp].get("build"), outfit=SPECIES[sp].get("outfit"))
@@ -404,6 +437,16 @@ def paint(sp, key):
         streak = shades(e.get("streak", "#6aa8f0"))
         for part in [q for q in H.PARTS if q.startswith(("strand_", "lock_", "tail_lock", "tail_long", "bang_", "frame"))]:
             pt(part, ("north", "south", "east", "west"), lambda f, x, y, w, h: pick(streak, 0.55, x, y) if (x + y // 6) % 4 == 1 else None)
+    if d.get("wtusks"):
+        tusk = shades(e.get("tusk", "#f8f4e8"))
+        pt("wtusk", "all", lambda f, x, y, w, h: pick(tusk, 0.6 - 0.15 * (y == 0) + 0.1 * (f == "north"), x, y))
+    if d.get("anomalo"):
+        arm, tip, flap = shades(e.get("arm", "#5a8ac8")), shades(e.get("arm_tip", "#f4faff")), shades(e.get("flap", "#d0e8fc"))
+        segs = lambda f, x, y, w, h: pick(tip, 0.6, x, y) if f == "down" and (x + y) % 2 == 0 else pick(arm, 0.45 + 0.2 * ((x + y) % 3 == 0), x, y)
+        for p in ("ano_a", "ano_b", "ano_c"):
+            pt(p, "all", segs)
+        pt("anoflap", "all", lambda f, x, y, w, h: CLEAR if f not in ("up", "down")
+           else G.with_alpha(pick(flap, 0.55 + 0.15 * (x % 2), x, y), 230) if x < w - 1 or y % 2 else CLEAR)
     if d.get("trident"):
         tr, trd = shades(e.get("trident", "#8ad0f0")), shades(e.get("trident_dark", "#3a6ab0"))
         pt("tri_shaft", "all", lambda f, x, y, w, h: pick(trd if y % 5 == 0 else tr, 0.45 + 0.1 * (f == "north"), x, y))
@@ -545,6 +588,19 @@ def build(sp):
         r.add("trident", "hand_r", [px, py - 1.5, pz], [cube("tri_shaft", [cx, py - 1.5 - 5.5, cz]), cube("tri_bar", [cx - 1.625, top, cz]),
                                                         cube("tri_prong", [cx - 1.5, top + 0.75, cz + 0.125]), cube("tri_prong", [cx + 1.75, top + 0.75, cz + 0.125]),
                                                         cube("tri_mid", [cx + 0.125, top + 0.75, cz + 0.125])])
+    hx, hy, hz = r.b["head"]["pivot"]
+    if d.get("wtusks"):                                  # two long tusks down from the corners of her mouth
+        r.put("head", cube("wtusk", [-1.5, hy - 2.6, hz - 4.6]), cube("wtusk", [0.75, hy - 2.6, hz - 4.6]))
+    if d.get("anomalo"):                                 # an arm reaching forward from each side of her brow, bending down and back
+        for sg in (-1, 1):
+            x0 = sg * 2.9 - 0.5
+            r.put("head", cube("ano_a", [x0, hy + 7.0, hz - 7.0]), cube("ano_b", [x0, hy + 4.5, hz - 8.0]), cube("ano_c", [x0, hy + 4.5, hz - 7.0]))
+        zz = G.S("fin_1")[2] / 2 - 1.0
+        for i in range(2, 5):                            # two flaps on each tail segment, one either side
+            w, h, dd = G.S(f"fin_{i}")
+            fl = cube("anoflap", [w / 2 - 0.5, h / 2, zz + 0.5])
+            r.put(f"fin_{i}", fl, G.mirror_cube(fl))
+            zz += dd - 0.25
     if d.get("seal"):
         f2 = G.S("fin_2")
         for sg in (-1, 1):

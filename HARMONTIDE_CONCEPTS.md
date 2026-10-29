@@ -560,3 +560,29 @@ striped shirt and a slingshot) and soul keeper (Gregory Mama, soul bottles at he
 (Zelda), the wood elf's green hero (Link, with the long green cap), the ent's tree guard (Groot), the yuki-onna's snow
 wraith (Froslass, purple eyes) and the dullahan's headless rider (Celty) and death envoy (Lala).
 
+## Twenty-first wave (2026-10-28, in the game)
+
+Eight Harmontide creatures from the reference art (their blue looks) and four creatures of folklore that the reference art
+also has (the serpopard, Urcuchillay, the rakshasa and the gashadokuro).
+
+| Species | Home | Design |
+|---|---|---|
+| **Nenekea** | Dragon | A blue sea dragon who walks on land: fins for ears, a crest of fin on her head, beads and pearls, a long tail ending in a tall fan of a fin: her hurt friend near her heals while they stand in water. |
+| **Rheintalensis** | Canid | A broad, shaggy cave bear: wild blue hair, pelts, a necklace of teeth and a knotted club in her fist: she clubs a monster that comes close to her friend and knocks it away. |
+| **Daeodon** | Armoured | A great shaggy pale-blue "hell pig", round ears, pink cheeks, little tusks: now and then she roots up a potato, a carrot or a beetroot at her friend's feet (rarely a golden carrot). |
+| **Anteater** | Armoured | Soft blue with a cream face, a long snout with a pink tongue peeking out, round ears and a great bushy tail: she licks up the loose items near her friend and brings them to their feet. |
+| **Oryx** | Minotaur | Pale blue, a cream crescent moon on her brow, two long straight horns swept back, a tufted tail (bulls too): in the heat of deserts, badlands and savannas her friend near her doesn't tire. |
+| **Caracal** | Nekomata | Blue-grey with long black ear tufts and a pale chest: she leaps at a flying monster near her friend (a phantom, a vex, a blaze, a ghast). |
+| **Walrus** | Merfolk | Round and blue, long pale hair, two white tusks, flippers and a broad tail: her friend near her never freezes. |
+| **Anomalocaris** | Merfolk | A pale blue swimmer from the oldest seas: big round eyes, two spiny arms curling from her brow, flaps along her tail, a fan of a fluke: she seizes a monster swimming near her friend, drags it to her and bites. |
+| **Serpopard** | Lamia | The serpent-leopard of ancient Egyptian palettes: a gold serpent with dark rosettes, a leopard's ears and whiskers, a lapis and gold collar: she bites a monster near her friend (Poison). |
+| **Urcuchillay** | Centaur | The Inca god who watches over the herds, a llama of many colours: rainbow hair and fleece, a blue dress: the young animals near her friend grow up six times as fast. |
+| **Rakshasa** | Nekomata | The shape-shifting tiger demon of Hindu legend: orange stripes, long fangs, a purple robe and gold: the monsters hunting her friend lose sight of them. |
+| **Gashadokuro** | Undead | The towering "starving skeleton" of Japanese folklore: bone-white, dark hollows round red eyes, long black hair, a torn robe, the lines of her bones showing: she seizes a monster near her friend and lifts it into the air (Levitation). |
+
+Paints: obsidian (black volcanic glass with purple glints), patchwork (quilted squares of cloth, stitched), sandstone (layered
+bands of sand and ochre) and the seasonal acorn (little acorns on warm brown, September only), so 83 in all; every month now
+has its seasonal paint.
+
+Homage variant (POP_CULTURE_VARIANTS.md): the jorogumo's bake sale (Muffet): lilac skin, a fifth eye, black pigtails with red
+bows, a purple dress and a teacup. The pigtails, the eye and the cup are drawn only on her.

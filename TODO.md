@@ -293,6 +293,22 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
 - [x] Journal and hearth discoverable (2026-10-28): the journal opens again (its pages are synced to the client before the book screen opens), it starts with four guide pages (making friends, the hearth, expeditions, weapons), both recipes are unlocked at login, and every player gets a journal on their first visit (not on the GameTest server).
 - [x] Homage variants from POP_CULTURE_VARIANTS.md: `jewel_thief` (cave bat), `ink_kid` (ika), `pink_dairy` (cattle minotaur), `sun_goddess` (wolf girl); palettes only, rare in the wild (`HOMAGES`). The rest of that list wants a prop each.
 - [ ] Dev client for the life features: a held bow and a TaCZ gun in a girl's hand (position on `hand_r`; the item may need vanilla's extra 180-degree turn once the arm is raised), the aiming poses and recoil, TaCZ shooting and reloading from the pouch, the journal's pages, a hut going up and the market's presents, an expedition's return.
+- [x] **Twenty-first wave** (2026-10-28), tested in `TwentyFirstWaveTests`:
+  - **Nenekea** (dragon, `seafin`: a tail fan and `hair_nfin`): every second, `tidalBalm` gives her hurt friend within 8 who stands in water Regeneration I.
+  - **Rheintalensis** (canid, `bigclub` in `hand_r`): every 2 s, `bruteSwing` hits the nearest monster within 4 of her friend for 6 and knocks it away from them.
+  - **Daeodon** (armoured, boar tusks): every minute, `rooting` drops a potato, carrot or beetroot (1 in 20 a golden carrot) at her friend's feet on grass or dirt.
+  - **Anteater** (armoured, `snout`: snout and tongue on the head, a bushy tail): every second, `longTongue` brings the items within 12 of her friend to their feet.
+  - **Oryx** (minotaur, `oryx`: `hair_ohorn` and a crescent on her brow; bulls too): every second in a hot biome (base temperature 1.5+), `desertStride` wipes her friend's exhaustion.
+  - **Caracal** (nekomata, tuft ears): every 2 s, `birdCatch` hits the nearest flying hostile mob (any `Mob` that is an `Enemy`: FlyingMob, vex, blaze; phantoms and ghasts aren't `Monster`s) within 10 of her friend for 6.
+  - **Walrus** (merfolk, `wtusks`, flippers): every second, `blubber` thaws her frozen friend within 10.
+  - **Anomalocaris** (merfolk, `anomalo`: brow arms and tail flaps): every 2 s, `raptorGrasp` hits the nearest monster in the water within 8 of her friend for 4 and pulls it towards her.
+  - **Serpopard** (lamia, cat ears: the lamia generator now takes `ears`): every 3 s, `venomBite` gives the nearest monster within 6 of her friend Poison II (the undead take 3 damage instead).
+  - **Urcuchillay** (centaur, rainbow mane and fleece): every 10 s, `herdKeeper` ages the baby animals within 12 of her friend by a minute.
+  - **Rakshasa** (nekomata, sabre fangs): every 2 s, `glamour` makes the monsters within 12 that target her friend drop the target.
+  - **Gashadokuro** (undead, `bones`, panda face marks; a monster, 2.6 tall): every 3 s, `giantsGrasp` gives the nearest monster within 6 of her friend Levitation II.
+  - **Paints:** obsidian, patchwork, sandstone and acorn (September only, `Painted.roll`), so 83 in all.
+  - **Homage:** `bake_sale` on the jorogumo (Muffet), with `muffet_kit` props (pigtails, a fifth eye, a teacup) drawn only on her; the jorogumo's 83 paints were redone for the new parts.
+- [ ] Dev client for the twenty-first wave: the rheintalensis's club and the anteater's snout at game scale, the nenekea's tail fan, the anomalocaris's arms, the oryx's horns in doorways, the gashadokuro's height; Muffet's pigtails and teacup; the four paints.
 - [x] **Twentieth wave** (2026-10-28), tested in `TwentiethWaveTests`:
   - **Brasshorn ram** (minotaur, ram horns, wool, regalia; rams too): every second, `mountainFooting` gives her friend within 10 Jump Boost I.
   - **Ceibler** (centaur, fleece, blanket, bells, horns): every second, `trailGuide` gives her friend within 10 Speed I while they stand on dirt, grass or a path.

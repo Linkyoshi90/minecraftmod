@@ -21,6 +21,21 @@ COW_TAIL = [(1, 1, 3.5), (.75, .75, 3.5), (1.5, 1.75, 1.75)]
 TAIL_REST = [(-62, 0, 0), (-14, 0, 0), (-6, 0, 0)]
 
 SPECIES = {
+    # twenty-first wave: the oryx, pale blue with a cream crescent moon on her brow, two long straight horns swept back, a tufted tail
+    "oryx_minotaur": dict(
+        build="slim", outfit=dict(top=["halter", "capelet"], bottom="sarong", extras=["armlets"], colors=dict(cloth2="#2a4a8a")),
+        hair="ponytail", bangs="parted", ears="horse", legs="hoof", foot="hoof", tail=[(1, 1, 3), (1.5, 1.5, 2)], tail_look="tuft",
+        tail_rest=[(-20, 0, 0), (10, 0, 0)], oryx=True, male=dict(hair="shaggy", outfit=dict(bottom="sarong", extras=["armlets"], colors=dict(cloth2="#2a4a8a"))),
+        pal=dict(SKIN=skin("fair"), HAIR="#c8d8f4", FUR="#9ab4e0", LIGHT="#eef4fc", MARK="#2a3a6a", EYE="#2a4a9a", CLOTH="#2a4a8a", TRIM="#e8e0c8",
+                 INNER="#d8b8c8", pattern="solid", extra=dict(horn="#2a3a6a", moon="#f4ecd0", hoof="#2a3a5a")),
+        variants={"white": dict(HAIR="#f4f2ec", FUR="#f0ece4", LIGHT="#ffffff", MARK="#4a4440", EYE="#3a2a1e", CLOTH="#a87a3a",
+                                extra=dict(horn="#2a2624", moon="#c8a060", hoof="#2a2624")),
+                  "gemsbok": dict(HAIR="#1e1c1e", FUR="#a8a090", LIGHT="#f4f0e8", MARK="#141214", EYE="#2a1e14", CLOTH="#8a3a22",
+                                  extra=dict(horn="#1e1c1e", moon="#f4f0e8", hoof="#1e1c1e")),
+                  "scimitar": dict(HAIR="#8a3a1e", FUR="#f0ece4", LIGHT="#ffffff", MARK="#8a3a1e", EYE="#2a1e14", CLOTH="#2a5a6a",
+                                   extra=dict(horn="#3a2a1e", moon="#a8502a", hoof="#3a2a1e")),
+                  "sand": dict(HAIR="#e8d4a8", FUR="#d8c094", LIGHT="#f8f0dc", MARK="#6a4a24", EYE="#3a2412", CLOTH="#3a6a8a",
+                               extra=dict(horn="#3a2a1a", moon="#fff8e8", hoof="#3a2a1a"))}),
     # twentieth wave: the brasshorn ram, a shaggy blue mountain ram, great curling horns of brass, brass at her brow and hooves,
     # a white rune on her brow and a woven blanket
     "brasshorn_minotaur": dict(
@@ -232,6 +247,8 @@ def male(sp):
 
 def declare_hook(sp, d):
     out = [("haft", .75, 13, .75), ("blade", 3, 3.5, .5)] if d.get("labrys") else []
+    if d.get("oryx"):                                   # the oryx's long straight horns, ringed at the base
+        out += [("ohorn", .75, 10, .75)]
     if d.get("wool"):                                   # the fleece: a shawl, a fluffy band at the hips and a cap (bones wool, wool_hips, wool_head)
         out += [("wool_c", 9, 2.75, 5), ("wool_s", 7.5, 2.5, 5.25), ("wool_h", 7, 1.75, 6.5)]
     if d.get("browplate"):                              # a steel plate over her brow, riveted, with a ridge down its middle
@@ -265,6 +282,17 @@ def wool_fn(pal):
 
 
 def paint_hook(pt, pal, d):
+    if d.get("oryx"):
+        oh = G.shades(pal.extra.get("horn", "#2a3a6a"))
+        pt("ohorn", "all", lambda f, x, y, w, h: pick(oh, 0.35 + 0.25 * (y < h * 0.45 and y % 2 == 0) + 0.1 * (y < 2), x, y))
+        moon = G.shades(pal.extra.get("moon", "#f4ecd0"))
+
+        def crescent(f, x, y, w, h):                     # a crescent moon on her brow, its horns up
+            dx, dy = x + 0.5 - w / 2, y + 0.5 - 5.0
+            if dx * dx + dy * dy < 6.5 and dx * dx + (dy + 1.6) ** 2 > 4.4:
+                return pick(moon, 0.6, x, y)
+            return None
+        pt("head", ("north",), crescent)
     tusk, tband = G.shades(pal.extra.get("tusk", "#f4ecd8")), G.shades(pal.extra.get("tusk_band", "#5a5e6a"))
     pt("tusk_a", "all", lambda f, x, y, w, h: pick(tusk, 0.5 + 0.15 * (f == "up") - 0.1 * (f == "down"), x, y))
     pt("tusk_b", "all", lambda f, x, y, w, h: pick(tusk, 0.62 + 0.1 * (f == "up"), x, y))
@@ -316,6 +344,9 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
+    if d.get("oryx"):                                   # two long horns from the top of her head, swept back in a shallow V
+        r.add("hair_ohorn", "head", [0, hy + 8, z], [G.rot_cube("ohorn", [sg * 1.4 - 0.375, hy + 7.5, -1.0 + z], [sg * 1.4, hy + 7.5, -0.6 + z], 55, 0, -8 * sg)
+                                                     for sg in (-1, 1)])
     if d.get("tusks"):
         cs = []
         for sg in (-1, 1):

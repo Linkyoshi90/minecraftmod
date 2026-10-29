@@ -34,7 +34,10 @@ blobs glow) and sunflower (golden petals round brown seed heads, August only). A
 colours, halftone dots and bold black outlines, like a printed comic), blueprint (white lines and a grid on blueprint
 blue), koi (red-orange patches and a few black specks on pearl white) and lemonade (lemon slices on pale yellow, June
 only). And (twentieth wave): tie_dye (a swirl of rainbow dye with white crinkle lines), jade (carved green stone, pale
-veins), lace (ivory open-work lace) and bluebell (little blue bells on green stems over pale periwinkle, May only). The drips and
+veins), lace (ivory open-work lace) and bluebell (little blue bells on green stems over pale periwinkle, May only). And
+(twenty-first wave): obsidian (black volcanic glass with purple glints and pale sheen), patchwork (quilted squares of
+different cloth, stitched), sandstone (layered bands of sand and ochre) and acorn (little acorns on warm brown, September
+only). The drips and
 patterns follow the model: they are drawn per cube face from the geo file, running down each side from its top edge.
 
     python tools/gen_paints.py [paint ...] [model ...]   # everything, or just the paints and/or models named
@@ -205,7 +208,8 @@ def treat(img, name, model):
                                         "polka", "circuit", "giraffe", "watermelon",
                                         "cow", "rust", "lava_lamp", "sunflower",
                                         "comic", "blueprint", "koi", "lemonade",
-                                        "tie_dye", "jade", "lace", "bluebell"):
+                                        "tie_dye", "jade", "lace", "bluebell",
+                                        "obsidian", "patchwork", "sandstone", "acorn"):
         return finish(img, name, model)[0]
     W = len(img[0])
     out = [list(row) for row in img]
@@ -338,7 +342,8 @@ TREATS = ["chocolate", "icecream", "strawberry", "jello", "milk", "gold", "marbl
           "polka", "circuit", "giraffe", "watermelon",
           "cow", "rust", "lava_lamp", "sunflower",
           "comic", "blueprint", "koi", "lemonade",
-          "tie_dye", "jade", "lace", "bluebell"]
+          "tie_dye", "jade", "lace", "bluebell",
+          "obsidian", "patchwork", "sandstone", "acorn"]
 PEARL = hexes("#b8b0c0", "#d8d2e0", "#ece8f2", "#f8f6fc", "#ffffff")
 CHROME = hexes("#1e2024", "#4a4e56", "#8a909a", "#c8ccd4", "#ffffff")
 AURORA = hexes("#2af08a", "#3ad8c8", "#5aa0f0", "#8a6af0", "#c86ae8")
@@ -832,6 +837,42 @@ def finish(img, name, model):
                     c = (86, 150, 70)                                        # the stem
                 elif ty in (3, 4, 6, 7) and tx in (1, 2, 4, 5) and (tx < 3) == (ty < 5):
                     c = (int(70 + 30 * l), int(90 + 30 * l), int(200 + 30 * l))     # a nodding bell
+            elif name == "obsidian":
+                if l < 0.22 and face:
+                    continue
+                k = 0.35 + 0.5 * l
+                c = (int(26 + 40 * k), int(18 + 26 * k), int(40 + 60 * k))     # glassy black-violet
+                if H.noise(x, y, 197) > 0.9:
+                    c = (int(150 + 60 * l), int(90 + 50 * l), int(220 + 30 * l))  # a purple glint
+                elif (xx + yy + i) % 11 == 0 and yy < fh * 0.5:
+                    c = (int(90 + 60 * l), int(84 + 60 * l), int(110 + 70 * l))   # a pale sheen across the glass
+            elif name == "patchwork":
+                if l < 0.22 and face:
+                    continue
+                PATCH = ((200, 90, 80), (90, 140, 190), (230, 196, 110), (120, 170, 110), (190, 130, 180), (236, 226, 206))
+                px_, py_ = (xx + 2 * i) // 5, (yy + i) // 5
+                base = PATCH[(px_ * 3 + py_ * 5 + i) % len(PATCH)]
+                c = tuple(int(v * (0.72 + 0.32 * l)) for v in base)
+                if (px_ + py_) % 2 == 0 and (xx + yy) % 2 == 0:
+                    c = tuple(min(255, int(v * 1.08)) for v in c)              # a gingham weave on every other patch
+                if (xx + 2 * i) % 5 == 0 and yy % 2 == 0 or (yy + i) % 5 == 0 and xx % 2 == 0:
+                    c = (int(70 + 30 * l), int(54 + 24 * l), int(40 + 20 * l))     # the stitched seams
+            elif name == "sandstone":
+                if l < 0.22 and face:
+                    continue
+                band = (yy + i * 3 + int(2 * math.sin((xx + i) * 0.45))) // 3 % 4
+                SAND = ((236, 214, 160), (222, 186, 124), (204, 150, 92), (230, 202, 146))
+                k = 0.78 + 0.28 * l + (H.noise(x, y, 198) - 0.5) * 0.1
+                c = tuple(min(255, int(v * k)) for v in SAND[band])
+            elif name == "acorn":
+                if l < 0.22 and face:
+                    continue
+                c = (int(150 + 40 * l), int(96 + 30 * l), int(56 + 20 * l))    # warm brown
+                tx, ty = (xx + 3 * i) % 6, (yy + 4 * i) % 7                      # an acorn in every 6x7
+                if ty in (1, 2) and 1 <= tx <= 4 or ty == 0 and tx in (2, 3):
+                    c = (int(96 + 30 * l), int(70 + 20 * l), int(40 + 16 * l))     # the cup, darker, its stalk on top
+                elif ty in (3, 4) and 1 <= tx <= 4 or ty == 5 and tx in (2, 3):
+                    c = (int(220 + 30 * l), int(170 + 30 * l), int(80 + 20 * l))   # the nut, golden
             elif name == "lemonade":
                 if l < 0.22 and face:
                     continue

@@ -18,6 +18,17 @@ SEGS = [("seg_1", 4.5, 10.5, 4), ("seg_2", 4.25, 4, 5.5), ("seg_3", 4, 3.75, 5.5
         ("seg_5", 3, 2.75, 5), ("seg_6", 2.5, 2.25, 4.5), ("seg_7", 2, 1.75, 4), ("seg_8", 1.25, 1.25, 3.5)]
 
 SPECIES = {
+    # twenty-first wave (folklore): the serpopard of ancient Egyptian palettes, a long-necked serpent with a leopard's spots, ears
+    # and face: gold with dark rosettes, a lapis and gold collar
+    "serpopard_lamia": dict(
+        build="slim", outfit=dict(top=["bandeau"], extras=["usekh", "armlets"], colors=dict(cloth2="#e8c050")),
+        thick=1.05, hair="bob", bangs="blunt", ears="cat",
+        pal=dict(SKIN=skin("fair"), HAIR="#2a1e14", FUR="#d8a840", LIGHT="#f8ecc8", MARK="#3a2410", EYE="#c8d040", CLOTH="#2a4ab0", TRIM="#e8c050",
+                 INNER="#e8a0a0", pattern="rosettes", facemark="whisker"),
+        variants={"blue": dict(FUR="#4a7ad8", LIGHT="#e0ecfc", MARK="#14204a", HAIR="#14204a", EYE="#f8d040", CLOTH="#e8c050", TRIM="#2a4ab0"),
+                  "snow": dict(FUR="#e8e8ec", LIGHT="#ffffff", MARK="#5a5a64", HAIR="#3a3a44", EYE="#5ab8e8"),
+                  "black": dict(FUR="#2a2830", LIGHT="#5a5860", MARK="#0e0c10", HAIR="#0e0c10", EYE="#f8d040", CLOTH="#a81a2a"),
+                  "sand": dict(FUR="#e0c890", LIGHT="#fcf4e0", MARK="#8a6a3a", HAIR="#5a3a1e", EYE="#3a8a3a", CLOTH="#2a7a6a")}),
     # nineteenth wave: the turquoise serpent, royal blue with a turquoise belly, a feathered crest, gold and turquoise jewellery
     "turquoise_serpent_lamia": dict(
         build="curvy", outfit=dict(top=["bandeau"], extras=["usekh", "armlets", "bracers"], colors=dict(cloth2="#e8c050")),
@@ -170,7 +181,7 @@ def declare(sp):
         extra += [("spine", .5, 3.5, .5), ("spine_s", .5, 2, .5)]
     if d.get("medusa"):
         extra += [("snake", 1, 5.5, 1), ("snake_h", 1.5, 1, 2), ("blindfold", 8.5, 1.75, 8.5), ("blind_tail", 1, 3, .25)]
-    G.declare(parts + extra, ears=None, hair=SPECIES[sp]["hair"],
+    G.declare(parts + extra, ears=d.get("ears"), hair=SPECIES[sp]["hair"],
               build=SPECIES[sp].get("build"), outfit=SPECIES[sp].get("outfit"))
 
 
@@ -179,6 +190,8 @@ def paint(sp, key):
     pal = G.pal_from(d["pal"], d["variants"].get(key) if key else None, pupil=(0.9, 3.6))
     pt = H.Painter()
     G.paint_upper(pt, pal, top="wrap", top_pattern="dots", outfit=d.get("outfit"), build=d.get("build"))
+    if d.get("ears"):                                    # the serpopard's leopard ears
+        G.paint_ears(pt, pal)
     sc = G.scale_fn(pal, belly_faces=("down",))
     belly = G.scale_fn(pal, belly_faces=("down", "north"))
     skin_t = H.skin_fn(pal, 0.66)
@@ -221,7 +234,7 @@ def build(sp):
     d = SPECIES[sp]
     r = G.Rig()
     r.add("root", None, [0, 0, 0])
-    g = G.upper(r, 12, dict(hair=d["hair"], bangs=d.get("bangs"), build=d.get("build"), outfit=d.get("outfit"), ears=None, skirt=False))
+    g = G.upper(r, 12, dict(hair=d["hair"], bangs=d.get("bangs"), build=d.get("build"), outfit=d.get("outfit"), ears=d.get("ears"), skirt=False))
     end_z = G.serpent(r, None, d)
     if d.get("crown"):                                  # the naga's crown: a gold band, five spikes, a jade gem at the front
         cs = [cube("crown", [-2.25, g.hy + 8.3, -2.25 + g.z])]

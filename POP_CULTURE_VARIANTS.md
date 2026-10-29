@@ -7,7 +7,7 @@ rolled rarely in the wild (`AbstractMonsterGirl.HOMAGES`). Variant names must be
 the homage set is keyed by name.
 
 **Fit** is how naturally the character sits on that girl (the same animal, the same rig, the props we can model).
-✅ = in the game (2026-10-28: four with the journal, eight with the nineteenth wave, nine with the twentieth).
+✅ = in the game (2026-10-28: four with the journal, eight with the nineteenth wave, nine with the twentieth, Muffet with the twenty-first).
 
 ## Strong fits
 
@@ -22,7 +22,7 @@ the homage set is keyed by name.
 | Crocodile (`croc_lizardfolk`) | Vector (Sonic) | `detective_croc` | Green scales, gold chain, big headphones | ★★ |
 | Bee (`bee_bug`) | Charmy Bee (Sonic) | `flight_cap` | Yellow and black, an aviator's cap and goggles, orange vest | ★★ |
 | Turtle (`turtle_lizardfolk`) | Koopa (Mario) | `shell_trooper` ✅ | Yellow skin, a green dome shell with a white rim, red shoes | ★★★ |
-| Orb weaver (`orb_weaver_arachne`) | Muffet (Undertale) | `bake_sale` | Lilac skin, five eyes, black pigtails with red bows, a puffy purple dress, a teacup | ★★★ |
+| Jorogumo (`jorogumo_arachne`) | Muffet (Undertale) | `bake_sale` ✅ | Lilac skin, five eyes, black pigtails with red bows, a puffy purple dress, a teacup | ★★★ (two legs and spider legs at her back, like Muffet's; she was planned on the orb weaver, whose spider body is wrong; the pigtails, the fifth eye and the teacup are props drawn only on her) |
 | Fennec (`fennec_kitsune`) | Tails (Sonic) | `twin_tails` | Orange and white, two tails, goggles on her head | ★★★ (two tails: show the second tail bone) |
 | Red kitsune (`red_kitsune`) | Ninetales (Pokémon) | `nine_cream` | Cream fur and hair, red eyes, nine tails | ★★ |
 | Kobold (`kobold_canid`) | Isabelle (Animal Crossing) | `town_clerk` ✅ | Golden fur, a topknot with a red bell, green vest, white blouse | ★★★ |

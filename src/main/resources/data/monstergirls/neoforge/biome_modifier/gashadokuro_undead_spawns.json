@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_gashadokuro_undead",
+  "spawners": {
+    "type": "monstergirls:gashadokuro_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -89,12 +89,14 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             "polka", "circuit", "giraffe", "watermelon",                     // circuit glows; watermelon is seasonal, July only
             "cow", "rust", "lava_lamp", "sunflower",                         // lava lamp's blobs glow; sunflower is seasonal, August only
             "comic", "blueprint", "koi", "lemonade",                         // lemonade is seasonal, June only
-            "tie_dye", "jade", "lace", "bluebell");                          // bluebell is seasonal, May only
+            "tie_dye", "jade", "lace", "bluebell",                           // bluebell is seasonal, May only
+            "obsidian", "patchwork", "sandstone", "acorn");                  // acorn is seasonal, September only
     /** Homage variants (the look of a favourite character): a wild one rolls them only rarely. */
     public static final java.util.Set<String> HOMAGES = java.util.Set.of("gunman", "blossom", "lost", "stitched", "nurse", "mummy", "ranger", "outback",
             "jewel_thief", "ink_kid", "pink_dairy", "sun_goddess",                            // POP_CULTURE_VARIANTS.md
             "octo_agent", "ninja_chameleon", "shell_trooper", "town_clerk", "scythe_green", "leaf_sprout", "mud_fin", "trident_hood",
-            "innkeeper", "prankster", "soul_keeper", "sage_princess", "green_hero", "tree_guard", "snow_wraith", "headless_rider", "death_envoy");
+            "innkeeper", "prankster", "soul_keeper", "sage_princess", "green_hero", "tree_guard", "snow_wraith", "headless_rider", "death_envoy",
+            "bake_sale");
     /** Homage looks with a model of their own (geo, animations and texture &lt;species&gt;_&lt;variant&gt;), not just a recolour. */
     public static final java.util.Set<String> OWN_MODELS = java.util.Set.of("mud_fin", "trident_hood");
     /** One wild girl in this many is painted, like a shiny. */

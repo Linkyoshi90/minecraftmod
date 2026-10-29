@@ -17,6 +17,17 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # twenty-first wave (folklore): the gashadokuro, the towering 'starving skeleton' of Japanese folklore: bone-white, dark hollows
+    # round her glowing eyes, long black hair, a tattered robe, the lines of her bones showing through
+    "gashadokuro_undead": dict(
+        build="strong", outfit=dict(top=["mantle"], bottom="hakama", extras=["arm_wraps"], colors=dict(cloth2="#2a2a30", bandage="#c8c0a8")),
+        hair="flowing", bangs="wispy", ears=None, legs="bare", foot="claw", tattered=True, bones=True,
+        pal=dict(SKIN="#e8e0cc", HAIR="#1e1a20", FUR="#e8e0cc", LIGHT="#f8f4ec", MARK="#2a2220", EYE="#e8302a", CLOTH="#3a3a44", TRIM="#a8a090",
+                 facemark="panda", extra=dict(claw="#e8e0cc")),
+        variants={"ash": dict(SKIN="#a8a8a4", FUR="#a8a8a4", LIGHT="#d8d8d4", HAIR="#3a3a3e", EYE="#f8a030", CLOTH="#2a2a2e"),
+                  "black": dict(SKIN="#4a4448", FUR="#4a4448", LIGHT="#7a7478", MARK="#0e0a0c", HAIR="#e8e4ec", EYE="#f8f040", CLOTH="#5a1e24"),
+                  "blood": dict(SKIN="#e0c8b8", FUR="#e0c8b8", LIGHT="#f4e4d8", MARK="#5a0e10", HAIR="#3a0a0c", EYE="#f8e040", CLOTH="#6a1418"),
+                  "jade": dict(SKIN="#b8e0cc", FUR="#b8e0cc", LIGHT="#e0f8ec", MARK="#1e4a3a", HAIR="#14302a", EYE="#5af0c8", CLOTH="#1e3a34")}),
     # twentieth wave (folklore): the ghoul, the grave-haunting ghul of Arabian tales: blue-grey cracked skin, wild teal hair, clawed
     # hands and feet, a torn shift
     "ghoul_undead": dict(
@@ -207,6 +218,10 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    if d.get("bones"):                                   # the gashadokuro's bones showing: a groove down each limb, knuckled joints
+        groove = lambda f, x, y, w, h: pick(pal.MARK, 0.45, x, y) if f in ("north", "south") and x == w // 2 and y % 4 != 3 else None
+        for p in ("arm_up", "forearm", "thigh", "shin"):
+            pt(p, ("north", "south"), groove)
     if d.get("smudge"):                                  # her face smeared and scratched out, like an old photograph
         smear = G.shades("#e8e8ec")
         pt("head", ("north",), lambda f, x, y, w, h: G.with_alpha(pick(smear, 0.55 + 0.3 * noise(x, y, 141), x, y), 215)

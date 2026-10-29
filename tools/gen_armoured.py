@@ -16,6 +16,29 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # twenty-first wave: the daeodon, a great shaggy pale-blue 'hell pig': round ears, pink cheeks, little tusks, a big mouth
+    "daeodon_armoured": dict(
+        build="strong", outfit=dict(top=["bandeau"], bottom="shorts", extras=["belt"], colors=dict(leather="#3a4a6a", cloth2="#2a3a5a")),
+        hair="shaggy", bangs="messy", ears="round", legs="fur", foot="hoof", tail=[(1, 1, 2), (.75, .75, 1.5)], tail_rest=[(-40, 0, 0), (60, 0, 0)],
+        tail_look="fur", boar=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#6a8ad0", FUR="#8aa8e0", LIGHT="#dce8f8", MARK="#3a5aa8", EYE="#1e2a4a", CLOTH="#3a5a9a", TRIM="#e8eef8",
+                 pattern="solid", extra=dict(nobands=True, tusk="#f8f4e8", hoof="#2a3a5a")),
+        variants={"brown": dict(HAIR="#4a3424", FUR="#6a4e36", LIGHT="#b89a7a", MARK="#2a1e14", EYE="#2a1a10", extra=dict(nobands=True, tusk="#f0e6cc", hoof="#2a2018")),
+                  "grey": dict(HAIR="#5a5a60", FUR="#7a7a80", LIGHT="#c8c8cc", MARK="#3a3a40", extra=dict(nobands=True, tusk="#f0e6cc", hoof="#2a2a2e")),
+                  "black": dict(HAIR="#1e1c20", FUR="#2e2c30", LIGHT="#6a6870", MARK="#0e0c10", EYE="#c8302a", extra=dict(nobands=True, tusk="#f0e6cc", hoof="#141214")),
+                  "ginger": dict(HAIR="#a8501e", FUR="#c8743a", LIGHT="#f0c8a0", MARK="#6a2e10", extra=dict(nobands=True, tusk="#f8f0dc", hoof="#3a2014"))}),
+    # twenty-first wave: the anteater, soft blue with a cream face, a long tubular snout with a pink tongue, round ears and a great
+    # bushy tail
+    "anteater_armoured": dict(
+        build="standard", outfit=dict(top=["sweater"], bottom="shorts", extras=["satchel"], colors=dict(leather="#5a4a3a", cloth2="#3a4a6a")),
+        hair="bob", bangs="blunt", ears="round", legs="fur", foot="claw", tail=[(3, 3, 4), (3.5, 4, 5)], tail_rest=[(-15, 0, 0), (12, 0, 0)],
+        tail_look="fur", snout=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#6a84c0", FUR="#7a94cc", LIGHT="#f0e8d8", MARK="#2a3a6a", EYE="#1e2440", CLOTH="#e8dcc0", TRIM="#3a4a8a",
+                 pattern="solid", extra=dict(nobands=True, tongue="#f08aa0", nose="#1e2440")),
+        variants={"grey": dict(HAIR="#6a6a70", FUR="#8a8a90", LIGHT="#e8e8e8", MARK="#141418", CLOTH="#3a3a40", extra=dict(nobands=True, tongue="#f08aa0", nose="#141418")),
+                  "tamandua": dict(HAIR="#d8b060", FUR="#e0bc6a", LIGHT="#f8ecc8", MARK="#1e1814", CLOTH="#2a2420", extra=dict(nobands=True, tongue="#f08aa0", nose="#1e1814")),
+                  "silky": dict(HAIR="#f0d070", FUR="#f4d880", LIGHT="#fff4d8", MARK="#a87a2a", CLOTH="#a87a2a", extra=dict(nobands=True, tongue="#f8a0b0", nose="#5a3a1a")),
+                  "brown": dict(HAIR="#5a4030", FUR="#7a5a42", LIGHT="#d8c0a0", MARK="#2a1e14", CLOTH="#c8a878", extra=dict(nobands=True, tongue="#f08aa0", nose="#1e140c"))}),
     "armadillo_armoured": dict(
         build="petite", outfit=dict(top=["bandeau"], bottom="shorts", extras=["scarf", "belt"], colors=dict(scarf="#6a7a5a", cloth2="#6a5a42")),
         hair="bob", bangs="blunt", ears="horse", legs="scales", foot="claw",
@@ -76,12 +99,18 @@ SPECIES = {
 
 
 def declare_hook(sp, d):
-    return [("band", 7, 1.5, 3.5), ("band_top", 6, 1.5, 3), ("hat_crown", 5, 2.5, 5), ("hat_brim", 9.5, .5, 9.5), ("btusk", .75, 1.75, .75),
+    snout = [("aesnout", 2, 2, 5.5), ("aetongue", .5, .25, 2.5)] if d.get("snout") else []      # the anteater's snout and tongue
+    return snout + [("band", 7, 1.5, 3.5), ("band_top", 6, 1.5, 3), ("hat_crown", 5, 2.5, 5), ("hat_brim", 9.5, .5, 9.5), ("btusk", .75, 1.75, .75),
             ("sclaw", .5, 2.5, .5)] + ([("rfin", 4, .5, 3)] if d.get("fin") else [])
 
 
 def paint_hook(pt, pal, d):
     e = pal.extra
+    if d.get("snout"):                                   # cream like her face, the nose dark at the tip
+        nose, tongue = G.shades(e.get("nose", "#1e2440")), G.shades(e.get("tongue", "#f08aa0"))
+        pt("aesnout", "all", lambda f, x, y, w, h: pick(nose, 0.4, x, y) if f == "north"
+           else pick(pal.LIGHT, 0.45 + 0.15 * (f == "up") - 0.12 * (f == "down") + (noise(x, y, 81) - 0.5) * 0.08, x, y))
+        pt("aetongue", "all", lambda f, x, y, w, h: pick(tongue, 0.55 + 0.1 * (f == "up"), x, y))
     band, edge = G.shades(e.get("band", "#8a7a68")), G.shades(e.get("band_edge", "#5a4a3e"))
     plates = lambda f, x, y, w, h: pick(edge if y == h - 1 or x % 3 == 0 else band, 0.45 + 0.2 * (y == 0) + (noise(x, y, 4) - 0.5) * 0.1, x, y)
     pt("band", "all", (lambda *a: CLEAR) if e.get("nobands") else plates)
@@ -108,6 +137,8 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
+    if d.get("snout"):                                   # the long snout straight out from her face, the tongue peeking from its tip
+        r.put("head", cube("aesnout", [-1.0, hy + 0.9, -9.4 + z]), cube("aetongue", [-0.25, hy + 0.85, -11.4 + z]))
     cd = G.S("chest")[2]
     bands = [cube("band", [-3.5, 12.6 + i * 1.6, cd / 2 - 0.4 + z]) for i in range(4)] + [cube("band_top", [-3, 19.0, cd / 2 - 0.6 + z])]
     r.add("bands", "body", [0, 16, cd / 2 + z], bands)

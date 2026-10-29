@@ -323,6 +323,7 @@ public class Dragon extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.NENEKEA_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel tide && !this.isBaby() && this.tickCount % 20 == 0) this.tidalBalm(tide);
         if (this.species == GirlSpecies.MOO_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel frill && !this.isBaby() && this.tickCount % 20 == 0) this.herdStand(frill);
         if (this.species == GirlSpecies.HAIRYPTERIX_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel wind && !this.isBaby() && this.tickCount % 10 == 0) this.updraft(wind);
         if (!(this.level() instanceof ServerLevel server)) return;
@@ -472,6 +473,16 @@ public class Dragon extends AbstractMonsterGirl {
         net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 12);
         if (friend == null || friend.fallDistance <= 3.0F) return false;
         friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SLOW_FALLING, 40, 0, true, true));
+        return true;
+    }
+
+    // --- the nenekea (twenty-first wave) ----------------------------------------------------------------------------
+
+    /** Her hurt friend within 8 blocks, standing in water, heals: Regeneration I for three seconds. True if she soothed them. */
+    public boolean tidalBalm(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null || !friend.isInWater() || friend.getHealth() >= friend.getMaxHealth()) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.REGENERATION, 60, 0, true, true));
         return true;
     }
 }

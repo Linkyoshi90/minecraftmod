@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_anteater_armoured",
+  "spawners": {
+    "type": "monstergirls:anteater_armoured",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

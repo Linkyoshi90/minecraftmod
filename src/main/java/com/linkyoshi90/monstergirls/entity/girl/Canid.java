@@ -533,6 +533,7 @@ public class Canid extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.RHEINTALENSIS_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel cave && !this.isBaby() && this.tickCount % 40 == 0) this.bruteSwing(cave);
         if (this.species == GirlSpecies.OBSIDIAN_HOUND_CANID && this.level() instanceof ServerLevel badlands && !this.isBaby() && this.tickCount % 20 == 0) this.coolLava(badlands);
         if (this.species == GirlSpecies.TARNHELM_CANID && this.level() instanceof ServerLevel watch && !this.isBaby() && this.tickCount % 100 == 0) this.sentinel(watch);
         if (this.species == GirlSpecies.AMAROK_CANID && this.level() instanceof ServerLevel pack && !this.isBaby() && this.tickCount % 20 == 0) this.packMother(pack);
@@ -819,5 +820,22 @@ public class Canid extends AbstractMonsterGirl {
             n++;
         }
         return n;
+    }
+
+    // --- the rheintalensis (twenty-first wave) ----------------------------------------------------------------------
+
+    /** She clubs the nearest monster within 4 blocks of her friend: six points, and it is knocked away from them. 1 if she swung,
+     *  0 if none was close, -1 without a friend. */
+    public int bruteSwing(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster m = level.getNearestEntity(net.minecraft.world.entity.monster.Monster.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat(), friend,
+                friend.getX(), friend.getY(), friend.getZ(), friend.getBoundingBox().inflate(4));
+        if (m == null) return 0;
+        m.hurt(level.damageSources().mobAttack(this), 6.0F);
+        m.knockback(1.2, friend.getX() - m.getX(), friend.getZ() - m.getZ());
+        this.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+        this.playSound(net.minecraft.sounds.SoundEvents.PLAYER_ATTACK_KNOCKBACK, 1.0F, 0.7F);
+        return 1;
     }
 }

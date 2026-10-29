@@ -17,6 +17,17 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # twenty-first wave (folklore): Urcuchillay, the Inca god who watches over the herds: a llama of many colours, rainbow hair and
+    # fleece, a blue dress and a headband with a blue stone
+    "urcuchillay_centaur": dict(
+        build="standard", outfit=dict(top=["halter"], extras=["armlets", "scarf"], colors=dict(scarf="#3a7ad8", cloth2="#3a7ad8")),
+        hair="flowing", bangs="wispy", tail=(2.5, 4, 1.75), fleece=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#f8d8e8", FUR="#f4ece4", LIGHT="#fffaf4", MARK="#c8a888", EYE="#6a3a1e", CLOTH="#3a7ad8", TRIM="#e8f0fc",
+                 pattern="solid", extra=dict(rainbow=True)),
+        variants={"white": dict(HAIR="#f4f0ec", FUR="#f4f0ea", MARK="#a89888", CLOTH="#c84a3a", EYE="#3a2a1e"),
+                  "brown": dict(HAIR="#7a5236", FUR="#8a6040", LIGHT="#d8b896", MARK="#3a2414", CLOTH="#2a8a6a", EYE="#2a1a10"),
+                  "grey": dict(HAIR="#9a9aa0", FUR="#a8a8ae", LIGHT="#e8e8ea", MARK="#4a4a50", CLOTH="#e8a030", EYE="#2a2a30"),
+                  "black": dict(HAIR="#1e1c20", FUR="#2a282c", LIGHT="#6a6870", MARK="#0e0c10", CLOTH="#e83a6a", EYE="#c8902a")}),
     # twentieth wave: the ceibler, a slender pale-blue llama-deer, long ears and little horns, blue diamonds over her coat, a fringed
     # blanket and harness hung with tassels and bells
     "ceibler_centaur": dict(
@@ -371,6 +382,14 @@ def paint(sp, key):
     for p in ("horn_a", "horn_b"):
         pt(p, "all", lambda f, x, y, w, h: pick(horn, 0.45 + 0.25 * (y % 3 == 0), x, y))
     pt("fleece", "all", lambda f, x, y, w, h: pick(pal.FUR, 0.62 + 0.18 * (noise(x // 2, y // 2, 9) > 0.5) + (noise(x, y, 8) - 0.5) * 0.1, x, y))
+    if pal.extra.get("rainbow") and d.get("fleece"):    # Urcuchillay's fleece of many colours: soft rainbow bands along her back
+        import colorsys
+
+        def rainbow_fleece(f, x, y, w, h):
+            r_, g_, b_ = colorsys.hsv_to_rgb(((x + y * 0.5) / 18.0 + noise(x // 2, y // 2, 9) * 0.05) % 1.0, 0.38, 0.97)
+            k = 0.9 + 0.1 * (noise(x // 2, y // 2, 9) > 0.5)
+            return (int(r_ * 255 * k), int(g_ * 255 * k), int(b_ * 255 * k), 255)
+        pt("fleece", "all", rainbow_fleece)
     gold = shades(pal.extra.get("horn", "#f0c850"))
     for p in ("uhorn_a", "uhorn_b"):                      # a spiral: a stripe winding round the horn
         pt(p, "all", lambda f, x, y, w, h: pick(gold, 0.45 + 0.35 * ((x + y) % 4 == 0), x, y))

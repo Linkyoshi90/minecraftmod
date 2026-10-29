@@ -261,6 +261,8 @@ public class Armoured extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.DAEODON_ARMOURED && this.level() instanceof net.minecraft.server.level.ServerLevel soil && !this.isBaby() && this.tickCount % 1200 == 0) this.rooting(soil);
+        if (this.species == GirlSpecies.ANTEATER_ARMOURED && this.level() instanceof net.minecraft.server.level.ServerLevel lick && !this.isBaby() && this.tickCount % 20 == 0) this.longTongue(lick);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.curled > 0 && --this.curled == 0) {
             this.setFlag(FLAG_RETRACTED, false);
@@ -354,5 +356,34 @@ public class Armoured extends AbstractMonsterGirl {
     public void readAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.curled = tag.getInt("Curled");
+    }
+
+    // --- the daeodon and the anteater (twenty-first wave) -----------------------------------------------------------
+
+    /** Her friend within 10 blocks, standing on grass or dirt, gets what she roots up at their feet: a potato, a carrot or a
+     *  beetroot (one time in twenty a golden carrot). True if she found something. */
+    public boolean rooting(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 10);
+        if (friend == null || !level.getBlockState(friend.blockPosition().below()).is(net.minecraft.tags.BlockTags.DIRT)) return false;
+        int roll = this.random.nextInt(20);
+        var find = roll == 0 ? net.minecraft.world.item.Items.GOLDEN_CARROT : roll < 7 ? net.minecraft.world.item.Items.POTATO : roll < 14 ? net.minecraft.world.item.Items.CARROT : net.minecraft.world.item.Items.BEETROOT;
+        net.minecraft.world.entity.item.ItemEntity drop = new net.minecraft.world.entity.item.ItemEntity(level, friend.getX(), friend.getY() + 0.3, friend.getZ(), new net.minecraft.world.item.ItemStack(find));
+        drop.setDefaultPickUpDelay();
+        level.addFreshEntity(drop);
+        level.levelEvent(2001, friend.blockPosition().below(), net.minecraft.world.level.block.Block.getId(level.getBlockState(friend.blockPosition().below())));
+        return true;
+    }
+
+    /** The loose items within 12 blocks of her friend are licked up and brought to their feet. How many, or -1 without a friend. */
+    public int longTongue(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int n = 0;
+        for (net.minecraft.world.entity.item.ItemEntity item : level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, friend.getBoundingBox().inflate(12), e -> e.distanceToSqr(friend) > 4.0)) {
+            item.teleportTo(friend.getX(), friend.getY() + 0.2, friend.getZ());
+            item.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+            n++;
+        }
+        return n;
     }
 }

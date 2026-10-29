@@ -407,6 +407,7 @@ public class Lamia extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.SERPOPARD_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel fang && !this.isBaby() && this.tickCount % 60 == 0) this.venomBite(fang);
         if (this.species == GirlSpecies.TURQUOISE_SERPENT_LAMIA && this.level() instanceof ServerLevel ward && !this.isBaby() && this.tickCount % 20 == 0) this.scaleWard(ward);
         if (this.species == GirlSpecies.HOOP_SNAKE_LAMIA && this.level() instanceof ServerLevel hills && !this.isBaby() && this.tickCount % 100 == 0) this.sting(hills);
         if (!(this.level() instanceof ServerLevel server)) return;
@@ -893,6 +894,24 @@ public class Lamia extends AbstractMonsterGirl {
         m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.POISON, 100, 0), this);
         this.getLookControl().setLookAt(m);
         this.playSound(net.minecraft.sounds.SoundEvents.BEE_STING, 1.0F, 0.8F);
+        return 1;
+    }
+
+    // --- the serpopard (twenty-first wave) --------------------------------------------------------------------------
+
+    /** She bites the nearest monster within 6 blocks of her friend: Poison II for four seconds (the undead, who can't be poisoned,
+     *  take three points of venom instead). 1 if she bit, 0 if none was near,
+     *  -1 without a friend. */
+    public int venomBite(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster m = level.getNearestEntity(net.minecraft.world.entity.monster.Monster.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat(), friend,
+                friend.getX(), friend.getY(), friend.getZ(), friend.getBoundingBox().inflate(6));
+        if (m == null) return 0;
+        if (m.isInvertedHealAndHarm()) m.hurt(level.damageSources().indirectMagic(this, this), 3.0F);   // the undead shrug off poison: the venom burns instead
+        else m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.POISON, 80, 1), this);
+        this.getLookControl().setLookAt(m);
+        this.playSound(net.minecraft.sounds.SoundEvents.CAT_HISS, 1.0F, 0.8F);
         return 1;
     }
 }
