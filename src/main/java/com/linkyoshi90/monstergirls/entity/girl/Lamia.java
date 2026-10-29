@@ -408,6 +408,8 @@ public class Lamia extends AbstractMonsterGirl {
     public void aiStep() {
         super.aiStep();
         if (this.species == GirlSpecies.SERPOPARD_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel fang && !this.isBaby() && this.tickCount % 60 == 0) this.venomBite(fang);
+        if (this.species == GirlSpecies.SANDWORM_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel dune && !this.isBaby() && this.tickCount % 200 == 0) this.swallow(dune);
+        if (this.species == GirlSpecies.XIANGLIU_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel marsh && !this.isBaby() && this.tickCount % 60 == 0) this.nineHeads(marsh);
         if (this.species == GirlSpecies.TURQUOISE_SERPENT_LAMIA && this.level() instanceof ServerLevel ward && !this.isBaby() && this.tickCount % 20 == 0) this.scaleWard(ward);
         if (this.species == GirlSpecies.HOOP_SNAKE_LAMIA && this.level() instanceof ServerLevel hills && !this.isBaby() && this.tickCount % 100 == 0) this.sting(hills);
         if (!(this.level() instanceof ServerLevel server)) return;
@@ -913,5 +915,43 @@ public class Lamia extends AbstractMonsterGirl {
         this.getLookControl().setLookAt(m);
         this.playSound(net.minecraft.sounds.SoundEvents.CAT_HISS, 1.0F, 0.8F);
         return 1;
+    }
+
+    // --- the twenty-second wave ---------------------------------------------------------------------------------------
+
+    /** The sandworm swallows the nearest monster within 6 blocks of her friend and spits it out 16 blocks away from them, on the
+     *  ground there. 1 if she did, 0 if none was near, -1 without a friend. */
+    public int swallow(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster m = level.getNearestEntity(net.minecraft.world.entity.monster.Monster.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat(), friend, friend.getX(), friend.getY(), friend.getZ(), friend.getBoundingBox().inflate(6));
+        if (m == null) return 0;
+        net.minecraft.world.phys.Vec3 away = new net.minecraft.world.phys.Vec3(m.getX() - friend.getX(), 0, m.getZ() - friend.getZ());
+        if (away.lengthSqr() < 1.0E-4) away = new net.minecraft.world.phys.Vec3(1, 0, 0);
+        away = away.normalize().scale(16);
+        int x = net.minecraft.util.Mth.floor(friend.getX() + away.x), z = net.minecraft.util.Mth.floor(friend.getZ() + away.z);
+        int y = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+        if (y <= level.getMinBuildHeight()) y = (int) m.getY();
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.POOF, m.getX(), m.getY(0.5), m.getZ(), 12, 0.3, 0.4, 0.3, 0.02);
+        m.teleportTo(x + 0.5, y, z + 0.5);
+        m.setTarget(null);
+        this.playSound(net.minecraft.sounds.SoundEvents.GENERIC_EAT, 1.0F, 0.6F);
+        return 1;
+    }
+
+    /** Xiangliu's heads bite up to three monsters within 8 blocks of her friend at once: four points each. How many she bit, -1
+     *  without a friend. */
+    public int nineHeads(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        java.util.List<net.minecraft.world.entity.monster.Monster> near = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8), net.minecraft.world.entity.LivingEntity::isAlive);
+        near.sort(java.util.Comparator.comparingDouble(friend::distanceToSqr));
+        int n = 0;
+        for (net.minecraft.world.entity.monster.Monster m : near) {
+            if (n == 3) break;
+            m.hurt(level.damageSources().mobAttack(this), 4.0F);
+            n++;
+        }
+        return n;
     }
 }

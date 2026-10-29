@@ -45,6 +45,22 @@ SPECIES = {
                                extra=dict(fin="#fff4d0", fin_ray="#f0c860")),
                   "violet": dict(HAIR="#7a4ad8", FUR="#8a5ae0", LIGHT="#f4ecff", MARK="#3a1e7a", CLOTH="#4a2a9a", EYE="#c87af8",
                                  extra=dict(fin="#f0e4ff", fin_ray="#b088f0"))}),
+    # twenty-second wave: the macawtl, a feathered serpent in deep macaw blue: a crest of plumes, a hooked beak of a mask on her brow,
+    # feathered wings and tail, two long plumes trailing from it
+    "macawtl_dragon": dict(
+        build="slim", outfit=dict(top=["bandeau", "harness"], bottom="loincloth", extras=["bracers"], colors=dict(leather="#c8ccd8", cloth2="#1e3a9a")),
+        hair="flowing", bangs="swept", ears=None, legs="scales", foot="claw", tail=[(2, 2, 4), (1.5, 1.5, 4), (1, 1, 3.5)], tail_look="fur",
+        tail_rest=[(-25, 0, 0), (8, 0, 0), (6, 0, 0)], wings="feather", wing_scale=1.1, flies=True, macaw=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e3a9a", FUR="#2a4ab8", LIGHT="#c8d8f4", MARK="#0e1e5a", EYE="#f0c030", CLOTH="#1e3a9a", TRIM="#c8ccd8",
+                 pupil=(0.9, 3.4), extra=dict(wing="#2a4ab8", wing_tip="#0e1e5a", plume="#3a6ae0", plume_tip="#c8ccd8", beak="#4a4a56", claw="#c8ccd8")),
+        variants={"scarlet": dict(HAIR="#b81e1e", FUR="#d02a2a", LIGHT="#f8e0a0", MARK="#3a5ab8", CLOTH="#b81e1e", EYE="#f0e8d0",
+                                  extra=dict(wing="#d02a2a", wing_tip="#2a5ac8", plume="#e8c030", plume_tip="#2a5ac8", beak="#f0e8d8", claw="#3a3a40")),
+                  "green": dict(HAIR="#2a6a2a", FUR="#3a8a3a", LIGHT="#d8f0c0", MARK="#1e3a8a", CLOTH="#2a6a2a", EYE="#f0d040",
+                                extra=dict(wing="#3a8a3a", wing_tip="#2a4ab8", plume="#c83a2a", plume_tip="#2a4ab8", beak="#2a2a30", claw="#3a3a40")),
+                  "gold": dict(HAIR="#2a5ac8", FUR="#3a6ad8", LIGHT="#f8d040", MARK="#0e2a6a", CLOTH="#e8b020", EYE="#f8f0d8",
+                               extra=dict(wing="#3a6ad8", wing_tip="#0e2a6a", plume="#f0c020", plume_tip="#3a6ad8", beak="#2a2a30", claw="#3a3a40")),
+                  "hyacinth": dict(HAIR="#3a2a8a", FUR="#4a3aa8", LIGHT="#f0d040", MARK="#1e1450", CLOTH="#3a2a8a", EYE="#f0c030",
+                                   extra=dict(wing="#4a3aa8", wing_tip="#1e1450", plume="#5a4ac8", plume_tip="#f0d040", beak="#2a2a30", claw="#3a3a40"))}),
     # twentieth wave: the moo, a round little blue triceratops: a frill rimmed with cream knobs, two brow horns and a nose horn, spots
     "moo_dragon": dict(
         build="petite", outfit=dict(top=["bandeau"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#3a6aa8")), hair="bob", bangs="blunt", ears=None,
@@ -187,6 +203,8 @@ def declare_hook(sp, d):
         out += [("ptcrest", 1, 2.5, 6.5)]
     if d.get("seafin"):                                  # the nenekea's tail fan and head crest
         out += [("nfan", .5, 6, 5.5), ("nfin", .5, 3.5, 5)]
+    if d.get("macaw"):                                   # the macawtl's crest of plumes, beak mask and trailing tail plumes
+        out += [("mcrest", .5, 1.25, 4.5), ("mbeak", 1, 1.25, 1), ("mbeak_tip", .75, .5, .5), ("mplume", 1.25, .25, 7.5)]
     return out
 
 
@@ -203,6 +221,19 @@ def paint_hook(pt, pal, d):
         pt("nfan", "all", fan)
         pt("nfin", "all", lambda f, x, y, w, h: CLEAR if f not in ("east", "west") or y > h - 1 - x * 0.6
            else pick(ray, 0.5, x, y) if x % 2 == 0 else G.with_alpha(pick(fin, 0.6, x, y), 220))
+    plume, ptip = G.shades(pal.extra.get("plume", "#3a6ae0")), G.shades(pal.extra.get("plume_tip", "#c8ccd8"))
+
+    def feather(f, x, y, w, h):                          # a long feather: a pale shaft, barbs, a tip of the second colour
+        along = y if f in ("east", "west", "north", "south") else y
+        tip = along > h * 0.75
+        if f in ("east", "west", "up", "down") and x == w // 2:
+            return pick(ptip, 0.75, x, y)
+        return pick(ptip if tip else plume, 0.5 + 0.15 * ((x + y) % 3 == 0), x, y)
+    for p in ("mcrest", "mplume"):
+        pt(p, "all", feather)
+    beak = G.shades(pal.extra.get("beak", "#2a2a30"))
+    pt("mbeak", "all", lambda f, x, y, w, h: pick(beak, 0.45 + 0.2 * (f == "up") + 0.1 * (x == 0 or x == w - 1), x, y))
+    pt("mbeak_tip", "all", lambda f, x, y, w, h: pick(beak, 0.35, x, y))
     comb = G.shades(pal.extra.get("comb", "#d8201e"))
     pt("comb", "all", lambda f, x, y, w, h: CLEAR if f in ("east", "west") and y < 2 and x % 3 == 1 else pick(comb, 0.5 + 0.2 * (f == "up"), x, y))
     pt("wattle", "all", lambda f, x, y, w, h: pick(comb, 0.45, x, y))
@@ -274,6 +305,13 @@ def build_hook(r, g, d):
         px, py, pz = r.b["tail_3"]["pivot"]
         r.put("tail_3", cube("nfan", [px - 0.25, py - 3.0, pz + 2.0]))
         r.add("hair_nfin", "head", [0, hy + 8, z], [cube("nfin", [-0.25, hy + 7.4, -1.5 + z])])
+    if d.get("macaw"):                                   # plumes fanned up and back, a hooked beak between her eyes, two plumes off the tail tip
+        r.add("hair_mcrest", "head", [0, hy + 8.2, z], [G.rot_cube("mcrest", [x - 0.25, hy + 7.8, -1.5 + z], [x, hy + 8.2, -1.0 + z], 30 + 8 * abs(x), x * 12, 0)
+                                                       for x in (-1.6, -0.8, 0, 0.8, 1.6)])
+        r.put("head", cube("mbeak", [-0.5, hy + 3.25, -4.9 + z]), cube("mbeak_tip", [-0.375, hy + 2.75, -5.15 + z]))
+        last = [b for b in ("tail_3", "tail_2", "tail") if b in r.b][0]
+        px, py, pz = r.b[last]["pivot"]
+        r.put(last, *[G.rot_cube("mplume", [px + dx - 0.625, py - 0.125, pz + 2.5], [px + dx, py, pz + 2.5], -8, dx * 10, 0) for dx in (-0.5, 0.5)])
     if d.get("heads"):                                    # seven dragon heads rising behind and around her own
         for i in range(7):
             ry = -135 + i * 45                              # fanned round the sides and back, none in front of her face

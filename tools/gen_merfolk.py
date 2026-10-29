@@ -18,6 +18,38 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # twenty-second wave: the piranha, a round little blue fish girl with darker spots, a jutting jaw full of teeth and a lure of a
+    # curl on her head
+    "piranha_mermaid": dict(
+        build="curvy", outfit=dict(top=["bandeau"], extras=["belt"], colors=dict(cloth2="#c83a2a")),
+        ears="fin", hair="bob", bangs="blunt", fluke=(.75, 5.5, 4), dorsal=(.75, 3, 3), size=0.95, scales=True, grin=True, pjaw=True, plure=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#3a7ab8", FUR="#5a9ad0", LIGHT="#e8f0f8", MARK="#2a5a8a", EYE="#c83a2a", CLOTH="#c83a2a", TRIM="#f4f4f0",
+                 pattern="spots", extra=dict(belly_white=True)),
+        variants={"red": dict(HAIR="#5a6a7a", FUR="#7a8a9a", LIGHT="#e8603a", MARK="#3a4a5a", CLOTH="#3a4a5a", EYE="#e8c040", extra=dict(belly_white=True)),
+                  "silver": dict(HAIR="#a8b0b8", FUR="#c0c8d0", LIGHT="#f4f6f8", MARK="#6a7480", CLOTH="#3a6ab0", EYE="#c83a2a", extra=dict(belly_white=True)),
+                  "black": dict(HAIR="#1e2228", FUR="#2e343c", LIGHT="#8a9098", MARK="#0e1014", CLOTH="#c83a2a", EYE="#e83a2a", extra=dict(belly_white=True)),
+                  "gold": dict(HAIR="#c8901e", FUR="#e0b040", LIGHT="#f8ecc0", MARK="#8a5a10", CLOTH="#2a5a8a", EYE="#3a2a1a", extra=dict(belly_white=True))}),
+    # twenty-second wave: the mosasaurus, the great sea lizard: big, grey-blue and scaled, a toothy grin, a crescent of a tail fin
+    "mosasaurus_mermaid": dict(
+        build="strong", outfit=dict(top=["bandeau", "harness"], extras=["bracers"], colors=dict(leather="#2a3440")),
+        ears=None, hair="wavy", bangs="swept", fluke=(.75, 8, 6), dorsal=(.75, 2.5, 3.5), size=1.3, scales=True, grin=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#3a5a7a", FUR="#5a7a96", LIGHT="#dce8f0", MARK="#2a4058", EYE="#e8c040", CLOTH="#2a4058", TRIM="#dce8f0",
+                 pattern="bands", extra=dict(belly_white=True)),
+        variants={"green": dict(HAIR="#2a5a4a", FUR="#4a7a62", LIGHT="#dcecd8", MARK="#1e3a2e", CLOTH="#1e3a2e", extra=dict(belly_white=True)),
+                  "grey": dict(HAIR="#5a5e66", FUR="#7a7e86", LIGHT="#e8e8ea", MARK="#3a3e46", CLOTH="#3a3e46", EYE="#c83a2a", extra=dict(belly_white=True)),
+                  "black": dict(HAIR="#1e2228", FUR="#2a3038", LIGHT="#a8b0b8", MARK="#0e1014", CLOTH="#5a1e24", extra=dict(belly_white=True)),
+                  "white": dict(HAIR="#e8eef4", FUR="#d0dce8", LIGHT="#ffffff", MARK="#8a9ab0", CLOTH="#3a6ac8", EYE="#c83a5a", extra=dict(belly_white=True))}),
+    # twenty-second wave: the fishman, a light blue fish girl with a fin of a ponytail, fins at her elbows, freckle spots and sharp
+    # teeth ready to scowl
+    "fishman_mermaid": dict(
+        build="athletic", outfit=dict(top=["bandeau"], extras=["belt"], colors=dict(cloth2="#2a6ab0")),
+        ears="fin", hair="ponytail", bangs="jagged", fluke=(.75, 6, 4.5), dorsal=(.75, 3.5, 3.5), scales=True, grin=True, elbowfin=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#7ac8e8", FUR="#8ad0f0", LIGHT="#e8f8fc", MARK="#3a8ab8", EYE="#2a5a8a", CLOTH="#2a6ab0", TRIM="#e8f8fc",
+                 pattern="spots", extra=dict(belly_white=True, fin_mark=True)),
+        variants={"green": dict(HAIR="#6ac08a", FUR="#7ad09a", LIGHT="#e8f8ec", MARK="#2a7a4a", CLOTH="#2a7a4a", extra=dict(belly_white=True, fin_mark=True)),
+                  "pink": dict(HAIR="#f0a0b8", FUR="#f4b0c4", LIGHT="#fcecf0", MARK="#c85a7a", CLOTH="#c85a7a", EYE="#5a2a3a", extra=dict(belly_white=True, fin_mark=True)),
+                  "grey": dict(HAIR="#9aa4ae", FUR="#b0b8c0", LIGHT="#f0f2f4", MARK="#5a646e", CLOTH="#3a4a5a", extra=dict(belly_white=True, fin_mark=True)),
+                  "gold": dict(HAIR="#e8b840", FUR="#f0c858", LIGHT="#fcf4dc", MARK="#a87a1e", CLOTH="#a83a2a", EYE="#3a2a1a", extra=dict(belly_white=True, fin_mark=True))}),
     # twenty-first wave: the walrus, round and blue, long pale hair, two white tusks and a broad flipper tail
     "walrus_mermaid": dict(
         build="curvy", outfit=dict(top=["sweater"], extras=["scarf"], colors=dict(scarf="#3a7ac8")),
@@ -313,6 +345,12 @@ def declare(sp):
         parts += [("wtusk", .75, 3.75, .75)]
     if d.get("anomalo"):                                 # the anomalocaris's grasping arms (three bends each) and her side flaps
         parts += [("ano_a", 1, 1, 3), ("ano_b", 1, 2.5, 1), ("ano_c", 1, 1, 1.75), ("anoflap", 3, .25, 3.5)]
+    if d.get("pjaw"):                                    # the piranha's jutting lower jaw, its teeth showing
+        parts += [("pjaw", 3.5, 1, 1.25)]
+    if d.get("plure"):                                   # the lure of a curl on her head: a stalk and its bulb
+        parts += [("plure", .5, 3, .5), ("plure_bulb", 1, 1, 1)]
+    if d.get("elbowfin"):                                # the fishman's fins at her elbows
+        parts += [("elbowfin", .25, 2, 2.5)]
     parts.append(("shell", 2, 1.75, .5))
     G.declare(parts, ears=d["ears"], hair=SPECIES[sp]["hair"],
               build=SPECIES[sp].get("build"), outfit=SPECIES[sp].get("outfit"))
@@ -321,6 +359,9 @@ def declare(sp):
 def paint(sp, key):
     d = SPECIES[sp]
     pal = G.pal_from(d["pal"], d["variants"].get(key) if key else None)
+    if d.get("grin"):                                    # a grin of little pointed teeth, as the theropods have
+        import gen_theropod
+        pal.mouth_px = gen_theropod.grin(pal)
     pt = H.Painter()
     G.paint_upper(pt, pal, top="skin", outfit=d.get("outfit"), build=d.get("build"))
     shell = shades(pal.extra.get("shell", "#f0d8c8"))
@@ -438,6 +479,16 @@ def paint(sp, key):
         streak = shades(e.get("streak", "#6aa8f0"))
         for part in [q for q in H.PARTS if q.startswith(("strand_", "lock_", "tail_lock", "tail_long", "bang_", "frame"))]:
             pt(part, ("north", "south", "east", "west"), lambda f, x, y, w, h: pick(streak, 0.55, x, y) if (x + y // 6) % 4 == 1 else None)
+    if d.get("pjaw"):                                    # skin, a row of teeth along its top edge
+        tooth = shades("#f8f6ee")
+        pt("pjaw", "all", lambda f, x, y, w, h: pick(tooth, 0.75, x, y) if (f == "up" or f == "north" and y == 0 and x % 2 == 0)
+           else H.skin_fn(pal, 0.62)(f, x, y, w, h))
+    if d.get("plure"):
+        pt("plure", "all", lambda f, x, y, w, h: pick(pal.MARK, 0.5, x, y))
+        pt("plure_bulb", "all", lambda f, x, y, w, h: pick(pal.LIGHT, 0.75 + 0.15 * (f == "up"), x, y))
+    if d.get("elbowfin"):                                # broad faces only: rays fanning back
+        pt("elbowfin", "all", lambda f, x, y, w, h: CLEAR if f not in ("east", "west") or y > h - 1 - x * 0.5
+           else pick(pal.MARK if x % 2 == 0 else pal.FUR, 0.5, x, y))
     if d.get("wtusks"):
         tusk = shades(e.get("tusk", "#f8f4e8"))
         pt("wtusk", "all", lambda f, x, y, w, h: pick(tusk, 0.6 - 0.15 * (y == 0) + 0.1 * (f == "north"), x, y))
@@ -593,6 +644,13 @@ def build(sp):
                                                   cube("tri_prong", [cx + 1.75, top + 0.75, cz + 0.125], **lean),
                                                   cube("tri_mid", [cx + 0.125, top + 0.75, cz + 0.125], **lean)])
     hx, hy, hz = r.b["head"]["pivot"]
+    if d.get("pjaw"):                                    # the jaw jutting out under her mouth
+        r.put("head", cube("pjaw", [-1.75, hy - 0.25, hz - 5.0]))
+    if d.get("plure"):                                   # a stalk rising from her crown, its bulb hanging forward at the tip
+        r.add("hair_plure", "head", [0, hy + 8, hz], [cube("plure", [-0.25, hy + 8.0, hz - 1.25]), cube("plure_bulb", [-0.5, hy + 10.25, hz - 2.0])])
+    if d.get("elbowfin"):                                # a fin swept back from each elbow (forearm_l mirrors forearm_r)
+        px, py, pz = r.b["forearm_r"]["pivot"]
+        r.put("forearm_r", cube("elbowfin", [px - 0.75, py - 1.75, pz + 0.5]))
     if d.get("wtusks"):                                  # two long tusks down from the corners of her mouth
         r.put("head", cube("wtusk", [-1.5, hy - 2.6, hz - 4.6]), cube("wtusk", [0.75, hy - 2.6, hz - 4.6]))
     if d.get("anomalo"):                                 # an arm reaching forward from each side of her brow, bending down and back

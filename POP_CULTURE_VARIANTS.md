@@ -52,8 +52,8 @@ the homage set is keyed by name.
 | Wood elf (`wood_elf`) | Link (Zelda) | `green_hero` ✅ | Blonde hair, a long green cap and green tunic over white sleeves, brown belt and boots, a sword and a round shield on her back | ★★★ (a girl's take on him) |
 | Ent (`ent_flora`) | Groot (Marvel) | `tree_guard` ✅ | Brown bark skin with grain lines, little branches and a few leaves sprouting from her head and shoulders, warm amber eyes | ★★ (not a game) |
 | Yuki-onna (`yuki_onna_undead`) | Froslass (Pokémon) | `snow_wraith` ✅ | White body like a snow kimono with a red-purple obi sash, a pale blue face, **purple eyes** (this variant's own; the yuki-onna's other looks have blue or red eyes) | ★★ (close to her base look, so the eyes and sash carry it) |
-| Dullahan (`dullahan_undead`) | Celty Sturluson (Durarara!!) | `headless_rider` ✅ | Black rider's suit with yellow trim, a yellow helmet with cat ears held under her arm, black shadow wisps at the neck | ★★ (anime; the helmet is not built yet) |
-| Dullahan (`dullahan_undead`) | Lala (Monster Musume) | `death_envoy` ✅ | Silver-white hair, red eyes, a black and red gothic dress with a high collar and cape, blue flame at the neck, a scythe | ★★★ (already a dullahan; the scythe is not built yet) |
+| Dullahan (`dullahan_undead`) | Celty Sturluson (Durarara!!) | `headless_rider` ✅ | Black rider's suit with yellow trim, a yellow helmet with cat ears held under her arm, black shadow wisps at the neck | ★★ (anime; the helmet sits over the head she carries, drawn only on her) |
+| Dullahan (`dullahan_undead`) | Lala (Monster Musume) | `death_envoy` ✅ | Silver-white hair, red eyes, a black and red gothic dress with a high collar and cape, blue flame at the neck, a scythe | ★★★ (already a dullahan; the scythe is in her free hand, drawn only on her) |
 
 ## Gregory Horror Show: on the house mouse
 

@@ -534,6 +534,7 @@ public class Canid extends AbstractMonsterGirl {
     public void aiStep() {
         super.aiStep();
         if (this.species == GirlSpecies.RHEINTALENSIS_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel cave && !this.isBaby() && this.tickCount % 40 == 0) this.bruteSwing(cave);
+        if (this.species == GirlSpecies.GIGANTOPITHECUS_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel grove && !this.isBaby() && this.tickCount % 40 == 0) this.groundPound(grove);
         if (this.species == GirlSpecies.OBSIDIAN_HOUND_CANID && this.level() instanceof ServerLevel badlands && !this.isBaby() && this.tickCount % 20 == 0) this.coolLava(badlands);
         if (this.species == GirlSpecies.TARNHELM_CANID && this.level() instanceof ServerLevel watch && !this.isBaby() && this.tickCount % 100 == 0) this.sentinel(watch);
         if (this.species == GirlSpecies.AMAROK_CANID && this.level() instanceof ServerLevel pack && !this.isBaby() && this.tickCount % 20 == 0) this.packMother(pack);
@@ -837,5 +838,25 @@ public class Canid extends AbstractMonsterGirl {
         this.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
         this.playSound(net.minecraft.sounds.SoundEvents.PLAYER_ATTACK_KNOCKBACK, 1.0F, 0.7F);
         return 1;
+    }
+
+    // --- the twenty-second wave ---------------------------------------------------------------------------------------
+
+    /** When three or more monsters are within 5 blocks of her friend, she slams the ground: each is knocked back from her friend and
+     *  slowed (Slowness II for three seconds). How many she struck, 0 if fewer than three crowd them, -1 without a friend. */
+    public int groundPound(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        java.util.List<net.minecraft.world.entity.monster.Monster> crowd = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(5), net.minecraft.world.entity.LivingEntity::isAlive);
+        if (crowd.size() < 3) return 0;
+        for (net.minecraft.world.entity.monster.Monster m : crowd) {
+            m.knockback(1.2, friend.getX() - m.getX(), friend.getZ() - m.getZ());
+            m.hurtMarked = true;
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 60, 1), this);
+        }
+        level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(net.minecraft.core.particles.ParticleTypes.BLOCK,
+                level.getBlockState(this.blockPosition().below())), this.getX(), this.getY(), this.getZ(), 30, 1.5, 0.1, 1.5, 0.1);
+        this.playSound(net.minecraft.sounds.SoundEvents.GENERIC_EXPLODE.value(), 0.6F, 1.4F);
+        return crowd.size();
     }
 }

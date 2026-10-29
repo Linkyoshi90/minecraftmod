@@ -19,6 +19,27 @@ SEGS = [("seg_1", 4.5, 10.5, 4), ("seg_2", 4.25, 4, 5.5), ("seg_3", 4, 3.75, 5.5
 
 SPECIES = {
     # twenty-first wave (folklore): the serpopard of ancient Egyptian palettes, a long-necked serpent with a leopard's spots, ears
+    # twenty-second wave: the sandworm, blue and segmented with a cream belly and a scaly hood over her head
+    "sandworm_lamia": dict(
+        build="curvy", outfit=dict(top=["bandeau"], extras=["armlets"], colors=dict(cloth2="#e8c050")),
+        thick=1.2, hair="bob", bangs="blunt", whood=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#2a4a8a", FUR="#4a7ac8", LIGHT="#f4e4c4", MARK="#2a4a8a", EYE="#2a4a9a", CLOTH="#2a4a8a", TRIM="#f4e4c4",
+                 pattern="bands"),
+        variants={"sand": dict(HAIR="#8a6a3a", FUR="#d8b878", LIGHT="#f8f0dc", MARK="#9a7440", CLOTH="#9a7440", EYE="#3a6a8a"),
+                  "red": dict(HAIR="#7a2a1a", FUR="#c8603a", LIGHT="#f8e0c8", MARK="#7a2a1a", CLOTH="#7a2a1a", EYE="#e8c040"),
+                  "grey": dict(HAIR="#4a4e56", FUR="#8a8e96", LIGHT="#ecece8", MARK="#4a4e56", CLOTH="#4a4e56", EYE="#c83a3a"),
+                  "black": dict(HAIR="#141218", FUR="#2a2830", LIGHT="#c8b890", MARK="#0a080c", CLOTH="#5a1e24", EYE="#e8c040")}),
+    # twenty-second wave (folklore): Xiangliu, the nine-headed serpent of Chinese myth: a teal serpent girl with six little heads of
+    # her own round her head on short necks, all of them talking at once
+    "xiangliu_lamia": dict(
+        build="slim", outfit=dict(top=["kimono"], colors=dict(kimono="#2a6a6a", kimono_trim="#e8d8a8", obi="#a8402a")),
+        thick=1.1, hair="hime", bangs="blunt", xheads=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#2a5a5a", FUR="#3a8a86", LIGHT="#c8e8d8", MARK="#1e4a4a", EYE="#3a6a8a", CLOTH="#2a6a6a", TRIM="#e8d8a8",
+                 pattern="solid"),
+        variants={"green": dict(HAIR="#2a4a22", FUR="#4a7a3a", LIGHT="#d8e8c0", MARK="#1e3a14", EYE="#c8a040"),
+                  "black": dict(HAIR="#141418", FUR="#2a2a30", LIGHT="#8a8a90", MARK="#0a0a0e", EYE="#c83a3a"),
+                  "gold": dict(HAIR="#5a3a14", FUR="#c8a040", LIGHT="#f8ecc0", MARK="#7a5a1e", EYE="#3a2a1a"),
+                  "red": dict(HAIR="#3a1410", FUR="#a8402a", LIGHT="#f0d0b8", MARK="#5a1e14", EYE="#e8c040")}),
     # and face: gold with dark rosettes, a lapis and gold collar
     "serpopard_lamia": dict(
         build="slim", outfit=dict(top=["bandeau"], extras=["usekh", "armlets"], colors=dict(cloth2="#e8c050")),
@@ -179,6 +200,10 @@ def declare(sp):
         extra.append(("paddle", .5, 3.5, 4))
     if d.get("spines"):
         extra += [("spine", .5, 3.5, .5), ("spine_s", .5, 2, .5)]
+    if d.get("whood"):                                   # the sandworm's scaly hood: a cap over her hair, ridged
+        extra += [("whood", 9.25, 3.5, 9.25), ("whood_back", 9.25, 4, 1)]
+    if d.get("xheads"):                                  # Xiangliu's little heads: a neck, a head, a cap of hair with a fringe
+        extra += [("xneck", 1.25, 6, 1.25), ("xhead", 3.5, 3.5, 3.5), ("xhair", 4, 1.5, 4), ("xhair_back", 4, 2.5, .75)]
     if d.get("medusa"):
         extra += [("snake", 1, 5.5, 1), ("snake_h", 1.5, 1, 2), ("blindfold", 8.5, 1.75, 8.5), ("blind_tail", 1, 3, .25)]
     G.declare(parts + extra, ears=d.get("ears"), hair=SPECIES[sp]["hair"],
@@ -224,6 +249,25 @@ def paint(sp, key):
     pt("snake", "all", lambda f, x, y, w, h: pick(band if y % 4 == 0 else band2 if y % 4 == 2 and pal.extra.get("snake_band2") else sn, 0.5 + 0.15 * (f == "north"), x, y))
     pt("snake_h", "all", lambda f, x, y, w, h: pick(shades("#f8d040"), 0.7, x, y) if f == "north" and y == 0 and x in (0, w - 1)
        else pick(sn, 0.45 + 0.1 * (f == "up"), x, y))
+    ring = lambda f, x, y, w, h: pick(pal.MARK, 0.45, x, y) if (y % 4 == 3 and f in ("north", "south", "east", "west")) or (x % 4 == 3 and f == "up")         else sc(f, x, y, w, h)
+    pt("whood", "all", ring)
+    pt("whood_back", "all", ring)
+
+    def little_face(f, x, y, w, h):                      # two big dark eyes with a glint, a small smile
+        if f != "north":
+            return skin_t(f, x, y, w, h)
+        if y in (5, 6, 7) and x in (3, 4, 9, 10):
+            return pal.WHITE if (y == 5 and x in (3, 9)) else pal.EYE[1]
+        if y == 10 and 6 <= x <= 7:
+            return pal.LIP
+        if y == 9 and x in (2, 11):
+            return pal.BLUSH
+        return skin_t(f, x, y, w, h)
+    pt("xhead", "all", little_face)
+    hair = lambda f, x, y, w, h: pick(pal.HAIR, 0.45 + 0.2 * (x % 3 == 0) + (noise(x, y, 81) - 0.5) * 0.1, x, y)
+    pt("xhair", "all", hair)
+    pt("xhair_back", "all", hair)
+    pt("xneck", "all", sc)
     bf = shades(pal.extra.get("blindfold", "#5a2a6a"))
     pt("blindfold", "all", lambda f, x, y, w, h: pick(bf, 0.45 + 0.15 * (y == 0) + (noise(x, y, 51) - 0.5) * 0.1, x, y) if f not in ("up", "down") else CLEAR)
     pt("blind_tail", "all", lambda f, x, y, w, h: pick(bf, 0.45, x, y))
@@ -265,6 +309,17 @@ def build(sp):
         hy, gz = g.hy, g.z
         r.add("hair_spines", "head", [0, hy + 8, gz], [G.rot_cube("spine", [x - 0.25, hy + 7.6, zz - 0.25 + gz], [x, hy + 7.6, zz + gz], 35, 0, -x * 6)
                                                         for x, zz in ((-2.2, 0.5), (0, -0.5), (2.2, 0.5), (-1.1, 2.4), (1.1, 2.4))])
+    if d.get("whood"):                                  # the hood over her crown and down the back of her head
+        hy, z = g.hy, g.z
+        r.add("hair_whood", "head", [0, hy + 8, z], [cube("whood", [-4.625, hy + 6.0, -4.75 + z]), cube("whood_back", [-4.625, hy + 2.0, 4.0 + z])])
+    if d.get("xheads"):                                 # six little heads on necks rising from her shoulders and back, round her own
+        hy, z = g.hy, g.z
+        cs = []
+        for x, dy, zz in ((-6.0, 1.5, 1.0), (6.0, 1.5, 1.0), (-4.2, 5.5, 3.0), (4.2, 5.5, 3.0), (-7.5, -2.0, 2.0), (7.5, -2.0, 2.0)):
+            top = hy + dy
+            cs += [cube("xneck", [x - 0.625, top - 6.0, zz - 0.625 + z]), cube("xhead", [x - 1.75, top, zz - 1.75 + z]),
+                   cube("xhair", [x - 2.0, top + 3.0, zz - 2.0 + z]), cube("xhair_back", [x - 2.0, top + 1.0, zz + 1.75 + z])]
+        r.add("hair_xheads", "body", [0, hy, z], cs)
     if d.get("medusa"):                                 # nine snakes rising from her head and curling out, each with its own head
         hy, z = g.hy, g.z
         cs = []

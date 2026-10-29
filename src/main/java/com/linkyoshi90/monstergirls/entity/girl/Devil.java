@@ -453,6 +453,8 @@ public class Devil extends AbstractMonsterGirl {
     public void aiStep() {
         super.aiStep();
         if (this.species == GirlSpecies.AKANAME_DEVIL && this.level() instanceof ServerLevel bath && !this.isBaby() && this.tickCount % 40 == 0) this.scrub(bath);
+        if (this.species == GirlSpecies.CYCLOPS_DEVIL && this.level() instanceof ServerLevel peak && !this.isBaby() && this.tickCount % 60 == 0) this.boulder(peak);
+        if (this.species == GirlSpecies.GENIE_DEVIL && this.level() instanceof ServerLevel lamp && !this.isBaby() && this.tickCount % 20 == 0) this.wish(lamp);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.KIKIMORA_DEVIL && !this.isBaby() && this.tickCount % 40 == 0) this.nightLatch(server, !server.isDay());
         switch (this.species) {
@@ -620,5 +622,44 @@ public class Devil extends AbstractMonsterGirl {
             return 1;
         }
         return 0;
+    }
+
+    // --- the twenty-second wave ---------------------------------------------------------------------------------------
+
+    /** The cyclops hurls a boulder at the nearest monster within 20 blocks of her friend: seven points of damage. 1 if she threw,
+     *  0 if none was near, -1 without a friend. */
+    public int boulder(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster m = level.getNearestEntity(net.minecraft.world.entity.monster.Monster.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat(), friend, friend.getX(), friend.getY(), friend.getZ(), friend.getBoundingBox().inflate(20));
+        if (m == null) return 0;
+        m.hurt(level.damageSources().mobAttack(this), 7.0F);
+        this.getLookControl().setLookAt(m);
+        level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(net.minecraft.core.particles.ParticleTypes.BLOCK,
+                net.minecraft.world.level.block.Blocks.COBBLESTONE.defaultBlockState()), m.getX(), m.getY(0.6), m.getZ(), 16, 0.3, 0.3, 0.3, 0.1);
+        this.playSound(net.minecraft.sounds.SoundEvents.STONE_BREAK, 1.0F, 0.7F);
+        return 1;
+    }
+
+    /** The wish slot (dawn, noon or dusk) she last granted, as day * 3 + slot, so each comes once a day. */
+    private long lastWish = -1;
+    private static final net.minecraft.core.Holder<net.minecraft.world.effect.MobEffect>[] BOONS = new net.minecraft.core.Holder[]{
+            net.minecraft.world.effect.MobEffects.LUCK, net.minecraft.world.effect.MobEffects.DIG_SPEED, net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, net.minecraft.world.effect.MobEffects.DAMAGE_BOOST, net.minecraft.world.effect.MobEffects.REGENERATION, net.minecraft.world.effect.MobEffects.DAMAGE_RESISTANCE, net.minecraft.world.effect.MobEffects.JUMP};
+
+    /** At dawn, noon and dusk (the first minute of each) the genie grants her friend within 16 blocks a wish: a random boon for five
+     *  minutes, once per slot a day. 1 if she granted one, 0 if it is not the hour or this one is granted, -1 without a friend. */
+    public int wish(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        long time = level.getDayTime();
+        int t = (int) (time % 24000L);
+        int slot = t < 1200 ? 0 : t >= 6000 && t < 7200 ? 1 : t >= 12000 && t < 13200 ? 2 : -1;
+        long key = time / 24000L * 3 + slot;
+        if (slot < 0 || key == this.lastWish) return 0;
+        this.lastWish = key;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(BOONS[this.random.nextInt(BOONS.length)], 6000, 0), this);
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.ENCHANT, friend.getX(), friend.getY(1.0), friend.getZ(), 30, 0.5, 0.6, 0.5, 0.5);
+        this.playSound(net.minecraft.sounds.SoundEvents.AMETHYST_BLOCK_CHIME, 1.0F, 1.2F);
+        return 1;
     }
 }

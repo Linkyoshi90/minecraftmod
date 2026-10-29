@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_ammit_nekomata",
+  "spawners": {
+    "type": "monstergirls:ammit_nekomata",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

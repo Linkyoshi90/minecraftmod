@@ -324,6 +324,7 @@ public class Dragon extends AbstractMonsterGirl {
     public void aiStep() {
         super.aiStep();
         if (this.species == GirlSpecies.NENEKEA_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel tide && !this.isBaby() && this.tickCount % 20 == 0) this.tidalBalm(tide);
+        if (this.species == GirlSpecies.MACAWTL_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel sky && !this.isBaby() && this.tickCount % 20 == 0) this.tailwind(sky);
         if (this.species == GirlSpecies.MOO_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel frill && !this.isBaby() && this.tickCount % 20 == 0) this.herdStand(frill);
         if (this.species == GirlSpecies.HAIRYPTERIX_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel wind && !this.isBaby() && this.tickCount % 10 == 0) this.updraft(wind);
         if (!(this.level() instanceof ServerLevel server)) return;
@@ -484,5 +485,17 @@ public class Dragon extends AbstractMonsterGirl {
         if (friend == null || !friend.isInWater() || friend.getHealth() >= friend.getMaxHealth()) return false;
         friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.REGENERATION, 60, 0, true, true));
         return true;
+    }
+
+    // --- the twenty-second wave ---------------------------------------------------------------------------------------
+
+    /** Her friend within 10 blocks of her, out under the open sky, runs faster (Speed I for three seconds). 1 if they got it, 0 if they
+     *  are under a roof or too far, -1 without a friend. */
+    public int tailwind(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        if (friend.distanceToSqr(this) > 10 * 10 || !level.canSeeSky(friend.blockPosition().above())) return 0;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 60, 0, true, true), this);
+        return 1;
     }
 }

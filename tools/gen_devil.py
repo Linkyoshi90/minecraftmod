@@ -8,6 +8,7 @@ a carved pumpkin as a hat (its face glows: glow mask) and has a `disguise` bone,
 game shows instead of her while she hides. The jiang shi wears a Qing official's hat with a paper talisman over her face
 and holds her arms out in front of her ("hop").
 """
+import math
 import os
 import sys
 
@@ -20,6 +21,28 @@ SPADE = [(.75, .75, 4), (.5, .5, 4), (2, 2, .5)]
 SPADE_REST = [(-20, 0, 0), (25, 0, 0), (10, 0, 0)]
 
 SPECIES = {
+    # twenty-second wave (folklore): the cyclops, the one-eyed giants of Greek myth: a big shy girl with a single great eye, pointed
+    # ears, a blue bob and a teal tunic
+    "cyclops_devil": dict(
+        build="strong", outfit=dict(top=["halter", "mantle"], bottom="sarong", extras=["belt"], colors=dict(cloth2="#3a8a8a", leather="#6a4a2a")),
+        hair="bob", bangs="parted", ears="elf", legs="bare", foot="shoe", cyclops=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#3a6ac8", FUR="#3a6ac8", LIGHT="#e8f0fc", MARK="#1e3a7a", EYE="#3a7ad8", CLOTH="#3a9a9a", TRIM="#e8e0c8",
+                 extra=dict(boot="#6a4a2a")),
+        variants={"brown": dict(HAIR="#6a4a2a", EYE="#8a5a2a", CLOTH="#8a6a3a"),
+                  "red": dict(HAIR="#a8301e", EYE="#c83a2a", CLOTH="#e8d8b8"),
+                  "grey": dict(HAIR="#8a8e96", EYE="#5a6a7a", CLOTH="#4a5a6a"),
+                  "green": dict(HAIR="#3a7a3a", EYE="#4a9a3a", CLOTH="#a8803a")}),
+    # twenty-second wave (folklore): the genie, a spirit of smoke bound to a brass lamp: a smoke tail for legs, a high ponytail, a
+    # bandeau and bangles, the lamp in her hand; she floats
+    "genie_devil": dict(
+        build="curvy", outfit=dict(top=["bandeau"], extras=["armlets", "pearls"], colors=dict(cloth2="#e8c040")),
+        hair="ponytail", bangs="swept", ears="elf", lower="none", smoke=True, lamp=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#3a5ab8", FUR="#7a9ae0", LIGHT="#e8f0fc", MARK="#2a4a9a", EYE="#3a5ab8", CLOTH="#4a6ac8", TRIM="#e8c040",
+                 extra=dict(smoke="#8aa8e8", smoke_dark="#4a6ac8", brass="#d8a840")),
+        variants={"purple": dict(HAIR="#5a2a8a", MARK="#3a1a6a", CLOTH="#6a3aa8", EYE="#8a4ac8", extra=dict(smoke="#b08ae0", smoke_dark="#6a3aa8", brass="#d8a840")),
+                  "green": dict(HAIR="#2a6a4a", MARK="#1e4a32", CLOTH="#3a8a5a", EYE="#3a9a5a", extra=dict(smoke="#8ad0a8", smoke_dark="#3a8a5a", brass="#d8a840")),
+                  "red": dict(HAIR="#8a1e1e", MARK="#5a1414", CLOTH="#a82a2a", EYE="#e8a030", extra=dict(smoke="#e08a7a", smoke_dark="#a82a2a", brass="#d8a840")),
+                  "gold": dict(HAIR="#c8901e", MARK="#7a5410", CLOTH="#e8b030", EYE="#3a2a1a", extra=dict(smoke="#f0d890", smoke_dark="#c89a30", brass="#f0c860"))}),
     # nineteenth wave: the akaname, the filth-licker of the bathhouses: blue hair, a simple dress, a long tongue out
     "akaname_devil": dict(
         build="petite", outfit=dict(top=["sweater"], bottom="wrap_skirt", extras=["belt"], colors=dict(cloth2="#3a5ab8", leather="#2a3a7a")),
@@ -180,12 +203,24 @@ def declare_hook(sp, d):
         out += [("canopy", 14, 1, 14), ("canopy_b", 10.5, 1.25, 10.5), ("canopy_c", 7, 1.25, 7), ("canopy_top", 3.5, 1, 3.5), ("umb_tip", 1, 2, 1)]
     if d.get("kerchief"):                                # the kikimora's headscarf, knotted at the nape
         out += [("kerchief", 8.75, 4.5, 8.75), ("kerchief_knot", 2.5, 1.5, 1), ("kerchief_end", 1.5, 3, .25)]
+    if d.get("smoke"):                                   # the genie's smoke tail, puffing smaller to a wisp
+        out += [("smoke_a", 5.5, 4.5, 4.5), ("smoke_b", 4.5, 4.5, 3.75), ("smoke_c", 3.25, 4, 2.75), ("smoke_d", 2, 3.5, 1.75)]
+    if d.get("lamp"):                                    # her brass lamp: body, lid, spout and handle
+        out += [("lamp_body", 2.5, 1.25, 1.75), ("lamp_lid", 1, .75, 1), ("lamp_spout", .75, .5, 2), ("lamp_handle", .5, 1, 1)]
     if d.get("tongue"):                                  # the akaname's long tongue, lolling out over her chin
         out += [("long_tongue", 1.25, 3, .25)]
     return out
 
 
 def paint_hook(pt, pal, d):
+    if d.get("cyclops"):
+        paint_cyclops(pt, pal)
+    sm, smd = G.shades(pal.extra.get("smoke", "#8aa8e8")), G.shades(pal.extra.get("smoke_dark", "#4a6ac8"))
+    for p in ("smoke_a", "smoke_b", "smoke_c", "smoke_d"):          # soft swirls of smoke, a little see-through
+        pt(p, "all", lambda f, x, y, w, h: G.with_alpha(pick(smd if (x + 2 * y) % 7 < 2 else sm, 0.5 + 0.2 * noise(x // 2, y // 2, 91), x, y), 225))
+    brass = G.shades(pal.extra.get("brass", "#d8a840"))
+    for p in ("lamp_body", "lamp_lid", "lamp_spout", "lamp_handle"):
+        pt(p, "all", lambda f, x, y, w, h: pick(brass, 0.5 + 0.25 * (f == "up") + 0.15 * (x == 1 and y == 0), x, y))
     tg = G.shades(pal.extra.get("tongue", "#5a8af0"))
     pt("long_tongue", "all", lambda f, x, y, w, h: pick(tg, 0.55 + 0.15 * (x == w // 2) - 0.1 * (y == h - 1), x, y))
     kc, kd = G.shades(pal.extra.get("kerchief", "#c83a2a")), G.shades(pal.extra.get("kerchief_dot", "#f4f0e4"))
@@ -271,8 +306,55 @@ def paint_hook(pt, pal, d):
     pt("talisman", "all", talisman)
 
 
+def paint_cyclops(pt, pal):
+    """one great eye in the middle of her face (over where the two eyes were), a single brow over it; one lid to blink with"""
+    sk = H.skin_fn(pal, 0.70)
+    cx, cy, a, b = 16.0, 18.0, 6.4, 6.8
+
+    def face(f, x, y, w, h):
+        e = ((x + 0.5 - cx) / a) ** 2 + ((y + 0.5 - cy) / b) ** 2
+        if e <= 1.0:
+            if e > 0.72:
+                return pal.EYE_OUT                                   # the outline
+            iris = ((x + 0.5 - cx) / (a * 0.62)) ** 2 + ((y + 0.5 - cy - 0.6) / (b * 0.66)) ** 2
+            if (x, y) in ((13, 14), (14, 14), (13, 15), (14, 15), (18, 21)):
+                return pal.WHITE                                     # glints
+            if iris <= 0.35:
+                return pal.EYE[0]                                    # the pupil
+            if iris <= 1.0:
+                return pal.EYE[min(4, max(1, int((y - cy + b) / (2 * b) * 5)))]
+            return pal.WHITE
+        if y == 9 and 11 <= x <= 20:
+            return pal.BROW                                          # one brow
+        if 6 <= y <= 25:
+            return sk(f, x, y, w, h)                                 # skin over the two eyes and brows that were here
+        return None
+    pt("head", ("north",), face)
+
+    def lid(f, x, y, w, h):                                          # one lid patch with a closed-eye arc across it
+        if f != "north":
+            return CLEAR
+        lx, ly = 13.0, 7.0
+        e = ((x + 0.5 - lx) / 6.9) ** 2 + ((y + 0.5 - ly) / 7.2) ** 2
+        if e > 1.0:
+            return CLEAR
+        arch = ly + 2 - 3.6 * math.sin(math.pi * (x - lx + 6.5) / 13.0)
+        return pal.EYE_OUT if abs(y + 0.5 - arch) <= 1.0 else sk(f, x, y, w, h)
+    pt("eyelids", "all", lid)
+
+
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
+    if d.get("smoke"):                                   # the smoke tail she ends in, in four bones so it can curl
+        r.add("smoke_1", "body", [0, 12.5, z], [cube("smoke_a", [-2.75, 8.0, -2.25 + z])])
+        r.add("smoke_2", "smoke_1", [0, 8.0, z], [cube("smoke_b", [-2.25, 3.75, -1.9 + z])])
+        r.add("smoke_3", "smoke_2", [0, 3.75, z], [cube("smoke_c", [-1.625, 0.0, -1.4 + z])])
+        r.add("smoke_4", "smoke_3", [0, 0.0, z], [cube("smoke_d", [-1.0, -3.25, -0.9 + z])])
+    if d.get("lamp"):                                    # the brass lamp held in her right hand
+        px, py, pz = r.b["hand_r"]["pivot"]
+        ly, lz = py - 2.75, pz - 1.4
+        r.add("lamp", "hand_r", [px, py - 1.5, pz], [cube("lamp_body", [px - 1.25, ly, lz - 0.6]), cube("lamp_lid", [px - 0.5, ly + 1.25, lz - 0.25]),
+                                                    cube("lamp_spout", [px - 0.375, ly + 0.5, lz - 2.4]), cube("lamp_handle", [px - 0.25, ly + 0.1, lz + 1.15])])
     if d.get("tongue"):
         r.put("head", G.rot_cube("long_tongue", [-0.625, hy - 1.6, -4.35 + z], [0, hy + 1.4, -4.35 + z], 18, 0, 0))
     if d.get("kerchief"):
@@ -327,6 +409,12 @@ def anim_extra(an, sp, d):
     if d.get("pumpkin"):                                 # the disguise stays shrunk away unless the game shows it (see GirlRenderer)
         for key in [k.split(".")[-1] for k in an.A]:
             F._inject(an, key, {"disguise": {"scale": hold(0, 0, 0)}})
+    if d.get("smoke"):                                   # she floats; her smoke tail curls and sways under her
+        wave = lambda a, ph: Tk((0, (a, 0, -6 * ph)), (1.0, (a + 8 * ph, 0, 6 * ph)), (2.0, (a, 0, -6 * ph)))
+        rest = {"smoke_1": {"rotation": wave(10, 1)}, "smoke_2": {"rotation": wave(20, -1)}, "smoke_3": {"rotation": wave(25, 1)},
+                "smoke_4": {"rotation": wave(30, -1)}, "root": {"position": Tk((0, (0, 2.0, 0)), (1.0, (0, 2.8, 0)), (2.0, (0, 2.0, 0)))}}
+        for key in [k.split(".")[-1] for k in an.A]:
+            F._inject(an, key, rest)
     if d.get("ribbon"):                                  # the ribbon trails out behind her, rippling; flying, it streams straight back
         wave = lambda a, ph: Tk((0, (a, 0, 0)), (1.0, (a + 12 * ph, 0, 4)), (2.0, (a, 0, 0)))
         rest = {"ribbon_1": {"rotation": wave(40, 1)}, "ribbon_2": {"rotation": wave(25, -1)}, "ribbon_3": {"rotation": wave(20, 1)},

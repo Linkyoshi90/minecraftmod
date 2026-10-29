@@ -587,6 +587,33 @@ has its seasonal paint.
 Homage variant (POP_CULTURE_VARIANTS.md): the jorogumo's bake sale (Muffet): lilac skin, a fifth eye, black pigtails with red
 bows, a purple dress and a teacup. The pigtails, the eye and the cup are drawn only on her.
 
+## Twenty-second wave (2026-10-29, in the game)
+
+Eight Harmontide creatures from the reference art (their blue looks) and four creatures of folklore (Xiangliu, the cyclops,
+the genie and Ammit). The spinosaur and the australovenator, first planned here, went to the new theropod family; the
+archelon and the fishman took their places.
+
+| Species | Home | Design |
+|---|---|---|
+| **Macawtl** | Dragon | A feathered serpent in deep macaw blue: a crest of plumes, a small hooked beak between her eyes, feathered wings and tail, two long plumes trailing from it: out under the open sky her friend near her runs faster. |
+| **Piranha** | Merfolk | A round little blue fish girl with darker spots, a jutting jaw of teeth, a lure on a stalk on her head: in water she bites every monster near her friend that is already badly hurt. |
+| **Mosasaurus** | Merfolk | The great sea lizard: big, grey-blue, scaled, a toothy grin, a crescent of a tail fin: her friend's boat near her surges forward as she tows it. |
+| **Fishman** | Merfolk | A light blue fish girl with a ponytail, fins at her elbows, freckle spots and a scowl of sharp teeth: she wrenches the trident from a drowned near her friend. |
+| **Gibbon** | Rodent | Fluffy pale blue-grey round a cream face, green eyes, a ruff framing her face, a long tail curling up: her friend near her climbs ladders, vines and scaffolding twice as fast. |
+| **Gigantopithecus** | Canid | The giant ape: huge, shaggy, deep blue, a red flower over her ear, a fur top and stone belt: when monsters crowd her friend she slams the ground and they are knocked back and slowed. |
+| **Sandworm** | Lamia | Blue and segmented, a cream belly, a scaly hood over her head: she swallows a monster near her friend and spits it out far away. |
+| **Archelon** | Lizardfolk | The greatest sea turtle: crystal-blue, a great shell with three keels, flippers at her wrists: she knocks away the arrows flying at her friend. |
+| **Xiangliu** | Lamia | The nine-headed serpent of Chinese myth: a teal serpent girl with six little heads of her own round her head on short necks: her heads bite up to three monsters near her friend at once. |
+| **Cyclops** | Devil | The one-eyed giant of Greek myth: a big shy girl with a single great eye (and one lid to blink it), pointed ears, a blue bob: she hurls a boulder at a monster far from her friend. |
+| **Genie** | Devil | A spirit of smoke bound to a brass lamp: a smoke tail for legs, a ponytail, a bandeau and bangles, the lamp in her hand; she floats: three times a day (dawn, noon, dusk) she grants her friend a wish, a random boon. |
+| **Ammit** | Nekomata | The devourer of the dead of Egyptian myth: a lion's mane and body, a crocodile's snout with teeth along its jaw, a tufted tail: when a monster dies near her friend she eats its heart and her friend heals. |
+
+Paints: prismarine, amethyst, sculk (its bright specks glow) and mushroom, Minecraft's own blocks tiled (like obsidian and
+sandstone since 2026-10-29), so 87 in all.
+
+Homage props (POP_CULTURE_VARIANTS.md): the dullahan's headless rider (Celty) has her yellow cat-eared helmet over the head she
+carries, the death envoy (Lala) a scythe in her free hand; both are drawn only on their own looks.
+
 ## Theropods (2026-10-29, in the game)
 
 A family of their own (`theropod`, field guide volume XXVII), built like a 1920s museum sketch of a T. rex but human: the upper

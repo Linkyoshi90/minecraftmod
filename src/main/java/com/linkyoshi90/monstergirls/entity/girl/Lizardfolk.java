@@ -360,6 +360,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
     public void aiStep() {
         super.aiStep();
         if (this.species == GirlSpecies.TURTWORLD_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel isle && !this.isBaby() && this.tickCount % 100 == 0) this.livingIsland(isle);
+        if (this.species == GirlSpecies.ARCHELON_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel reef && !this.isBaby() && this.tickCount % 2 == 0) this.shellShield(reef);
         if (this.species == GirlSpecies.BASILISK_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel stare && !this.isBaby() && this.tickCount % 40 == 0) this.stoneGaze(stare);
         if (this.species == GirlSpecies.TURTFOLK_LIZARDFOLK && this.level() instanceof ServerLevel guard && !this.isBaby() && this.tickCount % 20 == 0) this.shellGuard(guard);
         if (this.species == GirlSpecies.CONCH_TURTLE_LIZARDFOLK && this.level() instanceof ServerLevel shore && !this.isBaby() && this.tickCount % 20 == 0) this.conchCall(shore);
@@ -811,5 +812,28 @@ public class Lizardfolk extends AbstractMonsterGirl {
         level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(net.minecraft.core.particles.ParticleTypes.BLOCK, net.minecraft.world.level.block.Blocks.STONE.defaultBlockState()),
                 m.getX(), m.getY(0.5), m.getZ(), 8, 0.3, 0.4, 0.3, 0.0);
         return 1;
+    }
+
+    // --- the twenty-second wave ---------------------------------------------------------------------------------------
+
+    /** The archelon knocks away the arrows (and tridents) flying at her friend within 8 blocks of her, once they are within 5 blocks
+     *  of them: they bounce back the way they came, weakly. How many she knocked away, -1 without a friend. */
+    public int shellShield(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        if (friend.distanceToSqr(this) > 8 * 8) return 0;
+        int n = 0;
+        for (net.minecraft.world.entity.projectile.AbstractArrow a : level.getEntitiesOfClass(net.minecraft.world.entity.projectile.AbstractArrow.class,
+                friend.getBoundingBox().inflate(5))) {
+            net.minecraft.world.phys.Vec3 v = a.getDeltaMovement();
+            if (a.getOwner() == friend || v.lengthSqr() < 0.04) continue;
+            net.minecraft.world.phys.Vec3 to = friend.getBoundingBox().getCenter().subtract(a.position());
+            if (v.dot(to) <= 0) continue;                  // flying away from them already
+            a.setDeltaMovement(v.scale(-0.3));
+            a.hurtMarked = true;
+            n++;
+        }
+        if (n > 0) this.playSound(net.minecraft.sounds.SoundEvents.SHIELD_BLOCK, 1.0F, 0.9F);
+        return n;
     }
 }

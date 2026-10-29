@@ -101,7 +101,10 @@ GROUP = {"lioness_nekomata": (3, 5), "orca_mermaid": (2, 3), "fennec_kitsune": (
          "nenekea_dragon": (1, 2), "rheintalensis_canid": (1, 1), "daeodon_armoured": (1, 2), "anteater_armoured": (1, 1), "oryx_minotaur": (2, 3),
          "caracal_nekomata": (1, 2), "walrus_mermaid": (2, 3), "anomalocaris_mermaid": (1, 2), "serpopard_lamia": (1, 2), "urcuchillay_centaur": (1, 1),
          "rakshasa_nekomata": (1, 1), "gashadokuro_undead": (1, 1),
-         "spinosaur_theropod": (1, 2), "australovenator_theropod": (2, 3)}
+         "spinosaur_theropod": (1, 2), "australovenator_theropod": (2, 3),
+         "macawtl_dragon": (1, 1), "piranha_mermaid": (2, 4), "mosasaurus_mermaid": (1, 1), "fishman_mermaid": (1, 2), "gibbon_rodent": (2, 3),
+         "gigantopithecus_canid": (1, 1), "sandworm_lamia": (1, 1), "xiangliu_lamia": (1, 1), "archelon_lizardfolk": (1, 2), "cyclops_devil": (1, 1),
+         "genie_devil": (1, 1), "ammit_nekomata": (1, 1)}
 CATEGORY = {"axolotl_mermaid": "underground_water_creature", "amethyst_slime": "monster", "magma_slime": "monster",
             "seal_mermaid": "creature", "kraken_mollusk": "water_creature", "ammonite_mollusk": "water_creature",
             "night_elf": "monster", "blood_elf": "monster", "salamander_lizardfolk": "monster", "turtle_lizardfolk": "creature",
@@ -116,7 +119,9 @@ CATEGORY = {"axolotl_mermaid": "underground_water_creature", "amethyst_slime": "
             "rusalka_mermaid": "water_creature", "ushi_oni_arachne": "creature", "spoodr_arachne": "creature",
             "moopie_mermaid": "water_creature", "kasurenijimi_undead": "creature", "akaname_devil": "creature", "tin_jack_construct": "creature",
             "doggo_mermaid": "water_creature", "fernstalker_theropod": "monster",
-            "walrus_mermaid": "water_creature", "anomalocaris_mermaid": "water_creature", "nenekea_dragon": "creature", "gashadokuro_undead": "monster"}
+            "walrus_mermaid": "water_creature", "anomalocaris_mermaid": "water_creature", "nenekea_dragon": "creature", "gashadokuro_undead": "monster",
+            "piranha_mermaid": "water_creature", "mosasaurus_mermaid": "water_creature", "fishman_mermaid": "water_creature",
+            "cyclops_devil": "creature", "genie_devil": "creature"}
 # hitbox widths that differ from the family's
 WIDTH = {"kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alraune_flora": 1.2, "frankenstein_undead": 0.8,
          "gryphon_dragon": 1.3, "long_dragon": 1.0, "jormungandr_dragon": 1.2, "wyvern_dragon": 1.2, "wyrm_dragon": 1.3,
@@ -133,7 +138,8 @@ WIDTH = {"kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alra
          "tuskin_minotaur": 1.0, "akaname_devil": 0.5,
          "house_mouse_rodent": 0.5, "sobolnik_rodent": 0.55, "turtworld_lizardfolk": 1.0, "moo_dragon": 0.7, "basilisk_lizardfolk": 0.55,
          "rheintalensis_canid": 0.8, "daeodon_armoured": 0.9, "walrus_mermaid": 0.9, "gashadokuro_undead": 0.85,
-         "spinosaur_theropod": 0.8}
+         "spinosaur_theropod": 0.8,
+         "gigantopithecus_canid": 0.9, "mosasaurus_mermaid": 1.0, "cyclops_devil": 0.8, "archelon_lizardfolk": 0.8, "sandworm_lamia": 0.9}
 # the name shown in game: the species name plus the family's word, unless NAME says otherwise
 SUFFIX = {"nekomata": " Nekomata", "kitsune": " Kitsune", "lamia": " Lamia", "arachne": " Arachne", "centaur": " Centaur", "merfolk": " Mermaid",
           "slime": "", "jackalope": "", "minotaur": " Minotaur", "mollusk": "", "elf": "", "undead": "", "lizardfolk": "", "dragon": "",
@@ -184,7 +190,10 @@ NAME = {"jack_jackalope": "Jack Jackalope", "kraken_mollusk": "Kraken", "octopus
         "mothman_bug": "Mothman",
         "nenekea_dragon": "Nenekea", "rheintalensis_canid": "Rheintalensis", "daeodon_armoured": "Daeodon", "anteater_armoured": "Anteater",
         "oryx_minotaur": "Oryx", "caracal_nekomata": "Caracal", "walrus_mermaid": "Walrus", "anomalocaris_mermaid": "Anomalocaris",
-        "serpopard_lamia": "Serpopard", "urcuchillay_centaur": "Urcuchillay", "rakshasa_nekomata": "Rakshasa", "gashadokuro_undead": "Gashadokuro"}
+        "serpopard_lamia": "Serpopard", "urcuchillay_centaur": "Urcuchillay", "rakshasa_nekomata": "Rakshasa", "gashadokuro_undead": "Gashadokuro",
+        "macawtl_dragon": "Macawtl", "piranha_mermaid": "Piranha", "mosasaurus_mermaid": "Mosasaurus", "fishman_mermaid": "Fishman",
+        "gibbon_rodent": "Gibbon", "gigantopithecus_canid": "Gigantopithecus", "sandworm_lamia": "Sandworm", "xiangliu_lamia": "Xiangliu",
+        "archelon_lizardfolk": "Archelon", "cyclops_devil": "Cyclops", "genie_devil": "Genie", "ammit_nekomata": "Ammit"}
 
 
 def gen_module(fid):

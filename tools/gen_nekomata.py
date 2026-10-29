@@ -19,6 +19,18 @@ FAMILY = C.family("nekomata")
 
 # per species: body knobs, then the default palette and the four other colours as palette overrides
 SPECIES = {
+    # twenty-second wave (folklore): Ammit, the devourer of the dead of Egyptian myth: a lion's mane and body, a crocodile's snout
+    # over her mouth (teeth along its jaw), a tufted tail, a gold collar
+    "ammit_nekomata": dict(
+        build="curvy", outfit=dict(top=["bandeau", "mantle"], bottom="strips", extras=["usekh", "armlets", "belt"], colors=dict(cloth2="#e8c050")),
+        ears="round", hair="mane", bangs="swept", tail=((1.25, 1.25, 4), (1.25, 1.25, 4), (1.75, 1.75, 2)), tail_pattern="solid", tuft=True,
+        croc=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#5a7ac0", FUR="#9ab4e0", LIGHT="#e8f0fa", MARK="#2a4a8a", EYE="#e8b040", CLOTH="#2a4a8a", TRIM="#e8c050",
+                 pattern="solid", extra=dict(snout="#7a9ad0")),
+        variants={"sand": dict(HAIR="#a8783a", FUR="#d8b880", LIGHT="#f8ecd4", MARK="#6a4a1e", EYE="#3a8a3a", CLOTH="#2a6a6a", extra=dict(snout="#8a8a4a")),
+                  "black": dict(HAIR="#1e1c22", FUR="#2e2c34", LIGHT="#8a8690", MARK="#0e0c10", EYE="#e8c040", CLOTH="#c8a040", extra=dict(snout="#3a4a3a")),
+                  "gold": dict(HAIR="#c8901e", FUR="#e0b850", LIGHT="#f8ecc0", MARK="#7a5410", EYE="#3a6ac8", CLOTH="#2a4a8a", extra=dict(snout="#6a8a3a")),
+                  "green": dict(HAIR="#3a5a2a", FUR="#8aa86a", LIGHT="#e8f0dc", MARK="#2a3a1e", EYE="#e8b040", CLOTH="#7a3a1e", extra=dict(snout="#4a7a3a"))}),
     # twenty-first wave: the caracal, blue-grey with long black ear tufts, a pale chest and dark tear marks
     "caracal_nekomata": dict(
         build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["belt"]),
@@ -256,6 +268,8 @@ def declare(sp):
         extra += [("sabre_fang", .5, 1.75, .5)]
     if d.get("stinger"):
         extra += [("sting_bulb", 2, 2, 2.5), ("sting_barb", .75, .75, 2.5)]
+    if d.get("croc"):                                    # Ammit's crocodile snout
+        extra += [("croc_snout", 3.5, 1.75, 3)]
     if d.get("wisps"):
         extra += [("wisp", 1.5, 1.5, 1.5)]
     if d.get("censer"):
@@ -275,6 +289,8 @@ def pal_for(sp, key=None):
     p.facemark = kw.get("facemark")
     p.extra = kw.get("extra", {})
     p.pupil = (0.9, 3.4)                     # slit pupils
+    if d.get("croc"):
+        p.mouth_px = {}                      # her mouth is under the snout
     return p
 
 
@@ -339,6 +355,19 @@ def paint(sp, pal):
     if d.get("wisps"):                                   # the will-o'-wisps: pale ghost fire, brighter at the heart
         hot, wc = G.shades(pal.extra.get("flame_hot", "#f4fcff")), G.shades(pal.extra.get("flame", "#a8d8ff"))
         pt("wisp", "all", lambda f, x, y, w, h: pick(hot if (x, y) == (0, 0) else wc, 0.7, x, y))
+    if d.get("croc"):                                    # scaled on top, a row of teeth along the jaw line, two nostrils
+        sn = G.palette(FUR=pal.extra.get("snout", "#7a9ad0"), LIGHT=pal.LIGHT, MARK=pal.MARK)
+        sn.pattern, sn.pattern_scale = "solid", 1.0
+        sc = G.scale_fn(sn)
+        tooth, gum = G.shades("#f8f4e8"), G.shades("#5a1e22")
+
+        def snout(f, x, y, w, h):
+            if f == "up" and y == 1 and x in (2, w - 3):
+                return pick(pal.MARK, 0.3, x, y)
+            if f in ("east", "west", "north") and y == h - 3:
+                return pick(tooth, 0.75, x, y) if x % 2 == 0 else pick(gum, 0.4, x, y)
+            return sc(f, x, y, w, h)
+        pt("croc_snout", "all", snout)
     if d.get("stinger"):                                 # the manticore's sting: a dark bulb and a curved barb
         st = G.shades(pal.extra.get("sting", "#2a2a3a"))
         pt("sting_bulb", "all", lambda f, x, y, w, h: pick(st, 0.5 + 0.2 * (f == "up") + 0.1 * (y % 2), x, y))
@@ -437,6 +466,8 @@ def build(sp):
         r.put("body", cube("star", [-1.25, 18.4, -G.S("chest")[2] / 2 - G.S("bust")[2] - 0.7 + g.z]))
     if d.get("grin"):                                    # the grin, wide across her lower face
         r.put("head", cube("grin", [-2.25, g.hy + 0.6, -4.2 + g.z]))
+    if d.get("croc"):                                    # a short snout over her mouth
+        r.put("head", cube("croc_snout", [-1.75, g.hy + 0.1, -6.9 + g.z]))
     if d.get("sabre"):                                   # two long fangs from her upper lip, down past her chin
         r.put("head", cube("sabre_fang", [-1.25, g.hy - 0.45, -4.4 + g.z]), cube("sabre_fang", [0.75, g.hy - 0.45, -4.4 + g.z]))
     if d.get("stinger"):                                 # on the end of her tail (not the hidden second one): the bulb, the barb curving down

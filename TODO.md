@@ -293,6 +293,22 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
 - [x] Journal and hearth discoverable (2026-10-28): the journal opens again (its pages are synced to the client before the book screen opens), it starts with four guide pages (making friends, the hearth, expeditions, weapons), both recipes are unlocked at login, and every player gets a journal on their first visit (not on the GameTest server).
 - [x] Homage variants from POP_CULTURE_VARIANTS.md: `jewel_thief` (cave bat), `ink_kid` (ika), `pink_dairy` (cattle minotaur), `sun_goddess` (wolf girl); palettes only, rare in the wild (`HOMAGES`). The rest of that list wants a prop each.
 - [ ] Dev client for the life features: a held bow and a TaCZ gun in a girl's hand (position on `hand_r`; the item may need vanilla's extra 180-degree turn once the arm is raised), the aiming poses and recoil, TaCZ shooting and reloading from the pouch, the journal's pages, a hut going up and the market's presents, an expedition's return.
+- [x] **Twenty-second wave** (2026-10-29), tested in `TwentySecondWaveTests`:
+  - **Macawtl** (dragon, `macaw`: crest, beak, tail plumes; feathered wings, flies): every second, `tailwind` gives her friend within 10 under the open sky Speed I.
+  - **Piranha** (merfolk, `pjaw`, `plure`, the grin): every second, `frenzy` bites each monster in water within 8 of her friend below half health for 3.
+  - **Mosasaurus** (merfolk, size 1.3, the grin): every 10 ticks, `tow` pushes her friend's boat within 12 forward (capped at 0.9).
+  - **Fishman** (merfolk, `elbowfin`, the grin): every 2 s, `disarm` takes the trident from a drowned within 10 of her friend (it breaks).
+  - **Gibbon** (rodent, `ruff`, curling tail): every 2 ticks, `brachiation` lifts her friend climbing up a ladder, vine or scaffolding within 8 to 0.36 a tick.
+  - **Gigantopithecus** (canid, `hflower`): every 2 s, `groundPound`: with 3+ monsters within 5 of her friend, knockback and Slowness II for each.
+  - **Sandworm** (lamia, `whood`): every 10 s, `swallow` moves the nearest monster within 6 of her friend 16 blocks away from them, onto the ground.
+  - **Xiangliu** (lamia, `xheads`: six little heads on a `hair_xheads` bone): every 3 s, `nineHeads` bites up to three monsters within 8 of her friend for 4.
+  - **Archelon** (lizardfolk, `keels`, `wflippers`): every 2 ticks, `shellShield` reverses the arrows and tridents within 5 of her friend that fly at them.
+  - **Cyclops** (devil, `cyclops`: one eye and one lid painted over the face): every 3 s, `boulder` hits the nearest monster within 20 of her friend for 7.
+  - **Genie** (devil, `smoke` tail in four bones, `lamp`; floats): every second, `wish` grants one random 5-minute boon in each of dawn, noon and dusk.
+  - **Ammit** (nekomata, `croc` snout): every 10 ticks, `devour` heals her friend 4 for each monster dying within 10 of them (once each).
+  - **Paints:** prismarine, amethyst, sculk (glow mask) and mushroom, tiled from the vanilla block textures, so 87 in all.
+  - **Homage props:** the dullahan's `envoy_kit`: Celty's helmet (`rider`) and Lala's scythe (`scythe`), each drawn only on its look; the dullahan's paints were redone for the new parts.
+- [ ] Dev client for the twenty-second wave: the macawtl's plumes, the piranha's lure, the mosasaurus's size, Xiangliu's little heads, the cyclops's eye and blink, the genie's smoke tail and float, Ammit's snout; Celty's helmet and Lala's scythe; the four paints and the sculk glow.
 - [x] **Theropods** (2026-10-29), a new family, tested in `TheropodTests` (the fernstalker's ambush still in `TwentiethWaveTests`):
   - `gen_theropod.py` (girl_family biped, `HUNCH` = 20, tail rest tied to it, the grin in `pal.mouth_px`), `Theropod.java` (extends `Lizardfolk`), `Family.THEROPOD` (settlements and expeditions as the lizardfolk).
   - **Fernstalker** moved from the lizardfolk: id `fernstalker_lizardfolk` -> `fernstalker_theropod` (old assets, spawns and lang deleted; fernstalkers in old worlds are gone).

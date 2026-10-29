@@ -489,6 +489,7 @@ public class Nekomata extends AbstractMonsterGirl {
         super.aiStep();
         if (this.species == GirlSpecies.CARACAL_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel leap && !this.isBaby() && this.tickCount % 40 == 0) this.birdCatch(leap);
         if (this.species == GirlSpecies.RAKSHASA_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel maya && !this.isBaby() && this.tickCount % 40 == 0) this.glamour(maya);
+        if (this.species == GirlSpecies.AMMIT_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel judge && !this.isBaby() && this.tickCount % 10 == 0) this.devour(judge);
         if (this.species == GirlSpecies.MANTICORE_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel spike && !this.isBaby() && this.tickCount % 60 == 0) this.tailSpike(spike);
         if (this.species == GirlSpecies.SABRE_NEKOMATA && this.level() instanceof ServerLevel hunt && !this.isBaby() && this.tickCount % 40 == 0) this.finishingBite(hunt);
         if (this.species == GirlSpecies.BASTET_NEKOMATA && this.level() instanceof ServerLevel home && !this.isBaby() && this.tickCount % 10 == 0) this.wardCreepers(home);
@@ -841,6 +842,27 @@ public class Nekomata extends AbstractMonsterGirl {
             level.sendParticles(net.minecraft.core.particles.ParticleTypes.WITCH, m.getX(), m.getEyeY(), m.getZ(), 6, 0.3, 0.3, 0.3, 0.0);
             n++;
         }
+        return n;
+    }
+
+    // --- the twenty-second wave ---------------------------------------------------------------------------------------
+
+    /** The monsters whose hearts she has already eaten (by id), so each death counts once. */
+    private final java.util.Set<Integer> devoured = new java.util.HashSet<>();
+
+    /** When a monster within 10 blocks of her friend dies, Ammit eats its heart and her friend heals two hearts. How many she ate,
+     *  -1 without a friend. */
+    public int devour(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        int n = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(10), net.minecraft.world.entity.LivingEntity::isDeadOrDying)) {
+            if (!this.devoured.add(m.getId())) continue;
+            friend.heal(4.0F);
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.HEART, friend.getX(), friend.getY(1.0), friend.getZ(), 3, 0.3, 0.3, 0.3, 0.0);
+            n++;
+        }
+        if (this.devoured.size() > 64) this.devoured.clear();
         return n;
     }
 }

@@ -37,7 +37,8 @@ only). And (twentieth wave): tie_dye (a swirl of rainbow dye with white crinkle 
 veins), lace (ivory open-work lace) and bluebell (little blue bells on green stems over pale periwinkle, May only). And
 (twenty-first wave): obsidian (Minecraft's obsidian block, tiled), patchwork (quilted squares of
 different cloth, stitched), sandstone (Minecraft's sandstone side, tiled) and acorn (little acorns on warm brown, September
-only). The drips and
+only). And (twenty-second wave): prismarine, amethyst, sculk (its specks glow) and mushroom, Minecraft's own blocks
+tiled. The drips and
 patterns follow the model: they are drawn per cube face from the geo file, running down each side from its top edge.
 
     python tools/gen_paints.py [paint ...] [model ...]   # everything, or just the paints and/or models named
@@ -229,7 +230,8 @@ def treat(img, name, model):
                                         "cow", "rust", "lava_lamp", "sunflower",
                                         "comic", "blueprint", "koi", "lemonade",
                                         "tie_dye", "jade", "lace", "bluebell",
-                                        "obsidian", "patchwork", "sandstone", "acorn"):
+                                        "obsidian", "patchwork", "sandstone", "acorn",
+                                        "prismarine", "amethyst", "sculk", "mushroom"):
         return finish(img, name, model)[0]
     W = len(img[0])
     out = [list(row) for row in img]
@@ -363,7 +365,8 @@ TREATS = ["chocolate", "icecream", "strawberry", "jello", "milk", "gold", "marbl
           "cow", "rust", "lava_lamp", "sunflower",
           "comic", "blueprint", "koi", "lemonade",
           "tie_dye", "jade", "lace", "bluebell",
-          "obsidian", "patchwork", "sandstone", "acorn"]
+          "obsidian", "patchwork", "sandstone", "acorn",
+          "prismarine", "amethyst", "sculk", "mushroom"]
 PEARL = hexes("#b8b0c0", "#d8d2e0", "#ece8f2", "#f8f6fc", "#ffffff")
 CHROME = hexes("#1e2024", "#4a4e56", "#8a909a", "#c8ccd4", "#ffffff")
 AURORA = hexes("#2af08a", "#3ad8c8", "#5aa0f0", "#8a6af0", "#c86ae8")
@@ -380,7 +383,7 @@ EMBER = hexes("#a8280a", "#e85a14", "#f8901e", "#ffc84a", "#fff0a0")
 NEON = hexes("#1a8a8a", "#2ad0c8", "#5af8f0", "#b0fff8")
 NIGHTBODY = hexes("#0a0a14", "#14141e", "#20202e", "#2e2e40", "#40405a")
 PUMPKIN = hexes("#7a2e06", "#b04a0e", "#e0701a", "#f89a3a", "#ffc070")
-GLOWING = ("glow", "magma", "thunder", "neon", "circuit", "lava_lamp")                             # the paints with a glow mask of their own (PaintGlowLayer)
+GLOWING = ("glow", "magma", "thunder", "neon", "circuit", "lava_lamp", "sculk")                             # the paints with a glow mask of their own (PaintGlowLayer)
 SUNSET = hexes("#f8c040", "#f88a3a", "#e8584a", "#b8407a", "#6a3a9a")
 STORM = hexes("#2a2e3a", "#3e4452", "#5a6070", "#7a8090", "#a0a6b4")
 NEON = [(255, 60, 200), (60, 230, 255), (150, 255, 70), (255, 230, 60)]
@@ -878,6 +881,16 @@ def finish(img, name, model):
                     continue
                 k = 0.8 + 0.3 * l
                 c = tuple(min(255, int(v * k)) for v in vanilla("sandstone")[(yy + 3 * i) % 16][(xx + 7 * i) % 16])
+            elif name in ("prismarine", "amethyst", "sculk", "mushroom"):        # Minecraft's own blocks, tiled
+                if l < 0.22 and face:
+                    continue
+                block = {"prismarine": "prismarine", "amethyst": "amethyst_block", "sculk": "sculk", "mushroom": "red_mushroom_block"}[name]
+                v = vanilla(block)[(yy + 5 * i) % 16][(xx + 7 * i) % 16]
+                k = 0.8 + 0.35 * l
+                c = tuple(min(255, int(q * k)) for q in v)
+                if name == "sculk" and v[2] > 150 and v[1] > 120:              # the sculk's bright specks glow
+                    c = tuple(v)
+                    mask[y][x] = c + (255,)
             elif name == "acorn":
                 if l < 0.22 and face:
                     continue

@@ -18,6 +18,19 @@ from girl_lib import H, cube, pick, skin, CLEAR  # noqa: E402
 
 SPECIES = {
     # twentieth wave: the house mouse, big round ears and a long bare tail; the Gregory Horror Show homages (POP_CULTURE_VARIANTS.md)
+    # twenty-second wave: the gibbon, fluffy and pale blue-grey round a cream face, green eyes, a fluffy ruff framing her face,
+    # long curling tail
+    "gibbon_rodent": dict(
+        build="petite", outfit=dict(top=["halter"], bottom="shorts", colors=dict(cloth2="#6a8ab0")),
+        hair="shaggy", bangs="wispy", ears=None, legs="fur", foot="paw",
+        tail=[(1, 1, 3.5), (.85, .85, 3.5), (.75, .75, 3.5), (.6, .6, 3), (.5, .5, 2.5)], tail_rest=[(-55, 0, 0), (15, 0, 0), (30, 0, 0), (35, 0, 0), (40, 0, 0)],
+        tail_look="fur", ruff=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#9ab0c8", FUR="#a8bcd4", LIGHT="#f4ece0", MARK="#6a7e98", EYE="#3a9a5a", CLOTH="#6a8ab0", TRIM="#f4ece0",
+                 pattern="solid"),
+        variants={"white": dict(HAIR="#e8e4dc", FUR="#f0ece4", LIGHT="#ffffff", MARK="#8a8478", CLOTH="#c8a060", EYE="#5a3a1e"),
+                  "black": dict(HAIR="#26242a", FUR="#302e34", LIGHT="#d8ccb8", MARK="#141216", CLOTH="#c8a040", EYE="#c8a040"),
+                  "gold": dict(HAIR="#d8a850", FUR="#e4b860", LIGHT="#f8ecd0", MARK="#9a6a24", CLOTH="#4a6a3a", EYE="#3a5a2a"),
+                  "brown": dict(HAIR="#7a5a3e", FUR="#8a6a4c", LIGHT="#ecdcc4", MARK="#4a3422", CLOTH="#3a6a8a", EYE="#3a9a5a")}),
     # carry their props by variant (`ghs_kit`): Gregory's ring of keys, James's slingshot, Gregory Mama's soul bottles
     "house_mouse_rodent": dict(
         build="petite", outfit=dict(top=["halter", "vest"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#5a4a3a", leather="#5a3a22")),
@@ -196,6 +209,8 @@ def declare_hook(sp, d):
         out += [("pinecone", 1.75, 2.5, 1.75), ("cone_cap", 1, .5, 1)]
     if d.get("whisker_nose"):
         out += [("mouse_nose", 1, .75, .5)]
+    if d.get("ruff"):                                    # the gibbon's ruff of fur framing her face
+        out += [("ruff_side", 1, 5, 1), ("ruff_chin", 6, 1.25, 1)]
     if d.get("ghs_kit"):
         out += [("keyring", 1.75, 1.75, .25), ("key", .5, 2, .25), ("sling_y", 2, 2.5, .5), ("sling_grip", .75, 2, .75),
                 ("soul_bottle", 1.25, 2, 1.25), ("bottle_cork", .75, .5, .75)]
@@ -208,6 +223,9 @@ def paint_hook(pt, pal, d):
     pt("yuzu_leaf", "all", lambda f, x, y, w, h: pick(G.shades("#4a9a3a"), 0.55, x, y))
     pt("coati_nose", "all", lambda f, x, y, w, h: pick(G.shades("#1e1a1c"), 0.4, x, y) if f == "north" and y == h - 1
        else pick(pal.LIGHT if f == "down" else pal.FUR, 0.55, x, y))
+    ruff = G.fur_fn(pal, light_faces=(), grain=0.2, seed=71)
+    for p in ("ruff_side", "ruff_chin"):
+        pt(p, "all", ruff)
     frill, edge = G.shades(pal.extra.get("frill", "#5a7ac8")), G.shades(pal.extra.get("frill_edge", "#e8c060"))
 
     def fr(f, x, y, w, h):                               # the frill: a fan plate, scalloped and spotted along its edge
@@ -283,6 +301,10 @@ def paint_ghs(pt, pal, d):
 def build_hook(r, g, d):
     if d.get("whisker_nose"):                           # a little pink nose
         r.put("head", cube("mouse_nose", [-0.5, g.hy + 2.5, -4.4 + g.z]))
+    if d.get("ruff"):                                    # fluffy fur down both sides of her face and under her chin
+        hy, z = g.hy, g.z
+        r.put("head", cube("ruff_side", [-4.6, hy + 0.5, -4.6 + z]), cube("ruff_side", [3.6, hy + 0.5, -4.6 + z]),
+              cube("ruff_chin", [-3.0, hy - 0.6, -4.6 + z]))
     if d.get("ghs_kit"):                                # at her belt: the ring of keys (right), the slingshot (left), three soul bottles (back)
         bz = -G.S("hips")[2] / 2 + g.z
         r.add("ghs_kit", "body", [0, 12, g.z], [

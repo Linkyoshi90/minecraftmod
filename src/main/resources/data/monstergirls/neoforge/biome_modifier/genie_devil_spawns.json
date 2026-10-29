@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_genie_devil",
+  "spawners": {
+    "type": "monstergirls:genie_devil",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

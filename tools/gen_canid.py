@@ -17,6 +17,20 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # twenty-second wave: the gigantopithecus, the giant ape: huge and shaggy, deep blue fur, a red flower in her hair, a fur top and a
+    # stone belt
+    "gigantopithecus_canid": dict(
+        build="strong", outfit=dict(top=["bandeau"], bottom="loincloth", extras=["belt", "arm_wraps"],
+                                    colors=dict(cloth2="#2a3a8a", leather="#6a6e7a", bandage="#3a4a9a")),
+        hair="mane", bangs="messy", ears=None, legs="fur", foot="paw", tail=None, hflower=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e2e8a", FUR="#2a3c9a", LIGHT="#8a9ad8", MARK="#101a4a", EYE="#4a6ad8", CLOTH="#2a3c9a", TRIM="#c8ccd8",
+                 pattern="solid", extra=dict(flower="#e0281e", flower_in="#f8d040")),
+        variants={"brown": dict(HAIR="#4a3020", FUR="#5a3a26", LIGHT="#a88060", MARK="#2a1a10", EYE="#c8902a", CLOTH="#5a3a26"),
+                  "black": dict(HAIR="#1a181c", FUR="#242226", LIGHT="#6a6670", MARK="#0a080a", EYE="#c8902a", CLOTH="#242226"),
+                  "grey": dict(HAIR="#8a8e96", FUR="#9a9ea6", LIGHT="#d8dade", MARK="#4a4e56", EYE="#3a5a8a", CLOTH="#4a4e56",
+                               extra=dict(flower="#f0f0f0", flower_in="#f8d040")),
+                  "red": dict(HAIR="#7a321e", FUR="#8a3c24", LIGHT="#d0906a", MARK="#3a140a", EYE="#3a2a1a", CLOTH="#4a2a1a",
+                              extra=dict(flower="#f8d040", flower_in="#e0601e"))}),
     # twenty-first wave: the rheintalensis, a broad shaggy cave bear: wild blue hair, pelts, a necklace of teeth, a big club
     "rheintalensis_canid": dict(
         build="strong", outfit=dict(top=["sarashi"], bottom="loincloth", extras=["arm_wraps", "pearls"], colors=dict(bandage="#3a5ab0", cloth2="#2a3a7a")),
@@ -203,6 +217,8 @@ def build_melon(r, g):
 
 
 def declare_hook(sp, d):
+    if d.get("hflower"):                                 # a big flower behind her ear: four petals round a heart
+        return [("hpetal", .5, 2, 2), ("hbloom", .5, 1.25, 1.25)]
     if d.get("bigclub"):                                 # the rheintalensis's club: a thick haft, a knotted head
         return [("bclub", 2, 8, 2), ("bclub_head", 3.25, 4.5, 3.25), ("bclub_knob", 1, 1, 1)]
     if d.get("club"):                                    # the macuahuitl: a flat wooden club edged with obsidian blades
@@ -221,6 +237,10 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    if d.get("hflower"):
+        fl, fin = G.shades(pal.extra.get("flower", "#e0281e")), G.shades(pal.extra.get("flower_in", "#f8d040"))
+        pt("hpetal", "all", lambda f, x, y, w, h: pick(fl, 0.55 + 0.2 * (f in ("east", "west")) - 0.15 * (x == 0 or y == 0), x, y))
+        pt("hbloom", "all", lambda f, x, y, w, h: pick(fin, 0.65, x, y))
     if d.get("bigclub"):
         cl, cd = G.shades(pal.extra.get("club", "#6a7284")), G.shades(pal.extra.get("club_dark", "#3a4050"))
         pt("bclub", "all", lambda f, x, y, w, h: pick(cd if y % 3 == 0 and f != "up" else cl, 0.45 + 0.1 * (x % 2), x, y))
@@ -305,6 +325,11 @@ def paint_hook(pt, pal, d):
 
 
 def build_hook(r, g, d):
+    if d.get("hflower"):                                 # tucked over her left ear, facing out
+        hy, z = g.hy, g.z
+        fx, fy, fz = 4.9, hy + 5.0, -1.0 + z
+        r.add("hair_flower", "head", [fx, fy, fz], [cube("hpetal", [fx, fy - 1.0 + dy, fz - 1.0 + dz]) for dy, dz in ((1.2, 0), (-1.2, 0), (0, 1.2), (0, -1.2))]
+              + [cube("hbloom", [fx + 0.2, fy - 0.625, fz - 0.625])])
     if d.get("bigclub"):                                 # held upright in her right fist, out in front of her arm
         px, py, pz = r.b["hand_r"]["pivot"]
         cx, cz = px - 0.6, pz - 2.4

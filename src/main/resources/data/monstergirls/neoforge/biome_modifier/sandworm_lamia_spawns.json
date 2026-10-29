@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_sandworm_lamia",
+  "spawners": {
+    "type": "monstergirls:sandworm_lamia",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -2521,6 +2521,124 @@ for _fid, _entries in TWENTY_FIRST.items():
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
 
+# twenty-second wave (2026-10-29): eight Harmontide creatures from the reference art (their blue looks) and four creatures of
+# folklore (Xiangliu, the cyclops, the genie and Ammit)
+TWENTY_SECOND = {
+    "dragon": [
+        (dict(id="macawtl_dragon", name="Macawtl", group="Jungles", tag="Proud · bright", height=1.9,
+              biomes=["jungle", "bamboo_jungle", "sparse_jungle"], temperament="Proud, bright",
+              ecology="A Harmontide feathered serpent in deep macaw blue: a crest of plumes, a hooked beak of a mask, diamond-patterned feathers and a long tail of plumes hung with silver beads. She rides the winds above the canopy.",
+              interaction="Melon, cocoa beans and seeds.",
+              signature=("Tailwind", "Befriended, out under the open sky her friend near her runs faster (Speed)."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Deep blue, silver beads"), ("scarlet", "Scarlet", "Scarlet macaw red"), ("green", "Green", "Military macaw green"), ("gold", "Gold", "Blue and gold"), ("hyacinth", "Hyacinth", "Violet blue")]),
+         {"Habitat": "Jungles", "Signature": "Speed under the sky", "Danger": "Low"})],
+    "merfolk": [
+        (dict(id="piranha_mermaid", name="Piranha", group="Jungle rivers", tag="Hungry · fierce", height=1.5,
+              biomes=["river", "jungle", "mangrove_swamp", "swamp"], temperament="Hungry, fierce",
+              ecology="A round little Harmontide piranha girl, blue and spotted, with a jutting jaw full of teeth and a lure of a curl on her head. Where there is blood in the water, she is there first.",
+              interaction="Any raw meat or fish.",
+              signature=("Frenzy", "Befriended, in water she bites every monster near her friend that is already badly hurt."),
+              danger="Moderate (her teeth).",
+              variants=[("blue", "Blue (default)", "Blue, darker spots"), ("red", "Red", "Red-bellied"), ("silver", "Silver", "Silver"), ("black", "Black", "Black"), ("gold", "Gold", "Gold")]),
+         {"Habitat": "Jungle rivers", "Signature": "Bites hurt monsters", "Danger": "Moderate"}),
+        (dict(id="mosasaurus_mermaid", name="Mosasaurus", group="Deep oceans", tag="Huge · playful", height=2.4,
+              biomes=["deep_ocean", "deep_cold_ocean", "deep_lukewarm_ocean", "ocean"], temperament="Huge, playful",
+              ecology="The great sea lizard of the Cretaceous as a Harmontide mermaid: grey-blue scales, a long toothy jaw, flippers for hands and a crescent fluke. She loves to push boats along.",
+              interaction="Fish and kelp.",
+              signature=("Tow", "Befriended, her friend's boat near her surges forward as she tows it."),
+              danger="High (if provoked).",
+              variants=[("blue", "Blue (default)", "Grey-blue"), ("green", "Green", "Sea green"), ("grey", "Grey", "Grey"), ("black", "Black", "Black"), ("white", "White", "White")]),
+         {"Habitat": "Deep oceans", "Signature": "Tows boats", "Danger": "High"}),
+        (dict(id="fishman_mermaid", name="Fishman", group="Oceans and rivers", tag="Grumpy · brave", height=1.6,
+              biomes=["ocean", "lukewarm_ocean", "river", "beach"], temperament="Grumpy, brave",
+              ecology="A light blue Harmontide fish girl with a fin of a ponytail, fins at her elbows, freckle spots and sharp teeth always ready to scowl. She cannot stand the drowned.",
+              interaction="Fish and kelp.",
+              signature=("Disarm", "Befriended, she wrenches the trident from a drowned near her friend."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Light blue"), ("green", "Green", "Green"), ("pink", "Pink", "Pink"), ("grey", "Grey", "Grey"), ("gold", "Gold", "Gold")]),
+         {"Habitat": "Oceans, rivers", "Signature": "Disarms drowned", "Danger": "Low"})],
+    "rodent": [
+        (dict(id="gibbon_rodent", name="Gibbon", group="Jungles", tag="Cheerful · agile", height=1.5,
+              biomes=["jungle", "bamboo_jungle", "sparse_jungle"], temperament="Cheerful, agile",
+              ecology="A fluffy Harmontide gibbon girl, pale blue-grey round a cream face, green eyes, long arms and a curling tail. She swings through the canopy faster than anyone walks.",
+              interaction="Apples, melon and sweet berries.",
+              signature=("Brachiation", "Befriended, her friend near her climbs ladders, vines and scaffolding twice as fast."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Pale blue-grey"), ("white", "White", "White-handed"), ("black", "Black", "Black"), ("gold", "Gold", "Golden"), ("brown", "Brown", "Brown")]),
+         {"Habitat": "Jungles", "Signature": "Faster climbing", "Danger": "None"})],
+    "canid": [
+        (dict(id="gigantopithecus_canid", name="Gigantopithecus", group="Bamboo forests", tag="Mighty · gentle", height=2.3,
+              biomes=["bamboo_jungle", "jungle", "old_growth_pine_taiga"], temperament="Mighty, gentle",
+              ecology="The giant ape of ancient China as a Harmontide girl: huge and shaggy, deep blue fur, a red flower in her hair, a fur top and a stone belt. Gentle until her friend is cornered.",
+              interaction="Bamboo, apples and melon.",
+              signature=("Ground pound", "Befriended, when monsters crowd her friend she slams the ground: they are all knocked back and slowed."),
+              danger="High (if provoked).",
+              variants=[("blue", "Blue (default)", "Deep blue, a red flower"), ("brown", "Brown", "Brown"), ("black", "Black", "Black"), ("grey", "Grey", "Silver-grey"), ("red", "Red", "Red-brown")]),
+         {"Habitat": "Bamboo forests", "Signature": "Ground pound", "Danger": "High"})],
+    "lamia": [
+        (dict(id="sandworm_lamia", name="Sandworm", group="Deserts", tag="Hidden · hungry", height=2.0,
+              biomes=["desert", "badlands", "beach"], temperament="Hidden, hungry",
+              ecology="A Harmontide sandworm girl, blue and segmented with a cream belly and a scaly hood over her head. She swims through sand as fish swim through water.",
+              interaction="Rotten flesh and spider eyes.",
+              signature=("Swallow", "Befriended, she swallows a monster near her friend and spits it out far away."),
+              danger="Moderate.",
+              variants=[("blue", "Blue (default)", "Blue, a cream belly"), ("sand", "Sand", "Sand"), ("red", "Red", "Red sand"), ("grey", "Grey", "Grey"), ("black", "Black", "Black")]),
+         {"Habitat": "Deserts", "Signature": "Spits monsters away", "Danger": "Moderate"}),
+        (dict(id="xiangliu_lamia", name="Xiangliu", group="Swamps", tag="Chatty · venomous", height=2.0,
+              biomes=["swamp", "mangrove_swamp", "river"], temperament="Chatty, venomous",
+              ecology="The nine-headed serpent of Chinese myth, whose venom turned the land to swamp: a teal serpent girl with little heads of her own gathered round her head, all of them talking at once.",
+              interaction="Fish and spider eyes.",
+              signature=("Nine heads", "Befriended, her heads bite up to three monsters near her friend at once."),
+              danger="High.",
+              variants=[("teal", "Teal (default)", "Teal"), ("green", "Green", "Swamp green"), ("black", "Black", "Black"), ("gold", "Gold", "Gold"), ("red", "Red", "Red")]),
+         {"Habitat": "Swamps", "Signature": "Bites three at once", "Danger": "High"})],
+    "lizardfolk": [
+        (dict(id="archelon_lizardfolk", name="Archelon", group="Warm oceans and beaches", tag="Steady · protective", height=1.9,
+              biomes=["warm_ocean", "lukewarm_ocean", "beach"], temperament="Steady, protective",
+              ecology="The greatest sea turtle that ever lived as a Harmontide girl: crystal-blue scales and a great ridged shell like a shield, flippers at her wrists.",
+              interaction="Seagrass, kelp and fish.",
+              signature=("Shell shield", "Befriended, she knocks away the arrows flying at her friend near her."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Crystal blue"), ("green", "Green", "Green"), ("brown", "Brown", "Brown"), ("black", "Black", "Black"), ("white", "White", "White")]),
+         {"Habitat": "Warm oceans", "Signature": "Knocks arrows away", "Danger": "None"})],
+    "devil": [
+        (dict(id="cyclops_devil", name="Cyclops", group="Mountains", tag="Shy · strong", height=2.2,
+              biomes=["windswept_hills", "stony_peaks", "meadow"], temperament="Shy, strong",
+              ecology="The one-eyed giants of Greek myth, smiths and shepherds: a big shy girl with a single great eye, pointed ears and a blue bob. She throws rocks as far as others throw pebbles.",
+              interaction="Mutton, milk and bread.",
+              signature=("Boulder", "Befriended, she hurls a boulder at a monster far from her friend."),
+              danger="High (her boulders).",
+              variants=[("blue", "Blue (default)", "Blue hair, a teal tunic"), ("brown", "Brown", "Brown"), ("red", "Red", "Red"), ("grey", "Grey", "Grey"), ("green", "Green", "Green")]),
+         {"Habitat": "Mountains", "Signature": "Hurls boulders", "Danger": "High"}),
+        (dict(id="genie_devil", name="Genie", group="Deserts", tag="Playful · generous", height=1.8,
+              biomes=["desert", "badlands"], temperament="Playful, generous",
+              ecology="A spirit of smoke and fire from Arabian tales, bound to a brass lamp: a smoke tail for legs, a high ponytail in a gold band, a bandeau and bangles.",
+              interaction="Gold nuggets and sweet berries.",
+              signature=("Three wishes", "Befriended, three times a day (dawn, noon and dusk) she grants her friend a wish: a random boon for five minutes."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Blue smoke, gold"), ("purple", "Purple", "Purple"), ("green", "Green", "Green"), ("red", "Red", "Red"), ("gold", "Gold", "Gold")]),
+         {"Habitat": "Deserts", "Signature": "Three wishes a day", "Danger": "Low"})],
+    "nekomata": [
+        (dict(id="ammit_nekomata", name="Ammit", group="Deserts by the river", tag="Stern · fair", height=1.8,
+              biomes=["desert", "river", "savanna"], temperament="Stern, fair",
+              ecology="The devourer of the dead of Egyptian myth, who ate the hearts that failed the weighing: a lion's mane and body, a crocodile's snout, a tufted tail.",
+              interaction="Raw meat and fish.",
+              signature=("Devourer", "Befriended, when a monster dies near her friend she eats its heart and her friend heals."),
+              danger="Moderate.",
+              variants=[("blue", "Blue (default)", "Pale blue"), ("sand", "Sand", "Sand"), ("black", "Black", "Black"), ("gold", "Gold", "Gold"), ("green", "Green", "Green")]),
+         {"Habitat": "Deserts", "Signature": "Heals on monster deaths", "Danger": "Moderate"})]
+}
+
+for _fid, _entries in TWENTY_SECOND.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 # theropods (2026-10-29): a family of their own, built like a 1920s museum sketch of a T. rex but human: hunched forward over a
 # long balancing tail, human legs, arms, skin and face, and a sharp-toothed grin. The fernstalker moved here from the lizardfolk.
 _family(id="theropod", volume="XXVII", title="Theropods", subtitle="the raptor family", food="Raw meat (and eggs)",

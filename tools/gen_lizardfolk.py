@@ -22,6 +22,20 @@ LIZARD_TAIL = [(2.5, 2.5, 4), (2, 2, 4), (1.5, 1.5, 4), (1, 1, 3.5)]
 DROOP = [(-38, 0, 0), (10, 0, 0), (10, 0, 0), (8, 0, 0)]
 
 SPECIES = {
+    # twenty-second wave: the archelon, the greatest sea turtle that ever lived: crystal-blue scales, a great shell ridged with three
+    # keels like a shield, flippers at her wrists
+    "archelon_lizardfolk": dict(
+        build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["pearls"], colors=dict(cloth2="#2a5aa8")),
+        hair="pixie", bangs="swept", ears=None, legs="scales", foot="claw", tail=[(1.5, 1.5, 2), (1, 1, 1.5)], tail_rest=[(-50, 0, 0), (10, 0, 0)],
+        tail_look="scale", shell=True, keels=True, wflippers=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#2a6ac0", FUR="#5aa0e8", LIGHT="#e4f0fc", MARK="#2a5aa8", EYE="#2a4a8a", CLOTH="#e4f0fc", TRIM="#2a5aa8",
+                 extra=dict(shell="#3a7ad8", shell_band="#a8d8f8", keel="#e4f4ff")),
+        variants={"green": dict(HAIR="#2a6a3a", FUR="#5aa86a", MARK="#2a5a3a", TRIM="#2a5a3a", extra=dict(shell="#3a7a4a", shell_band="#a8d8a8", keel="#e4f4e4")),
+                  "brown": dict(HAIR="#6a4a2a", FUR="#a87a4a", MARK="#5a3a1e", TRIM="#5a3a1e", extra=dict(shell="#7a5a2a", shell_band="#d8b878", keel="#f4e8d0")),
+                  "black": dict(HAIR="#1e2228", FUR="#3a3e46", MARK="#141618", TRIM="#141618", EYE="#5ab8e8",
+                                extra=dict(shell="#22262c", shell_band="#5a6470", keel="#a8b4c0")),
+                  "white": dict(HAIR="#e8eef4", FUR="#d8e4f0", MARK="#8a9ab0", TRIM="#8a9ab0", EYE="#c83a5a",
+                                extra=dict(shell="#c8d8e8", shell_band="#ffffff", keel="#ffffff"))}),
     # twentieth wave: the turtworld, a great blue tortoise who carries a little world on her shell: turf, two snowy peaks and a waterfall
     "turtworld_lizardfolk": dict(
         build="strong", outfit=dict(top=["halter"], bottom="sarong", extras=["belt"], colors=dict(cloth2="#2a4a8a", leather="#5a4a2a")),
@@ -322,12 +336,20 @@ def declare_hook(sp, d):
         out += [("isl_turf", 6.5, 6, 1), ("isl_peak", 2.5, 4.5, 2.5), ("isl_peak2", 1.75, 3, 1.75), ("isl_fall", 1.5, 6, .25)]
     if d.get("ferns"):                                   # fern fronds and a feather crest (the theropod fernstalker uses the painting)
         out += [("frond", 3, .25, 9), ("crest_feather", .5, 1.25, 4.5)]
+    if d.get("keels"):                                   # the archelon's three keels running down her shell
+        out += [("keel", .5, 6.5, .75)]
+    if d.get("wflippers"):                               # flippers at her wrists
+        out += [("wflipper", .25, 3, 2.5)]
     if d.get("crown"):                                   # the basilisk's little crown
         out += [("bcrown", 4.5, 1, 4.5), ("bcrown_pt", .75, 1.25, .75)]
     return out
 
 
 def paint_hook(pt, pal, d):
+    keel = G.shades(pal.extra.get("keel", "#e4f4ff"))
+    pt("keel", "all", lambda f, x, y, w, h: pick(keel, 0.55 + 0.2 * (f == "up") + 0.1 * (y % 3 == 0), x, y))
+    pt("wflipper", "all", lambda f, x, y, w, h: G.scale_fn(pal)(f, x, y, w, h) if f in ("east", "west") and y < h - 1 - x * 0.4 else
+       (CLEAR if f in ("east", "west") else pick(pal.MARK, 0.5, x, y)))
     fl, fin = G.shades(pal.extra.get("flower", "#f8d040")), G.shades(pal.extra.get("flower_in", "#f89a3a"))
     pt("petal", "all", lambda f, x, y, w, h: pick(fl, 0.6 + 0.2 * (f == "north"), x, y))
     pt("bloom_in", "all", lambda f, x, y, w, h: pick(fin, 0.6, x, y))
@@ -462,6 +484,13 @@ def build_hook(r, g, d):
         if d["shell"] == "dome":
             cs.append(cube("carapace_dome", [-2, 14.25, cd / 2 + 3.4 + z]))
         r.add("shell", "body", [0, 16, 1.5 + z], cs)
+    if d.get("keels") and "shell" in r.b:              # three ridges down the shell, the middle one along the top
+        cd = G.S("chest")[2]
+        b = cd / 2 + z
+        r.put("shell", cube("keel", [-0.25, 13.25, b + 3.4]), cube("keel", [-2.4, 12.75, b + 2.2]), cube("keel", [1.9, 12.75, b + 2.2]))
+    if d.get("wflippers"):                               # a flipper swept back from each wrist (forearm_l mirrors forearm_r)
+        px, py, pz = r.b["forearm_r"]["pivot"]
+        r.put("forearm_r", cube("wflipper", [px - 0.8, py - 3.5, pz + 0.25]))
     if d.get("teeth"):
         r.put("head", cube("snout", [-1.75, g.hy + 0.5, -5.2 + z]))
     elif d.get("snout"):

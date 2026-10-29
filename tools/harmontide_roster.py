@@ -87,6 +87,10 @@ IN_GAME = {
     "serpopard": "serpopard_lamia", "urcuchillay": "urcuchillay_centaur", "rakshasa": "rakshasa_nekomata", "gashadokuro": "gashadokuro_undead",
     # the theropods (2026-10-29)
     "spinosaur": "spinosaur_theropod", "australovenator": "australovenator_theropod",
+    # twenty-second wave (2026-10-29)
+    "macawtl": "macawtl_dragon", "piranha": "piranha_mermaid", "mosasaurus": "mosasaurus_mermaid", "fishman": "fishman_mermaid",
+    "gibbon": "gibbon_rodent", "gigantopithecus": "gigantopithecus_canid", "sandworm": "sandworm_lamia", "archelon": "archelon_lizardfolk",
+    "xiangliu": "xiangliu_lamia", "cyclops": "cyclops_devil", "genie": "genie_devil", "ammit": "ammit_nekomata",
     # already played by older girls
     "azureus": "poison_dart_frog (cobalt)", "slidred": "red_eared_slider_lizardfolk", "alisnapor": "snapping_turtle_lizardfolk",
 }

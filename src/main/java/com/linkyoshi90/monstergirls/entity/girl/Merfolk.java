@@ -432,6 +432,9 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         super.aiStep();
         if (this.species == GirlSpecies.WALRUS_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel floe && !this.isBaby() && this.tickCount % 20 == 0) this.blubber(floe);
         if (this.species == GirlSpecies.ANOMALOCARIS_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel deep && !this.isBaby() && this.tickCount % 40 == 0) this.raptorGrasp(deep);
+        if (this.species == GirlSpecies.PIRANHA_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel river && !this.isBaby() && this.tickCount % 20 == 0) this.frenzy(river);
+        if (this.species == GirlSpecies.MOSASAURUS_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel sea && !this.isBaby() && this.tickCount % 10 == 0) this.tow(sea);
+        if (this.species == GirlSpecies.FISHMAN_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel reef && !this.isBaby() && this.tickCount % 40 == 0) this.disarm(reef);
         if (this.species == GirlSpecies.DOGGO_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel surf && !this.isBaby() && this.tickCount % 20 == 0) this.lifeguard(surf);
         if (this.species == GirlSpecies.MOOPIE_MERMAID && this.level() instanceof ServerLevel shallows && !this.isBaby() && this.tickCount % 100 == 0) this.seaMilk(shallows);
         if (this.species == GirlSpecies.RUSALKA_MERMAID && this.level() instanceof ServerLevel river && !this.isBaby() && this.tickCount % 20 == 0) this.riverLuck(river);
@@ -1236,6 +1239,56 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         m.setDeltaMovement(this.position().subtract(m.position()).normalize().scale(0.8));
         m.hurtMarked = true;
         this.getLookControl().setLookAt(m);
+        return 1;
+    }
+
+    // --- the twenty-second wave ---------------------------------------------------------------------------------------
+
+    /** The piranha bites every monster within 8 blocks of her friend that is in water and already below half its health: three points
+     *  each. How many she bit, or -1 without a friend. */
+    public int frenzy(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        int n = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8),
+                x -> x.isAlive() && x.isInWater() && x.getHealth() < x.getMaxHealth() / 2)) {
+            m.hurt(level.damageSources().mobAttack(this), 3.0F);
+            n++;
+        }
+        if (n > 0) this.playSound(net.minecraft.sounds.SoundEvents.PLAYER_ATTACK_SWEEP, 0.8F, 1.6F);
+        return n;
+    }
+
+    /** The mosasaurus tows her friend's boat within 12 blocks of her: it surges forward the way it faces. 1 if she pushed, 0 if they
+     *  are not in a boat near her, -1 without a friend. */
+    public int tow(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        if (!(friend.getVehicle() instanceof net.minecraft.world.entity.vehicle.Boat boat) || boat.distanceToSqr(this) > 12 * 12) return 0;
+        net.minecraft.world.phys.Vec3 ahead = net.minecraft.world.phys.Vec3.directionFromRotation(0, boat.getYRot());
+        net.minecraft.world.phys.Vec3 v = boat.getDeltaMovement().add(ahead.scale(0.12));
+        double max = 0.9;
+        if (v.horizontalDistance() > max) v = new net.minecraft.world.phys.Vec3(v.x * max / v.horizontalDistance(), v.y, v.z * max / v.horizontalDistance());
+        boat.setDeltaMovement(v);
+        boat.hurtMarked = true;
+        return 1;
+    }
+
+    /** The fishman wrenches the trident from the nearest drowned within 10 blocks of her friend (and snaps it). 1 if she did, 0 if no
+     *  drowned near them held one, -1 without a friend. */
+    public int disarm(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Drowned d = level.getNearestEntity(net.minecraft.world.entity.monster.Drowned.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat(), friend,
+                friend.getX(), friend.getY(), friend.getZ(), friend.getBoundingBox().inflate(10));
+        if (d == null || !d.getMainHandItem().is(net.minecraft.world.item.Items.TRIDENT)) {
+            for (net.minecraft.world.entity.monster.Drowned o : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Drowned.class, friend.getBoundingBox().inflate(10),
+                    x -> x.isAlive() && x.getMainHandItem().is(net.minecraft.world.item.Items.TRIDENT))) { d = o; break; }
+        }
+        if (d == null || !d.getMainHandItem().is(net.minecraft.world.item.Items.TRIDENT)) return 0;
+        d.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, net.minecraft.world.item.ItemStack.EMPTY);
+        d.playSound(net.minecraft.sounds.SoundEvents.ITEM_BREAK, 1.0F, 0.8F);
+        this.getLookControl().setLookAt(d);
         return 1;
     }
 }

@@ -90,7 +90,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             "cow", "rust", "lava_lamp", "sunflower",                         // lava lamp's blobs glow; sunflower is seasonal, August only
             "comic", "blueprint", "koi", "lemonade",                         // lemonade is seasonal, June only
             "tie_dye", "jade", "lace", "bluebell",                           // bluebell is seasonal, May only
-            "obsidian", "patchwork", "sandstone", "acorn");                  // acorn is seasonal, September only
+            "obsidian", "patchwork", "sandstone", "acorn",                   // acorn is seasonal, September only
+            "prismarine", "amethyst", "sculk", "mushroom");                  // Minecraft's blocks, tiled; sculk's specks glow
     /** Homage variants (the look of a favourite character): a wild one rolls them only rarely. */
     public static final java.util.Set<String> HOMAGES = java.util.Set.of("gunman", "blossom", "lost", "stitched", "nurse", "mummy", "ranger", "outback",
             "jewel_thief", "ink_kid", "pink_dairy", "sun_goddess",                            // POP_CULTURE_VARIANTS.md

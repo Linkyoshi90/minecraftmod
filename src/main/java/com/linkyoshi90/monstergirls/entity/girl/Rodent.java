@@ -476,6 +476,7 @@ public class Rodent extends AbstractMonsterGirl {
         super.aiStep();
         if (this.species == GirlSpecies.SOBOLNIK_RODENT && this.level() instanceof net.minecraft.server.level.ServerLevel burrow && !this.isBaby() && this.tickCount % 20 == 0) this.burrowEyes(burrow);
         if (this.species == GirlSpecies.HOUSE_MOUSE_RODENT && this.level() instanceof net.minecraft.server.level.ServerLevel pantry && !this.isBaby() && this.tickCount % 600 == 0) this.crumbs(pantry);
+        if (this.species == GirlSpecies.GIBBON_RODENT && this.level() instanceof net.minecraft.server.level.ServerLevel canopy && !this.isBaby() && this.tickCount % 2 == 0) this.brachiation(canopy);
         if (this.species == GirlSpecies.PINESKRELL_RODENT && this.level() instanceof ServerLevel ores && !this.isBaby() && this.tickCount % 100 == 0) this.oreSense(ores);
         if (this.species == GirlSpecies.COATIMANO_RODENT && this.level() instanceof ServerLevel diggingLevel && !this.isBaby()) this.tickDig(diggingLevel);
         if (this.species == GirlSpecies.SQUIRRICERAT_RODENT && this.level() instanceof ServerLevel acorn && !this.isBaby() && this.tickCount % 2400 == 0) this.buryAcorn(acorn);
@@ -666,5 +667,19 @@ public class Rodent extends AbstractMonsterGirl {
         friend.getFoodData().eat(1, 0.1F);
         this.playSound(net.minecraft.sounds.SoundEvents.GENERIC_EAT, 0.6F, 1.6F);
         return true;
+    }
+
+    // --- the twenty-second wave ---------------------------------------------------------------------------------------
+
+    /** Her friend within 8 blocks of her, climbing a ladder, vine or scaffolding upward, climbs twice as fast. 1 if she sped them up,
+     *  0 if they are not climbing up near her, -1 without a friend. */
+    public int brachiation(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        net.minecraft.world.phys.Vec3 v = friend.getDeltaMovement();
+        if (friend.distanceToSqr(this) > 8 * 8 || !friend.onClimbable() || v.y <= 0.05) return 0;
+        friend.setDeltaMovement(v.x, Math.max(v.y, 0.36), v.z);
+        friend.hurtMarked = true;
+        return 1;
     }
 }

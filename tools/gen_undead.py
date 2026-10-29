@@ -161,7 +161,7 @@ SPECIES = {
                   "raven": dict(HAIR="#141218", CLOTH="#1e1c24", extra=dict(boot="#141218", comb="#d8dce4", cloth2="#2a2834"))}),
     "dullahan_undead": dict(
         build="athletic", outfit=dict(top=["corset", "capelet"], bottom="hakama", extras=["pauldron", "bracers", "belt"], colors=dict(cloth2="#2a2a32")),
-        hair="ponytail", bangs="parted", ears=None, legs="bare", foot="shoe", headless=True, glow=["stump"],
+        hair="ponytail", bangs="parted", ears=None, legs="bare", foot="shoe", headless=True, glow=["stump"], envoy_kit=True,
         pal=dict(SKIN="#e8e4e8", HAIR="#d8dce4", FUR="#e8e4e8", LIGHT="#ffffff", MARK="#5a5a68", EYE="#5ac8f0", CLOTH="#2a2a36", TRIM="#a8b0c0",
                  extra=dict(boot="#1e1e24", flame="#5ac8f8")),
         variants={"crimson": dict(CLOTH="#5a141e", TRIM="#c8a050", extra=dict(boot="#1e0e10", flame="#5ac8f8", cloth2="#3a0e14")),
@@ -170,10 +170,10 @@ SPECIES = {
                   "pale": dict(HAIR="#f4f4f8", CLOTH="#c8ccd4", TRIM="#5a6a8a", EYE="#8a6ad8", extra=dict(boot="#8a8e98", flame="#b08af8", cloth2="#a8acb4")),
                   # homage (2026-10-28): Celty Sturluson (Durarara!!): a black rider's suit with yellow trim, black shadow at the neck
                   "headless_rider": dict(HAIR="#2a2a30", CLOTH="#16161a", TRIM="#e8c020", EYE="#e8c020",
-                                         extra=dict(boot="#16161a", flame="#3a3a44", cloth2="#16161a")),
+                                         extra=dict(boot="#16161a", flame="#3a3a44", cloth2="#16161a", rider=True)),
                   # homage (2026-10-28): Lala (Monster Musume): silver-white hair, red eyes, a black and red gothic dress, blue flame at the neck
                   "death_envoy": dict(HAIR="#e8e8f0", CLOTH="#1a1418", TRIM="#a8182a", EYE="#d8182a",
-                                      extra=dict(boot="#1a1418", flame="#4a9af8", cloth2="#5a0e18"))}),
+                                      extra=dict(boot="#1a1418", flame="#4a9af8", cloth2="#5a0e18", scythe=True))}),
     "llorona_undead": dict(
         build="slim", outfit=dict(top=["corset", "capelet"], bottom="hakama", extras=["pearls"], colors=dict(cloth2="#e8e0d8", leather="#d8d0c8")),
         hair="flowing", bangs="wispy", ears=None, legs="bare", foot="shoe",
@@ -205,6 +205,9 @@ def declare_hook(sp, d):
         out += [("bolt", 1.25, .75, .75)]
     if d.get("headless"):
         out += [("stump", 3.5, 1.5, 3)]
+    if d.get("envoy_kit"):                               # the homage props, drawn only on their own looks: Celty's cat-eared helmet over the
+        out += [("rhelm", 9, 9, 9), ("rhelm_ear", 2, 2.5, 1.25),         # head she carries, Lala's scythe in her free hand
+                ("sc_shaft", .75, 20, .75), ("sc_blade", .5, 1.75, 6.5), ("sc_tip", .5, 1.25, 2.5)]
     if d.get("lich"):
         out += [("crown", 4.5, 1, 4.5), ("crown_spike", .75, 2, .5), ("crown_gem", 1, 1, .25)]
     if d.get("doll"):
@@ -218,6 +221,22 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    rider, scythe = pal.extra.get("rider"), pal.extra.get("scythe")
+    yel, black = G.shades("#e8c020"), G.shades("#16161a")
+
+    def helm(f, x, y, w, h):                             # yellow, a black visor across the front
+        if not rider:
+            return CLEAR
+        if f == "north" and 10 <= y <= 24 and 4 <= x <= w - 5:
+            return pick(black, 0.4 + 0.25 * (y == 11 and x > w // 2), x, y)
+        return pick(yel, 0.5 + 0.2 * (f == "up") - 0.12 * (f == "down"), x, y)
+    pt("rhelm", "all", helm)
+    pt("rhelm_ear", "all", lambda f, x, y, w, h: CLEAR if not rider else pick(yel, 0.55 + 0.15 * (f == "north"), x, y))
+    steel, wood = G.shades("#c8ccd4"), G.shades("#2a1e22")
+    pt("sc_shaft", "all", lambda f, x, y, w, h: CLEAR if not scythe else pick(wood, 0.45 + 0.15 * (y % 6 == 0), x, y))
+    pt("sc_blade", "all", lambda f, x, y, w, h: CLEAR if not scythe else
+       pick(G.shades("#a8182a"), 0.5, x, y) if y == h - 1 and f in ("east", "west") else pick(steel, 0.55 + 0.2 * (f == "up"), x, y))
+    pt("sc_tip", "all", lambda f, x, y, w, h: CLEAR if not scythe else pick(steel, 0.6, x, y))
     if d.get("bones"):                                   # the gashadokuro's bones showing: a groove down each limb, knuckled joints
         groove = lambda f, x, y, w, h: pick(pal.MARK, 0.45, x, y) if f in ("north", "south") and x == w // 2 and y % 4 != 3 else None
         for p in ("arm_up", "forearm", "thigh", "shin"):
@@ -319,6 +338,16 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
+    if d.get("envoy_kit"):                               # the helmet over her (carried) head; the scythe upright in her left fist
+        r.add("rider_helm", "head", [0, hy + 4, z], [cube("rhelm", [-4.5, hy - 0.5, -4.5 + z]),
+                                                    G.rot_cube("rhelm_ear", [-4.0, hy + 8.2, -0.6 + z], [-3.0, hy + 8.4, z], 0, 0, 15),
+                                                    G.rot_cube("rhelm_ear", [2.0, hy + 8.2, -0.6 + z], [3.0, hy + 8.4, z], 0, 0, -15)])
+        px, py, pz = r.b["hand_r"]["pivot"]
+        sx, sz = -px + 0.375 - 0.375, pz - 1.0
+        top = py - 6.0 + 20
+        r.add("scythe", "hand_l", [-px, py - 1.5, pz], [cube("sc_shaft", [sx - 0.375, py - 6.0, sz - 0.375]),
+                                                        cube("sc_blade", [sx - 0.25, top - 1.75, sz + 0.25]),
+                                                        G.rot_cube("sc_tip", [sx - 0.25, top - 2.9, sz + 5.6], [sx, top - 1.75, sz + 6.5], 35, 0, 0)])
     if d.get("mummy"):                                  # each layer is its own bone, so the game can hide them one at a time
         a = G.OF.BUILDS[d.get("build", "slim")].get("arm", 1.5)
         t = G.OF.thigh_width(d.get("build"), 2.25)
