@@ -278,12 +278,14 @@ def torso(r, s, W, dy, z, parent):
         r.add("skirt", "body", [0, 13.7 + dy, z], sk)
 
 
+ARM_GAP = 0.25
+
+
 def arms(r, s, dy, z):
     outfit = s.get("outfit") or {}
     tops, ex = _tops(outfit), outfit.get("extras", [])
-    cw = S("chest")[0]
     a = S("arm_up")[0]
-    x0 = -(cw / 2 + a)
+    x0 = -(max(S("chest")[0], S("hips")[0]) / 2 + ARM_GAP + a)   # clear of her chest and hips, or the arms melt into her body
     ay = 19.5 + dy
     up = [cube("arm_up", [x0, ay - 3.5, -a / 2 + z])]
     if "sweater" in tops:

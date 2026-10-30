@@ -48,9 +48,8 @@ SPECIES = {
     # twenty-second wave: the macawtl, a feathered serpent in deep macaw blue: a crest of plumes, a hooked beak of a mask on her brow,
     # feathered wings and tail, two long plumes trailing from it
     "macawtl_dragon": dict(
-        build="slim", outfit=dict(top=["bandeau", "harness"], bottom="loincloth", extras=["bracers"], colors=dict(leather="#c8ccd8", cloth2="#1e3a9a")),
-        hair="flowing", bangs="swept", ears=None, legs="scales", foot="claw", tail=[(2, 2, 4), (1.5, 1.5, 4), (1, 1, 3.5)], tail_look="fur",
-        tail_rest=[(-25, 0, 0), (8, 0, 0), (6, 0, 0)], wings="feather", wing_scale=1.1, flies=True, macaw=True,
+        build="slim", outfit=dict(top=["bandeau", "harness"], extras=["bracers"], colors=dict(leather="#c8ccd8", cloth2="#1e3a9a")),
+        hair="flowing", bangs="swept", ears=None, lower="none", wings="feather", wing_scale=1.1, flies=True, macaw=True, rearing=True,
         pal=dict(SKIN=skin("fair"), HAIR="#1e3a9a", FUR="#2a4ab8", LIGHT="#c8d8f4", MARK="#0e1e5a", EYE="#f0c030", CLOTH="#1e3a9a", TRIM="#c8ccd8",
                  pupil=(0.9, 3.4), extra=dict(wing="#2a4ab8", wing_tip="#0e1e5a", plume="#3a6ae0", plume_tip="#c8ccd8", beak="#4a4a56", claw="#c8ccd8")),
         variants={"scarlet": dict(HAIR="#b81e1e", FUR="#d02a2a", LIGHT="#f8e0a0", MARK="#3a5ab8", CLOTH="#b81e1e", EYE="#f0e8d0",
@@ -189,6 +188,9 @@ SPECIES = {
 BIPEDS = {k: v for k, v in SPECIES.items() if v.get("body") is None}
 
 
+import serpent_rig  # noqa: E402
+
+
 def declare_hook(sp, d):
     out = []
     if d.get("heads"):
@@ -205,10 +207,14 @@ def declare_hook(sp, d):
         out += [("nfan", .5, 6, 5.5), ("nfin", .5, 3.5, 5)]
     if d.get("macaw"):                                   # the macawtl's crest of plumes, beak mask and trailing tail plumes
         out += [("mcrest", .5, 1.25, 4.5), ("mbeak", 1, 1.25, 1), ("mbeak_tip", .75, .5, .5), ("mplume", 1.25, .25, 7.5)]
+    if d.get("rearing"):
+        out += serpent_rig.parts()
     return out
 
 
 def paint_hook(pt, pal, d):
+    if d.get("rearing"):
+        serpent_rig.paint(pt, pal)
     if d.get("seafin"):                                  # see-through fins with rays, painted only on their broad sides
         fin, ray = G.shades(pal.extra.get("fin", "#d8ecff")), G.shades(pal.extra.get("fin_ray", "#5aa8f0"))
 
@@ -309,9 +315,11 @@ def build_hook(r, g, d):
         r.add("hair_mcrest", "head", [0, hy + 8.2, z], [G.rot_cube("mcrest", [x - 0.25, hy + 7.8, -1.5 + z], [x, hy + 8.2, -1.0 + z], 30 + 8 * abs(x), x * 12, 0)
                                                        for x in (-1.6, -0.8, 0, 0.8, 1.6)])
         r.put("head", cube("mbeak", [-0.5, hy + 3.25, -4.9 + z]), cube("mbeak_tip", [-0.375, hy + 2.75, -5.15 + z]))
-        last = [b for b in ("tail_3", "tail_2", "tail") if b in r.b][0]
+        serpent_rig.build(r)
+        last = serpent_rig.tip()
         px, py, pz = r.b[last]["pivot"]
-        r.put(last, *[G.rot_cube("mplume", [px + dx - 0.625, py - 0.125, pz + 2.5], [px + dx, py, pz + 2.5], -8, dx * 10, 0) for dx in (-0.5, 0.5)])
+        py -= 4.5                                        # the end of her tail: the plumes carry on down the line of her body
+        r.put(last, *[G.rot_cube("mplume", [px + dx - 0.625, py - 0.125, pz], [px + dx, py, pz], 90, 0, dx * 14) for dx in (-0.5, 0.5)])
     if d.get("heads"):                                    # seven dragon heads rising behind and around her own
         for i in range(7):
             ry = -135 + i * 45                              # fanned round the sides and back, none in front of her face
@@ -393,6 +401,12 @@ def gryphon_anims(an):
 def anim_extra(an, sp, d):
     """fire breath ("breathe"), the sting ("sting"), Kannae's lightning call ("call")"""
     Tk, hold, sym, merge = H.track, H.hold, H.sym, H.merge
+    if d.get("rearing"):
+        serpent_rig.anims(an)
+        folded = P.folded(["wing_r", "wing_l"], fold=62, droop=-84)
+        for key in ("idle", "walk", "run", "sit", "rear", "coil", "bask", "lie"):
+            F._inject(an, key, folded)
+        F._inject(an, "fly", merge(serpent_rig.posed(serpent_rig.FLAT), {"root": {"position": hold(0, 10, 14)}}, serpent_rig.slither(2.0, 12)))
     an.add("breathe", 1.5, False, merge({"head": {"rotation": Tk((0, (0, 0, 0)), (0.3, (-25, 0, 0)), (0.6, (10, 0, 0)), (1.5, (10, 0, 0)))},
                                          "body": {"rotation": Tk((0, (0, 0, 0)), (0.3, (-10, 0, 0)), (0.6, (12, 0, 0)), (1.5, (0, 0, 0)))},
                                          "mouth": {"position": Tk((0, H.REST), (0.5, H.OUT_), (1.3, H.OUT_), (1.5, H.REST))}}))

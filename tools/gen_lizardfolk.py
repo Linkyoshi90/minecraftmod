@@ -18,6 +18,7 @@ import girl_family as F  # noqa: E402
 import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
+PRONE, PRONE_AT = (80, 0, 0), (0, 7, 12)                  # the archelon's belly-down pose
 LIZARD_TAIL = [(2.5, 2.5, 4), (2, 2, 4), (1.5, 1.5, 4), (1, 1, 3.5)]
 DROOP = [(-38, 0, 0), (10, 0, 0), (10, 0, 0), (8, 0, 0)]
 
@@ -40,7 +41,7 @@ SPECIES = {
     "archelon_lizardfolk": dict(
         build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["pearls"], colors=dict(cloth2="#2a5aa8")),
         hair="pixie", bangs="swept", ears=None, legs="scales", foot="claw", tail=[(1.5, 1.5, 2), (1, 1, 1.5)], tail_rest=[(-50, 0, 0), (10, 0, 0)],
-        tail_look="scale", shell=True, keels=True, wflippers=True,
+        tail_look="scale", shell="great", keels=True, wflippers=True,
         pal=dict(SKIN=skin("fair"), HAIR="#2a6ac0", FUR="#5aa0e8", LIGHT="#e4f0fc", MARK="#2a5aa8", EYE="#2a4a8a", CLOTH="#e4f0fc", TRIM="#2a5aa8",
                  extra=dict(shell="#3a7ad8", shell_band="#a8d8f8", keel="#e4f4ff")),
         variants={"green": dict(HAIR="#2a6a3a", FUR="#5aa86a", MARK="#2a5a3a", TRIM="#2a5a3a", extra=dict(shell="#3a7a4a", shell_band="#a8d8a8", keel="#e4f4e4")),
@@ -330,6 +331,8 @@ def declare_hook(sp, d):
         out += [("spine", .5, 1.25, 1)]
     if d.get("shell") == "flat":                         # the softshell: one thin, wide disc
         out += [("carapace", 8, 8.5, 1), ("plastron", 5, 5, .5)]
+    elif d.get("shell") == "great":                      # the archelon's: two and a half times her width, from her neck past her hips
+        out += [("carapace", 14, 17, 3), ("carapace_top", 10.5, 13.5, 3.75), ("plastron", 5, 5, .5)]
     elif d.get("shell"):
         out += [("carapace", 7, 8, 2.5), ("carapace_top", 5.5, 6, 1.25), ("plastron", 5, 5, .5)]
     if d.get("shell") == "dome":                         # the tortoises' high dome
@@ -358,9 +361,9 @@ def declare_hook(sp, d):
     if d.get("ferns"):                                   # fern fronds and a feather crest (the theropod fernstalker uses the painting)
         out += [("frond", 3, .25, 9), ("crest_feather", .5, 1.25, 4.5)]
     if d.get("keels"):                                   # the archelon's three keels running down her shell
-        out += [("keel", .5, 6.5, .75)]
+        out += [("keel", .5, 11, .75)]
     if d.get("wflippers"):                               # flippers at her wrists
-        out += [("wflipper", .25, 3, 2.5)]
+        out += [("wflipper", 1, 9, 4), ("rflipper", 1, 7, 4.5)]
     if d.get("crown"):                                   # the basilisk's little crown
         out += [("bcrown", 4.5, 1, 4.5), ("bcrown_pt", .75, 1.25, .75)]
     return out
@@ -370,6 +373,7 @@ def paint_hook(pt, pal, d):
     pt("lneck", "all", lambda f, x, y, w, h: pick(pal.LIGHT, 0.6, x, y) if f == "north" and 0 < x < w - 1 else
        pick(pal.MARK if y % 4 == 1 else pal.FUR, 0.5 + 0.1 * (f == "up"), x, y))
     keel = G.shades(pal.extra.get("keel", "#e4f4ff"))
+    pt("rflipper", "all", lambda f, x, y, w, h: G.scale_fn(pal)(f, x, y, w, h))
     pt("keel", "all", lambda f, x, y, w, h: pick(keel, 0.55 + 0.2 * (f == "up") + 0.1 * (y % 3 == 0), x, y))
     pt("wflipper", "all", lambda f, x, y, w, h: G.scale_fn(pal)(f, x, y, w, h) if f in ("east", "west") and y < h - 1 - x * 0.4 else
        (CLEAR if f in ("east", "west") else pick(pal.MARK, 0.5, x, y)))
@@ -517,6 +521,9 @@ def build_hook(r, g, d):
     if d.get("shell") == "flat":
         cd = G.S("chest")[2]
         r.add("shell", "body", [0, 16, 1.5 + z], [cube("carapace", [-4, 12.25, cd / 2 - 0.2 + z])])
+    elif d.get("shell") == "great":
+        b = G.S("chest")[2] / 2 + z
+        r.add("shell", "body", [0, 16, 1.5 + z], [cube("carapace", [-7, 5.5, b - 0.2]), cube("carapace_top", [-5.25, 7.25, b + 2.6])])
     elif d.get("shell"):
         cd = G.S("chest")[2]
         cs = [cube("carapace", [-3.5, 12.5, cd / 2 - 0.2 + z]), cube("carapace_top", [-2.75, 13.5, cd / 2 + 2.2 + z])]
@@ -526,10 +533,12 @@ def build_hook(r, g, d):
     if d.get("keels") and "shell" in r.b:              # three ridges down the shell, the middle one along the top
         cd = G.S("chest")[2]
         b = cd / 2 + z
-        r.put("shell", cube("keel", [-0.25, 13.25, b + 3.4]), cube("keel", [-2.4, 12.75, b + 2.2]), cube("keel", [1.9, 12.75, b + 2.2]))
+        r.put("shell", cube("keel", [-0.25, 8.5, b + 6.2]), cube("keel", [-3.4, 8.5, b + 6.0]), cube("keel", [2.9, 8.5, b + 6.0]))
     if d.get("wflippers"):                               # a flipper swept back from each wrist (forearm_l mirrors forearm_r)
         px, py, pz = r.b["forearm_r"]["pivot"]
-        r.put("forearm_r", cube("wflipper", [px - 0.8, py - 3.5, pz + 0.25]))
+        r.put("forearm_r", cube("wflipper", [px - 1.0, py - 8.5, pz - 2.0]))
+        sx, sy, sz = r.b["shin_r"]["pivot"]              # and a broad flipper in place of each foot (shin_l mirrors shin_r)
+        r.put("shin_r", cube("rflipper", [sx - 0.5, sy - 8.5, sz - 2.25]))
     if d.get("teeth"):
         r.put("head", cube("snout", [-1.75, g.hy + 0.5, -5.2 + z]))
     elif d.get("snout"):
@@ -561,9 +570,33 @@ def build_hook(r, g, d):
               + [cube("bcrown_pt", [px - 0.375, hy + 9.6, pz - 0.375 + z]) for px, pz in ((-1.9, -1.9), (1.9, -1.9), (-1.9, 1.9), (1.9, 1.9), (0, -1.9))])
 
 
+def turtle_prone(an):
+    """the archelon is a sea turtle, not a girl on two legs: flat on her belly, her head up, her flippers out to the sides"""
+    Tk, hold, sym, merge = H.track, H.hold, H.sym, H.merge
+    flat = {"root": {"rotation": hold(*PRONE), "position": hold(*PRONE_AT)}, "head": {"rotation": hold(-PRONE[0] + 10, 0, 0)},
+            "hair_back": {"rotation": hold(30, 0, 0)}, "leg_r": {"rotation": hold(0, 0, 14)}, "leg_l": {"rotation": hold(0, 0, -14)}}
+
+    def stroke(period, amp):                             # both front flippers together, as a sea turtle swims and hauls herself
+        return sym("arm", Tk((0, (-amp, 0, -62)), (period / 2, (amp, 0, -40)), (period, (-amp, 0, -62))))
+    an.add("idle", 4.0, True, merge(flat, sym("arm", Tk((0, (0, 0, -60)), (2, (0, 0, -56)), (4, (0, 0, -60))))))
+    bob = lambda period: {"body": {"position": Tk((0, (0, 0, 0)), (period / 2, (0, 0.6, 0)), (period, (0, 0, 0)))}}
+    an.add("walk", 1.6, True, merge(flat, stroke(1.6, 24), bob(1.6)))
+    an.add("run", 1.0, True, merge(flat, stroke(1.0, 32), bob(1.0)))
+    an.add("swim", 1.8, True, merge(flat, stroke(1.8, 40), {"root": {"rotation": hold(*PRONE), "position": hold(0, 10, 12)}}, F_wave_legs()))
+    for key in ("sit", "lie", "pounce", "groom", "hiss", "stalk"):
+        F._inject(an, key, {"root": flat["root"], "head": flat["head"]})
+
+
+def F_wave_legs():
+    return {"leg_r": {"rotation": H.track((0, (-14, 0, 14)), (0.9, (14, 0, 14)), (1.8, (-14, 0, 14)))},
+            "leg_l": {"rotation": H.track((0, (14, 0, -14)), (0.9, (-14, 0, -14)), (1.8, (14, 0, -14)))}}
+
+
 def anim_extra(an, sp, d):
     """basking in the sun ("bask"), the crocodile's death roll ("roll"), the turtle hiding in her shell ("retract")"""
     Tk, hold, sym, merge = H.track, H.hold, H.sym, H.merge
+    if d.get("shell") == "great":
+        turtle_prone(an)
     an.add("bask", 4.0, True, merge({"root": {"rotation": hold(-90, 0, 0), "position": hold(0, 2.5, 0)}, "head": {"rotation": hold(-30, 0, 0)},
                                      "eyelids": {"position": hold(*H.OUT_)}}, sym("arm", hold(-170, 0, 20))))
     an.add("roll", 1.0, True, merge({"root": {"rotation": Tk((0, (0, 0, 0)), (0.5, (0, 0, 180)), (1.0, (0, 0, 360))), "position": hold(0, 4, 0)},

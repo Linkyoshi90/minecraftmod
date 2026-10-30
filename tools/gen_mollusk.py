@@ -38,7 +38,7 @@ SPECIES = {
     # twenty-third wave (folklore): Scylla, the sea monster of the Odyssey: a sea-green girl over a skirt of tentacles, with six dog
     # heads snarling out from her waist
     "scylla_mollusk": dict(
-        build="curvy", outfit=dict(top=["corset"], extras=["pearls", "armlets"], colors=dict(cloth2="#1e3a4a")),
+        build="curvy", outfit=dict(top=["shells", "corset"], extras=["pearls", "armlets"], colors=dict(cloth2="#1e3a4a", shell="#f4c8cc")),
         hair="flowing", bangs="parted", ears="fin", legs="bare", foot="shoe", body="octopus", hat=False, dogs=True,
         pal=dict(SKIN=skin("fair"), HAIR="#1e6a6a", FUR="#2a7a7a", LIGHT="#a8e0d8", MARK="#0e3a3a", EYE="#e8c040", CLOTH="#1e3a4a", TRIM="#e8c060",
                  INNER="#f0b8c0", extra=dict(dog="#5a6a74", dog_dark="#2a343a", boot="#0e3a3a")),

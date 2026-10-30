@@ -49,7 +49,8 @@ def declare(sp, d, extra_parts=()):
 
 
 def pal_for(d, key=None):
-    p = G.pal_from(d["pal"], d["variants"].get(key) if key else None)
+    p = G.pal_from(dict(d["pal"], SKIN=(dict(d["pal"], **d["variants"].get(key, {})) if key else d["pal"])["FUR"]) if d.get("coat") else d["pal"],
+                   d["variants"].get(key) if key else None)
     if d.get("pupil"):
         p.pupil = d["pupil"]
     if d.get("grin"):                                    # a grin of little pointed teeth, as the theropods have
@@ -59,6 +60,17 @@ def pal_for(d, key=None):
 
 
 def paint(sp, d, pal, hook=None):
+    if not d.get("coat"):
+        return paint_girl(sp, d, pal, hook)
+    skin_fn = H.skin_fn                                  # furred all over: every patch of skin takes the coat's fur instead
+    H.skin_fn = lambda pal, base=0.68, **kw: G.fur_fn(pal, light_faces=(), pattern="solid", seed=13)
+    try:
+        return paint_girl(sp, d, pal, hook)
+    finally:
+        H.skin_fn = skin_fn
+
+
+def paint_girl(sp, d, pal, hook=None):
     pt = H.Painter()
     G.paint_upper(pt, pal, top="wrap", outfit=d.get("outfit"), build=d.get("build"))
     fur = G.fur_fn(pal, light_faces=("down",), light_below=0.7)

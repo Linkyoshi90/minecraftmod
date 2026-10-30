@@ -854,4 +854,9 @@ public class Lizardfolk extends AbstractMonsterGirl {
         }
         return n;
     }
+
+    @Override
+    protected boolean hasSwimAnimation() {
+        return this.species == GirlSpecies.ARCHELON_LIZARDFOLK;   // the sea turtle's flipper strokes
+    }
 }

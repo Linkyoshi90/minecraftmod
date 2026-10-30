@@ -24,7 +24,7 @@ SPECIES = {
     "ammit_nekomata": dict(
         build="curvy", outfit=dict(top=["bandeau", "mantle"], bottom="strips", extras=["usekh", "armlets", "belt"], colors=dict(cloth2="#e8c050")),
         ears="round", hair="mane", bangs="swept", tail=((1.25, 1.25, 4), (1.25, 1.25, 4), (1.75, 1.75, 2)), tail_pattern="solid", tuft=True,
-        croc=True,
+        croc=True, coat=True,
         pal=dict(SKIN=skin("fair"), HAIR="#5a7ac0", FUR="#9ab4e0", LIGHT="#e8f0fa", MARK="#2a4a8a", EYE="#e8b040", CLOTH="#2a4a8a", TRIM="#e8c050",
                  pattern="solid", extra=dict(snout="#7a9ad0")),
         variants={"sand": dict(HAIR="#a8783a", FUR="#d8b880", LIGHT="#f8ecd4", MARK="#6a4a1e", EYE="#3a8a3a", CLOTH="#2a6a6a", extra=dict(snout="#8a8a4a")),
@@ -283,6 +283,8 @@ def pal_for(sp, key=None):
     kw = dict(d["pal"])
     if key:
         kw.update(d["variants"][key])
+    if d.get("coat"):                        # furred all over: her face and body are the colour of her coat
+        kw["SKIN"] = kw["FUR"]
     p = G.palette(**{k: v for k, v in kw.items() if k not in ("pattern", "facemark", "extra", "pattern_scale")})
     p.pattern = kw.get("pattern", "solid")
     p.pattern_scale = kw.get("pattern_scale", 1.0)
@@ -295,6 +297,17 @@ def pal_for(sp, key=None):
 
 
 def paint(sp, pal):
+    if not SPECIES[sp].get("coat"):
+        return paint_girl(sp, pal)
+    skin_fn = H.skin_fn                                  # furred all over: every patch of skin takes the coat's fur instead
+    H.skin_fn = lambda pal, base=0.68, **kw: G.fur_fn(pal, light_faces=(), pattern="solid", seed=13)
+    try:
+        return paint_girl(sp, pal)
+    finally:
+        H.skin_fn = skin_fn
+
+
+def paint_girl(sp, pal):
     d = SPECIES[sp]
     pt = H.Painter()
     G.paint_upper(pt, pal, top="wrap", top_pattern="weave" if sp.startswith("lion") else None, outfit=d.get("outfit"),

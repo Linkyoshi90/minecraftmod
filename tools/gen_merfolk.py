@@ -42,8 +42,8 @@ SPECIES = {
     # twenty-second wave: the fishman, a light blue fish girl with a fin of a ponytail, fins at her elbows, freckle spots and sharp
     # teeth ready to scowl
     "fishman_mermaid": dict(
-        build="athletic", outfit=dict(top=["bandeau"], extras=["belt"], colors=dict(cloth2="#2a6ab0")),
-        ears="fin", hair="ponytail", bangs="jagged", fluke=(.75, 6, 4.5), dorsal=(.75, 3.5, 3.5), scales=True, grin=True, elbowfin=True,
+        build="athletic", outfit=dict(top=["bandeau"], colors=dict(cloth2="#2a6ab0")),
+        ears="fin", hair="ponytail", bangs="jagged", fluke=(.75, 10, 6), dorsal=(.75, 3.5, 3.5), scales=True, grin=True, elbowfin=True, fishbody=True,
         pal=dict(SKIN=skin("fair"), HAIR="#7ac8e8", FUR="#8ad0f0", LIGHT="#e8f8fc", MARK="#3a8ab8", EYE="#2a5a8a", CLOTH="#2a6ab0", TRIM="#e8f8fc",
                  pattern="spots", extra=dict(belly_white=True, fin_mark=True)),
         variants={"green": dict(HAIR="#6ac08a", FUR="#7ad09a", LIGHT="#e8f8ec", MARK="#2a7a4a", CLOTH="#2a7a4a", extra=dict(belly_white=True, fin_mark=True)),
@@ -312,6 +312,9 @@ def declare(sp):
     q = lambda v: round(v * k * 4) / 4
     parts = [("fin_1", q(4.5), 10.5, q(3.75)), ("fin_2", q(4.25), q(3.75), 5), ("fin_3", q(3.5), q(3.25), 5), ("fin_4", q(2.5), q(2.5), 4.5),
              ("fluke",) + d["fluke"]]
+    if d.get("fishbody"):                                # the fish begins right under her bust: a deep, streamlined body tapering to the tail
+        parts[:4] = [("fin_1", 5.75, 10.5, 4.75), ("fin_2", 5, 4.75, 5), ("fin_3", 3.75, 3.5, 5), ("fin_4", 2.5, 2.5, 4.5)]
+        parts.append(("fish_flank", 6.25, 5.25, 5))
     if d.get("dorsal"):
         parts.append(("dorsal",) + d["dorsal"])
     if d.get("long_fins"):
@@ -375,7 +378,7 @@ def paint(sp, key):
     body = sc if sp.startswith("koi") or d.get("scales") else smooth                 # the koi has scales; the mammals and the shark are smooth
     skin_t = H.skin_fn(pal, 0.66)
     pt("hips", "all", lambda f, x, y, w, h: skin_t(f, x, y, w, h) if y < h * 0.4 else body(f, x, y, w, h))
-    for p in ("fin_1", "fin_2", "fin_3", "fin_4"):
+    for p in ("fin_1", "fin_2", "fin_3", "fin_4", "fish_flank"):
         pt(p, "all", body)
 
     def fin(f, x, y, w, h):
@@ -553,6 +556,8 @@ def build(sp):
     left = cube("shell", [-0.25 - bw + (bw - sw) / 2, 16.9 - 0.15, fz - sdp + 0.1], inflate=0.1)
     r.add("seashells", "body", [0, 17.5, fz], [left, G.mirror_cube(left), cube("cord", [-1.5, 18.6, fz - 0.15])])
     G.fish(r, None, d)
+    if d.get("fishbody"):
+        r.put("body", cube("fish_flank", [-3.125, 11.5, -2.5]))
     if d.get("dorsal"):
         dw, dh, dd = G.S("dorsal")
         if d.get("axolotl"):                                       # a low frilly crest along the tail
@@ -672,6 +677,37 @@ def build(sp):
 
 def anims(an):
     G.fish_anims(an)
+    if SPECIES.get(an.name, {}).get("fishbody"):
+        fish_body_anims(an)
+
+
+def fish_body_anims(an):
+    """the fishman is a fish with a girl's chest: level and straight, in water and out, her tail sweeping side to side"""
+    Tk, hold, sym, merge = H.track, H.hold, H.sym, H.merge
+    side = lambda period, amp: merge(G.wave(["fin_1", "fin_2"], period, [amp * 0.3, amp * 0.6], axis=2, phase=0.8, base=[(0, 0, 0), (-90, 0, 0)]),
+                                     G.wave(["fin_3", "fin_4", "fluke"], period, [amp, amp * 1.3, amp * 1.6], axis=1, phase=0.8))
+
+    def level(y):
+        return {"root": {"rotation": hold(84, 0, 0), "position": hold(0, y, FISH_BACK)}, "head": {"rotation": hold(-74, 0, 0)},
+                "hair_back": {"rotation": hold(40, 0, 0)}, "hair_side_r": {"rotation": hold(30, 0, -6)}, "hair_side_l": {"rotation": hold(30, 0, 6)}}
+    lying = merge(level(7), sym("arm", hold(-62, 0, -14)), sym("forearm", hold(-30, 0, 0)))    # propped up on her hands
+    flop = lambda period: sym("arm", Tk((0, (-70, 0, -14)), (period / 2, (-44, 0, -14)), (period, (-70, 0, -14))))
+    an.add("idle", 4.0, True, merge(lying, side(4.0, 7)))
+    an.add("walk", 1.2, True, merge(lying, flop(1.2), sym("forearm", hold(-24, 0, 0)), side(1.2, 16)))
+    an.add("run", 0.8, True, merge(lying, flop(0.8), sym("forearm", hold(-24, 0, 0)), side(0.8, 20)))
+    an.add("swim", 0.9, True, merge(level(7), sym("arm", hold(14, 0, -6)), side(0.9, 20)))
+    an.add("sit", 4.0, True, merge(lying, side(4.0, 5)))
+    an.add("lie", 4.0, True, merge(level(3.5), sym("arm", hold(10, 0, -10)), side(6.0, 3)))
+    for key in ("sing", "dig", "laugh"):
+        G_inject(an, key, merge(level(7), side(2.0, 6)))
+
+
+def G_inject(an, key, bones):
+    import girl_family as F
+    F._inject(an, key, bones)
+
+
+FISH_BACK = 12                                           # she lies level, so her middle sits over the entity's feet
 
 
 VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0, 180, 0),

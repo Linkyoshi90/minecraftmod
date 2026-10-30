@@ -20,6 +20,8 @@ from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 SPADE = [(.75, .75, 4), (.5, .5, 4), (2, 2, .5)]
 SPADE_REST = [(-20, 0, 0), (25, 0, 0), (10, 0, 0)]
 
+CLUB_TILT = 78
+
 SPECIES = {
     # twenty-third wave: the ogre, big and green-skinned with long pointed ears, two little horns and a mop of light-blue hair, a
     # simple blue dress; a club in her right hand
@@ -392,12 +394,13 @@ def build_hook(r, g, d):
         r.add("pumpkin_hat", "head", [0, hy + 8, z], [cube("pumpkin", [-4.75, hy + 7.4, -4.75 + z]), cube("pumpkin_f", [-4.75, hy + 8.2, -4.85 + z]),
                                                     cube("stem", [-0.75, hy + 12.3, -0.75 + z])])
         r.add("disguise", "root", [0, 0, 0], [cube("whole", [-6, 0, -6]), cube("whole_f", [-6, 0, -6.1]), cube("stem", [-0.75, 11, -0.75])])
-    if d.get("club"):                                    # held upright in her right hand, resting against her shoulder
+    if d.get("club"):                                    # gripped in her right fist and sloping up and forward, away from her arm
         px, py, pz = r.b["hand_r"]["pivot"]
-        cz = pz - 2.4
-        studs = [cube("stud", [px - 1.45 + 2.4 * (i % 2), py + 1.5 + 2.2 * (i // 2), cz - 0.25]) for i in range(8)]
-        studs += [cube("stud", [px - 0.25, py + 2.6 + 2.2 * i, cz - 1.45]) for i in range(3)]
-        r.add("club", "hand_r", [px, py - 1.5, pz], [cube("grip", [px - 0.625, py - 2.5, cz - 0.625]), cube("club", [px - 1.125, py + 1.0, cz - 1.125])] + studs)
+        grip = [px, py - 1.5, pz]
+        held = lambda p, o: G.rot_cube(p, o, grip, CLUB_TILT)
+        studs = [held("stud", [px - 1.45 + 2.4 * (i % 2), py + 1.5 + 2.2 * (i // 2), pz - 0.25]) for i in range(8)]
+        studs += [held("stud", [px - 0.25, py + 2.6 + 2.2 * i, pz - 1.45]) for i in range(3)]
+        r.add("club", "hand_r", grip, [held("grip", [px - 0.625, py - 3.25, pz - 0.625]), held("club", [px - 1.125, py + 0.25, pz - 1.125])] + studs)
     if d.get("neck"):                                    # the long neck, rising from her collar (shrunk away until she stretches it)
         r.add("neck", "body", [0, hy - 0.5, z], [cube("neck_long", [-1, hy - 0.5, -1 + z])])
     if d.get("ribbon"):                                  # the long cotton ribbon she ends in, in four bones so it can ripple

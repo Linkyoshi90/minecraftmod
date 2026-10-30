@@ -16,11 +16,13 @@ import girl_family as F  # noqa: E402
 import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, skin, CLEAR  # noqa: E402
 
+STAFF_TILT = -82
+
 SPECIES = {
     # twenty-third wave: the sasquatch, big and fluffy, pale blue, a shaggy mane falling round a pink face, a fluffy ruff
     "sasquatch_rodent": dict(
         build="strong", outfit=dict(top=["bandeau"], bottom="loincloth", colors=dict(cloth2="#7a9ac8")),
-        hair="shaggy", bangs="messy", ears=None, legs="fur", foot="paw", ruff=True,
+        hair="shaggy", bangs="messy", ears=None, legs="fur", foot="paw", ruff=True, chest_fur=True,
         pal=dict(SKIN=skin("#f0c8b8"), HAIR="#8ab0e0", FUR="#9ab8e4", LIGHT="#f0c8c0", MARK="#5a7aa8", EYE="#3a4a7a", CLOTH="#7a9ac8", TRIM="#f0c8c0",
                  pattern="solid"),
         variants={"brown": dict(HAIR="#5a3e26", FUR="#6a4a30", LIGHT="#d8b098", MARK="#2e1e12", CLOTH="#5a3e26", EYE="#2a1e14"),
@@ -245,6 +247,8 @@ def declare_hook(sp, d):
         out += [("mouse_nose", 1, .75, .5)]
     if d.get("ruff"):                                    # the gibbon's ruff of fur framing her face
         out += [("ruff_side", 1, 5, 1), ("ruff_chin", 6, 1.25, 1)]
+    if d.get("chest_fur"):                               # the sasquatch's shaggy chest
+        out += [("chest_tuft", 5.5, 3.5, 1)]
     if d.get("ghs_kit"):
         out += [("keyring", 1.75, 1.75, .25), ("key", .5, 2, .25), ("sling_y", 2, 2.5, .5), ("sling_grip", .75, 2, .75),
                 ("soul_bottle", 1.25, 2, 1.25), ("bottle_cork", .75, .5, .75)]
@@ -265,6 +269,11 @@ def paint_hook(pt, pal, d):
     ruff = G.fur_fn(pal, light_faces=(), grain=0.2, seed=71)
     for p in ("ruff_side", "ruff_chin"):
         pt(p, "all", ruff)
+    if d.get("chest_fur"):                               # her chest and belly are shaggy too, the tuft's lower edge ragged
+        shag = G.fur_fn(pal, light_faces=(), grain=0.2, pattern="solid", seed=73, fluffy=True)
+        pt("chest_tuft", "all", shag)
+        for p in ("collar", "midriff"):
+            pt(p, "all", G.fur_fn(pal, light_faces=(), grain=0.2, pattern="solid", seed=74))
     frill, edge = G.shades(pal.extra.get("frill", "#5a7ac8")), G.shades(pal.extra.get("frill_edge", "#e8c060"))
 
     def fr(f, x, y, w, h):                               # the frill: a fan plate, scalloped and spotted along its edge
@@ -342,17 +351,21 @@ def build_hook(r, g, d):
         hy, z = g.hy, g.z
         r.put("head", cube("circlet", [-4.5, hy + 5.6, -4.5 + z]), cube("circlet_curl", [-1.5, hy + 6.5, -4.6 + z]),
               cube("circlet_curl", [0.75, hy + 6.5, -4.6 + z]))
-    if d.get("staff"):                                   # upright in her right fist, a gold cap at each end
+    if d.get("staff"):                                   # through her right fist, level with the ground, a gold cap at each end
         px, py, pz = r.b["hand_r"]["pivot"]
-        cx, cz = px - 0.5, pz - 1.0
-        r.add("staff", "hand_r", [px, py - 1.5, pz], [cube("staff_pole", [cx, py - 9.5, cz]), cube("staff_cap", [cx - 0.25, py - 11.5, cz - 0.25]),
-                                                      cube("staff_cap", [cx - 0.25, py + 6.5, cz - 0.25])])
+        cx, cz, grip = px - 0.5, pz - 0.5, [px, py - 1.5, pz]
+        held = lambda p, o: G.rot_cube(p, o, grip, STAFF_TILT)
+        r.add("staff", "hand_r", grip, [held("staff_pole", [cx, py - 9.5, cz]), held("staff_cap", [cx - 0.25, py - 11.5, cz - 0.25]),
+                                        held("staff_cap", [cx - 0.25, py + 6.5, cz - 0.25])])
     if d.get("whisker_nose"):                           # a little pink nose
         r.put("head", cube("mouse_nose", [-0.5, g.hy + 2.5, -4.4 + g.z]))
     if d.get("ruff"):                                    # fluffy fur down both sides of her face and under her chin
         hy, z = g.hy, g.z
         r.put("head", cube("ruff_side", [-4.6, hy + 0.5, -4.6 + z]), cube("ruff_side", [3.6, hy + 0.5, -4.6 + z]),
               cube("ruff_chin", [-3.0, hy - 0.6, -4.6 + z]))
+    if d.get("chest_fur"):
+        fz = -G.S("chest")[2] / 2 - G.S("bust")[2] + g.z
+        r.put("body", cube("chest_tuft", [-2.75, 16.75 + g.dy, fz - 0.6]))
     if d.get("ghs_kit"):                                # at her belt: the ring of keys (right), the slingshot (left), three soul bottles (back)
         bz = -G.S("hips")[2] / 2 + g.z
         r.add("ghs_kit", "body", [0, 12, g.z], [

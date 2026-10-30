@@ -2934,6 +2934,59 @@
         }
       }
     },
+    "animation.polar_bear_canid.point": {
+      "loop": false,
+      "animation_length": 1.5,
+      "bones": {
+        "head": {
+          "rotation": {
+            "0.0": [
+              -5,
+              -20,
+              0
+            ],
+            "1.0": [
+              -5,
+              -20,
+              0
+            ]
+          }
+        },
+        "body": {
+          "rotation": {
+            "0.0": [
+              0,
+              -15,
+              0
+            ],
+            "1.0": [
+              0,
+              -15,
+              0
+            ]
+          }
+        },
+        "arm_r": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              0
+            ],
+            "0.3": [
+              -90,
+              -20,
+              0
+            ],
+            "1.5": [
+              -90,
+              -20,
+              0
+            ]
+          }
+        }
+      }
+    },
     "animation.polar_bear_canid.judge": {
       "loop": false,
       "animation_length": 2.0,

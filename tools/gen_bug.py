@@ -349,7 +349,7 @@ def build_hook(r, g, d):
     if d.get("four_arms"):                               # a second, lower pair of arms
         cw = G.S("chest")[0]
         a = G.S("arm_up")[0]
-        x0 = -(cw / 2 + a)
+        x0 = -(max(cw, G.S("hips")[0]) / 2 + 0.25 + a)
         ay = 17.0
         r.add("arm2_r", "body", [x0 + a / 2, ay, z], [cube("arm_up", [x0, ay - 3.5, -a / 2 + z])], mirror=True)
         r.add("forearm2_r", "arm2_r", [x0 + a / 2, ay - 3.5, z], [cube("forearm", [x0, ay - 6.5, -a / 2 + z])], mirror=True)

@@ -63,7 +63,7 @@ SPECIES = {
     # nineteenth wave: the turquoise serpent, royal blue with a turquoise belly, a feathered crest, gold and turquoise jewellery
     "turquoise_serpent_lamia": dict(
         build="curvy", outfit=dict(top=["bandeau"], extras=["usekh", "armlets", "bracers"], colors=dict(cloth2="#e8c050")),
-        thick=1.1, hair="mane", bangs="jagged",
+        thick=1.1, hair="mane", bangs="jagged", rearing=True,
         pal=dict(SKIN=skin("fair"), HAIR="#2a9aa8", FUR="#2a4ab0", LIGHT="#5ad8c8", MARK="#1a2a6a", EYE="#e8c040", CLOTH="#e8c050", TRIM="#3ad8c8",
                  pattern="solid", facemark="scales"),
         variants={"jade": dict(HAIR="#5a3a8a", FUR="#2a7a4a", LIGHT="#a8e8a0", MARK="#14402a", EYE="#e8c040"),
@@ -194,12 +194,15 @@ SPECIES = {
 }
 
 
+import serpent_rig  # noqa: E402
+
+
 def declare(sp):
     d = SPECIES[sp]
     k = d["thick"]
     st = d.get("stub", 1.0)                             # a stubby tail: the same girth, much shorter
     parts = [(n, round(w * k * 4) / 4, round(h * k * 4) / 4 if i else h, round(dd * (st if i else 1) * 4) / 4) for i, (n, w, h, dd) in enumerate(SEGS)]
-    extra = []
+    extra = serpent_rig.parts() if d.get("rearing") else []
     if d.get("hood"):
         extra.append(("hood_p", 5.5, 6.5, .5))
     if d.get("crown"):
@@ -234,6 +237,8 @@ def paint(sp, key):
     def hips(f, x, y, w, h):                       # the scales begin at the hips
         return skin_t(f, x, y, w, h) if y < h * 0.35 else sc(f, x, y, w, h)
     pt("hips", "all", hips)
+    if d.get("rearing"):
+        serpent_rig.paint(pt, pal)
     pt("seg_1", "all", lambda f, x, y, w, h: skin_t(f, x, y, w, h) if y < 2 and f != "down" else belly(f, x, y, w, h))
     tail_col = pal.extra.get("tail")
     for i in range(2, 9):
@@ -289,7 +294,10 @@ def build(sp):
     r = G.Rig()
     r.add("root", None, [0, 0, 0])
     g = G.upper(r, 12, dict(hair=d["hair"], bangs=d.get("bangs"), build=d.get("build"), outfit=d.get("outfit"), ears=d.get("ears"), skirt=False))
-    end_z = G.serpent(r, None, d)
+    if d.get("rearing"):
+        serpent_rig.build(r)
+    else:
+        end_z = G.serpent(r, None, d)
     if d.get("crown"):                                  # the naga's crown: a gold band, five spikes, a jade gem at the front
         cs = [cube("crown", [-2.25, g.hy + 8.3, -2.25 + g.z])]
         for x in (-1.9, -0.95, 0, 0.95, 1.9):
@@ -353,6 +361,8 @@ def anims(an):
     Tk = H.track                                         # curled up, rolling down the hill like a wheel
     an.add("roll", 0.5, True, {"root": {"rotation": Tk((0, (0, 0, 0)), (0.25, (180, 0, 0)), (0.5, (360, 0, 0))), "position": H.hold(0, 5, 0)},
                                **{s: {"rotation": H.hold(-35, 0, 0)} for s in SEG_NAMES[1:]}})
+    if SPECIES.get(an.name, {}).get("rearing"):
+        serpent_rig.anims(an)
 
 
 VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0, 180, 0),

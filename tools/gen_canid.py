@@ -17,22 +17,19 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
-    # twenty-third wave: the hellhound, navy-furred with tufts of blue flame at her ears, wrists and tail tip (they glow), glowing
-    # blue eyes and a grin full of teeth
+    # twenty-third wave: the hellhound (the Monster Girl Encyclopedia's): furred all over in dark grey, the colour only in her accents:
+    # flame tufts at her ears, wrists and tail tip (they glow), glowing eyes, the trim of her clothes; a grin full of teeth
     "hellhound_canid": dict(
-        build="athletic", outfit=dict(top=["bandeau"], bottom="shorts", extras=["belt", "bracers"], colors=dict(leather="#1a1a2a", cloth2="#1a1a2a")),
+        build="athletic", outfit=dict(top=["bandeau"], bottom="shorts", extras=["belt", "bracers"], colors=dict(leather="#141418", cloth2="#141418")),
         hair="shaggy", bangs="jagged", ears="fox", legs="fur", foot="paw", tail=[(2, 2, 4), (2.25, 2.25, 4), (1.75, 1.75, 3)],
-        tail_rest=[(-25, 0, 0), (10, 0, 0), (12, 0, 0)], tail_look="fur", grin=True, flames=True, glow=["flame", "flame_tip"],
-        pal=dict(SKIN=skin("fair"), HAIR="#1a2a6a", FUR="#22306e", LIGHT="#5a6ab0", MARK="#0a1030", EYE="#4ae0f8", CLOTH="#1a1a2a", TRIM="#4ae0f8",
+        tail_rest=[(-25, 0, 0), (10, 0, 0), (12, 0, 0)], tail_look="fur", grin=True, flames=True, glow=["flame", "flame_tip"], coat=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#26262c", FUR="#3c3c44", LIGHT="#5c5c68", MARK="#141418", EYE="#4ae0f8", CLOTH="#1c1c22", TRIM="#4ae0f8", INNER="#26262c",
                  pattern="solid", pupil=(1.6, 2.6), extra=dict(flame="#4ac8f8", flame_core="#e8fcff")),
-        variants={"black": dict(HAIR="#141418", FUR="#1e1e24", LIGHT="#4a4a54", MARK="#08080a", EYE="#f84a2a", TRIM="#f84a2a",
+        variants={"black": dict(HAIR="#141418", FUR="#26262c", LIGHT="#44444e", MARK="#08080a", EYE="#f8701e", TRIM="#f8701e",
                                 extra=dict(flame="#f86a1e", flame_core="#fff0a0")),
-                  "red": dict(HAIR="#5a0e14", FUR="#6a141a", LIGHT="#a84a4a", MARK="#2a0608", EYE="#f8c040", TRIM="#f8c040",
-                              extra=dict(flame="#f8a01e", flame_core="#fff8c0")),
-                  "green": dict(HAIR="#0e3a2a", FUR="#144a34", LIGHT="#3a8a6a", MARK="#062014", EYE="#8af84a", TRIM="#8af84a",
-                                extra=dict(flame="#6af84a", flame_core="#e8ffd0")),
-                  "purple": dict(HAIR="#2a0e4a", FUR="#3a1a5a", LIGHT="#7a5aa8", MARK="#140628", EYE="#e84af8", TRIM="#e84af8",
-                                 extra=dict(flame="#c84af8", flame_core="#f8e0ff"))}),
+                  "red": dict(EYE="#f83a2a", TRIM="#f83a2a", extra=dict(flame="#f8401e", flame_core="#fff0a0")),
+                  "green": dict(EYE="#8af84a", TRIM="#8af84a", extra=dict(flame="#6af84a", flame_core="#e8ffd0")),
+                  "purple": dict(EYE="#e84af8", TRIM="#e84af8", extra=dict(flame="#c84af8", flame_core="#f8e0ff"))}),
     # twenty-second wave: the gigantopithecus, the giant ape: huge and shaggy, deep blue fur, a red flower in her hair, a fur top and a
     # stone belt
     "gigantopithecus_canid": dict(
