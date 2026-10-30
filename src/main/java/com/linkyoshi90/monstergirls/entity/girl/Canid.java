@@ -533,7 +533,14 @@ public class Canid extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
-        if (this.species == GirlSpecies.HELLHOUND_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel pit && !this.isBaby() && this.tickCount % 20 == 0) this.huntDown(pit);
+        if (this.species == GirlSpecies.HELLHOUND_CANID && !this.isBaby()) {
+            if (this.level() instanceof net.minecraft.server.level.ServerLevel pit) {
+                this.glow(pit, HELLFIRE_LIGHT);                                 // her eye flames light the world, shaders included
+                if (this.tickCount % 20 == 0) this.huntDown(pit);
+            } else if (this.tickCount % 4 == 0 && !this.isInvisible()) {
+                this.eyeFlames();
+            }
+        }
         if (this.species == GirlSpecies.RHEINTALENSIS_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel cave && !this.isBaby() && this.tickCount % 40 == 0) this.bruteSwing(cave);
         if (this.species == GirlSpecies.GIGANTOPITHECUS_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel grove && !this.isBaby() && this.tickCount % 40 == 0) this.groundPound(grove);
         if (this.species == GirlSpecies.OBSIDIAN_HOUND_CANID && this.level() instanceof ServerLevel badlands && !this.isBaby() && this.tickCount % 20 == 0) this.coolLava(badlands);
@@ -859,6 +866,24 @@ public class Canid extends AbstractMonsterGirl {
                 level.getBlockState(this.blockPosition().below())), this.getX(), this.getY(), this.getZ(), 30, 1.5, 0.1, 1.5, 0.1);
         this.playSound(net.minecraft.sounds.SoundEvents.GENERIC_EXPLODE.value(), 0.6F, 1.4F);
         return crowd.size();
+    }
+
+    /** How bright the hellhound's eye flames are: as a torch is 14, a little less. */
+    public static final int HELLFIRE_LIGHT = 11;
+
+    /** Client side: a lick of fire from each eye, drifting up and away, in the colour of her flames. */
+    private void eyeFlames() {
+        double yaw = Math.toRadians(this.yHeadRot), fx = -Math.sin(yaw), fz = Math.cos(yaw), sx = Math.cos(yaw), sz = Math.sin(yaw);
+        net.minecraft.core.particles.ParticleOptions fire = switch (this.getVariantName()) {
+            case "blue" -> ParticleTypes.SOUL_FIRE_FLAME;
+            case "green" -> new net.minecraft.core.particles.DustParticleOptions(new org.joml.Vector3f(0.42F, 0.97F, 0.29F), 0.7F);
+            case "purple" -> new net.minecraft.core.particles.DustParticleOptions(new org.joml.Vector3f(0.78F, 0.29F, 0.97F), 0.7F);
+            default -> ParticleTypes.SMALL_FLAME;
+        };
+        for (int side = -1; side <= 1; side += 2) {
+            this.level().addParticle(fire, this.getX() + fx * 0.32 + side * sx * 0.3, this.getEyeY() + 0.08, this.getZ() + fz * 0.32 + side * sz * 0.3,
+                    side * sx * 0.015, 0.025, side * sz * 0.015);
+        }
     }
 
     /** The last hit on her friend the hellhound has avenged (the friend's last-hurt-by timestamp). */

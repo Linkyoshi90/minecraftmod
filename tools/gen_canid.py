@@ -450,7 +450,23 @@ def build_hook(r, g, d):
                                                  cube("scale_pan", [1.25, 11.5, -3.5])])
 
 
+def flicker(an):
+    """the flames never hold still: they swell and shrink in every looping animation"""
+    for key in ("idle", "walk", "run", "sit", "lie", "stalk", "groom", "hiss"):
+        A = an.A.get(f"animation.{an.name}.{key}")
+        if A is None:
+            continue
+        n = max(4, int(A["animation_length"] / 0.15))
+        n += n % 2                                       # an even count, so the loop closes on the same size
+        step = A["animation_length"] / n
+        sizes = [1.0 + 0.16 * math.sin(i * 2.4) * (1 if i % 2 else -0.7) for i in range(n)] + [None]
+        sizes[-1] = sizes[0]
+        F._inject(an, key, {"hair_eflame": {"scale": H.track(*[(round(i * step, 3), (round(q, 3),) * 3) for i, q in enumerate(sizes)])}})
+
+
 def anim_extra(an, sp, d):
+    if d.get("flames"):
+        flicker(an)
     Tk, hold, sym, merge = H.track, H.hold, H.sym, H.merge
     an.add("howl", 2.0, False, merge({"head": {"rotation": Tk((0, (0, 0, 0)), (0.5, (-55, 0, 0)), (2.0, (-55, 0, 0)))},
                                       "body": {"rotation": hold(-8, 0, 0)}, "mouth": {"position": Tk((0, H.REST), (0.4, H.OUT_), (2.0, H.OUT_))}},

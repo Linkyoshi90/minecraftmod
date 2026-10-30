@@ -144,6 +144,16 @@ public class TwentyThirdWaveTests {
         helper.succeed();
     }
 
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "hellhoundEyesLightTheWorld")
+    public static void hellhoundEyesLightTheWorld(GameTestHelper helper) {
+        Canid hound = still(helper, GirlSpecies.HELLHOUND_CANID, new BlockPos(5, 2, 5));
+        helper.succeedWhen(() -> {
+            var light = helper.getLevel().getBlockState(hound.blockPosition());
+            check(light.is(net.minecraft.world.level.block.Blocks.LIGHT), "her eye flames light the ground");
+            check(light.getValue(net.minecraft.world.level.block.LightBlock.LEVEL) == Canid.HELLFIRE_LIGHT, "as bright as they should be");
+        });
+    }
+
     @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "hellhoundHuntsDown")
     public static void hellhoundHuntsDown(GameTestHelper helper) {
         Canid hound = still(helper, GirlSpecies.HELLHOUND_CANID, new BlockPos(1, 2, 1));
