@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_vetala_bat",
+  "spawners": {
+    "type": "monstergirls:vetala_bat",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

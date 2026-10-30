@@ -18,6 +18,16 @@ SEGS = [("seg_1", 4.5, 10.5, 4), ("seg_2", 4.25, 4, 5.5), ("seg_3", 4, 3.75, 5.5
         ("seg_5", 3, 2.75, 5), ("seg_6", 2.5, 2.25, 4.5), ("seg_7", 2, 1.75, 4), ("seg_8", 1.25, 1.25, 3.5)]
 
 SPECIES = {
+    # twenty-third wave: the titanoboa, the greatest snake that ever lived: huge, olive-brown with dark blotches, a cream belly
+    "titanoboa_lamia": dict(
+        build="strong", outfit=dict(top=["sports"], extras=["armlets"], colors=dict(cloth2="#5a4a2a")),
+        thick=1.45, hair="flowing", bangs="parted",
+        pal=dict(SKIN=skin("fair"), HAIR="#4a3a1e", FUR="#9a8a4a", LIGHT="#f0e4b8", MARK="#3a2e14", EYE="#c89a2a", CLOTH="#5a4a2a", TRIM="#e8d8a0",
+                 pattern="blotches", facemark="scales"),
+        variants={"green": dict(HAIR="#2a4a1e", FUR="#6a8a3a", MARK="#1e3010", CLOTH="#3a4a1e", EYE="#d8b030"),
+                  "black": dict(HAIR="#1a1814", FUR="#3a3630", MARK="#0e0c0a", LIGHT="#d8ccb0", CLOTH="#2a2620", EYE="#e85a2a"),
+                  "red": dict(HAIR="#5a1e10", FUR="#a8582a", MARK="#4a1a0a", CLOTH="#4a2a14", EYE="#e8c040"),
+                  "blue": dict(HAIR="#1e3a5a", FUR="#5a7a9a", MARK="#14243a", LIGHT="#e0e8f0", CLOTH="#1e3a5a", EYE="#e8c040")}),
     # twenty-first wave (folklore): the serpopard of ancient Egyptian palettes, a long-necked serpent with a leopard's spots, ears
     # twenty-second wave: the sandworm, blue and segmented with a cream belly and a scaly hood over her head
     "sandworm_lamia": dict(

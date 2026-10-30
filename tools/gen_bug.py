@@ -166,13 +166,16 @@ SPECIES = {
                   "bark": dict(FUR="#7a5a3a", LIGHT="#a8885a", MARK="#3a2814", HAIR="#3a2814")}),
     "bee_bug": dict(
         build="petite", outfit=dict(top=["sweater"], bottom="shorts", colors=dict(cloth2="#2a2420")), hair="bob", bangs="blunt", ears="antenna",
-        legs="stockings", foot="shoe", wings="insect", flies=True, gaster=True, collar=True,
+        legs="stockings", foot="shoe", wings="insect", flies=True, gaster=True, collar=True, cap_kit=True,
         pal=dict(SKIN=skin("peach"), HAIR="#f0b830", FUR="#f8d040", LIGHT="#fff0a8", MARK="#2a2420", EYE="#2a2018", CLOTH="#f8c830", TRIM="#2a2420",
                  extra=dict(antenna="#2a2420", wing="#f0f4f8", wing_vein="#8a8a90", stocking="#2a2420", boot="#2a2420")),
         variants={"bumble": dict(HAIR="#f8d850", FUR="#f8d850", MARK="#141210", LIGHT="#ffffff", CLOTH="#141210"),
                   "carpenter": dict(HAIR="#2a2a32", FUR="#2a2a32", MARK="#141418", LIGHT="#5a5a6a", CLOTH="#2a2a32", extra=dict(antenna="#141418", wing="#b8a8e8", wing_vein="#3a2a6a", stocking="#141418", boot="#141418")),
                   "orchid": dict(HAIR="#3ab878", FUR="#3ab878", MARK="#1a5a3a", LIGHT="#a8f0c8", CLOTH="#2a8a5a"),
-                  "red": dict(HAIR="#2a2420", FUR="#2a2420", MARK="#d84a2a", LIGHT="#f8a080", CLOTH="#d84a2a")}),
+                  "red": dict(HAIR="#2a2420", FUR="#2a2420", MARK="#d84a2a", LIGHT="#f8a080", CLOTH="#d84a2a"),
+                  # homage (2026-10-30): Charmy Bee (Sonic): yellow and black, an orange vest, an aviator's cap and goggles
+                  "flight_cap": dict(HAIR="#f8c830", FUR="#f8c830", MARK="#1e1a18", LIGHT="#fff0a8", CLOTH="#e8782a", TRIM="#1e1a18",
+                                     extra=dict(antenna="#1e1a18", wing="#f0f4f8", wing_vein="#8a8a90", stocking="#1e1a18", boot="#d82a2a", cap=True))}),
     "hornet_bug": dict(
         build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#5a2a14")), hair="ponytail", bangs="jagged",
         ears="antenna", legs="stockings", foot="shoe", wings="insect", flies=True, gaster=True, collar=True,
@@ -228,6 +231,8 @@ BIPEDS = {k: v for k, v in SPECIES.items() if v.get("body") is None}  # noqa: E3
 
 def declare_hook(sp, d):
     out = []
+    if d.get("cap_kit"):                                 # Charmy's aviator cap, its ear flaps, the goggles on its brow
+        out += [("acap", 9.25, 3, 9.25), ("acap_flap", .75, 3, 2.5)] + [("goggle_band", 9.25, 1, 9.25), ("goggle_lens", 2.25, 2, .75)]
     if d.get("proboscis"):
         out += [("proboscis", .5, .5, 4)]
     if d.get("collar"):
@@ -252,6 +257,13 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    cap = pal.extra.get("cap")
+    brown = G.shades("#6a4a2a")
+    pt("acap", "all", lambda f, x, y, w, h: H.CLEAR if not cap or f == "down" else pick(brown, 0.45 + 0.15 * (f == "up") + 0.1 * (y == h - 1), x, y))
+    pt("acap_flap", "all", lambda f, x, y, w, h: H.CLEAR if not cap else pick(brown, 0.4, x, y))
+    pt("goggle_band", "all", lambda f, x, y, w, h: H.CLEAR if not cap or f in ("up", "down") else pick(brown, 0.3, x, y))
+    pt("goggle_lens", "all", lambda f, x, y, w, h: H.CLEAR if not cap else pick(G.shades("#5ac8f0"), 0.7, x, y)
+       if f == "north" and 0 < x < w - 1 and 0 < y < h - 1 else pick(G.shades("#c8c8cc"), 0.6, x, y))
     pt("proboscis", "all", lambda f, x, y, w, h: pick(pal.MARK, 0.4, x, y))
     pt("ruff", "all", lambda f, x, y, w, h: pick(pal.LIGHT, 0.6 + 0.25 * (noise(x // 2, y, 4) > 0.5), x, y))
     pt("gaster", "all", lambda f, x, y, w, h: pick(pal.FUR, 0.55, x, y))
@@ -298,6 +310,10 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
+    if d.get("cap_kit"):                                 # the cap snug over the top of her head, flaps over her ears, goggles on its brow
+        r.add("hair_acap", "head", [0, hy + 7, z], [cube("acap", [-4.625, hy + 6.2, -4.625 + z]), cube("goggle_band", [-4.75, hy + 6.0, -4.75 + z]),
+                                                    cube("goggle_lens", [-3.4, hy + 5.6, -5.3 + z]), cube("goggle_lens", [1.15, hy + 5.6, -5.3 + z]),
+                                                    cube("acap_flap", [-5.0, hy + 3.4, -1.25 + z]), G.mirror_cube(cube("acap_flap", [-5.0, hy + 3.4, -1.25 + z]))])
     if d.get("proboscis"):
         r.put("head", G.rot_cube("proboscis", [-0.25, hy + 0.6, -7.8 + z], [0, hy + 0.8, -4 + z], 18, 0, 0))
     if d.get("collar"):

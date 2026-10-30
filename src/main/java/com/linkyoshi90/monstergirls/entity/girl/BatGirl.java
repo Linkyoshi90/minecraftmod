@@ -160,6 +160,7 @@ public class BatGirl extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.VETALA_BAT && this.level() instanceof net.minecraft.server.level.ServerLevel ground && !this.isBaby() && this.tickCount % 10 == 0) this.possess(ground);
         if (this.species == GirlSpecies.CAMAZOTZ_BAT && this.level() instanceof ServerLevel dark && !this.isBaby() && this.tickCount % 40 == 0) this.nightBite(dark, !dark.isDay());
         if (this.species == GirlSpecies.FROND_BAT && this.level() instanceof ServerLevel canopy && !this.isBaby() && this.tickCount % 600 == 0) this.shakeLeaves(canopy);
         if (!(this.level() instanceof ServerLevel server)) return;
@@ -278,6 +279,37 @@ public class BatGirl extends AbstractMonsterGirl {
         m.hurt(level.damageSources().mobAttack(this), 2.0F);
         friend.heal(2.0F);
         level.sendParticles(net.minecraft.core.particles.ParticleTypes.DAMAGE_INDICATOR, m.getX(), m.getY(0.7), m.getZ(), 3, 0.2, 0.2, 0.2, 0.0);
+        return 1;
+    }
+
+    /** The zombie the vetala rides, and until when. */
+    @javax.annotation.Nullable
+    private java.util.UUID ridden;
+    private long riddenUntil;
+
+    /**
+     * The vetala's possession (twenty-third wave): she rides the nearest zombie within 8 of her friend for 30 seconds; it turns on
+     * the other monsters near her friend (and never on her friend). 1 while she rides one, 0 with no zombie near, -1 without a friend.
+     */
+    public int possess(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Zombie z = this.ridden == null ? null
+                : level.getEntity(this.ridden) instanceof net.minecraft.world.entity.monster.Zombie r && r.isAlive() && level.getGameTime() < this.riddenUntil ? r : null;
+        if (z == null) {
+            this.ridden = null;
+            z = level.getNearestEntity(net.minecraft.world.entity.monster.Zombie.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forNonCombat(),
+                    friend, friend.getX(), friend.getY(), friend.getZ(), friend.getBoundingBox().inflate(8));
+            if (z == null) return 0;
+            this.ridden = z.getUUID();
+            this.riddenUntil = level.getGameTime() + 600;
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.SOUL, z.getX(), z.getY() + 1.5, z.getZ(), 16, 0.3, 0.5, 0.3, 0.02);
+            this.playSound(net.minecraft.sounds.SoundEvents.SOUL_ESCAPE.value(), 1.0F, 0.8F);
+        }
+        final net.minecraft.world.entity.monster.Zombie host = z;
+        net.minecraft.world.entity.monster.Monster prey = level.getNearestEntity(net.minecraft.world.entity.monster.Monster.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat(), host, host.getX(), host.getY(), host.getZ(),
+                friend.getBoundingBox().inflate(12));
+        host.setTarget(prey != null && prey != host ? prey : null);
         return 1;
     }
 }

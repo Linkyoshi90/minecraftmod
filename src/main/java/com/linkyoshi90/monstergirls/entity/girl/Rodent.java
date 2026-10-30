@@ -474,6 +474,9 @@ public class Rodent extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.SASQUATCH_RODENT && this.level() instanceof net.minecraft.server.level.ServerLevel wood && !this.isBaby() && this.tickCount % 20 == 0)
+            this.unseen(wood, wood.getBiome(this.blockPosition()).is(net.minecraft.tags.BiomeTags.IS_FOREST) || wood.getBiome(this.blockPosition()).is(net.minecraft.tags.BiomeTags.IS_TAIGA));
+        if (this.species == GirlSpecies.SUN_WUKONG_RODENT && this.level() instanceof net.minecraft.server.level.ServerLevel sky && !this.isBaby()) this.somersaultCloud(sky);
         if (this.species == GirlSpecies.SOBOLNIK_RODENT && this.level() instanceof net.minecraft.server.level.ServerLevel burrow && !this.isBaby() && this.tickCount % 20 == 0) this.burrowEyes(burrow);
         if (this.species == GirlSpecies.HOUSE_MOUSE_RODENT && this.level() instanceof net.minecraft.server.level.ServerLevel pantry && !this.isBaby() && this.tickCount % 600 == 0) this.crumbs(pantry);
         if (this.species == GirlSpecies.GIBBON_RODENT && this.level() instanceof net.minecraft.server.level.ServerLevel canopy && !this.isBaby() && this.tickCount % 2 == 0) this.brachiation(canopy);
@@ -680,6 +683,32 @@ public class Rodent extends AbstractMonsterGirl {
         if (friend.distanceToSqr(this) > 8 * 8 || !friend.onClimbable() || v.y <= 0.05) return 0;
         friend.setDeltaMovement(v.x, Math.max(v.y, 0.36), v.z);
         friend.hurtMarked = true;
+        return 1;
+    }
+
+    /**
+     * The sasquatch's knack for not being seen (twenty-third wave): in a forest (or taiga), her friend within 16 of her turns
+     * invisible while sneaking. 1 when they are hidden, 0 when not sneaking or out of the woods, -1 without a friend.
+     */
+    public int unseen(net.minecraft.server.level.ServerLevel level, boolean forest) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        if (!forest || !friend.isShiftKeyDown()) return 0;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.INVISIBILITY, 40, 0, true, false), this);
+        return 1;
+    }
+
+    /**
+     * Sun Wukong's somersault cloud (twenty-third wave), every tick: her friend within 16 of her never builds up a fall, so they
+     * take no fall damage. 1 when she caught a fall, 0 when they were not falling, -1 without a friend.
+     */
+    public int somersaultCloud(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        if (friend.fallDistance <= 0) return 0;
+        if (friend.fallDistance > 3 && this.tickCount % 5 == 0)
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.CLOUD, friend.getX(), friend.getY(), friend.getZ(), 4, 0.3, 0.1, 0.3, 0.01);
+        friend.resetFallDistance();
         return 1;
     }
 }

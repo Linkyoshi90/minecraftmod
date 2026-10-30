@@ -16,6 +16,21 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # twenty-third wave: the automaton, a pale-blue clockwork girl in armour plates: a round helmet with a disc over each ear,
+    # rivets down every plate
+    "automaton_construct": dict(
+        build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["pauldron", "bracers", "belt"], colors=dict(cloth2="#5a8ad0", leather="#3a5a9a")),
+        hair="bob", bangs="swept", ears=None, legs="bare", foot="shoe", tin=True, helm=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#7aa8e0", FUR="#8ab4ec", LIGHT="#dceafc", MARK="#3a5a9a", EYE="#2a6ad8", CLOTH="#6a9ae0", TRIM="#dceafc",
+                 pattern="solid", extra=dict(boot="#5a8ad0", helm="#8ab4ec", helm_disc="#dceafc", key="#c8d8f0")),
+        variants={"silver": dict(HAIR="#a8acb4", FUR="#c8ccd4", LIGHT="#f0f2f6", MARK="#5a5e66", EYE="#3a8ae8", CLOTH="#a8acb4",
+                                 extra=dict(boot="#7a7e86", helm="#c8ccd4", helm_disc="#f0f2f6", key="#d8dce4")),
+                  "red": dict(HAIR="#d8584a", FUR="#e0705a", LIGHT="#f8d0c0", MARK="#7a2a1e", EYE="#2a8ad8", CLOTH="#c8483a",
+                              extra=dict(boot="#8a2e22", helm="#e0705a", helm_disc="#f8e080", key="#f8e080")),
+                  "green": dict(HAIR="#5aa86a", FUR="#7ac08a", LIGHT="#d8f0dc", MARK="#2a5a32", EYE="#e8a030", CLOTH="#5aa86a",
+                                extra=dict(boot="#3a7a44", helm="#7ac08a", helm_disc="#d8f0dc", key="#d8f0dc")),
+                  "gold": dict(HAIR="#d8a840", FUR="#e8c060", LIGHT="#f8ecc0", MARK="#8a6418", EYE="#2a6ad8", CLOTH="#c89030",
+                               extra=dict(boot="#8a6418", helm="#e8c060", helm_disc="#f8ecc0", key="#f8ecc0"))}),
     # nineteenth wave: Tin Jack, a scarecrow of riveted blue tin in a tattered cloak and a pointed hat, a lantern at her hip
     "tin_jack_construct": dict(
         build="slim", outfit=dict(top=["corset", "capelet"], bottom="wrap_skirt", extras=["belt", "bracers"],
@@ -85,6 +100,9 @@ SPECIES = {
 
 
 def declare_hook(sp, d):
+    if d.get("helm"):                                    # the automaton's round helmet and the discs over her ears
+        return [("helm_dome", 11, 3, 11), ("helm_crown", 7, 1.5, 7), ("ear_disc", 1, 4, 4),
+                ("shem", 3, 1, .25), ("key_shaft", .75, .75, 3), ("key_bow", 3.5, 3, .5), ("gear", 1.5, 1.5, .25)]
     if d.get("witch_hat"):                               # Tin Jack's pointed hat (bent at the tip) and her lantern
         return [("hat_brim", 13, .5, 13), ("hat_cone", 6, 4, 6), ("hat_mid", 4, 3.5, 4), ("hat_tip", 2, 3, 2), ("hat_band", 6.25, 1, 6.25),
                 ("lantern", 2, 2.5, 2), ("lantern_cap", 2.5, .5, 2.5), ("lantern_ring", .25, 1.5, .25),
@@ -93,6 +111,12 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    helm, disc = G.shades(pal.extra.get("helm", "#8ab4ec")), G.shades(pal.extra.get("helm_disc", "#dceafc"))
+    plated = lambda f, x, y, w, h: pick(helm, 0.5 + 0.2 * (f == "up") + 0.15 * (y == h - 1) - 0.1 * (x % 5 == 0), x, y)
+    pt("helm_dome", "all", plated)
+    pt("helm_crown", "all", plated)
+    pt("ear_disc", "all", lambda f, x, y, w, h: pick(disc, 0.6 + 0.2 * (0 < x < w - 1 and 0 < y < h - 1), x, y) if f in ("east", "west")
+       else pick(helm, 0.45, x, y))
     hat, band, lamp = G.shades(pal.extra.get("hat", "#25305a")), G.shades(pal.extra.get("hat_band", "#d8b060")), G.shades(pal.extra.get("lantern", "#7af0f8"))
     patched = lambda f, x, y, w, h: pick(hat, 0.42 + 0.14 * (f == "up") + 0.12 * ((x // 3 + y // 3) % 3 == 0) + (noise(x, y, 97) - 0.5) * 0.1, x, y)
     for p in ("hat_brim", "hat_cone", "hat_mid", "hat_tip"):
@@ -119,6 +143,10 @@ def paint_hook(pt, pal, d):
 
 
 def build_hook(r, g, d):
+    if d.get("helm"):                                    # the helmet over the crown of her head, a disc over each ear
+        hy, z = g.hy, g.z
+        r.add("hair_helm", "head", [0, hy + 8, z], [cube("helm_dome", [-5.5, hy + 7.6, -5.25 + z]), cube("helm_crown", [-3.5, hy + 10.6, -3.25 + z])])
+        r.add("hair_discs", "head", [0, hy + 4, z], [cube("ear_disc", [-6.6, hy + 2.0, -2.0 + z]), G.mirror_cube(cube("ear_disc", [-6.6, hy + 2.0, -2.0 + z]))])
     if d.get("witch_hat"):                               # the hat on her head, its tip bent back; the lantern at her right hip
         hy, z = g.hy, g.z
         r.add("hair_hat", "head", [0, hy + 9, z], [G.rot_cube("hat_brim", [-6.5, hy + 8.7, -6.5 + z], [0, hy + 8.7, z], 6, 0, 0),

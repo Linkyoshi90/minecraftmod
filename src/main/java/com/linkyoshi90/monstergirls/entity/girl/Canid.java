@@ -533,6 +533,7 @@ public class Canid extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.HELLHOUND_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel pit && !this.isBaby() && this.tickCount % 20 == 0) this.huntDown(pit);
         if (this.species == GirlSpecies.RHEINTALENSIS_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel cave && !this.isBaby() && this.tickCount % 40 == 0) this.bruteSwing(cave);
         if (this.species == GirlSpecies.GIGANTOPITHECUS_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel grove && !this.isBaby() && this.tickCount % 40 == 0) this.groundPound(grove);
         if (this.species == GirlSpecies.OBSIDIAN_HOUND_CANID && this.level() instanceof ServerLevel badlands && !this.isBaby() && this.tickCount % 20 == 0) this.coolLava(badlands);
@@ -858,5 +859,29 @@ public class Canid extends AbstractMonsterGirl {
                 level.getBlockState(this.blockPosition().below())), this.getX(), this.getY(), this.getZ(), 30, 1.5, 0.1, 1.5, 0.1);
         this.playSound(net.minecraft.sounds.SoundEvents.GENERIC_EXPLODE.value(), 0.6F, 1.4F);
         return crowd.size();
+    }
+
+    /** The last hit on her friend the hellhound has avenged (the friend's last-hurt-by timestamp). */
+    private int lastHunt = Integer.MIN_VALUE;
+
+    /**
+     * The hellhound's hunt (twenty-third wave): whatever monster last hurt her friend (within 10 seconds), wherever it is within
+     * 24 of them, she runs down and sets on blue fire: 3 damage and five seconds of burning. 1 when she found it, 0 with
+     * nothing to avenge, -1 without a friend.
+     */
+    public int huntDown(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.LivingEntity attacker = friend.getLastHurtByMob();
+        int when = friend.getLastHurtByMobTimestamp();
+        if (!(attacker instanceof net.minecraft.world.entity.monster.Monster m) || !m.isAlive() || when == this.lastHunt || friend.tickCount - when > 200 || m.distanceTo(friend) > 24) return 0;
+        this.lastHunt = when;
+        this.setTarget(m);
+        this.getNavigation().moveTo(m, 1.5);
+        m.hurt(level.damageSources().mobAttack(this), 3.0F);
+        m.igniteForSeconds(5.0F);
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.SOUL_FIRE_FLAME, m.getX(), m.getY() + 1, m.getZ(), 24, 0.3, 0.5, 0.3, 0.02);
+        this.playSound(net.minecraft.sounds.SoundEvents.WOLF_GROWL, 1.0F, 0.7F);
+        return 1;
     }
 }

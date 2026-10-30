@@ -22,6 +22,19 @@ LIZARD_TAIL = [(2.5, 2.5, 4), (2, 2, 4), (1.5, 1.5, 4), (1, 1, 3.5)]
 DROOP = [(-38, 0, 0), (10, 0, 0), (10, 0, 0), (8, 0, 0)]
 
 SPECIES = {
+    # twenty-third wave: the argentinosaurus, the greatest of the long-necked dinosaurs: tall and gentle, pale blue with orange
+    # stripes and a cream belly, a long neck lifting her head high, a long heavy tail
+    "argentinosaurus_lizardfolk": dict(
+        build="curvy", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["pearls"], colors=dict(cloth2="#e8a060")),
+        hair="bob", bangs="swept", ears=None, legs="scales", foot="claw",
+        tail=[(3, 3, 5), (2.5, 2.5, 5), (2, 2, 5), (1.5, 1.5, 4.5), (1, 1, 4)], tail_rest=[(-30, 0, 0), (12, 0, 0), (10, 0, 0), (8, 0, 0), (6, 0, 0)],
+        tail_look="scale", lneck=9,
+        pal=dict(SKIN=skin("fair"), HAIR="#6a98c8", FUR="#9ac0e4", LIGHT="#f4ead4", MARK="#e0904a", EYE="#2a4a7a", CLOTH="#e8a060", TRIM="#f4ead4",
+                 pattern="bands"),
+        variants={"green": dict(HAIR="#4a7a3a", FUR="#8ab878", MARK="#3a5a2a", CLOTH="#c8a050", EYE="#5a3a1e"),
+                  "sand": dict(HAIR="#a87a4a", FUR="#d8b888", MARK="#8a5a2a", CLOTH="#5a8aa8"),
+                  "grey": dict(HAIR="#5a5e66", FUR="#a8acb4", MARK="#4a6a8a", CLOTH="#a8483a", EYE="#3a2a1a"),
+                  "pink": dict(HAIR="#c86a8a", FUR="#f0b8c8", MARK="#a84a6a", CLOTH="#6a8ac8")}),
     # twenty-second wave: the archelon, the greatest sea turtle that ever lived: crystal-blue scales, a great shell ridged with three
     # keels like a shield, flippers at her wrists
     "archelon_lizardfolk": dict(
@@ -130,7 +143,10 @@ SPECIES = {
                   "gold": dict(FUR="#e8b830", HAIR="#c8781a", MARK="#fff0a0", extra=dict(flame="#fff07a", claw="#5a3a10")),
                   # homage to Gregory Horror Show (2026-10-25): Catherine, the pink lizard nurse with an enormous syringe
                   "nurse": dict(SKIN=skin("#f0a8c8"), FUR="#e890b8", LIGHT="#f8c8dc", MARK="#e0408a", HAIR="#e890b8", EYE="#c02a6a", CLOTH="#f8f8f8",
-                                TRIM="#d82a2a", pattern="spots", extra=dict(flame="#f87ab0", claw="#2a1a1a", nurse=True))}),
+                                TRIM="#d82a2a", pattern="spots", extra=dict(flame="#f87ab0", claw="#2a1a1a", nurse=True)),
+                  # homage (2026-10-30): Charmander (Pokemon): orange, a cream belly, blue eyes, the flame at her tail tip
+                  "ember_tail": dict(SKIN=skin("tan"), FUR="#f08a30", HAIR="#f08a30", LIGHT="#f8e0a0", MARK="#c86a1e", EYE="#2a5ad8", CLOTH="#f8e0a0",
+                                     TRIM="#c86a1e", pattern="solid", extra=dict(flame="#f8c030", claw="#f8f0e8"))}),
     "chameleon_lizardfolk": dict(
         build="slim", outfit=dict(top=["halter"], bottom="sarong", extras=["armlets"], colors=dict(cloth2="#6a3a8a")),
         hair="bun", bangs="swept", ears=None, legs="scales", foot="claw", tail=LIZARD_TAIL, tail_look="scale",
@@ -184,7 +200,10 @@ SPECIES = {
                   "dark": dict(FUR="#3a342a", HAIR="#1e1e16", extra=dict(shell="#1e1a14", shell_band="#3a3428")),
                   "suwannee": dict(FUR="#7a7466", HAIR="#4a4a3a", extra=dict(shell="#5a5448", shell_band="#3a362e")),
                   "leucistic": dict(FUR="#e0d4b8", HAIR="#f0e8d0", LIGHT="#fff8e8", MARK="#c8b898", EYE="#c84a4a",
-                                    extra=dict(shell="#d8c8a0", shell_band="#b8a880"))}),
+                                    extra=dict(shell="#d8c8a0", shell_band="#b8a880")),
+                  # homage (2026-10-30): Bowser (Mario): yellow skin, red hair, a green spiked shell with a white rim, black cuffs
+                  "spike_king": dict(SKIN=skin("#e8c860"), FUR="#7ab83a", HAIR="#e83a1e", LIGHT="#f8e8a0", MARK="#f0ecd8", EYE="#d82a1e", CLOTH="#2a2a2a",
+                                     TRIM="#f0ecd8", extra=dict(shell="#3a8a2a", shell_band="#f0ecd8"))}),
     "black_tortoise_lizardfolk": dict(
         build="athletic", outfit=dict(top=["kimono"], colors=dict(kimono="#1e2a3a", kimono_trim="#c8d8e8", obi="#5a8aa8")),
         hair="hime", bangs="blunt", ears=None, legs="scales", foot="claw",
@@ -305,6 +324,8 @@ SPECIES = {
 
 def declare_hook(sp, d):
     out = []
+    if d.get("lneck"):                                   # the long neck her head rides on
+        out += [("lneck", 4, d["lneck"] + 1, 4)]
     if d.get("spines"):
         out += [("spine", .5, 1.25, 1)]
     if d.get("shell") == "flat":                         # the softshell: one thin, wide disc
@@ -346,6 +367,8 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    pt("lneck", "all", lambda f, x, y, w, h: pick(pal.LIGHT, 0.6, x, y) if f == "north" and 0 < x < w - 1 else
+       pick(pal.MARK if y % 4 == 1 else pal.FUR, 0.5 + 0.1 * (f == "up"), x, y))
     keel = G.shades(pal.extra.get("keel", "#e4f4ff"))
     pt("keel", "all", lambda f, x, y, w, h: pick(keel, 0.55 + 0.2 * (f == "up") + 0.1 * (y % 3 == 0), x, y))
     pt("wflipper", "all", lambda f, x, y, w, h: G.scale_fn(pal)(f, x, y, w, h) if f in ("east", "west") and y < h - 1 - x * 0.4 else
@@ -443,6 +466,22 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     z = g.z
+    if d.get("lneck"):                                   # her head and everything on it lifted onto the top of the neck
+        n = d["lneck"]
+        lifted, grew = {"head"}, True
+        while grew:
+            grew = False
+            for name, b in r.b.items():
+                if b["parent"] in lifted and name not in lifted:
+                    lifted.add(name)
+                    grew = True
+        for name in lifted:
+            r.b[name]["pivot"][1] += n
+            for c in r.b[name]["cubes"]:
+                c["origin"][1] = round(c["origin"][1] + n, 3)
+                if "pivot" in c:
+                    c["pivot"][1] = round(c["pivot"][1] + n, 3)
+        r.add("neck", "body", [0, g.hy, z], [cube("lneck", [-2, g.hy - 1, -1.5 + z])])
     if d.get("flower"):                                  # a flower behind her left ear: four petals round a heart
         hy, z = g.hy, g.z
         fx, fy, fz = 4.6, hy + 4.5, -0.5 + z

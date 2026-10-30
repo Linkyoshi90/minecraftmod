@@ -407,6 +407,7 @@ public class Lamia extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.TITANOBOA_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel marsh && !this.isBaby() && this.tickCount % 100 == 0) this.constrict(marsh);
         if (this.species == GirlSpecies.SERPOPARD_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel fang && !this.isBaby() && this.tickCount % 60 == 0) this.venomBite(fang);
         if (this.species == GirlSpecies.SANDWORM_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel dune && !this.isBaby() && this.tickCount % 200 == 0) this.swallow(dune);
         if (this.species == GirlSpecies.XIANGLIU_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel marsh && !this.isBaby() && this.tickCount % 60 == 0) this.nineHeads(marsh);
@@ -953,5 +954,32 @@ public class Lamia extends AbstractMonsterGirl {
             n++;
         }
         return n;
+    }
+
+    /**
+     * The titanoboa's constriction (twenty-third wave): she coils round the biggest monster within 8 of her friend and holds it fast
+     * for five seconds (it cannot move: Slowness VII) while she squeezes (Wither II). 1 when she coiled round one, 0 with none near,
+     * -1 without a friend.
+     */
+    public int constrict(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster biggest = null;
+        double size = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8), net.minecraft.world.entity.LivingEntity::isAlive)) {
+            net.minecraft.world.phys.AABB b = m.getBoundingBox();
+            double v = b.getXsize() * b.getYsize() * b.getZsize();
+            if (v > size) {
+                size = v;
+                biggest = m;
+            }
+        }
+        if (biggest == null) return 0;
+        biggest.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 100, 6), this);
+        biggest.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WITHER, 100, 1), this);
+        biggest.setDeltaMovement(0, 0, 0);
+        this.getLookControl().setLookAt(biggest);
+        this.playSound(net.minecraft.sounds.SoundEvents.SLIME_SQUISH, 1.0F, 0.5F);
+        return 1;
     }
 }

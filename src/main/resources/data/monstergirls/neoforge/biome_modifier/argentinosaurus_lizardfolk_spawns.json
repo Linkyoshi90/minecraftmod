@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_argentinosaurus_lizardfolk",
+  "spawners": {
+    "type": "monstergirls:argentinosaurus_lizardfolk",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

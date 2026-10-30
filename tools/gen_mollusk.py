@@ -24,6 +24,28 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # twenty-third wave: the spewslug, a glistening crimson slug girl with eye-stalk antennae, a slug's mantle over her back, a wide
+    # toothy maw and purple bile dribbling from it
+    "spewslug_mollusk": dict(
+        build="curvy", outfit=dict(top=["halter"], bottom="wrap_skirt", colors=dict(cloth2="#6a1a2a")),
+        hair="wavy", bangs="messy", ears="antenna", legs="bare", foot="shoe", body="slug", grin=True,
+        pal=dict(SKIN=skin("#d87a7a"), HAIR="#a8202a", FUR="#b82a32", LIGHT="#f0a0a0", MARK="#5a0e14", EYE="#e8d040", CLOTH="#6a1a2a", TRIM="#b84ad8",
+                 INNER="#f0a0b0", extra=dict(antenna="#b82a32", mantle="#a8202a", bile="#b84ad8")),
+        variants={"orange": dict(SKIN=skin("#e0a070"), HAIR="#c8601e", FUR="#d8702a", MARK="#6a2a0a", extra=dict(antenna="#d8702a", mantle="#c8601e", bile="#a8d83a")),
+                  "black": dict(SKIN=skin("#8a7a82"), HAIR="#2a2228", FUR="#3a3038", MARK="#0e0a0e", EYE="#e83a3a", extra=dict(antenna="#3a3038", mantle="#2a2228", bile="#5ad8a8")),
+                  "yellow": dict(SKIN=skin("#e8d090"), HAIR="#c8a020", FUR="#d8b830", MARK="#5a4a0e", EYE="#3a2a1a", extra=dict(antenna="#d8b830", mantle="#c8a020", bile="#e85a8a")),
+                  "blue": dict(SKIN=skin("#8aa0d8"), HAIR="#2a4aa8", FUR="#3a5ac0", MARK="#0e1a5a", EYE="#f8a030", extra=dict(antenna="#3a5ac0", mantle="#2a4aa8", bile="#f8d040"))}),
+    # twenty-third wave (folklore): Scylla, the sea monster of the Odyssey: a sea-green girl over a skirt of tentacles, with six dog
+    # heads snarling out from her waist
+    "scylla_mollusk": dict(
+        build="curvy", outfit=dict(top=["corset"], extras=["pearls", "armlets"], colors=dict(cloth2="#1e3a4a")),
+        hair="flowing", bangs="parted", ears="fin", legs="bare", foot="shoe", body="octopus", hat=False, dogs=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e6a6a", FUR="#2a7a7a", LIGHT="#a8e0d8", MARK="#0e3a3a", EYE="#e8c040", CLOTH="#1e3a4a", TRIM="#e8c060",
+                 INNER="#f0b8c0", extra=dict(dog="#5a6a74", dog_dark="#2a343a", boot="#0e3a3a")),
+        variants={"blue": dict(HAIR="#2a4a9a", FUR="#3a5ab0", LIGHT="#b8c8f0", MARK="#14204a", extra=dict(dog="#4a5068", dog_dark="#1e2232", boot="#14204a")),
+                  "purple": dict(HAIR="#5a2a8a", FUR="#6a3a9a", LIGHT="#d8c0f0", MARK="#2a1044", extra=dict(dog="#6a5a6a", dog_dark="#2e242e", boot="#2a1044")),
+                  "red": dict(HAIR="#8a1e2a", FUR="#a82a32", LIGHT="#f0b0b0", MARK="#4a0a10", extra=dict(dog="#6a5048", dog_dark="#2e1e1a", boot="#4a0a10")),
+                  "pale": dict(HAIR="#d8e0e4", FUR="#c8d4d8", LIGHT="#f4f8fa", MARK="#6a7a80", EYE="#3a8ab0", extra=dict(dog="#a8a8a4", dog_dark="#4a4a48", boot="#6a7a80"))}),
     # sixteenth wave: the squidkin, a sky-blue squid girl: long wavy hair curling into tentacles, a slip dress over a skirt of
     # eight tentacles (the octopus' body without its cap, the ika's tentacle locks)
     "squidkin_mollusk": dict(
@@ -110,9 +132,13 @@ def declare_hook(sp, d):
             out += [("hat_a", 9.5, 3, 9.5), ("hat_b", 7, 3, 7)]
         if d.get("tent_hair"):
             out += [("htent_a", 1.5, 6, 1.5), ("htent_b", 1.25, 6, 1.25)]
+        if d.get("dogs"):                                  # Scylla's dog heads: a head, a muzzle, two ears
+            out += [("dog_head", 2.5, 2.5, 2.5), ("dog_muzzle", 1.5, 1.25, 1.5), ("dog_ear", .75, 1.25, .5)]
         return out
     if b == "snail":
         return [("shell_a", 7, 7, 4), ("shell_b", 5, 5, 3), ("shell_c", 3, 3, 2)]
+    if b == "slug":                                        # the slug's mantle on her back, the bile dribbling from her maw
+        return [("mantle", 6, 7, 2), ("bile", 1.5, 2.5, .5), ("bile_drip", .5, 2, .5)]
     if b == "jelly":
         return [("bell_a", 10, 3, 10), ("bell_b", 8, 2.5, 8), ("bell_c", 5, 1.5, 5), ("jtent_a", .5, 7, .5), ("jtent_b", .5, 6, .5)]
     return []
@@ -139,6 +165,21 @@ def paint_hook(pt, pal, d):
     for p in ("shell_a", "shell_b", "shell_c", "coil_a", "coil_b", "coil_c", "coil_rim"):
         pt(p, "all", lambda f, x, y, w, h: pick(band if (x + y) % 5 == 0 or (y % 6 == 0) else shell, 0.45 + 0.2 * (noise(x // 2, y // 2, 8) > 0.6), x, y))
     pt("skirt_m", "all", spotted)
+    mantle = G.shades(pal.extra.get("mantle", "#a8202a"))
+    pt("mantle", "all", lambda f, x, y, w, h: pick(mantle, 0.45 + 0.25 * ((x * 3 + y * 5) % 7 == 0) + 0.15 * (y < 2), x, y))
+    bile = G.shades(pal.extra.get("bile", "#b84ad8"))
+    for p in ("bile", "bile_drip"):
+        pt(p, "all", lambda f, x, y, w, h: G.with_alpha(pick(bile, 0.55 + 0.25 * (x == 0), x, y), 215))
+    dog, dark = G.shades(pal.extra.get("dog", "#5a6a74")), G.shades(pal.extra.get("dog_dark", "#2a343a"))
+
+    def dog_face(f, x, y, w, h):
+        if f == "north" and y == 1 and x in (0, w - 1):
+            return pick(G.shades("#e8c040"), 0.7, x, y)                    # her eyes
+        return pick(dog, 0.45 + 0.2 * (f == "up") + (noise(x, y, 213) - 0.5) * 0.12, x, y)
+    pt("dog_head", "all", dog_face)
+    pt("dog_muzzle", "all", lambda f, x, y, w, h: pick(G.shades("#f4f0e8"), 0.7, x, y) if f == "north" and y == h - 1 and x % 2 == 0
+       else pick(dark, 0.5 if f == "north" and y == 0 else 0.4, x, y))        # a black nose, white fangs along the jaw
+    pt("dog_ear", "all", lambda f, x, y, w, h: pick(dark, 0.4, x, y))
     bell = G.shades(pal.FUR) if isinstance(pal.FUR, str) else pal.FUR             # the jellyfish's bell: see-through, ringed
     for p in ("bell_a", "bell_b", "bell_c"):
         pt(p, "all", lambda f, x, y, w, h: G.with_alpha(pick(pal.MARK if (pal.pattern == "stripes" and x % 4 == 0) or (f == "up" and (x + y) % 7 == 0)
@@ -176,6 +217,16 @@ def build_hook(r, g, d):
             a = 360 * i / 10
             x, zz = 4.4 * math.sin(math.radians(a)), 4.4 * math.cos(math.radians(a))
             P.chain(r, f"bell_tent{i + 1}", "bell", (round(x, 2), hy + 7.6, round(zz + z, 2)), ["jtent_a", "jtent_b"], rx=8, ry=a, bend=6)
+    if b == "slug":                                        # the mantle humped over her back, bile from the corner of her grin
+        r.add("mantle", "body", [0, 17, 2.0 + z], [cube("mantle", [-3, 13.5, 1.6 + z])])
+        r.put("head", cube("bile", [0.5, hy - 0.6, -4.3 + z]), cube("bile_drip", [1.0, hy - 2.6, -4.3 + z]))
+    if d.get("dogs"):                                      # six dog heads round her waist, each looking out, snarling
+        for i in range(6):
+            ang = 360 * i / 6 + 30
+            piv = [0, 12.0, z]
+            dog = [G.rot_cube("dog_head", [-1.25, 10.8, -5.0 + z], piv, 0, ang, 0), G.rot_cube("dog_muzzle", [-0.75, 11.0, -6.2 + z], piv, 0, ang, 0),
+                   G.rot_cube("dog_ear", [-1.25, 13.3, -3.5 + z], piv, 0, ang, 0), G.rot_cube("dog_ear", [0.5, 13.3, -3.5 + z], piv, 0, ang, 0)]
+            r.add(f"dog{i + 1}", "body", piv, dog)
     if b == "snail":
         r.add("shell", "body", [0, 17, 2.0 + z], [cube("shell_a", [-3.5, 13.5, 1.8 + z]), cube("shell_b", [-2.5, 14.5, 5.3 + z]), cube("shell_c", [-1.5, 15.5, 7.8 + z])])
 
@@ -327,7 +378,7 @@ if __name__ == "__main__":
         if not want or sp in want:
             g, t, a, h = run_custom(sp, decl, bld, anm, prev)
             entries[sp] = (g, t, a, heights[sp], h)
-    bip = {k: v for k, v in SPECIES.items() if v["body"] in ("ika", "octopus", "snail", "jelly")}
+    bip = {k: v for k, v in SPECIES.items() if v["body"] in ("ika", "octopus", "snail", "jelly", "slug")}
     for e, sp in zip(F.run_family("mollusk", bip, declare_hook, paint_hook, build_hook, bip_extra, views=VIEWS, only=[k for k in bip if not want or k in want]),
                      [k for k in [s["id"] for s in FC.family("mollusk")["species"]] if k in bip and (not want or k in want)]):
         entries[sp] = e

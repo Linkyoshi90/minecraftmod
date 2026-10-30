@@ -2639,6 +2639,116 @@ for _fid, _entries in TWENTY_SECOND.items():
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
 
+# twenty-third wave (2026-10-30): eight Harmontide creatures from the reference art (their blue looks; the spewslug's only look is
+# red) and three of folklore (Scylla, the taotie, the vetala) and Sun Wukong; the ironbeak is a harpy (her own class)
+TWENTY_THIRD = {
+    "construct": [
+        (dict(id="automaton_construct", name="Automaton", group="Villages and ruins", tag="Dutiful · curious", height=1.7,
+              biomes=["plains", "meadow", "savanna"], temperament="Dutiful, curious",
+              ecology="A Harmontide clockwork girl in pale-blue armour plates: a round helmet with a disc over each ear, rivets down every plate and a wind-up key she never lets anyone turn but a friend. Nobody remembers who built the first of them.",
+              interaction="Redstone dust and copper ingots.",
+              signature=("Lamplighter", "Befriended, she sets torches (her friend's own) on the dark ground near her friend."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Pale-blue plates"), ("silver", "Silver", "Silver"), ("red", "Red", "Red and gold"), ("green", "Green", "Green"), ("gold", "Gold", "Gold")]),
+         {"Habitat": "Villages and ruins", "Signature": "Lights the dark", "Danger": "Low"})],
+    "mollusk": [
+        (dict(id="spewslug_mollusk", name="Spewslug", group="Swamps and caves", tag="Gross · loyal", height=1.6,
+              biomes=["swamp", "mangrove_swamp", "dripstone_caves", "lush_caves"], temperament="Gross, loyal",
+              ecology="A glistening crimson Harmontide slug girl: eye-stalk antennae, a slug's mantle humped over her back and a wide maw full of teeth, purple bile always dribbling from it. She means well.",
+              interaction="Mushrooms, rotten flesh and spider eyes.",
+              signature=("Bile", "Befriended, she spews bile over a monster that hits her friend: it is weakened and starving."),
+              danger="Moderate (her bile).",
+              variants=[("red", "Red (default)", "Crimson, purple bile"), ("orange", "Orange", "Orange, green bile"), ("black", "Black", "Black, teal bile"), ("yellow", "Yellow", "Yellow, pink bile"), ("blue", "Blue", "Blue, yellow bile")]),
+         {"Habitat": "Swamps and caves", "Signature": "Weakening bile", "Danger": "Moderate"}),
+        (dict(id="scylla_mollusk", name="Scylla", group="Rocky coasts", tag="Fierce · watchful", height=2.0,
+              biomes=["stony_shore", "ocean", "deep_ocean"], temperament="Fierce, watchful",
+              ecology="The sea monster of the Odyssey who waited across the strait from Charybdis: a sea-green girl over a skirt of tentacles, with six dog heads snarling out from her waist. They snatch whatever sails too close.",
+              interaction="Fish and raw meat.",
+              signature=("Six hounds", "Befriended, her dog heads tear the armour and the weapons off the monsters near her friend."),
+              danger="High.",
+              variants=[("teal", "Teal (default)", "Sea green, grey hounds"), ("blue", "Blue", "Blue"), ("purple", "Purple", "Purple"), ("red", "Red", "Red"), ("pale", "Pale", "Pale")]),
+         {"Habitat": "Rocky coasts", "Signature": "Strips monsters", "Danger": "High"})],
+    "devil": [
+        (dict(id="ogre_devil", name="Ogre", group="Forests and hills", tag="Big · good-natured", height=2.3,
+              biomes=["forest", "dark_forest", "windswept_forest"], temperament="Big, good-natured",
+              ecology="A big green Harmontide ogre girl with long pointed ears, two little horns and a mop of light-blue hair, in a simple blue dress. She carries a club, and she is gentle with everything except whatever threatens her friends.",
+              interaction="Mutton, potatoes and bread.",
+              signature=("Bonk", "Befriended, her club stuns a monster that hits her friend: it can hardly move for three seconds."),
+              danger="High (her club).",
+              variants=[("green", "Green (default)", "Green skin, blue hair"), ("grey", "Grey", "Grey"), ("brown", "Brown", "Brown"), ("blue", "Blue", "Blue skin"), ("red", "Red", "Red skin")]),
+         {"Habitat": "Forests and hills", "Signature": "Stuns attackers", "Danger": "High"}),
+        (dict(id="taotie_devil", name="Taotie", group="Badlands", tag="Greedy · cheerful", height=1.9,
+              biomes=["badlands", "wooded_badlands", "savanna_plateau"], temperament="Greedy, cheerful",
+              ecology="The glutton of Chinese myth, whose face is cast on the ancient bronzes: curled horns, bronze meanders running over her arms and legs and a huge grin. She will eat anything, and she is always hungry.",
+              interaction="Any food at all.",
+              signature=("Gluttony", "Befriended, she eats the junk the monsters drop near her friend (rotten flesh, bones, string, spider eyes) and turns it into experience for them."),
+              danger="Moderate.",
+              variants=[("teal", "Teal (default)", "Teal, jade glyphs"), ("bronze", "Bronze", "Bronze"), ("red", "Red", "Red"), ("black", "Black", "Black"), ("gold", "Gold", "Gold")]),
+         {"Habitat": "Badlands", "Signature": "Junk into experience", "Danger": "Moderate"})],
+    "canid": [
+        (dict(id="hellhound_canid", name="Hellhound", group="The Nether", tag="Fierce · devoted", height=1.8,
+              biomes=["soul_sand_valley", "basalt_deltas", "nether_wastes"], temperament="Fierce, devoted",
+              ecology="A Harmontide hound of the underworld: navy fur, tufts of blue flame at her ears, wrists and tail tip, glowing blue eyes and a grin full of teeth. She never forgets a scent.",
+              interaction="Raw meat and bones.",
+              signature=("Hunted down", "Befriended, she runs down whatever hurt her friend, wherever it is within 24 blocks, and sets it on blue fire."),
+              danger="High.",
+              variants=[("blue", "Blue (default)", "Navy, blue flames"), ("black", "Black", "Black, orange flames"), ("red", "Red", "Red, gold flames"), ("green", "Green", "Green flames"), ("purple", "Purple", "Purple flames")]),
+         {"Habitat": "The Nether", "Signature": "Avenges her friend", "Danger": "High"})],
+    "lizardfolk": [
+        (dict(id="argentinosaurus_lizardfolk", name="Argentinosaurus", group="Savannas and plains", tag="Gentle · tall", height=2.8,
+              biomes=["savanna", "plains", "sunflower_plains"], temperament="Gentle, tall",
+              ecology="The greatest of the long-necked dinosaurs as a Harmontide girl: pale blue with orange stripes and a cream belly, a long neck that lifts her head far above everyone else's and a long heavy tail.",
+              interaction="Leaves, wheat and apples.",
+              signature=("Lookout", "Befriended, from up on her long neck she spots the monsters 24 to 40 blocks from her friend, and they glow."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Pale blue, orange stripes"), ("green", "Green", "Green"), ("sand", "Sand", "Sand"), ("grey", "Grey", "Grey"), ("pink", "Pink", "Pink")]),
+         {"Habitat": "Savannas", "Signature": "Spots far monsters", "Danger": "None"})],
+    "lamia": [
+        (dict(id="titanoboa_lamia", name="Titanoboa", group="Jungles and swamps", tag="Huge · lazy", height=3.9,
+              biomes=["jungle", "swamp", "mangrove_swamp"], temperament="Huge, lazy",
+              ecology="The greatest snake that ever lived: twice the size of any boa, olive-brown with dark blotches and a cream belly. She sleeps for days after a meal, coiled in the warm shallows.",
+              interaction="Raw meat and fish.",
+              signature=("Constrict", "Befriended, she coils round the biggest monster near her friend, holding it fast and squeezing it for five seconds."),
+              danger="High.",
+              variants=[("olive", "Olive (default)", "Olive-brown blotches"), ("green", "Green", "Green"), ("black", "Black", "Black"), ("red", "Red", "Red"), ("blue", "Blue", "Blue")]),
+         {"Habitat": "Jungles", "Signature": "Holds monsters fast", "Danger": "High"})],
+    "rodent": [
+        (dict(id="sasquatch_rodent", name="Sasquatch", group="Old forests", tag="Shy · gentle", height=2.2,
+              biomes=["old_growth_spruce_taiga", "old_growth_pine_taiga", "taiga"], temperament="Shy, gentle",
+              ecology="A big fluffy Harmontide sasquatch girl, pale blue all over, with a shaggy mane falling round a pink face. Everyone has heard of her, and hardly anyone has seen her: she hides very well.",
+              interaction="Berries, salmon and honey.",
+              signature=("Unseen", "Befriended, her friend near her turns invisible while sneaking in a forest."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Pale blue"), ("brown", "Brown", "Brown"), ("white", "White", "White"), ("red", "Red", "Red"), ("black", "Black", "Black")]),
+         {"Habitat": "Old forests", "Signature": "Invisible in forests", "Danger": "Low"}),
+        (dict(id="sun_wukong_rodent", name="Sun Wukong", group="Mountains", tag="Mischievous · bold", height=1.7,
+              biomes=["jagged_peaks", "cherry_grove", "stony_peaks"], temperament="Mischievous, bold",
+              ecology="The Monkey King of Journey to the West, born from a stone and the terror of Heaven: golden fur, a gold circlet on her brow, red and gold armour, a long curling tail and her staff. She rides a cloud that crosses the world in one somersault.",
+              interaction="Peaches, apples and melon.",
+              signature=("Somersault cloud", "Befriended, her friend near her takes no fall damage: her cloud catches them."),
+              danger="High (her staff).",
+              variants=[("gold", "Gold (default)", "Golden fur, red armour"), ("stone", "Stone", "Grey, blue armour"), ("white", "White", "White"), ("black", "Black", "Black, gold armour"), ("red", "Red", "Red fur")]),
+         {"Habitat": "Mountains", "Signature": "No fall damage", "Danger": "High"})],
+    "bat": [
+        (dict(id="vetala_bat", name="Vetala", group="Old forests at night", tag="Eerie · clever", height=1.7,
+              biomes=["dark_forest", "swamp", "old_growth_birch_forest"], temperament="Eerie, clever",
+              ecology="The spirit of the Indian tales who hangs upside down from the trees by the burning grounds and rides the bodies of the dead, and who told a king twenty-five riddles: ash-pale, ragged, red-eyed, with tattered wings.",
+              interaction="Rotten flesh and sweet berries.",
+              signature=("Possession", "Befriended, she rides a zombie near her friend, and it fights for them for 30 seconds."),
+              danger="Moderate.",
+              variants=[("pale", "Pale (default)", "Ash-pale, white hair"), ("ash", "Ash", "Dark ash"), ("blue", "Blue", "Blue"), ("green", "Green", "Green"), ("red", "Red", "Red")]),
+         {"Habitat": "Dark forests", "Signature": "Possesses zombies", "Danger": "Moderate"})],
+}
+
+for _fid, _entries in TWENTY_THIRD.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(x["id"] == _species["id"] for x in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 # theropods (2026-10-29): a family of their own, built like a 1920s museum sketch of a T. rex but human: hunched forward over a
 # long balancing tail, human legs, arms, skin and face, and a sharp-toothed grin. The fernstalker moved here from the lizardfolk.
 _family(id="theropod", volume="XXVII", title="Theropods", subtitle="the raptor family", food="Raw meat (and eggs)",
@@ -2728,7 +2838,16 @@ for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, 
                        ("yuki_onna_undead", ("snow_wraith", "Snow Wraith", "White, a red-purple sash, purple eyes")),
                        ("dullahan_undead", ("headless_rider", "Headless Rider", "A black rider's suit with yellow trim")),
                        ("dullahan_undead", ("death_envoy", "Death Envoy", "Silver hair, red eyes, a black and red gothic dress")),
-                       ("jorogumo_arachne", ("bake_sale", "Bake Sale", "Lilac skin, five eyes, black pigtails with red bows, a teacup"))]:
+                       ("jorogumo_arachne", ("bake_sale", "Bake Sale", "Lilac skin, five eyes, black pigtails with red bows, a teacup")),
+                       # twenty-third wave
+                       ("fennec_kitsune", ("twin_tails", "Twin Tails", "Orange and white, blue eyes, two tails, goggles")),
+                       ("salamander_lizardfolk", ("ember_tail", "Ember Tail", "Orange, a cream belly, a flame at her tail tip")),
+                       ("snapping_turtle_lizardfolk", ("spike_king", "Spike King", "Yellow skin, red hair, a green spiked shell")),
+                       ("zombie_undead", ("lawn_zombie", "Lawn Zombie", "A brown suit, a red tie, a traffic cone")),
+                       ("undine_slime", ("drop_smile", "Drop Smile", "Clear blue, a drop's point on her head, a wide smile")),
+                       ("amethyst_slime", ("puffball", "Puffball", "Pink, rosy cheeks, red crystals")),
+                       ("ratatoskr_rodent", ("hoodie_squirrel", "Hoodie Squirrel", "Red-orange fur, a blue hoodie")),
+                       ("bee_bug", ("flight_cap", "Flight Cap", "An orange vest, an aviator's cap and goggles"))]:
     for _fam in C.FAMILIES:
         for _s in _fam["species"]:
             if _s["id"] == _sid and all(v[0] != _variant[0] for v in _s["variants"]):

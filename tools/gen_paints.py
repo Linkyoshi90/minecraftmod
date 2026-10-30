@@ -38,7 +38,9 @@ veins), lace (ivory open-work lace) and bluebell (little blue bells on green ste
 (twenty-first wave): obsidian (Minecraft's obsidian block, tiled), patchwork (quilted squares of
 different cloth, stitched), sandstone (Minecraft's sandstone side, tiled) and acorn (little acorns on warm brown, September
 only). And (twenty-second wave): prismarine, amethyst, sculk (its specks glow) and mushroom, Minecraft's own blocks
-tiled. The drips and
+tiled. And (twenty-third wave): lapis, bookshelf, glazed (blue glazed terracotta) and redstone_lamp (its light glows); since
+then every paint named after something Minecraft draws uses its texture (gold, the copper stages, honey, magma, pumpkin,
+frost's packed ice, sakura's cherry leaves, stained glass, moss, the melon rind, the cow's hide, the sunflower). The drips and
 patterns follow the model: they are drawn per cube face from the geo file, running down each side from its top edge.
 
     python tools/gen_paints.py [paint ...] [model ...]   # everything, or just the paints and/or models named
@@ -64,7 +66,7 @@ GEO = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls", "
 JAVA = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "girl", "GirlSpecies.java")
 HUES = {"blue": 0.58, "red": 0.0, "green": 0.33, "yellow": 0.14, "purple": 0.77}
 # the harpies and anurans (their own entity classes): the adult texture and the young ones (hatchling, tadpole, froglet)
-OTHERS = ["sparrow_harpy", "crow_harpy", "ostrich_harpy", "owl_harpy", "seagull_harpy", "albatross_harpy", "riflebird_harpy", "phoenix_harpy", "tengu_harpy", "toucan_harpy", "penguin_harpy", "vodyanoy", "zhuque_harpy", "finch_harpy", "flamingo_harpy", "coin_magpie_harpy", "trickster_raven_harpy", "rookmourn_harpy", "cassowrath_harpy", "dodobold_harpy", "peaflare_harpy", "pumpkingull_harpy", "condorune_harpy", "mirror_crane_harpy", "emberu_harpy",
+OTHERS = ["sparrow_harpy", "crow_harpy", "ostrich_harpy", "owl_harpy", "seagull_harpy", "albatross_harpy", "riflebird_harpy", "phoenix_harpy", "tengu_harpy", "toucan_harpy", "penguin_harpy", "vodyanoy", "zhuque_harpy", "finch_harpy", "flamingo_harpy", "coin_magpie_harpy", "trickster_raven_harpy", "rookmourn_harpy", "cassowrath_harpy", "dodobold_harpy", "peaflare_harpy", "pumpkingull_harpy", "condorune_harpy", "mirror_crane_harpy", "emberu_harpy", "ironbeak_harpy",
           "bullywug", "mucus_toad", "bullfrog", "tree_frog", "poison_dart_frog", "glass_frog", "goliath_frog", "desert_rain_frog",
           "fire_bellied_toad", "cane_toad", "natterjack", "surinam_toad", "mailtoad"]
 
@@ -166,8 +168,9 @@ VANILLA_JARS = (os.path.expanduser("~/.gradle/caches/neoformruntime/artifacts/mi
 _VANILLA = {}
 
 
-def vanilla(block):
-    """a 16x16 block texture from the local Minecraft 1.21.1 client jar, as rows of RGB"""
+def _vanilla_rgba(block):
+    """a Minecraft 1.21.1 texture from the local client jar, as rows of RGBA: a block by name, or a path under
+    textures/ (entity/cow/cow); an animated strip gives its first frame"""
     if block not in _VANILLA:
         import io
         import zipfile
@@ -176,9 +179,29 @@ def vanilla(block):
         if jar is None:
             raise SystemExit("the Minecraft 1.21.1 client jar was not found (run a Gradle build once): " + ", ".join(VANILLA_JARS))
         with zipfile.ZipFile(jar) as z:
-            im = Image.open(io.BytesIO(z.read(f"assets/minecraft/textures/block/{block}.png"))).convert("RGB")
-        _VANILLA[block] = [[im.getpixel((x, y)) for x in range(16)] for y in range(16)]
+            path = block if "/" in block else "block/" + block
+            im = Image.open(io.BytesIO(z.read(f"assets/minecraft/textures/{path}.png"))).convert("RGBA")
+        _VANILLA[block] = [[im.getpixel((x, y)) for x in range(im.width)] for y in range(min(im.height, im.width))]
     return _VANILLA[block]
+
+
+def vanilla(block):
+    """a 16x16 block texture from the local Minecraft 1.21.1 client jar, as rows of RGB"""
+    return [[p[:3] for p in row] for row in _vanilla_rgba(block)]
+
+
+def vtile(block, xx, yy, i, k, sx=7, sy=5, region=None):
+    """the Minecraft texture tiled over a face (each face shifted by its index), darkened by k; (rgb, alpha)"""
+    t = _vanilla_rgba(block)
+    x0, y0, w, h = region or (0, 0, len(t[0]), len(t))
+    r, g, b, a = t[y0 + (yy + sy * i) % h][x0 + (xx + sx * i) % w]
+    return (min(255, int(r * k)), min(255, int(g * k)), min(255, int(b * k))), a
+
+
+COPPER_BLOCK = {"copper": "copper_block", "copper_exposed": "exposed_copper", "copper_weathered": "weathered_copper",
+                "copper_oxidized": "oxidized_copper"}
+PANE_GLASS = ("red", "blue", "yellow", "green", "purple", "orange")
+COW_HIDE = (22, 5, 20, 20)                                              # the cow's flank on entity/cow/cow.png
 
 
 def lum(r, g, b):
@@ -231,7 +254,8 @@ def treat(img, name, model):
                                         "comic", "blueprint", "koi", "lemonade",
                                         "tie_dye", "jade", "lace", "bluebell",
                                         "obsidian", "patchwork", "sandstone", "acorn",
-                                        "prismarine", "amethyst", "sculk", "mushroom"):
+                                        "prismarine", "amethyst", "sculk", "mushroom",
+                                        "lapis", "bookshelf", "glazed", "redstone_lamp"):
         return finish(img, name, model)[0]
     W = len(img[0])
     out = [list(row) for row in img]
@@ -248,8 +272,8 @@ def treat(img, name, model):
                     continue
                 if l < 0.22:
                     continue
-                if name == "gold":
-                    c = (255, 252, 220) if rnd.random() < 0.01 else ramp_pick(GOLD, l * 1.15)
+                if name == "gold":                                      # Minecraft's gold block
+                    c = (255, 252, 220) if rnd.random() < 0.01 else vtile("gold_block", x, y, 0, 0.7 + 0.45 * l)[0]
                 elif name == "marble":
                     c = ramp_pick(MARBLE, 0.3 + 0.6 * l)
                 else:
@@ -347,6 +371,8 @@ def treat(img, name, model):
                     if xx % 5 == 1 and yy < length - 1:
                         t += 0.25                                       # a glossy streak
                     c = ramp_pick(coat, t)
+                    if name == "honey":                                 # Minecraft's honey block, glossy where streaked
+                        c = vtile("honey_block_side", xx, yy, i, 0.55 + 0.7 * t)[0]
                     if name == "icecream" and rnd.random() < 0.05:
                         c = SPRINKLES[rnd.randrange(len(SPRINKLES))]
                 out[y][x] = c + (max(a, 255),)
@@ -366,7 +392,8 @@ TREATS = ["chocolate", "icecream", "strawberry", "jello", "milk", "gold", "marbl
           "comic", "blueprint", "koi", "lemonade",
           "tie_dye", "jade", "lace", "bluebell",
           "obsidian", "patchwork", "sandstone", "acorn",
-          "prismarine", "amethyst", "sculk", "mushroom"]
+          "prismarine", "amethyst", "sculk", "mushroom",
+          "lapis", "bookshelf", "glazed", "redstone_lamp"]
 PEARL = hexes("#b8b0c0", "#d8d2e0", "#ece8f2", "#f8f6fc", "#ffffff")
 CHROME = hexes("#1e2024", "#4a4e56", "#8a909a", "#c8ccd4", "#ffffff")
 AURORA = hexes("#2af08a", "#3ad8c8", "#5aa0f0", "#8a6af0", "#c86ae8")
@@ -383,7 +410,7 @@ EMBER = hexes("#a8280a", "#e85a14", "#f8901e", "#ffc84a", "#fff0a0")
 NEON = hexes("#1a8a8a", "#2ad0c8", "#5af8f0", "#b0fff8")
 NIGHTBODY = hexes("#0a0a14", "#14141e", "#20202e", "#2e2e40", "#40405a")
 PUMPKIN = hexes("#7a2e06", "#b04a0e", "#e0701a", "#f89a3a", "#ffc070")
-GLOWING = ("glow", "magma", "thunder", "neon", "circuit", "lava_lamp", "sculk")                             # the paints with a glow mask of their own (PaintGlowLayer)
+GLOWING = ("glow", "magma", "thunder", "neon", "circuit", "lava_lamp", "sculk", "redstone_lamp")                             # the paints with a glow mask of their own (PaintGlowLayer)
 SUNSET = hexes("#f8c040", "#f88a3a", "#e8584a", "#b8407a", "#6a3a9a")
 STORM = hexes("#2a2e3a", "#3e4452", "#5a6070", "#7a8090", "#a0a6b4")
 NEON = [(255, 60, 200), (60, 230, 255), (150, 255, 70), (255, 230, 60)]
@@ -432,8 +459,7 @@ def finish(img, name, model):
             if name.startswith("copper"):
                 if l < 0.22:
                     continue
-                share = PATINA_SHARE[name]
-                c = ramp_pick(PATINA if H.noise(x // 3, y // 3, 23) < share else COPPER, 0.15 + 0.8 * l)
+                c = vtile(COPPER_BLOCK[name], xx, yy, i, 0.7 + 0.45 * l)[0]   # Minecraft's copper block at that stage
             elif name == "glow":
                 if l < 0.22 and face:
                     continue                                        # her eyes stay her own
@@ -444,9 +470,9 @@ def finish(img, name, model):
             elif name == "magma":
                 if l < 0.22 and face:
                     continue
-                vein = lambda k: abs(fh * (0.3 + 0.4 * k + 0.25 * math.sin(xx * (0.5 + 0.3 * k) + i * 1.7 + k * 2.3)) - yy) < 0.75
-                crack = (fh > 2 and (vein(0) or vein(1))) or (hair and yy == fh - 1)   # glowing cracks wandering across each face
-                c = ramp_pick(EMBER, 0.4 + 0.5 * l) if crack else ramp_pick(BASALT, 0.3 + 0.6 * l)
+                v, _ = vtile("magma", xx, yy, i, 1.0)                   # Minecraft's magma block; its bright cracks glow
+                crack = v[0] > 200 and v[1] > 90
+                c = v if crack else tuple(int(q * (0.75 + 0.4 * l)) for q in v)
                 if crack:
                     mask[y][x] = c + (255,)
             elif name == "ink":
@@ -459,26 +485,25 @@ def finish(img, name, model):
             elif name == "pumpkin":
                 if l < 0.22 and face:
                     continue
-                c = ramp_pick(VINE, 0.3 + 0.5 * l) if hair else ramp_pick(PUMPKIN, 0.25 + 0.6 * l - 0.18 * (xx % 4 == 0 and fw > 3))
+                c = ramp_pick(VINE, 0.3 + 0.5 * l) if hair else vtile("pumpkin_side", xx, yy, i, 0.7 + 0.45 * l)[0]   # Minecraft's pumpkin
             elif name == "frost":
                 if l < 0.22 and face:
                     continue
                 frosted = yy < 2 or (fm.get((x, y)) is None) or ((xx * 7 + yy * 3) % 29 == 0)
-                c = (244, 250, 255) if frosted else ramp_pick(ICE, 0.25 + 0.6 * l)
+                c = (244, 250, 255) if frosted else vtile("packed_ice", xx, yy, i, 0.75 + 0.4 * l)[0]   # Minecraft's packed ice
             elif name == "sakura":
                 if l < 0.22 and face:
                     continue
-                c = ramp_pick(BLOSSOM, 0.3 + 0.6 * l)
+                v, va = vtile("cherry_leaves", xx, yy, i, 0.75 + 0.4 * l)   # Minecraft's cherry leaves
+                c = v if va > 128 else ramp_pick(BLOSSOM, 0.3 + 0.6 * l)
                 if hair and ((xx * 5 + yy * 3 + i) % 17 == 0 or (xx * 5 + yy * 3 + i) % 17 == 1 and yy % 2 == 0):
                     c = (255, 248, 250) if (xx + yy) % 2 else (240, 120, 160)        # a petal caught in her hair
             elif name == "stained_glass":
                 if l < 0.22 and face:
                     continue
-                if xx % 9 == 0 or yy % 9 == 0:
-                    out[y][x] = (30, 26, 30, 240)                       # the lead lines between panes
-                    continue
-                c = ramp_pick([tuple(min(255, int(v * (0.7 + 0.5 * l))) for v in PANES[(xx // 9 + yy // 9 * 2 + i * 3) % len(PANES)])] * 2, 0.5)
-                out[y][x] = c + (190,)
+                glass = PANE_GLASS[(xx // 16 + yy // 16 * 2 + i * 3) % len(PANE_GLASS)] + "_stained_glass"
+                c, va = vtile(glass, xx, yy, 0, 0.8 + 0.4 * l, 0, 0)    # Minecraft's stained glass, a pane per 16x16
+                out[y][x] = c + (max(170, va),)
                 continue
             elif name == "sepia":
                 c = ramp_pick(SEPIA, 0.08 + 0.85 * l - 0.04 * (H.noise(x, y, 5) > 0.7))
@@ -589,7 +614,7 @@ def finish(img, name, model):
                 if l < 0.22 and face:
                     continue
                 mossy = yy < 2 or H.noise(x // 3, y // 3, 91) > 0.55
-                c = ramp_pick(MOSS if mossy else STONE, 0.25 + 0.6 * l)
+                c = vtile("moss_block" if mossy else "stone", xx, yy, i, 0.75 + 0.4 * l)[0]   # Minecraft's moss block on stone
             elif name == "easter":
                 if l < 0.22 and face:
                     continue
@@ -766,7 +791,7 @@ def finish(img, name, model):
                     continue
                 t = (yy + 0.5) / max(1, fh)
                 if fh > 4 and t > 0.82:                                     # the striped green rind at the bottom of each face
-                    c = (60, 140, 50) if (xx // 2) % 2 else (130, 200, 90)
+                    c = vtile("melon_side", xx, yy, i, 1.0)[0]               # Minecraft's melon rind
                 elif fh > 4 and t > 0.72:
                     c = (240, 236, 210)                                     # the pale band inside the rind
                 else:
@@ -776,9 +801,7 @@ def finish(img, name, model):
             elif name == "cow":
                 if l < 0.22 and face:
                     continue
-                c = (int(226 + 26 * l), int(224 + 26 * l), int(218 + 26 * l))   # white hide
-                if max(G_blob(xx + 11 * i, yy, 181, 14, 3.5, 6.5), G_blob(xx + 11 * i + 5, yy + 4, 182, 10, 2.5, 5.0)) > 0.15:
-                    c = (int(20 + 30 * l), int(18 + 28 * l), int(20 + 28 * l))   # big black patches
+                c = vtile("entity/cow/cow", xx, yy, i, 0.8 + 0.4 * l, region=COW_HIDE)[0]   # Minecraft's cow hide
             elif name == "rust":
                 if l < 0.22 and face:
                     continue
@@ -881,6 +904,16 @@ def finish(img, name, model):
                     continue
                 k = 0.8 + 0.3 * l
                 c = tuple(min(255, int(v * k)) for v in vanilla("sandstone")[(yy + 3 * i) % 16][(xx + 7 * i) % 16])
+            elif name in ("lapis", "bookshelf", "glazed", "redstone_lamp"):      # twenty-third wave: Minecraft's blocks
+                if l < 0.22 and face:
+                    continue
+                block = {"lapis": "lapis_block", "bookshelf": "bookshelf", "glazed": "blue_glazed_terracotta",
+                         "redstone_lamp": "redstone_lamp_on"}[name]
+                v, _ = vtile(block, xx, yy, i, 1.0, 0 if name == "glazed" else 7, 0 if name == "glazed" else 5)
+                c = tuple(min(255, int(q * (0.8 + 0.35 * l))) for q in v)
+                if name == "redstone_lamp" and v[0] > 200 and v[1] > 150:       # the lamp's light glows
+                    c = v
+                    mask[y][x] = c + (255,)
             elif name in ("prismarine", "amethyst", "sculk", "mushroom"):        # Minecraft's own blocks, tiled
                 if l < 0.22 and face:
                     continue
@@ -918,16 +951,8 @@ def finish(img, name, model):
             elif name == "sunflower":
                 if l < 0.22 and face:
                     continue
-                cx, cy = (xx + 4 * i) % 9 - 4, (yy + 2 * i) % 9 - 4             # a sunflower in every 9x9 tile
-                d2 = cx * cx + cy * cy
-                if d2 <= 2:
-                    c = (int(70 + 30 * l), int(44 + 20 * l), int(20 + 10 * l))   # the brown seed head
-                    if (xx + yy) % 2 == 0:
-                        c = (40, 26, 14)
-                elif d2 <= 12 and (abs(cx) <= 1 or abs(cy) <= 1 or abs(cx) == abs(cy)):
-                    c = (int(236 + 19 * l), int(176 + 50 * l), int(20 + 30 * l))   # golden petals
-                else:
-                    c = tuple(int(v * (0.65 + 0.4 * l)) for v in (70, 130, 60))   # leaf green between
+                v, va = vtile("sunflower_front", xx + 4, yy + 4, i, 0.85 + 0.3 * l, 5, 3)   # Minecraft's sunflower head
+                c = v if va > 128 else tuple(int(q * (0.65 + 0.4 * l)) for q in (70, 130, 60))   # on leaf green
             else:                                                       # candy cane: red and white stripes, round and round
                 if l < 0.22 and face:
                     continue

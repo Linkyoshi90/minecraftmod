@@ -17,6 +17,34 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # twenty-third wave: the sasquatch, big and fluffy, pale blue, a shaggy mane falling round a pink face, a fluffy ruff
+    "sasquatch_rodent": dict(
+        build="strong", outfit=dict(top=["bandeau"], bottom="loincloth", colors=dict(cloth2="#7a9ac8")),
+        hair="shaggy", bangs="messy", ears=None, legs="fur", foot="paw", ruff=True,
+        pal=dict(SKIN=skin("#f0c8b8"), HAIR="#8ab0e0", FUR="#9ab8e4", LIGHT="#f0c8c0", MARK="#5a7aa8", EYE="#3a4a7a", CLOTH="#7a9ac8", TRIM="#f0c8c0",
+                 pattern="solid"),
+        variants={"brown": dict(HAIR="#5a3e26", FUR="#6a4a30", LIGHT="#d8b098", MARK="#2e1e12", CLOTH="#5a3e26", EYE="#2a1e14"),
+                  "white": dict(HAIR="#e8ecf0", FUR="#f0f2f4", LIGHT="#f8d8d0", MARK="#9aa0a8", CLOTH="#9aa0a8"),
+                  "red": dict(HAIR="#8a3a1e", FUR="#a04a28", LIGHT="#e8b0a0", MARK="#4a1a0a", CLOTH="#4a1a0a", EYE="#3a2a1a"),
+                  "black": dict(HAIR="#1e1c20", FUR="#2a282c", LIGHT="#c8a8a0", MARK="#0e0c0e", CLOTH="#5a2a2a", EYE="#e8a030")}),
+    # twenty-third wave (folklore): Sun Wukong, the Monkey King of Journey to the West: golden fur, a gold circlet on her brow, red
+    # and gold armour, a long curling tail and her staff, the Ruyi Jingu Bang
+    "sun_wukong_rodent": dict(
+        build="athletic", outfit=dict(top=["corset", "capelet"], bottom="shorts", extras=["bracers", "belt", "pauldron"],
+                                      colors=dict(cloth2="#e8b030", leather="#8a1e1a")),
+        hair="shaggy", bangs="jagged", ears="round", legs="fur", foot="paw",
+        tail=[(1, 1, 3.5), (.85, .85, 3.5), (.75, .75, 3.5), (.6, .6, 3), (.5, .5, 2.5)], tail_rest=[(-55, 0, 0), (15, 0, 0), (30, 0, 0), (35, 0, 0), (40, 0, 0)],
+        tail_look="fur", circlet=True, staff=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#c8901e", FUR="#d8a030", LIGHT="#f8e0a0", MARK="#7a4a10", EYE="#e8c040", CLOTH="#c8281e", TRIM="#f0c840",
+                 pattern="solid", extra=dict(gold="#f0c840", staff="#a8281e")),
+        variants={"stone": dict(HAIR="#8a8a8a", FUR="#9a9a9a", LIGHT="#d8d8d4", MARK="#4a4a4a", CLOTH="#3a5a8a", EYE="#e8a030",
+                                extra=dict(gold="#f0c840", staff="#3a3a3a")),
+                  "white": dict(HAIR="#f0ece4", FUR="#f4f0e8", LIGHT="#ffffff", MARK="#a8a090", CLOTH="#c8281e", EYE="#c83a2a",
+                                extra=dict(gold="#f0c840", staff="#c8281e")),
+                  "black": dict(HAIR="#1e1a1a", FUR="#2a2424", LIGHT="#8a7a6a", MARK="#0e0a0a", CLOTH="#e8b030", TRIM="#c8281e", EYE="#f8d040",
+                                extra=dict(gold="#f0c840", staff="#e8b030")),
+                  "red": dict(HAIR="#8a2a14", FUR="#a83a1e", LIGHT="#f0b090", MARK="#4a1408", CLOTH="#e8b030", TRIM="#2a2a2a",
+                              extra=dict(gold="#f0c840", staff="#2a2a2a"))}),
     # twentieth wave: the house mouse, big round ears and a long bare tail; the Gregory Horror Show homages (POP_CULTURE_VARIANTS.md)
     # twenty-second wave: the gibbon, fluffy and pale blue-grey round a cream face, green eyes, a fluffy ruff framing her face,
     # long curling tail
@@ -187,12 +215,18 @@ SPECIES = {
         variants={"grey": dict(FUR="#8a8a90", HAIR="#6a6a72", LIGHT="#e8e8ec", MARK="#4a4a50"),
                   "black": dict(FUR="#222024", HAIR="#141216", LIGHT="#5a5860", MARK="#0a0a0c"),
                   "fox": dict(FUR="#c8783a", HAIR="#a85a26", LIGHT="#e8b07a", MARK="#5a3418", CLOTH="#3a5a7a"),
-                  "abert": dict(FUR="#5a5a62", HAIR="#3a3a40", LIGHT="#f4f4f6", MARK="#7a3a1a", CLOTH="#7a3a3a")}),
+                  "abert": dict(FUR="#5a5a62", HAIR="#3a3a40", LIGHT="#f4f4f6", MARK="#7a3a1a", CLOTH="#7a3a3a"),
+                  # homage (2026-10-30): Conker (Conker's Bad Fur Day): red-orange fur, a cream face, a blue hoodie
+                  "hoodie_squirrel": dict(FUR="#d8702a", HAIR="#c8601e", LIGHT="#f8e0b8", MARK="#8a3a10", EYE="#3a2a1a", CLOTH="#3a5ab8", TRIM="#f0f0f0")}),
 }
 
 
 def declare_hook(sp, d):
     out = [("yuzu", 2, 2, 2), ("yuzu_leaf", 1, .25, 1.5)] if d.get("yuzu") else []
+    if d.get("circlet"):                                 # Wukong's gold circlet, its band round her brow
+        out += [("circlet", 9, 1, 9), ("circlet_curl", .75, 1.5, .5)]
+    if d.get("staff"):                                   # the Ruyi Jingu Bang: a red staff with gold caps
+        out += [("staff_pole", 1, 16, 1), ("staff_cap", 1.5, 2, 1.5)]
     if d.get("quills"):
         out += [("quill", 1, 1, 5), ("note", 2, 2.5, .25)]
     if d.get("coati"):
@@ -218,6 +252,11 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    gold = G.shades(pal.extra.get("gold", "#f0c840"))
+    pt("circlet", "all", lambda f, x, y, w, h: CLEAR if f in ("up", "down") else pick(gold, 0.55 + 0.2 * (x % 4 == 0), x, y))
+    pt("circlet_curl", "all", lambda f, x, y, w, h: pick(gold, 0.65, x, y))
+    pt("staff_pole", "all", lambda f, x, y, w, h: pick(G.shades(pal.extra.get("staff", "#a8281e")), 0.5 + 0.15 * (x == 0), x, y))
+    pt("staff_cap", "all", lambda f, x, y, w, h: pick(gold, 0.55 + 0.2 * (y % 2 == 0), x, y))
     orange = G.shades("#f0a020")
     pt("yuzu", "all", lambda f, x, y, w, h: pick(orange, 0.55 + 0.25 * (f == "up") - 0.15 * (f == "down"), x, y))
     pt("yuzu_leaf", "all", lambda f, x, y, w, h: pick(G.shades("#4a9a3a"), 0.55, x, y))
@@ -299,6 +338,15 @@ def paint_ghs(pt, pal, d):
 
 
 def build_hook(r, g, d):
+    if d.get("circlet"):                                 # round her brow, two little curls rising over her forehead
+        hy, z = g.hy, g.z
+        r.put("head", cube("circlet", [-4.5, hy + 5.6, -4.5 + z]), cube("circlet_curl", [-1.5, hy + 6.5, -4.6 + z]),
+              cube("circlet_curl", [0.75, hy + 6.5, -4.6 + z]))
+    if d.get("staff"):                                   # upright in her right fist, a gold cap at each end
+        px, py, pz = r.b["hand_r"]["pivot"]
+        cx, cz = px - 0.5, pz - 1.0
+        r.add("staff", "hand_r", [px, py - 1.5, pz], [cube("staff_pole", [cx, py - 9.5, cz]), cube("staff_cap", [cx - 0.25, py - 11.5, cz - 0.25]),
+                                                      cube("staff_cap", [cx - 0.25, py + 6.5, cz - 0.25])])
     if d.get("whisker_nose"):                           # a little pink nose
         r.put("head", cube("mouse_nose", [-0.5, g.hy + 2.5, -4.4 + g.z]))
     if d.get("ruff"):                                    # fluffy fur down both sides of her face and under her chin

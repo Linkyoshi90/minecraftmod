@@ -17,6 +17,21 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # twenty-third wave (folklore): the vetala, the spirit of Indian tales that hangs upside down from trees in the burning grounds and
+    # rides the bodies of the dead: ash-pale, ragged, red-eyed, with tattered wings
+    "vetala_bat": dict(
+        build="slim", outfit=dict(top=["halter"], bottom="loincloth", extras=["arm_wraps", "pearls"], colors=dict(cloth2="#4a3a3a", bandage="#a89a8a")),
+        hair="flowing", bangs="messy", ears="elf", legs="bare", foot="claw", wings="bat", wing_scale=0.95, flies=True,
+        pal=dict(SKIN=skin("#c8ccd0"), HAIR="#e8e8ec", FUR="#a8acb4", LIGHT="#e8eaee", MARK="#4a4e56", EYE="#d82a3a", CLOTH="#6a5a5a", TRIM="#a89a8a",
+                 INNER="#a8808a", pattern="solid", extra=dict(wing="#5a5e66", wing_bone="#2a2e34", boot="#2a2e34")),
+        variants={"ash": dict(SKIN=skin("#9a9a9e"), HAIR="#3a3a40", FUR="#5a5a62", MARK="#1e1e22", CLOTH="#2a2a2e",
+                              extra=dict(wing="#3a3a40", wing_bone="#141418", boot="#141418")),
+                  "blue": dict(SKIN=skin("#a8b8d8"), HAIR="#2a3a6a", FUR="#4a5a8a", MARK="#14204a", EYE="#f8d040", CLOTH="#2a3a6a",
+                               extra=dict(wing="#2a3a6a", wing_bone="#101a3a", boot="#101a3a")),
+                  "green": dict(SKIN=skin("#a8c0a8"), HAIR="#2a4a2e", FUR="#4a6a4e", MARK="#142a16", EYE="#f8e040", CLOTH="#3a4a2a",
+                                extra=dict(wing="#2a4a2e", wing_bone="#0e1e10", boot="#0e1e10")),
+                  "red": dict(SKIN=skin("#d8b0a8"), HAIR="#5a0e14", FUR="#7a1e24", MARK="#2a0608", EYE="#f8e080", CLOTH="#3a1418",
+                              extra=dict(wing="#5a0e14", wing_bone="#2a0608", boot="#2a0608"))}),
     # nineteenth wave: Camazotz, the death bat of the Maya: blue-grey, great pink ears, a leaf nose, jade at her arms
     "camazotz_bat": dict(
         build="curvy", outfit=dict(top=["bandeau"], bottom="loincloth", extras=["armlets", "usekh"], colors=dict(cloth2="#2a8a6a")),

@@ -92,9 +92,10 @@ public class Kitsune extends AbstractMonsterGirl {
         builder.define(DATA_TAILS, (byte) 1);
     }
 
-    /** How many tails she shows: her strongest bond (1 wild, 2 at 25, 3 at 60, 9 as a kyubi). */
+    /** How many tails she shows: her strongest bond (1 wild, 2 at 25, 3 at 60, 9 as a kyubi); Tails's look always shows two. */
     public int visibleTails() {
-        return this.entityData.get(DATA_TAILS);
+        int n = this.entityData.get(DATA_TAILS);
+        return "twin_tails".equals(this.getVariantName()) ? Math.max(2, n) : n;
     }
 
     private int tailsFor(int affection) {

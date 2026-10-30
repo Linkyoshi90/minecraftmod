@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_taotie_devil",
+  "spawners": {
+    "type": "monstergirls:taotie_devil",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

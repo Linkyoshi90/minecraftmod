@@ -91,6 +91,10 @@ IN_GAME = {
     "macawtl": "macawtl_dragon", "piranha": "piranha_mermaid", "mosasaurus": "mosasaurus_mermaid", "fishman": "fishman_mermaid",
     "gibbon": "gibbon_rodent", "gigantopithecus": "gigantopithecus_canid", "sandworm": "sandworm_lamia", "archelon": "archelon_lizardfolk",
     "xiangliu": "xiangliu_lamia", "cyclops": "cyclops_devil", "genie": "genie_devil", "ammit": "ammit_nekomata",
+    # twenty-third wave (2026-10-30)
+    "automaton": "automaton_construct", "spewslug": "spewslug_mollusk", "ogre": "ogre_devil", "hellhound": "hellhound_canid",
+    "argentinosaurus": "argentinosaurus_lizardfolk", "titanoboa": "titanoboa_lamia", "sasquatch": "sasquatch_rodent", "ironbeak": "ironbeak_harpy",
+    "sunwukong": "sun_wukong_rodent", "scylla": "scylla_mollusk", "taotie": "taotie_devil", "vetala": "vetala_bat",
     # already played by older girls
     "azureus": "poison_dart_frog (cobalt)", "slidred": "red_eared_slider_lizardfolk", "alisnapor": "snapping_turtle_lizardfolk",
 }

@@ -134,13 +134,15 @@ SPECIES = {
                   "pale": dict(CLOTH="#f0e8ea", TRIM="#c81a2a", HAIR="#f4f0f2", extra=dict(stocking="#ffffff", boot="#c81a2a"))}),
     "zombie_undead": dict(
         build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["arm_wraps"], colors=dict(bandage="#c8c0a8")),
-        hair="shaggy", bangs="messy", ears=None, legs="bare", foot="shoe", stitches=True,
+        hair="shaggy", bangs="messy", ears=None, legs="bare", foot="shoe", stitches=True, cone_kit=True,
         pal=dict(SKIN="#a8c0a0", HAIR="#3a4a3a", FUR="#a8c0a0", LIGHT="#d8e8d0", MARK="#4a2a3a", EYE="#e8302a", CLOTH="#3a6a8a", TRIM="#c8c0a8",
                  extra=dict(boot="#3a3028")),
         variants={"husk": dict(SKIN="#c8b088", HAIR="#6a5038", CLOTH="#8a6a4a"),
                   "drowned": dict(SKIN="#7ab0b0", HAIR="#2a5a5a", CLOTH="#4a7a6a", EYE="#5af0f0"),
                   "pale": dict(SKIN="#d0d0d4", HAIR="#2a2a2e", CLOTH="#5a3a5a"),
-                  "patchy": dict(SKIN="#b8b098", HAIR="#8a3a2a", CLOTH="#3a5a3a")}),
+                  "patchy": dict(SKIN="#b8b098", HAIR="#8a3a2a", CLOTH="#3a5a3a"),
+                  # homage (2026-10-30): the Plants vs. Zombies zombie: grey-green, a brown suit, a red tie, a traffic cone on her head
+                  "lawn_zombie": dict(SKIN="#9ab08a", HAIR="#4a3e30", CLOTH="#6a4a2a", TRIM="#c8281e", EYE="#f0e8d0", extra=dict(boot="#2a2018", cone=True))}),
     "frankenstein_undead": dict(
         build="strong", outfit=dict(top=["sweater"], bottom="wrap_skirt", extras=["belt"], colors=dict(cloth2="#2a2a32")),
         hair="bob", bangs="blunt", ears=None, legs="bare", foot="shoe", stitches=True, bolts=True,
@@ -197,6 +199,8 @@ SPECIES = {
 
 def declare_hook(sp, d):
     out = []
+    if d.get("cone_kit"):                                # the lawn zombie's traffic cone: base, two tiers, the tip
+        out += [("cone_base", 7, 1, 7), ("cone_a", 5, 3, 5), ("cone_b", 3.5, 3, 3.5), ("cone_tip", 2, 2, 2)]
     if d.get("wisp"):
         out += [("flame_a", 6, 4, 4.5), ("flame_b", 4.5, 4, 3.5), ("flame_c", 3, 3.5, 2.5), ("flame_tip", 1.5, 3, 1.5), ("lick", 1, 3.5, 1)]
     if d.get("comb"):
@@ -221,6 +225,11 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    cone = pal.extra.get("cone")
+    orange = G.shades("#f0701e")
+    for p in ("cone_base", "cone_a", "cone_b", "cone_tip"):
+        pt(p, "all", lambda f, x, y, w, h, p=p: H.CLEAR if not cone else pick(G.shades("#f4f4f0"), 0.7, x, y) if p == "cone_b" and f != "up" and y in (1, 2)
+           else pick(orange, 0.5 + 0.15 * (f == "up") - 0.1 * (f == "south"), x, y))
     rider, scythe = pal.extra.get("rider"), pal.extra.get("scythe")
     yel, black = G.shades("#e8c020"), G.shades("#16161a")
 
@@ -338,6 +347,9 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
+    if d.get("cone_kit"):                                # on top of her head, a white band round the middle
+        r.add("hair_cone", "head", [0, hy + 8, z], [cube("cone_base", [-3.5, hy + 7.8, -3.5 + z]), cube("cone_a", [-2.5, hy + 8.8, -2.5 + z]),
+                                                    cube("cone_b", [-1.75, hy + 11.8, -1.75 + z]), cube("cone_tip", [-1, hy + 14.8, -1 + z])])
     if d.get("envoy_kit"):                               # the helmet over her (carried) head; the scythe upright in her left fist
         r.add("rider_helm", "head", [0, hy + 4, z], [cube("rhelm", [-4.5, hy - 0.5, -4.5 + z]),
                                                     G.rot_cube("rhelm_ear", [-4.0, hy + 8.2, -0.6 + z], [-3.0, hy + 8.4, z], 0, 0, 15),

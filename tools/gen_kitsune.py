@@ -80,13 +80,16 @@ SPECIES = {
                   "pearl": dict(FUR="#ece4d8", HAIR="#f2ebe0", MARK="#a8a4a0", CLOTH="#8a6aa8")}),
     "fennec_kitsune": dict(
         build="slim", outfit=dict(top=["bandeau", "vest"], bottom="shorts", extras=["pouch"], colors=dict(leather="#b07a48")),
-        ears="big", hair="twintails", stockings=False, tip="dark",
+        ears="big", hair="twintails", stockings=False, tip="dark", goggles_kit=True,
         pal=dict(SKIN=skin("tan"), HAIR="#f0dcb8", FUR="#ecd2a4", LIGHT="#fbf6ec", MARK="#7a5a3a", EYE="#2a1e18", CLOTH="#d0703a", TRIM="#f0d090",
                  facemark="fox"),
         variants={"sandy": dict(FUR="#e0bc84", HAIR="#e6c48e", MARK="#6a4a2a"),
                   "pale": dict(FUR="#f6eee0", HAIR="#faf4ea", MARK="#a89070", CLOTH="#6a8ab0"),
                   "redsand": dict(FUR="#d88a50", HAIR="#d48450", MARK="#5a3020", CLOTH="#3a6a6a"),
-                  "ash": dict(FUR="#cfcac2", HAIR="#d8d4cc", LIGHT="#f2f0ec", MARK="#5a5550", CLOTH="#8a4a4a")}),
+                  "ash": dict(FUR="#cfcac2", HAIR="#d8d4cc", LIGHT="#f2f0ec", MARK="#5a5550", CLOTH="#8a4a4a"),
+                  # homage (2026-10-30): Tails (Sonic): orange and white, blue eyes, two tails (Kitsune shows two), goggles on her head
+                  "twin_tails": dict(SKIN=skin("fair"), FUR="#f0902a", HAIR="#f0902a", LIGHT="#fff8f0", MARK="#fff4ea", EYE="#2a6ad8", CLOTH="#d82a2a",
+                                     TRIM="#f8f8f8", extra=dict(goggles=True))}),
     "corsac_kitsune": dict(
         build="athletic", outfit=dict(top=["bandeau", "harness"], bottom="loincloth", extras=["bracers"]),
         ears="fox", hair="braid", stockings=False, tip="dark",
@@ -120,6 +123,8 @@ def leg_parts(build):
 
 def declare(sp):
     extra = [("wattle", 1.25, 1.25, 1.25), ("wattle_leaf", .5, .25, 2.5)] if SPECIES[sp].get("wattle") else []
+    if SPECIES[sp].get("goggles_kit"):                 # Tails's goggles, on the twin_tails look only
+        extra += [("goggle_band", 9.25, 1, 9.25), ("goggle_lens", 2.25, 2, .75)]
     G.declare(leg_parts(SPECIES[sp].get("build")) + extra, ears=SPECIES[sp]["ears"], hair=SPECIES[sp]["hair"],
               build=SPECIES[sp].get("build"), outfit=SPECIES[sp].get("outfit"))
 
@@ -167,7 +172,17 @@ def paint(sp, key):
     bloom, leaf = shades(pal.extra.get("bloom", "#f8d030")), shades(pal.extra.get("leaf", "#5a8a4a"))
     pt("wattle", "all", lambda f, x, y, w, h: pick(bloom, 0.55 + 0.3 * ((x + y) % 2), x, y))     # fluffy golden balls of blossom
     pt("wattle_leaf", "all", lambda f, x, y, w, h: pick(leaf, 0.5 + 0.15 * (y % 2), x, y))
+    paint_goggles(pt, pal)
     return pt.T
+
+
+def paint_goggles(pt, pal):
+    """flight goggles pushed up on her head (pal.extra goggles), a brown strap and two round glass lenses; clear otherwise"""
+    on = pal.extra.get("goggles")
+    strap, rim = shades("#6a4a2a"), shades("#c8c8cc")
+    pt("goggle_band", "all", lambda f, x, y, w, h: H.CLEAR if not on or f in ("up", "down") else pick(strap, 0.45, x, y))
+    pt("goggle_lens", "all", lambda f, x, y, w, h: H.CLEAR if not on else pick(shades("#5ac8f0"), 0.7 + 0.2 * (x + y < 2), x, y)
+       if f == "north" and 0 < x < w - 1 and 0 < y < h - 1 else pick(rim, 0.6, x, y))
 
 
 def build(sp):
@@ -178,6 +193,11 @@ def build(sp):
     G.legs_biped(r, g, d)
     G.OF.dress_legs(r, d.get("outfit"))
     G.fox_tails(r, d, 9)
+    if d.get("goggles_kit"):                             # the goggles' strap round her head above the brow, the lenses up front
+        hy, z = g.hy, g.z
+        r.add("hair_goggles", "head", [0, hy + 8, z], [G.rot_cube("goggle_band", [-4.625, hy + 8.0, -4.625 + z], [0, hy + 8.5, z], -12, 0, 0),
+                                                      G.rot_cube("goggle_lens", [-3.4, hy + 8.4, -5.6 + z], [0, hy + 8.5, z], -12, 0, 0),
+                                                      G.rot_cube("goggle_lens", [1.15, hy + 8.4, -5.6 + z], [0, hy + 8.5, z], -12, 0, 0)])
     if d.get("wattle"):                                  # a wreath of wattle round her head
         hy, z = g.hy, g.z
         cs = []

@@ -35,12 +35,15 @@ SPECIES = {
     # fourteenth wave: the undine, a girl of living water, bubbles drifting round her
     "undine_slime": dict(
         build="slim", outfit=dict(top=[], extras=["pearls"]),
-        extra="motes", hair="flowing",
+        extra="motes", hair="flowing", drop_kit=True,
         pal=dict(FUR="#5ab0f0", LIGHT="#d8f0ff", MARK="#2a6ab8", HAIR="#8ac8f8", EYE="#1e4a8a", PUPIL="#0e2450", extra=dict(core="#ffffff")),
         variants={"teal": dict(FUR="#40c8c0", HAIR="#70dcd4", MARK="#1e7a74", EYE="#0e4a46", extra=dict(core="#e0fffc")),
                   "clear": dict(FUR="#d0ecf8", HAIR="#e4f4fc", MARK="#8ab8d0", EYE="#3a6a8a", extra=dict(core="#ffffff")),
                   "deep": dict(FUR="#2a4ab8", HAIR="#4a6ad0", LIGHT="#8ab0f0", MARK="#14286a", EYE="#c8e0ff", PUPIL="#0e1a4a", extra=dict(core="#a8c8ff")),
-                  "sea": dict(FUR="#4ab89a", HAIR="#6ad0b4", MARK="#1e6a54", EYE="#0e3a2e", extra=dict(core="#d8fff0"))}),
+                  "sea": dict(FUR="#4ab89a", HAIR="#6ad0b4", MARK="#1e6a54", EYE="#0e3a2e", extra=dict(core="#d8fff0")),
+                  # homage (2026-10-30): the Dragon Quest slime: clear blue, a drop's point on top of her head, a wide smile
+                  "drop_smile": dict(FUR="#3a8ae8", HAIR="#5aa8f8", LIGHT="#d8ecff", MARK="#1e4aa8", EYE="#1e1e24", PUPIL="#0a0a10",
+                                     extra=dict(core="#ffffff", drop=True, smile=True))}),
     "verdant_slime": dict(
         build="curvy", outfit=dict(top=[]),
         extra="sprout", hair="bob",
@@ -80,7 +83,10 @@ SPECIES = {
         variants={"rose": dict(FUR="#f0a8c0", HAIR="#f8c4d6", MARK="#c87090", EYE="#8a2a5a", extra=dict(core="#fff0f4", crystal="#ffc8da")),
                   "citrine": dict(FUR="#f0c860", HAIR="#f8d880", MARK="#c08a20", EYE="#7a4a10", extra=dict(core="#fff4c8", crystal="#ffe08a")),
                   "smoky": dict(FUR="#8a7a70", HAIR="#a09088", MARK="#4a3e38", EYE="#2a2420", extra=dict(core="#e0d4cc", crystal="#b0a094")),
-                  "emerald": dict(FUR="#40c070", HAIR="#60d88a", MARK="#1e7a40", EYE="#0e4a24", extra=dict(core="#d8ffe8", crystal="#80f0a8"))}),
+                  "emerald": dict(FUR="#40c070", HAIR="#60d88a", MARK="#1e7a40", EYE="#0e4a24", extra=dict(core="#d8ffe8", crystal="#80f0a8")),
+                  # homage (2026-10-30): Kirby: pink all over, rosy cheeks, deep blue eyes, red crystals for her shoes' red
+                  "puffball": dict(FUR="#f8a8c8", HAIR="#f8b8d0", LIGHT="#fff0f6", MARK="#d86a98", EYE="#1e2a6a", PUPIL="#0a0e2a",
+                                   extra=dict(core="#fff4f8", crystal="#e8283a"))}),
 }
 
 SPECIES["ender_slime"] = dict(                         # ninth wave: dark jelly, glowing eyes and core, ender motes floating round her
@@ -145,6 +151,8 @@ def declare(sp):
         parts += [("leaf", .25, 2, 1.5)]
     if d["extra"] == "motes":
         parts += [("mote", .75, .75, .75)]
+    if d.get("drop_kit"):                      # the point of a drop on top of her head (the drop_smile look only)
+        parts += [("sdrop_a", 5, 2, 5), ("sdrop_b", 3, 2, 3), ("sdrop_c", 1.5, 1.75, 1.5)]
     if d["extra"] == "swirl":                  # the klabuster's swirl, its strand and the tuft of hair it hangs from
         parts += [("swirl_a", 7, 2, 7), ("swirl_b", 5, 2, 5), ("swirl_c", 3, 1.75, 3), ("strand", .5, 6, .5), ("tuft", 4, 1.5, 4), ("tuft_hair", 1, 2, 1)]
     if d["extra"] == "chest":
@@ -163,6 +171,11 @@ def paint(sp, key, glow=False, base=None):
     pal.SKIN = shades(base["FUR"] if not over or "FUR" not in over else over["FUR"], n=4, dark=0.7, light=0.4, nodither=True)
     pal.BLUSH = pick(pal.LIGHT, 0.9, 0, 0)
     pal.BLUSH_L = pick(pal.LIGHT, 0.7, 0, 0)
+    if pal.extra.get("smile"):                 # a wide open smile, a dark mouth with a pink tongue
+        pal.mouth_px = {(x, 26): pal.LIP_D for x in range(11, 21)}
+        pal.mouth_px.update({(x, 27): pal.MOUTH_IN for x in range(12, 20)})
+        pal.mouth_px.update({(x, 28): pal.TONGUE if 14 <= x <= 17 else pal.MOUTH_IN for x in range(13, 19)})
+        pal.mouth_px.update({(x, 29): pal.LIP_D for x in range(14, 18)})
     pt = H.Painter()
     G.paint_upper(pt, pal, top="skin", outfit=d.get("outfit"), build=d.get("build"))
     jelly = G.jelly_fn(pal, alpha=255)
@@ -185,6 +198,8 @@ def paint(sp, key, glow=False, base=None):
     pt("latch", "all", lambda f, x, y, w, h: pick(iron, 0.7, x, y))
     pt("tooth", "all", lambda f, x, y, w, h: pick(shades("#f4f0e0"), 0.7, x, y))
     pt("mote", "all", lambda f, x, y, w, h: pick(shades(pal.extra.get("mote", "#e080ff")), 0.8, x, y))
+    for p in ("sdrop_a", "sdrop_b", "sdrop_c"):
+        pt(p, "all", (lambda f, x, y, w, h: CLEAR) if not pal.extra.get("drop") else jelly)
     for p in ("swirl_a", "swirl_b", "swirl_c"):            # glossy coils: a darker groove at the bottom of each, a shine on top
         pt(p, "all", lambda f, x, y, w, h: pick(pal.FUR, 0.3 if y == h - 1 and f != "up" else 0.7 if f == "up" and (x + y) % 5 == 0 else 0.55, x, y))
     pt("strand", "all", lambda f, x, y, w, h: pick(pal.MARK, 0.45, x, y))
@@ -236,6 +251,9 @@ def build(sp):
         teeth = [cube("tooth", [x, 5.0, -5.4]) for x in (-4.5, -2.5, -0.5, 1.5, 3.5)]
         r.add("lid", "root", [0, 6, 5.0], [G.rot_cube("lid", [-5.5, 6, -5.0], [0, 6, 5.0], -110, 0, 0),
                                             G.rot_cube("latch", [-0.75, 6.5, -5.5], [0, 6, 5.0], -110, 0, 0)] + teeth)
+    if d.get("drop_kit"):                      # stacked to a point on the crown of her head (hair_: not her height)
+        r.add("hair_sdrop", "head", [0, 28.4, 0], [cube("sdrop_a", [-2.5, 28.2, -2.5]), cube("sdrop_b", [-1.5, 30.2, -1.5]),
+                                                   cube("sdrop_c", [-0.75, 32.2, -0.75])])
     if ex == "motes":                          # specks of the End drifting round her
         r.add("motes", "body", [0, 16, 0], [cube("mote", [x, y, zz]) for x, y, zz in ((-5.2, 21.5, -1.0), (4.6, 18.0, 1.5), (-4.8, 11.0, 2.4),
                                                                                        (5.0, 25.5, -2.0), (-1.0, 30.5, 2.6), (2.6, 8.5, -3.4))])

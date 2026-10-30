@@ -359,6 +359,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.ARGENTINOSAURUS_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel plain && !this.isBaby() && this.tickCount % 40 == 0) this.lookout(plain);
         if (this.species == GirlSpecies.TURTWORLD_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel isle && !this.isBaby() && this.tickCount % 100 == 0) this.livingIsland(isle);
         if (this.species == GirlSpecies.ARCHELON_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel reef && !this.isBaby() && this.tickCount % 2 == 0) this.shellShield(reef);
         if (this.species == GirlSpecies.BASILISK_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel stare && !this.isBaby() && this.tickCount % 40 == 0) this.stoneGaze(stare);
@@ -834,6 +835,23 @@ public class Lizardfolk extends AbstractMonsterGirl {
             n++;
         }
         if (n > 0) this.playSound(net.minecraft.sounds.SoundEvents.SHIELD_BLOCK, 1.0F, 0.9F);
+        return n;
+    }
+
+    /**
+     * The argentinosaurus's lookout (twenty-third wave): from up on her long neck she spots the monsters 24 to 40 blocks from her
+     * friend, and they glow for three seconds. How many she spotted, or -1 without a friend.
+     */
+    public int lookout(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null) return -1;
+        int n = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(40), net.minecraft.world.entity.LivingEntity::isAlive)) {
+            double d = m.distanceTo(friend);
+            if (d < 24 || d > 40) continue;
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.GLOWING, 60, 0), this);
+            n++;
+        }
         return n;
     }
 }

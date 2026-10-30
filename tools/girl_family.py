@@ -52,6 +52,9 @@ def pal_for(d, key=None):
     p = G.pal_from(d["pal"], d["variants"].get(key) if key else None)
     if d.get("pupil"):
         p.pupil = d["pupil"]
+    if d.get("grin"):                                    # a grin of little pointed teeth, as the theropods have
+        import gen_theropod
+        p.mouth_px = gen_theropod.grin(p)
     return p
 
 

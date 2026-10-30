@@ -21,6 +21,28 @@ SPADE = [(.75, .75, 4), (.5, .5, 4), (2, 2, .5)]
 SPADE_REST = [(-20, 0, 0), (25, 0, 0), (10, 0, 0)]
 
 SPECIES = {
+    # twenty-third wave: the ogre, big and green-skinned with long pointed ears, two little horns and a mop of light-blue hair, a
+    # simple blue dress; a club in her right hand
+    "ogre_devil": dict(
+        build="strong", outfit=dict(top=["halter"], bottom="sarong", extras=["belt", "arm_wraps"], colors=dict(cloth2="#5a8ac8", leather="#6a4a2a")),
+        hair="shaggy", bangs="parted", ears="elf", legs="bare", foot="shoe", horns="devil", club=True,
+        pal=dict(SKIN="#7ab05a", HAIR="#9ab8e8", FUR="#7ab05a", LIGHT="#b8d8a0", MARK="#3a6a2a", EYE="#2a4a8a", CLOTH="#7aa8e0", TRIM="#e8e0c8",
+                 extra=dict(horn="#e8e0c8", boot="#6a4a2a")),
+        variants={"grey": dict(SKIN="#8a9a8a", FUR="#8a9a8a", LIGHT="#c0ccc0", MARK="#4a5a4a", HAIR="#3a3a40", CLOTH="#a8803a"),
+                  "brown": dict(SKIN="#a8805a", FUR="#a8805a", LIGHT="#d8b890", MARK="#5a3a1e", HAIR="#3a2a1a", CLOTH="#5a7a3a"),
+                  "blue": dict(SKIN="#6a8ac0", FUR="#6a8ac0", LIGHT="#a8c0e8", MARK="#2a3a6a", HAIR="#e8e4d8", CLOTH="#c84a3a"),
+                  "red": dict(SKIN="#c8705a", FUR="#c8705a", LIGHT="#f0b098", MARK="#6a2a1e", HAIR="#2a2228", CLOTH="#3a5a8a")}),
+    # twenty-third wave (folklore): the taotie, the glutton of the Chinese bronzes: curled horns, bronze glyph-work running over
+    # her arms and legs, and a huge grin
+    "taotie_devil": dict(
+        build="curvy", outfit=dict(top=["bandeau", "mantle"], bottom="sarong", extras=["armlets", "belt"], colors=dict(cloth2="#c8a040", leather="#6a3a1e")),
+        hair="hime", bangs="blunt", ears="elf", legs="bare", foot="shoe", horns="ram", grin=True, glyphs=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e3a3a", FUR="#2a5a54", LIGHT="#a8d8c8", MARK="#0e2a26", EYE="#e8a030", CLOTH="#2a6a5a", TRIM="#c8a040",
+                 extra=dict(horn="#c8903a", boot="#2a1e14", glyph="#3a8a7a")),
+        variants={"bronze": dict(HAIR="#5a3a1e", CLOTH="#8a5a2a", EYE="#3ad8b8", extra=dict(horn="#e8b860", boot="#2a1e14", glyph="#b8783a")),
+                  "red": dict(HAIR="#5a0e14", CLOTH="#a82a2a", extra=dict(horn="#e8c060", boot="#2a1e14", glyph="#c8402a")),
+                  "black": dict(HAIR="#141214", CLOTH="#2a2628", EYE="#e83a3a", extra=dict(horn="#a8a094", boot="#141214", glyph="#5a5248")),
+                  "gold": dict(HAIR="#3a2a14", CLOTH="#c8a040", TRIM="#2a6a5a", extra=dict(horn="#f0d080", boot="#3a2a14", glyph="#d8a830"))}),
     # twenty-second wave (folklore): the cyclops, the one-eyed giants of Greek myth: a big shy girl with a single great eye, pointed
     # ears, a blue bob and a teal tunic
     "cyclops_devil": dict(
@@ -213,6 +235,11 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    if d.get("glyphs"):                                  # the taotie's bronze meanders over her arms and legs
+        gl = G.shades(pal.extra.get("glyph", "#3a8a7a"))
+        for p in ("thigh", "shin", "arm_up", "forearm"):
+            pt(p, ("north", "south", "east", "west"), lambda f, x, y, w, h: pick(gl, 0.5 + 0.15 * (y % 4 == 0), x, y)
+               if (y % 4 == 0 and x % 4 != 3) or (x % 4 == 0 and y % 4 != 1) and y % 8 < 4 else None)
     if d.get("cyclops"):
         paint_cyclops(pt, pal)
     sm, smd = G.shades(pal.extra.get("smoke", "#8aa8e8")), G.shades(pal.extra.get("smoke_dark", "#4a6ac8"))

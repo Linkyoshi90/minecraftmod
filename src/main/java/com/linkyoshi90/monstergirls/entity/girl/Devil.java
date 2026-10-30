@@ -452,6 +452,8 @@ public class Devil extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.OGRE_DEVIL && this.level() instanceof ServerLevel glen && !this.isBaby() && this.tickCount % 10 == 0) this.bonk(glen);
+        if (this.species == GirlSpecies.TAOTIE_DEVIL && this.level() instanceof ServerLevel feast && !this.isBaby() && this.tickCount % 20 == 0) this.gluttony(feast);
         if (this.species == GirlSpecies.AKANAME_DEVIL && this.level() instanceof ServerLevel bath && !this.isBaby() && this.tickCount % 40 == 0) this.scrub(bath);
         if (this.species == GirlSpecies.CYCLOPS_DEVIL && this.level() instanceof ServerLevel peak && !this.isBaby() && this.tickCount % 60 == 0) this.boulder(peak);
         if (this.species == GirlSpecies.GENIE_DEVIL && this.level() instanceof ServerLevel lamp && !this.isBaby() && this.tickCount % 20 == 0) this.wish(lamp);
@@ -661,5 +663,56 @@ public class Devil extends AbstractMonsterGirl {
         level.sendParticles(net.minecraft.core.particles.ParticleTypes.ENCHANT, friend.getX(), friend.getY(1.0), friend.getZ(), 30, 0.5, 0.6, 0.5, 0.5);
         this.playSound(net.minecraft.sounds.SoundEvents.AMETHYST_BLOCK_CHIME, 1.0F, 1.2F);
         return 1;
+    }
+
+    /** The last hit on her friend the ogre has answered (the friend's last-hurt-by timestamp). */
+    private int lastBonk = Integer.MIN_VALUE;
+
+    /**
+     * The ogre's bonk (twenty-third wave): the monster that last hit her friend (within five seconds, within 10 of her) is
+     * clubbed: 4 damage and Slowness V for three seconds, so it can hardly move. 1 when she clubbed it, 0 with nothing to answer,
+     * -1 without a friend.
+     */
+    public int bonk(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.LivingEntity attacker = friend.getLastHurtByMob();
+        int when = friend.getLastHurtByMobTimestamp();
+        if (!(attacker instanceof net.minecraft.world.entity.monster.Monster m) || !m.isAlive() || when == this.lastBonk || friend.tickCount - when > 100 || m.distanceTo(this) > 10) return 0;
+        this.lastBonk = when;
+        m.hurt(level.damageSources().mobAttack(this), 4.0F);
+        m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 60, 4), this);
+        m.setDeltaMovement(0, m.getDeltaMovement().y, 0);
+        this.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+        this.getLookControl().setLookAt(m);
+        this.playSound(net.minecraft.sounds.SoundEvents.ANVIL_LAND, 0.5F, 1.4F);
+        return 1;
+    }
+
+    /** What the taotie eats off the ground: the monsters' leavings. */
+    private static boolean junk(net.minecraft.world.item.ItemStack s) {
+        return s.is(net.minecraft.world.item.Items.ROTTEN_FLESH) || s.is(net.minecraft.world.item.Items.BONE) || s.is(net.minecraft.world.item.Items.STRING)
+                || s.is(net.minecraft.world.item.Items.SPIDER_EYE) || s.is(net.minecraft.world.item.Items.GUNPOWDER) || s.is(net.minecraft.world.item.Items.ARROW);
+    }
+
+    /**
+     * The taotie's gluttony (twenty-third wave): the junk lying within 8 of her friend (rotten flesh, bones, string, spider eyes,
+     * gunpowder, arrows) is eaten, one experience point for her friend per item. How many she ate, or -1 without a friend.
+     */
+    public int gluttony(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        int n = 0;
+        for (net.minecraft.world.entity.item.ItemEntity e : level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, friend.getBoundingBox().inflate(8),
+                e -> e.isAlive() && junk(e.getItem()))) {
+            n += e.getItem().getCount();
+            e.discard();
+        }
+        if (n > 0) {
+            friend.giveExperiencePoints(n);
+            this.playSound(net.minecraft.sounds.SoundEvents.GENERIC_EAT, 1.0F, 0.8F);
+            this.playSound(net.minecraft.sounds.SoundEvents.PLAYER_BURP, 0.6F, 1.0F);
+        }
+        return n;
     }
 }

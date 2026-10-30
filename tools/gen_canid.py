@@ -17,6 +17,22 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # twenty-third wave: the hellhound, navy-furred with tufts of blue flame at her ears, wrists and tail tip (they glow), glowing
+    # blue eyes and a grin full of teeth
+    "hellhound_canid": dict(
+        build="athletic", outfit=dict(top=["bandeau"], bottom="shorts", extras=["belt", "bracers"], colors=dict(leather="#1a1a2a", cloth2="#1a1a2a")),
+        hair="shaggy", bangs="jagged", ears="fox", legs="fur", foot="paw", tail=[(2, 2, 4), (2.25, 2.25, 4), (1.75, 1.75, 3)],
+        tail_rest=[(-25, 0, 0), (10, 0, 0), (12, 0, 0)], tail_look="fur", grin=True, flames=True, glow=["flame", "flame_tip"],
+        pal=dict(SKIN=skin("fair"), HAIR="#1a2a6a", FUR="#22306e", LIGHT="#5a6ab0", MARK="#0a1030", EYE="#4ae0f8", CLOTH="#1a1a2a", TRIM="#4ae0f8",
+                 pattern="solid", pupil=(1.6, 2.6), extra=dict(flame="#4ac8f8", flame_core="#e8fcff")),
+        variants={"black": dict(HAIR="#141418", FUR="#1e1e24", LIGHT="#4a4a54", MARK="#08080a", EYE="#f84a2a", TRIM="#f84a2a",
+                                extra=dict(flame="#f86a1e", flame_core="#fff0a0")),
+                  "red": dict(HAIR="#5a0e14", FUR="#6a141a", LIGHT="#a84a4a", MARK="#2a0608", EYE="#f8c040", TRIM="#f8c040",
+                              extra=dict(flame="#f8a01e", flame_core="#fff8c0")),
+                  "green": dict(HAIR="#0e3a2a", FUR="#144a34", LIGHT="#3a8a6a", MARK="#062014", EYE="#8af84a", TRIM="#8af84a",
+                                extra=dict(flame="#6af84a", flame_core="#e8ffd0")),
+                  "purple": dict(HAIR="#2a0e4a", FUR="#3a1a5a", LIGHT="#7a5aa8", MARK="#140628", EYE="#e84af8", TRIM="#e84af8",
+                                 extra=dict(flame="#c84af8", flame_core="#f8e0ff"))}),
     # twenty-second wave: the gigantopithecus, the giant ape: huge and shaggy, deep blue fur, a red flower in her hair, a fur top and a
     # stone belt
     "gigantopithecus_canid": dict(
@@ -217,6 +233,8 @@ def build_melon(r, g):
 
 
 def declare_hook(sp, d):
+    if d.get("flames"):                                  # the hellhound's flame tufts: a flame and its flickering tip
+        return [("flame", 1.5, 2.5, 1.5), ("flame_tip", .75, 1.5, .75)]
     if d.get("hflower"):                                 # a big flower behind her ear: four petals round a heart
         return [("hpetal", .5, 2, 2), ("hbloom", .5, 1.25, 1.25)]
     if d.get("bigclub"):                                 # the rheintalensis's club: a thick haft, a knotted head
@@ -237,6 +255,10 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    if d.get("flames"):
+        fl, core = G.shades(pal.extra.get("flame", "#4ac8f8")), G.shades(pal.extra.get("flame_core", "#e8fcff"))
+        pt("flame", "all", lambda f, x, y, w, h: pick(core if y == h - 1 and 0 < x < w - 1 else fl, 0.55 + 0.25 * (y > h / 2), x, y))
+        pt("flame_tip", "all", lambda f, x, y, w, h: pick(fl, 0.75, x, y))
     if d.get("hflower"):
         fl, fin = G.shades(pal.extra.get("flower", "#e0281e")), G.shades(pal.extra.get("flower_in", "#f8d040"))
         pt("hpetal", "all", lambda f, x, y, w, h: pick(fl, 0.55 + 0.2 * (f in ("east", "west")) - 0.15 * (x == 0 or y == 0), x, y))
@@ -325,6 +347,17 @@ def paint_hook(pt, pal, d):
 
 
 def build_hook(r, g, d):
+    if d.get("flames"):                                  # flames on top of each ear, at each wrist (forearm_l mirrors) and at the tail tip
+        hy, z = g.hy, g.z
+        for x in (-3.6, 2.1):
+            r.add(f"hair_flame{'rl'[x > 0]}", "head", [x + 0.75, hy + 11, z], [cube("flame", [x, hy + 10.6, -0.25 + z]),
+                                                                              cube("flame_tip", [x + 0.375, hy + 13.1, z + 0.125])])
+        px, py, pz = r.b["forearm_r"]["pivot"]
+        r.put("forearm_r", cube("flame", [px - 1.6, py - 4.5, pz - 0.75]), cube("flame_tip", [px - 1.6, py - 3.0, pz - 1.25]))
+        last = "tail_%d" % len(d["tail"]) if len(d["tail"]) > 1 else "tail"
+        o, s = r.b[last]["cubes"][0]["origin"], r.b[last]["cubes"][0]["size"]
+        cx, cy, cz = o[0] + s[0] / 2, o[1] + s[1] / 2, o[2] + s[2]
+        r.put(last, cube("flame", [cx - 0.75, cy - 0.75, cz - 0.5]), cube("flame_tip", [cx - 0.375, cy - 0.375, cz + 0.75]))
     if d.get("hflower"):                                 # tucked over her left ear, facing out
         hy, z = g.hy, g.z
         fx, fy, fz = 4.9, hy + 5.0, -1.0 + z

@@ -309,6 +309,22 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Paints:** prismarine, amethyst, sculk (glow mask) and mushroom, tiled from the vanilla block textures, so 87 in all.
   - **Homage props:** the dullahan's `envoy_kit`: Celty's helmet (`rider`) and Lala's scythe (`scythe`), each drawn only on its look; the dullahan's paints were redone for the new parts.
 - [ ] Dev client for the twenty-second wave: the macawtl's plumes, the piranha's lure, the mosasaurus's size, Xiangliu's little heads, the cyclops's eye and blink, the genie's smoke tail and float, Ammit's snout; Celty's helmet and Lala's scythe; the four paints and the sculk glow.
+- [x] **Twenty-third wave** (2026-10-30), tested in `TwentyThirdWaveTests`:
+  - **Automaton** (construct, `helm`: dome and ear discs): every 2 s, `lamplighter` sets one of her friend's torches on a dark spot within 5 of them.
+  - **Spewslug** (mollusk, body `slug`: mantle, bile; the grin): every 10 ticks, `bile` gives the monster that hit her friend (within 5 s) Weakness II and Hunger, once per hit.
+  - **Scylla** (mollusk, octopus body, `dogs`: six dog heads): every 3 s, `sixHounds` strips armour and held items off up to two monsters within 6 of her friend.
+  - **Ogre** (devil, horns, club): every 10 ticks, `bonk` hits the monster that hit her friend for 4 and gives Slowness V for 3 s, once per hit.
+  - **Taotie** (devil, ram horns, `glyphs`, the grin): every second, `gluttony` eats rotten flesh, bones, string, spider eyes, gunpowder and arrows within 8 of her friend, 1 experience each.
+  - **Hellhound** (canid, `flames` glowing at ears, wrists and tail tip; the grin): every second, `huntDown` targets the monster that hurt her friend (within 10 s, 24 blocks), 3 damage and 5 s of fire.
+  - **Argentinosaurus** (lizardfolk, `lneck`: the head lifted on a long neck): every 2 s, `lookout` makes monsters 24-40 blocks from her friend glow.
+  - **Titanoboa** (lamia, thick 1.45, 3.9 blocks tall): every 5 s, `constrict` holds the biggest monster within 8 of her friend (Slowness VII, Wither II, 5 s).
+  - **Sasquatch** (rodent, ruff): every second, `unseen` gives her sneaking friend Invisibility in forests and taigas.
+  - **Sun Wukong** (rodent, `circlet`, `staff`, curling tail): every tick, `somersaultCloud` resets her friend's fall distance.
+  - **Vetala** (bat): every 10 ticks, `possess` rides the nearest zombie within 8 of her friend for 30 s and turns it on the nearest other monster.
+  - **Ironbeak** (harpy, `IronbeakHarpy`, the crow's rig recoloured in gen_ironbeak_harpy.py; eggs, hatchling, spawns in plains, meadows, forests and cherry groves): once a day, `dailyPost` brings her friend an explorer's map of the day's route.
+  - **Paints:** lapis, bookshelf, glazed, redstone_lamp (glow mask); 91 in all. Every paint named after something in Minecraft now tiles its texture (gen_paints `vtile`).
+  - **Homage looks:** twin_tails (Kitsune.visibleTails shows two), ember_tail, spike_king, lawn_zombie (`cone_kit`), drop_smile (`drop_kit`, a wide smile), puffball, hoodie_squirrel, flight_cap (`cap_kit`).
+- [ ] Dev client for the twenty-third wave: the argentinosaurus's neck in every animation (her head lifted 9 px), the titanoboa's size and hitbox, Scylla's dog heads, the hellhound's flame glow, the automaton's helmet, Sun Wukong's staff; the ironbeak's map; the eight homage props; the retextured paints (gold, copper, honey, magma, pumpkin, frost, sakura, stained glass, moss, watermelon, cow, sunflower) and the four new ones.
 - [x] **Theropods** (2026-10-29), a new family, tested in `TheropodTests` (the fernstalker's ambush still in `TwentiethWaveTests`):
   - `gen_theropod.py` (girl_family biped, `HUNCH` = 20, tail rest tied to it, the grin in `pal.mouth_px`), `Theropod.java` (extends `Lizardfolk`), `Family.THEROPOD` (settlements and expeditions as the lizardfolk).
   - **Fernstalker** moved from the lizardfolk: id `fernstalker_lizardfolk` -> `fernstalker_theropod` (old assets, spawns and lang deleted; fernstalkers in old worlds are gone).

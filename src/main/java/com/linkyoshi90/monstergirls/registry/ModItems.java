@@ -56,6 +56,8 @@ public final class ModItems {
             () -> new DeferredSpawnEggItem(ModEntities.MIRROR_CRANE_HARPY, 0x2A48B0, 0xF0F4FF, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> EMBERU_HARPY_SPAWN_EGG = ITEMS.register("emberu_harpy_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.EMBERU_HARPY, 0x223A8C, 0xC8D8F0, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> IRONBEAK_HARPY_SPAWN_EGG = ITEMS.register("ironbeak_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.IRONBEAK_HARPY, 0x3C6ED2, 0xB0B8C8, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> COIN_MAGPIE_HARPY_SPAWN_EGG = ITEMS.register("coin_magpie_harpy_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.COIN_MAGPIE_HARPY, 0x1A3440, 0xF0F0F4, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> TRICKSTER_RAVEN_HARPY_SPAWN_EGG = ITEMS.register("trickster_raven_harpy_spawn_egg",

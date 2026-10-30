@@ -300,6 +300,8 @@ public class Mollusk extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.SPEWSLUG_MOLLUSK && this.level() instanceof net.minecraft.server.level.ServerLevel bog && !this.isBaby() && this.tickCount % 10 == 0) this.bile(bog);
+        if (this.species == GirlSpecies.SCYLLA_MOLLUSK && this.level() instanceof net.minecraft.server.level.ServerLevel strait && !this.isBaby() && this.tickCount % 60 == 0) this.sixHounds(strait);
         if (this.species == GirlSpecies.KRAKEN_MOLLUSK && this.hasFlag(FLAG_TOWING)) this.tow();
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.SQUIDKIN_MOLLUSK && this.tickCount % 5 == 0) this.inkCloud(server);
@@ -426,5 +428,51 @@ public class Mollusk extends AbstractMonsterGirl {
         this.startTimedAction(Action.INK, 20);
         this.nextInk = level.getGameTime() + 200;
         return near.size();
+    }
+
+    /** The last hit on her friend she has answered (the friend's last-hurt-by timestamp), so each hit is answered once. */
+    private int lastBile = Integer.MIN_VALUE;
+
+    /**
+     * The spewslug's bile (twenty-third wave): the monster that last hit her friend (within the last five seconds, within 12 of
+     * them) is spewed on: Weakness II and Hunger for ten seconds. 1 when she spewed, 0 with nothing to answer, -1 without a friend.
+     */
+    public int bile(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.LivingEntity attacker = friend.getLastHurtByMob();
+        int when = friend.getLastHurtByMobTimestamp();
+        if (!(attacker instanceof net.minecraft.world.entity.monster.Monster m) || !m.isAlive() || when == this.lastBile || friend.tickCount - when > 100 || m.distanceTo(friend) > 12) return 0;
+        this.lastBile = when;
+        m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WEAKNESS, 200, 1), this);
+        m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.HUNGER, 200, 0), this);
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.WITCH, m.getX(), m.getY() + 1, m.getZ(), 20, 0.3, 0.4, 0.3, 0.05);
+        this.getLookControl().setLookAt(m);
+        this.playSound(net.minecraft.sounds.SoundEvents.LLAMA_SPIT, 1.0F, 0.7F);
+        return 1;
+    }
+
+    /**
+     * Scylla's six hounds (twenty-third wave): up to two monsters within 6 of her friend have their armour and whatever they hold
+     * torn off and dropped. How many she stripped, or -1 without a friend.
+     */
+    public int sixHounds(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        int n = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(6), net.minecraft.world.entity.LivingEntity::isAlive)) {
+            boolean any = false;
+            for (net.minecraft.world.entity.EquipmentSlot slot : net.minecraft.world.entity.EquipmentSlot.values()) {
+                net.minecraft.world.item.ItemStack held = m.getItemBySlot(slot);
+                if (held.isEmpty() || slot == net.minecraft.world.entity.EquipmentSlot.BODY) continue;
+                m.spawnAtLocation(held.copy());
+                m.setItemSlot(slot, net.minecraft.world.item.ItemStack.EMPTY);
+                any = true;
+            }
+            if (!any) continue;
+            this.playSound(net.minecraft.sounds.SoundEvents.WOLF_GROWL, 1.0F, 1.0F);
+            if (++n == 2) break;
+        }
+        return n;
     }
 }

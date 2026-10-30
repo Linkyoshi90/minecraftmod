@@ -204,6 +204,8 @@ public class Construct extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.AUTOMATON_CONSTRUCT && this.level() instanceof net.minecraft.server.level.ServerLevel works && !this.isBaby() && this.tickCount % 40 == 0)
+            this.lamplighter(works, p -> works.getMaxLocalRawBrightness(p) < 8);
         if (this.species == GirlSpecies.TIN_JACK_CONSTRUCT && this.level() instanceof ServerLevel field && !this.isBaby() && this.tickCount % 20 == 0) this.scarePhantoms(field);
         if (this.isGargoyle() && !this.level().isClientSide) this.tickGargoyle();
         if (this.isTalos() && !this.level().isClientSide) this.tickTalos();
@@ -341,5 +343,27 @@ public class Construct extends AbstractMonsterGirl {
             n++;
         }
         return n;
+    }
+
+    /**
+     * The automaton's lamplighter (twenty-third wave): a torch from her friend's own pack set on a dark spot near them (within
+     * 5, on solid ground). 1 when she set one, 0 when there was no dark spot or no torch, -1 without a friend.
+     */
+    public int lamplighter(net.minecraft.server.level.ServerLevel level, java.util.function.Predicate<net.minecraft.core.BlockPos> dark) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        int slot = friend.getInventory().findSlotMatchingItem(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.TORCH));
+        if (slot < 0) return 0;
+        net.minecraft.core.BlockPos at = friend.blockPosition();
+        for (int i = 0; i < 40; i++) {
+            net.minecraft.core.BlockPos p = at.offset(this.random.nextInt(11) - 5, this.random.nextInt(3) - 1, this.random.nextInt(11) - 5);
+            if (!level.getBlockState(p).isAir() || !net.minecraft.world.level.block.Blocks.TORCH.defaultBlockState().canSurvive(level, p) || !dark.test(p)) continue;
+            level.setBlockAndUpdate(p, net.minecraft.world.level.block.Blocks.TORCH.defaultBlockState());
+            if (!friend.getAbilities().instabuild) friend.getInventory().getItem(slot).shrink(1);
+            this.getLookControl().setLookAt(p.getX() + 0.5, p.getY(), p.getZ() + 0.5);
+            this.playSound(net.minecraft.sounds.SoundEvents.WOOD_PLACE, 1.0F, 1.0F);
+            return 1;
+        }
+        return 0;
     }
 }

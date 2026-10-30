@@ -614,6 +614,38 @@ sandstone since 2026-10-29), so 87 in all.
 Homage props (POP_CULTURE_VARIANTS.md): the dullahan's headless rider (Celty) has her yellow cat-eared helmet over the head she
 carries, the death envoy (Lala) a scythe in her free hand; both are drawn only on their own looks.
 
+## Twenty-third wave (2026-10-30, in the game)
+
+Eight Harmontide creatures from the reference art (their blue looks; the spewslug's only look is red) and four of myth and
+folklore: Sun Wukong, Scylla, the taotie and the vetala. The ironbeak is a harpy of her own (`IronbeakHarpy`, the crow's rig).
+
+| Species | Home | Design |
+|---|---|---|
+| **Automaton** | Construct | A pale-blue clockwork girl in armour plates: a round helmet with a disc over each ear, rivets down every plate: she sets torches (her friend's own) on the dark ground near her friend. |
+| **Spewslug** | Mollusk | A glistening crimson slug girl: eye-stalk antennae, a slug's mantle over her back, a toothy maw with purple bile dribbling from it: she spews bile over the monster that hits her friend (Weakness II, Hunger). |
+| **Ogre** | Devil | Big and green-skinned, long pointed ears, two little horns, light-blue hair, a blue dress and a club: she clubs the monster that hits her friend, and it can hardly move for three seconds. |
+| **Hellhound** | Canid | Navy fur, tufts of blue flame (glowing) at her ears, wrists and tail tip, glowing blue eyes, a toothy grin: she runs down whatever hurt her friend, anywhere within 24 blocks, and sets it on fire. |
+| **Argentinosaurus** | Lizardfolk | Tall, pale blue with orange stripes and a cream belly; a **long neck** lifts her head high above everyone (her head and hair ride on a 9-pixel neck bone), a long heavy tail: she spots the monsters 24-40 blocks from her friend and they glow. |
+| **Titanoboa** | Lamia | The greatest snake: **3.9 blocks tall, twice the boa**, olive-brown with dark blotches: she coils round the biggest monster near her friend and holds it fast for five seconds (Slowness VII, Wither II). |
+| **Sasquatch** | Rodent | Big and fluffy, pale blue, a shaggy mane round a pink face, a fluffy ruff: her friend turns invisible while sneaking in a forest near her. |
+| **Ironbeak** | Harpy | A blue courier bird with silver talons, a blue scarf and a satchel (the crow's rig): once a day she brings her friend an explorer's map (a woodland mansion, an ocean monument, buried treasure or a trial chamber, in turn). |
+| **Sun Wukong** | Rodent | The Monkey King: golden fur, a gold circlet, red and gold armour, a curling tail and her red staff with gold caps: on her somersault cloud her friend never takes fall damage near her. |
+| **Scylla** | Mollusk | The sea monster of the Odyssey: a sea-green girl over a skirt of tentacles, six dog heads snarling from her waist: her hounds tear the armour and weapons off the monsters near her friend. |
+| **Taotie** | Devil | The glutton of the Chinese bronzes: curled horns, bronze meanders over her arms and legs, a toothy grin: she eats the junk monsters drop near her friend and turns it into experience for them. |
+| **Vetala** | Bat | The corpse-riding spirit of Indian tales: ash-pale, ragged, red-eyed, tattered wings: she rides a zombie near her friend, and it fights the other monsters for 30 seconds. |
+
+Paints: **lapis**, **bookshelf**, **glazed** (blue glazed terracotta) and **redstone_lamp** (its light glows), Minecraft's own
+blocks, so 91 in all. And every older paint named after something Minecraft draws now uses its texture too: gold (the gold
+block), the four copper stages (the copper blocks), honey (the honey block), magma (the magma block, its cracks glow), pumpkin,
+frost (packed ice), sakura (cherry leaves), stained glass (the stained glass blocks), moss (moss block on stone), watermelon
+(the melon's rind), cow (the cow's hide) and sunflower (its flower head).
+
+Homage looks (POP_CULTURE_VARIANTS.md): the fennec as Tails (`twin_tails`: two tails always, goggles on her head), the
+salamander as Charmander (`ember_tail`), the snapping turtle as Bowser (`spike_king`), the zombie as the Plants vs. Zombies
+zombie (`lawn_zombie`, a traffic cone), the undine as the Dragon Quest slime (`drop_smile`: a drop's point on her head, a wide
+smile), the amethyst slime as Kirby (`puffball`), the ratatoskr as Conker (`hoodie_squirrel`) and the bee as Charmy Bee
+(`flight_cap`: an aviator's cap and goggles). The props are drawn only on their looks.
+
 ## Theropods (2026-10-29, in the game)
 
 A family of their own (`theropod`, field guide volume XXVII), built like a 1920s museum sketch of a T. rex but human: the upper
