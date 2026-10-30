@@ -102,7 +102,9 @@ SPECIES = {
                   "antique": dict(SKIN="#ecd8c0", HAIR="#a8804a", CLOTH="#8a6a4a", TRIM="#e8d8b8", EYE="#5a4a3a"),
                   # homage to Gregory Horror Show (2026-10-25): the Lost Doll, red braids and a patched green dress, Katie's face on the back
                   "lost": dict(SKIN="#f0b0a8", HAIR="#e0503a", CLOTH="#2e7a4a", TRIM="#3a9a5a", EYE="#7a3a9a",
-                               extra=dict(stocking="#f0b0a8", boot="#e05040", cloth2="#2e7a4a", lost=True))}),
+                               extra=dict(stocking="#f0b0a8", boot="#e05040", cloth2="#2e7a4a", lost=True)),
+                  # homage (2026-10-30): the Puppet: a white face, black body, white stripes' colour in her trim, purple eyes
+                  "music_box": dict(SKIN="#f4f4f6", HAIR="#141418", FUR="#141418", LIGHT="#f4f4f6", MARK="#141418", EYE="#7a3ac8", CLOTH="#141418", TRIM="#f4f4f6")}),
     "mummy_undead": dict(
         build="slim", outfit=dict(top=["sarashi"], bottom="loincloth", extras=["usekh"], colors=dict(bandage="#ece4cc", cloth2="#ece4cc")),
         hair="hime", bangs="blunt", ears=None, legs="bare", foot="shoe", mummy=True,

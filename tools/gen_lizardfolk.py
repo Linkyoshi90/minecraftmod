@@ -189,7 +189,9 @@ SPECIES = {
         variants={"saltwater": dict(FUR="#4a5030", HAIR="#1e2414", MARK="#1a1e10"),
                   "albino": dict(FUR="#f0e8d8", HAIR="#f8f4ec", MARK="#d8c8b0", LIGHT="#ffffff", EYE="#e83a4a"),
                   "dwarf": dict(FUR="#2a2a24", HAIR="#141410", MARK="#4a4a3a"),
-                  "gharial": dict(FUR="#7a8a6a", HAIR="#4a5a3a", MARK="#3a4a2a")}),
+                  "gharial": dict(FUR="#7a8a6a", HAIR="#4a5a3a", MARK="#3a4a2a"),
+                  # homage (2026-10-30): Vector: green scales, a gold chain's colour in her trim
+                  "detective_croc": dict(SKIN=skin("#7ab04a"), FUR="#5a9a3a", HAIR="#2a5a1e", LIGHT="#e8e0a0", MARK="#2a5a1e", EYE="#e8c040", CLOTH="#1e1e24", TRIM="#e8c040")}),
     "turtle_lizardfolk": dict(
         build="petite", outfit=dict(top=["sports"], bottom="shorts", extras=["pearls"], colors=dict(cloth2="#3a7a8a")),
         hair="bob", bangs="blunt", ears=None, legs="scales", foot="claw", tail=[(1.5, 1.5, 2), (1, 1, 1.5)], tail_rest=[(-50, 0, 0), (10, 0, 0)],

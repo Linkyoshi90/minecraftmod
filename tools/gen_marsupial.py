@@ -26,7 +26,9 @@ SPECIES = {
         variants={"grey": dict(FUR="#8a8078", HAIR="#6a625a", LIGHT="#e0d8d0", MARK="#4a4440", CLOTH="#5a7a9a"),
                   "wallaroo": dict(FUR="#4a3e36", HAIR="#2e2620", LIGHT="#8a7a6a", MARK="#1e1814", CLOTH="#8a6a3a"),
                   "albino": dict(FUR="#f4f0e8", HAIR="#fbf8f2", LIGHT="#ffffff", MARK="#d8d0c4", EYE="#d84a5a", CLOTH="#7aa8c8"),
-                  "outback": dict(CLOTH="#c8282a", TRIM="#2a2a30", extra=dict(shades=True))}),
+                  "outback": dict(CLOTH="#c8282a", TRIM="#2a2a30", extra=dict(shades=True)),
+                  # homage (2026-10-30): Crash: orange fur, red hair, blue jeans, a big grin
+                  "bandicoot": dict(FUR="#e8802a", HAIR="#c82a1e", LIGHT="#f8d8a0", MARK="#a84a14", EYE="#1e1e24", CLOTH="#2a4ab0", TRIM="#e8802a")}),
     # eleventh wave: the gliderune, a sugar glider: big eyes and ears, a gliding membrane from wrist to hip, a long fluffy tail
     "gliderune_marsupial": dict(
         build="petite", outfit=dict(top=["halter"], bottom="shorts", extras=["scarf"], colors=dict(cloth2="#2a3a5a", scarf="#e8c060")),

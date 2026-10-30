@@ -16,13 +16,17 @@ import java.util.List;
 /**
  * The riflebird's display: she picks an audience (a player, more eagerly one she likes, or another riflebird),
  * plants herself a few blocks in front of them and dances to her own little pop groove - a funky bassline,
- * hi-hats and a bright melody on note-block sounds (an original pattern, not anyone's song).
+ * hi-hats and a bright melody on note-block sounds. Since 2026-10-30 a tense, driving 80s pop groove in a minor key, a nod to the
+ * viral videos of birds dancing to one (an original pattern, not anyone's song).
  */
 public class DanceGoal extends Goal {
-    /** 16-step loop at 3 ticks per step: bass notes (semitones, -1 = rest), hats, melody. */
-    private static final int[] BASS = {0, -1, 0, 7, -1, 5, -1, 3, 0, -1, 0, 7, -1, 10, -1, 12};
-    private static final boolean[] HAT = {true, false, true, true, true, false, true, true, true, false, true, true, true, false, true, false};
-    private static final int[] MELODY = {-1, -1, 12, -1, 15, -1, 17, 15, -1, -1, 12, -1, 10, 12, -1, -1};
+    /** 32-step loop at 3 ticks per step: a pulsing bass (semitones, -1 = rest), off-beat hats, short stabs of melody. */
+    private static final int[] BASS = {0, -1, 0, -1, 0, -1, 0, 3, 5, -1, 5, -1, 3, -1, 0, -1,
+            0, -1, 0, -1, 0, -1, 0, 3, 7, -1, 7, -1, 5, 3, -1, -1};
+    private static final boolean[] HAT = {false, true, false, true, false, true, true, true, false, true, false, true, false, true, true, true,
+            false, true, false, true, false, true, true, true, false, true, false, true, false, true, true, false};
+    private static final int[] MELODY = {-1, -1, 12, 12, -1, 15, -1, -1, 17, -1, 15, -1, 12, -1, -1, -1,
+            -1, -1, 12, 12, -1, 15, -1, 17, 19, -1, 17, 15, -1, 12, -1, -1};
     private static final int STEP_TICKS = 3;
 
     private final RiflebirdHarpy bird;
@@ -87,7 +91,7 @@ public class DanceGoal extends Goal {
         }
         this.bird.getNavigation().stop();
         this.bird.setAction(AbstractHarpy.Action.DANCING);
-        if (this.ticks % STEP_TICKS == 0) this.playStep(this.ticks / STEP_TICKS % 16);
+        if (this.ticks % STEP_TICKS == 0) this.playStep(this.ticks / STEP_TICKS % BASS.length);
     }
 
     private void playStep(int step) {

@@ -2918,6 +2918,137 @@ for _species, _cols in THEROPODS:
     for _label, _values in _fam.get("split", []):
         _values.append(_cols.get(_label, "-"))
 
+# the Four Riders (2026-10-30, twenty-fifth wave): a family of their own, each with her own look; Pestilence rides a real horse
+_family(id="rider", volume="XXVIII", title="The Four Riders", subtitle="the riders of the end", food="Whatever suits her",
+        theme=dict(bg="#120f14", panel="#1c1820", panel2="#241f2a", ink="#f0ecf2", muted="#bcb2c4", accent="#3ae8c8",
+                   line="#38303e", green="#c8a040", grad="#2a1a3a"),
+        lede="War, Famine, Pestilence and Death: four girls who go where the end of things goes, and who turn out to be very good friends to have.",
+        hero=dict(eyebrow="The central similarity", title="Four girls, four ends.",
+                  text="No two of them look alike and none of them is in a hurry. Each is rare, walks alone and takes an interest in exactly one kind of trouble. Befriended, that trouble becomes your enemies' problem.",
+                  bullets=[("War", "Stronger when you are outnumbered."), ("Famine", "Feeds you and starves them."),
+                           ("Pestilence", "Rides a black horse under a teal cloud."), ("Death", "Finishes what you start.")]),
+        lifecycle=[("1. Courtship", "At high friendship she may share your bed."), ("2. Young", "She bears one daughter, as a mammal does."),
+                   ("3. Grown", "Grown in five days.")],
+        systems=[("Rare", "They are few and wander alone, and never in a group."), ("Steed", "Pestilence rides a real black horse; if it dies she walks.")],
+        friendship=dict(builds=["The food she likes (+1)"], costs=["Hitting her"], devoted="She rides at your side."),
+        mating=dict(form="Live birth", young="1", grows="5 days", where="Anywhere", note="Daughters use the adult model at 45%."),
+        split=[("Habitat", []), ("Signature", []), ("Danger", [])], species=[],
+        decisions=["Built as their own family on 2026-10-30, with their own looks, at the user's request."],
+        questions=["More riders?"])
+RIDERS = [
+    (dict(id="war_rider", name="War", group="Plains and old battlefields", tag="Loud · fearless", height=1.9,
+          biomes=["plains", "windswept_savanna", "savanna_plateau"], temperament="Loud, fearless",
+          ecology="The first rider: a wild blonde mane, blue and silver armour, and a grin that says she has been looking forward to this.",
+          interaction="Cooked beef and iron ingots.",
+          signature=("Battle cry", "Befriended, when several monsters close in on her friend she gives them Strength."),
+          danger="High.",
+          variants=[("blue", "Blue (default)", "Blonde, blue and silver"), ("crimson", "Crimson", "Red hair, red armour"), ("black", "Black", "Black armour"), ("gold", "Gold", "Gold armour"), ("white", "White", "White armour")]),
+     {"Habitat": "Plains", "Signature": "Strength when outnumbered", "Danger": "High"}),
+    (dict(id="famine_rider", name="Famine", group="Badlands and dead lands", tag="Quiet · hollow", height=1.9,
+          biomes=["badlands", "eroded_badlands", "desert"], temperament="Quiet, hollow",
+          ecology="The second rider: pale and thin in a huge white feather cloak and a dark horned hood. Food tastes of nothing to her, so she gives it away.",
+          interaction="Bread, and she only ever nibbles.",
+          signature=("Hollow hunger", "Befriended, she keeps her friend fed in a fight and leaves the monsters near them weak with hunger."),
+          danger="Moderate.",
+          variants=[("white", "White (default)", "White cloak, dark hood"), ("ash", "Ash", "Grey cloak"), ("gold", "Gold", "Wheat gold"), ("bone", "Bone", "Bone"), ("void", "Void", "Black and violet")]),
+     {"Habitat": "Badlands", "Signature": "Feeds, weakens monsters", "Danger": "Moderate"}),
+    (dict(id="pestilence_rider", name="Pestilence", group="Swamps and dark forests", tag="Cheerful · catching", height=1.5,
+          biomes=["swamp", "mangrove_swamp", "dark_forest"], temperament="Cheerful, catching",
+          ecology="The third rider: a tiny lilac-haired girl on a black horse, a thorned staff with teal flame at its tip. She is having a lovely time.",
+          interaction="Glow berries and fermented spider eyes.",
+          signature=("Teal cloud", "Befriended, a teal cloud falls on the monsters near her friend, hurting and slowing them. She rides a real horse."),
+          danger="High.",
+          variants=[("teal", "Teal (default)", "Lilac hair, teal flame"), ("green", "Green", "Green"), ("rust", "Rust", "Rust"), ("ash", "Ash", "Ash"), ("rose", "Rose", "Rose")]),
+     {"Habitat": "Swamps", "Signature": "A cloud on monsters", "Danger": "High"}),
+    (dict(id="death_rider", name="Death", group="Old graveyards and snow", tag="Gentle · punctual", height=1.6,
+          biomes=["snowy_taiga", "old_growth_pine_taiga", "dark_forest"], temperament="Gentle, punctual",
+          ecology="The last rider: a small hooded girl with a very large scythe and a crow on her hand. She is kind about it.",
+          interaction="Bones and sweet berries.",
+          signature=("Last call", "Befriended, she finishes off the monsters near her friend that are nearly dead."),
+          danger="High.",
+          variants=[("brown", "Brown (default)", "Brown cloak"), ("black", "Black", "Black cloak"), ("grey", "Grey", "Grey cloak"), ("white", "White", "White cloak"), ("violet", "Violet", "Violet cloak")]),
+     {"Habitat": "Old forests", "Signature": "Finishes monsters", "Danger": "High"}),
+]
+_fam = C.family("rider")
+for _species, _cols in RIDERS:
+    if any(x["id"] == _species["id"] for x in _fam["species"]):
+        continue
+    _fam["species"].append(_species)
+    for _label, _values in _fam.get("split", []):
+        _values.append(_cols.get(_label, "-"))
+
+# twenty-fifth wave (2026-10-30): the two giants, Charybdis, the Mad Hatter, the Ifrit, Pazuzu and the Angel; the yatagarasu is a harpy
+TWENTY_FIFTH = {
+    "devil": [
+        (dict(id="fire_giant_devil", name="Fire Giant", group="The Nether", tag="Warm · booming", height=4.0,
+              biomes=["basalt_deltas", "nether_wastes", "crimson_forest"], temperament="Warm, booming",
+              ecology="A giant of the forge-worlds, four blocks tall: dark skin veined with glowing lava, a crown of flame and long black hair.",
+              interaction="Blaze powder and cooked beef.",
+              signature=("Hearthfire", "Befriended, she gives her friend Fire Resistance and lights the ground she walks on."),
+              danger="High.",
+              variants=[("ember", "Ember (default)", "Dark skin, orange lava"), ("gold", "Gold", "Bronze skin, gold lava"), ("blue", "Blue", "Blue flame"), ("green", "Green", "Green flame"), ("ash", "Ash", "Grey skin, red lava")]),
+         {"Habitat": "The Nether", "Signature": "Fire Resistance, light", "Danger": "High"}),
+        (dict(id="frost_giant_devil", name="Frost Giant", group="Frozen peaks", tag="Serene · huge", height=4.0,
+              biomes=["frozen_peaks", "ice_spikes", "snowy_slopes"], temperament="Serene, huge",
+              ecology="A giant of the far north, four blocks tall: long white hair, a crown and shoulders of ice shards, and a smile that frosts the air.",
+              interaction="Salmon and snowballs.",
+              signature=("Ice road", "Befriended, water freezes under her friend's feet, so they can walk across it."),
+              danger="High.",
+              variants=[("blue", "Blue (default)", "Pale blue, white hair"), ("white", "White", "White"), ("aqua", "Aqua", "Aqua"), ("violet", "Violet", "Violet"), ("grey", "Grey", "Grey")]),
+         {"Habitat": "Frozen peaks", "Signature": "Walks on water", "Danger": "High"}),
+        (dict(id="ifrit_devil", name="Ifrit", group="Deserts and the Nether", tag="Proud · smouldering", height=1.8,
+              biomes=["desert", "nether_wastes", "basalt_deltas"], temperament="Proud, smouldering",
+              ecology="The fire spirit of Arabian tales: horns, small wings, a tail of smoke in place of legs, and blue flames floating at her sides.",
+              interaction="Blaze powder and coal.",
+              signature=("Smelter", "Befriended, once a day she smelts a stack of raw ore in her friend's pack."),
+              danger="Moderate.",
+              variants=[("blue", "Blue (default)", "Blue flame"), ("orange", "Orange", "Orange flame"), ("green", "Green", "Green flame"), ("violet", "Violet", "Violet flame"), ("black", "Black", "Black smoke")]),
+         {"Habitat": "Deserts", "Signature": "Smelts ore", "Danger": "Moderate"}),
+        (dict(id="pazuzu_devil", name="Pazuzu", group="Windswept hills", tag="Sharp · restless", height=1.8,
+              biomes=["windswept_hills", "windswept_savanna", "desert"], temperament="Sharp, restless",
+              ecology="The Mesopotamian king of the wind demons: horns, feathered wings, taloned feet and a snake for a tail. She drives other demons away.",
+              interaction="Rabbit and feathers.",
+              signature=("South wind", "Befriended, a gust throws back the monsters that crowd her friend."),
+              danger="Moderate.",
+              variants=[("blue", "Blue (default)", "Blue"), ("sand", "Sand", "Sand"), ("grey", "Grey", "Grey"), ("red", "Red", "Red"), ("green", "Green", "Green")]),
+         {"Habitat": "Windswept hills", "Signature": "Blows monsters back", "Danger": "Moderate"})],
+    "mollusk": [
+        (dict(id="charybdis_mollusk", name="Charybdis", group="Rocky coasts", tag="Bubbly · bottomless", height=1.8,
+              biomes=["stony_shore", "ocean", "warm_ocean"], temperament="Bubbly, bottomless",
+              ecology="The whirlpool across the strait from Scylla: curly pale-teal hair, a shell top, a skirt of tentacles and an appetite for the sea itself.",
+              interaction="Fish and kelp.",
+              signature=("Whirlpool", "Befriended, she drags the monsters in the water near her down towards her."),
+              danger="High.",
+              variants=[("teal", "Teal (default)", "Pale teal"), ("blue", "Blue", "Blue"), ("green", "Green", "Green"), ("rose", "Rose", "Rose"), ("grey", "Grey", "Grey")]),
+         {"Habitat": "Rocky coasts", "Signature": "Pulls monsters in", "Danger": "High"})],
+    "elf": [
+        (dict(id="mad_hatter_elf", name="Mad Hatter", group="Flower forests", tag="Merry · unhinged", height=1.8,
+              biomes=["flower_forest", "cherry_grove", "meadow"], temperament="Merry, unhinged",
+              ecology="Of Wonderland, like the Cheshire and the clockhare: purple hair, a blue tailcoat, a huge hat and a teacup she never puts down.",
+              interaction="Cookies and cake.",
+              signature=("Tea time", "Befriended, once a day she pours her friend a cup: one good effect, chosen entirely at random."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Blue coat, purple hair"), ("green", "Green", "Green coat"), ("plum", "Plum", "Plum coat"), ("red", "Red", "Red coat"), ("gold", "Gold", "Gold coat")]),
+         {"Habitat": "Flower forests", "Signature": "Random daily tea", "Danger": "Low"}),
+        (dict(id="angel_elf", name="Angel", group="Mountain meadows", tag="Kind · shining", height=1.7,
+              biomes=["meadow", "cherry_grove", "snowy_slopes"], temperament="Kind, shining",
+              ecology="A small winged girl with a glowing halo and a plain dress. She flies, and stays close to anyone who is hurt.",
+              interaction="Golden apples and honey bottles.",
+              signature=("Mercy", "Befriended, she heals her friend when their health runs low."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Pale blue"), ("white", "White", "White"), ("gold", "Gold", "Gold"), ("rose", "Rose", "Rose"), ("grey", "Grey", "Grey")]),
+         {"Habitat": "Mountain meadows", "Signature": "Heals at low health", "Danger": "Low"})],
+}
+
+for _fid, _entries in TWENTY_FIFTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(s["id"] == _species["id"] for s in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 # homage variants of 2026-10-28 (POP_CULTURE_VARIANTS.md): appended after every wave, so every species exists by now
 for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, a black bodysuit with a pink heart, white gloves and boots")),
                        ("ika_mollusk", ("ink_kid", "Ink Kid", "Bright orange tentacle hair, a white tee and black shorts")),
@@ -2960,7 +3091,14 @@ for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, 
                        ("red_kitsune", ("nine_cream", "Nine Cream", "Cream fur and hair, red eyes, nine tails")),
                        ("silkcoon_rodent", ("shopkeeper", "Shopkeeper", "Brown and tan, a green apron")),
                        ("will_o_wisp_undead", ("shy_ghost", "Shy Ghost", "All white, dark eyes")),
-                       ("vampire_undead", ("night_heir", "Night Heir", "Silver hair, a black and gold coat"))]:
+                       ("vampire_undead", ("night_heir", "Night Heir", "Silver hair, a black and gold coat")),
+                       # twenty-fifth wave
+                       ("croc_lizardfolk", ("detective_croc", "Detective Croc", "Green scales, gold trim")),
+                       ("kangaroo_marsupial", ("bandicoot", "Bandicoot", "Orange fur, red hair, blue jeans")),
+                       ("cactus_flora", ("needle_runner", "Needle Runner", "Bright green, dark eyes")),
+                       ("pegasus_centaur", ("angel_guard", "Angel Guard", "White and gold, dark hair")),
+                       ("living_doll_undead", ("music_box", "Music Box", "A white face, a black body, purple eyes")),
+                       ("dolphin_mermaid", ("star_song", "Star Song", "Grey-blue, a pale belly"))]:
     for _fam in C.FAMILIES:
         for _s in _fam["species"]:
             if _s["id"] == _sid and all(v[0] != _variant[0] for v in _s["variants"]):

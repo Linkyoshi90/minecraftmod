@@ -62,6 +62,8 @@ public final class ModItems {
             () -> new DeferredSpawnEggItem(ModEntities.IBISET_HARPY, 0x2E56BA, 0xECC85A, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> STIGOWL_HARPY_SPAWN_EGG = ITEMS.register("stigowl_harpy_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.STIGOWL_HARPY, 0x1A1E2E, 0xA8B0D0, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> YATAGARASU_HARPY_SPAWN_EGG = ITEMS.register("yatagarasu_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.YATAGARASU_HARPY, 0x141418, 0xB4D2F0, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> COIN_MAGPIE_HARPY_SPAWN_EGG = ITEMS.register("coin_magpie_harpy_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.COIN_MAGPIE_HARPY, 0x1A3440, 0xF0F0F4, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> TRICKSTER_RAVEN_HARPY_SPAWN_EGG = ITEMS.register("trickster_raven_harpy_spawn_egg",

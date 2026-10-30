@@ -58,7 +58,7 @@ public class TenguHarpy extends AbstractHarpy {
 
     /** Texture variants (tools/gen_tengu_harpy.py). Saved by name, synced by ordinal: append new ones at the end. */
     public enum Variant {
-        KARASU("karasu"), KONOHA("konoha"), SHIRO("shiro"), AKA("aka"), KURAMA("kurama");
+        KARASU("karasu"), KONOHA("konoha"), SHIRO("shiro"), AKA("aka"), KURAMA("kurama"), SKY_ACE("sky_ace");
 
         private final String name;
 
@@ -115,7 +115,7 @@ public class TenguHarpy extends AbstractHarpy {
 
     @Override
     public void randomizeVariant() {
-        this.setVariant(Variant.values()[this.random.nextInt(Variant.values().length)]);
+        this.setVariant(Variant.values()[this.random.nextInt(Variant.KURAMA.ordinal() + 1)]);   // the homage look is never rolled in the wild
     }
 
     @Override

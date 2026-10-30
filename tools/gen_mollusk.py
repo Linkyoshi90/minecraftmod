@@ -37,6 +37,15 @@ SPECIES = {
                   "blue": dict(SKIN=skin("#8aa0d8"), HAIR="#2a4aa8", FUR="#3a5ac0", MARK="#0e1a5a", EYE="#f8a030", extra=dict(antenna="#3a5ac0", mantle="#2a4aa8", bile="#f8d040"))}),
     # twenty-third wave (folklore): Scylla, the sea monster of the Odyssey: a sea-green girl over a skirt of tentacles, with six dog
     # heads snarling out from her waist
+    # twenty-fifth wave: Charybdis, the whirlpool across the strait from Scylla: curly pale-teal hair, a shell top, a skirt of tentacles
+    "charybdis_mollusk": dict(
+        build="curvy", outfit=dict(top=["shells"], extras=["pearls"], colors=dict(cloth2="#5ab8b0", shell="#f4f0e4")),
+        hair="wavy", bangs="swept", ears="fin", legs="bare", foot="shoe", body="octopus", hat=False,
+        pal=dict(SKIN=skin("#d8f4f0"), HAIR="#8ae0d8", FUR="#7ad0c8", LIGHT="#d8f8f4", MARK="#2a8a84", EYE="#2a7ac8", CLOTH="#5ab8b0", TRIM="#f0ecd8", INNER="#f0b8c0", extra=dict(boot="#2a8a84")),
+        variants={"blue": dict(HAIR="#6aa8e8", FUR="#5a98e0", LIGHT="#c8dcf8", MARK="#1e3a8a", extra=dict(boot="#1e3a8a")),
+                  "green": dict(HAIR="#7ad08a", FUR="#6ac07a", LIGHT="#d0f4d8", MARK="#1e6a34", extra=dict(boot="#1e6a34")),
+                  "rose": dict(HAIR="#f0a0b8", FUR="#e88aa8", LIGHT="#fcd8e4", MARK="#8a2a50", extra=dict(boot="#8a2a50")),
+                  "grey": dict(HAIR="#b8c0c8", FUR="#a0a8b0", LIGHT="#e0e4e8", MARK="#4a5058", extra=dict(boot="#4a5058"))}),
     "scylla_mollusk": dict(
         build="curvy", outfit=dict(top=["shells", "corset"], extras=["pearls", "armlets"], colors=dict(cloth2="#1e3a4a", shell="#f4c8cc")),
         hair="flowing", bangs="parted", ears="fin", legs="bare", foot="shoe", body="octopus", hat=False, dogs=True,

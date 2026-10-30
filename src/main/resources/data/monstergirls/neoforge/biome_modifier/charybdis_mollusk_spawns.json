@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_charybdis_mollusk",
+  "spawners": {
+    "type": "monstergirls:charybdis_mollusk",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

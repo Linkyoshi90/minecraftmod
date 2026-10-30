@@ -614,6 +614,32 @@ sandstone since 2026-10-29), so 87 in all.
 Homage props (POP_CULTURE_VARIANTS.md): the dullahan's headless rider (Celty) has her yellow cat-eared helmet over the head she
 carries, the death envoy (Lala) a scythe in her free hand; both are drawn only on their own looks.
 
+## Twenty-fifth wave (2026-10-30, in the game)
+
+The Four Riders, a family of their own with their own looks, and eight more. Riflebirds also got a new dance groove: an original, tense
+80s pop pattern in a minor key, a nod to the viral videos of birds dancing (`DanceGoal`; not anyone's song).
+
+| Species | Home | Design |
+|---|---|---|
+| **War** | Rider | A wild blonde mane, blue and silver armour: she gives her friend Strength when three monsters close in. |
+| **Famine** | Rider | Pale, in a huge white feather cloak and a dark horned hood: she keeps her friend fed in a fight and weakens the monsters near them. |
+| **Pestilence** | Rider | A tiny lilac-haired girl with a thorned staff and teal flame, riding a real black Minecraft horse: a teal cloud hurts and slows the monsters near her friend. |
+| **Death** | Rider | Hooded, a big scythe, a crow on her hand: the monsters near her friend at a quarter of their health fall. |
+| **Fire Giant** | Devil | 4 blocks tall, dark skin veined with glowing lava, a crown of flame: Fire Resistance for her friend, and real light where she walks. |
+| **Frost Giant** | Devil | 4 blocks tall, long white hair, a crown and shoulders of ice shards: water freezes under her friend's feet. |
+| **Ifrit** | Devil | Horns, small wings, a smoke tail for legs, blue flames floating at her sides: once a day she smelts a stack of raw ore in her friend's pack. |
+| **Pazuzu** | Devil | Horns, feathered wings, a snake for a tail; she flies: a gust throws back the monsters crowding her friend. |
+| **Charybdis** | Mollusk | Curly pale-teal hair, a shell top, a skirt of tentacles, across the strait from Scylla: she drags the monsters in the water towards her. |
+| **Mad Hatter** | Elf | Purple hair, a blue coat, a huge hat, a teacup: once a day a cup of tea with a random good effect. |
+| **Angel** | Elf | A small winged girl, a glowing halo; she flies: she heals her friend when their health runs low. |
+| **Yatagarasu** | Harpy | Black wings, a pale blue kimono (`YatagarasuHarpy`, the crow's rig): at dawn she gives her friend Regeneration and Speed. |
+
+Paints: **end_stone**, **hay_bale**, **ancient_debris** and **sea_lantern** (it glows), so 99 in all (PAINTS.md).
+
+Homage looks (POP_CULTURE_VARIANTS.md): the crocodile as Vector (`detective_croc`), the kangaroo as Crash (`bandicoot`), the cactus as the
+Cactuar (`needle_runner`), the pegasus as Pit (`angel_guard`), the living doll as the Puppet (`music_box`), the dolphin as Ecco
+(`star_song`), the tengu as Falco (`sky_ace`, never rolled in the wild).
+
 ## Twenty-fourth wave (2026-10-30, in the game)
 
 Eight Harmontide creatures from the reference art and four of folklore. Three use the rigs of the last round: Quetzalcoatl the

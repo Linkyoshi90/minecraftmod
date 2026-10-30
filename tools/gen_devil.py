@@ -36,6 +36,47 @@ SPECIES = {
                   "red": dict(SKIN="#c8705a", FUR="#c8705a", LIGHT="#f0b098", MARK="#6a2a1e", HAIR="#2a2228", CLOTH="#3a5a8a")}),
     # twenty-third wave (folklore): the taotie, the glutton of the Chinese bronzes: curled horns, bronze glyph-work running over
     # her arms and legs, and a huge grin
+    # twenty-fifth wave: the Fire Giant, four blocks tall: dark skin veined with glowing lava, a crown of flame, long black hair
+    "fire_giant_devil": dict(
+        build="curvy", outfit=dict(top=["bandeau"], bottom="sarong", extras=["armlets", "belt"], colors=dict(cloth2="#1e3a8a", leather="#c8901e")),
+        hair="flowing", bangs="parted", ears="elf", legs="bare", foot="shoe", lava=True, glow=["lvein", "lcrown"], glow_boost=1.3,
+        pal=dict(SKIN=skin("#5a3a2a"), HAIR="#1a1210", FUR="#2a1a14", LIGHT="#7a5a44", MARK="#1a0e0a", EYE="#f8a01e", CLOTH="#1e3a8a", TRIM="#e8b030",
+                 extra=dict(boot="#2a1a14", vein="#f8701e", vein_hot="#ffd860")),
+        variants={"gold": dict(SKIN=skin("#8a6a3a"), HAIR="#3a2410", EYE="#f8d040", CLOTH="#7a1e1e", extra=dict(boot="#3a2410", vein="#f8c030", vein_hot="#fff4c0")),
+                  "blue": dict(EYE="#4ac8f8", CLOTH="#2a2a30", TRIM="#4ac8f8", extra=dict(boot="#2a1a14", vein="#3ab0f8", vein_hot="#e0f8ff")),
+                  "green": dict(EYE="#6af84a", CLOTH="#2a2a30", TRIM="#6af84a", extra=dict(boot="#2a1a14", vein="#5af04a", vein_hot="#e8ffd0")),
+                  "ash": dict(SKIN=skin("#5a5a60"), HAIR="#141418", EYE="#f83a1e", CLOTH="#2a2a30", extra=dict(boot="#1e1e24", vein="#f83a1e", vein_hot="#ffc080"))}),
+    # twenty-fifth wave: the Frost Giant, four blocks tall: long white hair, a crown and shoulders of ice shards
+    "frost_giant_devil": dict(
+        build="curvy", outfit=dict(top=["bandeau"], bottom="sarong", extras=["armlets"], colors=dict(cloth2="#a8d8f0")),
+        hair="flowing", bangs="swept", ears="elf", legs="bare", foot="shoe", ice=True,
+        pal=dict(SKIN=skin("#d8ecf8"), HAIR="#f0f4fa", FUR="#f4f8fc", LIGHT="#ffffff", MARK="#a8c8e0", EYE="#3a8ad8", CLOTH="#a8d8f0", TRIM="#e8f4fc",
+                 extra=dict(boot="#a8c8e0", ice="#a8e0f8", ice_tip="#ffffff")),
+        variants={"white": dict(SKIN=skin("#f0f0f4"), EYE="#6a7a9a", CLOTH="#e8e8f0", extra=dict(boot="#c8c8d8", ice="#e8f0f8", ice_tip="#ffffff")),
+                  "aqua": dict(SKIN=skin("#c8f0ec"), HAIR="#d8fcf8", EYE="#2aa8a0", CLOTH="#7ae0d8", extra=dict(boot="#7ac8c0", ice="#8af0e0", ice_tip="#f0fffc")),
+                  "violet": dict(SKIN=skin("#e4dcf8"), HAIR="#f0ecfc", EYE="#7a5ad8", CLOTH="#c8b0f0", extra=dict(boot="#a890d8", ice="#c8b8f8", ice_tip="#f8f4ff")),
+                  "grey": dict(SKIN=skin("#c8ccd4"), HAIR="#a8acb4", EYE="#3a4a6a", CLOTH="#8a909a", extra=dict(boot="#6a7078", ice="#a8b8c8", ice_tip="#e8f0f8"))}),
+    # twenty-fifth wave: the Ifrit, a fire spirit: horns, small wings, a smoke tail for legs, blue flames floating at her sides
+    "ifrit_devil": dict(
+        build="curvy", outfit=dict(top=["bandeau"], extras=["armlets"], colors=dict(cloth2="#2a5ab8")),
+        hair="shaggy", bangs="swept", ears="elf", lower="none", smoke=True, horns="devil", wings="bat", wing_scale=0.7, iflames=True, glow=["iflame"], glow_boost=1.2,
+        pal=dict(SKIN=skin("#a8c8f0"), HAIR="#6aa8e8", FUR="#7ab0e8", LIGHT="#d8e8fc", MARK="#2a5ab8", EYE="#2a4a9a", CLOTH="#2a5ab8", TRIM="#a8d8f8",
+                 extra=dict(smoke="#7ab0e8", smoke_dark="#2a5ab8", horn="#2a4a9a", wing="#4a7ac8", wing_vein="#2a4a9a", iflame="#4ac8f8", iflame_hot="#e8fcff")),
+        variants={"orange": dict(SKIN=skin("#e8a878"), HAIR="#c85a1e", MARK="#7a2a0e", CLOTH="#7a2a0e", EYE="#7a2a0e", extra=dict(smoke="#e88a4a", smoke_dark="#7a2a0e", horn="#3a1a0e", wing="#a84a1e", wing_vein="#5a1e0e", iflame="#f8901e", iflame_hot="#fff0a0")),
+                  "green": dict(SKIN=skin("#a8e0b0"), HAIR="#3a9a5a", MARK="#1a5a2e", CLOTH="#1a5a2e", EYE="#1a5a2e", extra=dict(smoke="#6ac88a", smoke_dark="#1a5a2e", horn="#143a1e", wing="#2a7a4a", wing_vein="#143a1e", iflame="#5af04a", iflame_hot="#e8ffd0")),
+                  "violet": dict(SKIN=skin("#c8b0f0"), HAIR="#7a4ac8", MARK="#3a1a7a", CLOTH="#3a1a7a", EYE="#3a1a7a", extra=dict(smoke="#a07ae0", smoke_dark="#3a1a7a", horn="#2a1454", wing="#5a2aa8", wing_vein="#2a1454", iflame="#c84af8", iflame_hot="#f8e0ff")),
+                  "black": dict(SKIN=skin("#5a5a64"), HAIR="#1e1e24", MARK="#0e0e12", CLOTH="#0e0e12", EYE="#f83a1e", extra=dict(smoke="#3a3a44", smoke_dark="#0e0e12", horn="#0e0e12", wing="#2a2a30", wing_vein="#0e0e12", iflame="#f8501e", iflame_hot="#ffd860"))}),
+    # twenty-fifth wave: Pazuzu, the king of the wind demons: horns, feathered wings, talons and a snake for a tail; she flies
+    "pazuzu_devil": dict(
+        build="athletic", outfit=dict(top=["bandeau"], bottom="loincloth", extras=["armlets", "belt"], colors=dict(cloth2="#c8a040", leather="#c8a040")),
+        hair="shaggy", bangs="jagged", ears="elf", legs="scales", foot="claw", horns="devil", wings="feather", wing_scale=1.0, flies=True,
+        tail=[(1.5, 1.5, 4), (1.25, 1.25, 4), (1, 1, 3.5)], tail_look="scale", snake_tail=True,
+        pal=dict(SKIN=skin("#a8c0e0"), HAIR="#3a5a9a", FUR="#6a8ac0", LIGHT="#d0dcf0", MARK="#2a3a6a", EYE="#e8c040", CLOTH="#c8a040", TRIM="#e8c860",
+                 extra=dict(horn="#2a3a6a", boot="#2a3a6a", wing="#7a9ad0", wing_tip="#2a3a6a")),
+        variants={"sand": dict(SKIN=skin("#d8b888"), HAIR="#7a5a2e", FUR="#b8945a", LIGHT="#f0e0bc", MARK="#5a3e1e", extra=dict(horn="#3a2410", boot="#3a2410", wing="#b8945a", wing_tip="#5a3e1e")),
+                  "grey": dict(SKIN=skin("#b8bcc4"), HAIR="#4a4c54", FUR="#7a7e88", LIGHT="#d8dae0", MARK="#2a2c32", extra=dict(horn="#1e2024", boot="#1e2024", wing="#8a8e98", wing_tip="#2a2c32")),
+                  "red": dict(SKIN=skin("#d89a8a"), HAIR="#7a1e1a", FUR="#b84a3a", LIGHT="#f0c8b8", MARK="#5a1410", extra=dict(horn="#2a0e0a", boot="#2a0e0a", wing="#b84a3a", wing_tip="#5a1410")),
+                  "green": dict(SKIN=skin("#a8d0a8"), HAIR="#2a6a3a", FUR="#5a9a6a", LIGHT="#d0ecd0", MARK="#1a4a24", extra=dict(horn="#0e2a14", boot="#0e2a14", wing="#5a9a6a", wing_tip="#1a4a24"))}),
     # twenty-fourth wave: the Behemoth, huge and dark blue, great horns, a wild mane and a thick tail
     "behemoth_devil": dict(
         build="strong", outfit=dict(top=["bandeau"], bottom="loincloth", colors=dict(cloth2="#1a2a5a", leather="#1a2a5a")),
@@ -495,6 +536,67 @@ def anim_extra(an, sp, d):
             an.A[f"animation.{sp}.{key}"] = an.A[f"animation.{sp}.onehop"]
     an.add("charm", 2.0, True, merge({"head": {"rotation": hold(8, 14, 6)}, "body": {"rotation": hold(0, 10, 4)}},
                                      {"arm_r": {"rotation": hold(-150, 0, 20)}, "forearm_r": {"rotation": hold(-60, 0, 0)}}))
+
+
+_declare, _paint, _build = declare_hook, paint_hook, build_hook
+
+
+def declare_hook(sp, d):                                 # twenty-fifth wave: the giants' lava and ice, the ifrit's flames, Pazuzu's snake
+    out = list(_declare(sp, d) or [])
+    if d.get("lava"):
+        out += [("lvein", .5, 3.5, .25), ("lcrown", 1.25, 3.5, 1.25)]
+    if d.get("ice"):
+        out += [("ishard", 1.25, 4.5, 1.25), ("ishard_s", .75, 2.75, .75)]
+    if d.get("iflames"):
+        out += [("iflame", 2.25, 3.5, 2.25)]
+    if d.get("snake_tail"):
+        out += [("shead", 1.75, 1.5, 2.75)]
+    return out
+
+
+def paint_hook(pt, pal, d):
+    _paint(pt, pal, d)
+    if d.get("lava"):
+        v, hot = G.shades(pal.extra["vein"]), G.shades(pal.extra["vein_hot"])
+        pt("lvein", "all", lambda f, x, y, w, h: pick(hot if y % 3 == 1 else v, 0.7, x, y))
+        pt("lcrown", "all", lambda f, x, y, w, h: pick(hot if y > h * 0.5 else v, 0.65 + 0.2 * (x % 2), x, y))
+    if d.get("ice"):
+        ic, tip = G.shades(pal.extra["ice"]), G.shades(pal.extra["ice_tip"])
+        for p in ("ishard", "ishard_s"):
+            pt(p, "all", lambda f, x, y, w, h: pick(tip if y < h * 0.35 or x == 0 else ic, 0.6, x, y))
+    if d.get("iflames"):
+        fl, hot = G.shades(pal.extra["iflame"]), G.shades(pal.extra["iflame_hot"])
+        pt("iflame", "all", lambda f, x, y, w, h: pick(hot if y > h * 0.6 else fl, 0.6 + 0.2 * (x % 2), x, y))
+    if d.get("snake_tail"):
+        pt("shead", "all", lambda f, x, y, w, h: pick(pal.extra["horn"] and G.shades(pal.FUR and "#2a2a30") if f == "north" and y == 0 and x in (0, w - 1) else pal.FUR, 0.45, x, y))
+
+
+def build_hook(r, g, d):
+    _build(r, g, d)
+    hy, z = g.hy, g.z
+    if d.get("lava"):                                    # veins of lava over her skin, a crown of flame
+        ax, ay, az = r.b["arm_r"]["pivot"]
+        r.put("arm_r", G.rot_cube("lvein", [ax - 0.75, ay - 3.5, az - 0.9], [ax, ay - 2, az], 0, 0, 12))
+        r.put("forearm_r", G.rot_cube("lvein", [ax - 0.25, ay - 7.0, az - 0.9], [ax, ay - 5, az], 0, 0, -14))
+        fz = -G.S("midriff")[2] / 2 - 0.1 + z
+        r.put("body", G.rot_cube("lvein", [-1.5, 13.5, fz], [-1.25, 15, fz], 0, 0, 22), G.rot_cube("lvein", [1.0, 13.8, fz], [1.25, 15, fz], 0, 0, -22))
+        lx, ly, lz = r.b["leg_r"]["pivot"]
+        sx, sy, sz = r.b["shin_r"]["pivot"]
+        r.put("leg_r", G.rot_cube("lvein", [lx - 0.25, sy + 0.5, lz - 1.5], [lx, sy + 2, lz - 1.5], 0, 0, 16))
+        r.put("shin_r", G.rot_cube("lvein", [sx - 0.25, 2.0, sz - 1.4], [sx, 3.5, sz - 1.4], 0, 0, -14))
+        r.add("hair_lcrown", "head", [0, hy + 8, z], [G.rot_cube("lcrown", [x - 0.625, hy + 8.2, -3.6 + z + abs(x) * 0.6], [x, hy + 8.2, -3 + z], 0, 0, -x * 9)
+                                                      for x in (-3.4, -1.7, 0, 1.7, 3.4)])
+    if d.get("ice"):                                     # a crown of shards, and more standing up from her shoulders
+        r.add("hair_icrown", "head", [0, hy + 8, z], [G.rot_cube("ishard", [x - 0.625, hy + 7.8, -2.6 + z], [x, hy + 7.8, -2 + z], 0, 0, -x * 11)
+                                                      for x in (-3.4, -1.7, 0, 1.7, 3.4)])
+        ax, ay, az = r.b["arm_r"]["pivot"]
+        r.put("arm_r", G.rot_cube("ishard_s", [ax - 0.375, ay + 0.2, az - 0.375], [ax, ay, az], 0, 0, 24), G.rot_cube("ishard_s", [ax - 1.0, ay, az + 0.5], [ax, ay, az], 14, 0, 40))
+    if d.get("iflames"):                                 # floating free at her sides
+        r.add("hair_iflames", "body", [0, 16, z], [cube("iflame", [x - 1.125, y, z - 1.125]) for x, y in ((-8.5, 15.5), (8.5, 15.5), (-7.0, 21.0), (7.0, 21.0))])
+    if d.get("snake_tail"):                              # the tip of her tail is a snake's head, looking back at you
+        last = [b for b in ("tail_3", "tail_2", "tail") if b in r.b][0]
+        px, py, pz = r.b[last]["pivot"]
+        r.put(last, cube("shead", [px - 0.875, py - 0.5, pz + 3.0]))
 
 
 if __name__ == "__main__":

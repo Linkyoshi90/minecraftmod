@@ -161,6 +161,11 @@ VARIANTS = {
                HAKAMA),
 }
 
+# homage (2026-10-30): Falco: blue feathers, red at the brow, a dark flight jacket for a robe; rolled only by hand (TenguHarpy)
+VARIANTS["sky_ace"] = (variant_pal([(16, 30, 90), (28, 54, 140), (46, 86, 186), (84, 130, 220), (140, 180, 240), (210, 228, 252)],
+                                   [(14, 28, 80), (24, 48, 130), (40, 78, 176), (70, 120, 214), (120, 166, 236), (190, 216, 248), (240, 246, 255)],
+                                   [(20, 20, 30), (30, 60, 140), (60, 110, 210), (120, 170, 240), (200, 226, 255)]),) + VARIANTS["aka"][1:]
+
 
 def write_variants():
     tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls", "textures", "entity")

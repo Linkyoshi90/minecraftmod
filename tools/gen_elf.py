@@ -35,6 +35,26 @@ SPECIES = {
                   "teal": dict(SKIN="#6aa8a8", HAIR="#a8e8c8", CLOTH="#2a4a4a", EYE="#e8f8a0"),
                   "dusk": dict(SKIN="#8a8aa8", HAIR="#2a2430", CLOTH="#4a2a4a"),
                   "moon": dict(SKIN="#c8b8e0", HAIR="#8ab0f0", CLOTH="#2a2a5a")}),
+    # twenty-fifth wave: the Mad Hatter of Wonderland: purple hair, a blue coat, a huge hat, a teacup she never puts down
+    "mad_hatter_elf": dict(
+        build="curvy", outfit=dict(top=["sweater", "vest"], bottom="wrap_skirt", extras=["belt"], colors=dict(cloth2="#f0ece4", leather="#2a4ab0")),
+        hair="flowing", bangs="swept", ears="elf", legs="stockings", foot="shoe", hatter=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#9a6ad8", FUR="#9a6ad8", LIGHT="#e0d0f8", MARK="#5a3a9a", EYE="#c84a6a", CLOTH="#2a4ab0", TRIM="#e84a4a",
+                 extra=dict(boot="#1e2a6a", stocking="#f0ece4", hat="#2a4ab0", hat_band="#e84a4a", cup="#f8f8f8")),
+        variants={"green": dict(HAIR="#e8a03a", CLOTH="#2a7a4a", extra=dict(boot="#1e4a2e", stocking="#f0ece4", hat="#2a7a4a", hat_band="#e8c040", cup="#f8f8f8")),
+                  "plum": dict(HAIR="#e8a0c0", CLOTH="#5a2a7a", extra=dict(boot="#3a1a54", stocking="#f0ece4", hat="#5a2a7a", hat_band="#e8c040", cup="#f8f8f8")),
+                  "red": dict(HAIR="#f0ece4", CLOTH="#a81e2a", extra=dict(boot="#5a0e14", stocking="#f0ece4", hat="#a81e2a", hat_band="#2a2a30", cup="#f8f8f8")),
+                  "gold": dict(HAIR="#7a4ac8", CLOTH="#c8901e", extra=dict(boot="#5a3e10", stocking="#f0ece4", hat="#c8901e", hat_band="#2a4ab0", cup="#f8f8f8"))}),
+    # twenty-fifth wave: the Angel: a small winged girl, a glowing halo, a plain dress; she flies
+    "angel_elf": dict(
+        build="petite", outfit=dict(top=["halter"], bottom="wrap_skirt", colors=dict(cloth2="#c8dcf4")),
+        hair="bob", bangs="swept", ears=None, legs="bare", foot="shoe", wings="feather", wing_scale=0.8, flies=True, halo=True, glow=["halo"], glow_boost=1.2,
+        pal=dict(SKIN=skin("fair"), HAIR="#8ab0e0", FUR="#8ab0e0", LIGHT="#e0ecfa", MARK="#5a80b8", EYE="#3a5a9a", CLOTH="#c8dcf4", TRIM="#f8e8a0",
+                 extra=dict(boot="#e8e0d0", wing="#e0ecfa", wing_tip="#a8c4e8", halo="#f8e080")),
+        variants={"white": dict(HAIR="#f4f0e8", CLOTH="#f8f8f8", extra=dict(boot="#e8e0d0", wing="#ffffff", wing_tip="#e0e0e8", halo="#f8e080")),
+                  "gold": dict(HAIR="#e8c050", CLOTH="#f8ecc0", extra=dict(boot="#c8a040", wing="#f8ecc0", wing_tip="#e8c050", halo="#ffe860")),
+                  "rose": dict(HAIR="#f0a8c0", CLOTH="#fce0ec", extra=dict(boot="#e8c8d0", wing="#fce8f0", wing_tip="#f0a8c0", halo="#f8e080")),
+                  "grey": dict(HAIR="#6a6a74", CLOTH="#c8c8d0", extra=dict(boot="#8a8a94", wing="#c8c8d0", wing_tip="#6a6a74", halo="#e0e0f0"))}),
     "high_elf": dict(
         build="slim", outfit=dict(top=["kimono"], bottom="hakama", extras=["pearls"],
                                   colors=dict(kimono="#f4f2ea", kimono_trim="#d8b040", obi="#d8b040", cloth2="#f0ece0")),
@@ -219,6 +239,47 @@ def anim_extra(an, sp, d):
     an.add("trade", 1.5, False, merge({"body": {"rotation": Tk((0, (0, 0, 0)), (0.5, (14, 0, 0)), (1.0, (14, 0, 0)), (1.5, (0, 0, 0)))},
                                        "eyelids": {"position": Tk((0, H.REST), (0.4, H.OUT_), (1.1, H.OUT_), (1.2, H.REST))}},
                                       sym("arm", hold(-20, 0, 0))))
+
+
+_declare, _paint, _build = declare_hook, paint_hook, build_hook
+
+
+def declare_hook(sp, d):                                 # twenty-fifth wave: the Hatter's hat and cup, the Angel's halo
+    out = list(_declare(sp, d) or [])
+    if d.get("hatter"):
+        out += [("hhat_brim", 12.5, .75, 12.5), ("hhat_crown", 8.5, 6, 8.5), ("hhat_band", 8.75, 1.5, 8.75), ("tcup", 1.75, 1.5, 1.75)]
+    if d.get("halo"):
+        out += [("halo", 7, .5, 1), ("halo_s", 1, .5, 5)]
+    return out
+
+
+def paint_hook(pt, pal, d):
+    _paint(pt, pal, d)
+    if d.get("hatter"):
+        hat, band, cup = G.shades(pal.extra["hat"]), G.shades(pal.extra["hat_band"]), G.shades(pal.extra["cup"])
+        for p in ("hhat_brim", "hhat_crown"):
+            pt(p, "all", lambda f, x, y, w, h: pick(hat, 0.45 + 0.15 * ((x + y) % 7 == 0), x, y))
+        pt("hhat_band", "all", lambda f, x, y, w, h: CLEAR if f in ("up", "down") else pick(band, 0.55, x, y))
+        pt("tcup", "all", lambda f, x, y, w, h: pick(cup, 0.7, x, y))
+    if d.get("halo"):
+        c = G.shades(pal.extra["halo"])
+        for p in ("halo", "halo_s"):
+            pt(p, "all", lambda f, x, y, w, h: pick(c, 0.75, x, y))
+
+
+def build_hook(r, g, d):
+    _build(r, g, d)
+    hy, z = g.hy, g.z
+    if d.get("hatter"):                                  # a wide brim over her hair, tipped a little; a teacup in her left hand
+        r.add("hair_hhat", "head", [0, hy + 8, z], [G.rot_cube("hhat_brim", [-6.25, hy + 7.6, -6.25 + z], [0, hy + 8, z], 0, 0, 5),
+                                                    G.rot_cube("hhat_crown", [-4.25, hy + 8.2, -4.25 + z], [0, hy + 8, z], 0, 0, 5),
+                                                    G.rot_cube("hhat_band", [-4.375, hy + 8.2, -4.375 + z], [0, hy + 8, z], 0, 0, 5)])
+        px, py, pz = r.b["hand_r"]["pivot"]
+        r.add("teacup", "hand_l", [-px, py - 1.5, pz], [cube("tcup", [-px - 0.875, py - 2.0, pz - 2.25])])
+    if d.get("halo"):                                    # a square ring floating over her head
+        top = hy + 10.25
+        r.add("hair_halo", "head", [0, top, z], [cube("halo", [-3.5, top, -3.0 + z]), cube("halo", [-3.5, top, 2.0 + z]),
+                                                 cube("halo_s", [-3.5, top, -2.5 + z]), cube("halo_s", [2.5, top, -2.5 + z])])
 
 
 if __name__ == "__main__":

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_ifrit_devil",
+  "spawners": {
+    "type": "monstergirls:ifrit_devil",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -300,6 +300,7 @@ public class Mollusk extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.CHARYBDIS_MOLLUSK && this.level() instanceof net.minecraft.server.level.ServerLevel maw && !this.isBaby() && this.tickCount % 20 == 0) this.whirlpool(maw);
         if (this.species == GirlSpecies.SPEWSLUG_MOLLUSK && this.level() instanceof net.minecraft.server.level.ServerLevel bog && !this.isBaby() && this.tickCount % 10 == 0) this.bile(bog);
         if (this.species == GirlSpecies.SCYLLA_MOLLUSK && this.level() instanceof net.minecraft.server.level.ServerLevel strait && !this.isBaby() && this.tickCount % 60 == 0) this.sixHounds(strait);
         if (this.species == GirlSpecies.KRAKEN_MOLLUSK && this.hasFlag(FLAG_TOWING)) this.tow();
@@ -474,5 +475,18 @@ public class Mollusk extends AbstractMonsterGirl {
             if (++n == 2) break;
         }
         return n;
+    }
+
+    /** Charybdis's whirlpool (twenty-fifth wave): the monsters in the water within 10 of her are pulled towards her. The number pulled, -1 without a friend near. */
+    public int whirlpool(net.minecraft.server.level.ServerLevel level) {
+        if (this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32) == null) return -1;
+        int pulled = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, this.getBoundingBox().inflate(10), m -> m.isAlive() && m.isInWater())) {
+            net.minecraft.world.phys.Vec3 in = this.position().subtract(m.position()).normalize().scale(0.8);
+            m.setDeltaMovement(in.x, in.y - 0.1, in.z);
+            m.hurtMarked = true;
+            pulled++;
+        }
+        return pulled;
     }
 }

@@ -101,7 +101,9 @@ SPECIES = {
                                             poncho="#e8dcc8", poncho_band="#8a2e4a", ribs="#1a6a34")),
                   "blossom": dict(SKIN="#62b434", HAIR="#14603a", EYE="#e0301e", CLOTH="#2a5aa0", TRIM="#f8c830",
                                   extra=dict(cactus="#4aa02e", bloom="#f86aa8", blossom=True, hat="#d8782a", hat_band="#6a3a18", bandana="#f02a10",
-                                             poncho="#1e4e98", poncho_band="#f0a030", ribs="#2e8a2a"))}),
+                                             poncho="#1e4e98", poncho_band="#f0a030", ribs="#2e8a2a")),
+                  # homage (2026-10-30): the Cactuar: bright green, dark eyes
+                  "needle_runner": dict(SKIN=skin("#6ad05a"), HAIR="#3aa83a", FUR="#6ad05a", LIGHT="#a8f090", MARK="#2a7a2a", EYE="#141418", CLOTH="#e8d870")}),
     "mandragora_flora": dict(
         build="petite", outfit=dict(top=["halter"], colors=dict()), hair="pixie", bangs="messy", ears=None, lower="none", plant="root",
         pal=dict(SKIN="#e8d0b0", HAIR="#5aa84a", FUR="#d8b890", LIGHT="#f8ecd8", MARK="#8a6a4a", EYE="#3a2a1a", CLOTH="#7ab85a", TRIM="#3a7a2a",

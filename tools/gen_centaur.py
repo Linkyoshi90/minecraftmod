@@ -274,7 +274,9 @@ SPECIES = {
         variants={"grey": dict(FUR="#b0b0b4", HAIR="#e0e0e4", MARK="#7a7a80", pattern="dapple", extra=dict(wing="#e8e8ec", wing_tip="#8a8a90")),
                   "palomino": dict(FUR="#e0bc70", HAIR="#f8f0d8", MARK="#c89a50", CLOTH="#8a2a3a", extra=dict(wing="#f8ecc8", wing_tip="#d8b060")),
                   "black": dict(FUR="#1e1c22", HAIR="#141218", MARK="#0e0c10", LIGHT="#3a3640", CLOTH="#c8a040", extra=dict(wing="#2a2830", wing_tip="#0e0c12")),
-                  "dawn": dict(FUR="#f4dcd8", HAIR="#f8c8a0", MARK="#e0a890", CLOTH="#c84a6a", extra=dict(wing="#f8e0d0", wing_tip="#e8a060"))}),
+                  "dawn": dict(FUR="#f4dcd8", HAIR="#f8c8a0", MARK="#e0a890", CLOTH="#c84a6a", extra=dict(wing="#f8e0d0", wing_tip="#e8a060")),
+                  # homage (2026-10-30): Pit: white chiton, a gold wreath's colour in her trim, dark hair
+                  "angel_guard": dict(HAIR="#3a2a1e", FUR="#f8f8f4", LIGHT="#ffffff", MARK="#c8c0a8", EYE="#2a5ab0", CLOTH="#f8f8f4", TRIM="#e8c040")}),
 }
 
 

@@ -200,7 +200,9 @@ SPECIES = {
         variants={"common": dict(FUR="#2e3a4a", MARK="#e8d8a0", LIGHT="#f2ecd8", HAIR="#3a4656", pattern="patches", CLOTH="#e8b040"),
                   "spinner": dict(FUR="#5a6676", MARK="#9aa4b0", HAIR="#6a7686", CLOTH="#8a4ab0"),
                   "rissos": dict(FUR="#a8acb0", MARK="#f0f0ee", HAIR="#c8ccd0", pattern="speckle", CLOTH="#3a5a8a"),
-                  "pink": dict(FUR="#e8a8b4", HAIR="#f0bcc6", LIGHT="#f8dce2", MARK="#d08898", CLOTH="#3a8a7a")}),
+                  "pink": dict(FUR="#e8a8b4", HAIR="#f0bcc6", LIGHT="#f8dce2", MARK="#d08898", CLOTH="#3a8a7a"),
+                  # homage (2026-10-30): Ecco: grey-blue, a pale belly
+                  "star_song": dict(HAIR="#3a5a8a", FUR="#5a7aa8", LIGHT="#e0e8f4", MARK="#2a3a6a", EYE="#2a2a36", CLOTH="#2a3a6a", TRIM="#e0e8f4")}),
     "ahuizotl_mermaid": dict(
         build="athletic", outfit=dict(top=["sports"], extras=["armlets"], colors=dict(cloth2="#2a6a6a")),
         ears="round", hair="shaggy", bangs="messy", fluke=(3, .75, 3.5), hand=True, size=0.95,

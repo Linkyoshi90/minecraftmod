@@ -400,6 +400,8 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.MAD_HATTER_ELF && this.level() instanceof net.minecraft.server.level.ServerLevel party && !this.isBaby() && this.tickCount % 100 == 0) this.teaTime(party);
+        if (this.species == GirlSpecies.ANGEL_ELF && this.level() instanceof net.minecraft.server.level.ServerLevel grace && !this.isBaby() && this.tickCount % 40 == 0) this.mercy(grace);
         if (this.species == GirlSpecies.DOMOVOI_ELF && this.level() instanceof ServerLevel house && !this.isBaby()) this.keepHearth(house, this.tickCount % 40 == 0);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.VALKYRIE_ELF && this.tickCount % 20 == 0) this.returnFallen(server);
@@ -567,7 +569,7 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
 
     @Override
     public boolean canFly() {
-        return this.species == GirlSpecies.VALKYRIE_ELF || super.canFly();
+        return this.species == GirlSpecies.VALKYRIE_ELF || this.species == GirlSpecies.ANGEL_ELF || super.canFly();
     }
 
     /** What she gathered up where her friend fell, and whose it is. */
@@ -649,5 +651,31 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
             }
         }
         return n;
+    }
+
+    /** The last day the Hatter poured. */
+    private long lastTea = -1;
+
+    /** The Mad Hatter's tea (twenty-fifth wave): once a day, a good effect for her friend, chosen at random, for two minutes. 1 when she poured, 0 when she already has, -1 without a friend. */
+    public int teaTime(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        long day = level.getDayTime() / 24000L;
+        if (day == this.lastTea) return 0;
+        this.lastTea = day;
+        var cups = java.util.List.of(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, net.minecraft.world.effect.MobEffects.DIG_SPEED, net.minecraft.world.effect.MobEffects.JUMP, net.minecraft.world.effect.MobEffects.REGENERATION, net.minecraft.world.effect.MobEffects.NIGHT_VISION, net.minecraft.world.effect.MobEffects.WATER_BREATHING, net.minecraft.world.effect.MobEffects.LUCK, net.minecraft.world.effect.MobEffects.FIRE_RESISTANCE);
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(cups.get(this.random.nextInt(cups.size())), 2400, 0));
+        this.playSound(net.minecraft.sounds.SoundEvents.BOTTLE_EMPTY, 1.0F, 1.2F);
+        return 1;
+    }
+
+    /** The Angel's mercy (twenty-fifth wave): her friend under a third of their health gets Regeneration II for 5 seconds. 1 when she healed, 0 when they are well, -1 without a friend. */
+    public int mercy(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        if (friend.getHealth() >= friend.getMaxHealth() / 3.0F) return 0;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.REGENERATION, 100, 1));
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.END_ROD, friend.getX(), friend.getY() + 1, friend.getZ(), 8, 0.4, 0.5, 0.4, 0.02);
+        return 1;
     }
 }

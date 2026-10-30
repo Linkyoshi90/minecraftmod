@@ -73,7 +73,7 @@ public final class Settlement {
     static Style style(GirlSpecies s) {
         return switch (s.family()) {
             case MERFOLK, MOLLUSK, CRUSTACEAN -> new Style(Blocks.DARK_PRISMARINE, Blocks.PRISMARINE_BRICKS, Blocks.PRISMARINE_BRICK_SLAB, Blocks.CYAN_BED);
-            case UNDEAD, DEVIL -> new Style(Blocks.DARK_OAK_LOG, Blocks.DARK_OAK_PLANKS, Blocks.BLACKSTONE_SLAB, Blocks.PURPLE_BED);
+            case UNDEAD, DEVIL, RIDER -> new Style(Blocks.DARK_OAK_LOG, Blocks.DARK_OAK_PLANKS, Blocks.BLACKSTONE_SLAB, Blocks.PURPLE_BED);
             case SLIME -> new Style(Blocks.MUD_BRICKS, Blocks.PACKED_MUD, Blocks.MUD_BRICK_SLAB, Blocks.LIME_BED);
             case CONSTRUCT, DRAGON -> new Style(Blocks.POLISHED_DEEPSLATE, Blocks.DEEPSLATE_BRICKS, Blocks.DEEPSLATE_BRICK_SLAB, Blocks.GRAY_BED);
             case LIZARDFOLK, LAMIA, THEROPOD -> new Style(Blocks.CUT_SANDSTONE, Blocks.SMOOTH_SANDSTONE, Blocks.SANDSTONE_SLAB, Blocks.GREEN_BED);

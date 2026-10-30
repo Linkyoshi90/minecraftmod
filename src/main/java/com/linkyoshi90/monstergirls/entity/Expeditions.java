@@ -146,7 +146,7 @@ public final class Expeditions {
     static Item[] land(GirlSpecies.Family family) {
         return switch (family) {
             case MERFOLK, MOLLUSK, CRUSTACEAN -> new Item[]{Items.PRISMARINE_SHARD, Items.PRISMARINE_CRYSTALS, Items.KELP, Items.SEA_PICKLE, Items.COD, Items.NAUTILUS_SHELL};
-            case UNDEAD, DEVIL -> new Item[]{Items.BONE, Items.CANDLE, Items.AMETHYST_SHARD, Items.SOUL_TORCH, Items.ROTTEN_FLESH};
+            case UNDEAD, DEVIL, RIDER -> new Item[]{Items.BONE, Items.CANDLE, Items.AMETHYST_SHARD, Items.SOUL_TORCH, Items.ROTTEN_FLESH};
             case FLORA, ELF, BUG -> new Item[]{Items.OAK_SAPLING, Items.BIRCH_SAPLING, Items.APPLE, Items.HONEYCOMB, Items.SWEET_BERRIES, Items.GLOW_BERRIES};
             case LIZARDFOLK, LAMIA, DRAGON, THEROPOD -> new Item[]{Items.CACTUS, Items.GOLD_NUGGET, Items.TURTLE_SCUTE, Items.DEAD_BUSH, Items.FIRE_CHARGE};
             case NEKOMATA, KITSUNE -> new Item[]{Items.STRING, Items.SALMON, Items.SWEET_BERRIES, Items.CHERRY_SAPLING, Items.RABBIT_HIDE};

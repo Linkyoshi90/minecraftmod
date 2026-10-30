@@ -93,14 +93,16 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             "obsidian", "patchwork", "sandstone", "acorn",                   // acorn is seasonal, September only
             "prismarine", "amethyst", "sculk", "mushroom",                   // Minecraft's blocks, tiled; sculk's specks glow
             "lapis", "bookshelf", "glazed", "redstone_lamp",                 // the lamp's light glows
-            "netherite", "purpur", "crying_obsidian", "shroomlight");        // the tears and the shroomlight's light glow
+            "netherite", "purpur", "crying_obsidian", "shroomlight",         // the tears and the shroomlight's light glow
+            "end_stone", "hay_bale", "ancient_debris", "sea_lantern");       // the sea lantern glows
     /** Homage variants (the look of a favourite character): a wild one rolls them only rarely. */
     public static final java.util.Set<String> HOMAGES = java.util.Set.of("gunman", "blossom", "lost", "stitched", "nurse", "mummy", "ranger", "outback",
             "jewel_thief", "ink_kid", "pink_dairy", "sun_goddess",                            // POP_CULTURE_VARIANTS.md
             "octo_agent", "ninja_chameleon", "shell_trooper", "town_clerk", "scythe_green", "leaf_sprout", "mud_fin", "trident_hood",
             "innkeeper", "prankster", "soul_keeper", "sage_princess", "green_hero", "tree_guard", "snow_wraith", "headless_rider", "death_envoy",
             "bake_sale", "twin_tails", "ember_tail", "spike_king", "lawn_zombie", "drop_smile", "puffball", "hoodie_squirrel", "flight_cap",
-            "lamp_friend", "tiny_jumper", "kaiju_moth", "pocket_bot", "nine_cream", "shopkeeper", "shy_ghost", "night_heir");
+            "lamp_friend", "tiny_jumper", "kaiju_moth", "pocket_bot", "nine_cream", "shopkeeper", "shy_ghost", "night_heir",
+            "detective_croc", "bandicoot", "needle_runner", "angel_guard", "music_box", "star_song");
     /** Homage looks with a model of their own (geo, animations and texture &lt;species&gt;_&lt;variant&gt;), not just a recolour. */
     public static final java.util.Set<String> OWN_MODELS = java.util.Set.of("mud_fin", "trident_hood");
     /** One wild girl in this many is painted, like a shiny. */
@@ -1120,8 +1122,14 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         controllers.add(new AnimationController<>(this, "main", 4, this::animate));
     }
 
+    /** Whether her animation file has a seated "ride" pose for when she is on a mount (the Riders). */
+    protected boolean hasRideAnimation() {
+        return false;
+    }
+
     private PlayState animate(AnimationState<AbstractMonsterGirl> state) {
         if (this.isDeadOrDying() && this.hasDeathAnimation()) return state.setAndContinue(this.anim("death", true));
+        if (this.isPassenger() && this.hasRideAnimation()) return state.setAndContinue(this.anim("ride", false));
         Action action = this.getAction();
         if (action.animation != null) return state.setAndContinue(this.anim(action.animation, action.once));
         if (this.isInWater() && this.hasSwimAnimation()) return state.setAndContinue(this.anim(state.isMoving() ? "swim" : "idle", false));

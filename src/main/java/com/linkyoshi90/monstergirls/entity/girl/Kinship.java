@@ -75,7 +75,7 @@ public final class Kinship {
             }
             for (String h : List.of("sparrow_harpy", "crow_harpy", "owl_harpy", "seagull_harpy", "albatross_harpy", "riflebird_harpy", "tengu_harpy", "toucan_harpy",
                     "finch_harpy", "flamingo_harpy", "coin_magpie_harpy", "trickster_raven_harpy", "rookmourn_harpy", "pumpkingull_harpy", "condorune_harpy", "mirror_crane_harpy",
-                    "ironbeak_harpy", "ibiset_harpy", "stigowl_harpy")) {
+                    "ironbeak_harpy", "ibiset_harpy", "stigowl_harpy", "yatagarasu_harpy")) {
                 other(h, EntityType.PARROT);
             }
             other("ostrich_harpy", EntityType.CHICKEN);

@@ -73,6 +73,7 @@ public class Devil extends AbstractMonsterGirl {
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
+            case FIRE_GIANT_DEVIL, FROST_GIANT_DEVIL -> girlAttributes(100, 0.26, 12).add(net.minecraft.world.entity.ai.attributes.Attributes.KNOCKBACK_RESISTANCE, 0.9);
             case BEHEMOTH_DEVIL -> girlAttributes(90, 0.24, 10).add(net.minecraft.world.entity.ai.attributes.Attributes.ARMOR, 6).add(net.minecraft.world.entity.ai.attributes.Attributes.KNOCKBACK_RESISTANCE, 0.9);
             case LESSER_DEVIL -> girlAttributes(12, 0.32, 2);
             case SUCCUBUS_DEVIL -> girlAttributes(26, 0.3, 4);
@@ -91,6 +92,7 @@ public class Devil extends AbstractMonsterGirl {
 
     @Override
     public boolean canFly() {
+        if (this.species == GirlSpecies.PAZUZU_DEVIL) return true;
         return this.species == GirlSpecies.LESSER_DEVIL || this.species == GirlSpecies.SUCCUBUS_DEVIL || this.species == GirlSpecies.GREATER_DEVIL
                 || this.species == GirlSpecies.ITTAN_MOMEN_DEVIL;
     }
@@ -453,6 +455,13 @@ public class Devil extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.FIRE_GIANT_DEVIL && this.level() instanceof net.minecraft.server.level.ServerLevel forge && !this.isBaby()) {
+            this.glow(forge, 13);                                              // her lava lights the ground she walks on
+            if (this.tickCount % 40 == 0) this.hearthfire(forge);
+        }
+        if (this.species == GirlSpecies.FROST_GIANT_DEVIL && this.level() instanceof net.minecraft.server.level.ServerLevel frost && !this.isBaby() && this.tickCount % 5 == 0) this.iceRoad(frost);
+        if (this.species == GirlSpecies.IFRIT_DEVIL && this.level() instanceof net.minecraft.server.level.ServerLevel oven && !this.isBaby() && this.tickCount % 100 == 0) this.smelter(oven);
+        if (this.species == GirlSpecies.PAZUZU_DEVIL && this.level() instanceof net.minecraft.server.level.ServerLevel storm && !this.isBaby() && this.tickCount % 40 == 0) this.southWind(storm);
         if (this.species == GirlSpecies.OGRE_DEVIL && this.level() instanceof ServerLevel glen && !this.isBaby() && this.tickCount % 10 == 0) this.bonk(glen);
         if (this.species == GirlSpecies.TAOTIE_DEVIL && this.level() instanceof ServerLevel feast && !this.isBaby() && this.tickCount % 20 == 0) this.gluttony(feast);
         if (this.species == GirlSpecies.AKANAME_DEVIL && this.level() instanceof ServerLevel bath && !this.isBaby() && this.tickCount % 40 == 0) this.scrub(bath);
@@ -721,5 +730,68 @@ public class Devil extends AbstractMonsterGirl {
     public static boolean anchored(net.minecraft.world.entity.player.Player player) {
         return !player.level().getEntitiesOfClass(Devil.class, player.getBoundingBox().inflate(8),
                 d -> d.species == GirlSpecies.BEHEMOTH_DEVIL && !d.isBaby() && d.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION).isEmpty();
+    }
+
+    /** The Fire Giant's warmth: Fire Resistance for her friend. 1, or -1 without a friend. */
+    public int hearthfire(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.FIRE_RESISTANCE, 120, 0, true, false));
+        return 1;
+    }
+
+    /** The Frost Giant's road: still water within 2 under her friend's feet freezes for a while. The blocks frozen, -1 without a friend. */
+    public int iceRoad(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        net.minecraft.core.BlockPos under = friend.getOnPos();
+        int frozen = 0;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(under.offset(-2, 0, -2), under.offset(2, 0, 2))) {
+            if (!level.getBlockState(p).is(net.minecraft.world.level.block.Blocks.WATER) || !level.getFluidState(p).isSource() || !level.getBlockState(p.above()).isAir()) continue;
+            level.setBlockAndUpdate(p, net.minecraft.world.level.block.Blocks.FROSTED_ICE.defaultBlockState());
+            level.scheduleTick(p.immutable(), net.minecraft.world.level.block.Blocks.FROSTED_ICE, 60 + this.random.nextInt(60));
+            frozen++;
+        }
+        return frozen;
+    }
+
+    /** The last day the Ifrit smelted. */
+    private long lastSmelt = -1;
+
+    /** The Ifrit's oven: once a day, a stack of raw iron, gold or copper in her friend's pack turns into ingots. The ingots made, -1 without a friend. */
+    public int smelter(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        long day = level.getDayTime() / 24000L;
+        if (day == this.lastSmelt) return 0;
+        var pack = friend.getInventory();
+        for (int i = 0; i < pack.getContainerSize(); i++) {
+            net.minecraft.world.item.ItemStack s = pack.getItem(i);
+            net.minecraft.world.item.Item ingot = s.is(net.minecraft.world.item.Items.RAW_IRON) ? net.minecraft.world.item.Items.IRON_INGOT
+                    : s.is(net.minecraft.world.item.Items.RAW_GOLD) ? net.minecraft.world.item.Items.GOLD_INGOT
+                    : s.is(net.minecraft.world.item.Items.RAW_COPPER) ? net.minecraft.world.item.Items.COPPER_INGOT : null;
+            if (ingot == null) continue;
+            int n = s.getCount();
+            pack.setItem(i, new net.minecraft.world.item.ItemStack(ingot, n));
+            this.lastSmelt = day;
+            this.playSound(net.minecraft.sounds.SoundEvents.BLASTFURNACE_FIRE_CRACKLE, 1.0F, 1.0F);
+            return n;
+        }
+        return 0;
+    }
+
+    /** Pazuzu's wind: with three or more monsters within 5 of her friend, a gust throws them back. The number thrown, -1 without a friend. */
+    public int southWind(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        var near = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(5), m -> m.isAlive());
+        if (near.size() < 3) return 0;
+        for (net.minecraft.world.entity.monster.Monster m : near) {
+            net.minecraft.world.phys.Vec3 away = m.position().subtract(friend.position()).normalize().scale(1.2);
+            m.setDeltaMovement(away.x, 0.45, away.z);
+            m.hurtMarked = true;
+        }
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.GUST, friend.getX(), friend.getY() + 1, friend.getZ(), 6, 1.5, 0.5, 1.5, 0.0);
+        return near.size();
     }
 }
