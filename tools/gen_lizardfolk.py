@@ -169,6 +169,17 @@ SPECIES = {
                   "orange": dict(FUR="#e8883a", HAIR="#c8682a", MARK="#7a3a1a", LIGHT="#f8c8a0"),
                   "marine": dict(FUR="#4a4a4e", HAIR="#2a2a2e", MARK="#7a7a5a", LIGHT="#8a8a8e"),
                   "rhino": dict(FUR="#8a8a82", HAIR="#5a5a52", MARK="#4a4a44", LIGHT="#c0c0b8")}),
+    # twenty-fourth wave: Cipactli, the Aztec first monster: a small spiky teal crocodile girl, a cream belly, a heavy tail
+    "cipactli_lizardfolk": dict(
+        build="petite", outfit=dict(top=["bandeau"], bottom="shorts", colors=dict(cloth2="#1a6a70")),
+        hair="pixie", bangs="jagged", ears=None, legs="scales", foot="claw", tail=[(3.5, 3, 4.5), (3, 2.5, 4.5), (2.25, 2, 4), (1.5, 1.5, 3.5)],
+        tail_rest=[(-25, 0, 0), (8, 0, 0), (6, 0, 0), (4, 0, 0)], tail_look="scale", spines=True, teeth=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1a7a80", FUR="#3ab0b8", LIGHT="#f0e4b8", MARK="#14606a", EYE="#2a5ab0", CLOTH="#f0e4b8", TRIM="#14606a",
+                 pattern="solid", pupil=(0.9, 3.4)),
+        variants={"green": dict(HAIR="#2a6a2a", FUR="#4a9a4a", MARK="#1e4a1e", TRIM="#1e4a1e"),
+                  "olive": dict(HAIR="#4a4a1e", FUR="#7a7a3a", MARK="#3a3a14", TRIM="#3a3a14"),
+                  "red": dict(HAIR="#7a1e14", FUR="#b83a2a", MARK="#5a140e", TRIM="#5a140e"),
+                  "black": dict(HAIR="#141418", FUR="#2a2a30", LIGHT="#a89a7a", MARK="#0a0a0c", TRIM="#0a0a0c", EYE="#e8c040")}),
     "croc_lizardfolk": dict(
         build="strong", outfit=dict(top=["sarashi"], bottom="loincloth", extras=["arm_wraps", "belt"], colors=dict(bandage="#c8b898")),
         hair="shaggy", bangs="messy", ears=None, legs="scales", foot="claw", tail=[(3.5, 3, 5), (3, 2.5, 5), (2.25, 2, 4.5), (1.5, 1.5, 4)],

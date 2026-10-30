@@ -43,7 +43,9 @@ SPECIES = {
                  pattern="spots", facemark="eyes"),
         variants={"bold": dict(MARK="#e8602a", CLOTH="#c8502a"), "zebra": dict(pattern="finestripes", HAIR="#e8e8e8"),
                   "golden": dict(FUR="#b08a40", MARK="#f0e0b0", pattern="bands", HAIR="#c89a48", CLOTH="#6a4a2a"),
-                  "teal": dict(FUR="#1a3a3a", MARK="#3ad0c0", HAIR="#1a4a4a")}),
+                  "teal": dict(FUR="#1a3a3a", MARK="#3ad0c0", HAIR="#1a4a4a"),
+                  # homage (2026-10-30): the spider of Webbed: round, black and gold, a tiny red bow's colour on her top
+                  "tiny_jumper": dict(FUR="#1a1a1e", HAIR="#1a1a1e", LIGHT="#e8b040", MARK="#e8b040", CLOTH="#c82a4a", TRIM="#e8b040", pattern="bands")}),
     "orb_weaver_arachne": dict(
         build="slim", outfit=dict(top=["bandeau", "corset"], extras=["pearls"], colors=dict(cloth2="#2a2420")),
         abdomen=(9, 8.5, 9), hair="drills", hairy=0.0,

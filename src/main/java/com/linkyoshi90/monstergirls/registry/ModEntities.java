@@ -27,7 +27,9 @@ import com.linkyoshi90.monstergirls.entity.FlamingoHarpy;
 import com.linkyoshi90.monstergirls.entity.CoinMagpieHarpy;
 import com.linkyoshi90.monstergirls.entity.PeaflareHarpy;
 import com.linkyoshi90.monstergirls.entity.EmberuHarpy;
+import com.linkyoshi90.monstergirls.entity.IbisetHarpy;
 import com.linkyoshi90.monstergirls.entity.IronbeakHarpy;
+import com.linkyoshi90.monstergirls.entity.StigowlHarpy;
 import com.linkyoshi90.monstergirls.entity.MirrorCraneHarpy;
 import com.linkyoshi90.monstergirls.entity.PumpkingullHarpy;
 import com.linkyoshi90.monstergirls.entity.CondoruneHarpy;
@@ -218,6 +220,20 @@ public final class ModEntities {
                     .clientTrackingRange(10)
                     .build("ironbeak_harpy"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<IbisetHarpy>> IBISET_HARPY =
+            ENTITY_TYPES.register("ibiset_harpy", () -> EntityType.Builder.of(IbisetHarpy::new, MobCategory.CREATURE)
+                    .sized(0.6F, 1.9F)
+                    .eyeHeight(1.65F)
+                    .clientTrackingRange(10)
+                    .build("ibiset_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<StigowlHarpy>> STIGOWL_HARPY =
+            ENTITY_TYPES.register("stigowl_harpy", () -> EntityType.Builder.of(StigowlHarpy::new, MobCategory.CREATURE)
+                    .sized(0.6F, 1.7F)
+                    .eyeHeight(1.5F)
+                    .clientTrackingRange(10)
+                    .build("stigowl_harpy"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<FlamingoHarpy>> FLAMINGO_HARPY =
             ENTITY_TYPES.register("flamingo_harpy", () -> EntityType.Builder.of(FlamingoHarpy::new, MobCategory.CREATURE)
                     .sized(0.55F, 1.95F)
@@ -362,6 +378,8 @@ public final class ModEntities {
         event.put(MIRROR_CRANE_HARPY.get(), MirrorCraneHarpy.createAttributes().build());
         event.put(EMBERU_HARPY.get(), EmberuHarpy.createAttributes().build());
         event.put(IRONBEAK_HARPY.get(), IronbeakHarpy.createAttributes().build());
+        event.put(IBISET_HARPY.get(), IbisetHarpy.createAttributes().build());
+        event.put(STIGOWL_HARPY.get(), StigowlHarpy.createAttributes().build());
         event.put(DODOBOLD_HARPY.get(), DodoboldHarpy.createAttributes().build());
         event.put(ROOKMOURN_HARPY.get(), RookmournHarpy.createAttributes().build());
         event.put(CASSOWRATH_HARPY.get(), CassowrathHarpy.createAttributes().build());
@@ -429,6 +447,10 @@ public final class ModEntities {
                 EmberuHarpy::checkEmberuHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(IRONBEAK_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 IronbeakHarpy::checkIronbeakHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(IBISET_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                IbisetHarpy::checkIbisetHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(STIGOWL_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                StigowlHarpy::checkStigowlHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(COIN_MAGPIE_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 CoinMagpieHarpy::checkCoinMagpieHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(TRICKSTER_RAVEN_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,

@@ -758,6 +758,7 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.QILIN_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel meadow && !this.isBaby() && this.tickCount % 60 == 0) this.gentleTread(meadow);
         if (this.species == GirlSpecies.URCUCHILLAY_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel herd && !this.isBaby() && this.tickCount % 200 == 0) this.herdKeeper(herd);
         if (this.species == GirlSpecies.CEIBLER_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel trail && !this.isBaby() && this.tickCount % 20 == 0) this.trailGuide(trail);
         if (this.species == GirlSpecies.PALMYR_CENTAUR && this.level() instanceof ServerLevel meadow && !this.isBaby() && this.tickCount % 20 == 0) this.fleetFoot(meadow);
@@ -1021,5 +1022,19 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
             n++;
         }
         return n;
+    }
+
+    /** The qilin's blessing (twenty-fourth wave): the hurt animals within 8 of her friend heal 2 health. The number healed, -1 without a friend. */
+    public int gentleTread(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        int healed = 0;
+        for (net.minecraft.world.entity.animal.Animal a : level.getEntitiesOfClass(net.minecraft.world.entity.animal.Animal.class, friend.getBoundingBox().inflate(8),
+                a -> a.isAlive() && a.getHealth() < a.getMaxHealth())) {
+            a.heal(2.0F);
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.HEART, a.getX(), a.getEyeY(), a.getZ(), 2, 0.2, 0.2, 0.2, 0.0);
+            healed++;
+        }
+        return healed;
     }
 }

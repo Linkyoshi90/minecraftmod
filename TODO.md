@@ -309,6 +309,22 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Paints:** prismarine, amethyst, sculk (glow mask) and mushroom, tiled from the vanilla block textures, so 87 in all.
   - **Homage props:** the dullahan's `envoy_kit`: Celty's helmet (`rider`) and Lala's scythe (`scythe`), each drawn only on its look; the dullahan's paints were redone for the new parts.
 - [ ] Dev client for the twenty-second wave: the macawtl's plumes, the piranha's lure, the mosasaurus's size, Xiangliu's little heads, the cyclops's eye and blink, the genie's smoke tail and float, Ammit's snout; Celty's helmet and Lala's scythe; the four paints and the sculk glow.
+- [x] **Twenty-fourth wave** (2026-10-30), tested in `TwentyFourthWaveTests`:
+  - **Quetzalcoatl** (dragon, rearing serpent, flies, `qcrest`): once a day at dawn, `morningStar` grows the crops within 6 of her friend.
+  - **Leviathan** (merfolk, `fishbody`, `lhorns`, 3 blocks): every second, `tideCall` gives her friend Dolphin's Grace in water and throws back monsters in the water within 8.
+  - **Girtablilu** (bug, the scorpion's rig, `veil`): every second at night, `gateGuard` stings the nearest monster within 6 of her friend (2 damage, Poison, Slowness II).
+  - **Cipactli** (lizardfolk): every 2 s, `pullUnder` bites monsters in or beside water within 6 of her friend (3 damage, Slowness III).
+  - **Behemoth** (devil): `Devil.anchored` (LivingKnockBackEvent in GirlEvents) cancels knockback on her friend within 8.
+  - **Nasnas** (undead, wisp): `Undead.takesTheBlow` (GirlEvents.onPlayerHurt) cancels a killing blow within 16, once a day.
+  - **Ibiset** (harpy, `IbisetHarpy`, flamingo rig; eggs, hatchling, spawns in deserts, savannas, rivers, mangroves): once a day, `dailyBook`.
+  - **Stigowl** (harpy, `StigowlHarpy`, owl rig; eggs, hatchling, spawns in dark forests, old growth taigas, the deep dark): every second, `clearSight`. The reference `strigowl` is the same owl.
+  - **Cerberus** (canid, `cheads`): every second, `threeWatches` slows monsters behind her friend within 8 and stops creepers swelling.
+  - **Jiangshi** (undead, `jiangshi`: hat, talisman, hopping animations): every 2 s, `stiffHop` strikes monsters within 3 of her (2 damage, Slowness VI).
+  - **Baku** (nekomata, `baku`: trunk): every 10 s, `eatNightmares` resets her friend's time since rest.
+  - **Qilin** (centaur): every 3 s, `gentleTread` heals hurt animals within 8 of her friend; GirlEvents cancels her farmland trampling.
+  - **Paints:** netherite, purpur, crying_obsidian, shroomlight (the last two glow); 95 in all.
+  - **Homage looks:** lamp_friend (`ggoatee`), tiny_jumper, kaiju_moth, pocket_bot, nine_cream (`Kitsune.visibleTails` shows nine), shopkeeper, shy_ghost, night_heir.
+- [ ] Dev client for the twenty-fourth wave: Quetzalcoatl's crest and flight, the Leviathan's size and horns in water, the girtablilu's hood and veil, Cerberus's side heads in every animation (they ride on her body, not her head), the jiangshi's hop, the baku's trunk; the harpies' colours; the glow of the two new paints; the eight homage looks.
 - [x] **Rigs and fixes** (2026-10-30, after playing the twenty-third wave):
   - **Rearing serpent** (`tools/serpent_rig.py`): a girl only from the bust up, ten snake segments under her. The Macawtl and the Turquoise Serpent lie flat, slither, and rear up in the idle (14 s loop). The bones stand upright in the model and the animations lay them down, so sizes and hitboxes are unchanged.
   - **Fish body** (Fishman, gen_merfolk `fishbody`): her chest on a deep fish body, level in water and out, the tail sweeping side to side.

@@ -487,6 +487,7 @@ public class Nekomata extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.BAKU_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel dream && !this.isBaby() && this.tickCount % 200 == 0) this.eatNightmares(dream);
         if (this.species == GirlSpecies.CARACAL_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel leap && !this.isBaby() && this.tickCount % 40 == 0) this.birdCatch(leap);
         if (this.species == GirlSpecies.RAKSHASA_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel maya && !this.isBaby() && this.tickCount % 40 == 0) this.glamour(maya);
         if (this.species == GirlSpecies.AMMIT_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel judge && !this.isBaby() && this.tickCount % 10 == 0) this.devour(judge);
@@ -864,5 +865,13 @@ public class Nekomata extends AbstractMonsterGirl {
         }
         if (this.devoured.size() > 64) this.devoured.clear();
         return n;
+    }
+
+    /** The baku's meal (twenty-fourth wave): her friend counts as freshly rested, so phantoms never come. 1 when she ate, -1 without a friend. */
+    public int eatNightmares(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (!(friend instanceof net.minecraft.server.level.ServerPlayer sleeper)) return -1;
+        sleeper.resetStat(net.minecraft.stats.Stats.CUSTOM.get(net.minecraft.stats.Stats.TIME_SINCE_REST));
+        return 1;
     }
 }

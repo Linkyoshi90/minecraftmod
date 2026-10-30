@@ -138,6 +138,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
+            case LEVIATHAN_MERMAID -> girlAttributes(70, 0.28, 8);
             case SAWFIN_MERMAID -> girlAttributes(24, 0.25, 5);
             case ORCA_MERMAID -> girlAttributes(36, 0.25, 6);
             case SHARK_MERMAID -> girlAttributes(30, 0.25, 7);
@@ -430,6 +431,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.LEVIATHAN_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel deep && !this.isBaby() && this.tickCount % 20 == 0) this.tideCall(deep);
         if (this.species == GirlSpecies.WALRUS_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel floe && !this.isBaby() && this.tickCount % 20 == 0) this.blubber(floe);
         if (this.species == GirlSpecies.ANOMALOCARIS_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel deep && !this.isBaby() && this.tickCount % 40 == 0) this.raptorGrasp(deep);
         if (this.species == GirlSpecies.PIRANHA_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel river && !this.isBaby() && this.tickCount % 20 == 0) this.frenzy(river);
@@ -1290,5 +1292,23 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         d.playSound(net.minecraft.sounds.SoundEvents.ITEM_BREAK, 1.0F, 0.8F);
         this.getLookControl().setLookAt(d);
         return 1;
+    }
+
+    /**
+     * The Leviathan's tide (twenty-fourth wave): her friend swims with Dolphin's Grace, and the monsters in the water within 8 of them
+     * are driven away. The number of monsters moved, -1 without a friend.
+     */
+    public int tideCall(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null) return -1;
+        if (friend.isInWater()) friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DOLPHINS_GRACE, 60, 0, true, false));
+        int moved = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8), m -> m.isAlive() && m.isInWater())) {
+            net.minecraft.world.phys.Vec3 away = m.position().subtract(friend.position()).normalize().scale(0.9);
+            m.setDeltaMovement(away.x, 0.2, away.z);
+            m.hurtMarked = true;
+            moved++;
+        }
+        return moved;
     }
 }

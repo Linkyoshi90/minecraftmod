@@ -32,6 +32,16 @@ SPECIES = {
                   "blue": dict(EYE="#4ac8f8", TRIM="#1e4a7a", INNER="#1e2a4a", extra=dict(flame="#4ac8f8", flame_core="#e8fcff", tuft="#1a3a5a", tuft_tip="#2a7aa8", claw="#203a5a")),
                   "green": dict(EYE="#6af84a", TRIM="#2a6a2a", INNER="#1e3a1e", extra=dict(flame="#6af84a", flame_core="#e8ffd0", tuft="#1a4a24", tuft_tip="#3a8a3a", claw="#204a2a")),
                   "purple": dict(EYE="#c84af8", TRIM="#5a1e7a", INNER="#2e1a4a", extra=dict(flame="#c84af8", flame_core="#f8e0ff", tuft="#3a1a5a", tuft_tip="#7a3aa8", claw="#3a205a"))}),
+    # twenty-fourth wave: Cerberus, dark-furred, with two more little heads on her shoulders, as the Xiangliu has
+    "cerberus_canid": dict(
+        build="athletic", outfit=dict(top=["bandeau"], bottom="shorts", extras=["belt"], colors=dict(leather="#7a1e1a", cloth2="#1e1a1e")),
+        hair="shaggy", bangs="jagged", ears="fox", legs="fur", foot="paw", tail=[(2, 2, 4), (2.25, 2.25, 4), (1.75, 1.75, 3)],
+        tail_rest=[(-25, 0, 0), (10, 0, 0), (12, 0, 0)], tail_look="fur", grin=True, cheads=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e1a1e", FUR="#2a2628", LIGHT="#6a6266", MARK="#0e0c0e", EYE="#e83a2a", CLOTH="#1e1a1e", TRIM="#c82a1e", INNER="#7a3a3a", pattern="solid"),
+        variants={"brown": dict(HAIR="#3a2614", FUR="#5a3e24", LIGHT="#a8845a", MARK="#2a1a0e", EYE="#e8a030", CLOTH="#3a2614"),
+                  "grey": dict(HAIR="#4a4a50", FUR="#6a6a70", LIGHT="#a8a8b0", MARK="#2a2a30", EYE="#5ab0e8", CLOTH="#2a2a30"),
+                  "white": dict(HAIR="#e8e4e0", FUR="#f0ece8", LIGHT="#ffffff", MARK="#a8a4a0", EYE="#c83a5a", CLOTH="#a8a4a0"),
+                  "red": dict(HAIR="#4a0e0a", FUR="#7a1e14", LIGHT="#c85a3a", MARK="#2a0806", EYE="#f8d040", CLOTH="#2a0806")}),
     # twenty-second wave: the gigantopithecus, the giant ape: huge and shaggy, deep blue fur, a red flower in her hair, a fur top and a
     # stone belt
     "gigantopithecus_canid": dict(
@@ -232,6 +242,8 @@ def build_melon(r, g):
 
 
 def declare_hook(sp, d):
+    if d.get("cheads"):                                  # Cerberus's two little heads: a neck, a head, a cap of hair, two ears
+        return [("cneck", 1.75, 4, 1.75), ("chead", 4, 4, 4), ("chair", 4.5, 1.5, 4.5), ("cear", 1.25, 1.75, .75), ("csnout", 1.75, 1.25, 1)]
     if d.get("flames"):                                  # the hellhound's flame tufts: a flame and its flickering tip
         return [("efl_a", 3, 1.25, .75), ("efl_b", 3, 1, .75), ("efl_c", 2.5, .75, .5), ("spike_a", 1.75, 2.5, 1.75), ("spike_b", 1, 1.75, 1),
                 ("fur_up", 2.75, 3.75, 2.75), ("fur_fa", 3.25, 3.25, 3.25), ("fur_thigh", 4.5, 4.5, 4.5), ("fur_shin", 4.25, 5, 4.25),
@@ -256,6 +268,19 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    if d.get("cheads"):
+        skin_t = H.skin_fn(pal, 0.66)
+
+        def face(f, x, y, w, h):                         # two bright eyes and a little fang
+            if f != "north":
+                return skin_t(f, x, y, w, h)
+            if y in (6, 7, 8) and x in (3, 4, 11, 12):
+                return pal.WHITE if y == 6 and x in (3, 11) else pal.EYE[1]
+            return skin_t(f, x, y, w, h)
+        pt("chead", "all", face)
+        coat = G.fur_fn(pal, light_faces=(), pattern="solid", seed=79)
+        for p_ in ("cneck", "chair", "cear", "csnout"):
+            pt(p_, "all", coat)
     if d.get("flames"):
         fl, core = G.shades(pal.extra.get("flame", "#f8501e")), G.shades(pal.extra.get("flame_core", "#ffd860"))
         for p_ in ("efl_a", "efl_b", "efl_c"):           # hot at the root, by her eye
@@ -408,6 +433,17 @@ def hound_kit(r, g):
 
 
 def build_hook(r, g, d):
+    if d.get("cheads"):                                  # one on each shoulder, a little lower than her own and looking outward
+        hy, z = g.hy, g.z
+        cs = []
+        for sg in (-1, 1):
+            x, top, zz = sg * 9.0, hy - 0.5, -1.0 + z
+            yaw = -18 * sg
+            p_ = [x, top + 2, zz]
+            cs += [G.rot_cube("cneck", [sg * 3.6 - 0.875, hy - 2.6, -0.875 + z], [sg * 3.6, hy - 2.6, z], 0, 0, -62 * sg), G.rot_cube("chead", [x - 2, top, zz - 2], p_, 0, yaw, 0),
+                   G.rot_cube("csnout", [x - 0.875, top + 0.25, zz - 3], p_, 0, yaw, 0), G.rot_cube("chair", [x - 2.25, top + 3, zz - 2.25], p_, 0, yaw, 0),
+                   G.rot_cube("cear", [x - 2, top + 4.25, zz - 0.5], p_, 0, yaw, 0), G.rot_cube("cear", [x + 0.75, top + 4.25, zz - 0.5], p_, 0, yaw, 0)]
+        r.add("hair_cheads", "body", [0, hy, z], cs)
     if d.get("flames"):                                  # the hellhound (see hound_kit)
         hound_kit(r, g)
     if d.get("hflower"):                                 # tucked over her left ear, facing out

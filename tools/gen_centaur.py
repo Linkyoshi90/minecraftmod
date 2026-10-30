@@ -98,6 +98,16 @@ SPECIES = {
                   "mountain": dict(pattern="stripes", pattern_scale=1.3, FUR="#e8e0d0"),
                   "golden": dict(FUR="#f6ecd2", MARK="#c8a060", HAIR="#c8a060", CLOTH="#4a6a8a"),
                   "quagga": dict(FUR="#a07850", MARK="#3a2a1e", LIGHT="#ece4d6", HAIR="#3a2a1e", pattern="finestripes", pattern_scale=1.5)}),
+    # twenty-fourth wave: the qilin, a scaled golden deer with soft antlers and a teal mane
+    "qilin_centaur": dict(
+        build="standard", outfit=dict(top=["bandeau"], extras=["pearls", "armlets"], colors=dict()),
+        hair="flowing", tail=(2, 3, 1.5), antlers=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#2aa8a0", FUR="#e0b040", LIGHT="#f8ecc0", MARK="#a87a1e", EYE="#c8501e", CLOTH="#2aa8a0", TRIM="#f8e080",
+                 pattern="spots", extra=dict(antler="#f8e8b0")),
+        variants={"jade": dict(FUR="#4ab888", LIGHT="#d8f4e4", MARK="#2a7a58", HAIR="#e8c040", CLOTH="#e8c040", extra=dict(antler="#e8f4d8")),
+                  "white": dict(FUR="#f0ece4", LIGHT="#ffffff", MARK="#c8c0a8", HAIR="#e8a0b0", CLOTH="#e8a0b0", extra=dict(antler="#f8e8d8")),
+                  "red": dict(FUR="#c84a2a", LIGHT="#f8d0a8", MARK="#7a2a14", HAIR="#f0c040", CLOTH="#f0c040", extra=dict(antler="#f8e0a0")),
+                  "blue": dict(FUR="#4a7ac8", LIGHT="#d8e8f8", MARK="#2a4a8a", HAIR="#f0e8d0", CLOTH="#f0e8d0", extra=dict(antler="#e8f0f8"))}),
     "reindeer_centaur": dict(
         build="standard", outfit=dict(top=["sweater"], extras=["scarf"], colors=dict(scarf="#2e7a4a")),
         hair="braid", tail=(2, 3, 1.5), antlers=True,

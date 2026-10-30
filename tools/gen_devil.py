@@ -36,6 +36,16 @@ SPECIES = {
                   "red": dict(SKIN="#c8705a", FUR="#c8705a", LIGHT="#f0b098", MARK="#6a2a1e", HAIR="#2a2228", CLOTH="#3a5a8a")}),
     # twenty-third wave (folklore): the taotie, the glutton of the Chinese bronzes: curled horns, bronze glyph-work running over
     # her arms and legs, and a huge grin
+    # twenty-fourth wave: the Behemoth, huge and dark blue, great horns, a wild mane and a thick tail
+    "behemoth_devil": dict(
+        build="strong", outfit=dict(top=["bandeau"], bottom="loincloth", colors=dict(cloth2="#1a2a5a", leather="#1a2a5a")),
+        hair="mane", bangs="messy", ears="elf", legs="bare", foot="shoe", horns="greater", tail=[(3.5, 3.5, 4), (2.75, 2.75, 4), (2, 2, 3.5)], tail_look="scale",
+        pal=dict(SKIN=skin("#3a5aa8"), HAIR="#1a2a6a", FUR="#2a448a", LIGHT="#5a7ac8", MARK="#14204a", EYE="#5ad0d8", CLOTH="#1a2a5a", TRIM="#5a7ac8",
+                 extra=dict(horn="#1a2a5a", boot="#14204a")),
+        variants={"grey": dict(SKIN=skin("#6a6e78"), HAIR="#2e3036", FUR="#4a4c54", LIGHT="#8a8e98", MARK="#1e2024", CLOTH="#2e3036", extra=dict(horn="#1e2024", boot="#1e2024")),
+                  "brown": dict(SKIN=skin("#7a5a3a"), HAIR="#3a2614", FUR="#5a3e24", LIGHT="#a8845a", MARK="#2a1a0e", CLOTH="#3a2614", extra=dict(horn="#2a1a0e", boot="#2a1a0e")),
+                  "green": dict(SKIN=skin("#3a7a4a"), HAIR="#143a1e", FUR="#2a5a34", LIGHT="#6aa87a", MARK="#0e2a14", CLOTH="#143a1e", extra=dict(horn="#0e2a14", boot="#0e2a14")),
+                  "red": dict(SKIN=skin("#a83a2a"), HAIR="#4a0e0a", FUR="#7a1e14", LIGHT="#d86a4a", MARK="#2a0806", CLOTH="#4a0e0a", extra=dict(horn="#2a0806", boot="#2a0806"))}),
     "taotie_devil": dict(
         build="curvy", outfit=dict(top=["bandeau", "mantle"], bottom="sarong", extras=["armlets", "belt"], colors=dict(cloth2="#c8a040", leather="#6a3a1e")),
         hair="hime", bangs="blunt", ears="elf", legs="bare", foot="shoe", horns="ram", grin=True, glyphs=True,
@@ -66,7 +76,9 @@ SPECIES = {
         variants={"purple": dict(HAIR="#5a2a8a", MARK="#3a1a6a", CLOTH="#6a3aa8", EYE="#8a4ac8", extra=dict(smoke="#b08ae0", smoke_dark="#6a3aa8", brass="#d8a840")),
                   "green": dict(HAIR="#2a6a4a", MARK="#1e4a32", CLOTH="#3a8a5a", EYE="#3a9a5a", extra=dict(smoke="#8ad0a8", smoke_dark="#3a8a5a", brass="#d8a840")),
                   "red": dict(HAIR="#8a1e1e", MARK="#5a1414", CLOTH="#a82a2a", EYE="#e8a030", extra=dict(smoke="#e08a7a", smoke_dark="#a82a2a", brass="#d8a840")),
-                  "gold": dict(HAIR="#c8901e", MARK="#7a5410", CLOTH="#e8b030", EYE="#3a2a1a", extra=dict(smoke="#f0d890", smoke_dark="#c89a30", brass="#f0c860"))}),
+                  "gold": dict(HAIR="#c8901e", MARK="#7a5410", CLOTH="#e8b030", EYE="#3a2a1a", extra=dict(smoke="#f0d890", smoke_dark="#c89a30", brass="#f0c860")),
+                  # homage (2026-10-30): the Genie of the animated Aladdin: blue all over, a black top-knot and goatee, gold cuffs, a red sash
+                  "lamp_friend": dict(SKIN=skin("#3a8ae8"), FUR="#3a8ae8", HAIR="#141418", LIGHT="#a8d0f8", MARK="#1e5ab8", EYE="#141418", CLOTH="#c82a2a", TRIM="#e8c040", extra=dict(smoke="#3a8ae8", smoke_dark="#1e5ab8", brass="#d8a840", goatee=True))}),
     # nineteenth wave: the akaname, the filth-licker of the bathhouses: blue hair, a simple dress, a long tongue out
     "akaname_devil": dict(
         build="petite", outfit=dict(top=["sweater"], bottom="wrap_skirt", extras=["belt"], colors=dict(cloth2="#3a5ab8", leather="#2a3a7a")),
@@ -227,6 +239,8 @@ def declare_hook(sp, d):
         out += [("canopy", 14, 1, 14), ("canopy_b", 10.5, 1.25, 10.5), ("canopy_c", 7, 1.25, 7), ("canopy_top", 3.5, 1, 3.5), ("umb_tip", 1, 2, 1)]
     if d.get("kerchief"):                                # the kikimora's headscarf, knotted at the nape
         out += [("kerchief", 8.75, 4.5, 8.75), ("kerchief_knot", 2.5, 1.5, 1), ("kerchief_end", 1.5, 3, .25)]
+    if d.get("smoke"):                                   # her goatee, drawn only on the lamp_friend look
+        out += [("ggoatee", 1.75, 2, .5)]
     if d.get("smoke"):                                   # the genie's smoke tail, puffing smaller to a wisp
         out += [("smoke_a", 5.5, 4.5, 4.5), ("smoke_b", 4.5, 4.5, 3.75), ("smoke_c", 3.25, 4, 2.75), ("smoke_d", 2, 3.5, 1.75)]
     if d.get("lamp"):                                    # her brass lamp: body, lid, spout and handle
@@ -244,6 +258,7 @@ def paint_hook(pt, pal, d):
                if (y % 4 == 0 and x % 4 != 3) or (x % 4 == 0 and y % 4 != 1) and y % 8 < 4 else None)
     if d.get("cyclops"):
         paint_cyclops(pt, pal)
+    pt("ggoatee", "all", lambda f, x, y, w, h: pick(pal.HAIR, 0.4, x, y) if pal.extra.get("goatee") else CLEAR)
     sm, smd = G.shades(pal.extra.get("smoke", "#8aa8e8")), G.shades(pal.extra.get("smoke_dark", "#4a6ac8"))
     for p in ("smoke_a", "smoke_b", "smoke_c", "smoke_d"):          # soft swirls of smoke, a little see-through
         pt(p, "all", lambda f, x, y, w, h: G.with_alpha(pick(smd if (x + 2 * y) % 7 < 2 else sm, 0.5 + 0.2 * noise(x // 2, y // 2, 91), x, y), 225))
@@ -374,6 +389,8 @@ def paint_cyclops(pt, pal):
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
+    if d.get("smoke"):                                   # the goatee at her chin
+        r.put("head", cube("ggoatee", [-0.875, g.hy - 1.4, -4.3 + g.z]))
     if d.get("smoke"):                                   # the smoke tail she ends in, in four bones so it can curl
         r.add("smoke_1", "body", [0, 12.5, z], [cube("smoke_a", [-2.75, 8.0, -2.25 + z])])
         r.add("smoke_2", "smoke_1", [0, 8.0, z], [cube("smoke_b", [-2.25, 3.75, -1.9 + z])])

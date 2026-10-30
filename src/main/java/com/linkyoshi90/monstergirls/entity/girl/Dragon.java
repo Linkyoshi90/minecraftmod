@@ -88,7 +88,7 @@ public class Dragon extends AbstractMonsterGirl {
     @Override
     public boolean canFly() {
         return switch (this.species) {
-            case LONG_DRAGON, WYRM_DRAGON, GRYPHON_DRAGON, WYVERN_DRAGON, ALEBRIJE_DRAGON, COCKATRICE_DRAGON, MACAWTL_DRAGON -> true;
+            case LONG_DRAGON, WYRM_DRAGON, GRYPHON_DRAGON, WYVERN_DRAGON, ALEBRIJE_DRAGON, COCKATRICE_DRAGON, MACAWTL_DRAGON, QUETZALCOATL_DRAGON -> true;
             default -> false;
         };
     }
@@ -323,6 +323,8 @@ public class Dragon extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.QUETZALCOATL_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel dawn && !this.isBaby() && this.tickCount % 100 == 0
+                && dawn.getDayTime() % 24000L < 1000L) this.morningStar(dawn);
         if (this.species == GirlSpecies.NENEKEA_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel tide && !this.isBaby() && this.tickCount % 20 == 0) this.tidalBalm(tide);
         if (this.species == GirlSpecies.MACAWTL_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel sky && !this.isBaby() && this.tickCount % 20 == 0) this.tailwind(sky);
         if (this.species == GirlSpecies.MOO_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel frill && !this.isBaby() && this.tickCount % 20 == 0) this.herdStand(frill);
@@ -497,5 +499,30 @@ public class Dragon extends AbstractMonsterGirl {
         if (friend.distanceToSqr(this) > 10 * 10 || !level.canSeeSky(friend.blockPosition().above())) return 0;
         friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 60, 0, true, true), this);
         return 1;
+    }
+
+    /** The last day Quetzalcoatl ripened the crops. */
+    private long lastDawn = -1;
+
+    /**
+     * Quetzalcoatl's morning star (twenty-fourth wave): once a day, the crops within 6 of her friend grow. The number of crops, -1
+     * without a friend (0 also when she has already done it today).
+     */
+    public int morningStar(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null) return -1;
+        long day = level.getDayTime() / 24000L;
+        if (day == this.lastDawn) return 0;
+        this.lastDawn = day;
+        int grown = 0;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-6, -2, -6), friend.blockPosition().offset(6, 2, 6))) {
+            var state = level.getBlockState(p);
+            if (state.getBlock() instanceof net.minecraft.world.level.block.CropBlock crop && !crop.isMaxAge(state)) {
+                crop.growCrops(level, p.immutable(), state);
+                level.sendParticles(net.minecraft.core.particles.ParticleTypes.HAPPY_VILLAGER, p.getX() + 0.5, p.getY() + 0.6, p.getZ() + 0.5, 3, 0.2, 0.2, 0.2, 0.0);
+                grown++;
+            }
+        }
+        return grown;
     }
 }

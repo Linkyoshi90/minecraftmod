@@ -533,6 +533,7 @@ public class Canid extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.CERBERUS_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel gates && !this.isBaby() && this.tickCount % 20 == 0) this.threeWatches(gates);
         if (this.species == GirlSpecies.HELLHOUND_CANID && !this.isBaby()) {
             if (this.level() instanceof net.minecraft.server.level.ServerLevel pit) {
                 this.glow(pit, HELLFIRE_LIGHT);                                 // her eye flames light the world, shaders included
@@ -908,5 +909,24 @@ public class Canid extends AbstractMonsterGirl {
         level.sendParticles(net.minecraft.core.particles.ParticleTypes.SOUL_FIRE_FLAME, m.getX(), m.getY() + 1, m.getZ(), 24, 0.3, 0.5, 0.3, 0.02);
         this.playSound(net.minecraft.sounds.SoundEvents.WOLF_GROWL, 1.0F, 0.7F);
         return 1;
+    }
+
+    /**
+     * Cerberus's three watches (twenty-fourth wave): monsters within 8 coming at her friend from behind are slowed for 3 seconds and
+     * creepers near them lose their nerve. The number she stopped, -1 without a friend.
+     */
+    public int threeWatches(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        net.minecraft.world.phys.Vec3 look = friend.getLookAngle();
+        int stopped = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8), m -> m.isAlive())) {
+            if (m instanceof net.minecraft.world.entity.monster.Creeper c && c.getSwellDir() > 0) c.setSwellDir(-1);
+            else if (m.position().subtract(friend.position()).dot(look) >= 0) continue;
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 60, 1));
+            stopped++;
+        }
+        if (stopped > 0) this.playSound(net.minecraft.sounds.SoundEvents.WOLF_GROWL, 1.0F, 0.8F);
+        return stopped;
     }
 }

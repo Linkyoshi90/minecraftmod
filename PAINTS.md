@@ -1,6 +1,6 @@
 # Paints
 
-Every Harmontide paint, 91 in all. A paint is a full texture for a model: `textures/entity/<model>_paint_<paint>.png`, made by
+Every Harmontide paint, 95 in all. A paint is a full texture for a model: `textures/entity/<model>_paint_<paint>.png`, made by
 `tools/gen_paints.py` for every model. One wild girl, harpy or anuran in 64 is painted (`PAINT_RARITY`), like a shiny, and a
 painted mother has painted young. The list lives in `AbstractMonsterGirl.PAINTS`. It is synced by index, so **only ever append
 to it**.
@@ -69,6 +69,10 @@ To test one, summon a girl with it: `/summon monstergirls:wolf_canid ~ ~ ~ {Pain
 | `bookshelf` | Bookshelf | `bookshelf` | |
 | `glazed` | Blue glazed terracotta | `blue_glazed_terracotta` | |
 | `redstone_lamp` | A lit redstone lamp | `redstone_lamp_on` | Glows: its light |
+| `netherite` | Netherite block | `netherite_block` | |
+| `purpur` | Purpur block | `purpur_block` | |
+| `crying_obsidian` | Crying obsidian | `crying_obsidian` | Glows: its tears |
+| `shroomlight` | Shroomlight | `shroomlight` | Glows: its light |
 | `moss` | Moss over stone | `moss_block`, `stone` | |
 | `frost` | Icy, frosted on every top | `packed_ice` | |
 
@@ -155,5 +159,5 @@ To test one, summon a girl with it: `/summon monstergirls:wolf_canid ~ ~ ~ {Pain
 1. Append its name to `AbstractMonsterGirl.PAINTS`, and to the two lists and `TREATS` in `tools/gen_paints.py`.
 2. Draw it in `finish()`. If Minecraft draws the thing it is named after, tile that texture with `vtile`.
 3. If it glows, add it to `GLOWING` and `PaintGlowLayer.glows`. If it is see-through, add it to `Paints.translucent`. If it is seasonal, add it to `Painted.roll`.
-4. Run `uv run --no-project --with pillow python tools/gen_paints.py <paint>`.
+4. Run `uv run --no-project --with pillow python tools/gen_paints.py <paint>`. A glow mask with no pixels crashes GeckoLib: gen_paints guards against that, but check that the glow actually shows.
 5. Add it to this file.

@@ -360,6 +360,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.CIPACTLI_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel marsh && !this.isBaby() && this.tickCount % 40 == 0) this.pullUnder(marsh);
         if (this.species == GirlSpecies.ARGENTINOSAURUS_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel plain && !this.isBaby() && this.tickCount % 40 == 0) this.lookout(plain);
         if (this.species == GirlSpecies.TURTWORLD_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel isle && !this.isBaby() && this.tickCount % 100 == 0) this.livingIsland(isle);
         if (this.species == GirlSpecies.ARCHELON_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel reef && !this.isBaby() && this.tickCount % 2 == 0) this.shellShield(reef);
@@ -859,5 +860,26 @@ public class Lizardfolk extends AbstractMonsterGirl {
     @Override
     protected boolean hasSwimAnimation() {
         return this.species == GirlSpecies.ARCHELON_LIZARDFOLK;   // the sea turtle's flipper strokes
+    }
+
+    /**
+     * Cipactli's jaws (twenty-fourth wave): the monsters in or beside water within 6 of her friend are bitten and dragged down: 3
+     * damage and Slowness III for 3 seconds. The number bitten, -1 without a friend.
+     */
+    public int pullUnder(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        int bitten = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(6), m -> m.isAlive())) {
+            boolean wet = m.isInWater();
+            for (net.minecraft.core.Direction d : net.minecraft.core.Direction.Plane.HORIZONTAL) wet |= level.getFluidState(m.blockPosition().relative(d)).is(net.minecraft.tags.FluidTags.WATER);
+            if (!wet) continue;
+            m.hurt(level.damageSources().mobAttack(this), 3.0F);
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 60, 2));
+            m.setDeltaMovement(m.getDeltaMovement().add(0, -0.4, 0));
+            m.hurtMarked = true;
+            bitten++;
+        }
+        return bitten;
     }
 }

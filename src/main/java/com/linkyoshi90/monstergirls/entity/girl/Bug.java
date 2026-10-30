@@ -362,6 +362,7 @@ public class Bug extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.GIRTABLILU_BUG && this.level() instanceof net.minecraft.server.level.ServerLevel gate && !this.isBaby() && this.tickCount % 20 == 0 && !gate.isDay()) this.gateGuard(gate);
         if (this.species == GirlSpecies.MOTHMAN_BUG && this.level() instanceof net.minecraft.server.level.ServerLevel omen && !this.isBaby() && this.tickCount % 20 == 0) this.omen(omen, !omen.isDay());
         if (this.species == GirlSpecies.DATE_BEETLE_BUG && this.level() instanceof ServerLevel oasis && !this.isBaby() && this.tickCount % 200 == 0) this.shareDate(oasis);
         if (!(this.level() instanceof ServerLevel server)) return;
@@ -793,5 +794,22 @@ public class Bug extends AbstractMonsterGirl {
             n++;
         }
         return n;
+    }
+
+    /**
+     * The girtablilu's watch (twenty-fourth wave): at night (her caller checks), the nearest monster within 6 of her friend is stung:
+     * 2 damage, Poison and Slowness II for 5 seconds. 1 when she stung one, 0 when there was none, -1 without a friend.
+     */
+    public int gateGuard(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster m = level.getNearestEntity(net.minecraft.world.entity.monster.Monster.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat().ignoreLineOfSight(), friend,
+                friend.getX(), friend.getY(), friend.getZ(), friend.getBoundingBox().inflate(6));
+        if (m == null) return 0;
+        m.hurt(level.damageSources().mobAttack(this), 2.0F);
+        m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.POISON, 100, 0));
+        m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 100, 1));   // the undead shrug off the poison, not the numbness
+        this.getLookControl().setLookAt(m);
+        return 1;
     }
 }

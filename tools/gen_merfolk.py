@@ -41,6 +41,16 @@ SPECIES = {
                   "white": dict(HAIR="#e8eef4", FUR="#d0dce8", LIGHT="#ffffff", MARK="#8a9ab0", CLOTH="#3a6ac8", EYE="#c83a5a", extra=dict(belly_white=True))}),
     # twenty-second wave: the fishman, a light blue fish girl with a fin of a ponytail, fins at her elbows, freckle spots and sharp
     # teeth ready to scowl
+    # twenty-fourth wave: the Leviathan, a great fish with a girl's chest: pale blue, curled horns, fin ears
+    "leviathan_mermaid": dict(
+        build="curvy", outfit=dict(top=["bandeau"], colors=dict(cloth2="#5a9ad0")),
+        ears="fin", hair="wavy", bangs="swept", fluke=(.75, 10, 6), dorsal=(.75, 3.5, 3.5), scales=True, fishbody=True, lhorns=True, elbowfin=True,
+        pal=dict(SKIN=skin("#d8eaf8"), HAIR="#a8d0f0", FUR="#a8d4f4", LIGHT="#eaf6fe", MARK="#5a9ad0", EYE="#3a6ab0", CLOTH="#5a9ad0", TRIM="#eaf6fe",
+                 pattern="solid", extra=dict(belly_white=True, fin_mark=True, horn="#7ab0e0")),
+        variants={"deep": dict(HAIR="#2a5aa8", FUR="#3a6ac0", LIGHT="#b8d4f4", MARK="#14306a", CLOTH="#14306a", extra=dict(belly_white=True, fin_mark=True, horn="#14306a")),
+                  "green": dict(HAIR="#5ac0a8", FUR="#6ad0b4", LIGHT="#e0f8ec", MARK="#2a7a68", CLOTH="#2a7a68", extra=dict(belly_white=True, fin_mark=True, horn="#2a7a68")),
+                  "pearl": dict(HAIR="#f0f0f4", FUR="#f4f2f0", LIGHT="#ffffff", MARK="#a8b0c0", CLOTH="#a8b0c0", extra=dict(belly_white=True, fin_mark=True, horn="#c8ccd8")),
+                  "black": dict(HAIR="#1e2228", FUR="#2a3038", LIGHT="#8a98a8", MARK="#0e1014", CLOTH="#0e1014", EYE="#e8c040", extra=dict(belly_white=True, fin_mark=True, horn="#a8b0c0"))}),
     "fishman_mermaid": dict(
         build="athletic", outfit=dict(top=["bandeau"], colors=dict(cloth2="#2a6ab0")),
         ears="fin", hair="ponytail", bangs="jagged", fluke=(.75, 10, 6), dorsal=(.75, 3.5, 3.5), scales=True, grin=True, elbowfin=True, fishbody=True,
@@ -337,6 +347,8 @@ def declare(sp):
         parts += [("coral_a", .75, 4, .75), ("coral_b", .5, 2.5, .5), ("coral_tip", .75, .75, .75)]
     if d.get("cowhorns"):
         parts += [("mhorn_a", .75, 1.5, .75), ("mhorn_b", .5, 1, .5)]
+    if d.get("lhorns"):                                  # the Leviathan's great curled horns
+        parts += [("lhorn_a", 1.5, 3.75, 1.5), ("lhorn_b", 1.25, 3.25, 1.25), ("lhorn_c", .75, 2.5, .75)]
     if d.get("mudkip"):                                  # the head fin, and the cheek gills: a base and three points each
         parts += [("mk_headfin", .5, 6.5, 7.5), ("mk_gill", .75, 1.5, 1.5), ("mk_spike", 2.25, .75, .75)]
     if d.get("ghood"):                                   # the shark hood: crown, snout, teeth, fin; the hoodie's drawstrings and pocket
@@ -532,6 +544,8 @@ def paint(sp, key):
         G.paint_ears(pt, pal, G.fur_fn(pal, pattern="solid"))
     horn = shades(pal.extra.get("horn", "#e8dcc0"))
     pt("mhorn_a", "all", lambda f, x, y, w, h: pick(horn, 0.5 + 0.1 * (f == "up"), x, y))
+    for p_ in ("lhorn_a", "lhorn_b", "lhorn_c"):
+        pt(p_, "all", lambda f, x, y, w, h: pick(horn, 0.45 + 0.2 * (y % 2), x, y))
     pt("mhorn_b", "all", lambda f, x, y, w, h: pick(horn, 0.65, x, y))
     if d["ears"] == "gill":
         pt("ear_a", "all", lambda f, x, y, w, h: pick(pal.INNER, 0.55 + 0.25 * (y % 2 == 0), x, y))
@@ -649,6 +663,13 @@ def build(sp):
                                                   cube("tri_prong", [cx + 1.75, top + 0.75, cz + 0.125], **lean),
                                                   cube("tri_mid", [cx + 0.125, top + 0.75, cz + 0.125], **lean)])
     hx, hy, hz = r.b["head"]["pivot"]
+    if d.get("lhorns"):                                  # out from the sides of her head, curling up and back in
+        cs = []
+        for sg in (-1, 1):
+            cs += [G.rot_cube("lhorn_a", [sg * 4.4 - 0.75, hy + 5.5, hz - 0.75], [sg * 4.4, hy + 5.5, hz], 0, 0, -68 * sg),
+                   G.rot_cube("lhorn_b", [sg * 7.7 - 0.625, hy + 6.4, hz - 0.625], [sg * 7.7, hy + 6.8, hz], 0, 0, -12 * sg),
+                   G.rot_cube("lhorn_c", [sg * 8.3 - 0.375, hy + 9.6, hz - 0.375], [sg * 8.3, hy + 9.8, hz], 0, 0, 34 * sg)]
+        r.add("hair_lhorns", "head", [0, hy + 6, hz], cs)
     if d.get("pjaw"):                                    # the jaw jutting out under her mouth
         r.put("head", cube("pjaw", [-1.75, hy - 0.25, hz - 5.0]))
     if d.get("plure"):                                   # a stalk rising from her crown, its bulb hanging forward at the tip

@@ -91,6 +91,9 @@ IN_GAME = {
     "macawtl": "macawtl_dragon", "piranha": "piranha_mermaid", "mosasaurus": "mosasaurus_mermaid", "fishman": "fishman_mermaid",
     "gibbon": "gibbon_rodent", "gigantopithecus": "gigantopithecus_canid", "sandworm": "sandworm_lamia", "archelon": "archelon_lizardfolk",
     "xiangliu": "xiangliu_lamia", "cyclops": "cyclops_devil", "genie": "genie_devil", "ammit": "ammit_nekomata",
+    # twenty-fourth wave (2026-10-30)
+    "quetzalcoatl": "quetzalcoatl_dragon", "leviathan": "leviathan_mermaid", "girtablilu": "girtablilu_bug", "cipactli": "cipactli_lizardfolk",
+    "behemoth": "behemoth_devil", "nasnas": "nasnas_undead", "ibiset": "ibiset_harpy", "stigowl": "stigowl_harpy", "strigowl": "stigowl_harpy",
     # twenty-third wave (2026-10-30)
     "automaton": "automaton_construct", "spewslug": "spewslug_mollusk", "ogre": "ogre_devil", "hellhound": "hellhound_canid",
     "argentinosaurus": "argentinosaurus_lizardfolk", "titanoboa": "titanoboa_lamia", "sasquatch": "sasquatch_rodent", "ironbeak": "ironbeak_harpy",

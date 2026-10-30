@@ -614,6 +614,33 @@ sandstone since 2026-10-29), so 87 in all.
 Homage props (POP_CULTURE_VARIANTS.md): the dullahan's headless rider (Celty) has her yellow cat-eared helmet over the head she
 carries, the death envoy (Lala) a scythe in her free hand; both are drawn only on their own looks.
 
+## Twenty-fourth wave (2026-10-30, in the game)
+
+Eight Harmontide creatures from the reference art and four of folklore. Three use the rigs of the last round: Quetzalcoatl the
+rearing serpent, the Leviathan the fish body, the girtablilu the scorpion's. The ibiset and the stigowl are harpies of their own.
+
+| Species | Home | Design |
+|---|---|---|
+| **Quetzalcoatl** | Dragon | A teal feathered serpent from the bust down, a crest of leaves round her head, a woven orange band, pale wings; she flies: at dawn she ripens the crops near her friend. |
+| **Leviathan** | Merfolk | A great pale-blue fish, 3 blocks long, with a girl's chest, curled horns and fin ears: her friend swims with Dolphin's Grace and the tide drives monsters away from them. |
+| **Girtablilu** | Bug | A veiled, hooded girl on a scorpion's legs with pincers and a raised tail: at night she stings the monsters near her friend (Poison and Slowness II). |
+| **Cipactli** | Lizardfolk | A small spiky teal crocodile girl, a cream belly, a heavy tail: she bites monsters at the water's edge near her friend and drags them under. |
+| **Behemoth** | Devil | 3 blocks tall, dark blue, great horns, a wild mane and a thick tail: her friend cannot be knocked back near her. |
+| **Nasnas** | Undead | Pale, her body fading into a wisp: once a day she takes a killing blow in her friend's place. |
+| **Ibiset** | Harpy | A slim blue ibis hung with gold (`IbisetHarpy`, the flamingo's rig): once a day she brings her friend an enchanted book. |
+| **Stigowl** | Harpy | A dark owl with a pale heart of a face (`StigowlHarpy`, the owl's rig): she clears Darkness and Blindness from her friend. |
+| **Cerberus** | Canid | Dark-furred, with two more little heads on her shoulders: monsters coming at her friend from behind are slowed, and creepers lose their nerve. |
+| **Jiangshi** | Undead | The hopping corpse: an official's robe and hat, a paper talisman, arms held out; she only hops, and strikes stiff the monsters she reaches. |
+| **Baku** | Nekomata | A tapir's short trunk, round ears, a two-tone coat: she eats her friend's nightmares, so phantoms never come. |
+| **Qilin** | Centaur | A golden deer with soft antlers: she heals the animals near her friend and never tramples farmland. |
+
+Paints: **netherite**, **purpur**, **crying_obsidian** (its tears glow) and **shroomlight** (it glows), Minecraft's own blocks, so 95
+in all (PAINTS.md).
+
+Homage looks (POP_CULTURE_VARIANTS.md): the genie as the Genie (`lamp_friend`, a goatee), the jumping spider as the Webbed spider
+(`tiny_jumper`), the moth as Mothra (`kaiju_moth`), the golem as Clank (`pocket_bot`), the red kitsune as Ninetales (`nine_cream`,
+always nine tails), the raccoon as Tom Nook (`shopkeeper`), the will-o'-wisp as Boo (`shy_ghost`), the vampire as Alucard (`night_heir`).
+
 ## Twenty-third wave (2026-10-30, in the game)
 
 Eight Harmontide creatures from the reference art (their blue looks; the spewslug's only look is red) and four of myth and

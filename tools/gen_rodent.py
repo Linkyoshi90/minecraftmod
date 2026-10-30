@@ -192,7 +192,9 @@ SPECIES = {
         variants={"grey": dict(HAIR="#6a6a72", FUR="#8a8a92", LIGHT="#e0e0e6", MARK="#2a2a30", CLOTH="#4a6a3a"),
                   "brown": dict(HAIR="#6a4a2e", FUR="#8a6644", LIGHT="#e8d4bc", MARK="#3a2414", CLOTH="#3a5a7a"),
                   "white": dict(HAIR="#f4f2ee", FUR="#f6f4f0", LIGHT="#ffffff", MARK="#c8c4be", EYE="#c84a5a", CLOTH="#c8a8e8"),
-                  "black": dict(HAIR="#1e1c22", FUR="#2a2830", LIGHT="#6a6870", MARK="#0e0c10", EYE="#e8c040", CLOTH="#a83a4a")}),
+                  "black": dict(HAIR="#1e1c22", FUR="#2a2830", LIGHT="#6a6870", MARK="#0e0c10", EYE="#e8c040", CLOTH="#a83a4a"),
+                  # homage (2026-10-30): Tom Nook: brown and tan, a green apron
+                  "shopkeeper": dict(HAIR="#7a5a34", FUR="#8a6644", LIGHT="#e8d4a8", MARK="#4a3420", EYE="#1e1a14", CLOTH="#3a8a5a", TRIM="#e8d870")}),
     # eighteenth wave: the pineskrell, a blue squirrel with a huge frosted tail and glowing crystal pinecones in her hair
     "pineskrell_rodent": dict(
         build="petite", outfit=dict(top=["sweater"], bottom="shorts", extras=["satchel"], colors=dict(cloth2="#2a3a6a", leather="#5a3a5a")),

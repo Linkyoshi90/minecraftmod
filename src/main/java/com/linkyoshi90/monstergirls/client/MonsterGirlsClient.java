@@ -9,7 +9,9 @@ import com.linkyoshi90.monstergirls.entity.FlamingoHarpy;
 import com.linkyoshi90.monstergirls.entity.CoinMagpieHarpy;
 import com.linkyoshi90.monstergirls.entity.PeaflareHarpy;
 import com.linkyoshi90.monstergirls.entity.EmberuHarpy;
+import com.linkyoshi90.monstergirls.entity.IbisetHarpy;
 import com.linkyoshi90.monstergirls.entity.IronbeakHarpy;
+import com.linkyoshi90.monstergirls.entity.StigowlHarpy;
 import com.linkyoshi90.monstergirls.entity.MirrorCraneHarpy;
 import com.linkyoshi90.monstergirls.entity.PumpkingullHarpy;
 import com.linkyoshi90.monstergirls.entity.CondoruneHarpy;
@@ -116,6 +118,8 @@ public final class MonsterGirlsClient {
         event.registerEntityRenderer(ModEntities.MIRROR_CRANE_HARPY.get(), ctx -> new HarpyRenderer<MirrorCraneHarpy>(ctx, "mirror_crane_harpy", 0.85F, 0.35F, MirrorCraneHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.EMBERU_HARPY.get(), ctx -> new HarpyRenderer<EmberuHarpy>(ctx, "emberu_harpy", 0.85F, 0.4F, EmberuHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.IRONBEAK_HARPY.get(), ctx -> new HarpyRenderer<IronbeakHarpy>(ctx, "ironbeak_harpy", 0.8F, 0.3F, IronbeakHarpy::getVariantSuffix));
+        event.registerEntityRenderer(ModEntities.IBISET_HARPY.get(), ctx -> new HarpyRenderer<IbisetHarpy>(ctx, "ibiset_harpy", 0.85F, 0.35F, IbisetHarpy::getVariantSuffix));
+        event.registerEntityRenderer(ModEntities.STIGOWL_HARPY.get(), ctx -> new HarpyRenderer<StigowlHarpy>(ctx, "stigowl_harpy", 0.85F, 0.35F, StigowlHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.COIN_MAGPIE_HARPY.get(), ctx -> new HarpyRenderer<CoinMagpieHarpy>(ctx, "coin_magpie_harpy", 0.8F, 0.3F, CoinMagpieHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.TRICKSTER_RAVEN_HARPY.get(), ctx -> new HarpyRenderer<TricksterRavenHarpy>(ctx, "trickster_raven_harpy", 0.85F, 0.35F, TricksterRavenHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.FLAMINGO_HARPY.get(), ctx -> new HarpyRenderer<FlamingoHarpy>(ctx, "flamingo_harpy", 0.8F, 0.35F, FlamingoHarpy::getVariantSuffix));

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_quetzalcoatl_dragon",
+  "spawners": {
+    "type": "monstergirls:quetzalcoatl_dragon",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

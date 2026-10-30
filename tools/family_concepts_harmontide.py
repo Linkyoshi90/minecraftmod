@@ -2749,6 +2749,110 @@ for _fid, _entries in TWENTY_THIRD.items():
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
 
+# twenty-fourth wave (2026-10-30): six from the reference art (their blue looks) and the Quetzalcoatl on the rearing serpent's rig, the
+# Leviathan on the fish body, the Girtablilu on the scorpion's; Cerberus, the jiangshi, the baku and the qilin of folklore; the ibiset
+# and the stigowl are harpies (their own classes)
+TWENTY_FOURTH = {
+    "dragon": [
+        (dict(id="quetzalcoatl_dragon", name="Quetzalcoatl", group="Jungles", tag="Gentle · radiant", height=1.9,
+              biomes=["jungle", "sparse_jungle", "savanna"], temperament="Gentle, radiant",
+              ecology="The feathered serpent of Mesoamerica: a teal snake from the bust down, a crest of green leaves and feathers round her head, a woven orange headband and pale wings. She flies at dawn.",
+              interaction="Melon, cocoa beans and maize-yellow carrots.",
+              signature=("Morning star", "Befriended, at dawn she ripens the crops near her friend."),
+              danger="Low.",
+              variants=[("teal", "Teal (default)", "Teal, orange band"), ("green", "Green", "Green"), ("gold", "Gold", "Gold"), ("rose", "Rose", "Rose"), ("violet", "Violet", "Violet")]),
+         {"Habitat": "Jungles", "Signature": "Ripens crops at dawn", "Danger": "Low"})],
+    "merfolk": [
+        (dict(id="leviathan_mermaid", name="Leviathan", group="Deep oceans", tag="Vast · calm", height=3.0,
+              biomes=["deep_ocean", "deep_cold_ocean", "deep_lukewarm_ocean"], temperament="Vast, calm",
+              ecology="The sea monster of the Book of Job, as a great pale-blue fish with a girl's chest, curled horns and fin ears. The tide moves when she does.",
+              interaction="Fish and prismarine crystals.",
+              signature=("Tide call", "Befriended, her friend swims with Dolphin's Grace near her, and the tide drives monsters away from them."),
+              danger="High.",
+              variants=[("blue", "Blue (default)", "Pale blue"), ("deep", "Deep", "Deep blue"), ("green", "Green", "Sea green"), ("pearl", "Pearl", "Pearl white"), ("black", "Black", "Black")]),
+         {"Habitat": "Deep oceans", "Signature": "Grace, drives monsters off", "Danger": "High"})],
+    "bug": [
+        (dict(id="girtablilu_bug", name="Girtablilu", group="Deserts", tag="Stern · loyal", height=1.8,
+              biomes=["desert", "badlands"], temperament="Stern, loyal",
+              ecology="The scorpion folk of Mesopotamia, who guard the gates of the sun: a veiled girl on a scorpion's legs, pincers in place of hands and a raised tail, spiral tattoos on her arms.",
+              interaction="Spider eyes and gold.",
+              signature=("Gate guard", "Befriended, at night she stings the monsters that come near her friend."),
+              danger="Moderate (her sting).",
+              variants=[("blue", "Blue (default)", "Blue"), ("sand", "Sand", "Sand"), ("black", "Black", "Black"), ("red", "Red", "Red"), ("green", "Green", "Green")]),
+         {"Habitat": "Deserts", "Signature": "Stings at night", "Danger": "Moderate"})],
+    "lizardfolk": [
+        (dict(id="cipactli_lizardfolk", name="Cipactli", group="Rivers and swamps", tag="Hungry · playful", height=1.5,
+              biomes=["swamp", "mangrove_swamp", "river"], temperament="Hungry, playful",
+              ecology="The first monster of the Aztec creation, half crocodile: a small spiky teal girl with a cream belly, a toothy jaw and a heavy tail.",
+              interaction="Raw fish and meat.",
+              signature=("Pulled under", "Befriended, she snaps at monsters at the water's edge near her friend and drags them in."),
+              danger="Moderate.",
+              variants=[("teal", "Teal (default)", "Teal"), ("green", "Green", "Green"), ("olive", "Olive", "Olive"), ("red", "Red", "Red"), ("black", "Black", "Black")]),
+         {"Habitat": "Rivers and swamps", "Signature": "Drags monsters under", "Danger": "Moderate"})],
+    "devil": [
+        (dict(id="behemoth_devil", name="Behemoth", group="Mountains", tag="Immense · steady", height=3.0,
+              biomes=["windswept_hills", "stony_peaks", "jagged_peaks"], temperament="Immense, steady",
+              ecology="The land beast of the Book of Job, the Leviathan's match: huge and dark blue, great horns, a wild mane and a thick tail.",
+              interaction="Hay bales and any meat.",
+              signature=("Immovable", "Befriended, her friend cannot be knocked back near her."),
+              danger="High.",
+              variants=[("blue", "Blue (default)", "Dark blue"), ("grey", "Grey", "Grey"), ("brown", "Brown", "Brown"), ("green", "Green", "Green"), ("red", "Red", "Red")]),
+         {"Habitat": "Mountains", "Signature": "No knockback", "Danger": "High"})],
+    "undead": [
+        (dict(id="nasnas_undead", name="Nasnas", group="Deserts by night", tag="Quiet · faithful", height=1.6,
+              biomes=["desert", "badlands", "savanna"], temperament="Quiet, faithful",
+              ecology="The half-creature of Arabian tales, here half a ghost: pale, eyes closed, her body fading into a wisp where her legs should be.",
+              interaction="Dates of any kind: sweet berries and bread.",
+              signature=("Half a life", "Befriended, once a day she takes a killing blow in her friend's place."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Pale blue"), ("grey", "Grey", "Grey"), ("gold", "Gold", "Gold"), ("rose", "Rose", "Rose"), ("green", "Green", "Green")]),
+         {"Habitat": "Deserts by night", "Signature": "Takes a killing blow", "Danger": "Low"}),
+        (dict(id="jiangshi_undead", name="Jiangshi", group="Bamboo and old forests", tag="Stiff · dutiful", height=1.7,
+              biomes=["bamboo_jungle", "dark_forest", "old_growth_pine_taiga"], temperament="Stiff, dutiful",
+              ecology="The hopping corpse of China: an official's robe and hat, pale skin, a paper talisman on her brow, arms stretched out in front of her. She cannot bend, so she hops.",
+              interaction="Sticky rice: bread and sweet berries.",
+              signature=("Stiff hop", "Befriended, she hops at the monsters that come near her and stuns them."),
+              danger="Moderate.",
+              variants=[("indigo", "Indigo (default)", "Indigo robe"), ("red", "Red", "Red robe"), ("green", "Green", "Green robe"), ("black", "Black", "Black robe"), ("gold", "Gold", "Gold robe")]),
+         {"Habitat": "Bamboo and old forests", "Signature": "Stuns monsters", "Danger": "Moderate"})],
+    "canid": [
+        (dict(id="cerberus_canid", name="Cerberus", group="The Nether", tag="Watchful · three times as loyal", height=1.8,
+              biomes=["soul_sand_valley", "crimson_forest"], temperament="Watchful, loyal",
+              ecology="The hound at the gates of the underworld: a dark-furred girl with two more little heads on her shoulders, each with its own idea about you.",
+              interaction="Raw meat and honey cakes: honey bottles.",
+              signature=("Three watches", "Befriended, nothing sneaks up on her friend: monsters coming from behind them are slowed and creepers lose their nerve."),
+              danger="High.",
+              variants=[("black", "Black (default)", "Black, red eyes"), ("brown", "Brown", "Brown"), ("grey", "Grey", "Grey"), ("white", "White", "White"), ("red", "Red", "Red")]),
+         {"Habitat": "The Nether", "Signature": "Guards her friend's back", "Danger": "High"})],
+    "nekomata": [
+        (dict(id="baku_nekomata", name="Baku", group="Meadows at night", tag="Sleepy · kind", height=1.6,
+              biomes=["meadow", "flower_forest", "cherry_grove"], temperament="Sleepy, kind",
+              ecology="The dream-eater of Japan: a tapir's short trunk, round ears and a two-tone coat. She eats nightmares and is always a little full.",
+              interaction="Sweet berries and glow berries.",
+              signature=("Dream eater", "Befriended, she eats her friend's nightmares: they never grow tired enough for phantoms to come."),
+              danger="Low.",
+              variants=[("black", "Black (default)", "Black and white"), ("lilac", "Lilac", "Lilac"), ("blue", "Blue", "Blue"), ("rose", "Rose", "Rose"), ("grey", "Grey", "Grey")]),
+         {"Habitat": "Meadows", "Signature": "No phantoms", "Danger": "Low"})],
+    "centaur": [
+        (dict(id="qilin_centaur", name="Qilin", group="Bamboo and meadows", tag="Gentle · auspicious", height=2.0,
+              biomes=["bamboo_jungle", "meadow", "cherry_grove"], temperament="Gentle, auspicious",
+              ecology="The auspicious beast of China: a scaled deer who treads so lightly she bends no grass, with soft antlers and a golden coat.",
+              interaction="Apples and golden carrots.",
+              signature=("Gentle tread", "Befriended, she heals the animals near her friend, and she never tramples farmland."),
+              danger="Low.",
+              variants=[("gold", "Gold (default)", "Gold, teal mane"), ("jade", "Jade", "Jade"), ("white", "White", "White"), ("red", "Red", "Red"), ("blue", "Blue", "Blue")]),
+         {"Habitat": "Bamboo and meadows", "Signature": "Heals animals", "Danger": "Low"})],
+}
+
+for _fid, _entries in TWENTY_FOURTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(s["id"] == _species["id"] for s in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 # theropods (2026-10-29): a family of their own, built like a 1920s museum sketch of a T. rex but human: hunched forward over a
 # long balancing tail, human legs, arms, skin and face, and a sharp-toothed grin. The fernstalker moved here from the lizardfolk.
 _family(id="theropod", volume="XXVII", title="Theropods", subtitle="the raptor family", food="Raw meat (and eggs)",
@@ -2847,7 +2951,16 @@ for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, 
                        ("undine_slime", ("drop_smile", "Drop Smile", "Clear blue, a drop's point on her head, a wide smile")),
                        ("amethyst_slime", ("puffball", "Puffball", "Pink, rosy cheeks, red crystals")),
                        ("ratatoskr_rodent", ("hoodie_squirrel", "Hoodie Squirrel", "Red-orange fur, a blue hoodie")),
-                       ("bee_bug", ("flight_cap", "Flight Cap", "An orange vest, an aviator's cap and goggles"))]:
+                       ("bee_bug", ("flight_cap", "Flight Cap", "An orange vest, an aviator's cap and goggles")),
+                       # twenty-fourth wave
+                       ("genie_devil", ("lamp_friend", "Lamp Friend", "Bright blue, a black top-knot and goatee, gold cuffs, a red sash")),
+                       ("jumping_spider_arachne", ("tiny_jumper", "Tiny Jumper", "Round, black and gold")),
+                       ("moth_bug", ("kaiju_moth", "Kaiju Moth", "Gold and orange wings, a white ruff")),
+                       ("golem_construct", ("pocket_bot", "Pocket Bot", "Silver with green eyes")),
+                       ("red_kitsune", ("nine_cream", "Nine Cream", "Cream fur and hair, red eyes, nine tails")),
+                       ("silkcoon_rodent", ("shopkeeper", "Shopkeeper", "Brown and tan, a green apron")),
+                       ("will_o_wisp_undead", ("shy_ghost", "Shy Ghost", "All white, dark eyes")),
+                       ("vampire_undead", ("night_heir", "Night Heir", "Silver hair, a black and gold coat"))]:
     for _fam in C.FAMILIES:
         for _s in _fam["species"]:
             if _s["id"] == _sid and all(v[0] != _variant[0] for v in _s["variants"]):

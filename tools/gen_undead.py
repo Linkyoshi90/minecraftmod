@@ -63,6 +63,25 @@ SPECIES = {
                   "frost": dict(SKIN="#c8d8e4", FUR="#c8d8e4", HAIR="#e8f0f8", EYE="#5ad8f8", CLOTH="#8aa0b8", TRIM="#e8f0f8",
                                 extra=dict(boot="#5a6a7a", cloth2="#a8b8c8"))}),
     # seventeenth wave: the yurei, a Japanese ghost in a school uniform, long black hair, her legs fading into a white wisp
+    # twenty-fourth wave: the nasnas, half a ghost: pale, her body fading into a wisp where her legs should be
+    "nasnas_undead": dict(
+        build="curvy", outfit=dict(top=["bandeau"], colors=dict(cloth2="#a8c8e0")),
+        lower="none", hair="wavy", bangs="swept", ears=None, wisp=True,
+        pal=dict(SKIN="#d8ecf4", HAIR="#a8d0e4", FUR="#c8e4f0", LIGHT="#f0f8fc", MARK="#7ab0cc", EYE="#5a9ac0", CLOTH="#a8c8e0", TRIM="#f0f8fc", extra=dict(flame="#c8e4f0")),
+        variants={"grey": dict(SKIN="#e0e0e4", HAIR="#a8a8b0", FUR="#c8c8d0", MARK="#7a7a84", EYE="#5a5a64", CLOTH="#a8a8b0", extra=dict(flame="#d8d8e0")),
+                  "gold": dict(SKIN="#f4e8c8", HAIR="#e0c070", FUR="#f0dca0", MARK="#a88a3a", EYE="#a87a1e", CLOTH="#e0c070", extra=dict(flame="#f8ecc0")),
+                  "rose": dict(SKIN="#f8e0e4", HAIR="#f0b0c0", FUR="#f8ccd8", MARK="#c87a90", EYE="#c84a6a", CLOTH="#f0b0c0", extra=dict(flame="#fcdce4")),
+                  "green": dict(SKIN="#dcf0e0", HAIR="#a8d8b4", FUR="#c8e8d0", MARK="#6aa87a", EYE="#3a8a5a", CLOTH="#a8d8b4", extra=dict(flame="#d0f0d8"))}),
+    # twenty-fourth wave: the jiangshi, a hopping corpse in an official's robe and hat, a paper talisman on her brow, her arms held out
+    "jiangshi_undead": dict(
+        build="slim", outfit=dict(top=["kimono"], colors=dict(obi="#c8a040", kimono="#2a3a7a")),
+        hair="bob", bangs="blunt", ears=None, legs="bare", foot="shoe", jiangshi=True,
+        pal=dict(SKIN="#d0dcd8", HAIR="#141420", FUR="#2a3a7a", LIGHT="#c8d0d8", MARK="#14204a", EYE="#3a3a4a", CLOTH="#2a3a7a", TRIM="#c8a040",
+                 extra=dict(boot="#141420", hat="#141420", paper="#f0d860", ink="#c82a1e")),
+        variants={"red": dict(CLOTH="#8a1e1e", extra=dict(boot="#141420", hat="#141420", paper="#f0d860", ink="#2a2a2a", kimono="#8a1e1e")),
+                  "green": dict(CLOTH="#2a6a4a", extra=dict(boot="#141420", hat="#141420", paper="#f0d860", ink="#c82a1e", kimono="#2a6a4a")),
+                  "black": dict(CLOTH="#1e1e24", TRIM="#a8a8b0", extra=dict(boot="#141420", hat="#2a2a30", paper="#f0d860", ink="#c82a1e", kimono="#1e1e24")),
+                  "gold": dict(CLOTH="#a87a1e", TRIM="#2a3a7a", extra=dict(boot="#141420", hat="#141420", paper="#f4f0e0", ink="#c82a1e", kimono="#a87a1e"))}),
     "yurei_undead": dict(
         build="slim", outfit=dict(top=["sweater"], bottom="wrap_skirt", extras=["satchel"], colors=dict(cloth2="#c82a2a", leather="#7a4a2a")),
         lower="none", hair="hime", bangs="blunt", ears=None, wisp=True,
@@ -101,7 +120,9 @@ SPECIES = {
         variants={"green": dict(SKIN="#c8f0d0", HAIR="#6af0a0", CLOTH="#1e5a3a", TRIM="#a8f8c8", extra=dict(flame="#5af090")),
                   "violet": dict(SKIN="#e0d0f8", HAIR="#b88af8", CLOTH="#4a2a8a", TRIM="#e0c8ff", extra=dict(flame="#b07af8")),
                   "amber": dict(SKIN="#f8e8c8", HAIR="#f8b04a", CLOTH="#8a4a1a", TRIM="#ffe0a0", extra=dict(flame="#f8a83a")),
-                  "soul": dict(SKIN="#c8f8f8", HAIR="#4af0f0", CLOTH="#1a4a5a", TRIM="#a8ffff", extra=dict(flame="#3ae8f0"))}),
+                  "soul": dict(SKIN="#c8f8f8", HAIR="#4af0f0", CLOTH="#1a4a5a", TRIM="#a8ffff", extra=dict(flame="#3ae8f0")),
+                  # homage (2026-10-30): Boo: all white, dark eyes, a pink tongue's colour in her trim
+                  "shy_ghost": dict(SKIN="#fbfbfb", HAIR="#f8f8f8", FUR="#f0f0f4", LIGHT="#ffffff", MARK="#c8c8d0", EYE="#1e1e24", CLOTH="#f4f4f8", TRIM="#f08ab0", extra=dict(flame="#f8f8fc"))}),
     "yuki_onna_undead": dict(
         build="slim", outfit=dict(top=["kimono"], bottom="hakama", colors=dict(kimono="#f4f8fc", kimono_trim="#a8c8e8", obi="#a8c8e8", cloth2="#eaf2fa")),
         hair="hime", bangs="blunt", ears=None, legs="bare", foot="shoe", comb=True,
@@ -131,7 +152,9 @@ SPECIES = {
         variants={"noble": dict(CLOTH="#4a2a6a", TRIM="#e8c060", HAIR="#2a1a2a", extra=dict(wing="#2a1a3a", wing_bone="#140a1a")),
                   "silver": dict(HAIR="#d8dce4", CLOTH="#2a2a3a", EYE="#e83a4a"),
                   "raven": dict(CLOTH="#141216", TRIM="#8a8a90", HAIR="#0e0c10"),
-                  "pale": dict(CLOTH="#f0e8ea", TRIM="#c81a2a", HAIR="#f4f0f2", extra=dict(stocking="#ffffff", boot="#c81a2a"))}),
+                  "pale": dict(CLOTH="#f0e8ea", TRIM="#c81a2a", HAIR="#f4f0f2", extra=dict(stocking="#ffffff", boot="#c81a2a")),
+                  # homage (2026-10-30): Alucard: silver hair, a black and gold coat
+                  "night_heir": dict(HAIR="#e8e8ec", CLOTH="#141216", TRIM="#e8c060", EYE="#e8c040")}),
     "zombie_undead": dict(
         build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["arm_wraps"], colors=dict(bandage="#c8c0a8")),
         hair="shaggy", bangs="messy", ears=None, legs="bare", foot="shoe", stitches=True, cone_kit=True,
@@ -199,6 +222,8 @@ SPECIES = {
 
 def declare_hook(sp, d):
     out = []
+    if d.get("jiangshi"):                                # the official's hat and the paper talisman
+        out += [("jhat", 9.5, 2, 9.5), ("jhat_top", 6, 1.75, 6), ("jtalisman", 2.5, 5.5, .25)]
     if d.get("cone_kit"):                                # the lawn zombie's traffic cone: base, two tiers, the tip
         out += [("cone_base", 7, 1, 7), ("cone_a", 5, 3, 5), ("cone_b", 3.5, 3, 3.5), ("cone_tip", 2, 2, 2)]
     if d.get("wisp"):
@@ -225,6 +250,11 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    if d.get("jiangshi"):
+        hat, paper, ink = G.shades(pal.extra.get("hat", "#141420")), G.shades(pal.extra.get("paper", "#f0d860")), G.shades(pal.extra.get("ink", "#c82a1e"))
+        pt("jhat", "all", lambda f, x, y, w, h: CLEAR if f == "down" else pick(hat, 0.45 + 0.2 * (y == 0), x, y))
+        pt("jhat_top", "all", lambda f, x, y, w, h: pick(hat, 0.4 + 0.15 * (x % 3 == 0), x, y))
+        pt("jtalisman", "all", lambda f, x, y, w, h: pick(ink, 0.5, x, y) if 3 <= x < w - 3 and y % 4 < 3 and y > 1 else pick(paper, 0.7, x, y))
     cone = pal.extra.get("cone")
     orange = G.shades("#f0701e")
     for p in ("cone_base", "cone_a", "cone_b", "cone_tip"):
@@ -346,6 +376,9 @@ def paint_hook(pt, pal, d):
 
 
 def build_hook(r, g, d):
+    if d.get("jiangshi"):                                # the hat on her head, the talisman hanging from its brim over her face
+        r.add("hair_jhat", "head", [0, g.hy + 8, g.z], [cube("jhat", [-4.75, g.hy + 7.25, -4.75 + g.z]), cube("jhat_top", [-3, g.hy + 9.0, -3 + g.z]),
+                                                        cube("jtalisman", [-1.25, g.hy + 2.75, -4.6 + g.z])])
     hy, z = g.hy, g.z
     if d.get("cone_kit"):                                # on top of her head, a white band round the middle
         r.add("hair_cone", "head", [0, hy + 8, z], [cube("cone_base", [-3.5, hy + 7.8, -3.5 + z]), cube("cone_a", [-2.5, hy + 8.8, -2.5 + z]),
@@ -400,6 +433,13 @@ def build_hook(r, g, d):
 def anim_extra(an, sp, d):
     """the wisp's flicker, the jiang shi-like zombie shamble ("shamble") and the vampire's bite ("drink")"""
     Tk, hold, sym, merge = H.track, H.hold, H.sym, H.merge
+    if d.get("jiangshi"):                                # stiff as a board: arms straight out, and she can only hop
+        arms = merge(sym("arm", hold(-88, 0, 0)), sym("forearm", hold(0, 0, 0)), {"hair_back": {"rotation": hold(0, 0, 0)}})
+        hop = lambda p, up: {"root": {"position": Tk((0, (0, 0, 0)), (p * 0.15, (0, 0, 0)), (p * 0.55, (0, up, 0)), (p * 0.9, (0, 0, 0)), (p, (0, 0, 0)))},
+                             "leg_r": {"rotation": hold(0, 0, 0)}, "leg_l": {"rotation": hold(0, 0, 0)}, "shin_r": {"rotation": hold(0, 0, 0)}, "shin_l": {"rotation": hold(0, 0, 0)}}
+        an.add("idle", 3.0, True, merge(arms, hop(3.0, 0.5)))
+        an.add("walk", 0.7, True, merge(arms, hop(0.7, 4)))
+        an.add("run", 0.5, True, merge(arms, hop(0.5, 5)))
     if d.get("mummy"):                                  # flustered, she spins round and round, wrapping herself up again
         an.add("spin", 1.0, True, {"root": {"rotation": H.track((0, (0, 0, 0)), (0.5, (0, 180, 0)), (1.0, (0, 360, 0)))},
                                    "arm_r": {"rotation": H.hold(-20, 0, 60)}, "arm_l": {"rotation": H.hold(-20, 0, -60)}})

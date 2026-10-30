@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_qilin_centaur",
+  "spawners": {
+    "type": "monstergirls:qilin_centaur",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

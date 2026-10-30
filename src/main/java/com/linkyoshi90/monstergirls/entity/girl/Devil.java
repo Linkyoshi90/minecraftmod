@@ -73,6 +73,7 @@ public class Devil extends AbstractMonsterGirl {
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
+            case BEHEMOTH_DEVIL -> girlAttributes(90, 0.24, 10).add(net.minecraft.world.entity.ai.attributes.Attributes.ARMOR, 6).add(net.minecraft.world.entity.ai.attributes.Attributes.KNOCKBACK_RESISTANCE, 0.9);
             case LESSER_DEVIL -> girlAttributes(12, 0.32, 2);
             case SUCCUBUS_DEVIL -> girlAttributes(26, 0.3, 4);
             case GREATER_DEVIL -> girlAttributes(70, 0.28, 10);
@@ -714,5 +715,11 @@ public class Devil extends AbstractMonsterGirl {
             this.playSound(net.minecraft.sounds.SoundEvents.PLAYER_BURP, 0.6F, 1.0F);
         }
         return n;
+    }
+
+    /** The Behemoth's friend is immovable: is this player within 8 of a Behemoth who likes them? (GirlEvents cancels the knockback.) */
+    public static boolean anchored(net.minecraft.world.entity.player.Player player) {
+        return !player.level().getEntitiesOfClass(Devil.class, player.getBoundingBox().inflate(8),
+                d -> d.species == GirlSpecies.BEHEMOTH_DEVIL && !d.isBaby() && d.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION).isEmpty();
     }
 }

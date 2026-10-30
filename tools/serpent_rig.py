@@ -1,4 +1,4 @@
-"""The rearing serpent (the Macawtl, the Turquoise Serpent): a girl only from the bust up, one long snake from just under it. She
+"""The rearing serpent (the Macawtl, the Turquoise Serpent, Quetzalcoatl): a girl only from the bust up, one long snake from just under it. She
 is not a lamia standing on her tail: she lies flat and slithers like a snake, and now and then rears up to look around.
 
 The bones stand upright in the model, with the body hanging straight down from her chest (sp_1..sp_10), so her size in the game

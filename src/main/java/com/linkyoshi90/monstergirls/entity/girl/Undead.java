@@ -494,6 +494,7 @@ public class Undead extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.JIANGSHI_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel grave && !this.isBaby() && this.tickCount % 40 == 0) this.stiffHop(grave);
         if (this.species == GirlSpecies.GASHADOKURO_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel grasp && !this.isBaby() && this.tickCount % 60 == 0) this.giantsGrasp(grasp);
         if (this.species == GirlSpecies.GHOUL_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel grave && !this.isBaby() && this.tickCount % 20 == 0) this.carrion(grave);
         if (this.species == GirlSpecies.KASURENIJIMI_UNDEAD && this.level() instanceof ServerLevel blur && !this.isBaby() && this.tickCount % 20 == 0) this.smudge(blur);
@@ -835,5 +836,38 @@ public class Undead extends AbstractMonsterGirl {
         this.getLookControl().setLookAt(m);
         this.playSound(net.minecraft.sounds.SoundEvents.SKELETON_AMBIENT, 1.0F, 0.5F);
         return 1;
+    }
+
+    /**
+     * The jiangshi's hop (twenty-fourth wave): the monsters within 3 of her, while her friend is near, are struck stiff: 2 damage and
+     * Slowness VI for 2 seconds. The number struck, -1 without a friend.
+     */
+    public int stiffHop(net.minecraft.server.level.ServerLevel level) {
+        if (this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24) == null) return -1;
+        int struck = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, this.getBoundingBox().inflate(3), m -> m.isAlive())) {
+            m.hurt(level.damageSources().mobAttack(this), 2.0F);
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 40, 5));
+            struck++;
+        }
+        return struck;
+    }
+
+    /** The last day the nasnas took a blow. */
+    private long lastBlow = -1;
+
+    /** Would this nasnas take the killing blow for this player now? She is spent for the day if she does (GirlEvents asks). */
+    public static boolean takesTheBlow(net.minecraft.world.entity.player.Player player, float amount) {
+        if (amount < player.getHealth() + player.getAbsorptionAmount() || !(player.level() instanceof net.minecraft.server.level.ServerLevel level)) return false;
+        long day = level.getDayTime() / 24000L;
+        for (Undead u : level.getEntitiesOfClass(Undead.class, player.getBoundingBox().inflate(16),
+                u -> u.species == GirlSpecies.NASNAS_UNDEAD && !u.isBaby() && u.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION)) {
+            if (u.lastBlow == day) continue;
+            u.lastBlow = day;
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.SOUL, player.getX(), player.getY() + 1.0, player.getZ(), 20, 0.4, 0.5, 0.4, 0.02);
+            u.playSound(net.minecraft.sounds.SoundEvents.TOTEM_USE, 0.6F, 1.4F);
+            return true;
+        }
+        return false;
     }
 }

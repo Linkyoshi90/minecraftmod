@@ -47,6 +47,16 @@ SPECIES = {
                                  extra=dict(fin="#f0e4ff", fin_ray="#b088f0"))}),
     # twenty-second wave: the macawtl, a feathered serpent in deep macaw blue: a crest of plumes, a hooked beak of a mask on her brow,
     # feathered wings and tail, two long plumes trailing from it
+    # twenty-fourth wave: Quetzalcoatl, the feathered serpent on the rearing rig: a crest of leaves and feathers, a woven band, pale wings
+    "quetzalcoatl_dragon": dict(
+        build="slim", outfit=dict(top=["bandeau"], extras=["usekh", "bracers"], colors=dict(cloth2="#e8903a", leather="#c86a2a")),
+        hair="wavy", bangs="swept", ears=None, lower="none", wings="feather", wing_scale=1.1, flies=True, rearing=True, qcrest=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#2aa8a0", FUR="#2ab8b0", LIGHT="#c8f4e4", MARK="#167a78", EYE="#2a7ac8", CLOTH="#e8903a", TRIM="#f8d080",
+                 extra=dict(wing="#a8f0dc", wing_tip="#3ac8b8", leaf="#3ad8a8", leaf_tip="#c8f8e0", band="#e8903a", band_mark="#7a3a14")),
+        variants={"green": dict(HAIR="#2a8a3a", FUR="#3aa84a", LIGHT="#d8f4b8", MARK="#1a5a24", extra=dict(wing="#c8f0a8", wing_tip="#4ab85a", leaf="#6ad84a", leaf_tip="#e0f8b0", band="#e8903a", band_mark="#7a3a14")),
+                  "gold": dict(HAIR="#c8901e", FUR="#e0b040", LIGHT="#f8ecb0", MARK="#8a5a10", extra=dict(wing="#f8e8a8", wing_tip="#e0a830", leaf="#f0c840", leaf_tip="#fff0b0", band="#2aa8a0", band_mark="#0e5a58")),
+                  "rose": dict(HAIR="#c84a7a", FUR="#e0709a", LIGHT="#fcd8e4", MARK="#8a2a50", extra=dict(wing="#fcd8e8", wing_tip="#e87aa8", leaf="#f08ab0", leaf_tip="#ffe0ec", band="#f0c840", band_mark="#8a5a10")),
+                  "violet": dict(HAIR="#6a3ab8", FUR="#8a5ad8", LIGHT="#e4d8f8", MARK="#3a1a7a", extra=dict(wing="#e0d0f8", wing_tip="#8a5ad8", leaf="#a87ae8", leaf_tip="#ece0fc", band="#e8903a", band_mark="#7a3a14"))}),
     "macawtl_dragon": dict(
         build="slim", outfit=dict(top=["bandeau", "harness"], extras=["bracers"], colors=dict(leather="#c8ccd8", cloth2="#1e3a9a")),
         hair="flowing", bangs="swept", ears=None, lower="none", wings="feather", wing_scale=1.1, flies=True, macaw=True, rearing=True,
@@ -209,12 +219,19 @@ def declare_hook(sp, d):
         out += [("mcrest", .5, 1.25, 4.5), ("mbeak", 1, 1.25, 1), ("mbeak_tip", .75, .5, .5), ("mplume", 1.25, .25, 7.5)]
     if d.get("rearing"):
         out += serpent_rig.parts()
+    if d.get("qcrest"):                                  # Quetzalcoatl's crest of leaves and woven band
+        out += [("qleaf", 1.75, 6, .5), ("qband", 9.25, 1.5, 9.25)]
     return out
 
 
 def paint_hook(pt, pal, d):
     if d.get("rearing"):
         serpent_rig.paint(pt, pal)
+    if d.get("qcrest"):
+        leaf, tip = G.shades(pal.extra.get("leaf", "#3ad8a8")), G.shades(pal.extra.get("leaf_tip", "#c8f8e0"))
+        pt("qleaf", "all", lambda f, x, y, w, h: pick(tip if y < 2 else leaf, 0.5 + 0.2 * (x == w // 2), x, y))
+        band, mark = G.shades(pal.extra.get("band", "#e8903a")), G.shades(pal.extra.get("band_mark", "#7a3a14"))
+        pt("qband", "all", lambda f, x, y, w, h: CLEAR if f in ("up", "down") else pick(mark if (x + y * 2) % 6 < 2 else band, 0.55, x, y))
     if d.get("seafin"):                                  # see-through fins with rays, painted only on their broad sides
         fin, ray = G.shades(pal.extra.get("fin", "#d8ecff")), G.shades(pal.extra.get("fin_ray", "#5aa8f0"))
 
@@ -294,6 +311,8 @@ def paint_hook(pt, pal, d):
 
 
 def build_hook(r, g, d):
+    if d.get("rearing"):
+        serpent_rig.build(r)
     hy, z = g.hy, g.z
     if d.get("comb"):
         r.add("hair_comb", "head", [0, hy + 8, z], [cube("comb", [-0.5, hy + 8.0, -3.5 + z])])
@@ -311,11 +330,16 @@ def build_hook(r, g, d):
         px, py, pz = r.b["tail_3"]["pivot"]
         r.put("tail_3", cube("nfan", [px - 0.25, py - 3.0, pz + 2.0]))
         r.add("hair_nfin", "head", [0, hy + 8, z], [cube("nfin", [-0.25, hy + 7.4, -1.5 + z])])
+    if d.get("qcrest"):                                  # leaves fanned round the back of her head, the woven band over her brow
+        cs = [cube("qband", [-4.625, hy + 5.4, -4.625 + z])]
+        for i in range(9):
+            tilt = -84 + i * 21
+            cs.append(G.rot_cube("qleaf", [-0.875, hy + 7.0, 3.0 + z], [0, hy + 4.0, 3.0 + z], -14, 0, tilt))
+        r.add("hair_qcrest", "head", [0, hy + 4, 3 + z], cs)
     if d.get("macaw"):                                   # plumes fanned up and back, a hooked beak between her eyes, two plumes off the tail tip
         r.add("hair_mcrest", "head", [0, hy + 8.2, z], [G.rot_cube("mcrest", [x - 0.25, hy + 7.8, -1.5 + z], [x, hy + 8.2, -1.0 + z], 30 + 8 * abs(x), x * 12, 0)
                                                        for x in (-1.6, -0.8, 0, 0.8, 1.6)])
         r.put("head", cube("mbeak", [-0.5, hy + 3.25, -4.9 + z]), cube("mbeak_tip", [-0.375, hy + 2.75, -5.15 + z]))
-        serpent_rig.build(r)
         last = serpent_rig.tip()
         px, py, pz = r.b[last]["pivot"]
         py -= 4.5                                        # the end of her tail: the plumes carry on down the line of her body

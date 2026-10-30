@@ -56,7 +56,9 @@ SPECIES = {
                   "red_clay": dict(SKIN=skin("#a8503a"), HAIR="#6a2a1e", FUR="#a8503a", MARK="#5a2014", extra=dict(boot="#7a3a28", shem="#e8c868")),
                   "kaolin": dict(SKIN=skin("#ece6dc"), HAIR="#d8d0c4", FUR="#ece6dc", LIGHT="#ffffff", MARK="#b8b0a4", EYE="#5a8ac8",
                                  extra=dict(boot="#c8c0b4", shem="#5a8ac8")),
-                  "mud": dict(SKIN=skin("#6a5240"), HAIR="#3e2e22", FUR="#6a5240", MARK="#2e2218", EYE="#a8d878", extra=dict(boot="#4a3a2c", shem="#a8d878"))}),
+                  "mud": dict(SKIN=skin("#6a5240"), HAIR="#3e2e22", FUR="#6a5240", MARK="#2e2218", EYE="#a8d878", extra=dict(boot="#4a3a2c", shem="#a8d878")),
+                  # homage (2026-10-30): Clank: silver, green eyes
+                  "pocket_bot": dict(SKIN=skin("#c8ccd4"), HAIR="#8a909a", FUR="#c8ccd4", LIGHT="#e8ecf0", MARK="#5a6068", EYE="#5ae87a", extra=dict(boot="#6a7078", shem="#5ae87a"))}),
     # eleventh wave: the talosling, a bronze clockwork hound girl with a wind-up key in her back
     "talosling_construct": dict(
         build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["bracers", "belt"], colors=dict(cloth2="#2a3a6a", leather="#2a3a6a")),

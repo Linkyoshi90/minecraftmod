@@ -51,6 +51,20 @@ public final class GirlEvents {
         }
     }
 
+    /** A befriended Behemoth near a player: they cannot be knocked back. */
+    @SubscribeEvent
+    public static void onKnockback(net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent event) {
+        if (event.getEntity() instanceof net.minecraft.world.entity.player.Player p && !p.level().isClientSide
+                && com.linkyoshi90.monstergirls.entity.girl.Devil.anchored(p)) event.setCanceled(true);
+    }
+
+    /** The qilin treads so lightly that farmland never notices. */
+    @SubscribeEvent
+    public static void onTrample(net.neoforged.neoforge.event.level.BlockEvent.FarmlandTrampleEvent event) {
+        if (event.getEntity() instanceof com.linkyoshi90.monstergirls.entity.girl.Centaur c
+                && c.getSpecies() == com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.QILIN_CENTAUR) event.setCanceled(true);
+    }
+
     /** A befriended karakasa obake near a player catches the projectiles about to hit them. */
     @SubscribeEvent
     public static void onProjectileImpact(net.neoforged.neoforge.event.entity.ProjectileImpactEvent event) {
@@ -64,6 +78,7 @@ public final class GirlEvents {
     public static void onPlayerHurt(net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent event) {
         if (event.getEntity() instanceof net.minecraft.world.entity.player.Player p && !p.level().isClientSide) {
             event.setAmount(com.linkyoshi90.monstergirls.entity.girl.Armoured.shield(p, event.getSource(), event.getAmount()));
+            if (com.linkyoshi90.monstergirls.entity.girl.Undead.takesTheBlow(p, event.getAmount())) event.setAmount(0.0F);
         }
     }
 

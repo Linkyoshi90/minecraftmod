@@ -68,7 +68,9 @@ SPECIES = {
         variants={"silver": dict(FUR="#34343a", HAIR="#c8cad2", LIGHT="#eceef2", MARK="#141418", EYE="#c8b040"),
                   "cross": dict(FUR="#c86a30", HAIR="#b8602e", pattern="cross", MARK="#3a2a22"),
                   "platinum": dict(FUR="#dcdce0", HAIR="#ececf0", LIGHT="#ffffff", MARK="#8a8a92", CLOTH="#6a5aa0"),
-                  "amber": dict(FUR="#e0a868", HAIR="#e4b070", MARK="#6a4a30", CLOTH="#a04a6a")}),
+                  "amber": dict(FUR="#e0a868", HAIR="#e4b070", MARK="#6a4a30", CLOTH="#a04a6a"),
+                  # homage (2026-10-30): Ninetales: cream fur and hair, red eyes, nine tails (Kitsune shows nine)
+                  "nine_cream": dict(FUR="#f0e4c0", HAIR="#f4e8c8", LIGHT="#fff8e8", MARK="#e8c888", EYE="#c82a2a", CLOTH="#e8a040", TRIM="#f8e8c0")}),
     "arctic_kitsune": dict(
         build="petite", outfit=dict(top=["halter", "capelet"], bottom="wrap_skirt", extras=["pearls"], colors=dict(cloth2="#dfe8f0")),
         ears="round", hair="shaggy", stockings=False, tip="light",
