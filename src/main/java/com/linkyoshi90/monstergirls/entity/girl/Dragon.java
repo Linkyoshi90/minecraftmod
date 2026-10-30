@@ -88,7 +88,7 @@ public class Dragon extends AbstractMonsterGirl {
     @Override
     public boolean canFly() {
         return switch (this.species) {
-            case LONG_DRAGON, WYRM_DRAGON, GRYPHON_DRAGON, WYVERN_DRAGON, ALEBRIJE_DRAGON, COCKATRICE_DRAGON -> true;
+            case LONG_DRAGON, WYRM_DRAGON, GRYPHON_DRAGON, WYVERN_DRAGON, ALEBRIJE_DRAGON, COCKATRICE_DRAGON, MACAWTL_DRAGON -> true;
             default -> false;
         };
     }

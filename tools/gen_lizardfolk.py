@@ -577,12 +577,14 @@ def turtle_prone(an):
             "hair_back": {"rotation": hold(30, 0, 0)}, "leg_r": {"rotation": hold(0, 0, 14)}, "leg_l": {"rotation": hold(0, 0, -14)}}
 
     def stroke(period, amp):                             # both front flippers together, as a sea turtle swims and hauls herself
-        return sym("arm", Tk((0, (-amp, 0, -62)), (period / 2, (amp, 0, -40)), (period, (-amp, 0, -62))))
+        return sym("arm", Tk((0, (0, amp, -56)), (period / 2, (0, -amp, -44)), (period, (0, amp, -56))))
     an.add("idle", 4.0, True, merge(flat, sym("arm", Tk((0, (0, 0, -60)), (2, (0, 0, -56)), (4, (0, 0, -60))))))
-    bob = lambda period: {"body": {"position": Tk((0, (0, 0, 0)), (period / 2, (0, 0.6, 0)), (period, (0, 0, 0)))}}
-    an.add("walk", 1.6, True, merge(flat, stroke(1.6, 24), bob(1.6)))
-    an.add("run", 1.0, True, merge(flat, stroke(1.0, 32), bob(1.0)))
-    an.add("swim", 1.8, True, merge(flat, stroke(1.8, 40), {"root": {"rotation": hold(*PRONE), "position": hold(0, 10, 12)}}, F_wave_legs()))
+    bob = lambda period: {"body": {"position": Tk((0, (0, 0, 0)), (period / 2, (0, 1.2, -1.2)), (period, (0, 0, 0)))}}    # each stroke heaves her forward
+    kick = lambda period: {"leg_r": {"rotation": Tk((0, (-18, 0, 14)), (period / 2, (18, 0, 14)), (period, (-18, 0, 14)))},
+                           "leg_l": {"rotation": Tk((0, (18, 0, -14)), (period / 2, (-18, 0, -14)), (period, (18, 0, -14)))}}
+    an.add("walk", 1.2, True, merge(flat, stroke(1.2, 42), bob(1.2), kick(1.2)))
+    an.add("run", 0.8, True, merge(flat, stroke(0.8, 50), bob(0.8), kick(0.8)))
+    an.add("swim", 1.8, True, merge(flat, stroke(1.8, 55), {"root": {"rotation": hold(*PRONE), "position": hold(0, 10, 12)}}, F_wave_legs()))
     for key in ("sit", "lie", "pounce", "groom", "hiss", "stalk"):
         F._inject(an, key, {"root": flat["root"], "head": flat["head"]})
 

@@ -57,11 +57,12 @@ def _idle():
                                      (12.5, REAR["head"]), (14, FLAT["head"]))}}
     for i, n in enumerate(CHAIN):
         bones[n] = {"rotation": keys(lambda p, i=i: (p["chain"][i], 0, 0))}
-    return merge(bones, sym("arm", keys(lambda p: p["arm"])), sym("forearm", keys(lambda p: p["forearm"])))
+    bones = merge(bones, sym("arm", keys(lambda p: p["arm"])), sym("forearm", keys(lambda p: p["forearm"])))
+    return bones
 
 
 def slither(period, amp):
-    return G.wave(CHAIN, period, [amp * (0.35 + 0.65 * min(1, i / 4)) for i in range(COUNT)], axis=2, phase=0.8)
+    return G.wave(CHAIN, period, [amp * (0.4 + 0.6 * min(1, i / 3)) for i in range(COUNT)], axis=2, phase=1.15, keys=12)
 
 
 def anims(an):
@@ -69,10 +70,10 @@ def anims(an):
     merge = H.merge
     flat, rear = posed(FLAT), posed(REAR)
     an.add("idle", 14.0, True, _idle())
-    an.add("walk", 1.6, True, merge(flat, slither(1.6, 16)))
-    an.add("run", 1.0, True, merge(flat, slither(1.0, 20)))
+    an.add("walk", 1.2, True, merge(flat, slither(1.2, 30)))
+    an.add("run", 0.7, True, merge(flat, slither(0.7, 36)))
     an.add("rear", 2.0, True, rear)
-    an.add("sit", 4.0, True, merge(flat, slither(6.0, 4)))
+    an.add("sit", 4.0, True, merge(flat, slither(4.0, 8)))
     an.add("lie", 4.0, True, flat)
     an.add("bask", 4.0, True, flat)
     an.add("coil", 2.0, True, merge(flat, {n: {"rotation": H.hold(0, 0, 34)} for n in CHAIN}))

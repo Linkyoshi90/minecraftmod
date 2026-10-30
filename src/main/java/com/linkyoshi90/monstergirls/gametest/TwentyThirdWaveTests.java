@@ -144,6 +144,24 @@ public class TwentyThirdWaveTests {
         helper.succeed();
     }
 
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "serpentBodyHasItsOwnHitboxes")
+    public static void serpentBodyHasItsOwnHitboxes(GameTestHelper helper) {
+        var serpent = still(helper, GirlSpecies.TURQUOISE_SERPENT_LAMIA, new BlockPos(5, 2, 7));
+        check(serpent.isMultipartEntity() && serpent.getParts().length == 4, "four lengths of body");
+        float health = serpent.getHealth();
+        helper.succeedWhen(() -> {
+            var tail = serpent.getParts()[3];
+            check(tail.distanceTo(serpent) > 2.0F, "her tail lies well behind her");
+            check(tail.hurt(helper.getLevel().damageSources().generic(), 2.0F) || serpent.getHealth() < health, "a hit on her body hits her");
+        });
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "macawtlFlies")
+    public static void macawtlFlies(GameTestHelper helper) {
+        check(still(helper, GirlSpecies.MACAWTL_DRAGON, new BlockPos(5, 2, 5)).canFly(), "she has wings and uses them");
+        helper.succeed();
+    }
+
     @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "hellhoundEyesLightTheWorld")
     public static void hellhoundEyesLightTheWorld(GameTestHelper helper) {
         Canid hound = still(helper, GirlSpecies.HELLHOUND_CANID, new BlockPos(5, 2, 5));

@@ -921,7 +921,7 @@ def finish(img, name, model):
                 v = vanilla(block)[(yy + 5 * i) % 16][(xx + 7 * i) % 16]
                 k = 0.8 + 0.35 * l
                 c = tuple(min(255, int(q * k)) for q in v)
-                if name == "sculk" and v[2] > 150 and v[1] > 120:              # the sculk's bright specks glow
+                if name == "sculk" and v[1] >= 60:                            # the sculk's bright specks glow
                     c = tuple(v)
                     mask[y][x] = c + (255,)
             elif name == "acorn":
@@ -995,6 +995,9 @@ def main():
                 if os.path.exists(glow):
                     base = load(glow)
                     mask = [[mk if mk[3] else bs for mk, bs in zip(mrow, brow)] for mrow, brow in zip(mask, base)]
+                if not any(px[3] for row in mask for px in row):   # GeckoLib crashes on a mask with no pixels: one, where no part is drawn
+                    y0, x0 = next(((y, x) for y, row in enumerate(tex) for x, px in enumerate(row) if not px[3]), (0, 0))
+                    mask[y0][x0] = (0, 0, 0, 255)
                 H.write_png(os.path.join(ENT, f"{m}_paint_{p}.png"), tex)
                 H.write_png(os.path.join(ENT, f"{m}_paint_{p}_glowmask.png"), mask)
                 continue

@@ -406,7 +406,7 @@ def anim_extra(an, sp, d):
         folded = P.folded(["wing_r", "wing_l"], fold=62, droop=-84)
         for key in ("idle", "walk", "run", "sit", "rear", "coil", "bask", "lie"):
             F._inject(an, key, folded)
-        F._inject(an, "fly", merge(serpent_rig.posed(serpent_rig.FLAT), {"root": {"position": hold(0, 10, 14)}}, serpent_rig.slither(2.0, 12)))
+        F._inject(an, "fly", merge(serpent_rig.posed(serpent_rig.FLAT), {"root": {"position": hold(0, 10, 14)}}, serpent_rig.slither(1.6, 22)))
     an.add("breathe", 1.5, False, merge({"head": {"rotation": Tk((0, (0, 0, 0)), (0.3, (-25, 0, 0)), (0.6, (10, 0, 0)), (1.5, (10, 0, 0)))},
                                          "body": {"rotation": Tk((0, (0, 0, 0)), (0.3, (-10, 0, 0)), (0.6, (12, 0, 0)), (1.5, (0, 0, 0)))},
                                          "mouth": {"position": Tk((0, H.REST), (0.5, H.OUT_), (1.3, H.OUT_), (1.5, H.REST))}}))

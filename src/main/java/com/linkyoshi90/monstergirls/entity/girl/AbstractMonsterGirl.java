@@ -154,6 +154,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     }
 
     protected final GirlSpecies species;
+    /** The hitboxes of a rearing serpent's body; none on anyone else. */
+    private final SerpentSegment[] segments;
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private final Map<UUID, Integer> affection = new HashMap<>();
     private final Gestation gestation = new Gestation();
@@ -185,6 +187,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     protected AbstractMonsterGirl(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level);
         this.species = species;
+        this.segments = SerpentSegment.of(this, species);
+        if (this.segments.length > 0) this.setId(ENTITY_COUNTER.getAndAdd(this.segments.length + 1) + 1);
         this.goalSelector.addGoal(-1, new SitWhenOrderedGoal<>(this));
         this.goalSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StayNearGoal<>(this));
         this.goalSelector.addGoal(3, new FarmhandGoal<>(this));
@@ -834,6 +838,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     @Override
     public void aiStep() {
         super.aiStep();
+        SerpentSegment.follow(this, this.segments);
         if (this.level() instanceof ServerLevel healerLevel && this.tickCount % 600 == 0) this.tendCompanions(healerLevel);
         if (!(this.level() instanceof ServerLevel server)) return;
         com.linkyoshi90.monstergirls.entity.Painted.tickCopper(this, this);
@@ -875,6 +880,30 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     public void setDevotedSince(long time) {
         this.devotedSince = time;
+    }
+
+    // --- a serpent's body ------------------------------------------------------------------------------------------
+
+    @Override
+    public boolean isMultipartEntity() {
+        return this.segments.length > 0;
+    }
+
+    @Nullable
+    @Override
+    public net.neoforged.neoforge.entity.PartEntity<?>[] getParts() {
+        return this.segments;
+    }
+
+    @Override
+    public void setId(int id) {
+        super.setId(id);
+        if (this.segments != null) for (int i = 0; i < this.segments.length; i++) this.segments[i].setId(id + i + 1);
+    }
+
+    @Override
+    public net.minecraft.world.phys.AABB getBoundingBoxForCulling() {                // her tail is drawn well outside her own box
+        return this.segments.length > 0 ? super.getBoundingBoxForCulling().inflate(3.5) : super.getBoundingBoxForCulling();
     }
 
     // --- light (foxfire, a glowing slime) -------------------------------------------------------------------------

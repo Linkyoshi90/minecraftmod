@@ -109,6 +109,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
             case CROCORA_LIZARDFOLK -> girlAttributes(20, 0.28, 4).add(Attributes.ARMOR, 4);
             case IRON_KOBOLD_LIZARDFOLK -> girlAttributes(18, 0.3, 4).add(Attributes.ARMOR, 6);
             case ANVIL_TORTOISE_LIZARDFOLK -> girlAttributes(40, 0.16, 3).add(Attributes.ARMOR, 12).add(Attributes.KNOCKBACK_RESISTANCE, 1.0);
+            case ARCHELON_LIZARDFOLK -> girlAttributes(26, 0.28, 2).add(Attributes.ARMOR, 6);
             default -> girlAttributes(26, 0.2, 2).add(Attributes.ARMOR, 6);
         };
     }
