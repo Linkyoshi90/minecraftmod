@@ -315,7 +315,7 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Sea turtle** (Archelon, gen_lizardfolk `shell="great"`): a shell 2.5 times her width, front and rear flippers, flat on her belly, a `swim` animation (`Lizardfolk.hasSwimAnimation`).
   - **Arms:** `outfits.arms` keeps them `ARM_GAP` clear of her chest and hips, on every girl with an outfit or build; they overlapped curvy hips and melted into the body.
   - **Held props:** the ogre's and oni's club and Sun Wukong's staff stick out of the fist at an angle (`CLUB_TILT`, `STAFF_TILT`), not down the arm.
-  - **Hellhound:** furred all over in dark grey, colour only in her flames, eyes and trim (`coat=True` in girl_family). **Ammit:** furred all over (`coat=True` in gen_nekomata). **Sasquatch:** a shaggy chest (`chest_fur`). **Scylla:** a clam shell top.
+  - **Hellhound:** rebuilt from the user's reference (gen_canid `hound_kit`): charcoal skin, shaggy black limbs, dark-red fur spikes, eye flames, claws, skull collar, ember marks; default variant `ember`, `red` replaced by `blue`. **Ammit:** furred all over (`coat=True` in gen_nekomata). **Sasquatch:** a shaggy chest (`chest_fur`). **Scylla:** a clam shell top.
   - **PAINTS.md:** every paint, its look, its texture and its special cases.
 - [ ] Dev client for the rigs: the serpent's slither and rearing, the Macawtl's raised wings when flat and her `fly` pose, the fishman's flop on land, the archelon's swim and whether her swim pose sits right in water; hands and tails clipping the ground; long bodies clipping through walls (the hitbox did not grow).
 - [ ] The prismarine, amethyst, sculk and mushroom paints reported as not working: files, code path and pixels match the working paints, cause not found yet.

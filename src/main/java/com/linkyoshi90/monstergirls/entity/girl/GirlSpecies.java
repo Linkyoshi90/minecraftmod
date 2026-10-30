@@ -280,7 +280,7 @@ public enum GirlSpecies {
     OBSIDIAN_HOUND_CANID("obsidian_hound_canid", Family.CANID, 1.9F, 28.5F, 0.7F, MobCategory.CREATURE, 0x1E2448, 0x1A1E3A, "navy", "black", "jade", "red", "gold"),
     RHEINTALENSIS_CANID("rheintalensis_canid", Family.CANID, 2.1F, 28.6F, 0.8F, MobCategory.CREATURE, 0x2A4A9A, 0x2A4AB0, "blue", "brown", "grey", "black", "red"),
     GIGANTOPITHECUS_CANID("gigantopithecus_canid", Family.CANID, 2.3F, 28.6F, 0.9F, MobCategory.CREATURE, 0x2A3C9A, 0x1E2E8A, "blue", "brown", "black", "grey", "red"),
-    HELLHOUND_CANID("hellhound_canid", Family.CANID, 1.8F, 28.4F, 0.7F, MobCategory.MONSTER, 0x22306E, 0x1A2A6A, "blue", "black", "red", "green", "purple"),
+    HELLHOUND_CANID("hellhound_canid", Family.CANID, 1.8F, 28.4F, 0.7F, MobCategory.MONSTER, 0x242428, 0x1A1A1E, "ember", "black", "blue", "green", "purple"),
     CAPYBARA_RODENT("capybara_rodent", Family.RODENT, 1.6F, 30.85F, 0.7F, MobCategory.CREATURE, 0x8A5A3A, 0x6A4228, "brown", "sandy", "dark", "ginger", "grey"),
     RATATOSKR_RODENT("ratatoskr_rodent", Family.RODENT, 1.4F, 28.6F, 0.5F, MobCategory.CREATURE, 0xC8602A, 0xB8501E, "red", "grey", "black", "fox", "abert", "hoodie_squirrel"),
     NEEDLEHOG_RODENT("needlehog_rodent", Family.RODENT, 1.3F, 28.5F, 0.6F, MobCategory.CREATURE, 0xC8B090, 0x6A5040, "brown", "blue", "albino", "cinnamon", "dark"),

@@ -8,6 +8,7 @@ of a tail, the panda dark patches round her eyes (facemark "panda"), Anubis tall
 Extra animations: "howl" (the wolf), "fish" (the polar bear, crouched at the water), "roll" and "sneeze" (the panda),
 "judge" (Anubis holds up the scales).
 """
+import math
 import os
 import sys
 
@@ -17,19 +18,20 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
-    # twenty-third wave: the hellhound (the Monster Girl Encyclopedia's): furred all over in dark grey, the colour only in her accents:
-    # flame tufts at her ears, wrists and tail tip (they glow), glowing eyes, the trim of her clothes; a grin full of teeth
+    # twenty-third wave: the hellhound, from the user's reference (the Monster Girl Encyclopedia's): charcoal skin, heavy black fur on her
+    # arms and legs, spiky dark-red fur at the shoulders, wrists and ankles, flames streaming from her eyes, great claws, a skull at her
+    # collar on a chain, ember cracks that glow, a grin full of teeth; a fur top and shorts in place of the art's bare skin
     "hellhound_canid": dict(
-        build="athletic", outfit=dict(top=["bandeau"], bottom="shorts", extras=["belt", "bracers"], colors=dict(leather="#141418", cloth2="#141418")),
-        hair="shaggy", bangs="jagged", ears="fox", legs="fur", foot="paw", tail=[(2, 2, 4), (2.25, 2.25, 4), (1.75, 1.75, 3)],
-        tail_rest=[(-25, 0, 0), (10, 0, 0), (12, 0, 0)], tail_look="fur", grin=True, flames=True, glow=["flame", "flame_tip"], coat=True,
-        pal=dict(SKIN=skin("fair"), HAIR="#26262c", FUR="#3c3c44", LIGHT="#5c5c68", MARK="#141418", EYE="#4ae0f8", CLOTH="#1c1c22", TRIM="#4ae0f8", INNER="#26262c",
-                 pattern="solid", pupil=(1.6, 2.6), extra=dict(flame="#4ac8f8", flame_core="#e8fcff")),
-        variants={"black": dict(HAIR="#141418", FUR="#26262c", LIGHT="#44444e", MARK="#08080a", EYE="#f8701e", TRIM="#f8701e",
-                                extra=dict(flame="#f86a1e", flame_core="#fff0a0")),
-                  "red": dict(EYE="#f83a2a", TRIM="#f83a2a", extra=dict(flame="#f8401e", flame_core="#fff0a0")),
-                  "green": dict(EYE="#8af84a", TRIM="#8af84a", extra=dict(flame="#6af84a", flame_core="#e8ffd0")),
-                  "purple": dict(EYE="#e84af8", TRIM="#e84af8", extra=dict(flame="#c84af8", flame_core="#f8e0ff"))}),
+        build="athletic", outfit=dict(top=["bandeau"], bottom="shorts", colors=dict(leather="#141418", cloth2="#141418")),
+        hair="mane", bangs="jagged", ears="fox", legs="fur", foot="paw", tail=[(3, 3, 4), (3.25, 3.25, 4), (2.25, 2.25, 3)],
+        tail_rest=[(-25, 0, 0), (10, 0, 0), (12, 0, 0)], tail_look="fur", grin=True, flames=True, glow=["efl_a", "efl_b", "efl_c", "ember"], glow_boost=1.3,
+        pal=dict(SKIN=skin("#4a4a54"), HAIR="#1a1a1e", FUR="#242428", LIGHT="#3a3a42", MARK="#0e0e12", EYE="#f03a1e", CLOTH="#1a1a1e", TRIM="#7a1e1a", INNER="#4a1e1e",
+                 pattern="solid", pupil=(1.6, 2.6), extra=dict(flame="#f8501e", flame_core="#ffd860", tuft="#5a1a18", tuft_tip="#a83a24", claw="#5a2030")),
+        variants={"black": dict(SKIN=skin("#2e2e36"), HAIR="#0e0e12", FUR="#141418", LIGHT="#26262c", EYE="#f8a01e", TRIM="#7a4a14",
+                                extra=dict(flame="#f8a01e", flame_core="#fff0a0", tuft="#3a2a14", tuft_tip="#a8701e", claw="#3a2a1e")),
+                  "blue": dict(EYE="#4ac8f8", TRIM="#1e4a7a", INNER="#1e2a4a", extra=dict(flame="#4ac8f8", flame_core="#e8fcff", tuft="#1a3a5a", tuft_tip="#2a7aa8", claw="#203a5a")),
+                  "green": dict(EYE="#6af84a", TRIM="#2a6a2a", INNER="#1e3a1e", extra=dict(flame="#6af84a", flame_core="#e8ffd0", tuft="#1a4a24", tuft_tip="#3a8a3a", claw="#204a2a")),
+                  "purple": dict(EYE="#c84af8", TRIM="#5a1e7a", INNER="#2e1a4a", extra=dict(flame="#c84af8", flame_core="#f8e0ff", tuft="#3a1a5a", tuft_tip="#7a3aa8", claw="#3a205a"))}),
     # twenty-second wave: the gigantopithecus, the giant ape: huge and shaggy, deep blue fur, a red flower in her hair, a fur top and a
     # stone belt
     "gigantopithecus_canid": dict(
@@ -231,7 +233,9 @@ def build_melon(r, g):
 
 def declare_hook(sp, d):
     if d.get("flames"):                                  # the hellhound's flame tufts: a flame and its flickering tip
-        return [("flame", 1.5, 2.5, 1.5), ("flame_tip", .75, 1.5, .75)]
+        return [("efl_a", 3, 1.25, .75), ("efl_b", 3, 1, .75), ("efl_c", 2.5, .75, .5), ("spike_a", 1.75, 2.5, 1.75), ("spike_b", 1, 1.75, 1),
+                ("fur_up", 2.75, 3.75, 2.75), ("fur_fa", 3.25, 3.25, 3.25), ("fur_thigh", 4.5, 4.5, 4.5), ("fur_shin", 4.25, 5, 4.25),
+                ("hclaw", .5, 2, .5), ("fclaw", .75, .75, 3), ("hcollar", 4.5, .75, 4.5), ("hskull", 1.75, 1.75, .75), ("hchain", .5, 2.5, .5), ("ember", 1.75, .5, .25)]
     if d.get("hflower"):                                 # a big flower behind her ear: four petals round a heart
         return [("hpetal", .5, 2, 2), ("hbloom", .5, 1.25, 1.25)]
     if d.get("bigclub"):                                 # the rheintalensis's club: a thick haft, a knotted head
@@ -253,9 +257,26 @@ def declare_hook(sp, d):
 
 def paint_hook(pt, pal, d):
     if d.get("flames"):
-        fl, core = G.shades(pal.extra.get("flame", "#4ac8f8")), G.shades(pal.extra.get("flame_core", "#e8fcff"))
-        pt("flame", "all", lambda f, x, y, w, h: pick(core if y == h - 1 and 0 < x < w - 1 else fl, 0.55 + 0.25 * (y > h / 2), x, y))
-        pt("flame_tip", "all", lambda f, x, y, w, h: pick(fl, 0.75, x, y))
+        fl, core = G.shades(pal.extra.get("flame", "#f8501e")), G.shades(pal.extra.get("flame_core", "#ffd860"))
+        for p_ in ("efl_a", "efl_b", "efl_c"):           # hot at the root, by her eye
+            pt(p_, "all", lambda f, x, y, w, h: pick(core if x < w * 0.4 else fl, 0.6 + 0.2 * (y % 2), x, y))
+        pt("ember", "all", lambda f, x, y, w, h: pick(core if 0 < x < w - 1 else fl, 0.7, x, y))
+        tuft, tip = G.shades(pal.extra.get("tuft", "#5a1a18")), G.shades(pal.extra.get("tuft_tip", "#a83a24"))
+        pt("spike_a", "all", lambda f, x, y, w, h: pick(tuft, 0.45 + 0.2 * (x % 2), x, y))
+        pt("spike_b", "all", lambda f, x, y, w, h: pick(tip, 0.5 + 0.2 * (y % 2), x, y))
+        shag = G.fur_fn(pal, light_faces=(), grain=0.22, pattern="solid", seed=77, fluffy=True)
+        for p_ in ("fur_up", "fur_fa", "fur_thigh", "fur_shin"):
+            pt(p_, "all", lambda f, x, y, w, h: CLEAR if f in ("up", "down") else shag(f, x, y, w, h))
+        coat = G.fur_fn(pal, light_faces=(), grain=0.22, pattern="solid", seed=78)
+        for p_ in ("palm", "fingers", "thumb", "paw"):
+            pt(p_, "all", coat)
+        claw = G.shades(pal.extra.get("claw", "#5a2030"))
+        for p_ in ("hclaw", "fclaw"):
+            pt(p_, "all", lambda f, x, y, w, h: pick(claw, 0.5 + 0.25 * (f == "up"), x, y))
+        pt("hcollar", "all", lambda f, x, y, w, h: pick(pal.MARK, 0.4 + 0.3 * (x % 3 == 0), x, y))
+        bone = G.shades("#6a6a72")
+        pt("hskull", "all", lambda f, x, y, w, h: pick(pal.MARK, 0.2, x, y) if f == "north" and y == 2 and x in (1, 4) else pick(bone, 0.55, x, y))
+        pt("hchain", "all", lambda f, x, y, w, h: pick(bone, 0.3 + 0.3 * (y % 2), x, y))
     if d.get("hflower"):
         fl, fin = G.shades(pal.extra.get("flower", "#e0281e")), G.shades(pal.extra.get("flower_in", "#f8d040"))
         pt("hpetal", "all", lambda f, x, y, w, h: pick(fl, 0.55 + 0.2 * (f in ("east", "west")) - 0.15 * (x == 0 or y == 0), x, y))
@@ -343,18 +364,52 @@ def paint_hook(pt, pal, d):
                 pt(p, ("north",), lambda f, x, y, w, h: pick(gore, 0.5, x, y) if (x, y) in {(2, 3), (3, 3), (2, 4), (w - 4, 6), (w - 3, 6)} else None)
 
 
+def spikes(r, bone, cx, cy, cz, rad, tilt, n=7):
+    """a ring of dark-red spikes of fur round a limb, each with a brighter tip"""
+    cs = []
+    for i in range(n):
+        a = 2 * math.pi * i / n
+        x, z, rx, rz = cx + rad * math.cos(a), cz + rad * math.sin(a), tilt * math.sin(a), -tilt * math.cos(a)
+        cs += [G.rot_cube("spike_a", [x - 0.875, cy, z - 0.875], [x, cy, z], rx, 0, rz),
+               G.rot_cube("spike_b", [x - 0.5, cy + 2.3, z - 0.5], [x, cy, z], rx, 0, rz)]
+    r.put(bone, *cs)
+
+
+def hound_kit(r, g):
+    """her shaggy limbs, the spikes at shoulder, wrist and ankle, the claws, the skull collar, the flames streaming from her eyes"""
+    hy, z = g.hy, g.z
+    ax, ay, az = r.b["arm_r"]["pivot"]
+    fx, fy, fz = r.b["forearm_r"]["pivot"]
+    hx, hy_, hz = r.b["hand_r"]["pivot"]
+    r.put("arm_r", cube("fur_up", [ax - 1.375, ay - 3.5, az - 1.375]))
+    r.put("forearm_r", cube("fur_fa", [fx - 1.625, fy - 3.1, fz - 1.625]))
+    spikes(r, "arm_r", ax, ay - 1.0, az, 1.0, 62, 6)
+    spikes(r, "forearm_r", hx, hy_ + 1.0, hz, 1.2, 128, 6)
+    r.put("hand_r", *[cube("hclaw", [hx - 0.9 + i * 0.65, hy_ - 4.2, hz - 0.25]) for i in range(3)])
+    lx, ly, lz = r.b["leg_r"]["pivot"]
+    sx, sy, sz = r.b["shin_r"]["pivot"]
+    r.put("leg_r", cube("fur_thigh", [lx - 2.25, sy, lz - 2.25]))
+    r.put("shin_r", cube("fur_shin", [sx - 2.125, 1.25, sz - 2.125]))
+    spikes(r, "shin_r", sx, 3.0, sz, 1.4, 132, 6)
+    r.put("foot_r", *[cube("fclaw", [sx - 1.6 + i * 1.2, 0.1, sz - 4.5]) for i in range(3)])
+    c = G.S("chest")[2] / 2 + G.S("bust")[2]
+    r.put("body", cube("hcollar", [-2.25, 19.2, -2.25 + z]), cube("hskull", [-0.875, 17.9, -c - 0.5 + z]), cube("hchain", [-1.9, 17.2, -c - 0.2 + z]),
+          cube("hchain", [1.4, 17.2, -c - 0.2 + z]), G.rot_cube("ember", [-2.3, 14.6, -G.S("midriff")[2] / 2 - 0.15 + z], [-1.4, 14.8, 0], 0, 0, 24),
+          G.rot_cube("ember", [0.6, 13.9, -G.S("midriff")[2] / 2 - 0.15 + z], [1.4, 14.1, 0], 0, 0, -24))
+    r.put("leg_r", G.rot_cube("ember", [lx - 0.9, sy + 2.0, lz - 2.35], [lx, sy + 2.2, lz], 0, 0, 20))
+    cs = []
+    for sg in (-1, 1):                                   # a jagged streak from the outer corner of each eye, up and away
+        x0, y0, zf = sg * 2.4, hy + 3.0, -4.6 + z
+        for part, dx, dy, tilt in (("efl_a", 0, 0, 34), ("efl_b", 2.4, 1.7, -8), ("efl_c", 5.0, 1.6, 46)):
+            bx, by = x0 + sg * dx, y0 + dy
+            ox = bx if sg > 0 else bx - G.S(part)[0]
+            cs.append(G.rot_cube(part, [ox, by, zf], [bx, by, zf], 0, 0, tilt * sg))
+    r.add("hair_eflame", "head", [0, hy + 4, zf], cs)
+
+
 def build_hook(r, g, d):
-    if d.get("flames"):                                  # flames on top of each ear, at each wrist (forearm_l mirrors) and at the tail tip
-        hy, z = g.hy, g.z
-        for x in (-3.6, 2.1):
-            r.add(f"hair_flame{'rl'[x > 0]}", "head", [x + 0.75, hy + 11, z], [cube("flame", [x, hy + 10.6, -0.25 + z]),
-                                                                              cube("flame_tip", [x + 0.375, hy + 13.1, z + 0.125])])
-        px, py, pz = r.b["forearm_r"]["pivot"]
-        r.put("forearm_r", cube("flame", [px - 1.6, py - 4.5, pz - 0.75]), cube("flame_tip", [px - 1.6, py - 3.0, pz - 1.25]))
-        last = "tail_%d" % len(d["tail"]) if len(d["tail"]) > 1 else "tail"
-        o, s = r.b[last]["cubes"][0]["origin"], r.b[last]["cubes"][0]["size"]
-        cx, cy, cz = o[0] + s[0] / 2, o[1] + s[1] / 2, o[2] + s[2]
-        r.put(last, cube("flame", [cx - 0.75, cy - 0.75, cz - 0.5]), cube("flame_tip", [cx - 0.375, cy - 0.375, cz + 0.75]))
+    if d.get("flames"):                                  # the hellhound (see hound_kit)
+        hound_kit(r, g)
     if d.get("hflower"):                                 # tucked over her left ear, facing out
         hy, z = g.hy, g.z
         fx, fy, fz = 4.9, hy + 5.0, -1.0 + z

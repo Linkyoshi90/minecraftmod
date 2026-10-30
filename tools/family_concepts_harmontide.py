@@ -2688,11 +2688,11 @@ TWENTY_THIRD = {
     "canid": [
         (dict(id="hellhound_canid", name="Hellhound", group="The Nether", tag="Fierce · devoted", height=1.8,
               biomes=["soul_sand_valley", "basalt_deltas", "nether_wastes"], temperament="Fierce, devoted",
-              ecology="A hound of the underworld: furred all over in dark grey, with colour only in her accents: tufts of blue flame at her ears, wrists and tail tip, glowing blue eyes and a grin full of teeth. She never forgets a scent.",
+              ecology="A hound of the underworld: charcoal skin, heavy black fur on her arms and legs, spiky dark-red fur at the shoulders, wrists and ankles, flames streaming from her eyes, great claws, a skull at her collar and ember cracks that glow. She grins with every tooth. She never forgets a scent.",
               interaction="Raw meat and bones.",
-              signature=("Hunted down", "Befriended, she runs down whatever hurt her friend, wherever it is within 24 blocks, and sets it on blue fire."),
+              signature=("Hunted down", "Befriended, she runs down whatever hurt her friend, wherever it is within 24 blocks, and sets it on fire."),
               danger="High.",
-              variants=[("blue", "Blue (default)", "Dark grey, blue flames"), ("black", "Black", "Near black, orange flames"), ("red", "Red", "Dark grey, red flames"), ("green", "Green", "Dark grey, green flames"), ("purple", "Purple", "Dark grey, purple flames")]),
+              variants=[("ember", "Ember (default)", "Charcoal, red-orange flames"), ("black", "Black", "Near black, amber flames"), ("blue", "Blue", "Charcoal, blue flames"), ("green", "Green", "Charcoal, green flames"), ("purple", "Purple", "Charcoal, purple flames")]),
          {"Habitat": "The Nether", "Signature": "Avenges her friend", "Danger": "High"})],
     "lizardfolk": [
         (dict(id="argentinosaurus_lizardfolk", name="Argentinosaurus", group="Savannas and plains", tag="Gentle · tall", height=2.8,
