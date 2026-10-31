@@ -1547,6 +1547,12 @@
       }
     ]
   },
+  "entity.mermaid.sing": {
+    "subtitle": "subtitles.monstergirls.entity.mermaid.sing",
+    "sounds": [
+      "monstergirls:merfolk/mermsing"
+    ]
+  },
   "entity.vodyanoy.tongue": {
     "subtitle": "subtitles.monstergirls.entity.vodyanoy.tongue",
     "sounds": [

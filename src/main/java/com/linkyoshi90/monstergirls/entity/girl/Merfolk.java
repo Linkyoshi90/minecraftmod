@@ -358,6 +358,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         return switch (this.species) {
             case AXOLOTL_MERMAID -> this.isInWater() ? SoundEvents.AXOLOTL_IDLE_WATER : SoundEvents.AXOLOTL_IDLE_AIR;
             case KOI_MERMAID -> SoundEvents.FISH_SWIM;
+            case DOLPHIN_MERMAID, ORCA_MERMAID -> com.linkyoshi90.monstergirls.registry.ModSounds.MERMAID_SING.get();
             default -> this.isInWater() ? SoundEvents.DOLPHIN_AMBIENT_WATER : SoundEvents.DOLPHIN_AMBIENT;
         };
     }

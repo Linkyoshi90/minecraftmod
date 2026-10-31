@@ -22,6 +22,9 @@ public final class ModSounds {
     /** One note of her song; the sing goal picks the pitch. */
     public static final DeferredHolder<SoundEvent, SoundEvent> SPARROW_SING = register("entity.sparrow_harpy.sing");
 
+    /** The dolphin and orca mermaids' idle song (a real recording, sounds/merfolk/mermsing.ogg). */
+    public static final DeferredHolder<SoundEvent, SoundEvent> MERMAID_SING = register("entity.mermaid.sing");
+
     public static final DeferredHolder<SoundEvent, SoundEvent> CROW_CAW = register("entity.crow_harpy.caw");
     public static final DeferredHolder<SoundEvent, SoundEvent> CROW_GIGGLE = register("entity.crow_harpy.giggle");
     /** The cackle after picking on another mob. */
