@@ -245,7 +245,7 @@ public enum GirlSpecies {
     ROKUROKUBI_DEVIL("rokurokubi_devil", Family.DEVIL, 1.6F, 31.5F, 0.6F, MobCategory.CREATURE, 0x3A2A22, 0x2A1E18, "blue", "red", "green", "white", "black"),
     KIKIMORA_DEVIL("kikimora_devil", Family.DEVIL, 1.4F, 28.9F, 0.5F, MobCategory.CREATURE, 0x8A6A3A, 0x3A2A1A, "red", "blue", "green", "black", "white"),
     AKANAME_DEVIL("akaname_devil", Family.DEVIL, 1.5F, 28.5F, 0.5F, MobCategory.CREATURE, 0x3A6AD8, 0x1E3A8A, "blue", "red", "green", "purple", "pink"),
-    CYCLOPS_DEVIL("cyclops_devil", Family.DEVIL, 2.2F, 28.5F, 0.8F, MobCategory.CREATURE, 0x3A6AC8, 0x1E3A7A, "blue", "brown", "red", "grey", "green"),
+    CYCLOPS_DEVIL("cyclops_devil", Family.DEVIL, 2.2F, 28.5F, 0.8F, MobCategory.CREATURE, 0x3A6AC8, 0x1E3A7A, "blue", "brown", "red", "grey", "green", "tactical_eye"),
     GENIE_DEVIL("genie_devil", Family.DEVIL, 1.8F, 28.5F, 0.6F, MobCategory.CREATURE, 0x7A9AE0, 0x3A5AB8, "blue", "purple", "green", "red", "gold", "lamp_friend"),
     OGRE_DEVIL("ogre_devil", Family.DEVIL, 2.3F, 28.5F, 0.85F, MobCategory.CREATURE, 0x7AB05A, 0x9AB8E8, "green", "grey", "brown", "blue", "red"),
     TAOTIE_DEVIL("taotie_devil", Family.DEVIL, 1.9F, 28.5F, 0.6F, MobCategory.CREATURE, 0x2A5A54, 0x1E3A3A, "teal", "bronze", "red", "black", "gold"),

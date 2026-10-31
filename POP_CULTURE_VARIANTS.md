@@ -66,7 +66,7 @@ pink nose. Each homage's prop is drawn only on its own variant. They follow the 
 | House mouse (`house_mouse_rodent`) | Gregory | `innkeeper` ✅ | Grey-brown fur, small red eyes, a crooked grin, a worn hotelier's suit, a ring of keys | ★★★ |
 | House mouse (`house_mouse_rodent`) | James (Gregory's grandson) | `prankster` ✅ | Smaller and younger, lighter fur, a big grin, a striped shirt, a slingshot | ★★ (look to be checked against the show) |
 | House mouse (`house_mouse_rodent`) | Gregory's Mama | `soul_keeper` ✅ | An old mouse, white hair in a bun, a long dark robe, glass soul bottles at her belt | ★★ (look to be checked against the show) |
-| Cyclops (`cyclops_devil`) | Manako (Monster Musume) | `tactical_eye` | Her one big eye and dark hair, black tactical work gear (vest, gloves, boots), a long sniper rifle; waiting on a reference image | ★★★ (already a cyclops) |
+| Cyclops (`cyclops_devil`) | Manako (Monster Musume) | `tactical_eye` ✅ | Her own model: one big eye, a short purple bob, a yellow zipped suit with shoulder plates, black leggings, yellow armoured knees, navy boots and gloves, a red belt with two pouches, a long tan rifle | ★★★ (already a cyclops) |
 | Genie (`genie_devil`) | The Genie (Disney's animated Aladdin) | `lamp_friend` ✅ | Bright blue all over, a black top-knot and a little black goatee, gold wrist cuffs, a red sash, her smoke tail in the same blue | ★★★ (already a genie with a lamp) |
 
 ## Possible but weaker

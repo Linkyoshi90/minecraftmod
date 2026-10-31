@@ -251,8 +251,9 @@ public class TwentiethWaveTests {
     /** The Mudkip and Gura looks are drawn with models of their own (axolotl_mermaid_mud_fin, shark_mermaid_trident_hood). */
     @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "homagesWithTheirOwnModels")
     public static void homagesWithTheirOwnModels(GameTestHelper helper) {
-        check(AbstractMonsterGirl.OWN_MODELS.equals(java.util.Set.of("mud_fin", "trident_hood")), "the two detailed looks");
+        check(AbstractMonsterGirl.OWN_MODELS.equals(java.util.Set.of("mud_fin", "trident_hood", "tactical_eye")), "the detailed looks");
         for (String v : AbstractMonsterGirl.OWN_MODELS) check(AbstractMonsterGirl.HOMAGES.contains(v), v + " is still a rare homage");
+        check(GirlSpecies.CYCLOPS_DEVIL.variants().contains("tactical_eye"), "Manako is a cyclops look");
         check(GirlSpecies.AXOLOTL_MERMAID.variants().contains("mud_fin") && GirlSpecies.SHARK_MERMAID.variants().contains("trident_hood"),
                 "on the axolotl and the shark");
         Merfolk gura = still(helper, GirlSpecies.SHARK_MERMAID, new BlockPos(1, 2, 1));

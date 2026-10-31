@@ -11,6 +11,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -27,6 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
@@ -37,6 +39,8 @@ import java.util.List;
  * of her own when she first ticks, and walks if it dies.
  */
 public class Rider extends AbstractMonsterGirl {
+    /** From her feet down to the saddle: her hips (12 model pixels, she is drawn at 0.84) stand a little above it, as a player's do. */
+    public static final double SEAT = 0.48;
     /** Whether Pestilence has had her horse yet: it does not come back once it is lost. */
     private boolean hadSteed;
 
@@ -76,6 +80,12 @@ public class Rider extends AbstractMonsterGirl {
     @Override
     protected boolean hasRideAnimation() {
         return true;
+    }
+
+    /** Her hips, not her feet, go on the saddle (with the legs folded, her feet are nowhere near it). */
+    @Override
+    public Vec3 getVehicleAttachmentPoint(Entity vehicle) {
+        return new Vec3(0.0, SEAT, 0.0);
     }
 
     @Override

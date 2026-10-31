@@ -58,6 +58,10 @@ SPECIES = {
 }
 
 
+RIDE_TURN = 90
+RIDE_SHIFT = (4.0, 0, 0)                                 # out to the horse's left, so her knees clear its flank
+
+
 def declare_hook(sp, d):
     out = []
     if d.get("fcloak"):
@@ -127,8 +131,12 @@ def build_hook(r, g, d):
 def anim_extra(an, sp, d):
     """"ride": seated on her horse (the game plays it while she has a mount)"""
     hold, sym, merge = H.hold, H.sym, H.merge
-    an.add("ride", 4.0, True, merge(G.upper_idle(), {"leg_r": {"rotation": hold(-72, 0, 18)}, "leg_l": {"rotation": hold(-72, 0, -18)},
-                                                     "shin_r": {"rotation": hold(50, 0, 0)}, "shin_l": {"rotation": hold(50, 0, 0)}}))
+    # princess style: turned to the horse's left, both legs together over its flank, looking ahead, the staff forward in her right hand
+    an.add("ride", 4.0, True, merge(G.upper_idle(), {"root": {"rotation": hold(0, RIDE_TURN, 0), "position": hold(*RIDE_SHIFT)},
+                                                     "head": {"rotation": hold(0, -RIDE_TURN * 0.6, 0)},
+                                                     "leg_r": {"rotation": hold(-84, 0, 0)}, "leg_l": {"rotation": hold(-76, 0, 0)},
+                                                     "shin_r": {"rotation": hold(76, 0, 0)}, "shin_l": {"rotation": hold(84, 0, 0)},
+                                                     "arm_r": {"rotation": hold(-20, 0, 45)}, "arm_l": {"rotation": hold(-35, 0, 5)}, "forearm_l": {"rotation": hold(-30, 0, 0)}}))
 
 
 if __name__ == "__main__":

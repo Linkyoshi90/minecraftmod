@@ -973,7 +973,7 @@ def finish(img, name, model):
 
 
 # homage looks with a model of their own (AbstractMonsterGirl.OWN_MODELS): <species>_<variant> is a model to paint too
-OWN_MODELS = ("mud_fin", "trident_hood")
+OWN_MODELS = ("mud_fin", "trident_hood", "tactical_eye")
 
 
 def models():

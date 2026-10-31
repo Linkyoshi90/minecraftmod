@@ -3084,6 +3084,7 @@ for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, 
                        ("ratatoskr_rodent", ("hoodie_squirrel", "Hoodie Squirrel", "Red-orange fur, a blue hoodie")),
                        ("bee_bug", ("flight_cap", "Flight Cap", "An orange vest, an aviator's cap and goggles")),
                        # twenty-fourth wave
+                       ("cyclops_devil", ("tactical_eye", "Tactical Eye", "Purple hair, a yellow and black combat suit, a long rifle")),
                        ("genie_devil", ("lamp_friend", "Lamp Friend", "Bright blue, a black top-knot and goatee, gold cuffs, a red sash")),
                        ("jumping_spider_arachne", ("tiny_jumper", "Tiny Jumper", "Round, black and gold")),
                        ("moth_bug", ("kaiju_moth", "Kaiju Moth", "Gold and orange wings, a white ruff")),

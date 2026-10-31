@@ -318,7 +318,8 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Homage looks:** detective_croc, bandicoot, needle_runner, angel_guard, music_box, star_song, sky_ace (TenguHarpy, never rolled).
 - [ ] Dev client for the twenty-fifth wave: Pestilence's seat on the horse (height, legs), whether she steers it well and what happens when it dies; the giants' size in doorways and caves; the Fire Giant's light; the frost road; the riflebird's groove; the Yatagarasu's colours; Famine's cloak and horns.
 - [ ] Wrath: too close to the oni as drawn; needs another angle before she goes in.
-- [ ] `tactical_eye` (Manako): waiting for a reference image.
+- [x] `tactical_eye` (Manako): her own model, `cyclops_devil_tactical_eye` (`HOMAGE_MODELS` in gen_devil.py), from the reference image.
+- [x] Pestilence sits princess style: `ride` turns her to the horse's left, `Rider.SEAT` puts her hips on the saddle.
 - [x] **Twenty-fourth wave** (2026-10-30), tested in `TwentyFourthWaveTests`:
   - **Quetzalcoatl** (dragon, rearing serpent, flies, `qcrest`): once a day at dawn, `morningStar` grows the crops within 6 of her friend.
   - **Leviathan** (merfolk, `fishbody`, `lhorns`, 3 blocks): every second, `tideCall` gives her friend Dolphin's Grace in water and throws back monsters in the water within 8.

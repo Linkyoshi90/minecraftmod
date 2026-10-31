@@ -102,9 +102,9 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             "innkeeper", "prankster", "soul_keeper", "sage_princess", "green_hero", "tree_guard", "snow_wraith", "headless_rider", "death_envoy",
             "bake_sale", "twin_tails", "ember_tail", "spike_king", "lawn_zombie", "drop_smile", "puffball", "hoodie_squirrel", "flight_cap",
             "lamp_friend", "tiny_jumper", "kaiju_moth", "pocket_bot", "nine_cream", "shopkeeper", "shy_ghost", "night_heir",
-            "detective_croc", "bandicoot", "needle_runner", "angel_guard", "music_box", "star_song");
+            "detective_croc", "bandicoot", "needle_runner", "angel_guard", "music_box", "star_song", "tactical_eye");
     /** Homage looks with a model of their own (geo, animations and texture &lt;species&gt;_&lt;variant&gt;), not just a recolour. */
-    public static final java.util.Set<String> OWN_MODELS = java.util.Set.of("mud_fin", "trident_hood");
+    public static final java.util.Set<String> OWN_MODELS = java.util.Set.of("mud_fin", "trident_hood", "tactical_eye");
     /** One wild girl in this many is painted, like a shiny. */
     public static final int PAINT_RARITY = 64;
     private static final EntityDataAccessor<Integer> DATA_FLAGS = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.INT);

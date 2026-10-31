@@ -106,7 +106,8 @@ SPECIES = {
         variants={"brown": dict(HAIR="#6a4a2a", EYE="#8a5a2a", CLOTH="#8a6a3a"),
                   "red": dict(HAIR="#a8301e", EYE="#c83a2a", CLOTH="#e8d8b8"),
                   "grey": dict(HAIR="#8a8e96", EYE="#5a6a7a", CLOTH="#4a5a6a"),
-                  "green": dict(HAIR="#3a7a3a", EYE="#4a9a3a", CLOTH="#a8803a")}),
+                  "green": dict(HAIR="#3a7a3a", EYE="#4a9a3a", CLOTH="#a8803a"),
+                  "tactical_eye": dict(HAIR="#3a2458", EYE="#4a5ad8", CLOTH="#e8b83a")}),
     # twenty-second wave (folklore): the genie, a spirit of smoke bound to a brass lamp: a smoke tail for legs, a high ponytail, a
     # bandeau and bangles, the lamp in her hand; she floats
     "genie_devil": dict(
@@ -599,5 +600,95 @@ def build_hook(r, g, d):
         r.put(last, cube("shead", [px - 0.875, py - 0.5, pz + 3.0]))
 
 
+# homage look with a model of its own (AbstractMonsterGirl.OWN_MODELS), written after its species so its texture is the one the game draws.
+# Manako (Monster Musume): a short purple bob and her one eye, a yellow suit with a zip and shoulder plates, black leggings, yellow armoured
+# knees, tall navy boots, a red belt with two yellow pouches, a long tan anti-materiel rifle held upright in her right hand
+HOMAGE_MODELS = {"cyclops_devil_tactical_eye": "cyclops_devil"}
+SPECIES["cyclops_devil_tactical_eye"] = dict(
+    build="slim", outfit=dict(top=["sweater"], bottom="shorts", extras=["belt", "pauldron"], colors=dict(cloth2="#1a1a22", leather="#9a2a1e")),
+    hair="bob", bangs="blunt", ears=None, legs="boots", foot="shoe", cyclops=True, manako=True,
+    pal=dict(SKIN=skin("fair"), HAIR="#3a2458", FUR="#3a2458", LIGHT="#f4f0e8", MARK="#22143a", EYE="#4a5ad8", CLOTH="#e8b83a", TRIM="#e8b83a",
+             extra=dict(boot="#2a2c4a", suit="#e8b83a", black="#1a1a22", stripe="#9a2a1e", plate="#b8bcc4", rifle="#c8a858", rifle_dark="#7a6434", glove="#2a2c4a")),
+    variants={})
+_declare2, _paint2, _build2 = declare_hook, paint_hook, build_hook
+
+
+def declare_hook(sp, d):
+    out = list(_declare2(sp, d) or [])
+    if d.get("manako"):
+        out += [("mknee", 2.25, 2.5, .75), ("mpouch", 1.25, 2.25, 1.5), ("rf_stock", 1.25, 3.5, 2.25), ("rf_body", 1.5, 10, 2), ("rf_barrel", .75, 12, .75),
+                ("rf_brake", 1.25, 2.25, 1.25), ("rf_scope", 1, 5, 1), ("rf_mag", .75, 3, 2.25), ("rf_bipod", .25, 3.5, .25)]
+    return out
+
+
+def paint_hook(pt, pal, d):
+    _paint2(pt, pal, d)
+    if d.get("manako"):
+        paint_manako(pt, pal)
+
+
+def paint_manako(pt, pal):
+    e = pal.extra
+    suit, black, red, navy, plate, tan, dark = (G.shades(e[k]) for k in ("suit", "black", "stripe", "glove", "plate", "rifle", "rifle_dark"))
+    shiny = lambda f, x, y, w, h: pick(black, 0.35 + 0.3 * (x == w // 3), x, y)            # the sheen of her leggings
+
+    def front(f, x, y, w, h):                                                              # the yellow suit, a zip down the middle
+        if f == "north" and abs(x + 0.5 - w / 2) < 1:
+            return pick(black, 0.5, x, y)
+        return pick(suit, 0.55 + 0.12 * (f == "up") - 0.08 * (f in ("east", "west", "south")), x, y)
+    for p in ("sh_chest", "chest", "midriff"):
+        pt(p, ("north", "south", "east", "west"), front)
+    pt("knit_bust", "all", lambda f, x, y, w, h: pick(suit, 0.6, x, y))
+    pt("turtle", "all", lambda f, x, y, w, h: pick(G.shades("#f4f0e8"), 0.65, x, y) if y < h * 0.6 else pick(black, 0.45, x, y))
+    pt("turtle", ("up",), lambda f, x, y, w, h: pick(black, 0.4, x, y))
+    pt("sh_arm", ("north", "south", "east", "west"), lambda f, x, y, w, h: pick(suit, 0.55, x, y) if y < h * 0.55 else pick(red, 0.5, x, y) if y < h * 0.7 else shiny(f, x, y, w, h))
+    pt("sh_fore", ("north", "south", "east", "west"), lambda f, x, y, w, h: shiny(f, x, y, w, h) if y < h * 0.45 else pick(navy, 0.45 + 0.15 * (y % 4 == 0), x, y))
+    pt("pauldron", "all", lambda f, x, y, w, h: pick(suit, 0.62 + 0.15 * (f == "up"), x, y))
+    for p in ("palm", "thumb"):
+        pt(p, "all", lambda f, x, y, w, h: pick(navy, 0.5, x, y))
+    pt("fingers", "all", H.skin_fn(pal, 0.66))                                             # fingerless gloves
+    pt("sh_hips", "all", shiny)
+    pt("short_leg", "all", shiny)
+    pt("thigh", "all", lambda f, x, y, w, h: shiny(f, x, y, w, h) if y < h * 0.5 else pick(red, 0.5, x, y) if y < h * 0.62 else pick(suit, 0.55, x, y))
+    pt("shin", "all", lambda f, x, y, w, h: pick(suit, 0.55, x, y) if y < h * 0.14 else pick(red, 0.5, x, y) if y < h * 0.2 else
+       shiny(f, x, y, w, h) if y < h * 0.3 else pick(navy, 0.42 + 0.22 * (y % 8 == 0) + 0.1 * (y == 0), x, y))
+    pt("belt", "all", lambda f, x, y, w, h: pick(red, 0.5, x, y))
+    pt("buckle", "all", lambda f, x, y, w, h: pick(plate, 0.7, x, y))
+    pt("mknee", "all", lambda f, x, y, w, h: pick(plate, 0.6 + 0.2 * (x < w / 2) - 0.2 * (y == h - 1), x, y))
+    pt("mpouch", "all", lambda f, x, y, w, h: pick(suit, 0.55 - 0.2 * (y == 2), x, y))
+    pt("rf_stock", "all", lambda f, x, y, w, h: pick(tan, 0.5, x, y))
+    pt("rf_body", "all", lambda f, x, y, w, h: pick(tan, 0.6 + 0.12 * (x == 0) - 0.15 * (y % 20 == 0), x, y))
+    pt("rf_barrel", "all", lambda f, x, y, w, h: pick(tan, 0.55 + 0.15 * (y % 16 == 0), x, y))
+    pt("rf_brake", "all", lambda f, x, y, w, h: pick(dark, 0.5 + 0.3 * (y % 4 < 2), x, y))
+    pt("rf_scope", "all", lambda f, x, y, w, h: pick(dark, 0.45, x, y))
+    pt("rf_mag", "all", lambda f, x, y, w, h: pick(black, 0.45, x, y))
+    pt("rf_bipod", "all", lambda f, x, y, w, h: pick(black, 0.5, x, y))
+
+
+def build_hook(r, g, d):
+    _build2(r, g, d)
+    if d.get("manako"):
+        cx, ky, kz = r.b["shin_r"]["pivot"]                  # the knee plates
+        r.add("kneeplate_r", "shin_r", [cx, ky, kz], [cube("mknee", [cx - 1.125, ky - 1.5, kz - 1.75])], mirror=True)
+        hw = G.S("hips")[0]                                  # a pouch on each hip
+        r.put("body", cube("mpouch", [-hw / 2 - 1.1, 10.75, -0.75 + g.z]), cube("mpouch", [hw / 2 - 0.15, 10.75, -0.75 + g.z]))
+        px, py, pz = r.b["hand_r"]["pivot"]                  # the rifle upright in her right hand, muzzle past her head, leaning away from her
+        grip = [px, py - 1.5, pz]
+        held = lambda p, o: G.rot_cube(p, o, grip, -6, 0, 13)
+        x, z = px - 0.25, pz - 2.0
+        r.add("hair_mrifle", "hand_r", grip, [held("rf_stock", [x - 0.375, py - 7.5, z]), held("rf_body", [x - 0.5, py - 4.0, z - 0.25]), held("rf_barrel", [x, py + 6.0, z + 0.5]),
+                                              held("rf_brake", [x - 0.25, py + 18.0, z + 0.25]), held("rf_scope", [x, py + 0.5, z + 2.0]), held("rf_mag", [x, py - 3.5, z - 2.5]),
+                                              held("rf_bipod", [x - 0.75, py + 8.0, z + 0.75]), held("rf_bipod", [x + 1.0, py + 8.0, z + 0.75])])
+
+
 if __name__ == "__main__":
     F.run_family("devil", SPECIES, declare_hook, paint_hook, build_hook, anim_extra)
+    want = [a for a in sys.argv[1:] if not a.startswith("--")]
+    for m, base in HOMAGE_MODELS.items():                # after their species: their texture is the one the game draws for that look
+        if want and m not in want and base not in want:
+            continue
+        d = SPECIES[m]
+        F.declare(m, d, declare_hook(m, d))
+        geo, adoc, texes = G.write(m, F.paint(m, d, F.pal_for(d), paint_hook), F.build(m, d, build_hook), F.anims(d, lambda an: anim_extra(an, m, d)), [], None)
+        if "--previews" in sys.argv:
+            G.previews(m, geo, adoc, texes, F.VIEWS, F.FACE, G.model_height(geo))
