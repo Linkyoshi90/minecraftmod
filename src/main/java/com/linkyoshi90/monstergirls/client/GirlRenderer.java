@@ -38,9 +38,11 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
     private final GirlSpecies species;
     /** Species with a glow mask (textures/entity/&lt;texture&gt;_glowmask.png for every colour). */
     static final java.util.Set<String> GLOWING = java.util.Set.of("magma_slime", "will_o_wisp_undead", "salamander_lizardfolk", "jack_o_lantern_devil",
-            "jellyfish_mollusk", "dark_elf", "ender_slime", "aurorantler_centaur", "axolume_mermaid", "blaze_cat_nekomata", "moonseal_mermaid", "chochin_obake_devil");
+            "jellyfish_mollusk", "dark_elf", "ender_slime", "aurorantler_centaur", "axolume_mermaid", "blaze_cat_nekomata", "moonseal_mermaid", "chochin_obake_devil",
+            "fire_giant_devil", "ifrit_devil", "pestilence_rider", "hellhound_canid", "angel_elf", "bakeneko_nekomata", "dullahan_undead", "pineskrell_rodent",
+            "tarnhelm_canid", "tin_jack_construct", "wrath_devil", "min_min_mollusk");
     /** Species drawn see-through (jelly, flame, insect wings, ghosts). */
-    static final java.util.Set<String> TRANSLUCENT = java.util.Set.of("will_o_wisp_undead", "jellyfish_mollusk", "cheshire_nekomata");
+    static final java.util.Set<String> TRANSLUCENT = java.util.Set.of("will_o_wisp_undead", "jellyfish_mollusk", "cheshire_nekomata", "min_min_mollusk");
 
     public GirlRenderer(EntityRendererProvider.Context context, GirlSpecies species) {
         super(context, new Model(species));

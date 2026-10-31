@@ -64,6 +64,7 @@ public class Undead extends AbstractMonsterGirl {
 
     public Undead(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
+        if (species == GirlSpecies.HAND_UNDEAD) this.navigation = this.createNavigation(level);   // the first one was made before she had a species
         boolean creeper = species == GirlSpecies.LIVING_DOLL_UNDEAD || species == GirlSpecies.YUKI_ONNA_UNDEAD;
         if (creeper) this.goalSelector.addGoal(1, new StalkGoal(this, 1.0, 1.6, true, t -> t instanceof Player));
         if (species == GirlSpecies.LIVING_DOLL_UNDEAD) this.goalSelector.addGoal(2, new ShelfGoal());
@@ -91,6 +92,7 @@ public class Undead extends AbstractMonsterGirl {
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
+            case HAND_UNDEAD -> girlAttributes(12, 0.33, 2);
             case YUREI_UNDEAD -> girlAttributes(18, 0.3, 2);
             case LIVING_DOLL_UNDEAD -> girlAttributes(14, 0.3, 0);
             case WILL_O_WISP_UNDEAD -> girlAttributes(16, 0.3, 3);
@@ -491,9 +493,30 @@ public class Undead extends AbstractMonsterGirl {
 
     // --- tick ----------------------------------------------------------------------------------------------------
 
+    /** The Hand runs up walls on its fingertips, like a spider. */
+    @Override
+    protected net.minecraft.world.entity.ai.navigation.PathNavigation createNavigation(net.minecraft.world.level.Level level) {
+        return this.species == GirlSpecies.HAND_UNDEAD ? new net.minecraft.world.entity.ai.navigation.WallClimberNavigation(this, level) : super.createNavigation(level);
+    }
+
+    @Override
+    public boolean onClimbable() {
+        return this.species == GirlSpecies.HAND_UNDEAD && this.horizontalCollision || super.onClimbable();
+    }
+
+    /** The Hand holds the monsters within 6 of its friend by the ankle: nearly stopped for two seconds. Returns how many, -1 without a friend. */
+    public int firmGrip(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        var near = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(6));
+        for (var m : near) m.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 50, 3));
+        return near.size();
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.HAND_UNDEAD && this.level() instanceof ServerLevel floor && !this.isBaby() && this.tickCount % 40 == 0) this.firmGrip(floor);
         if (this.species == GirlSpecies.JIANGSHI_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel grave && !this.isBaby() && this.tickCount % 40 == 0) this.stiffHop(grave);
         if (this.species == GirlSpecies.GASHADOKURO_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel grasp && !this.isBaby() && this.tickCount % 60 == 0) this.giantsGrasp(grasp);
         if (this.species == GirlSpecies.GHOUL_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel grave && !this.isBaby() && this.tickCount % 20 == 0) this.carrion(grave);

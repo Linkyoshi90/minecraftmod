@@ -472,5 +472,118 @@ def anim_extra(an, sp, d):
             F._inject(an, k.split(".")[-1], carry)
 
 
+# twenty-sixth wave: the Hand, not a girl at all: an ordinary severed hand, palm down, a bone sticking out of the wrist. It runs on its fingertips like a spider.
+SPECIES["hand_undead"] = dict(
+    hand=True,
+    pal=dict(SKIN=skin("fair"), HAIR="#e8e0c8", FUR="#e8c8a8", LIGHT="#f4e8d8", MARK="#a87a64", EYE="#3a2a20", CLOTH="#c86a6a", TRIM="#e8e0c8"),
+    variants={"pale": dict(SKIN=skin("pale"), FUR="#f0e0d8"), "tan": dict(SKIN=skin("tan"), FUR="#c89a70"), "dark": dict(SKIN=skin("#7a5240"), FUR="#7a5240"),
+              "zombie": dict(SKIN=skin("#8aa878"), FUR="#8aa878")})
+FINGERS = [("fing1", -3.4, 14, 0.9), ("fing2", -1.15, 5, 1.0), ("fing3", 1.15, -5, 0.95), ("fing4", 3.4, -14, 0.8)]        # front edge x, how far it fans out, how long
+PALM_Y = 6.0
+
+
+def hand_declare():
+    H.PARTS.clear()
+    H.RECT.clear()
+    for n, w, h_, dd in [("h_palm", 9, 3, 9.5), ("h_wrist", 6.5, 2.75, 3.5), ("h_bone", 1.5, 9, 1.5), ("h_knob", 1.5, 1.5, 3)] + \
+            [(f"{n}_{s}", *(w, l * k, w)) for n, _, _, k in FINGERS for s, w, l in (("a", 1.9, 4.5), ("b", 1.75, 4.0), ("c", 1.6, 3.5))] + \
+            [("thumb_a", 2.25, 3.75, 2.25), ("thumb_b", 2, 3.5, 2)]:
+        H.part(n, w, h_, dd)
+    H.pack()
+
+
+def hand_paint(pal):
+    pt = H.Painter()
+    sk = H.skin_fn(pal, 0.66)
+    ivory = G.shades("#ece4cc")
+    raw = G.shades("#b84a4a")
+
+    def finger(tip):
+        def fn(f, x, y, w, h):
+            if f == "north" and tip and y > h * 0.55 and 0 < x < w - 1:      # the fingernail, on the back of the fingertip
+                return pick(G.shades("#f4dcd4"), 0.72 + 0.2 * (y == h - 1), x, y)
+            if f == "north" and y in (0, 1):                                 # a knuckle's crease
+                return pick(pal.SKIN, 0.42, x, y)
+            return sk(f, x, y, w, h)
+        return fn
+    pt("h_palm", "all", lambda f, x, y, w, h: pick(pal.SKIN, 0.5, x, y) if f == "up" and x % 8 == 4 and y < h * 0.7 else sk(f, x, y, w, h))   # the tendons on the back of the hand
+    pt("h_wrist", "all", lambda f, x, y, w, h: pick(raw, 0.5 + 0.2 * ((x + y) % 5 == 0), x, y) if f == "south" else sk(f, x, y, w, h))        # where it ends
+    pt("h_bone", "all", lambda f, x, y, w, h: pick(ivory, 0.6 + 0.2 * (x == 1) + (noise(x, y, 5) - 0.5) * 0.12, x, y))
+    pt("h_knob", "all", lambda f, x, y, w, h: pick(ivory, 0.72 + (noise(x, y, 6) - 0.5) * 0.1, x, y))
+    for n, *_ in FINGERS:
+        pt(n + "_a", "all", finger(False))
+        pt(n + "_b", "all", finger(False))
+        pt(n + "_c", "all", finger(True))
+    pt("thumb_a", "all", finger(False))
+    pt("thumb_b", "all", finger(True))
+    return pt.T
+
+
+def hand_build():
+    import girl_parts as P
+    r = G.Rig()
+    r.add("root", None, [0, 0, 0])
+    r.add("body", "root", [0, PALM_Y, 0], [cube("h_palm", [-4.5, PALM_Y - 1.5, -4.75]), cube("h_wrist", [-3.25, PALM_Y - 1.4, 4.75])])
+    for n, x, ry, _ in FINGERS:
+        P.chain(r, n, "body", (x, PALM_Y, -4.5), [n + "_a", n + "_b", n + "_c"], rx=-100, ry=ry, bend=60)
+    P.chain(r, "thumb", "body", (4.3, PALM_Y - 0.5, 0.5), ["thumb_a", "thumb_b"], rx=-62, ry=-72, bend=46)
+    # the bone, out of the cut end of the wrist, up and back, with a knob at its end like a drawing of a bone
+    piv = [0, PALM_Y, 8.0]
+    ang = -130
+    end = H.rot_about((0, PALM_Y - 9, 8.0), piv, H.rot_matrix(ang, 0, 0))
+    r.add("hair_bone", "body", piv, [G.rot_cube("h_bone", [-0.75, PALM_Y - 9, 7.25], piv, ang, 0, 0),
+                                     G.rot_cube("h_knob", [-1.35, PALM_Y - 9.4, 6.5], piv, ang, 0, 0), G.rot_cube("h_knob", [-0.15, PALM_Y - 9.4, 6.5], piv, ang, 0, 0)])
+    return r.model("hand_undead")
+
+
+def hand_anims(an):
+    Tk, hold, merge = H.track, H.hold, H.merge
+    allf = [n for n, *_ in FINGERS] + ["thumb"]
+
+    def step(n, T, phase, a=22):                         # one finger's stride: forward in the air, back along the ground
+        t = lambda f: round(((f + phase) % 1.0) * T, 3)
+        keys = sorted([(t(0.0), (a, 0, 0)), (t(0.5), (-a, 0, 0)), (t(0.75), (-a * 0.2, 0, 0))])
+        at0 = (0, keys[-1][1]) if keys[0][0] > 0 else None
+        return {n: {"rotation": Tk(*([at0] if at0 else []), *keys, (T, keys[0][1] if keys[0][0] == 0 else at0[1]))},
+                n + "_b": {"rotation": Tk((0, (0, 0, 0)), (T, (0, 0, 0)))}}
+
+    def gait(T, bob):
+        groups = {"fing1": 0.0, "fing3": 0.0, "thumb": 0.0, "fing2": 0.5, "fing4": 0.5}
+        return merge(*[step(n, T, p) for n, p in groups.items()],
+                     {"body": {"position": Tk((0, (0, 0, 0)), (T / 4, (0, bob, 0)), (T / 2, (0, 0, 0)), (T * 3 / 4, (0, bob, 0)), (T, (0, 0, 0))),
+                               "rotation": Tk((0, (0, 0, 5)), (T / 2, (0, 0, -5)), (T, (0, 0, 5)))},
+                      "hair_bone": {"rotation": Tk((0, (5, 0, 0)), (T / 2, (-5, 0, 0)), (T, (5, 0, 0)))}})
+    # idle: drumming its fingers on the ground, one after another
+    drum = {}
+    for i, n in enumerate(allf):
+        t0 = 0.4 + i * 0.22
+        drum[n] = {"rotation": Tk((0, (0, 0, 0)), (t0, (0, 0, 0)), (t0 + 0.1, (-16, 0, 0)), (t0 + 0.2, (0, 0, 0)), (3.0, (0, 0, 0)))}
+    an.add("idle", 3.0, True, merge(drum, {"body": {"position": Tk((0, (0, 0, 0)), (1.5, (0, -0.3, 0)), (3, (0, 0, 0)))},
+                                           "hair_bone": {"rotation": Tk((0, (0, 0, 0)), (1.5, (3, 0, 0)), (3, (0, 0, 0)))}}))
+    an.add("walk", 0.7, True, gait(0.7, 0.5))
+    an.add("run", 0.36, True, gait(0.36, 0.8))
+    curl = merge(*[{n: {"rotation": hold(-34, 0, 0)}, n + "_b": {"rotation": hold(-30, 0, 0)}} for n in allf])
+    an.add("sit", 3.0, True, merge(curl, {"body": {"position": hold(0, -2.5, 0)}}))
+    an.add("lie", 3.0, True, merge(curl, {"root": {"rotation": hold(0, 0, 180), "position": hold(0, 9, 0)}}))
+    pounce = lambda: {"body": {"rotation": Tk((0, (0, 0, 0)), (0.2, (-40, 0, 0)), (0.6, (0, 0, 0))), "position": Tk((0, (0, 0, 0)), (0.2, (0, 5, -2)), (0.6, (0, 0, 0)))}}
+    an.add("pounce", 0.6, False, merge(pounce(), *[{n: {"rotation": Tk((0, (0, 0, 0)), (0.2, (40, 0, 0)), (0.4, (-30, 0, 0)), (0.6, (0, 0, 0)))}} for n in allf]))
+    an.add("grab", 0.6, False, merge(pounce(), *[{n: {"rotation": Tk((0, (0, 0, 0)), (0.2, (40, 0, 0)), (0.4, (-30, 0, 0)), (0.6, (0, 0, 0)))}} for n in allf]))
+
+
+HAND_VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0, 180, 0),
+              ("walk", 0.17, -30, 8), ("run", 0.1, -60, 5), ("sit", 0, -30, 10), ("pounce", 0.2, -70, 5)]
+
+
+def run_hand():
+    d = SPECIES["hand_undead"]
+    hand_declare()
+    tex = hand_paint(F.pal_for(d))
+    geo, adoc, texes = G.write("hand_undead", tex, hand_build(), hand_anims, list(d["variants"]), lambda k: hand_paint(F.pal_for(d, k)))
+    if "--previews" in sys.argv:
+        G.previews("hand_undead", geo, adoc, texes, HAND_VIEWS, F.FACE, 24)
+
+
 if __name__ == "__main__":
-    F.run_family("undead", SPECIES, declare_hook, paint_hook, build_hook, anim_extra)
+    F.run_family("undead", {k: v for k, v in SPECIES.items() if not v.get("hand")}, declare_hook, paint_hook, build_hook, anim_extra)
+    if not [a for a in sys.argv[1:] if not a.startswith("--")] or "hand_undead" in sys.argv:
+        run_hand()

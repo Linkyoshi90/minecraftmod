@@ -600,6 +600,85 @@ def build_hook(r, g, d):
         r.put(last, cube("shead", [px - 0.875, py - 0.5, pz + 3.0]))
 
 
+# twenty-sixth wave: Lilith of Jewish legend, night-blue hair, ram's horns, great bat wings, a blue leotard and long gloves; she flies
+SPECIES["lilith_devil"] = dict(
+    build="curvy", outfit=dict(top=["corset"], bottom="shorts", extras=["armlets"], colors=dict(cloth2="#2a4a9a")),
+    hair="wavy", bangs="swept", ears="elf", legs="stockings", foot="shoe", tail=SPADE, tail_look="spade", tail_rest=SPADE_REST, horns="ram", wings="bat", wing_scale=1.5, flies=True,
+    pal=dict(SKIN=skin("#cfe0f4"), HAIR="#5a8ad0", FUR="#5a8ad0", LIGHT="#d8e8f8", MARK="#1e3468", EYE="#2a5ac8", CLOTH="#2a4a9a", TRIM="#1e3468",
+             pupil=(1.6, 2.4), extra=dict(horn="#1e2a58", wing="#2a3a78", wing_bone="#141e48", tail_col="#1e2a58", stocking="#1e3468", boot="#1e3468")),
+    variants={"black": dict(SKIN=skin("pale"), HAIR="#1a1820", FUR="#1a1820", CLOTH="#1a1820", TRIM="#a81e2a", EYE="#c81e2a", extra=dict(horn="#141218", wing="#26222a", wing_bone="#0e0c10", tail_col="#141218", stocking="#141218", boot="#141218")),
+              "red": dict(SKIN=skin("fair"), HAIR="#a81e2a", FUR="#a81e2a", CLOTH="#7a141e", TRIM="#2a0e12", EYE="#e8a030", extra=dict(horn="#2a0e12", wing="#7a141e", wing_bone="#2a0e12", tail_col="#7a141e", stocking="#2a0e12", boot="#2a0e12")),
+              "violet": dict(SKIN=skin("lilac"), HAIR="#5a2a8a", FUR="#5a2a8a", CLOTH="#3a1e6a", TRIM="#1e0e3a", EYE="#a83ae8", extra=dict(horn="#1e0e3a", wing="#3a1e6a", wing_bone="#1e0e3a", tail_col="#3a1e6a", stocking="#1e0e3a", boot="#1e0e3a")),
+              "white": dict(SKIN=skin("pale"), HAIR="#f0f0f8", FUR="#f0f0f8", CLOTH="#e8e8f0", TRIM="#9a9ab0", EYE="#6a4ac8", extra=dict(horn="#c8c8d8", wing="#d8d8e4", wing_bone="#8a8aa0", tail_col="#c8c8d8", stocking="#c8c8d8", boot="#c8c8d8"))})
+# twenty-sixth wave: Wrath, a walking fire vaguely in the shape of an oni: broad shoulders, two horns, a kanabo and a tail, and every bit of her is flame
+SPECIES["wrath_devil"] = dict(
+    build="strong", outfit=dict(top=["bandeau"], bottom="loincloth", colors=dict(cloth2="#c84a1e", leather="#c84a1e")),
+    hair="shaggy", bangs="jagged", ears="elf", legs="bare", foot="shoe", horns="greater", club=True, tail=[(1.75, 1.75, 4), (1.25, 1.25, 4), (.75, .75, 3)], grin=True,
+    wrath=True, glow="all",
+    pal=dict(SKIN="#e8602a", HAIR="#f8a03a", FUR="#e8602a", LIGHT="#f8c860", MARK="#a82a14", EYE="#fff0c0", CLOTH="#c84a1e", TRIM="#f8a03a",
+             extra=dict(horn="#f8d060", boot="#a82a14", fire=("#5a0e08", "#c82a0e", "#f8701e", "#fcc83a", "#fff4d0"))),
+    variants={"blue": dict(extra=dict(horn="#a8d0f8", boot="#2a3a8a", fire=("#0a1450", "#1a48c8", "#2a90f8", "#80dcfc", "#f0fcff"))),
+              "green": dict(extra=dict(horn="#c0f8a0", boot="#1a6a2a", fire=("#06381a", "#0e8a30", "#2ad04a", "#a0f850", "#f4ffd8"))),
+              "violet": dict(extra=dict(horn="#e0b0f8", boot="#4a1a8a", fire=("#1e0640", "#5a18b0", "#a03af0", "#e88af8", "#fff0ff"))),
+              "white": dict(extra=dict(horn="#ffffff", boot="#8a8a94", fire=("#6a6058", "#c8a878", "#f8e0a0", "#fff8e0", "#ffffff")))})
+FLAMES = [("hair_wflame1", "body", -5.5, 21, 0, 16), ("hair_wflame2", "body", 5.5, 21, 0, -16), ("hair_wflame3", "body", 0, 19, 3, 0),
+          ("hair_wflame4", "body", -4.0, 12, 0, 22), ("hair_wflame5", "body", 4.0, 12, 0, -22)]
+_declare3, _paint3, _build3, _extra3 = declare_hook, paint_hook, build_hook, anim_extra
+
+
+def _lerp(a, b, t):
+    return tuple(int(x + (y - x) * t) for x, y in zip(a, b))
+
+
+def fire_ramp(hexes):
+    return [tuple(int(h[i:i + 2], 16) for i in (1, 3, 5)) for h in hexes]
+
+
+def set_alight(T, ramp):
+    """every painted texel becomes flame: its brightness picks the heat (so her eyes and grin still read), licked with streaks"""
+    for y, row in enumerate(T):
+        for x, px in enumerate(row):
+            if not px[3]:
+                continue
+            lum = (0.3 * px[0] + 0.59 * px[1] + 0.11 * px[2]) / 255
+            t = max(0.0, min(0.999, -0.08 + 0.92 * lum + (noise(x // 2, y // 3, 7) - 0.5) * 0.4)) * (len(ramp) - 1)
+            i = int(t)
+            row[x] = _lerp(ramp[i], ramp[i + 1], t - i) + (255,)
+
+
+def declare_hook(sp, d):
+    out = list(_declare3(sp, d) or [])
+    if d.get("wrath"):
+        out += [("wflame", 2.25, 5.5, 2.25), ("wflame_s", 1.25, 3, 1.25)]
+    return out
+
+
+def paint_hook(pt, pal, d):
+    _paint3(pt, pal, d)
+    if d.get("wrath"):
+        pt("wflame", "all", lambda f, x, y, w, h: pick(G.shades("#f8c060"), 0.9 - 0.8 * y / h + 0.2 * (x % 3 == 0), x, y))
+        pt("wflame_s", "all", lambda f, x, y, w, h: pick(G.shades("#f8c060"), 0.9 - 0.8 * y / h, x, y))
+        set_alight(pt.T, fire_ramp(pal.extra["fire"]))
+
+
+def build_hook(r, g, d):
+    _build3(r, g, d)
+    if d.get("wrath"):                                   # tongues of flame licking up off her shoulders, back and hips
+        for name, parent, x, y, z, rz in FLAMES:
+            piv = [x, y, z + g.z]
+            r.add(name, parent, piv, [G.rot_cube("wflame", [x - 1.125, y, z + g.z - 1.125], piv, 0, 0, rz), G.rot_cube("wflame_s", [x - 0.625, y + 5.3, z + g.z - 0.625], piv, 0, 0, rz * 1.6)])
+
+
+def anim_extra(an, sp, d):
+    _extra3(an, sp, d)
+    if d.get("wrath"):                                   # she never stops flickering
+        Tk = H.track
+        flick = lambda p: {"rotation": Tk((0, (0, 0, 0)), (0.2 + p, (9, 0, -7)), (0.45 + p, (-7, 0, 9)), (0.8, (0, 0, 0)))}
+        tracks = {n: flick(i * 0.05) for i, (n, *_) in enumerate(FLAMES)}
+        for key in [k.split(".")[-1] for k in an.A]:
+            F._inject(an, key, tracks)
+
+
 # homage look with a model of its own (AbstractMonsterGirl.OWN_MODELS), written after its species so its texture is the one the game draws.
 # Manako (Monster Musume): a short purple bob and her one eye, a yellow suit with a zip and shoulder plates, black leggings, yellow armoured
 # knees, tall navy boots, a red belt with two yellow pouches, a long tan anti-materiel rifle held upright in her right hand

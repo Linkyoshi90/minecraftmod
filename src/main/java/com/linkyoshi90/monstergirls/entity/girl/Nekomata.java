@@ -98,6 +98,7 @@ public class Nekomata extends AbstractMonsterGirl {
         return switch (s) {
             case CENSER_LION_NEKOMATA -> girlAttributes(28, 0.3, 5);
             case TIGER_NEKOMATA -> girlAttributes(30, 0.3, 6);
+            case SMILODON_NEKOMATA -> girlAttributes(38, 0.3, 8);
             case LIONESS_NEKOMATA -> girlAttributes(26, 0.3, 5);
             case CHEETAH_NEKOMATA -> girlAttributes(18, 0.34, 3);
             case SNOW_LEOPARD_NEKOMATA -> girlAttributes(22, 0.3, 4).add(Attributes.JUMP_STRENGTH, 0.62);
@@ -484,9 +485,31 @@ public class Nekomata extends AbstractMonsterGirl {
         return light;
     }
 
+    /** The smilodon springs on the nearest monster within 8 of her friend for 9; the rest flinch back from it. Returns how many she moved, -1 without a friend. */
+    public int ambush(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster prey = null;
+        var near = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8));
+        for (var m : near) if (prey == null || m.distanceToSqr(friend) < prey.distanceToSqr(friend)) prey = m;
+        if (prey == null) return 0;
+        this.teleportTo(prey.getX(), prey.getY(), prey.getZ());
+        prey.hurt(level.damageSources().mobAttack(this), 9.0F);
+        for (var m : near) {
+            if (m == prey) continue;
+            net.minecraft.world.phys.Vec3 away = m.position().subtract(prey.position()).multiply(1, 0, 1);
+            away = (away.lengthSqr() < 1.0E-4 ? new net.minecraft.world.phys.Vec3(1, 0, 0) : away).normalize();
+            m.setDeltaMovement(away.x * 0.9, 0.3, away.z * 0.9);
+            m.hurtMarked = true;
+        }
+        this.playSound(SoundEvents.RAVAGER_ROAR, 0.6F, 1.3F);
+        return near.size();
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.SMILODON_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel snow && !this.isBaby() && this.tickCount % 60 == 0) this.ambush(snow);
         if (this.species == GirlSpecies.BAKU_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel dream && !this.isBaby() && this.tickCount % 200 == 0) this.eatNightmares(dream);
         if (this.species == GirlSpecies.CARACAL_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel leap && !this.isBaby() && this.tickCount % 40 == 0) this.birdCatch(leap);
         if (this.species == GirlSpecies.RAKSHASA_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel maya && !this.isBaby() && this.tickCount % 40 == 0) this.glamour(maya);

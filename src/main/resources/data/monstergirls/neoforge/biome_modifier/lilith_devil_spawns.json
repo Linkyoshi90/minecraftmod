@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_lilith_devil",
+  "spawners": {
+    "type": "monstergirls:lilith_devil",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

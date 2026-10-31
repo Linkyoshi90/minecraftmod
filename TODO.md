@@ -309,6 +309,14 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Paints:** prismarine, amethyst, sculk (glow mask) and mushroom, tiled from the vanilla block textures, so 87 in all.
   - **Homage props:** the dullahan's `envoy_kit`: Celty's helmet (`rider`) and Lala's scythe (`scythe`), each drawn only on its look; the dullahan's paints were redone for the new parts.
 - [ ] Dev client for the twenty-second wave: the macawtl's plumes, the piranha's lure, the mosasaurus's size, Xiangliu's little heads, the cyclops's eye and blink, the genie's smoke tail and float, Ammit's snout; Celty's helmet and Lala's scythe; the four paints and the sculk glow.
+- [x] **Twenty-sixth wave** (2026-10-31), tested in `TwentySixthWaveTests`:
+  - **Birds** (own classes, eggs, hatchlings, spawns): Emu (`EmuHarpy`, ostrich rig: `kickAway`, `pilfer`), Macaw (toucan rig: `hiddenCall`), Roc (crow rig, renderer scale 2.1, 4 blocks: `seize`), Ziz (phoenix rig: `clearSkies`), Bennu (flamingo rig: `sunrise`, `rise`), Garuda (crow rig: `serpentBane`), La Lechuza (`LechuzaHarpy`, owl rig: `cry`), Alkonost (crow rig: `song`).
+  - **Smilodon** (nekomata, `coat`, `sabre`): `ambush`. **Caribou** (centaur): `snowStride`. **Lilith** (devil, flies): `nightfall`. **Min Min Light** (mollusk, `jelly`, `lower="none"`, floats): `leadTheWay`.
+  - **Hand** (`hand_undead`, its own rig in gen_undead.py: `hand_declare`, `hand_build`, `hand_anims`; no head bone): `firmGrip`, WallClimberNavigation.
+  - **Wrath** (`wrath_devil`, gen_devil.py `wrath`: `set_alight` recolours the finished texture to flame, `glow="all"`): `rage`, `grudge`.
+  - **Paints:** redstone (glow), glowstone (glow), cherry, terracotta; 103 in all.
+  - **Fixed:** ten species had glow masks the game never drew (`GirlRenderer.GLOWING`): Fire Giant, Ifrit, Pestilence, hellhound, Angel, bakeneko, dullahan, pineskrell, tarnhelm, tin jack.
+- [ ] Dev client for the twenty-sixth wave: the Hand's gait and wall climbing (its fingers on a wall), Wrath's glow and flicker, the Roc's size and whether her hitbox fits her wings, the seize in the air, the Min Min light's float and see-through cap, the ten newly glowing species.
 - [x] **Twenty-fifth wave** (2026-10-30), tested in `TwentyFifthWaveTests`:
   - **The Four Riders** (family `rider`, `Rider.java`, gen_rider.py): `battleCry`, `hollowHunger`, `tealCloud`, `lastCall`. Pestilence mounts a real black `Horse` on her first tick (`mount`, saved as HadSteed) and plays `ride` while she is on it (`hasRideAnimation`).
   - **Fire Giant** (devil, `lava`, 4 blocks): `glow` level 13, `hearthfire`. **Frost Giant** (`ice`, 4 blocks): `iceRoad`, frosted ice under her friend. **Ifrit** (`smoke`, `iflames`): `smelter`, once a day. **Pazuzu** (`snake_tail`, flies): `southWind`.
@@ -317,7 +325,6 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Paints:** end_stone, hay_bale, ancient_debris, sea_lantern (glow); 99 in all.
   - **Homage looks:** detective_croc, bandicoot, needle_runner, angel_guard, music_box, star_song, sky_ace (TenguHarpy, never rolled).
 - [ ] Dev client for the twenty-fifth wave: Pestilence's seat on the horse (height, legs), whether she steers it well and what happens when it dies; the giants' size in doorways and caves; the Fire Giant's light; the frost road; the riflebird's groove; the Yatagarasu's colours; Famine's cloak and horns.
-- [ ] Wrath: too close to the oni as drawn; needs another angle before she goes in.
 - [x] `tactical_eye` (Manako): her own model, `cyclops_devil_tactical_eye` (`HOMAGE_MODELS` in gen_devil.py), from the reference image.
 - [x] Pestilence sits princess style: `ride` turns her to the horse's left, `Rider.SEAT` puts her hips on the saddle.
 - [x] **Twenty-fourth wave** (2026-10-30), tested in `TwentyFourthWaveTests`:

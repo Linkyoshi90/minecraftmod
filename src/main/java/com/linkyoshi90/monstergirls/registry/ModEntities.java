@@ -31,6 +31,14 @@ import com.linkyoshi90.monstergirls.entity.IbisetHarpy;
 import com.linkyoshi90.monstergirls.entity.IronbeakHarpy;
 import com.linkyoshi90.monstergirls.entity.StigowlHarpy;
 import com.linkyoshi90.monstergirls.entity.YatagarasuHarpy;
+import com.linkyoshi90.monstergirls.entity.RocHarpy;
+import com.linkyoshi90.monstergirls.entity.ZizHarpy;
+import com.linkyoshi90.monstergirls.entity.BennuHarpy;
+import com.linkyoshi90.monstergirls.entity.GarudaHarpy;
+import com.linkyoshi90.monstergirls.entity.AlkonostHarpy;
+import com.linkyoshi90.monstergirls.entity.EmuHarpy;
+import com.linkyoshi90.monstergirls.entity.LechuzaHarpy;
+import com.linkyoshi90.monstergirls.entity.MacawHarpy;
 import com.linkyoshi90.monstergirls.entity.MirrorCraneHarpy;
 import com.linkyoshi90.monstergirls.entity.PumpkingullHarpy;
 import com.linkyoshi90.monstergirls.entity.CondoruneHarpy;
@@ -242,6 +250,62 @@ public final class ModEntities {
                     .clientTrackingRange(10)
                     .build("yatagarasu_harpy"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<RocHarpy>> ROC_HARPY =
+            ENTITY_TYPES.register("roc_harpy", () -> EntityType.Builder.of(RocHarpy::new, MobCategory.CREATURE)
+                    .sized(1.6F, 4.0F)
+                    .eyeHeight(3.5F)
+                    .clientTrackingRange(10)
+                    .build("roc_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ZizHarpy>> ZIZ_HARPY =
+            ENTITY_TYPES.register("ziz_harpy", () -> EntityType.Builder.of(ZizHarpy::new, MobCategory.CREATURE)
+                    .sized(0.6F, 1.8F)
+                    .eyeHeight(1.6F)
+                    .clientTrackingRange(10)
+                    .build("ziz_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<BennuHarpy>> BENNU_HARPY =
+            ENTITY_TYPES.register("bennu_harpy", () -> EntityType.Builder.of(BennuHarpy::new, MobCategory.CREATURE)
+                    .sized(0.6F, 1.9F)
+                    .eyeHeight(1.7F)
+                    .clientTrackingRange(10)
+                    .build("bennu_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<GarudaHarpy>> GARUDA_HARPY =
+            ENTITY_TYPES.register("garuda_harpy", () -> EntityType.Builder.of(GarudaHarpy::new, MobCategory.CREATURE)
+                    .sized(0.6F, 1.7F)
+                    .eyeHeight(1.5F)
+                    .clientTrackingRange(10)
+                    .build("garuda_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<AlkonostHarpy>> ALKONOST_HARPY =
+            ENTITY_TYPES.register("alkonost_harpy", () -> EntityType.Builder.of(AlkonostHarpy::new, MobCategory.CREATURE)
+                    .sized(0.55F, 1.65F)
+                    .eyeHeight(1.45F)
+                    .clientTrackingRange(10)
+                    .build("alkonost_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<EmuHarpy>> EMU_HARPY =
+            ENTITY_TYPES.register("emu_harpy", () -> EntityType.Builder.of(EmuHarpy::new, MobCategory.CREATURE)
+                    .sized(0.7F, 2.2F)
+                    .eyeHeight(1.95F)
+                    .clientTrackingRange(10)
+                    .build("emu_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<LechuzaHarpy>> LECHUZA_HARPY =
+            ENTITY_TYPES.register("lechuza_harpy", () -> EntityType.Builder.of(LechuzaHarpy::new, MobCategory.CREATURE)
+                    .sized(0.6F, 1.7F)
+                    .eyeHeight(1.5F)
+                    .clientTrackingRange(10)
+                    .build("lechuza_harpy"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<MacawHarpy>> MACAW_HARPY =
+            ENTITY_TYPES.register("macaw_harpy", () -> EntityType.Builder.of(MacawHarpy::new, MobCategory.CREATURE)
+                    .sized(0.55F, 1.6F)
+                    .eyeHeight(1.4F)
+                    .clientTrackingRange(10)
+                    .build("macaw_harpy"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<FlamingoHarpy>> FLAMINGO_HARPY =
             ENTITY_TYPES.register("flamingo_harpy", () -> EntityType.Builder.of(FlamingoHarpy::new, MobCategory.CREATURE)
                     .sized(0.55F, 1.95F)
@@ -389,6 +453,14 @@ public final class ModEntities {
         event.put(IBISET_HARPY.get(), IbisetHarpy.createAttributes().build());
         event.put(STIGOWL_HARPY.get(), StigowlHarpy.createAttributes().build());
         event.put(YATAGARASU_HARPY.get(), YatagarasuHarpy.createAttributes().build());
+        event.put(ROC_HARPY.get(), RocHarpy.createAttributes().build());
+        event.put(ZIZ_HARPY.get(), ZizHarpy.createAttributes().build());
+        event.put(BENNU_HARPY.get(), BennuHarpy.createAttributes().build());
+        event.put(GARUDA_HARPY.get(), GarudaHarpy.createAttributes().build());
+        event.put(ALKONOST_HARPY.get(), AlkonostHarpy.createAttributes().build());
+        event.put(EMU_HARPY.get(), EmuHarpy.createAttributes().build());
+        event.put(LECHUZA_HARPY.get(), LechuzaHarpy.createAttributes().build());
+        event.put(MACAW_HARPY.get(), MacawHarpy.createAttributes().build());
         event.put(DODOBOLD_HARPY.get(), DodoboldHarpy.createAttributes().build());
         event.put(ROOKMOURN_HARPY.get(), RookmournHarpy.createAttributes().build());
         event.put(CASSOWRATH_HARPY.get(), CassowrathHarpy.createAttributes().build());
@@ -462,6 +534,22 @@ public final class ModEntities {
                 StigowlHarpy::checkStigowlHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(YATAGARASU_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 YatagarasuHarpy::checkYatagarasuHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(ROC_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                RocHarpy::checkRocHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(ZIZ_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                ZizHarpy::checkZizHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(BENNU_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                BennuHarpy::checkBennuHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(GARUDA_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                GarudaHarpy::checkGarudaHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(ALKONOST_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                AlkonostHarpy::checkAlkonostHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(EMU_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                EmuHarpy::checkEmuHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(LECHUZA_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                LechuzaHarpy::checkLechuzaHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(MACAW_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                MacawHarpy::checkMacawHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(COIN_MAGPIE_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 CoinMagpieHarpy::checkCoinMagpieHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(TRICKSTER_RAVEN_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,

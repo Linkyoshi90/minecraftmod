@@ -45,6 +45,11 @@ public class Devil extends AbstractMonsterGirl {
     @javax.annotation.Nullable
     private java.util.UUID beanThrower;
     private long fleeUntil;
+    /** Wrath: blows taken and not yet paid back (each adds 2 to her hits), and when she took the last one. */
+    private int rage;
+    private long lastProvoked;
+    public static final int MAX_RAGE = 5;
+    private static final int RAGE_FADES = 200;
 
     public Devil(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
@@ -79,6 +84,8 @@ public class Devil extends AbstractMonsterGirl {
             case SUCCUBUS_DEVIL -> girlAttributes(26, 0.3, 4);
             case GREATER_DEVIL -> girlAttributes(70, 0.28, 10);
             case JACK_O_LANTERN_DEVIL -> girlAttributes(24, 0.28, 4);
+            case WRATH_DEVIL -> girlAttributes(50, 0.3, 7);
+            case LILITH_DEVIL -> girlAttributes(30, 0.3, 5);
             case ONI_DEVIL -> girlAttributes(50, 0.27, 9).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 1.2);
             case GREMLIN_DEVIL -> girlAttributes(12, 0.3, 1);
             case KARAKASA_OBAKE_DEVIL -> girlAttributes(20, 0.3, 2);
@@ -92,7 +99,7 @@ public class Devil extends AbstractMonsterGirl {
 
     @Override
     public boolean canFly() {
-        if (this.species == GirlSpecies.PAZUZU_DEVIL) return true;
+        if (this.species == GirlSpecies.PAZUZU_DEVIL || this.species == GirlSpecies.LILITH_DEVIL) return true;
         return this.species == GirlSpecies.LESSER_DEVIL || this.species == GirlSpecies.SUCCUBUS_DEVIL || this.species == GirlSpecies.GREATER_DEVIL
                 || this.species == GirlSpecies.ITTAN_MOMEN_DEVIL;
     }
@@ -437,6 +444,10 @@ public class Devil extends AbstractMonsterGirl {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean hurt = super.hurt(source, amount);
+        if (hurt && this.species == GirlSpecies.WRATH_DEVIL && source.getEntity() != null) {
+            this.rage = Math.min(MAX_RAGE, this.rage + 1);
+            this.lastProvoked = this.level().getGameTime();
+        }
         if (hurt && source.getEntity() instanceof Player p) this.giveBack(p);
         if (hurt) this.setDisguised(false);
         return hurt;
@@ -446,6 +457,13 @@ public class Devil extends AbstractMonsterGirl {
     public boolean doHurtTarget(Entity target) {
         boolean hit = super.doHurtTarget(target);
         if (hit && this.species == GirlSpecies.GREATER_DEVIL) target.igniteForSeconds(4);
+        if (hit && this.species == GirlSpecies.WRATH_DEVIL) {
+            target.igniteForSeconds(4);
+            if (this.rage > 0) {                                                // every blow she has taken comes back with this one
+                target.invulnerableTime = 0;
+                target.hurt(this.damageSources().mobAttack(this), this.rage * 2.0F);
+            }
+        }
         if (hit && this.species == GirlSpecies.ONI_DEVIL) this.playSound(SoundEvents.ANVIL_LAND, 0.5F, 0.7F);   // the iron club
         return hit;
     }
@@ -459,6 +477,12 @@ public class Devil extends AbstractMonsterGirl {
             this.glow(forge, 13);                                              // her lava lights the ground she walks on
             if (this.tickCount % 40 == 0) this.hearthfire(forge);
         }
+        if (this.species == GirlSpecies.WRATH_DEVIL && this.level() instanceof ServerLevel pyre && !this.isBaby()) {
+            this.glow(pyre, 15);
+            if (this.rage > 0 && pyre.getGameTime() - this.lastProvoked > RAGE_FADES) this.rage = 0;
+            if (this.tickCount % 20 == 0) this.grudge(pyre);
+        }
+        if (this.species == GirlSpecies.LILITH_DEVIL && this.level() instanceof ServerLevel dusk && !this.isBaby() && this.tickCount % 40 == 0) this.nightfall(dusk, !dusk.isDay());
         if (this.species == GirlSpecies.FROST_GIANT_DEVIL && this.level() instanceof net.minecraft.server.level.ServerLevel frost && !this.isBaby() && this.tickCount % 5 == 0) this.iceRoad(frost);
         if (this.species == GirlSpecies.IFRIT_DEVIL && this.level() instanceof net.minecraft.server.level.ServerLevel oven && !this.isBaby() && this.tickCount % 100 == 0) this.smelter(oven);
         if (this.species == GirlSpecies.PAZUZU_DEVIL && this.level() instanceof net.minecraft.server.level.ServerLevel storm && !this.isBaby() && this.tickCount % 40 == 0) this.southWind(storm);
@@ -733,6 +757,37 @@ public class Devil extends AbstractMonsterGirl {
     }
 
     /** The Fire Giant's warmth: Fire Resistance for her friend. 1, or -1 without a friend. */
+    /** How much anger Wrath is carrying. */
+    public int rage() {
+        return this.rage;
+    }
+
+    /** Rain and water hurt her. */
+    @Override
+    public boolean isSensitiveToWater() {
+        return this.species == GirlSpecies.WRATH_DEVIL || super.isSensitiveToWater();
+    }
+
+    /** Wrath goes after whatever last hurt her friend. 1 when she turns on it, 0 with nobody to blame, -1 without a friend. */
+    public int grudge(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        var culprit = friend.getLastHurtByMob();
+        if (culprit == null || !culprit.isAlive() || culprit == this || culprit == this.getTarget()) return 0;
+        this.setTarget(culprit);
+        return 1;
+    }
+
+    /** At night Lilith's friend walks safer: monsters within 10 of them are weakened. Returns how many, 0 by day, -1 without a friend. */
+    public int nightfall(ServerLevel level, boolean night) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        if (!night) return 0;
+        var near = level.getEntitiesOfClass(Monster.class, friend.getBoundingBox().inflate(10));
+        for (var m : near) m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WEAKNESS, 80, 1));
+        return near.size();
+    }
+
     public int hearthfire(net.minecraft.server.level.ServerLevel level) {
         net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
         if (friend == null) return -1;

@@ -107,6 +107,16 @@ SPECIES = {
                   "lilac": dict(extra=dict(antenna="#a89ab8", shell="#b8a0d8", shell_band="#6a508a"), HAIR="#8a7a9a"),
                   "mint": dict(extra=dict(antenna="#8aa89a", shell="#a8e0c8", shell_band="#4a8a6a"), HAIR="#6a8a7a"),
                   "amber": dict(extra=dict(antenna="#a8906a", shell="#d8902a", shell_band="#7a4410"), HAIR="#8a5a3a")}),
+    # twenty-sixth wave: the Min Min light of the Queensland outback, a girl under a glowing yellow cap who trails pale tentacles in place of legs and floats
+    "min_min_mollusk": dict(
+        build="petite", outfit=dict(top=["halter"], colors=dict(cloth2="#f4ecc8")), lower="none",
+        hair="bob", bangs="wispy", ears=None, legs="bare", foot="shoe", body="jelly", tent_hair=False, glow=["bell_a", "bell_b", "bell_c", "jtent_a", "jtent_b"],
+        pal=dict(SKIN=skin("#fff4dc"), HAIR="#f4e8b0", FUR="#f8d850", LIGHT="#fff8d0", MARK="#e8b030", EYE="#4a3a1a", CLOTH="#f4ecc8", TRIM="#f8d850",
+                 INNER="#f8c8b0", extra=dict(boot="#f4e8b0")),
+        variants={"white": dict(FUR="#f4f4e8", HAIR="#ffffff", MARK="#c8c8b0", LIGHT="#ffffff", EYE="#3a3a4a", CLOTH="#ffffff", TRIM="#f4f4e8"),
+                  "green": dict(FUR="#a8f0a0", HAIR="#d8f8d0", MARK="#5ac868", LIGHT="#e8ffe0", EYE="#1e4a2a", CLOTH="#e0f8d8", TRIM="#a8f0a0"),
+                  "blue": dict(FUR="#90d0f8", HAIR="#d0ecfc", MARK="#4a9ae0", LIGHT="#e0f4ff", EYE="#1e3a6a", CLOTH="#dcf0fc", TRIM="#90d0f8"),
+                  "red": dict(FUR="#f89a70", HAIR="#fcd8b8", MARK="#e0603a", LIGHT="#ffe4d0", EYE="#5a1e14", CLOTH="#fce4d0", TRIM="#f89a70")}),
     "jellyfish_mollusk": dict(
         build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["pearls"], colors=dict(cloth2="#c8e0f4")),
         hair="flowing", bangs="wispy", ears=None, legs="stockings", foot="shoe", body="jelly", glow=["bell_a", "bell_b", "bell_c", "jtent_a", "jtent_b"],

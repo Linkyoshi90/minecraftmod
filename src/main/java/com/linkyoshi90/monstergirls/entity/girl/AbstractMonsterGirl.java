@@ -94,7 +94,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             "prismarine", "amethyst", "sculk", "mushroom",                   // Minecraft's blocks, tiled; sculk's specks glow
             "lapis", "bookshelf", "glazed", "redstone_lamp",                 // the lamp's light glows
             "netherite", "purpur", "crying_obsidian", "shroomlight",         // the tears and the shroomlight's light glow
-            "end_stone", "hay_bale", "ancient_debris", "sea_lantern");       // the sea lantern glows
+            "end_stone", "hay_bale", "ancient_debris", "sea_lantern",        // the sea lantern glows
+            "redstone", "glowstone", "cherry", "terracotta");                 // redstone's bright lines and the glowstone glow
     /** Homage variants (the look of a favourite character): a wild one rolls them only rarely. */
     public static final java.util.Set<String> HOMAGES = java.util.Set.of("gunman", "blossom", "lost", "stitched", "nurse", "mummy", "ranger", "outback",
             "jewel_thief", "ink_kid", "pink_dairy", "sun_goddess",                            // POP_CULTURE_VARIANTS.md

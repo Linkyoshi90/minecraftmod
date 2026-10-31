@@ -249,7 +249,7 @@ def write_glowmask(name, tex, parts, boost=1.0):
     n = len(tex)
     mask = [[(0, 0, 0, 0)] * n for _ in range(n)]
     for (p, f), (x0, y0, w, h) in H.RECT.items():
-        if p not in parts:
+        if parts != "all" and p not in parts:              # "all": she is made of light (Wrath)
             continue
         for y in range(y0, y0 + h):
             for x in range(x0, x0 + w):

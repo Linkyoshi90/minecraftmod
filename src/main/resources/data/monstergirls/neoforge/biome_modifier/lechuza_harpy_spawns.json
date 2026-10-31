@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_lechuza_harpy",
+  "spawners": {
+    "type": "monstergirls:lechuza_harpy",
+    "weight": 4,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

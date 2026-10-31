@@ -43,6 +43,16 @@ SPECIES = {
                                extra=dict(horn="#2a8a5a", bell="#f0fcf6", blanket="#2a8a5a", blanket2="#f0fcf6", blanket3="#e8c040")),
                   "dusk": dict(FUR="#a8a0d8", HAIR="#e8e0fc", MARK="#3a2a7a", CLOTH="#3a2a7a", EYE="#e8a040",
                                extra=dict(horn="#3a2a7a", bell="#e8c050", blanket="#3a2a7a", blanket2="#e8e0fc", blanket3="#f87a8a"))}),
+    # twenty-sixth wave: the caribou, a blue-grey wild deer taur of the tundra, broad antlers, a shaggy white ruff of a scarf
+    "caribou_centaur": dict(
+        build="athletic", outfit=dict(top=["bandeau"], extras=["scarf"], colors=dict(scarf="#e8ecf4")),
+        hair="shaggy", bangs="messy", tail=(2, 3, 1.5), antlers=True, ears="round",
+        pal=dict(SKIN=skin("fair"), HAIR="#6a8ab8", FUR="#7a9ac4", LIGHT="#dce8f4", MARK="#3a5484", EYE="#2a4a8a", CLOTH="#e8ecf4", TRIM="#3a5484",
+                 pattern="solid", extra=dict(antler="#3a5a9a")),
+        variants={"barren": dict(HAIR="#c8b8a0", FUR="#8a7458", LIGHT="#ece4d6", MARK="#4a3a2a", EYE="#4a3020", extra=dict(antler="#c8b090")),
+                  "woodland": dict(HAIR="#4a3626", FUR="#5a4432", LIGHT="#d8c8b0", MARK="#2a1e14", EYE="#3a2a1a", extra=dict(antler="#a89070")),
+                  "peary": dict(HAIR="#f4f0e8", FUR="#e8e4dc", LIGHT="#ffffff", MARK="#9a948a", EYE="#4a4a5a", extra=dict(antler="#d8ccb0")),
+                  "dusk": dict(HAIR="#7a6aa8", FUR="#8a7ab8", LIGHT="#e4dcf4", MARK="#44386a", EYE="#4a3a8a", extra=dict(antler="#4a3a8a"))}),
     # eighteenth wave: the palmyr, a blue deer taur in white diamonds with feathery frond antlers and a fan of a tail
     "palmyr_centaur": dict(
         build="slim", outfit=dict(top=["halter", "capelet"], extras=["pearls", "armlets"], colors=dict(cloth2="#c8d8f8")),

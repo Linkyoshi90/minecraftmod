@@ -614,6 +614,29 @@ sandstone since 2026-10-29), so 87 in all.
 Homage props (POP_CULTURE_VARIANTS.md): the dullahan's headless rider (Celty) has her yellow cat-eared helmet over the head she
 carries, the death envoy (Lala) a scythe in her free hand; both are drawn only on their own looks.
 
+## Twenty-sixth wave (2026-10-31, in the game)
+
+Eight birds, four more from the roster, and two new looks at old problems: the Hand, which isn't a girl at all, and Wrath, who is nothing but fire.
+
+| Species | Home | Design |
+|---|---|---|
+| **Emu** | Harpy | Round, shaggy and brown on the ostrich's rig (`EmuHarpy`): very fast; she lifts food out of chests until she is befriended, then kicks whatever comes at her friend. |
+| **Macaw** | Harpy | Blue and gold, a big dark beak, on the toucan's rig (`MacawHarpy`): she calls in the voice of any monster hiding near her friend, and it glows. |
+| **Roc** | Harpy | Storm-blue, 4 blocks tall, on the crow's rig (`RocHarpy`): she snatches a monster near her friend, climbs with it for two seconds and lets go. |
+| **Ziz** | Harpy | Blue and white, rainbow wings, a long tail, on the phoenix's rig (`ZizHarpy`): once a day she clears the rain from the sky. |
+| **Bennu** | Harpy | A slate-blue heron on the flamingo's rig (`BennuHarpy`): at sunrise she heals her friend whole, and once a day she gets up from a killing blow. |
+| **Garuda** | Harpy | Orange skin, blue wings, gold, on the crow's rig (`GarudaHarpy`): poison does not hold on her or her friend, and she strikes down silverfish, endermites and wild hostile lamias on sight. |
+| **La Lechuza** | Harpy | A scowling brown owl (`LechuzaHarpy`): at night her cry shows up the monsters near her friend and drives them back. |
+| **Alkonost** | Harpy | All soft white down, on the crow's rig (`AlkonostHarpy`): her song mends her friend and all but stops the monsters round them. |
+| **Smilodon** | Nekomata | Furred all over in shaggy gold, a thick mane, two long fangs: she springs on the nearest monster near her friend for 9, and the rest flinch back. |
+| **Caribou** | Centaur | A blue-grey deer taur with broad antlers: with a player on her back she gets faster on snow and ice, and she walks on powder snow. |
+| **Lilith** | Devil | Blue hair, ram's horns, great bat wings; she flies: at night the monsters near her friend are weakened. |
+| **Min Min Light** | Mollusk | A small girl under a glowing yellow cap, pale tentacles in place of legs; she floats: at night she drifts ahead of her friend and lights the ground. |
+| **Hand** | Undead | Its own model: an ordinary severed hand, palm down, a bone sticking out of the wrist. It runs on its fingertips like a spider, climbs walls and drums its fingers while it waits; it holds monsters near its friend by the ankle. |
+| **Wrath** | Devil | Made entirely of fire, only vaguely an oni: horns, a club and a tail, all flame, tongues of it licking off her. Every blow she takes adds 2 to her next hits for 10 seconds (5 blows at most), her hits set things alight, water hurts her, and she goes after whatever hurts her friend. |
+
+Paints: **redstone** (its bright lines glow), **glowstone** (it glows), **cherry** and **terracotta**, so 103 in all (PAINTS.md).
+
 ## Twenty-fifth wave (2026-10-30, in the game)
 
 The Four Riders, a family of their own with their own looks, and eight more. Riflebirds also got a new dance groove: an original, tense

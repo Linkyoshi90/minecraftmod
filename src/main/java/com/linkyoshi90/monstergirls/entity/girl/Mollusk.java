@@ -112,6 +112,28 @@ public class Mollusk extends AbstractMonsterGirl {
         };
     }
 
+    /** The Min Min light floats wherever she goes. */
+    @Override
+    public boolean canFly() {
+        return this.species == GirlSpecies.MIN_MIN_MOLLUSK || super.canFly();
+    }
+
+    @Override
+    protected boolean hasFlyAnimation() {
+        return false;
+    }
+
+    /** At night the Min Min light keeps a few blocks ahead of her friend and lights the ground. 1 when she does, 0 by day, -1 without a friend. */
+    public int leadTheWay(net.minecraft.server.level.ServerLevel level, boolean night) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        if (!night) return 0;
+        net.minecraft.world.phys.Vec3 ahead = friend.position().add(friend.getLookAngle().multiply(1, 0, 1).normalize().scale(5)).add(0, 2, 0);
+        this.getMoveControl().setWantedPosition(ahead.x, ahead.y, ahead.z, 1.0);
+        this.glow(level, 14);
+        return 1;
+    }
+
     /** The kraken, the ammonite and the jellyfish live in the sea; the others walk. */
     public boolean isSeaDweller() {
         return this.species == GirlSpecies.KRAKEN_MOLLUSK || this.species == GirlSpecies.AMMONITE_MOLLUSK || this.species == GirlSpecies.JELLYFISH_MOLLUSK;
@@ -300,6 +322,7 @@ public class Mollusk extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.MIN_MIN_MOLLUSK && this.level() instanceof net.minecraft.server.level.ServerLevel plain && !this.isBaby() && this.tickCount % 5 == 0) this.leadTheWay(plain, !plain.isDay());
         if (this.species == GirlSpecies.CHARYBDIS_MOLLUSK && this.level() instanceof net.minecraft.server.level.ServerLevel maw && !this.isBaby() && this.tickCount % 20 == 0) this.whirlpool(maw);
         if (this.species == GirlSpecies.SPEWSLUG_MOLLUSK && this.level() instanceof net.minecraft.server.level.ServerLevel bog && !this.isBaby() && this.tickCount % 10 == 0) this.bile(bog);
         if (this.species == GirlSpecies.SCYLLA_MOLLUSK && this.level() instanceof net.minecraft.server.level.ServerLevel strait && !this.isBaby() && this.tickCount % 60 == 0) this.sixHounds(strait);

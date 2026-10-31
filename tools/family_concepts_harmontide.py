@@ -3049,6 +3049,72 @@ for _fid, _entries in TWENTY_FIFTH.items():
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
 
+# twenty-sixth wave (2026-10-31): the smilodon, the caribou, Lilith, Wrath, the Min Min light and the Hand; the other eight are harpies
+TWENTY_SIXTH = {
+    "nekomata": [
+        (dict(id="smilodon_nekomata", name="Smilodon", group="Cold plains", tag="Heavy · patient", height=2.0,
+              biomes=["snowy_plains", "snowy_taiga", "savanna"], temperament="Heavy, patient",
+              ecology="The great sabre-tooth of the Ice Age, furred all over in shaggy gold with a thick mane and two long fangs. She waits, then springs.",
+              interaction="Raw beef and mutton.",
+              signature=("Ambush", "Befriended, she springs on the nearest monster near her friend with a heavy blow, and the rest flinch back."),
+              danger="High.",
+              variants=[("gold", "Gold (default)", "Shaggy gold"), ("dun", "Dun", "Dusty brown"), ("snow", "Snow", "White"), ("dark", "Dark", "Dark brown"), ("red", "Red", "Red-gold")]),
+         {"Habitat": "Cold plains", "Signature": "Springs on monsters", "Danger": "High"})],
+    "centaur": [
+        (dict(id="caribou_centaur", name="Caribou", group="The tundra", tag="Hardy · wandering", height=2.3,
+              biomes=["snowy_plains", "snowy_taiga", "frozen_river"], temperament="Hardy, wandering",
+              ecology="The wild cousin of the reindeer: a blue-grey deer taur with broad antlers and wide hooves, who walks a thousand miles a year.",
+              interaction="Apples and sweet berries.",
+              signature=("Snow stride", "Carrying her friend over snow or ice she only gets faster, and she walks on powder snow."),
+              danger="Low.",
+              variants=[("blue", "Blue (default)", "Blue-grey"), ("barren", "Barren-ground", "Brown and cream"), ("woodland", "Woodland", "Dark brown"), ("peary", "Peary", "Nearly white"), ("dusk", "Dusk", "Violet")]),
+         {"Habitat": "The tundra", "Signature": "Fast over snow", "Danger": "Low"})],
+    "devil": [
+        (dict(id="lilith_devil", name="Lilith", group="Dark forests", tag="Proud · unbowed", height=1.8,
+              biomes=["dark_forest", "swamp", "old_growth_spruce_taiga"], temperament="Proud, unbowed",
+              ecology="The night demon of Jewish legend, who would bow to no one: blue hair, ram's horns, great bat wings. She flies, and she comes out after dark.",
+              interaction="Pomegranate-red things: sweet berries and beetroot.",
+              signature=("Nightfall", "Befriended, at night the monsters near her friend are weakened."),
+              danger="Moderate.",
+              variants=[("blue", "Blue (default)", "Blue"), ("black", "Black", "Black and red"), ("red", "Red", "Red"), ("violet", "Violet", "Violet"), ("white", "White", "White")]),
+         {"Habitat": "Dark forests", "Signature": "Weakens monsters at night", "Danger": "Moderate"}),
+        (dict(id="wrath_devil", name="Wrath", group="Volcanic wastes", tag="Furious · burning", height=2.1,
+              biomes=["basalt_deltas", "crimson_forest", "badlands"], temperament="Furious, burning",
+              ecology="Anger with nothing left to hold it: a walking fire, only vaguely in the shape of an oni, with two horns of flame and a burning club. Rain hurts her.",
+              interaction="Blaze powder and fire charges.",
+              signature=("Rage", "Every blow she takes makes her next ones harder. Befriended, she goes after whoever hurts her friend."),
+              danger="Very high.",
+              variants=[("red", "Red (default)", "Red and gold fire"), ("blue", "Blue", "Blue fire"), ("green", "Green", "Green fire"), ("violet", "Violet", "Violet fire"), ("white", "White", "White fire")]),
+         {"Habitat": "Volcanic wastes", "Signature": "Hits harder when hit", "Danger": "Very high"})],
+    "mollusk": [
+        (dict(id="min_min_mollusk", name="Min Min Light", group="The outback", tag="Shy · drifting", height=1.5,
+              biomes=["savanna", "badlands", "desert"], temperament="Shy, drifting",
+              ecology="The light that hangs over the Queensland outback at night and keeps its distance: a small girl under a glowing cap, pale tentacles for legs. She floats.",
+              interaction="Glow berries and glowstone dust.",
+              signature=("Lead the way", "Befriended, at night she drifts ahead of her friend and lights the ground."),
+              danger="None.",
+              variants=[("yellow", "Yellow (default)", "Glowing yellow"), ("white", "White", "White"), ("green", "Green", "Green"), ("blue", "Blue", "Blue"), ("red", "Red", "Red")]),
+         {"Habitat": "The outback", "Signature": "Lights the way at night", "Danger": "None"})],
+    "undead": [
+        (dict(id="hand_undead", name="Hand", group="Graveyards and cold ground", tag="Busy · silent", height=0.6,
+              biomes=["swamp", "dark_forest", "deep_dark"], temperament="Busy, silent",
+              ecology="Not a girl at all: an ordinary severed hand with a bone sticking out of the wrist. It runs about on its fingertips like a spider, climbs walls, and drums its fingers while it waits.",
+              interaction="Rotten flesh and rings of gold nuggets.",
+              signature=("Firm grip", "Befriended, it grabs the monsters near its friend by the ankle and holds them back."),
+              danger="Low.",
+              variants=[("fair", "Fair (default)", "Fair skin"), ("pale", "Pale", "Pale skin"), ("tan", "Tan", "Tan skin"), ("dark", "Dark", "Dark skin"), ("zombie", "Zombie", "Grey-green skin")]),
+         {"Habitat": "Dark ground", "Signature": "Holds monsters back", "Danger": "Low"})],
+}
+
+for _fid, _entries in TWENTY_SIXTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(s["id"] == _species["id"] for s in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 # homage variants of 2026-10-28 (POP_CULTURE_VARIANTS.md): appended after every wave, so every species exists by now
 for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, a black bodysuit with a pink heart, white gloves and boots")),
                        ("ika_mollusk", ("ink_kid", "Ink Kid", "Bright orange tentacle hair, a white tee and black shorts")),

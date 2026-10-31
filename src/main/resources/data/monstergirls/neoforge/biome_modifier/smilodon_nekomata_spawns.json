@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_smilodon_nekomata",
+  "spawners": {
+    "type": "monstergirls:smilodon_nekomata",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

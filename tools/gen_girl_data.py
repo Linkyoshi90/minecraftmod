@@ -114,7 +114,7 @@ GROUP = {"lioness_nekomata": (3, 5), "orca_mermaid": (2, 3), "fennec_kitsune": (
          "nasnas_undead": (1, 2), "jiangshi_undead": (1, 2), "cerberus_canid": (1, 1), "baku_nekomata": (1, 2), "qilin_centaur": (1, 2),
          "fire_giant_devil": (1, 1), "frost_giant_devil": (1, 1), "ifrit_devil": (1, 1), "pazuzu_devil": (1, 2), "charybdis_mollusk": (1, 1),
          "mad_hatter_elf": (1, 1), "angel_elf": (1, 2)}
-CATEGORY = {"fire_giant_devil": "monster", "frost_giant_devil": "creature", "ifrit_devil": "monster", "pazuzu_devil": "monster", "charybdis_mollusk": "water_creature",
+CATEGORY = {"min_min_mollusk": "creature", "lilith_devil": "monster", "wrath_devil": "monster", "hand_undead": "monster", "fire_giant_devil": "monster", "frost_giant_devil": "creature", "ifrit_devil": "monster", "pazuzu_devil": "monster", "charybdis_mollusk": "water_creature",
             "mad_hatter_elf": "creature", "angel_elf": "creature", "leviathan_mermaid": "water_creature", "jiangshi_undead": "monster", "nasnas_undead": "monster", "cerberus_canid": "monster",
             "girtablilu_bug": "monster", "behemoth_devil": "creature", "baku_nekomata": "creature", "quetzalcoatl_dragon": "creature", "qilin_centaur": "creature",
             "hellhound_canid": "monster", "ogre_devil": "creature", "taotie_devil": "creature",
@@ -136,7 +136,7 @@ CATEGORY = {"fire_giant_devil": "monster", "frost_giant_devil": "creature", "ifr
             "piranha_mermaid": "water_creature", "mosasaurus_mermaid": "water_creature", "fishman_mermaid": "water_creature",
             "cyclops_devil": "creature", "genie_devil": "creature"}
 # hitbox widths that differ from the family's
-WIDTH = {"kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alraune_flora": 1.2, "frankenstein_undead": 0.8,
+WIDTH = {"hand_undead": 0.8, "wrath_devil": 0.8, "kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alraune_flora": 1.2, "frankenstein_undead": 0.8,
          "gryphon_dragon": 1.3, "long_dragon": 1.0, "jormungandr_dragon": 1.2, "wyvern_dragon": 1.2, "wyrm_dragon": 1.3,
          "fairy_bug": 0.4, "scorpion_bug": 1.2, "moth_larva_bug": 0.6, "papillon_larva_bug": 0.6, "living_doll_undead": 0.4,
          "kannae_dragon": 0.5, "lesser_devil": 0.5, "mandragora_flora": 0.5, "polar_bear_canid": 0.8, "grizzly_canid": 0.8, "kobold_canid": 0.5,
@@ -215,6 +215,7 @@ NAME = {"jack_jackalope": "Jack Jackalope", "kraken_mollusk": "Kraken", "octopus
         "sasquatch_rodent": "Sasquatch", "sun_wukong_rodent": "Sun Wukong", "vetala_bat": "Vetala",
         "quetzalcoatl_dragon": "Quetzalcoatl", "leviathan_mermaid": "Leviathan", "girtablilu_bug": "Girtablilu", "cipactli_lizardfolk": "Cipactli",
         "behemoth_devil": "Behemoth", "nasnas_undead": "Nasnas", "jiangshi_undead": "Jiangshi", "cerberus_canid": "Cerberus", "baku_nekomata": "Baku",
+        "smilodon_nekomata": "Smilodon", "caribou_centaur": "Caribou", "lilith_devil": "Lilith", "wrath_devil": "Wrath", "min_min_mollusk": "Min Min Light", "hand_undead": "Hand",
         "qilin_centaur": "Qilin", "war_rider": "War", "famine_rider": "Famine", "pestilence_rider": "Pestilence", "death_rider": "Death",
         "fire_giant_devil": "Fire Giant", "frost_giant_devil": "Frost Giant", "ifrit_devil": "Ifrit", "pazuzu_devil": "Pazuzu", "charybdis_mollusk": "Charybdis",
         "mad_hatter_elf": "Mad Hatter", "angel_elf": "Angel"}
@@ -291,7 +292,7 @@ def main():
         if sig:
             lang[f"journal.monstergirls.{sp}.signature"] = f"{sig[0]}: {sig[1]}"
         if sp in ("snow_leopard_nekomata", "lynx_nekomata", "arctic_kitsune", "reindeer_centaur", "highland_minotaur", "yak_minotaur", "tusktaur_centaur",
-                  "aurorantler_centaur", "snowloper_nekomata", "yeti_canid"):
+                  "aurorantler_centaur", "snowloper_nekomata", "yeti_canid", "caribou_centaur"):
             snow_walkers.append("monstergirls:" + sp)
     dump(os.path.join(RES, "data", "minecraft", "tags", "entity_type", "powder_snow_walkable_mobs.json"), {"replace": False, "values": snow_walkers})
 

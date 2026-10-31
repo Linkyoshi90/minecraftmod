@@ -260,6 +260,7 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
             case HALBERELK_CENTAUR -> girlAttributes(40, 0.28, 6).add(Attributes.ATTACK_KNOCKBACK, 1.0);
             case BELLMARE_CENTAUR -> girlAttributes(28, 0.28, 2);
             case VICUNERO_CENTAUR -> girlAttributes(24, 0.32, 2).add(Attributes.JUMP_STRENGTH, 0.75);
+            case CARIBOU_CENTAUR -> girlAttributes(30, 0.3, 3);
             default -> girlAttributes(28, 0.28, 3);
         };
     }
@@ -755,9 +756,20 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
 
     // --- tick ----------------------------------------------------------------------------------------------------
 
+    /** The caribou with a player on her back, on snow or ice, runs faster for two seconds. 1 when she does, 0 off the snow, -1 with nobody on her back. */
+    public int snowStride(net.minecraft.server.level.ServerLevel level) {
+        if (!(this.getFirstPassenger() instanceof net.minecraft.world.entity.player.Player)) return -1;
+        var on = level.getBlockState(this.blockPosition().below());
+        var in = level.getBlockState(this.blockPosition());
+        if (!on.is(net.minecraft.tags.BlockTags.SNOW) && !on.is(net.minecraft.tags.BlockTags.ICE) && !in.is(net.minecraft.tags.BlockTags.SNOW)) return 0;
+        this.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 40, 1, false, false));
+        return 1;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.CARIBOU_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel tundra && !this.isBaby() && this.tickCount % 20 == 0) this.snowStride(tundra);
         if (this.species == GirlSpecies.QILIN_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel meadow && !this.isBaby() && this.tickCount % 60 == 0) this.gentleTread(meadow);
         if (this.species == GirlSpecies.URCUCHILLAY_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel herd && !this.isBaby() && this.tickCount % 200 == 0) this.herdKeeper(herd);
         if (this.species == GirlSpecies.CEIBLER_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel trail && !this.isBaby() && this.tickCount % 20 == 0) this.trailGuide(trail);

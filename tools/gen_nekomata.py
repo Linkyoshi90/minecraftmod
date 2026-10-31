@@ -73,6 +73,16 @@ SPECIES = {
                   "red": dict(HAIR="#a82a1e", FUR="#c8604a", LIGHT="#f8d8c8", MARK="#5a1a10", EYE="#e8c040", CLOTH="#2a2a30", extra=dict(sting="#1e1e24")),
                   "black": dict(HAIR="#1e1c22", FUR="#2a282e", LIGHT="#8a8690", MARK="#0e0c10", EYE="#e83a2a", CLOTH="#5a1e24", extra=dict(sting="#a8182a")),
                   "white": dict(HAIR="#f4f0e8", FUR="#ece6dc", LIGHT="#ffffff", MARK="#a89a88", EYE="#3a8ad8", CLOTH="#3a5a9a", extra=dict(sting="#3a3a44"))}),
+    # twenty-sixth wave: the smilodon, the Ice Age's great sabre-tooth: furred all over in shaggy gold, a thick mane, two long fangs, a short tail
+    "smilodon_nekomata": dict(
+        build="strong", outfit=dict(top=["bandeau"], bottom="shorts", extras=["bracers"], colors=dict(cloth2="#6a3e1a", leather="#6a3e1a")),
+        ears="cat", hair="mane", bangs="messy", tail=((2, 2, 2.5), (1.75, 1.75, 1.5), (1.5, 1.5, 1.25)), tail_pattern="solid", sabre=True, coat=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#b8701e", FUR="#d8982e", LIGHT="#f4dca0", MARK="#7a4412", EYE="#c83a5a", CLOTH="#6a3e1a", TRIM="#e8d8b0",
+                 INNER="#e8a8a0", pattern="solid", facemark="whisker"),
+        variants={"dun": dict(HAIR="#8a6a42", FUR="#a88a5a", LIGHT="#ece0c4", MARK="#5a3e1e", EYE="#c8a040", CLOTH="#4a3a2a"),
+                  "snow": dict(HAIR="#d8dce4", FUR="#e8ecf0", LIGHT="#ffffff", MARK="#8a94a8", EYE="#3a8ad8", CLOTH="#3a4a6a"),
+                  "dark": dict(HAIR="#2a2018", FUR="#4a3a2a", LIGHT="#a8987e", MARK="#1a120c", EYE="#e8d040", CLOTH="#2a1e14"),
+                  "red": dict(HAIR="#8a2a14", FUR="#b84a1e", LIGHT="#f0c8a0", MARK="#5a180e", EYE="#e8c040", CLOTH="#3a1e14")}),
     # nineteenth wave: the sabre, a shaggy blue sabre-tooth in black leather, a white ruff, two long fangs
     "sabre_nekomata": dict(
         build="athletic", outfit=dict(top=["bandeau", "harness"], bottom="shorts", extras=["pauldron", "bracers", "belt"],

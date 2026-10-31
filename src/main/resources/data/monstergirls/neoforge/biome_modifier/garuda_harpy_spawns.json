@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_garuda_harpy",
+  "spawners": {
+    "type": "monstergirls:garuda_harpy",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}
