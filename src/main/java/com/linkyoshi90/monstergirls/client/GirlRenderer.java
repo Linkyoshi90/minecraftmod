@@ -130,7 +130,7 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         @Override
         public void render(PoseStack poseStack, AbstractMonsterGirl girl, BakedGeoModel model, RenderType renderType, MultiBufferSource buffers,
                            VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-            if (!(girl instanceof com.linkyoshi90.monstergirls.entity.girl.Minotaur m) || m.getWoolDye() == null || m.isShorn() || girl.getPaint() > 0) return;
+            if (!(girl instanceof com.linkyoshi90.monstergirls.entity.girl.Minotaur m) || m.getWoolDye() == null || m.isShorn() || Paints.shown(girl.getPaintName()) != null) return;
             String name = girl.getSpecies().id() + (girl.hasFlag(AbstractMonsterGirl.FLAG_MALE) ? "_male" : "") + "_wool";
             RenderType wool = RenderType.entityCutoutNoCull(MonsterGirlsMod.id("textures/entity/" + name + ".png"));
             this.getRenderer().reRender(model, poseStack, buffers, girl, wool, buffers.getBuffer(wool), partialTick, packedLight, packedOverlay,
@@ -212,7 +212,7 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
             if (girl instanceof com.linkyoshi90.monstergirls.entity.girl.SlimeGirl slime && slime.hasCustomColour()) {   // a light grey copy, tinted by her colour
                 return this.textures.computeIfAbsent(name + "_tint", s -> MonsterGirlsMod.id("textures/entity/" + s + ".png"));
             }
-            String paint = girl.getPaintName();
+            String paint = Paints.shown(girl.getPaintName());
             if (paint != null) return this.textures.computeIfAbsent(name + "_paint_" + paint, s -> MonsterGirlsMod.id("textures/entity/" + s + ".png"));
             String suffix = ownModel(girl) ? "" : girl.getVariantSuffix();         // an own model's texture is its own name
             return this.textures.computeIfAbsent(name + suffix, s -> MonsterGirlsMod.id("textures/entity/" + s + ".png"));

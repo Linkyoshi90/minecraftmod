@@ -49,7 +49,7 @@ public class AnuranRenderer<T extends AbstractAnuran> extends GeoEntityRenderer<
 
             @Override
             public ResourceLocation getTextureResource(T animatable) {
-                String paint = animatable.getPaintName();                    // a painted one: her paint over the default colours
+                String paint = Paints.shown(animatable.getPaintName());                    // a painted one: her paint over the default colours
                 if (animatable.isBaby() && animatable.hasYoungModels()) return Paints.of(YoungModels.tex(animatable.modelName()), paint);
                 if (paint != null) return Paints.of(MonsterGirlsMod.id("textures/entity/" + species + ".png"), paint);
                 // colour variants: textures/entity/<species>_<variant>.png (the default colours have no suffix)

@@ -1,0 +1,19 @@
+modLoader="lowcodefml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+
+[[mods]]
+modId="${mod_id}_paints"
+version="${mod_version}"
+displayName="${mod_name} Paints"
+description='''
+The paint textures for ${mod_name}. Optional and client side: without them, painted creatures are drawn unpainted.
+'''
+displayTest="IGNORE_ALL_VERSION"
+
+[[dependencies.${mod_id}_paints]]
+    modId="${mod_id}"
+    type="required"
+    versionRange="[${mod_version},)"
+    ordering="AFTER"
+    side="BOTH"

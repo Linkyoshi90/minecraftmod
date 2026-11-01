@@ -64,6 +64,7 @@ from girl_lib import blob as G_blob  # noqa: E402
 
 REPO = H.REPO
 ENT = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls", "textures", "entity")
+PAINT_ENT = os.path.join(REPO, "src", "paints", "resources", "assets", "monstergirls", "textures", "entity")   # the optional paints jar
 GEO = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls", "geo", "entity")
 JAVA = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "girl", "GirlSpecies.java")
 HUES = {"blue": 0.58, "red": 0.0, "green": 0.33, "yellow": 0.14, "purple": 0.77}
@@ -1014,12 +1015,12 @@ def main():
                 if not any(px[3] for row in mask for px in row):   # GeckoLib crashes on a mask with no pixels: one, where no part is drawn
                     y0, x0 = next(((y, x) for y, row in enumerate(tex) for x, px in enumerate(row) if not px[3]), (0, 0))
                     mask[y0][x0] = (0, 0, 0, 255)
-                H.write_png(os.path.join(ENT, f"{m}_paint_{p}.png"), tex)
-                H.write_png(os.path.join(ENT, f"{m}_paint_{p}_glowmask.png"), mask)
+                H.write_png(os.path.join(PAINT_ENT, f"{m}_paint_{p}.png"), tex)
+                H.write_png(os.path.join(PAINT_ENT, f"{m}_paint_{p}_glowmask.png"), mask)
                 continue
-            H.write_png(os.path.join(ENT, f"{m}_paint_{p}.png"), treat(img, p, m) if p in TREATS else paint(img, p))
+            H.write_png(os.path.join(PAINT_ENT, f"{m}_paint_{p}.png"), treat(img, p, m) if p in TREATS else paint(img, p))
             if os.path.exists(glow):                               # the glow layer looks for <texture>_glowmask.png
-                shutil.copyfile(glow, os.path.join(ENT, f"{m}_paint_{p}_glowmask.png"))
+                shutil.copyfile(glow, os.path.join(PAINT_ENT, f"{m}_paint_{p}_glowmask.png"))
     print(f"{len(ms)} models x {7 + len(TREATS)} paints")
 
 

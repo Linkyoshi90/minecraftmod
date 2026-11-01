@@ -41,7 +41,7 @@ public class CrowHarpyRenderer extends GeoEntityRenderer<CrowHarpy> {
             @Override
             public ResourceLocation getTextureResource(CrowHarpy crow) {
                 if (crow.isBaby()) return Paints.of(YoungModels.tex(crow.modelName()), crow.getPaintName());
-                if (crow.getPaintName() != null) return Paints.of(MonsterGirlsMod.id("textures/entity/crow_harpy.png"), crow.getPaintName());
+                if (Paints.shown(crow.getPaintName()) != null) return Paints.of(MonsterGirlsMod.id("textures/entity/crow_harpy.png"), crow.getPaintName());
                 // "" -> crow_harpy.png, "_hooded" -> crow_harpy_hooded.png, ...
                 return TEXTURES.computeIfAbsent(crow.getVariantSuffix(), suffix -> MonsterGirlsMod.id("textures/entity/crow_harpy" + suffix + ".png"));
             }

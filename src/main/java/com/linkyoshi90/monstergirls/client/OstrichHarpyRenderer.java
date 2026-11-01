@@ -48,7 +48,7 @@ public class OstrichHarpyRenderer extends GeoEntityRenderer<OstrichHarpy> {
             @Override
             public ResourceLocation getTextureResource(OstrichHarpy ostrich) {
                 if (ostrich.isBaby()) return Paints.of(YoungModels.tex(ostrich.modelName()), ostrich.getPaintName());
-                if (ostrich.getPaintName() != null) return Paints.of(MonsterGirlsMod.id("textures/entity/ostrich_harpy.png"), ostrich.getPaintName());
+                if (Paints.shown(ostrich.getPaintName()) != null) return Paints.of(MonsterGirlsMod.id("textures/entity/ostrich_harpy.png"), ostrich.getPaintName());
                 return TEXTURES.get(ostrich.getVariant());
             }
         });

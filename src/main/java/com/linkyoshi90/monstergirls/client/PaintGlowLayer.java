@@ -30,6 +30,6 @@ public class PaintGlowLayer<T extends GeoAnimatable> extends AutoGlowingGeoLayer
     @Override
     public void render(PoseStack poseStack, T animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource,
                        VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-        if (glows(this.paint.apply(animatable))) super.render(poseStack, animatable, bakedModel, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
+        if (glows(Paints.shown(this.paint.apply(animatable)))) super.render(poseStack, animatable, bakedModel, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
     }
 }

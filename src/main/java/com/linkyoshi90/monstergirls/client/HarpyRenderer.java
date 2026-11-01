@@ -48,7 +48,7 @@ public class HarpyRenderer<T extends AbstractHarpy> extends GeoEntityRenderer<T>
             @Override
             public ResourceLocation getTextureResource(T harpy) {
                 if (harpy.isBaby()) return Paints.of(YoungModels.tex(harpy.modelName()), harpy.getPaintName());
-                if (harpy.getPaintName() != null) return Paints.of(MonsterGirlsMod.id("textures/entity/" + species + ".png"), harpy.getPaintName());
+                if (Paints.shown(harpy.getPaintName()) != null) return Paints.of(MonsterGirlsMod.id("textures/entity/" + species + ".png"), harpy.getPaintName());
                 return this.textures.computeIfAbsent(textureSuffix.apply(harpy),
                         suffix -> MonsterGirlsMod.id("textures/entity/" + species + suffix + ".png"));
             }

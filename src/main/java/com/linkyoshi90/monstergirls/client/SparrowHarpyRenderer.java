@@ -54,7 +54,7 @@ public class SparrowHarpyRenderer extends GeoEntityRenderer<SparrowHarpy> {
             @Override
             public ResourceLocation getTextureResource(SparrowHarpy harpy) {
                 if (harpy.isBaby()) return Paints.of(YoungModels.tex(harpy.modelName()), harpy.getPaintName());
-                if (harpy.getPaintName() != null) return Paints.of(MonsterGirlsMod.id(MonsterGirlsClientConfig.detailedSparrow()
+                if (Paints.shown(harpy.getPaintName()) != null) return Paints.of(MonsterGirlsMod.id(MonsterGirlsClientConfig.detailedSparrow()
                         ? "textures/entity/sparrow_harpy_detailed.png" : "textures/entity/sparrow_harpy.png"), harpy.getPaintName());
                 return (MonsterGirlsClientConfig.detailedSparrow() ? DETAILED_TEXTURES : TEXTURES).get(harpy.getVariant());
             }

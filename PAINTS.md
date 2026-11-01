@@ -1,5 +1,7 @@
 # Paints
 
+The textures are in an optional second jar, `monstergirls-paints-<version>.jar` (`src/paints`, built by `./gradlew paintsJar` or `build`), because there are far too many for the main jar. It is only needed on clients. Without it a painted creature keeps her paint, in saves and for her young, but is drawn unpainted.
+
 Every Harmontide paint, 119 in all. A paint is a full texture for a model: `textures/entity/<model>_paint_<paint>.png`, made by
 `tools/gen_paints.py` for every model. One wild girl, harpy or anuran in 64 is painted (`PAINT_RARITY`), like a shiny, and a
 painted mother has painted young. The list lives in `AbstractMonsterGirl.PAINTS`. It is synced by index, so **only ever append
