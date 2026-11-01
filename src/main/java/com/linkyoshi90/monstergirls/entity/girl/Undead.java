@@ -61,10 +61,14 @@ public class Undead extends AbstractMonsterGirl {
     @Nullable
     private BlockPos phylactery;
     private long nextCast;
+    /** Koschei's chains: who is held, to where, until when. */
+    private final java.util.Map<Monster, Vec3> chained = new java.util.HashMap<>();
+    private long chainsOff;
+    private long nextChain;
 
     public Undead(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
-        if (species == GirlSpecies.HAND_UNDEAD) this.navigation = this.createNavigation(level);   // the first one was made before she had a species
+        if (species == GirlSpecies.HAND_UNDEAD || species == GirlSpecies.MANO_PELUDA_UNDEAD) this.navigation = this.createNavigation(level);   // the first one was made before she had a species
         boolean creeper = species == GirlSpecies.LIVING_DOLL_UNDEAD || species == GirlSpecies.YUKI_ONNA_UNDEAD;
         if (creeper) this.goalSelector.addGoal(1, new StalkGoal(this, 1.0, 1.6, true, t -> t instanceof Player));
         if (species == GirlSpecies.LIVING_DOLL_UNDEAD) this.goalSelector.addGoal(2, new ShelfGoal());
@@ -91,6 +95,9 @@ public class Undead extends AbstractMonsterGirl {
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        if (s == GirlSpecies.KOSCHEI_UNDEAD) return girlAttributes(34, 0.26, 5);
+        if (s == GirlSpecies.MANO_PELUDA_UNDEAD) return girlAttributes(14, 0.34, 3);
+        if (s == GirlSpecies.GAITRESS_UNDEAD) return girlAttributes(26, 0.4, 5).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 2.0);
         return switch (s) {
             case HAND_UNDEAD -> girlAttributes(12, 0.33, 2);
             case YUREI_UNDEAD -> girlAttributes(18, 0.3, 2);
@@ -368,6 +375,7 @@ public class Undead extends AbstractMonsterGirl {
             this.swing(InteractionHand.MAIN_HAND);
             return true;
         }
+        if (this.species == GirlSpecies.GAITRESS_UNDEAD) this.startTimedAction(Action.KICK, 12);
         boolean hit = super.doHurtTarget(target);
         if (hit && target instanceof LivingEntity l) {
             switch (this.species) {
@@ -496,12 +504,12 @@ public class Undead extends AbstractMonsterGirl {
     /** The Hand runs up walls on its fingertips, like a spider. */
     @Override
     protected net.minecraft.world.entity.ai.navigation.PathNavigation createNavigation(net.minecraft.world.level.Level level) {
-        return this.species == GirlSpecies.HAND_UNDEAD ? new net.minecraft.world.entity.ai.navigation.WallClimberNavigation(this, level) : super.createNavigation(level);
+        return this.species == GirlSpecies.HAND_UNDEAD || this.species == GirlSpecies.MANO_PELUDA_UNDEAD ? new net.minecraft.world.entity.ai.navigation.WallClimberNavigation(this, level) : super.createNavigation(level);
     }
 
     @Override
     public boolean onClimbable() {
-        return this.species == GirlSpecies.HAND_UNDEAD && this.horizontalCollision || super.onClimbable();
+        return (this.species == GirlSpecies.HAND_UNDEAD || this.species == GirlSpecies.MANO_PELUDA_UNDEAD) && this.horizontalCollision || super.onClimbable();
     }
 
     /** The Hand holds the monsters within 6 of its friend by the ankle: nearly stopped for two seconds. Returns how many, -1 without a friend. */
@@ -513,9 +521,75 @@ public class Undead extends AbstractMonsterGirl {
         return near.size();
     }
 
+    /** Koschei chains the monsters within 8 of her friend to where they stand, for 8 seconds. Returns how many, -1 without a friend. */
+    public int chain(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        var near = level.getEntitiesOfClass(Monster.class, friend.getBoundingBox().inflate(8));
+        for (var m : near) this.chained.put(m, m.position());
+        if (!near.isEmpty()) {
+            this.chainsOff = level.getGameTime() + 160;
+            this.playSound(SoundEvents.CHAIN_PLACE, 1.0F, 0.7F);
+        }
+        return near.size();
+    }
+
+    /** How many she has on her chains. */
+    public int chainedCount() {
+        return this.chained.size();
+    }
+
+    /** Anything more than 3 blocks from where it was chained is hauled back. */
+    public void holdChains(ServerLevel level) {
+        if (this.chained.isEmpty()) return;
+        if (level.getGameTime() >= this.chainsOff) {
+            this.chained.clear();
+            return;
+        }
+        this.chained.keySet().removeIf(m -> !m.isAlive());
+        this.chained.forEach((m, at) -> {
+            if (m.position().distanceToSqr(at) > 9.0) {
+                m.setDeltaMovement(at.subtract(m.position()).normalize().scale(0.6));
+                m.hurtMarked = true;
+                m.getNavigation().stop();
+            }
+        });
+    }
+
+    /** La Mano Peluda leaps on the nearest monster within 8 of its friend: 4 damage, Blindness, and the monster forgets its target. 1 when it does, 0 with nothing there, -1 without a friend. */
+    public int lunge(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        Monster prey = null;
+        for (Monster m : level.getEntitiesOfClass(Monster.class, friend.getBoundingBox().inflate(8))) {
+            if (prey == null || m.distanceToSqr(friend) < prey.distanceToSqr(friend)) prey = m;
+        }
+        if (prey == null) return 0;
+        this.teleportTo(prey.getX(), prey.getY() + prey.getBbHeight() * 0.7, prey.getZ());
+        prey.hurt(this.damageSources().mobAttack(this), 4.0F);
+        prey.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 80, 0));
+        prey.setTarget(null);
+        this.playSound(SoundEvents.SPIDER_HURT, 0.8F, 1.4F);
+        return 1;
+    }
+
+    /** The Gaitress's friend, within 8 of her, keeps pace: Speed I. 1 when they do, -1 without a friend. */
+    public int pace(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null) return -1;
+        friend.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60, 0, false, false));
+        return 1;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.MANO_PELUDA_UNDEAD && this.level() instanceof ServerLevel bed && !this.isBaby() && this.tickCount % 60 == 0) this.lunge(bed);
+        if (this.species == GirlSpecies.GAITRESS_UNDEAD && this.level() instanceof ServerLevel road && !this.isBaby() && this.tickCount % 40 == 0) this.pace(road);
+        if (this.species == GirlSpecies.KOSCHEI_UNDEAD && this.level() instanceof ServerLevel taiga && !this.isBaby()) {
+            if (this.tickCount % 40 == 0 && taiga.getGameTime() >= this.nextChain && this.chain(taiga) > 0) this.nextChain = taiga.getGameTime() + 300;
+            this.holdChains(taiga);
+        }
         if (this.species == GirlSpecies.HAND_UNDEAD && this.level() instanceof ServerLevel floor && !this.isBaby() && this.tickCount % 40 == 0) this.firmGrip(floor);
         if (this.species == GirlSpecies.JIANGSHI_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel grave && !this.isBaby() && this.tickCount % 40 == 0) this.stiffHop(grave);
         if (this.species == GirlSpecies.GASHADOKURO_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel grasp && !this.isBaby() && this.tickCount % 60 == 0) this.giantsGrasp(grasp);

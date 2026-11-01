@@ -45,6 +45,16 @@ SPECIES = {
                   "rust": dict(HAIR="#e8a87a", MARK="#a85a2a", EYE="#c84a1e", TRIM="#e8a03a", extra=dict(boot="#2a1a14", staff="#141418", flame="#e8a03a", flame_core="#fff0c0")),
                   "ash": dict(HAIR="#c8c8d0", MARK="#7a7a84", EYE="#5a5a64", TRIM="#a8e8e8", extra=dict(boot="#1e1e24", staff="#141418", flame="#a8e8e8", flame_core="#ffffff")),
                   "rose": dict(HAIR="#f0a8c8", MARK="#a85a7a", EYE="#c82a6a", TRIM="#f85aa8", extra=dict(boot="#2a1a24", staff="#141418", flame="#f85aa8", flame_core="#ffe0f0"))}),
+    # twenty-seventh wave: the Charro Negro of Mexican legend, in black from hat to hem, a wide-brimmed sombrero with a black rose, a ruffled skirt, a poncho, on a black horse
+    "charro_negro_rider": dict(
+        build="curvy", outfit=dict(top=["corset", "capelet"], bottom="wrap_skirt", extras=["belt"], colors=dict(cloth2="#1e2438", leather="#c8a040")),
+        hair="hime", bangs="parted", ears=None, legs="boots", foot="shoe", charro=True,
+        pal=dict(SKIN=skin("#3a4258"), HAIR="#14182a", FUR="#14182a", LIGHT="#5a6484", MARK="#0a0c16", EYE="#7ac8f8", CLOTH="#1e2438", TRIM="#c8a040",
+                 extra=dict(boot="#0e1020", hat="#1e2438", band="#c8a040", rose="#2a3250")),
+        variants={"silver": dict(SKIN=skin("tan"), HAIR="#141418", EYE="#c82a2a", CLOTH="#141418", TRIM="#c8ccd8", extra=dict(boot="#0e0e12", hat="#141418", band="#c8ccd8", rose="#c82a2a", leather="#c8ccd8")),
+                  "red": dict(SKIN=skin("fair"), HAIR="#2a0e12", EYE="#e8c040", CLOTH="#6a141c", TRIM="#e8c040", extra=dict(boot="#1e0a0e", hat="#6a141c", band="#e8c040", rose="#e8c040", cloth2="#4a0e14")),
+                  "bone": dict(SKIN=skin("#e8e0cc"), HAIR="#e8e0cc", EYE="#1e1e24", CLOTH="#2a2a30", TRIM="#e8e0cc", extra=dict(boot="#141418", hat="#2a2a30", band="#e8e0cc", rose="#e8e0cc", leather="#e8e0cc")),
+                  "green": dict(SKIN=skin("#3a5848"), HAIR="#0e2018", EYE="#a8f07a", CLOTH="#14342a", TRIM="#c8a040", extra=dict(boot="#0a1a14", hat="#14342a", band="#c8a040", rose="#2a5a44", cloth2="#14342a"))}),
     # Death: hooded and cloaked in brown, a short top and shorts, thigh boots, a great scythe, a crow on her other hand
     "death_rider": dict(
         build="petite", outfit=dict(top=["bandeau", "harness"], bottom="shorts", extras=["belt"], colors=dict(leather="#2a2020", cloth2="#2a2020")),
@@ -64,6 +74,8 @@ RIDE_SHIFT = (4.0, 0, 0)                                 # out to the horse's le
 
 def declare_hook(sp, d):
     out = []
+    if d.get("charro"):
+        out += [("chat_brim", 16, .75, 16), ("chat_crown", 8.5, 4.5, 8.5), ("chat_band", 8.75, 1, 8.75), ("chat_rose", 2.5, 2.5, 1.5)]
     if d.get("fcloak"):
         out += [("fc_back", 14, 20, 1.25), ("fc_side", 1.25, 18, 6), ("fc_hood", 10, 6.5, 10)]
     if d.get("pstaff"):
@@ -75,6 +87,12 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    if d.get("charro"):
+        hat, band, rose = G.shades(pal.extra["hat"]), G.shades(pal.extra["band"]), G.shades(pal.extra["rose"])
+        pt("chat_brim", "all", lambda f, x, y, w, h: pick(band, 0.55, x, y) if f in ("up", "down") and (x in (0, w - 1) or y in (0, h - 1)) else pick(hat, 0.42 + 0.14 * (f == "up"), x, y))
+        pt("chat_crown", "all", lambda f, x, y, w, h: pick(hat, 0.45 + 0.1 * (f == "up"), x, y))
+        pt("chat_band", "all", lambda f, x, y, w, h: CLEAR if f in ("up", "down") else pick(band, 0.55 + 0.2 * (x % 4 == 0), x, y))
+        pt("chat_rose", "all", lambda f, x, y, w, h: pick(rose, 0.4 + 0.3 * ((x + y) % 3 == 0), x, y))
     if d.get("fcloak"):
         cl, tip, hood = G.shades(pal.extra["cloak"]), G.shades(pal.extra["cloak_tip"]), G.shades(pal.extra["hood"])
 
@@ -105,6 +123,9 @@ def paint_hook(pt, pal, d):
 
 def build_hook(r, g, d):
     hy, z = g.hy, g.z
+    if d.get("charro"):                                  # the sombrero: a wide flat brim low on her head, a tall crown, a rose at the side
+        r.add("hair_chat", "head", [0, hy + 7, z], [cube("chat_brim", [-8, hy + 6.6, -8 + z]), cube("chat_crown", [-4.25, hy + 7.2, -4.25 + z]), cube("chat_band", [-4.375, hy + 7.3, -4.375 + z]),
+                                                    cube("chat_rose", [3.6, hy + 7.3, -3.2 + z])])
     if d.get("fcloak"):                                  # the cloak hangs from her shoulders to the ground, the hood stands up over her head
         r.put("body", cube("fc_back", [-7, -0.5, 2.0 + z]), cube("fc_side", [-7.5, 1.0, -3.5 + z]), cube("fc_side", [6.25, 1.0, -3.5 + z]))
         r.add("hair_fhood", "head", [0, hy + 7, z], [cube("fc_hood", [-5, hy + 3.5, -5 + z])])

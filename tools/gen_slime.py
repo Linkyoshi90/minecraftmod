@@ -43,7 +43,9 @@ SPECIES = {
                   "sea": dict(FUR="#4ab89a", HAIR="#6ad0b4", MARK="#1e6a54", EYE="#0e3a2e", extra=dict(core="#d8fff0")),
                   # homage (2026-10-30): the Dragon Quest slime: clear blue, a drop's point on top of her head, a wide smile
                   "drop_smile": dict(FUR="#3a8ae8", HAIR="#5aa8f8", LIGHT="#d8ecff", MARK="#1e4aa8", EYE="#1e1e24", PUPIL="#0a0a10",
-                                     extra=dict(core="#ffffff", drop=True, smile=True))}),
+                                     extra=dict(core="#ffffff", drop=True, smile=True)),
+                  # homage (2026-10-31): Ditto (Pokemon): soft pink, two dot eyes
+                  "copy_blob": dict(FUR="#d8a0e0", HAIR="#e4b4e8", LIGHT="#f8e8fa", MARK="#a06ab0", EYE="#1e1e24", PUPIL="#0a0a10", extra=dict(core="#ffffff"))}),
     "verdant_slime": dict(
         build="curvy", outfit=dict(top=[]),
         extra="sprout", hair="bob",

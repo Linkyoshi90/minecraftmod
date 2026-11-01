@@ -246,7 +246,9 @@ SPECIES = {
                   "ash": dict(FUR="#5a5658", HAIR="#3a3638", LIGHT="#8a8688", EYE="#f0c040", extra=dict(flame="#f8901e", flame_hot="#ffe070")),
                   "cinder": dict(FUR="#3a1a14", HAIR="#2a0e0a", LIGHT="#6a3a2a", EYE="#f84a2a", TRIM="#e83a1a", extra=dict(flame="#e83a1a", flame_hot="#f8a040")),
                   "white": dict(FUR="#f4f0ea", HAIR="#ffffff", LIGHT="#ffffff", MARK="#c8c0b4", EYE="#d8a020", CLOTH="#f4f0ea", TRIM="#e8b830",
-                                extra=dict(flame="#f0c030", flame_hot="#fff8c0"))}),
+                                extra=dict(flame="#f0c030", flame_hot="#fff8c0")),
+                  # homage (2026-10-31): Blaze the Cat (Sonic): lilac fur, a white and magenta coat, gold eyes, pink flames
+                  "royal_flame": dict(FUR="#a878d8", HAIR="#8a58c0", LIGHT="#e8d8f4", MARK="#4a2a7a", EYE="#e8c040", CLOTH="#f4f0f4", TRIM="#d82a8a", extra=dict(flame="#f85aa8", flame_hot="#ffd8ec"))}),
     "ocelot_nekomata": dict(
         build="slim", outfit=dict(top=["halter", "capelet"], bottom="shorts", extras=["armlets"]),
         ears="round", hair="sidetail", tail=((1.25, 1.25, 3.5), (1.25, 1.25, 3.5), (1.25, 1.25, 2.5)), tail_pattern="bars",

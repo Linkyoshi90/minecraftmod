@@ -43,6 +43,26 @@ SPECIES = {
                                extra=dict(horn="#2a8a5a", bell="#f0fcf6", blanket="#2a8a5a", blanket2="#f0fcf6", blanket3="#e8c040")),
                   "dusk": dict(FUR="#a8a0d8", HAIR="#e8e0fc", MARK="#3a2a7a", CLOTH="#3a2a7a", EYE="#e8a040",
                                extra=dict(horn="#3a2a7a", bell="#e8c050", blanket="#3a2a7a", blanket2="#e8e0fc", blanket3="#f87a8a"))}),
+    # twenty-seventh wave: the shedim, a spirit of Jewish lore drawn as a soft deer-fox taur: long ears, little antlers, a thick mane and a bushy tail
+    "shedim_centaur": dict(
+        build="petite", outfit=dict(top=["bandeau"], colors=dict(cloth2="#5a8ad0")),
+        hair="wavy", bangs="swept", tail=(3, 3, 2), antlers=True, ears="fox",
+        pal=dict(SKIN=skin("#d8e8f8"), HAIR="#7aa8e0", FUR="#8ab4e8", LIGHT="#dceaf8", MARK="#3a6ab0", EYE="#2a5ab0", CLOTH="#5a8ad0", TRIM="#dceaf8",
+                 pattern="solid", extra=dict(antler="#7aa8e0")),
+        variants={"gold": dict(SKIN=skin("#fbeec0"), HAIR="#f4d040", FUR="#f8d850", LIGHT="#fff4c0", MARK="#c89a1e", EYE="#a8641e", CLOTH="#e8a830", extra=dict(antler="#f4d040")),
+                  "red": dict(SKIN=skin("#f8d8c8"), HAIR="#d8583a", FUR="#e0704a", LIGHT="#f8d8c0", MARK="#8a2a14", EYE="#7a2a14", CLOTH="#8a2a14", extra=dict(antler="#d8583a")),
+                  "violet": dict(SKIN=skin("#e0d4f4"), HAIR="#9a7ae0", FUR="#a88ae8", LIGHT="#e8dcf8", MARK="#5a3aa0", EYE="#4a2a9a", CLOTH="#5a3aa0", extra=dict(antler="#9a7ae0")),
+                  "white": dict(SKIN=skin("pale"), HAIR="#f4f4f8", FUR="#f8f8fa", LIGHT="#ffffff", MARK="#b8bcc8", EYE="#5a6ab0", CLOTH="#b8bcc8", extra=dict(antler="#e8e8f0"))}),
+    # twenty-seventh wave: Anzu, the storm-bird of Sumerian myth who stole the Tablet of Destinies: a blue lion taur with feathered wings, long blue hair and gold at her brow and neck
+    "anzu_centaur": dict(
+        build="athletic", outfit=dict(top=["bandeau"], extras=["usekh", "armlets", "belt"], colors=dict(usekh2="#e8c050")),
+        hair="flowing", bangs="parted", tail=(1, 9, 1), wings=True, ears="round", brow=True,
+        pal=dict(SKIN=skin("#f4dcc0"), HAIR="#2a8ae8", FUR="#2a84e0", LIGHT="#a8d4f8", MARK="#1458b0", EYE="#6a3a14", CLOTH="#e8c050", TRIM="#2a8ae8",
+                 pattern="solid", extra=dict(wing="#c8dcf4", wing_tip="#6aa0e0", brow="#e8c050")),
+        variants={"yellow": dict(HAIR="#e8b020", FUR="#e8b830", LIGHT="#f8e8a8", MARK="#a87a14", CLOTH="#2a8ae8", extra=dict(wing="#f8ecc0", wing_tip="#e8b830", brow="#2a8ae8")),
+                  "red": dict(HAIR="#c83a2a", FUR="#c84a30", LIGHT="#f0b090", MARK="#7a1e12", extra=dict(wing="#f0d0c0", wing_tip="#c84a30", brow="#e8c050")),
+                  "black": dict(HAIR="#1e1e28", FUR="#2a2a34", LIGHT="#6a6a78", MARK="#0e0e14", EYE="#e8c050", extra=dict(wing="#4a4a58", wing_tip="#14141c", brow="#e8c050")),
+                  "white": dict(HAIR="#f0ece4", FUR="#f4f0e8", LIGHT="#ffffff", MARK="#b8b0a0", CLOTH="#2a4a9a", extra=dict(wing="#ffffff", wing_tip="#c8c0b0", brow="#2a4a9a"))}),
     # twenty-sixth wave: the caribou, a blue-grey wild deer taur of the tundra, broad antlers, a shaggy white ruff of a scarf
     "caribou_centaur": dict(
         build="athletic", outfit=dict(top=["bandeau"], extras=["scarf"], colors=dict(scarf="#e8ecf4")),
@@ -321,6 +341,8 @@ def declare(sp):
         parts += [("frond", .25, 6, 1.25)]
     if d.get("wings"):
         parts += P.wing_parts("feather", 1.4)
+    if d.get("brow"):                                    # a gold band round her brow
+        parts += [("brow_band", 9, 1, 9)]
     if d.get("nemes"):                                   # the striped headcloth: a cap and two lappets over her shoulders
         parts += [("nemes_cap", 9, 3, 9), ("nemes_lappet", 2.5, 6, 1)]
     G.declare(parts, ears=d.get("ears", "horse"), hair=SPECIES[sp]["hair"],
@@ -395,6 +417,8 @@ def paint(sp, key):
     stripes = lambda f, x, y, w, h: pick(nb if (y // 2) % 2 else nm, 0.55, x, y)
     pt("nemes_cap", "all", stripes)
     pt("nemes_lappet", "all", stripes)
+    brow = shades(pal.extra.get("brow", "#e8c050"))
+    pt("brow_band", "all", lambda f, x, y, w, h: pick(brow, 0.55 + 0.25 * (x % 4 == 0), x, y))
     tusk = shades(pal.extra.get("tusk", "#f0e6cc"))
     for p in ("tusk_a", "tusk_b"):
         pt(p, "all", lambda f, x, y, w, h: pick(tusk, 0.55 + 0.15 * (f == "up") - 0.1 * (f == "down"), x, y))
@@ -478,6 +502,8 @@ def build(sp):
         r.put("barrel", cube("fleece", [-3.75, 13.25, -4.0]))
     if d.get("blanket"):                                # the saddle blanket over the middle of her back, hanging down her flanks
         r.put("barrel", cube("blanket", [-3.875, 14.0, 0.0], inflate=0.35))
+    if d.get("brow"):
+        r.put("head", cube("brow_band", [-4.5, hy + 5.0, -4.5 + z]))
     if d.get("bells"):                                  # a strap of bells across her chest, more bells hung on her flanks
         r.put("barrel", cube("bell_strap", [-3.75, 15.5, -4.4]),
               *[cube("cbell", [-3.0 + 2.5 * i, 14.2, -4.9]) for i in range(3)],

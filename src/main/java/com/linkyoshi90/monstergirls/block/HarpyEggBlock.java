@@ -146,6 +146,7 @@ public class HarpyEggBlock extends Block implements EntityBlock {
             chick.randomizeVariant();
             chick.setBaby(true);
             chick.setPaint(paint);                                      // a painted mother's young are painted too
+            chick.setPersistenceRequired();
             level.addFreshEntity(chick);
             chick.bornTo(father);
         }

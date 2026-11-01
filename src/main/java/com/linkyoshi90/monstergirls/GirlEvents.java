@@ -259,6 +259,7 @@ public final class GirlEvents {
 
     @SubscribeEvent
     public static void onDeath(LivingDeathEvent event) {
+        com.linkyoshi90.monstergirls.entity.girl.Devil.witness(event.getEntity(), event.getSource());
         if (event.getSource().getEntity() instanceof Merfolk merfolk) Merfolk.onKill(merfolk, event.getEntity());
     }
 }

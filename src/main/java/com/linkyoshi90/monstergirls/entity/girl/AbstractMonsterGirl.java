@@ -95,7 +95,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             "lapis", "bookshelf", "glazed", "redstone_lamp",                 // the lamp's light glows
             "netherite", "purpur", "crying_obsidian", "shroomlight",         // the tears and the shroomlight's light glow
             "end_stone", "hay_bale", "ancient_debris", "sea_lantern",        // the sea lantern glows
-            "redstone", "glowstone", "cherry", "terracotta");                 // redstone's bright lines and the glowstone glow
+            "redstone", "glowstone", "cherry", "terracotta",                 // redstone's bright lines and the glowstone glow
+            "tnt", "warped", "dripstone", "brain_coral");
     /** Homage variants (the look of a favourite character): a wild one rolls them only rarely. */
     public static final java.util.Set<String> HOMAGES = java.util.Set.of("gunman", "blossom", "lost", "stitched", "nurse", "mummy", "ranger", "outback",
             "jewel_thief", "ink_kid", "pink_dairy", "sun_goddess",                            // POP_CULTURE_VARIANTS.md
@@ -103,7 +104,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             "innkeeper", "prankster", "soul_keeper", "sage_princess", "green_hero", "tree_guard", "snow_wraith", "headless_rider", "death_envoy",
             "bake_sale", "twin_tails", "ember_tail", "spike_king", "lawn_zombie", "drop_smile", "puffball", "hoodie_squirrel", "flight_cap",
             "lamp_friend", "tiny_jumper", "kaiju_moth", "pocket_bot", "nine_cream", "shopkeeper", "shy_ghost", "night_heir",
-            "detective_croc", "bandicoot", "needle_runner", "angel_guard", "music_box", "star_song", "tactical_eye");
+            "detective_croc", "bandicoot", "needle_runner", "angel_guard", "music_box", "star_song", "tactical_eye",
+            "blue_blur", "royal_flame", "backpack_bear", "aura_guardian", "gold_ninja", "night_heiress", "copy_blob");
     /** Homage looks with a model of their own (geo, animations and texture &lt;species&gt;_&lt;variant&gt;), not just a recolour. */
     public static final java.util.Set<String> OWN_MODELS = java.util.Set.of("mud_fin", "trident_hood", "tactical_eye");
     /** One wild girl in this many is painted, like a shiny. */
@@ -544,6 +546,11 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         super.setTarget(allowed ? target : null);
     }
 
+    /** A score to settle: past her orders and her friendships (the Fury's guilty, the Charro Negro's debtor). */
+    protected void settleScoreWith(net.minecraft.world.entity.LivingEntity target) {
+        super.setTarget(target);
+    }
+
     @Override
     public boolean isOrderedToSit() {
         return this.orderedToSit;
@@ -817,6 +824,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         young.setBaby(true);
         young.randomizeVariant();
         young.setPaint(this.getPaint());                                  // a painted mother has painted daughters
+        young.setPersistenceRequired();                                   // born here, she stays here: no despawning
         level.addFreshEntity(young);
         young.bornTo(father);
         return young;
@@ -833,6 +841,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         young.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, level.random.nextFloat() * 360.0F, 0.0F);
         young.setBaby(true);
         young.randomizeVariant();
+        young.setPersistenceRequired();
         level.addFreshEntity(young);
         young.bornTo(father);
         return young;

@@ -184,6 +184,7 @@ public class Canid extends AbstractMonsterGirl {
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        if (s == GirlSpecies.BLOODHOUND_CANID) return girlAttributes(36, 0.32, 7);
         return switch (s) {
             case AMAROK_CANID -> girlAttributes(40, 0.33, 8);
             case WOLF_CANID -> girlAttributes(24, 0.32, 5);
@@ -530,9 +531,39 @@ public class Canid extends AbstractMonsterGirl {
 
     // --- tick ----------------------------------------------------------------------------------------------------
 
+    /** What the bloodhound is tracking. */
+    private net.minecraft.world.entity.LivingEntity trail;
+
+    /** What she is on the trail of, if anything. */
+    public net.minecraft.world.entity.LivingEntity trail() {
+        return this.trail;
+    }
+
+    /** Whatever last hurt her friend, kept up to 64 blocks; failing that the nearest monster within 32 they cannot see. It glows, and a line of smoke runs from her friend towards it. 1 on a scent, 0 with none, -1 without a friend. */
+    public int scent(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        if (friend.getLastHurtByMob() != null && friend.getLastHurtByMob() != this) this.trail = friend.getLastHurtByMob();
+        if (this.trail != null && (!this.trail.isAlive() || this.trail.distanceToSqr(friend) > 64 * 64)) this.trail = null;
+        net.minecraft.world.entity.LivingEntity quarry = this.trail;
+        if (quarry == null) {
+            for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(32), m -> !friend.hasLineOfSight(m))) {
+                if (quarry == null || m.distanceToSqr(friend) < quarry.distanceToSqr(friend)) quarry = m;
+            }
+        }
+        if (quarry == null) return 0;
+        quarry.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.GLOWING, 60, 0));
+        this.getLookControl().setLookAt(quarry);
+        net.minecraft.world.phys.Vec3 way = quarry.position().subtract(friend.position()).multiply(1, 0, 1);
+        way = way.lengthSqr() < 1.0E-4 ? way : way.normalize();
+        for (int i = 2; i < 12; i += 2) level.sendParticles(net.minecraft.core.particles.ParticleTypes.SMOKE, friend.getX() + way.x * i, friend.getY() + 0.2, friend.getZ() + way.z * i, 2, 0.05, 0.05, 0.05, 0.0);
+        return 1;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.BLOODHOUND_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel woods && !this.isBaby() && this.tickCount % 40 == 0) this.scent(woods);
         if (this.species == GirlSpecies.CERBERUS_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel gates && !this.isBaby() && this.tickCount % 20 == 0) this.threeWatches(gates);
         if (this.species == GirlSpecies.HELLHOUND_CANID && !this.isBaby()) {
             if (this.level() instanceof net.minecraft.server.level.ServerLevel pit) {

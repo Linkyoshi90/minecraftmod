@@ -212,6 +212,16 @@ SPECIES = {
                   "golden": dict(FUR="#a8783a", HAIR="#8a5a2a", LIGHT="#e8c890", MARK="#5a3a1a", CLOTH="#3a5a9a"),
                   "grey": dict(FUR="#6a6460", HAIR="#4a4440", LIGHT="#c8c0b8", MARK="#2e2a28", CLOTH="#9a3a3a"),
                   "jade": dict(FUR="#4a5a3a", HAIR="#2e3a22", LIGHT="#a8b888", MARK="#1e2614", CLOTH="#c8a040")}),
+    # twenty-seventh wave: Cetus, the sea monster of the Greek myths, drawn as a huge, soft, pale whale of a girl with a great flat fluke
+    "cetus_mermaid": dict(
+        build="curvy", outfit=dict(top=["bandeau"], colors=dict(cloth2="#a8c8e8")),
+        ears=None, hair="wavy", bangs="swept", fluke=(12, .75, 4.5), size=1.3,
+        pal=dict(SKIN=skin("#d8e8f8"), HAIR="#b8d4f0", FUR="#a8c8ec", LIGHT="#f0f6fc", MARK="#6a94c8", EYE="#2a4a8a", CLOTH="#a8c8e8", TRIM="#f0f6fc",
+                 pattern="solid", extra=dict(belly_white=True)),
+        variants={"bw": dict(SKIN=skin("fair"), HAIR="#1e1e24", FUR="#1e1e24", LIGHT="#f4f4f6", MARK="#0e0e12", EYE="#3a3a4a", CLOTH="#1e1e24", TRIM="#f4f4f6", extra=dict(belly_white=True)),
+                  "grey": dict(SKIN=skin("#d8dce4"), HAIR="#8a94a4", FUR="#8a94a4", LIGHT="#e8ecf0", MARK="#4a5464", EYE="#3a4454", CLOTH="#4a5464", extra=dict(belly_white=True)),
+                  "white": dict(SKIN=skin("pale"), HAIR="#f4f6f8", FUR="#f0f2f4", LIGHT="#ffffff", MARK="#b8c0cc", EYE="#c83a5a", CLOTH="#b8c0cc", extra=dict(belly_white=True)),
+                  "deep": dict(SKIN=skin("#8aa8d0"), HAIR="#2a4a8a", FUR="#2a4a8a", LIGHT="#a8c0e0", MARK="#14285a", EYE="#e8d040", CLOTH="#14285a", extra=dict(belly_white=True))}),
     "dugong_mermaid": dict(
         build="curvy", outfit=dict(top=["bandeau"], extras=["pearls"]),
         ears=None, hair="wavy", bangs="swept", fluke=(9, .75, 3.5), size=1.15,

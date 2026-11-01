@@ -72,6 +72,7 @@ public class Dragon extends AbstractMonsterGirl {
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        if (s == GirlSpecies.BAHAMUT_DRAGON) return girlAttributes(60, 0.28, 8);
         return switch (s) {
             case LONG_DRAGON -> girlAttributes(60, 0.25, 6);
             case JORMUNGANDR_DRAGON -> girlAttributes(80, 0.22, 10).add(Attributes.ARMOR, 8);
@@ -88,7 +89,7 @@ public class Dragon extends AbstractMonsterGirl {
     @Override
     public boolean canFly() {
         return switch (this.species) {
-            case LONG_DRAGON, WYRM_DRAGON, GRYPHON_DRAGON, WYVERN_DRAGON, ALEBRIJE_DRAGON, COCKATRICE_DRAGON, MACAWTL_DRAGON, QUETZALCOATL_DRAGON -> true;
+            case LONG_DRAGON, WYRM_DRAGON, GRYPHON_DRAGON, WYVERN_DRAGON, ALEBRIJE_DRAGON, COCKATRICE_DRAGON, MACAWTL_DRAGON, QUETZALCOATL_DRAGON, BAHAMUT_DRAGON -> true;
             default -> false;
         };
     }
@@ -320,6 +321,23 @@ public class Dragon extends AbstractMonsterGirl {
         return true;
     }
 
+    /** Once a day a beam of light falls on every monster within 10 of Bahamut's friend, for 12. Returns how many it struck, -1 without a friend. */
+    public int judgement(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        long day = level.getDayTime() / 24000L;
+        if (this.getPersistentData().contains("LastBeam") && this.getPersistentData().getLong("LastBeam") == day) return 0;
+        var near = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(10));
+        if (near.isEmpty()) return 0;
+        this.getPersistentData().putLong("LastBeam", day);
+        for (var m : near) {
+            m.hurt(this.damageSources().magic(), 12.0F);
+            for (int y = 0; y < 12; y++) level.sendParticles(net.minecraft.core.particles.ParticleTypes.END_ROD, m.getX(), m.getY() + y, m.getZ(), 3, 0.1, 0.3, 0.1, 0.0);
+        }
+        this.playSound(net.minecraft.sounds.SoundEvents.BEACON_ACTIVATE, 1.0F, 1.4F);
+        return near.size();
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
@@ -327,6 +345,7 @@ public class Dragon extends AbstractMonsterGirl {
                 && dawn.getDayTime() % 24000L < 1000L) this.morningStar(dawn);
         if (this.species == GirlSpecies.NENEKEA_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel tide && !this.isBaby() && this.tickCount % 20 == 0) this.tidalBalm(tide);
         if (this.species == GirlSpecies.MACAWTL_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel sky && !this.isBaby() && this.tickCount % 20 == 0) this.tailwind(sky);
+        if (this.species == GirlSpecies.BAHAMUT_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel peak && !this.isBaby() && this.tickCount % 40 == 0) this.judgement(peak);
         if (this.species == GirlSpecies.MOO_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel frill && !this.isBaby() && this.tickCount % 20 == 0) this.herdStand(frill);
         if (this.species == GirlSpecies.HAIRYPTERIX_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel wind && !this.isBaby() && this.tickCount % 10 == 0) this.updraft(wind);
         if (!(this.level() instanceof ServerLevel server)) return;

@@ -45,6 +45,10 @@ public class Devil extends AbstractMonsterGirl {
     @javax.annotation.Nullable
     private java.util.UUID beanThrower;
     private long fleeUntil;
+    /** The Fury: who she is after. */
+    private LivingEntity quarry;
+    /** The demon: when she will deal again. */
+    private long nextPact;
     /** Wrath: blows taken and not yet paid back (each adds 2 to her hits), and when she took the last one. */
     private int rage;
     private long lastProvoked;
@@ -77,6 +81,8 @@ public class Devil extends AbstractMonsterGirl {
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        if (s == GirlSpecies.DEMON_DEVIL) return girlAttributes(32, 0.3, 6);
+        if (s == GirlSpecies.FURY_DEVIL) return girlAttributes(44, 0.32, 9);
         return switch (s) {
             case FIRE_GIANT_DEVIL, FROST_GIANT_DEVIL -> girlAttributes(100, 0.26, 12).add(net.minecraft.world.entity.ai.attributes.Attributes.KNOCKBACK_RESISTANCE, 0.9);
             case BEHEMOTH_DEVIL -> girlAttributes(90, 0.24, 10).add(net.minecraft.world.entity.ai.attributes.Attributes.ARMOR, 6).add(net.minecraft.world.entity.ai.attributes.Attributes.KNOCKBACK_RESISTANCE, 0.9);
@@ -99,7 +105,7 @@ public class Devil extends AbstractMonsterGirl {
 
     @Override
     public boolean canFly() {
-        if (this.species == GirlSpecies.PAZUZU_DEVIL || this.species == GirlSpecies.LILITH_DEVIL) return true;
+        if (this.species == GirlSpecies.PAZUZU_DEVIL || this.species == GirlSpecies.LILITH_DEVIL || this.species == GirlSpecies.FURY_DEVIL) return true;
         return this.species == GirlSpecies.LESSER_DEVIL || this.species == GirlSpecies.SUCCUBUS_DEVIL || this.species == GirlSpecies.GREATER_DEVIL
                 || this.species == GirlSpecies.ITTAN_MOMEN_DEVIL;
     }
@@ -411,6 +417,10 @@ public class Devil extends AbstractMonsterGirl {
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
+        if (this.species == GirlSpecies.DEMON_DEVIL && stack.isEmpty() && player.isShiftKeyDown() && !this.isBaby() && this.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {
+            if (this.level() instanceof ServerLevel server) this.pact(server, player);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         if (this.species == GirlSpecies.GREMLIN_DEVIL && stack.is(Items.COOKIE)) this.calmUntil = this.level().getGameTime() + 24000;   // no pranks for a day
         if (this.species == GirlSpecies.ONI_DEVIL && stack.is(Items.COCOA_BEANS) && this.getAffection(player) < com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {
             if (this.level() instanceof ServerLevel server) {
@@ -470,12 +480,47 @@ public class Devil extends AbstractMonsterGirl {
 
     // --- tick ----------------------------------------------------------------------------------------------------
 
+    /** The demon's bargain: 3 hearts now for Strength II, half a minute. 1 when it is struck, 0 when they have not the hearts to spare or she dealt lately, -1 for a stranger. */
+    public int pact(ServerLevel level, Player player) {
+        if (this.getAffection(player) < com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) return -1;
+        if (level.getGameTime() < this.nextPact || player.getHealth() <= 7.0F) return 0;
+        this.nextPact = level.getGameTime() + 1200;
+        player.setHealth(player.getHealth() - 6.0F);                           // a price, not a blow: no armour or invulnerability helps
+        player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 600, 1));
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.SOUL, player.getX(), player.getY() + 1.0, player.getZ(), 10, 0.3, 0.5, 0.3, 0.02);
+        this.playSound(net.minecraft.sounds.SoundEvents.EVOKER_CAST_SPELL, 1.0F, 0.8F);
+        return 1;
+    }
+
+    /** The Fury takes up the hunt: it glows for her and she does not let go. */
+    public void hound(LivingEntity guilty) {
+        this.quarry = guilty;
+        this.settleScoreWith(guilty);
+        guilty.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40, 0));
+    }
+
+    /** Who the Fury is after, if anyone. */
+    public LivingEntity quarry() {
+        return this.quarry;
+    }
+
+    /** A villager or someone's pet has been killed: every Fury within 32 saw it. */
+    public static void witness(LivingEntity victim, net.minecraft.world.damagesource.DamageSource source) {
+        if (!(source.getEntity() instanceof LivingEntity killer)) return;
+        if (!(victim instanceof net.minecraft.world.entity.npc.AbstractVillager) && !(victim instanceof net.minecraft.world.entity.TamableAnimal t && t.isTame())) return;
+        for (Devil d : victim.level().getEntitiesOfClass(Devil.class, victim.getBoundingBox().inflate(32), d -> d.species == GirlSpecies.FURY_DEVIL && d != killer)) d.hound(killer);
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
         if (this.species == GirlSpecies.FIRE_GIANT_DEVIL && this.level() instanceof net.minecraft.server.level.ServerLevel forge && !this.isBaby()) {
             this.glow(forge, 13);                                              // her lava lights the ground she walks on
             if (this.tickCount % 40 == 0) this.hearthfire(forge);
+        }
+        if (this.species == GirlSpecies.FURY_DEVIL && this.level() instanceof ServerLevel ruin && this.tickCount % 20 == 0 && this.quarry != null) {
+            if (!this.quarry.isAlive() || this.quarry.isRemoved() || this.quarry.level() != ruin) this.quarry = null;
+            else this.hound(this.quarry);
         }
         if (this.species == GirlSpecies.WRATH_DEVIL && this.level() instanceof ServerLevel pyre && !this.isBaby()) {
             this.glow(pyre, 15);

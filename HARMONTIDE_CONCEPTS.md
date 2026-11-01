@@ -614,6 +614,29 @@ sandstone since 2026-10-29), so 87 in all.
 Homage props (POP_CULTURE_VARIANTS.md): the dullahan's headless rider (Celty) has her yellow cat-eared helmet over the head she
 carries, the death envoy (Lala) a scythe in her free hand; both are drawn only on their own looks.
 
+## Twenty-seventh wave (2026-10-31, in the game)
+
+Twelve from the roster's Left list, the Gaitress on a rig of her own. Set aside: the adaro and the pishtaco (living traditions). Twelve creatures are left for one last wave.
+
+| Species | Home | Design |
+|---|---|---|
+| **Bahamut** | Dragon | Soft, round and pale blue, curled horns, fins for ears; she flies. Once a day a beam of light strikes every monster around her friend for 12. |
+| **Cetus** | Merfolk | 3 blocks of pale whale, a great flat fluke: she swallows drowned and guardians near her friend whole. |
+| **Demon** | Devil | The plain kind: horns, furred legs, little wings. A friend crouching with an empty hand trades 3 hearts for half a minute of Strength II. |
+| **Fury** | Devil | Ink-dark clothes, wild hair, wings of glowing violet flame; she flies. Whoever kills a villager or a tamed pet within 32 of her is marked and hunted to the death, her own friend included. |
+| **Charro Negro** | Rider | In black from sombrero to hem, on a real black horse. She lends a friend 8 emeralds (crouch, empty hand); 16 must come back within three days, or she rides to them wherever they are. The debt dies with the debtor. |
+| **Koschei** | Undead | A bone beak under a tall kokoshnik, blue robes, chains, a glowing lantern: she chains the monsters near her friend so they cannot get 3 blocks from where they stood. |
+| **La Mano Peluda** | Undead | The Hand's rig under a shaggy pelt, climbs walls: it leaps on a monster near its friend, and the monster goes blind and forgets its target. |
+| **Gaitress** | Undead | Her own rig: four long legs and a swimsuit, two to walk on, two crossed up in the air where a head would be. Very fast, a throwing kick, and her friend runs faster beside her. |
+| **Bloodhound** | Canid | Stitched brown fur, long black hair, a wide bloody grin: she tracks what last hurt her friend up to 64 blocks, or the nearest hidden monster within 32, and shows the way. |
+| **Shedim** | Centaur | A soft deer-fox taur with little antlers, unseen at night: she blinks her badly hurt friend 8 blocks away from a monster. |
+| **Anzu** | Centaur | A blue lioness with feathered wings and gold at her brow: she knocks the weapon out of a monster's hand and passes its good effects to her friend. |
+| **Kitsune Obaa** | Kitsune | White hair, nine white tails always: once a day, with two or more monsters after her friend, she hides them and the monsters lose interest. |
+
+Paints: **tnt**, **warped**, **dripstone** and **brain coral**, so 107 in all (PAINTS.md).
+
+Homage looks: Blue Blur (needlehog), Royal Flame (blaze cat), Backpack Bear (grizzly), Aura Guardian (wolf), Gold Ninja (red kitsune), Night Heiress (succubus), Copy Blob (undine), Golden Runner (emu).
+
 ## Twenty-sixth wave (2026-10-31, in the game)
 
 Eight birds, four more from the roster, and two new looks at old problems: the Hand, which isn't a girl at all, and Wrath, who is nothing but fire.

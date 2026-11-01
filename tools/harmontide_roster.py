@@ -91,6 +91,9 @@ IN_GAME = {
     "macawtl": "macawtl_dragon", "piranha": "piranha_mermaid", "mosasaurus": "mosasaurus_mermaid", "fishman": "fishman_mermaid",
     "gibbon": "gibbon_rodent", "gigantopithecus": "gigantopithecus_canid", "sandworm": "sandworm_lamia", "archelon": "archelon_lizardfolk",
     "xiangliu": "xiangliu_lamia", "cyclops": "cyclops_devil", "genie": "genie_devil", "ammit": "ammit_nekomata",
+    # twenty-seventh wave (2026-10-31)
+    "bahamut": "bahamut_dragon", "cetus": "cetus_mermaid", "demon": "demon_devil", "fury": "fury_devil", "charro_negro": "charro_negro_rider", "koschei_chain": "koschei_undead",
+    "la_mano_peluda": "mano_peluda_undead", "gaitress": "gaitress_undead", "bloodhound": "bloodhound_canid", "shedim": "shedim_centaur", "anzu": "anzu_centaur", "kitsune_obaa": "obaa_kitsune",
     # twenty-sixth wave (2026-10-31)
     "smilodon": "smilodon_nekomata", "caribou": "caribou_centaur", "emu": "emu_harpy", "macaw": "macaw_harpy", "roc": "roc_harpy", "ziz": "ziz_harpy",
     "bennu": "bennu_harpy", "garuda": "garuda_harpy", "la_lechuza": "lechuza_harpy", "alkonost": "alkonost_harpy", "lilith": "lilith_devil",
@@ -125,6 +128,7 @@ EXCLUDED = {
     "peacepipe_bison": "set aside: a sacred pipe of living Plains traditions",
     "alux": "set aside: living Maya tradition", "curupira": "set aside: living Indigenous Brazilian tradition",
     "mapinguari": "set aside: living Indigenous Brazilian tradition", "ypupiara": "set aside: living Indigenous Brazilian tradition",
+    "adaro": "set aside: living Solomon Islands tradition", "pishtaco": "set aside: living Andean tradition",
     "horned_serpent_uktena": "set aside: living Cherokee tradition", "terniq": "set aside: an Inuit name",
 }
 

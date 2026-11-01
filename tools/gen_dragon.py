@@ -85,6 +85,16 @@ SPECIES = {
                                extra=dict(frill="#f0a0c0", frill_edge="#f8f0d0", horn="#f8f0d0")),
                   "purple": dict(HAIR="#6a4aa8", FUR="#8a6ac8", LIGHT="#e8dcf8", MARK="#3a2a6a", CLOTH="#3a2a6a",
                                  extra=dict(frill="#8a6ac8", frill_edge="#f8e070", horn="#f0e0c0"))}),
+    # twenty-seventh wave: Bahamut, the king of dragons, drawn soft and round: pale blue, curled horns, fins for ears, a pale belly, dragon wings; she flies
+    "bahamut_dragon": dict(
+        build="curvy", outfit=dict(top=["bandeau"], bottom="shorts", colors=dict(cloth2="#8ab4e0")), hair="wavy", bangs="swept", ears="fin",
+        legs="scales", foot="claw", tail=DRAGON_TAIL, tail_look="spade", tail_rest=[(-30, 0, 0), (8, 0, 0), (8, 0, 0), (6, 0, 0)], horns="dragon", wings="dragon", flies=True,
+        pal=dict(SKIN=skin("#d8e8f8"), HAIR="#b8d4f0", FUR="#a8c8ec", LIGHT="#f0f6fc", MARK="#5a84b8", EYE="#2a4a8a", CLOTH="#8ab4e0", TRIM="#f0f6fc",
+                 extra=dict(horn="#5a84b8", wing="#a8c8ec", wing_bone="#5a84b8", tail_col="#a8c8ec")),
+        variants={"gold": dict(SKIN=skin("#f8ecc8"), HAIR="#f0d890", FUR="#e8c870", LIGHT="#fff8e0", MARK="#a87a2a", EYE="#8a4a14", CLOTH="#e8c870", extra=dict(horn="#a87a2a", wing="#e8c870", wing_bone="#a87a2a", tail_col="#e8c870")),
+                  "black": dict(SKIN=skin("#7a7a8a"), HAIR="#2a2a34", FUR="#3a3a48", LIGHT="#a8a8b8", MARK="#14141c", EYE="#e8c040", CLOTH="#2a2a34", extra=dict(horn="#14141c", wing="#3a3a48", wing_bone="#14141c", tail_col="#3a3a48")),
+                  "green": dict(SKIN=skin("#d8f0dc"), HAIR="#a8dcb4", FUR="#90d0a4", LIGHT="#f0fcf4", MARK="#3a8a5a", EYE="#1e5a3a", CLOTH="#90d0a4", extra=dict(horn="#3a8a5a", wing="#90d0a4", wing_bone="#3a8a5a", tail_col="#90d0a4")),
+                  "red": dict(SKIN=skin("#f8d8d0"), HAIR="#e89a8a", FUR="#e0806a", LIGHT="#fcecE8", MARK="#a83a2a", EYE="#7a1e14", CLOTH="#e0806a", extra=dict(horn="#a83a2a", wing="#e0806a", wing_bone="#a83a2a", tail_col="#e0806a"))}),
     # twentieth wave: the hairypterix, a shaggy blue pterosaur: great membrane wings, a long head crest swept back, yellow claws
     "hairypterix_dragon": dict(
         build="slim", outfit=dict(top=["sports"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#1a2a6a")), hair="shaggy", bangs="jagged",

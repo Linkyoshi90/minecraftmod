@@ -28,6 +28,16 @@ SPECIES = {
                   "red": dict(FUR="#d8864a", HAIR="#e09058", LIGHT="#fff0e0", MARK="#6a3018", CLOTH="#c8683a", extra=dict(cloth2="#e8c8a0")),
                   "cream": dict(FUR="#fbf2e2", HAIR="#fff8ee", LIGHT="#ffffff", MARK="#b89a78", CLOTH="#2a4ac8", EYE="#3a8ab8"),
                   "dusk": dict(FUR="#5a3a8a", HAIR="#6a4a9a", LIGHT="#e0d0ff", MARK="#2a1a4a", CLOTH="#1e2a5a", extra=dict(cloth2="#1e2a5a"))}),
+    # twenty-seventh wave: the kitsune obaa, the old fox-wife of the tales: white hair and white tails, gold eyes, red berries and ribbons, a lilac kimono
+    "obaa_kitsune": dict(
+        build="curvy", outfit=dict(top=["kimono"], extras=["pearls"], colors=dict(kimono="#c8b8e8", kimono_trim="#f4f0f8", obi="#c82a2a")),
+        ears="fox", hair="flowing", stockings=False, tip="light",
+        pal=dict(SKIN=skin("fair"), HAIR="#f0eee8", FUR="#ece8e0", LIGHT="#ffffff", MARK="#a8a098", EYE="#e0a030", CLOTH="#c8b8e8", TRIM="#c82a2a",
+                 facemark="fox"),
+        variants={"gold": dict(FUR="#e8c870", HAIR="#f4e0a0", MARK="#a87a2a", EYE="#c82a2a"),
+                  "black": dict(FUR="#2a2830", HAIR="#1a181e", LIGHT="#8a8890", MARK="#0a080e", EYE="#e8c040", CLOTH="#3a2a4a"),
+                  "red": dict(FUR="#c8482a", HAIR="#e8d8c8", MARK="#7a2412", EYE="#e8c040", CLOTH="#f4ece0"),
+                  "silver": dict(FUR="#a8acb8", HAIR="#d8dce4", MARK="#5a5e6a", EYE="#5a8ac8", CLOTH="#3a4a7a")}),
     # fifteenth wave: the huli jing, a silver-blue fox spirit with long black hair (nine tails, the game shows them all)
     "huli_jing_kitsune": dict(
         build="slim", outfit=dict(top=["kimono"], extras=["armlets"], colors=dict(kimono="#c83a3a", kimono_trim="#e8c050", obi="#1e1c22")),
@@ -70,7 +80,9 @@ SPECIES = {
                   "platinum": dict(FUR="#dcdce0", HAIR="#ececf0", LIGHT="#ffffff", MARK="#8a8a92", CLOTH="#6a5aa0"),
                   "amber": dict(FUR="#e0a868", HAIR="#e4b070", MARK="#6a4a30", CLOTH="#a04a6a"),
                   # homage (2026-10-30): Ninetales: cream fur and hair, red eyes, nine tails (Kitsune shows nine)
-                  "nine_cream": dict(FUR="#f0e4c0", HAIR="#f4e8c8", LIGHT="#fff8e8", MARK="#e8c888", EYE="#c82a2a", CLOTH="#e8a040", TRIM="#f8e8c0")}),
+                  "nine_cream": dict(FUR="#f0e4c0", HAIR="#f4e8c8", LIGHT="#fff8e8", MARK="#e8c888", EYE="#c82a2a", CLOTH="#e8a040", TRIM="#f8e8c0"),
+                  # homage (2026-10-31): Renamon (Digimon): golden fur, a white front, long purple gloves' colour on her clothes
+                  "gold_ninja": dict(FUR="#e8c030", HAIR="#f0d040", LIGHT="#ffffff", MARK="#8a6a14", EYE="#3a7ac8", CLOTH="#6a3a9a", TRIM="#f4f4f6")}),
     "arctic_kitsune": dict(
         build="petite", outfit=dict(top=["halter", "capelet"], bottom="wrap_skirt", extras=["pearls"], colors=dict(cloth2="#dfe8f0")),
         ears="round", hair="shaggy", stockings=False, tip="light",

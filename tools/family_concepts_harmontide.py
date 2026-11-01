@@ -3115,6 +3115,123 @@ for _fid, _entries in TWENTY_SIXTH.items():
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
 
+# twenty-seventh wave (2026-10-31): Bahamut, Cetus, the demon, the Fury, the Charro Negro, Koschei, La Mano Peluda, the Gaitress, the bloodhound, the shedim, Anzu and the kitsune obaa
+TWENTY_SEVENTH = {
+    "dragon": [
+        (dict(id="bahamut_dragon", name="Bahamut", group="High peaks", tag="Regal · gentle", height=2.2,
+              biomes=["jagged_peaks", "frozen_peaks", "stony_peaks"], temperament="Regal, gentle",
+              ecology="The king of dragons, far softer than the stories say: pale blue and round, curled horns, fins for ears. She flies.",
+              interaction="Prismarine crystals and cooked salmon.",
+              signature=("Judgement", "Befriended, once a day a beam of light strikes down on every monster around her friend."),
+              danger="High.",
+              variants=[("blue", "Blue (default)", "Pale blue"), ("gold", "Gold", "Gold"), ("black", "Black", "Black"), ("green", "Green", "Green"), ("red", "Red", "Red")]),
+         {"Habitat": "High peaks", "Signature": "A daily beam of light", "Danger": "High"})],
+    "merfolk": [
+        (dict(id="cetus_mermaid", name="Cetus", group="Deep oceans", tag="Huge · hungry", height=3.0,
+              biomes=["deep_ocean", "deep_cold_ocean", "deep_lukewarm_ocean"], temperament="Huge, hungry",
+              ecology="The sea monster of the Greek myths: a vast, soft, pale whale of a girl with a great flat fluke. Whatever she opens her mouth for is gone.",
+              interaction="Cod, salmon and tropical fish.",
+              signature=("Whole", "Befriended, she swallows drowned and guardians near her friend whole, and coughs up what they carried."),
+              danger="High.",
+              variants=[("blue", "Blue (default)", "Pale blue"), ("bw", "Black and white", "Black and white"), ("grey", "Grey", "Grey"), ("white", "White", "White"), ("deep", "Deep", "Deep blue")]),
+         {"Habitat": "Deep oceans", "Signature": "Swallows sea monsters", "Danger": "High"})],
+    "devil": [
+        (dict(id="demon_devil", name="Demon", group="Dark forests and the Nether", tag="Sly · obliging", height=1.75,
+              biomes=["dark_forest", "crimson_forest", "soul_sand_valley"], temperament="Sly, obliging",
+              ecology="The plain, old-fashioned kind: small horns, furred legs, little wings and a spade tail. She is always ready to make a deal.",
+              interaction="Nether wart and gold nuggets.",
+              signature=("Pact", "Befriended, crouch and offer an empty hand: she takes 3 hearts and gives you half a minute of great strength."),
+              danger="Moderate.",
+              variants=[("blue", "Blue (default)", "Blue-grey"), ("red", "Red", "Red"), ("black", "Black", "Black"), ("green", "Green", "Green"), ("purple", "Purple", "Purple")]),
+         {"Habitat": "Dark forests", "Signature": "Trades hearts for strength", "Danger": "Moderate"}),
+        (dict(id="fury_devil", name="Fury", group="Ruined places", tag="Relentless · just", height=1.9,
+              biomes=["soul_sand_valley", "basalt_deltas", "dark_forest"], temperament="Relentless, just",
+              ecology="The Erinys of Greek myth, who hounds the guilty to the end of the earth: ink-dark clothes, wild hair, great wings of cold violet flame. She flies.",
+              interaction="Ghast tears and blaze powder.",
+              signature=("Hounded", "Whoever kills a villager or someone's pet near her is marked, and she does not stop until they are dead. She spares nobody, not even her friend."),
+              danger="Very high.",
+              variants=[("blue", "Blue (default)", "Blue and violet flame"), ("red", "Red", "Red flame"), ("black", "Black", "White flame"), ("green", "Green", "Green flame"), ("white", "White", "Pale flame")]),
+         {"Habitat": "Ruined places", "Signature": "Hounds the guilty", "Danger": "Very high"})],
+    "rider": [
+        (dict(id="charro_negro_rider", name="Charro Negro", group="Lonely roads", tag="Courteous · patient", height=1.8,
+              biomes=["desert", "badlands", "wooded_badlands", "savanna"], temperament="Courteous, patient",
+              ecology="The horsewoman in black of Mexican legend, who rides the empty roads at night offering money to anyone desperate enough. It must always be paid back.",
+              interaction="Emeralds, and anything cooked.",
+              signature=("The loan", "Befriended, crouch with an empty hand: she lends you 8 emeralds. Bring back 16 within three days, or she comes to collect."),
+              danger="High.",
+              variants=[("black", "Black (default)", "Black and gold"), ("silver", "Silver", "Black and silver"), ("red", "Red", "Deep red"), ("bone", "Bone", "A pale face"), ("green", "Green", "Dark green")]),
+         {"Habitat": "Lonely roads", "Signature": "Lends emeralds at a price", "Danger": "High"})],
+    "undead": [
+        (dict(id="koschei_undead", name="Koschei", group="Cold forests", tag="Patient · deathless", height=1.95,
+              biomes=["old_growth_spruce_taiga", "snowy_taiga", "taiga"], temperament="Patient, deathless",
+              ecology="Koschei the Deathless of the Russian tales: a bone beak under a tall kokoshnik, long blue robes, chains hung all about her and a lantern at her hand.",
+              interaction="Eggs, and rotten flesh.",
+              signature=("Chains", "Befriended, she chains the monsters near her friend to the spot: they can go no further than a few steps."),
+              danger="High.",
+              variants=[("blue", "Blue (default)", "Blue robes"), ("black", "Black", "Black robes"), ("gold", "Gold", "Gold robes"), ("green", "Green", "Green robes"), ("red", "Red", "Red robes")]),
+         {"Habitat": "Cold forests", "Signature": "Chains monsters in place", "Danger": "High"}),
+        (dict(id="mano_peluda_undead", name="La Mano Peluda", group="Old houses and dark ground", tag="Vicious · quick", height=0.6,
+              biomes=["dark_forest", "swamp", "desert"], temperament="Vicious, quick",
+              ecology="The hairy hand of Mexican legend, from under the bed: a pale fist under a shaggy pelt with a bone sticking out of the wrist. It runs on its fingers and climbs walls.",
+              interaction="Rotten flesh and bones.",
+              signature=("Lunge", "Befriended, it leaps on the face of a monster near its friend, which forgets what it was doing."),
+              danger="Moderate.",
+              variants=[("blue", "Blue (default)", "Blue-grey fur"), ("black", "Black", "Black fur"), ("green", "Green", "Green fur"), ("purple", "Purple", "Purple fur"), ("red", "Red", "Red fur")]),
+         {"Habitat": "Dark ground", "Signature": "Leaps at faces", "Danger": "Moderate"}),
+        (dict(id="gaitress_undead", name="Gaitress", group="Plains and roads", tag="Tireless · silent", height=2.6,
+              biomes=["plains", "sunflower_plains", "savanna"], temperament="Tireless, silent",
+              ecology="Four long legs and a swimsuit, and nothing else: two to walk on, two crossed up in the air where a head would be. Nobody knows who she is walking to.",
+              interaction="Sugar and rabbit's feet.",
+              signature=("Stride", "Very fast, with a kick that throws things. Befriended, her friend runs faster beside her."),
+              danger="Moderate.",
+              variants=[("blue", "Blue (default)", "A blue swimsuit"), ("black", "Black", "A black swimsuit"), ("green", "Green", "A green swimsuit"), ("purple", "Purple", "A purple swimsuit"), ("red", "Red", "A red swimsuit"), ("white", "White", "A white swimsuit")]),
+         {"Habitat": "Plains and roads", "Signature": "Runs, and kicks", "Danger": "Moderate"})],
+    "canid": [
+        (dict(id="bloodhound_canid", name="Bloodhound", group="Dark forests", tag="Grinning · dogged", height=1.9,
+              biomes=["dark_forest", "swamp", "deep_dark"], temperament="Grinning, dogged",
+              ecology="Matted fur sewn up with black stitches, long black hair, and a wide human grin with blood on its chin. She has never yet lost a scent.",
+              interaction="Raw meat, the rawer the better.",
+              signature=("The scent", "Befriended, she tracks whatever last hurt her friend, however far it ran, or else the nearest thing hiding from them, and shows them where it went."),
+              danger="High.",
+              variants=[("brown", "Brown (default)", "Matted brown"), ("grey", "Grey", "Grey"), ("black", "Black", "Black"), ("red", "Red", "Red"), ("pale", "Pale", "Pale")]),
+         {"Habitat": "Dark forests", "Signature": "Tracks what hurt her friend", "Danger": "High"})],
+    "centaur": [
+        (dict(id="shedim_centaur", name="Shedim", group="Lonely places", tag="Timid · uncanny", height=1.6,
+              biomes=["desert", "meadow", "old_growth_birch_forest"], temperament="Timid, uncanny",
+              ecology="A spirit of Jewish lore, drawn as a soft deer-fox: long ears, little antlers, a bushy tail. By night you cannot see her at all.",
+              interaction="Sweet berries and honey.",
+              signature=("Elsewhere", "Unseen at night. Befriended, when her friend is badly hurt with a monster close, she takes them away from it in a blink."),
+              danger="None.",
+              variants=[("blue", "Blue (default)", "Blue"), ("gold", "Gold", "Golden yellow"), ("red", "Red", "Red"), ("violet", "Violet", "Violet"), ("white", "White", "White")]),
+         {"Habitat": "Lonely places", "Signature": "Blinks her friend to safety", "Danger": "None"}),
+        (dict(id="anzu_centaur", name="Anzu", group="Mountain crags", tag="Thieving · stormy", height=2.2,
+              biomes=["windswept_hills", "stony_peaks", "savanna_plateau"], temperament="Thieving, stormy",
+              ecology="The storm-bird of Sumerian myth, who stole the Tablet of Destinies from the gods: a blue lioness with feathered wings, long blue hair and gold at her brow.",
+              interaction="Gold nuggets and raw beef.",
+              signature=("Snatch", "Befriended, she snatches the weapon out of a monster's hand and steals its blessings for her friend."),
+              danger="High.",
+              variants=[("blue", "Blue (default)", "Blue"), ("yellow", "Yellow", "Yellow"), ("red", "Red", "Red"), ("black", "Black", "Black"), ("white", "White", "White")]),
+         {"Habitat": "Mountain crags", "Signature": "Steals weapons and blessings", "Danger": "High"})],
+    "kitsune": [
+        (dict(id="obaa_kitsune", name="Kitsune Obaa", group="Old forests", tag="Knowing · amused", height=1.7,
+              biomes=["cherry_grove", "old_growth_birch_forest", "taiga"], temperament="Knowing, amused",
+              ecology="The old fox-wife of the tales, not nearly as old as she should look: white hair, nine white tails, red berries in her hair. Nothing fools her, and she fools everything.",
+              interaction="Fried tofu has not reached this world: cooked chicken and sweet berries.",
+              signature=("Fox-glamour", "Befriended, once a day, when monsters close in on her friend, she hides them in a glamour and the monsters lose interest."),
+              danger="Low.",
+              variants=[("white", "White (default)", "White"), ("gold", "Gold", "Gold"), ("black", "Black", "Black"), ("red", "Red", "Red"), ("silver", "Silver", "Silver")]),
+         {"Habitat": "Old forests", "Signature": "Hides her friend once a day", "Danger": "Low"})],
+}
+
+for _fid, _entries in TWENTY_SEVENTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(s["id"] == _species["id"] for s in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 # homage variants of 2026-10-28 (POP_CULTURE_VARIANTS.md): appended after every wave, so every species exists by now
 for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, a black bodysuit with a pink heart, white gloves and boots")),
                        ("ika_mollusk", ("ink_kid", "Ink Kid", "Bright orange tentacle hair, a white tee and black shorts")),
@@ -3165,7 +3282,15 @@ for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, 
                        ("cactus_flora", ("needle_runner", "Needle Runner", "Bright green, dark eyes")),
                        ("pegasus_centaur", ("angel_guard", "Angel Guard", "White and gold, dark hair")),
                        ("living_doll_undead", ("music_box", "Music Box", "A white face, a black body, purple eyes")),
-                       ("dolphin_mermaid", ("star_song", "Star Song", "Grey-blue, a pale belly"))]:
+                       ("dolphin_mermaid", ("star_song", "Star Song", "Grey-blue, a pale belly")),
+                       # twenty-seventh wave
+                       ("needlehog_rodent", ("blue_blur", "Blue Blur", "Blue quills, a tan belly, red clothes")),
+                       ("blaze_cat_nekomata", ("royal_flame", "Royal Flame", "Lilac fur, a white coat, pink flames")),
+                       ("grizzly_canid", ("backpack_bear", "Backpack Bear", "Warm brown, yellow shorts, a blue pack")),
+                       ("wolf_canid", ("aura_guardian", "Aura Guardian", "Blue and black, a cream chest")),
+                       ("red_kitsune", ("gold_ninja", "Gold Ninja", "Golden fur, a white front, purple clothes")),
+                       ("succubus_devil", ("night_heiress", "Night Heiress", "Green hair, black, purple wings and stockings")),
+                       ("undine_slime", ("copy_blob", "Copy Blob", "Soft pink, dot eyes"))]:
     for _fam in C.FAMILIES:
         for _s in _fam["species"]:
             if _s["id"] == _sid and all(v[0] != _variant[0] for v in _s["variants"]):

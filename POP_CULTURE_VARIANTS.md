@@ -55,6 +55,15 @@ the homage set is keyed by name.
 | Dullahan (`dullahan_undead`) | Celty Sturluson (Durarara!!) | `headless_rider` ✅ | Black rider's suit with yellow trim, a yellow helmet with cat ears held under her arm, black shadow wisps at the neck | ★★ (anime; the helmet sits over the head she carries, drawn only on her) |
 | Dullahan (`dullahan_undead`) | Lala (Monster Musume) | `death_envoy` ✅ | Silver-white hair, red eyes, a black and red gothic dress with a high collar and cape, blue flame at the neck, a scythe | ★★★ (already a dullahan; the scythe is in her free hand, drawn only on her) |
 
+| Needlehog (`needlehog_rodent`) | Sonic | `blue_blur` ✅ | Blue quills and hair, a tan belly, green eyes, red clothes | ★★ |
+| Blaze cat (`blaze_cat_nekomata`) | Blaze the Cat (Sonic) | `royal_flame` ✅ | Lilac fur, a white and magenta coat, gold eyes, pink flames | ★★★ |
+| Grizzly (`grizzly_canid`) | Banjo (Banjo-Kazooie) | `backpack_bear` ✅ | Warm brown, yellow shorts, a blue pack | ★★★ |
+| Wolf (`wolf_canid`) | Lucario (Pokémon) | `aura_guardian` ✅ | Blue and black fur, a cream chest, red eyes | ★★ |
+| Red kitsune (`red_kitsune`) | Renamon (Digimon) | `gold_ninja` ✅ | Golden fur, a white front, purple clothes | ★★ |
+| Succubus (`succubus_devil`) | Morrigan (Darkstalkers) | `night_heiress` ✅ | Green hair, a black leotard, purple wings and stockings | ★★★ |
+| Undine (`undine_slime`) | Ditto (Pokémon) | `copy_blob` ✅ | Soft pink, dot eyes | ★★ |
+| Emu (harpy) | Chocobo (Final Fantasy) | `golden_runner` ✅ | All bright yellow | ★★★ (harpy: own variant code) |
+
 ## Gregory Horror Show: on the house mouse
 
 The house mouse (`house_mouse_rodent`, twentieth wave) came in for these three: big round ears, a long bare tail and a

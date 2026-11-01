@@ -163,7 +163,9 @@ SPECIES = {
         variants={"violet": dict(SKIN=skin("lilac"), HAIR="#4a2a6a", extra=dict(horn="#1a0e24", wing="#5a2a8a", wing_bone="#1a0e24", tail_col="#1a0e24", stocking="#1a0e24", boot="#1a0e24")),
                   "rose": dict(HAIR="#f0a0b8", CLOTH="#c83a6a", extra=dict(horn="#f8e0e8", wing="#e87aa0", wing_bone="#8a2a4a", tail_col="#c83a6a", stocking="#c83a6a", boot="#c83a6a")),
                   "night": dict(HAIR="#e8e8f0", CLOTH="#141418", TRIM="#c8c8d8", extra=dict(horn="#c8c8d8", wing="#2a2a34", wing_bone="#0e0e12", tail_col="#141418", stocking="#141418", boot="#141418")),
-                  "azure": dict(SKIN=skin("blue"), HAIR="#1a2a5a", extra=dict(horn="#0e1430", wing="#2a4a9a", wing_bone="#0e1430", tail_col="#0e1430", stocking="#0e1430", boot="#0e1430"))}),
+                  "azure": dict(SKIN=skin("blue"), HAIR="#1a2a5a", extra=dict(horn="#0e1430", wing="#2a4a9a", wing_bone="#0e1430", tail_col="#0e1430", stocking="#0e1430", boot="#0e1430")),
+                  # homage (2026-10-31): Morrigan (Darkstalkers): long green hair, a black leotard, purple stockings and wings
+                  "night_heiress": dict(HAIR="#2aa86a", FUR="#2aa86a", CLOTH="#141418", TRIM="#7a3ac8", EYE="#2aa86a", extra=dict(horn="#141418", wing="#5a2a9a", wing_bone="#1e1430", tail_col="#141418", stocking="#7a3ac8", boot="#141418"))}),
     "greater_devil": dict(
         build="strong", outfit=dict(top=["harness", "bandeau"], bottom="loincloth", extras=["pauldron", "bracers"], colors=dict(cloth2="#1a0a0a")),
         hair="mane", bangs="jagged", ears="elf", legs="scales", foot="hoof", tail=[(1, 1, 5), (.75, .75, 5), (2.5, 2.5, .5)], tail_look="spade",
@@ -621,6 +623,26 @@ SPECIES["wrath_devil"] = dict(
               "green": dict(extra=dict(horn="#c0f8a0", boot="#1a6a2a", fire=("#06381a", "#0e8a30", "#2ad04a", "#a0f850", "#f4ffd8"))),
               "violet": dict(extra=dict(horn="#e0b0f8", boot="#4a1a8a", fire=("#1e0640", "#5a18b0", "#a03af0", "#e88af8", "#fff0ff"))),
               "white": dict(extra=dict(horn="#ffffff", boot="#8a8a94", fire=("#6a6058", "#c8a878", "#f8e0a0", "#fff8e0", "#ffffff")))})
+# twenty-seventh wave: the plain demon: small dark horns, furred legs, little wings and a spade tail, blue-grey from head to foot
+SPECIES["demon_devil"] = dict(
+    build="curvy", outfit=dict(top=["bandeau"], bottom="shorts", colors=dict(cloth2="#3a4a7a")),
+    hair="wavy", bangs="swept", ears="elf", legs="fur", foot="hoof", tail=SPADE, tail_look="spade", tail_rest=SPADE_REST, horns="greater", wings="devil_small",
+    pal=dict(SKIN=skin("#a8b8d8"), HAIR="#7a94c8", FUR="#7a94c8", LIGHT="#d0dcf0", MARK="#2a3a6a", EYE="#2a4a9a", CLOTH="#3a4a7a", TRIM="#d0dcf0",
+             pupil=(1.6, 2.4), extra=dict(horn="#2a3a6a", wing="#3a4a7a", wing_bone="#1e2a4a", tail_col="#2a3a6a", hoof="#1e2a4a")),
+    variants={"red": dict(SKIN=skin("#e8907a"), HAIR="#7a1e1e", FUR="#a83a2a", LIGHT="#f8c8b8", MARK="#3a0e0e", EYE="#e8c040", CLOTH="#3a0e0e", extra=dict(horn="#2a0a0a", wing="#7a1e1e", wing_bone="#2a0a0a", tail_col="#3a0e0e", hoof="#2a0a0a")),
+              "black": dict(SKIN=skin("#5a5a68"), HAIR="#1a1a22", FUR="#26262e", LIGHT="#8a8a98", MARK="#0e0e12", EYE="#e83a3a", CLOTH="#14141a", extra=dict(horn="#0e0e12", wing="#26262e", wing_bone="#0e0e12", tail_col="#0e0e12", hoof="#0e0e12")),
+              "green": dict(SKIN=skin("#a8c8a0"), HAIR="#2a5a3a", FUR="#3a7a4a", LIGHT="#d8ecd0", MARK="#14361e", EYE="#c8e040", CLOTH="#14361e", extra=dict(horn="#14361e", wing="#2a5a3a", wing_bone="#14361e", tail_col="#14361e", hoof="#14361e")),
+              "purple": dict(SKIN=skin("#c0a8e0"), HAIR="#5a3a9a", FUR="#6a4aa8", LIGHT="#e4d8f4", MARK="#2a1a4a", EYE="#e8a0f8", CLOTH="#2a1a4a", extra=dict(horn="#2a1a4a", wing="#5a3a9a", wing_bone="#2a1a4a", tail_col="#2a1a4a", hoof="#2a1a4a"))})
+# twenty-seventh wave: the Fury, the Erinys of Greek myth: ink-dark clothes, wild hair, and great wings of violet flame that glow; she flies
+SPECIES["fury_devil"] = dict(
+    build="athletic", outfit=dict(top=["corset"], bottom="shorts", extras=["bracers"], colors=dict(cloth2="#141430", leather="#141430")),
+    hair="mane", bangs="jagged", ears="elf", legs="stockings", foot="shoe", wings="feather", wing_scale=1.5, flies=True, grin=True, glow=["fwing_a", "fwing_b"], glow_boost=1.2,
+    pal=dict(SKIN=skin("#b8b0f0"), HAIR="#2a2aa8", FUR="#2a2aa8", LIGHT="#e0d8ff", MARK="#14145a", EYE="#e8a0ff", CLOTH="#141430", TRIM="#a03af0",
+             pupil=(1.6, 2.4), extra=dict(wing="#a03af0", wing_tip="#3a48f0", stocking="#141430", boot="#141430")),
+    variants={"red": dict(SKIN=skin("#f0b8a8"), HAIR="#a81e1e", FUR="#a81e1e", MARK="#5a0e0e", EYE="#f8d040", TRIM="#f0701e", extra=dict(wing="#f0701e", wing_tip="#c81e1e", stocking="#2a0e0e", boot="#2a0e0e")),
+              "black": dict(SKIN=skin("#8a8a98"), HAIR="#14141a", FUR="#14141a", MARK="#08080c", EYE="#e8e8f0", TRIM="#e8e8f0", extra=dict(wing="#c8c8d8", wing_tip="#3a3a48", stocking="#08080c", boot="#08080c")),
+              "green": dict(SKIN=skin("#b0e0c0"), HAIR="#14703a", FUR="#14703a", MARK="#0a3a1e", EYE="#c8f840", TRIM="#40e070", extra=dict(wing="#40e070", wing_tip="#14a0a0", stocking="#0a2a14", boot="#0a2a14")),
+              "white": dict(SKIN=skin("pale"), HAIR="#e8e8f8", FUR="#e8e8f8", MARK="#8a8aa8", EYE="#5a4ac8", TRIM="#a8c8f8", CLOTH="#e8e8f0", extra=dict(wing="#d8e8ff", wing_tip="#8ab8f8", stocking="#c8c8d8", boot="#c8c8d8"))})
 FLAMES = [("hair_wflame1", "body", -5.5, 21, 0, 16), ("hair_wflame2", "body", 5.5, 21, 0, -16), ("hair_wflame3", "body", 0, 19, 3, 0),
           ("hair_wflame4", "body", -4.0, 12, 0, 22), ("hair_wflame5", "body", 4.0, 12, 0, -22)]
 _declare3, _paint3, _build3, _extra3 = declare_hook, paint_hook, build_hook, anim_extra

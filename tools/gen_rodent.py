@@ -113,7 +113,9 @@ SPECIES = {
                   "albino": dict(HAIR="#f0ece6", FUR="#f8f4ee", LIGHT="#ffffff", MARK="#c8c0b8", EYE="#d84a5a", CLOTH="#c8a8d8",
                                  extra=dict(quill="#e8e2da", quill_tip="#ffffff")),
                   "cinnamon": dict(HAIR="#a85a2a", FUR="#d8a878", MARK="#6a3418", CLOTH="#5a8a5a", extra=dict(quill="#8a4a22", quill_tip="#f0d0a8")),
-                  "dark": dict(HAIR="#2a2220", FUR="#6a5a50", MARK="#141010", CLOTH="#a84a4a", extra=dict(quill="#1e1816", quill_tip="#a8a098"))}),
+                  "dark": dict(HAIR="#2a2220", FUR="#6a5a50", MARK="#141010", CLOTH="#a84a4a", extra=dict(quill="#1e1816", quill_tip="#a8a098")),
+                  # homage (2026-10-31): Sonic: blue quills and hair, a tan belly, green eyes, red shoes' colour on her clothes
+                  "blue_blur": dict(HAIR="#1e4ad8", FUR="#2a5ae8", LIGHT="#f0d8b0", MARK="#142a8a", EYE="#2a9a4a", CLOTH="#d82a2a", TRIM="#f4f4f6", extra=dict(quill="#1e4ad8", quill_tip="#3a6af0"))}),
     # eleventh wave: the coatimano, a coati: a long ringed tail held high and a long nose
     "coatimano_rodent": dict(
         build="slim", outfit=dict(top=["halter", "vest"], bottom="shorts", extras=["satchel"], colors=dict(cloth2="#3a2a1e", leather="#7a5a3a")),

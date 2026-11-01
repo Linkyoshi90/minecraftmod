@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_gaitress_undead",
+  "spawners": {
+    "type": "monstergirls:gaitress_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

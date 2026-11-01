@@ -75,7 +75,7 @@ public final class ModGirls {
     /** Species that lava and fire cannot hurt. */
     public static boolean fireImmune(GirlSpecies s) {
         return switch (s.id()) {
-            case "magma_slime", "volcano_jackalope", "blood_elf", "salamander_lizardfolk", "will_o_wisp_undead", "greater_devil", "lesser_devil", "wrath_devil",
+            case "magma_slime", "volcano_jackalope", "blood_elf", "salamander_lizardfolk", "will_o_wisp_undead", "greater_devil", "lesser_devil", "wrath_devil", "fury_devil",
                  "wyrm_dragon" -> true;
             default -> false;
         };

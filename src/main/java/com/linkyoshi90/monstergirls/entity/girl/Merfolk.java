@@ -137,6 +137,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        if (s == GirlSpecies.CETUS_MERMAID) return girlAttributes(70, 0.26, 8);
         return switch (s) {
             case LEVIATHAN_MERMAID -> girlAttributes(70, 0.28, 8);
             case SAWFIN_MERMAID -> girlAttributes(24, 0.25, 5);
@@ -429,6 +430,21 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         return at;
     }
 
+    /** Cetus swallows the nearest drowned or guardian within 10 of her friend, whole; its drops are left in the water. 1 when she does, 0 with nothing to eat, -1 without a friend. */
+    public int swallow(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster prey = null;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(10),
+                m -> m.isAlive() && (m instanceof net.minecraft.world.entity.monster.Drowned || m.getType() == net.minecraft.world.entity.EntityType.GUARDIAN))) {
+            if (prey == null || m.distanceToSqr(friend) < prey.distanceToSqr(friend)) prey = m;
+        }
+        if (prey == null) return 0;
+        prey.hurt(this.damageSources().mobAttack(this), 1000.0F);
+        this.playSound(net.minecraft.sounds.SoundEvents.GENERIC_EAT, 1.5F, 0.4F);
+        return 1;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
@@ -436,6 +452,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         if (this.species == GirlSpecies.WALRUS_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel floe && !this.isBaby() && this.tickCount % 20 == 0) this.blubber(floe);
         if (this.species == GirlSpecies.ANOMALOCARIS_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel deep && !this.isBaby() && this.tickCount % 40 == 0) this.raptorGrasp(deep);
         if (this.species == GirlSpecies.PIRANHA_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel river && !this.isBaby() && this.tickCount % 20 == 0) this.frenzy(river);
+        if (this.species == GirlSpecies.CETUS_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel deep && !this.isBaby() && this.tickCount % 60 == 0) this.swallow(deep);
         if (this.species == GirlSpecies.MOSASAURUS_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel sea && !this.isBaby() && this.tickCount % 10 == 0) this.tow(sea);
         if (this.species == GirlSpecies.FISHMAN_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel reef && !this.isBaby() && this.tickCount % 40 == 0) this.disarm(reef);
         if (this.species == GirlSpecies.DOGGO_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel surf && !this.isBaby() && this.tickCount % 20 == 0) this.lifeguard(surf);

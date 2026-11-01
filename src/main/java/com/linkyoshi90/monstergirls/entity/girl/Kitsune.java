@@ -82,6 +82,7 @@ public class Kitsune extends AbstractMonsterGirl {
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        if (s == GirlSpecies.OBAA_KITSUNE) return girlAttributes(24, 0.3, 4);
         if (s == GirlSpecies.DUNEFENNEC_KITSUNE) return girlAttributes(14, 0.34, 2);
         return girlAttributes(s == GirlSpecies.FENNEC_KITSUNE ? 12 : s == GirlSpecies.WATTLEFOX_KITSUNE ? 18 : s == GirlSpecies.HULI_JING_KITSUNE ? 22 : 16, s == GirlSpecies.CORSAC_KITSUNE ? 0.33 : 0.3, 3);
     }
@@ -112,7 +113,7 @@ public class Kitsune extends AbstractMonsterGirl {
     /** One wild kitsune in four is an older fox spirit, born with two or three split tails (one in twenty-five: up to five). */
     @Override
     protected int rollTails(net.minecraft.util.RandomSource random) {
-        if (this.species == GirlSpecies.HULI_JING_KITSUNE) return 9;            // a thousand years old: always all nine
+        if (this.species == GirlSpecies.HULI_JING_KITSUNE || this.species == GirlSpecies.OBAA_KITSUNE) return 9;   // a thousand years old: always all nine
         if (random.nextInt(25) == 0) return 4 + random.nextInt(2);
         return random.nextInt(4) == 0 ? 2 + random.nextInt(2) : 1;
     }
@@ -377,6 +378,22 @@ public class Kitsune extends AbstractMonsterGirl {
         return true;
     }
 
+    /** Once a day, with two or more monsters after her friend, the kitsune obaa hides them: Invisibility for 10 seconds, and the monsters forget them. Returns how many gave up, -1 without a friend. */
+    public int glamour(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        long day = level.getDayTime() / 24000L;
+        if (this.getPersistentData().contains("LastGlamour") && this.getPersistentData().getLong("LastGlamour") == day) return 0;
+        var after = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(16), m -> m.getTarget() == friend);
+        if (after.size() < 2) return 0;
+        this.getPersistentData().putLong("LastGlamour", day);
+        friend.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 200, 0));
+        for (var m : after) m.setTarget(null);
+        level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, friend.getX(), friend.getY() + 1.0, friend.getZ(), 16, 0.5, 0.7, 0.5, 0.02);
+        this.playSound(SoundEvents.FOX_AMBIENT, 1.0F, 0.8F);
+        return after.size();
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
@@ -395,6 +412,7 @@ public class Kitsune extends AbstractMonsterGirl {
             if (this.tickCount % 2400 == 0 && this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32) != null) this.plantAcacia(server);
         }
         if (this.species == GirlSpecies.HULI_JING_KITSUNE && this.tickCount % 40 == 0) this.charm(server);
+        if (this.species == GirlSpecies.OBAA_KITSUNE && this.tickCount % 20 == 0) this.glamour(server);
         if (this.tickCount % 20 == 0) this.entityData.set(DATA_TAILS, (byte) this.tailsFor(this.bestAffection()));
         // foxfire: real light at night once she has two tails (a kyubi carries a brighter lantern)
         boolean night = !server.isDay() || server.getBrightness(net.minecraft.world.level.LightLayer.SKY, this.blockPosition()) < 4;

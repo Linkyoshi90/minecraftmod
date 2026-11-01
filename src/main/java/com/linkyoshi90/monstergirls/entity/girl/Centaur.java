@@ -240,6 +240,8 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        if (s == GirlSpecies.SHEDIM_CENTAUR) return girlAttributes(20, 0.32, 2);
+        if (s == GirlSpecies.ANZU_CENTAUR) return girlAttributes(46, 0.32, 8);
         return switch (s) {
             case STAGEL_CENTAUR -> girlAttributes(20, 0.32, 2).add(Attributes.JUMP_STRENGTH, 0.8);
             case LAMASSU_CENTAUR -> girlAttributes(50, 0.3, 8);
@@ -756,6 +758,9 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
 
     // --- tick ----------------------------------------------------------------------------------------------------
 
+    /** The shedim: when she can blink again. */
+    private long nextBlink;
+
     /** The caribou with a player on her back, on snow or ice, runs faster for two seconds. 1 when she does, 0 off the snow, -1 with nobody on her back. */
     public int snowStride(net.minecraft.server.level.ServerLevel level) {
         if (!(this.getFirstPassenger() instanceof net.minecraft.world.entity.player.Player)) return -1;
@@ -766,9 +771,66 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
         return 1;
     }
 
+    /** The shedim cannot be seen at night. */
+    public boolean veil(boolean night) {
+        if (night) this.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 40, 0, false, false));
+        return night;
+    }
+
+    /** With her friend under 4 hearts and a monster within 6, she takes them 8 blocks away from it, to the first spot with room, and comes too. 1 when she does, 0 otherwise, -1 without a friend. */
+    public int blink(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        var near = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(6));
+        if (friend.getHealth() >= 8.0F || near.isEmpty() || level.getGameTime() < this.nextBlink) return 0;
+        Vec3 away = friend.position().subtract(near.get(0).position()).multiply(1, 0, 1);
+        away = (away.lengthSqr() < 1.0E-4 ? new Vec3(1, 0, 0) : away).normalize();
+        for (int d = 8; d >= 3; d--) {
+            Vec3 to = friend.position().add(away.scale(d));
+            net.minecraft.core.BlockPos p = net.minecraft.core.BlockPos.containing(to);
+            if (!level.getBlockState(p.below()).isSolid() || !level.noCollision(friend, friend.getBoundingBox().move(to.subtract(friend.position())))) continue;
+            friend.teleportTo(to.x, to.y, to.z);
+            this.teleportTo(to.x + 1, to.y, to.z);
+            this.nextBlink = level.getGameTime() + 400;
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.PORTAL, to.x, to.y + 1, to.z, 20, 0.4, 0.6, 0.4, 0.1);
+            this.playSound(net.minecraft.sounds.SoundEvents.ENDERMAN_TELEPORT, 0.8F, 1.4F);
+            return 1;
+        }
+        return 0;
+    }
+
+    /** Anzu takes what a monster within 8 of her friend has: its weapon falls to the ground and its good effects pass to her friend. 1 when she steals something, 0 with nothing to steal, -1 without a friend. */
+    public int snatch(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int took = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8))) {
+            net.minecraft.world.item.ItemStack held = m.getMainHandItem();
+            if (!held.isEmpty()) {
+                m.spawnAtLocation(held.copy());
+                m.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, net.minecraft.world.item.ItemStack.EMPTY);
+                took = 1;
+            }
+            for (MobEffectInstance e : new java.util.ArrayList<>(m.getActiveEffects())) {
+                if (!e.getEffect().value().isBeneficial()) continue;
+                friend.addEffect(new MobEffectInstance(e));
+                m.removeEffect(e.getEffect());
+                took = 1;
+            }
+            if (took > 0) break;
+        }
+        if (took > 0) this.playSound(net.minecraft.sounds.SoundEvents.PHANTOM_BITE, 0.8F, 1.3F);
+        return took;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.ANZU_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel crag && !this.isBaby() && this.tickCount % 60 == 0) this.snatch(crag);
+        if (this.species == GirlSpecies.SHEDIM_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel lonely && !this.isBaby() && this.tickCount % 20 == 0) {
+            this.veil(!lonely.isDay());
+            this.blink(lonely);
+        }
         if (this.species == GirlSpecies.CARIBOU_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel tundra && !this.isBaby() && this.tickCount % 20 == 0) this.snowStride(tundra);
         if (this.species == GirlSpecies.QILIN_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel meadow && !this.isBaby() && this.tickCount % 60 == 0) this.gentleTread(meadow);
         if (this.species == GirlSpecies.URCUCHILLAY_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel herd && !this.isBaby() && this.tickCount % 200 == 0) this.herdKeeper(herd);

@@ -32,6 +32,17 @@ SPECIES = {
                   "blue": dict(EYE="#4ac8f8", TRIM="#1e4a7a", INNER="#1e2a4a", extra=dict(flame="#4ac8f8", flame_core="#e8fcff", tuft="#1a3a5a", tuft_tip="#2a7aa8", claw="#203a5a")),
                   "green": dict(EYE="#6af84a", TRIM="#2a6a2a", INNER="#1e3a1e", extra=dict(flame="#6af84a", flame_core="#e8ffd0", tuft="#1a4a24", tuft_tip="#3a8a3a", claw="#204a2a")),
                   "purple": dict(EYE="#c84af8", TRIM="#5a1e7a", INNER="#2e1a4a", extra=dict(flame="#c84af8", flame_core="#f8e0ff", tuft="#3a1a5a", tuft_tip="#7a3aa8", claw="#3a205a"))}),
+    # twenty-seventh wave: the bloodhound, a horror of a hound: matted brown fur sewn up with black stitches, long black hair, a wide human grin with blood down her chin
+    "bloodhound_canid": dict(
+        build="strong", outfit=dict(top=["bandeau"], bottom="shorts", colors=dict(leather="#2a1a14", cloth2="#2a1a14")),
+        hair="flowing", bangs="messy", ears="round", legs="fur", foot="paw", tail=[(2, 2, 4), (1.75, 1.75, 4), (1.25, 1.25, 3)],
+        tail_rest=[(-25, 0, 0), (10, 0, 0), (12, 0, 0)], tail_look="fur", grin=True, sewn=True,
+        pal=dict(SKIN=skin("#b89a84"), HAIR="#141012", FUR="#4a3024", LIGHT="#8a6a50", MARK="#1e120c", EYE="#e8e0c8", CLOTH="#2a1a14", TRIM="#7a1414", INNER="#7a3a3a",
+                 pattern="solid", extra=dict(gore="#8a1414")),
+        variants={"grey": dict(FUR="#5a5a5e", HAIR="#1a1a1e", LIGHT="#9a9a9e", MARK="#242428", SKIN=skin("#b0aca8")),
+                  "black": dict(FUR="#26221e", HAIR="#0e0c0c", LIGHT="#5a5048", MARK="#0a0808", SKIN=skin("#8a8078")),
+                  "red": dict(FUR="#6a241a", HAIR="#2a0a08", LIGHT="#a85a44", MARK="#2a0a08", SKIN=skin("#c8a090")),
+                  "pale": dict(FUR="#a89878", HAIR="#3a342a", LIGHT="#d8ccb0", MARK="#5a4e3a", SKIN=skin("#d8d0c0"))}),
     # twenty-fourth wave: Cerberus, dark-furred, with two more little heads on her shoulders, as the Xiangliu has
     "cerberus_canid": dict(
         build="athletic", outfit=dict(top=["bandeau"], bottom="shorts", extras=["belt"], colors=dict(leather="#7a1e1a", cloth2="#1e1a1e")),
@@ -125,7 +136,9 @@ SPECIES = {
                                 extra=dict(wrapped=True, blood=True, blade="cleaver", leather="#1a78b0", cloth2="#1a78b0", shoes="#1a5a8a", legs="#1a78b0")),
                   # homage (2026-10-28): Amaterasu (Okami): white with red markings
                   "sun_goddess": dict(FUR="#f8f8f6", HAIR="#ffffff", LIGHT="#ffffff", MARK="#d82a2a", EYE="#c82a2a", CLOTH="#f4f4f6", TRIM="#d82a2a",
-                                      pattern="stripes")}),
+                                      pattern="stripes"),
+                  # homage (2026-10-31): Lucario (Pokemon): blue and black fur, a cream chest, red eyes
+                  "aura_guardian": dict(FUR="#2a6ac8", HAIR="#1e2a4a", LIGHT="#e8d890", MARK="#14142a", EYE="#c82a2a", CLOTH="#14142a", TRIM="#e8e8ec")}),
     # tenth wave: the meloncollie, a collie in watermelon colours (rind-green top, melon-red shorts), half a melon on her back
     "meloncollie_canid": dict(
         build="petite", outfit=dict(top=["halter"], bottom="shorts", extras=["bell_collar"], colors=dict(cloth2="#e84a5a")),
@@ -219,7 +232,9 @@ SPECIES = {
         variants={"cinnamon": dict(FUR="#9a5a2e", HAIR="#7a3e1e", LIGHT="#d0905a"),
                   "silvertip": dict(FUR="#7a6a5a", HAIR="#c8c0b0", LIGHT="#d8d0c0", pattern="speckle"),
                   "dark": dict(FUR="#3a2a1e", HAIR="#1e140c", LIGHT="#5a4636"),
-                  "blond": dict(FUR="#b8946a", HAIR="#d8bc8a", LIGHT="#ecdcb8")}),
+                  "blond": dict(FUR="#b8946a", HAIR="#d8bc8a", LIGHT="#ecdcb8"),
+                  # homage (2026-10-31): Banjo (Banjo-Kazooie): warm brown fur, yellow shorts, a blue backpack
+                  "backpack_bear": dict(FUR="#8a5a30", HAIR="#6a4220", LIGHT="#d8b080", EYE="#1e140c", CLOTH="#e8c030", TRIM="#2a5ab8", extra=dict(leather="#2a5ab8", cloth2="#e8c030"))}),
 }
 
 
@@ -268,6 +283,12 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    if d.get("sewn"):                                    # black stitches across her limbs, blood from the corners of her grin
+        thread, blood = G.shades("#141012"), G.shades(pal.extra["gore"])
+        seam = lambda f, x, y, w, h: pick(thread, 0.3, x, y) if y == h // 2 and x % 2 == 0 or y in (h // 2 - 1, h // 2 + 1) and x % 4 == 0 else None
+        for p in ("arm_up", "thigh", "shin", "midriff"):
+            pt(p, ("north", "east", "west"), seam)
+        pt("head", ("north",), lambda f, x, y, w, h: pick(blood, 0.45 + 0.2 * (x % 3 == 0), x, y) if h * 0.76 <= y <= h * 0.94 and abs(x - w * 0.5) in range(int(w * 0.2), int(w * 0.24)) else None)
     if d.get("cheads"):
         skin_t = H.skin_fn(pal, 0.66)
 

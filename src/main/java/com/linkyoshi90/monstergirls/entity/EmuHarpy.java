@@ -48,7 +48,7 @@ public class EmuHarpy extends AbstractHarpy {
 
     /** Her colours (tools/gen_emu_harpy.py). Saved by name, synced by ordinal: append new ones at the end. */
     public enum Variant {
-        BROWN("brown"), GREY("grey"), PALE("pale"), RED("red"), BLACK("black");
+        BROWN("brown"), GREY("grey"), PALE("pale"), RED("red"), BLACK("black"), GOLDEN_RUNNER("golden_runner");
 
         private final String name;
 

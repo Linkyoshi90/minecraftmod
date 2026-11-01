@@ -72,6 +72,16 @@ SPECIES = {
                   "gold": dict(SKIN="#f4e8c8", HAIR="#e0c070", FUR="#f0dca0", MARK="#a88a3a", EYE="#a87a1e", CLOTH="#e0c070", extra=dict(flame="#f8ecc0")),
                   "rose": dict(SKIN="#f8e0e4", HAIR="#f0b0c0", FUR="#f8ccd8", MARK="#c87a90", EYE="#c84a6a", CLOTH="#f0b0c0", extra=dict(flame="#fcdce4")),
                   "green": dict(SKIN="#dcf0e0", HAIR="#a8d8b4", FUR="#c8e8d0", MARK="#6aa87a", EYE="#3a8a5a", CLOTH="#a8d8b4", extra=dict(flame="#d0f0d8"))}),
+    # twenty-seventh wave: Koschei the Deathless of the Russian tales: a bone-beaked mask under a tall kokoshnik, long blue robes, chains hung about her and a lantern at her hand
+    "koschei_undead": dict(
+        build="slim", outfit=dict(top=["corset", "capelet"], bottom="hakama", extras=["pearls"], colors=dict(cloth2="#1e3a7a", leather="#a8b0c0")),
+        hair="hime", bangs="parted", ears=None, legs="bare", foot="shoe", koschei=True, glow=["klantern"],
+        pal=dict(SKIN=skin("#c8d4e4"), HAIR="#1e2a5a", FUR="#c8d4e4", LIGHT="#ffffff", MARK="#3a4a6a", EYE="#5ac8f8", CLOTH="#2a4a9a", TRIM="#e8ecf4",
+                 extra=dict(boot="#14204a", kok="#1e3a8a", gem="#5ac8f8", bone="#e8e4d8", chain="#a8b0c0", flame="#f8d870")),
+        variants={"black": dict(HAIR="#141418", CLOTH="#1e1e24", TRIM="#a8a8b0", EYE="#e83a3a", extra=dict(boot="#0e0e12", cloth2="#2a2a30", kok="#1e1e24", gem="#e83a3a", bone="#d8d4c8", chain="#6a6a74", flame="#f85a3a")),
+                  "gold": dict(HAIR="#3a2a14", CLOTH="#a87a1e", TRIM="#f4e8c0", EYE="#f8d040", extra=dict(boot="#4a3414", cloth2="#7a5614", kok="#c89a2a", gem="#f8d040", bone="#f0e4c8", chain="#c8a040", flame="#f8d870")),
+                  "green": dict(HAIR="#14301e", CLOTH="#1e5a3a", TRIM="#d8e8d0", EYE="#6af07a", extra=dict(boot="#0e2a1a", cloth2="#14402a", kok="#1e5a3a", gem="#6af07a", bone="#e0e4d0", chain="#7a9a84", flame="#a0f870")),
+                  "red": dict(HAIR="#2a0e12", CLOTH="#7a1e24", TRIM="#e8d8d0", EYE="#f8a03a", extra=dict(boot="#2a0a0e", cloth2="#5a1218", kok="#7a1e24", gem="#f8a03a", bone="#e8dcd0", chain="#8a7070", flame="#f8a03a"))}),
     # twenty-fourth wave: the jiangshi, a hopping corpse in an official's robe and hat, a paper talisman on her brow, her arms held out
     "jiangshi_undead": dict(
         build="slim", outfit=dict(top=["kimono"], colors=dict(obi="#c8a040", kimono="#2a3a7a")),
@@ -224,6 +234,8 @@ SPECIES = {
 
 def declare_hook(sp, d):
     out = []
+    if d.get("koschei"):                                 # the kokoshnik, the bone beak, chains and a lantern
+        out += [("kkok", 10.5, 6.5, .75), ("kgem", 1.5, 1.5, .25), ("kbeak", 3, 2.5, 5), ("kchain", .75, 13, .75), ("klantern", 2.5, 3.5, 2.5)]
     if d.get("jiangshi"):                                # the official's hat and the paper talisman
         out += [("jhat", 9.5, 2, 9.5), ("jhat_top", 6, 1.75, 6), ("jtalisman", 2.5, 5.5, .25)]
     if d.get("cone_kit"):                                # the lawn zombie's traffic cone: base, two tiers, the tip
@@ -252,6 +264,13 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    if d.get("koschei"):
+        kok, gem, bone, chain, fl = (G.shades(pal.extra[k]) for k in ("kok", "gem", "bone", "chain", "flame"))
+        pt("kkok", "all", lambda f, x, y, w, h: CLEAR if y < 5 - min(x, w - 1 - x) // 2 and f in ("north", "south") else pick(kok, 0.45 + 0.25 * ((x + y) % 5 == 0), x, y))
+        pt("kgem", "all", lambda f, x, y, w, h: pick(gem, 0.8, x, y))
+        pt("kbeak", "all", lambda f, x, y, w, h: pick(bone, 0.65 - 0.2 * (f == "down") - 0.1 * (y > h * 0.6), x, y))
+        pt("kchain", "all", lambda f, x, y, w, h: CLEAR if y % 4 == 3 else pick(chain, 0.45 + 0.3 * (y % 4 == 1), x, y))
+        pt("klantern", "all", lambda f, x, y, w, h: pick(chain, 0.4, x, y) if y in (0, h - 1) else pick(fl, 0.7 + 0.2 * (x % 2), x, y))
     if d.get("jiangshi"):
         hat, paper, ink = G.shades(pal.extra.get("hat", "#141420")), G.shades(pal.extra.get("paper", "#f0d860")), G.shades(pal.extra.get("ink", "#c82a1e"))
         pt("jhat", "all", lambda f, x, y, w, h: CLEAR if f == "down" else pick(hat, 0.45 + 0.2 * (y == 0), x, y))
@@ -378,6 +397,13 @@ def paint_hook(pt, pal, d):
 
 
 def build_hook(r, g, d):
+    if d.get("koschei"):                                 # the kokoshnik stands up off her brow, the beak out of her face; chains from her shoulders and a lantern on one from her fist
+        y0, z0 = g.hy, g.z
+        r.add("hair_kok", "head", [0, y0 + 7, z0], [cube("kkok", [-5.25, y0 + 6.5, -2.5 + z0]), cube("kgem", [-0.75, y0 + 7.5, -2.8 + z0])])
+        r.put("head", cube("kbeak", [-1.5, y0 + 1.5, -8.5 + z0]))
+        r.add("kchains", "body", [0, 16, z0], [G.rot_cube("kchain", [-4.5, 7.5, 2.4 + z0], [-4.5, 20, 2.4 + z0], 0, 0, 12), G.rot_cube("kchain", [3.75, 7.5, 2.4 + z0], [4.5, 20, 2.4 + z0], 0, 0, -12)])
+        px, py, pz = r.b["hand_r"]["pivot"]
+        r.add("klantern_b", "hand_r", [px, py - 1.5, pz], [cube("kchain", [px - 0.375, py - 8.5, pz - 0.375]), cube("klantern", [px - 1.25, py - 12, pz - 1.25])])
     if d.get("jiangshi"):                                # the hat on her head, the talisman hanging from its brim over her face
         r.add("hair_jhat", "head", [0, g.hy + 8, g.z], [cube("jhat", [-4.75, g.hy + 7.25, -4.75 + g.z]), cube("jhat_top", [-3, g.hy + 9.0, -3 + g.z]),
                                                         cube("jtalisman", [-1.25, g.hy + 2.75, -4.6 + g.z])])
@@ -478,21 +504,35 @@ SPECIES["hand_undead"] = dict(
     pal=dict(SKIN=skin("fair"), HAIR="#e8e0c8", FUR="#e8c8a8", LIGHT="#f4e8d8", MARK="#a87a64", EYE="#3a2a20", CLOTH="#c86a6a", TRIM="#e8e0c8"),
     variants={"pale": dict(SKIN=skin("pale"), FUR="#f0e0d8"), "tan": dict(SKIN=skin("tan"), FUR="#c89a70"), "dark": dict(SKIN=skin("#7a5240"), FUR="#7a5240"),
               "zombie": dict(SKIN=skin("#8aa878"), FUR="#8aa878")})
+# twenty-seventh wave: La Mano Peluda, the hairy hand of Mexican legend: the Hand's rig under a shaggy pelt
+SPECIES["mano_peluda_undead"] = dict(
+    hand=True, furry=True,
+    pal=dict(SKIN=skin("#f8cca8"), HAIR="#e8e0c8", FUR="#6a94c0", LIGHT="#a8c4e0", MARK="#2a4468", EYE="#3a2a20", CLOTH="#c86a6a", TRIM="#e8e0c8"),
+    variants={"black": dict(FUR="#2a2a30", LIGHT="#5a5a64", MARK="#0e0e12"), "green": dict(FUR="#5a8a4a", LIGHT="#a0c88a", MARK="#2a4a22"),
+              "purple": dict(FUR="#7a5aa8", LIGHT="#b8a0d8", MARK="#3a2a5a"), "red": dict(FUR="#a8483a", LIGHT="#d8907a", MARK="#5a1e14")})
+# twenty-seventh wave: the Gaitress, four long legs and a swimsuit: two to walk on, two crossed up in the air where a head would be. No head, no arms.
+SPECIES["gaitress_undead"] = dict(
+    gaitress=True,
+    pal=dict(SKIN=skin("fair"), HAIR="#e8e0c8", FUR="#f4d4b8", LIGHT="#f8e4d0", MARK="#a87a64", EYE="#3a2a20", CLOTH="#2a5ad0", TRIM="#14348a"),
+    variants={"black": dict(CLOTH="#26262e", TRIM="#0e0e12"), "green": dict(CLOTH="#2a9a5a", TRIM="#14582e"), "purple": dict(CLOTH="#7a3ac8", TRIM="#42207a"),
+              "red": dict(CLOTH="#c82a2a", TRIM="#7a1414"), "white": dict(CLOTH="#f0f0f4", TRIM="#b8b8c4")})
 FINGERS = [("fing1", -3.4, 14, 0.9), ("fing2", -1.15, 5, 1.0), ("fing3", 1.15, -5, 0.95), ("fing4", 3.4, -14, 0.8)]        # front edge x, how far it fans out, how long
 PALM_Y = 6.0
 
 
-def hand_declare():
+def hand_declare(furry=False):
     H.PARTS.clear()
     H.RECT.clear()
     for n, w, h_, dd in [("h_palm", 9, 3, 9.5), ("h_wrist", 6.5, 2.75, 3.5), ("h_bone", 1.5, 9, 1.5), ("h_knob", 1.5, 1.5, 3)] + \
             [(f"{n}_{s}", *(w, l * k, w)) for n, _, _, k in FINGERS for s, w, l in (("a", 1.9, 4.5), ("b", 1.75, 4.0), ("c", 1.6, 3.5))] + \
             [("thumb_a", 2.25, 3.75, 2.25), ("thumb_b", 2, 3.5, 2)]:
         H.part(n, w, h_, dd)
+    if furry:
+        H.part("h_fur", 10.5, 4, 15)
     H.pack()
 
 
-def hand_paint(pal):
+def hand_paint(pal, furry=False):
     pt = H.Painter()
     sk = H.skin_fn(pal, 0.66)
     ivory = G.shades("#ece4cc")
@@ -516,10 +556,13 @@ def hand_paint(pal):
         pt(n + "_c", "all", finger(True))
     pt("thumb_a", "all", finger(False))
     pt("thumb_b", "all", finger(True))
+    if furry:                                            # the pelt over the back of the hand and the wrist, shaggy and torn at its edges
+        shag = lambda f, x, y, w, h: CLEAR if f == "down" or (f != "up" and y >= h - 3 and noise(x, 0, 21) * 3 < y - (h - 4)) else pick(pal.FUR, 0.42 + 0.3 * ((x + y // 2) % 3 == 0) + (noise(x, y, 22) - 0.5) * 0.2, x, y)
+        pt("h_fur", "all", shag)
     return pt.T
 
 
-def hand_build():
+def hand_build(name="hand_undead", furry=False):
     import girl_parts as P
     r = G.Rig()
     r.add("root", None, [0, 0, 0])
@@ -533,7 +576,9 @@ def hand_build():
     end = H.rot_about((0, PALM_Y - 9, 8.0), piv, H.rot_matrix(ang, 0, 0))
     r.add("hair_bone", "body", piv, [G.rot_cube("h_bone", [-0.75, PALM_Y - 9, 7.25], piv, ang, 0, 0),
                                      G.rot_cube("h_knob", [-1.35, PALM_Y - 9.4, 6.5], piv, ang, 0, 0), G.rot_cube("h_knob", [-0.15, PALM_Y - 9.4, 6.5], piv, ang, 0, 0)])
-    return r.model("hand_undead")
+    if furry:
+        r.put("body", cube("h_fur", [-5.25, PALM_Y - 0.5, -5.5]))
+    return r.model(name)
 
 
 def hand_anims(an):
@@ -574,16 +619,113 @@ HAND_VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idl
               ("walk", 0.17, -30, 8), ("run", 0.1, -60, 5), ("sit", 0, -30, 10), ("pounce", 0.2, -70, 5)]
 
 
-def run_hand():
-    d = SPECIES["hand_undead"]
-    hand_declare()
-    tex = hand_paint(F.pal_for(d))
-    geo, adoc, texes = G.write("hand_undead", tex, hand_build(), hand_anims, list(d["variants"]), lambda k: hand_paint(F.pal_for(d, k)))
+def run_hand(name):
+    d = SPECIES[name]
+    furry = d.get("furry", False)
+    hand_declare(furry)
+    tex = hand_paint(F.pal_for(d), furry)
+    geo, adoc, texes = G.write(name, tex, hand_build(name, furry), hand_anims, list(d["variants"]), lambda k: hand_paint(F.pal_for(d, k), furry))
     if "--previews" in sys.argv:
-        G.previews("hand_undead", geo, adoc, texes, HAND_VIEWS, F.FACE, 24)
+        G.previews(name, geo, adoc, texes, HAND_VIEWS, F.FACE, 24)
+
+
+HIP_Y, TOP_Y = 19.5, 29.5                                # where the lower and the upper legs join the body
+
+
+def gait_declare():
+    H.PARTS.clear()
+    H.RECT.clear()
+    for n, w, h_, dd in [("g_hips", 8.5, 4.5, 5), ("g_waist", 6.25, 2.5, 3.75), ("g_chest", 8, 4, 4.75), ("g_thigh", 3.75, 10, 4), ("g_shin", 3, 9.5, 3.25), ("g_foot", 3, 1.5, 5.5), ("g_toes", 3, 1, 1.5)]:
+        H.part(n, w, h_, dd)
+    H.pack()
+
+
+def gait_paint(pal):
+    pt = H.Painter()
+    sk = H.skin_fn(pal, 0.66)
+    cloth = pal.CLOTH
+    suit = lambda f, x, y, w, h: pick(cloth, 0.5 + 0.2 * (f == "up") + 0.14 * ((x * 2 + y) % 7 == 0) - 0.12 * (f in ("east", "west")), x, y)
+    pt("g_waist", "all", suit)
+    pt("g_chest", "all", suit)
+
+    def hips(f, x, y, w, h):                             # cut high at the leg, so her hips show at the sides and the lowest rows
+        if f in ("east", "west") and y > h * 0.35:
+            return sk(f, x, y, w, h)
+        if f in ("north", "south") and y > h * 0.3 + abs(x - w / 2) * 0.1 + 1.5 and abs(x - w / 2) > (h - y) * 2.2:
+            return sk(f, x, y, w, h)
+        return suit(f, x, y, w, h)
+    pt("g_hips", "all", hips)
+    pt("g_thigh", "all", sk)
+    pt("g_shin", "all", sk)
+    pt("g_foot", "all", sk)
+    pt("g_toes", "all", lambda f, x, y, w, h: pick(pal.SKIN, 0.42, x, y) if f == "north" and x % 3 == 2 else sk(f, x, y, w, h))
+    return pt.T
+
+
+def gait_build():
+    r = G.Rig()
+    r.add("root", None, [0, 0, 0])
+    r.add("body", "root", [0, HIP_Y, 0], [cube("g_hips", [-4.25, HIP_Y - 1, -2.5]), cube("g_waist", [-3.125, HIP_Y + 3.5, -1.875]), cube("g_chest", [-4, HIP_Y + 6, -2.375])])
+    x = -2.25
+    r.add("leg_r", "body", [x, HIP_Y, 0], [cube("g_thigh", [x - 1.875, HIP_Y - 10, -2])], mirror=True)
+    r.add("shin_r", "leg_r", [x, HIP_Y - 10, 0], [cube("g_shin", [x - 1.5, HIP_Y - 19.5, -1.625])], mirror=True)
+    r.add("foot_r", "shin_r", [x, 1.5, 0], [cube("g_foot", [x - 1.5, 0, -4]), cube("g_toes", [x - 1.5, 0, -5.5])], mirror=True)
+    # the upper pair, standing up off her shoulders: the same leg turned over, its feet pointed at the sky
+    y = TOP_Y
+    r.add("uleg_r", "body", [x, y, 0], [cube("g_thigh", [x - 1.875, y, -2])], mirror=True)
+    r.add("ushin_r", "uleg_r", [x, y + 10, 0], [cube("g_shin", [x - 1.5, y + 10, -1.625])], mirror=True)
+    r.add("ufoot_r", "ushin_r", [x, y + 19.5, 0], [cube("g_foot", [x - 1.5, y + 19.5, -1.25]), cube("g_toes", [x - 1.5, y + 21, -1.25])], mirror=True)
+    return r.model("gaitress_undead")
+
+
+def gait_anims(an):
+    Tk, hold, merge = H.track, H.hold, H.merge
+    CROSS = -9                                           # the upper legs lean in and cross above her
+
+    def stride(T, a, knee, bob):
+        lift = lambda s: Tk((0, (12, 0, 0)), (T * 0.25 + s, (24, 0, 0)), (T * 0.5, (knee * 0.35, 0, 0)), (T * 0.75, (knee, 0, 0)), (T, (12, 0, 0)))
+        low = lambda s: Tk((0, (knee * 0.35, 0, 0)), (T * 0.25, (knee, 0, 0)), (T * 0.5, (12, 0, 0)), (T * 0.75, (24, 0, 0)), (T, (knee * 0.35, 0, 0)))
+        return {"leg_r": {"rotation": Tk((0, (-a, 0, 0)), (T / 2, (a * 0.8, 0, 0)), (T, (-a, 0, 0)))}, "leg_l": {"rotation": Tk((0, (a * 0.8, 0, 0)), (T / 2, (-a, 0, 0)), (T, (a * 0.8, 0, 0)))},
+                "shin_r": {"rotation": lift(0)}, "shin_l": {"rotation": low(0)},
+                "foot_r": {"rotation": Tk((0, (-6, 0, 0)), (T / 2, (22, 0, 0)), (T, (-6, 0, 0)))}, "foot_l": {"rotation": Tk((0, (22, 0, 0)), (T / 2, (-6, 0, 0)), (T, (22, 0, 0)))},
+                "uleg_r": {"rotation": Tk((0, (a * 0.4, 0, CROSS)), (T / 2, (-a * 0.4, 0, CROSS)), (T, (a * 0.4, 0, CROSS)))},
+                "uleg_l": {"rotation": Tk((0, (-a * 0.4, 0, -CROSS)), (T / 2, (a * 0.4, 0, -CROSS)), (T, (-a * 0.4, 0, -CROSS)))},
+                "ushin_r": {"rotation": Tk((0, (0, 0, 0)), (T / 2, (a * 0.3, 0, 0)), (T, (0, 0, 0)))}, "ushin_l": {"rotation": Tk((0, (a * 0.3, 0, 0)), (T / 2, (0, 0, 0)), (T, (a * 0.3, 0, 0)))},
+                "body": {"position": Tk((0, (0, 0, 0)), (T / 4, (0, bob, 0)), (T / 2, (0, 0, 0)), (T * 3 / 4, (0, bob, 0)), (T, (0, 0, 0))),
+                         "rotation": Tk((0, (-6, -5, 0)), (T / 2, (-6, 5, 0)), (T, (-6, -5, 0)))}}
+    rest = {"uleg_r": {"rotation": Tk((0, (2, 0, CROSS)), (2, (-2, 0, CROSS)), (4, (2, 0, CROSS)))}, "uleg_l": {"rotation": Tk((0, (-2, 0, -CROSS)), (2, (2, 0, -CROSS)), (4, (-2, 0, -CROSS)))},
+            "ushin_r": {"rotation": hold(0, 0, 5)}, "ushin_l": {"rotation": hold(0, 0, -5)}}
+    an.add("idle", 4.0, True, merge(rest, {"leg_l": {"rotation": hold(-4, 0, 0)}, "shin_l": {"rotation": hold(8, 0, 0)}, "body": {"position": Tk((0, (0, 0, 0)), (2, (0, -0.3, 0)), (4, (0, 0, 0)))}}))
+    an.add("walk", 0.8, True, stride(0.8, 26, 62, 0.5))
+    an.add("run", 0.42, True, stride(0.42, 46, 104, 1.0))
+    fold = {"leg_r": {"rotation": hold(-84, 12, 0)}, "leg_l": {"rotation": hold(-84, -12, 0)}, "shin_r": {"rotation": hold(84, 0, 0)}, "shin_l": {"rotation": hold(84, 0, 0)}, "body": {"position": hold(0, -9.5, 0)}}
+    an.add("sit", 3.0, True, merge(rest, fold))
+    an.add("lie", 3.0, True, merge(rest, {"root": {"rotation": hold(-90, 0, 0), "position": hold(0, 3, 12)}}))
+    kick = lambda: {"leg_r": {"rotation": Tk((0, (0, 0, 0)), (0.12, (30, 0, 0)), (0.28, (-105, 0, 0)), (0.6, (0, 0, 0)))}, "shin_r": {"rotation": Tk((0, (0, 0, 0)), (0.12, (70, 0, 0)), (0.28, (6, 0, 0)), (0.6, (0, 0, 0)))},
+                    "body": {"rotation": Tk((0, (0, 0, 0)), (0.28, (14, 0, 0)), (0.6, (0, 0, 0)))}}
+    an.add("kick", 0.6, False, merge(rest, kick()))
+    an.add("pounce", 0.6, False, merge(rest, kick()))
+    an.add("grab", 0.6, False, merge(rest, kick()))
+
+
+GAIT_VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0, 180, 0),
+              ("walk", 0.2, -30, 8), ("run", 0.1, -90, 5), ("sit", 0, -30, 10), ("kick", 0.28, -80, 5)]
+
+
+def run_gaitress():
+    d = SPECIES["gaitress_undead"]
+    gait_declare()
+    tex = gait_paint(F.pal_for(d))
+    geo, adoc, texes = G.write("gaitress_undead", tex, gait_build(), gait_anims, list(d["variants"]), lambda k: gait_paint(F.pal_for(d, k)))
+    if "--previews" in sys.argv:
+        G.previews("gaitress_undead", geo, adoc, texes, GAIT_VIEWS, F.FACE, 50)
 
 
 if __name__ == "__main__":
-    F.run_family("undead", {k: v for k, v in SPECIES.items() if not v.get("hand")}, declare_hook, paint_hook, build_hook, anim_extra)
-    if not [a for a in sys.argv[1:] if not a.startswith("--")] or "hand_undead" in sys.argv:
-        run_hand()
+    F.run_family("undead", {k: v for k, v in SPECIES.items() if not v.get("hand") and not v.get("gaitress")}, declare_hook, paint_hook, build_hook, anim_extra)
+    want = [a for a in sys.argv[1:] if not a.startswith("--")]
+    for name in ("hand_undead", "mano_peluda_undead"):
+        if not want or name in want:
+            run_hand(name)
+    if not want or "gaitress_undead" in want:
+        run_gaitress()
