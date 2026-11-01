@@ -50,6 +50,14 @@ public final class BedCall {
         return CALLS.containsKey(player);
     }
 
+    /** Whether someone within earshot of her is calling from bed: her patrol waits until that is over. */
+    public static boolean calledNear(Mob mob) {
+        for (ServerPlayer player : CALLS.keySet()) {
+            if (player.level() == mob.level() && player.distanceToSqr(mob) <= ShareBedGoal.RANGE * ShareBedGoal.RANGE) return true;
+        }
+        return false;
+    }
+
     public static int stage(ServerPlayer player) {
         Call call = CALLS.get(player);
         return call == null ? NONE : call.stage;

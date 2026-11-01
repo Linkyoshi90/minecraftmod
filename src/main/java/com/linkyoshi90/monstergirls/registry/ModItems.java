@@ -202,14 +202,14 @@ public final class ModItems {
     public static final DeferredItem<Item> PUMPKIN_MOCHI = food("pumpkin_mochi", 7, 0.8F);
     public static final java.util.List<DeferredItem<Item>> MOCHI = java.util.List.of(APPLE_MOCHI, MELON_MOCHI, BERRY_MOCHI, CHOCOLATE_MOCHI, HONEY_MOCHI, PUMPKIN_MOCHI);
 
-    /** One bucket of milk per family. */
+    /** One bucket of milk per family. They stack as empty buckets do. */
     public static final java.util.Map<com.linkyoshi90.monstergirls.item.FamilyMilk, DeferredItem<com.linkyoshi90.monstergirls.item.FamilyMilkItem>> MILK = familyMilks();
 
     private static java.util.Map<com.linkyoshi90.monstergirls.item.FamilyMilk, DeferredItem<com.linkyoshi90.monstergirls.item.FamilyMilkItem>> familyMilks() {
         var milks = new java.util.EnumMap<com.linkyoshi90.monstergirls.item.FamilyMilk, DeferredItem<com.linkyoshi90.monstergirls.item.FamilyMilkItem>>(com.linkyoshi90.monstergirls.item.FamilyMilk.class);
         for (var milk : com.linkyoshi90.monstergirls.item.FamilyMilk.values()) {
             milks.put(milk, ITEMS.registerItem(milk.id(), props -> new com.linkyoshi90.monstergirls.item.FamilyMilkItem(milk,
-                    props.stacksTo(1).craftRemainder(net.minecraft.world.item.Items.BUCKET))));
+                    props.stacksTo(16).craftRemainder(net.minecraft.world.item.Items.BUCKET))));
         }
         return milks;
     }

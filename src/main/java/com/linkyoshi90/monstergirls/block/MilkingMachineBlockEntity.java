@@ -100,6 +100,14 @@ public class MilkingMachineBlockEntity extends BlockEntity {
 
     private void put(ItemStack milk) {
         for (int i = 0; i < SLOTS; i++) {
+            ItemStack held = this.store.getItem(i);
+            if (ItemStack.isSameItemSameComponents(held, milk) && held.getCount() < held.getMaxStackSize()) {
+                held.grow(1);
+                this.store.setChanged();
+                return;
+            }
+        }
+        for (int i = 0; i < SLOTS; i++) {
             if (this.store.getItem(i).isEmpty()) {
                 this.store.setItem(i, milk);
                 return;

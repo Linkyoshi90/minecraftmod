@@ -15,7 +15,7 @@ public class MilkDripParticle extends TextureSheetParticle {
         this.pickSprite(sprites);
         this.setColor(1.0F, 0.98F, 0.92F);
         this.setSize(0.02F, 0.02F);
-        this.quadSize = 0.06F;
+        this.quadSize = 0.1F;
         this.gravity = 0.6F;
         this.lifetime = 40;
         this.xd = 0.0;

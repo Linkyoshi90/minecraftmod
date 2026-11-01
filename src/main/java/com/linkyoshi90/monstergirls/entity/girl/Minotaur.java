@@ -55,7 +55,7 @@ public class Minotaur extends AbstractMonsterGirl {
     /** How long the machine's harness stays on her, and how long she blushes after a bucket. */
     public static final int MACHINE_MILK_TICKS = 100, BUCKET_BLUSH_TICKS = 60;
     /** Ticks between drips while her milk is ready. */
-    public static final int DRIP_INTERVAL = 30;
+    public static final int DRIP_INTERVAL = 15;
     public static final int LOVE_TICKS = 600;
     public static final int GUARD_RADIUS = 10;
     private static final net.minecraft.network.syncher.EntityDataAccessor<Byte> DATA_WOOL =

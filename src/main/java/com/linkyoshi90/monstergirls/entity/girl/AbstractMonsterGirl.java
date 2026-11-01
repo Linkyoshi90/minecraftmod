@@ -1132,9 +1132,10 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     // --- animation -----------------------------------------------------------------------------------------------
 
     protected RawAnimation anim(String name, boolean once) {
-        String key = (once ? "once:" : "") + this.species.id() + "." + name;
-        return ANIMATIONS.computeIfAbsent(key, k -> once ? RawAnimation.begin().thenPlayAndHold("animation." + this.species.id() + "." + name)
-                : RawAnimation.begin().thenLoop("animation." + this.species.id() + "." + name));
+        String model = OWN_MODELS.contains(this.getVariantName()) ? this.species.id() + "_" + this.getVariantName() : this.species.id();   // an own model's file is named for it
+        String key = (once ? "once:" : "") + model + "." + name;
+        return ANIMATIONS.computeIfAbsent(key, k -> once ? RawAnimation.begin().thenPlayAndHold("animation." + model + "." + name)
+                : RawAnimation.begin().thenLoop("animation." + model + "." + name));
     }
 
     /** Whether her animation file has a swim animation (the merfolk). */

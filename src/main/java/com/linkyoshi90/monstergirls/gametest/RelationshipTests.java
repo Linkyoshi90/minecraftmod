@@ -122,6 +122,55 @@ public class RelationshipTests {
         });
     }
 
+    /** The family girls lie down at night (SleepGoal), so she has to wake for the call. */
+    @GameTest(template = PLATFORM, timeoutTicks = 500, batch = "callFromBedWakesASleepingGirl")
+    public static void callFromBedWakesASleepingGirl(GameTestHelper helper) {
+        helper.setDayTime(24000 + 18000);
+        bed(helper, new BlockPos(2, 2, 2));
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
+        com.linkyoshi90.monstergirls.entity.girl.Minotaur cow = com.linkyoshi90.monstergirls.gametest.JackalopeTests.spawn(helper,
+                com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.BISON_MINOTAUR, new BlockPos(7, 2, 7));
+        cow.setMale(false);
+        cow.addAffection(player, Bonded.FULL_AFFECTION);
+        helper.runAfterDelay(60, () -> {
+            check(cow.getAction() == com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.Action.LYING, "she should be asleep by now");
+            player.startSleeping(helper.absolutePos(new BlockPos(2, 2, 2)));
+            BedCall.begin(player);
+            helper.succeedWhen(() -> {
+                BedCall.tick(player);
+                check(BedCall.stage(player) == BedCall.JOINED, "she should have woken and answered the call");
+                player.stopSleeping();
+                HarpyTestUtil.remove(player);
+                helper.setDayTime(1000);
+            });
+        });
+    }
+
+    /** On patrol she holds her post while they just sleep, and comes when they call. */
+    @GameTest(template = PLATFORM, timeoutTicks = 600, batch = "callFromBedFetchesAGuard")
+    public static void callFromBedFetchesAGuard(GameTestHelper helper) {
+        helper.setDayTime(24000 + 18000);
+        bed(helper, new BlockPos(2, 2, 2));
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
+        com.linkyoshi90.monstergirls.entity.girl.Minotaur cow = com.linkyoshi90.monstergirls.gametest.JackalopeTests.spawn(helper,
+                com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.BISON_MINOTAUR, new BlockPos(7, 2, 7));
+        cow.setMale(false);
+        cow.addAffection(player, Bonded.FULL_AFFECTION);
+        cow.getOrders().set(com.linkyoshi90.monstergirls.entity.Orders.Command.PATROL, player, cow.blockPosition());
+        helper.runAfterDelay(10, () -> player.startSleeping(helper.absolutePos(new BlockPos(2, 2, 2))));
+        helper.runAfterDelay(90, () -> {
+            check(cow.getGestation().getSharingWith() == null, "not called, so she keeps her post");
+            BedCall.begin(player);
+            helper.succeedWhen(() -> {
+                BedCall.tick(player);
+                check(BedCall.stage(player) == BedCall.JOINED, "she should have answered the call");
+                player.stopSleeping();
+                HarpyTestUtil.remove(player);
+                helper.setDayTime(1000);
+            });
+        });
+    }
+
     @GameTest(template = PLATFORM, timeoutTicks = 500, batch = "callFromBedWaitsForAFriend")
     public static void callFromBedWaitsForAFriend(GameTestHelper helper) {
         helper.setDayTime(24000 + 18000);   // midnight, the night after the full moon

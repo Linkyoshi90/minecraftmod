@@ -96,11 +96,21 @@ public class MilkTests {
         });
     }
 
-    /** Options are global, so each test here has its own batch and puts them back. */
-    private static void options(boolean on) {
-        MonsterGirlsConfig.MILK_DRIPS.set(on);
-        MonsterGirlsConfig.MILK_EMBARRASSED.set(on);
-        MonsterGirlsConfig.MILK_HARNESS.set(on);
+    /** Options are global, so each test here has its own batch and puts back what it found. */
+    private static boolean[] options(boolean on) {
+        boolean[] found = {MonsterGirlsConfig.MILK_DRIPS.get(), MonsterGirlsConfig.MILK_EMBARRASSED.get(), MonsterGirlsConfig.MILK_HARNESS.get()};
+        set(on, on, on);
+        return found;
+    }
+
+    private static void set(boolean drips, boolean embarrassed, boolean harness) {
+        MonsterGirlsConfig.MILK_DRIPS.set(drips);
+        MonsterGirlsConfig.MILK_EMBARRASSED.set(embarrassed);
+        MonsterGirlsConfig.MILK_HARNESS.set(harness);
+    }
+
+    private static void restore(boolean[] found) {
+        set(found[0], found[1], found[2]);
     }
 
     private static boolean machineIsCart(GameTestHelper helper) {
@@ -110,6 +120,7 @@ public class MilkTests {
     @GameTest(template = PLATFORM, batch = "milk_options_off", timeoutTicks = 120)
     public static void milkingOptionsAreOffByDefault(GameTestHelper helper) {
         check(!MonsterGirlsConfig.MILK_DRIPS.getDefault() && !MonsterGirlsConfig.MILK_EMBARRASSED.getDefault() && !MonsterGirlsConfig.MILK_HARNESS.getDefault(), "all off");
+        boolean[] found = options(false);
         ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
         MilkingMachineBlockEntity m = machine(helper, player);
         Minotaur cow = beside(helper, GirlSpecies.CATTLE_MINOTAUR, player);
@@ -123,13 +134,14 @@ public class MilkTests {
         });
         helper.runAfterDelay(60, () -> {
             check(cow.isMilkFull() && !cow.isDripping(), "ready again, but no drips");
+            restore(found);
             helper.succeed();
         });
     }
 
     @GameTest(template = PLATFORM, batch = "milk_harness", timeoutTicks = 260)
     public static void machineHarnessesACowThenLetsHerGo(GameTestHelper helper) {
-        options(true);
+        boolean[] found = options(true);
         ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
         machine(helper, player);
         Minotaur cow = beside(helper, GirlSpecies.CATTLE_MINOTAUR, player);
@@ -142,14 +154,14 @@ public class MilkTests {
         });
         helper.runAfterDelay(170, () -> {
             check(!cow.hasFlag(AbstractMonsterGirl.FLAG_HARNESSED) && !cow.hasFlag(AbstractMonsterGirl.FLAG_BLUSHING), "out of it again");
-            options(false);
+            restore(found);
             helper.succeed();
         });
     }
 
     @GameTest(template = PLATFORM, batch = "milk_calf_harness", timeoutTicks = 120)
     public static void calvesAndBullsNeverWearTheHarness(GameTestHelper helper) {
-        options(true);
+        boolean[] found = options(true);
         ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
         MilkingMachineBlockEntity m = machine(helper, player);
         Minotaur calf = beside(helper, GirlSpecies.CATTLE_MINOTAUR, player);
@@ -163,14 +175,14 @@ public class MilkTests {
             check(m.store().countItem(Items.BUCKET) == 2, "no bucket filled");
             check(!calf.hasFlag(AbstractMonsterGirl.FLAG_HARNESSED) && !calf.hasFlag(AbstractMonsterGirl.FLAG_BLUSHING), "not the calf");
             check(!bull.hasFlag(AbstractMonsterGirl.FLAG_HARNESSED) && !bull.hasFlag(AbstractMonsterGirl.FLAG_BLUSHING), "not the bull");
-            options(false);
+            restore(found);
             helper.succeed();
         });
     }
 
     @GameTest(template = PLATFORM, batch = "milk_drips", timeoutTicks = 80)
     public static void onlyAMilkedCowDripsUntilMilkedAgain(GameTestHelper helper) {
-        options(true);
+        boolean[] found = options(true);
         ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
         Minotaur cow = spawn(helper, GirlSpecies.CATTLE_MINOTAUR, new BlockPos(2, 2, 2));
         cow.setMale(false);
@@ -184,7 +196,7 @@ public class MilkTests {
             check(!cow.isDripping(), "milking stops it");
             check(cow.hasFlag(AbstractMonsterGirl.FLAG_BLUSHING), "a bucket embarrasses her too");
             check(!cow.hasFlag(AbstractMonsterGirl.FLAG_HARNESSED), "but a bucket has no harness");
-            options(false);
+            restore(found);
             helper.succeed();
         });
     }
@@ -205,6 +217,21 @@ public class MilkTests {
         MonsterGirlsConfig.PAINT_RATE.set(100);
         MonsterGirlsConfig.VARIANT_RATE.set(100);
         helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, batch = "milk_stacks", timeoutTicks = 120)
+    public static void milkStacksInTheMachine(GameTestHelper helper) {
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
+        MilkingMachineBlockEntity m = machine(helper, player);
+        ItemStack milk = new ItemStack(ModItems.MILK.get(FamilyMilk.MINOTAUR).get(), 3);
+        check(milk.getMaxStackSize() == 16, "stacks as buckets do");
+        m.store().setItem(1, milk);
+        Minotaur cow = beside(helper, GirlSpecies.CATTLE_MINOTAUR, player);
+        cow.setMale(false);
+        helper.runAfterDelay(50, () -> {
+            check(m.store().getItem(1).getCount() == 4, "the new bucket joins the stack");
+            helper.succeed();
+        });
     }
 
     @GameTest(template = PLATFORM, batch = "milk_growth", timeoutTicks = 60)

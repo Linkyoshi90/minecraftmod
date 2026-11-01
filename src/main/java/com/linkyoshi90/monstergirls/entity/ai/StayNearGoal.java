@@ -32,6 +32,7 @@ public class StayNearGoal<T extends PathfinderMob & Bonded> extends Goal {
     public boolean canUse() {
         if (--this.cooldown > 0) return false;              // a countdown, not tickCount: idle goals are only checked every other tick
         this.cooldown = 5;
+        if (com.linkyoshi90.monstergirls.entity.BedCall.calledNear(this.mob)) return false;
         this.centre = this.mob.getOrders().centre(this.mob);
         if (this.centre == null) return false;
         double r = this.mob.getTarget() == null ? this.radius() : this.radius() * 2;
@@ -41,6 +42,7 @@ public class StayNearGoal<T extends PathfinderMob & Bonded> extends Goal {
     @Override
     public boolean canContinueToUse() {
         this.centre = this.mob.getOrders().centre(this.mob);
+        if (com.linkyoshi90.monstergirls.entity.BedCall.calledNear(this.mob)) return false;
         double r = this.radius() * 0.5;
         return this.centre != null && this.mob.distanceToSqr(this.centre) > r * r;
     }

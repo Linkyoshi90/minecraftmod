@@ -1,5 +1,6 @@
 package com.linkyoshi90.monstergirls.entity.ai;
 
+import com.linkyoshi90.monstergirls.entity.BedCall;
 import com.linkyoshi90.monstergirls.entity.BedSharing;
 import com.linkyoshi90.monstergirls.entity.Bonded;
 import net.minecraft.core.BlockPos;
@@ -68,12 +69,14 @@ public class ShareBedGoal<T extends PathfinderMob & Bonded> extends Goal {
 
     @Override
     public boolean canUse() {
-        if (--this.scanDelay > 0 || com.linkyoshi90.monstergirls.entity.Orders.holdsPlace(this.mob)) return false;
+        if (--this.scanDelay > 0) return false;
         this.scanDelay = 20;
         if (!this.mob.canShareBed() || this.mob.isOrderedToSit() || this.mob.getTarget() != null || this.mob.isInWater()) return false;
+        boolean onPost = com.linkyoshi90.monstergirls.entity.Orders.holdsPlace(this.mob);   // a guard only leaves her post when called
         Player best = null;
         for (Player p : this.mob.level().players()) {
             if (!p.isSleeping() || p.isSpectator() || p.distanceToSqr(this.mob) > RANGE * RANGE) continue;
+            if (onPost && !(p instanceof ServerPlayer caller && BedCall.isCalling(caller))) continue;
             if (!this.mob.trustsEnoughForBed(p)) continue;
             if (best == null || p.distanceToSqr(this.mob) < best.distanceToSqr(this.mob)) best = p;
         }
