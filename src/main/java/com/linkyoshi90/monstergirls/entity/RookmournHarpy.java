@@ -98,6 +98,11 @@ public class RookmournHarpy extends AbstractHarpy {
     }
 
     @Override
+    public void plainVariant() {
+        this.setVariant(Variant.values()[0]);
+    }
+
+    @Override
     public void randomizeVariant() {
         int r = this.random.nextInt(100);
         this.setVariant(r < 50 ? Variant.ROOK : r < 65 ? Variant.HOODED : r < 78 ? Variant.JACKDAW : r < 88 ? Variant.CHOUGH : r < 96 ? Variant.PIED : Variant.MAGPIE);

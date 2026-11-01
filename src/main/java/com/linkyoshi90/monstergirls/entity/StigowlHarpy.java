@@ -95,6 +95,11 @@ public class StigowlHarpy extends AbstractHarpy {
     }
 
     @Override
+    public void plainVariant() {
+        this.setVariant(Variant.values()[0]);
+    }
+
+    @Override
     public void randomizeVariant() {
         int r = this.random.nextInt(100);
         this.setVariant(r < 60 ? Variant.DUSK : r < 78 ? Variant.ASH : r < 90 ? Variant.BARN : r < 96 ? Variant.SNOW : Variant.VIOLET);

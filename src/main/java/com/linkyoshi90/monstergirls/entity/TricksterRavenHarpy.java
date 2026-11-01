@@ -109,6 +109,11 @@ public class TricksterRavenHarpy extends AbstractHarpy {
     }
 
     @Override
+    public void plainVariant() {
+        this.setVariant(Variant.values()[0]);
+    }
+
+    @Override
     public void randomizeVariant() {
         int r = this.random.nextInt(100);
         this.setVariant(r < 55 ? Variant.RAVEN : r < 75 ? Variant.SHEEN : r < 88 ? Variant.STORM : r < 97 ? Variant.BROWN : Variant.WHITE);

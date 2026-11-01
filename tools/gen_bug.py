@@ -457,6 +457,31 @@ VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0
          ("walk", 0.25, -30, 8), ("fly", 0.3, -60, 5), ("sit", 0, -30, 10), ("idle", 0, -150, 15)]
 
 
+# twenty-eighth wave: the pixi, a tiny blue fairy in a plain sundress (the fairy's rig; too small to share a bed, like the fairy); the rlff, a tall golden spirit
+# of forest streams on the Fairy Queen's rig, in a long gold gown
+SPECIES["pixi_bug"] = dict(
+    build="petite", outfit=dict(top=["halter"], bottom="wrap_skirt", colors=dict(cloth2="#a8d0f4")), hair="bob", bangs="swept", ears="elf",
+    legs="bare", foot="shoe", wings="fairy", flies=True,
+    pal=dict(SKIN=skin("pale"), HAIR="#a8d0f4", FUR="#a8d0f4", LIGHT="#ffffff", MARK="#6a9ad8", EYE="#4a7ac8", CLOTH="#a8d0f4", TRIM="#d8ecfc",
+             extra=dict(wing="#e0f0fc", wing_vein="#a8d0f4", wing_alpha=120, boot="#a8d0f4")),
+    variants={"candy": dict(HAIR="#f8b0d0", CLOTH="#f8c8e0", extra=dict(wing="#fce0ec", wing_vein="#f8a8c8", wing_alpha=120, boot="#f8a8c8")),
+              "mint": dict(HAIR="#a8ecc8", CLOTH="#c8f4dc", extra=dict(wing="#dcf8e8", wing_vein="#8ad8a8", wing_alpha=120, boot="#8ad8a8")),
+              "lemon": dict(HAIR="#f8e890", CLOTH="#fcf0b0", extra=dict(wing="#fcf8d8", wing_vein="#e8c850", wing_alpha=120, boot="#e8c850")),
+              "dusk": dict(HAIR="#c0a8f0", CLOTH="#d0c0f4", extra=dict(wing="#e4dcf8", wing_vein="#a890e0", wing_alpha=120, boot="#a890e0"))})
+SPECIES["rlff_bug"] = dict(
+    build="curvy", outfit=dict(top=["kimono"], bottom="hakama", extras=["pearls"], colors=dict(kimono="#e8d090", kimono_trim="#f8e8b0", obi="#c8a040", cloth2="#e8d090")),
+    hair="flowing", bangs="parted", ears="elf", legs="bare", foot="shoe", wings="butterfly", wing_scale=1.2, flies=True,
+    pal=dict(SKIN=skin("fair"), HAIR="#e8c878", FUR="#e8c878", LIGHT="#fff4d0", MARK="#b08a3a", EYE="#6a8a3a", CLOTH="#e8d090", TRIM="#f8e8b0",
+             extra=dict(wing="#f4e4b0", wing_vein="#c8a040", wing_alpha=130, wing_pattern="border", boot="#c8a040")),
+    variants={"moss": dict(HAIR="#8ac878", extra=dict(wing="#d0ecc0", wing_vein="#5a9a4a", wing_alpha=130, wing_pattern="border", kimono="#c8e4b0", boot="#5a9a4a")),
+              "brook": dict(HAIR="#8ac8e8", extra=dict(wing="#c8e8f8", wing_vein="#4a90c0", wing_alpha=130, wing_pattern="border", kimono="#c8e4f4", boot="#4a90c0")),
+              "autumn": dict(HAIR="#d8783a", extra=dict(wing="#f4c890", wing_vein="#a84a1e", wing_alpha=130, wing_pattern="border", kimono="#f0c8a0", boot="#a84a1e")),
+              "pale": dict(HAIR="#f0f0e8", extra=dict(wing="#ffffff", wing_vein="#c8c8b8", wing_alpha=130, wing_pattern="border", kimono="#f4f4ec", boot="#c8c8b8"))})
+
+
+BIPEDS.update({k: SPECIES[k] for k in ("pixi_bug", "rlff_bug")})
+
+
 if __name__ == "__main__":
     import family_concepts as FC
     want = [a for a in sys.argv[1:] if not a.startswith("--")]

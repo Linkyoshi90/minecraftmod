@@ -334,6 +334,11 @@ public class OwlHarpy extends AbstractHarpy {
 
     /** A hatchling from a clutch: any of her species' colours. */
     @Override
+    public void plainVariant() {
+        this.setVariant(Variant.values()[0]);
+    }
+
+    @Override
     public void randomizeVariant() {
         Variant[] all = Variant.values();
         this.setVariant(all[this.random.nextInt(all.length)]);

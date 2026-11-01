@@ -450,6 +450,11 @@ def anim_extra(an, sp, d):
                                       sym("arm", Tk((0, (0, 0, 0)), (0.5, (-170, 0, 10)), (1.2, (-170, 0, 10)), (1.5, (0, 0, 0))))))
 
 
+# homage looks of the twenty-eighth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["wyrm_dragon"]["variants"]["purple_flame"] = dict(HAIR="#e8b83a", FUR="#8a3ac8", LIGHT="#e8c050", MARK="#5a1e8a", EYE="#c83a8a", CLOTH="#e8b83a", TRIM="#5a1e8a")
+SPECIES["gryphon_dragon"]["variants"]["night_wing"] = dict(HAIR="#1a1a22", FUR="#22222c", LIGHT="#3a3a48", MARK="#101018", EYE="#4ae05a", CLOTH="#3a2a22", TRIM="#14141c")
+
+
 if __name__ == "__main__":
     import family_concepts as FC
     want = [a for a in sys.argv[1:] if not a.startswith("--")]

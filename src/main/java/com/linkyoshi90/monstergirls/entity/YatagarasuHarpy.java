@@ -95,6 +95,11 @@ public class YatagarasuHarpy extends AbstractHarpy {
     }
 
     @Override
+    public void plainVariant() {
+        this.setVariant(Variant.values()[0]);
+    }
+
+    @Override
     public void randomizeVariant() {
         int r = this.random.nextInt(100);
         this.setVariant(r < 60 ? Variant.BLACK : r < 78 ? Variant.SUN : r < 90 ? Variant.SHRINE : r < 97 ? Variant.NIGHT : Variant.WHITE);

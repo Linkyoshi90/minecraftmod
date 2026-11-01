@@ -13,6 +13,13 @@ import com.linkyoshi90.monstergirls.entity.IbisetHarpy;
 import com.linkyoshi90.monstergirls.entity.IronbeakHarpy;
 import com.linkyoshi90.monstergirls.entity.StigowlHarpy;
 import com.linkyoshi90.monstergirls.entity.YatagarasuHarpy;
+import com.linkyoshi90.monstergirls.entity.SkycrowHarpy;
+import com.linkyoshi90.monstergirls.entity.ReliquaryDoveHarpy;
+import com.linkyoshi90.monstergirls.entity.PoultryHarpy;
+import com.linkyoshi90.monstergirls.entity.LandharpyHarpy;
+import com.linkyoshi90.monstergirls.entity.ArgentowlisHarpy;
+import com.linkyoshi90.monstergirls.entity.IbiskingHarpy;
+import com.linkyoshi90.monstergirls.entity.MotmoraHarpy;
 import com.linkyoshi90.monstergirls.entity.RocHarpy;
 import com.linkyoshi90.monstergirls.entity.ZizHarpy;
 import com.linkyoshi90.monstergirls.entity.BennuHarpy;
@@ -103,6 +110,11 @@ public final class MonsterGirlsClient {
     }
 
     @SubscribeEvent
+    public static void registerParticles(net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent event) {
+        event.registerSpriteSet(com.linkyoshi90.monstergirls.registry.ModParticles.MILK_DRIP.get(), MilkDripParticle.Provider::new);
+    }
+
+    @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.SPARROW_HARPY.get(), SparrowHarpyRenderer::new);
         event.registerEntityRenderer(ModEntities.CROW_HARPY.get(), CrowHarpyRenderer::new);
@@ -130,6 +142,13 @@ public final class MonsterGirlsClient {
         event.registerEntityRenderer(ModEntities.IBISET_HARPY.get(), ctx -> new HarpyRenderer<IbisetHarpy>(ctx, "ibiset_harpy", 0.85F, 0.35F, IbisetHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.STIGOWL_HARPY.get(), ctx -> new HarpyRenderer<StigowlHarpy>(ctx, "stigowl_harpy", 0.85F, 0.35F, StigowlHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.YATAGARASU_HARPY.get(), ctx -> new HarpyRenderer<YatagarasuHarpy>(ctx, "yatagarasu_harpy", 0.8F, 0.3F, YatagarasuHarpy::getVariantSuffix));
+        event.registerEntityRenderer(ModEntities.SKYCROW_HARPY.get(), ctx -> new HarpyRenderer<SkycrowHarpy>(ctx, "skycrow_harpy", 0.9F, 0.35F, SkycrowHarpy::getVariantSuffix));
+        event.registerEntityRenderer(ModEntities.RELIQUARY_DOVE_HARPY.get(), ctx -> new HarpyRenderer<ReliquaryDoveHarpy>(ctx, "reliquary_dove_harpy", 0.85F, 0.35F, ReliquaryDoveHarpy::getVariantSuffix));
+        event.registerEntityRenderer(ModEntities.POULTRY_HARPY.get(), ctx -> new HarpyRenderer<PoultryHarpy>(ctx, "poultry_harpy", 0.85F, 0.4F, PoultryHarpy::getVariantSuffix));
+        event.registerEntityRenderer(ModEntities.LANDHARPY_HARPY.get(), ctx -> new HarpyRenderer<LandharpyHarpy>(ctx, "landharpy_harpy", 0.85F, 0.4F, LandharpyHarpy::getVariantSuffix));
+        event.registerEntityRenderer(ModEntities.ARGENTOWLIS_HARPY.get(), ctx -> new HarpyRenderer<ArgentowlisHarpy>(ctx, "argentowlis_harpy", 1.3F, 0.5F, ArgentowlisHarpy::getVariantSuffix));
+        event.registerEntityRenderer(ModEntities.IBISKING_HARPY.get(), ctx -> new HarpyRenderer<IbiskingHarpy>(ctx, "ibisking_harpy", 0.85F, 0.35F, IbiskingHarpy::getVariantSuffix));
+        event.registerEntityRenderer(ModEntities.MOTMORA_HARPY.get(), ctx -> new HarpyRenderer<MotmoraHarpy>(ctx, "motmora_harpy", 0.85F, 0.35F, MotmoraHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.ROC_HARPY.get(), ctx -> new HarpyRenderer<RocHarpy>(ctx, "roc_harpy", 2.1F, 1.0F, RocHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.ZIZ_HARPY.get(), ctx -> new HarpyRenderer<ZizHarpy>(ctx, "ziz_harpy", 0.85F, 0.35F, ZizHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.BENNU_HARPY.get(), ctx -> new HarpyRenderer<BennuHarpy>(ctx, "bennu_harpy", 0.85F, 0.35F, BennuHarpy::getVariantSuffix));

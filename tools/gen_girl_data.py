@@ -26,6 +26,14 @@ ASSETS = os.path.join(RES, "assets", "monstergirls")
 DATA = os.path.join(RES, "data", "monstergirls")
 JAVA = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "girl")
 
+# every biome of 1.21.1: a misspelt one fails its whole spawn tag when the game loads, and she never spawns
+BIOMES = set("""badlands bamboo_jungle basalt_deltas beach birch_forest cherry_grove cold_ocean crimson_forest dark_forest deep_cold_ocean deep_dark
+    deep_frozen_ocean deep_lukewarm_ocean deep_ocean desert dripstone_caves end_barrens end_highlands end_midlands eroded_badlands flower_forest forest
+    frozen_ocean frozen_peaks frozen_river grove ice_spikes jagged_peaks jungle lukewarm_ocean lush_caves mangrove_swamp meadow mushroom_fields nether_wastes
+    ocean old_growth_birch_forest old_growth_pine_taiga old_growth_spruce_taiga plains river savanna savanna_plateau small_end_islands snowy_beach snowy_plains
+    snowy_slopes snowy_taiga soul_sand_valley sparse_jungle stony_peaks stony_shore sunflower_plains swamp taiga the_end warm_ocean warped_forest
+    windswept_forest windswept_gravelly_hills windswept_hills windswept_savanna wooded_badlands""".split())
+
 # family -> (Java enum, hitbox width, spawn category, group size, weight)
 FAMILY = {
     "nekomata": ("NEKOMATA", 0.6, "creature", (1, 1), 6),
@@ -60,7 +68,7 @@ FAMILY = {
     # added 2026-10-30: rare and solitary
     "rider": ("RIDER", 0.7, "creature", (1, 1), 2),
 }
-GROUP = {"lioness_nekomata": (3, 5), "orca_mermaid": (2, 3), "fennec_kitsune": (2, 3), "corsac_kitsune": (2, 3), "dolphin_mermaid": (2, 3),
+GROUP = {"gandharva_elf": (1, 1), "apsara_elf": (1, 1), "pixi_bug": (1, 1), "rlff_bug": (1, 1), "ark_seraphim_centaur": (1, 1), "lioness_nekomata": (3, 5), "orca_mermaid": (2, 3), "fennec_kitsune": (2, 3), "corsac_kitsune": (2, 3), "dolphin_mermaid": (2, 3),
          "al_miraj_jackalope": (3, 5), "bison_minotaur": (3, 6), "high_elf": (2, 4), "bee_bug": (2, 4),
          "dugong_mermaid": (2, 2), "kelpie_centaur": (1, 1), "wolf_canid": (2, 4), "panda_canid": (1, 3), "anubis_canid": (1, 1),
          "pegasus_centaur": (1, 2), "lich_undead": (1, 1), "capybara_rodent": (2, 4), "leshy_flora": (1, 1), "llorona_undead": (1, 1),
@@ -137,7 +145,7 @@ CATEGORY = {"cetus_mermaid": "water_creature", "demon_devil": "monster", "fury_d
             "piranha_mermaid": "water_creature", "mosasaurus_mermaid": "water_creature", "fishman_mermaid": "water_creature",
             "cyclops_devil": "creature", "genie_devil": "creature"}
 # hitbox widths that differ from the family's
-WIDTH = {"mano_peluda_undead": 0.8, "gaitress_undead": 0.7, "cetus_mermaid": 1.2, "hand_undead": 0.8, "wrath_devil": 0.8, "kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alraune_flora": 1.2, "frankenstein_undead": 0.8,
+WIDTH = {"ark_seraphim_centaur": 1.3, "pixi_bug": 0.4, "mano_peluda_undead": 0.8, "gaitress_undead": 0.7, "cetus_mermaid": 1.2, "hand_undead": 0.8, "wrath_devil": 0.8, "kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alraune_flora": 1.2, "frankenstein_undead": 0.8,
          "gryphon_dragon": 1.3, "long_dragon": 1.0, "jormungandr_dragon": 1.2, "wyvern_dragon": 1.2, "wyrm_dragon": 1.3,
          "fairy_bug": 0.4, "scorpion_bug": 1.2, "moth_larva_bug": 0.6, "papillon_larva_bug": 0.6, "living_doll_undead": 0.4,
          "kannae_dragon": 0.5, "lesser_devil": 0.5, "mandragora_flora": 0.5, "polar_bear_canid": 0.8, "grizzly_canid": 0.8, "kobold_canid": 0.5,
@@ -216,6 +224,7 @@ NAME = {"jack_jackalope": "Jack Jackalope", "kraken_mollusk": "Kraken", "octopus
         "sasquatch_rodent": "Sasquatch", "sun_wukong_rodent": "Sun Wukong", "vetala_bat": "Vetala",
         "quetzalcoatl_dragon": "Quetzalcoatl", "leviathan_mermaid": "Leviathan", "girtablilu_bug": "Girtablilu", "cipactli_lizardfolk": "Cipactli",
         "behemoth_devil": "Behemoth", "nasnas_undead": "Nasnas", "jiangshi_undead": "Jiangshi", "cerberus_canid": "Cerberus", "baku_nekomata": "Baku",
+        "gandharva_elf": "Gandharva", "apsara_elf": "Apsara", "pixi_bug": "Pixi", "rlff_bug": "Rlff", "ark_seraphim_centaur": "Ark Seraphim",
         "bahamut_dragon": "Bahamut", "cetus_mermaid": "Cetus", "demon_devil": "Demon", "fury_devil": "Fury", "charro_negro_rider": "Charro Negro", "koschei_undead": "Koschei",
         "mano_peluda_undead": "La Mano Peluda", "gaitress_undead": "Gaitress", "bloodhound_canid": "Bloodhound", "shedim_centaur": "Shedim", "anzu_centaur": "Anzu", "obaa_kitsune": "Kitsune Obaa",
         "smilodon_nekomata": "Smilodon", "caribou_centaur": "Caribou", "lilith_devil": "Lilith", "wrath_devil": "Wrath", "min_min_mollusk": "Min Min Light", "hand_undead": "Hand",
@@ -279,8 +288,12 @@ def main():
         tag_path = os.path.join(DATA, "tags", "worldgen", "biome", f"spawns_{sp}.json")
         mod_path = os.path.join(DATA, "neoforge", "biome_modifier", f"{sp}_spawns.json")
         if s["biomes"]:
-            dump(tag_path, {"values": ["minecraft:" + b for b in s["biomes"]]})
+            unknown = [b for b in s["biomes"] if not b.startswith("#") and b not in BIOMES]
+            assert not unknown, (sp, unknown)
+            dump(tag_path, {"values": [("#minecraft:" + b[1:] if b.startswith("#") else "minecraft:" + b) for b in s["biomes"]]})
             lo, hi = GROUP.get(sp, grp)
+            hi = min(hi, 2)                                    # chance meetings: nobody comes in a crowd
+            lo = min(lo, hi)
             dump(mod_path, {"type": "neoforge:add_spawns", "biomes": f"#monstergirls:spawns_{sp}",
                             "spawners": {"type": f"monstergirls:{sp}", "weight": weight, "minCount": lo, "maxCount": hi}})
         else:

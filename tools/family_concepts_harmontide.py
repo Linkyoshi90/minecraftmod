@@ -1642,7 +1642,7 @@ FIFTEENTH = {
          {"Habitat": "Highlands", "Ridden": "By friends", "Signature": "Spits at monsters", "Temperament": "Prickly", "Danger": "Low"})],
     "rodent": [
         (dict(id="rockhyrax_rodent", name="Rockhyrax", group="Stony hills", tag="Watchful · sunny", height=1.2,
-              biomes=["stony_shores", "windswept_hills", "savanna_plateau"], temperament="Watchful, sociable",
+              biomes=["stony_shore", "windswept_hills", "savanna_plateau"], temperament="Watchful, sociable",
               ecology="A Harmontide rock hyrax with a back of blue scales, who loves nothing more than a sun-warmed stone.",
               interaction="Apples and sweet berries.",
               signature=("Sentinel", "Befriended, she whistles when a creeper comes within 12 blocks of her friend, and the creeper glows."),
@@ -3232,6 +3232,64 @@ for _fid, _entries in TWENTY_SEVENTH.items():
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
 
+# twenty-eighth wave (2026-11-01): the last of the Harmontide art: the Gandharva, the Apsara, the pixi, the rlff, the Ark Seraphim (the seven birds are harpies, with their own gen scripts)
+TWENTY_EIGHTH = {
+    "elf": [
+        (dict(id="gandharva_elf", name="Gandharva", group="Cherry groves", tag="Musical · courteous", height=1.75,
+              biomes=['cherry_grove', 'meadow'], temperament="Courteous, dreamy",
+              ecology="The celestial musician of Hindu and Buddhist lore: a youth in a long robe, small blue wings, a lute on his back.",
+              interaction="Sweet berries and honey.",
+              signature=("Lute", "He truly plays: a melody of notes on his lute. With a jukebox or a note block nearby he joins in, and his friends heal to the music."),
+              danger="Low.",
+              variants=[('blue', 'Blue (default)', 'Blue'), ('saffron', 'Saffron', 'Saffron'), ('rose', 'Rose', 'Rose'), ('green', 'Green', 'Green'), ('white', 'White', 'White')]),
+         {"Habitat": "Cherry groves", "Signature": "Plays his lute", "Danger": "Low."}),
+        (dict(id="apsara_elf", name="Apsara", group="Rivers by the blossom", tag="Graceful · playful", height=1.8,
+              biomes=['river', 'cherry_grove'], temperament="Graceful, playful",
+              ecology="The celestial dancer and water nymph of Hindu and Buddhist lore, water-blue, in a dancer's full costume.",
+              interaction="Cod, salmon and honey.",
+              signature=("Dance", "To any music she dances, and her friend moves quicker. With a Gandharva playing, her friend heals as well."),
+              danger="Low.",
+              variants=[('blue', 'Blue (default)', 'Blue'), ('lotus', 'Lotus', 'Lotus'), ('jade', 'Jade', 'Jade'), ('gold', 'Gold', 'Gold'), ('night', 'Night', 'Night')]),
+         {"Habitat": "Rivers by the blossom", "Signature": "Dances to music", "Danger": "Low."}),
+    ],
+    "bug": [
+        (dict(id="pixi_bug", name="Pixi", group="Mushroom fields", tag="Tiny · mischievous", height=0.7,
+              biomes=['mushroom_fields', 'flower_forest'], temperament="Mischievous",
+              ecology="A tiny blue fairy in a plain sundress, no bigger than a cat.",
+              interaction="Sugar and sweet berries.",
+              signature=("Shrink", "Crouch and ask her, empty-handed, and she shrinks her friend for half a minute, small enough for a one-block gap."),
+              danger="Low.",
+              variants=[('blue', 'Blue (default)', 'Blue'), ('candy', 'Candy', 'Candy'), ('mint', 'Mint', 'Mint'), ('lemon', 'Lemon', 'Lemon'), ('dusk', 'Dusk', 'Dusk')]),
+         {"Habitat": "Mushroom fields", "Signature": "Shrinks her friend", "Danger": "Low."}),
+        (dict(id="rlff_bug", name="Rlff", group="Forest streams", tag="Serene · ancient", height=1.9,
+              biomes=['lush_caves', 'river'], temperament="Serene",
+              ecology="A tall golden spirit of forest streams, in a long gown, on wide pale wings.",
+              interaction="Glow berries and honey.",
+              signature=("Healing water", "While her friend stands in water near her, the water heals them."),
+              danger="Low.",
+              variants=[('gold', 'Gold (default)', 'Gold'), ('moss', 'Moss', 'Moss'), ('brook', 'Brook', 'Brook'), ('autumn', 'Autumn', 'Autumn'), ('pale', 'Pale', 'Pale')]),
+         {"Habitat": "Forest streams", "Signature": "Her water heals", "Danger": "Low."}),
+    ],
+    "centaur": [
+        (dict(id="ark_seraphim_centaur", name="Ark Seraphim", group="End highlands", tag="Watchful · solemn", height=2.4,
+              biomes=['end_highlands', 'end_midlands'], temperament="Solemn, watchful",
+              ecology="A winged blue lioness in jewelled trappings who bears a small gold ark on her back across the outer islands.",
+              interaction="Golden apples and raw beef.",
+              signature=("Blinding light", "Once a day, when her friend is badly hurt, a blast of light burns the monsters around them and shields her friend."),
+              danger="High.",
+              variants=[('blue', 'Blue (default)', 'Blue'), ('white', 'White', 'White'), ('gold', 'Gold', 'Gold'), ('void', 'Void', 'Void'), ('rose', 'Rose', 'Rose')]),
+         {"Habitat": "End highlands", "Signature": "Burns and shields", "Danger": "High."}),
+    ],
+}
+for _fid, _entries in TWENTY_EIGHTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(s["id"] == _species["id"] for s in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 # homage variants of 2026-10-28 (POP_CULTURE_VARIANTS.md): appended after every wave, so every species exists by now
 for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, a black bodysuit with a pink heart, white gloves and boots")),
                        ("ika_mollusk", ("ink_kid", "Ink Kid", "Bright orange tentacle hair, a white tee and black shorts")),
@@ -3290,7 +3348,16 @@ for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, 
                        ("wolf_canid", ("aura_guardian", "Aura Guardian", "Blue and black, a cream chest")),
                        ("red_kitsune", ("gold_ninja", "Gold Ninja", "Golden fur, a white front, purple clothes")),
                        ("succubus_devil", ("night_heiress", "Night Heiress", "Green hair, black, purple wings and stockings")),
-                       ("undine_slime", ("copy_blob", "Copy Blob", "Soft pink, dot eyes"))]:
+                       ("undine_slime", ("copy_blob", "Copy Blob", "Soft pink, dot eyes")),
+                       # twenty-eighth wave
+                       ("house_mouse_rodent", ("spark_mouse", "Spark Mouse", "All yellow, black-tipped ears, red at the cheeks")),
+                       ("gecko_lizardfolk", ("green_dino", "Green Dino", "Bright green, a white front, a red saddle")),
+                       ("reindeer_centaur", ("doctor_deer", "Doctor Deer", "Warm brown fur, pink clothes")),
+                       ("wyrm_dragon", ("purple_flame", "Purple Flame", "Purple scales, gold horns and wing webs")),
+                       ("gryphon_dragon", ("night_wing", "Night Wing", "Black all over, bright green eyes")),
+                       ("panda_canid", ("forest_keeper", "Forest Keeper", "Soft grey, a cream belly")),
+                       ("grizzly_canid", ("sleepy_giant", "Sleepy Giant", "Blue-green fur, a cream belly")),
+                       ("fennec_kitsune", ("first_fox", "First Fox", "Warm brown fur, a big cream ruff"))]:
     for _fam in C.FAMILIES:
         for _s in _fam["species"]:
             if _s["id"] == _sid and all(v[0] != _variant[0] for v in _s["variants"]):

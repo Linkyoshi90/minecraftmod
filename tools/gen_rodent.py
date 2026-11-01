@@ -427,5 +427,9 @@ def anim_extra(an, sp, d):
                                                    "body": {"rotation": hold(20, 0, 0)}}, sym("arm", hold(-40, 0, 0))))
 
 
+# homage looks of the twenty-eighth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["house_mouse_rodent"]["variants"]["spark_mouse"] = dict(HAIR="#f8d830", FUR="#f8d830", LIGHT="#fff0a0", MARK="#3a2a14", EYE="#1e1e24", CLOTH="#c84a2a", TRIM="#3a2a14")
+
+
 if __name__ == "__main__":
     F.run_family("rodent", SPECIES, declare_hook, paint_hook, build_hook, anim_extra)

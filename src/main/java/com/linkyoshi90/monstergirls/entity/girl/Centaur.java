@@ -823,9 +823,31 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
         return took;
     }
 
+    /**
+     * Once a day, with her friend under 40% health: the monsters within 8 of them burn for 14, and her friend is shielded.
+     * How many monsters were caught, or -1 when she doesn't (no friend, not hurt enough, already today).
+     */
+    public int blindingLight(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        long day = level.getDayTime() / 24000L;
+        if (friend == null || friend.getHealth() > friend.getMaxHealth() * 0.4F || this.getPersistentData().contains("ArkDay") && this.getPersistentData().getLong("ArkDay") == day) return -1;
+        this.getPersistentData().putLong("ArkDay", day);
+        int caught = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8),
+                net.minecraft.world.entity.monster.Monster::isAlive)) {
+            m.hurt(level.damageSources().magic(), 14);
+            caught++;
+        }
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.ABSORPTION, 600, 2));
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.END_ROD, friend.getX(), friend.getY() + 1, friend.getZ(), 60, 3, 1.5, 3, 0.05);
+        this.playSound(net.minecraft.sounds.SoundEvents.BEACON_ACTIVATE, 1.5F, 1.4F);
+        return caught;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.ARK_SERAPHIM_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel lit && !this.isBaby() && this.tickCount % 20 == 0) this.blindingLight(lit);
         if (this.species == GirlSpecies.ANZU_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel crag && !this.isBaby() && this.tickCount % 60 == 0) this.snatch(crag);
         if (this.species == GirlSpecies.SHEDIM_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel lonely && !this.isBaby() && this.tickCount % 20 == 0) {
             this.veil(!lonely.isDay());

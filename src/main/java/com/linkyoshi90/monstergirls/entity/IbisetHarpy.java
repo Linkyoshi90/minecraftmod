@@ -94,6 +94,11 @@ public class IbisetHarpy extends AbstractHarpy {
     }
 
     @Override
+    public void plainVariant() {
+        this.setVariant(Variant.values()[0]);
+    }
+
+    @Override
     public void randomizeVariant() {
         int r = this.random.nextInt(100);
         this.setVariant(r < 60 ? Variant.BLUE : r < 78 ? Variant.SACRED : r < 90 ? Variant.GLOSSY : r < 96 ? Variant.SCARLET : Variant.GOLD);

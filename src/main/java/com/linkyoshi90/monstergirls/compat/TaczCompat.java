@@ -27,6 +27,16 @@ public final class TaczCompat {
         return LOADED && !stack.isEmpty() && Tacz.isGun(stack);
     }
 
+    /** Whether the item is a gun its gun pack files under sniper rifles. */
+    public static boolean isSniper(ItemStack stack) {
+        return isGun(stack) && Tacz.isSniper(stack);
+    }
+
+    /** She shoulders it and looks down the scope (or lowers it again). */
+    public static void aim(LivingEntity shooter, boolean aiming) {
+        if (LOADED && Tacz.isGun(shooter.getMainHandItem())) Tacz.aim(shooter, aiming);
+    }
+
     /** Whether the item is ammunition (or an ammo box) for the gun she holds. */
     public static boolean isAmmoFor(ItemStack gun, ItemStack stack) {
         return LOADED && !stack.isEmpty() && Tacz.isGun(gun) && Tacz.isAmmoFor(gun, stack);
@@ -46,6 +56,15 @@ public final class TaczCompat {
     private static final class Tacz {
         static boolean isGun(ItemStack stack) {
             return com.tacz.guns.api.item.IGun.getIGunOrNull(stack) != null;
+        }
+
+        static boolean isSniper(ItemStack stack) {
+            var gun = com.tacz.guns.api.item.IGun.getIGunOrNull(stack);
+            return gun != null && com.tacz.guns.api.TimelessAPI.getCommonGunIndex(gun.getGunId(stack)).map(i -> "sniper".equals(i.getType())).orElse(false);
+        }
+
+        static void aim(LivingEntity shooter, boolean aiming) {
+            com.tacz.guns.api.entity.IGunOperator.fromLivingEntity(shooter).aim(aiming);
         }
 
         static boolean isAmmoFor(ItemStack gun, ItemStack stack) {

@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -59,6 +60,40 @@ public final class GirlArms {
         return stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem || TaczCompat.isGun(stack);
     }
 
+    /** Manako's look of the cyclops, the one eye made for a scope: she carries weapons, and a sniper rifle best of all. */
+    public static boolean isMarksman(AbstractMonsterGirl girl) {
+        return girl.getSpecies() == GirlSpecies.CYCLOPS_DEVIL && "tactical_eye".equals(girl.getVariantName());
+    }
+
+    public static boolean isFighter(AbstractMonsterGirl girl) {
+        return isFighter(girl.getSpecies()) || isMarksman(girl);
+    }
+
+    /** Whether she is the marksman with a sniper rifle in her hands. */
+    public static boolean isSniping(AbstractMonsterGirl girl) {
+        return isMarksman(girl) && TaczCompat.isSniper(girl.getMainHandItem());
+    }
+
+    /** How far away she will fire, with this weapon in hand. */
+    public static double fireRange(boolean sniper) {
+        return sniper ? 64.0 : 24.0;
+    }
+
+    /** How close she walks up before she stops and shoots. */
+    public static double holdRange(boolean sniper) {
+        return sniper ? 48.0 : 14.0;
+    }
+
+    /** How close a target gets before she backs away. */
+    public static double backOffRange(boolean sniper) {
+        return sniper ? 10.0 : 4.0;
+    }
+
+    /** Ticks with the target in sight before her first shot (a sniper settles her aim). */
+    public static int aimTicks(boolean sniper) {
+        return sniper ? 20 : 5;
+    }
+
     public static boolean isArmed(AbstractMonsterGirl girl) {
         return isRangedWeapon(girl.getMainHandItem());
     }
@@ -69,7 +104,7 @@ public final class GirlArms {
      */
     @Nullable
     public static InteractionResult interact(AbstractMonsterGirl girl, Player player, ItemStack stack) {
-        if (!isFighter(girl.getSpecies()) || girl.isBaby() || girl.getAffection(player) < Orders.AFFECTION) return null;
+        if (!isFighter(girl) || girl.isBaby() || girl.getAffection(player) < Orders.AFFECTION) return null;
         boolean client = girl.level().isClientSide;
         if (isRangedWeapon(stack)) {
             if (!client) {
@@ -110,7 +145,7 @@ public final class GirlArms {
 
     /** Whether she would fetch this item lying on the ground: a weapon or ammunition for her gun, thrown by a friend. */
     public static boolean wantsThrown(AbstractMonsterGirl girl, ItemEntity item) {
-        if (!item.isAlive() || item.getItem().isEmpty() || girl.isBaby() || !isFighter(girl.getSpecies())) return false;
+        if (!item.isAlive() || item.getItem().isEmpty() || girl.isBaby() || !isFighter(girl)) return false;
         if (!(item.getOwner() instanceof Player thrower) || girl.getAffection(thrower) < Orders.AFFECTION) return false;
         ItemStack s = item.getItem();
         return isRangedWeapon(s) || TaczCompat.isAmmoFor(girl.getMainHandItem(), s) && girl.ammoPouch().canAddItem(s);
@@ -231,6 +266,7 @@ public final class GirlArms {
             this.seen = 0;
             this.girl.getNavigation().stop();
             this.girl.setAim(AbstractMonsterGirl.AIM_NONE);
+            TaczCompat.aim(this.girl, false);
         }
 
         @Override
@@ -247,11 +283,14 @@ public final class GirlArms {
             this.seen = sees ? this.seen + 1 : 0;
             this.girl.getLookControl().setLookAt(t, 30.0F, 30.0F);
             this.girl.setAim(aimOf(this.girl.getMainHandItem()));
-            if (d2 > 14 * 14 || !sees) this.girl.getNavigation().moveTo(t, 1.0);
-            else if (d2 < 4 * 4) this.girl.getNavigation().moveTo(this.girl.getX() * 2 - t.getX(), this.girl.getY(), this.girl.getZ() * 2 - t.getZ(), 1.1);
+            boolean sniper = isSniping(this.girl);
+            double hold = holdRange(sniper), back = backOffRange(sniper), fire = fireRange(sniper);
+            if (d2 > hold * hold || !sees) this.girl.getNavigation().moveTo(t, 1.0);
+            else if (d2 < back * back) this.girl.getNavigation().moveTo(this.girl.getX() * 2 - t.getX(), this.girl.getY(), this.girl.getZ() * 2 - t.getZ(), 1.1);
             else this.girl.getNavigation().stop();
             if (this.cooldown > 0) this.cooldown--;
-            if (!sees || this.seen < 5 || d2 > 24 * 24 || !(this.girl.level() instanceof ServerLevel)) return;
+            if (sniper) TaczCompat.aim(this.girl, sees && d2 >= back * back);
+            if (!sees || this.seen < aimTicks(sniper) || d2 > fire * fire || !(this.girl.level() instanceof ServerLevel)) return;
             ItemStack weapon = this.girl.getMainHandItem();
             if (TaczCompat.isGun(weapon)) {
                 if (TaczCompat.fireAt(this.girl, t)) this.girl.announceShot();   // TaCZ keeps the gun's own fire rate and reloads
@@ -259,6 +298,36 @@ public final class GirlArms {
                 shootArrow(this.girl, t, weapon);
                 this.cooldown = weapon.getItem() instanceof CrossbowItem ? 40 : 30;
             }
+        }
+    }
+
+    /** With a sniper rifle she watches far past what she would otherwise notice, while a friend is near. */
+    public static class SpotterGoal extends Goal {
+        private final AbstractMonsterGirl girl;
+
+        public SpotterGoal(AbstractMonsterGirl girl) {
+            this.girl = girl;
+        }
+
+        @Override
+        public boolean canUse() {
+            return this.girl.tickCount % 20 == 0 && this.girl.getTarget() == null && isSniping(this.girl) && this.girl.bondedPlayer(Orders.AFFECTION, 32) != null;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return false;
+        }
+
+        @Override
+        public void start() {
+            double range = fireRange(true);
+            Monster nearest = null;
+            for (Monster m : this.girl.level().getEntitiesOfClass(Monster.class, this.girl.getBoundingBox().inflate(range), m -> m.isAlive() && this.girl.distanceToSqr(m) < range * range
+                    && this.girl.getSensing().hasLineOfSight(m))) {
+                if (nearest == null || this.girl.distanceToSqr(m) < this.girl.distanceToSqr(nearest)) nearest = m;
+            }
+            if (nearest != null) this.girl.setTarget(nearest);
         }
     }
 

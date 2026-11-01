@@ -265,7 +265,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     /** Picks this species' variant for a biome (with the rare rolls); species without variants stay as they are. */
     public void rollVariant(Holder<Biome> biome) {
         AnuranVariants.Set set = this.variants();
-        if (set != null) this.entityData.set(DATA_VARIANT, (byte) set.pick(biome, this.random));
+        if (set != null) this.entityData.set(DATA_VARIANT, (byte) (com.linkyoshi90.monstergirls.MonsterGirlsConfig.keepsBiomeVariant(this.random) ? set.pick(biome, this.random) : 0));
     }
 
     /** Whether the variant came from loaded data. Vanilla /summon loads the NBT and then still runs finalizeSpawn. */
@@ -598,7 +598,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
 
     @Override
     public boolean canShareBed() {
-        return !this.isBaby() && !this.isAquaticOnly() && this.gestation.canConceive();
+        return !this.isBaby() && this.getType().getHeight() >= CHILDLIKE_HEIGHT && !this.isAquaticOnly() && this.gestation.canConceive();
     }
 
     @Override
@@ -678,6 +678,12 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         return this.isTadpole() ? currentAir : super.decreaseAirSupply(currentAir); // gills
     }
 
+    @Override
+    public int getGrowTicks() {
+        return this.growTicks;
+    }
+
+    @Override
     public void setGrowTicks(int ticks) {
         this.growTicks = ticks;
     }
@@ -815,10 +821,10 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         return p == 0 ? null : com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.PAINTS.get(p - 1);
     }
 
-    /** One wild one in 64 (never a hatchling: she takes her mother's) is painted. */
+    /** One wild one in 64 by default (never a hatchling: she takes her mother's) is painted. */
     protected void rollPaint(MobSpawnType spawnType) {
         if (spawnType != MobSpawnType.BREEDING && !this.hasVariantFromData()
-                && this.random.nextInt(com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.PAINT_RARITY) == 0) {
+                && com.linkyoshi90.monstergirls.MonsterGirlsConfig.rollsPaint(this.random)) {
             this.setPaint(Painted.roll(this.random));
         }
     }

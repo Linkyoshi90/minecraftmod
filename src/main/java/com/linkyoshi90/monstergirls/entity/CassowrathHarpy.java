@@ -41,7 +41,7 @@ public class CassowrathHarpy extends OstrichHarpy {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData groupData) {
         SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, groupData);
-        if (spawnType != MobSpawnType.BREEDING) this.randomizeVariant();
+        if (spawnType != MobSpawnType.BREEDING && com.linkyoshi90.monstergirls.MonsterGirlsConfig.keepsBiomeVariant(this.random)) this.randomizeVariant();
         return data;
     }
 

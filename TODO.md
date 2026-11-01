@@ -34,7 +34,7 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Naga** (lamia): jungles. King cobra hood and a gold crown. Nobody she is not fond of opens or breaks an unopened structure chest within 10 blocks of her. Player chests are never affected.
   - **Dullahan** (undead): plains and meadows at night. She carries her head in the crook of her arm, with a blue spirit flame at the neck. Half of them ride a skeleton horse. She backs away from anyone holding gold.
 - [x] Fourth wave (2026-10-24), the design notes in HARMONTIDE_CONCEPTS.md "Fourth wave", tested in `FourthWaveTests`:
-  - **Camel** and **Dromedary** (centaur): anyone may ride them, with no friendship needed. Cactus puts one in the mood, and next to a vanilla camel in love she conceives (half the young are camel calves). A bucket milks her once every 5 minutes. Kin of vanilla camels.
+  - **Camel** and **Dromedary** (centaur): anyone may ride them, with no friendship needed. Cactus puts one in the mood, and next to a vanilla camel in love she conceives (half the young are camel calves). A bucket milks her once every 5 minutes with a similarly embarrassed reaction to the minotaur. Kin of vanilla camels.
   - **Kelpie** (centaur): rivers. She is ridden only under a saddle, put on at fond (10). In water she carries you faster than a boat (0.42 a tick, 0.5 sprinting). She attacks players she is not fond of between 13000 and 23000 on the clock.
   - **Wadjet** (lamia, on two legs with a cobra hood): desert. Every 2 s she gives Regeneration and Resistance to players within 8 blocks and to the girls (any family) fond of them. She hunts every hostile mob and often brings emeralds. Named **Nekhbet**: level II effects and +4 attack damage.
   - **Hornet** (bug): forests. She stings players within 5 blocks unless fond of them. Until befriended she hunts bees and bee girls. On patrol she goes for hostile mobs. Eats meat and fruit, gives paper and clay.
@@ -309,6 +309,16 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Paints:** prismarine, amethyst, sculk (glow mask) and mushroom, tiled from the vanilla block textures, so 87 in all.
   - **Homage props:** the dullahan's `envoy_kit`: Celty's helmet (`rider`) and Lala's scythe (`scythe`), each drawn only on its look; the dullahan's paints were redone for the new parts.
 - [ ] Dev client for the twenty-second wave: the macawtl's plumes, the piranha's lure, the mosasaurus's size, Xiangliu's little heads, the cyclops's eye and blink, the genie's smoke tail and float, Ammit's snout; Celty's helmet and Lala's scythe; the four paints and the sculk glow.
+- [ ] **Twenty-ninth wave** (planned): the missing system (based on friendship points; conception is certain today, so a higher chance needs a lower base chance first). Mushroom: Shiitake (a main body with small offshoots shaped like girls, on adult proportions, kept out of the bed system), Shroomotaur, Censhroom, Cordyceps Infected. Warped: Firesprite, Zoglintaur, Piglette (these two also crimson forest). Soul sand: Lost Soul, Soul Cluster, Soul Leech.
+- [ ] **Thirtieth wave** (planned): cold ocean: Beluga, Spider Crab, Giant Kraken, Drowned zombie looks. Dripstone: Olm, Cave Gekko, Knocker (warns of cave-ins), Famished (hostile until a player drops food, then friendly and less monstrous: two looks; no antlers or deer skull). End: Moon Rabbit, Kaguya, Ophanim, Norn, Kun; add the Baku to the midlands.
+- [ ] **Thirty-first wave** (planned): add existing creatures to thin biomes (at least 8 species from 3 families everywhere); modded biomes as optional tag entries from a table, starting with Biomes O' Plenty, Terralith, Regions Unexplored and Oh The Biomes We've Gone.
+- [x] **Twenty-eighth wave** (2026-11-01), tested in `TwentyEighthWaveTests`:
+  - **Elf** Gandharva (`playLute`, `hearNote`, `tickLute`), Apsara (`dance`). **Bug** Pixi (`shrink`, `growBack`), Rlff (`healingWater`). **Centaur** Ark Seraphim (`blindingLight`, `ark` props).
+  - **Harpies** Poultry (`tend`, `layEgg`), Landharpy (`stomp`), Argentowlis (`watch`), Ibisking (`consult`), Motmora (`display`), Reliquary Dove (`keepsake`), Skycrow (`strike`).
+  - **Paints:** crimson, bone, bamboo, sponge; 111 in all. **Homages:** spark_mouse, green_dino, doctor_deer, purple_flame, night_wing, forest_keeper, sleepy_giant, first_fox.
+  - **Rarity:** `MonsterGirlsConfig`, `SpawnRarity`, `GirlEvents.onSpawnCheck`; groups capped at 2 in gen_girl_data.
+  - **Fixed:** the rock hyrax never spawned (`stony_shores`); gen_girl_data now rejects unknown biomes. **Bed:** `Bonded.CHILDLIKE_HEIGHT`. **Manako:** `GirlArms.isMarksman`, `isSniping`, `SpotterGoal`, `TaczCompat.isSniper`.
+- [ ] Dev client for the twenty-eighth wave: the Gandharva's strumming and the lute's swing to the front, the Apsara's dance, the hen's figure (inflated cubes), the ark's seat, a real TaCZ sniper in Manako's hands (only the compile is tested: TaCZ isn't in the test server), spawn rates over a long walk, spawns in the End; the four paints; the eight homage looks.
 - [x] **Twenty-seventh wave** (2026-10-31), tested in `TwentySeventhWaveTests`:
   - **Dragon** Bahamut (`judgement`). **Merfolk** Cetus (`swallow`). **Devil** Demon (`pact`), Fury (`hound`, `witness` from `GirlEvents.onDeath`, wings glow). **Rider** Charro Negro (`lend`, `repay`, `collect`, kept in the persistent data; rides a black horse via `mount`).
   - **Undead** Koschei (`chain`, `holdChains`), La Mano Peluda (`mano_peluda_undead`, the Hand's rig with `h_fur`: `lunge`), Gaitress (`gaitress_undead`, own rig in gen_undead.py: `gait_*`; `pace`, kick).
@@ -504,8 +514,6 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
 - [ ] Dev client: how the drips read at game scale, and jello's translucency on the harpies' wings.
 - [x] **Expecting bellies** no longer stretch abs over the bump: the belly bone has its own smooth skin texture (`belly_skin`). All 17 girl families were regenerated.
 - [x] Decided: no Kachina and no Rainbow Serpent. Bears share a family with kobolds and the other canids ("canid girls").
-- Not doing: the full-moon "phantom pregnancy" of every befriended girl. It is still the whole household getting pregnant by the player in one night. Normal single bed-sharing stays as it is.
-- Not doing: the full-moon event where every befriended girl queues at the bed to mate (a group sex scene; the mod is low ecchi). A non-sexual full moon is fine: a moonlit vigil, or moods.
 - [ ] Decide on the sensitive ones: Kachina (recommendation: drop it), Uktena, Wayob. Decided (2026-10-26): no Thunderbird.
 - [ ] Decide which new families are worth their own class: Giants, Celestials, Horsemen, Fury, Crustaceans.
 
@@ -594,7 +602,9 @@ The answers given on 2026-10-22, as a work list. Ticked = in game.
 **Minotaur**
 - [x] Cheese becomes its own item.
 - [x] Only cows (female minotaurs) can be milked (already the case).
-- Not doing: the embarrassed-but-gives-milk-anyway reaction, and milk dripping from the chest. Both sexualise the milking.
+- To do: the embarrassed-but-gives-milk-anyway reaction, and milk dripping from the chest.
+- [x] **Milking machine and family milk** (2026-11-01): every family but constructs and flora has a milk bucket (`item/FamilyMilk`, assets from `tools/gen_milk_assets.py`) with its own effect for 3 minutes. Any milk fed to a young one takes a day off her growing up. The machine fills buckets from a grown, full-size (1.25 blocks or taller) friend of its placer (10 friendship) within 2 blocks who is expecting, or a minotaur cow; once per 5 minutes each. Reaction and animation needed.
+- [ ] Dev client: the machine's look (a plain vanilla-textured block for now), the bucket icons, and hoppers.
 
 **Mollusk**
 - [x] The kraken can pull a boat (a ride). High friendship: in the water next to her player's boat she tows it the way the rider looks.
@@ -621,13 +631,14 @@ The answers given on 2026-10-22, as a work list. Ticked = in game.
 
 **Flora**
 - [x] The alraune can be planted as a flower block. At high friendship, sneak with a shovel: she becomes an Alraune Bloom item. Plant it on dirt; right-click or break it and she steps out with her bonds intact.
-- [x] Nectar from flora girls at high friendship, collected with a glass bottle (built as gathering, not "milking").
+- [x] Nectar from flora girls at high friendship, collected with a glass bottle (built as milking).
 - [x] Nectar waters and feeds a field: pour a bottle on farmland and it soaks every block within 2 and gives every crop a growth spurt.
 - [x] Nectar as a placeable fluid (Bucket of Nectar: three nectar bottles and a bucket). It hydrates farmland like water, and crops within 4 blocks grow on half of their growth ticks. It is slow and honey-like, makes no infinite source, and renders as golden-tinted water.
 
 ## 0g. Round of 2026-10-22 (evening)
 
-- [x] **Cowbell:** a minotaur cow's bell rings once (a note over her head) when her milk is ready again. This replaces the milk-drip idea, which stays out (it sexualises her).
+- [x] **Cowbell:** a minotaur cow's bell rings once (a note over her head) when her milk is ready again. 
+- [x] **Milk-drips:** her chest drips milk once she's ready.
 - [x] **Orders outrank following:** under sit or patrol a girl no longer follows her player, flocks, flies home, brings presents, begs or joins your bed. Under follow only her own following gives way (presents and bed stay). This covers harpies (leader, flock, home, owl night-stalking), anurans and girls.
 - [x] **Healing balm** (nectar bottle, honey bottle and a small flower make 3, or a present from a healer): use it on a girl who is fond of you, or on a befriended vanilla mob, for 10 health and Regeneration II. Healers are the flora, the verdant and honey slimes, the snail, the fairies and the axolotl. At high friendship one present in five is a balm, and every 30 seconds they tend your most-hurt companion nearby (4 health and a little regeneration).
 - [x] **Farmhands:** a girl patrolling (stick) for a player she is fond of at high friendship harvests ripe crops in her patrol area, replants them from the harvest, and stores the rest in a chest or barrel there (or drops it). Flora girls also nudge growing crops along. Obeys mobGriefing. Merfolk don't farm.

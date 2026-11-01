@@ -107,6 +107,11 @@ public class MirrorCraneHarpy extends AbstractHarpy {
     }
 
     @Override
+    public void plainVariant() {
+        this.setVariant(Variant.values()[0]);
+    }
+
+    @Override
     public void randomizeVariant() {
         int r = this.random.nextInt(100);
         this.setVariant(r < 60 ? Variant.BLUE : r < 75 ? Variant.WHITE : r < 87 ? Variant.GREY : r < 95 ? Variant.VIOLET : Variant.GOLD);

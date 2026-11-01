@@ -107,6 +107,11 @@ public class ZhuqueHarpy extends AbstractHarpy {
     }
 
     @Override
+    public void plainVariant() {
+        this.setVariant(Variant.values()[0]);
+    }
+
+    @Override
     public void randomizeVariant() {
         this.setVariant(this.random.nextInt(3) == 0 ? Variant.values()[1 + this.random.nextInt(Variant.values().length - 1)] : Variant.VERMILION);
     }

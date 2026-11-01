@@ -282,5 +282,70 @@ def build_hook(r, g, d):
                                                  cube("halo_s", [-3.5, top, -2.5 + z]), cube("halo_s", [2.5, top, -2.5 + z])])
 
 
+# twenty-eighth wave: the Gandharva, the celestial musician of Hindu and Buddhist lore, a youth in a long robe with small blue wings and a lute slung on
+# his back (it swings round to his hands when he plays); the Apsara, the celestial dancer, water-blue, in a full dancer's costume
+SPECIES["gandharva_elf"] = dict(
+    build="slim", outfit=dict(top=["kimono"], bottom="hakama", extras=["armlets"], colors=dict(kimono="#3a6ac8", kimono_trim="#e8c050", obi="#e8c050", cloth2="#2a4a9a")),
+    hair="bun", bangs="parted", ears="elf", legs="bare", foot="shoe", wings="feather", wing_scale=0.7, flies=True, lute=True,
+    pal=dict(SKIN=skin("fair"), HAIR="#1e2e6a", FUR="#1e2e6a", LIGHT="#a8c4f4", MARK="#14204a", EYE="#2a3a7a", CLOTH="#3a6ac8", TRIM="#e8c050",
+             extra=dict(boot="#c8a878", wing="#7ab0f0", wing_tip="#3a6ac8", lute="#b87a3a", lute_dark="#6a4018")),
+    variants={"saffron": dict(HAIR="#2a1e14", CLOTH="#e8a02a", extra=dict(boot="#c8a878", wing="#f8d890", wing_tip="#e8a02a", lute="#b87a3a", lute_dark="#6a4018", kimono="#e8a02a")),
+              "rose": dict(HAIR="#4a1e3a", CLOTH="#d86a8a", extra=dict(boot="#c8a878", wing="#f8c8d8", wing_tip="#d86a8a", lute="#8a4a2a", lute_dark="#4a2414", kimono="#d86a8a")),
+              "green": dict(HAIR="#143a2a", CLOTH="#2a8a5a", extra=dict(boot="#c8a878", wing="#a8e8c0", wing_tip="#2a8a5a", lute="#b87a3a", lute_dark="#6a4018", kimono="#2a8a5a")),
+              "white": dict(HAIR="#e8e8f0", CLOTH="#f0f0f4", extra=dict(boot="#c8a878", wing="#ffffff", wing_tip="#c8c8d8", lute="#d8b878", lute_dark="#8a6a3a", kimono="#f0f0f4"))})
+SPECIES["apsara_elf"] = dict(
+    build="curvy", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["armlets", "pearls"], colors=dict(cloth2="#2a8ae8")),
+    hair="flowing", bangs="swept", ears=None, legs="bare", foot="shoe", dancer=True,
+    pal=dict(SKIN=skin("tan"), HAIR="#3ab0f0", FUR="#3ab0f0", LIGHT="#c8ecfc", MARK="#1a70c0", EYE="#2a6ac8", CLOTH="#3ab0f0", TRIM="#e8c050", extra=dict(boot="#3ab0f0")),
+    variants={"lotus": dict(HAIR="#f0a0c0", CLOTH="#f0a0c0", MARK="#c84a7a", extra=dict(boot="#f0a0c0")),
+              "jade": dict(HAIR="#3ad0a0", CLOTH="#3ad0a0", MARK="#1a8a6a", extra=dict(boot="#3ad0a0")),
+              "gold": dict(HAIR="#f0c850", CLOTH="#f0c850", MARK="#b88a1e", extra=dict(boot="#f0c850")),
+              "night": dict(HAIR="#3a3ab0", CLOTH="#3a3ab0", MARK="#1e1e6a", EYE="#c8a040", extra=dict(boot="#3a3ab0"))})
+_declare2, _paint2, _build2, _anim2 = declare_hook, paint_hook, build_hook, anim_extra
+
+
+def declare_hook(sp, d):
+    out = list(_declare2(sp, d) or [])
+    if d.get("lute"):
+        out += [("lute_bowl", 5, 5.5, 1.75), ("lute_neck", 1.25, 8, .75), ("lute_head", 1.5, 2, 1), ("lute_strings", 1, 12, .25)]
+    return out
+
+
+def paint_hook(pt, pal, d):
+    _paint2(pt, pal, d)
+    if d.get("lute"):
+        wood, dark = G.shades(pal.extra["lute"]), G.shades(pal.extra["lute_dark"])
+        pt("lute_bowl", "all", lambda f, x, y, w, h: pick(wood, 0.55 + 0.12 * (x % 6 < 2) - (0.25 if f == "north" and abs(y - h // 2) < 5 and abs(x - w // 2) < 5 else 0), x, y))
+        pt("lute_neck", "all", lambda f, x, y, w, h: pick(dark, 0.5 + 0.2 * (y % 8 == 0), x, y))
+        pt("lute_head", "all", lambda f, x, y, w, h: pick(dark, 0.4, x, y))
+        pt("lute_strings", "all", lambda f, x, y, w, h: (240, 232, 200, 255) if x % 4 < 2 else CLEAR)
+
+
+def build_hook(r, g, d):
+    _build2(r, g, d)
+    if d.get("lute"):                                    # slung on his back, the neck over his shoulder; "play" swings it round to the front
+        cx, cy, cz = 0.0, 16.0, g.z + 3.4
+        held = lambda p, o: G.rot_cube(p, o, [cx, cy, cz], 0, 0, -38)
+        r.add("hair_lute", "body", [cx, cy, cz], [held("lute_bowl", [cx - 2.5, cy - 4.0, cz - 0.875]), held("lute_neck", [cx - 0.625, cy + 1.5, cz - 0.375]),
+                                                  held("lute_head", [cx - 0.75, cy + 9.5, cz - 0.5]), held("lute_strings", [cx - 0.5, cy - 2.5, cz - 0.95])])
+
+
+def anim_extra(an, sp, d):
+    _anim2(an, sp, d)
+    Tk, hold, merge = H.track, H.hold, H.merge
+    if d.get("lute"):
+        an.add("play", 1.0, True, merge({"hair_lute": {"position": hold(0, -1.5, -7.0), "rotation": hold(0, 0, -18)},
+                                         "head": {"rotation": Tk((0, (6, 0, 0)), (0.5, (10, 4, 0)), (1.0, (6, 0, 0)))},
+                                         "arm_l": {"rotation": hold(-62, 28, 0)},
+                                         "arm_r": {"rotation": Tk((0, (-58, -22, 0)), (0.25, (-44, -30, 0)), (0.5, (-58, -22, 0)), (0.75, (-44, -30, 0)), (1.0, (-58, -22, 0)))}}))
+    if d.get("dancer"):
+        an.add("dance", 2.0, True, merge({"root": {"position": Tk((0, (0, 0, 0)), (0.5, (1.0, 0.5, 0)), (1.0, (0, 0, 0)), (1.5, (-1.0, 0.5, 0)), (2.0, (0, 0, 0)))},
+                                          "body": {"rotation": Tk((0, (0, 0, 0)), (0.5, (0, 14, -6)), (1.0, (0, 0, 0)), (1.5, (0, -14, 6)), (2.0, (0, 0, 0)))},
+                                          "arm_r": {"rotation": Tk((0, (-160, 0, -10)), (1.0, (-60, -40, 0)), (2.0, (-160, 0, -10)))},
+                                          "arm_l": {"rotation": Tk((0, (-60, 40, 0)), (1.0, (-160, 0, 10)), (2.0, (-60, 40, 0)))},
+                                          "leg_r": {"rotation": Tk((0, (0, 0, 0)), (0.5, (-20, 0, 0)), (1.0, (0, 0, 0)), (2.0, (0, 0, 0)))},
+                                          "leg_l": {"rotation": Tk((0, (0, 0, 0)), (1.0, (0, 0, 0)), (1.5, (-20, 0, 0)), (2.0, (0, 0, 0)))}}))
+
+
 if __name__ == "__main__":
     F.run_family("elf", SPECIES, declare_hook, paint_hook, build_hook, anim_extra)

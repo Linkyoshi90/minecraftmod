@@ -91,6 +91,10 @@ IN_GAME = {
     "macawtl": "macawtl_dragon", "piranha": "piranha_mermaid", "mosasaurus": "mosasaurus_mermaid", "fishman": "fishman_mermaid",
     "gibbon": "gibbon_rodent", "gigantopithecus": "gigantopithecus_canid", "sandworm": "sandworm_lamia", "archelon": "archelon_lizardfolk",
     "xiangliu": "xiangliu_lamia", "cyclops": "cyclops_devil", "genie": "genie_devil", "ammit": "ammit_nekomata",
+    # twenty-eighth wave (2026-11-01)
+    "apsara": "apsara_elf", "argentowlis": "argentowlis_harpy", "ark_seraphim": "ark_seraphim_centaur", "gandharva": "gandharva_elf", "ibisking": "ibisking_harpy",
+    "landharpy": "landharpy_harpy", "motmora": "motmora_harpy", "pixi": "pixi_bug", "poultry": "poultry_harpy", "reliquary_dove": "reliquary_dove_harpy",
+    "rlff": "rlff_bug", "skycrow": "skycrow_harpy",
     # twenty-seventh wave (2026-10-31)
     "bahamut": "bahamut_dragon", "cetus": "cetus_mermaid", "demon": "demon_devil", "fury": "fury_devil", "charro_negro": "charro_negro_rider", "koschei_chain": "koschei_undead",
     "la_mano_peluda": "mano_peluda_undead", "gaitress": "gaitress_undead", "bloodhound": "bloodhound_canid", "shedim": "shedim_centaur", "anzu": "anzu_centaur", "kitsune_obaa": "obaa_kitsune",

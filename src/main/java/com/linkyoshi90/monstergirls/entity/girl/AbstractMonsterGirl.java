@@ -96,7 +96,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             "netherite", "purpur", "crying_obsidian", "shroomlight",         // the tears and the shroomlight's light glow
             "end_stone", "hay_bale", "ancient_debris", "sea_lantern",        // the sea lantern glows
             "redstone", "glowstone", "cherry", "terracotta",                 // redstone's bright lines and the glowstone glow
-            "tnt", "warped", "dripstone", "brain_coral");
+            "tnt", "warped", "dripstone", "brain_coral", "crimson", "bone", "bamboo", "sponge");
     /** Homage variants (the look of a favourite character): a wild one rolls them only rarely. */
     public static final java.util.Set<String> HOMAGES = java.util.Set.of("gunman", "blossom", "lost", "stitched", "nurse", "mummy", "ranger", "outback",
             "jewel_thief", "ink_kid", "pink_dairy", "sun_goddess",                            // POP_CULTURE_VARIANTS.md
@@ -105,11 +105,11 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             "bake_sale", "twin_tails", "ember_tail", "spike_king", "lawn_zombie", "drop_smile", "puffball", "hoodie_squirrel", "flight_cap",
             "lamp_friend", "tiny_jumper", "kaiju_moth", "pocket_bot", "nine_cream", "shopkeeper", "shy_ghost", "night_heir",
             "detective_croc", "bandicoot", "needle_runner", "angel_guard", "music_box", "star_song", "tactical_eye",
-            "blue_blur", "royal_flame", "backpack_bear", "aura_guardian", "gold_ninja", "night_heiress", "copy_blob");
+            "blue_blur", "royal_flame", "backpack_bear", "aura_guardian", "gold_ninja", "night_heiress", "copy_blob",
+            "spark_mouse", "green_dino", "doctor_deer", "purple_flame", "night_wing", "forest_keeper", "sleepy_giant", "first_fox");
     /** Homage looks with a model of their own (geo, animations and texture &lt;species&gt;_&lt;variant&gt;), not just a recolour. */
     public static final java.util.Set<String> OWN_MODELS = java.util.Set.of("mud_fin", "trident_hood", "tactical_eye");
     /** One wild girl in this many is painted, like a shiny. */
-    public static final int PAINT_RARITY = 64;
     private static final EntityDataAccessor<Integer> DATA_FLAGS = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> DATA_TAILS = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
     /** What she is aiming (GirlArms.RangedGoal), for the client's aiming pose (client.AimPose). */
@@ -124,7 +124,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     public static final int FLAG_TRUE_FORM = 1, FLAG_HIDDEN = 2, FLAG_DECOY = 4, FLAG_HALF = 8, FLAG_CARRYING = 16, FLAG_SADDLED = 32, FLAG_CHEST = 64,
             FLAG_CALM = 128, FLAG_SHELLS = 256, FLAG_SMILE = 512, FLAG_MALE = 1024, FLAG_RETRACTED = 2048, FLAG_LIT = 4096, FLAG_MASKED = 8192,
             FLAG_MERCHANT = 16384, FLAG_TOWING = 32768, FLAG_MOONSTRUCK = 65536, FLAG_INJURED = 131072, FLAG_WAXED = 262144,
-            FLAG_TAILLESS = 524288, FLAG_UNWRAP_A = 1048576, FLAG_UNWRAP_B = 2097152, FLAG_SHORN = 4194304, FLAG_BLINDFOLD = 8388608;
+            FLAG_TAILLESS = 524288, FLAG_UNWRAP_A = 1048576, FLAG_UNWRAP_B = 2097152, FLAG_SHORN = 4194304, FLAG_BLINDFOLD = 8388608,
+            FLAG_BLUSHING = 16777216, FLAG_HARNESSED = 33554432;
     /** The flags that are saved (the others are moment-to-moment state). */
     private static final int SAVED_FLAGS = FLAG_TRUE_FORM | FLAG_SADDLED | FLAG_CHEST | FLAG_HALF | FLAG_CALM | FLAG_SHELLS | FLAG_MALE | FLAG_MASKED | FLAG_MERCHANT
             | FLAG_INJURED | FLAG_WAXED | FLAG_TAILLESS | FLAG_UNWRAP_A | FLAG_UNWRAP_B | FLAG_SHORN;
@@ -149,7 +150,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         POINT("point", true), SOAK("soak", false), SCAMPER("scamper", false),
         PINCH("pinch", true), CURL("curl", false), SLAM("slam", true), CLING("cling", false),
         ROOST("roost", false), PRAY("pray", false), STRIKE("strike", true), SNAP("snap", true), PERCH("perch", false),
-        HANG("hang", false), RUNDOWN("rundown", false), WATCH("watch", true);
+        HANG("hang", false), RUNDOWN("rundown", false), WATCH("watch", true),
+        PLAY("play", false), DANCE("dance", false);
 
         public final String animation;
         public final boolean once;
@@ -206,9 +208,10 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.goalSelector.addGoal(5, new FollowEntityGoal(this, this::mother, 1.1, 6.0F, 2.5F));
         this.targetSelector.addGoal(2, new net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal<>(this, Player.class, 10, true, false,
                 p -> p instanceof Player pl && this.isHostileTo(pl)));
-        if (GirlArms.isFighter(species)) {                    // a weapon from her friend: handed over or thrown her way
+        if (GirlArms.isFighter(species) || species == GirlSpecies.CYCLOPS_DEVIL) {   // a weapon from her friend: handed over or thrown her way
             this.goalSelector.addGoal(0, new GirlArms.FetchGoal(this));
             this.goalSelector.addGoal(1, new GirlArms.RangedGoal(this));
+            this.goalSelector.addGoal(2, new GirlArms.SpotterGoal(this));
         }
         this.goalSelector.addGoal(6, new Settlement.HomeGoal(this));
         if (this.canFly()) {                                // the winged and the floating: fly instead of walking
@@ -360,9 +363,9 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         return i == 0 ? "" : "_" + this.species.variants().get(i);
     }
 
-    /** Wild spawns: the default colours half the time, the four others share the rest. */
+    /** Wild spawns: the default colours half the time (see the variant rate), the four others share the rest. */
     protected int rollWildVariant(RandomSource random) {
-        int v = random.nextBoolean() ? 0 : 1 + random.nextInt(this.species.variants().size() - 1);
+        int v = random.nextDouble() >= com.linkyoshi90.monstergirls.MonsterGirlsConfig.variantChance(0.5) ? 0 : 1 + random.nextInt(this.species.variants().size() - 1);
         return HOMAGES.contains(this.species.variants().get(v)) && random.nextInt(8) != 0 ? 0 : v;   // homages are rare
     }
 
@@ -372,7 +375,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData groupData) {
-        if (!this.variantFromData && spawnType != MobSpawnType.BREEDING && this.random.nextInt(PAINT_RARITY) == 0) {
+        if (!this.variantFromData && spawnType != MobSpawnType.BREEDING && com.linkyoshi90.monstergirls.MonsterGirlsConfig.rollsPaint(this.random)) {
             this.setPaint(com.linkyoshi90.monstergirls.entity.Painted.roll(this.random));   // a painted one: rare, like a shiny
         }
         if (!this.variantFromData) {
@@ -488,7 +491,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     @Override
     public boolean canShareBed() {
-        return !this.isBaby() && this.gestation.canConceive() && !this.hasFlag(FLAG_DECOY) && !this.hasFlag(FLAG_HALF);
+        return !this.isBaby() && this.species.height() >= CHILDLIKE_HEIGHT && this.gestation.canConceive() && !this.hasFlag(FLAG_DECOY) && !this.hasFlag(FLAG_HALF);
     }
 
     @Nullable
@@ -778,6 +781,12 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.growTicks = 0;
     }
 
+    @Override
+    public int getGrowTicks() {
+        return this.growTicks;
+    }
+
+    @Override
     public void setGrowTicks(int ticks) {
         this.growTicks = ticks;
     }

@@ -97,6 +97,11 @@ public class PumpkingullHarpy extends AbstractHarpy {
     }
 
     @Override
+    public void plainVariant() {
+        this.setVariant(Variant.values()[0]);
+    }
+
+    @Override
     public void randomizeVariant() {
         int r = this.random.nextInt(100);
         this.setVariant(r < 55 ? Variant.PUMPKIN : r < 70 ? Variant.HARVEST : r < 82 ? Variant.CINDER : r < 92 ? Variant.BLACK : Variant.GHOST);

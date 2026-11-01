@@ -102,6 +102,11 @@ public class FlamingoHarpy extends AbstractHarpy {
     }
 
     @Override
+    public void plainVariant() {
+        this.setVariant(Variant.values()[0]);
+    }
+
+    @Override
     public void randomizeVariant() {
         this.setVariant(Variant.PINK);                      // a wild flamingo is well fed
     }

@@ -51,6 +51,10 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         if (GLOWING.contains(species.id())) this.addRenderLayer(new AutoGlowingGeoLayer<>(this));
         if (species.family() == GirlSpecies.Family.CENTAUR) this.addRenderLayer(new TorsoArmourLayer(this));
         if (species == GirlSpecies.SHEEP_MINOTAUR || species == GirlSpecies.RHIWOOL_MINOTAUR) this.addRenderLayer(new DyedWoolLayer(this));
+        if (species.family() == GirlSpecies.Family.MINOTAUR) {
+            this.addRenderLayer(new BlushLayer(this));
+            this.addRenderLayer(new MilkingHarnessLayer(this));
+        }
         this.addRenderLayer(new MoonEyesLayer<>(this));
         this.addRenderLayer(new HeldItemLayer(this));
         this.addRenderLayer(new PaintGlowLayer<>(this, AbstractMonsterGirl::getPaintName));
@@ -131,6 +135,21 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
             RenderType wool = RenderType.entityCutoutNoCull(MonsterGirlsMod.id("textures/entity/" + name + ".png"));
             this.getRenderer().reRender(model, poseStack, buffers, girl, wool, buffers.getBuffer(wool), partialTick, packedLight, packedOverlay,
                     m.getWoolDye().getTextureDiffuseColor());
+        }
+    }
+
+    /** A cow being milked: &lt;species&gt;_blush.png (her cheeks alone) drawn over her, so it shows on any colours or paint. */
+    static class BlushLayer extends software.bernie.geckolib.renderer.layer.GeoRenderLayer<AbstractMonsterGirl> {
+        BlushLayer(GirlRenderer renderer) {
+            super(renderer);
+        }
+
+        @Override
+        public void render(PoseStack poseStack, AbstractMonsterGirl girl, BakedGeoModel model, RenderType renderType, MultiBufferSource buffers,
+                           VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+            if (!girl.hasFlag(AbstractMonsterGirl.FLAG_BLUSHING) || girl.isBaby() || girl.hasFlag(AbstractMonsterGirl.FLAG_MALE)) return;
+            RenderType blush = RenderType.entityTranslucent(MonsterGirlsMod.id("textures/entity/" + girl.getSpecies().id() + "_blush.png"));
+            this.getRenderer().reRender(model, poseStack, buffers, girl, blush, buffers.getBuffer(blush), partialTick, packedLight, packedOverlay, -1);
         }
     }
 

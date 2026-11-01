@@ -20,6 +20,34 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 /** World rules the later families bring along (see their field guides). */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class GirlEvents {
+    /** A Gandharva or an Apsara near a note block hears it. */
+    @SubscribeEvent
+    public static void onNoteBlock(net.neoforged.neoforge.event.level.NoteBlockEvent.Play event) {
+        if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel level)) return;
+        for (com.linkyoshi90.monstergirls.entity.girl.Elf elf : level.getEntitiesOfClass(com.linkyoshi90.monstergirls.entity.girl.Elf.class,
+                new net.minecraft.world.phys.AABB(event.getPos()).inflate(16), e -> e.getSpecies() == com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.GANDHARVA_ELF
+                        || e.getSpecies() == com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.APSARA_ELF)) {
+            elf.hearNote(level, event.getVanillaNoteId());
+        }
+    }
+
+    /** The Pixi's shrinking wears off, whether or not she is still around. */
+    @SubscribeEvent
+    public static void onPlayerTick(net.neoforged.neoforge.event.tick.PlayerTickEvent.Post event) {
+        if (event.getEntity().tickCount % 20 == 0 && !event.getEntity().level().isClientSide) com.linkyoshi90.monstergirls.entity.girl.Bug.growBack(event.getEntity());
+    }
+
+    /** Natural spawns of every family stay rare, however many species share the biome. */
+    @SubscribeEvent
+    public static void onSpawnCheck(net.neoforged.neoforge.event.entity.living.MobSpawnEvent.PositionCheck event) {
+        var type = event.getSpawnType();
+        if (event.getEntity() instanceof com.linkyoshi90.monstergirls.entity.Bonded
+                && (type == net.minecraft.world.entity.MobSpawnType.NATURAL || type == net.minecraft.world.entity.MobSpawnType.CHUNK_GENERATION)
+                && !com.linkyoshi90.monstergirls.entity.SpawnRarity.allows(event.getLevel(), event.getEntity(), event.getEntity().getRandom())) {
+            event.setResult(net.neoforged.neoforge.event.entity.living.MobSpawnEvent.PositionCheck.Result.FAIL);
+        }
+    }
+
     /** An aegis boar takes a share of every blow meant for her friend (Armoured.shield). */
     /** A befriended halberelk near a player who cuts a log fells the rest of the tree. */
     @SubscribeEvent

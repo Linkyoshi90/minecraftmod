@@ -14,6 +14,8 @@ public interface Bonded {
     int GIFT_AFFECTION = BED_AFFECTION;
     /** The most there is: what a daughter feels for the player who fathered her. */
     int FULL_AFFECTION = 100;
+    /** Anyone shorter than this looks like a child, whatever her age: no bed, no young (a fairy, not her queen). */
+    float CHILDLIKE_HEIGHT = 1.25F;
 
     int getAffection(Player player);
 
@@ -26,6 +28,10 @@ public interface Bonded {
     Component describeBond(Player player);
 
     Gestation getGestation();
+
+    int getGrowTicks();
+
+    void setGrowTicks(int ticks);
 
     /** Grown up, not already expecting or resting from it, and able to leave her home terrain. */
     boolean canShareBed();

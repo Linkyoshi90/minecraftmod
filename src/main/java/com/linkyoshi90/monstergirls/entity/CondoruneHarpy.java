@@ -102,6 +102,11 @@ public class CondoruneHarpy extends AbstractHarpy {
     }
 
     @Override
+    public void plainVariant() {
+        this.setVariant(Variant.values()[0]);
+    }
+
+    @Override
     public void randomizeVariant() {
         int r = this.random.nextInt(100);
         this.setVariant(r < 50 ? Variant.ANDEAN : r < 65 ? Variant.GRIFFON : r < 80 ? Variant.CALIFORNIA : r < 92 ? Variant.BEARDED : Variant.KING);

@@ -1,0 +1,31 @@
+{
+  "replace": false,
+  "values": [
+    "monstergirls:harpy_milk",
+    "monstergirls:anuran_milk",
+    "monstergirls:nekomata_milk",
+    "monstergirls:kitsune_milk",
+    "monstergirls:lamia_milk",
+    "monstergirls:arachne_milk",
+    "monstergirls:centaur_milk",
+    "monstergirls:merfolk_milk",
+    "monstergirls:slime_milk",
+    "monstergirls:jackalope_milk",
+    "monstergirls:minotaur_milk",
+    "monstergirls:mollusk_milk",
+    "monstergirls:elf_milk",
+    "monstergirls:undead_milk",
+    "monstergirls:lizardfolk_milk",
+    "monstergirls:dragon_milk",
+    "monstergirls:devil_milk",
+    "monstergirls:bug_milk",
+    "monstergirls:canid_milk",
+    "monstergirls:rodent_milk",
+    "monstergirls:crustacean_milk",
+    "monstergirls:marsupial_milk",
+    "monstergirls:armoured_milk",
+    "monstergirls:bat_milk",
+    "monstergirls:theropod_milk",
+    "monstergirls:rider_milk"
+  ]
+}

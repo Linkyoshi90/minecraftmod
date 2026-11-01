@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_gandharva_elf",
+  "spawners": {
+    "type": "monstergirls:gandharva_elf",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

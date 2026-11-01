@@ -64,6 +64,15 @@ the homage set is keyed by name.
 | Undine (`undine_slime`) | Ditto (Pokémon) | `copy_blob` ✅ | Soft pink, dot eyes | ★★ |
 | Emu (harpy) | Chocobo (Final Fantasy) | `golden_runner` ✅ | All bright yellow | ★★★ (harpy: own variant code) |
 
+| House mouse (`house_mouse_rodent`) | Pikachu (Pokémon) | `spark_mouse` ✅ | Yellow fur, black ear tips, a touch of red | ★★ |
+| Gecko (`gecko_lizardfolk`) | Yoshi (Super Mario) | `green_dino` ✅ | Bright green, a white front, red clothes | ★★ |
+| Reindeer (`reindeer_centaur`) | Tony Tony Chopper (One Piece) | `doctor_deer` ✅ | Warm brown, pink clothes | ★★ |
+| Wyrm (`wyrm_dragon`) | Spyro | `purple_flame` ✅ | Purple scales, gold horns and belly | ★★ |
+| Gryphon (`gryphon_dragon`) | Toothless (How to Train Your Dragon) | `night_wing` ✅ | Black all over, bright green eyes | ★★ |
+| Panda (`panda_canid`) | Totoro | `forest_keeper` ✅ | Soft grey fur, a cream belly | ★★ |
+| Grizzly (`grizzly_canid`) | Snorlax (Pokémon) | `sleepy_giant` ✅ | Blue-green fur, a cream belly | ★★ |
+| Fennec (`fennec_kitsune`) | Eevee (Pokémon) | `first_fox` ✅ | Warm brown fur, a cream ruff | ★★ |
+
 ## Gregory Horror Show: on the house mouse
 
 The house mouse (`house_mouse_rodent`, twentieth wave) came in for these three: big round ears, a long bare tail and a

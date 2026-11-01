@@ -114,6 +114,11 @@ public class TenguHarpy extends AbstractHarpy {
     }
 
     @Override
+    public void plainVariant() {
+        this.setVariant(Variant.values()[0]);
+    }
+
+    @Override
     public void randomizeVariant() {
         this.setVariant(Variant.values()[this.random.nextInt(Variant.KURAMA.ordinal() + 1)]);   // the homage look is never rolled in the wild
     }

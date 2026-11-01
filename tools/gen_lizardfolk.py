@@ -623,5 +623,9 @@ def anim_extra(an, sp, d):
         "eyelids": {"position": hold(*H.OUT_)}}, sym("arm", hold(-120, 0, -20))))
 
 
+# homage looks of the twenty-eighth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["gecko_lizardfolk"]["variants"]["green_dino"] = dict(HAIR="#4ac84a", FUR="#4ac84a", LIGHT="#f8f4e8", MARK="#c83a2a", EYE="#1e1e24", CLOTH="#c83a2a", TRIM="#f8f4e8")
+
+
 if __name__ == "__main__":
     F.run_family("lizardfolk", SPECIES, declare_hook, paint_hook, build_hook, anim_extra)

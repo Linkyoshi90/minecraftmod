@@ -150,6 +150,10 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     public void randomizeVariant() {
     }
 
+    /** Back to her species' default colours. */
+    public void plainVariant() {
+    }
+
     /** Animation name for an action, or null to fall back to idle/walk/fly. */
     @Nullable
     protected abstract String actionAnimation(Action action);
@@ -495,6 +499,12 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.growTicks = 0;
     }
 
+    @Override
+    public int getGrowTicks() {
+        return this.growTicks;
+    }
+
+    @Override
     public void setGrowTicks(int ticks) {
         this.growTicks = ticks;
     }
@@ -518,7 +528,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
 
     @Override
     public boolean canShareBed() {
-        return !this.isBaby() && this.gestation.canConceive();
+        return !this.isBaby() && this.getType().getHeight() >= CHILDLIKE_HEIGHT && this.gestation.canConceive();
     }
 
     /** How round her belly is, 0 (not expecting) to 1 (due); synced to the client. */
@@ -875,10 +885,10 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         return p == 0 ? null : com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.PAINTS.get(p - 1);
     }
 
-    /** One wild one in 64 (never a hatchling: she takes her mother's) is painted. */
+    /** One wild one in 64 by default (never a hatchling: she takes her mother's) is painted. */
     protected void rollPaint(MobSpawnType spawnType) {
         if (spawnType != MobSpawnType.BREEDING && !this.hasVariantFromData()
-                && this.random.nextInt(com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.PAINT_RARITY) == 0) {
+                && com.linkyoshi90.monstergirls.MonsterGirlsConfig.rollsPaint(this.random)) {
             this.setPaint(Painted.roll(this.random));
         }
     }
@@ -887,6 +897,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     public net.minecraft.world.entity.SpawnGroupData finalizeSpawn(net.minecraft.world.level.ServerLevelAccessor level, net.minecraft.world.DifficultyInstance difficulty,
                                                                    MobSpawnType spawnType, @Nullable net.minecraft.world.entity.SpawnGroupData group) {
         this.rollPaint(spawnType);
+        if (!this.hasVariantFromData() && spawnType != MobSpawnType.BREEDING && !com.linkyoshi90.monstergirls.MonsterGirlsConfig.keepsBiomeVariant(this.random)) this.plainVariant();
         return super.finalizeSpawn(level, difficulty, spawnType, group);
     }
 }

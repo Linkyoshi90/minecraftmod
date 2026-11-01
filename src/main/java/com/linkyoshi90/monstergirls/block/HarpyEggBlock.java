@@ -52,7 +52,8 @@ public class HarpyEggBlock extends Block implements EntityBlock {
         RAVEN("trickster_raven_harpy"), ROOK("rookmourn_harpy"), CASSOWRATH("cassowrath_harpy"), DODOBOLD("dodobold_harpy"), PEAFLARE("peaflare_harpy"),
         PUMPKINGULL("pumpkingull_harpy"), CONDORUNE("condorune_harpy"), MIRROR_CRANE("mirror_crane_harpy"), EMBERU("emberu_harpy"),
         IRONBEAK("ironbeak_harpy"), IBISET("ibiset_harpy"), STIGOWL("stigowl_harpy"), YATAGARASU("yatagarasu_harpy"),
-        ROC("roc_harpy"), ZIZ("ziz_harpy"), BENNU("bennu_harpy"), GARUDA("garuda_harpy"), ALKONOST("alkonost_harpy"), EMU("emu_harpy"), LECHUZA("lechuza_harpy"), MACAW("macaw_harpy");
+        ROC("roc_harpy"), ZIZ("ziz_harpy"), BENNU("bennu_harpy"), GARUDA("garuda_harpy"), ALKONOST("alkonost_harpy"), EMU("emu_harpy"), LECHUZA("lechuza_harpy"), MACAW("macaw_harpy"),
+        SKYCROW("skycrow_harpy"), RELIQUARY_DOVE("reliquary_dove_harpy"), POULTRY("poultry_harpy"), LANDHARPY("landharpy_harpy"), ARGENTOWLIS("argentowlis_harpy"), IBISKING("ibisking_harpy"), MOTMORA("motmora_harpy");
 
         private final String entityId;
 

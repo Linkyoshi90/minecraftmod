@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "harness=false": {
+      "model": "monstergirls:block/milking_machine"
+    },
+    "harness=true": {
+      "model": "monstergirls:block/milking_machine_cart"
+    }
+  }
+}

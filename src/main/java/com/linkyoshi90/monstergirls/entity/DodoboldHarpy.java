@@ -117,6 +117,11 @@ public class DodoboldHarpy extends AbstractHarpy {
     }
 
     @Override
+    public void plainVariant() {
+        this.setVariant(Variant.values()[0]);
+    }
+
+    @Override
     public void randomizeVariant() {
         int r = this.random.nextInt(100);
         this.setVariant(r < 40 ? Variant.BLUE : r < 70 ? Variant.GREY : r < 85 ? Variant.BROWN : r < 95 ? Variant.TEAL : Variant.WHITE);

@@ -1,0 +1,268 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "minecraft:block/copper_block",
+    "base": "minecraft:block/smooth_stone",
+    "tank": "minecraft:block/copper_block",
+    "pump": "minecraft:block/iron_block",
+    "hose": "minecraft:block/black_concrete"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        3,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#base"
+        },
+        "south": {
+          "texture": "#base"
+        },
+        "east": {
+          "texture": "#base"
+        },
+        "west": {
+          "texture": "#base"
+        },
+        "up": {
+          "texture": "#base"
+        },
+        "down": {
+          "texture": "#base"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        3,
+        3
+      ],
+      "to": [
+        13,
+        11,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tank"
+        },
+        "south": {
+          "texture": "#tank"
+        },
+        "east": {
+          "texture": "#tank"
+        },
+        "west": {
+          "texture": "#tank"
+        },
+        "up": {
+          "texture": "#tank"
+        },
+        "down": {
+          "texture": "#tank"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        11,
+        5
+      ],
+      "to": [
+        7,
+        15,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pump"
+        },
+        "south": {
+          "texture": "#pump"
+        },
+        "east": {
+          "texture": "#pump"
+        },
+        "west": {
+          "texture": "#pump"
+        },
+        "up": {
+          "texture": "#pump"
+        },
+        "down": {
+          "texture": "#pump"
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        11,
+        5
+      ],
+      "to": [
+        12,
+        15,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pump"
+        },
+        "south": {
+          "texture": "#pump"
+        },
+        "east": {
+          "texture": "#pump"
+        },
+        "west": {
+          "texture": "#pump"
+        },
+        "up": {
+          "texture": "#pump"
+        },
+        "down": {
+          "texture": "#pump"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        15,
+        3
+      ],
+      "to": [
+        6,
+        16,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hose"
+        },
+        "south": {
+          "texture": "#hose"
+        },
+        "east": {
+          "texture": "#hose"
+        },
+        "west": {
+          "texture": "#hose"
+        },
+        "up": {
+          "texture": "#hose"
+        },
+        "down": {
+          "texture": "#hose"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        15,
+        3
+      ],
+      "to": [
+        11,
+        16,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hose"
+        },
+        "south": {
+          "texture": "#hose"
+        },
+        "east": {
+          "texture": "#hose"
+        },
+        "west": {
+          "texture": "#hose"
+        },
+        "up": {
+          "texture": "#hose"
+        },
+        "down": {
+          "texture": "#hose"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        6,
+        2
+      ],
+      "to": [
+        6,
+        16,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hose"
+        },
+        "south": {
+          "texture": "#hose"
+        },
+        "east": {
+          "texture": "#hose"
+        },
+        "west": {
+          "texture": "#hose"
+        },
+        "up": {
+          "texture": "#hose"
+        },
+        "down": {
+          "texture": "#hose"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        6,
+        2
+      ],
+      "to": [
+        11,
+        16,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hose"
+        },
+        "south": {
+          "texture": "#hose"
+        },
+        "east": {
+          "texture": "#hose"
+        },
+        "west": {
+          "texture": "#hose"
+        },
+        "up": {
+          "texture": "#hose"
+        },
+        "down": {
+          "texture": "#hose"
+        }
+      }
+    }
+  ]
+}

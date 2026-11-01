@@ -36,5 +36,9 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("hearth", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.HearthBlockEntity::new,
                     ModBlocks.HEARTH.get()).build(null));
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.linkyoshi90.monstergirls.block.MilkingMachineBlockEntity>> MILKING_MACHINE =
+            BLOCK_ENTITIES.register("milking_machine", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.MilkingMachineBlockEntity::new,
+                    ModBlocks.MILKING_MACHINE.get()).build(null));
+
     private ModBlockEntities() {}
 }

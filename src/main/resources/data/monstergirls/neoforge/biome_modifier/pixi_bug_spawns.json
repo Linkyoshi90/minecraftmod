@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_pixi_bug",
+  "spawners": {
+    "type": "monstergirls:pixi_bug",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -404,6 +404,8 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
         if (this.species == GirlSpecies.ANGEL_ELF && this.level() instanceof net.minecraft.server.level.ServerLevel grace && !this.isBaby() && this.tickCount % 40 == 0) this.mercy(grace);
         if (this.species == GirlSpecies.DOMOVOI_ELF && this.level() instanceof ServerLevel house && !this.isBaby()) this.keepHearth(house, this.tickCount % 40 == 0);
         if (!(this.level() instanceof ServerLevel server)) return;
+        if (this.species == GirlSpecies.GANDHARVA_ELF && !this.isBaby()) this.tickLute(server);
+        if (this.species == GirlSpecies.APSARA_ELF && !this.isBaby() && this.tickCount % 20 == 0) this.dance(server);
         if (this.species == GirlSpecies.VALKYRIE_ELF && this.tickCount % 20 == 0) this.returnFallen(server);
         if (this.tradingPlayer != null && (!this.tradingPlayer.isAlive() || this.tradingPlayer.distanceToSqr(this) > 16 * 16)) this.tradingPlayer = null;
         if (this.species == GirlSpecies.NIGHT_ELF && this.tickCount % 20 == 0) {
@@ -565,11 +567,85 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
         }
     }
 
+    // --- the Gandharva and the Apsara -------------------------------------------------------------------------------
+
+    /** His tune, in the notes of a note block (0-24): written for him, round and round a five-note scale. */
+    private static final int[] TUNE = {12, 14, 16, 19, 21, 19, 16, 14, 12, 9, 12, 14, 16, 14, 12, 7};
+    private static final int NOTE_TICKS = 8;
+    private static final int TUNE_TICKS = TUNE.length * NOTE_TICKS * 2;
+    private int lutePlaying;
+    private int tunePos;
+    private long nextTune;
+    private long lastHeardNote = -1000;
+
+    public boolean isPlaying() {
+        return this.lutePlaying > 0;
+    }
+
+    /** He takes the lute in hand and plays the tune through twice. */
+    public void playLute() {
+        this.lutePlaying = TUNE_TICKS;
+        this.tunePos = 0;
+        this.startTimedAction(Action.PLAY, TUNE_TICKS);
+    }
+
+    /** One plucked note; the same pitches a note block makes. */
+    private void pluck(ServerLevel level, int note) {
+        float pitch = (float) Math.pow(2.0, (note - 12) / 12.0);
+        this.playSound(SoundEvents.NOTE_BLOCK_GUITAR.value(), 1.2F, pitch);
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.NOTE, this.getX(), this.getEyeY() + 0.4, this.getZ(), 0, note / 24.0, 0, 0, 1.0);
+    }
+
+    /** A note block rang near. The Gandharva answers it a fifth up; either of them takes it for music. */
+    public void hearNote(ServerLevel level, int note) {
+        this.lastHeardNote = level.getGameTime();
+        if (this.species == GirlSpecies.GANDHARVA_ELF) {
+            this.pluck(level, Math.min(24, note + 7));
+            if (!this.isPlaying()) this.playLute();
+        }
+    }
+
+    /** A jukebox within 16 is playing, or a note block rang in the last few seconds. */
+    public boolean hearsMusic(ServerLevel level) {
+        return level.getGameTime() - this.lastHeardNote < 100 || com.linkyoshi90.monstergirls.entity.JukeboxSensing.findPlaying(level, this.blockPosition(), 16) != null;
+    }
+
+    private void tickLute(ServerLevel level) {
+        if (this.isPlaying()) {
+            if (this.lutePlaying-- % NOTE_TICKS == 0) this.pluck(level, TUNE[this.tunePos++ % TUNE.length]);
+            if (this.tickCount % 20 == 0 && this.hearsMusic(level)) {
+                Player friend = this.bondedPlayer(10, 12);
+                if (friend != null) friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.REGENERATION, 60));
+            }
+        } else if (this.tickCount % 20 == 0 && (this.hearsMusic(level) || level.getGameTime() >= this.nextTune)) {
+            this.nextTune = level.getGameTime() + 1200 + this.random.nextInt(1200);
+            this.playLute();
+        }
+    }
+
+    /** She dances to any music. 2 with a Gandharva playing, 1 to other music, 0 with none; her friend gains from it. */
+    public int dance(ServerLevel level) {
+        boolean lute = !level.getEntitiesOfClass(Elf.class, this.getBoundingBox().inflate(16), e -> e.species == GirlSpecies.GANDHARVA_ELF && e.isPlaying()).isEmpty();
+        if (!lute && !this.hearsMusic(level)) return 0;
+        this.startTimedAction(Action.DANCE, 40);
+        Player friend = this.bondedPlayer(10, 12);
+        if (friend != null) {
+            friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 60));
+            if (lute) friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.REGENERATION, 60));
+        }
+        return lute ? 2 : 1;
+    }
+
+    @Override
+    public boolean canShareBed() {
+        return this.species != GirlSpecies.GANDHARVA_ELF && super.canShareBed();
+    }
+
     // --- the valkyrie --------------------------------------------------------------------------------------------
 
     @Override
     public boolean canFly() {
-        return this.species == GirlSpecies.VALKYRIE_ELF || this.species == GirlSpecies.ANGEL_ELF || super.canFly();
+        return this.species == GirlSpecies.VALKYRIE_ELF || this.species == GirlSpecies.ANGEL_ELF || this.species == GirlSpecies.GANDHARVA_ELF || super.canFly();
     }
 
     /** What she gathered up where her friend fell, and whose it is. */

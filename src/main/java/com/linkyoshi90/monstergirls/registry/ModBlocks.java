@@ -62,6 +62,11 @@ public final class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(2.0F, 6.0F).sound(SoundType.STONE).lightLevel(s -> 13)
                     .requiresCorrectToolForDrops());
 
+    /** Fills buckets from a friend standing by it (MilkingMachineBlock). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.MilkingMachineBlock> MILKING_MACHINE = BLOCKS.registerBlock("milking_machine",
+            com.linkyoshi90.monstergirls.block.MilkingMachineBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(2.0F, 6.0F).sound(SoundType.COPPER).requiresCorrectToolForDrops().noOcclusion());
+
     /** The nectar fluid's block (see ModFluids). */
     public static final DeferredBlock<net.minecraft.world.level.block.LiquidBlock> NECTAR = BLOCKS.register("nectar",
             () -> new net.minecraft.world.level.block.LiquidBlock(ModFluids.NECTAR.get(),

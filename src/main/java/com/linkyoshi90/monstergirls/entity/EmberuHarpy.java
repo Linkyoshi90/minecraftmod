@@ -100,6 +100,11 @@ public class EmberuHarpy extends AbstractHarpy {
     }
 
     @Override
+    public void plainVariant() {
+        this.setVariant(Variant.values()[0]);
+    }
+
+    @Override
     public void randomizeVariant() {
         int r = this.random.nextInt(100);
         this.setVariant(r < 60 ? Variant.BLUE : r < 75 ? Variant.EMBER : r < 87 ? Variant.OCHRE : r < 95 ? Variant.ASH : Variant.DUSK);

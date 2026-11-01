@@ -64,6 +64,20 @@ public final class ModItems {
             () -> new DeferredSpawnEggItem(ModEntities.STIGOWL_HARPY, 0x1A1E2E, 0xA8B0D0, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> YATAGARASU_HARPY_SPAWN_EGG = ITEMS.register("yatagarasu_harpy_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.YATAGARASU_HARPY, 0x141418, 0xB4D2F0, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> SKYCROW_HARPY_SPAWN_EGG = ITEMS.register("skycrow_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.SKYCROW_HARPY, 0x141A30, 0x5AB8F8, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> RELIQUARY_DOVE_HARPY_SPAWN_EGG = ITEMS.register("reliquary_dove_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.RELIQUARY_DOVE_HARPY, 0x7A9AC8, 0xE8C050, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> POULTRY_HARPY_SPAWN_EGG = ITEMS.register("poultry_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.POULTRY_HARPY, 0xF0ECE4, 0xC83A2A, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> LANDHARPY_HARPY_SPAWN_EGG = ITEMS.register("landharpy_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.LANDHARPY_HARPY, 0xE8E8F0, 0x3A5A9A, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> ARGENTOWLIS_HARPY_SPAWN_EGG = ITEMS.register("argentowlis_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.ARGENTOWLIS_HARPY, 0x2A3E7A, 0xDCE4F4, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> IBISKING_HARPY_SPAWN_EGG = ITEMS.register("ibisking_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.IBISKING_HARPY, 0x1E3A8A, 0xE8C050, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> MOTMORA_HARPY_SPAWN_EGG = ITEMS.register("motmora_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.MOTMORA_HARPY, 0x1E4AC8, 0xE8C050, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> ROC_HARPY_SPAWN_EGG = ITEMS.register("roc_harpy_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.ROC_HARPY, 0x2C4A88, 0xB4CCE8, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> ZIZ_HARPY_SPAWN_EGG = ITEMS.register("ziz_harpy_spawn_egg",
@@ -162,6 +176,7 @@ public final class ModItems {
     /** An Easter Bunny's painted egg (place it to hide it again). */
     public static final DeferredItem<BlockItem> PAINTED_EGG = ITEMS.registerSimpleBlockItem(ModBlocks.PAINTED_EGG);
     public static final DeferredItem<BlockItem> HEARTH = ITEMS.registerSimpleBlockItem(ModBlocks.HEARTH);
+    public static final DeferredItem<BlockItem> MILKING_MACHINE = ITEMS.registerSimpleBlockItem(ModBlocks.MILKING_MACHINE);
     /** A fertilised harpy egg: place it somewhere solid and it hatches in about a day. */
     public static final DeferredItem<BlockItem> HARPY_EGG = ITEMS.register("harpy_egg",
             () -> new HarpyEggItem(ModBlocks.HARPY_EGG.get(), new Item.Properties().stacksTo(16)));
@@ -186,6 +201,18 @@ public final class ModItems {
     public static final DeferredItem<Item> HONEY_MOCHI = food("honey_mochi", 8, 0.8F);
     public static final DeferredItem<Item> PUMPKIN_MOCHI = food("pumpkin_mochi", 7, 0.8F);
     public static final java.util.List<DeferredItem<Item>> MOCHI = java.util.List.of(APPLE_MOCHI, MELON_MOCHI, BERRY_MOCHI, CHOCOLATE_MOCHI, HONEY_MOCHI, PUMPKIN_MOCHI);
+
+    /** One bucket of milk per family. */
+    public static final java.util.Map<com.linkyoshi90.monstergirls.item.FamilyMilk, DeferredItem<com.linkyoshi90.monstergirls.item.FamilyMilkItem>> MILK = familyMilks();
+
+    private static java.util.Map<com.linkyoshi90.monstergirls.item.FamilyMilk, DeferredItem<com.linkyoshi90.monstergirls.item.FamilyMilkItem>> familyMilks() {
+        var milks = new java.util.EnumMap<com.linkyoshi90.monstergirls.item.FamilyMilk, DeferredItem<com.linkyoshi90.monstergirls.item.FamilyMilkItem>>(com.linkyoshi90.monstergirls.item.FamilyMilk.class);
+        for (var milk : com.linkyoshi90.monstergirls.item.FamilyMilk.values()) {
+            milks.put(milk, ITEMS.registerItem(milk.id(), props -> new com.linkyoshi90.monstergirls.item.FamilyMilkItem(milk,
+                    props.stacksTo(1).craftRemainder(net.minecraft.world.item.Items.BUCKET))));
+        }
+        return milks;
+    }
 
     /** Brushed off an arachne now and then: the material of silk trousers and shoes. */
     public static final DeferredItem<Item> SPIDER_SILK = ITEMS.registerSimpleItem("spider_silk", new Item.Properties());

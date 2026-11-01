@@ -19,6 +19,7 @@ public final class MonsterGirlsMod {
 
     public MonsterGirlsMod(IEventBus modBus, ModContainer container) {
         container.registerConfig(ModConfig.Type.CLIENT, MonsterGirlsClientConfig.SPEC);
+        container.registerConfig(ModConfig.Type.COMMON, MonsterGirlsConfig.SPEC);
         ModGirls.init();                                   // the later families' entity types and spawn eggs
         com.linkyoshi90.monstergirls.registry.ModFluids.FLUID_TYPES.register(modBus);
         com.linkyoshi90.monstergirls.registry.ModFluids.FLUIDS.register(modBus);
@@ -29,6 +30,7 @@ public final class MonsterGirlsMod {
         ModItems.ITEMS.register(modBus);
         ModItems.TABS.register(modBus);
         ModSounds.SOUND_EVENTS.register(modBus);
+        com.linkyoshi90.monstergirls.registry.ModParticles.PARTICLE_TYPES.register(modBus);
         com.linkyoshi90.monstergirls.registry.ModAttachments.ATTACHMENT_TYPES.register(modBus);
 
         modBus.addListener(ModEntities::registerAttributes);
@@ -37,10 +39,13 @@ public final class MonsterGirlsMod {
         modBus.addListener(ModGirls::registerSpawnPlacements);
         modBus.addListener(ModItems::addToCreativeTabs);
         modBus.addListener(MonsterGirlsMod::registerCapabilities);
+        modBus.addListener(com.linkyoshi90.monstergirls.network.ModPayloads::register);
     }
 
     /** Every girl's ammo pouch as her item handler: where TaCZ looks for her ammunition when she reloads (GirlArms). */
     private static void registerCapabilities(net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, com.linkyoshi90.monstergirls.registry.ModBlockEntities.MILKING_MACHINE.get(),
+                (machine, side) -> new net.neoforged.neoforge.items.wrapper.InvWrapper(machine.store()));
         for (var holder : ModGirls.TYPES.values()) {
             event.registerEntity(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.ENTITY, holder.get(),
                     (girl, ctx) -> new net.neoforged.neoforge.items.wrapper.InvWrapper(girl.ammoPouch()));

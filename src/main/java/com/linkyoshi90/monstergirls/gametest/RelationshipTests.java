@@ -6,6 +6,7 @@ import com.linkyoshi90.monstergirls.block.AnuranSpawnBlock;
 import com.linkyoshi90.monstergirls.block.HarpyEggBlock;
 import com.linkyoshi90.monstergirls.entity.AbstractAnuran;
 import com.linkyoshi90.monstergirls.entity.AbstractHarpy;
+import com.linkyoshi90.monstergirls.entity.BedCall;
 import com.linkyoshi90.monstergirls.entity.BedSharing;
 import com.linkyoshi90.monstergirls.entity.Bonded;
 import com.linkyoshi90.monstergirls.block.ParentageBlockEntity;
@@ -119,6 +120,50 @@ public class RelationshipTests {
                 helper.setDayTime(1000);   // back to morning: later tests share this world's clock
             });
         });
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 500, batch = "callFromBedWaitsForAFriend")
+    public static void callFromBedWaitsForAFriend(GameTestHelper helper) {
+        helper.setDayTime(24000 + 18000);   // midnight, the night after the full moon
+        bed(helper, new BlockPos(2, 2, 2));
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
+        Bullywug friend = helper.spawn(ModEntities.BULLYWUG.get(), new BlockPos(11, 2, 11));
+        friend.addAffection(player, Bonded.FULL_AFFECTION);
+        helper.runAfterDelay(10, () -> {
+            player.startSleeping(helper.absolutePos(new BlockPos(2, 2, 2)));
+            BedCall.begin(player);
+            player.sleepCounter = 100;
+            BedCall.tick(player);
+            check(player.sleepCounter == 0, "the night should wait while the call is going");
+            BedCall.skipNight(player);
+            check(BedCall.stage(player) == BedCall.WAITING, "nobody has come yet, so there is nothing to skip to");
+            helper.succeedWhen(() -> {
+                BedCall.tick(player);
+                check(BedCall.stage(player) == BedCall.JOINED, "she should have answered the call");
+                BedCall.skipNight(player);
+                check(!BedCall.isCalling(player), "the skip button hands over to the vanilla sleep");
+                player.sleepCounter = 100;
+                BedCall.tick(player);
+                check(player.sleepCounter == 100, "nothing holds the night any more");
+                player.stopSleeping();
+                HarpyTestUtil.remove(player);
+                helper.setDayTime(1000);   // back to morning: later tests share this world's clock
+            });
+        });
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "leavingTheBedCancelsTheCall")
+    public static void leavingTheBedCancelsTheCall(GameTestHelper helper) {
+        bed(helper, new BlockPos(2, 2, 2));
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
+        player.startSleeping(helper.absolutePos(new BlockPos(2, 2, 2)));
+        BedCall.begin(player);
+        check(BedCall.isCalling(player), "the call should be going");
+        player.stopSleeping();
+        BedCall.tick(player);
+        check(!BedCall.isCalling(player), "leaving the bed ends the call");
+        HarpyTestUtil.remove(player);
+        helper.succeed();
     }
 
     @GameTest(template = PLATFORM, timeoutTicks = 1200, batch = "fullMoonEveryoneTakesHerTurn")

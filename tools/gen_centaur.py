@@ -63,6 +63,16 @@ SPECIES = {
                   "red": dict(HAIR="#c83a2a", FUR="#c84a30", LIGHT="#f0b090", MARK="#7a1e12", extra=dict(wing="#f0d0c0", wing_tip="#c84a30", brow="#e8c050")),
                   "black": dict(HAIR="#1e1e28", FUR="#2a2a34", LIGHT="#6a6a78", MARK="#0e0e14", EYE="#e8c050", extra=dict(wing="#4a4a58", wing_tip="#14141c", brow="#e8c050")),
                   "white": dict(HAIR="#f0ece4", FUR="#f4f0e8", LIGHT="#ffffff", MARK="#b8b0a0", CLOTH="#2a4a9a", extra=dict(wing="#ffffff", wing_tip="#c8c0b0", brow="#2a4a9a"))}),
+    # twenty-eighth wave: the Ark Seraphim, a blue lion taur with feathered wings, a gold brow, a jewelled blanket and a small gold ark on her back
+    "ark_seraphim_centaur": dict(
+        build="athletic", outfit=dict(top=["bandeau"], extras=["usekh", "armlets", "belt"], colors=dict(usekh2="#e8c050")),
+        hair="flowing", bangs="parted", tail=(1, 9, 1), wings=True, ears="round", brow=True, blanket=True, ark=True,
+        pal=dict(SKIN=skin("#d8e4f4"), HAIR="#2a4a9a", FUR="#3a5ab0", LIGHT="#c8d8f0", MARK="#1e3478", EYE="#e8c050", CLOTH="#e8c050", TRIM="#2a4a9a",
+                 pattern="solid", extra=dict(wing="#dce8f8", wing_tip="#3a5ab0", brow="#e8c050", blanket="#1e3478", blanket2="#e8c050", blanket3="#c8d8f0", ark="#e8c050", ark_dark="#a87a1e")),
+        variants={"white": dict(HAIR="#e8ecf4", FUR="#f0f2f8", LIGHT="#ffffff", MARK="#a8b0c8", extra=dict(wing="#ffffff", wing_tip="#c8d0e0", brow="#e8c050", blanket="#2a4a9a", blanket2="#e8c050", blanket3="#ffffff", ark="#e8c050", ark_dark="#a87a1e")),
+                  "gold": dict(HAIR="#e8b83a", FUR="#e8c050", LIGHT="#f8ecc0", MARK="#a87a1e", extra=dict(wing="#f8ecc0", wing_tip="#e8b83a", brow="#ffffff", blanket="#7a1e2a", blanket2="#f8ecc0", blanket3="#e8b83a", ark="#f0f0f4", ark_dark="#a8a8b4")),
+                  "void": dict(HAIR="#2a1a4a", FUR="#3a2a5a", LIGHT="#8a78b0", MARK="#1a1030", EYE="#c88af8", extra=dict(wing="#6a58a0", wing_tip="#2a1a4a", brow="#c88af8", blanket="#1a1030", blanket2="#c88af8", blanket3="#6a58a0", ark="#c88af8", ark_dark="#6a3aa8")),
+                  "rose": dict(HAIR="#c85a7a", FUR="#d87a90", LIGHT="#f8dce4", MARK="#8a2a4a", extra=dict(wing="#fce8ee", wing_tip="#d87a90", brow="#e8c050", blanket="#8a2a4a", blanket2="#e8c050", blanket3="#f8dce4", ark="#e8c050", ark_dark="#a87a1e"))}),
     # twenty-sixth wave: the caribou, a blue-grey wild deer taur of the tundra, broad antlers, a shaggy white ruff of a scarf
     "caribou_centaur": dict(
         build="athletic", outfit=dict(top=["bandeau"], extras=["scarf"], colors=dict(scarf="#e8ecf4")),
@@ -343,6 +353,8 @@ def declare(sp):
         parts += P.wing_parts("feather", 1.4)
     if d.get("brow"):                                    # a gold band round her brow
         parts += [("brow_band", 9, 1, 9)]
+    if d.get("ark"):                                     # twenty-eighth wave: the small gold ark on the Ark Seraphim's back
+        parts += [("ark_box", 6, 3.5, 4.5), ("ark_lid", 7, 1, 5.5), ("ark_finial", 1.5, 2, 1.5)]
     if d.get("nemes"):                                   # the striped headcloth: a cap and two lappets over her shoulders
         parts += [("nemes_cap", 9, 3, 9), ("nemes_lappet", 2.5, 6, 1)]
     G.declare(parts, ears=d.get("ears", "horse"), hair=SPECIES[sp]["hair"],
@@ -453,6 +465,11 @@ def paint(sp, key):
             return bow
         for p in hairy:
             pt(p, "all", bow_for(p))
+    if d.get("ark"):
+        gold, dark = G.shades(pal.extra["ark"]), G.shades(pal.extra["ark_dark"])
+        pt("ark_box", "all", lambda f, x, y, w, h: pick(dark if x % 8 < 2 or y % 10 < 2 else gold, 0.6, x, y))
+        pt("ark_lid", "all", lambda f, x, y, w, h: pick(gold, 0.72, x, y))
+        pt("ark_finial", "all", lambda f, x, y, w, h: pick(gold, 0.8, x, y))
     pt("armor_ref", "all", lambda f, x, y, w, h: G.CLEAR)
     return pt.T
 
@@ -525,6 +542,8 @@ def build(sp):
             r.put("barrel", cube("hump", [-2.5, 18.75, zc - 2.25]), cube("hump_top", [-1.75, 21.5, zc - 1.5]))
     if d.get("kelp"):                                   # the kelpie's weed, hanging off her flanks
         r.put("barrel", *[cube("frond", [sg * 3.6 - 0.125, 11.0, zz]) for sg in (-1, 1) for zz in (0.5, 5.5)])
+    if d.get("ark"):
+        r.put("barrel", cube("ark_box", [-3.0, 18.75, 5.0]), cube("ark_lid", [-3.5, 22.25, 4.5]), cube("ark_finial", [-0.75, 23.25, 6.5]))
     if d.get("wings"):                                  # the pegasus' wings rise from her withers, at the front of the horse body
         P.wings(r, "feather", "barrel", y=19.0, z=-1.0, root_x=3.0)
     return r.model(sp)
@@ -542,6 +561,10 @@ def anims(an):
 VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0, 180, 0),
          ("walk", 0.3, -45, 8), ("run", 0.15, -70, 5), ("sit", 0, -35, 10), ("rear", 0.8, -60, 5)]
 FACE = [("idle", 0, 0, 0, 31.5), ("idle", 2.75, 0, 0, 31.5), ("rear", 0.8, 0, 0, 31.5), ("idle", 0, -30, 8, 31.5)]
+
+# homage looks of the twenty-eighth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["reindeer_centaur"]["variants"]["doctor_deer"] = dict(HAIR="#8a4a2a", FUR="#8a5a3a", LIGHT="#e8c8a8", MARK="#5a3018", EYE="#1e1e24", CLOTH="#e87aa0", TRIM="#f8f4ec")
+
 
 if __name__ == "__main__":
     G.run_family("centaur", SPECIES, declare, paint, build, anims, VIEWS, FACE)

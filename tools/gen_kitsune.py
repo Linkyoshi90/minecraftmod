@@ -236,5 +236,9 @@ VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0
          ("walk", 0.25, -30, 8), ("run", 0.15, -60, 5), ("sit", 0, -30, 10), ("dig", 0.2, -60, 8)]
 FACE = [("idle", 0, 0, 0, 24), ("idle", 2.75, 0, 0, 24), ("laugh", 0.3, 0, 0, 24), ("idle", 0, -30, 8, 24)]
 
+# homage looks of the twenty-eighth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["fennec_kitsune"]["variants"]["first_fox"] = dict(HAIR="#a8693a", FUR="#b8784a", LIGHT="#f8ecd4", MARK="#7a4a24", EYE="#2a1a10", CLOTH="#f4e8d0", TRIM="#a8693a")
+
+
 if __name__ == "__main__":
     G.run_family("kitsune", SPECIES, declare, paint, build, anims, VIEWS, FACE)

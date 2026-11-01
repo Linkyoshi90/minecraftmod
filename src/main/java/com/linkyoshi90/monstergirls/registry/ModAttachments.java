@@ -20,6 +20,10 @@ public final class ModAttachments {
     public static final Supplier<AttachmentType<CompoundTag>> EXPEDITIONS = ATTACHMENT_TYPES.register("expeditions",
             () -> AttachmentType.builder(() -> new CompoundTag()).serialize(CompoundTag.CODEC).copyOnDeath().build());
 
+    /** The game time she can next be milked by a machine (minotaur cows keep their own clock). */
+    public static final Supplier<AttachmentType<Long>> NEXT_MILK = ATTACHMENT_TYPES.register("next_milk",
+            () -> AttachmentType.builder(() -> 0L).serialize(com.mojang.serialization.Codec.LONG).build());
+
     private ModAttachments() {
     }
 }

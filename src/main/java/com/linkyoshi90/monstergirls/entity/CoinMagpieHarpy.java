@@ -101,6 +101,11 @@ public class CoinMagpieHarpy extends AbstractHarpy {
     }
 
     @Override
+    public void plainVariant() {
+        this.setVariant(Variant.values()[0]);
+    }
+
+    @Override
     public void randomizeVariant() {
         int r = this.random.nextInt(100);
         this.setVariant(r < 50 ? Variant.COMMON : r < 72 ? Variant.AZURE : r < 90 ? Variant.GREEN : r < 97 ? Variant.GOLD : Variant.WHITE);

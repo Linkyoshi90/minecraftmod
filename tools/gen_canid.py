@@ -548,5 +548,10 @@ def anim_extra(an, sp, d):
                                       {"arm_r": {"rotation": Tk((0, (0, 0, 0)), (0.5, (-150, 0, 0)), (2.0, (-150, 0, 0)))}}))
 
 
+# homage looks of the twenty-eighth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["panda_canid"]["variants"]["forest_keeper"] = dict(HAIR="#6a7078", FUR="#7a8088", LIGHT="#ece4cc", MARK="#3a3e44", EYE="#1e1e24", CLOTH="#4a6a4a", TRIM="#ece4cc")
+SPECIES["grizzly_canid"]["variants"]["sleepy_giant"] = dict(HAIR="#2a5a6a", FUR="#34697a", LIGHT="#f0e4c8", MARK="#1e4250", EYE="#1e1e24", CLOTH="#f0e4c8", TRIM="#2a5a6a")
+
+
 if __name__ == "__main__":
     F.run_family("canid", SPECIES, declare_hook, paint_hook, build_hook, anim_extra)

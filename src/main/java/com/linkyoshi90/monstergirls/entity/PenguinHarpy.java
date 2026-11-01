@@ -157,6 +157,11 @@ public class PenguinHarpy extends AbstractHarpy {
     }
 
     @Override
+    public void plainVariant() {
+        this.setVariant(Variant.values()[0]);
+    }
+
+    @Override
     public void randomizeVariant() {
         this.setVariant(Variant.values()[this.random.nextInt(Variant.values().length)]);
     }

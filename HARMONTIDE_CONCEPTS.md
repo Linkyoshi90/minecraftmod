@@ -614,6 +614,31 @@ sandstone since 2026-10-29), so 87 in all.
 Homage props (POP_CULTURE_VARIANTS.md): the dullahan's headless rider (Celty) has her yellow cat-eared helmet over the head she
 carries, the death envoy (Lala) a scythe in her free hand; both are drawn only on their own looks.
 
+## Twenty-eighth wave (2026-11-01, in the game)
+
+The last of the Harmontide reference art: nothing is left on the roster.
+
+| Species | Home | Design |
+|---|---|---|
+| **Gandharva** | Elf | Male by default, a long robe, small wings, a lute on his back. He truly plays: note by note, joining in with jukeboxes and note blocks, and his friend heals to the music. |
+| **Apsara** | Elf | Water-blue dancer, full costume. Dances to any music, her friend moves quicker; with a Gandharva playing, her friend heals too. |
+| **Pixi** | Bug | A tiny fairy, kept out of the bed system. Crouch and ask, empty-handed: she shrinks her friend to half size for half a minute. |
+| **Rlff** | Bug | A tall golden stream spirit on the Fairy Queen's rig. Her friend heals standing in water near her. |
+| **Ark Seraphim** | Centaur | A winged blue lioness with a gold ark. End highlands and midlands. Once a day, with her friend badly hurt, light burns the monsters near them and shields her friend. |
+| **Poultry** | Harpy | Crow rig with a hen's full figure, a work dress and apron. Grows the crops around her and lays eggs. |
+| **Landharpy** | Harpy | Ostrich rig, torn jeans, never flies. Her kick staggers monsters. |
+| **Argentowlis** | Harpy | Owl rig, drawn huge. At night she marks the monsters her friend can't see. |
+| **Ibisking** | Harpy | Flamingo rig. Give her paper and she tells you where the nearest treasure lies. |
+| **Motmora** | Harpy | Phoenix rig. Her tail display dazes two or more monsters. |
+| **Reliquary Dove** | Harpy | Crow rig. The End. She keeps one stack for you. |
+| **Skycrow** | Harpy | Crow rig. End barrens and small islands. Lightning on the monsters near her friend, harder in rain. |
+
+Paints: **crimson**, **bone**, **bamboo** and **sponge**, so 111 in all (PAINTS.md).
+
+Homage looks: Spark Mouse (house mouse), Green Dino (gecko), Doctor Deer (reindeer), Purple Flame (wyrm), Night Wing (gryphon), Forest Keeper (panda), Sleepy Giant (grizzly), First Fox (fennec).
+
+Also new: wild girls are rarer (`MonsterGirlsConfig`, `SpawnRarity`: a 37.5% chance on top of each species' own rules, none within 128 blocks of another wild one, groups of at most 2); anyone under 1.25 blocks tall stays out of bed (`Bonded.CHILDLIKE_HEIGHT`: fairies, not the Fairy Queen); `tactical_eye` lost her model rifle and carries real weapons, with a TaCZ sniper rifle firing out to 64 blocks.
+
 ## Twenty-seventh wave (2026-10-31, in the game)
 
 Twelve from the roster's Left list, the Gaitress on a rig of her own. Set aside: the adaro and the pishtaco (living traditions). Twelve creatures are left for one last wave.

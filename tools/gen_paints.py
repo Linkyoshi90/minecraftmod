@@ -40,7 +40,7 @@ different cloth, stitched), sandstone (Minecraft's sandstone side, tiled) and ac
 only). And (twenty-second wave): prismarine, amethyst, sculk (its specks glow) and mushroom, Minecraft's own blocks
 tiled. And (twenty-third wave): lapis, bookshelf, glazed (blue glazed terracotta) and redstone_lamp (its light glows); and (twenty-fourth wave): netherite,
 purpur, crying_obsidian (its tears glow) and shroomlight (it glows); and (twenty-fifth wave): end_stone, hay_bale,
-ancient_debris and sea_lantern (it glows); and (twenty-sixth wave): redstone (its bright lines glow), glowstone (it glows), cherry and terracotta; and (twenty-seventh wave): tnt, warped, dripstone and brain_coral. Since
+ancient_debris and sea_lantern (it glows); and (twenty-sixth wave): redstone (its bright lines glow), glowstone (it glows), cherry and terracotta; (twenty-seventh wave): tnt, warped, dripstone and brain_coral; and (twenty-eighth wave): crimson, bone, bamboo and sponge. Since
 then every paint named after something Minecraft draws uses its texture (gold, the copper stages, honey, magma, pumpkin,
 frost's packed ice, sakura's cherry leaves, stained glass, moss, the melon rind, the cow's hide, the sunflower). The drips and
 patterns follow the model: they are drawn per cube face from the geo file, running down each side from its top edge.
@@ -68,7 +68,7 @@ GEO = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls", "
 JAVA = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "girl", "GirlSpecies.java")
 HUES = {"blue": 0.58, "red": 0.0, "green": 0.33, "yellow": 0.14, "purple": 0.77}
 # the harpies and anurans (their own entity classes): the adult texture and the young ones (hatchling, tadpole, froglet)
-OTHERS = ["sparrow_harpy", "crow_harpy", "ostrich_harpy", "owl_harpy", "seagull_harpy", "albatross_harpy", "riflebird_harpy", "phoenix_harpy", "tengu_harpy", "toucan_harpy", "penguin_harpy", "vodyanoy", "zhuque_harpy", "finch_harpy", "flamingo_harpy", "coin_magpie_harpy", "trickster_raven_harpy", "rookmourn_harpy", "cassowrath_harpy", "dodobold_harpy", "peaflare_harpy", "pumpkingull_harpy", "condorune_harpy", "mirror_crane_harpy", "emberu_harpy", "ironbeak_harpy", "ibiset_harpy", "stigowl_harpy", "yatagarasu_harpy", "emu_harpy", "macaw_harpy", "roc_harpy", "ziz_harpy", "bennu_harpy", "garuda_harpy", "lechuza_harpy", "alkonost_harpy",
+OTHERS = ["sparrow_harpy", "crow_harpy", "ostrich_harpy", "owl_harpy", "seagull_harpy", "albatross_harpy", "riflebird_harpy", "phoenix_harpy", "tengu_harpy", "toucan_harpy", "penguin_harpy", "vodyanoy", "zhuque_harpy", "finch_harpy", "flamingo_harpy", "coin_magpie_harpy", "trickster_raven_harpy", "rookmourn_harpy", "cassowrath_harpy", "dodobold_harpy", "peaflare_harpy", "pumpkingull_harpy", "condorune_harpy", "mirror_crane_harpy", "emberu_harpy", "ironbeak_harpy", "ibiset_harpy", "stigowl_harpy", "yatagarasu_harpy", "poultry_harpy", "landharpy_harpy", "argentowlis_harpy", "skycrow_harpy", "ibisking_harpy", "motmora_harpy", "reliquary_dove_harpy", "emu_harpy", "macaw_harpy", "roc_harpy", "ziz_harpy", "bennu_harpy", "garuda_harpy", "lechuza_harpy", "alkonost_harpy",
           "bullywug", "mucus_toad", "bullfrog", "tree_frog", "poison_dart_frog", "glass_frog", "goliath_frog", "desert_rain_frog",
           "fire_bellied_toad", "cane_toad", "natterjack", "surinam_toad", "mailtoad"]
 
@@ -259,7 +259,7 @@ def treat(img, name, model):
                                         "prismarine", "amethyst", "sculk", "mushroom",
                                         "lapis", "bookshelf", "glazed", "redstone_lamp",
                                         "netherite", "purpur", "crying_obsidian", "shroomlight",
-                                        "end_stone", "hay_bale", "ancient_debris", "sea_lantern", "redstone", "glowstone", "cherry", "terracotta", "tnt", "warped", "dripstone", "brain_coral"):
+                                        "end_stone", "hay_bale", "ancient_debris", "sea_lantern", "redstone", "glowstone", "cherry", "terracotta", "tnt", "warped", "dripstone", "brain_coral", "crimson", "bone", "bamboo", "sponge"):
         return finish(img, name, model)[0]
     W = len(img[0])
     out = [list(row) for row in img]
@@ -399,7 +399,7 @@ TREATS = ["chocolate", "icecream", "strawberry", "jello", "milk", "gold", "marbl
           "prismarine", "amethyst", "sculk", "mushroom",
           "lapis", "bookshelf", "glazed", "redstone_lamp",
           "netherite", "purpur", "crying_obsidian", "shroomlight",
-          "end_stone", "hay_bale", "ancient_debris", "sea_lantern", "redstone", "glowstone", "cherry", "terracotta", "tnt", "warped", "dripstone", "brain_coral"]
+          "end_stone", "hay_bale", "ancient_debris", "sea_lantern", "redstone", "glowstone", "cherry", "terracotta", "tnt", "warped", "dripstone", "brain_coral", "crimson", "bone", "bamboo", "sponge"]
 PEARL = hexes("#b8b0c0", "#d8d2e0", "#ece8f2", "#f8f6fc", "#ffffff")
 CHROME = hexes("#1e2024", "#4a4e56", "#8a909a", "#c8ccd4", "#ffffff")
 AURORA = hexes("#2af08a", "#3ad8c8", "#5aa0f0", "#8a6af0", "#c86ae8")
@@ -911,7 +911,7 @@ def finish(img, name, model):
                 k = 0.8 + 0.3 * l
                 c = tuple(min(255, int(v * k)) for v in vanilla("sandstone")[(yy + 3 * i) % 16][(xx + 7 * i) % 16])
             elif name in ("lapis", "bookshelf", "glazed", "redstone_lamp", "netherite", "purpur", "crying_obsidian", "shroomlight",
-                          "end_stone", "hay_bale", "ancient_debris", "sea_lantern", "redstone", "glowstone", "cherry", "terracotta", "tnt", "warped", "dripstone", "brain_coral"):      # Minecraft's blocks
+                          "end_stone", "hay_bale", "ancient_debris", "sea_lantern", "redstone", "glowstone", "cherry", "terracotta", "tnt", "warped", "dripstone", "brain_coral", "crimson", "bone", "bamboo", "sponge"):      # Minecraft's blocks
                 if l < 0.22 and face:
                     continue
                 block = {"lapis": "lapis_block", "bookshelf": "bookshelf", "glazed": "blue_glazed_terracotta",
@@ -919,7 +919,8 @@ def finish(img, name, model):
                          "crying_obsidian": "crying_obsidian", "shroomlight": "shroomlight", "end_stone": "end_stone", "hay_bale": "hay_block_side",
                          "ancient_debris": "ancient_debris_side", "sea_lantern": "sea_lantern", "redstone": "redstone_block", "glowstone": "glowstone",
                          "cherry": "cherry_planks", "terracotta": "terracotta",
-                         "tnt": "tnt_side", "warped": "warped_planks", "dripstone": "dripstone_block", "brain_coral": "brain_coral_block"}[name]
+                         "tnt": "tnt_side", "warped": "warped_planks", "dripstone": "dripstone_block", "brain_coral": "brain_coral_block",
+                         "crimson": "crimson_planks", "bone": "bone_block_side", "bamboo": "bamboo_block", "sponge": "sponge"}[name]
                 v, _ = vtile(block, xx, yy, i, 1.0, 0 if name == "glazed" else 7, 0 if name == "glazed" else 5)
                 c = tuple(min(255, int(q * (0.8 + 0.35 * l))) for q in v)
                 if (name == "redstone_lamp" and v[0] > 200 and v[1] > 150 or name == "crying_obsidian" and v[2] > 140 and v[0] > 60

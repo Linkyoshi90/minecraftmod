@@ -52,6 +52,10 @@ import java.util.UUID;
  */
 public class Minotaur extends AbstractMonsterGirl {
     public static final int MILK_COOLDOWN = 6000;
+    /** How long the machine's harness stays on her, and how long she blushes after a bucket. */
+    public static final int MACHINE_MILK_TICKS = 100, BUCKET_BLUSH_TICKS = 60;
+    /** Ticks between drips while her milk is ready. */
+    public static final int DRIP_INTERVAL = 30;
     public static final int LOVE_TICKS = 600;
     public static final int GUARD_RADIUS = 10;
     private static final net.minecraft.network.syncher.EntityDataAccessor<Byte> DATA_WOOL =
@@ -59,6 +63,9 @@ public class Minotaur extends AbstractMonsterGirl {
     private final net.minecraft.world.SimpleContainer pack = new net.minecraft.world.SimpleContainer(18);
 
     private long nextMilk;
+    private boolean milkFull;
+    private int blushTicks;
+    private int harnessTicks;
     private int inLove;
     @Nullable
     private BlockPos post;
@@ -303,12 +310,13 @@ public class Minotaur extends AbstractMonsterGirl {
                     player.displayClientMessage(Component.translatable("message.monstergirls.no_milk", this.getDisplayName()), true);
                 } else {
                     boolean friend = this.getAffection(player) >= BED_AFFECTION;
-                    this.nextMilk = server.getGameTime() + (friend ? MILK_COOLDOWN / 2 : MILK_COOLDOWN);
+                    this.setNextMilk(server.getGameTime() + (friend ? MILK_COOLDOWN / 2 : MILK_COOLDOWN));
                     stack.consume(1, player);
                     ItemStack milk = new ItemStack(Items.MILK_BUCKET);
                     if (!player.getInventory().add(milk)) player.drop(milk, false);
                     this.addAffection(player, 1);
                     this.startTimedAction(Action.MILK, 40);
+                    if (com.linkyoshi90.monstergirls.MonsterGirlsConfig.milkEmbarrassed()) this.blush(BUCKET_BLUSH_TICKS);
                     this.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
                 }
             }
@@ -329,6 +337,7 @@ public class Minotaur extends AbstractMonsterGirl {
     /** The milk is ready again: her cowbell rings once (a note over her head), so you know without asking. */
     private void ringBell(ServerLevel level) {
         this.nextMilk = 0;
+        this.milkFull = true;
         this.playSound(SoundEvents.NOTE_BLOCK_COW_BELL.value(), 1.0F, 1.0F);
         level.sendParticles(ParticleTypes.NOTE, this.getX(), this.getY() + this.getBbHeight() + 0.4, this.getZ(), 0, 0.3, 0.0, 0.0, 1.0);
     }
@@ -339,6 +348,55 @@ public class Minotaur extends AbstractMonsterGirl {
 
     public void setNextMilk(long time) {
         this.nextMilk = time;
+        this.milkFull = false;
+    }
+
+    /** Her bell has rung and nobody has milked her since. A cow never milked has no bell to ring, so this stays false. */
+    public boolean isMilkFull() {
+        return this.milkFull;
+    }
+
+    /** Whether her milk drips from her chest just now. */
+    public boolean isDripping() {
+        return this.milkFull && !this.isMale() && !this.isBaby() && com.linkyoshi90.monstergirls.MonsterGirlsConfig.milkDrips();
+    }
+
+    private void drip(ServerLevel level) {
+        double yaw = Math.toRadians(this.yBodyRot);
+        double side = this.random.nextBoolean() ? 0.1 : -0.1;
+        double forward = this.getBbWidth() * 0.3;
+        level.sendParticles(com.linkyoshi90.monstergirls.registry.ModParticles.MILK_DRIP.get(),
+                this.getX() - Math.sin(yaw) * forward + Math.cos(yaw) * side, this.getY() + this.getBbHeight() * 0.6,
+                this.getZ() + Math.cos(yaw) * forward + Math.sin(yaw) * side, 1, 0.0, 0.0, 0.0, 0.0);
+    }
+
+    private void blush(int ticks) {
+        this.blushTicks = ticks;
+        this.setFlag(FLAG_BLUSHING, true);
+    }
+
+    /** The machine has her: she stands in its harness for a few seconds, if those options are on. */
+    public void milkedByMachine() {
+        boolean harness = com.linkyoshi90.monstergirls.MonsterGirlsConfig.milkHarness();
+        boolean embarrassed = com.linkyoshi90.monstergirls.MonsterGirlsConfig.milkEmbarrassed();
+        if (harness) {
+            this.harnessTicks = MACHINE_MILK_TICKS;
+            this.setFlag(FLAG_HARNESSED, true);
+        }
+        if (embarrassed) this.blush(MACHINE_MILK_TICKS);
+        if (harness || embarrassed) this.startTimedAction(Action.MILK, MACHINE_MILK_TICKS);
+    }
+
+    /** The timers are not saved, so a reload ends both of these. */
+    private void tickMilking(ServerLevel level) {
+        if (this.blushTicks > 0) this.blushTicks--;
+        if (this.blushTicks == 0 && this.hasFlag(FLAG_BLUSHING)) this.setFlag(FLAG_BLUSHING, false);
+        if (this.harnessTicks > 0) {
+            this.harnessTicks--;
+            this.getNavigation().stop();
+        }
+        if (this.harnessTicks == 0 && this.hasFlag(FLAG_HARNESSED)) this.setFlag(FLAG_HARNESSED, false);
+        if (this.tickCount % DRIP_INTERVAL == 0 && this.isDripping()) this.drip(level);
     }
 
     @Override
@@ -422,6 +480,7 @@ public class Minotaur extends AbstractMonsterGirl {
         if (this.species == GirlSpecies.MOOSKUH_MINOTAUR && this.tickCount % 400 == 0 && this.getDeltaMovement().horizontalDistanceSqr() < 1.0E-4) this.growMoss(server);
         if (this.stampede > 0) this.stampede--;
         if (this.nextMilk > 0 && server.getGameTime() >= this.nextMilk) this.ringBell(server);
+        this.tickMilking(server);
         if (this.species == GirlSpecies.RHIWOOL_MINOTAUR) this.tickCharge(server);
         if (this.tickCount % 40 == 0 && !this.isBaby()) {
             Player p = this.bondedPlayer(60, 16);
@@ -648,6 +707,7 @@ public class Minotaur extends AbstractMonsterGirl {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putLong("NextMilk", this.nextMilk);
+        tag.putBoolean("MilkFull", this.milkFull);
         tag.putInt("InLove", this.inLove);
         if (this.post != null) tag.putLong("Post", this.post.asLong());
         if (this.getWoolDye() != null) tag.putString("WoolDye", this.getWoolDye().getName());
@@ -658,6 +718,7 @@ public class Minotaur extends AbstractMonsterGirl {
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.nextMilk = tag.getLong("NextMilk");
+        this.milkFull = tag.getBoolean("MilkFull");
         this.inLove = tag.getInt("InLove");
         this.post = tag.contains("Post") ? BlockPos.of(tag.getLong("Post")) : null;
         this.setWoolDye(tag.contains("WoolDye") ? net.minecraft.world.item.DyeColor.byName(tag.getString("WoolDye"), null) : null);

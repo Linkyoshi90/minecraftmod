@@ -246,10 +246,54 @@ public class Bug extends AbstractMonsterGirl {
         return stack.is(Items.HONEY_BOTTLE) || stack.is(Items.SPIDER_EYE) ? 2 : 1;
     }
 
+    // --- the Pixi and the Rlff --------------------------------------------------------------------------------------
+
+    private static final net.minecraft.resources.ResourceLocation SHRINK =
+            net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(com.linkyoshi90.monstergirls.MonsterGirlsMod.MODID, "pixi_shrink");
+    private static final String SHRUNK_UNTIL = "PixiShrunkUntil";
+    private static final int SHRINK_TICKS = 600;
+    private long nextShrink;
+
+    /** Half a minute at half size, small enough for a gap one block high. Whether she did it (she needs a minute between). */
+    public boolean shrink(Player player) {
+        long now = this.level().getGameTime();
+        if (now < this.nextShrink) return false;
+        var scale = player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.SCALE);
+        if (scale == null) return false;
+        if (!scale.hasModifier(SHRINK)) {
+            scale.addTransientModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(SHRINK, -0.5,
+                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        }
+        player.getPersistentData().putLong(SHRUNK_UNTIL, now + SHRINK_TICKS);
+        this.nextShrink = now + 1200;
+        this.playSound(net.minecraft.sounds.SoundEvents.AMETHYST_BLOCK_CHIME, 1.0F, 1.6F);
+        return true;
+    }
+
+    /** Back to size once the time is up. */
+    public static void growBack(Player player) {
+        var scale = player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.SCALE);
+        if (scale != null && scale.hasModifier(SHRINK) && player.level().getGameTime() >= player.getPersistentData().getLong(SHRUNK_UNTIL)) scale.removeModifier(SHRINK);
+    }
+
+    /** Her friend, standing in water near her, heals. Whether they did. */
+    public boolean healingWater() {
+        Player friend = this.bondedPlayer(10, 12);
+        if (friend == null || !friend.level().getFluidState(friend.blockPosition()).is(net.minecraft.tags.FluidTags.WATER)) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.REGENERATION, 60));
+        return true;
+    }
+
     /** A glass bottle catches a firefly or a fairy in a jar (why?). */
     @Override
     @javax.annotation.Nullable
     protected net.minecraft.world.InteractionResult familyInteract(Player player, net.minecraft.world.InteractionHand hand, ItemStack stack) {
+        if (this.species == GirlSpecies.PIXI_BUG && hand == net.minecraft.world.InteractionHand.MAIN_HAND && player.isShiftKeyDown() && player.getMainHandItem().isEmpty()
+                && this.getAffection(player) >= 10) {
+            boolean client = this.level().isClientSide;
+            if (!client) this.shrink(player);
+            return net.minecraft.world.InteractionResult.sidedSuccess(client);
+        }
         if (this.species == GirlSpecies.SCARABRONZE_BUG && stack.is(Items.ROTTEN_FLESH) && !this.isBaby()) {   // she rolls it into bone meal
             if (this.level() instanceof ServerLevel server) {
                 stack.consume(1, player);
@@ -385,6 +429,9 @@ public class Bug extends AbstractMonsterGirl {
                 if (this.tickCount % 20 == 0) this.eatWool(server);
             }
             case FAIRY_BUG -> this.fairy(server);
+            case RLFF_BUG -> {
+                if (this.tickCount % 20 == 0) this.healingWater();
+            }
             case FAIRY_QUEEN_BUG -> this.bless(server);
             case BEE_BUG, QUEEN_BEE_BUG -> {
                 this.tickBee(server);
