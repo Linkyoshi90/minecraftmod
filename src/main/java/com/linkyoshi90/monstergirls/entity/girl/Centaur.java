@@ -844,9 +844,34 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
         return caught;
     }
 
+    /** The zoglintaur goes for anyone until she is calmed with raw meat. */
+    @Override
+    protected boolean wildHostile() {
+        return this.species == GirlSpecies.ZOGLINTAUR_CENTAUR;
+    }
+
+    /** Befriended: the nearest monster within 6 of her friend takes 8 and goes up. 1 on a hit, 0 with none near, -1 without a friend. */
+    public int gore(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster near = null;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(6),
+                net.minecraft.world.entity.monster.Monster::isAlive)) {
+            if (near == null || m.distanceToSqr(friend) < near.distanceToSqr(friend)) near = m;
+        }
+        if (near == null) return 0;
+        near.hurt(this.damageSources().mobAttack(this), 8);
+        near.setDeltaMovement(near.getDeltaMovement().add(0, 0.9, 0));
+        near.hurtMarked = true;
+        this.playSound(net.minecraft.sounds.SoundEvents.ZOGLIN_ATTACK, 1.0F, 1.0F);
+        return 1;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.CENSHROOM_CENTAUR && !this.level().isClientSide && this.tickCount % 20 == 0 && this.getControllingPassenger() instanceof LivingEntity rider) rider.removeEffect(net.minecraft.world.effect.MobEffects.POISON);
+        if (this.species == GirlSpecies.ZOGLINTAUR_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel gored && !this.isBaby() && this.tickCount % 40 == 0) this.gore(gored);
         if (this.species == GirlSpecies.ARK_SERAPHIM_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel lit && !this.isBaby() && this.tickCount % 20 == 0) this.blindingLight(lit);
         if (this.species == GirlSpecies.ANZU_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel crag && !this.isBaby() && this.tickCount % 60 == 0) this.snatch(crag);
         if (this.species == GirlSpecies.SHEDIM_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel lonely && !this.isBaby() && this.tickCount % 20 == 0) {

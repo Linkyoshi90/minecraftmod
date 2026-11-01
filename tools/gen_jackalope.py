@@ -45,6 +45,13 @@ SPECIES = {
                   "lavender": dict(FUR="#e0d4f0", HAIR="#c8b4e4", LIGHT="#f6f2fc", MARK="#a890c8", CLOTH="#f8e090"),
                   "butter": dict(FUR="#f8eebc", HAIR="#f2e08a", LIGHT="#fffbe8", MARK="#d8c070", CLOTH="#a8c8f0"),
                   "sky": dict(FUR="#cfe4f6", HAIR="#a8ccee", LIGHT="#f2f8fe", MARK="#88aed8", CLOTH="#f4c0d8")}),
+    # thirtieth wave: the Moon Rabbit, the jade rabbit of Chinese legend who pounds the elixir of life: white, jade trim
+    "moon_rabbit_jackalope": dict(
+        build="slim", outfit=dict(top=["kimono"], bottom="hakama", colors=dict(kimono="#e8f4ec", kimono_trim="#3a9a7a", obi="#3a9a7a", cloth2="#d8ecdf")),
+        hair="odango", bangs="parted", ears="rabbit", legs="fur", foot="long", tail=PUFF, tail_look="puff",
+        pal=dict(SKIN=skin("pale"), HAIR="#f4f4f0", FUR="#f8f8f4", LIGHT="#ffffff", MARK="#c8d8d0", EYE="#c83a5a", CLOTH="#e8f4ec", TRIM="#3a9a7a", INNER="#f8c8d0"),
+        variants={"jade": dict(HAIR="#a8e0c8", FUR="#c8f0dc", MARK="#6ab89a", EYE="#2a6a5a"), "gold": dict(HAIR="#f4e0a0", FUR="#f8ecc0", MARK="#c8a858", EYE="#8a4a14"),
+                  "dusk": dict(HAIR="#b8a8d8", FUR="#d0c4e8", MARK="#7a68a8", EYE="#4a2a8a"), "ash": dict(HAIR="#a8a8b0", FUR="#c0c0c8", MARK="#6a6a74", EYE="#c83a5a")}),
     "al_miraj_jackalope": dict(
         build="athletic", outfit=dict(top=["halter"], bottom="sarong", extras=["usekh", "armlets"], colors=dict(cloth2="#e8d8b0")),
         hair="braid", bangs="parted", ears="rabbit", legs="fur", foot="long", tail=PUFF, tail_look="puff", horns="unicorn",
@@ -178,6 +185,14 @@ def anim_extra(an, sp, d):
 
 VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0, 180, 0),
          ("walk", 0.25, -30, 8), ("run", 0.15, -60, 5), ("sit", 0, -30, 10), ("leap", 0.4, -60, 5)]
+
+# homage looks of the twenty-ninth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["boghare_jackalope"]["variants"]["carrot_bunny"] = dict(HAIR="#8a8a94", FUR="#9a9aa4", LIGHT="#f4f4f0", MARK="#5a5a64", EYE="#2a2a30", CLOTH="#f4f4f0", TRIM="#e8802a")
+
+
+# homage looks of the thirtieth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["inaba_jackalope"]["variants"]["moon_warrior"] = dict(HAIR="#f4d860", FUR="#fce8a0", LIGHT="#fff4d0", MARK="#c8a040", EYE="#2a5ac8", CLOTH="#2a4ab0", TRIM="#d82a4a")
+
 
 if __name__ == "__main__":
     F.run_family("jackalope", SPECIES, declare_hook, paint_hook, build_hook, anim_extra, views=VIEWS)

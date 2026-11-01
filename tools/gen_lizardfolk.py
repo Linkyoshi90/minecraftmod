@@ -303,6 +303,14 @@ SPECIES = {
                   "gold": dict(HAIR="#c8902a", FUR="#e0b040", MARK="#7a5410", CLOTH="#2a6a3a", extra=dict(leaf="#5a9a3a", bell="#f8f0c0")),
                   "orange": dict(HAIR="#d8601e", FUR="#e8782a", MARK="#7a2a0a", CLOTH="#2a5a7a", extra=dict(leaf="#5a9a3a", bell="#e8c050")),
                   "black": dict(HAIR="#1e1c22", FUR="#2a2830", MARK="#0a080e", LIGHT="#a8a4b0", EYE="#e8d040", extra=dict(leaf="#3a7a2a", bell="#e8c050"))}),
+    # thirtieth wave: the cave gekko: pale, huge dark eyes, sticky toes; she walks up walls
+    "cave_gekko_lizardfolk": dict(
+        build="slim", outfit=dict(top=["sports"], bottom="shorts", colors=dict(cloth2="#3a3a4a")),
+        hair="bob", bangs="messy", ears=None, legs="scales", foot="claw", tail=[(2, 2, 3), (2.25, 2.25, 3), (1.75, 1.75, 3), (1, 1, 2.5)],
+        tail_rest=[(-30, 0, 0), (10, 0, 0), (8, 0, 0), (6, 0, 0)], tail_look="scale",
+        pal=dict(SKIN=skin("#e8e0d8"), HAIR="#b8b0a8", FUR="#d0c8c0", LIGHT="#f0ece8", MARK="#6a625a", EYE="#1e1a18", CLOTH="#4a4a5a", TRIM="#b8b0a8"),
+        variants={"ochre": dict(HAIR="#c89a4a", FUR="#d8ac5a", MARK="#7a5a24"), "slate": dict(HAIR="#5a6270", FUR="#6a7280", MARK="#2a3038"),
+                  "moss": dict(HAIR="#6a8a5a", FUR="#7a9a6a", MARK="#3a5a2a"), "rust": dict(HAIR="#a85a2a", FUR="#b86a3a", MARK="#5a2a14")}),
     "gecko_lizardfolk": dict(
         build="petite", outfit=dict(top=["sports"], bottom="shorts", extras=["armlets"], colors=dict(cloth2="#3a4a5a")),
         hair="bob", bangs="messy", ears=None, legs="scales", foot="claw", tail=[(2, 2, 3), (2.25, 2.25, 3), (1.75, 1.75, 3), (1, 1, 2.5)],

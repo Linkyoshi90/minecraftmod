@@ -68,7 +68,7 @@ FAMILY = {
     # added 2026-10-30: rare and solitary
     "rider": ("RIDER", 0.7, "creature", (1, 1), 2),
 }
-GROUP = {"gandharva_elf": (1, 1), "apsara_elf": (1, 1), "pixi_bug": (1, 1), "rlff_bug": (1, 1), "ark_seraphim_centaur": (1, 1), "lioness_nekomata": (3, 5), "orca_mermaid": (2, 3), "fennec_kitsune": (2, 3), "corsac_kitsune": (2, 3), "dolphin_mermaid": (2, 3),
+GROUP = {"beluga_mermaid": (1, 1), "olm_mermaid": (1, 1), "spider_crab_crustacean": (1, 1), "giant_kraken_mollusk": (1, 1), "cave_gekko_lizardfolk": (1, 1), "drowned_undead": (1, 1), "famished_undead": (1, 1), "moon_rabbit_jackalope": (1, 1), "kun_dragon": (1, 1), "knocker_elf": (1, 1), "kaguya_elf": (1, 1), "ophanim_elf": (1, 1), "norn_elf": (1, 1), "shiitake_flora": (1, 1), "shroomotaur_minotaur": (1, 1), "censhroom_centaur": (1, 1), "zoglintaur_centaur": (1, 1), "piglette_armoured": (1, 1), "firesprite_devil": (1, 1), "cordyceps_undead": (1, 1), "lost_soul_undead": (1, 1), "soul_cluster_undead": (1, 1), "soul_leech_undead": (1, 1), "gandharva_elf": (1, 1), "apsara_elf": (1, 1), "pixi_bug": (1, 1), "rlff_bug": (1, 1), "ark_seraphim_centaur": (1, 1), "lioness_nekomata": (3, 5), "orca_mermaid": (2, 3), "fennec_kitsune": (2, 3), "corsac_kitsune": (2, 3), "dolphin_mermaid": (2, 3),
          "al_miraj_jackalope": (3, 5), "bison_minotaur": (3, 6), "high_elf": (2, 4), "bee_bug": (2, 4),
          "dugong_mermaid": (2, 2), "kelpie_centaur": (1, 1), "wolf_canid": (2, 4), "panda_canid": (1, 3), "anubis_canid": (1, 1),
          "pegasus_centaur": (1, 2), "lich_undead": (1, 1), "capybara_rodent": (2, 4), "leshy_flora": (1, 1), "llorona_undead": (1, 1),
@@ -122,7 +122,7 @@ GROUP = {"gandharva_elf": (1, 1), "apsara_elf": (1, 1), "pixi_bug": (1, 1), "rlf
          "nasnas_undead": (1, 2), "jiangshi_undead": (1, 2), "cerberus_canid": (1, 1), "baku_nekomata": (1, 2), "qilin_centaur": (1, 2),
          "fire_giant_devil": (1, 1), "frost_giant_devil": (1, 1), "ifrit_devil": (1, 1), "pazuzu_devil": (1, 2), "charybdis_mollusk": (1, 1),
          "mad_hatter_elf": (1, 1), "angel_elf": (1, 2)}
-CATEGORY = {"cetus_mermaid": "water_creature", "demon_devil": "monster", "fury_devil": "monster", "koschei_undead": "monster", "mano_peluda_undead": "monster", "gaitress_undead": "monster",
+CATEGORY = {"giant_kraken_mollusk": "water_creature", "olm_mermaid": "underground_water_creature", "drowned_undead": "water_creature", "kaguya_elf": "creature", "ophanim_elf": "creature", "norn_elf": "creature", "knocker_elf": "creature", "firesprite_devil": "creature", "cetus_mermaid": "water_creature", "demon_devil": "monster", "fury_devil": "monster", "koschei_undead": "monster", "mano_peluda_undead": "monster", "gaitress_undead": "monster",
             "bloodhound_canid": "monster", "bahamut_dragon": "creature", "charro_negro_rider": "creature", "shedim_centaur": "creature", "anzu_centaur": "creature", "min_min_mollusk": "creature", "lilith_devil": "monster", "wrath_devil": "monster", "hand_undead": "monster", "fire_giant_devil": "monster", "frost_giant_devil": "creature", "ifrit_devil": "monster", "pazuzu_devil": "monster", "charybdis_mollusk": "water_creature",
             "mad_hatter_elf": "creature", "angel_elf": "creature", "leviathan_mermaid": "water_creature", "jiangshi_undead": "monster", "nasnas_undead": "monster", "cerberus_canid": "monster",
             "girtablilu_bug": "monster", "behemoth_devil": "creature", "baku_nekomata": "creature", "quetzalcoatl_dragon": "creature", "qilin_centaur": "creature",
@@ -145,7 +145,7 @@ CATEGORY = {"cetus_mermaid": "water_creature", "demon_devil": "monster", "fury_d
             "piranha_mermaid": "water_creature", "mosasaurus_mermaid": "water_creature", "fishman_mermaid": "water_creature",
             "cyclops_devil": "creature", "genie_devil": "creature"}
 # hitbox widths that differ from the family's
-WIDTH = {"ark_seraphim_centaur": 1.3, "pixi_bug": 0.4, "mano_peluda_undead": 0.8, "gaitress_undead": 0.7, "cetus_mermaid": 1.2, "hand_undead": 0.8, "wrath_devil": 0.8, "kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alraune_flora": 1.2, "frankenstein_undead": 0.8,
+WIDTH = {"giant_kraken_mollusk": 2.0, "kun_dragon": 1.2, "ark_seraphim_centaur": 1.3, "pixi_bug": 0.4, "mano_peluda_undead": 0.8, "gaitress_undead": 0.7, "cetus_mermaid": 1.2, "hand_undead": 0.8, "wrath_devil": 0.8, "kraken_mollusk": 1.4, "ammonite_mollusk": 1.2, "ent_flora": 1.4, "alraune_flora": 1.2, "frankenstein_undead": 0.8,
          "gryphon_dragon": 1.3, "long_dragon": 1.0, "jormungandr_dragon": 1.2, "wyvern_dragon": 1.2, "wyrm_dragon": 1.3,
          "fairy_bug": 0.4, "scorpion_bug": 1.2, "moth_larva_bug": 0.6, "papillon_larva_bug": 0.6, "living_doll_undead": 0.4,
          "kannae_dragon": 0.5, "lesser_devil": 0.5, "mandragora_flora": 0.5, "polar_bear_canid": 0.8, "grizzly_canid": 0.8, "kobold_canid": 0.5,
@@ -224,6 +224,8 @@ NAME = {"jack_jackalope": "Jack Jackalope", "kraken_mollusk": "Kraken", "octopus
         "sasquatch_rodent": "Sasquatch", "sun_wukong_rodent": "Sun Wukong", "vetala_bat": "Vetala",
         "quetzalcoatl_dragon": "Quetzalcoatl", "leviathan_mermaid": "Leviathan", "girtablilu_bug": "Girtablilu", "cipactli_lizardfolk": "Cipactli",
         "behemoth_devil": "Behemoth", "nasnas_undead": "Nasnas", "jiangshi_undead": "Jiangshi", "cerberus_canid": "Cerberus", "baku_nekomata": "Baku",
+        "beluga_mermaid": "Beluga", "olm_mermaid": "Olm", "spider_crab_crustacean": "Spider Crab", "giant_kraken_mollusk": "Giant Kraken", "cave_gekko_lizardfolk": "Cave Gekko", "drowned_undead": "Drowned", "famished_undead": "Famished", "moon_rabbit_jackalope": "Moon Rabbit", "kun_dragon": "Kun", "knocker_elf": "Knocker", "kaguya_elf": "Kaguya", "ophanim_elf": "Ophanim", "norn_elf": "Norn",
+        "shiitake_flora": "Shiitake", "shroomotaur_minotaur": "Shroomotaur", "censhroom_centaur": "Censhroom", "zoglintaur_centaur": "Zoglintaur", "piglette_armoured": "Piglette", "firesprite_devil": "Firesprite", "cordyceps_undead": "Cordyceps Infected", "lost_soul_undead": "Lost Soul", "soul_cluster_undead": "Soul Cluster", "soul_leech_undead": "Soul Leech",
         "gandharva_elf": "Gandharva", "apsara_elf": "Apsara", "pixi_bug": "Pixi", "rlff_bug": "Rlff", "ark_seraphim_centaur": "Ark Seraphim",
         "bahamut_dragon": "Bahamut", "cetus_mermaid": "Cetus", "demon_devil": "Demon", "fury_devil": "Fury", "charro_negro_rider": "Charro Negro", "koschei_undead": "Koschei",
         "mano_peluda_undead": "La Mano Peluda", "gaitress_undead": "Gaitress", "bloodhound_canid": "Bloodhound", "shedim_centaur": "Shedim", "anzu_centaur": "Anzu", "obaa_kitsune": "Kitsune Obaa",

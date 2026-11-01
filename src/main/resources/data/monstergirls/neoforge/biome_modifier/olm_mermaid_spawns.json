@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_olm_mermaid",
+  "spawners": {
+    "type": "monstergirls:olm_mermaid",
+    "weight": 4,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

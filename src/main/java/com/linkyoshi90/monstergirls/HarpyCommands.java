@@ -66,8 +66,9 @@ public final class HarpyCommands {
 
     /** Her feelings, and a note if she is expecting. */
     private static Component describe(Bonded bonded, ServerPlayer player) {
-        Component bond = bonded.describeBond(player);
-        if (!bonded.getGestation().isCarrying()) return bond;
-        return bond.copy().append(Component.translatable("bond.monstergirls.expecting"));
+        net.minecraft.network.chat.MutableComponent bond = bonded.describeBond(player).copy();
+        Component missed = com.linkyoshi90.monstergirls.entity.Missing.describe((Mob) bonded, player);
+        if (missed != null) bond.append(missed);
+        return bonded.getGestation().isCarrying() ? bond.append(Component.translatable("bond.monstergirls.expecting")) : bond;
     }
 }

@@ -240,5 +240,13 @@ FACE = [("idle", 0, 0, 0, 24), ("idle", 2.75, 0, 0, 24), ("laugh", 0.3, 0, 0, 24
 SPECIES["fennec_kitsune"]["variants"]["first_fox"] = dict(HAIR="#a8693a", FUR="#b8784a", LIGHT="#f8ecd4", MARK="#7a4a24", EYE="#2a1a10", CLOTH="#f4e8d0", TRIM="#a8693a")
 
 
+# homage looks of the twenty-ninth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["gray_kitsune"]["variants"]["sly_fox"] = dict(HAIR="#d8702a", FUR="#e0803a", LIGHT="#f4dcc0", MARK="#8a4a1e", EYE="#3a8a4a", CLOTH="#4a9a5a", TRIM="#7a2a2a")
+
+
+# homage looks of the thirtieth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["arctic_kitsune"]["variants"]["ice_fox"] = dict(HAIR="#b8e0f4", FUR="#e8f4fc", LIGHT="#ffffff", MARK="#8ac0e0", EYE="#2a5a9a", CLOTH="#a8d8f0", TRIM="#e8f4fc")
+
+
 if __name__ == "__main__":
     G.run_family("kitsune", SPECIES, declare, paint, build, anims, VIEWS, FACE)

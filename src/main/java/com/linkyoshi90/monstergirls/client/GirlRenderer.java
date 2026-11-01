@@ -37,7 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
     private final GirlSpecies species;
     /** Species with a glow mask (textures/entity/&lt;texture&gt;_glowmask.png for every colour). */
-    static final java.util.Set<String> GLOWING = java.util.Set.of("magma_slime", "will_o_wisp_undead", "salamander_lizardfolk", "jack_o_lantern_devil",
+    static final java.util.Set<String> GLOWING = java.util.Set.of("ophanim_elf", "firesprite_devil", "lost_soul_undead", "soul_cluster_undead", "soul_leech_undead", "magma_slime", "will_o_wisp_undead", "salamander_lizardfolk", "jack_o_lantern_devil",
             "jellyfish_mollusk", "dark_elf", "ender_slime", "aurorantler_centaur", "axolume_mermaid", "blaze_cat_nekomata", "moonseal_mermaid", "chochin_obake_devil",
             "fire_giant_devil", "ifrit_devil", "pestilence_rider", "hellhound_canid", "angel_elf", "bakeneko_nekomata", "dullahan_undead", "pineskrell_rodent",
             "tarnhelm_canid", "tin_jack_construct", "wrath_devil", "min_min_mollusk", "fury_devil", "koschei_undead");
@@ -223,6 +223,8 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
             super.setCustomAnimations(girl, instanceId, state);
             var proc = this.getAnimationProcessor();
             var look = state.getData(software.bernie.geckolib.constant.DataTickets.ENTITY_MODEL_DATA);
+            var sprouts = proc.getBone("hair_sprouts");
+            if (sprouts != null) sprouts.setHidden(girl.hasFlag(AbstractMonsterGirl.FLAG_PRUNED));   // Shiitake's offshoots, regrowing
             AimPose.apply(proc, girl, look == null ? 0.0F : look.headPitch(), state.getPartialTick());   // a weapon raised over any animation
             // the jack o'lantern hiding as a pumpkin: only the disguise bone shows (it is shrunk away in every animation)
             GeoBone disguise = proc.getBone("disguise");

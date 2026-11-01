@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_kun_dragon",
+  "spawners": {
+    "type": "monstergirls:kun_dragon",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

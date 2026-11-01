@@ -405,6 +405,10 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
         if (this.species == GirlSpecies.DOMOVOI_ELF && this.level() instanceof ServerLevel house && !this.isBaby()) this.keepHearth(house, this.tickCount % 40 == 0);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.GANDHARVA_ELF && !this.isBaby()) this.tickLute(server);
+        if (this.species == GirlSpecies.KNOCKER_ELF && !this.isBaby() && this.tickCount % 200 == 0) this.knock(server);
+        if (this.species == GirlSpecies.KAGUYA_ELF && !this.isBaby() && this.tickCount % 40 == 0) this.moonsWeight();
+        if (this.species == GirlSpecies.OPHANIM_ELF && !this.isBaby() && this.tickCount % 60 == 0) this.allSeeing(server);
+        if (this.species == GirlSpecies.NORN_ELF && !this.isBaby() && this.tickCount % 20 == 0) this.foretell(server);
         if (this.species == GirlSpecies.APSARA_ELF && !this.isBaby() && this.tickCount % 20 == 0) this.dance(server);
         if (this.species == GirlSpecies.VALKYRIE_ELF && this.tickCount % 20 == 0) this.returnFallen(server);
         if (this.tradingPlayer != null && (!this.tradingPlayer.isAlive() || this.tradingPlayer.distanceToSqr(this) > 16 * 16)) this.tradingPlayer = null;
@@ -567,6 +571,68 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
         }
     }
 
+    // --- the thirtieth wave ---------------------------------------------------------------------------------------
+
+    /**
+     * She raps on the rock: 2 with loose gravel or sand over her friend's head (a warning), 1 with ore within 8 (and tells them
+     * which way), 0 with nothing to say, -1 without a friend.
+     */
+    public int knock(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        BlockPos at = friend.blockPosition();
+        for (int y = 2; y <= 6; y++) {
+            if (level.getBlockState(at.above(y)).getBlock() instanceof net.minecraft.world.level.block.FallingBlock && level.getBlockState(at.above(y - 1)).isAir()) {
+                this.rap(3);
+                friend.displayClientMessage(Component.translatable("message.monstergirls.knocker.loose", this.getDisplayName()), true);
+                return 2;
+            }
+        }
+        for (BlockPos p : BlockPos.withinManhattan(at, 8, 8, 8)) {
+            if (level.getBlockState(p).is(net.neoforged.neoforge.common.Tags.Blocks.ORES)) {
+                this.rap(1);
+                String way = net.minecraft.core.Direction.getNearest((float) (p.getX() - at.getX()), (float) (p.getY() - at.getY()), (float) (p.getZ() - at.getZ())).getName();
+                friend.displayClientMessage(Component.translatable("message.monstergirls.knocker.ore", this.getDisplayName(), way), true);
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    private void rap(int times) {
+        for (int i = 0; i < times; i++) this.playSound(SoundEvents.NOTE_BLOCK_BASEDRUM.value(), 1.5F, 0.8F + 0.1F * i);
+    }
+
+    /** Her friend near her falls softly and jumps high. Whether she has one near. */
+    public boolean moonsWeight() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 12);
+        if (friend == null) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.JUMP, 60, 2));
+        if (friend.fallDistance > 2.0F) friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SLOW_FALLING, 60));
+        return true;
+    }
+
+    /** Every monster within 32 of her friend shows through the walls. How many, -1 without a friend. */
+    public int allSeeing(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int seen = 0;
+        for (Monster m : level.getEntitiesOfClass(Monster.class, friend.getBoundingBox().inflate(32), Monster::isAlive)) {
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.GLOWING, 100));
+            seen++;
+        }
+        return seen;
+    }
+
+    /** A monster within 16 has her friend as its target: she says so, and steadies them. Whether one did. */
+    public boolean foretell(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null || level.getEntitiesOfClass(Monster.class, friend.getBoundingBox().inflate(16), m -> m.isAlive() && m.getTarget() == friend).isEmpty()) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DAMAGE_RESISTANCE, 40));
+        friend.displayClientMessage(Component.translatable("message.monstergirls.norn.warning", this.getDisplayName()), true);
+        return true;
+    }
+
     // --- the Gandharva and the Apsara -------------------------------------------------------------------------------
 
     /** His tune, in the notes of a note block (0-24): written for him, round and round a five-note scale. */
@@ -645,7 +711,7 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
 
     @Override
     public boolean canFly() {
-        return this.species == GirlSpecies.VALKYRIE_ELF || this.species == GirlSpecies.ANGEL_ELF || this.species == GirlSpecies.GANDHARVA_ELF || super.canFly();
+        return this.species == GirlSpecies.VALKYRIE_ELF || this.species == GirlSpecies.ANGEL_ELF || this.species == GirlSpecies.GANDHARVA_ELF || this.species == GirlSpecies.OPHANIM_ELF || super.canFly();
     }
 
     /** What she gathered up where her friend fell, and whose it is. */

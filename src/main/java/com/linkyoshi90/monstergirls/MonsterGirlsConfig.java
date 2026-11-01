@@ -41,6 +41,12 @@ public final class MonsterGirlsConfig {
                     "Harpies and anurans take their colours from the biome, so above 100 changes nothing for them.")
             .defineInRange("variantRate", 100, 0, MAX_RATE);
 
+    public static final ModConfigSpec.IntValue MISSING_RATE = BUILDER
+            .comment("How quickly friends start to miss a player they haven't seen, in percent (0 turns it off, 200 is twice as soon).")
+            .defineInRange("missingRate", 100, 0, MAX_RATE);
+    public static final ModConfigSpec.IntValue CONCEPTION_CHANCE = BUILDER
+            .comment("The chance of young after a shared night, in percent. One who missed you beats it; a full moon is always certain.")
+            .defineInRange("conceptionChance", 50, 0, 100);
     public static final ModConfigSpec.IntValue PAINT_RATE = BUILDER
             .comment("How often a wild one is painted, as a percent of normal (normal is one in " + PAINT_RARITY + ").")
             .defineInRange("paintRate", 100, 0, MAX_RATE);
@@ -119,6 +125,14 @@ public final class MonsterGirlsConfig {
     /** Whether a colour the biome chose stays, for the families that have no other say. */
     public static boolean keepsBiomeVariant(RandomSource random) {
         return random.nextDouble() < rate(VARIANT_RATE);
+    }
+
+    public static int missingRate() {
+        return SPEC.isLoaded() ? MISSING_RATE.get() : MISSING_RATE.getDefault();
+    }
+
+    public static int conceptionChance() {
+        return SPEC.isLoaded() ? CONCEPTION_CHANCE.get() : CONCEPTION_CHANCE.getDefault();
     }
 
     public static boolean milkDrips() {

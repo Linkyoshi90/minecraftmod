@@ -357,9 +357,18 @@ public class Lizardfolk extends AbstractMonsterGirl {
         return false;
     }
 
+    /** Her friend, falling near her, drifts down. Whether they were falling. */
+    public boolean steady() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null || friend.fallDistance < 4.0F) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SLOW_FALLING, 60));
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.CAVE_GEKKO_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel && !this.isBaby() && this.tickCount % 5 == 0) this.steady();
         if (this.species == GirlSpecies.CIPACTLI_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel marsh && !this.isBaby() && this.tickCount % 40 == 0) this.pullUnder(marsh);
         if (this.species == GirlSpecies.ARGENTINOSAURUS_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel plain && !this.isBaby() && this.tickCount % 40 == 0) this.lookout(plain);
         if (this.species == GirlSpecies.TURTWORLD_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel isle && !this.isBaby() && this.tickCount % 100 == 0) this.livingIsland(isle);
@@ -474,7 +483,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
     /** She runs up walls (and anything else she bumps into). */
     @Override
     public boolean onClimbable() {
-        return this.species == GirlSpecies.GECKO_LIZARDFOLK && this.horizontalCollision || super.onClimbable();
+        return (this.species == GirlSpecies.GECKO_LIZARDFOLK || this.species == GirlSpecies.CAVE_GEKKO_LIZARDFOLK) && this.horizontalCollision || super.onClimbable();
     }
 
     /** Hit, she sheds her tail (it wriggles a moment where it fell) and grows a new one. */

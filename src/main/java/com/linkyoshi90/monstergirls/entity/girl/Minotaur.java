@@ -304,6 +304,10 @@ public class Minotaur extends AbstractMonsterGirl {
             }
             return null;                                                               // and it still counts as food
         }
+        if (this.species == GirlSpecies.SHROOMOTAUR_MINOTAUR && stack.is(Items.BOWL) && !this.isMale() && !this.isBaby()) {
+            if (this.level() instanceof ServerLevel server) this.fillBowl(server, player, stack);
+            return InteractionResult.sidedSuccess(client);
+        }
         if (stack.is(Items.BUCKET) && !this.isMale() && !this.isBaby()) {
             if (this.level() instanceof ServerLevel server) {
                 if (server.getGameTime() < this.nextMilk) {
@@ -463,6 +467,21 @@ public class Minotaur extends AbstractMonsterGirl {
     }
 
     // --- tick ----------------------------------------------------------------------------------------------------
+
+    /** A bowl of mushroom stew, on the same clock as a pail of milk. Whether she had any. */
+    public boolean fillBowl(ServerLevel level, Player player, ItemStack bowl) {
+        if (level.getGameTime() < this.nextMilk) {
+            player.displayClientMessage(Component.translatable("message.monstergirls.no_milk", this.getDisplayName()), true);
+            return false;
+        }
+        boolean friend = this.getAffection(player) >= BED_AFFECTION;
+        this.setNextMilk(level.getGameTime() + (friend ? MILK_COOLDOWN / 2 : MILK_COOLDOWN));
+        bowl.consume(1, player);
+        ItemStack stew = new ItemStack(Items.MUSHROOM_STEW);
+        if (!player.getInventory().add(stew)) player.drop(stew, false);
+        this.addAffection(player, 1);
+        return true;
+    }
 
     @Override
     public void aiStep() {

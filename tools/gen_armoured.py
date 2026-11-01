@@ -173,5 +173,17 @@ def anim_extra(an, sp, d):
                                     sym("arm", hold(-175, 0, -8))))
 
 
+# twenty-ninth wave: the piglette, a piglin woman in gold trim and a padded tunic, tusks and a snout
+SPECIES["piglette_armoured"] = dict(
+    build="athletic", outfit=dict(top=["sweater"], bottom="shorts", extras=["belt", "armlets"], colors=dict(leather="#6a4a2a", cloth2="#7a3a2a")),
+    hair="mane", bangs="messy", ears="cow", legs="fur", foot="hoof", tail=[(1, 1, 2), (.75, .75, 1.5)], tail_rest=[(-40, 0, 0), (60, 0, 0)], tail_look="fur", boar=True,
+    pal=dict(SKIN=skin("#f0b8a8"), HAIR="#e8c050", FUR="#e89a8a", LIGHT="#f8d0c4", MARK="#b8605a", EYE="#3a2418", CLOTH="#7a3a2a", TRIM="#e8c050",
+             pattern="solid", extra=dict(nobands=True, tusk="#f0e6cc", hoof="#2a2420")),
+    variants={"rose": dict(HAIR="#6a2a2a", FUR="#d87a7a", LIGHT="#f0b0a8", extra=dict(nobands=True, tusk="#f0e6cc", hoof="#2a2420")),
+              "brown": dict(HAIR="#3a2a1e", FUR="#a06a4a", LIGHT="#d8a888", MARK="#5a3a2a", extra=dict(nobands=True, tusk="#f0e6cc", hoof="#2a2420")),
+              "ashen": dict(HAIR="#d8d0c0", FUR="#a89a94", LIGHT="#d8ccc4", MARK="#5a5450", extra=dict(nobands=True, tusk="#f0e6cc", hoof="#2a2420")),
+              "warped": dict(HAIR="#e8c050", FUR="#5a9a92", LIGHT="#a8d0c8", MARK="#1e4a4a", extra=dict(nobands=True, tusk="#f0e6cc", hoof="#14302e"))})
+
+
 if __name__ == "__main__":
     F.run_family("armoured", SPECIES, declare_hook, paint_hook, build_hook, anim_extra)

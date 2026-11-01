@@ -285,7 +285,7 @@ def build_hook(r, g, d):
 # twenty-eighth wave: the Gandharva, the celestial musician of Hindu and Buddhist lore, a youth in a long robe with small blue wings and a lute slung on
 # his back (it swings round to his hands when he plays); the Apsara, the celestial dancer, water-blue, in a full dancer's costume
 SPECIES["gandharva_elf"] = dict(
-    build="slim", outfit=dict(top=["kimono"], bottom="hakama", extras=["armlets"], colors=dict(kimono="#3a6ac8", kimono_trim="#e8c050", obi="#e8c050", cloth2="#2a4a9a")),
+    build="male", outfit=dict(top=["kimono"], bottom="hakama", extras=["armlets"], colors=dict(kimono="#3a6ac8", kimono_trim="#e8c050", obi="#e8c050", cloth2="#2a4a9a")),
     hair="bun", bangs="parted", ears="elf", legs="bare", foot="shoe", wings="feather", wing_scale=0.7, flies=True, lute=True,
     pal=dict(SKIN=skin("fair"), HAIR="#1e2e6a", FUR="#1e2e6a", LIGHT="#a8c4f4", MARK="#14204a", EYE="#2a3a7a", CLOTH="#3a6ac8", TRIM="#e8c050",
              extra=dict(boot="#c8a878", wing="#7ab0f0", wing_tip="#3a6ac8", lute="#b87a3a", lute_dark="#6a4018")),
@@ -345,6 +345,64 @@ def anim_extra(an, sp, d):
                                           "arm_l": {"rotation": Tk((0, (-60, 40, 0)), (1.0, (-160, 0, 10)), (2.0, (-60, 40, 0)))},
                                           "leg_r": {"rotation": Tk((0, (0, 0, 0)), (0.5, (-20, 0, 0)), (1.0, (0, 0, 0)), (2.0, (0, 0, 0)))},
                                           "leg_l": {"rotation": Tk((0, (0, 0, 0)), (1.0, (0, 0, 0)), (1.5, (-20, 0, 0)), (2.0, (0, 0, 0)))}}))
+
+
+# thirtieth wave: the Knocker, the Cornish mine spirit, short and stout in a miner's kerchief; Kaguya, the moon's exiled princess; the Ophanim, the wheel covered in eyes,
+# a pale woman inside a turning ring of them; the Norn, a weaver of fate in undyed wool
+SPECIES["knocker_elf"] = dict(
+    build="strong", outfit=dict(top=["sweater"], bottom="shorts", extras=["belt"], colors=dict(leather="#5a3a22", cloth2="#4a3a2a")),
+    hair="braid", bangs="messy", ears="elf", legs="bare", foot="shoe",
+    pal=dict(SKIN=skin("tan"), HAIR="#7a4a22", FUR="#7a4a22", LIGHT="#d8b890", MARK="#4a2a14", EYE="#3a2a1a", CLOTH="#8a6a3a", TRIM="#c8a040", extra=dict(boot="#3a2a1a")),
+    variants={"copper": dict(HAIR="#c8622a", CLOTH="#5a6a3a", extra=dict(boot="#3a2a1a")), "soot": dict(SKIN=skin("fair"), HAIR="#2a2622", CLOTH="#3a3a42", extra=dict(boot="#1e1a18")),
+              "tin": dict(HAIR="#a8a8b0", CLOTH="#5a6270", extra=dict(boot="#3a3a42")), "ochre": dict(HAIR="#c89a4a", CLOTH="#a87a2a", extra=dict(boot="#3a2a1a"))})
+SPECIES["kaguya_elf"] = dict(
+    build="slim", outfit=dict(top=["kimono"], bottom="hakama", extras=["pearls"], colors=dict(kimono="#f4f0f8", kimono_trim="#b8a0e0", obi="#b8a0e0", cloth2="#e8e0f4")),
+    hair="hime", bangs="blunt", ears=None, legs="bare", foot="shoe",
+    pal=dict(SKIN=skin("pale"), HAIR="#1a1a24", FUR="#1a1a24", LIGHT="#e8e0f4", MARK="#0e0e14", EYE="#6a4ac8", CLOTH="#f4f0f8", TRIM="#b8a0e0", extra=dict(boot="#e8e0f4")),
+    variants={"silver": dict(HAIR="#d8dce8", extra=dict(boot="#e8e0f4")), "bamboo": dict(HAIR="#2a4a2a", EYE="#3a8a4a", extra=dict(boot="#d8ecd0", kimono="#e4f0dc")),
+              "rose": dict(HAIR="#4a1e3a", EYE="#c83a7a", extra=dict(boot="#f4d8e4", kimono="#f8e4ec")), "gold": dict(HAIR="#e8c860", EYE="#a87a1e", extra=dict(boot="#f8ecc8", kimono="#fcf4dc"))})
+SPECIES["ophanim_elf"] = dict(
+    build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", colors=dict(cloth2="#e8e4d8")),
+    hair="flowing", bangs="parted", ears=None, legs="bare", foot="shoe", flies=True, halo=True, wheel=True, glow=["halo", "wheel"], glow_boost=1.2,
+    pal=dict(SKIN=skin("fair"), HAIR="#e8dcc0", FUR="#e8dcc0", LIGHT="#fff8e8", MARK="#b89a58", EYE="#e8b030", CLOTH="#f4f0e4", TRIM="#e8c050",
+             extra=dict(boot="#e8dcc0", halo="#f8e080", wheel="#e8c050", wheel_eye="#2a4a9a")),
+    variants={"silver": dict(HAIR="#d8dce8", extra=dict(boot="#d8dce8", halo="#e8ecf8", wheel="#c8ccd8", wheel_eye="#2a4a9a")), "ember": dict(HAIR="#e88a4a", extra=dict(boot="#e88a4a", halo="#f8a050", wheel="#e8702a", wheel_eye="#2a1a14")),
+              "azure": dict(HAIR="#a8c8f0", extra=dict(boot="#a8c8f0", halo="#a8e0f8", wheel="#5a9ae8", wheel_eye="#f8e080")), "pale": dict(HAIR="#f4f4f0", extra=dict(boot="#f4f4f0", halo="#ffffff", wheel="#e8e8e0", wheel_eye="#8a4a1e"))})
+SPECIES["norn_elf"] = dict(
+    build="standard", outfit=dict(top=["kimono"], bottom="hakama", colors=dict(kimono="#c8bca8", kimono_trim="#5a4a3a", obi="#5a4a3a", cloth2="#a89a84")),
+    hair="braid", bangs="parted", ears=None, legs="bare", foot="shoe",
+    pal=dict(SKIN=skin("fair"), HAIR="#b8b4ac", FUR="#b8b4ac", LIGHT="#e8e4dc", MARK="#6a665e", EYE="#3a5a7a", CLOTH="#c8bca8", TRIM="#5a4a3a", extra=dict(boot="#5a4a3a")),
+    variants={"past": dict(HAIR="#e8e4dc", extra=dict(boot="#5a4a3a")), "present": dict(HAIR="#c8a040", EYE="#3a7a4a", extra=dict(boot="#5a4a3a")),
+              "future": dict(HAIR="#3a3a48", EYE="#8a4ac8", extra=dict(boot="#2a2a34")), "red": dict(HAIR="#a83a2a", extra=dict(boot="#5a2a1e"))})
+_declare3, _paint3, _build3 = declare_hook, paint_hook, build_hook
+
+
+def declare_hook(sp, d):
+    out = list(_declare3(sp, d) or [])
+    if d.get("wheel"):
+        out += [("wheel_h", 18, 1, 1), ("wheel_v", 1, 18, 1), ("wheel_eye", 1.5, 1.5, .25)]
+    return out
+
+
+def paint_hook(pt, pal, d):
+    _paint3(pt, pal, d)
+    if d.get("wheel"):
+        rim, iris = G.shades(pal.extra["wheel"]), G.shades(pal.extra["wheel_eye"])
+        for p in ("wheel_h", "wheel_v"):
+            pt(p, "all", lambda f, x, y, w, h: pick(rim, 0.7, x, y))
+        pt("wheel_eye", "all", lambda f, x, y, w, h: pick(iris, 0.3, x, y) if abs(x - w // 2) < 2 and abs(y - h // 2) < 2 else (248, 244, 232, 255))
+
+
+def build_hook(r, g, d):
+    _build3(r, g, d)
+    if d.get("wheel"):                                   # a square ring of eyes behind her, turning
+        cy, z = 17.0, g.z + 4.0
+        eyes = [cube("wheel_eye", [x - 0.75, y - 0.75, z - 0.4]) for x, y in ((-6, cy + 8.5), (0, cy + 8.5), (6, cy + 8.5), (-6, cy - 8.5), (0, cy - 8.5), (6, cy - 8.5), (-8.5, cy - 4), (-8.5, cy + 4), (8.5, cy - 4), (8.5, cy + 4))]
+        r.add("hair_wheel", "root", [0, cy, z], [cube("wheel_h", [-9, cy + 8, z]), cube("wheel_h", [-9, cy - 9, z]), cube("wheel_v", [-9, cy - 9, z]), cube("wheel_v", [8, cy - 9, z])] + eyes)
+
+
+# homage looks of the thirtieth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["night_elf"]["variants"]["night_warden"] = dict(HAIR="#3a7a6a", CLOTH="#3a2a5a", TRIM="#c8c8d8", SKIN=skin("lilac"))
 
 
 if __name__ == "__main__":

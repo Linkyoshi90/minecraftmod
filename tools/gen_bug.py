@@ -482,6 +482,10 @@ SPECIES["rlff_bug"] = dict(
 BIPEDS.update({k: SPECIES[k] for k in ("pixi_bug", "rlff_bug")})
 
 
+# homage looks of the twenty-ninth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["hornet_bug"]["variants"]["needle_knight"] = dict(HAIR="#e8e4dc", FUR="#c82a2a", LIGHT="#e8e4dc", MARK="#6a1414", EYE="#141418", CLOTH="#c82a2a", TRIM="#e8e4dc")
+
+
 if __name__ == "__main__":
     import family_concepts as FC
     want = [a for a in sys.argv[1:] if not a.startswith("--")]

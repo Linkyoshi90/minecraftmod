@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_soul_cluster_undead",
+  "spawners": {
+    "type": "monstergirls:soul_cluster_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

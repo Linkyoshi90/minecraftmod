@@ -124,6 +124,52 @@ SPECIES = {
                   "royal": dict(TRIM="#3a5ac8", EYE="#e8c050", extra=dict(boot="#f4ecd8", wrap="#f4ecd8", gilded=True)),
                   "sand": dict(SKIN=skin("brown"), extra=dict(boot="#c8b088", wrap="#c8b088", bandage="#c8b088", cloth2="#c8b088")),
                   "night": dict(SKIN=skin("grey"), EYE="#7af0ff", extra=dict(boot="#a8a8b0", wrap="#a8a8b0", bandage="#a8a8b0", cloth2="#a8a8b0"))}),
+    # thirtieth wave: the drowned, a zombie of the cold sea, blue-green, weed in her hair; the Famished, a starved cave thing, grey and gaunt, long claws and a wide mouth, who eases when fed (`sated` hides the claws)
+    "drowned_undead": dict(
+        build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["arm_wraps"], colors=dict(bandage="#6a8a7a")),
+        hair="shaggy", bangs="messy", ears=None, legs="bare", foot="shoe", stitches=True,
+        pal=dict(SKIN="#7ab0b0", HAIR="#2a5a5a", FUR="#7ab0b0", LIGHT="#c8e0dc", MARK="#1e3e4a", EYE="#5af0f0", CLOTH="#4a7a6a", TRIM="#6a8a7a", extra=dict(boot="#1e3a3a")),
+        variants={"frozen": dict(SKIN="#a8c8e0", HAIR="#d8ecf8", CLOTH="#5a7a9a", EYE="#c8f4ff"), "deep": dict(SKIN="#3a6a8a", HAIR="#14283e", CLOTH="#1e3a5a", EYE="#5ae0f8"),
+                  "kelp": dict(SKIN="#8ab090", HAIR="#3a6a3a", CLOTH="#3a5a2a"), "pale": dict(SKIN="#c8d4d0", HAIR="#6a7a78", CLOTH="#5a6a68")}),
+    "famished_undead": dict(
+        build="slim", outfit=dict(top=["bandeau"], bottom="shorts", colors=dict(cloth2="#3a3430")),
+        hair="shaggy", bangs="messy", ears=None, legs="bare", foot="shoe", famished=True, grin=True,
+        pal=dict(SKIN="#a8a49c", HAIR="#2a2622", FUR="#a8a49c", LIGHT="#c8c4bc", MARK="#5a544c", EYE="#e8e0a0", CLOTH="#3a3430", TRIM="#5a544c", extra=dict(boot="#2a2622", fclaw="#2a2622")),
+        variants={"sated": dict(SKIN="#e8c8ac", HAIR="#4a3a2a", EYE="#6a4a2a", CLOTH="#6a5a3a", extra=dict(boot="#2a2622", fclaw="#2a2622", sated=True)),
+                  "pale": dict(SKIN="#d8d4d0", HAIR="#8a8680", extra=dict(boot="#2a2622", fclaw="#4a4640")),
+                  "ember": dict(SKIN="#a8887a", HAIR="#5a241a", EYE="#f8703a", extra=dict(boot="#2a2622", fclaw="#2a1a14")),
+                  "ash": dict(SKIN="#6a6a6e", HAIR="#1a1a1e", EYE="#c8e8f8", extra=dict(boot="#2a2622", fclaw="#14141a"))}),
+    # twenty-ninth wave: the cordyceps infected, a zombie with fungus fruiting from her head and shoulder (`cured` draws neither); five feedings of rotten flesh cure her
+    "cordyceps_undead": dict(
+        build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["arm_wraps"], colors=dict(bandage="#c8b8a0")),
+        hair="shaggy", bangs="messy", ears=None, legs="bare", foot="shoe", stitches=True, cordyceps=True,
+        pal=dict(SKIN="#b0b890", HAIR="#6a4a2a", FUR="#b0b890", LIGHT="#e0e0c0", MARK="#c8702a", EYE="#e88a2a", CLOTH="#6a5a3a", TRIM="#c8b8a0",
+                 extra=dict(boot="#3a3028", fungus="#e88a2a", fungus_tip="#f8d890")),
+        variants={"cured": dict(SKIN="#e8c8ac", HAIR="#6a4a2a", EYE="#5a7a3a", CLOTH="#3a6a8a", extra=dict(boot="#3a3028", fungus="#e88a2a", fungus_tip="#f8d890", cured=True)),
+                  "ashen": dict(SKIN="#b8b4a8", HAIR="#3a3a3a", extra=dict(boot="#3a3028", fungus="#c8c0b0", fungus_tip="#f4f0e8")),
+                  "violet": dict(SKIN="#b0a8b8", HAIR="#4a3a5a", EYE="#a83ae8", extra=dict(boot="#3a3028", fungus="#8a3ac8", fungus_tip="#e0b8f8")),
+                  "scarlet": dict(SKIN="#b8a890", HAIR="#5a2a22", EYE="#e83a2a", extra=dict(boot="#3a3028", fungus="#c82a2a", fungus_tip="#f8b0a0"))}),
+    # twenty-ninth wave: the souls of the valley: the Lost Soul, pale and legless; the Soul Cluster, several faces gathered in one body; the Soul Leech, dark and ribbed
+    "lost_soul_undead": dict(
+        build="slim", outfit=dict(top=["halter"], colors=dict()), lower="none", hair="flowing", bangs="wispy", ears=None, wisp=True,
+        glow=["flame_a", "flame_b", "flame_c", "flame_tip", "hair_cap", "strand_l1"],
+        pal=dict(SKIN="#d8f0f8", HAIR="#a8e8f8", FUR="#7ad0f0", LIGHT="#f0fcff", MARK="#3a8ab0", EYE="#2a5a7a", CLOTH="#6ab0d0", TRIM="#d8f8ff", extra=dict(flame="#7ae0f8")),
+        variants={"pale": dict(HAIR="#e8ecf0", CLOTH="#a8b0c0", extra=dict(flame="#e0e8f0")), "green": dict(HAIR="#a8f0d0", CLOTH="#5ab08a", extra=dict(flame="#7af0b8")),
+                  "amber": dict(HAIR="#f8d8a0", CLOTH="#b88a4a", extra=dict(flame="#f8c870")), "dusk": dict(HAIR="#c8b0f0", CLOTH="#7a5ab0", extra=dict(flame="#b090f0"))}),
+    "soul_cluster_undead": dict(
+        build="curvy", outfit=dict(top=["halter"], colors=dict()), lower="none", hair="shaggy", bangs="wispy", ears=None, wisp=True, scluster=True,
+        glow=["flame_a", "flame_b", "flame_c", "flame_tip", "hair_cap", "strand_l1", "hair_faces"],
+        pal=dict(SKIN="#c8e8f0", HAIR="#6ac0d8", FUR="#4aa0c8", LIGHT="#e8f8ff", MARK="#2a6a90", EYE="#143a5a", CLOTH="#3a7aa0", TRIM="#a8e8f8", extra=dict(flame="#5ad0f0")),
+        variants={"pale": dict(HAIR="#d8dce4", CLOTH="#8a92a4", extra=dict(flame="#d0d8e4")), "green": dict(HAIR="#6ad8a8", CLOTH="#2a8a60", extra=dict(flame="#5ae0a0")),
+                  "amber": dict(HAIR="#f0c070", CLOTH="#a87a3a", extra=dict(flame="#f0b050")), "dusk": dict(HAIR="#a88ae0", CLOTH="#5a3a90", extra=dict(flame="#9a78e0"))}),
+    "soul_leech_undead": dict(
+        build="slim", outfit=dict(top=["sports"], colors=dict()), lower="none", hair="bob", bangs="blunt", ears=None, wisp=True, grin=True,
+        glow=["flame_a", "flame_b", "flame_c", "flame_tip"],
+        pal=dict(SKIN="#3a3e5a", HAIR="#1e2238", FUR="#2a2e48", LIGHT="#6a7090", MARK="#141828", EYE="#5ae0f8", CLOTH="#1e2238", TRIM="#5ae0f8", extra=dict(flame="#3ab0d8")),
+        variants={"oil": dict(SKIN="#2a2622", HAIR="#14100c", CLOTH="#14100c", TRIM="#c8a040", EYE="#c8a040", extra=dict(flame="#a88030")),
+                  "blood": dict(SKIN="#4a1e24", HAIR="#2a0e12", CLOTH="#2a0e12", TRIM="#e84a4a", EYE="#e84a4a", extra=dict(flame="#c83a3a")),
+                  "ash": dict(SKIN="#6a6a70", HAIR="#3a3a40", CLOTH="#3a3a40", TRIM="#d0d0d8", EYE="#d0d0d8", extra=dict(flame="#b0b0b8")),
+                  "void": dict(SKIN="#2a1e3e", HAIR="#140e22", CLOTH="#140e22", TRIM="#b07af8", EYE="#b07af8", extra=dict(flame="#8a5ae0"))}),
     "will_o_wisp_undead": dict(
         build="slim", outfit=dict(top=["halter"], extras=["armlets"]), lower="none",
         hair="flowing", bangs="wispy", ears=None, wisp=True, glow=["flame_a", "flame_b", "flame_c", "flame_tip", "hair_cap", "strand_l1"],
@@ -234,6 +280,12 @@ SPECIES = {
 
 def declare_hook(sp, d):
     out = []
+    if d.get("famished"):                                # thirtieth wave: the Famished's long claws
+        out += [("fm_claw", .5, 3.5, .5)]
+    if d.get("cordyceps"):                               # twenty-ninth wave: the fungus fruiting from her; the Soul Cluster's other faces
+        out += [("cd_stalk", 1, 3, 1), ("cd_cap", 2.5, 1, 2.5)]
+    if d.get("scluster"):
+        out += [("sc_face", 3.5, 3.5, 1)]
     if d.get("koschei"):                                 # the kokoshnik, the bone beak, chains and a lantern
         out += [("kkok", 10.5, 6.5, .75), ("kgem", 1.5, 1.5, .25), ("kbeak", 3, 2.5, 5), ("kchain", .75, 13, .75), ("klantern", 2.5, 3.5, 2.5)]
     if d.get("jiangshi"):                                # the official's hat and the paper talisman
@@ -264,6 +316,18 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    if d.get("famished"):
+        cl = G.shades(pal.extra["fclaw"])
+        pt("fm_claw", "all", lambda f, x, y, w, h: CLEAR if pal.extra.get("sated") else pick(cl, 0.5, x, y))
+    if d.get("cordyceps"):
+        cured = pal.extra.get("cured")
+        fun, tip = G.shades(pal.extra["fungus"]), G.shades(pal.extra["fungus_tip"])
+        pt("cd_stalk", "all", lambda f, x, y, w, h: CLEAR if cured else pick(fun, 0.55, x, y))
+        pt("cd_cap", "all", lambda f, x, y, w, h: CLEAR if cured else pick(tip, 0.65, x, y))
+    if d.get("scluster"):
+        skin_ = G.shades(pal.LIGHT if isinstance(pal.LIGHT, str) else "#e8f8ff")
+        dark = G.shades(pal.MARK if isinstance(pal.MARK, str) else "#2a6a90")
+        pt("sc_face", "all", lambda f, x, y, w, h: CLEAR if f != "north" else pick(dark, 0.3, x, y) if (y == h // 3 and x in (w // 4, 3 * w // 4)) or (y == 2 * h // 3 and w // 3 <= x <= 2 * w // 3) else pick(skin_, 0.7, x, y))
     if d.get("koschei"):
         kok, gem, bone, chain, fl = (G.shades(pal.extra[k]) for k in ("kok", "gem", "bone", "chain", "flame"))
         pt("kkok", "all", lambda f, x, y, w, h: CLEAR if y < 5 - min(x, w - 1 - x) // 2 and f in ("north", "south") else pick(kok, 0.45 + 0.25 * ((x + y) % 5 == 0), x, y))
@@ -397,6 +461,20 @@ def paint_hook(pt, pal, d):
 
 
 def build_hook(r, g, d):
+    if d.get("famished"):
+        px, py, pz = r.b["hand_r"]["pivot"]
+        claws = lambda x: [G.rot_cube("fm_claw", [x + o - 0.25, py - 5.5, pz + zz - 0.25], [x, py - 2, pz], 8, 0, 0) for o, zz in ((-0.7, -0.5), (0, -0.7), (0.7, -0.5))]
+        r.add("claws_r", "hand_r", [px, py, pz], claws(px))
+        r.add("claws_l", "hand_l", [-px, py, pz], claws(-px))
+    if d.get("cordyceps"):
+        y0, z0 = g.hy, g.z
+        fruit = lambda x, y, zz, tilt: [G.rot_cube("cd_stalk", [x - 0.5, y, zz - 0.5], [x, y, zz], 0, 0, tilt), G.rot_cube("cd_cap", [x - 1.25, y + 3, zz - 1.25], [x, y, zz], 0, 0, tilt)]
+        r.add("hair_fungus", "head", [0, y0 + 8, z0], fruit(2.5, y0 + 7.5, z0 - 0.5, -14) + fruit(-2.0, y0 + 7.5, z0 + 1.5, 16))
+        r.add("hair_fungus_b", "body", [0, 20, z0], fruit(3.25, 19.5, z0 + 0.5, -24))
+    if d.get("scluster"):
+        z0 = g.z
+        r.add("hair_faces", "body", [0, 16, z0], [G.rot_cube("sc_face", [-7.0, 14.5, z0 - 1.5], [-5, 16, z0], 0, -20, 0), G.rot_cube("sc_face", [3.5, 14.5, z0 - 1.5], [5, 16, z0], 0, 20, 0),
+                                                  G.rot_cube("sc_face", [-1.75, 10.5, z0 - 2.5], [0, 12, z0], 8, 0, 0)])
     if d.get("koschei"):                                 # the kokoshnik stands up off her brow, the beak out of her face; chains from her shoulders and a lantern on one from her fist
         y0, z0 = g.hy, g.z
         r.add("hair_kok", "head", [0, y0 + 7, z0], [cube("kkok", [-5.25, y0 + 6.5, -2.5 + z0]), cube("kgem", [-0.75, y0 + 7.5, -2.8 + z0])])
@@ -719,6 +797,10 @@ def run_gaitress():
     geo, adoc, texes = G.write("gaitress_undead", tex, gait_build(), gait_anims, list(d["variants"]), lambda k: gait_paint(F.pal_for(d, k)))
     if "--previews" in sys.argv:
         G.previews("gaitress_undead", geo, adoc, texes, GAIT_VIEWS, F.FACE, 50)
+
+
+# homage looks of the thirtieth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["yuki_onna_undead"]["variants"]["frozen_queen"] = dict(HAIR="#f0f4f8", CLOTH="#8ac8f0", TRIM="#d8f4ff")
 
 
 if __name__ == "__main__":

@@ -453,6 +453,45 @@ def write_wool(name, d):
     H.write_png(os.path.join(G.ASSETS, "textures", "entity", name + "_wool.png"), mask)
 
 
+# twenty-ninth wave: the shroomotaur, a mooshroom cow in red and white with red mushrooms growing from her shoulders and hair
+SPECIES["shroomotaur_minotaur"] = dict(
+    build="curvy", outfit=dict(top=["halter"], bottom="shorts", extras=["bell_collar"], colors=dict(cloth2="#8a2a22")),
+    hair="wavy", bangs="blunt", ears="cow", legs="fur", foot="hoof", horns="bull", tail=[(2, 2, 1.75)], tail_look="puff", tail_rest=[(-20, 0, 0)], mushrooms=True,
+    male=dict(hair="shaggy", outfit=dict(bottom="loincloth", extras=["bell_collar"])),
+    pal=dict(SKIN=skin("fair"), HAIR="#a82a22", FUR="#b8302a", LIGHT="#f4ecdc", MARK="#f4ecdc", EYE="#3a2418", CLOTH="#f4ecdc", TRIM="#a82a22",
+             INNER="#f0c0b0", pattern="solid", extra=dict(horn="#d8ccb0", hoof="#3a3028", mcap="#c8302a", mspot="#f8f4ec", mstalk="#ece0cc")),
+    variants={"brown": dict(HAIR="#7a5432", FUR="#8a6038", MARK="#e8dcc8", extra=dict(horn="#d8ccb0", hoof="#2a2018", mcap="#7a5432", mspot="#c8a880", mstalk="#e8dcc8")),
+              "glow": dict(HAIR="#2a6ab8", FUR="#3a7ac8", MARK="#c8f0ff", EYE="#8af0ff", extra=dict(horn="#d8e8f0", hoof="#1a2430", mcap="#2a6ab8", mspot="#8af0ff", mstalk="#d8e8f0")),
+              "purple": dict(HAIR="#7a2aa8", FUR="#8a3ab8", MARK="#e8d8f4", extra=dict(horn="#e0d0e8", hoof="#2a1a30", mcap="#7a2aa8", mspot="#e8c8f8", mstalk="#ece0f0")),
+              "pale": dict(HAIR="#e8dcc8", FUR="#f0e8d8", MARK="#c83a2a", extra=dict(horn="#d8ccb0", hoof="#5a4a3a", mcap="#c8302a", mspot="#f8f4ec", mstalk="#ece0cc"))})
+_declare_m, _paint_m, _build_m = declare_hook, paint_hook, build_hook
+
+
+def declare_hook(sp, d):
+    out = list(_declare_m(sp, d) or [])
+    if d.get("mushrooms"):
+        out += [("ms_cap", 3.5, 1, 3.5), ("ms_top", 2, .75, 2), ("ms_stalk", 1, 1.75, 1)]
+    return out
+
+
+def paint_hook(pt, pal, d):
+    _paint_m(pt, pal, d)
+    if d.get("mushrooms"):
+        cap, spot, stalk = G.shades(pal.extra["mcap"]), G.shades(pal.extra["mspot"]), G.shades(pal.extra["mstalk"])
+        for p in ("ms_cap", "ms_top"):
+            pt(p, "all", lambda f, x, y, w, h: pick(spot, 0.7, x, y) if (x * 7 + y * 11) % 11 < 2 else pick(cap, 0.6, x, y))
+        pt("ms_stalk", "all", lambda f, x, y, w, h: pick(stalk, 0.6, x, y))
+
+
+def build_hook(r, g, d):
+    _build_m(r, g, d)
+    if d.get("mushrooms"):
+        hy, z = g.hy, g.z
+        shroom = lambda x, y, zz: [cube("ms_stalk", [x - 0.5, y, zz - 0.5]), cube("ms_cap", [x - 1.75, y + 1.75, zz - 1.75]), cube("ms_top", [x - 1.0, y + 2.75, zz - 1.0])]
+        r.add("hair_mushrooms", "body", [0, 20, z], shroom(-3.75, 20.5, z + 0.75) + shroom(3.25, 20.0, z + 1.25) + shroom(0.5, 16.5, z + 3.0))
+        r.add("hair_mushcap", "head", [0, hy + 8, z], shroom(3.0, hy + 7.75, z - 0.5))
+
+
 if __name__ == "__main__":
     want = [a for a in sys.argv[1:] if not a.startswith("--")]
     cows = F.run_family("minotaur", SPECIES, declare_hook, paint_hook, build_hook, anim_extra, views=VIEWS)

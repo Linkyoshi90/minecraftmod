@@ -20,6 +20,20 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 /** World rules the later families bring along (see their field guides). */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class GirlEvents {
+    /** A blow meant for a player: a Shiitake near them, their friend, puts her offshoots in the way. */
+    @SubscribeEvent
+    public static void onFriendHurt(LivingIncomingDamageEvent event) {
+        if (!(event.getEntity() instanceof Player player) || !(player.level() instanceof net.minecraft.server.level.ServerLevel level)
+                || !(event.getSource().getEntity() instanceof LivingEntity)) return;
+        for (com.linkyoshi90.monstergirls.entity.girl.Flora f : level.getEntitiesOfClass(com.linkyoshi90.monstergirls.entity.girl.Flora.class, player.getBoundingBox().inflate(8),
+                f -> f.getSpecies() == com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.SHIITAKE_FLORA && f.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION)) {
+            if (f.takeBlow(level)) {
+                event.setCanceled(true);
+                return;
+            }
+        }
+    }
+
     /** A Gandharva or an Apsara near a note block hears it. */
     @SubscribeEvent
     public static void onNoteBlock(net.neoforged.neoforge.event.level.NoteBlockEvent.Play event) {
@@ -31,10 +45,18 @@ public final class GirlEvents {
         }
     }
 
-    /** The Pixi's shrinking wears off, whether or not she is still around. */
+    /** The Pixi's shrinking wears off, whether or not she is still around; friends near a player have met them again (Missing). */
     @SubscribeEvent
     public static void onPlayerTick(net.neoforged.neoforge.event.tick.PlayerTickEvent.Post event) {
-        if (event.getEntity().tickCount % 20 == 0 && !event.getEntity().level().isClientSide) com.linkyoshi90.monstergirls.entity.girl.Bug.growBack(event.getEntity());
+        var player = event.getEntity();
+        if (player.tickCount % 20 != 0 || player.level().isClientSide) return;
+        com.linkyoshi90.monstergirls.entity.girl.Bug.growBack(player);
+        if (player.tickCount % 40 == 0 && !player.isSpectator()) {
+            for (net.minecraft.world.entity.Mob m : player.level().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, player.getBoundingBox().inflate(16),
+                    m -> m instanceof com.linkyoshi90.monstergirls.entity.Bonded)) {
+                com.linkyoshi90.monstergirls.entity.Missing.meet(m, player);
+            }
+        }
     }
 
     /** Natural spawns of every family stay rare, however many species share the biome. */

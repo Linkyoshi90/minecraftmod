@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_beluga_mermaid",
+  "spawners": {
+    "type": "monstergirls:beluga_mermaid",
+    "weight": 4,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

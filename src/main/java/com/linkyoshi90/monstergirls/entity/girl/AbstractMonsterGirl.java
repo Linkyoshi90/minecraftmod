@@ -96,7 +96,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             "netherite", "purpur", "crying_obsidian", "shroomlight",         // the tears and the shroomlight's light glow
             "end_stone", "hay_bale", "ancient_debris", "sea_lantern",        // the sea lantern glows
             "redstone", "glowstone", "cherry", "terracotta",                 // redstone's bright lines and the glowstone glow
-            "tnt", "warped", "dripstone", "brain_coral", "crimson", "bone", "bamboo", "sponge");
+            "tnt", "warped", "dripstone", "brain_coral", "crimson", "bone", "bamboo", "sponge", "soul_sand", "nether_wart", "mycelium", "basalt", "blue_ice", "chorus", "calcite", "tuff");
     /** Homage variants (the look of a favourite character): a wild one rolls them only rarely. */
     public static final java.util.Set<String> HOMAGES = java.util.Set.of("gunman", "blossom", "lost", "stitched", "nurse", "mummy", "ranger", "outback",
             "jewel_thief", "ink_kid", "pink_dairy", "sun_goddess",                            // POP_CULTURE_VARIANTS.md
@@ -106,8 +106,12 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             "lamp_friend", "tiny_jumper", "kaiju_moth", "pocket_bot", "nine_cream", "shopkeeper", "shy_ghost", "night_heir",
             "detective_croc", "bandicoot", "needle_runner", "angel_guard", "music_box", "star_song", "tactical_eye",
             "blue_blur", "royal_flame", "backpack_bear", "aura_guardian", "gold_ninja", "night_heiress", "copy_blob",
-            "spark_mouse", "green_dino", "doctor_deer", "purple_flame", "night_wing", "forest_keeper", "sleepy_giant", "first_fox");
+            "spark_mouse", "green_dino", "doctor_deer", "purple_flame", "night_wing", "forest_keeper", "sleepy_giant", "first_fox",
+            "needle_knight", "spore_retainer", "lasagna_cat", "sly_fox", "carrot_bunny", "web_hero", "blue_heeler", "swamp_king",
+            "sea_witch", "calypso_crab", "moon_warrior", "frozen_queen", "pride_queen", "wish_dragon", "night_warden", "ice_fox");
     /** Homage looks with a model of their own (geo, animations and texture &lt;species&gt;_&lt;variant&gt;), not just a recolour. */
+    /** Looks a girl comes to by being fed, never met in the wild. */
+    private static final java.util.Set<String> EARNED = java.util.Set.of("cured", "sated");
     public static final java.util.Set<String> OWN_MODELS = java.util.Set.of("mud_fin", "trident_hood", "tactical_eye");
     /** One wild girl in this many is painted, like a shiny. */
     private static final EntityDataAccessor<Integer> DATA_FLAGS = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.INT);
@@ -125,7 +129,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             FLAG_CALM = 128, FLAG_SHELLS = 256, FLAG_SMILE = 512, FLAG_MALE = 1024, FLAG_RETRACTED = 2048, FLAG_LIT = 4096, FLAG_MASKED = 8192,
             FLAG_MERCHANT = 16384, FLAG_TOWING = 32768, FLAG_MOONSTRUCK = 65536, FLAG_INJURED = 131072, FLAG_WAXED = 262144,
             FLAG_TAILLESS = 524288, FLAG_UNWRAP_A = 1048576, FLAG_UNWRAP_B = 2097152, FLAG_SHORN = 4194304, FLAG_BLINDFOLD = 8388608,
-            FLAG_BLUSHING = 16777216, FLAG_HARNESSED = 33554432;
+            FLAG_BLUSHING = 16777216, FLAG_HARNESSED = 33554432, FLAG_PRUNED = 67108864;
     /** The flags that are saved (the others are moment-to-moment state). */
     private static final int SAVED_FLAGS = FLAG_TRUE_FORM | FLAG_SADDLED | FLAG_CHEST | FLAG_HALF | FLAG_CALM | FLAG_SHELLS | FLAG_MALE | FLAG_MASKED | FLAG_MERCHANT
             | FLAG_INJURED | FLAG_WAXED | FLAG_TAILLESS | FLAG_UNWRAP_A | FLAG_UNWRAP_B | FLAG_SHORN;
@@ -366,11 +370,13 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     /** Wild spawns: the default colours half the time (see the variant rate), the four others share the rest. */
     protected int rollWildVariant(RandomSource random) {
         int v = random.nextDouble() >= com.linkyoshi90.monstergirls.MonsterGirlsConfig.variantChance(0.5) ? 0 : 1 + random.nextInt(this.species.variants().size() - 1);
+        if (EARNED.contains(this.species.variants().get(v))) return 0;
         return HOMAGES.contains(this.species.variants().get(v)) && random.nextInt(8) != 0 ? 0 : v;   // homages are rare
     }
 
     public void randomizeVariant() {
         this.setVariantIndex(this.random.nextInt(this.species.variants().size()));
+        if (EARNED.contains(this.getVariantName())) this.setVariantIndex(0);
     }
 
     @Override

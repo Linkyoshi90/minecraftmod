@@ -150,5 +150,6 @@ public class GiftGoal<T extends PathfinderMob & Bonded & GiftGiver> extends Goal
         this.harpy.playSound(this.harpy.getChirpSound(), 1.0F, this.harpy.getVoicePitch() * 1.1F);
         this.gift = ItemStack.EMPTY;
         this.harpy.scheduleNextGift();
+        if (com.linkyoshi90.monstergirls.entity.Missing.activeStage(this.harpy, this.player) > 0) this.harpy.setNextGiftTime(this.harpy.level().getGameTime() + 1200);   // she has a lot saved up
     }
 }

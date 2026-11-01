@@ -258,6 +258,26 @@ public class Armoured extends AbstractMonsterGirl {
         return hit;
     }
 
+    /** Gold for Nether goods, from the piglins' own bartering table. Whether she took it. */
+    public boolean barter(ServerLevel level, ItemStack gold) {
+        var table = level.getServer().reloadableRegistries().getLootTable(net.minecraft.world.level.storage.loot.BuiltInLootTables.PIGLIN_BARTERING);
+        var params = new net.minecraft.world.level.storage.loot.LootParams.Builder(level).withParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.THIS_ENTITY, this)
+                .create(net.minecraft.world.level.storage.loot.parameters.LootContextParamSets.PIGLIN_BARTER);
+        gold.shrink(1);
+        for (ItemStack s : table.getRandomItems(params)) this.spawnAtLocation(s);
+        this.playSound(net.minecraft.sounds.SoundEvents.PIGLIN_ADMIRING_ITEM, 1.0F, 1.2F);
+        return true;
+    }
+
+    @Override
+    protected net.minecraft.world.InteractionResult familyInteract(Player player, net.minecraft.world.InteractionHand hand, ItemStack stack) {
+        if (this.species == GirlSpecies.PIGLETTE_ARMOURED && stack.is(net.minecraft.world.item.Items.GOLD_INGOT) && !this.isBaby()) {
+            if (this.level() instanceof ServerLevel server) this.barter(server, stack);
+            return net.minecraft.world.InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+        return super.familyInteract(player, hand, stack);
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();

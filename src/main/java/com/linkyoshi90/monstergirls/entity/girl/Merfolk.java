@@ -359,7 +359,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         return switch (this.species) {
             case AXOLOTL_MERMAID -> this.isInWater() ? SoundEvents.AXOLOTL_IDLE_WATER : SoundEvents.AXOLOTL_IDLE_AIR;
             case KOI_MERMAID -> SoundEvents.FISH_SWIM;
-            case DOLPHIN_MERMAID, ORCA_MERMAID -> com.linkyoshi90.monstergirls.registry.ModSounds.MERMAID_SING.get();
+            case DOLPHIN_MERMAID, ORCA_MERMAID, BELUGA_MERMAID -> com.linkyoshi90.monstergirls.registry.ModSounds.MERMAID_SING.get();
             default -> this.isInWater() ? SoundEvents.DOLPHIN_AMBIENT_WATER : SoundEvents.DOLPHIN_AMBIENT;
         };
     }
@@ -445,9 +445,34 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         return 1;
     }
 
+    /** The monsters in the water within 32 of her friend show up, and her friend swims faster. How many, -1 without a friend. */
+    public int sonar(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null) return -1;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DOLPHINS_GRACE, 100));
+        int found = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(32), m -> m.isAlive() && m.isInWater())) {
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.GLOWING, 120));
+            found++;
+        }
+        return found;
+    }
+
+    /** Near her, darkness is nothing: her friend sees, and no blindness holds. Whether she has a friend near. */
+    public boolean lightless() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 12);
+        if (friend == null) return false;
+        friend.removeEffect(net.minecraft.world.effect.MobEffects.BLINDNESS);
+        friend.removeEffect(net.minecraft.world.effect.MobEffects.DARKNESS);
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.NIGHT_VISION, 300));
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.BELUGA_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel sonar && !this.isBaby() && this.tickCount % 60 == 0) this.sonar(sonar);
+        if (this.species == GirlSpecies.OLM_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel && !this.isBaby() && this.tickCount % 40 == 0) this.lightless();
         if (this.species == GirlSpecies.LEVIATHAN_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel deep && !this.isBaby() && this.tickCount % 20 == 0) this.tideCall(deep);
         if (this.species == GirlSpecies.WALRUS_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel floe && !this.isBaby() && this.tickCount % 20 == 0) this.blubber(floe);
         if (this.species == GirlSpecies.ANOMALOCARIS_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel deep && !this.isBaby() && this.tickCount % 40 == 0) this.raptorGrasp(deep);

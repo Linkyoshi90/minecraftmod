@@ -263,11 +263,33 @@ public class Flora extends AbstractMonsterGirl {
         return this.stillTicks > 40 && (under.is(BlockTags.DIRT) || under.is(Blocks.FARMLAND) || under.is(BlockTags.SAND) || under.is(Blocks.MYCELIUM));
     }
 
+    // --- Shiitake --------------------------------------------------------------------------------------------------
+
+    private static final String REGROW = "ShiitakeRegrow";
+
+    public boolean hasOffshoots() {
+        return !this.hasFlag(FLAG_PRUNED);
+    }
+
+    /** Her friend near her is about to be hit: the offshoots take it. Whether they did. */
+    public boolean takeBlow(ServerLevel level) {
+        if (!this.hasOffshoots()) return false;
+        this.setFlag(FLAG_PRUNED, true);
+        this.getPersistentData().putLong(REGROW, level.getGameTime() + com.linkyoshi90.monstergirls.entity.Missing.DAY);
+        level.sendParticles(ParticleTypes.SPORE_BLOSSOM_AIR, this.getX(), this.getY() + 1.2, this.getZ(), 20, 0.5, 0.5, 0.5, 0.0);
+        return true;
+    }
+
+    private void regrow(ServerLevel level) {
+        if (this.hasFlag(FLAG_PRUNED) && level.getGameTime() >= this.getPersistentData().getLong(REGROW)) this.setFlag(FLAG_PRUNED, false);
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
         if (this.species == GirlSpecies.DRYAD_FLORA && this.level() instanceof ServerLevel grove && !this.isBaby() && this.tickCount % 600 == 0) this.nurture(grove);
         if (!(this.level() instanceof ServerLevel server)) return;
+        if (this.species == GirlSpecies.SHIITAKE_FLORA && this.tickCount % 100 == 0) this.regrow(server);
         boolean still = this.getDeltaMovement().horizontalDistanceSqr() < 1.0E-4 && this.getTarget() == null;
         this.stillTicks = still ? this.stillTicks + 1 : 0;
         if (this.sunk > 0 && --this.sunk == 0) this.setHidden(false);
@@ -482,7 +504,7 @@ public class Flora extends AbstractMonsterGirl {
 
     @Override
     public boolean canShareBed() {
-        return this.species != GirlSpecies.LESHY_FLORA && super.canShareBed();
+        return this.species != GirlSpecies.LESHY_FLORA && this.species != GirlSpecies.SHIITAKE_FLORA && super.canShareBed();
     }
 
     public void setNextPlant(long t) {

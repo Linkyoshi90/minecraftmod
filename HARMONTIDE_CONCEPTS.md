@@ -614,6 +614,53 @@ sandstone since 2026-10-29), so 87 in all.
 Homage props (POP_CULTURE_VARIANTS.md): the dullahan's headless rider (Celty) has her yellow cat-eared helmet over the head she
 carries, the death envoy (Lala) a scythe in her free hand; both are drawn only on their own looks.
 
+## Thirtieth wave (2026-11-01, in the game)
+
+New designs for the cold seas, the dripstone caves and the End. The Baku also spawns in the End midlands.
+
+| Species | Home | Design |
+|---|---|---|
+| **Beluga** | Merfolk | Frozen seas. Reveals monsters in the water near her friend, and carries her friend along. Sings. |
+| **Spider Crab** | Crustacean | Cold deeps. Pins a monster near her friend. |
+| **Giant Kraken** | Mollusk | Frozen deeps. Five blocks tall. Attacks swimmers until fed; befriended, crushes monsters in the water. |
+| **Drowned** | Undead | Cold seas. Hostile until fed rotten flesh; keeps her friend's breath under water. |
+| **Olm** | Merfolk | Dripstone caves. No eyes. Her friend sees in the dark and can't be blinded. |
+| **Cave Gekko** | Lizardfolk | Dripstone and lush caves. Climbs walls; a friend who falls near her drifts down. |
+| **Knocker** | Elf | Dripstone caves. Knocks for loose rock overhead, and towards ore. |
+| **Famished** | Undead | Dripstone caves, deep dark. Hostile until a player drops food near her; then friendly, her claws gone (`sated`). No antlers or deer skull: she is not the Wendigo. |
+| **Moon Rabbit** | Jackalope | End highlands. Pounds chorus fruit into healing potions. |
+| **Kaguya** | Elf | End highlands. Her friend jumps high and falls softly. |
+| **Ophanim** | Elf | End highlands. A woman inside a ring of eyes; flies; shows every monster around her friend. |
+| **Norn** | Elf | End midlands. Warns her friend of an attacker, and steadies them. |
+| **Kun** | Dragon | End midlands. Flies; once a day catches her friend from the void. |
+
+Paints: **blue_ice**, **chorus**, **calcite** and **tuff**, so 119 in all (PAINTS.md).
+
+Homage looks: Sea Witch (octopus), Calypso Crab (crab), Moon Warrior (inaba), Frozen Queen (yuki-onna), Pride Queen (lioness), Wish Dragon (long), Night Warden (night elf), Ice Fox (arctic kitsune).
+
+## Twenty-ninth wave (2026-11-01, in the game)
+
+The first wave of new designs, for the thin biomes, and the missing system.
+
+| Species | Home | Design |
+|---|---|---|
+| **Shiitake** | Flora | Mushroom fields. A brown-capped woman with two small adult-proportioned offshoots. They take a blow meant for her friend, then regrow over a day. Out of the bed system. |
+| **Shroomotaur** | Minotaur | Mushroom fields. A mooshroom cow: fills a bowl with stew. |
+| **Censhroom** | Centaur | Mushroom fields, dark forest. A fungal shelf for a saddle; no poison touches her rider. |
+| **Cordyceps Infected** | Undead | Mushroom fields, lush caves. Hostile; five feedings of rotten flesh cure and befriend her. |
+| **Firesprite** | Devil | Warped forest, basalt deltas. Teal flame in a woman's shape: lights the monsters near her friend, keeps her friend from burning. |
+| **Zoglintaur** | Centaur | Warped and crimson forests. Hostile until calmed with raw meat; tosses monsters. |
+| **Piglette** | Armoured | Nether forests and wastes. Barters gold for Nether goods, carries a crossbow or gun. |
+| **Lost Soul** | Undead | Soul sand valley. Points to where you last died. |
+| **Soul Cluster** | Undead | Soul sand valley. A killing blow scatters her; she re-forms, three times a day. |
+| **Soul Leech** | Undead | Soul sand valley. Drains the monsters near her friend and passes the health on. |
+
+Paints: **soul_sand**, **nether_wart**, **mycelium** and **basalt**, so 115 in all (PAINTS.md).
+
+Homage looks: Needle Knight (hornet), Spore Retainer (matango), Lasagna Cat (caracal), Sly Fox (gray kitsune), Carrot Bunny (boghare), Web Hero (jumping spider), Blue Heeler (kobold), Swamp King (ogre).
+
+**Missing** (`entity/Missing.java`): worked out from the last meeting when a friend (25+) and her player meet again. She starts missing them after 4 days (60+: 3, 100: 2), badly at twice that. For a day after they meet: +25% or +50% on her odds of coming to bed, her gift at once and more often, and a line in the journal and in her bond. She loses 1 friendship a day past the start, never below 25. Conception after a shared night is now 50% (`conceptionChance`), 75% if she missed them, 100% if badly; a full moon is still certain. `missingRate` scales it all. Expeditions don't count.
+
 ## Twenty-eighth wave (2026-11-01, in the game)
 
 The last of the Harmontide reference art: nothing is left on the roster.

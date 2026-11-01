@@ -89,7 +89,7 @@ public class ShareBedGoal<T extends PathfinderMob & Bonded> extends Goal {
         if (night != this.decidedNight || !player.getUUID().equals(this.decidedFor)) {
             this.decidedNight = night;
             this.decidedFor = player.getUUID();
-            this.decidedYes = BedSharing.fullMoon(this.mob.level()) || this.mob.getRandom().nextFloat() < this.mob.bedChanceFor(player);
+            this.decidedYes = BedSharing.fullMoon(this.mob.level()) || this.mob.getRandom().nextFloat() < this.mob.bedChanceFor(player) + com.linkyoshi90.monstergirls.entity.Missing.bedBonus(this.mob, player);
         }
         return this.decidedYes;
     }
@@ -143,6 +143,7 @@ public class ShareBedGoal<T extends PathfinderMob & Bonded> extends Goal {
         this.ticks++;
         if (this.spent) {
             this.mob.getNavigation().stop();
+            if (this.ticks % 20 == 0) this.mob.settleInBed();   // whatever else she started, she lies back down
             return;
         }
         if (this.inBed) {

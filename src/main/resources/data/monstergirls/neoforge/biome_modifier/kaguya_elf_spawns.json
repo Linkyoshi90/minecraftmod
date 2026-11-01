@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_kaguya_elf",
+  "spawners": {
+    "type": "monstergirls:kaguya_elf",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

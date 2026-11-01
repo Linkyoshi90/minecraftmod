@@ -242,6 +242,10 @@ public class Jackalope extends AbstractMonsterGirl {
     @Nullable
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        if (this.species == GirlSpecies.MOON_RABBIT_JACKALOPE && stack.is(net.minecraft.world.item.Items.CHORUS_FRUIT) && !this.isBaby()) {
+            if (this.level() instanceof ServerLevel) this.pound(player, stack);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         if (this.species == GirlSpecies.INABA_JACKALOPE && !this.caught) {         // any hand on her at all: caught
             if (this.level() instanceof ServerLevel server) {
                 this.caught = true;
@@ -342,6 +346,14 @@ public class Jackalope extends AbstractMonsterGirl {
 
     public int getStamina() {
         return this.stamina;
+    }
+
+    /** Chorus fruit into a potion of healing. */
+    public void pound(Player player, ItemStack fruit) {
+        fruit.consume(1, player);
+        ItemStack elixir = net.minecraft.world.item.alchemy.PotionContents.createItemStack(net.minecraft.world.item.Items.POTION, net.minecraft.world.item.alchemy.Potions.HEALING);
+        if (!player.getInventory().add(elixir)) player.drop(elixir, false);
+        this.playSound(net.minecraft.sounds.SoundEvents.GRINDSTONE_USE, 0.6F, 1.4F);
     }
 
     @Override

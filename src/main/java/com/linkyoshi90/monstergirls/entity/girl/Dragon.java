@@ -89,7 +89,7 @@ public class Dragon extends AbstractMonsterGirl {
     @Override
     public boolean canFly() {
         return switch (this.species) {
-            case LONG_DRAGON, WYRM_DRAGON, GRYPHON_DRAGON, WYVERN_DRAGON, ALEBRIJE_DRAGON, COCKATRICE_DRAGON, MACAWTL_DRAGON, QUETZALCOATL_DRAGON, BAHAMUT_DRAGON -> true;
+            case KUN_DRAGON, LONG_DRAGON, WYRM_DRAGON, GRYPHON_DRAGON, WYVERN_DRAGON, ALEBRIJE_DRAGON, COCKATRICE_DRAGON, MACAWTL_DRAGON, QUETZALCOATL_DRAGON, BAHAMUT_DRAGON -> true;
             default -> false;
         };
     }
@@ -338,9 +338,28 @@ public class Dragon extends AbstractMonsterGirl {
         return near.size();
     }
 
+    private void overTheVoid(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 128);
+        if (friend != null && friend.getY() < level.getMinBuildHeight() + 8) this.rescue(level, friend);
+    }
+
+    /** She has her friend out of the fall, up beside her, once a day. Whether she could. */
+    public boolean rescue(net.minecraft.server.level.ServerLevel level, Player friend) {
+        long day = level.getDayTime() / 24000L;
+        if (this.getPersistentData().contains("KunDay") && this.getPersistentData().getLong("KunDay") == day) return false;
+        this.getPersistentData().putLong("KunDay", day);
+        friend.teleportTo(this.getX(), Math.max(this.getY(), level.getMinBuildHeight() + 64.0), this.getZ());
+        friend.setDeltaMovement(0, 0, 0);
+        friend.hurtMarked = true;
+        friend.resetFallDistance();
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SLOW_FALLING, 200));
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.KUN_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel sky && !this.isBaby() && this.tickCount % 10 == 0) this.overTheVoid(sky);
         if (this.species == GirlSpecies.QUETZALCOATL_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel dawn && !this.isBaby() && this.tickCount % 100 == 0
                 && dawn.getDayTime() % 24000L < 1000L) this.morningStar(dawn);
         if (this.species == GirlSpecies.NENEKEA_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel tide && !this.isBaby() && this.tickCount % 20 == 0) this.tidalBalm(tide);

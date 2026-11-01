@@ -553,5 +553,9 @@ SPECIES["panda_canid"]["variants"]["forest_keeper"] = dict(HAIR="#6a7078", FUR="
 SPECIES["grizzly_canid"]["variants"]["sleepy_giant"] = dict(HAIR="#2a5a6a", FUR="#34697a", LIGHT="#f0e4c8", MARK="#1e4250", EYE="#1e1e24", CLOTH="#f0e4c8", TRIM="#2a5a6a")
 
 
+# homage looks of the twenty-ninth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["kobold_canid"]["variants"]["blue_heeler"] = dict(HAIR="#5a7ab8", FUR="#6a8ac8", LIGHT="#c8d8f0", MARK="#2a3e7a", EYE="#2a2a30", CLOTH="#e8a040", TRIM="#2a3e7a")
+
+
 if __name__ == "__main__":
     F.run_family("canid", SPECIES, declare_hook, paint_hook, build_hook, anim_extra)

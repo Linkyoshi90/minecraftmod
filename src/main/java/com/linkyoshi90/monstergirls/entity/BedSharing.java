@@ -36,9 +36,17 @@ public final class BedSharing {
         gestation.setSharingWith(null);
         if (mob instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl girl) girl.onNightShared(player);   // her bed perk
         if (!((Bonded) mob).canShareBed()) return false;
+        level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getY() + mob.getBbHeight() + 0.3, mob.getZ(), 5, 0.3, 0.2, 0.3, 0.0);
+        if (!conceives(level, player, mob)) return false;
         gestation.conceive(player.getUUID());
         level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getY() + mob.getBbHeight() + 0.3, mob.getZ(), 5, 0.3, 0.2, 0.3, 0.0);
         return true;
+    }
+
+    /** The moon never fails; otherwise it is the setting's odds, better for one who has missed them (Missing). */
+    private static boolean conceives(ServerLevel level, ServerPlayer player, Mob mob) {
+        return fullMoon(level) || net.neoforged.neoforge.gametest.GameTestHooks.isGametestServer()
+                || mob.getRandom().nextFloat() < Missing.conceptionChance(mob, player);
     }
 
     /** A full moon in the night sky. */

@@ -86,6 +86,16 @@ SPECIES = {
                   "purple": dict(HAIR="#6a4aa8", FUR="#8a6ac8", LIGHT="#e8dcf8", MARK="#3a2a6a", CLOTH="#3a2a6a",
                                  extra=dict(frill="#8a6ac8", frill_edge="#f8e070", horn="#f0e0c0"))}),
     # twenty-seventh wave: Bahamut, the king of dragons, drawn soft and round: pale blue, curled horns, fins for ears, a pale belly, dragon wings; she flies
+    # thirtieth wave: Kun, the great fish of the Zhuangzi that becomes a bird: Bahamut's soft build, fin ears, wing-fins, a fish's fluke of a tail, in deep sky blues
+    "kun_dragon": dict(
+        build="curvy", outfit=dict(top=["bandeau"], bottom="shorts", colors=dict(cloth2="#2a4a7a")), hair="flowing", bangs="swept", ears="fin",
+        legs="scales", foot="claw", tail=DRAGON_TAIL, tail_look="spade", tail_rest=[(-30, 0, 0), (8, 0, 0), (8, 0, 0), (6, 0, 0)], wings="dragon", wing_scale=1.3, flies=True,
+        pal=dict(SKIN=skin("#c8d8f0"), HAIR="#3a5a9a", FUR="#2a4a8a", LIGHT="#c8e0f8", MARK="#14285a", EYE="#e8c050", CLOTH="#2a4a7a", TRIM="#c8e0f8",
+                 extra=dict(wing="#4a70b0", wing_bone="#14285a", tail_col="#2a4a8a")),
+        variants={"void": dict(SKIN=skin("#a898c8"), HAIR="#2a1a4a", FUR="#3a2a5a", LIGHT="#8a78b0", MARK="#140a28", EYE="#c88af8", extra=dict(wing="#4a3a7a", wing_bone="#140a28", tail_col="#3a2a5a")),
+                  "dawn": dict(SKIN=skin("#f8dcc8"), HAIR="#e88a6a", FUR="#e07a5a", LIGHT="#fce0c8", MARK="#a83a2a", extra=dict(wing="#f0a07a", wing_bone="#a83a2a", tail_col="#e07a5a")),
+                  "pale": dict(SKIN=skin("#e8eef4"), HAIR="#d8e4ec", FUR="#c8d8e4", LIGHT="#ffffff", MARK="#7a90a8", extra=dict(wing="#dce8f0", wing_bone="#7a90a8", tail_col="#c8d8e4")),
+                  "jade": dict(SKIN=skin("#c8e8d8"), HAIR="#2a8a6a", FUR="#2a7a60", LIGHT="#c8f0dc", MARK="#14483a", extra=dict(wing="#4aa888", wing_bone="#14483a", tail_col="#2a7a60"))}),
     "bahamut_dragon": dict(
         build="curvy", outfit=dict(top=["bandeau"], bottom="shorts", colors=dict(cloth2="#8ab4e0")), hair="wavy", bangs="swept", ears="fin",
         legs="scales", foot="claw", tail=DRAGON_TAIL, tail_look="spade", tail_rest=[(-30, 0, 0), (8, 0, 0), (8, 0, 0), (6, 0, 0)], horns="dragon", wings="dragon", flies=True,
@@ -453,6 +463,10 @@ def anim_extra(an, sp, d):
 # homage looks of the twenty-eighth wave (POP_CULTURE_VARIANTS.md)
 SPECIES["wyrm_dragon"]["variants"]["purple_flame"] = dict(HAIR="#e8b83a", FUR="#8a3ac8", LIGHT="#e8c050", MARK="#5a1e8a", EYE="#c83a8a", CLOTH="#e8b83a", TRIM="#5a1e8a")
 SPECIES["gryphon_dragon"]["variants"]["night_wing"] = dict(HAIR="#1a1a22", FUR="#22222c", LIGHT="#3a3a48", MARK="#101018", EYE="#4ae05a", CLOTH="#3a2a22", TRIM="#14141c")
+
+
+# homage looks of the thirtieth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["long_dragon"]["variants"]["wish_dragon"] = dict(HAIR="#1e6a3a", FUR="#2a8a4a", LIGHT="#c8e8a0", MARK="#14482a", EYE="#e82a2a", CLOTH="#e8c050", TRIM="#14482a")
 
 
 if __name__ == "__main__":

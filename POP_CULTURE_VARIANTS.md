@@ -73,6 +73,24 @@ the homage set is keyed by name.
 | Grizzly (`grizzly_canid`) | Snorlax (Pokémon) | `sleepy_giant` ✅ | Blue-green fur, a cream belly | ★★ |
 | Fennec (`fennec_kitsune`) | Eevee (Pokémon) | `first_fox` ✅ | Warm brown fur, a cream ruff | ★★ |
 
+| Hornet (`hornet_bug`) | Hornet (Hollow Knight) | `needle_knight` ✅ | Pale, a red cloak | ★★ |
+| Matango (`matango_flora`) | Toad (Super Mario) | `spore_retainer` ✅ | A white cap with red spots, a blue vest | ★★★ |
+| Caracal (`caracal_nekomata`) | Garfield | `lasagna_cat` ✅ | Orange fur, black stripes | ★★ |
+| Gray kitsune (`gray_kitsune`) | Nick Wilde (Zootopia) | `sly_fox` ✅ | Orange fur, a green shirt | ★★ |
+| Boghare (`boghare_jackalope`) | Bugs Bunny | `carrot_bunny` ✅ | Grey and white fur | ★★ |
+| Jumping spider (`jumping_spider_arachne`) | Spider-Man | `web_hero` ✅ | Red and blue | ★★ |
+| Kobold (`kobold_canid`) | Bluey | `blue_heeler` ✅ | Blue fur, darker patches | ★★ |
+| Ogre (`ogre_devil`) | Shrek | `swamp_king` ✅ | Green skin, a rough tunic | ★★★ |
+
+| Octopus (`octopus_mollusk`) | Ursula (The Little Mermaid) | `sea_witch` ✅ | Lilac skin, white hair, dark tentacles | ★★★ |
+| Crab (`crab_crustacean`) | Sebastian (The Little Mermaid) | `calypso_crab` ✅ | All bright red | ★★ |
+| Inaba (`inaba_jackalope`) | Sailor Moon | `moon_warrior` ✅ | Golden hair, a navy and red sailor suit | ★★★ |
+| Yuki-onna (`yuki_onna_undead`) | Elsa (Frozen) | `frozen_queen` ✅ | White-blonde hair, an ice-blue gown | ★★★ |
+| Lioness (`lioness_nekomata`) | Nala (The Lion King) | `pride_queen` ✅ | Golden tan fur, blue eyes | ★★ |
+| Long dragon (`long_dragon`) | Shenron (Dragon Ball) | `wish_dragon` ✅ | Green scales, red eyes | ★★★ |
+| Night elf (`night_elf`) | Tyrande (World of Warcraft) | `night_warden` ✅ | Lilac skin, teal hair, dark armour | ★★ |
+| Arctic kitsune (`arctic_kitsune`) | Alolan Ninetales (Pokémon) | `ice_fox` ✅ | Pale blue fur | ★★ |
+
 ## Gregory Horror Show: on the house mouse
 
 The house mouse (`house_mouse_rodent`, twentieth wave) came in for these three: big round ears, a long bare tail and a

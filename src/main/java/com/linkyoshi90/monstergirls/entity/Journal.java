@@ -76,6 +76,13 @@ public final class Journal {
         return news;
     }
 
+    /** Who last missed them: a line on the cover. */
+    public static void recordMissed(Player player, Entity creature) {
+        CompoundTag data = player.getData(ModAttachments.JOURNAL);
+        data.putString("MissedBy", creature.getName().getString());
+        player.setData(ModAttachments.JOURNAL, data);
+    }
+
     private static boolean add(CompoundTag data, String key, String id) {
         ListTag list = data.getList(key, Tag.TAG_STRING);
         for (Tag t : list) if (t.getAsString().equals(id)) return false;
@@ -108,6 +115,8 @@ public final class Journal {
                 .append("\n\n").append(Component.translatable("journal.monstergirls.girls", girls.size(), GirlSpecies.values().length).withStyle(ChatFormatting.RESET))
                 .append("\n").append(Component.translatable("journal.monstergirls.friends", friends.size()).withStyle(ChatFormatting.RESET))
                 .append("\n").append(Component.translatable("journal.monstergirls.others", others.size()).withStyle(ChatFormatting.RESET));
+        String missedBy = player.getData(ModAttachments.JOURNAL).getString("MissedBy");
+        if (!missedBy.isEmpty()) cover.append("\n\n").append(Component.translatable("journal.monstergirls.missed", missedBy).withStyle(ChatFormatting.RESET));
         if (met.isEmpty()) cover.append("\n\n").append(Component.translatable("journal.monstergirls.empty").withStyle(ChatFormatting.RESET, ChatFormatting.ITALIC));
         pages.add(Filterable.passThrough(cover));
         for (String guide : GUIDE) {                                                 // how to live with them: hearth, expeditions, weapons

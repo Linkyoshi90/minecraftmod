@@ -30,6 +30,16 @@ SPECIES = {
                               extra=dict(shell="#a89a88", claw="#c8503a", claw_tip="#f0e8d8", brass="#d8b050")),
                   "black": dict(FUR="#2a2e36", HAIR="#1a1e24", MARK="#0a0c10",
                                 extra=dict(shell="#4a4a4e", claw="#3a3e48", claw_tip="#c8c0b0", brass="#a88a3a"))}),
+    # thirtieth wave: the spider crab of the cold deep: tall, long-limbed, a knobbled orange shell
+    "spider_crab_crustacean": dict(
+        build="slim", outfit=dict(top=["bandeau"], bottom="sarong", colors=dict(cloth2="#8a3a1e")),
+        hair="ponytail", bangs="messy", ears=None, legs="scales", foot="claw", fanshell=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#c85a2a", FUR="#d8703a", LIGHT="#f4d0b0", MARK="#7a2e14", EYE="#2a1e14", CLOTH="#8a3a1e", TRIM="#f4d0b0",
+                 pattern="solid", extra=dict(shell="#c85a2a", claw="#d8703a", claw_tip="#f4e4d0", brass="#7a2e14")),
+        variants={"pale": dict(FUR="#e8c8a8", HAIR="#d8b088", MARK="#a87a58", extra=dict(shell="#d8b088", claw="#e8c8a8", claw_tip="#2a1e14", brass="#a87a58")),
+                  "red": dict(FUR="#a82a22", HAIR="#8a1e1a", MARK="#4a0e0c", extra=dict(shell="#8a1e1a", claw="#a82a22", claw_tip="#f4e4d0", brass="#4a0e0c")),
+                  "blue": dict(FUR="#3a6a9a", HAIR="#2a5078", MARK="#14283e", extra=dict(shell="#2a5078", claw="#3a6a9a", claw_tip="#f4e4d0", brass="#14283e")),
+                  "black": dict(FUR="#2a2e36", HAIR="#1a1e24", MARK="#0e1014", extra=dict(shell="#1a1e24", claw="#2a2e36", claw_tip="#c8c0a8", brass="#0e1014"))}),
     "crab_crustacean": dict(
         build="athletic", outfit=dict(top=["bandeau"], bottom="shorts", extras=["armlets"], colors=dict(cloth2="#3a4a6a")),
         hair="bob", bangs="jagged", ears=None, legs="scales", foot="claw", carapace=True,
@@ -140,6 +150,10 @@ def anim_extra(an, sp, d):
                             "leg_r": {"rotation": Tk((0, (0, 0, -18)), (h, (0, 0, 4)), (per, (0, 0, -18)))},
                             "leg_l": {"rotation": Tk((0, (0, 0, 4)), (h, (0, 0, 18)), (per, (0, 0, 4)))},
                             "arm_r": {"rotation": hold(-40, 0, -20)}, "arm_l": {"rotation": hold(-40, 0, 20)}})
+
+
+# homage looks of the thirtieth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["crab_crustacean"]["variants"]["calypso_crab"] = dict(FUR="#d82a22", HAIR="#a81e1a", MARK="#5a0e0c", EYE="#2a1e14", CLOTH="#f8f4ec", extra=dict(claw="#d82a22", claw_tip="#f4e4d0"))
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 # Paints
 
-Every Harmontide paint, 111 in all. A paint is a full texture for a model: `textures/entity/<model>_paint_<paint>.png`, made by
+Every Harmontide paint, 119 in all. A paint is a full texture for a model: `textures/entity/<model>_paint_<paint>.png`, made by
 `tools/gen_paints.py` for every model. One wild girl, harpy or anuran in 64 is painted (`PAINT_RARITY`), like a shiny, and a
 painted mother has painted young. The list lives in `AbstractMonsterGirl.PAINTS`. It is synced by index, so **only ever append
 to it**.
@@ -89,6 +89,14 @@ To test one, summon a girl with it: `/summon monstergirls:wolf_canid ~ ~ ~ {Pain
 | `bone` | Bone block | `bone_block_side` | |
 | `bamboo` | Block of bamboo | `bamboo_block` | |
 | `sponge` | Sponge | `sponge` | |
+| `soul_sand` | Soul sand | `soul_sand` | |
+| `nether_wart` | Nether wart block | `nether_wart_block` | |
+| `mycelium` | Mycelium | `mycelium_top` | |
+| `basalt` | Basalt | `basalt_side` | |
+| `blue_ice` | Blue ice | `blue_ice` | |
+| `chorus` | Chorus plant | `chorus_plant` | |
+| `calcite` | Calcite | `calcite` | |
+| `tuff` | Tuff | `tuff` | |
 | `moss` | Moss over stone | `moss_block`, `stone` | |
 | `frost` | Icy, frosted on every top | `packed_ice` | |
 

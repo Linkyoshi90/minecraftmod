@@ -376,5 +376,55 @@ def anim_extra(an, sp, d):
 VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0, 180, 0),
          ("walk", 0.5, -30, 8), ("scream", 0.5, -40, 8), ("sit", 0, -30, 10), ("idle", 0, -60, 40)]
 
+# twenty-ninth wave: Shiitake, a brown-capped mushroom woman with two small offshoots of herself growing from her hips, each a whole slender figure with its
+# own cap. `hair_sprouts` is hidden while they regrow (FLAG_PRUNED). Kept out of the bed system (Flora.canShareBed)
+SPECIES["shiitake_flora"] = dict(
+    build="curvy", outfit=dict(top=["capelet"], colors=dict()), hair="wavy", bangs="swept", ears=None, lower="none", plant="mushroom", sprouts=True,
+    pal=dict(SKIN="#f0dcc4", HAIR="#6a4228", FUR="#6a4228", LIGHT="#f4e8d4", MARK="#e8d8bc", EYE="#5a3a22", CLOTH="#e8dcc8", TRIM="#6a4228",
+             extra=dict(cap="#6a4228", spot="#e8d8bc", stalk="#ece0cc", mycelium="#8a7a6a")),
+    variants={"chestnut": dict(HAIR="#8a3a1e", extra=dict(cap="#8a3e20", spot="#e8c8a0", stalk="#ece0cc", mycelium="#8a7a6a")),
+              "pale": dict(HAIR="#c8b090", extra=dict(cap="#c8a880", spot="#f4ecdc", stalk="#f4ecdc", mycelium="#9a8a7a")),
+              "ink": dict(HAIR="#2a221e", extra=dict(cap="#2e2620", spot="#a89888", stalk="#d8ccbc", mycelium="#5a5048")),
+              "violet": dict(HAIR="#5a3a7a", extra=dict(cap="#5a3a7a", spot="#d8c8e8", stalk="#ece0f0", mycelium="#6a5a7a"))})
+_declare_s, _paint_s, _build_s = declare_hook, paint_hook, build_hook
+
+
+def declare_hook(sp, d):
+    out = list(_declare_s(sp, d) or [])
+    if d.get("sprouts"):
+        out += [("sp_head", 1.5, 1.5, 1.5), ("sp_torso", 1.75, 2.75, 1), ("sp_stem", 1.25, 4, 1), ("sp_cap", 3.5, .75, 3.5), ("sp_capt", 2, .5, 2), ("sp_arm", .5, 2.5, .5)]
+    return out
+
+
+def paint_hook(pt, pal, d):
+    _paint_s(pt, pal, d)
+    if d.get("sprouts"):
+        e = pal.extra
+        cap, spot, stalk, skin_ = G.shades(e["cap"]), G.shades(e["spot"]), G.shades(e["stalk"]), G.shades(pal.SKIN if isinstance(pal.SKIN, str) else "#f0dcc4")
+        pt("sp_stem", "all", lambda f, x, y, w, h: pick(stalk, 0.55, x, y))
+        pt("sp_torso", "all", lambda f, x, y, w, h: pick(stalk, 0.72, x, y))
+        pt("sp_arm", "all", lambda f, x, y, w, h: pick(skin_, 0.65, x, y))
+        pt("sp_head", "all", lambda f, x, y, w, h: pick(cap, 0.2, x, y) if f == "north" and y == h // 2 and x in (w // 4, 3 * w // 4) else pick(skin_, 0.65, x, y))
+        for p in ("sp_cap", "sp_capt"):
+            pt(p, "all", lambda f, x, y, w, h: pick(spot, 0.7, x, y) if (x * 7 + y * 11) % 13 < 2 else pick(cap, 0.55, x, y))
+
+
+def build_hook(r, g, d):
+    _build_s(r, g, d)
+    if d.get("sprouts"):
+        cubes = []
+        for sg, y, tilt in ((-1, 7.0, 12), (1, 8.5, -12)):
+            x = sg * 6.25
+            at = [x, y, g.z]
+            t = lambda p, o: G.rot_cube(p, o, at, 0, 0, tilt)
+            cubes += [t("sp_stem", [x - 0.625, y, g.z - 0.5]), t("sp_torso", [x - 0.875, y + 4, g.z - 0.5]), t("sp_arm", [x - 1.375, y + 4.25, g.z - 0.25]), t("sp_arm", [x + 0.875, y + 4.25, g.z - 0.25]),
+                      t("sp_head", [x - 0.75, y + 6.75, g.z - 0.75]), t("sp_cap", [x - 1.75, y + 8.25, g.z - 1.75]), t("sp_capt", [x - 1.0, y + 9.0, g.z - 1.0])]
+        r.add("hair_sprouts", "root", [0, 8, g.z], cubes)
+
+
+# homage looks of the twenty-ninth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["matango_flora"]["variants"]["spore_retainer"] = dict(HAIR="#3a2a1e", CLOTH="#2a4ab0", TRIM="#e8c050", extra=dict(cap="#f8f4ec", spot="#d82a2a", stalk="#ece0cc", mycelium="#8a7a8a"))
+
+
 if __name__ == "__main__":
     F.run_family("flora", SPECIES, declare_hook, paint_hook, build_hook, anim_extra, views=VIEWS)

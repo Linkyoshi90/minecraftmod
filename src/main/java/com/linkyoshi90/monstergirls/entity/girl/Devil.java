@@ -511,9 +511,24 @@ public class Devil extends AbstractMonsterGirl {
         for (Devil d : victim.level().getEntitiesOfClass(Devil.class, victim.getBoundingBox().inflate(32), d -> d.species == GirlSpecies.FURY_DEVIL && d != killer)) d.hound(killer);
     }
 
+    /** The monsters within 6 of her friend catch fire, and her friend doesn't. How many, -1 without a friend. */
+    public int kindle(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.FIRE_RESISTANCE, 100));
+        int lit = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(6),
+                net.minecraft.world.entity.monster.Monster::isAlive)) {
+            m.igniteForSeconds(4);
+            lit++;
+        }
+        return lit;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.FIRESPRITE_DEVIL && this.level() instanceof net.minecraft.server.level.ServerLevel kindled && !this.isBaby() && this.tickCount % 60 == 0) this.kindle(kindled);
         if (this.species == GirlSpecies.FIRE_GIANT_DEVIL && this.level() instanceof net.minecraft.server.level.ServerLevel forge && !this.isBaby()) {
             this.glow(forge, 13);                                              // her lava lights the ground she walks on
             if (this.tickCount % 40 == 0) this.hearthfire(forge);

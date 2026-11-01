@@ -584,6 +584,14 @@ def run(sp, previews):
     return geo, adoc, tex, height
 
 
+# homage looks of the twenty-ninth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["caracal_nekomata"]["variants"]["lasagna_cat"] = dict(HAIR="#e87a1e", FUR="#f0902a", LIGHT="#f8d890", MARK="#3a2414", EYE="#2a1e14", CLOTH="#f8e8c8", TRIM="#e87a1e")
+
+
+# homage looks of the thirtieth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["lioness_nekomata"]["variants"]["pride_queen"] = dict(HAIR="#d8a860", FUR="#e0b470", LIGHT="#f8e8c8", MARK="#a87a3a", EYE="#3a8ac8", CLOTH="#f4e8d0", TRIM="#a87a3a")
+
+
 if __name__ == "__main__":
     want = [a for a in sys.argv[1:] if not a.startswith("--")]
     prev = "--previews" in sys.argv

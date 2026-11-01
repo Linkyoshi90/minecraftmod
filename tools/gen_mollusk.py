@@ -66,6 +66,13 @@ SPECIES = {
                   "red": dict(FUR="#c83a3a", HAIR="#e85a4a", MARK="#5a1414", LIGHT="#f8c8c0", CLOTH="#c83a3a", extra=dict(boot="#5a1414")),
                   "glow": dict(FUR="#1e5a6a", HAIR="#3ad8c8", MARK="#8af8e8", LIGHT="#a8f0e8", CLOTH="#1e5a6a", EYE="#3ad8c8", extra=dict(boot="#0e3a44")),
                   "white": dict(FUR="#f0eef4", HAIR="#e8e4f0", MARK="#a8a0c0", LIGHT="#ffffff", CLOTH="#f0eef4", extra=dict(boot="#a8a0c0"))}),
+    # thirtieth wave: the giant kraken, the kraken's rig drawn enormous, an abyssal blue
+    "giant_kraken_mollusk": dict(
+        build="curvy", outfit=dict(top=["corset"], extras=["pearls"], colors=dict(cloth2="#0e1e3a")),
+        hair="flowing", bangs="parted", ears="fin", body="kraken",
+        pal=dict(SKIN=skin("#c8d8f0"), HAIR="#a8c8e8", FUR="#1e3a6a", LIGHT="#6a90c0", MARK="#0a1830", EYE="#5af0f8", CLOTH="#0e1e3a", TRIM="#5af0f8", INNER="#a8c8e8"),
+        variants={"crimson": dict(FUR="#7a1420", LIGHT="#c8606a", MARK="#2e060c", TRIM="#e8c060"), "pallid": dict(FUR="#a8b0b8", LIGHT="#dce0e4", MARK="#4a5058", EYE="#e83a2a"),
+                  "violet": dict(FUR="#3a1a6a", LIGHT="#8a68c0", MARK="#160a2e"), "ink": dict(FUR="#14141c", LIGHT="#4a4a58", MARK="#08080c", SKIN=skin("#9098a8"))}),
     "kraken_mollusk": dict(
         build="curvy", outfit=dict(top=["corset"], extras=["pearls"], colors=dict(cloth2="#2a1a3a")),
         hair="wavy", bangs="parted", ears="fin", body="kraken",
@@ -386,13 +393,17 @@ def run_custom(sp, decl, bld, anm, prev):
     return geo, tex, adoc["animations"][f"animation.{sp}.idle"], h
 
 
+# homage looks of the thirtieth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["octopus_mollusk"]["variants"]["sea_witch"] = dict(HAIR="#f4f4f0", FUR="#3a1e5a", LIGHT="#8a5ab0", MARK="#1a0e2e", EYE="#3a8a5a", CLOTH="#14141c", TRIM="#e8c050", SKIN=skin("lilac"))
+
+
 if __name__ == "__main__":
     import family_concepts as FC
     want = [a for a in sys.argv[1:] if not a.startswith("--")]
     prev = "--previews" in sys.argv
     heights = {s["id"]: s["height"] for s in FC.family("mollusk")["species"]}
     entries = {}
-    for sp, (decl, bld, anm) in {"kraken_mollusk": (kraken_declare, kraken_build, kraken_anims),
+    for sp, (decl, bld, anm) in {"kraken_mollusk": (kraken_declare, kraken_build, kraken_anims), "giant_kraken_mollusk": (kraken_declare, kraken_build, kraken_anims),
                                   "ammonite_mollusk": (ammonite_declare, ammonite_build, ammonite_anims)}.items():
         if not want or sp in want:
             g, t, a, h = run_custom(sp, decl, bld, anm, prev)

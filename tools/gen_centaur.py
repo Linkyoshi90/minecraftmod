@@ -63,6 +63,26 @@ SPECIES = {
                   "red": dict(HAIR="#c83a2a", FUR="#c84a30", LIGHT="#f0b090", MARK="#7a1e12", extra=dict(wing="#f0d0c0", wing_tip="#c84a30", brow="#e8c050")),
                   "black": dict(HAIR="#1e1e28", FUR="#2a2a34", LIGHT="#6a6a78", MARK="#0e0e14", EYE="#e8c050", extra=dict(wing="#4a4a58", wing_tip="#14141c", brow="#e8c050")),
                   "white": dict(HAIR="#f0ece4", FUR="#f4f0e8", LIGHT="#ffffff", MARK="#b8b0a0", CLOTH="#2a4a9a", extra=dict(wing="#ffffff", wing_tip="#c8c0b0", brow="#2a4a9a"))}),
+    # twenty-ninth wave: the censhroom, a pale taur whose back has grown a shelf of fungus, flat enough to serve as a saddle
+    "censhroom_centaur": dict(
+        build="athletic", outfit=dict(top=["halter"], extras=["belt"], colors=dict()),
+        hair="wavy", bangs="swept", tail=(2, 4, 1.5), ears="round", fungal=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#7a5a42", FUR="#c8b8a0", LIGHT="#ece4d4", MARK="#8a7a68", EYE="#5a3a2a", CLOTH="#e8dcc8", TRIM="#8a5a3a",
+                 pattern="solid", extra=dict(fcap="#8a5432", fspot="#e8d8bc", fsaddle="#6a4228")),
+        variants={"red": dict(HAIR="#a82a22", FUR="#e0d4c0", extra=dict(fcap="#c8302a", fspot="#f8f4ec", fsaddle="#8a2a22")),
+                  "glow": dict(HAIR="#2a6ab8", FUR="#b8c8d8", EYE="#8af0ff", extra=dict(fcap="#2a6ab8", fspot="#8af0ff", fsaddle="#1e4a8a")),
+                  "dark": dict(HAIR="#2e2620", FUR="#5a4e44", LIGHT="#a89888", extra=dict(fcap="#3a2e26", fspot="#a89888", fsaddle="#2a221e")),
+                  "violet": dict(HAIR="#5a3a7a", FUR="#b8a8c8", extra=dict(fcap="#5a3a7a", fspot="#d8c8e8", fsaddle="#3e2a58"))}),
+    # twenty-ninth wave: the zoglintaur, a rotting hoglin taur: raw pink-grey hide, bone showing, great tusks
+    "zoglintaur_centaur": dict(
+        build="strong", outfit=dict(top=["bandeau"], bottom="shorts", colors=dict(cloth2="#3a2a2a")),
+        hair="mane", bangs="messy", tail=(1.5, 5, 1.5), ears="round", tusks=True, grin=True,
+        pal=dict(SKIN=skin("#c8a8a0"), HAIR="#5a3a3e", FUR="#b87a78", LIGHT="#e0b0a8", MARK="#6a3a42", EYE="#e8302a", CLOTH="#3a2a2a", TRIM="#e0d8c0",
+                 pattern="solid", extra=dict(tusk="#e8e0c8", tusk_band="#5a3a3e", wool="#5a3a3e")),
+        variants={"ashen": dict(HAIR="#3a3a40", FUR="#8a8488", LIGHT="#c0b8b8", MARK="#4a464c", extra=dict(tusk="#e8e0c8", tusk_band="#3a3a40", wool="#3a3a40")),
+                  "crimson": dict(HAIR="#6a1e22", FUR="#a83a3a", LIGHT="#d88a80", MARK="#5a1a20", extra=dict(tusk="#e8e0c8", tusk_band="#6a1e22", wool="#6a1e22")),
+                  "warped": dict(HAIR="#1e5a5a", FUR="#5a9a92", LIGHT="#a8d0c8", MARK="#1e4a4a", extra=dict(tusk="#e8e0c8", tusk_band="#1e5a5a", wool="#1e5a5a")),
+                  "bone": dict(HAIR="#e0d8c0", FUR="#d0c4ac", LIGHT="#f0e8d4", MARK="#8a7a68", extra=dict(tusk="#f8f0dc", tusk_band="#8a7a68", wool="#8a7a68"))}),
     # twenty-eighth wave: the Ark Seraphim, a blue lion taur with feathered wings, a gold brow, a jewelled blanket and a small gold ark on her back
     "ark_seraphim_centaur": dict(
         build="athletic", outfit=dict(top=["bandeau"], extras=["usekh", "armlets", "belt"], colors=dict(usekh2="#e8c050")),
@@ -353,6 +373,8 @@ def declare(sp):
         parts += P.wing_parts("feather", 1.4)
     if d.get("brow"):                                    # a gold band round her brow
         parts += [("brow_band", 9, 1, 9)]
+    if d.get("fungal"):                                  # twenty-ninth wave: the censhroom's fungal saddle
+        parts += [("fsaddle", 8.5, 1.5, 7.5), ("fg_cap", 4, 1, 4), ("fg_stalk", 1.5, 1.5, 1.5)]
     if d.get("ark"):                                     # twenty-eighth wave: the small gold ark on the Ark Seraphim's back
         parts += [("ark_box", 6, 3.5, 4.5), ("ark_lid", 7, 1, 5.5), ("ark_finial", 1.5, 2, 1.5)]
     if d.get("nemes"):                                   # the striped headcloth: a cap and two lappets over her shoulders
@@ -465,6 +487,11 @@ def paint(sp, key):
             return bow
         for p in hairy:
             pt(p, "all", bow_for(p))
+    if d.get("fungal"):
+        fcap, fspot, fsad = G.shades(pal.extra["fcap"]), G.shades(pal.extra["fspot"]), G.shades(pal.extra["fsaddle"])
+        pt("fsaddle", "all", lambda f, x, y, w, h: pick(fsad, 0.45 + 0.2 * (x % 5 == 0) + (noise(x, y, 41) - 0.5) * 0.2, x, y))
+        pt("fg_cap", "all", lambda f, x, y, w, h: pick(fspot, 0.7, x, y) if (x * 7 + y * 11) % 11 < 2 else pick(fcap, 0.6, x, y))
+        pt("fg_stalk", "all", lambda f, x, y, w, h: pick(fspot, 0.55, x, y))
     if d.get("ark"):
         gold, dark = G.shades(pal.extra["ark"]), G.shades(pal.extra["ark_dark"])
         pt("ark_box", "all", lambda f, x, y, w, h: pick(dark if x % 8 < 2 or y % 10 < 2 else gold, 0.6, x, y))
@@ -542,6 +569,11 @@ def build(sp):
             r.put("barrel", cube("hump", [-2.5, 18.75, zc - 2.25]), cube("hump_top", [-1.75, 21.5, zc - 1.5]))
     if d.get("kelp"):                                   # the kelpie's weed, hanging off her flanks
         r.put("barrel", *[cube("frond", [sg * 3.6 - 0.125, 11.0, zz]) for sg in (-1, 1) for zz in (0.5, 5.5)])
+    if d.get("fungal"):                                 # flat across her back; caps along the rim and behind the seat
+        cs = [cube("fsaddle", [-4.25, 18.75, 1.0])]
+        for x, y, zz in ((-5.0, 16.5, 2.0), (5.0, 16.5, 3.5), (-5.0, 16.0, 6.0), (5.0, 16.0, 7.0), (0.0, 20.0, 9.0)):
+            cs += [cube("fg_stalk", [x - 0.75, y, zz - 0.75]), cube("fg_cap", [x - 2.0, y + 1.5, zz - 2.0])]
+        r.put("barrel", *cs)
     if d.get("ark"):
         r.put("barrel", cube("ark_box", [-3.0, 18.75, 5.0]), cube("ark_lid", [-3.5, 22.25, 4.5]), cube("ark_finial", [-0.75, 23.25, 6.5]))
     if d.get("wings"):                                  # the pegasus' wings rise from her withers, at the front of the horse body

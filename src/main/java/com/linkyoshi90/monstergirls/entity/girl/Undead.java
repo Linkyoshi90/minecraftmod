@@ -132,7 +132,7 @@ public class Undead extends AbstractMonsterGirl {
     @Override
     protected boolean wildHostile() {
         return switch (this.species) {
-            case ZOMBIE_UNDEAD, LIVING_DOLL_UNDEAD, YUKI_ONNA_UNDEAD, PHANTOM_UNDEAD, LICH_UNDEAD -> true;
+            case ZOMBIE_UNDEAD, CORDYCEPS_UNDEAD, DROWNED_UNDEAD, FAMISHED_UNDEAD, LIVING_DOLL_UNDEAD, YUKI_ONNA_UNDEAD, PHANTOM_UNDEAD, LICH_UNDEAD -> true;
             default -> false;
         };
     }
@@ -153,7 +153,8 @@ public class Undead extends AbstractMonsterGirl {
     @Override
     protected boolean calmsHer(ItemStack stack) {
         if (this.species == GirlSpecies.LICH_UNDEAD) return false;
-        return this.species == GirlSpecies.ZOMBIE_UNDEAD ? stack.is(Items.ROTTEN_FLESH) : stack.is(Items.PUMPKIN_PIE);
+        if (this.species == GirlSpecies.FAMISHED_UNDEAD) return false;                  // she won't take it from a hand: it has to be set down
+        return this.species == GirlSpecies.ZOMBIE_UNDEAD || this.species == GirlSpecies.CORDYCEPS_UNDEAD || this.species == GirlSpecies.DROWNED_UNDEAD ? stack.is(Items.ROTTEN_FLESH) : stack.is(Items.PUMPKIN_PIE);
     }
 
     // --- the mummy -------------------------------------------------------------------------------------------------
@@ -394,6 +395,8 @@ public class Undead extends AbstractMonsterGirl {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        if (this.species == GirlSpecies.SOUL_CLUSTER_UNDEAD && amount >= this.getHealth() && this.level() instanceof ServerLevel server
+                && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY) && this.scatter(server)) return false;
         if (this.species == GirlSpecies.MUMMY_UNDEAD && source.getEntity() != null && this.level() instanceof ServerLevel server && !this.isInvulnerableTo(source)) {
             this.unravel(server, null);                                      // a blow loosens her bandages
         }
@@ -443,6 +446,17 @@ public class Undead extends AbstractMonsterGirl {
     @Nullable
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        if (this.species == GirlSpecies.CORDYCEPS_UNDEAD && stack.is(Items.ROTTEN_FLESH) && this.isCalm() && !this.isCured()) {
+            if (this.level() instanceof ServerLevel server) {
+                stack.consume(1, player);
+                this.feedFungus(server, player);
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+        if (this.species == GirlSpecies.LOST_SOUL_UNDEAD && stack.isEmpty() && this.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {
+            if (this.level() instanceof ServerLevel server) this.wayBack(server, player);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         if (this.species == GirlSpecies.MUMMY_UNDEAD && stack.isEmpty() && player.isShiftKeyDown() && !this.isBaby()
                 && this.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {   // a gentle pull at a loose end
             if (this.level() instanceof ServerLevel server) this.unravel(server, player);
@@ -581,9 +595,114 @@ public class Undead extends AbstractMonsterGirl {
         return 1;
     }
 
+    // --- the twenty-ninth wave -------------------------------------------------------------------------------------
+
+    private static final int CURE_FEEDINGS = 4;       // and the one that calmed her
+
+    public boolean isCured() {
+        return "cured".equals(this.getVariantName());
+    }
+
+    /** One more feeding after the first that calmed her. On the last the fungus lets go, and she is a friend. Feedings so far. */
+    public int feedFungus(ServerLevel level, Player player) {
+        int fed = this.getPersistentData().getInt("FungusFed") + 1;
+        this.getPersistentData().putInt("FungusFed", fed);
+        this.addAffection(player, 2);
+        this.hearts(level, 2);
+        if (fed >= CURE_FEEDINGS) {
+            this.setVariant("cured");
+            if (this.getAffection(player) < com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) this.setAffection(player.getUUID(), com.linkyoshi90.monstergirls.entity.Orders.AFFECTION);
+        }
+        return fed;
+    }
+
+    /** She points the way to where they last died. The distance, or -1 when there is nowhere she can show them. */
+    public int wayBack(ServerLevel level, Player player) {
+        var death = player.getLastDeathLocation();
+        if (death.isEmpty() || death.get().dimension() != level.dimension()) {
+            player.displayClientMessage(Component.translatable("message.monstergirls.lost_soul.none", this.getDisplayName()), true);
+            return -1;
+        }
+        BlockPos at = death.get().pos();
+        int dx = at.getX() - this.getBlockX(), dz = at.getZ() - this.getBlockZ();
+        int distance = (int) Math.sqrt(dx * dx + dz * dz);
+        String way = net.minecraft.core.Direction.getNearest((float) dx, 0.0F, (float) dz).getName();
+        player.displayClientMessage(Component.translatable("message.monstergirls.lost_soul.found", this.getDisplayName(), distance, way), true);
+        for (int i = 1; i <= 8 && distance > 0; i++) {
+            level.sendParticles(ParticleTypes.SOUL, this.getX() + dx * i / (double) Math.max(distance, 8), this.getEyeY(), this.getZ() + dz * i / (double) Math.max(distance, 8), 1, 0, 0, 0, 0);
+        }
+        return distance;
+    }
+
+    /** A killing blow scatters her: she is gone for three seconds and comes back whole, up to three times a day. Whether she could. */
+    public boolean scatter(ServerLevel level) {
+        var data = this.getPersistentData();
+        long day = level.getDayTime() / 24000L;
+        if (data.getLong("ScatterDay") != day) {
+            data.putLong("ScatterDay", day);
+            data.putInt("Scattered", 0);
+        }
+        int times = data.getInt("Scattered");
+        if (times >= 3) return false;
+        data.putInt("Scattered", times + 1);
+        this.setHealth(this.getMaxHealth());
+        this.setInvisible(true);
+        this.scatterTicks = 60;
+        level.sendParticles(ParticleTypes.SOUL, this.getX(), this.getY() + 1, this.getZ(), 30, 0.6, 0.8, 0.6, 0.05);
+        this.teleportTo(this.getX() + this.random.nextInt(13) - 6, this.getY(), this.getZ() + this.random.nextInt(13) - 6);
+        return true;
+    }
+
+    /** Monsters within 6 of her friend lose 2, and her friend gains 1. How many she drained, -1 without a friend. */
+    public int drain(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int drained = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(6),
+                net.minecraft.world.entity.monster.Monster::isAlive)) {
+            m.hurt(level.damageSources().magic(), 2);
+            level.sendParticles(ParticleTypes.SOUL, m.getX(), m.getEyeY(), m.getZ(), 3, 0.2, 0.2, 0.2, 0.01);
+            drained++;
+        }
+        if (drained > 0) friend.heal(1);
+        return drained;
+    }
+
+    private int scatterTicks;
+
+    /** Her friend under water near her keeps their breath. Whether they needed it. */
+    public boolean deepBreath() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 12);
+        if (friend == null || !friend.isUnderWater()) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WATER_BREATHING, 60));
+        return true;
+    }
+
+    /** Food dropped by a player within 8: she eats, and the hunger goes out of her. Whether she did. */
+    public boolean eatDropped(net.minecraft.server.level.ServerLevel level) {
+        var food = level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, this.getBoundingBox().inflate(8),
+                i -> i.isAlive() && i.getItem().has(net.minecraft.core.component.DataComponents.FOOD) && i.getOwner() instanceof Player);
+        if (food.isEmpty()) return false;
+        var item = food.get(0);
+        Player giver = (Player) item.getOwner();
+        item.getItem().shrink(1);
+        if (item.getItem().isEmpty()) item.discard();
+        this.setFlag(FLAG_CALM, true);
+        this.setTarget(null);
+        this.setVariant("sated");
+        this.addAffection(giver, 10);
+        this.hearts(level, 5);
+        this.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.DROWNED_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel && !this.isBaby() && this.tickCount % 20 == 0) this.deepBreath();
+        if (this.species == GirlSpecies.FAMISHED_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel starving && !this.isBaby() && !this.isCalm() && this.tickCount % 20 == 0) this.eatDropped(starving);
+        if (this.scatterTicks > 0 && --this.scatterTicks == 0) this.setInvisible(false);
+        if (this.species == GirlSpecies.SOUL_LEECH_UNDEAD && this.level() instanceof ServerLevel thirst && !this.isBaby() && this.tickCount % 40 == 0) this.drain(thirst);
         if (this.species == GirlSpecies.MANO_PELUDA_UNDEAD && this.level() instanceof ServerLevel bed && !this.isBaby() && this.tickCount % 60 == 0) this.lunge(bed);
         if (this.species == GirlSpecies.GAITRESS_UNDEAD && this.level() instanceof ServerLevel road && !this.isBaby() && this.tickCount % 40 == 0) this.pace(road);
         if (this.species == GirlSpecies.KOSCHEI_UNDEAD && this.level() instanceof ServerLevel taiga && !this.isBaby()) {

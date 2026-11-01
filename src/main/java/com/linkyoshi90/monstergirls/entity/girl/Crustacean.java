@@ -160,9 +160,24 @@ public class Crustacean extends AbstractMonsterGirl {
 
     // --- the floodcrab -------------------------------------------------------------------------------------------
 
+    /** The nearest monster within 8 of her friend takes 4 and can't move for 3 seconds. 1 on a hit, 0 with none near, -1 without a friend. */
+    public int pin(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster near = null;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8), net.minecraft.world.entity.monster.Monster::isAlive)) {
+            if (near == null || m.distanceToSqr(friend) < near.distanceToSqr(friend)) near = m;
+        }
+        if (near == null) return 0;
+        near.hurt(this.damageSources().mobAttack(this), 4);
+        near.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 60, 6));
+        return 1;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.SPIDER_CRAB_CRUSTACEAN && this.level() instanceof net.minecraft.server.level.ServerLevel clawed && !this.isBaby() && this.tickCount % 60 == 0) this.pin(clawed);
         if (this.species == GirlSpecies.FLOODCRAB_CRUSTACEAN && !this.isBaby() && this.tickCount % 400 == 0 && this.level() instanceof ServerLevel server) this.puddle(server);
     }
 

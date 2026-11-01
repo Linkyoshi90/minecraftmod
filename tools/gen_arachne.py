@@ -302,6 +302,10 @@ def legged_anims(an, sp, d):
                                    sym("arm", Tk((0, (-60, 0, 5)), (0.4, (-20, 0, 5)), (0.8, (-60, 0, 5))))))
 
 
+# homage looks of the twenty-ninth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["jumping_spider_arachne"]["variants"]["web_hero"] = dict(HAIR="#3a2418", FUR="#c82a2a", LIGHT="#e8483a", MARK="#1e3ab0", EYE="#f4f4f8", CLOTH="#c82a2a", TRIM="#1e3ab0")
+
+
 if __name__ == "__main__":
     import girl_family as F
     legged = {k: v for k, v in SPECIES.items() if v.get("biped")}

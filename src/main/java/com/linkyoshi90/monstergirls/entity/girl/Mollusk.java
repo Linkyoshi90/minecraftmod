@@ -102,6 +102,7 @@ public class Mollusk extends AbstractMonsterGirl {
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
+            case GIANT_KRAKEN_MOLLUSK -> girlAttributes(90, 0.24, 12);
             case KRAKEN_MOLLUSK -> girlAttributes(44, 0.24, 7);
             case IKA_MOLLUSK -> girlAttributes(20, 0.28, 4);
             case OCTOPUS_MOLLUSK -> girlAttributes(16, 0.3, 2);
@@ -136,7 +137,7 @@ public class Mollusk extends AbstractMonsterGirl {
 
     /** The kraken, the ammonite and the jellyfish live in the sea; the others walk. */
     public boolean isSeaDweller() {
-        return this.species == GirlSpecies.KRAKEN_MOLLUSK || this.species == GirlSpecies.AMMONITE_MOLLUSK || this.species == GirlSpecies.JELLYFISH_MOLLUSK;
+        return this.species == GirlSpecies.KRAKEN_MOLLUSK || this.species == GirlSpecies.GIANT_KRAKEN_MOLLUSK || this.species == GirlSpecies.AMMONITE_MOLLUSK || this.species == GirlSpecies.JELLYFISH_MOLLUSK;
     }
 
     /** Who swims in the water: the sea dwellers, Ika and the octopus (the snail only floats). */
@@ -176,7 +177,7 @@ public class Mollusk extends AbstractMonsterGirl {
 
     @Override
     protected boolean wildHostile() {
-        return this.species == GirlSpecies.KRAKEN_MOLLUSK;
+        return this.species == GirlSpecies.KRAKEN_MOLLUSK || this.species == GirlSpecies.GIANT_KRAKEN_MOLLUSK;
     }
 
     /** The kraken only goes for swimmers. */
@@ -319,9 +320,22 @@ public class Mollusk extends AbstractMonsterGirl {
 
     // --- tick ----------------------------------------------------------------------------------------------------
 
+    /** Every monster in the water within 16 of her friend takes 10. How many, -1 without a friend. */
+    public int crush(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null) return -1;
+        int crushed = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(16), m -> m.isAlive() && m.isInWater())) {
+            m.hurt(this.damageSources().mobAttack(this), 10);
+            crushed++;
+        }
+        return crushed;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.GIANT_KRAKEN_MOLLUSK && this.level() instanceof net.minecraft.server.level.ServerLevel deep && !this.isBaby() && this.tickCount % 100 == 0) this.crush(deep);
         if (this.species == GirlSpecies.MIN_MIN_MOLLUSK && this.level() instanceof net.minecraft.server.level.ServerLevel plain && !this.isBaby() && this.tickCount % 5 == 0) this.leadTheWay(plain, !plain.isDay());
         if (this.species == GirlSpecies.CHARYBDIS_MOLLUSK && this.level() instanceof net.minecraft.server.level.ServerLevel maw && !this.isBaby() && this.tickCount % 20 == 0) this.whirlpool(maw);
         if (this.species == GirlSpecies.SPEWSLUG_MOLLUSK && this.level() instanceof net.minecraft.server.level.ServerLevel bog && !this.isBaby() && this.tickCount % 10 == 0) this.bile(bog);

@@ -144,6 +144,19 @@ SPECIES = {
                   "gold": dict(FUR="#e8c050", MARK="#f8e090", HAIR="#f0d070", pattern="speckle", extra=dict(fin_mark=True, saya="#5a3a1a", tsuka="#1a1a1c")),
                   "black": dict(FUR="#1a1a1c", MARK="#d8302a", HAIR="#1a1a1c", CLOTH="#2a2a2e", extra=dict(fin_mark=True, saya="#8a1e1e", tsuka="#e8c040")),
                   "silver": dict(FUR="#c8ccd4", MARK="#f4f6f8", HAIR="#d8dce4", pattern="speckle", extra=dict(fin_mark=True, saya="#3a4a6a", tsuka="#f4f6f8"))}),
+    # thirtieth wave: the beluga, a soft white whale with a round brow; the olm, the blind cave salamander: pale pink, frilled, no eyes at all (they are her skin's colour)
+    "beluga_mermaid": dict(
+        build="curvy", outfit=dict(top=["halter"], extras=["pearls"], colors=dict()),
+        ears="fin", hair="bob", bangs="swept", fluke=(9, .75, 4), size=1.1,
+        pal=dict(SKIN=skin("#f0f4f8"), HAIR="#e8eef4", FUR="#e8eef4", LIGHT="#ffffff", MARK="#b8c8d8", EYE="#2a3a5a", CLOTH="#a8c8e8", TRIM="#e8eef4", pattern="solid", extra=dict(belly_white=True)),
+        variants={"grey": dict(FUR="#a8b0bc", HAIR="#c8d0d8", MARK="#7a8490"), "cream": dict(FUR="#f0e8d8", HAIR="#f8f0e0", MARK="#c8b8a0", CLOTH="#c8a878"),
+                  "blush": dict(FUR="#f4dce0", HAIR="#f8e8ec", MARK="#d8a8b0", CLOTH="#e8a8b8"), "ice": dict(FUR="#c8ecf8", HAIR="#d8f4fc", MARK="#8ac0d8", CLOTH="#5a9ad0")}),
+    "olm_mermaid": dict(
+        build="slim", outfit=dict(top=["halter"], colors=dict()),
+        ears="fin", hair="wavy", bangs="blunt", fluke=(6, .75, 3), eyeless=True,
+        pal=dict(SKIN=skin("#f4d8d0"), HAIR="#f0c8c0", FUR="#f0d0c8", LIGHT="#fcecE8", MARK="#d89a94", EYE="#f4d8d0", CLOTH="#d89a94", TRIM="#f0c8c0", pattern="solid", extra=dict(belly_white=True)),
+        variants={"white": dict(FUR="#f4f0ec", HAIR="#f8f4f0", MARK="#c8c0b8", CLOTH="#c8c0b8"), "black": dict(FUR="#3a3440", HAIR="#2a2630", MARK="#14121a", LIGHT="#6a6470", CLOTH="#14121a"),
+                  "peach": dict(FUR="#f8d8b8", HAIR="#f8c8a0", MARK="#d89a6a", CLOTH="#d89a6a"), "lilac": dict(FUR="#e0d0f0", HAIR="#d8c0ec", MARK="#a890c8", CLOTH="#a890c8")}),
     "orca_mermaid": dict(
         build="strong", outfit=dict(top=["sports"], extras=["armlets"]),
         ears="fin", hair="ponytail", fluke=(9, .75, 4), dorsal=(.75, 6, 3.5), size=1.15,
@@ -563,6 +576,10 @@ def paint(sp, key):
         pt("ear_a", "all", lambda f, x, y, w, h: pick(pal.INNER, 0.55 + 0.25 * (y % 2 == 0), x, y))
     elif d["ears"] == "fin":
         pt("ear_a", "all", fin)
+    if d.get("eyeless"):                                 # the olm: smooth skin where the eyes would be, and a small mouth
+        sk = H.skin_fn(pal, 0.70)
+        pt("head", ("north",), lambda f, x, y, w, h: pal.SKIN[0] if y == 27 and 14 <= x < 18 else sk(f, x, y, w, h))
+        pt("eyelids", "all", lambda f, x, y, w, h: sk(f, x, y, w, h))
     return pt.T
 
 

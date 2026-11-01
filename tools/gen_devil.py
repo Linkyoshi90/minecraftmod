@@ -767,6 +767,22 @@ def build_hook(r, g, d):
         r.put("body", cube("mpouch", [-hw / 2 - 1.1, 10.75, -0.75 + g.z]), cube("mpouch", [hw / 2 - 0.15, 10.75, -0.75 + g.z]))
 
 
+# twenty-ninth wave: the Firesprite, Wrath's sister in spirit: all flame in a woman's shape, a warped forest's teal fire instead of a furnace's orange
+SPECIES["firesprite_devil"] = dict(
+    build="curvy", outfit=dict(top=["bandeau"], bottom="shorts", colors=dict(cloth2="#1eb8a8", leather="#1eb8a8")),
+    hair="flowing", bangs="wispy", ears="elf", legs="bare", foot="shoe", wrath=True, glow="all",
+    pal=dict(SKIN="#2ad8c8", HAIR="#7af8e8", FUR="#2ad8c8", LIGHT="#c8fff4", MARK="#128a82", EYE="#f0fff8", CLOTH="#1eb8a8", TRIM="#7af8e8",
+             extra=dict(horn="#c8fff4", boot="#128a82", fire=("#06302e", "#0e8a80", "#2ad8c8", "#8af8e8", "#f0fff8"))),
+    variants={"crimson": dict(extra=dict(horn="#ffd8c8", boot="#8a1e1e", fire=("#3a0808", "#b81e1e", "#f8503a", "#fca070", "#fff0e0"))),
+              "violet": dict(extra=dict(horn="#f0d8ff", boot="#4a1a8a", fire=("#1e0640", "#5a18b0", "#a03af0", "#e88af8", "#fff0ff"))),
+              "gold": dict(extra=dict(horn="#fff4c8", boot="#8a6a14", fire=("#3a2a06", "#b88a14", "#f8c830", "#fce890", "#fffce8"))),
+              "white": dict(extra=dict(horn="#ffffff", boot="#8a8a94", fire=("#6a6058", "#c8c0b0", "#f0ece0", "#fcfaf0", "#ffffff")))})
+
+
+# homage looks of the twenty-ninth wave (POP_CULTURE_VARIANTS.md)
+SPECIES["ogre_devil"]["variants"]["swamp_king"] = dict(HAIR="#6a8a2a", FUR="#7a9a3a", LIGHT="#a8c070", MARK="#4a6a1e", EYE="#6a4a1e", CLOTH="#e8dcb8", TRIM="#5a3a1e")
+
+
 if __name__ == "__main__":
     F.run_family("devil", SPECIES, declare_hook, paint_hook, build_hook, anim_extra)
     want = [a for a in sys.argv[1:] if not a.startswith("--")]
