@@ -2,6 +2,29 @@
   "values": [
     "minecraft:end_highlands",
     "minecraft:end_midlands",
-    "minecraft:warped_forest"
+    "minecraft:warped_forest",
+    "minecraft:end_barrens",
+    "minecraft:small_end_islands",
+    "minecraft:the_end",
+    {
+      "id": "biomesoplenty:end_reef",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:end_corruption",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:end_wilds",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:mycotoxic_undergrowth",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:glistering_meadow",
+      "required": false
+    }
   ]
 }

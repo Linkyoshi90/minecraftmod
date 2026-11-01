@@ -1,6 +1,30 @@
 {
   "values": [
     "minecraft:cherry_grove",
-    "minecraft:bamboo_jungle"
+    "minecraft:bamboo_jungle",
+    {
+      "id": "biomesoplenty:snowblossom_grove",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:sakura_grove",
+      "required": false
+    },
+    {
+      "id": "terralith:sakura_grove",
+      "required": false
+    },
+    {
+      "id": "terralith:sakura_valley",
+      "required": false
+    },
+    {
+      "id": "terralith:snowy_cherry_grove",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:bamboo_forest",
+      "required": false
+    }
   ]
 }

@@ -4,6 +4,42 @@
     "minecraft:frozen_ocean",
     "minecraft:snowy_beach",
     "minecraft:beach",
-    "minecraft:stony_shore"
+    "minecraft:stony_shore",
+    {
+      "id": "#minecraft:is_beach",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:dune_beach",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:rainbow_beach",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:grassy_beach",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:gravel_beach",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:dacite_shore",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:basalt_barrera",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:gravel_beach",
+      "required": false
+    },
+    {
+      "id": "terralith:gravel_beach",
+      "required": false
+    }
   ]
 }

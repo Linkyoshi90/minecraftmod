@@ -2,6 +2,10 @@
   "values": [
     "minecraft:frozen_river",
     "minecraft:snowy_beach",
-    "minecraft:frozen_ocean"
+    "minecraft:frozen_ocean",
+    {
+      "id": "regions_unexplored:cold_river",
+      "required": false
+    }
   ]
 }

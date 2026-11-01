@@ -614,6 +614,14 @@ sandstone since 2026-10-29), so 87 in all.
 Homage props (POP_CULTURE_VARIANTS.md): the dullahan's headless rider (Celty) has her yellow cat-eared helmet over the head she
 carries, the death envoy (Lala) a scythe in her free hand; both are drawn only on their own looks.
 
+## Thirty-first wave (2026-11-01, in the game)
+
+No new creatures: this one is about where they spawn (`tools/gen_biome_coverage.py`).
+
+- Every vanilla biome now has at least 8 species from 3 families. The End's outer islands, the warped forest, the frozen seas and the plain oceans gained the most.
+- All 297 biomes of Biomes O' Plenty, Oh The Biomes We've Gone, Regions Unexplored and Terralith are listed under the vanilla biome each is most like, and take that biome's creatures. The entries are optional, so nothing is needed without those mods.
+- Other world generation mods get creatures through broad tags: the species of the plain forest, plains, desert, swamp, savanna, jungle, taiga, badlands, beach, river, snowy plains, mushroom fields and stony peaks also spawn in whatever those tags hold. This also spreads them a little in vanilla, such as a forest species into the birch and dark forests.
+
 ## Thirtieth wave (2026-11-01, in the game)
 
 New designs for the cold seas, the dripstone caves and the End. The Baku also spawns in the End midlands.

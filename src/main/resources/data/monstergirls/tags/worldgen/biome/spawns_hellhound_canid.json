@@ -2,6 +2,30 @@
   "values": [
     "minecraft:soul_sand_valley",
     "minecraft:basalt_deltas",
-    "minecraft:nether_wastes"
+    "minecraft:nether_wastes",
+    {
+      "id": "biomesoplenty:withered_abyss",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:erupting_inferno",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:blackstone_basin",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:crystalline_chasm",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:inferno",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:redstone_abyss",
+      "required": false
+    }
   ]
 }

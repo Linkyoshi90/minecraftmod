@@ -2,6 +2,10 @@
   "values": [
     "minecraft:deep_ocean",
     "minecraft:deep_lukewarm_ocean",
-    "minecraft:ocean"
+    "minecraft:ocean",
+    {
+      "id": "terralith:deep_warm_ocean",
+      "required": false
+    }
   ]
 }

@@ -259,9 +259,12 @@ public class Rodent extends AbstractMonsterGirl {
         }
         if (this.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(this.dig)) > 2.5 * 2.5) {
             if (this.tickCount % 20 == 0) this.getNavigation().moveTo(this.dig.getX() + 0.5, this.dig.getY() + 1, this.dig.getZ() + 0.5, 1.0);
-        } else if (this.tickCount % 12 == 0) {
-            this.getLookControl().setLookAt(net.minecraft.world.phys.Vec3.atCenterOf(this.dig));
-            if (this.brushAt(level, this.dig)) this.dig = null;
+        } else {
+            this.getNavigation().stop();                                // she stays at it: the block forgets her strokes if she wanders off
+            if (this.tickCount % 12 == 0) {
+                this.getLookControl().setLookAt(net.minecraft.world.phys.Vec3.atCenterOf(this.dig));
+                if (this.brushAt(level, this.dig)) this.dig = null;
+            }
         }
     }
 

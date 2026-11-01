@@ -2,6 +2,10 @@
   "values": [
     "minecraft:ocean",
     "minecraft:lukewarm_ocean",
-    "minecraft:deep_ocean"
+    "minecraft:deep_ocean",
+    {
+      "id": "regions_unexplored:hyacinth_deeps",
+      "required": false
+    }
   ]
 }

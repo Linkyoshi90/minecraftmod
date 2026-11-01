@@ -3,6 +3,10 @@
     "minecraft:frozen_ocean",
     "minecraft:cold_ocean",
     "minecraft:snowy_beach",
-    "minecraft:frozen_river"
+    "minecraft:frozen_river",
+    {
+      "id": "regions_unexplored:cold_river",
+      "required": false
+    }
   ]
 }

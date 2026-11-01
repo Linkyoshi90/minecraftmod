@@ -1,6 +1,38 @@
 {
   "values": [
     "minecraft:lush_caves",
-    "minecraft:river"
+    "minecraft:river",
+    {
+      "id": "#minecraft:is_river",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:glowing_grotto",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:bioshroom_caves",
+      "required": false
+    },
+    {
+      "id": "terralith:cave/fungal_caves",
+      "required": false
+    },
+    {
+      "id": "terralith:cave/underground_jungle",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:muddy_river",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:tropical_river",
+      "required": false
+    },
+    {
+      "id": "terralith:warm_river",
+      "required": false
+    }
   ]
 }

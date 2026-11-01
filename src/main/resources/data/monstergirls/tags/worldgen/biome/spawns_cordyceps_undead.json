@@ -1,6 +1,30 @@
 {
   "values": [
     "minecraft:mushroom_fields",
-    "minecraft:lush_caves"
+    "minecraft:lush_caves",
+    {
+      "id": "#c:is_mushroom",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:fungal_fen",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:glowing_grotto",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:bioshroom_caves",
+      "required": false
+    },
+    {
+      "id": "terralith:cave/fungal_caves",
+      "required": false
+    },
+    {
+      "id": "terralith:cave/underground_jungle",
+      "required": false
+    }
   ]
 }

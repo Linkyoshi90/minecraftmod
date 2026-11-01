@@ -3,6 +3,18 @@
     "minecraft:warm_ocean",
     "minecraft:lukewarm_ocean",
     "minecraft:deep_lukewarm_ocean",
-    "minecraft:ocean"
+    "minecraft:ocean",
+    {
+      "id": "regions_unexplored:rocky_reef",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:hyacinth_deeps",
+      "required": false
+    },
+    {
+      "id": "terralith:deep_warm_ocean",
+      "required": false
+    }
   ]
 }

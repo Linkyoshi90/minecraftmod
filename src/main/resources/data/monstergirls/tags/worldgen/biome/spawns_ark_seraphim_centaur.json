@@ -1,6 +1,20 @@
 {
   "values": [
     "minecraft:end_highlands",
-    "minecraft:end_midlands"
+    "minecraft:end_midlands",
+    "minecraft:end_barrens",
+    "minecraft:the_end",
+    {
+      "id": "biomesoplenty:end_reef",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:end_corruption",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:end_wilds",
+      "required": false
+    }
   ]
 }

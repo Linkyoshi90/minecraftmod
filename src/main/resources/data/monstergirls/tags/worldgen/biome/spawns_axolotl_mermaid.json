@@ -1,5 +1,21 @@
 {
   "values": [
-    "minecraft:lush_caves"
+    "minecraft:lush_caves",
+    {
+      "id": "biomesoplenty:glowing_grotto",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:bioshroom_caves",
+      "required": false
+    },
+    {
+      "id": "terralith:cave/fungal_caves",
+      "required": false
+    },
+    {
+      "id": "terralith:cave/underground_jungle",
+      "required": false
+    }
   ]
 }

@@ -2,6 +2,34 @@
   "values": [
     "#minecraft:is_beach",
     "minecraft:stony_shore",
-    "minecraft:mushroom_fields"
+    "minecraft:mushroom_fields",
+    {
+      "id": "#c:is_mushroom",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:gravel_beach",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:dacite_shore",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:basalt_barrera",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:gravel_beach",
+      "required": false
+    },
+    {
+      "id": "terralith:gravel_beach",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:fungal_fen",
+      "required": false
+    }
   ]
 }

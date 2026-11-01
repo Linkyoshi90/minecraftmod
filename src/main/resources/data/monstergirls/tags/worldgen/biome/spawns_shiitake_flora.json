@@ -1,5 +1,13 @@
 {
   "values": [
-    "minecraft:mushroom_fields"
+    "minecraft:mushroom_fields",
+    {
+      "id": "#c:is_mushroom",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:fungal_fen",
+      "required": false
+    }
   ]
 }

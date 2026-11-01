@@ -1,6 +1,10 @@
 {
   "values": [
     "minecraft:old_growth_pine_taiga",
-    "minecraft:windswept_forest"
+    "minecraft:windswept_forest",
+    {
+      "id": "regions_unexplored:windswept_maple_forest",
+      "required": false
+    }
   ]
 }

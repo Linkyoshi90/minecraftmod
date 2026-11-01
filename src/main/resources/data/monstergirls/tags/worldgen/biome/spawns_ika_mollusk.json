@@ -3,6 +3,30 @@
     "minecraft:beach",
     "minecraft:ocean",
     "minecraft:lukewarm_ocean",
-    "minecraft:warm_ocean"
+    "minecraft:warm_ocean",
+    {
+      "id": "#minecraft:is_beach",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:dune_beach",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:rainbow_beach",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:grassy_beach",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:hyacinth_deeps",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:rocky_reef",
+      "required": false
+    }
   ]
 }

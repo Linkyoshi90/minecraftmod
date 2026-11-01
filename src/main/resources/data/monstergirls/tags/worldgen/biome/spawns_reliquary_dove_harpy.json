@@ -1,6 +1,11 @@
 {
   "values": [
     "minecraft:the_end",
-    "minecraft:end_highlands"
+    "minecraft:end_highlands",
+    "minecraft:small_end_islands",
+    {
+      "id": "biomesoplenty:end_reef",
+      "required": false
+    }
   ]
 }

@@ -2,6 +2,18 @@
   "values": [
     "minecraft:jagged_peaks",
     "minecraft:frozen_peaks",
-    "minecraft:snowy_slopes"
+    "minecraft:snowy_slopes",
+    {
+      "id": "regions_unexplored:icy_heights",
+      "required": false
+    },
+    {
+      "id": "terralith:frozen_cliffs",
+      "required": false
+    },
+    {
+      "id": "terralith:glacial_chasm",
+      "required": false
+    }
   ]
 }
