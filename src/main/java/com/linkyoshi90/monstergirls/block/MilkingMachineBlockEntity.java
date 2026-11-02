@@ -28,7 +28,8 @@ import java.util.UUID;
 /**
  * Fills the empty buckets in its store from a creature standing by it. She has to be a grown friend of whoever placed
  * it (fond, the same as taking orders) and full size, and either expecting or a minotaur cow. Each one gives a bucket
- * every five minutes, or sooner for a cow whose bell has rung.
+ * every five minutes, or sooner for a cow whose bell has rung. Those with milk come to it on their own (SeekMilkingMachineGoal), and hoppers
+ * can feed it empty buckets and carry off the milk (MilkingMachineBlockEntity.hopperHandler).
  */
 public class MilkingMachineBlockEntity extends BlockEntity {
     public static final int SLOTS = 5;
@@ -53,6 +54,48 @@ public class MilkingMachineBlockEntity extends BlockEntity {
 
     public SimpleContainer store() {
         return this.store;
+    }
+
+    /** What hoppers and pipes see: empty buckets go in, and only milk comes out. */
+    public net.neoforged.neoforge.items.IItemHandler hopperHandler() {
+        return new net.neoforged.neoforge.items.wrapper.InvWrapper(this.store) {
+            @Override
+            public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+                return stack.is(Items.BUCKET) ? super.insertItem(slot, stack, simulate) : stack;
+            }
+
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                return this.getStackInSlot(slot).is(Items.BUCKET) ? ItemStack.EMPTY : super.extractItem(slot, amount, simulate);
+            }
+        };
+    }
+
+    /** Whether this machine would milk her now: she's fit for it, and it has a bucket and room. */
+    public boolean wants(LivingEntity creature, ServerLevel level) {
+        return this.owner != null && this.freeBucketSlot() >= 0 && this.canMilk(creature, level);
+    }
+
+    /** The nearest machine within range that would milk her, or null. */
+    @Nullable
+    public static BlockPos nearestFor(ServerLevel level, LivingEntity creature, int range) {
+        net.minecraft.world.level.ChunkPos here = creature.chunkPosition();
+        int chunks = (range >> 4) + 1;
+        BlockPos best = null;
+        double closest = range * range;
+        for (int x = here.x - chunks; x <= here.x + chunks; x++) for (int z = here.z - chunks; z <= here.z + chunks; z++) {
+            net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkSource().getChunkNow(x, z);
+            if (chunk == null) continue;
+            for (BlockEntity be : chunk.getBlockEntities().values()) {
+                if (!(be instanceof MilkingMachineBlockEntity machine)) continue;
+                double d = be.getBlockPos().distToCenterSqr(creature.position());
+                if (d <= closest && machine.wants(creature, level)) {
+                    closest = d;
+                    best = be.getBlockPos();
+                }
+            }
+        }
+        return best;
     }
 
     public void setOwner(@Nullable UUID owner) {
@@ -123,7 +166,7 @@ public class MilkingMachineBlockEntity extends BlockEntity {
         return bonded.getGestation().isCarrying() || creature instanceof Minotaur cow && !cow.isMale();
     }
 
-    private static boolean isReady(LivingEntity creature, long now) {
+    public static boolean isReady(LivingEntity creature, long now) {
         return creature instanceof Minotaur cow ? cow.isMilkReady() : now >= creature.getData(ModAttachments.NEXT_MILK);
     }
 

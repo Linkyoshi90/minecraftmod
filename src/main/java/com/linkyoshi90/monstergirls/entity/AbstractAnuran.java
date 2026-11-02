@@ -146,6 +146,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         this.goalSelector.addGoal(-1, new TadpoleGoal(this)); // above everything, FloatGoal included
         this.goalSelector.addGoal(-1, new SitWhenOrderedGoal<>(this));
         this.goalSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StayNearGoal<>(this));
+        this.goalSelector.addGoal(3, new com.linkyoshi90.monstergirls.entity.ai.SeekMilkingMachineGoal<>(this));
         this.goalSelector.addGoal(3, new com.linkyoshi90.monstergirls.entity.girl.FarmhandGoal<>(this));
         this.targetSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StanceTargetGoal<>(this));
         this.goalSelector.addGoal(2, new LaySpawnGoal(this));
@@ -404,6 +405,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.level() instanceof ServerLevel milky) com.linkyoshi90.monstergirls.entity.Lactation.tick(milky, this);
         if (this.level() instanceof ServerLevel) {
             Painted.tickCopper(this, this);
             if (this.isWet()) this.dryTicks = 0;

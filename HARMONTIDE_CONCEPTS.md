@@ -614,6 +614,15 @@ sandstone since 2026-10-29), so 87 in all.
 Homage props (POP_CULTURE_VARIANTS.md): the dullahan's headless rider (Celty) has her yellow cat-eared helmet over the head she
 carries, the death envoy (Lala) a scythe in her free hand; both are drawn only on their own looks.
 
+## The scout pack (2026-11-02, in the game)
+
+`entity/Scouting.java`, `item/ScoutPackItem`, tested in `ScoutingTests`. Leather, string and a chest make a Scout Pack. Hand it to a grown friend (friendship 10+) and she leaves for half a day for one of the biomes in her spawn tag, modded ones included; she comes back to her hearth or to you and drops the pack, full of that biome's materials. Right-click unpacks it, and it can go out again.
+
+- Amount: 4 + friendship / 10 finds, so 5 at 10 and 14 at 100, each 1 to 3 items.
+- The rare find (ancient debris, diamonds, emeralds, golden apples, by biome): friendship / 400 per find, one in four at 100.
+- If she is missing you (the day after meeting again, Missing), half as much again, twice as much if badly. `missingRate` scales the bonus.
+- Harpies and frogs go too. No friendship is lost for being away. Expeditions stay as they were: a map, a whole day, family finds, a chance of a new girl.
+
 ## Thirty-fourth wave (2026-11-02, in the game): life at home
 
 New ways to spend time with friends, for anything Bonded: harpies and frogs too, unless noted. `entity/HomeLife.java`, assets from `tools/gen_home_assets.py`, tested in `HomeLifeTests`.

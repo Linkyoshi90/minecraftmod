@@ -2325,5 +2325,12 @@
   "message.monstergirls.picnic": "Friends at the picnic: %s",
   "message.monstergirls.picnic_nobody": "Nobody has come for a picnic",
   "message.monstergirls.mirror_nobody": "No friend near the mirror",
-  "message.monstergirls.pot": "In the pot: %s of %s"
+  "message.monstergirls.pot": "In the pot: %s of %s",
+  "item.monstergirls.scout_pack": "Scout Pack",
+  "item.monstergirls.scout_pack.empty": "Hand it to a friend: she'll scout her home biome",
+  "item.monstergirls.scout_pack.line": "%s x %s",
+  "message.monstergirls.scout_set_off": "%s shoulders the pack and sets off for the %s",
+  "message.monstergirls.scout_back": "%s is back from the %s with a full pack!",
+  "message.monstergirls.scout_full": "Empty the pack before you give it to %s",
+  "message.monstergirls.scout_refused": "%s won't go for you"
 }

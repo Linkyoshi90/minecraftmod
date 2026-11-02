@@ -130,6 +130,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.targetSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StanceTargetGoal<>(this));
         this.goalSelector.addGoal(2, new BuildNestGoal(this));
         this.goalSelector.addGoal(2, new com.linkyoshi90.monstergirls.entity.ai.FetchBallGoal<>(this));
+        this.goalSelector.addGoal(3, new com.linkyoshi90.monstergirls.entity.ai.SeekMilkingMachineGoal<>(this));
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));
         this.goalSelector.addGoal(3, new GiftGoal<>(this));
     }
@@ -641,6 +642,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.level() instanceof ServerLevel milky) com.linkyoshi90.monstergirls.entity.Lactation.tick(milky, this);
         if (this.level() instanceof ServerLevel) {
             Painted.tickCopper(this, this);
             this.gestation.tick();

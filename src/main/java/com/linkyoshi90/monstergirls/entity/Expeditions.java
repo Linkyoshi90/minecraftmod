@@ -75,7 +75,10 @@ public final class Expeditions {
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
-        if (event.getEntity() instanceof ServerPlayer player && player.tickCount % 100 == 0) returnDue(player, false);
+        if (event.getEntity() instanceof ServerPlayer player && player.tickCount % 100 == 0) {
+            returnDue(player, false);
+            Scouting.returnDue(player, false);
+        }
     }
 
     /** Brings home every girl whose day is up (or all of them, with {@code now}). The girls who came back. */
@@ -116,8 +119,8 @@ public final class Expeditions {
     }
 
     /** Beside her hearth when it is loaded, else a little way from her friend, on the ground. */
-    private static BlockPos arrival(ServerLevel level, Player player, AbstractMonsterGirl girl) {
-        BlockPos home = girl.homeHearth();
+    static BlockPos arrival(ServerLevel level, Player player, net.minecraft.world.entity.Mob girl) {
+        BlockPos home = girl instanceof AbstractMonsterGirl g ? g.homeHearth() : null;
         BlockPos near = home != null && level.isLoaded(home) ? home : player.blockPosition();
         RandomSource r = girl.getRandom();
         for (int i = 0; i < 10; i++) {

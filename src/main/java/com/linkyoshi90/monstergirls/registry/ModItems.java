@@ -186,6 +186,7 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> COOKING_POT = ITEMS.registerSimpleBlockItem(ModBlocks.COOKING_POT);
     public static final DeferredItem<BlockItem> SOAKING_TUB = ITEMS.registerSimpleBlockItem(ModBlocks.SOAKING_TUB);
     public static final DeferredItem<BlockItem> SPARRING_POST = ITEMS.registerSimpleBlockItem(ModBlocks.SPARRING_POST);
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.ScoutPackItem> SCOUT_PACK = ITEMS.register("scout_pack", () -> new com.linkyoshi90.monstergirls.item.ScoutPackItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> GROOMING_BRUSH = ITEMS.registerSimpleItem("grooming_brush", new Item.Properties().durability(64));
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.ToyBallItem> TOY_BALL = ITEMS.register("toy_ball", () -> new com.linkyoshi90.monstergirls.item.ToyBallItem(new Item.Properties().stacksTo(16)));
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.WhistleItem> WHISTLE = ITEMS.register("friend_whistle", () -> new com.linkyoshi90.monstergirls.item.WhistleItem(new Item.Properties().stacksTo(1)));

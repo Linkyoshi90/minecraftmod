@@ -314,6 +314,10 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
 - [x] **Thirty-first wave** (2026-11-01), tested in `ThirtyFirstWaveTests`; see HARMONTIDE_CONCEPTS.md. `tools/gen_biome_coverage.py` runs after `gen_girl_data.py` and `add_harpy_extras.py`.
 - [x] **Thirty-second and thirty-third waves** (2026-11-02), tested in `ThirtySecondWaveTests`; see HARMONTIDE_CONCEPTS.md. The rest of the species ideas: 28 creatures, 407 girl species.
 - [x] **Thirty-fourth wave** (2026-11-02), tested in `HomeLifeTests`: life at home (`entity/HomeLife`, `tools/gen_home_assets.py`): grooming brush, toy ball, friend whistle, cooking pot and home-cooked meals, picnic blanket, vanity mirror, soaking tub, sparring post.
+- [x] **Milk** (2026-11-02): anyone in the last third of expecting lactates; those with milk walk to a working machine within 24 blocks (`entity/Lactation`, `SeekMilkingMachineGoal`); hoppers put in only empty buckets and take out only milk.
+- [ ] Dev client: the bigger milk drips, and girls walking to the machine and waiting there.
+- [x] **Scout pack** (2026-11-02), tested in `ScoutingTests`; see HARMONTIDE_CONCEPTS.md: `entity/Scouting`, half a day out, materials of one of her spawn biomes, friendship and missing set the amount.
+- [ ] Dev client: the scout pack: its icon and tooltip, the full pack dropping, unpacking, the recipe, and whether the loot amounts feel right.
 - [ ] Dev client for the thirty-second to thirty-fourth waves: the newt's crawl, rear and swim (hind legs splayed enough? the head scale on her hair?), bone scale in GeckoLib, the pufferfish's puff, the angler's lure, the sea serpent swimming, the new block models and their textures, fetch with a flying harpy, whether friends reach the tub.
 - [ ] A world with each of Biomes O' Plenty, Oh The Biomes We've Gone, Regions Unexplored and Terralith: creatures spawn in their biomes, and nothing logs a tag error.
 - [ ] Real client with both jars, then with the main jar only: a painted girl, a glowing paint and a see-through paint show properly, and without the paints jar they are drawn unpainted with no missing textures.

@@ -250,4 +250,53 @@ public class MilkTests {
         check(FamilyMilk.LAMIA.effects().stream().allMatch(player::hasEffect), "the family's effect");
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 500, batch = "cowWalksToTheMachine")
+    public static void cowWalksToTheMachine(GameTestHelper helper) {
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 6));
+        MilkingMachineBlockEntity m = machine(helper, player);
+        m.store().setItem(0, new ItemStack(net.minecraft.world.item.Items.BUCKET, 2));
+        Minotaur cow = spawn(helper, GirlSpecies.CATTLE_MINOTAUR, new BlockPos(7, 2, 7));
+        cow.addAffection(player, com.linkyoshi90.monstergirls.entity.Orders.AFFECTION);
+        check(com.linkyoshi90.monstergirls.entity.Lactation.isLactating(cow) || cow.isMale(), "a cow has milk");
+        helper.succeedWhen(() -> {
+            if (cow.isMale()) return;                                   // one in a few spawns a bull
+            check(count(m, FamilyMilk.of(cow)) == 1, "she came and was milked");
+        });
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "lastStageLactates")
+    public static void lastStageLactates(GameTestHelper helper) {
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 6));
+        AbstractMonsterGirl girl = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(5, 2, 5));
+        girl.setNoAi(true);
+        check(!com.linkyoshi90.monstergirls.entity.Lactation.isLactating(girl), "not expecting");
+        girl.getGestation().conceive();
+        check(!com.linkyoshi90.monstergirls.entity.Lactation.isLactating(girl), "too early");
+        girl.getGestation().setTicksLeft(com.linkyoshi90.monstergirls.entity.Gestation.DURATION / 4);
+        check(com.linkyoshi90.monstergirls.entity.Lactation.isLactating(girl), "the last stage");
+        boolean drips = MonsterGirlsConfig.MILK_DRIPS.get();
+        MonsterGirlsConfig.MILK_DRIPS.set(true);
+        check(com.linkyoshi90.monstergirls.entity.Lactation.isDripping(girl), "drips with the option");
+        MonsterGirlsConfig.MILK_DRIPS.set(false);
+        check(!com.linkyoshi90.monstergirls.entity.Lactation.isDripping(girl), "not without it");
+        MonsterGirlsConfig.MILK_DRIPS.set(drips);
+        HarpyTestUtil.remove(player);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "hoppersOnlyHandleBucketsAndMilk")
+    public static void hoppersOnlyHandleBucketsAndMilk(GameTestHelper helper) {
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 6));
+        MilkingMachineBlockEntity m = machine(helper, player);
+        var hopper = m.hopperHandler();
+        check(!hopper.insertItem(0, new ItemStack(net.minecraft.world.item.Items.DIRT), false).isEmpty(), "no dirt");
+        check(hopper.insertItem(0, new ItemStack(net.minecraft.world.item.Items.BUCKET), false).isEmpty(), "buckets go in");
+        check(hopper.extractItem(0, 1, false).isEmpty(), "empty buckets stay");
+        ItemStack milk = new ItemStack(ModItems.MILK.get(FamilyMilk.values()[0]).get());
+        m.store().setItem(1, milk);
+        check(!hopper.extractItem(1, 1, false).isEmpty(), "milk comes out");
+        HarpyTestUtil.remove(player);
+        helper.succeed();
+    }
 }

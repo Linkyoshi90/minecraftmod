@@ -70,7 +70,7 @@ public final class MonsterGirlsConfig {
 
         BUILDER.push("milking");
         MILK_DRIPS = BUILDER
-                .comment("A minotaur cow whose milk is ready again drips from her chest until she is milked.")
+                .comment("A minotaur cow whose milk is ready again, and anyone in the last stage of expecting, drips from her chest until she is milked.")
                 .define("milkDrips", false);
         MILK_EMBARRASSED = BUILDER
                 .comment("A minotaur cow blushes and looks away while she is being milked.")

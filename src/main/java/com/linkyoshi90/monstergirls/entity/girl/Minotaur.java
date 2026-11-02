@@ -362,16 +362,8 @@ public class Minotaur extends AbstractMonsterGirl {
 
     /** Whether her milk drips from her chest just now. */
     public boolean isDripping() {
-        return this.milkFull && !this.isMale() && !this.isBaby() && com.linkyoshi90.monstergirls.MonsterGirlsConfig.milkDrips();
-    }
-
-    private void drip(ServerLevel level) {
-        double yaw = Math.toRadians(this.yBodyRot);
-        double side = this.random.nextBoolean() ? 0.1 : -0.1;
-        double forward = this.getBbWidth() * 0.3;
-        level.sendParticles(com.linkyoshi90.monstergirls.registry.ModParticles.MILK_DRIP.get(),
-                this.getX() - Math.sin(yaw) * forward + Math.cos(yaw) * side, this.getY() + this.getBbHeight() * 0.6,
-                this.getZ() + Math.cos(yaw) * forward + Math.sin(yaw) * side, 1, 0.0, 0.0, 0.0, 0.0);
+        return (this.milkFull && !this.isMale() && !this.isBaby() && com.linkyoshi90.monstergirls.MonsterGirlsConfig.milkDrips())
+                || com.linkyoshi90.monstergirls.entity.Lactation.isDripping(this);
     }
 
     private void blush(int ticks) {
@@ -400,7 +392,7 @@ public class Minotaur extends AbstractMonsterGirl {
             this.getNavigation().stop();
         }
         if (this.harnessTicks == 0 && this.hasFlag(FLAG_HARNESSED)) this.setFlag(FLAG_HARNESSED, false);
-        if (this.tickCount % DRIP_INTERVAL == 0 && this.isDripping()) this.drip(level);
+        if (this.tickCount % DRIP_INTERVAL == 0 && this.isDripping()) com.linkyoshi90.monstergirls.entity.Lactation.drip(level, this);
     }
 
     @Override

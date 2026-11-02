@@ -150,6 +150,10 @@ icon("toy_ball", [
     "................", ".....rrrrrr.....", "...rrrrrrrrrr...", "..rrwwrrrrrrrr..", "..rwwrrrrrrrrr..", ".rrrrrrrrrrrrrr.", ".yyyyyyyyyyyyyy.", ".yyyyyyyyyyyyyy.",
     ".bbbbbbbbbbbbbb.", ".bbbbbbbbbbbbbb.", ".bbbbbbbbbbbbbb.", "..bbbbbbbbbbbb..", "..bbbbbbbbbbbb..", "...bbbbbbbbbb...", ".....bbbbbb.....", "................"],
      dict(r="#d83a3a", w="#f8f4ec", y="#f0c840", b="#3a6ac8"))
+icon("scout_pack", [
+    "................", ".....ssssss.....", "....s......s....", "...llllllllll...", "..lLLLLLLLLLLl..", "..lLLLLLLLLLLl..", "..lLLLbbbbLLLl..", "..llllbggbllll..",
+    "..lLLLbbbbLLLl..", "..lLLLLLLLLLLl..", "..lLLLLLLLLLLl..", "..lLLLLLLLLLLl..", "..lLLLLLLLLLLl..", "...llllllllll...", "................", "................"],
+     dict(s="#5a3a1e", l="#6a4426", L="#9a6a3a", b="#5a3a1e", g="#e8c050"))
 icon("friend_whistle", [
     "................", "................", "................", "................", "...sssssssss....", "..sggggggggss...", "..sggkkkggggss..", "..sggggggggggs..",
     "...sssssggggs...", ".......sggs.....", "........ss......", "................", "................", "................", "................", "................"],
@@ -181,7 +185,7 @@ simple_state("sparring_post")
 for name in ("picnic_blanket", "cooking_pot", "soaking_tub", "vanity_mirror", "sparring_post"):
     block_item(name)
     loot(name)
-for name in ("grooming_brush", "toy_ball", "friend_whistle", "homemade_meal"):
+for name in ("grooming_brush", "toy_ball", "friend_whistle", "homemade_meal", "scout_pack"):
     plain_item(name)
 
 # --- recipes ------------------------------------------------------------------------------------------------------------
@@ -192,6 +196,7 @@ shaped("vanity_mirror", ["SGS", "SGS", " S "], dict(S="minecraft:stick", G="mine
 shaped("sparring_post", [" H ", "SFS", " F "], dict(H="minecraft:hay_block", S="minecraft:stick", F="#minecraft:wooden_fences"))
 shaped("grooming_brush", ["  W", " S ", "S  "], dict(W="minecraft:wheat", S="minecraft:stick"))
 shaped("toy_ball", [" W ", "WSW", " W "], dict(W="#minecraft:wool", S="minecraft:slime_ball"), 2)
+shaped("scout_pack", ["LSL", "LCL", "LLL"], dict(L="minecraft:leather", S="minecraft:string", C="#c:chests"))
 shaped("friend_whistle", ["  G", "GGG", " G "], dict(G="minecraft:gold_nugget"))
 tag_add(os.path.join(MC, "pickaxe.json"), ["monstergirls:cooking_pot"])
 axe = os.path.join(MC, "axe.json")
@@ -203,7 +208,10 @@ M.add_lang({
     "block.monstergirls.picnic_blanket": "Picnic Blanket", "block.monstergirls.vanity_mirror": "Vanity Mirror", "block.monstergirls.cooking_pot": "Cooking Pot",
     "block.monstergirls.soaking_tub": "Soaking Tub", "block.monstergirls.sparring_post": "Sparring Post",
     "item.monstergirls.grooming_brush": "Grooming Brush", "item.monstergirls.toy_ball": "Toy Ball", "item.monstergirls.friend_whistle": "Friend Whistle",
-    "item.monstergirls.homemade_meal": "Home-Cooked Meal",
+    "item.monstergirls.homemade_meal": "Home-Cooked Meal", "item.monstergirls.scout_pack": "Scout Pack",
+    "item.monstergirls.scout_pack.empty": "Hand it to a friend: she'll scout her home biome", "item.monstergirls.scout_pack.line": "%s x %s",
+    "message.monstergirls.scout_set_off": "%s shoulders the pack and sets off for the %s", "message.monstergirls.scout_back": "%s is back from the %s with a full pack!",
+    "message.monstergirls.scout_full": "Empty the pack before you give it to %s", "message.monstergirls.scout_refused": "%s won't go for you",
     "message.monstergirls.groomed": "%s has only just been brushed", "message.monstergirls.full": "%s couldn't manage another bite yet",
     "message.monstergirls.whistle": "%s came running", "message.monstergirls.picnic": "Friends at the picnic: %s", "message.monstergirls.picnic_nobody": "Nobody has come for a picnic",
     "message.monstergirls.mirror_nobody": "No friend near the mirror", "message.monstergirls.pot": "In the pot: %s of %s",

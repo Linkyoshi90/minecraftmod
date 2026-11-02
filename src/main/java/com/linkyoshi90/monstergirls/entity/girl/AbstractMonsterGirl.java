@@ -205,6 +205,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.goalSelector.addGoal(-1, new SitWhenOrderedGoal<>(this));
         this.goalSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StayNearGoal<>(this));
         this.goalSelector.addGoal(2, new com.linkyoshi90.monstergirls.entity.ai.FetchBallGoal<>(this));
+        this.goalSelector.addGoal(3, new com.linkyoshi90.monstergirls.entity.ai.SeekMilkingMachineGoal<>(this));
         this.goalSelector.addGoal(3, new FarmhandGoal<>(this));
         this.goalSelector.addGoal(7, new SleepGoal(this));
         this.targetSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StanceTargetGoal<>(this));
@@ -880,6 +881,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.level() instanceof ServerLevel milky) com.linkyoshi90.monstergirls.entity.Lactation.tick(milky, this);
         SerpentSegment.follow(this, this.segments);
         if (this.level() instanceof ServerLevel healerLevel && this.tickCount % 600 == 0) this.tendCompanions(healerLevel);
         if (!(this.level() instanceof ServerLevel server)) return;

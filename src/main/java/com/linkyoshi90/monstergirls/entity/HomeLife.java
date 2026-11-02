@@ -185,6 +185,14 @@ public final class HomeLife {
     @SubscribeEvent
     public static void onInteract(PlayerInteractEvent.EntityInteract event) {
         ItemStack stack = event.getItemStack();
+        if (stack.is(ModItems.SCOUT_PACK.get()) && event.getTarget() instanceof Mob scout && scout instanceof Bonded) {
+            event.setCanceled(true);
+            event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide));
+            if (!event.getLevel().isClientSide && !Scouting.send(scout, event.getEntity(), stack)) {
+                event.getEntity().displayClientMessage(Component.translatable(Scouting.hasFinds(stack) ? "message.monstergirls.scout_full" : "message.monstergirls.scout_refused", scout.getDisplayName()), true);
+            }
+            return;
+        }
         boolean brush = stack.is(ModItems.GROOMING_BRUSH.get()), meal = stack.is(ModItems.HOMEMADE_MEAL.get());
         if ((!brush && !meal) || !(event.getTarget() instanceof Mob mob) || !(mob instanceof Bonded)) return;
         event.setCanceled(true);

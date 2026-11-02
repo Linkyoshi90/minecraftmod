@@ -45,7 +45,7 @@ public final class MonsterGirlsMod {
     /** Every girl's ammo pouch as her item handler: where TaCZ looks for her ammunition when she reloads (GirlArms). */
     private static void registerCapabilities(net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, com.linkyoshi90.monstergirls.registry.ModBlockEntities.MILKING_MACHINE.get(),
-                (machine, side) -> new net.neoforged.neoforge.items.wrapper.InvWrapper(machine.store()));
+                (machine, side) -> machine.hopperHandler());
         for (var holder : ModGirls.TYPES.values()) {
             event.registerEntity(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.ENTITY, holder.get(),
                     (girl, ctx) -> new net.neoforged.neoforge.items.wrapper.InvWrapper(girl.ammoPouch()));
