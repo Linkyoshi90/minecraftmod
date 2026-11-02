@@ -1,0 +1,14 @@
+{
+  "values": [
+    "minecraft:deep_lukewarm_ocean",
+    "minecraft:warm_ocean",
+    {
+      "id": "terralith:deep_warm_ocean",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:rocky_reef",
+      "required": false
+    }
+  ]
+}

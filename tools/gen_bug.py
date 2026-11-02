@@ -24,6 +24,36 @@ LARVA_SEGS = [("seg_1", 4, 6.5, 3.5), ("seg_2", 4.25, 3.5, 3.5), ("seg_3", 4, 3.
               ("seg_5", 3.5, 2.75, 3), ("seg_6", 3, 2.5, 3), ("seg_7", 2.5, 2.25, 2.5), ("seg_8", 2, 2, 2)]
 
 SPECIES = {
+    # thirty-third wave: the ant: red-brown, a worker's vest and antennae; carries things
+    "ant_bug": dict(
+        build="athletic", outfit=dict(top=["vest"], bottom="shorts", extras=["belt", "pouch"], colors=dict(cloth2="#3a2a1e", leather="#3a2a1e")), hair="bob", bangs="blunt",
+        ears="antenna", legs="stockings", foot="shoe", gaster=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#5a1e14", FUR="#a83a22", LIGHT="#d87a5a", MARK="#2a1008", EYE="#1e0e08", CLOTH="#c8a878", TRIM="#3a2a1e",
+                 extra=dict(antenna="#2a1008", stocking="#7a2a1a", boot="#2a1008")),
+        variants={"black": dict(HAIR="#1a1616", FUR="#2a2424", LIGHT="#5a5454", MARK="#0e0a0a", extra=dict(antenna="#0e0a0a", stocking="#2a2424", boot="#0e0a0a")),
+                  "honey": dict(HAIR="#a8701e", FUR="#e0a03a", LIGHT="#f8d890", MARK="#5a3410", extra=dict(antenna="#5a3410", stocking="#a8701e", boot="#5a3410")),
+                  "leaf": dict(HAIR="#6a4a22", FUR="#8a6a3a", LIGHT="#c8a870", CLOTH="#5a8a3a", MARK="#3a2810", extra=dict(antenna="#3a2810", stocking="#6a4a22", boot="#3a2810")),
+                  "fire": dict(HAIR="#c8401e", FUR="#e8582a", LIGHT="#f8a070", MARK="#5a1a0a", extra=dict(antenna="#5a1a0a", stocking="#c8401e", boot="#5a1a0a"))}),
+    # thirty-third wave: the queen ant: taller, still winged, a crown of a collar, heavy with the next generation of the colony
+    "queen_ant_bug": dict(
+        build="curvy", outfit=dict(top=["corset"], bottom="sarong", extras=["pearls", "armlets"], colors=dict(cloth2="#e8c050")), hair="drills", bangs="parted",
+        ears="antenna", legs="stockings", foot="shoe", wings="insect", gaster=True, collar=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#3a1410", FUR="#8a2a1a", LIGHT="#d87a5a", MARK="#2a1008", EYE="#e8c040", CLOTH="#5a1e14", TRIM="#e8c050",
+                 extra=dict(antenna="#2a1008", wing="#e8d8c0", wing_vein="#8a5a2a", stocking="#5a1e14", boot="#2a1008")),
+        variants={"black": dict(HAIR="#141010", FUR="#241e1e", LIGHT="#5a5454", MARK="#0e0a0a", CLOTH="#241e1e", extra=dict(antenna="#0e0a0a", wing="#d8d8d8", wing_vein="#4a4a4a", stocking="#241e1e", boot="#0e0a0a")),
+                  "honey": dict(HAIR="#8a5a14", FUR="#d8982e", LIGHT="#f8d890", MARK="#5a3410", CLOTH="#a8701e", extra=dict(antenna="#5a3410", wing="#f8ecc8", wing_vein="#a8701e", stocking="#a8701e", boot="#5a3410")),
+                  "leaf": dict(HAIR="#4a3414", FUR="#7a5a2e", LIGHT="#c8a870", MARK="#3a2810", CLOTH="#3a6a2a", extra=dict(antenna="#3a2810", wing="#e0ecc8", wing_vein="#5a7a3a", stocking="#4a3414", boot="#3a2810")),
+                  "fire": dict(HAIR="#8a2410", FUR="#d8502a", LIGHT="#f8a070", MARK="#5a1a0a", CLOTH="#a83a1a", extra=dict(antenna="#5a1a0a", wing="#f8d8c0", wing_vein="#a83a1a", stocking="#a83a1a", boot="#5a1a0a"))}),
+    # thirty-third wave: the spider-wasp (tarantula hawk): a metal-blue body and burning orange wings; spiders go still at the sound of her
+    "spider_wasp_bug": dict(
+        build="slim", outfit=dict(top=["sports"], bottom="shorts", extras=["bracers"], colors=dict(cloth2="#141a3a")), hair="ponytail", bangs="jagged",
+        ears="antenna", legs="stockings", foot="shoe", wings="insect", flies=True, gaster=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#141a3a", FUR="#1e2a5a", LIGHT="#3a4a8a", MARK="#e8701e", EYE="#e8701e", CLOTH="#141a3a", TRIM="#e8701e",
+                 extra=dict(antenna="#141a3a", wing="#e8701e", wing_vein="#8a3a0e", stocking="#141a3a", boot="#0a0e20")),
+        variants={"black": dict(FUR="#1a1a20", HAIR="#101014", LIGHT="#3a3a44", extra=dict(antenna="#101014", wing="#d84a1e", wing_vein="#7a240a", stocking="#101014", boot="#08080c")),
+                  "green": dict(FUR="#1e4a3a", HAIR="#123028", LIGHT="#3a7a64", extra=dict(antenna="#123028", wing="#e8a01e", wing_vein="#8a5a0e", stocking="#123028", boot="#08140e")),
+                  "violet": dict(FUR="#3a1e5a", HAIR="#26123e", LIGHT="#6a4a8a", extra=dict(antenna="#26123e", wing="#e8501e", wing_vein="#7a240a", stocking="#26123e", boot="#100820")),
+                  "amber": dict(FUR="#5a3a14", HAIR="#3a240a", LIGHT="#a8783a", extra=dict(antenna="#3a240a", wing="#f8c84a", wing_vein="#a87a14", stocking="#3a240a", boot="#1e1206"))}),
     # twentieth wave (folklore): the Mothman of Point Pleasant, a soft blue moth girl with feathery antennae, a furry ruff, spotted
     # wings and red eyes that shine in the dark
     "mothman_bug": dict(

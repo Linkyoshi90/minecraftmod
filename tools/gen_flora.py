@@ -22,6 +22,24 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-third wave: the lotus: pale pink, rising from a wide bloom, calm as still water
+    "lotus_flora": dict(
+        build="slim", outfit=dict(top=["kimono"], extras=["pearls"], colors=dict(kimono="#f8e0e8", kimono_trim="#e88aa8", obi="#7ab85a")), hair="odango", bangs="parted", ears=None, lower="none", plant="flower",
+        pal=dict(SKIN="#f4e8e0", HAIR="#f0a8c0", FUR="#f0a8c0", LIGHT="#fce8f0", MARK="#c85a88", EYE="#3a8a6a", CLOTH="#f8e0e8", TRIM="#e88aa8",
+                 extra=dict(petal="#f4b0c8", petal_in="#f8e070", leaf="#4a9a6a")),
+        variants={"white": dict(HAIR="#f8f4ec", CLOTH="#f8f4ec", extra=dict(petal="#f8f8f0", petal_in="#f8e070", leaf="#4a9a6a")),
+                  "blue": dict(HAIR="#8ab0e8", CLOTH="#d8e8f8", extra=dict(petal="#8ab0e8", petal_in="#f8e070", leaf="#3a8a6a")),
+                  "gold": dict(HAIR="#f0c850", CLOTH="#f8ecc0", extra=dict(petal="#f0c850", petal_in="#f8f0c0", leaf="#4a9a4a")),
+                  "violet": dict(HAIR="#b88ae8", CLOTH="#e8d8f8", extra=dict(petal="#b88ae8", petal_in="#f8e070", leaf="#3a7a6a"))}),
+    # thirty-second wave: the rose: a deep red bloom round her hips, green-tinged skin, thorny grace
+    "rose_flora": dict(
+        build="curvy", outfit=dict(top=["corset"], extras=["pearls"], colors=dict(cloth2="#3a6a2a")), hair="wavy", bangs="swept", ears=None, lower="none", plant="flower",
+        pal=dict(SKIN="#e8d8c8", HAIR="#b81e2e", FUR="#b81e2e", LIGHT="#f8c0c0", MARK="#6a0e1a", EYE="#3a7a3a", CLOTH="#b81e2e", TRIM="#3a6a2a",
+                 extra=dict(petal="#c8202e", petal_in="#7a0e1a", leaf="#2e6a2a")),
+        variants={"white": dict(HAIR="#f8f0e8", CLOTH="#f0e8e0", extra=dict(petal="#f8f4ec", petal_in="#e8d8a8", leaf="#3a7a2a")),
+                  "yellow": dict(HAIR="#f0c830", CLOTH="#f0c830", extra=dict(petal="#f0c830", petal_in="#c8882a", leaf="#3a7a2a")),
+                  "pink": dict(HAIR="#f088a8", CLOTH="#f088a8", extra=dict(petal="#f088a8", petal_in="#c84a78", leaf="#3a7a2a")),
+                  "black": dict(HAIR="#2a0e18", CLOTH="#2a0e18", EYE="#c81e2e", extra=dict(petal="#2e1018", petal_in="#6a0e1a", leaf="#1e3a1e"))}),
     # seventeenth wave: the dryad, a tree nymph of Greek myth: a girl of pale blue wood with leafy branches for antlers
     "dryad_flora": dict(
         build="slim", outfit=dict(top=[]), hair="wavy", bangs="swept", ears="elf", legs="bare", foot="claw", plant="dryad", horns="antlers",

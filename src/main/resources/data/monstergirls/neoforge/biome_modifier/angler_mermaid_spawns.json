@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_angler_mermaid",
+  "spawners": {
+    "type": "monstergirls:angler_mermaid",
+    "weight": 4,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

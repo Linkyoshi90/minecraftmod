@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_queen_ant_bug",
+  "spawners": {
+    "type": "monstergirls:queen_ant_bug",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -812,7 +812,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     /** Her size relative to a grown adult (the young, a split slime). */
     public float sizeScale() {
-        return this.isBaby() ? YOUNG_SCALE : this.hasFlag(FLAG_HALF) ? 0.6F : 1.0F;
+        return this.isBaby() ? YOUNG_SCALE : this.hasFlag(FLAG_HALF) ? 0.6F : this.hasFlag(FLAG_RETRACTED) && this.species == GirlSpecies.PUFFERFISH_MERMAID ? 1.4F : 1.0F;
     }
 
     /** How many young she bears at once. */

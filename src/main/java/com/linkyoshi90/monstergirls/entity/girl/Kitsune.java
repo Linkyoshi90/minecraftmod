@@ -113,7 +113,7 @@ public class Kitsune extends AbstractMonsterGirl {
     /** One wild kitsune in four is an older fox spirit, born with two or three split tails (one in twenty-five: up to five). */
     @Override
     protected int rollTails(net.minecraft.util.RandomSource random) {
-        if (this.species == GirlSpecies.HULI_JING_KITSUNE || this.species == GirlSpecies.OBAA_KITSUNE) return 9;   // a thousand years old: always all nine
+        if (this.species == GirlSpecies.HULI_JING_KITSUNE || this.species == GirlSpecies.OBAA_KITSUNE || this.species == GirlSpecies.KUMIHO_KITSUNE) return 9;   // a thousand years old: always all nine
         if (random.nextInt(25) == 0) return 4 + random.nextInt(2);
         return random.nextInt(4) == 0 ? 2 + random.nextInt(2) : 1;
     }
@@ -394,9 +394,45 @@ public class Kitsune extends AbstractMonsterGirl {
         return after.size();
     }
 
+    /** The Kumiho's bead: her friend near her holds it for a moment and comes away with experience. True if they did. */
+    public boolean foxBead() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null) return false;
+        friend.giveExperiencePoints(15);
+        if (this.level() instanceof ServerLevel server) this.hearts(server, 3);
+        return true;
+    }
+
+    /** The bat-eared fox's ears: the distance to the nearest monster spawner within 48 of her friend, told on the action bar. -1 without a friend, -2 with none near. */
+    public int listen(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        net.minecraft.world.level.ChunkPos here = friend.chunkPosition();
+        double best = 48 * 48;
+        boolean found = false;
+        for (int x = here.x - 3; x <= here.x + 3; x++) for (int z = here.z - 3; z <= here.z + 3; z++) {
+            net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunkSource().getChunkNow(x, z);
+            if (chunk == null) continue;
+            for (net.minecraft.world.level.block.entity.BlockEntity be : chunk.getBlockEntities().values()) {
+                if (!(be instanceof net.minecraft.world.level.block.entity.SpawnerBlockEntity)) continue;
+                double d = be.getBlockPos().distSqr(friend.blockPosition());
+                if (d <= best) {
+                    best = d;
+                    found = true;
+                }
+            }
+        }
+        if (!found) return -2;
+        int metres = (int) Math.sqrt(best);
+        friend.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.bat_eared_spawner", this.getDisplayName(), metres), true);
+        return metres;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.KUMIHO_KITSUNE && !this.level().isClientSide && !this.isBaby() && this.tickCount % 3601 == 0) this.foxBead();
+        if (this.species == GirlSpecies.BAT_EARED_KITSUNE && this.level() instanceof ServerLevel listening && !this.isBaby() && this.tickCount % 401 == 0) this.listen(listening);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.DUNEFENNEC_KITSUNE && this.tickCount % 20 == 0) this.desertGuide(server);
         if (this.isDecoy()) {

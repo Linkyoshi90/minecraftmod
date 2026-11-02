@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_spider_wasp_bug",
+  "spawners": {
+    "type": "monstergirls:spider_wasp_bug",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

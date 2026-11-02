@@ -19,6 +19,16 @@ FAMILY = C.family("nekomata")
 
 # per species: body knobs, then the default palette and the four other colours as palette overrides
 SPECIES = {
+    # thirty-second wave: the black panther: a melanistic leopard, black on black, the rosettes only just showing, gold eyes
+    "black_panther_nekomata": dict(
+        build="athletic", outfit=dict(top=["halter"], bottom="shorts", extras=["belt"]),
+        ears="cat", hair="pixie", bangs="swept", tail=((1.5, 1.5, 3), (1.5, 1.5, 3), (1.5, 1.5, 3)), tail_pattern="solid",
+        pal=dict(SKIN=skin("deep"), HAIR="#17151a", FUR="#1e1c22", LIGHT="#34313a", MARK="#2e2b34", EYE="#e8c040", CLOTH="#3a2a4a", TRIM="#c8a040",
+                 INNER="#5a4a52", pattern="rosettes", facemark="whisker"),
+        variants={"blue": dict(FUR="#1e2434", HAIR="#141a28", MARK="#2c3448", LIGHT="#3a4258", EYE="#5ac8e8"),
+                  "green": dict(FUR="#1e2a22", HAIR="#141e18", MARK="#2c3a30", LIGHT="#3a4a3e", EYE="#8ae85a"),
+                  "red": dict(FUR="#2a1c1e", HAIR="#1e1416", MARK="#3e2a2c", LIGHT="#4e383a", EYE="#e8583a"),
+                  "grey": dict(FUR="#3a383e", HAIR="#2a282e", MARK="#4e4c54", LIGHT="#6a6870", EYE="#e8e0a0")}),
     # twenty-second wave (folklore): Ammit, the devourer of the dead of Egyptian myth: a lion's mane and body, a crocodile's snout
     # over her mouth (teeth along its jaw), a tufted tail, a gold collar
     # twenty-fourth wave: the baku, the dream-eater: a tapir's short trunk, round ears, a two-tone coat

@@ -397,9 +397,19 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
 
     // --- tick ----------------------------------------------------------------------------------------------------
 
+    /** The snow elf's tread: her friend near her doesn't freeze and walks on powder snow in the boots she lends them (Speed on snow). True while it holds. */
+    public boolean snowTread() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null) return false;
+        friend.setTicksFrozen(0);
+        if (friend.isInPowderSnow || friend.wasInPowderSnow) friend.setDeltaMovement(friend.getDeltaMovement().add(0, 0.12, 0));
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.SNOW_ELF && !this.level().isClientSide && !this.isBaby() && this.tickCount % 5 == 0) this.snowTread();
         if (this.species == GirlSpecies.MAD_HATTER_ELF && this.level() instanceof net.minecraft.server.level.ServerLevel party && !this.isBaby() && this.tickCount % 100 == 0) this.teaTime(party);
         if (this.species == GirlSpecies.ANGEL_ELF && this.level() instanceof net.minecraft.server.level.ServerLevel grace && !this.isBaby() && this.tickCount % 40 == 0) this.mercy(grace);
         if (this.species == GirlSpecies.DOMOVOI_ELF && this.level() instanceof ServerLevel house && !this.isBaby()) this.keepHearth(house, this.tickCount % 40 == 0);

@@ -17,6 +17,16 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-second wave: the donkey: grey with a cross on her back, long ears, a pale muzzle, and a very firm opinion
+    "donkey_centaur": dict(
+        build="strong", outfit=dict(top=["vest"], extras=["belt", "pouch", "scarf"], colors=dict(leather="#6a4a2a", scarf="#c8483a")),
+        hair="shaggy", bangs="messy", tail=(1.5, 8, 1.5),
+        pal=dict(SKIN=skin("fair"), HAIR="#3a3430", FUR="#8a8078", LIGHT="#d8d0c4", MARK="#3a3430", EYE="#3a2a1e", CLOTH="#c8b890", TRIM="#6a4a2a",
+                 pattern="solid"),
+        variants={"brown": dict(FUR="#7a5a3e", HAIR="#3a2818", MARK="#2a1c10", LIGHT="#c8b090"),
+                  "black": dict(FUR="#2a2628", HAIR="#141214", MARK="#0e0c0e", LIGHT="#8a8488"),
+                  "white": dict(FUR="#e0dcd4", HAIR="#c8c0b4", MARK="#a8a094", LIGHT="#ffffff"),
+                  "dun": dict(FUR="#b89a70", HAIR="#6a4e30", MARK="#5a4028", LIGHT="#ecdcc0")}),
     # twenty-first wave (folklore): Urcuchillay, the Inca god who watches over the herds: a llama of many colours, rainbow hair and
     # fleece, a blue dress and a headband with a blue stone
     "urcuchillay_centaur": dict(

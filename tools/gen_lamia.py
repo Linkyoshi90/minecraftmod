@@ -18,6 +18,27 @@ SEGS = [("seg_1", 4.5, 10.5, 4), ("seg_2", 4.25, 4, 5.5), ("seg_3", 4, 3.75, 5.5
         ("seg_5", 3, 2.75, 5), ("seg_6", 2.5, 2.25, 4.5), ("seg_7", 2, 1.75, 4), ("seg_8", 1.25, 1.25, 3.5)]
 
 SPECIES = {
+    # thirty-second wave: the anaconda, the heaviest snake there is and proud of it: a full figure on a very thick olive tail with
+    # black saddles, long dark waves, gold hoops of armlets. Her own woman, not anyone's portrait.
+    "anaconda_lamia": dict(
+        build="curvy", outfit=dict(top=["halter"], extras=["armlets", "pearls"], colors=dict(cloth2="#e8c050")),
+        thick=1.3, hair="wavy", bangs="parted",
+        pal=dict(SKIN=skin("tan"), HAIR="#1e1a14", FUR="#6a7a3a", LIGHT="#e8e0a8", MARK="#14140e", EYE="#d8a030", CLOTH="#e8c050", TRIM="#1e1a14",
+                 pattern="blotches", facemark="scales"),
+        variants={"yellow": dict(FUR="#b8a83a", MARK="#2a2410", LIGHT="#f8f0c0", HAIR="#3a2e14"),
+                  "dark": dict(FUR="#3a4428", MARK="#0e100a", LIGHT="#b8b890", HAIR="#141410"),
+                  "green": dict(FUR="#3a8a4a", MARK="#10301a", LIGHT="#d8f0b0", HAIR="#1e3a22"),
+                  "brown": dict(FUR="#7a5a34", MARK="#2a1a0e", LIGHT="#e8d8b0", HAIR="#3a2414")}),
+    # thirty-second wave: the sea serpent of the old charts: long, barred blue and white, a fin down her back, lives on the open sea
+    "sea_serpent_lamia": dict(
+        build="athletic", outfit=dict(top=["shells" if False else "bandeau"], extras=["armlets"]),
+        thick=1.35, hair="flowing", bangs="wispy", paddle=True,
+        pal=dict(SKIN="#bcd8dc", HAIR="#1e4a6a", FUR="#2a6a8a", LIGHT="#e0f0f0", MARK="#123044", EYE="#e8c040", CLOTH="#123044", TRIM="#e0f0f0",
+                 pattern="bands", facemark="scales"),
+        variants={"green": dict(FUR="#2a7a5a", HAIR="#1e4a3a", MARK="#10301e", CLOTH="#10301e"),
+                  "black": dict(FUR="#1e2228", HAIR="#141418", MARK="#0a0a0e", LIGHT="#a8b0b8", EYE="#e85a3a"),
+                  "red": dict(FUR="#a83a34", HAIR="#6a1e1e", MARK="#3a0e10", LIGHT="#f0d8c8"),
+                  "white": dict(FUR="#d8e4e8", HAIR="#a8c0c8", MARK="#5a7a88", LIGHT="#ffffff", EYE="#3a6a9a")}),
     # twenty-third wave: the titanoboa, the greatest snake that ever lived: huge, olive-brown with dark blotches, a cream belly
     "titanoboa_lamia": dict(
         build="strong", outfit=dict(top=["sports"], extras=["armlets"], colors=dict(cloth2="#5a4a2a")),

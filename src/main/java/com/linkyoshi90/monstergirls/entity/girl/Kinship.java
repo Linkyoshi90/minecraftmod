@@ -77,7 +77,7 @@ public final class Kinship {
                     "finch_harpy", "flamingo_harpy", "coin_magpie_harpy", "trickster_raven_harpy", "rookmourn_harpy", "pumpkingull_harpy", "condorune_harpy", "mirror_crane_harpy",
                     "ironbeak_harpy", "ibiset_harpy", "stigowl_harpy", "yatagarasu_harpy",
                     "roc_harpy", "ziz_harpy", "bennu_harpy", "garuda_harpy", "alkonost_harpy", "emu_harpy", "lechuza_harpy", "macaw_harpy",
-                    "skycrow_harpy", "reliquary_dove_harpy", "poultry_harpy", "landharpy_harpy", "argentowlis_harpy", "ibisking_harpy", "motmora_harpy")) {
+                    "skycrow_harpy", "reliquary_dove_harpy", "poultry_harpy", "landharpy_harpy", "argentowlis_harpy", "ibisking_harpy", "motmora_harpy", "hummingbird_harpy", "duck_harpy")) {
                 other(h, EntityType.PARROT);
             }
             other("ostrich_harpy", EntityType.CHICKEN);
@@ -104,7 +104,10 @@ public final class Kinship {
     /** The vanilla mobs a species counts as kin: the species' own first, else her family's. */
     private static Set<EntityType<?>> kinOf(GirlSpecies s) {
         return switch (s) {
-            case OCELOT_NEKOMATA -> Set.of(EntityType.OCELOT);
+            case OCELOT_NEKOMATA, BLACK_PANTHER_NEKOMATA -> Set.of(EntityType.OCELOT);
+            case DONKEY_CENTAUR -> Set.of(EntityType.DONKEY, EntityType.MULE);
+            case CAVE_SPIDER_ARACHNE -> Set.of(EntityType.CAVE_SPIDER);
+            case SKELETON_UNDEAD -> Set.of(EntityType.SKELETON, EntityType.STRAY);
             case BOGHARE_JACKALOPE -> Set.of(EntityType.RABBIT, EntityType.FROG);
             case HORSE_CENTAUR, ZEBRA_CENTAUR, PEGASUS_CENTAUR, UNICORN_CENTAUR -> Set.of(EntityType.HORSE, EntityType.DONKEY, EntityType.MULE);
             case ALPACA_CENTAUR -> Set.of(EntityType.LLAMA, EntityType.TRADER_LLAMA);

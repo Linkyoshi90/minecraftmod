@@ -18,6 +18,36 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-third wave: the pufferfish: yellow and spotted, a round fish tail; a hit blows her up to half again her size, spines out
+    "pufferfish_mermaid": dict(
+        build="curvy", outfit=dict(top=["bandeau"], extras=["armlets"]),
+        ears="fin", hair="bob", bangs="blunt", fluke=(.5, 4.5, 4),
+        pal=dict(SKIN=skin("fair"), HAIR="#e8c040", FUR="#e8c850", LIGHT="#fcf4d8", MARK="#5a4a1e", EYE="#2a2a3a", CLOTH="#5a7a3a", TRIM="#fcf4d8",
+                 pattern="spots"),
+        variants={"blue": dict(FUR="#7ab0d8", HAIR="#4a88c0", MARK="#1e3a5a", CLOTH="#1e3a5a"),
+                  "brown": dict(FUR="#a88a5a", HAIR="#7a5a34", MARK="#3a2810", CLOTH="#3a2810"),
+                  "green": dict(FUR="#8ab85a", HAIR="#5a8a3a", MARK="#1e3a14", CLOTH="#1e3a14"),
+                  "orange": dict(FUR="#e8904a", HAIR="#d8702a", MARK="#5a2a10", CLOTH="#2a5a7a")}),
+    # thirty-third wave: the deep-sea angler: dark, wide-mouthed grin, a glowing lure on a stalk over her brow
+    "angler_mermaid": dict(
+        build="curvy", outfit=dict(top=["halter"], colors=dict()),
+        ears="fin", hair="shaggy", bangs="messy", fluke=(.5, 5, 4), grin=True, lure=True, glow=["lure"], glow_boost=1.6,
+        pal=dict(SKIN="#6a6a7a", HAIR="#1e1e2e", FUR="#2a2a3a", LIGHT="#5a5a70", MARK="#14141e", EYE="#d8e87a", CLOTH="#14141e", TRIM="#5ae8d8",
+                 pattern="solid", extra=dict(lure="#e8f85a", stalk="#2a2a3a")),
+        variants={"violet": dict(FUR="#3a2a5a", HAIR="#241a3e", EYE="#e8a8f8", SKIN="#7a6a8a", extra=dict(lure="#e878f8", stalk="#3a2a5a")),
+                  "red": dict(FUR="#5a1e22", HAIR="#3a1014", EYE="#f8d07a", SKIN="#8a6a6a", extra=dict(lure="#f8a040", stalk="#5a1e22")),
+                  "teal": dict(FUR="#1e4a4e", HAIR="#123034", EYE="#7af8e8", SKIN="#5a7a7a", extra=dict(lure="#7af8e8", stalk="#1e4a4e")),
+                  "pale": dict(FUR="#a8a8b4", HAIR="#7a7a88", EYE="#2a2a3a", SKIN="#c8c8d4", extra=dict(lure="#e8f85a", stalk="#7a7a88"))}),
+    # thirty-third wave: the manatee: big, soft and grey, a round paddle of a tail, entirely unbothered
+    "manatee_mermaid": dict(
+        build="curvy", outfit=dict(top=["bandeau"], extras=["pearls"]),
+        ears=None, hair="wavy", bangs="parted", fluke=(9, .75, 3.5), size=1.2,
+        pal=dict(SKIN=skin("fair"), HAIR="#7a7a70", FUR="#a8a89c", LIGHT="#d8d8cc", MARK="#88887c", EYE="#3a3a2e", CLOTH="#6a9a5a", TRIM="#e8e0c8",
+                 pattern="solid"),
+        variants={"brown": dict(FUR="#9a8a70", HAIR="#6a5a44", MARK="#7a6a50"),
+                  "blue": dict(FUR="#8aa0b4", HAIR="#5a7088", MARK="#6a8098"),
+                  "algae": dict(FUR="#8aa070", HAIR="#5a7044", MARK="#6a8050", CLOTH="#3a6a2a"),
+                  "pink": dict(FUR="#c8a8a8", HAIR="#9a7a7a", MARK="#a88a8a")}),
     # twenty-second wave: the piranha, a round little blue fish girl with darker spots, a jutting jaw full of teeth and a lure of a
     # curl on her head
     "piranha_mermaid": dict(
@@ -362,6 +392,8 @@ def declare(sp):
         parts += [("pcap", 9.5, 3, 9.5), ("bill", 6, 1, 4.5)]
     if d.get("charms"):
         parts += [("charm", 1.25, 1.5, .25), ("charm_cord", 4.5, .25, .25)]
+    if d.get("lure"):                                    # thirty-third wave: the angler's stalk and its little light
+        parts += [("lure_stalk", .5, 6, .5), ("lure_arc", .5, .5, 4), ("lure", 2, 2, 2)]
     if d.get("moon"):
         parts += [("crescent", 3.5, 3.5, .25), ("antler_a", .5, 3, .5), ("antler_b", .5, 1.5, .5)]
     if d.get("saw"):
@@ -448,6 +480,10 @@ def paint(sp, key):
         bite = (x + 0.5 - cx - rr * 0.45) ** 2 + (y + 0.5 - cy + rr * 0.2) ** 2 < (rr * 0.8) ** 2
         return pick(moon, 0.75, x, y) if inside and not bite else CLEAR
     pt("crescent", "all", crescent)
+    if d.get("lure"):
+        pt("lure_stalk", "all", lambda f, x, y, w, h: pick(shades(pal.extra["stalk"]), 0.5, x, y))
+        pt("lure_arc", "all", lambda f, x, y, w, h: pick(shades(pal.extra["stalk"]), 0.5, x, y))
+        pt("lure", "all", lambda f, x, y, w, h: pick(shades(pal.extra["lure"]), 0.75 - 0.03 * (x + y), x, y))
     ant = shades(pal.extra.get("antler", "#e8e0d0"))
     pt("antler_a", "all", lambda f, x, y, w, h: pick(ant, 0.55 + 0.1 * (y % 2), x, y))
     pt("antler_b", "all", lambda f, x, y, w, h: pick(ant, 0.6, x, y))
@@ -621,6 +657,8 @@ def build(sp):
     if d.get("platypus"):                                # a furry cap with a duck bill for a peak
         hy = 12 + 8 + 0.0
         r.add("pcap", "head", [0, 28, 0], [cube("pcap", [-4.75, 26.2, -4.75]), G.rot_cube("bill", [-3, 25.9, -8.9], [0, 26.4, -4.6], 12, 0, 0)])
+    if d.get("lure"):                                    # up from her brow and forward over her face (hair_ so it doesn't shrink her)
+        r.add("hair_lure", "head", [0, 28, -3], [cube("lure_stalk", [-.25, 28, -3.25]), cube("lure_arc", [-.25, 33.5, -7.25]), cube("lure", [-1, 31.75, -8.5])])
     if d.get("moon"):                                    # crescents down her tail (they glow), little antlers in her hair
         r.put("fin_1", cube("crescent", [-1.75, 3.6, -2.2]))
         r.put("fin_2", cube("crescent", [-1.75, 0.3, -1.0]))

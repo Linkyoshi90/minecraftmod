@@ -332,9 +332,64 @@ public class Mollusk extends AbstractMonsterGirl {
         return crushed;
     }
 
+    private static final String BORROWED = "BorrowedSting", BORROWED_UNTIL = "BorrowedUntil";
+
+    /** The nautilus jets her crouching friend in the water near her upward. True if she did. */
+    public boolean jet() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null || !friend.isInWater() || !friend.isShiftKeyDown()) return false;
+        friend.setDeltaMovement(friend.getDeltaMovement().add(0, 0.5, 0));
+        friend.hurtMarked = true;
+        return true;
+    }
+
+    /** The sea slug takes on a potion: its first effect, shared with her friend near her for three minutes. True if she took it. */
+    public boolean borrow(ItemStack potion, long now) {
+        net.minecraft.world.item.alchemy.PotionContents contents = potion.get(net.minecraft.core.component.DataComponents.POTION_CONTENTS);
+        if (contents == null) return false;
+        for (net.minecraft.world.effect.MobEffectInstance e : contents.getAllEffects()) {
+            net.minecraft.resources.ResourceLocation id = net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.getKey(e.getEffect().value());
+            if (id == null) continue;
+            this.getPersistentData().putString(BORROWED, id.toString());
+            this.getPersistentData().putLong(BORROWED_UNTIL, now + 3600);
+            return true;
+        }
+        return false;
+    }
+
+    /** She shares what she borrowed with her friend near her. True if she did. */
+    public boolean shareSting(long now) {
+        if (now >= this.getPersistentData().getLong(BORROWED_UNTIL)) return false;
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null) return false;
+        net.minecraft.resources.ResourceLocation id = net.minecraft.resources.ResourceLocation.tryParse(this.getPersistentData().getString(BORROWED));
+        if (id == null) return false;
+        var effect = net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.getHolder(id);
+        if (effect.isEmpty()) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(effect.get(), 80, 0, true, true));
+        return true;
+    }
+
+    @Override
+    protected net.minecraft.world.InteractionResult familyInteract(Player player, net.minecraft.world.InteractionHand hand, ItemStack stack) {
+        if (this.species == GirlSpecies.SEA_SLUG_MOLLUSK && stack.is(net.minecraft.world.item.Items.POTION) && this.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {
+            if (!this.level().isClientSide && this.borrow(stack, this.level().getGameTime())) {
+                stack.consume(1, player);
+                player.getInventory().placeItemBackInInventory(new ItemStack(net.minecraft.world.item.Items.GLASS_BOTTLE));
+                this.playSound(net.minecraft.sounds.SoundEvents.GENERIC_DRINK, 1.0F, 1.0F);
+            }
+            return net.minecraft.world.InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+        return super.familyInteract(player, hand, stack);
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (!this.level().isClientSide && !this.isBaby()) {
+            if (this.species == GirlSpecies.NAUTILUS_MOLLUSK && this.tickCount % 5 == 0) this.jet();
+            if (this.species == GirlSpecies.SEA_SLUG_MOLLUSK && this.tickCount % 40 == 0) this.shareSting(this.level().getGameTime());
+        }
         if (this.species == GirlSpecies.GIANT_KRAKEN_MOLLUSK && this.level() instanceof net.minecraft.server.level.ServerLevel deep && !this.isBaby() && this.tickCount % 100 == 0) this.crush(deep);
         if (this.species == GirlSpecies.MIN_MIN_MOLLUSK && this.level() instanceof net.minecraft.server.level.ServerLevel plain && !this.isBaby() && this.tickCount % 5 == 0) this.leadTheWay(plain, !plain.isDay());
         if (this.species == GirlSpecies.CHARYBDIS_MOLLUSK && this.level() instanceof net.minecraft.server.level.ServerLevel maw && !this.isBaby() && this.tickCount % 20 == 0) this.whirlpool(maw);

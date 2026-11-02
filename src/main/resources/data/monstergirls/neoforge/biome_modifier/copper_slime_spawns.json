@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_copper_slime",
+  "spawners": {
+    "type": "monstergirls:copper_slime",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

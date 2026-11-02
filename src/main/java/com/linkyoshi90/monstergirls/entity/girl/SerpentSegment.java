@@ -32,7 +32,7 @@ public class SerpentSegment extends PartEntity<AbstractMonsterGirl> {
     }
 
     static SerpentSegment[] of(AbstractMonsterGirl serpent, GirlSpecies species) {
-        if (species != GirlSpecies.TURQUOISE_SERPENT_LAMIA && species != GirlSpecies.MACAWTL_DRAGON && species != GirlSpecies.QUETZALCOATL_DRAGON) return NONE;
+        if (species != GirlSpecies.TURQUOISE_SERPENT_LAMIA && species != GirlSpecies.MACAWTL_DRAGON && species != GirlSpecies.AMPHIPTERE_DRAGON && species != GirlSpecies.QUETZALCOATL_DRAGON) return NONE;
         SerpentSegment[] parts = new SerpentSegment[BACK.length];
         for (int i = 0; i < parts.length; i++) parts[i] = new SerpentSegment(serpent, i);
         return parts;

@@ -38,6 +38,8 @@ import com.linkyoshi90.monstergirls.entity.LandharpyHarpy;
 import com.linkyoshi90.monstergirls.entity.ArgentowlisHarpy;
 import com.linkyoshi90.monstergirls.entity.IbiskingHarpy;
 import com.linkyoshi90.monstergirls.entity.MotmoraHarpy;
+import com.linkyoshi90.monstergirls.entity.DuckHarpy;
+import com.linkyoshi90.monstergirls.entity.HummingbirdHarpy;
 import com.linkyoshi90.monstergirls.entity.RocHarpy;
 import com.linkyoshi90.monstergirls.entity.ZizHarpy;
 import com.linkyoshi90.monstergirls.entity.BennuHarpy;
@@ -305,6 +307,18 @@ public final class ModEntities {
                     .eyeHeight(1.6F)
                     .clientTrackingRange(10)
                     .build("motmora_harpy"));
+    public static final DeferredHolder<EntityType<?>, EntityType<DuckHarpy>> DUCK_HARPY =
+            ENTITY_TYPES.register("duck_harpy", () -> EntityType.Builder.of(DuckHarpy::new, MobCategory.CREATURE)
+                    .sized(0.6F, 1.8F)
+                    .eyeHeight(1.6F)
+                    .clientTrackingRange(10)
+                    .build("duck_harpy"));
+    public static final DeferredHolder<EntityType<?>, EntityType<HummingbirdHarpy>> HUMMINGBIRD_HARPY =
+            ENTITY_TYPES.register("hummingbird_harpy", () -> EntityType.Builder.of(HummingbirdHarpy::new, MobCategory.CREATURE)
+                    .sized(0.6F, 1.8F)
+                    .eyeHeight(1.6F)
+                    .clientTrackingRange(10)
+                    .build("hummingbird_harpy"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<RocHarpy>> ROC_HARPY =
             ENTITY_TYPES.register("roc_harpy", () -> EntityType.Builder.of(RocHarpy::new, MobCategory.CREATURE)
@@ -516,6 +530,8 @@ public final class ModEntities {
         event.put(ARGENTOWLIS_HARPY.get(), ArgentowlisHarpy.createAttributes().build());
         event.put(IBISKING_HARPY.get(), IbiskingHarpy.createAttributes().build());
         event.put(MOTMORA_HARPY.get(), MotmoraHarpy.createAttributes().build());
+        event.put(DUCK_HARPY.get(), DuckHarpy.createAttributes().build());
+        event.put(HUMMINGBIRD_HARPY.get(), HummingbirdHarpy.createAttributes().build());
         event.put(ROC_HARPY.get(), RocHarpy.createAttributes().build());
         event.put(ZIZ_HARPY.get(), ZizHarpy.createAttributes().build());
         event.put(BENNU_HARPY.get(), BennuHarpy.createAttributes().build());
@@ -611,6 +627,10 @@ public final class ModEntities {
                 IbiskingHarpy::checkIbiskingHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(MOTMORA_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 MotmoraHarpy::checkMotmoraHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(DUCK_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                DuckHarpy::checkDuckHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(HUMMINGBIRD_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                HummingbirdHarpy::checkHummingbirdHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(ROC_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 RocHarpy::checkRocHarpySpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(ZIZ_HARPY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,

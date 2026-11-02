@@ -506,9 +506,19 @@ public class Nekomata extends AbstractMonsterGirl {
         return near.size();
     }
 
+    /** The black panther's prowl: after dark her crouching friend near her goes unseen. 1 if so, 0 if not now, -1 without a friend. */
+    public int prowl(boolean night) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null) return -1;
+        if (!night || !friend.isShiftKeyDown()) return 0;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.INVISIBILITY, 40, 0, true, false));
+        return 1;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.BLACK_PANTHER_NEKOMATA && !this.level().isClientSide && !this.isBaby() && this.tickCount % 20 == 0) this.prowl(this.level().isNight());
         if (this.species == GirlSpecies.SMILODON_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel snow && !this.isBaby() && this.tickCount % 60 == 0) this.ambush(snow);
         if (this.species == GirlSpecies.BAKU_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel dream && !this.isBaby() && this.tickCount % 200 == 0) this.eatNightmares(dream);
         if (this.species == GirlSpecies.CARACAL_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel leap && !this.isBaby() && this.tickCount % 40 == 0) this.birdCatch(leap);

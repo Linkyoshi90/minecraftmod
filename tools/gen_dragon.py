@@ -30,6 +30,27 @@ SEGS = [("seg_1", 4.5, 10.5, 4), ("seg_2", 4.25, 4, 5.5), ("seg_3", 4, 3.75, 5.5
 BIG_SEGS = [(n, round(w * 1.3 * 4) / 4, h if n == "seg_1" else round(h * 1.3 * 4) / 4, round(d * 1.25 * 4) / 4) for n, w, h, d in SEGS]
 
 SPECIES = {
+    # thirty-third wave: the amphiptere: a winged serpent with no legs at all, on the rearing rig, green and gold
+    "amphiptere_dragon": dict(
+        build="slim", outfit=dict(top=["bandeau"], extras=["bracers"], colors=dict(cloth2="#e8c040", leather="#e8c040")),
+        hair="flowing", bangs="swept", ears=None, lower="none", wings="dragon", wing_scale=1.15, flies=True, rearing=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e6a3a", FUR="#2a8a4a", LIGHT="#e8e0a0", MARK="#0e3a1e", EYE="#e8c040", CLOTH="#e8c040", TRIM="#1e6a3a",
+                 pupil=(0.9, 3.4), extra=dict(wing="#2a8a4a", wing_bone="#e8c040", claw="#e8e0a0")),
+        variants={"red": dict(HAIR="#8a1e1e", FUR="#b82a2a", MARK="#4a0e0e", TRIM="#8a1e1e", extra=dict(wing="#b82a2a", wing_bone="#e8c040", claw="#e8e0a0")),
+                  "blue": dict(HAIR="#1e4a8a", FUR="#2a6ab8", MARK="#0e2a4a", TRIM="#1e4a8a", extra=dict(wing="#2a6ab8", wing_bone="#e8e0c0", claw="#e8e0a0")),
+                  "white": dict(HAIR="#d8d8e0", FUR="#f0f0f4", MARK="#8a8a98", TRIM="#8a8a98", EYE="#3a7ac8", extra=dict(wing="#f0f0f4", wing_bone="#a8a8b8", claw="#ffffff")),
+                  "black": dict(HAIR="#1a1a1e", FUR="#2a2a30", MARK="#0a0a0e", TRIM="#e8c040", EYE="#e85a3a", extra=dict(wing="#2a2a30", wing_bone="#e8c040", claw="#8a8a90"))}),
+    # thirty-third wave: the Ender Dragon, in a girl's shape: black scales, violet eyes and wing webs, tall, the End's own
+    "ender_dragon": dict(
+        build="strong", outfit=dict(top=["corset"], bottom="loincloth", extras=["armlets", "bracers"], colors=dict(cloth2="#6a2ab8")), hair="flowing", bangs="jagged", ears=None, legs="scales", foot="claw",
+        tail=DRAGON_TAIL, tail_look="spade", tail_rest=[(-30, 0, 0), (8, 0, 0), (8, 0, 0), (6, 0, 0)], horns="dragon", wings="dragon", wing_scale=1.5,
+        flies=True,
+        pal=dict(SKIN=skin("pale"), HAIR="#141218", FUR="#1e1c24", LIGHT="#4a4458", MARK="#0a080e", EYE="#c858f8", CLOTH="#141218", TRIM="#a858f0",
+                 pupil=(0.9, 3.4), extra=dict(horn="#2a2830", wing="#3a1e68", wing_bone="#141218", tail_col="#1e1c24")),
+        variants={"violet": dict(FUR="#3a1e68", HAIR="#2a1450", MARK="#1a0a3a", extra=dict(horn="#a858f0", wing="#a858f0", wing_bone="#2a1450", tail_col="#3a1e68")),
+                  "pale": dict(FUR="#d8d0e0", HAIR="#b8b0c8", MARK="#5a5068", SKIN=skin("fair"), extra=dict(horn="#5a5068", wing="#8a70b8", wing_bone="#5a5068", tail_col="#d8d0e0")),
+                  "end_stone": dict(FUR="#d8d8a0", HAIR="#a8a870", MARK="#5a5a30", extra=dict(horn="#5a5a30", wing="#3a3a20", wing_bone="#5a5a30", tail_col="#d8d8a0")),
+                  "void": dict(FUR="#0a0a12", HAIR="#050508", MARK="#2a2a48", EYE="#5ae8e0", TRIM="#5ae8e0", extra=dict(horn="#14141e", wing="#10102a", wing_bone="#5ae8e0", tail_col="#0a0a12"))}),
     # twenty-first wave: the nenekea, a blue sea dragon who walks on land: fins for ears, a crest of fins, gold beads and pearls,
     # a long tail ending in a great fan of a fin
     "nenekea_dragon": dict(

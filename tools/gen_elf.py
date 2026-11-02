@@ -16,6 +16,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-second wave: the snow elf: pale, white-blonde, a fur-trimmed coat over bandeau and boots
+    "snow_elf": dict(
+        build="athletic", outfit=dict(top=["bandeau", "mantle"], bottom="shorts", extras=["belt", "scarf"], colors=dict(leather="#7a8a9a", scarf="#6a9ac8", pelt="#f0f0f4")),
+        hair="braid", bangs="parted", ears="elf", legs="boots", foot="shoe",
+        pal=dict(SKIN=skin("pale"), HAIR="#e8ecf4", FUR="#e8ecf4", LIGHT="#ffffff", MARK="#8ab0d0", EYE="#4a8ac8", CLOTH="#a8c8e0", TRIM="#e8ecf4",
+                 extra=dict(boot="#7a8a9a")),
+        variants={"aurora": dict(CLOTH="#3ac8a0", HAIR="#c8f0e0", EYE="#a858e8", TRIM="#a858e8"),
+                  "pine": dict(CLOTH="#2a5a3e", HAIR="#c8a860", EYE="#3a8a4a"),
+                  "dusk": dict(CLOTH="#5a4a8a", HAIR="#d8c8f0", EYE="#a87ae0"),
+                  "ember": dict(CLOTH="#a83a2a", HAIR="#f0d8b8", EYE="#d8703a", TRIM="#f0d8b8")}),
     # sixteenth wave: the valkyrie, in mail and a winged helm, with great white wings and a sword at her hip
     "valkyrie_elf": dict(
         build="athletic", outfit=dict(top=["corset", "capelet"], bottom="wrap_skirt", extras=["bracers", "belt"], colors=dict(cloth2="#3a5a8a")),

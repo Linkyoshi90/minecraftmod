@@ -16,6 +16,26 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades  # noqa: E402
 
 SPECIES = {
+    # thirty-second wave: the kumiho, the nine-tailed fox of Korean tales, in a white and rose hanbok-cut robe, her fox bead at her throat
+    "kumiho_kitsune": dict(
+        build="slim", outfit=dict(top=["kimono"], extras=["pearls"], colors=dict(kimono="#f0e8e0", kimono_trim="#c83a5a", obi="#c83a5a")),
+        ears="fox", hair="braid", stockings=False, tip="light",
+        pal=dict(SKIN=skin("pale"), HAIR="#1a1416", FUR="#e8e0d8", LIGHT="#ffffff", MARK="#a89888", EYE="#c8a040", CLOTH="#f0e8e0", TRIM="#c83a5a",
+                 facemark="fox"),
+        variants={"gold": dict(FUR="#e0b860", HAIR="#3a2410", MARK="#8a6a2a", CLOTH="#c8a040"),
+                  "red": dict(FUR="#c8603a", HAIR="#2a1410", MARK="#7a3a1e", CLOTH="#f0e0d0"),
+                  "silver": dict(FUR="#b8bcc8", HAIR="#3a3e4a", MARK="#6a6e7a", CLOTH="#d8dce8"),
+                  "black": dict(FUR="#2a282e", HAIR="#141216", LIGHT="#8a8890", MARK="#141216", CLOTH="#3a3440", EYE="#e8583a")}),
+    # thirty-second wave: the bat-eared fox of the African savanna: huge ears, a dark mask and legs, she hears what is under the ground
+    "bat_eared_kitsune": dict(
+        build="slim", outfit=dict(top=["sports"], bottom="shorts", extras=["pouch"], colors=dict(leather="#7a5a3a")),
+        ears="big", hair="bob", bangs="messy", stockings=True, tip="dark",
+        pal=dict(SKIN=skin("tan"), HAIR="#6a5a48", FUR="#a89478", LIGHT="#e8dcc8", MARK="#2a2420", EYE="#2a1e18", CLOTH="#6a7a4a", TRIM="#e8dcc8",
+                 facemark="fox"),
+        variants={"sand": dict(FUR="#d8c098", HAIR="#a88a60", LIGHT="#f8f0dc"),
+                  "grey": dict(FUR="#8a8a86", HAIR="#5a5a56", LIGHT="#dcdcd8"),
+                  "rust": dict(FUR="#a86a3a", HAIR="#6a3a1e", LIGHT="#e8d0b0"),
+                  "dark": dict(FUR="#4a443e", HAIR="#2a2622", LIGHT="#a8a298", CLOTH="#a87a3a")}),
     # sixteenth wave: the dunefennec, a Harmontide fennec in night blue with gold crescents, a purple saddle-cloth and a bell
     "dunefennec_kitsune": dict(
         build="petite", outfit=dict(top=["bandeau", "capelet"], bottom="sarong", extras=["usekh", "bell_collar"],

@@ -17,6 +17,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-second wave: the skeleton: bone-white, her bones showing, a torn tabard and a bow
+    "skeleton_undead": dict(
+        build="slim", outfit=dict(top=["vest"], bottom="loincloth", extras=["belt", "bracers"], colors=dict(leather="#5a4a3a")),
+        hair="ponytail", bangs="wispy", ears=None, legs="bare", foot="claw", tattered=True, bones=True,
+        pal=dict(SKIN="#d8d4c8", HAIR="#a8a498", FUR="#d8d4c8", LIGHT="#f4f0e8", MARK="#2a2624", EYE="#2a2a2e", CLOTH="#4a4a50", TRIM="#7a7468",
+                 facemark="panda", extra=dict(claw="#d8d4c8")),
+        variants={"stray": dict(SKIN="#c8d8dc", FUR="#c8d8dc", LIGHT="#e8f4f8", HAIR="#8aa8b0", CLOTH="#4a6a72", EYE="#5ab8d8"),
+                  "wither": dict(SKIN="#3a3a3e", FUR="#3a3a3e", LIGHT="#5a5a5e", HAIR="#1e1e22", MARK="#0e0e12", CLOTH="#242428", EYE="#e8e4d8"),
+                  "bog": dict(SKIN="#b0b890", FUR="#b0b890", LIGHT="#d0d8b0", HAIR="#5a6a3a", CLOTH="#3e4a2a", EYE="#a8c83a"),
+                  "old": dict(SKIN="#c8b48a", FUR="#c8b48a", LIGHT="#e8d8b0", HAIR="#7a6a4a", CLOTH="#5a3a2a", EYE="#e8a030")}),
     # twenty-first wave (folklore): the gashadokuro, the towering 'starving skeleton' of Japanese folklore: bone-white, dark hollows
     # round her glowing eyes, long black hair, a tattered robe, the lines of her bones showing through
     "gashadokuro_undead": dict(

@@ -48,7 +48,7 @@ public final class GirlArms {
             GirlSpecies.WADJET_LAMIA,
             GirlSpecies.IKA_MOLLUSK,
             GirlSpecies.SQUIRRICERAT_RODENT, GirlSpecies.KAMAITACHI_RODENT,
-            GirlSpecies.FRANKENSTEIN_UNDEAD);
+            GirlSpecies.FRANKENSTEIN_UNDEAD, GirlSpecies.SKELETON_UNDEAD);
 
     /** Whether she fights the monsters near her friend on her own (so she can carry a weapon). */
     public static boolean isFighter(GirlSpecies s) {

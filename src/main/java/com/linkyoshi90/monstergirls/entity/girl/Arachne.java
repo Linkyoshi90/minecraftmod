@@ -299,9 +299,53 @@ public class Arachne extends AbstractMonsterGirl {
 
     // --- tick ----------------------------------------------------------------------------------------------------
 
+    /** The black widow threads the nearest monster to her friend with venom: Poison II and Slowness II. 1 on a hit, 0 with none near, -1 without a friend. */
+    public int hourglass(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster near = null;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8), net.minecraft.world.entity.monster.Monster::isAlive)) {
+            if (near == null || m.distanceToSqr(friend) < near.distanceToSqr(friend)) near = m;
+        }
+        if (near == null) return 0;
+        near.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.POISON, 100, 1));
+        near.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 100, 1));
+        return 1;
+    }
+
+    /** The peacock spider's routine: with a villager within 8 of her, her friend gets Hero of the Village. 1 if so, 0 with no audience, -1 without a friend. */
+    public int showtime(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 12);
+        if (friend == null) return -1;
+        if (level.getEntitiesOfClass(net.minecraft.world.entity.npc.Villager.class, this.getBoundingBox().inflate(8)).isEmpty()) return 0;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.HERO_OF_THE_VILLAGE, 1200, 0, true, true));
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.NOTE, this.getX(), this.getY() + 1.8, this.getZ(), 4, 0.4, 0.3, 0.4, 0.5);
+        return 1;
+    }
+
+    /** The cave spider pulls down the cobwebs within 6 of her friend, each one a string for them. How many, or -1 without a friend. */
+    public int pullWebs(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int cleared = 0;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-6, -3, -6), friend.blockPosition().offset(6, 3, 6))) {
+            if (cleared >= 4 || !level.getBlockState(p).is(net.minecraft.world.level.block.Blocks.COBWEB)) continue;
+            level.removeBlock(p, false);
+            net.minecraft.world.item.ItemStack string = new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.STRING, 2);
+            if (!friend.getInventory().add(string)) friend.drop(string, false);
+            cleared++;
+        }
+        return cleared;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.level() instanceof net.minecraft.server.level.ServerLevel webbed && !this.isBaby()) {
+            if (this.species == GirlSpecies.BLACK_WIDOW_ARACHNE && this.tickCount % 61 == 0) this.hourglass(webbed);
+            if (this.species == GirlSpecies.PEACOCK_SPIDER_ARACHNE && this.tickCount % 601 == 0) this.showtime(webbed);
+            if (this.species == GirlSpecies.CAVE_SPIDER_ARACHNE && this.tickCount % 41 == 0) this.pullWebs(webbed);
+        }
         if (this.species == GirlSpecies.SPOODR_ARACHNE && this.level() instanceof ServerLevel webs && !this.isBaby() && this.tickCount % 40 == 0) this.sweepWebs(webs);
         if (this.species == GirlSpecies.USHI_ONI_ARACHNE && this.level() instanceof ServerLevel shore && !this.isBaby() && this.tickCount % 20 == 0) this.bellow(shore);
         if (!(this.level() instanceof ServerLevel server)) return;

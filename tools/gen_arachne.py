@@ -16,6 +16,36 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-second wave: the black widow: gloss black, a red hourglass on her round abdomen, a veil of a fringe
+    "black_widow_arachne": dict(
+        build="curvy", outfit=dict(top=["corset"], extras=["pearls"], colors=dict(cloth2="#b81e2a")),
+        abdomen=(9, 9, 10), hair="hime", bangs="blunt", hairy=0.0,
+        pal=dict(SKIN=skin("pale"), HAIR="#121014", FUR="#141216", LIGHT="#34303a", MARK="#c81e2a", EYE="#c81e2a", CLOTH="#141216", TRIM="#c81e2a",
+                 pattern="bands", facemark="eyes"),
+        variants={"brown": dict(FUR="#4a3424", HAIR="#2a1c12", LIGHT="#7a5a3a", MARK="#e8903a", EYE="#e8903a", CLOTH="#2a1c12", TRIM="#e8903a"),
+                  "steel": dict(FUR="#3a3e48", HAIR="#22252c", LIGHT="#6a6e7a", MARK="#e0e4ec", EYE="#8ac8f0", CLOTH="#22252c", TRIM="#e0e4ec"),
+                  "wine": dict(FUR="#3a1420", HAIR="#240c14", LIGHT="#6a2a3a", MARK="#e8c040", EYE="#e8c040", CLOTH="#240c14", TRIM="#e8c040"),
+                  "white": dict(FUR="#e0dce0", HAIR="#c8c4cc", LIGHT="#ffffff", MARK="#c81e2a", EYE="#c81e2a", CLOTH="#e0dce0", TRIM="#c81e2a", SKIN=skin("fair"))}),
+    # thirty-second wave: the peacock spider: small, a blaze of blue, red and gold on her abdomen, a born performer
+    "peacock_spider_arachne": dict(
+        build="slim", outfit=dict(top=["bandeau"], bottom="shorts", extras=["armlets"], colors=dict(cloth2="#e8c040")),
+        abdomen=(7, 5.5, 7.5), hair="sidetail", bangs="swept", hairy=0.05,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e2a5a", FUR="#2a4ac8", LIGHT="#e8c040", MARK="#d8382a", EYE="#1e2a5a", CLOTH="#d8382a", TRIM="#e8c040",
+                 pattern="bands", facemark="eyes"),
+        variants={"teal": dict(FUR="#1ea8a0", HAIR="#14605e", MARK="#e8703a", CLOTH="#e8703a"),
+                  "violet": dict(FUR="#7a3ac8", HAIR="#42207a", MARK="#e8c040", LIGHT="#3ad0c0", CLOTH="#3ad0c0", TRIM="#7a3ac8"),
+                  "ember": dict(FUR="#d8482a", HAIR="#7a2214", MARK="#2a4ac8", CLOTH="#2a4ac8"),
+                  "green": dict(FUR="#2ea84a", HAIR="#166a2a", MARK="#e8c040", LIGHT="#d8382a", CLOTH="#e8c040", TRIM="#d8382a")}),
+    # thirty-second wave: the cave spider: blue-black with teal markings, at home in old mine timbers
+    "cave_spider_arachne": dict(
+        build="slim", outfit=dict(top=["sports"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#6a5a3a")),
+        abdomen=(7.5, 6.5, 8.5), hair="shaggy", bangs="messy", hairy=0.15,
+        pal=dict(SKIN=skin("pale"), HAIR="#12262c", FUR="#14343e", LIGHT="#2a5a68", MARK="#3ab8b0", EYE="#c81e2a", CLOTH="#3a4a4e", TRIM="#3ab8b0",
+                 pattern="spots", facemark="eyes"),
+        variants={"moss": dict(FUR="#26402a", HAIR="#16281a", MARK="#7ab84a", TRIM="#7ab84a"),
+                  "rust": dict(FUR="#4a2c1e", HAIR="#2a1810", MARK="#d8803a", TRIM="#d8803a"),
+                  "ash": dict(FUR="#3a3a40", HAIR="#242428", MARK="#a8a8b0", TRIM="#a8a8b0"),
+                  "violet": dict(FUR="#2c2048", HAIR="#1a1230", MARK="#a87ae0", TRIM="#a87ae0")}),
     # eighteenth wave: the spoodr, a round, fluffy little navy spider with pale blue tips and two tufts on her head
     "spoodr_arachne": dict(
         build="petite", outfit=dict(top=["sweater"], extras=["scarf"], colors=dict(scarf="#8ac8f0")),

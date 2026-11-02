@@ -132,7 +132,7 @@ public class Undead extends AbstractMonsterGirl {
     @Override
     protected boolean wildHostile() {
         return switch (this.species) {
-            case ZOMBIE_UNDEAD, CORDYCEPS_UNDEAD, DROWNED_UNDEAD, FAMISHED_UNDEAD, LIVING_DOLL_UNDEAD, YUKI_ONNA_UNDEAD, PHANTOM_UNDEAD, LICH_UNDEAD -> true;
+            case SKELETON_UNDEAD, ZOMBIE_UNDEAD, CORDYCEPS_UNDEAD, DROWNED_UNDEAD, FAMISHED_UNDEAD, LIVING_DOLL_UNDEAD, YUKI_ONNA_UNDEAD, PHANTOM_UNDEAD, LICH_UNDEAD -> true;
             default -> false;
         };
     }
@@ -153,6 +153,7 @@ public class Undead extends AbstractMonsterGirl {
     @Override
     protected boolean calmsHer(ItemStack stack) {
         if (this.species == GirlSpecies.LICH_UNDEAD) return false;
+        if (this.species == GirlSpecies.SKELETON_UNDEAD) return stack.is(Items.BONE);
         if (this.species == GirlSpecies.FAMISHED_UNDEAD) return false;                  // she won't take it from a hand: it has to be set down
         return this.species == GirlSpecies.ZOMBIE_UNDEAD || this.species == GirlSpecies.CORDYCEPS_UNDEAD || this.species == GirlSpecies.DROWNED_UNDEAD ? stack.is(Items.ROTTEN_FLESH) : stack.is(Items.PUMPKIN_PIE);
     }
@@ -482,6 +483,7 @@ public class Undead extends AbstractMonsterGirl {
     @Override
     public boolean isFood(ItemStack stack) {
         if (this.species == GirlSpecies.MUMMY_UNDEAD && (stack.is(Items.PAPER) || stack.is(Items.GOLD_NUGGET))) return true;
+        if (this.species == GirlSpecies.SKELETON_UNDEAD && stack.is(Items.BONE)) return true;
         return stack.is(Items.PUMPKIN_PIE) || (this.species == GirlSpecies.ZOMBIE_UNDEAD && stack.is(Items.ROTTEN_FLESH));
     }
 
@@ -696,9 +698,25 @@ public class Undead extends AbstractMonsterGirl {
         return true;
     }
 
+    /** The skeleton picks up the arrows lying within 8 of her friend and gives them back. How many, or -1 without a friend. */
+    public int gatherArrows(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int back = 0;
+        for (net.minecraft.world.entity.projectile.AbstractArrow a : level.getEntitiesOfClass(net.minecraft.world.entity.projectile.AbstractArrow.class, friend.getBoundingBox().inflate(8),
+                x -> x.pickup == net.minecraft.world.entity.projectile.AbstractArrow.Pickup.ALLOWED && x.onGround())) {
+            ItemStack arrow = new ItemStack(Items.ARROW);
+            if (!friend.getInventory().add(arrow)) friend.drop(arrow, false);
+            a.discard();
+            back++;
+        }
+        return back;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.SKELETON_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel counted && !this.isBaby() && this.tickCount % 41 == 0) this.gatherArrows(counted);
         if (this.species == GirlSpecies.DROWNED_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel && !this.isBaby() && this.tickCount % 20 == 0) this.deepBreath();
         if (this.species == GirlSpecies.FAMISHED_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel starving && !this.isBaby() && !this.isCalm() && this.tickCount % 20 == 0) this.eatDropped(starving);
         if (this.scatterTicks > 0 && --this.scatterTicks == 0) this.setInvisible(false);

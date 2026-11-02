@@ -24,6 +24,26 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-third wave: the nautilus: the ammonite's cousin who survived: a striped shell, many short arms, keeps to the deep
+    "nautilus_mollusk": dict(
+        build="slim", outfit=dict(top=["shells"], extras=["pearls"]),
+        hair="flowing", bangs="swept", ears="fin", body="ammonite",
+        pal=dict(SKIN=skin("fair"), HAIR="#a8583a", FUR="#f0e4d4", LIGHT="#fffaf0", MARK="#a8583a", EYE="#3a2a1e", CLOTH="#f0e0d0", TRIM="#e8d0a0",
+                 INNER="#f0d8d0", extra=dict(shell="#f4ecdc", shell_band="#a8483a")),
+        variants={"brown": dict(HAIR="#7a4a2a", extra=dict(shell="#e8d8c0", shell_band="#6a3a1e")),
+                  "pearl": dict(HAIR="#d8d0d8", extra=dict(shell="#f8f4f8", shell_band="#c8c0d8")),
+                  "black": dict(HAIR="#2a2428", extra=dict(shell="#3a3438", shell_band="#141014")),
+                  "blue": dict(HAIR="#3a6a8a", extra=dict(shell="#d8e8f0", shell_band="#2a5a7a"))}),
+    # thirty-third wave: the sea slug: a nudibranch in loud colours, frilled, wearing what she has eaten
+    "sea_slug_mollusk": dict(
+        build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["pearls"], colors=dict(cloth2="#e8703a")),
+        hair="wavy", bangs="wispy", ears=None, legs="stockings", foot="shoe", body="jelly",
+        pal=dict(SKIN=skin("#e8d8f0"), HAIR="#7a3ad8", FUR="#9a5ae8", LIGHT="#f8d040", MARK="#e8703a", EYE="#2a1a4a", CLOTH="#7a3ad8", TRIM="#f8d040",
+                 INNER="#f8c0a0", extra=dict(stocking="#9a5ae8", boot="#f8d040")),
+        variants={"blue": dict(HAIR="#2a6ad8", FUR="#3a8ae8", MARK="#f8f4ec", LIGHT="#f8a040", CLOTH="#2a6ad8", extra=dict(stocking="#3a8ae8", boot="#f8a040")),
+                  "gold": dict(HAIR="#d8a02a", FUR="#e8c04a", MARK="#c83a2a", LIGHT="#f8f0d0", CLOTH="#d8a02a", extra=dict(stocking="#e8c04a", boot="#c83a2a")),
+                  "pink": dict(HAIR="#e85aa8", FUR="#f088c0", MARK="#3ad0c0", LIGHT="#f8f0f8", CLOTH="#e85aa8", extra=dict(stocking="#f088c0", boot="#3ad0c0")),
+                  "white": dict(HAIR="#f0ecf0", FUR="#f8f4f8", MARK="#e8703a", LIGHT="#f8d040", CLOTH="#e8e4ec", extra=dict(stocking="#f8f4f8", boot="#e8703a"))}),
     # twenty-third wave: the spewslug, a glistening crimson slug girl with eye-stalk antennae, a slug's mantle over her back, a wide
     # toothy maw and purple bile dribbling from it
     "spewslug_mollusk": dict(
@@ -404,7 +424,7 @@ if __name__ == "__main__":
     heights = {s["id"]: s["height"] for s in FC.family("mollusk")["species"]}
     entries = {}
     for sp, (decl, bld, anm) in {"kraken_mollusk": (kraken_declare, kraken_build, kraken_anims), "giant_kraken_mollusk": (kraken_declare, kraken_build, kraken_anims),
-                                  "ammonite_mollusk": (ammonite_declare, ammonite_build, ammonite_anims)}.items():
+                                  "ammonite_mollusk": (ammonite_declare, ammonite_build, ammonite_anims), "nautilus_mollusk": (ammonite_declare, ammonite_build, ammonite_anims)}.items():
         if not want or sp in want:
             g, t, a, h = run_custom(sp, decl, bld, anm, prev)
             entries[sp] = (g, t, a, heights[sp], h)

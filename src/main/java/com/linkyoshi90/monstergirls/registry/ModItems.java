@@ -78,6 +78,10 @@ public final class ModItems {
             () -> new DeferredSpawnEggItem(ModEntities.IBISKING_HARPY, 0x1E3A8A, 0xE8C050, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> MOTMORA_HARPY_SPAWN_EGG = ITEMS.register("motmora_harpy_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.MOTMORA_HARPY, 0x1E4AC8, 0xE8C050, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> DUCK_HARPY_SPAWN_EGG = ITEMS.register("duck_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.DUCK_HARPY, 0x1E6A4A, 0xD8C4A8, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> HUMMINGBIRD_HARPY_SPAWN_EGG = ITEMS.register("hummingbird_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.HUMMINGBIRD_HARPY, 0xC81E4A, 0x2A9A5A, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> ROC_HARPY_SPAWN_EGG = ITEMS.register("roc_harpy_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.ROC_HARPY, 0x2C4A88, 0xB4CCE8, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> ZIZ_HARPY_SPAWN_EGG = ITEMS.register("ziz_harpy_spawn_egg",

@@ -123,6 +123,9 @@ public class Bug extends AbstractMonsterGirl {
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
             case DATE_BEETLE_BUG -> girlAttributes(12, 0.28, 1);
+            case ANT_BUG -> girlAttributes(16, 0.3, 3);
+            case QUEEN_ANT_BUG -> girlAttributes(30, 0.26, 4);
+            case SPIDER_WASP_BUG -> girlAttributes(22, 0.32, 5);
             case MOSQUITO_BUG -> girlAttributes(14, 0.3, 3);
             case FAIRY_BUG -> girlAttributes(8, 0.3, 1);
             case FIREFLY_BUG -> girlAttributes(8, 0.3, 1);
@@ -145,7 +148,7 @@ public class Bug extends AbstractMonsterGirl {
     @Override
     public boolean canFly() {
         return this.species != GirlSpecies.SCORPION_BUG && this.species != GirlSpecies.MOTH_LARVA_BUG && this.species != GirlSpecies.PAPILLON_LARVA_BUG
-                && this.species != GirlSpecies.MANTIS_BUG;
+                && this.species != GirlSpecies.MANTIS_BUG && this.species != GirlSpecies.ANT_BUG;
     }
 
     /** A caterpillar is already small: she hatches full size and grows by turning into her adult form instead. */
@@ -403,9 +406,56 @@ public class Bug extends AbstractMonsterGirl {
 
     // --- tick ----------------------------------------------------------------------------------------------------
 
+    /** The ant carries the loose items within 8 of her friend straight to them. How many, or -1 without a friend. */
+    public int haul(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int carried = 0;
+        for (net.minecraft.world.entity.item.ItemEntity item : level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, friend.getBoundingBox().inflate(8), i -> i.isAlive() && !i.hasPickUpDelay())) {
+            if (carried >= 3) break;
+            item.teleportTo(friend.getX(), friend.getY() + 0.5, friend.getZ());
+            item.setNoPickUpDelay();
+            carried++;
+        }
+        return carried;
+    }
+
+    /** The queen raises an ant, who knows her friend, with fewer than four near her. True if she did. */
+    public boolean brood(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend == null) return false;
+        var kind = com.linkyoshi90.monstergirls.registry.ModGirls.type(GirlSpecies.ANT_BUG);
+        if (level.getEntities(kind, this.getBoundingBox().inflate(16), net.minecraft.world.entity.Entity::isAlive).size() >= 4) return false;
+        AbstractMonsterGirl ant = kind.create(level);
+        if (ant == null) return false;
+        ant.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0);
+        ant.setPersistenceRequired();
+        ant.addAffection(friend, com.linkyoshi90.monstergirls.entity.Orders.AFFECTION);
+        level.addFreshEntity(ant);
+        return true;
+    }
+
+    /** The spider-wasp stings the spiders and spider-girls within 10 of her friend who are hostile: they can't move for 6 seconds. How many, or -1 without a friend. */
+    public int paralyse(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int stung = 0;
+        for (net.minecraft.world.entity.monster.Spider s : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Spider.class, friend.getBoundingBox().inflate(10), net.minecraft.world.entity.monster.Spider::isAlive)) {
+            s.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 120, 9));
+            s.hurt(this.damageSources().mobAttack(this), 3);
+            stung++;
+        }
+        return stung;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.level() instanceof net.minecraft.server.level.ServerLevel colony && !this.isBaby()) {
+            if (this.species == GirlSpecies.ANT_BUG && this.tickCount % 21 == 0) this.haul(colony);
+            if (this.species == GirlSpecies.QUEEN_ANT_BUG && this.tickCount % 6001 == 0) this.brood(colony);
+            if (this.species == GirlSpecies.SPIDER_WASP_BUG && this.tickCount % 41 == 0) this.paralyse(colony);
+        }
         if (this.species == GirlSpecies.GIRTABLILU_BUG && this.level() instanceof net.minecraft.server.level.ServerLevel gate && !this.isBaby() && this.tickCount % 20 == 0 && !gate.isDay()) this.gateGuard(gate);
         if (this.species == GirlSpecies.MOTHMAN_BUG && this.level() instanceof net.minecraft.server.level.ServerLevel omen && !this.isBaby() && this.tickCount % 20 == 0) this.omen(omen, !omen.isDay());
         if (this.species == GirlSpecies.DATE_BEETLE_BUG && this.level() instanceof ServerLevel oasis && !this.isBaby() && this.tickCount % 200 == 0) this.shareDate(oasis);

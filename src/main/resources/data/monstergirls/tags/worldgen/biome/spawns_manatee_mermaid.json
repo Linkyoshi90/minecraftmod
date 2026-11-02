@@ -1,0 +1,31 @@
+{
+  "values": [
+    "minecraft:river",
+    "minecraft:mangrove_swamp",
+    "minecraft:warm_ocean",
+    {
+      "id": "#minecraft:is_river",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:muddy_river",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:tropical_river",
+      "required": false
+    },
+    {
+      "id": "terralith:warm_river",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:white_mangrove_marshes",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:rocky_reef",
+      "required": false
+    }
+  ]
+}

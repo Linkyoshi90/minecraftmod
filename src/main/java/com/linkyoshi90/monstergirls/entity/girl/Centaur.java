@@ -867,9 +867,32 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
         return 1;
     }
 
+    /** The guard donkey kicks the nearest monster within 6 of a farm animal near her (cow, sheep, pig, chicken, goat), and it flies. 1 on a kick, 0 with none, -1 without a friend. */
+    public int guardFlock(net.minecraft.server.level.ServerLevel level) {
+        if (this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 64) == null) return -1;
+        for (net.minecraft.world.entity.animal.Animal a : level.getEntitiesOfClass(net.minecraft.world.entity.animal.Animal.class, this.getBoundingBox().inflate(12),
+                x -> x instanceof net.minecraft.world.entity.animal.Cow || x instanceof net.minecraft.world.entity.animal.Sheep || x instanceof net.minecraft.world.entity.animal.Pig
+                        || x instanceof net.minecraft.world.entity.animal.Chicken || x instanceof net.minecraft.world.entity.animal.goat.Goat)) {
+            for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, a.getBoundingBox().inflate(6), net.minecraft.world.entity.monster.Monster::isAlive)) {
+                m.hurt(this.damageSources().mobAttack(this), 6);
+                m.knockback(1.6, this.getX() - m.getX(), this.getZ() - m.getZ());
+                this.playSound(net.minecraft.sounds.SoundEvents.DONKEY_ANGRY, 1.0F, 1.0F);
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    /** Nothing moves a donkey who has decided not to move. */
+    @Override
+    public boolean isPushable() {
+        return this.species != GirlSpecies.DONKEY_CENTAUR && super.isPushable();
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.DONKEY_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel flock && !this.isBaby() && this.tickCount % 41 == 0) this.guardFlock(flock);
         if (this.species == GirlSpecies.CENSHROOM_CENTAUR && !this.level().isClientSide && this.tickCount % 20 == 0 && this.getControllingPassenger() instanceof LivingEntity rider) rider.removeEffect(net.minecraft.world.effect.MobEffects.POISON);
         if (this.species == GirlSpecies.ZOGLINTAUR_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel gored && !this.isBaby() && this.tickCount % 40 == 0) this.gore(gored);
         if (this.species == GirlSpecies.ARK_SERAPHIM_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel lit && !this.isBaby() && this.tickCount % 20 == 0) this.blindingLight(lit);

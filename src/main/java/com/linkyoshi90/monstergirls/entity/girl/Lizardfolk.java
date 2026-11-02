@@ -285,6 +285,8 @@ public class Lizardfolk extends AbstractMonsterGirl {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        if (this.species == GirlSpecies.NEWT_LIZARDFOLK && source.getDirectEntity() instanceof net.minecraft.world.entity.LivingEntity biter && !this.level().isClientSide)
+            biter.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.POISON, 60, 0));   // her skin
         if (this.species == GirlSpecies.BLACK_TORTOISE_LIZARDFOLK && source.is(net.minecraft.tags.DamageTypeTags.IS_PROJECTILE)) {   // arrows glance off Xuanwu's shell
             if (!this.level().isClientSide) this.playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 0.8F);
             return false;
@@ -365,9 +367,55 @@ public class Lizardfolk extends AbstractMonsterGirl {
         return true;
     }
 
+    /** The Komodo's slow venom: monsters near her friend that have already been hurt get Poison II. How many, or -1 without a friend. */
+    public int slowVenom(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int sick = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(12), x -> x.isAlive() && x.getHealth() < x.getMaxHealth())) {
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.POISON, 80, 1));
+            sick++;
+        }
+        return sick;
+    }
+
+    private long nextRear;
+
+    /** The newt rears up for 5 seconds to look around. True if she did. */
+    public boolean rearUp() {
+        if (this.getAction() != Action.NONE || this.isInWater()) return false;
+        this.startTimedAction(Action.REAR, 100);
+        return true;
+    }
+
+    /** In the water the newt regrows what she has lost: Regeneration for her, and for her friend beside her in the water. How many that healed. */
+    public int regrow() {
+        if (!this.isInWater()) return 0;
+        this.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.REGENERATION, 60, 1, true, false));
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 6);
+        if (friend == null || !friend.isInWater()) return 1;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.REGENERATION, 60, 0, true, true));
+        return 2;
+    }
+
+    /** All fours is a low hitbox, whatever her standing height. */
+    @Override
+    public net.minecraft.world.entity.EntityDimensions getDefaultDimensions(net.minecraft.world.entity.Pose pose) {
+        if (this.species == GirlSpecies.NEWT_LIZARDFOLK) return net.minecraft.world.entity.EntityDimensions.scalable(0.9F, 0.8F).scale(this.sizeScale());
+        return super.getDefaultDimensions(pose);
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.NEWT_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel pond && !this.isBaby()) {
+            if (this.tickCount % 40 == 0) this.regrow();
+            if (pond.getGameTime() >= this.nextRear) {
+                this.nextRear = pond.getGameTime() + 600 + this.random.nextInt(1200);
+                this.rearUp();
+            }
+        }
+        if (this.species == GirlSpecies.KOMODO_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel bitten && !this.isBaby() && this.tickCount % 41 == 0) this.slowVenom(bitten);
         if (this.species == GirlSpecies.CAVE_GEKKO_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel && !this.isBaby() && this.tickCount % 5 == 0) this.steady();
         if (this.species == GirlSpecies.CIPACTLI_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel marsh && !this.isBaby() && this.tickCount % 40 == 0) this.pullUnder(marsh);
         if (this.species == GirlSpecies.ARGENTINOSAURUS_LIZARDFOLK && this.level() instanceof net.minecraft.server.level.ServerLevel plain && !this.isBaby() && this.tickCount % 40 == 0) this.lookout(plain);

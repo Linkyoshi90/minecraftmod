@@ -18,6 +18,15 @@ from girl_lib import H, cube, pick, noise, shades, CLEAR  # noqa: E402
 ALPHA = 200
 
 SPECIES = {
+    # thirty-second wave: the copper slime: bright metal that weathers over the hours, stage by stage, into green
+    "copper_slime": dict(
+        build="athletic", outfit=dict(top=[], extras=["usekh"], colors=dict(usekh2="#e8b890")),
+        extra="crystals", hair="bob",
+        pal=dict(FUR="#c8703e", LIGHT="#f0a878", MARK="#8a4424", HAIR="#d8804a", EYE="#5a2a14", PUPIL="#2a1208", pattern="speckle", extra=dict(core="#f8c8a0", crystal="#f0a878")),
+        variants={"exposed": dict(FUR="#a87a5e", LIGHT="#c8a088", MARK="#6a8a74", HAIR="#b48a6e", extra=dict(core="#d8b8a0", crystal="#c8a088")),
+                  "weathered": dict(FUR="#6a9a78", LIGHT="#9ac0a4", MARK="#a87a5e", HAIR="#7aa888", EYE="#1e3a2a", PUPIL="#0e1e14", extra=dict(core="#b8d8c0", crystal="#9ac0a4")),
+                  "oxidized": dict(FUR="#4aa890", LIGHT="#7ad0b8", MARK="#2a7a68", HAIR="#58b8a0", EYE="#123a30", PUPIL="#081e18", extra=dict(core="#a0e8d0", crystal="#7ad0b8")),
+                  "polished": dict(FUR="#e88a4a", LIGHT="#fcc898", MARK="#a85a2a", HAIR="#f09a5a", extra=dict(core="#ffe0c0", crystal="#fcc898"))}),
     # seventeenth wave: the klabuster (German "Klabusterbeere", a dingleberry): a glossy brown swirl of a slime, dangling
     # on a single strand from a tuft of hair
     "klabuster_slime": dict(

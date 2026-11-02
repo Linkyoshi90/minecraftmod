@@ -284,9 +284,37 @@ public class Flora extends AbstractMonsterGirl {
         if (this.hasFlag(FLAG_PRUNED) && level.getGameTime() >= this.getPersistentData().getLong(REGROW)) this.setFlag(FLAG_PRUNED, false);
     }
 
+    /** The rose's thorns: whatever just hurt her friend near her takes 3 and is slowed. 1 on a prick, 0 with nobody to prick, -1 without a friend. */
+    public int thorns() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 10);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.LivingEntity by = friend.getLastHurtByMob();
+        if (by == null || !by.isAlive() || friend.tickCount - friend.getLastHurtByMobTimestamp() > 20) return 0;
+        by.hurt(this.damageSources().thorns(this), 3);
+        by.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 60, 1));
+        return 1;
+    }
+
+    private long lastBloom = -1;
+
+    /** The lotus opens at dawn: once a day her friend near her loses every harmful effect and is fed. True if she bloomed. */
+    public boolean dawnBloom(long day) {
+        if (day == this.lastBloom) return false;
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return false;
+        this.lastBloom = day;
+        for (net.minecraft.world.effect.MobEffectInstance e : java.util.List.copyOf(friend.getActiveEffects())) {
+            if (e.getEffect().value().getCategory() == net.minecraft.world.effect.MobEffectCategory.HARMFUL) friend.removeEffect(e.getEffect());
+        }
+        friend.getFoodData().eat(8, 0.6F);
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.LOTUS_FLORA && !this.level().isClientSide && !this.isBaby() && this.tickCount % 41 == 0 && this.level().getDayTime() % 24000L < 1000L) this.dawnBloom(this.level().getDayTime() / 24000L);
+        if (this.species == GirlSpecies.ROSE_FLORA && !this.level().isClientSide && !this.isBaby() && this.tickCount % 11 == 0) this.thorns();
         if (this.species == GirlSpecies.DRYAD_FLORA && this.level() instanceof ServerLevel grove && !this.isBaby() && this.tickCount % 600 == 0) this.nurture(grove);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.SHIITAKE_FLORA && this.tickCount % 100 == 0) this.regrow(server);

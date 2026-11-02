@@ -93,11 +93,11 @@ public class Lamia extends AbstractMonsterGirl {
 
     public Lamia(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
-        if (species == GirlSpecies.SEA_SNAKE_LAMIA || species == GirlSpecies.BOA_LAMIA) {
+        if (species == GirlSpecies.SEA_SNAKE_LAMIA || species == GirlSpecies.SEA_SERPENT_LAMIA || species == GirlSpecies.BOA_LAMIA) {
             this.navigation = this.createNavigation(level);       // the first one was made before species was set
             this.navigation.setCanFloat(true);
         }
-        if (species == GirlSpecies.SEA_SNAKE_LAMIA) {
+        if (species == GirlSpecies.SEA_SNAKE_LAMIA || species == GirlSpecies.SEA_SERPENT_LAMIA) {
             this.setPathfindingMalus(PathType.WATER, 0.0F);
             this.moveControl = new AmphibiousMoveControl(this);
             this.goalSelector.removeAllGoals(g -> g instanceof FloatGoal);
@@ -128,6 +128,8 @@ public class Lamia extends AbstractMonsterGirl {
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         return switch (s) {
+            case ANACONDA_LAMIA -> girlAttributes(60, 0.2, 7);
+            case SEA_SERPENT_LAMIA -> girlAttributes(50, 0.26, 7);
             case PYTHON_LAMIA -> girlAttributes(32, 0.22, 5);
             case COBRA_LAMIA -> girlAttributes(24, 0.26, 4);
             case NAGA_LAMIA -> girlAttributes(32, 0.26, 5);
@@ -142,7 +144,7 @@ public class Lamia extends AbstractMonsterGirl {
 
     @Override
     protected PathNavigation createNavigation(Level level) {
-        if (this.species == GirlSpecies.SEA_SNAKE_LAMIA) return new com.linkyoshi90.monstergirls.entity.ai.SwimmerNavigation(this, level);
+        if (this.species == GirlSpecies.SEA_SNAKE_LAMIA || this.species == GirlSpecies.SEA_SERPENT_LAMIA) return new com.linkyoshi90.monstergirls.entity.ai.SwimmerNavigation(this, level);
         if (this.species == GirlSpecies.BOA_LAMIA) return new WallClimberNavigation(this, level);
         return super.createNavigation(level);
     }
@@ -154,7 +156,7 @@ public class Lamia extends AbstractMonsterGirl {
 
     @Override
     public void travel(Vec3 input) {
-        if (this.species == GirlSpecies.SEA_SNAKE_LAMIA && this.isControlledByLocalInstance() && this.isInWater()) {
+        if ((this.species == GirlSpecies.SEA_SNAKE_LAMIA || this.species == GirlSpecies.SEA_SERPENT_LAMIA) && this.isControlledByLocalInstance() && this.isInWater()) {
             double y = this.getY();
             this.moveRelative(this.getSpeed() * 1.4F, input);       // a paddle tail: fast in the water
             this.move(net.minecraft.world.entity.MoverType.SELF, this.getDeltaMovement());
@@ -404,9 +406,58 @@ public class Lamia extends AbstractMonsterGirl {
 
     // --- tick ----------------------------------------------------------------------------------------------------
 
+    private long fullUntil;
+
+    /** The anaconda swallows a small monster (6 health or less, or small enough) near her friend whole, then wants a long rest. 1 on a gulp, 0 with none, -1 without a friend, -2 while full. */
+    public int gulp(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        if (level.getGameTime() < this.fullUntil) return -2;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, this.getBoundingBox().inflate(4), net.minecraft.world.entity.monster.Monster::isAlive)) {
+            if (m.getBbHeight() > 1.0F && m.getHealth() > 6) continue;
+            m.hurt(this.damageSources().mobAttack(this), 1000);
+            this.playSound(net.minecraft.sounds.SoundEvents.GENERIC_EAT, 1.0F, 0.6F);
+            this.fullUntil = level.getGameTime() + 2400;
+            this.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 1200, 1));
+            return 1;
+        }
+        return 0;
+    }
+
+    /** Music near the anaconda gets into everyone: her friend moves faster and hits harder for as long as it plays. True if it did. */
+    public boolean groove(boolean music) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null || !music) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 60, 0, true, true));
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DAMAGE_BOOST, 60, 0, true, true));
+        return true;
+    }
+
+    /** The sea serpent: in the rain, out under the sky, lightning finds a monster near her friend. 1 on a strike, 0 if not now, -1 without a friend. */
+    public int stormCall(net.minecraft.server.level.ServerLevel level, boolean raining) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        if (!raining) return 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(16), net.minecraft.world.entity.monster.Monster::isAlive)) {
+            net.minecraft.world.entity.LightningBolt bolt = net.minecraft.world.entity.EntityType.LIGHTNING_BOLT.create(level);
+            if (bolt == null) return 0;
+            bolt.moveTo(m.position());
+            bolt.setVisualOnly(true);
+            level.addFreshEntity(bolt);
+            m.hurt(this.damageSources().lightningBolt(), 10);
+            return 1;
+        }
+        return 0;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.ANACONDA_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel coils && !this.isBaby()) {
+            if (this.tickCount % 41 == 0) this.gulp(coils);
+            if (this.tickCount % 40 == 0) this.groove(com.linkyoshi90.monstergirls.entity.JukeboxSensing.findPlaying(coils, this.blockPosition(), 16) != null);
+        }
+        if (this.species == GirlSpecies.SEA_SERPENT_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel storm && !this.isBaby() && this.tickCount % 201 == 0) this.stormCall(storm, storm.isRaining());
         if (this.species == GirlSpecies.TITANOBOA_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel marsh && !this.isBaby() && this.tickCount % 100 == 0) this.constrict(marsh);
         if (this.species == GirlSpecies.SERPOPARD_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel fang && !this.isBaby() && this.tickCount % 60 == 0) this.venomBite(fang);
         if (this.species == GirlSpecies.SANDWORM_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel dune && !this.isBaby() && this.tickCount % 200 == 0) this.swallow(dune);

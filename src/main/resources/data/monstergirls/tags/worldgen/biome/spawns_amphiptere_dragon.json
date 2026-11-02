@@ -1,0 +1,31 @@
+{
+  "values": [
+    "minecraft:windswept_hills",
+    "minecraft:windswept_forest",
+    "minecraft:jagged_peaks",
+    {
+      "id": "terralith:rocky_mountains",
+      "required": false
+    },
+    {
+      "id": "terralith:highlands",
+      "required": false
+    },
+    {
+      "id": "terralith:alpine_highlands",
+      "required": false
+    },
+    {
+      "id": "terralith:arid_highlands",
+      "required": false
+    },
+    {
+      "id": "terralith:temperate_highlands",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:windswept_maple_forest",
+      "required": false
+    }
+  ]
+}

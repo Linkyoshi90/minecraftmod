@@ -23,6 +23,29 @@ LIZARD_TAIL = [(2.5, 2.5, 4), (2, 2, 4), (1.5, 1.5, 4), (1, 1, 3.5)]
 DROOP = [(-38, 0, 0), (10, 0, 0), (10, 0, 0), (8, 0, 0)]
 
 SPECIES = {
+    # thirty-third wave: the newt: a grown woman on all fours, belly low and limbs splayed like the real animal, head up and looking
+    # forward, flat-chested (the ground is rough), a long keeled tail. Dark olive back, orange belly with black spots. Her own prone
+    # animations (newt_prone); she rears up for a short while (Action.REAR).
+    "newt_lizardfolk": dict(
+        build="lithe", outfit=dict(top=["wrap"], bottom="shorts"),
+        hair="ponytail", bangs="swept", ears=None, legs="scales", foot="claw", tail=[(2.5, 2.75, 3), (2.25, 3, 3), (1.75, 2.75, 3), (1, 2, 3)],
+        tail_rest=[(0, 0, 0), (2, 0, 0), (2, 0, 0), (2, 0, 0)], tail_look="scale", newt=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#3a4228", FUR="#4a5a30", LIGHT="#e8802a", MARK="#141810", EYE="#d8a030", CLOTH="#e8802a", TRIM="#3a4228",
+                 pattern="spots", pupil=(0.9, 3.4)),
+        variants={"crested": dict(FUR="#3a3e34", HAIR="#26281e", LIGHT="#f0a030", CLOTH="#f0a030", TRIM="#26281e"),
+                  "alpine": dict(FUR="#2a4a6a", HAIR="#1a3048", LIGHT="#e8602a", CLOTH="#e8602a", TRIM="#1a3048"),
+                  "fire": dict(FUR="#1a1a1e", HAIR="#101014", LIGHT="#d8302a", CLOTH="#d8302a", MARK="#e8c040", TRIM="#101014"),
+                  "marbled": dict(FUR="#4a7a3a", HAIR="#2a4a22", LIGHT="#d8c8a0", CLOTH="#d8c8a0", MARK="#141810", TRIM="#2a4a22")}),
+    # thirty-second wave: the komodo dragon: heavy, dull grey-brown, a long forked tongue's patience, a thick dragging tail
+    "komodo_lizardfolk": dict(
+        build="strong", outfit=dict(top=["sarashi"], bottom="loincloth", extras=["bracers"], colors=dict(leather="#5a4a30")),
+        hair="ponytail", bangs="messy", ears=None, legs="scales", foot="claw", tail=LIZARD_TAIL, tail_rest=DROOP, tail_look="scale",
+        pal=dict(SKIN=skin("tan"), HAIR="#3a3428", FUR="#6a6250", LIGHT="#a89c80", MARK="#3a3428", EYE="#d8a030", CLOTH="#d8ccb0", TRIM="#5a4a30",
+                 pattern="blotches"),
+        variants={"red": dict(FUR="#8a5a3e", HAIR="#4a2a1a", MARK="#4a2a1a", LIGHT="#c89a78"),
+                  "green": dict(FUR="#5a7048", HAIR="#2e3e26", MARK="#2e3e26", LIGHT="#a8b888"),
+                  "grey": dict(FUR="#5a5a5e", HAIR="#2e2e32", MARK="#2e2e32", LIGHT="#a0a0a4"),
+                  "gold": dict(FUR="#a88a4a", HAIR="#5a4420", MARK="#5a4420", LIGHT="#e0c890")}),
     # twenty-third wave: the argentinosaurus, the greatest of the long-necked dinosaurs: tall and gentle, pale blue with orange
     # stripes and a cream belly, a long neck lifting her head high, a long heavy tail
     "argentinosaurus_lizardfolk": dict(
@@ -615,11 +638,60 @@ def F_wave_legs():
             "leg_l": {"rotation": H.track((0, (14, 0, -14)), (0.9, (-14, 0, -14)), (1.8, (14, 0, -14)))}}
 
 
+def newt_prone(an):
+    """the newt on all fours: flat on her belly, a long spine (the body bone stretched, its children scaled back), limbs splayed and bent to
+    the ground, the tail straight out behind, the head smaller and turned to look ahead. "rear" stands her up on her hind legs and tail.
+    Every clip builds its own dicts: Anims.add flips Z in place, so shared ones would swap sides."""
+    Tk, hold, merge = H.track, H.hold, H.merge
+    LONG, BACK = 1.5, 1 / 1.5                            # the spine, and what puts her head, arms and tail back to size
+    TAIL = -88
+
+    def frame(head_x=-PRONE[0] + 6):
+        return {"root": {"rotation": hold(*PRONE), "position": hold(0, 6, 15)},
+                "body": {"scale": hold(1, LONG, 1)},
+                "head": {"rotation": hold(head_x, 0, 0), "scale": hold(.74, .74 * BACK, .74)},
+                "hair_back": {"rotation": hold(30, 0, 0)}, "arm_r": {"scale": hold(1, BACK, 1)}, "arm_l": {"scale": hold(1, BACK, 1)},
+                "tail": {"scale": hold(1, BACK, 1)}}
+
+    def limbs(ar=None, al=None, lr=None, ll=None):
+        return {"arm_r": {"rotation": ar or hold(0, 0, -68)}, "arm_l": {"rotation": al or hold(0, 0, 68)},
+                "forearm_r": {"rotation": hold(0, 0, 60)}, "forearm_l": {"rotation": hold(0, 0, -60)},
+                "leg_r": {"rotation": lr or hold(0, 0, 58)}, "leg_l": {"rotation": ll or hold(0, 0, -58)},
+                "shin_r": {"rotation": hold(0, 0, -62)}, "shin_l": {"rotation": hold(0, 0, 62)}}
+
+    def tail(a, T):
+        sway = lambda s: Tk((0, (0, s * a, 0)), (T / 2, (0, -s * a, 0)), (T, (0, s * a, 0)))
+        return {"tail": {"rotation": Tk((0, (TAIL, a * .5, 0)), (T / 2, (TAIL, -a * .5, 0)), (T, (TAIL, a * .5, 0)))},
+                "tail_2": {"rotation": sway(-1)}, "tail_3": {"rotation": sway(1.3)}, "tail_4": {"rotation": sway(-1.5)}}
+    an.add("idle", 4.0, True, merge(frame(), limbs(), tail(5, 4.0)))
+
+    def crawl(T, a):                                     # a diagonal gait, right fore with left hind, and the spine bends with it
+        swing = lambda s, z, lift: Tk((0, (s * a, 0, z)), (T / 2, (-s * a, 0, z + lift)), (T, (s * a, 0, z)))
+        return merge(limbs(swing(1, -68, 12), swing(-1, 68, -12), swing(-1, 58, -10), swing(1, -58, 10)),
+                     {"body": {"rotation": Tk((0, (0, 0, -7)), (T / 2, (0, 0, 7)), (T, (0, 0, -7)))}}, tail(14, T))
+    an.add("walk", 1.0, True, merge(frame(), crawl(1.0, 34)))
+    an.add("run", 0.55, True, merge(frame(), crawl(0.55, 46)))
+    trail = limbs(hold(70, 0, -20), hold(70, 0, 20), hold(20, 0, 12), hold(20, 0, -12))
+    an.add("swim", 1.0, True, merge(frame(), trail, tail(26, 1.0), {"root": {"rotation": hold(*PRONE), "position": hold(0, 10, 15)}}))
+    sag = lambda: {"root": {"rotation": hold(*PRONE), "position": hold(0, 5, 15)}}
+    an.add("sit", 3.0, True, merge(frame(), limbs(), tail(3, 3.0), sag()))
+    an.add("lie", 3.0, True, merge(frame(-PRONE[0] + 24), limbs(), tail(1, 3.0), sag(), {"eyelids": {"position": hold(*H.OUT_)}}))
+    an.add("rear", 1.0, True, {"root": {"rotation": hold(-6, 0, 0)}, "body": {"scale": hold(1, LONG, 1)},
+                               "head": {"rotation": hold(6, 0, 0), "scale": hold(.74, .74 * BACK, .74)},
+                               "tail": {"rotation": hold(-58, 0, 0), "scale": hold(1, BACK, 1)}, "tail_2": {"rotation": hold(-8, 0, 0)},
+                               "arm_r": {"rotation": hold(-12, 0, -8), "scale": hold(1, BACK, 1)}, "arm_l": {"rotation": hold(-12, 0, 8), "scale": hold(1, BACK, 1)},
+                               "forearm_r": {"rotation": hold(-50, 0, 0)}, "forearm_l": {"rotation": hold(-50, 0, 0)}})
+    for key in ("pounce", "groom", "hiss", "stalk"):
+        an.add(key, 1.0, key == "stalk", merge(frame(), limbs(), tail(5, 1.0)))
+
+
 def anim_extra(an, sp, d):
     """basking in the sun ("bask"), the crocodile's death roll ("roll"), the turtle hiding in her shell ("retract")"""
     Tk, hold, sym, merge = H.track, H.hold, H.sym, H.merge
     if d.get("shell") == "great":
         turtle_prone(an)
+    if d.get("newt"):
+        newt_prone(an)
     an.add("bask", 4.0, True, merge({"root": {"rotation": hold(-90, 0, 0), "position": hold(0, 2.5, 0)}, "head": {"rotation": hold(-30, 0, 0)},
                                      "eyelids": {"position": hold(*H.OUT_)}}, sym("arm", hold(-170, 0, 20))))
     an.add("roll", 1.0, True, merge({"root": {"rotation": Tk((0, (0, 0, 0)), (0.5, (0, 0, 180)), (1.0, (0, 0, 360))), "position": hold(0, 4, 0)},

@@ -83,6 +83,7 @@ public class SlimeGirl extends AbstractMonsterGirl {
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
         if (s == GirlSpecies.KLABUSTER_SLIME) return girlAttributes(16, 0.24, 1);
+        if (s == GirlSpecies.COPPER_SLIME) return girlAttributes(24, 0.24, 3);
         if (s == GirlSpecies.ENDER_SLIME) return girlAttributes(20, 0.26, 3);
         return girlAttributes(s == GirlSpecies.MAGMA_SLIME ? 24 : 18, 0.24, s == GirlSpecies.MAGMA_SLIME ? 4 : 2);
     }
@@ -143,6 +144,20 @@ public class SlimeGirl extends AbstractMonsterGirl {
     @Nullable
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        if (this.species == GirlSpecies.COPPER_SLIME && (stack.is(Items.HONEYCOMB) || stack.getItem() instanceof net.minecraft.world.item.AxeItem)) {
+            if (!this.level().isClientSide) {
+                if (stack.is(Items.HONEYCOMB)) {
+                    if (this.isWaxed()) return InteractionResult.PASS;
+                    stack.consume(1, player);
+                    this.setWaxed(true);
+                } else if (this.scrape()) {
+                    stack.hurtAndBreak(1, player, net.minecraft.world.entity.LivingEntity.getSlotForHand(hand));
+                } else {
+                    return InteractionResult.PASS;
+                }
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         boolean client = this.level().isClientSide;
         if (stack.is(Items.SLIME_BALL) && !this.isBaby() && !this.isHalf() && this.getAffection(player) >= BED_AFFECTION) {
             if (this.isMixed() && player.isShiftKeyDown()) {                // sneak: let the two of them go their own ways
@@ -407,9 +422,48 @@ public class SlimeGirl extends AbstractMonsterGirl {
 
     // --- tick ----------------------------------------------------------------------------------------------------
 
+    private static final int WEATHER_TICKS = 48000;
+    private int weathering;
+
+    /** The copper slime goes one stage on: copper, exposed, weathered, oxidized. Not while waxed. True if she changed. */
+    public boolean weather() {
+        if (this.isWaxed() || this.getVariantIndex() >= 3) return false;
+        this.setVariantIndex(this.getVariantIndex() + 1);
+        return true;
+    }
+
+    /** An axe scrapes her back one stage. True if she changed; the wax goes first. */
+    public boolean scrape() {
+        if (this.isWaxed()) {
+            this.setWaxed(false);
+            return true;
+        }
+        int v = this.getVariantIndex();
+        if (v == 0 || v == 4) return false;
+        this.setVariantIndex(v - 1);
+        return true;
+    }
+
+    @Override
+    public void thunderHit(ServerLevel level, net.minecraft.world.entity.LightningBolt bolt) {
+        if (this.species != GirlSpecies.COPPER_SLIME) {
+            super.thunderHit(level, bolt);
+            return;
+        }
+        this.setVariantIndex(4);                                        // polished bright, and none the worse for it
+        this.weathering = 0;
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32);
+        if (friend != null) friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 2400, 1));
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.COPPER_SLIME && !this.level().isClientSide && ++this.weathering >= WEATHER_TICKS) {
+            this.weathering = 0;
+            if (this.getVariantIndex() == 4) this.setVariantIndex(0);
+            else this.weather();
+        }
         if (this.species == GirlSpecies.KLABUSTER_SLIME && this.level() instanceof ServerLevel field && !this.isBaby() && this.tickCount % 600 == 0) this.manure(field);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.isHalf()) {                                             // find the other half and merge

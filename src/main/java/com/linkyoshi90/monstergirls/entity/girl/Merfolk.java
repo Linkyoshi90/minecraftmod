@@ -140,6 +140,8 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         if (s == GirlSpecies.CETUS_MERMAID) return girlAttributes(70, 0.26, 8);
         return switch (s) {
             case LEVIATHAN_MERMAID -> girlAttributes(70, 0.28, 8);
+            case MANATEE_MERMAID -> girlAttributes(40, 0.2, 2);
+            case ANGLER_MERMAID -> girlAttributes(32, 0.25, 7);
             case SAWFIN_MERMAID -> girlAttributes(24, 0.25, 5);
             case ORCA_MERMAID -> girlAttributes(36, 0.25, 6);
             case SHARK_MERMAID -> girlAttributes(30, 0.25, 7);
@@ -386,6 +388,10 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     public boolean hurt(DamageSource source, float amount) {
         if (this.playDead > 0 && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) return false;
         boolean hurt = super.hurt(source, amount);
+        if (hurt && this.species == GirlSpecies.PUFFERFISH_MERMAID && this.level() instanceof ServerLevel puffed) {
+            if (this.isPuffed() && source.getEntity() instanceof LivingEntity by) by.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 1));
+            this.puff(puffed);
+        }
         if (hurt && this.species == GirlSpecies.PLATYPUS_MERMAID && !this.isBaby() && source.getEntity() instanceof LivingEntity a && a.distanceToSqr(this) < 3 * 3
                 && !(a instanceof Player p && this.getAffection(p) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION)) {
             a.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 0));     // her venomous spur
@@ -468,9 +474,52 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         return true;
     }
 
+    private long puffedUntil;
+
+    /** The pufferfish blows up: half again her size for 6 seconds (FLAG_RETRACTED, sizeScale). */
+    public void puff(ServerLevel level) {
+        this.setFlag(FLAG_RETRACTED, true);
+        this.puffedUntil = level.getGameTime() + 120;
+        this.playSound(net.minecraft.sounds.SoundEvents.PUFFER_FISH_BLOW_UP, 1.0F, this.getVoicePitch());
+    }
+
+    public boolean isPuffed() {
+        return this.hasFlag(FLAG_RETRACTED) && this.species == GirlSpecies.PUFFERFISH_MERMAID;
+    }
+
+    /** The angler's lure: monsters within 12 of her friend turn on her instead. How many, or -1 without a friend. */
+    public int lure(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int drawn = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(12), x -> x.isAlive() && x.getTarget() == friend)) {
+            m.setTarget(this);
+            drawn++;
+        }
+        return drawn;
+    }
+
+    /** The manatee calms the drowned and guardians within 12 of her friend. How many, or -1 without a friend. */
+    public int calmWater(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int calmed = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(12),
+                x -> (x instanceof net.minecraft.world.entity.monster.Drowned || x instanceof net.minecraft.world.entity.monster.Guardian) && x.getTarget() != null)) {
+            m.setTarget(null);
+            calmed++;
+        }
+        return calmed;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.level() instanceof ServerLevel reef && !this.isBaby()) {
+            if (this.species == GirlSpecies.PUFFERFISH_MERMAID && this.isPuffed() && reef.getGameTime() >= this.puffedUntil) this.setFlag(FLAG_RETRACTED, false);
+            if (this.species == GirlSpecies.ANGLER_MERMAID && this.tickCount % 41 == 0) this.lure(reef);
+            if (this.species == GirlSpecies.MANATEE_MERMAID && this.tickCount % 21 == 0) this.calmWater(reef);
+        }
         if (this.species == GirlSpecies.BELUGA_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel sonar && !this.isBaby() && this.tickCount % 60 == 0) this.sonar(sonar);
         if (this.species == GirlSpecies.OLM_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel && !this.isBaby() && this.tickCount % 40 == 0) this.lightless();
         if (this.species == GirlSpecies.LEVIATHAN_MERMAID && this.level() instanceof net.minecraft.server.level.ServerLevel deep && !this.isBaby() && this.tickCount % 20 == 0) this.tideCall(deep);

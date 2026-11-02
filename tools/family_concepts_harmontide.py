@@ -3526,6 +3526,114 @@ for _fid, _entries in THIRTIETH.items():
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
 
+# the leftover ideas of TODO.md, part one
+def _c(id, name, group, tag, height, biomes, temperament, ecology, interaction, signature, danger, variants, short):
+    return (dict(id=id, name=name, group=group, tag=tag, height=height, biomes=biomes, temperament=temperament, ecology=ecology,
+                 interaction=interaction, signature=signature, danger=danger,
+                 variants=[(v.lower(), v + (" (default)" if i == 0 else ""), v) for i, v in enumerate(variants)]),
+            {"Habitat": group, "Signature": short, "Danger": danger})
+
+
+THIRTY_SECOND = {
+    "nekomata": [_c("black_panther_nekomata", "Black Panther", "Jungle nights", "Silent · proud", 1.8, ['jungle', 'sparse_jungle', 'bamboo_jungle'], "Silent",
+                    "A leopard with the lights out: the rosettes are there if you catch her in the sun.", "Fish and raw meat.",
+                    ("Prowl", "Befriended, after dark, her friend near her goes unseen while crouching."), "Medium.", ["Black", "Blue", "Green", "Red", "Grey"], "Hides her crouching friend at night")],
+    "kitsune": [_c("kumiho_kitsune", "Kumiho", "Old mountains", "Nine tails · courteous", 1.75, ['cherry_grove', 'windswept_forest', 'old_growth_birch_forest'], "Courteous",
+                   "The nine-tailed fox of Korean tales, nine tails from the day she is born, her fox bead at her throat.", "Sweet berries and chicken.",
+                   ("Fox Bead", "Befriended, every few minutes she lets her friend hold her bead, and they come away with experience."), "Low.", ["White", "Gold", "Red", "Silver", "Black"], "Gives her friend experience"),
+                _c("bat_eared_kitsune", "Bat-Eared Fox", "Savanna", "All ears · curious", 1.5, ['savanna', 'savanna_plateau'], "Curious",
+                   "A small fox with enormous ears who listens for termites under the ground, and hears a good deal else.", "Sweet berries and spider eyes.",
+                   ("Ear to the Ground", "Befriended, she tells her friend how far off the nearest monster spawner is."), "Low.", ["Tan", "Sand", "Grey", "Rust", "Dark"], "Hears monster spawners")],
+    "lamia": [_c("anaconda_lamia", "Anaconda", "Jungle rivers", "Heavy · glamorous", 2.1, ['jungle', 'swamp', 'mangrove_swamp', 'river'], "Glamorous",
+                 "The heaviest snake in the world and she knows it: all curves, gold and attitude. Nobody hurries her.", "Raw meat and fish.",
+                 ("Gulp and Groove", "Befriended, she swallows a small monster near her friend whole, and when music plays near her, her friend moves faster and hits harder."), "Medium.", ["Olive", "Yellow", "Dark", "Green", "Brown"], "Swallows monsters, loves music"),
+              _c("sea_serpent_lamia", "Sea Serpent", "Open sea", "Vast · stormy", 2.4, ['deep_ocean', 'deep_lukewarm_ocean', 'ocean'], "Stormy",
+                 "The thing at the edge of the old charts, long and barred, and at her best in bad weather.", "Cod and salmon.",
+                 ("Storm Caller", "Befriended, in the rain, lightning finds the monsters near her friend."), "High.", ["Blue", "Green", "Black", "Red", "White"], "Calls lightning in the rain")],
+    "arachne": [_c("black_widow_arachne", "Black Widow", "Dark forests", "Glossy · patient", 1.75, ['dark_forest', 'badlands'], "Patient",
+                   "Gloss black, a red hourglass on her abdomen. She is in no hurry and never has been.", "Raw meat and spider eyes.",
+                   ("Hourglass", "Befriended, she threads the monsters near her friend with venom: poisoned and slowed."), "High.", ["Black", "Brown", "Steel", "Wine", "White"], "Poisons and slows monsters"),
+                _c("peacock_spider_arachne", "Peacock Spider", "Flower forests", "Dazzling · showy", 1.4, ['flower_forest', 'meadow'], "Showy",
+                   "A very small spider in very loud colours, always in the middle of a routine.", "Sweet berries and spider eyes.",
+                   ("Showtime", "Befriended, when she dances near a villager, her friend gets better prices."), "Low.", ["Blue", "Teal", "Violet", "Ember", "Green"], "Better prices near villagers"),
+                _c("cave_spider_arachne", "Cave Spider", "Deep caves", "Wiry · territorial", 1.45, ['dripstone_caves', 'lush_caves'], "Territorial",
+                   "She grew up in the mineshafts and has opinions about how they were built.", "Raw meat and spider eyes.",
+                   ("Clearing Webs", "Befriended, she pulls down the cobwebs near her friend and hands over the string. Cave spiders are her kin."), "Medium.", ["Teal", "Moss", "Rust", "Ash", "Violet"], "Clears cobwebs for string")],
+    "centaur": [_c("donkey_centaur", "Donkey", "Pastures", "Stubborn · loyal", 2.0, ['plains', 'sunflower_plains', 'meadow'], "Stubborn",
+                   "Farmers keep donkeys with their sheep because nothing gets past one. She will not be pushed, and she will not be argued with.", "Wheat and carrots.",
+                   ("Guard Donkey", "She can't be shoved. Befriended, she kicks the monsters near the farm animals around her."), "Low.", ["Grey", "Brown", "Black", "White", "Dun"], "Guards farm animals")],
+    "slime": [_c("copper_slime", "Copper Slime", "Copper caves", "Bright · weathering", 1.6, ['dripstone_caves', 'stony_shore'], "Bright",
+                 "A slime of living copper. She weathers like the blocks do, from bright metal to green, and a little vain about it.", "Copper ingots and slime balls.",
+                 ("Weathering", "She ages a stage every forty minutes. Honeycomb waxes her, an axe scrapes her back. Lightning polishes her all the way, and she stores the charge as speed for her friend."), "Low.", ["Copper", "Exposed", "Weathered", "Oxidized", "Polished"], "Weathers like copper")],
+    "lizardfolk": [_c("komodo_lizardfolk", "Komodo", "Island scrub", "Heavy · unhurried", 2.0, ['savanna', 'stony_shore', 'windswept_savanna'], "Unhurried",
+                      "She bites once and then simply follows until it is over.", "Raw meat.",
+                      ("Slow Venom", "Befriended, any monster near her friend that has already been hurt starts to sicken."), "High.", ["Dust", "Red", "Green", "Grey", "Gold"], "Hurt monsters sicken")],
+    "undead": [_c("skeleton_undead", "Skeleton", "Night fields", "Dry · exacting", 1.8, ['plains', 'dark_forest', 'snowy_plains'], "Exacting",
+                  "Bone-white and thin, her bow never far. Hostile until she is given a bone. She keeps count of every arrow.", "Bones and pumpkin pie.",
+                  ("Arrow Counter", "Befriended, she fights with a bow, and picks up the arrows lying near her friend and gives them back."), "Medium.", ["Bone", "Stray", "Wither", "Bog", "Old"], "Gathers your arrows")],
+    "elf": [_c("snow_elf", "Snow Elf", "Frozen peaks", "Cool · steady", 1.85, ['snowy_taiga', 'grove', 'snowy_slopes'], "Steady",
+               "Elves of the high snow, who skate where others wade.", "Sweet berries and cake.",
+               ("Snow Tread", "Befriended, her friend near her walks on snow without sinking and freezing does not touch them."), "Low.", ["Frost", "Aurora", "Pine", "Dusk", "Ember"], "Her friend walks on snow, never freezes")],
+    "flora": [_c("rose_flora", "Rose", "Flower meadows", "Thorny · elegant", 1.7, ['flower_forest', 'sunflower_plains'], "Elegant",
+                 "A rose from the hips up, thorns included. She is well aware of how she looks.", "Bone meal and sweet berries.",
+                 ("Thorns", "Befriended, whatever hurts her friend near her is pricked and slowed."), "Low.", ["Red", "White", "Yellow", "Pink", "Black"], "Pricks her friend's attackers")],
+}
+for _fid, _entries in THIRTY_SECOND.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(s["id"] == _species["id"] for s in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
+THIRTY_THIRD = {
+    "merfolk": [_c("pufferfish_mermaid", "Pufferfish", "Warm reefs", "Round · touchy", 1.5, ['warm_ocean', 'lukewarm_ocean'], "Touchy",
+                   "Soft, yellow and easily offended. Hit her and she is half as big again and covered in spines.", "Cod and kelp.",
+                   ("Puff", "A hit blows her up for a few seconds: bigger, and whatever hits her then is poisoned."), "Medium.", ["Yellow", "Blue", "Brown", "Green", "Orange"], "Puffs up and poisons"),
+                _c("angler_mermaid", "Angler", "The deep", "Grinning · lit", 1.7, ['deep_ocean', 'deep_cold_ocean', 'deep_lukewarm_ocean'], "Patient",
+                   "All teeth and a little light. She has had a lot of time to think about what she would say to you.", "Cod and salmon.",
+                   ("Lure", "Befriended, her lure draws the monsters near her friend to her instead."), "High.", ["Black", "Violet", "Red", "Teal", "Pale"], "Draws monsters away from her friend"),
+                _c("manatee_mermaid", "Manatee", "Warm rivers", "Soft · unbothered", 2.0, ['river', 'mangrove_swamp', 'warm_ocean'], "Unbothered",
+                   "The gentlest thing in the water. Nothing near her seems to want a fight any more.", "Kelp and seagrass.",
+                   ("Calm Water", "Befriended, the drowned and guardians near her friend lose interest."), "Low.", ["Grey", "Brown", "Blue", "Algae", "Pink"], "Calms things in the water")],
+    "mollusk": [_c("nautilus_mollusk", "Nautilus", "Warm deeps", "Old · careful", 1.8, ['deep_lukewarm_ocean', 'warm_ocean'], "Careful",
+                   "The ammonite's cousin, the one who lived. She moves by jet, and has her shell's chambers tuned to the inch.", "Cod and salmon.",
+                   ("Jet", "Befriended, her crouching friend in the water near her shoots up towards the surface."), "Low.", ["Striped", "Brown", "Pearl", "Black", "Blue"], "Jets her friend to the surface"),
+                _c("sea_slug_mollusk", "Sea Slug", "Warm shallows", "Loud · borrowed", 1.55, ['warm_ocean', 'lukewarm_ocean'], "Curious",
+                   "A nudibranch in loud colours. She keeps what she eats: real sea slugs wear the stings of what they swallow, and she will do the same with a potion.", "Kelp and potions.",
+                   ("Borrowed Sting", "Hand her a potion and she drinks it, then shares its effect with her friend near her for three minutes."), "Low.", ["Violet", "Blue", "Gold", "Pink", "White"], "Shares any potion you give her")],
+    "dragon": [_c("amphiptere_dragon", "Amphiptere", "High winds", "Swift · weightless", 2.4, ['windswept_hills', 'windswept_forest', 'jagged_peaks'], "Swift",
+                  "A winged serpent with no legs at all: she never lands if she can help it.", "Raw meat and gold.",
+                  ("Tailwind", "Befriended, her friend gliding on an elytra near her is carried along faster."), "Medium.", ["Green", "Red", "Blue", "White", "Black"], "Speeds her friend's elytra"),
+               _c("ender_dragon", "Ender Dragon", "The End", "Vast · imperious", 2.4, ['end_highlands', 'end_midlands'], "Imperious",
+                  "The dragon of the End, or something that looks back at you from a girl's shape. Very rare. She is not impressed.", "Chorus fruit and gold.",
+                  ("Dragon's Breath", "Befriended, she breathes into a glass bottle once every ten minutes: dragon's breath."), "Extreme.", ["Black", "Violet", "Pale", "End_stone", "Void"], "Fills bottles with dragon's breath")],
+    "bug": [_c("ant_bug", "Ant", "Forests", "Tireless · orderly", 1.6, ['forest', 'birch_forest', 'plains'], "Tireless",
+               "One ant is a worker in a vest. She carries things and has views on the right way to do it.", "Sugar and honey.",
+               ("Hauling", "Befriended, she carries the loose items near her friend to them."), "Low.", ["Red", "Black", "Honey", "Leaf", "Fire"], "Brings loose items to her friend"),
+            _c("queen_ant_bug", "Queen Ant", "Forests", "Regal · busy", 1.9, ['forest', 'dark_forest'], "Regal",
+               "Winged, tall and in charge of everyone. A colony is whoever she says it is.", "Sugar and honey.",
+               ("Brood", "Befriended, she raises an ant now and then (four at most near her), and the ant knows her friend."), "Low.", ["Red", "Black", "Honey", "Leaf", "Fire"], "Raises ants for her friend"),
+            _c("spider_wasp_bug", "Spider-Wasp", "Badlands", "Metallic · fearless", 1.8, ['badlands', 'wooded_badlands', 'savanna'], "Fearless",
+               "The tarantula hawk: blue steel and burning orange. Spiders stop moving when they hear her.", "Sugar and spider eyes.",
+               ("Paralysis", "Befriended, she stings the spiders near her friend and they cannot move."), "High.", ["Blue", "Black", "Green", "Violet", "Amber"], "Paralyses spiders")],
+    "flora": [_c("lotus_flora", "Lotus", "Still water", "Calm · renewed", 1.7, ['swamp', 'river', 'cherry_grove'], "Calm",
+                 "She closes at night and opens at dawn, and is always a little surprised to be back.", "Bone meal and sweet berries.",
+                 ("Dawn Bloom", "Befriended, at sunrise her friend near her loses every ill effect and is fed."), "Low.", ["Pink", "White", "Blue", "Gold", "Violet"], "Clears ill effects at dawn")],
+    "lizardfolk": [_c("newt_lizardfolk", "Newt", "Ponds and streams", "Low · alert", 1.8, ['swamp', 'river', 'forest', 'lush_caves'], "Alert",
+                      "A grown woman built like a newt: long, low and splayed out on all fours with her head up, and a keeled tail. She can stand if she wants to, for a little while, but she would rather not. She doesn't bother with a top: anything up front would only drag.", "Spider eyes and kelp.",
+                      ("Regrowth", "Her skin stings whatever bites her. In the water she heals fast, and befriended, her friend beside her in the water heals too. She rears up to look around, then drops back down."), "Low.", ["Olive", "Crested", "Alpine", "Fire", "Marbled"], "Heals in water, toxic skin")],
+}
+for _fid, _entries in THIRTY_THIRD.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(s["id"] == _species["id"] for s in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 # homage variants of 2026-10-28 (POP_CULTURE_VARIANTS.md): appended after every wave, so every species exists by now
 for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, a black bodysuit with a pink heart, white gloves and boots")),
                        ("ika_mollusk", ("ink_kid", "Ink Kid", "Bright orange tentacle hair, a white tee and black shorts")),

@@ -75,6 +75,8 @@ public class Dragon extends AbstractMonsterGirl {
         if (s == GirlSpecies.BAHAMUT_DRAGON) return girlAttributes(60, 0.28, 8);
         return switch (s) {
             case LONG_DRAGON -> girlAttributes(60, 0.25, 6);
+            case ENDER_DRAGON -> girlAttributes(120, 0.28, 14);
+            case AMPHIPTERE_DRAGON -> girlAttributes(36, 0.3, 5);
             case JORMUNGANDR_DRAGON -> girlAttributes(80, 0.22, 10).add(Attributes.ARMOR, 8);
             case WYRM_DRAGON -> girlAttributes(70, 0.28, 10).add(Attributes.ARMOR, 6);
             case GRYPHON_DRAGON -> girlAttributes(50, 0.32, 7);
@@ -89,7 +91,7 @@ public class Dragon extends AbstractMonsterGirl {
     @Override
     public boolean canFly() {
         return switch (this.species) {
-            case KUN_DRAGON, LONG_DRAGON, WYRM_DRAGON, GRYPHON_DRAGON, WYVERN_DRAGON, ALEBRIJE_DRAGON, COCKATRICE_DRAGON, MACAWTL_DRAGON, QUETZALCOATL_DRAGON, BAHAMUT_DRAGON -> true;
+            case AMPHIPTERE_DRAGON, ENDER_DRAGON, KUN_DRAGON, LONG_DRAGON, WYRM_DRAGON, GRYPHON_DRAGON, WYVERN_DRAGON, ALEBRIJE_DRAGON, COCKATRICE_DRAGON, MACAWTL_DRAGON, QUETZALCOATL_DRAGON, BAHAMUT_DRAGON -> true;
             default -> false;
         };
     }
@@ -161,6 +163,15 @@ public class Dragon extends AbstractMonsterGirl {
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
         boolean client = this.level().isClientSide;
+        if (this.species == GirlSpecies.ENDER_DRAGON && stack.is(Items.GLASS_BOTTLE) && this.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {
+            if (!client && this.level().getGameTime() >= this.getPersistentData().getLong("NextBreath")) {
+                this.getPersistentData().putLong("NextBreath", this.level().getGameTime() + 12000);
+                stack.consume(1, player);
+                player.getInventory().placeItemBackInInventory(new ItemStack(Items.DRAGON_BREATH));
+                this.playSound(net.minecraft.sounds.SoundEvents.ENDER_DRAGON_AMBIENT, 0.6F, 1.4F);
+            }
+            return InteractionResult.sidedSuccess(client);
+        }
         if (shiny(stack) && !stack.is(Items.GOLDEN_APPLE)) {                    // a gift for the hoard
             if (!client) {
                 this.addAffection(player, 2);
@@ -356,9 +367,19 @@ public class Dragon extends AbstractMonsterGirl {
         return true;
     }
 
+    /** The amphiptere's tailwind: her friend gliding near her goes faster. True if she pushed. */
+    public boolean tailwind() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null || !friend.isFallFlying()) return false;
+        friend.setDeltaMovement(friend.getDeltaMovement().add(friend.getLookAngle().scale(0.12)));
+        friend.hurtMarked = true;
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.AMPHIPTERE_DRAGON && !this.level().isClientSide && !this.isBaby() && this.tickCount % 5 == 0) this.tailwind();
         if (this.species == GirlSpecies.KUN_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel sky && !this.isBaby() && this.tickCount % 10 == 0) this.overTheVoid(sky);
         if (this.species == GirlSpecies.QUETZALCOATL_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel dawn && !this.isBaby() && this.tickCount % 100 == 0
                 && dawn.getDayTime() % 24000L < 1000L) this.morningStar(dawn);
