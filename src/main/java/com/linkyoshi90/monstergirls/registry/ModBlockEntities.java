@@ -40,5 +40,17 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("milking_machine", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.MilkingMachineBlockEntity::new,
                     ModBlocks.MILKING_MACHINE.get()).build(null));
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.linkyoshi90.monstergirls.block.CookingPotBlockEntity>> COOKING_POT =
+            BLOCK_ENTITIES.register("cooking_pot", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.CookingPotBlockEntity::new,
+                    ModBlocks.COOKING_POT.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.linkyoshi90.monstergirls.block.SoakingTubBlockEntity>> SOAKING_TUB =
+            BLOCK_ENTITIES.register("soaking_tub", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.SoakingTubBlockEntity::new,
+                    ModBlocks.SOAKING_TUB.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.linkyoshi90.monstergirls.block.SparringPostBlockEntity>> SPARRING_POST =
+            BLOCK_ENTITIES.register("sparring_post", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.SparringPostBlockEntity::new,
+                    ModBlocks.SPARRING_POST.get()).build(null));
+
     private ModBlockEntities() {}
 }

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "filled=false": {
+      "model": "monstergirls:block/soaking_tub"
+    },
+    "filled=true": {
+      "model": "monstergirls:block/soaking_tub_filled"
+    }
+  }
+}

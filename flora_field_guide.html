@@ -102,7 +102,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:v
   </section>
   <section id="split">
     <h2>Where the species split</h2>
-    <div class="table-wrap"><table><thead><tr><th>Trait</th><th>Alraune</th><th>Matango</th><th>Ent</th><th>Cactus</th><th>Mandragora</th><th>Leshy</th><th>Venus Flytrap</th><th>Kesaran Pasaran</th><th>Dryad</th><th>Shiitake</th></tr></thead><tbody><tr><th>Habitat</th><td>Flower forests, meadows, swamps</td><td>Mushroom fields, dark forests</td><td>Old-growth forests</td><td>Deserts, badlands</td><td>Swamps, dark forests, plains</td><td>Old-growth taiga</td><td>Swamps</td><td>Meadows</td><td>Forests</td><td>Mushroom fields</td></tr><tr><th>Signature</th><td>Pollen, lures</td><td>Mycelium travel, spores</td><td>Huge, plants trees</td><td>Thorns, needs little water</td><td>Hides in the ground, screams</td><td>Counts your trees, fog</td><td>Snaps and holds, guards gardens</td><td>Drifts on the wind, brings Luck</td><td>Grows saplings</td><td>Takes blows for a friend</td></tr><tr><th>Danger</th><td>Low</td><td>Low</td><td>High if provoked</td><td>Low</td><td>Low (the scream)</td><td>Low</td><td>Medium</td><td>None</td><td>None</td><td>Low.</td></tr></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th>Trait</th><th>Alraune</th><th>Matango</th><th>Ent</th><th>Cactus</th><th>Mandragora</th><th>Leshy</th><th>Venus Flytrap</th><th>Kesaran Pasaran</th><th>Dryad</th><th>Shiitake</th><th>Rose</th><th>Lotus</th></tr></thead><tbody><tr><th>Habitat</th><td>Flower forests, meadows, swamps</td><td>Mushroom fields, dark forests</td><td>Old-growth forests</td><td>Deserts, badlands</td><td>Swamps, dark forests, plains</td><td>Old-growth taiga</td><td>Swamps</td><td>Meadows</td><td>Forests</td><td>Mushroom fields</td><td>Flower meadows</td><td>Still water</td></tr><tr><th>Signature</th><td>Pollen, lures</td><td>Mycelium travel, spores</td><td>Huge, plants trees</td><td>Thorns, needs little water</td><td>Hides in the ground, screams</td><td>Counts your trees, fog</td><td>Snaps and holds, guards gardens</td><td>Drifts on the wind, brings Luck</td><td>Grows saplings</td><td>Takes blows for a friend</td><td>Pricks her friend&#x27;s attackers</td><td>Clears ill effects at dawn</td></tr><tr><th>Danger</th><td>Low</td><td>Low</td><td>High if provoked</td><td>Low</td><td>Low (the scream)</td><td>Low</td><td>Medium</td><td>None</td><td>None</td><td>Low.</td><td>Low.</td><td>Low.</td></tr></tbody></table></div>
   </section>
   <section id="species">
     <h2>Species profiles</h2>
@@ -217,6 +217,28 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:v
         <p><b>Spawns in</b><code>mushroom_fields</code></p>
         <p class="risk"><b>Danger</b>Low.</p>
       </article>
+      <article class="card" id="rose_flora">
+        <div class="card-top"><span class="group">Flower meadows</span><span class="tag">Thorny · elegant</span></div>
+        <h3>Rose <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Elegant</p>
+        <p><b>Ecology &amp; behaviour</b>A rose from the hips up, thorns included. She is well aware of how she looks.</p>
+        <p><b>Signature: Thorns</b>Befriended, whatever hurts her friend near her is pricked and slowed.</p>
+        <p><b>Player interaction</b>Bone meal and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Yellow</strong> · Yellow</span><span class="swatch"><strong>Pink</strong> · Pink</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>flower_forest, sunflower_plains</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+      </article>
+      <article class="card" id="lotus_flora">
+        <div class="card-top"><span class="group">Still water</span><span class="tag">Calm · renewed</span></div>
+        <h3>Lotus <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Calm</p>
+        <p><b>Ecology &amp; behaviour</b>She closes at night and opens at dawn, and is always a little surprised to be back.</p>
+        <p><b>Signature: Dawn Bloom</b>Befriended, at sunrise her friend near her loses every ill effect and is fed.</p>
+        <p><b>Player interaction</b>Bone meal and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Pink (default)</strong> · Pink</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Violet</strong> · Violet</span></div>
+        <p><b>Spawns in</b><code>swamp, river, cherry_grove</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+      </article>
     </div>
   </section>
   <section id="concept-models">
@@ -246,7 +268,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:v
   <section id="status">
     <h2>In the game</h2>
     <div class="grid">
-      <div class="card"><h3>Built (2026-10-19)</h3><ul><li>Rooted (still on soil): heals and grows crops nearby (much faster when devoted)</li><li>Bone meal and water</li><li>Alraune: pollen (Nausea, Slowness), plants flowers</li><li>Matango: spores, sinks into the ground and comes up elsewhere</li><li>Ent: plants saplings, hits very hard</li><li>Cactus: spines hurt attackers</li><li>Mandragora: buries herself, screams when pulled out (stuns all but the puller)</li><li>Fire hurts double</li><li>Seeds that sprout into seedlings</li><li>Shiitake: her offshoots take a blow meant for her friend, then regrow; kept out of the bed system</li><li>Dryad: befriended, every half minute the saplings near her friend grow as if given bone meal</li><li>Kesaran pasaran: never touches the ground, drifting on a wind that blows the same way for all of them; befriended, she drifts after her friend and gives Luck; sugar makes her split in two (three at most)</li><li>Venus flytrap: snaps shut on whatever steps into reach, holding and biting for three seconds; befriended, only monsters</li></ul></div>
+      <div class="card"><h3>Built (2026-10-19)</h3><ul><li>Lotus: at dawn clears ill effects and feeds her friend</li><li>Rose: whatever hurts her friend near her is pricked and slowed</li><li>Rooted (still on soil): heals and grows crops nearby (much faster when devoted)</li><li>Bone meal and water</li><li>Alraune: pollen (Nausea, Slowness), plants flowers</li><li>Matango: spores, sinks into the ground and comes up elsewhere</li><li>Ent: plants saplings, hits very hard</li><li>Cactus: spines hurt attackers</li><li>Mandragora: buries herself, screams when pulled out (stuns all but the puller)</li><li>Fire hurts double</li><li>Seeds that sprout into seedlings</li><li>Shiitake: her offshoots take a blow meant for her friend, then regrow; kept out of the bed system</li><li>Dryad: befriended, every half minute the saplings near her friend grow as if given bone meal</li><li>Kesaran pasaran: never touches the ground, drifting on a wind that blows the same way for all of them; befriended, she drifts after her friend and gives Luck; sugar makes her split in two (three at most)</li><li>Venus flytrap: snaps shut on whatever steps into reach, holding and biting for three seconds; befriended, only monsters</li></ul></div>
       <div class="card"><h3>Not yet</h3><ul><li>Plantable alraune flower block</li></ul></div>
     </div>
   </section>

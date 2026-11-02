@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "monstergirls:block/vanity_mirror",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "monstergirls:block/vanity_mirror",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "monstergirls:block/vanity_mirror",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "monstergirls:block/vanity_mirror",
+      "y": 270
+    }
+  }
+}

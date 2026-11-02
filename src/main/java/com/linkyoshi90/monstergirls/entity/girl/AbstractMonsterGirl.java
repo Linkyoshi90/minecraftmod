@@ -204,6 +204,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (this.segments.length > 0) this.setId(ENTITY_COUNTER.getAndAdd(this.segments.length + 1) + 1);
         this.goalSelector.addGoal(-1, new SitWhenOrderedGoal<>(this));
         this.goalSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StayNearGoal<>(this));
+        this.goalSelector.addGoal(2, new com.linkyoshi90.monstergirls.entity.ai.FetchBallGoal<>(this));
         this.goalSelector.addGoal(3, new FarmhandGoal<>(this));
         this.goalSelector.addGoal(7, new SleepGoal(this));
         this.targetSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StanceTargetGoal<>(this));
@@ -354,6 +355,18 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     public String getVariantName() {
         return this.species.variants().get(this.getVariantIndex());
+    }
+
+    /** The vanity mirror: her next colour, leaving out the ones she has to earn. */
+    public void nextVariant() {
+        int n = this.species.variants().size();
+        for (int i = 1; i < n; i++) {
+            int v = (this.getVariantIndex() + i) % n;
+            if (!EARNED.contains(this.species.variants().get(v))) {
+                this.setVariantIndex(v);
+                return;
+            }
+        }
     }
 
     public void setVariant(String name) {

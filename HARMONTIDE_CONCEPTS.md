@@ -614,6 +614,66 @@ sandstone since 2026-10-29), so 87 in all.
 Homage props (POP_CULTURE_VARIANTS.md): the dullahan's headless rider (Celty) has her yellow cat-eared helmet over the head she
 carries, the death envoy (Lala) a scythe in her free hand; both are drawn only on their own looks.
 
+## Thirty-fourth wave (2026-11-02, in the game): life at home
+
+New ways to spend time with friends, for anything Bonded: harpies and frogs too, unless noted. `entity/HomeLife.java`, assets from `tools/gen_home_assets.py`, tested in `HomeLifeTests`.
+
+| Thing | How it works |
+|---|---|
+| **Grooming Brush** | Use it on anyone who likes you: 2 friendship, every five minutes. One time in three something comes out of her coat, by family (feather, slime ball, prismarine shard, hide). 64 uses. |
+| **Toy Ball** | Right-click to throw, or drop it. A friend within 16 runs after it and brings it back: 1 friendship, a minute apart (girls and harpies). |
+| **Friend Whistle** | Every friend within 48 comes running. |
+| **Cooking Pot** | On a lit campfire, fire, magma or lava. Three foods go in, 15 seconds later a bowl takes out each of two Home-Cooked Meals. |
+| **Home-Cooked Meal** | 10 food for you. Any friend eats it whatever her diet: 5 friendship and 4 hearts of health, every two minutes. |
+| **Picnic Blanket** | Use food on it: friends within 20 come over, 2 friendship each, every ten minutes, and you eat well. The food only goes if somebody came. |
+| **Vanity Mirror** | Your hand on it: the nearest friend within 6 tries on her next colour (a random one for harpies; frogs have none here). |
+| **Soaking Tub** | Fill it with a water bucket, a bucket empties it. Standing in it you regenerate, and friends within 12 come over, regenerate too, 1 friendship every five minutes. |
+| **Sparring Post** | With you within 16, friends within 5 practise on it: a round a minute, each one +0.25 attack, up to +5 at 20 rounds. It stays with her. |
+
+## Thirty-third wave (2026-11-02, in the game)
+
+The rest of TODO's list of species ideas.
+
+| Species | Home | Design |
+|---|---|---|
+| **Pufferfish** | Merfolk | Warm reefs. A hit blows her up half again as big for 6 s, and another hit then poisons the attacker. |
+| **Angler** | Merfolk | The deep. A glowing lure. Monsters after her friend turn on her. |
+| **Manatee** | Merfolk | Warm rivers. The drowned and guardians near her friend lose interest. |
+| **Nautilus** | Mollusk | Warm deeps. Her crouching friend in the water shoots up to the surface. |
+| **Sea Slug** | Mollusk | Hand her a potion: she shares its effect with her friend for three minutes. |
+| **Amphiptere** | Dragon | Rearing rig, no legs. Her friend's elytra flies faster near her. |
+| **Ender Dragon** | Dragon | The End, 120 health. A glass bottle gets dragon's breath every ten minutes. |
+| **Ant** | Bug | Walks. Brings the loose items near her friend to them. |
+| **Queen Ant** | Bug | Raises an ant who knows her friend, four at most near her. |
+| **Spider-Wasp** | Bug | Flies. Paralyses spiders near her friend. |
+| **Lotus** | Flora | At dawn her friend loses every ill effect and is fed. |
+| **Newt** | Lizardfolk | User design: a grown woman on all fours, long-backed and low with a forward-looking head, flat-chested, keeled tail. The lizardfolk body laid prone (`newt_prone`, build `lithe`), the spine stretched by bone scale. Low hitbox, standing height 1.8. Rears up now and then (`Action.REAR`). Heals in water, with her friend; biters are poisoned. Not a new family: a salamander's neighbour. |
+| **Hummingbird** | Harpy | The phoenix's rig, small. Near flowers her friend gets Speed II. |
+| **Duck** | Harpy | The gull's rig: mallard, mandarin, white, teal, black. Tells her friend when rain is due. |
+
+## Thirty-second wave (2026-11-02, in the game)
+
+The first half of TODO's list of species ideas.
+
+| Species | Home | Design |
+|---|---|---|
+| **Black Panther** | Nekomata | Jungle. After dark, her crouching friend goes unseen. |
+| **Kumiho** | Kitsune | Nine tails from birth; her bead gives her friend experience. |
+| **Bat-Eared Fox** | Kitsune | Tells her friend how far off the nearest monster spawner is. |
+| **Anaconda** | Lamia | The heaviest snake: 60 health, curvy, gold jewellery, thick tail. Swallows small monsters, then rests; music near her gives her friend Speed and Strength. An original character: the user asked for a real singer's look and that was declined, because the mod has bed-sharing. |
+| **Sea Serpent** | Lamia | Open sea (on the lamia rig so she can swim). In the rain, lightning finds monsters near her friend. |
+| **Black Widow** | Arachne | Poisons and slows the monster nearest her friend. |
+| **Peacock Spider** | Arachne | Dances near villagers: Hero of the Village for her friend. |
+| **Cave Spider** | Arachne | Clears cobwebs near her friend into string. Kin of cave spiders. |
+| **Donkey** | Centaur | Can't be shoved. Kicks monsters near farm animals. |
+| **Copper Slime** | Slime | Weathers a stage every 40 minutes. Honeycomb waxes, an axe scrapes, lightning polishes her and gives her friend Speed. |
+| **Komodo** | Lizardfolk | Hurt monsters near her friend sicken. |
+| **Skeleton** | Undead | Hostile until given a bone; bow fighter; gathers the arrows near her friend. |
+| **Snow Elf** | Elf | Her friend doesn't freeze and climbs out of powder snow. |
+| **Rose** | Flora | Whatever hurts her friend is pricked and slowed. |
+
+Close enough to existing species to leave out: viper (caraviper), crystal slime (amethyst), parrot (macaw), vulture (condorune), elk (halberelk), imp (lesser devil), beetle (scarabronze, date beetle), mushroom dryad (matango).
+
 ## Thirty-first wave (2026-11-01, in the game)
 
 No new creatures: this one is about where they spawn (`tools/gen_biome_coverage.py`).

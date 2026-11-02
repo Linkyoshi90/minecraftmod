@@ -58,6 +58,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
 
     public Lizardfolk(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
+        if (species == GirlSpecies.NEWT_LIZARDFOLK) this.refreshDimensions();    // the size was set before species was
         if (species == GirlSpecies.SALAMANDER_LIZARDFOLK) {
             this.setPathfindingMalus(PathType.LAVA, 0.0F);
             this.setPathfindingMalus(PathType.DANGER_FIRE, 0.0F);
@@ -374,6 +375,7 @@ public class Lizardfolk extends AbstractMonsterGirl {
         int sick = 0;
         for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(12), x -> x.isAlive() && x.getHealth() < x.getMaxHealth())) {
             m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.POISON, 80, 1));
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WEAKNESS, 80, 0));   // the undead shrug off the poison
             sick++;
         }
         return sick;

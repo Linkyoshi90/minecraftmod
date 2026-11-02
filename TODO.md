@@ -312,6 +312,9 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
 - [x] **Twenty-ninth wave** (2026-11-01), tested in `TwentyNinthWaveTests`; see HARMONTIDE_CONCEPTS.md. The worn-out moonstruck pose no longer gets overwritten (`ShareBedGoal`). As planned: the missing system (based on friendship points; conception is certain today, so a higher chance needs a lower base chance first). Mushroom: Shiitake (a main body with small offshoots shaped like girls, on adult proportions, kept out of the bed system), Shroomotaur, Censhroom, Cordyceps Infected. Warped: Firesprite, Zoglintaur, Piglette (these two also crimson forest). Soul sand: Lost Soul, Soul Cluster, Soul Leech.
 - [x] **Thirtieth wave** (2026-11-01), tested in `ThirtiethWaveTests`; see HARMONTIDE_CONCEPTS.md. As planned: cold ocean: Beluga, Spider Crab, Giant Kraken, Drowned zombie looks. Dripstone: Olm, Cave Gekko, Knocker (warns of cave-ins), Famished (hostile until a player drops food, then friendly and less monstrous: two looks; no antlers or deer skull). End: Moon Rabbit, Kaguya, Ophanim, Norn, Kun; add the Baku to the midlands.
 - [x] **Thirty-first wave** (2026-11-01), tested in `ThirtyFirstWaveTests`; see HARMONTIDE_CONCEPTS.md. `tools/gen_biome_coverage.py` runs after `gen_girl_data.py` and `add_harpy_extras.py`.
+- [x] **Thirty-second and thirty-third waves** (2026-11-02), tested in `ThirtySecondWaveTests`; see HARMONTIDE_CONCEPTS.md. The rest of the species ideas: 28 creatures, 407 girl species.
+- [x] **Thirty-fourth wave** (2026-11-02), tested in `HomeLifeTests`: life at home (`entity/HomeLife`, `tools/gen_home_assets.py`): grooming brush, toy ball, friend whistle, cooking pot and home-cooked meals, picnic blanket, vanity mirror, soaking tub, sparring post.
+- [ ] Dev client for the thirty-second to thirty-fourth waves: the newt's crawl, rear and swim (hind legs splayed enough? the head scale on her hair?), bone scale in GeckoLib, the pufferfish's puff, the angler's lure, the sea serpent swimming, the new block models and their textures, fetch with a flying harpy, whether friends reach the tub.
 - [ ] A world with each of Biomes O' Plenty, Oh The Biomes We've Gone, Regions Unexplored and Terralith: creatures spawn in their biomes, and nothing logs a tag error.
 - [ ] Real client with both jars, then with the main jar only: a painted girl, a glowing paint and a see-through paint show properly, and without the paints jar they are drawn unpainted with no missing textures.
 - [ ] Dev client for the thirtieth wave: the Giant Kraken's size in water, the Ophanim's ring, the Olm's blank face, the Famished's claws and how the look changes when fed, the Drowned walking the sea floor, the Kun over the void, spawns in the End; the four paints; the eight homage looks.
@@ -518,7 +521,7 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
 - [ ] Dev client: how the drips read at game scale, and jello's translucency on the harpies' wings.
 - [x] **Expecting bellies** no longer stretch abs over the bump: the belly bone has its own smooth skin texture (`belly_skin`). All 17 girl families were regenerated.
 - [x] Decided: no Kachina and no Rainbow Serpent. Bears share a family with kobolds and the other canids ("canid girls").
-- [ ] Decide on the sensitive ones: Kachina (recommendation: drop it), Uktena, Wayob. Decided (2026-10-26): no Thunderbird.
+- [x] The sensitive ones: no Kachina and no Thunderbird; Uktena and Wayob are set aside (HARMONTIDE_ROSTER.md).
 - [ ] Decide which new families are worth their own class: Giants, Celestials, Horsemen, Fury, Crustaceans.
 
 ## 0d. Kinship (girls and their vanilla counterparts)
@@ -657,28 +660,7 @@ The answers given on 2026-10-22, as a work list. Ticked = in game.
 
 ## 1. More species ideas
 
-Ideas to pick from. Each new species needs a gen module, a field-guide entry, tests and its own favourite food.
-
-- **Nekomata:** caracal, black panther, ocelot
-- **Kitsune:** kumiho (nine tails from birth), bat-eared fox
-- **Lamia:** viper, anaconda, medusa (a petrifying gaze)
-- **Arachne:** black widow, peacock spider, cave spider
-- **Centaur:** donkey, unicorn, camel, elk
-- **Merfolk:** pufferfish, angler, manatee, siren (a luring song)
-- **Slime:** ender slime (teleports), copper slime (oxidises), crystal slime
-- **Harpy:** penguin, flamingo, hummingbird, vulture, parrot, duck (mallard, mandarin, white farm duck)
-- **Anuran:** axolotl-like newt girls (a salamander sub-family?)
-- **Jackalope:** wolpertinger, snowshoe hare
-- **Minotaur:** yak, highland cow
-- **Mollusk:** jellyfish, nautilus, sea slug (nudibranch)
-- **Elf:** snow elf, dark elf of the deep dark
-- **Undead:** mummy, banshee, ghoul, skeleton
-- **Lizardfolk:** gecko (climbs walls), komodo (venomous bite), axolotl
-- **Dragon:** amphiptere, sea serpent, ender dragon girl
-- **Devil:** imp, oni, hellhound
-- **Bug:** ant with queen, mantis, firefly, beetle, spider-wasp
-- **Flora:** mushroom-cap dryad, venus flytrap, rose, lotus (water)
-- **Whole new families:** wolf girls, bats, kobolds, golems, cyclops, sheep girls, sphinx, gorgons
+All built (thirty-second and thirty-third waves). New ones need new concepts.
 
 ## 2. Seagull/sparrow arrow farm
 

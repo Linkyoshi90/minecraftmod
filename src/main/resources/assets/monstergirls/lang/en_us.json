@@ -2309,5 +2309,21 @@
   "entity.monstergirls.nautilus_mollusk": "Nautilus",
   "item.monstergirls.nautilus_mollusk_spawn_egg": "Nautilus Spawn Egg",
   "journal.monstergirls.nautilus_mollusk.home": "Warm deeps",
-  "journal.monstergirls.nautilus_mollusk.signature": "Jet: Befriended, her crouching friend in the water near her shoots up towards the surface."
+  "journal.monstergirls.nautilus_mollusk.signature": "Jet: Befriended, her crouching friend in the water near her shoots up towards the surface.",
+  "block.monstergirls.picnic_blanket": "Picnic Blanket",
+  "block.monstergirls.vanity_mirror": "Vanity Mirror",
+  "block.monstergirls.cooking_pot": "Cooking Pot",
+  "block.monstergirls.soaking_tub": "Soaking Tub",
+  "block.monstergirls.sparring_post": "Sparring Post",
+  "item.monstergirls.grooming_brush": "Grooming Brush",
+  "item.monstergirls.toy_ball": "Toy Ball",
+  "item.monstergirls.friend_whistle": "Friend Whistle",
+  "item.monstergirls.homemade_meal": "Home-Cooked Meal",
+  "message.monstergirls.groomed": "%s has only just been brushed",
+  "message.monstergirls.full": "%s couldn't manage another bite yet",
+  "message.monstergirls.whistle": "%s came running",
+  "message.monstergirls.picnic": "Friends at the picnic: %s",
+  "message.monstergirls.picnic_nobody": "Nobody has come for a picnic",
+  "message.monstergirls.mirror_nobody": "No friend near the mirror",
+  "message.monstergirls.pot": "In the pot: %s of %s"
 }

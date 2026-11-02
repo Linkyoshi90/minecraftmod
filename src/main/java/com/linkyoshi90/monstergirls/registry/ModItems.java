@@ -181,6 +181,16 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> PAINTED_EGG = ITEMS.registerSimpleBlockItem(ModBlocks.PAINTED_EGG);
     public static final DeferredItem<BlockItem> HEARTH = ITEMS.registerSimpleBlockItem(ModBlocks.HEARTH);
     public static final DeferredItem<BlockItem> MILKING_MACHINE = ITEMS.registerSimpleBlockItem(ModBlocks.MILKING_MACHINE);
+    public static final DeferredItem<BlockItem> PICNIC_BLANKET = ITEMS.registerSimpleBlockItem(ModBlocks.PICNIC_BLANKET);
+    public static final DeferredItem<BlockItem> VANITY_MIRROR = ITEMS.registerSimpleBlockItem(ModBlocks.VANITY_MIRROR);
+    public static final DeferredItem<BlockItem> COOKING_POT = ITEMS.registerSimpleBlockItem(ModBlocks.COOKING_POT);
+    public static final DeferredItem<BlockItem> SOAKING_TUB = ITEMS.registerSimpleBlockItem(ModBlocks.SOAKING_TUB);
+    public static final DeferredItem<BlockItem> SPARRING_POST = ITEMS.registerSimpleBlockItem(ModBlocks.SPARRING_POST);
+    public static final DeferredItem<Item> GROOMING_BRUSH = ITEMS.registerSimpleItem("grooming_brush", new Item.Properties().durability(64));
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.ToyBallItem> TOY_BALL = ITEMS.register("toy_ball", () -> new com.linkyoshi90.monstergirls.item.ToyBallItem(new Item.Properties().stacksTo(16)));
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.WhistleItem> WHISTLE = ITEMS.register("friend_whistle", () -> new com.linkyoshi90.monstergirls.item.WhistleItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> HOMEMADE_MEAL = ITEMS.registerSimpleItem("homemade_meal", new Item.Properties().stacksTo(16)
+            .food(new net.minecraft.world.food.FoodProperties.Builder().nutrition(10).saturationModifier(0.8F).usingConvertsTo(net.minecraft.world.item.Items.BOWL).build()));
     /** A fertilised harpy egg: place it somewhere solid and it hatches in about a day. */
     public static final DeferredItem<BlockItem> HARPY_EGG = ITEMS.register("harpy_egg",
             () -> new HarpyEggItem(ModBlocks.HARPY_EGG.get(), new Item.Properties().stacksTo(16)));

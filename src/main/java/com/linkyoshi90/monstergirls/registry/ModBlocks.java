@@ -67,6 +67,23 @@ public final class ModBlocks {
             com.linkyoshi90.monstergirls.block.MilkingMachineBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(2.0F, 6.0F).sound(SoundType.COPPER).requiresCorrectToolForDrops().noOcclusion());
 
+    // the thirty-fourth wave: life at home
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.PicnicBlanketBlock> PICNIC_BLANKET = BLOCKS.registerBlock("picnic_blanket",
+            com.linkyoshi90.monstergirls.block.PicnicBlanketBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.1F).sound(SoundType.WOOL).noOcclusion().ignitedByLava().pushReaction(PushReaction.DESTROY));
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.VanityMirrorBlock> VANITY_MIRROR = BLOCKS.registerBlock("vanity_mirror",
+            com.linkyoshi90.monstergirls.block.VanityMirrorBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1.0F).sound(SoundType.GLASS).noOcclusion());
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.CookingPotBlock> COOKING_POT = BLOCKS.registerBlock("cooking_pot",
+            com.linkyoshi90.monstergirls.block.CookingPotBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(2.0F).sound(SoundType.METAL).noOcclusion().requiresCorrectToolForDrops());
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.SoakingTubBlock> SOAKING_TUB = BLOCKS.registerBlock("soaking_tub",
+            com.linkyoshi90.monstergirls.block.SoakingTubBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1.5F).sound(SoundType.WOOD).noOcclusion());
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.SparringPostBlock> SPARRING_POST = BLOCKS.registerBlock("sparring_post",
+            com.linkyoshi90.monstergirls.block.SparringPostBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1.5F).sound(SoundType.WOOD).noOcclusion());
+
     /** The nectar fluid's block (see ModFluids). */
     public static final DeferredBlock<net.minecraft.world.level.block.LiquidBlock> NECTAR = BLOCKS.register("nectar",
             () -> new net.minecraft.world.level.block.LiquidBlock(ModFluids.NECTAR.get(),
