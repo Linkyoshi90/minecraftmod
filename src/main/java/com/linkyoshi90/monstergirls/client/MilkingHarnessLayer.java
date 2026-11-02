@@ -64,10 +64,11 @@ public class MilkingHarnessLayer extends GeoRenderLayer<AbstractMonsterGirl> {
 
             // the pump: a brass ring, a copper body, a hose down from its end
             float py = 17.75F;
+            float stroke = 0.3F + 0.3F * net.minecraft.util.Mth.sin((girl.tickCount + partialTick) * 0.7F + side);   // the two work in turn
             b.box(x - 1.0F, py - 1.0F, front - STRAP - 0.3F, x + 1.0F, py + 1.0F, front - STRAP, BRASS);
-            b.box(x - 0.75F, py - 0.75F, front - STRAP - 1.1F, x + 0.75F, py + 0.75F, front - STRAP - 0.3F, COPPER);
-            b.box(x - 0.2F, py - 0.2F, front - STRAP - 1.4F, x + 0.2F, py + 0.2F, front - STRAP - 1.1F, BRASS);
-            b.box(x - 0.15F, 11.0F, front - STRAP - 1.4F, x + 0.15F, py - 0.2F, front - STRAP - 1.1F, HOSE);
+            b.box(x - 0.75F, py - 0.75F, front - STRAP - 1.1F - stroke, x + 0.75F, py + 0.75F, front - STRAP - 0.3F, COPPER);
+            b.box(x - 0.2F, py - 0.2F, front - STRAP - 1.4F - stroke, x + 0.2F, py + 0.2F, front - STRAP - 1.1F - stroke, BRASS);
+            b.box(x - 0.15F, 11.0F, front - STRAP - 1.4F - stroke, x + 0.15F, py - 0.2F, front - STRAP - 1.1F - stroke, HOSE);
         }
     }
 
@@ -89,7 +90,7 @@ public class MilkingHarnessLayer extends GeoRenderLayer<AbstractMonsterGirl> {
     }
 
     /** Boxes in model units, each face filled with one quarter of the harness texture. */
-    private record Boxes(PoseStack.Pose pose, VertexConsumer v, int light, int overlay) {
+    record Boxes(PoseStack.Pose pose, VertexConsumer v, int light, int overlay) {
         void box(float x0, float y0, float z0, float x1, float y1, float z1, int cell) {
             float u0 = (cell % 2) * 0.5F, v0 = (cell / 2) * 0.5F;
             this.quad(cell, u0, v0, 0, 0, -1, x0, y0, z0, x0, y1, z0, x1, y1, z0, x1, y0, z0);

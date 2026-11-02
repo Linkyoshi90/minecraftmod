@@ -45,7 +45,8 @@ import java.util.Optional;
  */
 public final class Scouting {
     public static final long DURATION = 12000L;
-    public static final int CAPACITY = 27;
+    public static final int CAPACITY = 27, PARTY = 3, MIXED_BONUS = 2;
+    private static final float MEMBER_SHARE = 0.6F;
     private static final String SCOUTS = "Scouts";
 
     /** Keywords of a biome's name, in order, with what's to be found there; the last item of each is the rare one. */
@@ -139,6 +140,11 @@ public final class Scouting {
 
     /** Her friend hands her an empty pack: she sets off. Whether she went. */
     public static boolean send(Mob mob, Player player, ItemStack pack) {
+        return send(mob, player, pack, false);
+    }
+
+    /** With {@code party} (the player crouching) up to two more friends within 6 go with her: each adds finds of her own home, and each family past the first adds two more. */
+    public static boolean send(Mob mob, Player player, ItemStack pack, boolean party) {
         if (!(mob.level() instanceof ServerLevel level) || !(mob instanceof Bonded bonded) || mob.isBaby() || mob.isPassenger() || mob.isLeashed()) return false;
         int affection = bonded.getAffection(player);
         if (affection < Orders.AFFECTION || hasFinds(pack)) return false;
@@ -151,6 +157,23 @@ public final class Scouting {
         e.putInt("Rolls", rolls(affection, Missing.activeStage(mob, player)));
         e.putInt("Affection", affection);
         e.putString("Biome", homeBiome(level, mob).location().toString());
+        if (party) {
+            ListTag members = new ListTag();
+            java.util.Set<String> families = new java.util.HashSet<>(List.of(family(mob)));
+            for (Mob other : HomeLife.friendsOf(level, player, mob.getBoundingBox().inflate(6))) {
+                if (other == mob || members.size() >= PARTY - 1 || other.isPassenger() || other.isLeashed() || !(other instanceof Bonded b)) continue;
+                CompoundTag saved2 = new CompoundTag();
+                if (!other.saveAsPassenger(saved2)) continue;
+                CompoundTag m = new CompoundTag();
+                m.put("Girl", saved2);
+                m.putInt("Rolls", (int) (rolls(b.getAffection(player), Missing.activeStage(other, player)) * MEMBER_SHARE) + (families.add(family(other)) ? MIXED_BONUS : 0));
+                m.putInt("Affection", b.getAffection(player));
+                m.putString("Biome", homeBiome(level, other).location().toString());
+                members.add(m);
+                other.discard();
+            }
+            e.put("Party", members);
+        }
         CompoundTag data = player.getData(ModAttachments.EXPEDITIONS);
         ListTag list = data.getList(SCOUTS, Tag.TAG_COMPOUND);
         list.add(e);
@@ -161,6 +184,10 @@ public final class Scouting {
         player.displayClientMessage(Component.translatable("message.monstergirls.scout_set_off", mob.getDisplayName(), biomeName(e.getString("Biome"))), true);
         mob.discard();
         return true;
+    }
+
+    private static String family(Mob mob) {
+        return mob instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g ? g.getSpecies().family().name() : mob.getClass().getSuperclass().getSimpleName();
     }
 
     private static Component biomeName(String id) {
@@ -202,7 +229,18 @@ public final class Scouting {
         Missing.forgive(mob, player.getUUID());
         ResourceKey<Biome> biome = ResourceKey.create(Registries.BIOME, ResourceLocation.parse(e.getString("Biome")));
         ItemStack pack = new ItemStack(ModItems.SCOUT_PACK.get());
-        pack.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(finds(biome, e.getInt("Rolls"), e.getInt("Affection"), mob.getRandom())));
+        List<ItemStack> all = new ArrayList<>(finds(biome, e.getInt("Rolls"), e.getInt("Affection"), mob.getRandom()));
+        for (Tag t : e.getList("Party", Tag.TAG_COMPOUND)) {                // whoever went with her comes back with her
+            CompoundTag m = (CompoundTag) t;
+            Entity other = EntityType.loadEntityRecursive(m.getCompound("Girl"), level, x -> x);
+            if (!(other instanceof Mob member)) continue;
+            BlockPos near = Expeditions.arrival(level, player, member);
+            member.moveTo(near.getX() + 0.5, near.getY(), near.getZ() + 0.5, member.getRandom().nextFloat() * 360F, 0);
+            member.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+            if (level.addFreshEntity(member)) Missing.forgive(member, player.getUUID());
+            all.addAll(finds(ResourceKey.create(Registries.BIOME, ResourceLocation.parse(m.getString("Biome"))), m.getInt("Rolls"), m.getInt("Affection"), member.getRandom()));
+        }
+        pack.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(all.size() > CAPACITY ? all.subList(0, CAPACITY) : all));
         mob.spawnAtLocation(pack);
         level.playSound(null, at, SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 0.6F, 1.4F);
         player.displayClientMessage(Component.translatable("message.monstergirls.scout_back", mob.getDisplayName(), biomeName(e.getString("Biome"))), false);

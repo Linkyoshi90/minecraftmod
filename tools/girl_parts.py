@@ -69,6 +69,7 @@ HORN_KINDS = {
     "bull": [("horn_a", 3.0, 1.25, 1.25), ("horn_b", 1.0, 2.5, 1.0)],
     "bull_big": [("horn_a", 4.5, 1.5, 1.5), ("horn_b", 1.25, 3.25, 1.25)],
     "buffalo": [("horn_a", 4.0, 1.5, 1.5), ("horn_b", 1.25, 1.25, 3.0)],
+    "rhino": [("horn_a", 1.75, 3.0, 1.75), ("horn_b", 1.0, 2.0, 1.0)],
     "devil": [("horn_a", 1.0, 2.25, 1.0), ("horn_b", .75, 1.25, .75)],
     "greater": [("horn_a", 1.5, 3.5, 1.5), ("horn_b", 1.25, 1.25, 3.5), ("horn_c", .75, 2.5, .75)],
     "dragon": [("horn_a", 1.25, 1.25, 4.5), ("horn_b", .75, .75, 3.0)],
@@ -91,7 +92,10 @@ def horns(r, kind, hy, z, name="horns", y_off=0.0):
     cs = []
     for sg in (-1, 1):
         x = sg * 2.6
-        if kind in ("bull", "bull_big"):
+        if kind == "rhino":                              # one great horn at her brow
+            if sg > 0:
+                cs += [G.rot_cube("horn_a", [-0.875, top - 2.4, -5.0 + z], [0, top - 2.4, -4.0 + z], -22, 0, 0), G.rot_cube("horn_b", [-0.5, top + 0.2, -6.0 + z], [0, top + 0.2, -5.0 + z], -28, 0, 0)]
+        elif kind in ("bull", "bull_big"):
             aw = S("horn_a")[0]
             ox = -4.2 if sg < 0 else 4.2 - 0.0
             a = cube("horn_a", [ox - aw if sg < 0 else ox, hy + 6.4, -1.0 + z], pivot=[ox, hy + 6.4, z], rotation=[0, 0, 10 * sg])

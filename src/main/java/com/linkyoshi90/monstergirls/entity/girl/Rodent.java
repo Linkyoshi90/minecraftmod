@@ -505,9 +505,34 @@ public class Rodent extends AbstractMonsterGirl {
         return caught;
     }
 
+    /** The lemur at dawn: once a day her friend near her gets Absorption and Haste. True if she did. */
+    public boolean sunSalute(long day) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 12);
+        if (friend == null || this.getPersistentData().getLong("SunDay") == day + 1) return false;
+        this.getPersistentData().putLong("SunDay", day + 1);
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.ABSORPTION, 2400, 1));
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DIG_SPEED, 2400, 0));
+        return true;
+    }
+
+    /** The mongoose draws the poison out of her friend near her. True if there was any. */
+    public boolean antivenom() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        return friend != null && friend.removeEffect(net.minecraft.world.effect.MobEffects.POISON);
+    }
+
+    @Override
+    public boolean canBeAffected(net.minecraft.world.effect.MobEffectInstance effect) {
+        return !(this.species == GirlSpecies.MONGOOSE_RODENT && effect.is(net.minecraft.world.effect.MobEffects.POISON)) && super.canBeAffected(effect);
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (!this.level().isClientSide && !this.isBaby()) {
+            if (this.species == GirlSpecies.LEMUR_RODENT && this.tickCount % 41 == 0 && this.level().getDayTime() % 24000L < 1500L) this.sunSalute(this.level().getDayTime() / 24000L);
+            if (this.species == GirlSpecies.MONGOOSE_RODENT && this.tickCount % 21 == 0) this.antivenom();
+        }
         if (this.species == GirlSpecies.SKUNK_RODENT && this.level() instanceof net.minecraft.server.level.ServerLevel sprayed && !this.isBaby() && this.tickCount % 21 == 0) this.spray(sprayed);
         if (this.species == GirlSpecies.SASQUATCH_RODENT && this.level() instanceof net.minecraft.server.level.ServerLevel wood && !this.isBaby() && this.tickCount % 20 == 0)
             this.unseen(wood, wood.getBiome(this.blockPosition()).is(net.minecraft.tags.BiomeTags.IS_FOREST) || wood.getBiome(this.blockPosition()).is(net.minecraft.tags.BiomeTags.IS_TAIGA));

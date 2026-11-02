@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_mongoose_rodent",
+  "spawners": {
+    "type": "monstergirls:mongoose_rodent",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

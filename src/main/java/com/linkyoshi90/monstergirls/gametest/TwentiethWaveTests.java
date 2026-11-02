@@ -93,7 +93,7 @@ public class TwentiethWaveTests {
         ServerPlayer p = friendOf(helper, sable, new BlockPos(3, 2, 3));
         check(!sable.burrowEyes(helper.getLevel()), "not under the open sky");
         helper.setBlock(new BlockPos(3, 5, 3), Blocks.STONE);
-        helper.runAfterDelay(10, () -> {                  // once the roof's shadow has spread
+        helper.runAfterDelay(40, () -> {                  // once the roof's shadow has spread
             check(sable.burrowEyes(helper.getLevel()), "under a roof");
             check(p.hasEffect(MobEffects.NIGHT_VISION), "her friend sees in the dark");
             HarpyTestUtil.remove(p);

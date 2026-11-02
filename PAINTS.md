@@ -98,6 +98,10 @@ To test one, summon a girl with it: `/summon monstergirls:wolf_canid ~ ~ ~ {Pain
 | `blue_ice` | Blue ice | `blue_ice` | |
 | `chorus` | Chorus plant | `chorus_plant` | |
 | `calcite` | Calcite | `calcite` | |
+| `mud_brick` | Mud Brick | `mud_bricks` | |
+| `deepslate` | Deepslate | `deepslate` | |
+| `oak` | Oak | `oak_planks` | |
+| `gilded` | Gilded | `gilded_blackstone` | |
 | `tuff` | Tuff | `tuff` | |
 | `moss` | Moss over stone | `moss_block`, `stone` | |
 | `frost` | Icy, frosted on every top | `packed_ice` | |

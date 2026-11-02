@@ -77,7 +77,7 @@ public final class Kinship {
                     "finch_harpy", "flamingo_harpy", "coin_magpie_harpy", "trickster_raven_harpy", "rookmourn_harpy", "pumpkingull_harpy", "condorune_harpy", "mirror_crane_harpy",
                     "ironbeak_harpy", "ibiset_harpy", "stigowl_harpy", "yatagarasu_harpy",
                     "roc_harpy", "ziz_harpy", "bennu_harpy", "garuda_harpy", "alkonost_harpy", "emu_harpy", "lechuza_harpy", "macaw_harpy",
-                    "skycrow_harpy", "reliquary_dove_harpy", "poultry_harpy", "landharpy_harpy", "argentowlis_harpy", "ibisking_harpy", "motmora_harpy", "hummingbird_harpy", "duck_harpy")) {
+                    "skycrow_harpy", "reliquary_dove_harpy", "poultry_harpy", "landharpy_harpy", "argentowlis_harpy", "ibisking_harpy", "motmora_harpy", "hummingbird_harpy", "duck_harpy", "swan_harpy", "pelican_harpy")) {
                 other(h, EntityType.PARROT);
             }
             other("ostrich_harpy", EntityType.CHICKEN);

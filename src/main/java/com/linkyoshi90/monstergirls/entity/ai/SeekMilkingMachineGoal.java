@@ -81,7 +81,7 @@ public class SeekMilkingMachineGoal<T extends PathfinderMob & Bonded> extends Go
         double reach = MilkingMachineBlockEntity.RADIUS;
         if (this.mob.distanceToSqr(this.machine.getCenter()) <= reach * reach) {
             this.mob.getNavigation().stop();
-            if (this.mob instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl girl) girl.blushFor(40);
+            this.mob.blushFor(40);
             return;
         }
         if (this.mob.tickCount % 20 == 0) this.mob.getNavigation().moveTo(this.spot.getX() + 0.5, this.spot.getY(), this.spot.getZ() + 0.5, 1.0);

@@ -799,6 +799,9 @@ SPECIES["firesprite_devil"] = dict(
 SPECIES["ogre_devil"]["variants"]["swamp_king"] = dict(HAIR="#6a8a2a", FUR="#7a9a3a", LIGHT="#a8c070", MARK="#4a6a1e", EYE="#6a4a1e", CLOTH="#e8dcb8", TRIM="#5a3a1e")
 
 
+SPECIES["troll_devil"]["variants"]["bridge_keeper"] = dict(SKIN="#5a8ac8", FUR="#5a8ac8", LIGHT="#a8c8e8", MARK="#2a4a7a", HAIR="#c83a2a", EYE="#e8e040")   # homage look of the thirty-sixth wave (POP_CULTURE_VARIANTS.md)
+
+
 if __name__ == "__main__":
     F.run_family("devil", SPECIES, declare_hook, paint_hook, build_hook, anim_extra)
     want = [a for a in sys.argv[1:] if not a.startswith("--")]

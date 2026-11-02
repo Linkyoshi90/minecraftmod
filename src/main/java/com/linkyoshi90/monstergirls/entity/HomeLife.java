@@ -37,6 +37,7 @@ import java.util.List;
 public final class HomeLife {
     public static final int FRIEND = Orders.AFFECTION;
     public static final int MAX_TRAINING = 20;
+    private static final int TOWEL_TICKS = 600;
     private static final long GROOM_WAIT = 6000, MEAL_WAIT = 2400, PICNIC_WAIT = 12000, TRAIN_WAIT = 1200, SOAK_WAIT = 6000;
     private static final ResourceLocation TRAINING = ResourceLocation.fromNamespaceAndPath(MonsterGirlsMod.MODID, "sparring");
 
@@ -176,8 +177,35 @@ public final class HomeLife {
         if (!(mob instanceof Bonded b) || !ready(mob, "NextSoak", SOAK_WAIT)) return false;
         b.addAffection(player, 1);
         hearts(level, mob);
-        if (mob instanceof AbstractMonsterGirl girl) Flirting.inTub(level, girl, player);
+        if (mob instanceof AbstractMonsterGirl girl) {
+            Flirting.inTub(level, girl, player);
+            if (Flirting.canFlirt(girl, player)) {
+                girl.towelFor(TOWEL_TICKS);
+                girl.blushFor(TOWEL_TICKS);
+            }
+        }
         return true;
+    }
+
+    // --- the bedroll ------------------------------------------------------------------------------------------------------
+
+    /** Making camp: friends within 32 gather round, and it counts as seeing them. How many. */
+    public static int camp(ServerLevel level, BlockPos at, Player player) {
+        int came = 0;
+        for (Mob m : friendsOf(level, player, new AABB(at).inflate(32))) {
+            m.getNavigation().moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, 1.0);
+            Missing.meet(m, player);
+            came++;
+        }
+        return came;
+    }
+
+    // --- the sketchbook -----------------------------------------------------------------------------------------------
+
+    /** Draws her: a figurine of her as she is now. Empty for a stranger. */
+    public static ItemStack sketch(Mob mob, Player player) {
+        if (!(mob instanceof Bonded b) || b.getAffection(player) < FRIEND) return ItemStack.EMPTY;
+        return com.linkyoshi90.monstergirls.block.FigurineBlockEntity.of(mob);
     }
 
     // --- the hand -----------------------------------------------------------------------------------------------------
@@ -189,8 +217,21 @@ public final class HomeLife {
         if (stack.is(ModItems.SCOUT_PACK.get()) && event.getTarget() instanceof Mob scout && scout instanceof Bonded) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide));
-            if (!event.getLevel().isClientSide && !Scouting.send(scout, event.getEntity(), stack)) {
+            if (!event.getLevel().isClientSide && !Scouting.send(scout, event.getEntity(), stack, event.getEntity().isShiftKeyDown())) {
                 event.getEntity().displayClientMessage(Component.translatable(Scouting.hasFinds(stack) ? "message.monstergirls.scout_full" : "message.monstergirls.scout_refused", scout.getDisplayName()), true);
+            }
+            return;
+        }
+        if (stack.is(ModItems.SKETCHBOOK.get()) && event.getTarget() instanceof Mob sitter && sitter instanceof Bonded) {
+            event.setCanceled(true);
+            event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide));
+            if (event.getLevel().isClientSide) return;
+            ItemStack figurine = sketch(sitter, event.getEntity());
+            if (figurine.isEmpty()) {
+                event.getEntity().displayClientMessage(Component.translatable("message.monstergirls.sketch_refused", sitter.getDisplayName()), true);
+            } else {
+                stack.hurtAndBreak(1, event.getEntity(), net.minecraft.world.entity.LivingEntity.getSlotForHand(event.getHand()));
+                event.getEntity().getInventory().placeItemBackInInventory(figurine);
             }
             return;
         }

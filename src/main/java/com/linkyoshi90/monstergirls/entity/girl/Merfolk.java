@@ -227,6 +227,11 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         };
     }
 
+    @Override
+    public boolean needsWater() {
+        return this.dryTicks > this.dryLimit() / 2;
+    }
+
     public int getDryTicks() {
         return this.dryTicks;
     }
@@ -521,9 +526,23 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         return true;
     }
 
+    /** The Lorelei's song pulls the monsters within 12 of her friend towards her. How many, or -1 without a friend. */
+    public int rhineSong(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        int drawn = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(12), net.minecraft.world.entity.monster.Monster::isAlive)) {
+            m.setDeltaMovement(m.getDeltaMovement().add(this.position().subtract(m.position()).normalize().scale(0.25)));
+            m.hurtMarked = true;
+            drawn++;
+        }
+        return drawn;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.LORELEI_MERMAID && this.level() instanceof ServerLevel river && !this.isBaby() && this.tickCount % 21 == 0) this.rhineSong(river);
         if (this.species == GirlSpecies.SELKIE_MERMAID && !this.level().isClientSide && !this.isBaby() && this.tickCount % 2401 == 0) this.sealSong();
         if (this.level() instanceof ServerLevel reef && !this.isBaby()) {
             if (this.species == GirlSpecies.PUFFERFISH_MERMAID && this.isPuffed() && reef.getGameTime() >= this.puffedUntil) this.setFlag(FLAG_RETRACTED, false);

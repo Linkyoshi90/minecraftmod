@@ -145,4 +145,42 @@ public class HomeLifeTests {
             HarpyTestUtil.remove(p);
         });
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "sketchbookMakesAFigurine")
+    public static void sketchbookMakesAFigurine(GameTestHelper helper) {
+        AbstractMonsterGirl g = girl(helper, new BlockPos(1, 2, 1));
+        ServerPlayer stranger = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
+        check(HomeLife.sketch(g, stranger).isEmpty(), "a stranger gets no sitting");
+        ServerPlayer p = friendOf(helper, g, new BlockPos(3, 2, 3));
+        ItemStack figurine = HomeLife.sketch(g, p);
+        check(figurine.is(ModItems.FIGURINE.get()) && figurine.has(net.minecraft.core.component.DataComponents.BLOCK_ENTITY_DATA), "a figurine of her");
+        HarpyTestUtil.remove(stranger);
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "friendsGatherAtCamp")
+    public static void friendsGatherAtCamp(GameTestHelper helper) {
+        AbstractMonsterGirl g = girl(helper, new BlockPos(1, 2, 1));
+        ServerPlayer p = friendOf(helper, g, new BlockPos(3, 2, 3));
+        check(HomeLife.camp(helper.getLevel(), helper.absolutePos(new BlockPos(2, 2, 2)), p) == 1, "she comes");
+        helper.setBlock(new BlockPos(4, 2, 4), ModBlocks.BEDROLL.get());
+        check(helper.getBlockState(new BlockPos(4, 2, 4)).isBed(helper.getLevel(), helper.absolutePos(new BlockPos(4, 2, 4)), p), "a bed");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "towelForGrownFriends")
+    public static void towelForGrownFriends(GameTestHelper helper) {
+        AbstractMonsterGirl g = girl(helper, new BlockPos(1, 2, 1));
+        ServerPlayer p = friendOf(helper, g, new BlockPos(3, 2, 3));
+        g.addAffection(p, 30);
+        check(HomeLife.soak(helper.getLevel(), g, p) && g.hasFlag(AbstractMonsterGirl.FLAG_TOWEL), "a towel");
+        AbstractMonsterGirl fairy = spawn(helper, GirlSpecies.FAIRY_BUG, new BlockPos(2, 2, 1));
+        fairy.addAffection(p, 100);
+        HomeLife.soak(helper.getLevel(), fairy, p);
+        check(!fairy.hasFlag(AbstractMonsterGirl.FLAG_TOWEL), "not for anyone childlike");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

@@ -614,6 +614,31 @@ sandstone since 2026-10-29), so 87 in all.
 Homage props (POP_CULTURE_VARIANTS.md): the dullahan's headless rider (Celty) has her yellow cat-eared helmet over the head she
 carries, the death envoy (Lala) a scythe in her free hand; both are drawn only on their own looks.
 
+## Thirty-sixth wave (2026-11-03, in the game)
+
+| Species | Home | Design |
+|---|---|---|
+| **Swan** | Harpy | The flamingo's rig. Whatever hurts her friend takes 6 and is thrown back. |
+| **Pelican** | Harpy | The gull's rig. Beside water, fish for her friend every two minutes. |
+| **Lemur** | Rodent | At dawn her friend gets extra hearts and Haste. |
+| **Mongoose** | Rodent | Immune to poison, and clears it from her friend. |
+| **Rhino** | Minotaur | A single horn; charges in a line like the rhiwool. |
+| **Mantis Shrimp** | Crustacean | A 12 damage punch; the shock stuns what stands round the target. |
+| **Centipede** | Lamia | The rearing rig (lamia, not bug, for that rig). Climbs walls; her bite sickens. |
+| **Cicada** | Bug | Song gives her friend Speed and Haste every few minutes. |
+| **Gnome** | Elf | A tall pointed hat. Can't move while a player looks straight at her. Grows crops. |
+| **Dwarf** | Elf | Carries a real iron pickaxe and mines ore within 3 of her friend (mobGriefing). |
+| **Nue** | Nekomata | Her night cry weakens monsters near her friend. |
+| **Lorelei** | Merfolk | Her song pulls monsters near her friend towards her. |
+
+Features: **Bedroll** (a one-block bed; using it brings friends within 32 round and counts as seeing them), **Scout party** (crouch as you hand over the pack: up to two more friends within 6 go too, each adds finds, each new family two more), **Towels** (a grown friend sharing the soaking tub wears a bath towel and blushes, `client/TowelLayer`, in place of the planned Wardrobe, since an overlay can't take clothes off), **Sketchbook** (use on a friend for a Figurine of her, `client/FigurineRenderer`, in place of the planned easel; it stays small on a stand).
+
+Paints: **mud_brick**, **deepslate**, **oak** and **gilded**, so 123 in all (PAINTS.md).
+
+Homage looks: Sun Wolf (wolf), Charm Fox (red kitsune), Fight Panda (panda), Storm Tiger (tiger), Boots Cat (lynx), Red Tide (koi), Shadow Ranger (dark elf), Bridge Keeper (troll).
+
+Fixes: riders sit behind the waist (seats were in front of it: +Z is her front), the giraffe's seat is lower, sitting frogs and merfolk get up when drying out, harpies and frogs blush at the machine, the harness pumps work.
+
 ## Thirty-fifth wave (2026-11-02, in the game)
 
 New designs, tested in `ThirtyFifthWaveTests`.

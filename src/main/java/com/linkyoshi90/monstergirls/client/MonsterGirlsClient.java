@@ -20,6 +20,8 @@ import com.linkyoshi90.monstergirls.entity.LandharpyHarpy;
 import com.linkyoshi90.monstergirls.entity.ArgentowlisHarpy;
 import com.linkyoshi90.monstergirls.entity.IbiskingHarpy;
 import com.linkyoshi90.monstergirls.entity.MotmoraHarpy;
+import com.linkyoshi90.monstergirls.entity.PelicanHarpy;
+import com.linkyoshi90.monstergirls.entity.SwanHarpy;
 import com.linkyoshi90.monstergirls.entity.DuckHarpy;
 import com.linkyoshi90.monstergirls.entity.HummingbirdHarpy;
 import com.linkyoshi90.monstergirls.entity.RocHarpy;
@@ -118,6 +120,7 @@ public final class MonsterGirlsClient {
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(com.linkyoshi90.monstergirls.registry.ModBlockEntities.FIGURINE.get(), FigurineRenderer::new);
         event.registerEntityRenderer(ModEntities.SPARROW_HARPY.get(), SparrowHarpyRenderer::new);
         event.registerEntityRenderer(ModEntities.CROW_HARPY.get(), CrowHarpyRenderer::new);
         event.registerEntityRenderer(ModEntities.OSTRICH_HARPY.get(), OstrichHarpyRenderer::new);
@@ -151,6 +154,8 @@ public final class MonsterGirlsClient {
         event.registerEntityRenderer(ModEntities.ARGENTOWLIS_HARPY.get(), ctx -> new HarpyRenderer<ArgentowlisHarpy>(ctx, "argentowlis_harpy", 1.3F, 0.5F, ArgentowlisHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.IBISKING_HARPY.get(), ctx -> new HarpyRenderer<IbiskingHarpy>(ctx, "ibisking_harpy", 0.85F, 0.35F, IbiskingHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.MOTMORA_HARPY.get(), ctx -> new HarpyRenderer<MotmoraHarpy>(ctx, "motmora_harpy", 0.85F, 0.35F, MotmoraHarpy::getVariantSuffix));
+        event.registerEntityRenderer(ModEntities.PELICAN_HARPY.get(), ctx -> new HarpyRenderer<PelicanHarpy>(ctx, "pelican_harpy", 0.85F, 0.35F, PelicanHarpy::getVariantSuffix));
+        event.registerEntityRenderer(ModEntities.SWAN_HARPY.get(), ctx -> new HarpyRenderer<SwanHarpy>(ctx, "swan_harpy", 0.85F, 0.35F, SwanHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.DUCK_HARPY.get(), ctx -> new HarpyRenderer<DuckHarpy>(ctx, "duck_harpy", 0.85F, 0.35F, DuckHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.HUMMINGBIRD_HARPY.get(), ctx -> new HarpyRenderer<HummingbirdHarpy>(ctx, "hummingbird_harpy", 0.72F, 0.25F, HummingbirdHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.ROC_HARPY.get(), ctx -> new HarpyRenderer<RocHarpy>(ctx, "roc_harpy", 2.1F, 1.0F, RocHarpy::getVariantSuffix));

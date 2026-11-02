@@ -56,6 +56,7 @@ public class HarpyRenderer<T extends AbstractHarpy> extends GeoEntityRenderer<T>
         this.withScale(scale);
         this.shadowRadius = shadowRadius;
         this.addRenderLayer(new HeldItemLayer<>(this));
+        this.addRenderLayer(new BlushOverlayLayer<>(this, species, T::isBlushing));
         this.addRenderLayer(new MoonEyesLayer<>(this));
         this.addRenderLayer(new PaintGlowLayer<>(this, T::getPaintName));
     }

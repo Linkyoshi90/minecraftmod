@@ -78,6 +78,10 @@ public final class ModItems {
             () -> new DeferredSpawnEggItem(ModEntities.IBISKING_HARPY, 0x1E3A8A, 0xE8C050, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> MOTMORA_HARPY_SPAWN_EGG = ITEMS.register("motmora_harpy_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.MOTMORA_HARPY, 0x1E4AC8, 0xE8C050, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> PELICAN_HARPY_SPAWN_EGG = ITEMS.register("pelican_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.PELICAN_HARPY, 0xF0ECE0, 0xE8A02A, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> SWAN_HARPY_SPAWN_EGG = ITEMS.register("swan_harpy_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.SWAN_HARPY, 0xF4F4F8, 0xE8902A, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> DUCK_HARPY_SPAWN_EGG = ITEMS.register("duck_harpy_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.DUCK_HARPY, 0x1E6A4A, 0xD8C4A8, new Item.Properties()));
     public static final DeferredItem<DeferredSpawnEggItem> HUMMINGBIRD_HARPY_SPAWN_EGG = ITEMS.register("hummingbird_harpy_spawn_egg",
@@ -187,6 +191,9 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> SOAKING_TUB = ITEMS.registerSimpleBlockItem(ModBlocks.SOAKING_TUB);
     public static final DeferredItem<BlockItem> SPARRING_POST = ITEMS.registerSimpleBlockItem(ModBlocks.SPARRING_POST);
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.ScoutPackItem> SCOUT_PACK = ITEMS.register("scout_pack", () -> new com.linkyoshi90.monstergirls.item.ScoutPackItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<BlockItem> BEDROLL = ITEMS.registerSimpleBlockItem(ModBlocks.BEDROLL);
+    public static final DeferredItem<BlockItem> FIGURINE = ITEMS.registerSimpleBlockItem(ModBlocks.FIGURINE);
+    public static final DeferredItem<Item> SKETCHBOOK = ITEMS.registerSimpleItem("sketchbook", new Item.Properties().durability(16));
     public static final DeferredItem<Item> GROOMING_BRUSH = ITEMS.registerSimpleItem("grooming_brush", new Item.Properties().durability(64));
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.ToyBallItem> TOY_BALL = ITEMS.register("toy_ball", () -> new com.linkyoshi90.monstergirls.item.ToyBallItem(new Item.Properties().stacksTo(16)));
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.WhistleItem> WHISTLE = ITEMS.register("friend_whistle", () -> new com.linkyoshi90.monstergirls.item.WhistleItem(new Item.Properties().stacksTo(1)));

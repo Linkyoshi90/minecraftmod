@@ -18,6 +18,14 @@ SEGS = [("seg_1", 4.5, 10.5, 4), ("seg_2", 4.25, 4, 5.5), ("seg_3", 4, 3.75, 5.5
         ("seg_5", 3, 2.75, 5), ("seg_6", 2.5, 2.25, 4.5), ("seg_7", 2, 1.75, 4), ("seg_8", 1.25, 1.25, 3.5)]
 
 SPECIES = {
+    # thirty-sixth wave: the centipede: on the rearing rig, banded red-brown, a body that doesn't end where you expect
+    "centipede_lamia": dict(
+        build="slim", outfit=dict(top=["bandeau"], extras=["armlets", "bracers"], colors=dict(cloth2="#e8a030")),
+        thick=0.9, hair="ponytail", bangs="blunt", rearing=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#3a1a14", FUR="#a83a22", LIGHT="#e8a030", MARK="#1e0e0a", EYE="#e8a030", CLOTH="#e8a030", TRIM="#3a1a14",
+                 pattern="bands", facemark="scales"),
+        variants={"black": dict(FUR="#1e1e22", MARK="#e8c040", LIGHT="#e8c040", HAIR="#141418"), "blue": dict(FUR="#2a4a9a", MARK="#e8c040", HAIR="#141e3a"),
+                  "cave": dict(FUR="#c8b890", MARK="#7a6a4a", HAIR="#7a6a4a", LIGHT="#e8dcc0"), "green": dict(FUR="#3a7a3a", MARK="#e8a030", HAIR="#14301a")}),
     # thirty-second wave: the anaconda, the heaviest snake there is and proud of it: a full figure on a very thick olive tail with
     # black saddles, long dark waves, gold hoops of armlets. Her own woman, not anyone's portrait.
     "anaconda_lamia": dict(

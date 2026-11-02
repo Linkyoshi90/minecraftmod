@@ -19,6 +19,14 @@ FAMILY = C.family("nekomata")
 
 # per species: body knobs, then the default palette and the four other colours as palette overrides
 SPECIES = {
+    # thirty-sixth wave: the nue of Japanese legend: a monkey's face, a tiger's stripes, a tail that ends in a snake's colours
+    "nue_nekomata": dict(
+        build="athletic", outfit=dict(top=["kimono"], colors=dict(kimono="#2a2a3a", kimono_trim="#e8c050", obi="#6a2a2a")),
+        ears="cat", hair="mane", bangs="jagged", tail=((1.5, 1.5, 3), (1.5, 1.5, 3), (1.5, 1.5, 3)), tail_pattern="solid",
+        pal=dict(SKIN=skin("tan"), HAIR="#5a3a22", FUR="#c8882a", LIGHT="#e8c890", MARK="#1e1612", EYE="#e8e040", CLOTH="#2a2a3a", TRIM="#e8c050",
+                 INNER="#a87a6a", pattern="stripes", facemark="whisker"),
+        variants={"storm": dict(FUR="#5a5a7a", HAIR="#2a2a3e", LIGHT="#a8a8c8", EYE="#8ac8f0"), "white": dict(FUR="#e0dcd4", HAIR="#a8a49c", MARK="#2a2a30"),
+                  "black": dict(FUR="#2a2a30", HAIR="#141418", MARK="#e8c050", EYE="#e85a3a"), "red": dict(FUR="#a83a22", HAIR="#3a1410")}),
     # thirty-second wave: the black panther: a melanistic leopard, black on black, the rosettes only just showing, gold eyes
     "black_panther_nekomata": dict(
         build="athletic", outfit=dict(top=["halter"], bottom="shorts", extras=["belt"]),
@@ -600,6 +608,12 @@ SPECIES["caracal_nekomata"]["variants"]["lasagna_cat"] = dict(HAIR="#e87a1e", FU
 
 # homage looks of the thirtieth wave (POP_CULTURE_VARIANTS.md)
 SPECIES["lioness_nekomata"]["variants"]["pride_queen"] = dict(HAIR="#d8a860", FUR="#e0b470", LIGHT="#f8e8c8", MARK="#a87a3a", EYE="#3a8ac8", CLOTH="#f4e8d0", TRIM="#a87a3a")
+
+
+SPECIES["tiger_nekomata"]["variants"]["storm_tiger"] = dict(HAIR="#1e1612", CLOTH="#c8302a", TRIM="#e8c050")   # homage look of the thirty-sixth wave (POP_CULTURE_VARIANTS.md)
+
+
+SPECIES["lynx_nekomata"]["variants"]["boots_cat"] = dict(HAIR="#d8782a", FUR="#e0883a", LIGHT="#f8d8a8", MARK="#a8481a", EYE="#3a8a4a", CLOTH="#2a2a30", TRIM="#e8c050")   # homage look of the thirty-sixth wave (POP_CULTURE_VARIANTS.md)
 
 
 if __name__ == "__main__":

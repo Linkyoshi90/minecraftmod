@@ -179,8 +179,8 @@ public class DuckHarpy extends AbstractHarpy {
     @Override
     protected String actionAnimation(Action action) {
         return switch (action) {
-            case STRIKING -> "strike";
-            case CRYING -> "cry";
+            case STRIKING -> "sing";
+            case CRYING -> "sing";
             default -> null;
         };
     }

@@ -151,7 +151,7 @@ public class Lamia extends AbstractMonsterGirl {
 
     @Override
     public boolean onClimbable() {
-        return (this.species == GirlSpecies.BOA_LAMIA && this.horizontalCollision) || super.onClimbable();
+        return ((this.species == GirlSpecies.BOA_LAMIA || this.species == GirlSpecies.CENTIPEDE_LAMIA) && this.horizontalCollision) || super.onClimbable();
     }
 
     @Override
@@ -450,9 +450,23 @@ public class Lamia extends AbstractMonsterGirl {
         return 0;
     }
 
+    /** Her bite on the monster nearest her friend: Weakness, Slowness and Poison. 1 on a bite, 0 with none, -1 without a friend. */
+    public int forcipules(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8), net.minecraft.world.entity.monster.Monster::isAlive)) {
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.POISON, 100, 1));
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WEAKNESS, 100, 0));
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 100, 1));
+            return 1;
+        }
+        return 0;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.CENTIPEDE_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel burrow && !this.isBaby() && this.tickCount % 61 == 0) this.forcipules(burrow);
         if (this.species == GirlSpecies.ANACONDA_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel coils && !this.isBaby()) {
             if (this.tickCount % 41 == 0) this.gulp(coils);
             if (this.tickCount % 40 == 0) this.groove(com.linkyoshi90.monstergirls.entity.JukeboxSensing.findPlaying(coils, this.blockPosition(), 16) != null);
@@ -870,7 +884,7 @@ public class Lamia extends AbstractMonsterGirl {
 
     @Override
     protected Vec3 getPassengerAttachmentPoint(net.minecraft.world.entity.Entity passenger, net.minecraft.world.entity.EntityDimensions dims, float scale) {
-        return new Vec3(0.0, dims.height() * 0.3, 0.9);                   // in her coils, behind her
+        return new Vec3(0.0, dims.height() * 0.3, -0.9);                  // in her coils, behind her (+Z is her front)
     }
 
     // --- the naga guards treasure -------------------------------------------------------------------------------------

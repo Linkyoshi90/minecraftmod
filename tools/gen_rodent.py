@@ -19,6 +19,22 @@ from girl_lib import H, cube, pick, skin, CLEAR  # noqa: E402
 STAFF_TILT = -82
 
 SPECIES = {
+    # thirty-sixth wave: the ring-tailed lemur: grey, a banded tail held high, sits with her arms out to the morning sun
+    "lemur_rodent": dict(
+        build="slim", outfit=dict(top=["halter"], bottom="shorts", extras=["armlets"], colors=dict(cloth2="#3a3a40")),
+        hair="pixie", bangs="messy", ears="round", legs="fur", foot="paw",
+        tail=[(1.5, 1.5, 4), (1.5, 1.5, 4), (1.25, 1.25, 4), (1, 1, 3)], tail_rest=[(70, 0, 0), (10, 0, 0), (8, 0, 0), (6, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("fair"), HAIR="#6a6a70", FUR="#9a9aa0", LIGHT="#ecece8", MARK="#1e1e22", EYE="#e8902a", CLOTH="#2e2e34", TRIM="#ecece8",
+                 pattern="bars", facemark="panda"),
+        variants={"red": dict(FUR="#a85a2a", HAIR="#6a3414"), "black": dict(FUR="#2a2a2e", HAIR="#141418", LIGHT="#5a5a60"),
+                  "white": dict(FUR="#e8e8e4", HAIR="#c8c8c4"), "gold": dict(FUR="#c8a050", HAIR="#7a5a22")}),
+    # thirty-sixth wave: the mongoose: lean, grizzled and quick, a snake's worst day
+    "mongoose_rodent": dict(
+        build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["belt"], colors=dict(leather="#5a4a30")),
+        hair="ponytail", bangs="messy", ears="round", legs="fur", foot="paw", tail=[(1.75, 1.75, 4), (1.5, 1.5, 4), (1, 1, 3)], tail_rest=[(-20, 0, 0), (8, 0, 0), (8, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("tan"), HAIR="#5a4a38", FUR="#8a7a60", LIGHT="#c8b898", MARK="#3a2e20", EYE="#c83a2a", CLOTH="#7a3a2a", TRIM="#c8b898",
+                 pattern="speckle"),
+        variants={"banded": dict(pattern="bars"), "yellow": dict(FUR="#c8a050", HAIR="#7a5a22"), "dark": dict(FUR="#4a3e30", HAIR="#2a2218"), "grey": dict(FUR="#8a8a84", HAIR="#5a5a54")}),
     # thirty-fifth wave: the tanuki of Japanese tales: a raccoon-dog's mask, a straw hat's worth of mischief, a round belly she drums on
     "tanuki_rodent": dict(
         build="curvy", outfit=dict(top=["kimono"], colors=dict(kimono="#7a5a3a", kimono_trim="#e8d8b0", obi="#3a6a4a")),

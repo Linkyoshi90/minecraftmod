@@ -94,4 +94,22 @@ public class ScoutingTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "aPartyGoesTogether")
+    public static void aPartyGoesTogether(GameTestHelper helper) {
+        AbstractMonsterGirl a = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(2, 2, 2));
+        AbstractMonsterGirl b = spawn(helper, GirlSpecies.CATTLE_MINOTAUR, new BlockPos(3, 2, 2));
+        AbstractMonsterGirl c = spawn(helper, GirlSpecies.CAPYBARA_RODENT, new BlockPos(2, 2, 3));
+        AbstractMonsterGirl d = spawn(helper, GirlSpecies.KOBOLD_CANID, new BlockPos(3, 2, 3));
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(4, 2, 4));
+        for (AbstractMonsterGirl g : List.of(a, b, c, d)) g.addAffection(p, Orders.AFFECTION);
+        check(Scouting.send(a, p, new ItemStack(ModItems.SCOUT_PACK.get()), true) && Scouting.away(p) == 1, "off they go");
+        check(a.isRemoved() && List.of(b, c, d).stream().filter(g -> g.isRemoved()).count() == 2, "three at most");
+        check(Scouting.returnDue(p, true).size() == 1, "back");
+        helper.runAfterDelay(2, () -> {
+            check(helper.getLevel().getEntitiesOfClass(AbstractMonsterGirl.class, p.getBoundingBox().inflate(12)).size() >= 4, "all of them");
+            HarpyTestUtil.remove(p);
+            helper.succeed();
+        });
+    }
 }

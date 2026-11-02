@@ -18,6 +18,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin  # noqa: E402
 
 SPECIES = {
+    # thirty-sixth wave: the mantis shrimp: every colour at once, and the hardest punch in the sea
+    "mantis_shrimp_crustacean": dict(
+        build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["armlets"], colors=dict(cloth2="#c83a4a")),
+        hair="sidetail", bangs="jagged", ears=None, legs="scales", foot="claw", carapace=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#e8483a", FUR="#2aa86a", LIGHT="#f0d040", MARK="#3a5ad8", EYE="#e8602a", CLOTH="#3a5ad8", TRIM="#f0d040",
+                 pattern="bands", extra=dict(shell="#2aa86a", claw="#e8483a", claw_tip="#f0d040", brass="#3a5ad8")),
+        variants={"blue": dict(FUR="#3a6ae0", HAIR="#2a3a9a", extra=dict(shell="#3a6ae0", claw="#3ad0c0", claw_tip="#f8f4ec", brass="#e8483a")),
+                  "violet": dict(FUR="#8a3ac8", HAIR="#e85a9a", extra=dict(shell="#8a3ac8", claw="#e85a9a", claw_tip="#f0d040", brass="#3ad0c0")),
+                  "orange": dict(FUR="#e8802a", HAIR="#c83a2a", extra=dict(shell="#e8802a", claw="#3aa8c8", claw_tip="#f8f4ec", brass="#3aa86a")),
+                  "dull": dict(FUR="#7a7a60", HAIR="#4a4a3a", extra=dict(shell="#7a7a60", claw="#a8a884", claw_tip="#e8e0c8", brass="#4a4a3a"))}),
     # thirty-fifth wave: the lobster: deep blue that goes red if you're not careful, one great crusher claw
     "lobster_crustacean": dict(
         build="strong", outfit=dict(top=["bandeau"], bottom="shorts", extras=["armlets"], colors=dict(cloth2="#14285a")),

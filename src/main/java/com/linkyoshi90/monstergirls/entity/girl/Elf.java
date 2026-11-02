@@ -406,9 +406,59 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
         return true;
     }
 
+    /** The gnome with a player looking straight at her: she doesn't move. */
+    public boolean isWatched() {
+        for (Player p : this.level().players()) {
+            if (p.isSpectator() || p.distanceToSqr(this) > 144) continue;
+            net.minecraft.world.phys.Vec3 to = this.getEyePosition().subtract(p.getEyePosition()).normalize();
+            if (p.getViewVector(1.0F).dot(to) > 0.95 && p.hasLineOfSight(this)) return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected boolean isImmobile() {
+        return (this.species == GirlSpecies.GNOME_ELF && this.isWatched()) || super.isImmobile();
+    }
+
+    /** The gnome's crops: everything growing within 5 gets a stage. How many, or -1 without a friend. */
+    public int tendGarden(net.minecraft.server.level.ServerLevel level) {
+        if (this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32) == null) return -1;
+        int grown = 0;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(this.blockPosition().offset(-5, -1, -5), this.blockPosition().offset(5, 1, 5))) {
+            var state = level.getBlockState(p);
+            if (state.getBlock() instanceof net.minecraft.world.level.block.CropBlock crop && !crop.isMaxAge(state)) {
+                crop.growCrops(level, p, state);
+                grown++;
+            }
+        }
+        return grown;
+    }
+
+    /** The dwarf mines the nearest ore within 3 of her friend, and it drops as if a pickaxe took it. True if she struck one. */
+    public boolean mineVein(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null || !level.getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_MOBGRIEFING)) return false;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-3, -2, -3), friend.blockPosition().offset(3, 3, 3))) {
+            if (level.getBlockState(p).is(net.neoforged.neoforge.common.Tags.Blocks.ORES)) {
+                level.destroyBlock(p, true, this);
+                this.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.level() instanceof ServerLevel woodland && !this.isBaby()) {
+            if (this.species == GirlSpecies.GNOME_ELF && this.tickCount % 601 == 0) this.tendGarden(woodland);
+            if (this.species == GirlSpecies.DWARF_ELF) {
+                if (this.getMainHandItem().isEmpty()) this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, new ItemStack(net.minecraft.world.item.Items.IRON_PICKAXE));
+                if (this.tickCount % 61 == 0) this.mineVein(woodland);
+            }
+        }
         if (this.species == GirlSpecies.SNOW_ELF && !this.level().isClientSide && !this.isBaby() && this.tickCount % 5 == 0) this.snowTread();
         if (this.species == GirlSpecies.MAD_HATTER_ELF && this.level() instanceof net.minecraft.server.level.ServerLevel party && !this.isBaby() && this.tickCount % 100 == 0) this.teaTime(party);
         if (this.species == GirlSpecies.ANGEL_ELF && this.level() instanceof net.minecraft.server.level.ServerLevel grace && !this.isBaby() && this.tickCount % 40 == 0) this.mercy(grace);

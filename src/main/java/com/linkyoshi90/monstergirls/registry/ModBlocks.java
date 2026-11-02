@@ -84,6 +84,13 @@ public final class ModBlocks {
             com.linkyoshi90.monstergirls.block.SparringPostBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1.5F).sound(SoundType.WOOD).noOcclusion());
 
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.BedrollBlock> BEDROLL = BLOCKS.registerBlock("bedroll",
+            com.linkyoshi90.monstergirls.block.BedrollBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(0.2F).sound(SoundType.WOOL).noOcclusion().ignitedByLava().pushReaction(PushReaction.DESTROY));
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.FigurineBlock> FIGURINE = BLOCKS.registerBlock("figurine",
+            com.linkyoshi90.monstergirls.block.FigurineBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(0.5F).sound(SoundType.WOOD).noOcclusion().noLootTable());
+
     /** The nectar fluid's block (see ModFluids). */
     public static final DeferredBlock<net.minecraft.world.level.block.LiquidBlock> NECTAR = BLOCKS.register("nectar",
             () -> new net.minecraft.world.level.block.LiquidBlock(ModFluids.NECTAR.get(),

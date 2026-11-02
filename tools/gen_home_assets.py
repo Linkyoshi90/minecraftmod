@@ -188,6 +188,27 @@ for name in ("picnic_blanket", "cooking_pot", "soaking_tub", "vanity_mirror", "s
 for name in ("grooming_brush", "toy_ball", "friend_whistle", "homemade_meal", "scout_pack"):
     plain_item(name)
 
+roll_w = lambda x, y: speck("#7a5a3a" if y % 4 else "#5a3e26", 8)
+tile("bedroll", roll_w)
+tile("bedroll_top", lambda x, y: speck("#c8a878" if 4 <= x <= 11 and y < 5 else "#3a5a7a" if (y // 3) % 2 else "#2e4a68", 6))
+bed = {"particle": "monstergirls:block/bedroll", "top": "monstergirls:block/bedroll_top", "side": "monstergirls:block/bedroll"}
+be = cube([0, 0, 1], [16, 3, 15], "side")
+be["faces"]["up"] = {"texture": "#top"}
+model("bedroll", bed, [be])
+simple_state("bedroll", {f"facing={f}": {"model": "monstergirls:block/bedroll", "y": r} for f, r in [("north", 0), ("east", 90), ("south", 180), ("west", 270)]})
+block_item("bedroll")
+loot("bedroll")
+model("figurine", {"particle": "monstergirls:block/soaking_tub_wood", "base": "monstergirls:block/soaking_tub_wood"}, [cube([3, 0, 3], [13, 2, 13], "base")])
+simple_state("figurine", {f"facing={f}": {"model": "monstergirls:block/figurine", "y": r} for f, r in [("north", 0), ("east", 90), ("south", 180), ("west", 270)]})
+block_item("figurine")
+icon("sketchbook", [
+    "................", "...bbbbbbbbbb...", "...bpppppppppb..", "...bpppppppppb..", "...bppkkkkpppb..", "...bppkppkpppb..", "...bppkkkkpppb..", "...bpppkppppb...",
+    "...bppkkkpppb...", "...bpppppppppb..", "...bpppppppppb..", "...bbbbbbbbbbb..", "................", "................", "................", "................"],
+     dict(b="#6a3a22", p="#f4ecd8", k="#3a3a40"))
+plain_item("sketchbook")
+rows = [[speck("#f4f2ec" if (y // 4) % 2 else "#e8a8b8", 5) for x in range(32)] for y in range(32)]
+H.write_png(os.path.join(ASSETS, "textures", "entity", "towel.png"), rows)
+
 # --- recipes ------------------------------------------------------------------------------------------------------------
 shaped("picnic_blanket", ["WR", "RW"], dict(W="minecraft:white_wool", R="minecraft:red_wool"), 2)
 shaped("cooking_pot", ["I I", "I I", "III"], dict(I="minecraft:iron_ingot"))
@@ -197,6 +218,8 @@ shaped("sparring_post", [" H ", "SFS", " F "], dict(H="minecraft:hay_block", S="
 shaped("grooming_brush", ["  W", " S ", "S  "], dict(W="minecraft:wheat", S="minecraft:stick"))
 shaped("toy_ball", [" W ", "WSW", " W "], dict(W="#minecraft:wool", S="minecraft:slime_ball"), 2)
 shaped("scout_pack", ["LSL", "LCL", "LLL"], dict(L="minecraft:leather", S="minecraft:string", C="#c:chests"))
+shaped("bedroll", ["SWW", "SWW"], dict(S="minecraft:string", W="#minecraft:wool"))
+shaped("sketchbook", [" C", "BF"], dict(C="minecraft:charcoal", B="minecraft:book", F="minecraft:feather"))
 shaped("friend_whistle", ["  G", "GGG", " G "], dict(G="minecraft:gold_nugget"))
 tag_add(os.path.join(MC, "pickaxe.json"), ["monstergirls:cooking_pot"])
 axe = os.path.join(MC, "axe.json")
@@ -208,7 +231,8 @@ M.add_lang({
     "block.monstergirls.picnic_blanket": "Picnic Blanket", "block.monstergirls.vanity_mirror": "Vanity Mirror", "block.monstergirls.cooking_pot": "Cooking Pot",
     "block.monstergirls.soaking_tub": "Soaking Tub", "block.monstergirls.sparring_post": "Sparring Post",
     "item.monstergirls.grooming_brush": "Grooming Brush", "item.monstergirls.toy_ball": "Toy Ball", "item.monstergirls.friend_whistle": "Friend Whistle",
-    "item.monstergirls.homemade_meal": "Home-Cooked Meal", "item.monstergirls.scout_pack": "Scout Pack",
+    "item.monstergirls.homemade_meal": "Home-Cooked Meal", "block.monstergirls.bedroll": "Bedroll", "block.monstergirls.figurine": "Figurine", "item.monstergirls.sketchbook": "Sketchbook",
+    "item.monstergirls.figurine.of": "Figurine of %s", "message.monstergirls.camp": "%s friends gather round the camp", "message.monstergirls.sketch_refused": "%s won't sit for you", "item.monstergirls.scout_pack": "Scout Pack",
     "item.monstergirls.scout_pack.empty": "Hand it to a friend: she'll scout her home biome", "item.monstergirls.scout_pack.line": "%s x %s",
     "message.monstergirls.scout_set_off": "%s shoulders the pack and sets off for the %s", "message.monstergirls.scout_back": "%s is back from the %s with a full pack!",
     "message.monstergirls.scout_full": "Empty the pack before you give it to %s", "message.monstergirls.scout_refused": "%s won't go for you",

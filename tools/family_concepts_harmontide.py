@@ -3681,6 +3681,47 @@ for _fid, _entries in THIRTY_FIFTH.items():
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
 
+THIRTY_SIXTH = {
+    "rodent": [_c("lemur_rodent", "Lemur", "Jungle clearings", "Sunlit · sociable", 1.55, ['sparse_jungle', 'jungle', 'savanna'], "Sociable",
+                  "A ring-tailed lemur who begins every day sitting with her arms open to the sun.", "Fruit and berries.",
+                  ("Sun Salute", "Befriended, at dawn her friend near her is warmed: extra hearts and Haste for the morning."), "Low.", ["Ring", "Red", "Black", "White", "Gold"], "A morning buff"),
+               _c("mongoose_rodent", "Mongoose", "Savanna", "Quick · fearless", 1.5, ['savanna', 'desert', 'badlands'], "Fearless",
+                  "Poison doesn't touch her. Snakes have noticed.", "Raw meat and eggs.",
+                  ("Antivenom", "Poison doesn't touch her, and it comes out of her friend near her."), "Medium.", ["Grizzled", "Banded", "Yellow", "Dark", "Grey"], "Clears poison from her friend")],
+    "minotaur": [_c("rhino_minotaur", "Rhino", "Savanna", "Short-sighted · decisive", 2.1, ['savanna', 'savanna_plateau', 'windswept_savanna'], "Decisive",
+                    "She can't see far, so she has decided not to need to.", "Wheat and melons.",
+                    ("Charge", "She charges in a straight line at what she's fighting, and it goes a long way."), "High.", ["Slate", "White", "Black", "Dust", "Armour"], "Charges her target")],
+    "crustacean": [_c("mantis_shrimp_crustacean", "Mantis Shrimp", "Warm reefs", "Dazzling · violent", 1.6, ['warm_ocean', 'lukewarm_ocean'], "Violent",
+                      "She sees colours nobody has names for, and punches faster than a bullet.", "Cod and kelp.",
+                      ("Punch", "Befriended, she hits the monster nearest her friend very hard, and the shock stuns what's round it."), "High.", ["Rainbow", "Blue", "Violet", "Orange", "Dull"], "A stunning punch")],
+    "lamia": [_c("centipede_lamia", "Centipede", "Deep caves", "Many-legged · patient", 2.2, ['dripstone_caves', 'lush_caves', 'jungle'], "Patient",
+                 "She goes on for some time. On the rearing rig: she climbs walls.", "Raw meat and spider eyes.",
+                 ("Forcipules", "She climbs walls. Befriended, her bite sickens the monster nearest her friend."), "High.", ["Red", "Black", "Blue", "Cave", "Green"], "Climbs, bites")],
+    "bug": [_c("cicada_bug", "Cicada", "Forests", "Loud · brief", 1.6, ['forest', 'birch_forest', 'dark_forest'], "Loud",
+               "She waited a very long time to say this, and she will say it all afternoon.", "Sugar and sweet berries.",
+               ("Chorus", "Befriended, a burst of song every few minutes: Speed and Haste for her friend."), "Low.", ["Green", "Brown", "Periodical", "Pale", "Blue"], "Song buffs her friend")],
+    "elf": [_c("gnome_elf", "Gnome", "Gardens", "Still · industrious", 1.3, ['flower_forest', 'meadow', 'plains'], "Industrious",
+               "A short grown woman in a tall hat, who tends the garden and stops dead when you look at her.", "Sweet berries and cake.",
+               ("Garden Keeper", "She freezes when you watch her. Befriended, the crops near her grow."), "Low.", ["Red", "Blue", "Green", "Yellow", "Ginger"], "Grows crops, freezes when watched"),
+            _c("dwarf_elf", "Dwarf", "Mountains", "Broad · tireless", 1.45, ['stony_peaks', 'windswept_hills', 'dripstone_caves'], "Tireless",
+               "Soot on her cheeks and a real pickaxe in her hand, which she will use.", "Bread and cake.",
+               ("Vein Finder", "Befriended, she mines the ore next to her friend with the pickaxe she carries."), "Low.", ["Red", "Black", "Gold", "Grey", "Copper"], "Mines ore for her friend")],
+    "nekomata": [_c("nue_nekomata", "Nue", "Night forests", "Dreadful · thundering", 1.9, ['dark_forest', 'taiga', 'old_growth_pine_taiga'], "Dreadful",
+                    "Monkey, tiger and snake in one, and the cry that made an emperor ill.", "Raw meat and fish.",
+                    ("Night Cry", "Befriended, at night her cry and a crack of thunder weaken the monsters near her friend."), "High.", ["Tiger", "Storm", "White", "Black", "Red"], "Night cry weakens monsters")],
+    "merfolk": [_c("lorelei_mermaid", "Lorelei", "River rocks", "Golden · fatal", 1.75, ['river', 'stony_shore'], "Fatal",
+                   "She combs her hair on a rock above the Rhine and sings. It has never gone well for the sailors.", "Cod and salmon.",
+                   ("Rhine Song", "Befriended, her song draws the monsters near her friend towards the water and her."), "Medium.", ["Gold", "Silver", "Red", "Dark", "River"], "Draws monsters to her")],
+}
+for _fid, _entries in THIRTY_SIXTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(s["id"] == _species["id"] for s in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 # homage variants of 2026-10-28 (POP_CULTURE_VARIANTS.md): appended after every wave, so every species exists by now
 for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, a black bodysuit with a pink heart, white gloves and boots")),
                        ("ika_mollusk", ("ink_kid", "Ink Kid", "Bright orange tentacle hair, a white tee and black shorts")),
@@ -3766,7 +3807,16 @@ for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, 
                        ("lioness_nekomata", ("pride_queen", "Pride Queen", "Golden tan, blue eyes")),
                        ("long_dragon", ("wish_dragon", "Wish Dragon", "Green scales, red eyes")),
                        ("night_elf", ("night_warden", "Night Warden", "Lilac skin, teal hair, dark armour")),
-                       ("arctic_kitsune", ("ice_fox", "Ice Fox", "Pale blue fur, curled tails"))]:
+                       ("arctic_kitsune", ("ice_fox", "Ice Fox", "Pale blue fur, curled tails")),
+                       # thirty-sixth wave
+                       ("wolf_canid", ("sun_wolf", "Sun Wolf", "White, red markings")),
+                       ("red_kitsune", ("charm_fox", "Charm Fox", "Black hair, cream tails, a red and white robe")),
+                       ("panda_canid", ("fight_panda", "Fight Panda", "An orange and gold top")),
+                       ("tiger_nekomata", ("storm_tiger", "Storm Tiger", "Orange, a red silk top")),
+                       ("lynx_nekomata", ("boots_cat", "Boots Cat", "Ginger, a dark hat's colours")),
+                       ("koi_mermaid", ("red_tide", "Red Tide", "Red hair, a green tail, a lilac top")),
+                       ("dark_elf", ("shadow_ranger", "Shadow Ranger", "White hair, dark skin, a black cloak")),
+                       ("troll_devil", ("bridge_keeper", "Bridge Keeper", "Blue skin, red hair"))]:
     for _fam in C.FAMILIES:
         for _s in _fam["species"]:
             if _s["id"] == _sid and all(v[0] != _variant[0] for v in _s["variants"]):

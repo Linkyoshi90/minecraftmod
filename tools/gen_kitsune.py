@@ -268,5 +268,8 @@ SPECIES["gray_kitsune"]["variants"]["sly_fox"] = dict(HAIR="#d8702a", FUR="#e080
 SPECIES["arctic_kitsune"]["variants"]["ice_fox"] = dict(HAIR="#b8e0f4", FUR="#e8f4fc", LIGHT="#ffffff", MARK="#8ac0e0", EYE="#2a5a9a", CLOTH="#a8d8f0", TRIM="#e8f4fc")
 
 
+SPECIES["red_kitsune"]["variants"]["charm_fox"] = dict(HAIR="#1e1a22", FUR="#f4ecdc", LIGHT="#ffffff", MARK="#c83a5a", EYE="#e8c040", CLOTH="#c83a4a", TRIM="#f8f4ec")   # homage look of the thirty-sixth wave (POP_CULTURE_VARIANTS.md)
+
+
 if __name__ == "__main__":
     G.run_family("kitsune", SPECIES, declare, paint, build, anims, VIEWS, FACE)

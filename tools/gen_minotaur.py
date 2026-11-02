@@ -21,6 +21,15 @@ COW_TAIL = [(1, 1, 3.5), (.75, .75, 3.5), (1.5, 1.75, 1.75)]
 TAIL_REST = [(-62, 0, 0), (-14, 0, 0), (-6, 0, 0)]
 
 SPECIES = {
+    # thirty-sixth wave: the rhino: slate hide, a broad build, a single great horn at her brow
+    "rhino_minotaur": dict(
+        build="strong", outfit=dict(top=["sports"], bottom="shorts", extras=["belt", "bracers"], colors=dict(leather="#5a4a3a")),
+        hair="bob", bangs="blunt", ears="round", legs="hoof", foot="hoof", horns="rhino", tail=COW_TAIL, tail_look="tuft", tail_rest=TAIL_REST,
+        male=dict(hair="pixie", outfit=dict(bottom="shorts", extras=["belt"], colors=dict(leather="#5a4a3a"))),
+        pal=dict(SKIN=skin("tan"), HAIR="#3a3a40", FUR="#7a7a80", LIGHT="#a8a8ac", MARK="#4a4a50", EYE="#2a2018", CLOTH="#a87a3a", TRIM="#e8e0d0",
+                 INNER="#a88a8a", extra=dict(horn="#d8d0c0", hoof="#3a3634")),
+        variants={"white": dict(FUR="#b8b4ac", HAIR="#7a766e"), "black": dict(FUR="#3a3a3e", HAIR="#1e1e22"),
+                  "dust": dict(FUR="#a08a6a", HAIR="#5a4a30"), "armour": dict(FUR="#5a6a7a", HAIR="#2e3a48", extra=dict(horn="#e8c050", hoof="#2e3a48"))}),
     # thirty-fifth wave: the hippo: round, wet and dangerous, a rosy flush to her hide
     "hippo_minotaur": dict(
         build="curvy", outfit=dict(top=["bandeau"], bottom="sarong", extras=["pearls"], colors=dict(cloth2="#5a8aa8")),

@@ -52,5 +52,9 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("sparring_post", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.SparringPostBlockEntity::new,
                     ModBlocks.SPARRING_POST.get()).build(null));
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.linkyoshi90.monstergirls.block.FigurineBlockEntity>> FIGURINE =
+            BLOCK_ENTITIES.register("figurine", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.FigurineBlockEntity::new,
+                    ModBlocks.FIGURINE.get()).build(null));
+
     private ModBlockEntities() {}
 }

@@ -42,15 +42,16 @@ def harness_texture():
     return rows
 
 
-def blush_rows(u, v, size=512, s=1.0):
+def blush_rows(u, v, size=512, s=1.0, sy=None):
     """Her head's north face is 32 pixels square at (u, v), or s times that: cheeks below the eyes, over the faint pink already painted."""
+    sy = s if sy is None else sy
     rows = [[(0, 0, 0, 0)] * size for _ in range(size)]
     for left in (2, 20):
         for y in range(23, 29):
             edge = y in (23, 28)
             for x in range(left + (1 if edge else 0), left + (9 if edge else 10)):
                 strong = 24 <= y <= 27 and left + 2 <= x <= left + 7
-                for yy in range(int(y * s), max(int(y * s) + 1, int((y + 1) * s))):
+                for yy in range(int(y * sy), max(int(y * sy) + 1, int((y + 1) * sy))):
                     for xx in range(int(x * s), max(int(x * s) + 1, int((x + 1) * s))):
                         rows[int(v) + yy][int(u) + xx] = BLUSH + (150 if strong else 90,)
     return rows
@@ -58,7 +59,10 @@ def blush_rows(u, v, size=512, s=1.0):
 
 def girl_ids():
     with open(os.path.join(H.REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "girl", "GirlSpecies.java"), encoding="utf-8") as fh:
-        return re.findall(r'^\s+[A-Z0-9_]+\("([a-z0-9_]+)", Family', fh.read(), re.M)
+        girls = re.findall(r'^\s+[A-Z0-9_]+\("([a-z0-9_]+)", Family', fh.read(), re.M)
+    with open(os.path.join(H.REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "registry", "ModEntities.java"), encoding="utf-8") as fh:
+        others = re.findall(r'ENTITY_TYPES\.register\("([a-z0-9_]+)"', fh.read())     # harpies and frogs
+    return girls + [n for n in others if os.path.exists(os.path.join(ASSETS, "geo", "entity", n + ".geo.json"))]
 
 
 def main():
@@ -72,7 +76,7 @@ def main():
             rows = [[(0, 0, 0, 0)] * size for _ in range(size)]
         else:
             face = head["cubes"][0]["uv"]["north"]
-            rows = blush_rows(face["uv"][0], face["uv"][1], size, abs(face["uv_size"][0]) / 32)
+            rows = blush_rows(face["uv"][0], face["uv"][1], size, abs(face["uv_size"][0]) / 32, abs(face["uv_size"][1]) / 32)
         H.write_png(os.path.join(ASSETS, "textures", "entity", name + "_blush.png"), rows)
     I.dump(os.path.join(ASSETS, "particles", "milk_drip.json"), {"textures": ["minecraft:drip_fall"]})
 

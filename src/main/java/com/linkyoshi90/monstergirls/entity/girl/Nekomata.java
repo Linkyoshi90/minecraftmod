@@ -515,9 +515,25 @@ public class Nekomata extends AbstractMonsterGirl {
         return 1;
     }
 
+    /** The nue's night cry: Weakness and Slowness on the monsters within 12 of her friend, and a crack of thunder. How many, or -1 without a friend. */
+    public int nightCry(net.minecraft.server.level.ServerLevel level, boolean night) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        if (!night) return 0;
+        var near = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(12), net.minecraft.world.entity.monster.Monster::isAlive);
+        if (near.isEmpty()) return 0;
+        for (net.minecraft.world.entity.monster.Monster m : near) {
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WEAKNESS, 160, 1));
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 160, 1));
+        }
+        this.playSound(net.minecraft.sounds.SoundEvents.LIGHTNING_BOLT_THUNDER, 0.6F, 1.6F);
+        return near.size();
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.NUE_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel forest && !this.isBaby() && this.tickCount % 401 == 0) this.nightCry(forest, forest.isNight());
         if (this.species == GirlSpecies.BLACK_PANTHER_NEKOMATA && !this.level().isClientSide && !this.isBaby() && this.tickCount % 20 == 0) this.prowl(this.level().isNight());
         if (this.species == GirlSpecies.SMILODON_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel snow && !this.isBaby() && this.tickCount % 60 == 0) this.ambush(snow);
         if (this.species == GirlSpecies.BAKU_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel dream && !this.isBaby() && this.tickCount % 200 == 0) this.eatNightmares(dream);

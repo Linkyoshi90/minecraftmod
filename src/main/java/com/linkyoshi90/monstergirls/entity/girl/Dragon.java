@@ -239,7 +239,7 @@ public class Dragon extends AbstractMonsterGirl {
 
     @Override
     protected Vec3 getPassengerAttachmentPoint(Entity passenger, net.minecraft.world.entity.EntityDimensions dims, float scale) {
-        return new Vec3(0.0, dims.height() * (this.species == GirlSpecies.GRYPHON_DRAGON ? 0.55 : 0.75), 0.4);
+        return new Vec3(0.0, dims.height() * (this.species == GirlSpecies.GRYPHON_DRAGON ? 0.55 : 0.75), -0.4);
     }
 
     @Override

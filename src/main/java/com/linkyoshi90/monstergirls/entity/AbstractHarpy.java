@@ -63,6 +63,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * somewhere later), and her affection for each player (raised by feeding and petting; see /monstergirls bonds).
  */
 public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, FlyingAnimal, Bonded, GiftGiver, Painted {
+    private static final EntityDataAccessor<Boolean> DATA_BLUSHING = SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.BOOLEAN);
+    private int blushTicks;
     private static final EntityDataAccessor<Byte> DATA_ACTION =
             SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> DATA_BABY =
@@ -183,6 +185,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ACTION, (byte) Action.NONE.ordinal());
+        builder.define(DATA_BLUSHING, false);
         builder.define(DATA_BABY, false);
         builder.define(DATA_BELLY, (byte) 0);
         builder.define(DATA_MOONSTRUCK, false);
@@ -640,8 +643,19 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     }
 
     @Override
+    public void blushFor(int ticks) {
+        this.blushTicks = Math.max(this.blushTicks, ticks);
+        this.entityData.set(DATA_BLUSHING, true);
+    }
+
+    public boolean isBlushing() {
+        return this.entityData.get(DATA_BLUSHING);
+    }
+
+    @Override
     public void aiStep() {
         super.aiStep();
+        if (!this.level().isClientSide && this.blushTicks > 0 && --this.blushTicks == 0) this.entityData.set(DATA_BLUSHING, false);
         if (this.level() instanceof ServerLevel milky) com.linkyoshi90.monstergirls.entity.Lactation.tick(milky, this);
         if (this.level() instanceof ServerLevel) {
             Painted.tickCopper(this, this);

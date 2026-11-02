@@ -16,6 +16,20 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-sixth wave: the gnome: short and round-cheeked, a tall red hat, very still when you look
+    "gnome_elf": dict(
+        build="curvy", outfit=dict(top=["bandeau", "vest"], bottom="shorts", extras=["belt"], colors=dict(leather="#5a3a22")),
+        hair="braid", bangs="parted", ears="elf", legs="boots", foot="shoe", gnome_hat=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#e8e0d0", FUR="#e8e0d0", LIGHT="#f4e8d8", MARK="#3a5a2a", EYE="#3a6ac8", CLOTH="#c83a2a", TRIM="#5a3a22",
+                 extra=dict(boot="#5a3a22")),
+        variants={"blue": dict(CLOTH="#2a5ab0"), "green": dict(CLOTH="#3a7a3a"), "yellow": dict(CLOTH="#d8a82a"), "ginger": dict(HAIR="#c8682a", CLOTH="#7a3a2a")}),
+    # thirty-sixth wave: the dwarf: broad, braided, soot on her cheeks, and a real pickaxe in her hand
+    "dwarf_elf": dict(
+        build="strong", outfit=dict(top=["sarashi", "vest"], bottom="shorts", extras=["belt", "bracers"], colors=dict(leather="#5a3a22")),
+        hair="braid", bangs="blunt", ears=None, legs="boots", foot="shoe",
+        pal=dict(SKIN=skin("tan"), HAIR="#a8482a", FUR="#a8482a", LIGHT="#e8c8a0", MARK="#3a3a40", EYE="#3a5a7a", CLOTH="#6a6a70", TRIM="#e8c050",
+                 extra=dict(boot="#3a2a1e")),
+        variants={"black": dict(HAIR="#1e1a1a", FUR="#1e1a1a"), "gold": dict(HAIR="#e8c050", FUR="#e8c050"), "grey": dict(HAIR="#a8a8ac", FUR="#a8a8ac"), "copper": dict(HAIR="#c8703e", FUR="#c8703e", CLOTH="#4a6a7a")}),
     # thirty-second wave: the snow elf: pale, white-blonde, a fur-trimmed coat over bandeau and boots
     "snow_elf": dict(
         build="athletic", outfit=dict(top=["bandeau", "mantle"], bottom="shorts", extras=["belt", "scarf"], colors=dict(leather="#7a8a9a", scarf="#6a9ac8", pelt="#f0f0f4")),
@@ -413,6 +427,32 @@ def build_hook(r, g, d):
 
 # homage looks of the thirtieth wave (POP_CULTURE_VARIANTS.md)
 SPECIES["night_elf"]["variants"]["night_warden"] = dict(HAIR="#3a7a6a", CLOTH="#3a2a5a", TRIM="#c8c8d8", SKIN=skin("lilac"))
+
+
+SPECIES["dark_elf"]["variants"]["shadow_ranger"] = dict(HAIR="#f0f0f4", SKIN="#3a3444", CLOTH="#1e1e2a", TRIM="#a8a8c8", EYE="#a858f0")   # homage look of the thirty-sixth wave (POP_CULTURE_VARIANTS.md)
+
+
+_declare0, _paint0, _build0 = declare_hook, paint_hook, build_hook
+
+
+def declare_hook(sp, d):                                 # thirty-sixth wave: the gnome's tall pointed hat
+    out = _declare0(sp, d) or []
+    return out + ([("gn_hat_a", 9.5, 3, 9.5), ("gn_hat_b", 7, 3.5, 7), ("gn_hat_c", 4.5, 3.5, 4.5), ("gn_hat_d", 2, 3, 2)] if d.get("gnome_hat") else [])
+
+
+def paint_hook(pt, pal, d):
+    _paint0(pt, pal, d)
+    if d.get("gnome_hat"):
+        for p in ("gn_hat_a", "gn_hat_b", "gn_hat_c", "gn_hat_d"):
+            pt(p, "all", lambda f, x, y, w, h: pick(pal.CLOTH, 0.5 + (noise(x, y, 51) - 0.5) * 0.12 - 0.04 * (y % 4 == 0), x, y))
+
+
+def build_hook(r, g, d):
+    _build0(r, g, d)
+    if d.get("gnome_hat"):
+        hy, z = g.hy, g.z
+        r.add("hair_gnome_hat", "head", [0, hy + 8, z], [cube("gn_hat_a", [-4.75, hy + 6.5, -4.75 + z]), cube("gn_hat_b", [-3.5, hy + 9.5, -3.5 + z]),
+                                                          cube("gn_hat_c", [-2.25, hy + 13, -2.25 + z]), cube("gn_hat_d", [-1, hy + 16.5, -1 + z])])
 
 
 if __name__ == "__main__":

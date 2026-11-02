@@ -137,7 +137,7 @@ public class MilkingMachineBlockEntity extends BlockEntity {
             this.put(new ItemStack(ModItems.MILK.get(milk).get()));
             markMilked(creature, level.getGameTime() + Minotaur.MILK_COOLDOWN);
             if (creature instanceof Minotaur cow) cow.milkedByMachine();
-            if (creature instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl girl) girl.blushFor(Minotaur.MACHINE_MILK_TICKS);
+            if (creature instanceof Bonded blushing) blushing.blushFor(Minotaur.MACHINE_MILK_TICKS);
             this.pumpTicks = PUMP_TICKS;
             level.playSound(null, pos, SoundEvents.COW_MILK, SoundSource.BLOCKS, 1.0F, 1.0F);
             return;

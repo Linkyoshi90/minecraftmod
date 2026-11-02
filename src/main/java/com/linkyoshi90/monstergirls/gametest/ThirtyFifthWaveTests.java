@@ -153,4 +153,44 @@ public class ThirtyFifthWaveTests {
         check(!goal.canUse(), "not while on fire");
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "sittingMermaidGoesForWater")
+    public static void sittingMermaidGoesForWater(GameTestHelper helper) {
+        com.linkyoshi90.monstergirls.entity.girl.Merfolk g = spawn(helper, GirlSpecies.KOI_MERMAID, new BlockPos(1, 2, 1));
+        var goal = new com.linkyoshi90.monstergirls.entity.ai.SitWhenOrderedGoal<>(g);
+        g.setOrderedToSit(true);
+        check(goal.canUse(), "she sits");
+        g.setDryTicks(g.dryLimit());
+        check(g.needsWater() && !goal.canUse(), "not while drying out");
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "harpiesAndFrogsBlush")
+    public static void harpiesAndFrogsBlush(GameTestHelper helper) {
+        var owl = helper.spawn(com.linkyoshi90.monstergirls.registry.ModEntities.OWL_HARPY.get(), new BlockPos(1, 2, 1));
+        owl.blushFor(3);
+        check(owl.isBlushing(), "she blushes");
+        helper.runAfterDelay(6, () -> {
+            check(!owl.isBlushing(), "and it passes");
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "wave36Creatures")
+    public static void wave36Creatures(GameTestHelper helper) {
+        com.linkyoshi90.monstergirls.entity.girl.Crustacean shrimp = still(helper, GirlSpecies.MANTIS_SHRIMP_CRUSTACEAN, new BlockPos(1, 2, 1));
+        Rodent mongoose = still(helper, GirlSpecies.MONGOOSE_RODENT, new BlockPos(2, 2, 1));
+        com.linkyoshi90.monstergirls.entity.girl.Elf gnome = still(helper, GirlSpecies.GNOME_ELF, new BlockPos(3, 2, 1));
+        ServerPlayer p = friendOf(helper, shrimp, new BlockPos(5, 2, 5), Orders.AFFECTION);
+        mongoose.addAffection(p, Orders.AFFECTION);
+        Zombie z = zombie(helper, new BlockPos(6, 2, 5));
+        check(shrimp.punch(helper.getLevel()) == 1 && z.hasEffect(MobEffects.MOVEMENT_SLOWDOWN), "the punch");
+        mongoose.addEffect(new net.minecraft.world.effect.MobEffectInstance(MobEffects.POISON, 100));
+        check(!mongoose.hasEffect(MobEffects.POISON), "poison doesn't touch her");
+        p.addEffect(new net.minecraft.world.effect.MobEffectInstance(MobEffects.POISON, 100));
+        check(mongoose.antivenom() && !p.hasEffect(MobEffects.POISON), "and it comes out of her friend");
+        check(gnome.tendGarden(helper.getLevel()) == -1, "only for a friend");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

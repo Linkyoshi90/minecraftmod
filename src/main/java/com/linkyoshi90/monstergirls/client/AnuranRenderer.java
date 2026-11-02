@@ -58,6 +58,7 @@ public class AnuranRenderer<T extends AbstractAnuran> extends GeoEntityRenderer<
             }
         });
         this.withScale(scale);
+        this.addRenderLayer(new BlushOverlayLayer<>(this, species, T::isBlushing));
         this.addRenderLayer(new MoonEyesLayer<>(this));
         this.addRenderLayer(new PaintGlowLayer<>(this, a -> a.getPaintName()));
         this.shadowRadius = shadowRadius;

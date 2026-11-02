@@ -183,9 +183,25 @@ public class Crustacean extends AbstractMonsterGirl {
         return true;
     }
 
+    /** The mantis shrimp punches the monster nearest her friend for 12; the shock stuns what stands within 2 of it. 1 on a hit, 0 with none, -1 without a friend. */
+    public int punch(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster near = null;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(6), net.minecraft.world.entity.monster.Monster::isAlive)) {
+            if (near == null || m.distanceToSqr(friend) < near.distanceToSqr(friend)) near = m;
+        }
+        if (near == null) return 0;
+        near.hurt(this.damageSources().mobAttack(this), 12);
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, near.getBoundingBox().inflate(2), net.minecraft.world.entity.monster.Monster::isAlive)) m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 60, 5));
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.SONIC_BOOM, near.getX(), near.getY() + 1, near.getZ(), 1, 0, 0, 0, 0);
+        return 1;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.MANTIS_SHRIMP_CRUSTACEAN && this.level() instanceof net.minecraft.server.level.ServerLevel reefs && !this.isBaby() && this.tickCount % 81 == 0) this.punch(reefs);
         if (this.species == GirlSpecies.LOBSTER_CRUSTACEAN && !this.level().isClientSide && !this.isBaby() && this.tickCount % 21 == 0) this.moult(this.level().getDayTime() / 24000L);
         if (this.species == GirlSpecies.SPIDER_CRAB_CRUSTACEAN && this.level() instanceof net.minecraft.server.level.ServerLevel clawed && !this.isBaby() && this.tickCount % 60 == 0) this.pin(clawed);
         if (this.species == GirlSpecies.FLOODCRAB_CRUSTACEAN && !this.isBaby() && this.tickCount % 400 == 0 && this.level() instanceof ServerLevel server) this.puddle(server);

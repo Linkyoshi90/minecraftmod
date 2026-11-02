@@ -19,6 +19,15 @@ public interface Bonded {
 
     int getAffection(Player player);
 
+    /** Drying out: she has to reach water, even if she was told to sit. */
+    default boolean needsWater() {
+        return false;
+    }
+
+    /** Pink cheeks for a while, at the milking machine. */
+    default void blushFor(int ticks) {
+    }
+
     void addAffection(Player player, int amount);
 
     /** Sets her affection for a player who may not be online (a newborn's father). */

@@ -66,6 +66,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * takes damage (frogs dry out fast, toads slowly); water or rain resets the clock.
  */
 public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity, Bonded, Painted {
+    private static final EntityDataAccessor<Boolean> DATA_BLUSHING = SynchedEntityData.defineId(AbstractAnuran.class, EntityDataSerializers.BOOLEAN);
+    private int blushTicks;
     private static final EntityDataAccessor<Byte> DATA_ACTION =
             SynchedEntityData.defineId(AbstractAnuran.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> DATA_STAGE =
@@ -229,6 +231,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ACTION, (byte) Action.NONE.ordinal());
+        builder.define(DATA_BLUSHING, false);
         builder.define(DATA_CLIMBING, false);
         builder.define(DATA_STAGE, ADULT);
         builder.define(DATA_VARIANT, (byte) 0);
@@ -340,6 +343,11 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         this.dryTicks = ticks;
     }
 
+    @Override
+    public boolean needsWater() {
+        return this.isDry();
+    }
+
     /** Dry enough that she should start looking for water (half-way to hurting). */
     public boolean isDry() {
         return this.dryTicks > this.effectiveDryLimit() / 2;
@@ -403,8 +411,19 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     }
 
     @Override
+    public void blushFor(int ticks) {
+        this.blushTicks = Math.max(this.blushTicks, ticks);
+        this.entityData.set(DATA_BLUSHING, true);
+    }
+
+    public boolean isBlushing() {
+        return this.entityData.get(DATA_BLUSHING);
+    }
+
+    @Override
     public void aiStep() {
         super.aiStep();
+        if (!this.level().isClientSide && this.blushTicks > 0 && --this.blushTicks == 0) this.entityData.set(DATA_BLUSHING, false);
         if (this.level() instanceof ServerLevel milky) com.linkyoshi90.monstergirls.entity.Lactation.tick(milky, this);
         if (this.level() instanceof ServerLevel) {
             Painted.tickCopper(this, this);

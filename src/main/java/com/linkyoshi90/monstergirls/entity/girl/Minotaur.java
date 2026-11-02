@@ -106,6 +106,7 @@ public class Minotaur extends AbstractMonsterGirl {
             case YAK_MINOTAUR -> girlAttributes(40, 0.24, 5).add(Attributes.ATTACK_KNOCKBACK, 1.0);
             case MOOSKUH_MINOTAUR -> girlAttributes(22, 0.22, 1);
             case BRONZEJAW_MINOTAUR -> girlAttributes(44, 0.24, 6).add(Attributes.ARMOR, 4).add(Attributes.KNOCKBACK_RESISTANCE, 0.6);
+            case RHINO_MINOTAUR -> girlAttributes(48, 0.26, 9).add(Attributes.ATTACK_KNOCKBACK, 2.5).add(Attributes.KNOCKBACK_RESISTANCE, 0.8);
             case RHIWOOL_MINOTAUR -> girlAttributes(44, 0.26, 8).add(Attributes.ATTACK_KNOCKBACK, 2.5).add(Attributes.KNOCKBACK_RESISTANCE, 0.8);
             default -> girlAttributes(30, 0.25, 4).add(Attributes.ATTACK_KNOCKBACK, 1.0);
         };
@@ -496,7 +497,7 @@ public class Minotaur extends AbstractMonsterGirl {
         if (this.stampede > 0) this.stampede--;
         if (this.nextMilk > 0 && server.getGameTime() >= this.nextMilk) this.ringBell(server);
         this.tickMilking(server);
-        if (this.species == GirlSpecies.RHIWOOL_MINOTAUR) this.tickCharge(server);
+        if (this.species == GirlSpecies.RHIWOOL_MINOTAUR || this.species == GirlSpecies.RHINO_MINOTAUR) this.tickCharge(server);
         if (this.tickCount % 40 == 0 && !this.isBaby()) {
             Player p = this.bondedPlayer(60, 16);
             if (p != null) {

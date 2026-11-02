@@ -18,6 +18,14 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-sixth wave: the Lorelei of the Rhine: long gold hair, a green tail, a comb, a song
+    "lorelei_mermaid": dict(
+        build="curvy", outfit=dict(top=["bandeau"], extras=["pearls"]),
+        ears=None, hair="flowing", bangs="parted", fluke=(.5, 6, 5), long_fins=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#e8c860", FUR="#3a8a6a", LIGHT="#c8e8c8", MARK="#1e5a44", EYE="#3a8ac8", CLOTH="#e8e4dc", TRIM="#e8c860",
+                 pattern="solid"),
+        variants={"silver": dict(HAIR="#d8dce4", FUR="#6a7a9a"), "red": dict(HAIR="#a83a2a", FUR="#2a6a7a"),
+                  "dark": dict(HAIR="#2a2428", FUR="#3a3a5a"), "river": dict(HAIR="#a88a4a", FUR="#5a7a5a")}),
     # thirty-fifth wave: the selkie: a seal who sheds her skin at the shore; a grey pelt worn round her shoulders like a cloak
     "selkie_mermaid": dict(
         build="slim", outfit=dict(top=["bandeau", "capelet"], extras=["pearls"]),
@@ -809,6 +817,9 @@ FISH_BACK = 12                                           # she lies level, so he
 VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0, 180, 0),
          ("walk", 0.4, -45, 15), ("swim", 0.3, -70, 15), ("sit", 0, -40, 25), ("sing", 0.5, -30, 8)]
 FACE = [("idle", 0, 0, 0, 24), ("idle", 2.75, 0, 0, 24), ("sing", 0.5, 0, 0, 24), ("idle", 0, -30, 8, 24)]
+
+SPECIES["koi_mermaid"]["variants"]["red_tide"] = dict(HAIR="#d83a2a", FUR="#2ea86a", LIGHT="#a8e8c8", MARK="#1e7a4a", EYE="#3a7ac8", CLOTH="#a87ad8", TRIM="#e8d8f0", pattern="solid")   # homage look of the thirty-sixth wave (POP_CULTURE_VARIANTS.md)
+
 
 if __name__ == "__main__":
     G.run_family("merfolk", SPECIES, declare, paint, build, anims, VIEWS, FACE)

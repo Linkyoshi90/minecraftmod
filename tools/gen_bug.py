@@ -24,6 +24,16 @@ LARVA_SEGS = [("seg_1", 4, 6.5, 3.5), ("seg_2", 4.25, 3.5, 3.5), ("seg_3", 4, 3.
               ("seg_5", 3.5, 2.75, 3), ("seg_6", 3, 2.5, 3), ("seg_7", 2.5, 2.25, 2.5), ("seg_8", 2, 2, 2)]
 
 SPECIES = {
+    # thirty-sixth wave: the cicada: green and black, glassy wings, seventeen years of things to say
+    "cicada_bug": dict(
+        build="slim", outfit=dict(top=["sports"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#1e2a1e", leather="#1e2a1e")), hair="bob", bangs="swept",
+        ears="antenna", legs="stockings", foot="shoe", wings="insect", flies=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e2a1e", FUR="#3a7a4a", LIGHT="#a8d890", MARK="#141a14", EYE="#c83a2a", CLOTH="#2a4a2e", TRIM="#e8d870",
+                 extra=dict(antenna="#141a14", wing="#e0ecd8", wing_vein="#5a6a3a", wing_alpha=170, stocking="#1e2a1e", boot="#141a14")),
+        variants={"brown": dict(HAIR="#3a2a1a", FUR="#7a5a34", MARK="#2a1c10", CLOTH="#4a3420", extra=dict(antenna="#2a1c10", wing="#ece4d0", wing_vein="#7a5a34", wing_alpha=170, stocking="#3a2a1a", boot="#2a1c10")),
+                  "periodical": dict(HAIR="#141418", FUR="#1e1e22", MARK="#e8602a", CLOTH="#1e1e22", EYE="#e8302a", extra=dict(antenna="#e8602a", wing="#f0e0c8", wing_vein="#e8602a", wing_alpha=170, stocking="#141418", boot="#0a0a0e")),
+                  "pale": dict(HAIR="#a8b890", FUR="#c8d8b0", MARK="#7a8a60", CLOTH="#a8b890", extra=dict(antenna="#7a8a60", wing="#f0f4e8", wing_vein="#a8b890", wing_alpha=170, stocking="#a8b890", boot="#7a8a60")),
+                  "blue": dict(HAIR="#1e2a4a", FUR="#3a5a8a", MARK="#141a2a", CLOTH="#2a3a5a", extra=dict(antenna="#141a2a", wing="#dce4f0", wing_vein="#3a5a8a", wing_alpha=170, stocking="#1e2a4a", boot="#141a2a"))}),
     # thirty-fifth wave: the dragonfly: long, jewel-green, four glassy wings, very large eyes
     "dragonfly_bug": dict(
         build="slim", outfit=dict(top=["sports"], bottom="shorts", extras=["bracers"], colors=dict(cloth2="#14503a")), hair="pixie", bangs="swept",

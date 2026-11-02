@@ -96,9 +96,10 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             "netherite", "purpur", "crying_obsidian", "shroomlight",         // the tears and the shroomlight's light glow
             "end_stone", "hay_bale", "ancient_debris", "sea_lantern",        // the sea lantern glows
             "redstone", "glowstone", "cherry", "terracotta",                 // redstone's bright lines and the glowstone glow
-            "tnt", "warped", "dripstone", "brain_coral", "crimson", "bone", "bamboo", "sponge", "soul_sand", "nether_wart", "mycelium", "basalt", "blue_ice", "chorus", "calcite", "tuff");
+            "tnt", "warped", "dripstone", "brain_coral", "crimson", "bone", "bamboo", "sponge", "soul_sand", "nether_wart", "mycelium", "basalt", "blue_ice", "chorus", "calcite", "tuff", "mud_brick", "deepslate", "oak", "gilded");
     /** Homage variants (the look of a favourite character): a wild one rolls them only rarely. */
     public static final java.util.Set<String> HOMAGES = java.util.Set.of("gunman", "blossom", "lost", "stitched", "nurse", "mummy", "ranger", "outback",
+            "sun_wolf", "charm_fox", "fight_panda", "storm_tiger", "boots_cat", "red_tide", "shadow_ranger", "bridge_keeper",
             "jewel_thief", "ink_kid", "pink_dairy", "sun_goddess",                            // POP_CULTURE_VARIANTS.md
             "octo_agent", "ninja_chameleon", "shell_trooper", "town_clerk", "scythe_green", "leaf_sprout", "mud_fin", "trident_hood",
             "innkeeper", "prankster", "soul_keeper", "sage_princess", "green_hero", "tree_guard", "snow_wraith", "headless_rider", "death_envoy",
@@ -125,12 +126,12 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     private static final Map<String, RawAnimation> ANIMATIONS = new ConcurrentHashMap<>();
 
     /** Synced flags (bits of DATA_FLAGS). */
-    private int blushTicks;
+    private int blushTicks, towelTicks;
     public static final int FLAG_TRUE_FORM = 1, FLAG_HIDDEN = 2, FLAG_DECOY = 4, FLAG_HALF = 8, FLAG_CARRYING = 16, FLAG_SADDLED = 32, FLAG_CHEST = 64,
             FLAG_CALM = 128, FLAG_SHELLS = 256, FLAG_SMILE = 512, FLAG_MALE = 1024, FLAG_RETRACTED = 2048, FLAG_LIT = 4096, FLAG_MASKED = 8192,
             FLAG_MERCHANT = 16384, FLAG_TOWING = 32768, FLAG_MOONSTRUCK = 65536, FLAG_INJURED = 131072, FLAG_WAXED = 262144,
             FLAG_TAILLESS = 524288, FLAG_UNWRAP_A = 1048576, FLAG_UNWRAP_B = 2097152, FLAG_SHORN = 4194304, FLAG_BLINDFOLD = 8388608,
-            FLAG_BLUSHING = 16777216, FLAG_HARNESSED = 33554432, FLAG_PRUNED = 67108864;
+            FLAG_BLUSHING = 16777216, FLAG_HARNESSED = 33554432, FLAG_PRUNED = 67108864, FLAG_TOWEL = 134217728;
     /** The flags that are saved (the others are moment-to-moment state). */
     private static final int SAVED_FLAGS = FLAG_TRUE_FORM | FLAG_SADDLED | FLAG_CHEST | FLAG_HALF | FLAG_CALM | FLAG_SHELLS | FLAG_MALE | FLAG_MASKED | FLAG_MERCHANT
             | FLAG_INJURED | FLAG_WAXED | FLAG_TAILLESS | FLAG_UNWRAP_A | FLAG_UNWRAP_B | FLAG_SHORN;
@@ -357,6 +358,12 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     public String getVariantName() {
         return this.species.variants().get(this.getVariantIndex());
+    }
+
+    /** A bath towel round her for a while (client/TowelLayer). */
+    public void towelFor(int ticks) {
+        this.towelTicks = Math.max(this.towelTicks, ticks);
+        this.setFlag(FLAG_TOWEL, true);
     }
 
     /** Pink cheeks for a while (client/GirlRenderer.BlushLayer). */
@@ -890,6 +897,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     public void aiStep() {
         super.aiStep();
         if (!this.level().isClientSide && this.blushTicks > 0 && --this.blushTicks == 0) this.setFlag(FLAG_BLUSHING, false);
+        if (!this.level().isClientSide && this.towelTicks > 0 && --this.towelTicks == 0) this.setFlag(FLAG_TOWEL, false);
         if (this.level() instanceof ServerLevel milky) com.linkyoshi90.monstergirls.entity.Lactation.tick(milky, this);
         SerpentSegment.follow(this, this.segments);
         if (this.level() instanceof ServerLevel healerLevel && this.tickCount % 600 == 0) this.tendCompanions(healerLevel);

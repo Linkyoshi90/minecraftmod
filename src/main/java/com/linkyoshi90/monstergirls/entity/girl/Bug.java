@@ -476,9 +476,20 @@ public class Bug extends AbstractMonsterGirl {
         return grown;
     }
 
+    /** The cicada's song: Speed and Haste for her friend near her. True if she sang. */
+    public boolean chorus() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 600, 0, true, true));
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DIG_SPEED, 600, 0, true, true));
+        this.playSound(net.minecraft.sounds.SoundEvents.BEE_LOOP, 1.0F, 1.6F);
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.CICADA_BUG && !this.level().isClientSide && !this.isBaby() && this.tickCount % 3001 == 0) this.chorus();
         if (this.level() instanceof net.minecraft.server.level.ServerLevel meadow && !this.isBaby()) {
             if (this.species == GirlSpecies.DRAGONFLY_BUG && this.tickCount % 41 == 0) this.hawk(meadow);
             if (this.species == GirlSpecies.LADYBUG_BUG && this.tickCount % 401 == 0) this.luckySpots(meadow);

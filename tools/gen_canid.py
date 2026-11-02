@@ -567,5 +567,11 @@ SPECIES["grizzly_canid"]["variants"]["sleepy_giant"] = dict(HAIR="#2a5a6a", FUR=
 SPECIES["kobold_canid"]["variants"]["blue_heeler"] = dict(HAIR="#5a7ab8", FUR="#6a8ac8", LIGHT="#c8d8f0", MARK="#2a3e7a", EYE="#2a2a30", CLOTH="#e8a040", TRIM="#2a3e7a")
 
 
+SPECIES["wolf_canid"]["variants"]["sun_wolf"] = dict(HAIR="#f4f0e8", FUR="#f4f0e8", LIGHT="#ffffff", MARK="#c82a2a", EYE="#c82a2a", CLOTH="#c82a2a", TRIM="#e8c050")   # homage look of the thirty-sixth wave (POP_CULTURE_VARIANTS.md)
+
+
+SPECIES["panda_canid"]["variants"]["fight_panda"] = dict(CLOTH="#d8702a", TRIM="#e8c050")   # homage look of the thirty-sixth wave (POP_CULTURE_VARIANTS.md)
+
+
 if __name__ == "__main__":
     F.run_family("canid", SPECIES, declare_hook, paint_hook, build_hook, anim_extra)

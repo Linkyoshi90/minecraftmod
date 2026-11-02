@@ -319,8 +319,9 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
 - [x] **Scout pack** (2026-11-02), tested in `ScoutingTests`; see HARMONTIDE_CONCEPTS.md: `entity/Scouting`, half a day out, materials of one of her spawn biomes, friendship and missing set the amount.
 - [ ] Dev client: the scout pack: its icon and tooltip, the full pack dropping, unpacking, the recipe, and whether the loot amounts feel right.
 - [x] **Thirty-fifth wave** (2026-11-02), tested in `ThirtyFifthWaveTests`: twelve creatures, flirting, sitting girls who get up when burning.
+- [x] **Thirty-sixth wave** (2026-11-03), see HARMONTIDE_CONCEPTS.md.
+- [ ] Dev client for the thirty-sixth wave: riders behind the waist on every mount (the seat flip was reasoned from vanilla, never seen), figurines of big species, the towel on every body shape, the bedroll sleep and morning, the gnome freezing, the dwarf's pickaxe, the swan and pelican.
 - [ ] Dev client for the thirty-fifth wave: the troll in the sun, the elephant and giraffe at game scale, the flirting lines.
-- [ ] Sitting girls who dry out (anurans, merfolk) still sit: only fire and lava get them up so far.
 - [ ] Dev client for the thirty-second to thirty-fourth waves: the newt's crawl, rear and swim (hind legs splayed enough? the head scale on her hair?), bone scale in GeckoLib, the pufferfish's puff, the angler's lure, the sea serpent swimming, the new block models and their textures, fetch with a flying harpy, whether friends reach the tub.
 - [ ] A world with each of Biomes O' Plenty, Oh The Biomes We've Gone, Regions Unexplored and Terralith: creatures spawn in their biomes, and nothing logs a tag error.
 - [ ] Real client with both jars, then with the main jar only: a painted girl, a glowing paint and a see-through paint show properly, and without the paints jar they are drawn unpainted with no missing textures.
