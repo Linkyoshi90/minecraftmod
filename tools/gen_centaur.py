@@ -17,9 +17,27 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-fifth wave: the giraffe: very tall, patched gold on cream, two short ossicones' worth of dignity
+    "giraffe_centaur": dict(
+        rig="giraffe", waist=36.0, ears="fox",
+        build="slim", outfit=dict(top=["halter"], extras=["armlets"], colors=dict(cloth2="#c8903a")),
+        hair="ponytail", bangs="swept", tail=(1, 9, 1),
+        pal=dict(SKIN=skin("tan"), HAIR="#7a4a22", FUR="#e0b860", LIGHT="#f4e4b8", MARK="#8a5224", EYE="#2a1a10", CLOTH="#a8582a", TRIM="#e8d8a8",
+                 pattern="patches"),
+        variants={"reticulated": dict(MARK="#6a3414", FUR="#f0d8a0"), "white": dict(FUR="#f0ece0", MARK="#d8d0c0", HAIR="#c8c0b0"),
+                  "dark": dict(FUR="#a87a40", MARK="#3a2410", HAIR="#3a2410"), "rothschild": dict(FUR="#d8a858", MARK="#5a3418")}),
+    # thirty-fifth wave: the elephant: vast, grey and gentle, gold on her brow, a trumpet of a voice
+    "elephant_centaur": dict(
+        rig="elephant", waist=24.0, ears=None,
+        build="strong", outfit=dict(top=["bandeau", "vest"], extras=["pearls", "armlets"], colors=dict(cloth2="#c83a4a", leather="#c83a4a")),
+        hair="flowing", bangs="parted", tail=(1, 7, 1),
+        pal=dict(SKIN=skin("tan"), HAIR="#3a3a40", FUR="#8a8a90", LIGHT="#b8b8bc", MARK="#6a6a70", EYE="#3a2a1e", CLOTH="#c83a4a", TRIM="#e8c050",
+                 pattern="solid"),
+        variants={"dusty": dict(FUR="#a8927a", HAIR="#5a4a3a", MARK="#7a6a58"), "dark": dict(FUR="#4a4a50", HAIR="#1e1e22", MARK="#2e2e32"),
+                  "white": dict(FUR="#e0dcd8", HAIR="#b8b4b0", MARK="#c0bcb8"), "pink": dict(FUR="#c8a8a8", HAIR="#7a5a5a", MARK="#a88a8a")}),
     # thirty-second wave: the donkey: grey with a cross on her back, long ears, a pale muzzle, and a very firm opinion
     "donkey_centaur": dict(
-        build="strong", outfit=dict(top=["vest"], extras=["belt", "pouch", "scarf"], colors=dict(leather="#6a4a2a", scarf="#c8483a")),
+        build="strong", outfit=dict(top=["bandeau", "vest"], extras=["belt", "pouch", "scarf"], colors=dict(leather="#6a4a2a", scarf="#c8483a")),
         hair="shaggy", bangs="messy", tail=(1.5, 8, 1.5),
         pal=dict(SKIN=skin("fair"), HAIR="#3a3430", FUR="#8a8078", LIGHT="#d8d0c4", MARK="#3a3430", EYE="#3a2a1e", CLOTH="#c8b890", TRIM="#6a4a2a",
                  pattern="solid"),
@@ -355,6 +373,13 @@ def declare(sp):
     parts = [("barrel", 7, 7, 15), ("withers", 5, 2.5, 5), ("uleg_f", 2.25, 6.5, 2.75), ("lleg_f", 1.75, 5.75, 1.75),
              ("uleg_b", 2.5, 6.5, 3.25), ("lleg_b", 1.75, 5.75, 1.75), ("hoof", 2.25, 1.25, 2.25), ("htail",) + d["tail"],
              ("armor_ref", 6, 8, 4)]
+    if d.get("rig") == "elephant":                       # thirty-fifth wave: pillars for legs, a great barrel, ears, tusks and a trunk
+        parts = [("barrel", 13, 12, 22), ("withers", 9, 3, 8), ("uleg_f", 5, 5, 5.5), ("lleg_f", 4.5, 5.25, 4.5), ("uleg_b", 5, 5, 5.5), ("lleg_b", 4.5, 5.25, 4.5),
+                 ("hoof", 5.25, 1.25, 5.25), ("htail",) + d["tail"], ("armor_ref", 6, 8, 4), ("eear", .75, 10, 9), ("etusk", 1.25, 1.25, 7),
+                 ("trunk_a", 3.75, 5, 3.75), ("trunk_b", 3, 5, 3), ("trunk_c", 2.25, 5, 2.25)]
+    if d.get("rig") == "giraffe":                        # thirty-fifth wave: very long legs, a short sloping body, the long neck she stands on
+        parts = [("barrel", 8, 8, 13), ("withers", 5, 2.5, 5), ("uleg_f", 2.5, 8.5, 3), ("lleg_f", 2, 8.75, 2), ("uleg_b", 2.5, 7.5, 3), ("lleg_b", 2, 7.75, 2),
+                 ("hoof", 2.5, 1.25, 2.5), ("htail",) + d["tail"], ("armor_ref", 6, 8, 4), ("gneck", 4.5, 15, 4.5), ("ossi", 1, 3, 1), ("ossi_top", 1.5, 1, 1.5)]
     if d.get("antlers"):
         parts += [("antler_a", .75, 5, .75), ("antler_b", .75, 2.5, .75), ("antler_c", .5, 2, .5)]
     if d.get("blossoms"):
@@ -406,6 +431,15 @@ def paint(sp, key):
         pt("barrel", "all", coat)
     pt("withers", "all", lambda f, x, y, w, h: H.skin_fn(pal, 0.66)(f, x, y, w, h) if f in ("north", "up") and y < h * 0.5 else coat(f, x, y, w, h))
     pt("uleg_f", "all", coat)
+    if d.get("rig") == "elephant":
+        hide = lambda f, x, y, w, h: pick(pal.FUR, 0.5 + (noise(x, y, 41) - 0.5) * 0.2 + 0.08 * (y % 5 == 0), x, y)
+        for p in ("eear", "trunk_a", "trunk_b", "trunk_c"):
+            pt(p, "all", hide)
+        pt("etusk", "all", lambda f, x, y, w, h: pick(shades("#f0e8d4"), 0.6 + (noise(x, y, 43) - 0.5) * 0.15, x, y))
+    if d.get("rig") == "giraffe":
+        pt("gneck", "all", coat)
+        pt("ossi", "all", coat)
+        pt("ossi_top", "all", lambda f, x, y, w, h: pick(pal.HAIR if hasattr(pal.HAIR, "__len__") else shades("#3a2410"), 0.4, x, y))
     pt("uleg_b", "all", coat)
     socks = pal.extra.get("socks")
     lower = lambda f, x, y, w, h: (pick(pal.LIGHT if socks else pal.MARK, 0.7, x, y) if y > h * 0.6 and socks else coat(f, x, y, w, h))
@@ -511,15 +545,60 @@ def paint(sp, key):
     return pt.T
 
 
+def rig_lower(r, d, g):
+    """The elephant's and giraffe's own lower bodies. The same bone names as G.taur, so they share its gaits."""
+    S = G.S
+    elephant = d["rig"] == "elephant"
+    bw, bh, bd = S("barrel")
+    bottom, front = (9.0, -7.0) if elephant else (15.0, -6.5)
+    r.add("barrel", "root", [0, bottom + 1, front + bd / 2], [cube("barrel", [-bw / 2, bottom, front]), cube("withers", [-S("withers")[0] / 2, bottom + bh - 1.0, front + 0.5])])
+    top = bottom + 2 if elephant else 16.0
+    legs = (("f_r", -4.0, front + 3.5, "uleg_f", "lleg_f"), ("b_r", -4.0, front + bd - 3.5, "uleg_b", "lleg_b")) if elephant else \
+           (("f_r", -2.5, front + 2.5, "uleg_f", "lleg_f"), ("b_r", -2.5, front + bd - 2.5, "uleg_b", "lleg_b"))
+    for name, x, z, up, lo in legs:
+        uw, uh, ud = S(up)
+        lw, lh, ld = S(lo)
+        leg_top = top + (1.0 if up == "uleg_f" and not elephant else 0.0)
+        r.add("leg_" + name, "barrel", [x, leg_top, z], [cube(up, [x - uw / 2, leg_top - uh, z - ud / 2])], mirror=True)
+        knee = leg_top - uh + 0.5
+        r.add("shin_" + name, "leg_" + name, [x, knee, z], [cube(lo, [x - lw / 2, knee - lh, z - ld / 2]),
+                                                             cube("hoof", [x - S("hoof")[0] / 2, 0, z - S("hoof")[2] / 2])], mirror=True)
+    tw, th, td = S("htail")
+    back = front + bd
+    r.add("tail", "barrel", [0, bottom + bh - 1.5, back + 0.25], [G.hang("htail", -tw / 2, bottom + bh - 1.25, back, 0, 12)])
+    hy, z = g.hy, g.z
+    if elephant:
+        r.add("hair_ear_r", "head", [-4.2, hy + 5, z], [G.rot_cube("eear", [-6.5, hy - 0.5, z - 3], [-4.2, hy + 5, z], 0, 30, 0)])
+        r.add("hair_ear_l", "head", [4.2, hy + 5, z], [G.rot_cube("eear", [5.75, hy - 0.5, z - 3], [4.2, hy + 5, z], 0, -30, 0)])
+        cs = []
+        for sg in (-1, 1):
+            cs.append(G.rot_cube("etusk", [sg * 3.2 - 0.625, 12.5, front - 6.5], [sg * 3.2, 13.1, front], 26, 0, -6 * sg))
+        r.add("tusks", "barrel", [0, 13, front], cs)
+        y = bottom + bh - 2.0
+        r.add("trunk", "barrel", [0, y, front], [cube("trunk_a", [-1.875, y - 5, front - 3.75])])
+        r.add("trunk_2", "trunk", [0, y - 5, front - 1.9], [cube("trunk_b", [-1.5, y - 10, front - 3.4])])
+        r.add("trunk_3", "trunk_2", [0, y - 10, front - 1.9], [cube("trunk_c", [-1.125, y - 15, front - 3.0])])
+    else:
+        r.put("body", cube("gneck", [-2.25, d["waist"] - 14.0, g.z - 2.25]))
+        cs = []
+        for sg in (-1, 1):
+            cs += [cube("ossi", [sg * 1.8 - 0.5, hy + 8.4, z - 0.5]), cube("ossi_top", [sg * 1.8 - 0.75, hy + 11.4, z - 0.75])]
+        r.add("hair_ossicones", "head", [0, hy + 8.4, z], cs)
+
+
 def build(sp):
     d = SPECIES[sp]
     r = G.Rig()
     r.add("root", None, [0, 0, 0])
-    g = G.upper(r, 19.5, dict(hair=d["hair"], bangs=d.get("bangs"), build=d.get("build"), outfit=d.get("outfit"), ears=d.get("ears", "horse"),
-                              skirt=False), z0=-2.25)
-    G.taur(r, None, d)
+    waist = d.get("waist", 19.5)
+    g = G.upper(r, waist, dict(hair=d["hair"], bangs=d.get("bangs"), build=d.get("build"), outfit=d.get("outfit"), ears=d.get("ears", "horse"),
+                               skirt=False), z0=-2.25)
+    if d.get("rig"):
+        rig_lower(r, d, g)
+    else:
+        G.taur(r, None, d)
     hy, z = g.hy, g.z
-    r.add("armor_torso", "body", [0, 19.5, z], [cube("armor_ref", [-3, 19.25, z - 2])])
+    r.add("armor_torso", "body", [0, waist, z], [cube("armor_ref", [-3, waist - 0.25, z - 2])])
     if d.get("antlers"):
         cs = []
         for sg in (-1, 1):
@@ -598,6 +677,12 @@ def anims(an):
     for key in ("idle", "walk", "sit", "lie", "graze", "rear", "kick"):
         F._inject(an, key, P.folded(names, fold=82, droop=-22))
     F._inject(an, "run", P.flap(names, 0.6, 35, 25))
+    Tk = H.track                                         # the elephant's trunk swings and her ears fan; bones she alone has
+    swing = lambda T, a: {"trunk": {"rotation": Tk((0, (-6, a, 0)), (T / 2, (-6, -a, 0)), (T, (-6, a, 0)))}, "trunk_2": {"rotation": Tk((0, (6, -a, 0)), (T / 2, (6, a, 0)), (T, (6, -a, 0)))},
+                          "trunk_3": {"rotation": Tk((0, (10, -a, 0)), (T / 2, (10, a, 0)), (T, (10, -a, 0)))},
+                          "hair_ear_r": {"rotation": Tk((0, (0, 10, 0)), (T / 2, (0, 28, 0)), (T, (0, 10, 0)))}, "hair_ear_l": {"rotation": Tk((0, (0, -10, 0)), (T / 2, (0, -28, 0)), (T, (0, -10, 0)))}}
+    for key, T, a in (("idle", 3.0, 6), ("walk", 1.2, 10), ("run", 0.6, 16), ("sit", 3.0, 4), ("lie", 3.0, 3)):
+        F._inject(an, key, swing(T, a))
 
 
 VIEWS = [("idle", 0, 0, 0), ("idle", 0, -35, 10), ("idle", 0, 90, 0), ("idle", 0, 180, 0),

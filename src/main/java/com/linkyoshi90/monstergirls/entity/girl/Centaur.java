@@ -889,9 +889,36 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
         return this.species != GirlSpecies.DONKEY_CENTAUR && super.isPushable();
     }
 
+    /** The giraffe reaches into the leaves above within 4 of her and pulls down an apple. True if she did. */
+    public boolean browse(net.minecraft.server.level.ServerLevel level) {
+        if (this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16) == null) return false;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(this.blockPosition().offset(-4, 1, -4), this.blockPosition().offset(4, 7, 4))) {
+            if (level.getBlockState(p).is(net.minecraft.tags.BlockTags.LEAVES)) {
+                this.spawnAtLocation(new ItemStack(net.minecraft.world.item.Items.APPLE));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** With two or more monsters within 6 of her friend the elephant trumpets and they are thrown back. How many, or -1 without a friend. */
+    public int trumpet(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        var near = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(6), net.minecraft.world.entity.monster.Monster::isAlive);
+        if (near.size() < 2) return 0;
+        for (net.minecraft.world.entity.monster.Monster m : near) m.knockback(2.0, friend.getX() - m.getX(), friend.getZ() - m.getZ());
+        this.playSound(net.minecraft.sounds.SoundEvents.GOAT_HORN_SOUND_VARIANTS.get(0).value(), 1.5F, 1.0F);
+        return near.size();
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.level() instanceof net.minecraft.server.level.ServerLevel herd && !this.isBaby()) {
+            if (this.species == GirlSpecies.GIRAFFE_CENTAUR && this.tickCount % 2401 == 0) this.browse(herd);
+            if (this.species == GirlSpecies.ELEPHANT_CENTAUR && this.tickCount % 201 == 0) this.trumpet(herd);
+        }
         if (this.species == GirlSpecies.DONKEY_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel flock && !this.isBaby() && this.tickCount % 41 == 0) this.guardFlock(flock);
         if (this.species == GirlSpecies.CENSHROOM_CENTAUR && !this.level().isClientSide && this.tickCount % 20 == 0 && this.getControllingPassenger() instanceof LivingEntity rider) rider.removeEffect(net.minecraft.world.effect.MobEffects.POISON);
         if (this.species == GirlSpecies.ZOGLINTAUR_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel gored && !this.isBaby() && this.tickCount % 40 == 0) this.gore(gored);

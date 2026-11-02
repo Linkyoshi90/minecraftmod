@@ -13,11 +13,15 @@ import java.util.EnumSet;
 
 /** With milk to give she looks for a working machine near her, goes to it and waits there until it has milked her. */
 public class SeekMilkingMachineGoal<T extends PathfinderMob & Bonded> extends Goal {
-    private static final int SEARCH = 24, PATIENCE = 400;
+    private static final int SEARCH = 24, PATIENCE = 600, UNSTICK = 4;
     private final T mob;
     @Nullable
     private BlockPos machine;
-    private int patience;
+    /** Where she means to stand: a free spot beside it. Walking at the machine itself leaves big girls shoving at corners. */
+    @Nullable
+    private BlockPos spot;
+    private net.minecraft.world.phys.Vec3 lastPos = net.minecraft.world.phys.Vec3.ZERO;
+    private int patience, stuck;
 
     public SeekMilkingMachineGoal(T mob) {
         this.mob = mob;
@@ -50,6 +54,19 @@ public class SeekMilkingMachineGoal<T extends PathfinderMob & Bonded> extends Go
     @Override
     public void start() {
         this.patience = PATIENCE;
+        this.stuck = 0;
+        this.lastPos = this.mob.position();
+        this.spot = this.pickSpot();
+    }
+
+    /** A random spot round the machine she has room to stand on, or the machine's own position with none. */
+    private BlockPos pickSpot() {
+        java.util.List<BlockPos> free = new java.util.ArrayList<>();
+        for (BlockPos p : BlockPos.betweenClosed(this.machine.offset(-1, -1, -1), this.machine.offset(1, 1, 1))) {
+            if (this.mob.level().getBlockState(p.below()).isFaceSturdy(this.mob.level(), p.below(), net.minecraft.core.Direction.UP)
+                    && this.mob.level().noCollision(this.mob, this.mob.getType().getSpawnAABB(p.getX() + 0.5, p.getY(), p.getZ() + 0.5))) free.add(p.immutable());
+        }
+        return free.isEmpty() ? this.machine : free.get(this.mob.getRandom().nextInt(free.size()));
     }
 
     @Override
@@ -62,7 +79,22 @@ public class SeekMilkingMachineGoal<T extends PathfinderMob & Bonded> extends Go
     public void tick() {
         this.patience--;
         double reach = MilkingMachineBlockEntity.RADIUS;
-        if (this.mob.distanceToSqr(this.machine.getCenter()) <= reach * reach) this.mob.getNavigation().stop();
-        else if (this.mob.tickCount % 20 == 0) this.mob.getNavigation().moveTo(this.machine.getX() + 0.5, this.machine.getY(), this.machine.getZ() + 0.5, 1.0);
+        if (this.mob.distanceToSqr(this.machine.getCenter()) <= reach * reach) {
+            this.mob.getNavigation().stop();
+            if (this.mob instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl girl) girl.blushFor(40);
+            return;
+        }
+        if (this.mob.tickCount % 20 == 0) this.mob.getNavigation().moveTo(this.spot.getX() + 0.5, this.spot.getY(), this.spot.getZ() + 0.5, 1.0);
+        if (this.mob.tickCount % 40 != 0) return;
+        if (this.mob.position().distanceToSqr(this.lastPos) >= 1.0) {
+            this.stuck = 0;
+        } else if (++this.stuck >= UNSTICK) {                  // the walk has failed: she steps across the last of the way
+            this.mob.teleportTo(this.spot.getX() + 0.5, this.spot.getY(), this.spot.getZ() + 0.5);
+            this.mob.getNavigation().stop();
+        } else {                                               // a hop over the lip of a low block, and try another side
+            this.mob.getJumpControl().jump();
+            this.spot = this.pickSpot();
+        }
+        this.lastPos = this.mob.position();
     }
 }

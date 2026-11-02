@@ -18,6 +18,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin  # noqa: E402
 
 SPECIES = {
+    # thirty-fifth wave: the lobster: deep blue that goes red if you're not careful, one great crusher claw
+    "lobster_crustacean": dict(
+        build="strong", outfit=dict(top=["bandeau"], bottom="shorts", extras=["armlets"], colors=dict(cloth2="#14285a")),
+        hair="ponytail", bangs="jagged", ears=None, legs="scales", foot="claw", carapace=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e3a7a", FUR="#2a4a9a", LIGHT="#a8c0e8", MARK="#14285a", EYE="#2a1e14", CLOTH="#14285a", TRIM="#e8c050",
+                 pattern="solid", extra=dict(shell="#1e3a7a", claw="#2a4a9a", claw_tip="#e85a3a", brass="#e8c050")),
+        variants={"red": dict(FUR="#c83a2a", HAIR="#8a1e14", MARK="#5a0e0a", extra=dict(shell="#8a1e14", claw="#c83a2a", claw_tip="#f4e4d0", brass="#e8c050")),
+                  "yellow": dict(FUR="#e0b83a", HAIR="#a8802a", MARK="#5a4010", extra=dict(shell="#a8802a", claw="#e0b83a", claw_tip="#f4e4d0", brass="#5a4010")),
+                  "calico": dict(FUR="#d88a3a", HAIR="#2a2a30", MARK="#2a2a30", extra=dict(shell="#2a2a30", claw="#d88a3a", claw_tip="#f4e4d0", brass="#e8c050")),
+                  "cotton": dict(FUR="#d8e0f0", HAIR="#a8b8d8", MARK="#7a8ab0", extra=dict(shell="#a8b8d8", claw="#d8e0f0", claw_tip="#7a8ab0", brass="#e8c050"))}),
     # sixteenth wave: the floodcrab, a blue-grey river crab under a ridged stone fan of a shell, hung with brass bells, moss and barnacles
     "floodcrab_crustacean": dict(
         build="standard", outfit=dict(top=["bandeau"], bottom="sarong", extras=["pouch"], colors=dict(cloth2="#4a5a3a", leather="#5a4a30")),

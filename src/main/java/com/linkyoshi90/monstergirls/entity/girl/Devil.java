@@ -84,6 +84,8 @@ public class Devil extends AbstractMonsterGirl {
         if (s == GirlSpecies.DEMON_DEVIL) return girlAttributes(32, 0.3, 6);
         if (s == GirlSpecies.FURY_DEVIL) return girlAttributes(44, 0.32, 9);
         return switch (s) {
+            case TROLL_DEVIL -> girlAttributes(90, 0.24, 11);
+            case GOBLIN_DEVIL -> girlAttributes(14, 0.3, 2);
             case FIRE_GIANT_DEVIL, FROST_GIANT_DEVIL -> girlAttributes(100, 0.26, 12).add(net.minecraft.world.entity.ai.attributes.Attributes.KNOCKBACK_RESISTANCE, 0.9);
             case BEHEMOTH_DEVIL -> girlAttributes(90, 0.24, 10).add(net.minecraft.world.entity.ai.attributes.Attributes.ARMOR, 6).add(net.minecraft.world.entity.ai.attributes.Attributes.KNOCKBACK_RESISTANCE, 0.9);
             case LESSER_DEVIL -> girlAttributes(12, 0.32, 2);
@@ -407,6 +409,13 @@ public class Devil extends AbstractMonsterGirl {
 
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        if (this.species == GirlSpecies.GOBLIN_DEVIL && stack.is(net.minecraft.world.item.Items.GOLD_INGOT)) {
+            if (!this.level().isClientSide) {
+                stack.consume(1, player);
+                this.spawnAtLocation(this.badDeal());
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         if (this.isDisguised() && !this.level().isClientSide) this.setDisguised(false);
         if (this.species == GirlSpecies.ITTAN_MOMEN_DEVIL && stack.isEmpty() && !player.isShiftKeyDown() && !this.isBaby() && !this.isVehicle()
                 && this.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {   // a friend climbs aboard
@@ -453,6 +462,7 @@ public class Devil extends AbstractMonsterGirl {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        if (this.isStone() && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) return false;
         boolean hurt = super.hurt(source, amount);
         if (hurt && this.species == GirlSpecies.WRATH_DEVIL && source.getEntity() != null) {
             this.rage = Math.min(MAX_RAGE, this.rage + 1);
@@ -465,6 +475,7 @@ public class Devil extends AbstractMonsterGirl {
 
     @Override
     public boolean doHurtTarget(Entity target) {
+        if (this.isStone()) return false;
         boolean hit = super.doHurtTarget(target);
         if (hit && this.species == GirlSpecies.GREATER_DEVIL) target.igniteForSeconds(4);
         if (hit && this.species == GirlSpecies.WRATH_DEVIL) {
@@ -525,9 +536,53 @@ public class Devil extends AbstractMonsterGirl {
         return lit;
     }
 
+    /** What the goblin has in her pockets for a gold ingot. It might be good. */
+    public ItemStack badDeal() {
+        int r = this.random.nextInt(100);
+        net.minecraft.world.item.Item item = r < 30 ? net.minecraft.world.item.Items.ROTTEN_FLESH : r < 55 ? net.minecraft.world.item.Items.STICK : r < 75 ? net.minecraft.world.item.Items.IRON_INGOT
+                : r < 90 ? net.minecraft.world.item.Items.EMERALD : r < 98 ? net.minecraft.world.item.Items.DIAMOND : net.minecraft.world.item.Items.GOLDEN_APPLE;
+        return new ItemStack(item, r < 55 ? 3 : 1);
+    }
+
+    /** The troll in the sun: stone, not moving and past hurting. */
+    public boolean isStone() {
+        return this.species == GirlSpecies.TROLL_DEVIL && this.level().getDayTime() % 24000L < 12500L
+                && this.level().getBrightness(net.minecraft.world.level.LightLayer.SKY, this.blockPosition()) >= 10;
+    }
+
+    /** Stone doesn't walk, whatever her goals want (both sides: the client moves a mob too). */
+    @Override
+    protected boolean isImmobile() {
+        return this.isStone() || super.isImmobile();
+    }
+
+    @Override
+    public boolean isPushable() {
+        return !this.isStone() && super.isPushable();
+    }
+
+    /** At night the troll flattens the nearest monster within 8 of her friend for 10. 1 on a hit, 0 if not, -1 without a friend. */
+    public int flatten(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        if (level.isDay()) return 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8), net.minecraft.world.entity.monster.Monster::isAlive)) {
+            m.hurt(this.damageSources().mobAttack(this), 10);
+            return 1;
+        }
+        return 0;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.TROLL_DEVIL && this.level() instanceof net.minecraft.server.level.ServerLevel stone) {
+            if (this.isStone()) {
+                this.getNavigation().stop();
+                this.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 40, 9, true, false));
+            }
+            if (!this.isBaby() && this.tickCount % 61 == 0) this.flatten(stone);
+        }
         if (this.species == GirlSpecies.FIRESPRITE_DEVIL && this.level() instanceof net.minecraft.server.level.ServerLevel kindled && !this.isBaby() && this.tickCount % 60 == 0) this.kindle(kindled);
         if (this.species == GirlSpecies.FIRE_GIANT_DEVIL && this.level() instanceof net.minecraft.server.level.ServerLevel forge && !this.isBaby()) {
             this.glow(forge, 13);                                              // her lava lights the ground she walks on

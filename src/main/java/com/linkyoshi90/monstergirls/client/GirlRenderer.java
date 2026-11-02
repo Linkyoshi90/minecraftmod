@@ -51,10 +51,8 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         if (GLOWING.contains(species.id())) this.addRenderLayer(new AutoGlowingGeoLayer<>(this));
         if (species.family() == GirlSpecies.Family.CENTAUR) this.addRenderLayer(new TorsoArmourLayer(this));
         if (species == GirlSpecies.SHEEP_MINOTAUR || species == GirlSpecies.RHIWOOL_MINOTAUR) this.addRenderLayer(new DyedWoolLayer(this));
-        if (species.family() == GirlSpecies.Family.MINOTAUR) {
-            this.addRenderLayer(new BlushLayer(this));
-            this.addRenderLayer(new MilkingHarnessLayer(this));
-        }
+        this.addRenderLayer(new BlushLayer(this));
+        if (species.family() == GirlSpecies.Family.MINOTAUR) this.addRenderLayer(new MilkingHarnessLayer(this));
         this.addRenderLayer(new MoonEyesLayer<>(this));
         this.addRenderLayer(new HeldItemLayer(this));
         this.addRenderLayer(new PaintGlowLayer<>(this, AbstractMonsterGirl::getPaintName));
@@ -138,7 +136,7 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         }
     }
 
-    /** A cow being milked: &lt;species&gt;_blush.png (her cheeks alone) drawn over her, so it shows on any colours or paint. */
+    /** Anyone at the milking machine: &lt;species&gt;_blush.png (her cheeks alone) drawn over her, so it shows on any colours or paint. */
     static class BlushLayer extends software.bernie.geckolib.renderer.layer.GeoRenderLayer<AbstractMonsterGirl> {
         BlushLayer(GirlRenderer renderer) {
             super(renderer);

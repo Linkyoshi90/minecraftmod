@@ -176,6 +176,7 @@ public final class HomeLife {
         if (!(mob instanceof Bonded b) || !ready(mob, "NextSoak", SOAK_WAIT)) return false;
         b.addAffection(player, 1);
         hearts(level, mob);
+        if (mob instanceof AbstractMonsterGirl girl) Flirting.inTub(level, girl, player);
         return true;
     }
 

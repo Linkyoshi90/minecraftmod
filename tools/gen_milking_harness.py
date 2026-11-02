@@ -6,6 +6,7 @@ the milk drip particle, and the names on the settings page.
 """
 import glob
 import json
+import re
 import os
 import random
 import sys
@@ -41,27 +42,38 @@ def harness_texture():
     return rows
 
 
-def blush_rows(u, v, size=512):
-    """Her head's north face is 32 pixels square at (u, v): cheeks below the eyes, over the faint pink already painted."""
+def blush_rows(u, v, size=512, s=1.0):
+    """Her head's north face is 32 pixels square at (u, v), or s times that: cheeks below the eyes, over the faint pink already painted."""
     rows = [[(0, 0, 0, 0)] * size for _ in range(size)]
     for left in (2, 20):
         for y in range(23, 29):
             edge = y in (23, 28)
             for x in range(left + (1 if edge else 0), left + (9 if edge else 10)):
                 strong = 24 <= y <= 27 and left + 2 <= x <= left + 7
-                rows[v + y][u + x] = BLUSH + (150 if strong else 90,)
+                for yy in range(int(y * s), max(int(y * s) + 1, int((y + 1) * s))):
+                    for xx in range(int(x * s), max(int(x * s) + 1, int((x + 1) * s))):
+                        rows[int(v) + yy][int(u) + xx] = BLUSH + (150 if strong else 90,)
     return rows
+
+
+def girl_ids():
+    with open(os.path.join(H.REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "girl", "GirlSpecies.java"), encoding="utf-8") as fh:
+        return re.findall(r'^\s+[A-Z0-9_]+\("([a-z0-9_]+)", Family', fh.read(), re.M)
 
 
 def main():
     H.write_png(os.path.join(ASSETS, "textures", "entity", "milking_harness.png"), harness_texture())
-    for path in sorted(glob.glob(os.path.join(ASSETS, "geo", "entity", "*_minotaur.geo.json"))):
-        name = os.path.basename(path)[:-len(".geo.json")]
-        with open(path, encoding="utf-8") as fh:
-            bones = json.load(fh)["minecraft:geometry"][0]["bones"]
-        head = next(b for b in bones if b["name"] == "head")
-        u, v = head["cubes"][0]["uv"]["north"]["uv"]
-        H.write_png(os.path.join(ASSETS, "textures", "entity", name + "_blush.png"), blush_rows(u, v))
+    for name in girl_ids():                              # every girl: a species with no face gets an empty overlay
+        with open(os.path.join(ASSETS, "geo", "entity", name + ".geo.json"), encoding="utf-8") as fh:
+            geo = json.load(fh)["minecraft:geometry"][0]
+        size = geo["description"]["texture_width"]
+        head = next((b for b in geo["bones"] if b["name"] == "head" and b.get("cubes")), None)
+        if head is None:
+            rows = [[(0, 0, 0, 0)] * size for _ in range(size)]
+        else:
+            face = head["cubes"][0]["uv"]["north"]
+            rows = blush_rows(face["uv"][0], face["uv"][1], size, abs(face["uv_size"][0]) / 32)
+        H.write_png(os.path.join(ASSETS, "textures", "entity", name + "_blush.png"), rows)
     I.dump(os.path.join(ASSETS, "particles", "milk_drip.json"), {"textures": ["minecraft:drip_fall"]})
 
     prefix = "monstergirls.configuration."

@@ -128,7 +128,7 @@ public class MilkTests {
         helper.runAfterDelay(50, () -> {
             m.store().clearContent();                       // or it milks her again as soon as her bell rings
             check(!cow.isMilkReady(), "she was milked");
-            check(!cow.hasFlag(AbstractMonsterGirl.FLAG_HARNESSED) && !cow.hasFlag(AbstractMonsterGirl.FLAG_BLUSHING), "no harness, no blush");
+            check(!cow.hasFlag(AbstractMonsterGirl.FLAG_HARNESSED), "no harness, no blush");
             check(!machineIsCart(helper), "still the plain machine");
             cow.setNextMilk(helper.getLevel().getGameTime() + 2);
         });

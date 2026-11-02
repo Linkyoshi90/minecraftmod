@@ -19,6 +19,22 @@ from girl_lib import H, cube, pick, skin, CLEAR  # noqa: E402
 STAFF_TILT = -82
 
 SPECIES = {
+    # thirty-fifth wave: the tanuki of Japanese tales: a raccoon-dog's mask, a straw hat's worth of mischief, a round belly she drums on
+    "tanuki_rodent": dict(
+        build="curvy", outfit=dict(top=["kimono"], colors=dict(kimono="#7a5a3a", kimono_trim="#e8d8b0", obi="#3a6a4a")),
+        hair="bob", bangs="swept", ears="round", legs="fur", foot="paw", tail=[(2.25, 2.25, 3), (2.5, 2.5, 3), (1.75, 1.75, 2.5)], tail_rest=[(-30, 0, 0), (8, 0, 0), (8, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("fair"), HAIR="#4a3a2a", FUR="#7a6248", LIGHT="#d8c8a8", MARK="#1e1812", EYE="#2a1a10", CLOTH="#7a5a3a", TRIM="#e8d8b0",
+                 pattern="bars", facemark="panda"),
+        variants={"grey": dict(FUR="#7a7a78", HAIR="#3a3a3a"), "red": dict(FUR="#a86a3a", HAIR="#5a2e14"),
+                  "pale": dict(FUR="#c8b898", HAIR="#7a6a4a"), "dark": dict(FUR="#3e3028", HAIR="#1e1612")}),
+    # thirty-fifth wave: the skunk: black and white, an enormous tail, an air of having warned you
+    "skunk_rodent": dict(
+        build="slim", outfit=dict(top=["bandeau", "vest"], bottom="shorts", extras=["belt"], colors=dict(leather="#3a3a3e")),
+        hair="ponytail", bangs="blunt", ears="round", legs="fur", foot="paw", tail=[(2.5, 2.5, 4), (3, 3, 4), (2.5, 2.5, 3), (1.5, 1.5, 3)], tail_rest=[(60, 0, 0), (14, 0, 0), (12, 0, 0), (10, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("fair"), HAIR="#f0f0ee", FUR="#1e1e22", LIGHT="#f0f0ee", MARK="#f0f0ee", EYE="#2a2a30", CLOTH="#2a2a2e", TRIM="#f0f0ee",
+                 pattern="bars"),
+        variants={"brown": dict(FUR="#3e2e22", HAIR="#e8dcc8", MARK="#e8dcc8"), "white": dict(FUR="#e8e8e6", HAIR="#2a2a2e", MARK="#2a2a2e", LIGHT="#2a2a2e"),
+                  "spotted": dict(pattern="spots"), "cream": dict(FUR="#2a2622", HAIR="#e8c890", MARK="#e8c890")}),
     # twenty-third wave: the sasquatch, big and fluffy, pale blue, a shaggy mane falling round a pink face, a fluffy ruff
     "sasquatch_rodent": dict(
         build="strong", outfit=dict(top=["bandeau"], bottom="loincloth", colors=dict(cloth2="#7a9ac8")),

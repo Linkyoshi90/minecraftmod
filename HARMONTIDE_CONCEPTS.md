@@ -614,6 +614,33 @@ sandstone since 2026-10-29), so 87 in all.
 Homage props (POP_CULTURE_VARIANTS.md): the dullahan's headless rider (Celty) has her yellow cat-eared helmet over the head she
 carries, the death envoy (Lala) a scythe in her free hand; both are drawn only on their own looks.
 
+## Thirty-fifth wave (2026-11-02, in the game)
+
+New designs, tested in `ThirtyFifthWaveTests`.
+
+| Species | Home | Design |
+|---|---|---|
+| **Hyena** | Canid | Savanna. Eats rotten flesh near her friend and leaves bone meal. |
+| **Tanuki** | Rodent | Once a day a leaf block becomes an emerald. |
+| **Skunk** | Rodent | Hit her, or her friend, and everything round her is blinded and sick. |
+| **Giraffe** | Centaur | Pulls apples down from the leaves above her. |
+| **Elephant** | Centaur | Monsters crowding her friend are thrown back. |
+| **Hippo** | Minotaur | While she is wet her friend doesn't burn. |
+| **Lobster** | Crustacean | Below half health, once a day, she moults: whole again, and an exoskeleton for you. |
+| **Dragonfly** | Bug | Hits phantoms and vexes near her friend. |
+| **Ladybug** | Bug | Luck for her friend; ripens berry bushes. |
+| **Goblin** | Devil | A gold ingot buys a random item from her pockets. |
+| **Troll** | Devil | Stone under the open sky by day: unhurt and not moving. At night she flattens monsters near her friend. |
+| **Selkie** | Merfolk | Sings fish up for her friend. |
+
+**Flirting** (`entity/Flirting`, option `flirting`, on by default): one pat in four from a close friend (25+) gets a teasing line and hearts, and sharing the soaking tub has lines of its own. Words only, nothing past a tease. Only grown, full-size girls: anyone under `CHILDLIKE_HEIGHT` stays out, constructs too, and never a girl and her own father.
+
+**Own rigs:** the Elephant (`rig="elephant"`, pillar legs, a great barrel, a swinging trunk, tusks, fanning ears) and the Giraffe (`rig="giraffe"`, long legs, standing on a long spotted neck, ossicones) use `rig_lower` in `gen_centaur.py`: the same bone names as `G.taur`, so they share its gaits.
+
+**The milking machine:** it pumps while it works (a plunger, swapped by the `stroke` block state), and everyone at it blushes (`AbstractMonsterGirl.blushFor`, overlays for every girl from `tools/gen_milking_harness.py`). Harpies and frogs have no overlay. Girls aim for a free spot beside it, hop and try another side when stuck, and step across if that fails.
+
+**Saving herself:** a girl ordered to sit gets up while she is on fire or in lava, and sits again afterwards.
+
 ## The scout pack (2026-11-02, in the game)
 
 `entity/Scouting.java`, `item/ScoutPackItem`, tested in `ScoutingTests`. Leather, string and a chest make a Scout Pack. Hand it to a grown friend (friendship 10+) and she leaves for half a day for one of the biomes in her spawn tag, modded ones included; she comes back to her hearth or to you and drops the pack, full of that biome's materials. Right-click unpacks it, and it can go out again.

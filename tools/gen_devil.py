@@ -23,6 +23,22 @@ SPADE_REST = [(-20, 0, 0), (25, 0, 0), (10, 0, 0)]
 CLUB_TILT = 78
 
 SPECIES = {
+    # thirty-fifth wave: the goblin: green, sharp-eared, pockets full, always has a deal for you
+    "goblin_devil": dict(
+        build="slim", outfit=dict(top=["bandeau", "vest"], bottom="shorts", extras=["belt", "pouch"], colors=dict(cloth2="#5a3a22", leather="#5a3a22")),
+        hair="ponytail", bangs="messy", ears="big", legs="bare", foot="shoe",
+        pal=dict(SKIN="#8ab85a", HAIR="#3a2a1e", FUR="#8ab85a", LIGHT="#c0e090", MARK="#4a7a2a", EYE="#e8c040", CLOTH="#a8582a", TRIM="#e8c040",
+                 INNER="#e8b0a0", extra=dict(boot="#5a3a22")),
+        variants={"cave": dict(SKIN="#7a9a8a", FUR="#7a9a8a", LIGHT="#b0ccc0", MARK="#4a6a5a"), "red": dict(SKIN="#c8705a", FUR="#c8705a", LIGHT="#e8a890", MARK="#7a3a2a"),
+                  "yellow": dict(SKIN="#d8c86a", FUR="#d8c86a", LIGHT="#f0e8a8", MARK="#8a7a2a"), "blue": dict(SKIN="#7a9ac8", FUR="#7a9ac8", LIGHT="#b8d0f0", MARK="#3a5a8a")}),
+    # thirty-fifth wave: the troll: huge, mossy, stone in the sun and awake only when it sets
+    "troll_devil": dict(
+        build="strong", outfit=dict(top=["sarashi", "mantle"], bottom="loincloth", extras=["arm_wraps"], colors=dict(pelt="#5a6a3a")),
+        hair="shaggy", bangs="messy", ears="elf", legs="bare", foot="shoe", club=True,
+        pal=dict(SKIN="#8a8a7a", HAIR="#4a5a2a", FUR="#8a8a7a", LIGHT="#b8b8a8", MARK="#4a4a3e", EYE="#e8a030", CLOTH="#5a4a30", TRIM="#4a5a2a",
+                 extra=dict(boot="#4a3a22")),
+        variants={"moss": dict(SKIN="#6a8a5a", FUR="#6a8a5a", LIGHT="#a0b890", MARK="#3a5a2a"), "snow": dict(SKIN="#c8d4dc", FUR="#c8d4dc", LIGHT="#e8f0f4", MARK="#7a8a98", HAIR="#e8f0f4"),
+                  "cave": dict(SKIN="#5a5a60", FUR="#5a5a60", LIGHT="#8a8a90", MARK="#2e2e32"), "bog": dict(SKIN="#6a6a44", FUR="#6a6a44", LIGHT="#a0a070", MARK="#3a3a20")}),
     # twenty-third wave: the ogre, big and green-skinned with long pointed ears, two little horns and a mop of light-blue hair, a
     # simple blue dress; a club in her right hand
     "ogre_devil": dict(

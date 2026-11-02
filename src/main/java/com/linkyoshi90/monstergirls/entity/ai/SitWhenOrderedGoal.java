@@ -20,12 +20,17 @@ public class SitWhenOrderedGoal<T extends PathfinderMob & Bonded> extends Goal {
 
     @Override
     public boolean canUse() {
-        return this.mob.isOrderedToSit();
+        return this.mob.isOrderedToSit() && !this.inDanger();
+    }
+
+    /** A sitting girl doesn't sit and burn: she gets up, saves herself and sits again once it's over. */
+    private boolean inDanger() {
+        return this.mob.isOnFire() || this.mob.isInLava();
     }
 
     @Override
     public boolean canContinueToUse() {
-        return this.mob.isOrderedToSit();
+        return this.mob.isOrderedToSit() && !this.inDanger();
     }
 
     @Override

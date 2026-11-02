@@ -450,6 +450,13 @@ public class Rodent extends AbstractMonsterGirl {
     @Override
     @Nullable
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        if (this.species == GirlSpecies.TANUKI_RODENT && stack.is(net.minecraft.tags.ItemTags.LEAVES) && this.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {
+            if (!this.level().isClientSide && this.leafMoney(this.level().getDayTime() / 24000L)) {
+                stack.consume(1, player);
+                player.getInventory().placeItemBackInInventory(new ItemStack(net.minecraft.world.item.Items.EMERALD));
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         if (this.species == GirlSpecies.SILKCOON_RODENT && !this.isBaby()) {
             ItemStack clean = washed(stack);
             if (clean != null) {
@@ -474,9 +481,34 @@ public class Rodent extends AbstractMonsterGirl {
 
     // --- tick ----------------------------------------------------------------------------------------------------
 
+    /** The tanuki's leaf money: once a day. True if she'll do it today. */
+    public boolean leafMoney(long day) {
+        if (this.getPersistentData().getLong("LeafDay") == day + 1) return false;
+        this.getPersistentData().putLong("LeafDay", day + 1);
+        return true;
+    }
+
+    /** The skunk sprays: everything but her friend within 5 is blinded and sick. Whether anything was caught. */
+    public boolean spray(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        net.minecraft.world.entity.LivingEntity by = this.getLastHurtByMob();
+        boolean wronged = by != null && by.isAlive() && this.tickCount - this.getLastHurtByMobTimestamp() < 40;
+        if (friend != null && friend.getLastHurtByMob() != null && friend.tickCount - friend.getLastHurtByMobTimestamp() < 40) wronged = true;
+        if (!wronged) return false;
+        boolean caught = false;
+        for (net.minecraft.world.entity.LivingEntity e : level.getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, this.getBoundingBox().inflate(5), x -> x != this && x != friend && x.isAlive() && !(x instanceof AbstractMonsterGirl))) {
+            e.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.BLINDNESS, 100));
+            e.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.CONFUSION, 160));
+            caught = true;
+        }
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.SNEEZE, this.getX(), this.getY() + 1, this.getZ(), 20, 2, 1, 2, 0.02);
+        return caught;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.SKUNK_RODENT && this.level() instanceof net.minecraft.server.level.ServerLevel sprayed && !this.isBaby() && this.tickCount % 21 == 0) this.spray(sprayed);
         if (this.species == GirlSpecies.SASQUATCH_RODENT && this.level() instanceof net.minecraft.server.level.ServerLevel wood && !this.isBaby() && this.tickCount % 20 == 0)
             this.unseen(wood, wood.getBiome(this.blockPosition()).is(net.minecraft.tags.BiomeTags.IS_FOREST) || wood.getBiome(this.blockPosition()).is(net.minecraft.tags.BiomeTags.IS_TAIGA));
         if (this.species == GirlSpecies.SUN_WUKONG_RODENT && this.level() instanceof net.minecraft.server.level.ServerLevel sky && !this.isBaby()) this.somersaultCloud(sky);

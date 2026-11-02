@@ -21,6 +21,15 @@ COW_TAIL = [(1, 1, 3.5), (.75, .75, 3.5), (1.5, 1.75, 1.75)]
 TAIL_REST = [(-62, 0, 0), (-14, 0, 0), (-6, 0, 0)]
 
 SPECIES = {
+    # thirty-fifth wave: the hippo: round, wet and dangerous, a rosy flush to her hide
+    "hippo_minotaur": dict(
+        build="curvy", outfit=dict(top=["bandeau"], bottom="sarong", extras=["pearls"], colors=dict(cloth2="#5a8aa8")),
+        hair="bob", bangs="blunt", ears="round", legs="hoof", foot="hoof", horns=None, tail=COW_TAIL, tail_look="tuft", tail_rest=TAIL_REST,
+        male=dict(hair="pixie", outfit=dict(bottom="sarong", colors=dict(cloth2="#5a8aa8"))),
+        pal=dict(SKIN=skin("tan"), HAIR="#5a4a50", FUR="#8a7078", LIGHT="#d8a8a8", MARK="#6a5058", EYE="#2a2018", CLOTH="#5a8aa8", TRIM="#e8d8c8",
+                 INNER="#d88a8a", extra=dict(horn="#e8e0d0", hoof="#4a3a3e")),
+        variants={"pygmy": dict(FUR="#4a3e44", HAIR="#2a2428"), "rosy": dict(FUR="#b88888", HAIR="#7a5a5a"),
+                  "grey": dict(FUR="#7a7a80", HAIR="#3e3e44"), "mud": dict(FUR="#6a5238", HAIR="#3a2a1a")}),
     # twenty-first wave: the oryx, pale blue with a cream crescent moon on her brow, two long straight horns swept back, a tufted tail
     "oryx_minotaur": dict(
         build="slim", outfit=dict(top=["halter", "capelet"], bottom="sarong", extras=["armlets"], colors=dict(cloth2="#2a4a8a")),

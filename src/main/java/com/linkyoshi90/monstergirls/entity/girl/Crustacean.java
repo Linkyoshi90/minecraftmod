@@ -174,9 +174,19 @@ public class Crustacean extends AbstractMonsterGirl {
         return 1;
     }
 
+    /** The lobster, below half health, sheds her shell once a day: whole again, and an exoskeleton for her friend. True if she moulted. */
+    public boolean moult(long day) {
+        if (this.getHealth() >= this.getMaxHealth() / 2 || this.getPersistentData().getLong("MoultDay") == day + 1) return false;
+        this.getPersistentData().putLong("MoultDay", day + 1);
+        this.setHealth(this.getMaxHealth());
+        this.spawnAtLocation(new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.EXOSKELETON.get()));
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.LOBSTER_CRUSTACEAN && !this.level().isClientSide && !this.isBaby() && this.tickCount % 21 == 0) this.moult(this.level().getDayTime() / 24000L);
         if (this.species == GirlSpecies.SPIDER_CRAB_CRUSTACEAN && this.level() instanceof net.minecraft.server.level.ServerLevel clawed && !this.isBaby() && this.tickCount % 60 == 0) this.pin(clawed);
         if (this.species == GirlSpecies.FLOODCRAB_CRUSTACEAN && !this.isBaby() && this.tickCount % 400 == 0 && this.level() instanceof ServerLevel server) this.puddle(server);
     }

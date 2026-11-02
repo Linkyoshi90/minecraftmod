@@ -3634,6 +3634,53 @@ for _fid, _entries in THIRTY_THIRD.items():
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
 
+THIRTY_FIFTH = {
+    "canid": [_c("hyena_canid", "Hyena", "Savanna", "Laughing · hungry", 1.8, ['savanna', 'savanna_plateau', 'windswept_savanna'], "Laughing",
+                 "A spotted hyena with a laugh that carries and a stomach for anything.", "Raw meat and rotten flesh.",
+                 ("Scavenger", "Befriended, she eats the rotten flesh lying near her friend and leaves bone meal."), "Medium.", ["Spotted", "Striped", "Brown", "Pale", "Dark"], "Turns rotten flesh to bone meal")],
+    "rodent": [_c("tanuki_rodent", "Tanuki", "Old woods", "Merry · crooked", 1.6, ['forest', 'old_growth_birch_forest', 'cherry_grove'], "Merry",
+                  "The raccoon-dog of Japanese tales, who pays her bills in leaves that only look like money.", "Sweet berries and fish.",
+                  ("Leaf Money", "Hand her leaves, friends only: once a day she turns one into an emerald. It is probably real."), "Low.", ["Brown", "Grey", "Red", "Pale", "Dark"], "Turns leaves into an emerald"),
+               _c("skunk_rodent", "Skunk", "Forest edges", "Polite · final", 1.55, ['forest', 'plains', 'taiga'], "Polite",
+                  "She will warn you. She has an enormous tail and she will warn you.", "Sweet berries and spider eyes.",
+                  ("Spray", "Hit her, or her friend near her, and everything round her is blinded and sick."), "Medium.", ["Black", "Brown", "White", "Spotted", "Cream"], "Sprays her attackers")],
+    "centaur": [_c("giraffe_centaur", "Giraffe", "Savanna", "Tall · serene", 2.8, ['savanna', 'savanna_plateau'], "Serene",
+                   "She can see your house from here.", "Leaves and apples.",
+                   ("Browsing", "Befriended, she reaches up into the trees near her friend and pulls down apples."), "Low.", ["Gold", "Reticulated", "White", "Dark", "Rothschild"], "Pulls apples from trees"),
+                _c("elephant_centaur", "Elephant", "Savanna", "Vast · gentle", 2.8, ['savanna', 'jungle', 'sparse_jungle'], "Gentle",
+                   "The largest thing on land, and the most careful about where she puts her feet.", "Wheat and melons.",
+                   ("Trumpet", "Befriended, when monsters crowd her friend she trumpets and they are thrown back."), "Medium.", ["Grey", "Dusty", "Dark", "White", "Pink"], "Throws monsters back")],
+    "minotaur": [_c("hippo_minotaur", "Hippo", "Warm rivers", "Round · dangerous", 2.0, ['river', 'swamp', 'savanna'], "Dangerous",
+                    "The sweetest face on the river and much the worst temper.", "Wheat and melons.",
+                    ("Red Sweat", "Befriended, while she is wet, her friend near her doesn't burn."), "High.", ["Mauve", "Pygmy", "Rosy", "Grey", "Mud"], "Fire Resistance while wet")],
+    "crustacean": [_c("lobster_crustacean", "Lobster", "Cold shores", "Old · stubborn", 1.85, ['stony_shore', 'cold_ocean', 'beach'], "Stubborn",
+                      "She never really stops growing. Every so often she climbs out of her shell and starts again.", "Cod and kelp.",
+                      ("Moult", "Once a day, hurt, she sheds her shell and is whole again; the shell is yours."), "Medium.", ["Blue", "Red", "Yellow", "Calico", "Cotton"], "Heals by moulting")],
+    "bug": [_c("dragonfly_bug", "Dragonfly", "Ponds", "Swift · exact", 1.7, ['swamp', 'river', 'mangrove_swamp'], "Exact",
+               "The best hunter in the air, by any count. She catches what she goes for.", "Sugar and spider eyes.",
+               ("Hawking", "Befriended, she takes phantoms and vexes out of the air near her friend."), "Medium.", ["Green", "Blue", "Red", "Gold", "Violet"], "Hunts phantoms"),
+            _c("ladybug_bug", "Ladybug", "Gardens", "Round · lucky", 1.5, ['meadow', 'flower_forest', 'sunflower_plains'], "Lucky",
+               "Land on someone and it's good luck. She has decided this applies to her.", "Sugar and sweet berries.",
+               ("Lucky Spots", "Befriended, her friend near her has Luck, and the berry bushes near her ripen."), "Low.", ["Red", "Yellow", "Orange", "Black", "Pink"], "Luck, ripens berries")],
+    "devil": [_c("goblin_devil", "Goblin", "Caves and hills", "Sharp · shameless", 1.4, ['windswept_hills', 'dripstone_caves', 'dark_forest'], "Shameless",
+                 "Everything she owns is for sale, including what isn't hers.", "Gold nuggets and cake.",
+                 ("Bad Deal", "A gold ingot buys a surprise from her pockets. It might be good."), "Low.", ["Green", "Cave", "Red", "Yellow", "Blue"], "Sells surprises for gold"),
+              _c("troll_devil", "Troll", "Mountains", "Slow · enormous", 2.9, ['stony_peaks', 'windswept_hills', 'snowy_slopes'], "Slow",
+                 "Stone by day. Nobody has ever got a straight answer out of her about it.", "Raw meat and cake.",
+                 ("Daylight", "Under the open sky by day she is stone: unhurt and not moving. Befriended, at night she flattens the monsters near her friend."), "High.", ["Stone", "Moss", "Snow", "Cave", "Bog"], "Stone by day, fights by night")],
+    "merfolk": [_c("selkie_mermaid", "Selkie", "Cold shores", "Quiet · homesick", 1.75, ['stony_shore', 'cold_ocean', 'snowy_beach'], "Quiet",
+                   "A seal who keeps her skin round her shoulders, in case. The stories about hiding it never end well for anyone.", "Cod and salmon.",
+                   ("Seal Song", "Befriended, by the water near her friend she sings fish up out of the sea."), "Low.", ["Grey", "Silver", "Dark", "Russet", "White"], "Brings fish to her friend")],
+}
+for _fid, _entries in THIRTY_FIFTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(s["id"] == _species["id"] for s in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 # homage variants of 2026-10-28 (POP_CULTURE_VARIANTS.md): appended after every wave, so every species exists by now
 for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, a black bodysuit with a pink heart, white gloves and boots")),
                        ("ika_mollusk", ("ink_kid", "Ink Kid", "Bright orange tentacle hair, a white tee and black shorts")),

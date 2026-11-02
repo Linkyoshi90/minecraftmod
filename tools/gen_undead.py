@@ -19,7 +19,7 @@ from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 SPECIES = {
     # thirty-second wave: the skeleton: bone-white, her bones showing, a torn tabard and a bow
     "skeleton_undead": dict(
-        build="slim", outfit=dict(top=["vest"], bottom="loincloth", extras=["belt", "bracers"], colors=dict(leather="#5a4a3a")),
+        build="slim", outfit=dict(top=["bandeau", "vest"], bottom="loincloth", extras=["belt", "bracers"], colors=dict(leather="#5a4a3a")),
         hair="ponytail", bangs="wispy", ears=None, legs="bare", foot="claw", tattered=True, bones=True,
         pal=dict(SKIN="#d8d4c8", HAIR="#a8a498", FUR="#d8d4c8", LIGHT="#f4f0e8", MARK="#2a2624", EYE="#2a2a2e", CLOTH="#4a4a50", TRIM="#7a7468",
                  facemark="panda", extra=dict(claw="#d8d4c8")),

@@ -18,6 +18,14 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-fifth wave: the selkie: a seal who sheds her skin at the shore; a grey pelt worn round her shoulders like a cloak
+    "selkie_mermaid": dict(
+        build="slim", outfit=dict(top=["bandeau", "capelet"], extras=["pearls"]),
+        ears=None, hair="flowing", bangs="wispy", fluke=(7, .75, 3.5), seal=True,
+        pal=dict(SKIN=skin("pale"), HAIR="#2a2a30", FUR="#7a7a84", LIGHT="#c8c8d0", MARK="#3a3a44", EYE="#2a4a6a", CLOTH="#7a7a84", TRIM="#e8e4dc",
+                 pattern="smallspots"),
+        variants={"silver": dict(FUR="#b8b8c0", HAIR="#d8d8e0"), "dark": dict(FUR="#3a3a44", HAIR="#141418"),
+                  "russet": dict(FUR="#8a5a3e", HAIR="#a8482a"), "white": dict(FUR="#e8e8ec", HAIR="#f4f4f8", MARK="#a8a8b0")}),
     # thirty-third wave: the pufferfish: yellow and spotted, a round fish tail; a hit blows her up to half again her size, spines out
     "pufferfish_mermaid": dict(
         build="curvy", outfit=dict(top=["bandeau"], extras=["armlets"]),

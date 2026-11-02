@@ -18,6 +18,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-fifth wave: the spotted hyena: broad shoulders, a sloping back, a laugh that carries for miles
+    "hyena_canid": dict(
+        build="strong", outfit=dict(top=["sports"], bottom="shorts", extras=["belt"], colors=dict(leather="#4a3a2a")),
+        hair="shaggy", bangs="messy", ears="round", legs="fur", foot="paw", tail=[(1.5, 1.5, 3), (1.75, 1.75, 3)], tail_rest=[(-40, 0, 0), (10, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("tan"), HAIR="#3a2e20", FUR="#b89a6a", LIGHT="#e0cca0", MARK="#3a2a1a", EYE="#c8902a", CLOTH="#6a3a2a", TRIM="#3a2a1a",
+                 pattern="spots", pupil=(1.6, 2.6)),
+        variants={"striped": dict(FUR="#a8a090", MARK="#2a2620", pattern="bars"),
+                  "brown": dict(FUR="#7a5a3e", HAIR="#2a1e12", MARK="#2a1a10"),
+                  "pale": dict(FUR="#d8ccb0", HAIR="#7a6a4a", MARK="#5a4a30"),
+                  "dark": dict(FUR="#4a3c30", HAIR="#1e1812", MARK="#14100c")}),
     # twenty-third wave: the hellhound, from the user's reference (the Monster Girl Encyclopedia's): charcoal skin, heavy black fur on her
     # arms and legs, spiky dark-red fur at the shoulders, wrists and ankles, flames streaming from her eyes, great claws, a skull at her
     # collar on a chain, ember cracks that glow, a grin full of teeth; a fur top and shorts in place of the art's bare skin

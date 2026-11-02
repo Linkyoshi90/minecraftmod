@@ -512,9 +512,19 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         return calmed;
     }
 
+    /** The selkie sings a fish up out of the water near her, for her friend beside the water. True if she did. */
+    public boolean sealSong() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 12);
+        if (friend == null || !this.isInWaterOrBubble()) return false;
+        ItemStack fish = new ItemStack(this.random.nextBoolean() ? net.minecraft.world.item.Items.COD : net.minecraft.world.item.Items.SALMON);
+        if (!friend.getInventory().add(fish)) friend.drop(fish, false);
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.SELKIE_MERMAID && !this.level().isClientSide && !this.isBaby() && this.tickCount % 2401 == 0) this.sealSong();
         if (this.level() instanceof ServerLevel reef && !this.isBaby()) {
             if (this.species == GirlSpecies.PUFFERFISH_MERMAID && this.isPuffed() && reef.getGameTime() >= this.puffedUntil) this.setFlag(FLAG_RETRACTED, false);
             if (this.species == GirlSpecies.ANGLER_MERMAID && this.tickCount % 41 == 0) this.lure(reef);

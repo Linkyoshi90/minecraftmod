@@ -560,9 +560,24 @@ public class Canid extends AbstractMonsterGirl {
         return 1;
     }
 
+    /** The hyena eats the rotten flesh lying within 6 of her friend, and leaves bone meal for it. How many, or -1 without a friend. */
+    public int scavenge(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int eaten = 0;
+        for (net.minecraft.world.entity.item.ItemEntity item : level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, friend.getBoundingBox().inflate(6), i -> i.isAlive() && i.getItem().is(Items.ROTTEN_FLESH))) {
+            int n = item.getItem().getCount();
+            item.discard();
+            this.spawnAtLocation(new ItemStack(Items.BONE_MEAL, n));
+            eaten += n;
+        }
+        return eaten;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.HYENA_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel hungry && !this.isBaby() && this.tickCount % 41 == 0) this.scavenge(hungry);
         if (this.species == GirlSpecies.BLOODHOUND_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel woods && !this.isBaby() && this.tickCount % 40 == 0) this.scent(woods);
         if (this.species == GirlSpecies.CERBERUS_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel gates && !this.isBaby() && this.tickCount % 20 == 0) this.threeWatches(gates);
         if (this.species == GirlSpecies.HELLHOUND_CANID && !this.isBaby()) {

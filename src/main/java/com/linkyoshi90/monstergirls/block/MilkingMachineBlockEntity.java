@@ -37,6 +37,8 @@ public class MilkingMachineBlockEntity extends BlockEntity {
     public static final int INTERVAL = 40;
     /** Small grown species stay out of it, as the young do. */
     public static final float MIN_HEIGHT = 1.25F;
+    /** How long it pumps for each bucket, and how long each stroke takes. */
+    public static final int PUMP_TICKS = 80, STROKE = 7;
 
     private final SimpleContainer store = new SimpleContainer(SLOTS) {
         @Override
@@ -47,6 +49,7 @@ public class MilkingMachineBlockEntity extends BlockEntity {
     };
     @Nullable
     private UUID owner;
+    private int pumpTicks;
 
     public MilkingMachineBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.MILKING_MACHINE.get(), pos, state);
@@ -109,6 +112,19 @@ public class MilkingMachineBlockEntity extends BlockEntity {
             if (state.getValue(MilkingMachineBlock.HARNESS) != harness) level.setBlock(pos, state.setValue(MilkingMachineBlock.HARNESS, harness), 2);
             machine.work(server, pos);
         }
+        if (machine.pumpTicks > 0 && level instanceof ServerLevel) machine.pump(level, pos, level.getBlockState(pos));
+    }
+
+    /** The plunger goes up and down (a second model, swapped by block state). */
+    private void pump(Level level, BlockPos pos, BlockState state) {
+        boolean stroke = --this.pumpTicks > 0 && (this.pumpTicks / STROKE) % 2 == 0;
+        if (state.getValue(MilkingMachineBlock.STROKE) == stroke) return;
+        level.setBlock(pos, state.setValue(MilkingMachineBlock.STROKE, stroke), 2);
+        if (stroke) level.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 0.12F, 1.4F);
+    }
+
+    public boolean isPumping() {
+        return this.pumpTicks > 0;
     }
 
     private void work(ServerLevel level, BlockPos pos) {
@@ -121,6 +137,8 @@ public class MilkingMachineBlockEntity extends BlockEntity {
             this.put(new ItemStack(ModItems.MILK.get(milk).get()));
             markMilked(creature, level.getGameTime() + Minotaur.MILK_COOLDOWN);
             if (creature instanceof Minotaur cow) cow.milkedByMachine();
+            if (creature instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl girl) girl.blushFor(Minotaur.MACHINE_MILK_TICKS);
+            this.pumpTicks = PUMP_TICKS;
             level.playSound(null, pos, SoundEvents.COW_MILK, SoundSource.BLOCKS, 1.0F, 1.0F);
             return;
         }

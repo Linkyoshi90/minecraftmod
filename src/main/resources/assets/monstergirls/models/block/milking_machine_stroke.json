@@ -1,0 +1,108 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "minecraft:block/barrel_side",
+    "top": "minecraft:block/copper_block",
+    "bottom": "minecraft:block/smooth_stone",
+    "side": "minecraft:block/barrel_side",
+    "pump": "minecraft:block/iron_block"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        15,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#bottom"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        15,
+        7
+      ],
+      "to": [
+        9,
+        20,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pump"
+        },
+        "south": {
+          "texture": "#pump"
+        },
+        "east": {
+          "texture": "#pump"
+        },
+        "west": {
+          "texture": "#pump"
+        },
+        "up": {
+          "texture": "#pump"
+        },
+        "down": {
+          "texture": "#pump"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        19,
+        5
+      ],
+      "to": [
+        11,
+        21,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pump"
+        },
+        "south": {
+          "texture": "#pump"
+        },
+        "east": {
+          "texture": "#pump"
+        },
+        "west": {
+          "texture": "#pump"
+        },
+        "up": {
+          "texture": "#pump"
+        },
+        "down": {
+          "texture": "#pump"
+        }
+      }
+    }
+  ]
+}

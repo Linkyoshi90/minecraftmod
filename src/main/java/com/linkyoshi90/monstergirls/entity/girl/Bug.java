@@ -448,9 +448,41 @@ public class Bug extends AbstractMonsterGirl {
         return stung;
     }
 
+    /** The dragonfly hits the phantoms and vexes within 16 of her friend for 8. How many, or -1 without a friend. */
+    public int hawk(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        int hit = 0;
+        for (net.minecraft.world.entity.Mob m : level.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, friend.getBoundingBox().inflate(16), x -> x instanceof net.minecraft.world.entity.monster.Phantom || x instanceof net.minecraft.world.entity.monster.Vex)) {
+            m.hurt(this.damageSources().mobAttack(this), 8);
+            hit++;
+        }
+        return hit;
+    }
+
+    /** The ladybug: Luck for her friend near her, and a stage on for the sweet berry bushes within 4. The bushes she ripened, or -1 without a friend. */
+    public int luckySpots(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null) return -1;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.LUCK, 400, 0, true, true));
+        int grown = 0;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(this.blockPosition().offset(-4, -1, -4), this.blockPosition().offset(4, 2, 4))) {
+            var state = level.getBlockState(p);
+            if (state.is(net.minecraft.world.level.block.Blocks.SWEET_BERRY_BUSH) && state.getValue(net.minecraft.world.level.block.SweetBerryBushBlock.AGE) < 3) {
+                level.setBlockAndUpdate(p, state.setValue(net.minecraft.world.level.block.SweetBerryBushBlock.AGE, state.getValue(net.minecraft.world.level.block.SweetBerryBushBlock.AGE) + 1));
+                grown++;
+            }
+        }
+        return grown;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.level() instanceof net.minecraft.server.level.ServerLevel meadow && !this.isBaby()) {
+            if (this.species == GirlSpecies.DRAGONFLY_BUG && this.tickCount % 41 == 0) this.hawk(meadow);
+            if (this.species == GirlSpecies.LADYBUG_BUG && this.tickCount % 401 == 0) this.luckySpots(meadow);
+        }
         if (this.level() instanceof net.minecraft.server.level.ServerLevel colony && !this.isBaby()) {
             if (this.species == GirlSpecies.ANT_BUG && this.tickCount % 21 == 0) this.haul(colony);
             if (this.species == GirlSpecies.QUEEN_ANT_BUG && this.tickCount % 6001 == 0) this.brood(colony);

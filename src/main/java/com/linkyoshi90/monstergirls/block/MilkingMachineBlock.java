@@ -31,15 +31,17 @@ public class MilkingMachineBlock extends BaseEntityBlock {
     public static final MapCodec<MilkingMachineBlock> CODEC = simpleCodec(MilkingMachineBlock::new);
     /** Drawn as the pump cart: follows the milkHarness option. */
     public static final BooleanProperty HARNESS = BooleanProperty.create("harness");
+    /** The plunger up, mid-stroke. */
+    public static final BooleanProperty STROKE = BooleanProperty.create("stroke");
 
     public MilkingMachineBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(HARNESS, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(HARNESS, false).setValue(STROKE, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(HARNESS);
+        builder.add(HARNESS, STROKE);
     }
 
     @Override

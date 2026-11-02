@@ -56,6 +56,7 @@ public final class MonsterGirlsConfig {
     private static final Map<GirlSpecies.Family, ModConfigSpec.IntValue> FAMILY_RATES = new EnumMap<>(GirlSpecies.Family.class);
 
     public static final ModConfigSpec.BooleanValue MILK_DRIPS;
+    public static final ModConfigSpec.BooleanValue FLIRTING;
     public static final ModConfigSpec.BooleanValue MILK_EMBARRASSED;
     public static final ModConfigSpec.BooleanValue MILK_HARNESS;
 
@@ -68,12 +69,16 @@ public final class MonsterGirlsConfig {
         }
         BUILDER.pop();
 
+        FLIRTING = BUILDER
+                .comment("Close friends now and then answer a pat with a teasing line and a few hearts.")
+                .define("flirting", true);
+
         BUILDER.push("milking");
         MILK_DRIPS = BUILDER
                 .comment("A minotaur cow whose milk is ready again, and anyone in the last stage of expecting, drips from her chest until she is milked.")
                 .define("milkDrips", false);
         MILK_EMBARRASSED = BUILDER
-                .comment("A minotaur cow blushes and looks away while she is being milked.")
+                .comment("A minotaur cow looks away while she is being milked, and blushes at a bucket. Everyone blushes at the machine regardless.")
                 .define("milkEmbarrassed", false);
         MILK_HARNESS = BUILDER
                 .comment("The milking machine becomes a pump cart, and a minotaur cow wears its harness and two pumps while it works.")
@@ -133,6 +138,10 @@ public final class MonsterGirlsConfig {
 
     public static int conceptionChance() {
         return SPEC.isLoaded() ? CONCEPTION_CHANCE.get() : CONCEPTION_CHANCE.getDefault();
+    }
+
+    public static boolean flirting() {
+        return SPEC.isLoaded() ? FLIRTING.get() : FLIRTING.getDefault();
     }
 
     public static boolean milkDrips() {

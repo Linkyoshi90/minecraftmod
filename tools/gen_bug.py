@@ -24,9 +24,29 @@ LARVA_SEGS = [("seg_1", 4, 6.5, 3.5), ("seg_2", 4.25, 3.5, 3.5), ("seg_3", 4, 3.
               ("seg_5", 3.5, 2.75, 3), ("seg_6", 3, 2.5, 3), ("seg_7", 2.5, 2.25, 2.5), ("seg_8", 2, 2, 2)]
 
 SPECIES = {
+    # thirty-fifth wave: the dragonfly: long, jewel-green, four glassy wings, very large eyes
+    "dragonfly_bug": dict(
+        build="slim", outfit=dict(top=["sports"], bottom="shorts", extras=["bracers"], colors=dict(cloth2="#14503a")), hair="pixie", bangs="swept",
+        ears="antenna", legs="stockings", foot="shoe", wings="insect", flies=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e7a5a", FUR="#2a9a6a", LIGHT="#a8e8c8", MARK="#0e3a2a", EYE="#c83a2a", CLOTH="#14503a", TRIM="#e8d870",
+                 extra=dict(antenna="#0e3a2a", wing="#d8f0f0", wing_vein="#3a7a7a", wing_alpha=170, stocking="#1e7a5a", boot="#0e3a2a")),
+        variants={"blue": dict(HAIR="#1e4a9a", FUR="#2a6ac8", MARK="#0e2a5a", CLOTH="#0e2a5a", extra=dict(antenna="#0e2a5a", wing="#d8e8f8", wing_vein="#3a5a8a", wing_alpha=170, stocking="#1e4a9a", boot="#0e2a5a")),
+                  "red": dict(HAIR="#a82a1e", FUR="#d83a2a", MARK="#5a140e", CLOTH="#5a140e", extra=dict(antenna="#5a140e", wing="#f8e0d8", wing_vein="#8a3a2a", wing_alpha=170, stocking="#a82a1e", boot="#5a140e")),
+                  "gold": dict(HAIR="#a8801e", FUR="#d8a82a", MARK="#5a4010", CLOTH="#5a4010", extra=dict(antenna="#5a4010", wing="#f8ecc8", wing_vein="#8a6a2a", wing_alpha=170, stocking="#a8801e", boot="#5a4010")),
+                  "violet": dict(HAIR="#5a2a9a", FUR="#7a3ac8", MARK="#2a1050", CLOTH="#2a1050", extra=dict(antenna="#2a1050", wing="#ecdcf8", wing_vein="#5a3a8a", wing_alpha=170, stocking="#5a2a9a", boot="#2a1050"))}),
+    # thirty-fifth wave: the ladybug: a round red shell-cape with black spots, the luck of whoever she lands on
+    "ladybug_bug": dict(
+        build="curvy", outfit=dict(top=["bandeau", "capelet"], bottom="wrap_skirt", colors=dict(cloth2="#1e1a1e")), hair="bob", bangs="blunt",
+        ears="antenna", legs="stockings", foot="shoe", wings="insect", flies=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#1e1a1e", FUR="#d82a2a", LIGHT="#f8a8a0", MARK="#1e1a1e", EYE="#2a2a30", CLOTH="#d82a2a", TRIM="#1e1a1e",
+                 extra=dict(antenna="#1e1a1e", wing="#d82a2a", wing_vein="#1e1a1e", stocking="#1e1a1e", boot="#141014")),
+        variants={"yellow": dict(FUR="#e8c02a", CLOTH="#e8c02a", extra=dict(antenna="#1e1a1e", wing="#e8c02a", wing_vein="#1e1a1e", stocking="#1e1a1e", boot="#141014")),
+                  "orange": dict(FUR="#e8782a", CLOTH="#e8782a", extra=dict(antenna="#1e1a1e", wing="#e8782a", wing_vein="#1e1a1e", stocking="#1e1a1e", boot="#141014")),
+                  "black": dict(FUR="#1e1a1e", CLOTH="#1e1a1e", HAIR="#d82a2a", extra=dict(antenna="#d82a2a", wing="#1e1a1e", wing_vein="#d82a2a", stocking="#1e1a1e", boot="#141014")),
+                  "pink": dict(FUR="#f088a8", CLOTH="#f088a8", extra=dict(antenna="#1e1a1e", wing="#f088a8", wing_vein="#1e1a1e", stocking="#1e1a1e", boot="#141014"))}),
     # thirty-third wave: the ant: red-brown, a worker's vest and antennae; carries things
     "ant_bug": dict(
-        build="athletic", outfit=dict(top=["vest"], bottom="shorts", extras=["belt", "pouch"], colors=dict(cloth2="#3a2a1e", leather="#3a2a1e")), hair="bob", bangs="blunt",
+        build="athletic", outfit=dict(top=["bandeau", "vest"], bottom="shorts", extras=["belt", "pouch"], colors=dict(cloth2="#3a2a1e", leather="#3a2a1e")), hair="bob", bangs="blunt",
         ears="antenna", legs="stockings", foot="shoe", gaster=True,
         pal=dict(SKIN=skin("tan"), HAIR="#5a1e14", FUR="#a83a22", LIGHT="#d87a5a", MARK="#2a1008", EYE="#1e0e08", CLOTH="#c8a878", TRIM="#3a2a1e",
                  extra=dict(antenna="#2a1008", stocking="#7a2a1a", boot="#2a1008")),

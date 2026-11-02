@@ -64,7 +64,6 @@ public class Minotaur extends AbstractMonsterGirl {
 
     private long nextMilk;
     private boolean milkFull;
-    private int blushTicks;
     private int harnessTicks;
     private int inLove;
     @Nullable
@@ -367,8 +366,7 @@ public class Minotaur extends AbstractMonsterGirl {
     }
 
     private void blush(int ticks) {
-        this.blushTicks = ticks;
-        this.setFlag(FLAG_BLUSHING, true);
+        this.blushFor(ticks);
     }
 
     /** The machine has her: she stands in its harness for a few seconds, if those options are on. */
@@ -379,14 +377,11 @@ public class Minotaur extends AbstractMonsterGirl {
             this.harnessTicks = MACHINE_MILK_TICKS;
             this.setFlag(FLAG_HARNESSED, true);
         }
-        if (embarrassed) this.blush(MACHINE_MILK_TICKS);
         if (harness || embarrassed) this.startTimedAction(Action.MILK, MACHINE_MILK_TICKS);
     }
 
     /** The timers are not saved, so a reload ends both of these. */
     private void tickMilking(ServerLevel level) {
-        if (this.blushTicks > 0) this.blushTicks--;
-        if (this.blushTicks == 0 && this.hasFlag(FLAG_BLUSHING)) this.setFlag(FLAG_BLUSHING, false);
         if (this.harnessTicks > 0) {
             this.harnessTicks--;
             this.getNavigation().stop();
@@ -475,9 +470,18 @@ public class Minotaur extends AbstractMonsterGirl {
         return true;
     }
 
+    /** The hippo's red sweat: wet, her friend near her doesn't burn. True while it holds. */
+    public boolean redSweat() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null || !this.isInWaterOrRain()) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.FIRE_RESISTANCE, 60, 0, true, true));
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.HIPPO_MINOTAUR && !this.level().isClientSide && !this.isBaby() && this.tickCount % 40 == 0) this.redSweat();
         if (this.species == GirlSpecies.ORYX_MINOTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel dune && !this.isBaby() && this.tickCount % 20 == 0)
             this.desertStride(dune, dune.getBiome(this.blockPosition()).value().getBaseTemperature() >= 1.5F);
         if (this.species == GirlSpecies.BRASSHORN_MINOTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel crag && !this.isBaby() && this.tickCount % 20 == 0) this.mountainFooting(crag);

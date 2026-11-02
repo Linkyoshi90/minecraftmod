@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_hyena_canid",
+  "spawners": {
+    "type": "monstergirls:hyena_canid",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}
