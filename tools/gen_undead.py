@@ -17,6 +17,14 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-ninth wave: the candle spirit: wax-pale, a lit wick for a crown and a flame where her legs would be, keeping vigil
+    "candle_spirit_undead": dict(
+        build="slim", outfit=dict(top=["halter"], extras=["armlets"]), lower="none",
+        hair="flowing", bangs="wispy", ears=None, wisp=True, glow=["flame_a", "flame_b", "flame_c", "flame_tip"],
+        pal=dict(SKIN="#f4ecdc", HAIR="#f0e4c8", FUR="#f4ecdc", LIGHT="#fffaf0", MARK="#a8946a", EYE="#e8a030", CLOTH="#8a3a2a", TRIM="#e8b040",
+                 extra=dict(flame="#f8b83a")),
+        variants={"red": dict(SKIN="#e8b8a8", HAIR="#c84a3a", CLOTH="#3a2a2a"), "blue": dict(extra=dict(flame="#5ab8f8"), EYE="#5ab8f8", TRIM="#5ab8f8", CLOTH="#2a3a6a"),
+                  "black": dict(SKIN="#d8d0c8", HAIR="#2a2428", CLOTH="#6a2a3a"), "beeswax": dict(SKIN="#f0d890", HAIR="#c89a3a", CLOTH="#5a3a1e")}),
     # thirty-eighth wave: the Sandman: a tall drowsy woman in midnight blue, sand always running from her sleeves
     "sandman_undead": dict(
         build="slim", outfit=dict(top=["sweater", "capelet"], bottom="wrap_skirt", extras=["satchel"], colors=dict(cloth2="#1e2a5a", leather="#c8a860")),

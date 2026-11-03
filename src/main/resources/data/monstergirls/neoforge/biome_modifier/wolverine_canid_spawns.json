@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_wolverine_canid",
+  "spawners": {
+    "type": "monstergirls:wolverine_canid",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

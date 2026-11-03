@@ -614,6 +614,24 @@ sandstone since 2026-10-29), so 87 in all.
 Homage props (POP_CULTURE_VARIANTS.md): the dullahan's headless rider (Celty) has her yellow cat-eared helmet over the head she
 carries, the death envoy (Lala) a scythe in her free hand; both are drawn only on their own looks.
 
+## Thirty-ninth wave (2026-11-03, in the game)
+
+| Species | Home | Design |
+|---|---|---|
+| **Opossum** | Marsupial | Her nearly dead friend vanishes for three seconds and the monsters lose them; once a minute. |
+| **Mole** | Rodent | Haste for her friend out of the sky's sight. |
+| **Meerkat** | Rodent | When her friend is hit, every friend of theirs within 24 turns on the attacker. |
+| **Red Panda** | Rodent | Her friend near her never freezes. |
+| **Wolverine** | Canid | Below half health, Strength II and Resistance. |
+| **Rafflesia** | Flora | Monsters that come within 5 reel back, weakened. |
+| **Candle Spirit** | Undead | Glows. At night the undead near her friend catch fire. |
+| **Cuttlefish** | Mollusk | With her friend swimming, monsters in the water near them lose their target and drift. |
+
+Keepsakes (`entity/Keepsakes`, `item/UmbrellaItem`):
+- **Friendship Bracelet** (string, a dye, string): a close friend (25+) wears it for good, +5. Missing that player costs her half the friendship.
+- **Love Letter** (paper over a poppy): any friend, once a day, +3. She writes back: a letter to keep with her line in it, sweet from a grown friend who can flirt (and she blushes), friendly from anyone else.
+- **Umbrella**: held in the rain, the nearest grown friend within 8 comes and shares it; 1 friendship a minute together, and a blush from one who can flirt.
+
 ## Thirty-eighth wave (2026-11-03, in the game)
 
 | Species | Home | Design |

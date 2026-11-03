@@ -609,9 +609,18 @@ public class Canid extends AbstractMonsterGirl {
         return eaten;
     }
 
+    /** The wolverine, badly hurt, fights harder and shrugs off blows. True while she does. */
+    public boolean berserk() {
+        if (this.getHealth() > this.getMaxHealth() / 2) return false;
+        this.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DAMAGE_BOOST, 60, 1, true, true));
+        this.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DAMAGE_RESISTANCE, 60, 0, true, true));
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.WOLVERINE_CANID && !this.level().isClientSide && this.tickCount % 20 == 0) this.berserk();
         if (this.species == GirlSpecies.HYENA_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel hungry && !this.isBaby() && this.tickCount % 41 == 0) this.scavenge(hungry);
         if (this.species == GirlSpecies.BLOODHOUND_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel woods && !this.isBaby() && this.tickCount % 40 == 0) this.scent(woods);
         if (this.species == GirlSpecies.CERBERUS_CANID && this.level() instanceof net.minecraft.server.level.ServerLevel gates && !this.isBaby() && this.tickCount % 20 == 0) this.threeWatches(gates);

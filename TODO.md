@@ -81,7 +81,7 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Zhuque, the Vermilion Bird** (`ZhuqueHarpy`, the phoenix's model in her own colours, savanna and badlands): she is fireproof, sets whatever she strikes alight, and once befriended ripens crops within 6 blocks every 3 s. She has her own egg (Vermilion Egg), eggs and hatchling.
   - **The Four Symbols** (advancement, challenge): befriend (10+) a long dragon (east), a white tiger nekomata (west), Zhuque (south) and the Black Tortoise (north).
 - [ ] Playtest the sixth wave: how chatty the kobold is underground, whether the Ratatoskr prank is funny or annoying, how the leshy's tally feels for a normal tree farm (12 logs is about two trees), and whether La Llorona finds lost young often enough.
-- [ ] Not done for the sixth wave: Zhuque has no harpy field guide entry (nor have the tengu, toucan and penguin). The grizzly looks for a den (a roofed spot within 12) before she hibernates, since 2026-11-03 (`Canid.seekDen`).
+- [x] The sixth wave's harpies (Zhuque, tengu, toucan, penguin) have harpy field guide cards (`tools/add_harpy_guide_entries.py`). The grizzly looks for a den (a roofed spot within 12) before she hibernates, since 2026-11-03 (`Canid.seekDen`).
 - [x] **Turtles** (2026-10-25, lizardfolk), tested in `TurtleAndKinTests`:
   - **Red-eared slider** (rivers, swamps, in groups of 2 to 4): when a stranger comes within 6 blocks, every slider within 8 slides into the nearest water. Her food is worth double.
   - **Galapagos tortoise** (beaches, stony shores, savanna): 70 health, armour 12, speed 0.12. Once she is fond of you, an empty hand climbs onto her shell (crouch to pat her, as with centaurs). She keeps going where she was going, and cactus does not hurt her.
@@ -194,7 +194,7 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Gargoyle** (construct): flies; by day with no target she takes the `PERCH` pose and cannot be hurt; at night she fights monsters within 16 of her friend. Stone, not clay, when she breaks.
   - **Coin magpie** and **trickster raven** (`CoinMagpieHarpy`, `TricksterRavenHarpy`, the crow's rig in `tools/gen_coin_magpie_harpy.py` and `tools/gen_trickster_raven_harpy.py`): the magpie hoards the shinies she carries (9 slots) and pays a gold nugget with one; the raven plays a monster's voice beside strangers and, every 5 s, calls monsters that target her friend 14 blocks away. Each has her own egg, hatchling and spawn egg.
   - **Paints:** plush, pixel, origami and gummy (translucent), so 39 in all.
-- [ ] Dev client for the tenth wave: the tusk sweep and rhiwool charge in play, the gargoyle's perch pose and flight, the aurorantler's and axolume's glow, the blaze cat's flames, the needlehog's ball, and the corvids' new colours. Not done: the harpy field guide has no entries for the coin magpie and the trickster raven (that guide is hand-written).
+- [ ] Dev client for the tenth wave: the tusk sweep and rhiwool charge in play, the gargoyle's perch pose and flight, the aurorantler's and axolume's glow, the blaze cat's flames, the needlehog's ball, and the corvids' new colours. The coin magpie and trickster raven have harpy field guide cards since 2026-11-03.
 - [x] **Eleventh wave** (2026-10-26), Harmontide's helpers, tested in `EleventhWaveTests`:
   - **Anvil tortoise** (lizardfolk): a damaged tool or armour piece in hand gets a quarter of its durability back for one repair material from your inventory (`Lizardfolk.repair`, `isValidRepairItem`), no experience; not pushable, knockback resistant.
   - **Mailtoad** (`Mailtoad`, the cane toad's rig in `tools/gen_mailtoad.py`): a friend (10+) gives her an item, then a paper renamed in an anvil to a player's name. She walks to them within 48 blocks and hops straight to them beyond it, in the same dimension; offline or elsewhere, she waits and tells the sender every 5 minutes. A crouching empty hand from the sender takes it back; she drops it on death and never despawns while carrying.
@@ -319,6 +319,8 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
 - [x] **Scout pack** (2026-11-02), tested in `ScoutingTests`; see HARMONTIDE_CONCEPTS.md: `entity/Scouting`, half a day out, materials of one of her spawn biomes, friendship and missing set the amount.
 - [ ] Dev client: the scout pack: its icon and tooltip, the full pack dropping, unpacking, the recipe, and whether the loot amounts feel right.
 - [x] **Thirty-fifth wave** (2026-11-02), tested in `ThirtyFifthWaveTests`: twelve creatures, flirting, sitting girls who get up when burning.
+- [x] **Thirty-ninth wave** (2026-11-03), eight creatures and three keepsakes, tested in `ThirtyNinthWaveTests`.
+- [ ] Dev client for the thirty-ninth wave: every creature's look (the candle spirit's glow, the cuttlefish's arms, the rafflesia's bloom), the three item icons, an umbrella in the rain (does the friend keep up, or crowd you?), a reply letter's name and line.
 - [x] **Thirty-eighth wave** (2026-11-03), nine creatures and anniversaries, tested in `ThirtyFifthWaveTests`.
 - [ ] Dev client for the thirty-eighth wave: every creature's look; an anniversary (`/time add` thirty days).
 - [x] **Thirty-seventh wave** (2026-11-03), tested in `ThirtyFifthWaveTests` and `HomeLifeTests`.

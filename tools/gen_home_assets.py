@@ -224,6 +224,22 @@ icon("friend_compass", [
      dict(g="#c8a040", w="#f4ecd8", r="#e8486a", k="#3a3a40"))
 plain_item("friend_compass")
 
+icon("friendship_bracelet", [
+    "................", "................", "................", ".....rryybb.....", "...rr......bb...", "..r..........g..", "..r..........g..", ".p............g.",
+    ".p............g.", "..p..........y..", "..p..........y..", "...pp......rr...", ".....ppbbrr.....", "................", "................", "................"],
+     dict(r="#e8486a", y="#f0c840", b="#3a8ad8", g="#5ab84a", p="#a85ad8"))
+plain_item("friendship_bracelet")
+icon("love_letter", [
+    "................", "................", "................", "..wwwwwwwwwwww..", "..wWwwwwwwwwWw..", "..wwWwwwwwwWww..", "..wwwWwwwwWwww..", "..wwwwWrrWwwww..",
+    "..wwwwrrrrwwww..", "..wwwwwrrwwwww..", "..wwwwwwwwwwww..", "..wwwwwwwwwwww..", "................", "................", "................", "................"],
+     dict(w="#f4ecd8", W="#c8b898", r="#d83a5a"))
+plain_item("love_letter")
+icon("umbrella", [
+    "................", ".......kk.......", ".....pppppp.....", "...pppwppppppp..", "..ppwwppppppppp.", ".pppppppppppppp.", ".p.p.p.hp.p.p.p.", ".......h........",
+    ".......h........", ".......h........", ".......h........", ".......h........", ".......h........", ".....h.h........", ".....hhh........", "................"],
+     dict(k="#3a3a40", p="#d85a8a", w="#f8c8d8", h="#5a3a22"))
+plain_item("umbrella")
+
 # --- recipes ------------------------------------------------------------------------------------------------------------
 shaped("picnic_blanket", ["WR", "RW"], dict(W="minecraft:white_wool", R="minecraft:red_wool"), 2)
 shaped("cooking_pot", ["I I", "I I", "III"], dict(I="minecraft:iron_ingot"))
@@ -237,6 +253,9 @@ shaped("bedroll", ["SWW", "SWW"], dict(S="minecraft:string", W="#minecraft:wool"
 shaped("sketchbook", [" C", "BF"], dict(C="minecraft:charcoal", B="minecraft:book", F="minecraft:feather"))
 shaped("gift_box", ["PSP", "PCP", "PPP"], dict(P="minecraft:paper", S="minecraft:string", C="#c:chests"))
 shaped("friend_compass", ["  ", "CH"], dict(C="minecraft:compass", H="minecraft:honeycomb"))
+shaped("friendship_bracelet", ["SDS"], dict(S="minecraft:string", D="#c:dyes"), 2)
+shaped("love_letter", ["P", "R"], dict(P="minecraft:paper", R="minecraft:poppy"))
+shaped("umbrella", ["WWW", " S ", " S "], dict(W="#minecraft:wool", S="minecraft:stick"))
 shaped("friend_whistle", ["  G", "GGG", " G "], dict(G="minecraft:gold_nugget"))
 tag_add(os.path.join(MC, "pickaxe.json"), ["monstergirls:cooking_pot"])
 axe = os.path.join(MC, "axe.json")
@@ -259,5 +278,16 @@ M.add_lang({
     "message.monstergirls.groomed": "%s has only just been brushed", "message.monstergirls.full": "%s couldn't manage another bite yet",
     "message.monstergirls.whistle": "%s came running", "message.monstergirls.picnic": "Friends at the picnic: %s", "message.monstergirls.picnic_nobody": "Nobody has come for a picnic",
     "message.monstergirls.mirror_nobody": "No friend near the mirror", "message.monstergirls.pot": "In the pot: %s of %s",
+    "item.monstergirls.friendship_bracelet": "Friendship Bracelet", "item.monstergirls.love_letter": "Love Letter", "item.monstergirls.umbrella": "Umbrella",
+    "item.monstergirls.love_letter.from": "Letter from %s", "message.monstergirls.bracelet": "%s ties the bracelet on and won't stop looking at it",
+    "message.monstergirls.bracelet_has": "%s already wears your bracelet", "message.monstergirls.bracelet_refused": "%s isn't close enough to you for that yet",
+    "message.monstergirls.letter": "%s reads it twice and writes back", "message.monstergirls.letter_today": "%s is still reading the last one",
+    "message.monstergirls.letter_refused": "%s doesn't know you well enough to write back", "message.monstergirls.umbrella": "%s ducks under the umbrella with you",
+    "letter.monstergirls.love.0": "\"I keep your letter under my pillow. Don't tell anyone.\"", "letter.monstergirls.love.1": "\"Come home soon. It's too quiet without you.\"",
+    "letter.monstergirls.love.2": "\"You write very nicely. I read it out loud to myself. Twice.\"", "letter.monstergirls.love.3": "\"I saved you the warm spot by the fire.\"",
+    "letter.monstergirls.love.4": "\"Next time, say it to my face. I dare you.\"", "letter.monstergirls.love.5": "\"I drew a heart on this one. Don't laugh.\"",
+    "letter.monstergirls.friend.0": "\"Thank you for the letter! Nobody ever writes to me.\"", "letter.monstergirls.friend.1": "\"Bring snacks next time.\"",
+    "letter.monstergirls.friend.2": "\"I found a nice spot by the river. I'll show you.\"", "letter.monstergirls.friend.3": "\"You're a good friend. That's all. Bye.\"",
+    "item.monstergirls.umbrella.tip": "Hold it in the rain: a friend will share it",
 })
 print("home assets written")

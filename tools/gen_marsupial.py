@@ -17,6 +17,14 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-ninth wave: the opossum: grey and white-faced, a long bare tail, and a talent for lying very still
+    "opossum_marsupial": dict(
+        build="slim", outfit=dict(top=["sweater"], bottom="shorts", colors=dict(cloth2="#4a4a52")),
+        hair="bob", bangs="messy", ears="round", legs="fur", foot="paw", tail=[(1, 1, 4), (0.9, 0.9, 4), (0.75, 0.75, 3.5)], tail_rest=[(-25, 0, 0), (12, 0, 0), (14, 0, 0)], tail_look="scale",
+        pal=dict(SKIN=skin("fair"), HAIR="#f0eeec", FUR="#8a8890", LIGHT="#f4f2f0", MARK="#2a2a30", EYE="#141418", CLOTH="#c88aa0", TRIM="#4a4a52",
+                 pattern="solid"),
+        variants={"dark": dict(FUR="#4a4a52", HAIR="#c8c8cc", CLOTH="#6a8aa8"), "brown": dict(FUR="#7a6a5a", HAIR="#e8e0d4", CLOTH="#8aa86a"),
+                  "pale": dict(FUR="#c8c6cc", HAIR="#ffffff", CLOTH="#a888c8"), "ginger": dict(FUR="#a8785a", HAIR="#f0e0cc", CLOTH="#5a8a8a")}),
     "kangaroo_marsupial": dict(
         build="athletic", outfit=dict(top=["sweater"], bottom="shorts", colors=dict(cloth2="#4a4a52")),
         hair="ponytail", bangs="swept", ears="big", legs="fur", foot="long",

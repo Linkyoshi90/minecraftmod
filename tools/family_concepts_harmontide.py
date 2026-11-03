@@ -3807,6 +3807,41 @@ for _fid, _entries in THIRTY_EIGHTH.items():
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
 
+THIRTY_NINTH = {
+    "marsupial": [_c("opossum_marsupial", "Opossum", "Woods and swamps", "Shy · dramatic", 1.55, ['forest', 'swamp', 'birch_forest'], "Dramatic",
+                     "Grey and white-faced with a long bare tail, and the best actress in the forest.", "Sweet berries and eggs.",
+                     ("Playing Possum", "Befriended, when her friend near her is nearly dead they vanish for a moment and the monsters lose them."), "Low.", ["Grey", "Dark", "Brown", "Pale", "Ginger"], "Hides her friend when nearly dead")],
+    "rodent": [_c("mole_rodent", "Mole", "Meadows", "Patient · short-sighted", 1.5, ['meadow', 'plains'], "Patient",
+                  "Velvet-black with broad digging hands; she can't see you, but she knows exactly where you are.", "Beetroot and worms.",
+                  ("Tunneller", "Befriended, her friend digs faster near her when out of the sky's sight."), "Low.", ["Velvet", "Star", "Grey", "Golden", "Pale"], "Haste underground"),
+               _c("meerkat_rodent", "Meerkat", "Deserts and savanna", "Watchful · loud", 1.5, ['desert', 'savanna'], "Watchful",
+                  "Up on her toes, dark-eyed, always the first to spot trouble and the loudest about it.", "Spider eyes and melon.",
+                  ("Lookout", "Befriended, when her friend is hit she calls every friend of theirs nearby to the fight."), "Low.", ["Sand", "Dark", "Pale", "Red", "Grey"], "Calls friends to a fight"),
+               _c("red_panda_rodent", "Red Panda", "Bamboo and cherry groves", "Sleepy · cosy", 1.45, ['bamboo_jungle', 'cherry_grove'], "Cosy",
+                  "Russet and ringed-tailed, and she sleeps curled up wherever is warmest, usually on you.", "Bamboo and apples.",
+                  ("Snug", "Befriended, her friend near her never freezes."), "Low.", ["Russet", "Dark", "Golden", "Pale", "Styan"], "Keeps her friend from freezing")],
+    "canid": [_c("wolverine_canid", "Wolverine", "Snowy taiga", "Fierce · stubborn", 1.6, ['snowy_taiga', 'grove', 'taiga'], "Fierce",
+                 "Low and broad with a pale band down her side, and nothing in the north makes her back down.", "Mutton and rabbit.",
+                 ("Berserk", "Badly hurt, she fights harder and shrugs off blows."), "Medium.", ["Brown", "Pale", "Black", "Red", "Snow"], "Fights harder when hurt")],
+    "flora": [_c("rafflesia_flora", "Rafflesia", "Jungles", "Proud · pungent", 1.7, ['jungle', 'sparse_jungle'], "Proud",
+                 "One vast red bloom spotted white. Beautiful from a distance, which is where everyone stays.", "Rotten flesh and bone meal.",
+                 ("Stench", "Befriended, monsters that come close to her reel back, weakened."), "Low.", ["Red", "Dark", "Orange", "Pink", "Brown"], "Drives monsters back")],
+    "undead": [_c("candle_spirit_undead", "Candle Spirit", "Dark forests", "Quiet · steadfast", 1.6, ['dark_forest', 'old_growth_spruce_taiga'], "Steadfast",
+                  "A candle that kept burning after everyone left the room, wax-pale with a wick for a crown.", "Honeycomb and glow berries.",
+                  ("Vigil", "Befriended, at night the undead near her friend catch fire."), "Low.", ["Wax", "Red", "Blue", "Black", "Beeswax"], "Undead burn near her friend at night")],
+    "mollusk": [_c("cuttlefish_mollusk", "Cuttlefish", "Warm seas", "Clever · shimmering", 1.55, ['warm_ocean', 'lukewarm_ocean'], "Clever",
+                   "Short arms, a frilled skirt and skin that ripples through every colour as she thinks.", "Cod and salmon.",
+                   ("Dazzle", "Befriended, the monsters in the water near her swimming friend are dazzled: they lose their target and drift."), "Low.", ["Brown", "Zebra", "Flame", "Blue", "Pale"], "Dazzles monsters in the water")],
+}
+for _fid, _entries in THIRTY_NINTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(s["id"] == _species["id"] for s in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 # homage variants of 2026-10-28 (POP_CULTURE_VARIANTS.md): appended after every wave, so every species exists by now
 for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, a black bodysuit with a pink heart, white gloves and boots")),
                        ("ika_mollusk", ("ink_kid", "Ink Kid", "Bright orange tentacle hair, a white tee and black shorts")),

@@ -318,9 +318,26 @@ public class Flora extends AbstractMonsterGirl {
         return true;
     }
 
+    /** The rafflesia: monsters within 5 of her reel back, weakened. How many, or -1 without a friend. */
+    public int stench(net.minecraft.server.level.ServerLevel level) {
+        if (this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32) == null) return -1;
+        int driven = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, this.getBoundingBox().inflate(5), net.minecraft.world.entity.monster.Monster::isAlive)) {
+            net.minecraft.world.phys.Vec3 away = m.position().subtract(this.position()).multiply(1, 0, 1);
+            away = away.lengthSqr() < 1.0E-4 ? new net.minecraft.world.phys.Vec3(1, 0, 0) : away.normalize();
+            m.push(away.x * 0.8, 0.2, away.z * 0.8);
+            m.hurtMarked = true;
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WEAKNESS, 100, 0));
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.SNEEZE, m.getX(), m.getEyeY(), m.getZ(), 4, 0.2, 0.2, 0.2, 0.0);
+            driven++;
+        }
+        return driven;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.RAFFLESIA_FLORA && this.level() instanceof net.minecraft.server.level.ServerLevel bloom && !this.isBaby() && this.tickCount % 21 == 0) this.stench(bloom);
         if (this.species == GirlSpecies.SUNFLOWER_FLORA && !this.level().isClientSide && !this.isBaby() && this.tickCount % 201 == 0) this.solar(this.level().isDay());
         if (this.species == GirlSpecies.LOTUS_FLORA && !this.level().isClientSide && !this.isBaby() && this.tickCount % 41 == 0 && this.level().getDayTime() % 24000L < 1000L) this.dawnBloom(this.level().getDayTime() / 24000L);
         if (this.species == GirlSpecies.ROSE_FLORA && !this.level().isClientSide && !this.isBaby() && this.tickCount % 11 == 0) this.thorns();

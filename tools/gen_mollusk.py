@@ -24,6 +24,16 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-ninth wave: the cuttlefish: short arms, a frilled skirt and skin that ripples through every colour at once
+    "cuttlefish_mollusk": dict(
+        build="slim", outfit=dict(top=["halter"]), hat=False, tent_hair=False,
+        hair="bob", bangs="swept", ears=None, legs="bare", foot="shoe", body="octopus",
+        pal=dict(SKIN=skin("fair"), HAIR="#a8784a", FUR="#b8885a", LIGHT="#f0dcc0", MARK="#5a3a1e", EYE="#2a2a30", CLOTH="#2a5a7a", TRIM="#f0dcc0",
+                 INNER="#f0d8c8", extra=dict(boot="#5a3a1e")),
+        variants={"zebra": dict(FUR="#d8d0c8", HAIR="#3a3a42", MARK="#1e1e24", CLOTH="#c83a3a", extra=dict(boot="#1e1e24")),
+                  "flame": dict(FUR="#c85a7a", HAIR="#e8a03a", MARK="#7a1e3a", CLOTH="#2a2a34", extra=dict(boot="#7a1e3a")),
+                  "blue": dict(FUR="#5a8ac8", HAIR="#3a6aa8", MARK="#1e3a6a", CLOTH="#e8c040", extra=dict(boot="#1e3a6a")),
+                  "pale": dict(FUR="#f0e8e0", HAIR="#d8c8b8", MARK="#a89888", CLOTH="#5a3a8a", extra=dict(boot="#a89888"))}),
     # thirty-eighth wave: the sea anemone: a skirt of waving tentacles, bright as a garden, and a clownfish's best friend
     "anemone_mollusk": dict(
         build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["pearls"], colors=dict(cloth2="#e8604a")),

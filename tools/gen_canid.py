@@ -18,6 +18,14 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-ninth wave: the wolverine: low, broad and dark, a pale band from shoulder to hip, and she does not back down
+    "wolverine_canid": dict(
+        build="strong", outfit=dict(top=["sports", "vest"], bottom="loincloth", extras=["arm_wraps"], colors=dict(leather="#3a2a1e", bandage="#c8b898")),
+        hair="shaggy", bangs="messy", ears="round", legs="fur", foot="paw", tail=[(2, 2, 2.5)], tail_rest=[(-20, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("tan"), HAIR="#2a1e16", FUR="#3a2a1e", LIGHT="#b8905a", MARK="#1e140c", EYE="#3a2412", CLOTH="#5a4a3a", TRIM="#b8905a",
+                 pattern="solid"),
+        variants={"pale": dict(FUR="#6a5038", HAIR="#4a3626", LIGHT="#d8b880"), "black": dict(FUR="#1e1a18", HAIR="#141210"), "red": dict(FUR="#5a3020", HAIR="#3a1e12"),
+                  "snow": dict(FUR="#5a5048", HAIR="#d8d0c8", LIGHT="#f0ece4")}),
     # thirty-fifth wave: the spotted hyena: broad shoulders, a sloping back, a laugh that carries for miles
     "hyena_canid": dict(
         build="strong", outfit=dict(top=["sports"], bottom="shorts", extras=["belt"], colors=dict(leather="#4a3a2a")),

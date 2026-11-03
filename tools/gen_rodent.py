@@ -19,6 +19,30 @@ from girl_lib import H, cube, pick, skin, CLEAR  # noqa: E402
 STAFF_TILT = -82
 
 SPECIES = {
+    # thirty-ninth wave: the mole: velvet-black, broad digging hands, small eyes and a miner's patience
+    "mole_rodent": dict(
+        build="strong", outfit=dict(top=["sports"], bottom="shorts", extras=["belt", "pouch"], colors=dict(leather="#6a4a2a")),
+        hair="bob", bangs="blunt", ears=None, legs="fur", foot="paw", tail=[(1, 1, 1.5)], tail_rest=[(-20, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("fair"), HAIR="#1e1e24", FUR="#2a2a30", LIGHT="#5a5a62", MARK="#141418", EYE="#141418", CLOTH="#a87a4a", TRIM="#e8b860",
+                 pattern="solid"),
+        variants={"star": dict(CLOTH="#c84a6a", TRIM="#f088a8"), "grey": dict(FUR="#5a5a62", HAIR="#3a3a42"), "golden": dict(FUR="#a8884a", HAIR="#7a5a2a", LIGHT="#d8c080"),
+                  "pale": dict(FUR="#c8bcb0", HAIR="#a8988a", LIGHT="#f0e8e0")}),
+    # thirty-ninth wave: the meerkat: sandy, dark rings round the eyes, always up on her toes keeping watch
+    "meerkat_rodent": dict(
+        build="slim", outfit=dict(top=["sports"], bottom="shorts", extras=["scarf"], colors=dict(scarf="#c84a2a")),
+        hair="bob", bangs="swept", ears="round", legs="fur", foot="paw", tail=[(1, 1, 4), (0.8, 0.8, 3)], tail_rest=[(-35, 0, 0), (10, 0, 0)], tail_look="tuft",
+        pal=dict(SKIN=skin("tan"), HAIR="#c8a070", FUR="#d8b888", LIGHT="#f0dcb8", MARK="#3a2a1a", EYE="#1e140e", CLOTH="#7a8a4a", TRIM="#c84a2a",
+                 pattern="solid"),
+        variants={"dark": dict(FUR="#a8885a", HAIR="#8a6a3a"), "pale": dict(FUR="#ece0c8", HAIR="#d8c8a8"), "red": dict(FUR="#c88a5a", HAIR="#a8683a"),
+                  "grey": dict(FUR="#b8b0a0", HAIR="#8a8274")}),
+    # thirty-ninth wave: the red panda: russet with a ringed tail and white cheeks, and she is warm to hold
+    "red_panda_rodent": dict(
+        build="petite", outfit=dict(top=["sweater"], bottom="wrap_skirt", colors=dict(cloth2="#3a3a42")),
+        hair="bob", bangs="blunt", ears="round", legs="fur", foot="paw", tail=[(2, 2, 3.5), (2.25, 2.25, 3.5), (2, 2, 3)], tail_rest=[(-15, 0, 0), (6, 0, 0), (6, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("fair"), HAIR="#b8482a", FUR="#c85a2a", LIGHT="#f8ece0", MARK="#3a2014", EYE="#2a1a10", CLOTH="#e8d8b8", TRIM="#3a2014",
+                 pattern="solid"),
+        variants={"dark": dict(FUR="#8a3a1e", HAIR="#7a2a14"), "golden": dict(FUR="#d8883a", HAIR="#c8702a"), "pale": dict(FUR="#e8a07a", HAIR="#d88a64"),
+                  "styan": dict(FUR="#a8381a", HAIR="#5a1e0e", CLOTH="#3a5a7a")}),
     # thirty-eighth wave: the beaver: stocky, a flat tail, big front teeth and a plan for that river
     "beaver_rodent": dict(
         build="strong", outfit=dict(top=["sports"], bottom="shorts", extras=["belt", "pouch"], colors=dict(leather="#5a3a22")),

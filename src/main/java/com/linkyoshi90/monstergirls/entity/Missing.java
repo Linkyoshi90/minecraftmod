@@ -86,6 +86,7 @@ public final class Missing {
         Bonded bonded = (Bonded) mob;
         int affection = bonded.getAffection(player);
         int lost = (int) (days - startDays(affection) + 1);
+        if (Keepsakes.wearsBracelet(mob, player)) lost /= 2;
         if (affection > Bonded.BED_AFFECTION) bonded.setAffection(player.getUUID(), Math.max(Bonded.BED_AFFECTION, affection - lost));
         String id = player.getUUID().toString();
         tag(mob, BACK).putLong(id, level.getDayTime() + DAY);

@@ -550,9 +550,45 @@ public class Rodent extends AbstractMonsterGirl {
         return chewed;
     }
 
+    /** The mole: her friend near her, out of the sky's sight, digs faster. True while they do. */
+    public boolean tunneller() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 10);
+        if (friend == null || this.level().canSeeSky(friend.blockPosition())) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DIG_SPEED, 200, 0, true, true));
+        return true;
+    }
+
+    /** The meerkat: when her friend has just been hit, every friend of theirs within 24 turns on the attacker. How many, or -1 without a friend. */
+    public int lookout(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.LivingEntity attacker = friend.getLastHurtByMob();
+        if (attacker == null || !attacker.isAlive() || friend.tickCount - friend.getLastHurtByMobTimestamp() > 100) return 0;
+        int called = 0;
+        for (net.minecraft.world.entity.Mob m : level.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, friend.getBoundingBox().inflate(24),
+                m -> m != attacker && !m.isBaby() && m instanceof com.linkyoshi90.monstergirls.entity.Bonded b && b.getAffection(friend) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION)) {
+            m.setTarget(attacker);
+            called++;
+        }
+        return called;
+    }
+
+    /** The red panda: her friend near her never freezes. True if she warmed them. */
+    public boolean snug() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 10);
+        if (friend == null || friend.getTicksFrozen() <= 0) return false;
+        friend.setTicksFrozen(0);
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (!this.isBaby() && this.level() instanceof net.minecraft.server.level.ServerLevel burrow) {
+            if (this.species == GirlSpecies.MOLE_RODENT && this.tickCount % 81 == 0) this.tunneller();
+            if (this.species == GirlSpecies.MEERKAT_RODENT && this.tickCount % 10 == 0) this.lookout(burrow);
+            if (this.species == GirlSpecies.RED_PANDA_RODENT) this.snug();
+        }
         if (this.species == GirlSpecies.BEAVER_RODENT && this.level() instanceof net.minecraft.server.level.ServerLevel lodge && !this.isBaby() && this.tickCount % 41 == 0) this.chew(lodge);
         if (this.species == GirlSpecies.RACCOON_RODENT && !this.level().isClientSide && !this.isBaby() && this.tickCount % 4801 == 0) this.rummage();
         if (!this.level().isClientSide && !this.isBaby()) {

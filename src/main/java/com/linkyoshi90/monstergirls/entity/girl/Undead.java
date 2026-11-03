@@ -740,9 +740,23 @@ public class Undead extends AbstractMonsterGirl {
         return drowsy;
     }
 
+    /** The candle spirit at night: the undead within 10 of her friend catch fire. How many, or -1 without a friend. */
+    public int vigil(net.minecraft.server.level.ServerLevel level, boolean night) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        if (!night) return 0;
+        int lit = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(10), m -> m.isAlive() && m.getType().is(net.minecraft.tags.EntityTypeTags.UNDEAD))) {
+            m.igniteForSeconds(4.0F);
+            lit++;
+        }
+        return lit;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.CANDLE_SPIRIT_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel wick && !this.isBaby() && this.tickCount % 61 == 0) this.vigil(wick, wick.isNight());
         if (this.species == GirlSpecies.SANDMAN_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel dreams && !this.isBaby() && this.tickCount % 81 == 0) this.sleepingSand(dreams, dreams.isNight());
         if (this.species == GirlSpecies.POLTERGEIST_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel attic && !this.isBaby() && this.tickCount % 61 == 0) this.throwThings(attic);
         if (this.species == GirlSpecies.SKELETON_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel counted && !this.isBaby() && this.tickCount % 41 == 0) this.gatherArrows(counted);

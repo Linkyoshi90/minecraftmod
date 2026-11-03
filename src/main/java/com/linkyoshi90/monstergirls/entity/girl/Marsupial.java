@@ -182,9 +182,22 @@ public class Marsupial extends AbstractMonsterGirl {
         return null;
     }
 
+    /** The opossum: her friend near her, nearly dead, vanishes for three seconds and the monsters after them lose them; once a minute. 1 if so, 0 if not, -1 without a friend. */
+    public int playPossum(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 12);
+        if (friend == null) return -1;
+        long now = level.getGameTime();
+        if (friend.getHealth() > 8 || now < this.getPersistentData().getLong("PossumAt")) return 0;
+        this.getPersistentData().putLong("PossumAt", now + 1200);
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.INVISIBILITY, 60, 0, true, true));
+        for (net.minecraft.world.entity.Mob m : level.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, friend.getBoundingBox().inflate(24), m -> m.getTarget() == friend)) m.setTarget(null);
+        return 1;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.OPOSSUM_MARSUPIAL && this.level() instanceof net.minecraft.server.level.ServerLevel den && !this.isBaby() && this.tickCount % 11 == 0) this.playPossum(den);
         if (this.isGlider() && !this.level().isClientSide) this.tickGlider();
         if (this.isKoala() && !this.isBaby() && this.level() instanceof ServerLevel server) {
             boolean awake = koalaAwake(server) || server.getGameTime() < this.getWokenUntil() || this.getTarget() != null;

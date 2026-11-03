@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_opossum_marsupial",
+  "spawners": {
+    "type": "monstergirls:opossum_marsupial",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

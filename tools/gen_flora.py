@@ -22,6 +22,15 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-ninth wave: the rafflesia: one vast red bloom spotted white, and a smell that keeps everything well back
+    "rafflesia_flora": dict(
+        build="curvy", outfit=dict(top=["bandeau"], extras=["pearls"]), hair="wavy", bangs="parted", ears=None, lower="none", plant="flower",
+        pal=dict(SKIN="#e8c8b0", HAIR="#a82a2a", FUR="#a82a2a", LIGHT="#f8d8c8", MARK="#5a1414", EYE="#5a1414", CLOTH="#a82a2a", TRIM="#5a7a3a",
+                 extra=dict(petal="#b8302a", petal_in="#f0e0d0", leaf="#4a6a3a")),
+        variants={"dark": dict(HAIR="#6a1414", CLOTH="#6a1414", extra=dict(petal="#7a1a1a", petal_in="#e0c8b8", leaf="#3a5a2a")),
+                  "orange": dict(HAIR="#c8582a", CLOTH="#c8582a", extra=dict(petal="#d8602a", petal_in="#f8e8d8", leaf="#4a6a3a")),
+                  "pink": dict(HAIR="#c84a6a", CLOTH="#c84a6a", extra=dict(petal="#d85a7a", petal_in="#f8e8ec", leaf="#4a6a3a")),
+                  "brown": dict(HAIR="#7a4a2a", CLOTH="#7a4a2a", extra=dict(petal="#8a5a3a", petal_in="#e8d8c0", leaf="#4a5a2a"))}),
     # thirty-eighth wave: the sunflower: tall, gold-petalled, her face always turned to the sun
     "sunflower_flora": dict(
         build="athletic", outfit=dict(top=["bandeau"], extras=["pearls"]), hair="bob", bangs="blunt", ears=None, lower="none", plant="flower",

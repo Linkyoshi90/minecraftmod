@@ -391,9 +391,24 @@ public class Mollusk extends AbstractMonsterGirl {
         return true;
     }
 
+    /** The cuttlefish: with her friend swimming, the monsters in the water within 12 of them lose their target and drift. How many, or -1 without a friend. */
+    public int dazzle(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        if (!friend.isInWater()) return 0;
+        int dazzled = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(12), m -> m.isAlive() && m.isInWater())) {
+            m.setTarget(null);
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 60, 3));
+            dazzled++;
+        }
+        return dazzled;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.CUTTLEFISH_MOLLUSK && this.level() instanceof net.minecraft.server.level.ServerLevel reef && !this.isBaby() && this.tickCount % 31 == 0) this.dazzle(reef);
         if (this.species == GirlSpecies.ANEMONE_MOLLUSK && !this.level().isClientSide && !this.isBaby() && this.tickCount % 41 == 0) this.host();
         if (!this.level().isClientSide && !this.isBaby()) {
             if (this.species == GirlSpecies.NAUTILUS_MOLLUSK && this.tickCount % 5 == 0) this.jet();
