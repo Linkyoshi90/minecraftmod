@@ -713,9 +713,23 @@ public class Undead extends AbstractMonsterGirl {
         return back;
     }
 
+    /** Things fly at the monster nearest her friend: 3 and a shove. 1 on a hit, 0 with none, -1 without a friend. */
+    public int throwThings(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8), net.minecraft.world.entity.monster.Monster::isAlive)) {
+            m.hurt(this.damageSources().mobAttack(this), 3);
+            m.knockback(0.8, friend.getX() - m.getX(), friend.getZ() - m.getZ());
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.CRIT, m.getX(), m.getY() + 1, m.getZ(), 6, 0.3, 0.3, 0.3, 0.1);
+            return 1;
+        }
+        return 0;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.POLTERGEIST_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel attic && !this.isBaby() && this.tickCount % 61 == 0) this.throwThings(attic);
         if (this.species == GirlSpecies.SKELETON_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel counted && !this.isBaby() && this.tickCount % 41 == 0) this.gatherArrows(counted);
         if (this.species == GirlSpecies.DROWNED_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel && !this.isBaby() && this.tickCount % 20 == 0) this.deepBreath();
         if (this.species == GirlSpecies.FAMISHED_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel starving && !this.isBaby() && !this.isCalm() && this.tickCount % 20 == 0) this.eatDropped(starving);

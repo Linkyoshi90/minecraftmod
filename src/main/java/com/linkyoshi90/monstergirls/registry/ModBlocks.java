@@ -91,6 +91,10 @@ public final class ModBlocks {
             com.linkyoshi90.monstergirls.block.FigurineBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(0.5F).sound(SoundType.WOOD).noOcclusion().noLootTable());
 
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.GiftBoxBlock> GIFT_BOX = BLOCKS.registerBlock("gift_box",
+            com.linkyoshi90.monstergirls.block.GiftBoxBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(1.0F).sound(SoundType.WOOD).noOcclusion());
+
     /** The nectar fluid's block (see ModFluids). */
     public static final DeferredBlock<net.minecraft.world.level.block.LiquidBlock> NECTAR = BLOCKS.register("nectar",
             () -> new net.minecraft.world.level.block.LiquidBlock(ModFluids.NECTAR.get(),

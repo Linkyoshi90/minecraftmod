@@ -463,9 +463,23 @@ public class Lamia extends AbstractMonsterGirl {
         return 0;
     }
 
+    /** Echidna hushes the creepers within 10 of her friend: they stop swelling and lose their target. How many, or -1 without a friend. */
+    public int hush(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int hushed = 0;
+        for (net.minecraft.world.entity.monster.Creeper c : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Creeper.class, friend.getBoundingBox().inflate(10), net.minecraft.world.entity.monster.Creeper::isAlive)) {
+            c.setSwellDir(-1);
+            c.setTarget(null);
+            hushed++;
+        }
+        return hushed;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.ECHIDNA_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel den && !this.isBaby() && this.tickCount % 5 == 0) this.hush(den);
         if (this.species == GirlSpecies.CENTIPEDE_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel burrow && !this.isBaby() && this.tickCount % 61 == 0) this.forcipules(burrow);
         if (this.species == GirlSpecies.ANACONDA_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel coils && !this.isBaby()) {
             if (this.tickCount % 41 == 0) this.gulp(coils);

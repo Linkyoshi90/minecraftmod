@@ -526,9 +526,20 @@ public class Rodent extends AbstractMonsterGirl {
         return !(this.species == GirlSpecies.MONGOOSE_RODENT && effect.is(net.minecraft.world.effect.MobEffects.POISON)) && super.canBeAffected(effect);
     }
 
+    /** The raccoon comes up with something for her friend. True if she did. */
+    public boolean rummage() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return false;
+        net.minecraft.world.item.Item[] finds = {Items.STRING, Items.BONE, Items.GOLD_NUGGET, Items.APPLE, Items.IRON_NUGGET, Items.PAPER, Items.SWEET_BERRIES};
+        ItemStack find = new ItemStack(finds[this.random.nextInt(finds.length)]);
+        if (!friend.getInventory().add(find)) friend.drop(find, false);
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.RACCOON_RODENT && !this.level().isClientSide && !this.isBaby() && this.tickCount % 4801 == 0) this.rummage();
         if (!this.level().isClientSide && !this.isBaby()) {
             if (this.species == GirlSpecies.LEMUR_RODENT && this.tickCount % 41 == 0 && this.level().getDayTime() % 24000L < 1500L) this.sunSalute(this.level().getDayTime() / 24000L);
             if (this.species == GirlSpecies.MONGOOSE_RODENT && this.tickCount % 21 == 0) this.antivenom();

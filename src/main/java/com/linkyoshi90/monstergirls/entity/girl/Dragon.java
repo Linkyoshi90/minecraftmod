@@ -91,7 +91,7 @@ public class Dragon extends AbstractMonsterGirl {
     @Override
     public boolean canFly() {
         return switch (this.species) {
-            case AMPHIPTERE_DRAGON, ENDER_DRAGON, KUN_DRAGON, LONG_DRAGON, WYRM_DRAGON, GRYPHON_DRAGON, WYVERN_DRAGON, ALEBRIJE_DRAGON, COCKATRICE_DRAGON, MACAWTL_DRAGON, QUETZALCOATL_DRAGON, BAHAMUT_DRAGON -> true;
+            case CHIMERA_DRAGON, AMPHIPTERE_DRAGON, ENDER_DRAGON, KUN_DRAGON, LONG_DRAGON, WYRM_DRAGON, GRYPHON_DRAGON, WYVERN_DRAGON, ALEBRIJE_DRAGON, COCKATRICE_DRAGON, MACAWTL_DRAGON, QUETZALCOATL_DRAGON, BAHAMUT_DRAGON -> true;
             default -> false;
         };
     }
@@ -376,9 +376,23 @@ public class Dragon extends AbstractMonsterGirl {
         return true;
     }
 
+    /** The chimera burns the monster nearest her friend and its wounds fester. 1 on a hit, 0 with none, -1 without a friend. */
+    public int threeHeads(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8), net.minecraft.world.entity.monster.Monster::isAlive)) {
+            m.igniteForSeconds(4);
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WEAKNESS, 100, 0));
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.POISON, 100, 0));
+            return 1;
+        }
+        return 0;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.CHIMERA_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel lava && !this.isBaby() && this.tickCount % 81 == 0) this.threeHeads(lava);
         if (this.species == GirlSpecies.AMPHIPTERE_DRAGON && !this.level().isClientSide && !this.isBaby() && this.tickCount % 5 == 0) this.tailwind();
         if (this.species == GirlSpecies.KUN_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel sky && !this.isBaby() && this.tickCount % 10 == 0) this.overTheVoid(sky);
         if (this.species == GirlSpecies.QUETZALCOATL_DRAGON && this.level() instanceof net.minecraft.server.level.ServerLevel dawn && !this.isBaby() && this.tickCount % 100 == 0

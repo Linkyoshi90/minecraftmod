@@ -30,6 +30,17 @@ SEGS = [("seg_1", 4.5, 10.5, 4), ("seg_2", 4.25, 4, 5.5), ("seg_3", 4, 3.75, 5.5
 BIG_SEGS = [(n, round(w * 1.3 * 4) / 4, h if n == "seg_1" else round(h * 1.3 * 4) / 4, round(d * 1.25 * 4) / 4) for n, w, h, d in SEGS]
 
 SPECIES = {
+    # thirty-seventh wave: the chimera: a lion's mane, a goat's horns, a snake for a tail, and fire
+    "chimera_dragon": dict(
+        build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["belt"]), hair="mane", bangs="jagged", ears=None, legs="scales", foot="claw",
+        tail=DRAGON_TAIL, tail_look="spade", tail_rest=[(-30, 0, 0), (8, 0, 0), (8, 0, 0), (6, 0, 0)], horns="dragon", wings="dragon", wing_scale=1.0,
+        flies=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#a8602a", FUR="#c89a4a", LIGHT="#f0dca0", MARK="#3a7a3a", EYE="#e8602a", CLOTH="#5a2a22", TRIM="#e8a030",
+                 pupil=(0.9, 3.4), extra=dict(horn="#e8dcc0", wing="#a8602a", wing_bone="#5a2a22", tail_col="#3a7a3a")),
+        variants={"black": dict(FUR="#3a3028", HAIR="#1e1814", extra=dict(horn="#a89880", wing="#3a3028", wing_bone="#141010", tail_col="#2a3a2a")),
+                  "white": dict(FUR="#e8e0d0", HAIR="#c8bca8", extra=dict(horn="#e8c050", wing="#e8e0d0", wing_bone="#a89880", tail_col="#7ab87a")),
+                  "red": dict(FUR="#a83a22", HAIR="#6a1e12", extra=dict(horn="#e8dcc0", wing="#a83a22", wing_bone="#3a1008", tail_col="#a8582a")),
+                  "ash": dict(FUR="#8a8078", HAIR="#4a4440", extra=dict(horn="#e8dcc0", wing="#8a8078", wing_bone="#3a3430", tail_col="#5a6a5a"))}),
     # thirty-third wave: the amphiptere: a winged serpent with no legs at all, on the rearing rig, green and gold
     "amphiptere_dragon": dict(
         build="slim", outfit=dict(top=["bandeau"], extras=["bracers"], colors=dict(cloth2="#e8c040", leather="#e8c040")),

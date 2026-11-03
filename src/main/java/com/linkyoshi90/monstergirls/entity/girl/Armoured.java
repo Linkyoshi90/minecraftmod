@@ -278,9 +278,22 @@ public class Armoured extends AbstractMonsterGirl {
         return super.familyInteract(player, hand, stack);
     }
 
+    /** The pangolin snaps up the silverfish and endermites within 8 of her friend. How many, or -1 without a friend. */
+    public int antEater(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int eaten = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8), x -> x instanceof net.minecraft.world.entity.monster.Silverfish || x instanceof net.minecraft.world.entity.monster.Endermite)) {
+            m.hurt(this.damageSources().mobAttack(this), 100);
+            eaten++;
+        }
+        return eaten;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.PANGOLIN_ARMOURED && this.level() instanceof net.minecraft.server.level.ServerLevel nest && !this.isBaby() && this.tickCount % 41 == 0) this.antEater(nest);
         if (this.species == GirlSpecies.DAEODON_ARMOURED && this.level() instanceof net.minecraft.server.level.ServerLevel soil && !this.isBaby() && this.tickCount % 1200 == 0) this.rooting(soil);
         if (this.species == GirlSpecies.ANTEATER_ARMOURED && this.level() instanceof net.minecraft.server.level.ServerLevel lick && !this.isBaby() && this.tickCount % 20 == 0) this.longTongue(lick);
         if (!(this.level() instanceof ServerLevel server)) return;

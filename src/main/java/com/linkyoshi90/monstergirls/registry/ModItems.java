@@ -194,6 +194,8 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> BEDROLL = ITEMS.registerSimpleBlockItem(ModBlocks.BEDROLL);
     public static final DeferredItem<BlockItem> FIGURINE = ITEMS.registerSimpleBlockItem(ModBlocks.FIGURINE);
     public static final DeferredItem<Item> SKETCHBOOK = ITEMS.registerSimpleItem("sketchbook", new Item.Properties().durability(16));
+    public static final DeferredItem<BlockItem> GIFT_BOX = ITEMS.registerSimpleBlockItem(ModBlocks.GIFT_BOX);
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.FriendCompassItem> FRIEND_COMPASS = ITEMS.register("friend_compass", () -> new com.linkyoshi90.monstergirls.item.FriendCompassItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> GROOMING_BRUSH = ITEMS.registerSimpleItem("grooming_brush", new Item.Properties().durability(64));
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.ToyBallItem> TOY_BALL = ITEMS.register("toy_ball", () -> new com.linkyoshi90.monstergirls.item.ToyBallItem(new Item.Properties().stacksTo(16)));
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.WhistleItem> WHISTLE = ITEMS.register("friend_whistle", () -> new com.linkyoshi90.monstergirls.item.WhistleItem(new Item.Properties().stacksTo(1)));

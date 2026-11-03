@@ -539,9 +539,52 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         return drawn;
     }
 
+    /** The narwhal breaks the ice within 2 over her friend in the water. How many blocks, or -1 without a friend. */
+    public int iceBreaker(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        if (!friend.isInWater()) return 0;
+        int broken = 0;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(friend.blockPosition().offset(-1, 0, -1), friend.blockPosition().offset(1, 3, 1))) {
+            var state = level.getBlockState(p);
+            if (state.is(net.minecraft.tags.BlockTags.ICE)) {
+                level.destroyBlock(p, false);
+                broken++;
+            }
+        }
+        return broken;
+    }
+
+    /** The seahorse shares her air with her friend near her when it runs low. True if she did. */
+    public boolean airLine() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 12);
+        if (friend == null || friend.getAirSupply() >= friend.getMaxAirSupply() / 3) return false;
+        friend.setAirSupply(friend.getMaxAirSupply());
+        return true;
+    }
+
+    /** The eel shocks everything hostile in the water within 8 of her friend. How many, or -1 without a friend. */
+    public int discharge(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int shocked = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8), x -> x.isInWater() && x.isAlive())) {
+            m.hurt(this.damageSources().lightningBolt(), 5);
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 40, 4));
+            shocked++;
+        }
+        if (shocked > 0) level.sendParticles(net.minecraft.core.particles.ParticleTypes.ELECTRIC_SPARK, this.getX(), this.getY() + 1, this.getZ(), 20, 1, 1, 1, 0.2);
+        return shocked;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.level() instanceof ServerLevel current && !this.isBaby()) {
+            if (this.species == GirlSpecies.NARWHAL_MERMAID && this.tickCount % 21 == 0) this.iceBreaker(current);
+            if (this.species == GirlSpecies.SEAHORSE_MERMAID && this.tickCount % 21 == 0) this.airLine();
+            if (this.species == GirlSpecies.EEL_MERMAID && this.tickCount % 81 == 0) this.discharge(current);
+        }
         if (this.species == GirlSpecies.LORELEI_MERMAID && this.level() instanceof ServerLevel river && !this.isBaby() && this.tickCount % 21 == 0) this.rhineSong(river);
         if (this.species == GirlSpecies.SELKIE_MERMAID && !this.level().isClientSide && !this.isBaby() && this.tickCount % 2401 == 0) this.sealSong();
         if (this.level() instanceof ServerLevel reef && !this.isBaby()) {

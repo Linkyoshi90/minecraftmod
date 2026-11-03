@@ -18,6 +18,30 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-seventh wave: the narwhal: dappled grey-white, and one long spiral tusk over her brow
+    "narwhal_mermaid": dict(
+        build="athletic", outfit=dict(top=["bandeau"], extras=["pearls"]),
+        ears=None, hair="bob", bangs="parted", fluke=(9, .75, 3.5), seal=True, tusk=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#a8b0b8", FUR="#b8c0c8", LIGHT="#f0f4f8", MARK="#4a5a6a", EYE="#2a3a4a", CLOTH="#4a6a8a", TRIM="#f0f4f8",
+                 pattern="smallspots", extra=dict(ivory="#f0e8d4")),
+        variants={"dark": dict(FUR="#4a5462", HAIR="#2a323e", MARK="#1e2632"), "pale": dict(FUR="#e0e4e8", HAIR="#c8d0d8", MARK="#8a98a8"),
+                  "gold": dict(FUR="#c8b890", HAIR="#a89868", MARK="#6a5a34", extra=dict(ivory="#e8c050")), "blue": dict(FUR="#7a9ab8", HAIR="#4a6a8a", MARK="#2a3e54")}),
+    # thirty-seventh wave: the seahorse: a curled tail, a little crown of a crest, very upright, very polite
+    "seahorse_mermaid": dict(
+        build="slim", outfit=dict(top=["bandeau"], extras=["pearls"]),
+        ears="fin", hair="odango", bangs="blunt", fluke=(.5, 3.5, 3.5),
+        pal=dict(SKIN=skin("fair"), HAIR="#e8a02a", FUR="#e8b83a", LIGHT="#f8e8a8", MARK="#a8702a", EYE="#2a2a3a", CLOTH="#e85a7a", TRIM="#f8e8a8",
+                 pattern="bars"),
+        variants={"pink": dict(FUR="#f088a8", HAIR="#e85a8a", MARK="#a83a5a"), "blue": dict(FUR="#5ac0e0", HAIR="#3a8ac8", MARK="#1e5a8a"),
+                  "green": dict(FUR="#7ac85a", HAIR="#4a9a3a", MARK="#2a5a22"), "red": dict(FUR="#e0603a", HAIR="#c83a2a", MARK="#7a1e14")}),
+    # thirty-seventh wave: the electric eel: long and dark, a yellow line down her and the glow of what's coming
+    "eel_mermaid": dict(
+        build="slim", outfit=dict(top=["sports"], colors=dict()),
+        ears="fin", hair="flowing", bangs="wispy", fluke=(.5, 4, 4.5), glow=["fluke"],
+        pal=dict(SKIN=skin("pale"), HAIR="#1e2a2a", FUR="#2a3a3a", LIGHT="#f0e04a", MARK="#f0e04a", EYE="#f0e04a", CLOTH="#1e2a2a", TRIM="#f0e04a",
+                 pattern="bars"),
+        variants={"moray": dict(FUR="#6a5a2a", HAIR="#3a3014", MARK="#c8b050"), "blue": dict(FUR="#1e3a6a", HAIR="#14243e", MARK="#5ac0f0", LIGHT="#5ac0f0", EYE="#5ac0f0"),
+                  "red": dict(FUR="#5a1e22", HAIR="#3a1014", MARK="#f0a040", LIGHT="#f0a040"), "black": dict(FUR="#141418", HAIR="#0e0e12")}),
     # thirty-sixth wave: the Lorelei of the Rhine: long gold hair, a green tail, a comb, a song
     "lorelei_mermaid": dict(
         build="curvy", outfit=dict(top=["bandeau"], extras=["pearls"]),
@@ -408,6 +432,8 @@ def declare(sp):
         parts += [("pcap", 9.5, 3, 9.5), ("bill", 6, 1, 4.5)]
     if d.get("charms"):
         parts += [("charm", 1.25, 1.5, .25), ("charm_cord", 4.5, .25, .25)]
+    if d.get("tusk"):                                    # thirty-seventh wave: the narwhal's spiral tusk
+        parts += [("ntusk", 1, 1, 9)]
     if d.get("lure"):                                    # thirty-third wave: the angler's stalk and its little light
         parts += [("lure_stalk", .5, 6, .5), ("lure_arc", .5, .5, 4), ("lure", 2, 2, 2)]
     if d.get("moon"):
@@ -496,6 +522,8 @@ def paint(sp, key):
         bite = (x + 0.5 - cx - rr * 0.45) ** 2 + (y + 0.5 - cy + rr * 0.2) ** 2 < (rr * 0.8) ** 2
         return pick(moon, 0.75, x, y) if inside and not bite else CLEAR
     pt("crescent", "all", crescent)
+    if d.get("tusk"):
+        pt("ntusk", "all", lambda f, x, y, w, h: pick(shades(pal.extra["ivory"]), 0.55 + 0.15 * ((x + y) % 3 == 0), x, y))
     if d.get("lure"):
         pt("lure_stalk", "all", lambda f, x, y, w, h: pick(shades(pal.extra["stalk"]), 0.5, x, y))
         pt("lure_arc", "all", lambda f, x, y, w, h: pick(shades(pal.extra["stalk"]), 0.5, x, y))
@@ -673,6 +701,8 @@ def build(sp):
     if d.get("platypus"):                                # a furry cap with a duck bill for a peak
         hy = 12 + 8 + 0.0
         r.add("pcap", "head", [0, 28, 0], [cube("pcap", [-4.75, 26.2, -4.75]), G.rot_cube("bill", [-3, 25.9, -8.9], [0, 26.4, -4.6], 12, 0, 0)])
+    if d.get("tusk"):                                    # forward from her brow (hair_ so it doesn't shrink her)
+        r.add("hair_tusk", "head", [0, 25, -4], [G.rot_cube("ntusk", [-.5, 25, -13], [0, 25.5, -4], 18, 0, 0)])
     if d.get("lure"):                                    # up from her brow and forward over her face (hair_ so it doesn't shrink her)
         r.add("hair_lure", "head", [0, 28, -3], [cube("lure_stalk", [-.25, 28, -3.25]), cube("lure_arc", [-.25, 33.5, -7.25]), cube("lure", [-1, 31.75, -8.5])])
     if d.get("moon"):                                    # crescents down her tail (they glow), little antlers in her hair

@@ -449,9 +449,23 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
         return false;
     }
 
+    /** The nymph brings up a flower on the grass within 4 of her. True if she did. */
+    public boolean bloom(net.minecraft.server.level.ServerLevel level) {
+        if (this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32) == null || !level.getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_MOBGRIEFING)) return false;
+        for (int i = 0; i < 8; i++) {
+            net.minecraft.core.BlockPos p = this.blockPosition().offset(this.random.nextInt(9) - 4, 0, this.random.nextInt(9) - 4);
+            if (level.isEmptyBlock(p) && level.getBlockState(p.below()).is(net.minecraft.world.level.block.Blocks.GRASS_BLOCK)) {
+                level.setBlockAndUpdate(p, (this.random.nextBoolean() ? net.minecraft.world.level.block.Blocks.POPPY : net.minecraft.world.level.block.Blocks.DANDELION).defaultBlockState());
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.NYMPH_ELF && this.level() instanceof ServerLevel glade && !this.isBaby() && this.tickCount % 1201 == 0) this.bloom(glade);
         if (this.level() instanceof ServerLevel woodland && !this.isBaby()) {
             if (this.species == GirlSpecies.GNOME_ELF && this.tickCount % 601 == 0) this.tendGarden(woodland);
             if (this.species == GirlSpecies.DWARF_ELF) {

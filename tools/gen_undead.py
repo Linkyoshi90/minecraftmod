@@ -17,6 +17,14 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-seventh wave: the poltergeist: a floating, see-through tantrum in an old nightdress
+    "poltergeist_undead": dict(
+        build="slim", outfit=dict(top=["sweater"], bottom="wrap_skirt", colors=dict(cloth2="#a8a8c8")),
+        lower="none", hair="shaggy", bangs="messy", ears=None, wisp=True,
+        pal=dict(SKIN="#d8dcf0", HAIR="#6a6a9a", FUR="#e0e4f4", LIGHT="#ffffff", MARK="#a8acd0", EYE="#5a5ac8", CLOTH="#c8ccec", TRIM="#7a7aa8",
+                 extra=dict(flame="#d0d4f0")),
+        variants={"green": dict(HAIR="#5a9a7a", CLOTH="#c0e8d0", EYE="#3a9a6a", extra=dict(flame="#c0e8d0")), "red": dict(HAIR="#9a5a6a", CLOTH="#ecc8d0", EYE="#c83a5a", extra=dict(flame="#ecc8d0")),
+                  "grey": dict(HAIR="#7a7a80", CLOTH="#d0d0d4", EYE="#2a2a30", extra=dict(flame="#d0d0d4")), "gold": dict(HAIR="#a8904a", CLOTH="#ece0b8", EYE="#a87a1e", extra=dict(flame="#ece0b8"))}),
     # thirty-second wave: the skeleton: bone-white, her bones showing, a torn tabard and a bow
     "skeleton_undead": dict(
         build="slim", outfit=dict(top=["bandeau", "vest"], bottom="loincloth", extras=["belt", "bracers"], colors=dict(leather="#5a4a3a")),

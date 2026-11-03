@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PSP",
+    "PCP",
+    "PPP"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:paper"
+    },
+    "S": {
+      "item": "minecraft:string"
+    },
+    "C": {
+      "tag": "c:chests"
+    }
+  },
+  "result": {
+    "id": "monstergirls:gift_box",
+    "count": 1
+  }
+}

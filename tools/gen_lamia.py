@@ -18,6 +18,13 @@ SEGS = [("seg_1", 4.5, 10.5, 4), ("seg_2", 4.25, 4, 5.5), ("seg_3", 4, 3.75, 5.5
         ("seg_5", 3, 2.75, 5), ("seg_6", 2.5, 2.25, 4.5), ("seg_7", 2, 1.75, 4), ("seg_8", 1.25, 1.25, 3.5)]
 
 SPECIES = {
+    # thirty-seventh wave: Echidna, mother of monsters in the Greek tales: a queen on a dark coil, gentle with every terrible thing
+    "echidna_lamia": dict(
+        build="curvy", outfit=dict(top=["bandeau", "capelet"], extras=["usekh", "armlets"], colors=dict(cloth2="#e8c050")),
+        thick=1.2, hair="wavy", bangs="parted",
+        pal=dict(SKIN=skin("fair"), HAIR="#2a1e2a", FUR="#3a2a3a", LIGHT="#a88ab0", MARK="#1e141e", EYE="#c8a040", CLOTH="#5a2a4a", TRIM="#e8c050",
+                 pattern="blotches", facemark="scales"),
+        variants={"green": dict(FUR="#2a4a3a", HAIR="#1e3028"), "bronze": dict(FUR="#7a5a2a", HAIR="#4a3414"), "red": dict(FUR="#6a2228", HAIR="#3a1014"), "white": dict(FUR="#d8d4dc", HAIR="#a8a4b0", MARK="#5a5468")}),
     # thirty-sixth wave: the centipede: on the rearing rig, banded red-brown, a body that doesn't end where you expect
     "centipede_lamia": dict(
         build="slim", outfit=dict(top=["bandeau"], extras=["armlets", "bracers"], colors=dict(cloth2="#e8a030")),

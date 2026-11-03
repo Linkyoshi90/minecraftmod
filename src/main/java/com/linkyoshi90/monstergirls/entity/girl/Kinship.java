@@ -105,7 +105,8 @@ public final class Kinship {
     private static Set<EntityType<?>> kinOf(GirlSpecies s) {
         return switch (s) {
             case OCELOT_NEKOMATA, BLACK_PANTHER_NEKOMATA -> Set.of(EntityType.OCELOT);
-            case SELKIE_MERMAID -> Set.of(EntityType.DOLPHIN);
+            case SELKIE_MERMAID, NARWHAL_MERMAID -> Set.of(EntityType.DOLPHIN);
+            case ECHIDNA_LAMIA -> Set.of(EntityType.CREEPER);
             case DONKEY_CENTAUR -> Set.of(EntityType.DONKEY, EntityType.MULE);
             case CAVE_SPIDER_ARACHNE -> Set.of(EntityType.CAVE_SPIDER);
             case SKELETON_UNDEAD -> Set.of(EntityType.SKELETON, EntityType.STRAY);

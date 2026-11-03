@@ -16,6 +16,15 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-seventh wave: the pangolin: brown overlapping scales, a long tail, and a very long tongue for ants
+    "pangolin_armoured": dict(
+        build="slim", outfit=dict(top=["bandeau"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#5a4a3a")),
+        hair="bob", bangs="blunt", ears=None, legs="scales", foot="claw",
+        tail=[(2.25, 2.25, 3), (2, 2, 3), (1.5, 1.5, 3), (1, 1, 3)], tail_rest=[(-20, 0, 0), (10, 0, 0), (10, 0, 0), (8, 0, 0)], tail_look="scale",
+        pal=dict(SKIN=skin("peach"), HAIR="#6a4a2e", FUR="#8a6240", LIGHT="#d8c0a0", MARK="#4a3220", EYE="#1e140e", CLOTH="#c8a878", TRIM="#6a4a2e",
+                 pattern="bands", extra=dict(band="#8a6240", band_edge="#4a3220")),
+        variants={"dark": dict(FUR="#4a3a2e", HAIR="#2a2018", extra=dict(band="#4a3a2e", band_edge="#2a2018")), "gold": dict(FUR="#c8a040", HAIR="#7a5a1e", extra=dict(band="#c8a040", band_edge="#7a5a1e")),
+                  "grey": dict(FUR="#7a7a78", HAIR="#4a4a48", extra=dict(band="#7a7a78", band_edge="#4a4a48")), "red": dict(FUR="#a85a3a", HAIR="#6a2e1e", extra=dict(band="#a85a3a", band_edge="#6a2e1e"))}),
     # twenty-first wave: the daeodon, a great shaggy pale-blue 'hell pig': round ears, pink cheeks, little tusks, a big mouth
     "daeodon_armoured": dict(
         build="strong", outfit=dict(top=["bandeau"], bottom="shorts", extras=["belt"], colors=dict(leather="#3a4a6a", cloth2="#2a3a5a")),

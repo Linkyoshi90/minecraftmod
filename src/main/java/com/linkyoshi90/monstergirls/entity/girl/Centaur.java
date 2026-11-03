@@ -913,9 +913,22 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
         return near.size();
     }
 
+    /** The okapi with a rider: monsters within 12 who were after them lose track. How many. */
+    public int leaveNoTrace(net.minecraft.server.level.ServerLevel level) {
+        if (!(this.getControllingPassenger() instanceof Player rider)) return 0;
+        int lost = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, this.getBoundingBox().inflate(12), x -> x.getTarget() == rider || x.getTarget() == this)) {
+            m.setTarget(null);
+            lost++;
+        }
+        return lost;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.OKAPI_CENTAUR && this.level() instanceof net.minecraft.server.level.ServerLevel jungle && this.tickCount % 41 == 0) this.leaveNoTrace(jungle);
+        if (this.species == GirlSpecies.MOOSE_CENTAUR && this.isInWater() && this.getControllingPassenger() != null) this.setDeltaMovement(this.getDeltaMovement().multiply(1.12, 1.0, 1.12));
         if (this.level() instanceof net.minecraft.server.level.ServerLevel herd && !this.isBaby()) {
             if (this.species == GirlSpecies.GIRAFFE_CENTAUR && this.tickCount % 2401 == 0) this.browse(herd);
             if (this.species == GirlSpecies.ELEPHANT_CENTAUR && this.tickCount % 201 == 0) this.trumpet(herd);

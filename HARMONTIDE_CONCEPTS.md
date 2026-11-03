@@ -614,6 +614,25 @@ sandstone since 2026-10-29), so 87 in all.
 Homage props (POP_CULTURE_VARIANTS.md): the dullahan's headless rider (Celty) has her yellow cat-eared helmet over the head she
 carries, the death envoy (Lala) a scythe in her free hand; both are drawn only on their own looks.
 
+## Thirty-seventh wave (2026-11-03, in the game)
+
+| Species | Home | Design |
+|---|---|---|
+| **Raccoon** | Rodent | Comes up with odds and ends for her friend. |
+| **Pangolin** | Armoured | Snaps up silverfish and endermites. |
+| **Okapi** | Centaur | With a rider, monsters after them lose track. |
+| **Moose** | Centaur | Water doesn't slow her with a rider. |
+| **Narwhal** | Merfolk | A spiral tusk (`hair_tusk`). Breaks ice over her friend in the water. |
+| **Seahorse** | Merfolk | Shares her air when her friend runs short. |
+| **Electric Eel** | Merfolk | Shocks everything hostile in the water near her friend; her tail glows. |
+| **Antlion** | Bug | Monsters on sand near her friend sink and slow. |
+| **Echidna** | Lamia | Hushes creepers near her friend. Creepers are her kin. |
+| **Chimera** | Dragon | Burns the monster nearest her friend, and it festers. |
+| **Nymph** | Elf | Flowers come up on the grass near her. |
+| **Poltergeist** | Undead | See-through. Things fly at monsters near her friend. |
+
+Features: **Friend Compass** (right-click: which way and how far to the next friend in the loaded world), **dancing** (any girl with a jukebox playing within 16 hops about, 1 friendship every five minutes), **Gift Box** (close friends of its owner within 16 leave a present once a day).
+
 ## Thirty-sixth wave (2026-11-03, in the game)
 
 | Species | Home | Design |

@@ -17,6 +17,20 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, shades, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-seventh wave: the okapi: dark velvet, striped legs like a zebra's that wandered off
+    "okapi_centaur": dict(
+        build="slim", outfit=dict(top=["halter"], extras=["armlets"], colors=dict(cloth2="#e8e0d0")),
+        hair="bob", bangs="swept", tail=(1, 7, 1),
+        pal=dict(SKIN=skin("deep"), HAIR="#2a1a14", FUR="#4a2a22", LIGHT="#e8e0d0", MARK="#f0ece4", EYE="#2a1a10", CLOTH="#7a3a2a", TRIM="#e8e0d0",
+                 pattern="solid", extra=dict(socks=True)),
+        variants={"chestnut": dict(FUR="#7a3e22", HAIR="#4a2212"), "black": dict(FUR="#1e1a1e", HAIR="#141216"), "grey": dict(FUR="#5a5a60", HAIR="#2e2e34"), "plum": dict(FUR="#4a2a4a", HAIR="#2a142a")}),
+    # thirty-seventh wave: the moose: tall and dark with great flat antlers, happiest up to her chest in a lake
+    "moose_centaur": dict(
+        build="strong", outfit=dict(top=["bandeau", "vest"], extras=["belt"], colors=dict(leather="#5a3a22")),
+        hair="shaggy", bangs="messy", tail=(1.5, 3, 1.5), antlers=True, blades=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#2a1e16", FUR="#4a3424", LIGHT="#a8886a", MARK="#2a1c12", EYE="#2a1a10", CLOTH="#7a5a3a", TRIM="#c8a878",
+                 pattern="solid"),
+        variants={"dark": dict(FUR="#2a2018", HAIR="#141010"), "pale": dict(FUR="#8a7458", HAIR="#5a4a34"), "grey": dict(FUR="#6a6660", HAIR="#3a3632"), "red": dict(FUR="#6a3a22", HAIR="#3a1e12")}),
     # thirty-fifth wave: the giraffe: very tall, patched gold on cream, two short ossicones' worth of dignity
     "giraffe_centaur": dict(
         rig="giraffe", waist=36.0, ears="fox",

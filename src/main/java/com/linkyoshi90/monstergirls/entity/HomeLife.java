@@ -200,6 +200,28 @@ public final class HomeLife {
         return came;
     }
 
+    // --- the friend compass and dancing ------------------------------------------------------------------------------
+
+    /** Every friend in the loaded world, nearest first. */
+    public static List<Mob> allFriends(ServerLevel level, Player player) {
+        List<Mob> out = new ArrayList<>();
+        for (net.minecraft.world.entity.Entity e : level.getAllEntities()) {
+            if (e instanceof Mob m && m.isAlive() && m instanceof Bonded b && b.getAffection(player) >= FRIEND) out.add(m);
+        }
+        out.sort(java.util.Comparator.comparingDouble(m -> m.distanceToSqr(player)));
+        return out;
+    }
+
+    /** With a jukebox playing within 16 she dances, hopping and scattering notes: 1 friendship every five minutes for a friend near. True if she danced. */
+    public static boolean dance(ServerLevel level, AbstractMonsterGirl girl, boolean music) {
+        if (!music || girl.isBaby() || !girl.onGround() || girl.isOrderedToSit()) return false;
+        girl.getJumpControl().jump();
+        level.sendParticles(ParticleTypes.NOTE, girl.getX(), girl.getY() + girl.getBbHeight() + 0.3, girl.getZ(), 1, 0.3, 0.1, 0.3, 0.5);
+        Player friend = girl.bondedPlayer(FRIEND, 16);
+        if (friend != null && ready(girl, "NextDance", GROOM_WAIT)) girl.addAffection(friend, 1);
+        return true;
+    }
+
     // --- the sketchbook -----------------------------------------------------------------------------------------------
 
     /** Draws her: a figurine of her as she is now. Empty for a stranger. */

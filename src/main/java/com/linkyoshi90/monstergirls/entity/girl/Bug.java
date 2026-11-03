@@ -486,9 +486,23 @@ public class Bug extends AbstractMonsterGirl {
         return true;
     }
 
+    /** The antlion's sand: monsters standing on sand within 8 of her friend sink and slow. How many, or -1 without a friend. */
+    public int pit(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int sunk = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8), x -> x.isAlive() && x.getBlockStateOn().is(net.minecraft.tags.BlockTags.SAND))) {
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 60, 4));
+            m.hurt(this.damageSources().mobAttack(this), 2);
+            sunk++;
+        }
+        return sunk;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.ANTLION_BUG && this.level() instanceof net.minecraft.server.level.ServerLevel dunes && !this.isBaby() && this.tickCount % 61 == 0) this.pit(dunes);
         if (this.species == GirlSpecies.CICADA_BUG && !this.level().isClientSide && !this.isBaby() && this.tickCount % 3001 == 0) this.chorus();
         if (this.level() instanceof net.minecraft.server.level.ServerLevel meadow && !this.isBaby()) {
             if (this.species == GirlSpecies.DRAGONFLY_BUG && this.tickCount % 41 == 0) this.hawk(meadow);

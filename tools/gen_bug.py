@@ -24,6 +24,14 @@ LARVA_SEGS = [("seg_1", 4, 6.5, 3.5), ("seg_2", 4.25, 3.5, 3.5), ("seg_3", 4, 3.
               ("seg_5", 3.5, 2.75, 3), ("seg_6", 3, 2.5, 3), ("seg_7", 2.5, 2.25, 2.5), ("seg_8", 2, 2, 2)]
 
 SPECIES = {
+    # thirty-seventh wave: the antlion: sand-brown, wide jaws of a grin, and she has dug somewhere you are about to walk
+    "antlion_bug": dict(
+        build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#6a5030", leather="#6a5030")), hair="shaggy", bangs="messy",
+        ears="antenna", legs="stockings", foot="shoe", gaster=True,
+        pal=dict(SKIN=skin("tan"), HAIR="#7a5a34", FUR="#c8a870", LIGHT="#e8d8b0", MARK="#5a4024", EYE="#2a1e14", CLOTH="#a8804a", TRIM="#5a4024",
+                 extra=dict(antenna="#5a4024", stocking="#7a5a34", boot="#4a3420")),
+        variants={"red": dict(FUR="#c8703a", HAIR="#7a3a1a", extra=dict(antenna="#5a2a10", stocking="#7a3a1a", boot="#4a2010")), "pale": dict(FUR="#e8dcc0", HAIR="#a89870", extra=dict(antenna="#7a6a4a", stocking="#a89870", boot="#7a6a4a")),
+                  "black": dict(FUR="#3a3028", HAIR="#1e1814", extra=dict(antenna="#1e1814", stocking="#2a2420", boot="#141010")), "gold": dict(FUR="#e0b84a", HAIR="#a8802a", extra=dict(antenna="#6a4a14", stocking="#a8802a", boot="#6a4a14"))}),
     # thirty-sixth wave: the cicada: green and black, glassy wings, seventeen years of things to say
     "cicada_bug": dict(
         build="slim", outfit=dict(top=["sports"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#1e2a1e", leather="#1e2a1e")), hair="bob", bangs="swept",

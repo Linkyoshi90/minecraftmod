@@ -19,6 +19,13 @@ from girl_lib import H, cube, pick, skin, CLEAR  # noqa: E402
 STAFF_TILT = -82
 
 SPECIES = {
+    # thirty-seventh wave: the raccoon: a bandit's mask, ringed tail, clever hands
+    "raccoon_rodent": dict(
+        build="slim", outfit=dict(top=["bandeau", "vest"], bottom="shorts", extras=["satchel"], colors=dict(leather="#4a3a2a")),
+        hair="bob", bangs="messy", ears="round", legs="fur", foot="paw", tail=[(2, 2, 4), (2, 2, 4), (1.5, 1.5, 3)], tail_rest=[(-25, 0, 0), (10, 0, 0), (8, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("fair"), HAIR="#5a5a60", FUR="#8a8a8e", LIGHT="#d8d8d4", MARK="#1e1e22", EYE="#2a1e14", CLOTH="#3a4a5a", TRIM="#d8d8d4",
+                 pattern="bars", facemark="panda"),
+        variants={"brown": dict(FUR="#7a5e44", HAIR="#3e2e20"), "red": dict(FUR="#a86a3e", HAIR="#6a3a1e"), "pale": dict(FUR="#c8c0b0", HAIR="#8a8274"), "dark": dict(FUR="#3e3e44", HAIR="#1e1e22")}),
     # thirty-sixth wave: the ring-tailed lemur: grey, a banded tail held high, sits with her arms out to the morning sun
     "lemur_rodent": dict(
         build="slim", outfit=dict(top=["halter"], bottom="shorts", extras=["armlets"], colors=dict(cloth2="#3a3a40")),

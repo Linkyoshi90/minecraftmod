@@ -56,5 +56,9 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("figurine", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.FigurineBlockEntity::new,
                     ModBlocks.FIGURINE.get()).build(null));
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.linkyoshi90.monstergirls.block.GiftBoxBlockEntity>> GIFT_BOX =
+            BLOCK_ENTITIES.register("gift_box", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.GiftBoxBlockEntity::new,
+                    ModBlocks.GIFT_BOX.get()).build(null));
+
     private ModBlockEntities() {}
 }

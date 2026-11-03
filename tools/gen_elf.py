@@ -16,6 +16,13 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-seventh wave: the nymph: a spirit of the spring, dressed in a light green wrap, flowers wherever she stood
+    "nymph_elf": dict(
+        build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["pearls"], colors=dict(cloth2="#7ab85a")),
+        hair="wavy", bangs="parted", ears="elf", legs="bare", foot="shoe",
+        pal=dict(SKIN=skin("peach"), HAIR="#6aa85a", FUR="#6aa85a", LIGHT="#d8f0c0", MARK="#3a7a3a", EYE="#3a8a6a", CLOTH="#9ad87a", TRIM="#f0d8e0",
+                 extra=dict(boot="#7a5a3a")),
+        variants={"river": dict(HAIR="#5ab0d8", CLOTH="#a8e0f0", EYE="#2a6a9a"), "autumn": dict(HAIR="#c8703a", CLOTH="#e8a860"), "blossom": dict(HAIR="#f0a8c0", CLOTH="#f8d8e4"), "night": dict(HAIR="#3a3a6a", CLOTH="#5a5a9a", EYE="#c8c8f0")}),
     # thirty-sixth wave: the gnome: short and round-cheeked, a tall red hat, very still when you look
     "gnome_elf": dict(
         build="curvy", outfit=dict(top=["bandeau", "vest"], bottom="shorts", extras=["belt"], colors=dict(leather="#5a3a22")),

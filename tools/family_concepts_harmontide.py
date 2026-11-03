@@ -3722,6 +3722,53 @@ for _fid, _entries in THIRTY_SIXTH.items():
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
 
+THIRTY_SEVENTH = {
+    "rodent": [_c("raccoon_rodent", "Raccoon", "Woods and towns", "Clever · light-fingered", 1.55, ['forest', 'swamp', 'river'], "Clever",
+                  "A masked bandit with clever hands, up all night going through everything.", "Sweet berries and bread.",
+                  ("Rummage", "Befriended, now and then she comes up with something useful from who knows where."), "Low.", ["Grey", "Brown", "Red", "Pale", "Dark"], "Finds odds and ends")],
+    "armoured": [_c("pangolin_armoured", "Pangolin", "Warm forests", "Shy · scaly", 1.55, ['savanna', 'sparse_jungle', 'jungle'], "Shy",
+                    "Covered in overlapping scales, and very shy about it. Lives on ants.", "Sugar and spider eyes.",
+                    ("Ant Eater", "Befriended, she snaps up the silverfish and endermites near her friend."), "Low.", ["Brown", "Dark", "Gold", "Grey", "Red"], "Eats silverfish and endermites")],
+    "centaur": [_c("okapi_centaur", "Okapi", "Deep jungle", "Elusive · velvet", 2.0, ['jungle', 'bamboo_jungle'], "Elusive",
+                   "The forest giraffe, half a rumour. You hear of her long after she has gone.", "Melons and leaves.",
+                   ("Leave No Trace", "With a rider on her back, the monsters near lose track of them."), "Low.", ["Velvet", "Chestnut", "Black", "Grey", "Plum"], "Monsters lose her rider"),
+                _c("moose_centaur", "Moose", "Northern lakes", "Massive · unbothered", 2.5, ['taiga', 'snowy_taiga', 'old_growth_spruce_taiga'], "Unbothered",
+                   "Huge, dark and up to her chest in a lake. She swims better than you do.", "Kelp and wheat.",
+                   ("Wader", "Water doesn't slow her with a rider on her back."), "Medium.", ["Brown", "Dark", "Pale", "Grey", "Red"], "Fast through water")],
+    "merfolk": [_c("narwhal_mermaid", "Narwhal", "Frozen seas", "Regal · spiralled", 1.9, ['frozen_ocean', 'deep_frozen_ocean'], "Regal",
+                   "The unicorn of the sea, and tired of the comparison.", "Cod and salmon.",
+                   ("Ice Breaker", "Befriended, her tusk breaks the ice above her friend in the water."), "Low.", ["Dappled", "Dark", "Pale", "Gold", "Blue"], "Breaks ice over her friend"),
+                _c("seahorse_mermaid", "Seahorse", "Warm reefs", "Upright · polite", 1.45, ['warm_ocean', 'lukewarm_ocean'], "Polite",
+                   "Very small, very upright, and she'd rather you held on to something.", "Kelp and cod.",
+                   ("Air Line", "Befriended, when her friend runs short of air under water she shares hers."), "Low.", ["Gold", "Pink", "Blue", "Green", "Red"], "Shares air"),
+                _c("eel_mermaid", "Electric Eel", "Dark rivers", "Long · shocking", 1.85, ['river', 'mangrove_swamp', 'jungle'], "Shocking",
+                   "She doesn't need to touch you. She doesn't even need to see you.", "Cod and salmon.",
+                   ("Discharge", "Befriended, everything hostile in the water near her friend is shocked."), "High.", ["Dark", "Moray", "Blue", "Red", "Black"], "Shocks monsters in water")],
+    "bug": [_c("antlion_bug", "Antlion", "Sand", "Patient · hungry", 1.6, ['desert', 'badlands'], "Patient",
+               "She has dug a pit somewhere near here and she will not say where.", "Sugar and spider eyes.",
+               ("Pit", "Befriended, monsters on the sand near her friend sink and slow."), "Medium.", ["Sand", "Red", "Pale", "Black", "Gold"], "Sand slows monsters")],
+    "lamia": [_c("echidna_lamia", "Echidna", "Dark caves", "Maternal · terrible", 2.2, ['deep_dark', 'dripstone_caves', 'dark_forest'], "Maternal",
+                 "Mother of monsters in the Greek tales, and every creeper knows her voice.", "Raw meat and cake.",
+                 ("Mother of Monsters", "Befriended, she hushes the creepers near her friend, and they stand down."), "High.", ["Dusk", "Green", "Bronze", "Red", "White"], "Hushes creepers")],
+    "dragon": [_c("chimera_dragon", "Chimera", "Volcanic hills", "Three-minded · burning", 2.0, ['badlands', 'windswept_savanna', 'basalt_deltas'], "Three-minded",
+                  "Lion, goat and snake, and they do not always agree, except about fire.", "Raw meat and gold.",
+                  ("Three Heads", "Befriended, she burns the monster nearest her friend, and its wounds fester."), "High.", ["Gold", "Black", "White", "Red", "Ash"], "Burns and poisons")],
+    "elf": [_c("nymph_elf", "Nymph", "Springs", "Bright · flighty", 1.7, ['flower_forest', 'cherry_grove', 'river'], "Bright",
+               "A spirit of the spring, and wherever she stands for long, flowers come up.", "Sweet berries and cake.",
+               ("Bloom", "Befriended, flowers come up on the grass near her."), "Low.", ["Meadow", "River", "Autumn", "Blossom", "Night"], "Flowers on the grass")],
+    "undead": [_c("poltergeist_undead", "Poltergeist", "Old houses", "Loud · unseen", 1.6, ['dark_forest', 'old_growth_birch_forest', 'snowy_taiga'], "Loud",
+                  "Nobody has ever seen her throw anything. Things just fly.", "Pumpkin pie.",
+                  ("Thrown Things", "Befriended, things fly at the monsters near her friend."), "Medium.", ["Pale", "Green", "Red", "Grey", "Gold"], "Throws things at monsters")],
+}
+for _fid, _entries in THIRTY_SEVENTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(s["id"] == _species["id"] for s in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 # homage variants of 2026-10-28 (POP_CULTURE_VARIANTS.md): appended after every wave, so every species exists by now
 for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, a black bodysuit with a pink heart, white gloves and boots")),
                        ("ika_mollusk", ("ink_kid", "Ink Kid", "Bright orange tentacle hair, a white tee and black shorts")),

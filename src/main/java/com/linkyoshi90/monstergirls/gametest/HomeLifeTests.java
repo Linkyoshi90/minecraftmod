@@ -183,4 +183,30 @@ public class HomeLifeTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "giftBoxCollects")
+    public static void giftBoxCollects(GameTestHelper helper) {
+        BlockPos at = new BlockPos(2, 2, 2);
+        helper.setBlock(at, ModBlocks.GIFT_BOX.get());
+        var box = (com.linkyoshi90.monstergirls.block.GiftBoxBlockEntity) helper.getBlockEntity(at);
+        AbstractMonsterGirl g = girl(helper, new BlockPos(3, 2, 2));
+        ServerPlayer p = friendOf(helper, g, new BlockPos(4, 2, 4));
+        g.addAffection(p, 30);
+        check(box.collect(helper.getLevel(), helper.absolutePos(at)) == 0, "no owner yet");
+        box.setOwner(p.getUUID());
+        check(box.collect(helper.getLevel(), helper.absolutePos(at)) == 1 && !box.store().isEmpty(), "a present");
+        check(box.collect(helper.getLevel(), helper.absolutePos(at)) == 0, "once a day");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "compassFindsFriends")
+    public static void compassFindsFriends(GameTestHelper helper) {
+        AbstractMonsterGirl g = girl(helper, new BlockPos(1, 2, 1));
+        ServerPlayer p = friendOf(helper, g, new BlockPos(3, 2, 3));
+        check(HomeLife.allFriends(helper.getLevel(), p).contains(g), "she's found");
+        check(HomeLife.dance(helper.getLevel(), g, false) == false, "no music, no dancing");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

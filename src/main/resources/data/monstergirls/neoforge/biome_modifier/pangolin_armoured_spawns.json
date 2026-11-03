@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_pangolin_armoured",
+  "spawners": {
+    "type": "monstergirls:pangolin_armoured",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}
