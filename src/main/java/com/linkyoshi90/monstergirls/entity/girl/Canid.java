@@ -393,6 +393,41 @@ public class Canid extends AbstractMonsterGirl {
                 && this.level().getBiome(this.blockPosition()).value().getPrecipitationAt(this.blockPosition()) == Biome.Precipitation.SNOW;
     }
 
+    @javax.annotation.Nullable
+    private BlockPos den;
+    private long denUntil, nextDenSearch;
+
+    /**
+     * The grizzly's den: with snow falling on her she looks for a roofed spot within 12 she can lie in and walks there (half a minute at
+     * most). True while she is on her way; false once she is under cover, or there is no den to be had (then she sleeps where she is).
+     */
+    public boolean seekDen(ServerLevel level) {
+        if (!level.canSeeSky(this.blockPosition())) {
+            this.den = null;
+            return false;
+        }
+        long now = level.getGameTime();
+        if (this.den != null && now < this.denUntil) {
+            if (this.tickCount % 20 == 0) this.getNavigation().moveTo(this.den.getX() + 0.5, this.den.getY(), this.den.getZ() + 0.5, 1.0);
+            return true;
+        }
+        if (this.den != null || now < this.nextDenSearch) {                  // she tried, or looked lately: here will do
+            this.den = null;
+            return false;
+        }
+        this.nextDenSearch = now + 1200;
+        BlockPos o = this.blockPosition(), best = null;
+        for (BlockPos p : BlockPos.betweenClosed(o.offset(-12, -4, -12), o.offset(12, 4, 12))) {
+            if (level.canSeeSky(p) || !level.isEmptyBlock(p) || !level.isEmptyBlock(p.above()) || !level.getBlockState(p.below()).isFaceSturdy(level, p.below(), net.minecraft.core.Direction.UP)) continue;
+            if (best == null || p.distSqr(o) < best.distSqr(o)) best = p.immutable();
+        }
+        if (best == null) return false;
+        this.den = best;
+        this.denUntil = now + 600;
+        this.getNavigation().moveTo(best.getX() + 0.5, best.getY(), best.getZ() + 0.5, 1.0);
+        return true;
+    }
+
     /** A full beehive near her: she goes to it, scoops out the honey and gets stung for it. */
     public void raidHive(ServerLevel level) {
         if (this.getTarget() != null || level.getGameTime() < this.nextRaid) return;
@@ -617,7 +652,9 @@ public class Canid extends AbstractMonsterGirl {
                 if (this.tickCount % 100 == 0) this.fish(server);
             }
             case GRIZZLY_CANID -> {
-                if (this.isHibernating()) {                               // curled up asleep until the snow stops
+                if (this.isHibernating() && this.seekDen(server)) {       // out in the open: to a roofed spot first
+                    if (this.getAction() == Action.LYING) this.setAction(Action.NONE);
+                } else if (this.isHibernating()) {                        // curled up asleep until the snow stops
                     this.getNavigation().stop();
                     if (this.getAction() != Action.LYING) this.startTimedAction(Action.LYING, 200);
                     if (this.tickCount % 100 == 0) server.sendParticles(ParticleTypes.SNOWFLAKE, this.getX(), this.getEyeY(), this.getZ(), 2, 0.3, 0.2, 0.3, 0.0);

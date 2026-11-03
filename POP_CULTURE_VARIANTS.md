@@ -105,6 +105,21 @@ pink nose. Each homage's prop is drawn only on its own variant. They follow the 
 | Cyclops (`cyclops_devil`) | Manako (Monster Musume) | `tactical_eye` ✅ | Her own model: one big eye, a short purple bob, a yellow zipped suit with shoulder plates, black leggings, yellow armoured knees, navy boots and gloves, a red belt with two pouches, a long tan rifle | ★★★ (already a cyclops) |
 | Genie (`genie_devil`) | The Genie (Disney's animated Aladdin) | `lamp_friend` ✅ | Bright blue all over, a black top-knot and a little black goatee, gold wrist cuffs, a red sash, her smoke tail in the same blue | ★★★ (already a genie with a lamp) |
 
+## Thirty-sixth wave (2026-11-03) ✅
+
+| Girl | Character | Variant | Look |
+|---|---|---|---|
+| Wolf (`wolf_canid`) | Amaterasu (Okami) | `sun_wolf` ✅ | White, red markings |
+| Red kitsune (`red_kitsune`) | Ahri (League of Legends) | `charm_fox` ✅ | Black hair, cream tails, a red and white robe |
+| Panda (`panda_canid`) | Po (Kung Fu Panda) | `fight_panda` ✅ | An orange and gold top |
+| Tiger (`tiger_nekomata`) | Tigress (Kung Fu Panda) | `storm_tiger` ✅ | Orange, a red silk top |
+| Lynx (`lynx_nekomata`) | Puss in Boots | `boots_cat` ✅ | Ginger, a dark hat's colours |
+| Koi (`koi_mermaid`) | Ariel (The Little Mermaid) | `red_tide` ✅ | Red hair, a green tail, a lilac top |
+| Dark elf (`dark_elf`) | Drizzt (Forgotten Realms) | `shadow_ranger` ✅ | White hair, dark skin, a black cloak |
+| Troll (`troll_devil`) | A Dreamworks troll | `bridge_keeper` ✅ | Blue skin, red hair |
+
+Palette only, no props, generic names (no logos, no lettering).
+
 ## Possible but weaker
 
 - Lamia (any) as Solid Snake (Metal Gear): headband, sneaking suit, a cardboard box. Funny, but a lamia has no legs to crouch with.

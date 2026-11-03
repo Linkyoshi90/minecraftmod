@@ -81,7 +81,7 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Zhuque, the Vermilion Bird** (`ZhuqueHarpy`, the phoenix's model in her own colours, savanna and badlands): she is fireproof, sets whatever she strikes alight, and once befriended ripens crops within 6 blocks every 3 s. She has her own egg (Vermilion Egg), eggs and hatchling.
   - **The Four Symbols** (advancement, challenge): befriend (10+) a long dragon (east), a white tiger nekomata (west), Zhuque (south) and the Black Tortoise (north).
 - [ ] Playtest the sixth wave: how chatty the kobold is underground, whether the Ratatoskr prank is funny or annoying, how the leshy's tally feels for a normal tree farm (12 logs is about two trees), and whether La Llorona finds lost young often enough.
-- [ ] Not done for the sixth wave: Zhuque has no harpy field guide entry (nor have the tengu, toucan and penguin). The grizzly cannot hibernate in a den (she sleeps where the snow catches her).
+- [ ] Not done for the sixth wave: Zhuque has no harpy field guide entry (nor have the tengu, toucan and penguin). The grizzly looks for a den (a roofed spot within 12) before she hibernates, since 2026-11-03 (`Canid.seekDen`).
 - [x] **Turtles** (2026-10-25, lizardfolk), tested in `TurtleAndKinTests`:
   - **Red-eared slider** (rivers, swamps, in groups of 2 to 4): when a stranger comes within 6 blocks, every slider within 8 slides into the nearest water. Her food is worth double.
   - **Galapagos tortoise** (beaches, stony shores, savanna): 70 health, armour 12, speed 0.12. Once she is fond of you, an empty hand climbs onto her shell (crouch to pat her, as with centaurs). She keeps going where she was going, and cactus does not hurt her.

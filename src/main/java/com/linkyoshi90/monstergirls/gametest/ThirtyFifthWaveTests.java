@@ -214,4 +214,11 @@ public class ThirtyFifthWaveTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "grizzlyStaysInHerDen")
+    public static void grizzlyStaysInHerDen(GameTestHelper helper) {
+        Canid bear = still(helper, GirlSpecies.GRIZZLY_CANID, new BlockPos(2, 2, 2));
+        check(helper.getLevel().canSeeSky(bear.blockPosition()) || !bear.seekDen(helper.getLevel()), "under a roof already: no need to move");
+        helper.succeed();
+    }
 }
