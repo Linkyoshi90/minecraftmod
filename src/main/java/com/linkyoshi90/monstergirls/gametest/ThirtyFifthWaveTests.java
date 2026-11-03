@@ -193,4 +193,25 @@ public class ThirtyFifthWaveTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "wave38Creatures")
+    public static void wave38Creatures(GameTestHelper helper) {
+        Bug t = still(helper, GirlSpecies.TARDIGRADE_BUG, new BlockPos(1, 2, 1));
+        t.setHealth(1);
+        check(t.tun(5) && t.getHealth() == t.getMaxHealth(), "back");
+        t.setHealth(1);
+        check(!t.tun(5), "once a day");
+        com.linkyoshi90.monstergirls.entity.girl.Construct s = still(helper, GirlSpecies.SNOWGIRL_CONSTRUCT, new BlockPos(2, 2, 1));
+        ServerPlayer p = friendOf(helper, s, new BlockPos(5, 2, 5), 30);
+        Zombie z = zombie(helper, new BlockPos(6, 2, 5));
+        check(s.snowball(helper.getLevel()) == 1 && z.hasEffect(MobEffects.MOVEMENT_SLOWDOWN), "pelted");
+        String id = p.getUUID().toString();
+        var missing = com.linkyoshi90.monstergirls.entity.Missing.class;
+        check(!com.linkyoshi90.monstergirls.entity.Missing.anniversary(helper.getLevel(), s, p, id, 100), "the day they met");
+        check(!com.linkyoshi90.monstergirls.entity.Missing.anniversary(helper.getLevel(), s, p, id, 110), "not yet");
+        check(com.linkyoshi90.monstergirls.entity.Missing.anniversary(helper.getLevel(), s, p, id, 130), "a month");
+        check(!com.linkyoshi90.monstergirls.entity.Missing.anniversary(helper.getLevel(), s, p, id, 130), "once");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

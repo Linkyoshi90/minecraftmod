@@ -23,6 +23,13 @@ SPADE_REST = [(-20, 0, 0), (25, 0, 0), (10, 0, 0)]
 CLUB_TILT = 78
 
 SPECIES = {
+    # thirty-eighth wave: the book spirit, a tsukumogami: an old book that woke up, page-pale, ink at her fingertips
+    "book_spirit_devil": dict(
+        build="slim", outfit=dict(top=["kimono"], colors=dict(kimono="#e8dcc0", kimono_trim="#7a2a22", obi="#7a2a22")),
+        hair="hime", bangs="blunt", ears=None, legs="bare", foot="shoe",
+        pal=dict(SKIN="#f0e8d4", HAIR="#2a2428", FUR="#f0e8d4", LIGHT="#f8f4e4", MARK="#3a3034", EYE="#2a2428", CLOTH="#e8dcc0", TRIM="#7a2a22",
+                 extra=dict(boot="#5a2a22")),
+        variants={"blue": dict(TRIM="#2a4a8a", HAIR="#1e2a4a"), "green": dict(TRIM="#2a6a4a", HAIR="#14301e"), "gold": dict(TRIM="#c8a040", HAIR="#5a3a14"), "old": dict(SKIN="#d8c8a0", FUR="#d8c8a0", HAIR="#5a4a3a")}),
     # thirty-fifth wave: the goblin: green, sharp-eared, pockets full, always has a deal for you
     "goblin_devil": dict(
         build="slim", outfit=dict(top=["bandeau", "vest"], bottom="shorts", extras=["belt", "pouch"], colors=dict(cloth2="#5a3a22", leather="#5a3a22")),

@@ -18,6 +18,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin  # noqa: E402
 
 SPECIES = {
+    # thirty-eighth wave: the starfish: five points of a crown, knobbled and orange, and whatever you cut off grows back
+    "starfish_crustacean": dict(
+        build="curvy", outfit=dict(top=["shells" if False else "bandeau"], bottom="shorts", extras=["pearls"], colors=dict(cloth2="#a83a2a")),
+        hair="odango", bangs="blunt", ears=None, legs="scales", foot="claw", fanshell=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#e8703a", FUR="#e8804a", LIGHT="#f8d0a8", MARK="#a83a2a", EYE="#2a1e14", CLOTH="#a83a2a", TRIM="#f8d0a8",
+                 pattern="spots", extra=dict(shell="#e8703a", claw="#e8804a", claw_tip="#f4e4d0", brass="#a83a2a")),
+        variants={"blue": dict(FUR="#3a7ad8", HAIR="#2a5ab0", MARK="#14285a", extra=dict(shell="#2a5ab0", claw="#3a7ad8", claw_tip="#f4e4d0", brass="#14285a")),
+                  "pink": dict(FUR="#f088a8", HAIR="#e8608a", MARK="#a83a5a", extra=dict(shell="#e8608a", claw="#f088a8", claw_tip="#f4e4d0", brass="#a83a5a")),
+                  "purple": dict(FUR="#8a4ac8", HAIR="#6a2aa8", MARK="#3a1a6a", extra=dict(shell="#6a2aa8", claw="#8a4ac8", claw_tip="#f4e4d0", brass="#3a1a6a")),
+                  "sand": dict(FUR="#d8c090", HAIR="#a8905a", MARK="#7a6034", extra=dict(shell="#a8905a", claw="#d8c090", claw_tip="#f4e4d0", brass="#7a6034"))}),
     # thirty-sixth wave: the mantis shrimp: every colour at once, and the hardest punch in the sea
     "mantis_shrimp_crustacean": dict(
         build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["armlets"], colors=dict(cloth2="#c83a4a")),

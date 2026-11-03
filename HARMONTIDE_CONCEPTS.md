@@ -614,6 +614,22 @@ sandstone since 2026-10-29), so 87 in all.
 Homage props (POP_CULTURE_VARIANTS.md): the dullahan's headless rider (Celty) has her yellow cat-eared helmet over the head she
 carries, the death envoy (Lala) a scythe in her free hand; both are drawn only on their own looks.
 
+## Thirty-eighth wave (2026-11-03, in the game)
+
+| Species | Home | Design |
+|---|---|---|
+| **Beaver** | Rodent | Chews logs lying near her friend into planks (always oak). |
+| **Starfish** | Crustacean | Her badly hurt friend regenerates. |
+| **Anemone** | Mollusk | Luck for her friend in the water. |
+| **Sunflower** | Flora | By day, keeps her friend fed. |
+| **Scarecrow** | Construct | Monsters near her lose their targets. |
+| **Snowgirl** | Construct | Pelts monsters near her friend; hurts blazes. Snow golems are her kin. |
+| **Book Spirit** | Devil | Experience for her friend near a bookshelf. |
+| **Tardigrade** | Bug | Once a day, nearly dead, she comes back whole. |
+| **Sandman** | Undead | At night monsters near her friend go drowsy and blind. |
+
+**Anniversaries** (`Missing.anniversary`): every 30 in-game days since a girl became a close friend (25+), three presents and a line in chat the next time they meet.
+
 ## Thirty-seventh wave (2026-11-03, in the game)
 
 | Species | Home | Design |

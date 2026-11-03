@@ -21,6 +21,8 @@ public final class Missing {
     private static final String SEEN = "MissingSeen";
     private static final String BACK = "MissingBack";
     private static final String STAGE = "MissingStage";
+    private static final String MET = "MissingMet", KEPT = "MissingKept";
+    public static final int MONTH = 30;
 
     private Missing() {
     }
@@ -59,7 +61,25 @@ public final class Missing {
             if (stage > 0) reunite(level, mob, player, stage, days);
         }
         seen.putLong(id, now);
+        anniversary(level, mob, player, id, now / DAY);
         if (activeStage(mob, player) > 0 && mob.getRandom().nextInt(4) == 0) tears(level, mob);
+    }
+
+    /** Every month of days since they became close friends: three presents and a line in chat. Returns whether it was today. */
+    public static boolean anniversary(ServerLevel level, Mob mob, Player player, String id, long day) {
+        CompoundTag met = tag(mob, MET);
+        if (!met.contains(id)) {
+            met.putLong(id, day);
+            return false;
+        }
+        long days = day - met.getLong(id);
+        CompoundTag kept = tag(mob, KEPT);
+        if (days <= 0 || days % MONTH != 0 || kept.getLong(id) == day) return false;
+        kept.putLong(id, day);
+        if (mob instanceof GiftGiver giver) for (int i = 0; i < 3; i++) mob.spawnAtLocation(giver.rollGift(player));
+        level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getY() + mob.getBbHeight(), mob.getZ(), 10, 0.5, 0.3, 0.5, 0.0);
+        player.displayClientMessage(Component.translatable("message.monstergirls.anniversary", mob.getDisplayName(), days), false);
+        return true;
     }
 
     private static void reunite(ServerLevel level, Mob mob, Player player, int stage, long days) {

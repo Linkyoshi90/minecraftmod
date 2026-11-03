@@ -198,9 +198,18 @@ public class Crustacean extends AbstractMonsterGirl {
         return 1;
     }
 
+    /** The starfish: her friend near her, badly hurt, gets Regeneration II. True if they did. */
+    public boolean regrowth() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null || friend.getHealth() > friend.getMaxHealth() / 2) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.REGENERATION, 80, 1, true, true));
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.STARFISH_CRUSTACEAN && !this.level().isClientSide && !this.isBaby() && this.tickCount % 41 == 0) this.regrowth();
         if (this.species == GirlSpecies.MANTIS_SHRIMP_CRUSTACEAN && this.level() instanceof net.minecraft.server.level.ServerLevel reefs && !this.isBaby() && this.tickCount % 81 == 0) this.punch(reefs);
         if (this.species == GirlSpecies.LOBSTER_CRUSTACEAN && !this.level().isClientSide && !this.isBaby() && this.tickCount % 21 == 0) this.moult(this.level().getDayTime() / 24000L);
         if (this.species == GirlSpecies.SPIDER_CRAB_CRUSTACEAN && this.level() instanceof net.minecraft.server.level.ServerLevel clawed && !this.isBaby() && this.tickCount % 60 == 0) this.pin(clawed);

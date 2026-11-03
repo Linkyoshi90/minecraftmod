@@ -19,6 +19,13 @@ from girl_lib import H, cube, pick, skin, CLEAR  # noqa: E402
 STAFF_TILT = -82
 
 SPECIES = {
+    # thirty-eighth wave: the beaver: stocky, a flat tail, big front teeth and a plan for that river
+    "beaver_rodent": dict(
+        build="strong", outfit=dict(top=["sports"], bottom="shorts", extras=["belt", "pouch"], colors=dict(leather="#5a3a22")),
+        hair="bob", bangs="blunt", ears="round", legs="fur", foot="paw", tail=[(3.5, 1, 4), (4, 1, 4), (3, 1, 3)], tail_rest=[(-15, 0, 0), (4, 0, 0), (4, 0, 0)], tail_look="scale",
+        pal=dict(SKIN=skin("tan"), HAIR="#4a2e1a", FUR="#7a5230", LIGHT="#c8a078", MARK="#3a2212", EYE="#1e140e", CLOTH="#3a6a7a", TRIM="#c8a078",
+                 pattern="solid"),
+        variants={"dark": dict(FUR="#4a3220", HAIR="#2a1a10"), "red": dict(FUR="#a85a2a", HAIR="#6a3414"), "pale": dict(FUR="#b89a70", HAIR="#7a6040"), "grey": dict(FUR="#7a726a", HAIR="#4a443e")}),
     # thirty-seventh wave: the raccoon: a bandit's mask, ringed tail, clever hands
     "raccoon_rodent": dict(
         build="slim", outfit=dict(top=["bandeau", "vest"], bottom="shorts", extras=["satchel"], colors=dict(leather="#4a3a2a")),

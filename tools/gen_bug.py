@@ -24,6 +24,14 @@ LARVA_SEGS = [("seg_1", 4, 6.5, 3.5), ("seg_2", 4.25, 3.5, 3.5), ("seg_3", 4, 3.
               ("seg_5", 3.5, 2.75, 3), ("seg_6", 3, 2.5, 3), ("seg_7", 2.5, 2.25, 2.5), ("seg_8", 2, 2, 2)]
 
 SPECIES = {
+    # thirty-eighth wave: the tardigrade: a round, wrinkled, eight-legged water bear of a girl who cannot be stopped
+    "tardigrade_bug": dict(
+        build="curvy", outfit=dict(top=["sweater"], bottom="shorts", colors=dict(cloth2="#a89a8a")), hair="bob", bangs="blunt",
+        ears="antenna", legs="stockings", foot="shoe", gaster=True,
+        pal=dict(SKIN=skin("fair"), HAIR="#a89a8a", FUR="#c8bcac", LIGHT="#ece4d8", MARK="#8a7a6a", EYE="#2a2a30", CLOTH="#c8bcac", TRIM="#8a7a6a",
+                 extra=dict(antenna="#8a7a6a", stocking="#a89a8a", boot="#7a6a5a")),
+        variants={"pink": dict(HAIR="#e8b8c0", FUR="#f0d0d8", MARK="#c88a98", extra=dict(antenna="#c88a98", stocking="#e8b8c0", boot="#c88a98")), "blue": dict(HAIR="#a8c8e0", FUR="#c8e0f0", MARK="#7a9ac0", extra=dict(antenna="#7a9ac0", stocking="#a8c8e0", boot="#7a9ac0")),
+                  "green": dict(HAIR="#a8c8a0", FUR="#c8e0c0", MARK="#7a9a70", extra=dict(antenna="#7a9a70", stocking="#a8c8a0", boot="#7a9a70")), "gold": dict(HAIR="#d8b860", FUR="#e8d090", MARK="#a88a3a", extra=dict(antenna="#a88a3a", stocking="#d8b860", boot="#a88a3a"))}),
     # thirty-seventh wave: the antlion: sand-brown, wide jaws of a grin, and she has dug somewhere you are about to walk
     "antlion_bug": dict(
         build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["belt"], colors=dict(cloth2="#6a5030", leather="#6a5030")), hair="shaggy", bangs="messy",

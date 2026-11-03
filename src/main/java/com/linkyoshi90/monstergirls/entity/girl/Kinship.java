@@ -106,6 +106,7 @@ public final class Kinship {
         return switch (s) {
             case OCELOT_NEKOMATA, BLACK_PANTHER_NEKOMATA -> Set.of(EntityType.OCELOT);
             case SELKIE_MERMAID, NARWHAL_MERMAID -> Set.of(EntityType.DOLPHIN);
+            case SNOWGIRL_CONSTRUCT -> Set.of(EntityType.SNOW_GOLEM);
             case ECHIDNA_LAMIA -> Set.of(EntityType.CREEPER);
             case DONKEY_CENTAUR -> Set.of(EntityType.DONKEY, EntityType.MULE);
             case CAVE_SPIDER_ARACHNE -> Set.of(EntityType.CAVE_SPIDER);

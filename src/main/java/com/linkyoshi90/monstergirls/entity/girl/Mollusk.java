@@ -383,9 +383,18 @@ public class Mollusk extends AbstractMonsterGirl {
         return super.familyInteract(player, hand, stack);
     }
 
+    /** The anemone: her friend in the water near her has Luck. True while they do. */
+    public boolean host() {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 12);
+        if (friend == null || !friend.isInWater()) return false;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.LUCK, 200, 0, true, true));
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.ANEMONE_MOLLUSK && !this.level().isClientSide && !this.isBaby() && this.tickCount % 41 == 0) this.host();
         if (!this.level().isClientSide && !this.isBaby()) {
             if (this.species == GirlSpecies.NAUTILUS_MOLLUSK && this.tickCount % 5 == 0) this.jet();
             if (this.species == GirlSpecies.SEA_SLUG_MOLLUSK && this.tickCount % 40 == 0) this.shareSting(this.level().getGameTime());

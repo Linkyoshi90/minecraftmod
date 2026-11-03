@@ -573,9 +573,23 @@ public class Devil extends AbstractMonsterGirl {
         return 0;
     }
 
+    /** The book spirit, with a bookshelf within 5: her friend learns something. True if they did. */
+    public boolean study(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 8);
+        if (friend == null) return false;
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(this.blockPosition().offset(-5, -1, -5), this.blockPosition().offset(5, 2, 5))) {
+            if (level.getBlockState(p).is(net.minecraft.world.level.block.Blocks.BOOKSHELF)) {
+                friend.giveExperiencePoints(10);
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.BOOK_SPIRIT_DEVIL && this.level() instanceof net.minecraft.server.level.ServerLevel shelves && !this.isBaby() && this.tickCount % 2401 == 0) this.study(shelves);
         if (this.species == GirlSpecies.TROLL_DEVIL && this.level() instanceof net.minecraft.server.level.ServerLevel stone) {
             if (this.isStone()) {
                 this.getNavigation().stop();

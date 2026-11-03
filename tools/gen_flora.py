@@ -22,6 +22,13 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-eighth wave: the sunflower: tall, gold-petalled, her face always turned to the sun
+    "sunflower_flora": dict(
+        build="athletic", outfit=dict(top=["bandeau"], extras=["pearls"]), hair="bob", bangs="blunt", ears=None, lower="none", plant="flower",
+        pal=dict(SKIN="#f0dcb8", HAIR="#e8b82a", FUR="#e8b82a", LIGHT="#f8e890", MARK="#5a3a1a", EYE="#5a3a1a", CLOTH="#e8b82a", TRIM="#4a8a3a",
+                 extra=dict(petal="#f0c02a", petal_in="#5a3a1a", leaf="#4a8a3a")),
+        variants={"red": dict(HAIR="#c8482a", CLOTH="#c8482a", extra=dict(petal="#c8482a", petal_in="#3a2010", leaf="#4a8a3a")), "white": dict(HAIR="#f4ecd8", CLOTH="#f4ecd8", extra=dict(petal="#f4ecd8", petal_in="#7a5a2a", leaf="#4a8a3a")),
+                  "dwarf": dict(HAIR="#f0a02a", CLOTH="#f0a02a", extra=dict(petal="#f0a02a", petal_in="#3a2010", leaf="#3a7a3a")), "night": dict(HAIR="#5a4a8a", CLOTH="#5a4a8a", extra=dict(petal="#6a5aa8", petal_in="#e8c040", leaf="#2a5a4a"))}),
     # thirty-third wave: the lotus: pale pink, rising from a wide bloom, calm as still water
     "lotus_flora": dict(
         build="slim", outfit=dict(top=["kimono"], extras=["pearls"], colors=dict(kimono="#f8e0e8", kimono_trim="#e88aa8", obi="#7ab85a")), hair="odango", bangs="parted", ears=None, lower="none", plant="flower",

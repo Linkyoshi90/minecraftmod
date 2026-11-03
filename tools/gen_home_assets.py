@@ -248,7 +248,7 @@ M.add_lang({
     "block.monstergirls.picnic_blanket": "Picnic Blanket", "block.monstergirls.vanity_mirror": "Vanity Mirror", "block.monstergirls.cooking_pot": "Cooking Pot",
     "block.monstergirls.soaking_tub": "Soaking Tub", "block.monstergirls.sparring_post": "Sparring Post",
     "item.monstergirls.grooming_brush": "Grooming Brush", "item.monstergirls.toy_ball": "Toy Ball", "item.monstergirls.friend_whistle": "Friend Whistle",
-    "item.monstergirls.homemade_meal": "Home-Cooked Meal", "block.monstergirls.gift_box": "Gift Box", "item.monstergirls.friend_compass": "Friend Compass",
+    "item.monstergirls.homemade_meal": "Home-Cooked Meal", "message.monstergirls.anniversary": "%s remembers: %s days since you became close", "block.monstergirls.gift_box": "Gift Box", "item.monstergirls.friend_compass": "Friend Compass",
     "message.monstergirls.compass": "%s: %s blocks %s", "message.monstergirls.compass_none": "No friends nearby in the loaded world",
     "direction.monstergirls.north": "north", "direction.monstergirls.northeast": "northeast", "direction.monstergirls.east": "east", "direction.monstergirls.southeast": "southeast",
     "direction.monstergirls.south": "south", "direction.monstergirls.southwest": "southwest", "direction.monstergirls.west": "west", "direction.monstergirls.northwest": "northwest", "block.monstergirls.bedroll": "Bedroll", "block.monstergirls.figurine": "Figurine", "item.monstergirls.sketchbook": "Sketchbook",

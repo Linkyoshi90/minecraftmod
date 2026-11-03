@@ -17,6 +17,13 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-eighth wave: the Sandman: a tall drowsy woman in midnight blue, sand always running from her sleeves
+    "sandman_undead": dict(
+        build="slim", outfit=dict(top=["sweater", "capelet"], bottom="wrap_skirt", extras=["satchel"], colors=dict(cloth2="#1e2a5a", leather="#c8a860")),
+        lower="none", hair="flowing", bangs="wispy", ears=None, wisp=True,
+        pal=dict(SKIN="#e0dcd0", HAIR="#c8b070", FUR="#e0dcd0", LIGHT="#f8f0d8", MARK="#a89860", EYE="#3a4a8a", CLOTH="#1e2a5a", TRIM="#c8a860",
+                 extra=dict(flame="#e8d8a0")),
+        variants={"dusk": dict(CLOTH="#4a2a5a"), "pale": dict(CLOTH="#a8b0c8", HAIR="#e8e0c8"), "night": dict(CLOTH="#0e1428", HAIR="#7a6a4a"), "rose": dict(CLOTH="#7a3a4a", HAIR="#d8a890")}),
     # thirty-seventh wave: the poltergeist: a floating, see-through tantrum in an old nightdress
     "poltergeist_undead": dict(
         build="slim", outfit=dict(top=["sweater"], bottom="wrap_skirt", colors=dict(cloth2="#a8a8c8")),

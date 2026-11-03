@@ -726,9 +726,24 @@ public class Undead extends AbstractMonsterGirl {
         return 0;
     }
 
+    /** The Sandman at night: monsters within 12 of her friend are blinded and slowed. How many, or -1 without a friend. */
+    public int sleepingSand(net.minecraft.server.level.ServerLevel level, boolean night) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        if (!night) return 0;
+        int drowsy = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(12), net.minecraft.world.entity.monster.Monster::isAlive)) {
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 100, 3));
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.BLINDNESS, 100, 0));
+            drowsy++;
+        }
+        return drowsy;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.SANDMAN_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel dreams && !this.isBaby() && this.tickCount % 81 == 0) this.sleepingSand(dreams, dreams.isNight());
         if (this.species == GirlSpecies.POLTERGEIST_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel attic && !this.isBaby() && this.tickCount % 61 == 0) this.throwThings(attic);
         if (this.species == GirlSpecies.SKELETON_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel counted && !this.isBaby() && this.tickCount % 41 == 0) this.gatherArrows(counted);
         if (this.species == GirlSpecies.DROWNED_UNDEAD && this.level() instanceof net.minecraft.server.level.ServerLevel && !this.isBaby() && this.tickCount % 20 == 0) this.deepBreath();

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_beaver_rodent",
+  "spawners": {
+    "type": "monstergirls:beaver_rodent",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

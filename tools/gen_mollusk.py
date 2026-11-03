@@ -24,6 +24,16 @@ import girl_parts as P  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-eighth wave: the sea anemone: a skirt of waving tentacles, bright as a garden, and a clownfish's best friend
+    "anemone_mollusk": dict(
+        build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["pearls"], colors=dict(cloth2="#e8604a")),
+        hair="wavy", bangs="wispy", ears=None, legs="stockings", foot="shoe", body="jelly",
+        pal=dict(SKIN=skin("#f4dcd8"), HAIR="#e8604a", FUR="#f08a6a", LIGHT="#f8e0c0", MARK="#a83a2a", EYE="#2a4a6a", CLOTH="#e8604a", TRIM="#f8f4ec",
+                 INNER="#f0d0c0", extra=dict(stocking="#f08a6a", boot="#a83a2a")),
+        variants={"green": dict(HAIR="#3ab88a", FUR="#6ad8a8", MARK="#1e7a5a", CLOTH="#3ab88a", extra=dict(stocking="#6ad8a8", boot="#1e7a5a")),
+                  "purple": dict(HAIR="#a85ad8", FUR="#c88af0", MARK="#6a2aa8", CLOTH="#a85ad8", extra=dict(stocking="#c88af0", boot="#6a2aa8")),
+                  "pink": dict(HAIR="#f088c0", FUR="#f8b0d8", MARK="#c84a8a", CLOTH="#f088c0", extra=dict(stocking="#f8b0d8", boot="#c84a8a")),
+                  "white": dict(HAIR="#f0ece4", FUR="#f8f4ec", MARK="#c8b8a8", CLOTH="#f0ece4", extra=dict(stocking="#f8f4ec", boot="#c8b8a8"))}),
     # thirty-third wave: the nautilus: the ammonite's cousin who survived: a striped shell, many short arms, keeps to the deep
     "nautilus_mollusk": dict(
         build="slim", outfit=dict(top=["shells"], extras=["pearls"]),

@@ -16,6 +16,20 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # thirty-eighth wave: the scarecrow: burlap, straw at the cuffs, a stitched smile, and she takes the job seriously
+    "scarecrow_construct": dict(
+        build="slim", outfit=dict(top=["bandeau", "vest"], bottom="shorts", extras=["belt", "scarf"], colors=dict(leather="#5a3a22", scarf="#a83a2a")),
+        hair="shaggy", bangs="messy", ears=None, legs="bare", foot="shoe",
+        pal=dict(SKIN=skin("#d8c8a0"), HAIR="#d8b860", FUR="#d8c8a0", LIGHT="#f0e4c0", MARK="#5a4a30", EYE="#2a1e14", CLOTH="#7a6a4a", TRIM="#d8b860",
+                 pattern="solid", extra=dict(boot="#5a3a22", key="#d8b860")),
+        variants={"plaid": dict(CLOTH="#a83a2a", TRIM="#2a2a30"), "autumn": dict(CLOTH="#c8703a", HAIR="#a8682a"), "dark": dict(SKIN=skin("#a89878"), CLOTH="#3a3a40"), "pumpkin": dict(SKIN=skin("#e8a050"), CLOTH="#3a5a2a")}),
+    # thirty-eighth wave: the snowgirl: a snow golem who woke up pleased with herself: round and white with a carrot-coloured scarf
+    "snowgirl_construct": dict(
+        build="curvy", outfit=dict(top=["sweater"], bottom="wrap_skirt", extras=["scarf"], colors=dict(cloth2="#e8e8f0", scarf="#e8802a")),
+        hair="bob", bangs="blunt", ears=None, legs="bare", foot="shoe",
+        pal=dict(SKIN=skin("#eef4fa"), HAIR="#d8e8f4", FUR="#eef4fa", LIGHT="#ffffff", MARK="#a8c0d8", EYE="#2a2a30", CLOTH="#d8e8f4", TRIM="#e8802a",
+                 pattern="solid", extra=dict(boot="#a8c0d8", key="#e8802a")),
+        variants={"blue": dict(HAIR="#a8d0f0", CLOTH="#a8d0f0"), "pink": dict(HAIR="#f0c8d8", CLOTH="#f0c8d8"), "dirty": dict(SKIN=skin("#c8c8c0"), HAIR="#a8a8a0", CLOTH="#a8a8a0"), "ice": dict(HAIR="#7ac0e8", CLOTH="#7ac0e8", TRIM="#2a6ac8")}),
     # twenty-third wave: the automaton, a pale-blue clockwork girl in armour plates: a round helmet with a disc over each ear,
     # rivets down every plate
     "automaton_construct": dict(

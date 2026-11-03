@@ -499,9 +499,19 @@ public class Bug extends AbstractMonsterGirl {
         return sunk;
     }
 
+    /** The tardigrade, nearly dead, curls into a tun once a day: all but untouchable, and she mends. True if she did. */
+    public boolean tun(long day) {
+        if (this.getHealth() > 4 || this.getPersistentData().getLong("TunDay") == day + 1) return false;
+        this.getPersistentData().putLong("TunDay", day + 1);
+        this.setHealth(this.getMaxHealth());
+        this.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DAMAGE_RESISTANCE, 100, 4));
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.TARDIGRADE_BUG && !this.level().isClientSide && !this.isBaby()) this.tun(this.level().getDayTime() / 24000L);
         if (this.species == GirlSpecies.ANTLION_BUG && this.level() instanceof net.minecraft.server.level.ServerLevel dunes && !this.isBaby() && this.tickCount % 61 == 0) this.pit(dunes);
         if (this.species == GirlSpecies.CICADA_BUG && !this.level().isClientSide && !this.isBaby() && this.tickCount % 3001 == 0) this.chorus();
         if (this.level() instanceof net.minecraft.server.level.ServerLevel meadow && !this.isBaby()) {

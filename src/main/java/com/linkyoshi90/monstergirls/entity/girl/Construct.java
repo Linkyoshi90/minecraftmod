@@ -201,9 +201,38 @@ public class Construct extends AbstractMonsterGirl {
         return super.hurt(source, amount);
     }
 
+    /** The scarecrow: monsters within 8 of her lose their targets and are slowed. How many, or -1 without a friend. */
+    public int onWatch(net.minecraft.server.level.ServerLevel level) {
+        if (this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 32) == null) return -1;
+        int scared = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, this.getBoundingBox().inflate(8), net.minecraft.world.entity.monster.Monster::isAlive)) {
+            m.setTarget(null);
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 60, 2));
+            scared++;
+        }
+        return scared;
+    }
+
+    /** The snowgirl pelts the monster nearest her friend: 1, or 5 to a blaze. 1 on a hit, 0 with none, -1 without a friend. */
+    public int snowball(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(10), net.minecraft.world.entity.monster.Monster::isAlive)) {
+            m.hurt(this.damageSources().mobAttack(this), m instanceof net.minecraft.world.entity.monster.Blaze ? 5 : 1);
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 40, 1));
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.ITEM_SNOWBALL, m.getX(), m.getY() + 1, m.getZ(), 6, 0.3, 0.3, 0.3, 0.1);
+            return 1;
+        }
+        return 0;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.level() instanceof net.minecraft.server.level.ServerLevel yard && !this.isBaby()) {
+            if (this.species == GirlSpecies.SCARECROW_CONSTRUCT && this.tickCount % 41 == 0) this.onWatch(yard);
+            if (this.species == GirlSpecies.SNOWGIRL_CONSTRUCT && this.tickCount % 41 == 0) this.snowball(yard);
+        }
         if (this.species == GirlSpecies.AUTOMATON_CONSTRUCT && this.level() instanceof net.minecraft.server.level.ServerLevel works && !this.isBaby() && this.tickCount % 40 == 0)
             this.lamplighter(works, p -> works.getMaxLocalRawBrightness(p) < 8);
         if (this.species == GirlSpecies.TIN_JACK_CONSTRUCT && this.level() instanceof ServerLevel field && !this.isBaby() && this.tickCount % 20 == 0) this.scarePhantoms(field);

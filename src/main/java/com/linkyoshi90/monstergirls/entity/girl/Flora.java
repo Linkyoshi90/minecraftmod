@@ -310,9 +310,18 @@ public class Flora extends AbstractMonsterGirl {
         return true;
     }
 
+    /** The sunflower: by day her friend near her gets a little food. True if she fed them. */
+    public boolean solar(boolean day) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 10);
+        if (friend == null || !day || friend.getFoodData().getFoodLevel() >= 20) return false;
+        friend.getFoodData().eat(1, 0.2F);
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.SUNFLOWER_FLORA && !this.level().isClientSide && !this.isBaby() && this.tickCount % 201 == 0) this.solar(this.level().isDay());
         if (this.species == GirlSpecies.LOTUS_FLORA && !this.level().isClientSide && !this.isBaby() && this.tickCount % 41 == 0 && this.level().getDayTime() % 24000L < 1000L) this.dawnBloom(this.level().getDayTime() / 24000L);
         if (this.species == GirlSpecies.ROSE_FLORA && !this.level().isClientSide && !this.isBaby() && this.tickCount % 11 == 0) this.thorns();
         if (this.species == GirlSpecies.DRYAD_FLORA && this.level() instanceof ServerLevel grove && !this.isBaby() && this.tickCount % 600 == 0) this.nurture(grove);

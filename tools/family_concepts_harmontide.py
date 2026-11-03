@@ -3769,6 +3769,44 @@ for _fid, _entries in THIRTY_SEVENTH.items():
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
 
+THIRTY_EIGHTH = {
+    "rodent": [_c("beaver_rodent", "Beaver", "Rivers", "Busy · stubborn", 1.6, ['river', 'taiga', 'forest'], "Busy",
+                  "A flat tail, big front teeth and firm views about that stream.", "Sticks and sweet berries.",
+                  ("Lumberjack", "Befriended, she chews the logs lying near her friend into planks."), "Low.", ["Brown", "Dark", "Red", "Pale", "Grey"], "Chews logs into planks")],
+    "crustacean": [_c("starfish_crustacean", "Starfish", "Warm shallows", "Slow · unkillable-ish", 1.55, ['warm_ocean', 'beach'], "Slow",
+                      "Whatever you take off her grows back, and she will remember.", "Cod and kelp.",
+                      ("Regrowth", "Befriended, when her friend near her is badly hurt they grow back too."), "Low.", ["Orange", "Blue", "Pink", "Purple", "Sand"], "Regrowth for her friend")],
+    "mollusk": [_c("anemone_mollusk", "Anemone", "Warm reefs", "Waving · stinging", 1.6, ['warm_ocean', 'lukewarm_ocean'], "Waving",
+                   "A garden with opinions. Clownfish like her. Nobody else should touch.", "Cod and kelp.",
+                   ("Host", "Befriended, her friend in the water near her has the Luck of the reef, and fish gather."), "Low.", ["Coral", "Green", "Purple", "Pink", "White"], "Luck in the water")],
+    "flora": [_c("sunflower_flora", "Sunflower", "Fields", "Bright · loyal", 2.0, ['sunflower_plains', 'plains'], "Bright",
+                 "She faces the sun all day, and at night she faces you.", "Bone meal and sweet berries.",
+                 ("Solar", "Befriended, by day her friend near her is kept fed."), "Low.", ["Gold", "Red", "White", "Dwarf", "Night"], "Keeps her friend fed by day")],
+    "construct": [_c("scarecrow_construct", "Scarecrow", "Farmland", "Stitched · dutiful", 1.8, ['plains', 'sunflower_plains'], "Dutiful",
+                     "Burlap and straw and an unshakeable sense of duty to the turnips.", "Wheat.",
+                     ("On Watch", "Befriended, monsters near her are scared off, and they forget what they came for."), "Low.", ["Burlap", "Plaid", "Autumn", "Dark", "Pumpkin"], "Scares off monsters"),
+                  _c("snowgirl_construct", "Snowgirl", "Snowfields", "Round · cheerful", 1.6, ['snowy_plains', 'snowy_taiga', 'ice_spikes'], "Cheerful",
+                     "A snow golem who woke up pleased with herself, carrot-orange scarf and all.", "Snowballs and carrots.",
+                     ("Snowballs", "Befriended, she pelts the monsters near her friend with snow; blazes really mind."), "Low.", ["White", "Blue", "Pink", "Dirty", "Ice"], "Pelts monsters with snow")],
+    "devil": [_c("book_spirit_devil", "Book Spirit", "Old libraries", "Dusty · well-read", 1.6, ['old_growth_birch_forest', 'dark_forest'], "Well-read",
+                 "A tsukumogami: an old book who has woken up after a hundred years and has notes.", "Paper and cake.",
+                 ("Study", "Befriended, near a bookshelf her friend learns from her: experience every few minutes."), "Low.", ["Parchment", "Blue", "Green", "Gold", "Old"], "Experience near bookshelves")],
+    "bug": [_c("tardigrade_bug", "Tardigrade", "Everywhere damp", "Round · unstoppable", 1.45, ['swamp', 'lush_caves', 'river'], "Unstoppable",
+               "She has survived space, and you.", "Sugar and moss.",
+               ("Tun", "Once a day, nearly dead, she curls up and comes back."), "Low.", ["Grey", "Pink", "Blue", "Green", "Gold"], "Survives a killing blow")],
+    "undead": [_c("sandman_undead", "Sandman", "Night plains", "Drowsy · gentle", 1.9, ['desert', 'plains', 'meadow'], "Drowsy",
+                  "A tall drowsy woman in midnight blue, sand always running from her sleeves.", "Pumpkin pie and milk.",
+                  ("Sleeping Sand", "Befriended, at night the monsters near her friend grow drowsy and blind."), "Low.", ["Midnight", "Dusk", "Pale", "Night", "Rose"], "Monsters grow drowsy at night")],
+}
+for _fid, _entries in THIRTY_EIGHTH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(s["id"] == _species["id"] for s in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 # homage variants of 2026-10-28 (POP_CULTURE_VARIANTS.md): appended after every wave, so every species exists by now
 for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, a black bodysuit with a pink heart, white gloves and boots")),
                        ("ika_mollusk", ("ink_kid", "Ink Kid", "Bright orange tentacle hair, a white tee and black shorts")),

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_tardigrade_bug",
+  "spawners": {
+    "type": "monstergirls:tardigrade_bug",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

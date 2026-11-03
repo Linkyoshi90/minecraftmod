@@ -536,9 +536,24 @@ public class Rodent extends AbstractMonsterGirl {
         return true;
     }
 
+    /** The beaver chews the logs lying within 6 of her friend into planks. How many, or -1 without a friend. */
+    public int chew(net.minecraft.server.level.ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.monstergirls.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int chewed = 0;
+        for (net.minecraft.world.entity.item.ItemEntity item : level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, friend.getBoundingBox().inflate(6), i -> i.isAlive() && i.getItem().is(net.minecraft.tags.ItemTags.LOGS))) {
+            int n = item.getItem().getCount();
+            item.discard();
+            this.spawnAtLocation(new ItemStack(net.minecraft.world.item.Items.OAK_PLANKS, n * 4));
+            chewed += n;
+        }
+        return chewed;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.species == GirlSpecies.BEAVER_RODENT && this.level() instanceof net.minecraft.server.level.ServerLevel lodge && !this.isBaby() && this.tickCount % 41 == 0) this.chew(lodge);
         if (this.species == GirlSpecies.RACCOON_RODENT && !this.level().isClientSide && !this.isBaby() && this.tickCount % 4801 == 0) this.rummage();
         if (!this.level().isClientSide && !this.isBaby()) {
             if (this.species == GirlSpecies.LEMUR_RODENT && this.tickCount % 41 == 0 && this.level().getDayTime() % 24000L < 1500L) this.sunSalute(this.level().getDayTime() / 24000L);
