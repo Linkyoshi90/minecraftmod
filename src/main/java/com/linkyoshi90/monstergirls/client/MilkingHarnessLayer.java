@@ -43,6 +43,7 @@ public class MilkingHarnessLayer extends GeoRenderLayer<AbstractMonsterGirl> {
         if (!bone.getName().equals("body") || !girl.hasFlag(AbstractMonsterGirl.FLAG_HARNESSED) || girl.isBaby()) return;
         float base = bone.getPivotY();
         float[] fit = this.fits.computeIfAbsent(girl.getSpecies(), s -> fit(bone, base));
+        if (fit[0] <= 0.0F) return;                                     // no chest on this bone to strap it to
         float half = fit[0] + 0.15F, front = fit[1] - 0.15F, back = fit[2] + 0.15F;
         VertexConsumer v = buffers.getBuffer(TYPE);
         Boxes b = new Boxes(pose.last(), v, light, overlay);

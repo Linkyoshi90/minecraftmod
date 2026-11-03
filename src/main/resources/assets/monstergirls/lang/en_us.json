@@ -2544,5 +2544,13 @@
   "entity.monstergirls.snowgirl_construct": "Snowgirl",
   "item.monstergirls.snowgirl_construct_spawn_egg": "Snowgirl Spawn Egg",
   "journal.monstergirls.snowgirl_construct.home": "Snowfields",
-  "journal.monstergirls.snowgirl_construct.signature": "Snowballs: Befriended, she pelts the monsters near her friend with snow; blazes really mind."
+  "journal.monstergirls.snowgirl_construct.signature": "Snowballs: Befriended, she pelts the monsters near her friend with snow; blazes really mind.",
+  "journal.monstergirls.guide.scouting.title": "Scouting",
+  "journal.monstergirls.guide.scouting": "Hand a friend a Scout Pack (leather, string, a chest): half a day later she brings it back full from one of her home biomes. Closer friends bring more. Crouch as you hand it over and two more friends nearby go with her.",
+  "journal.monstergirls.guide.home.title": "Life at home",
+  "journal.monstergirls.guide.home": "Brush her, throw her a ball, cook in a pot over a fire, spread a picnic blanket, share a soaking tub, set up a sparring post, a mirror and a gift box. A whistle calls everyone; a friend compass finds them.",
+  "journal.monstergirls.guide.milking.title": "The milking machine",
+  "journal.monstergirls.guide.milking": "Put empty buckets in it. Friends who have milk, cows and anyone late in expecting, come to it by themselves. Hoppers can feed it buckets and take the milk away.",
+  "journal.monstergirls.guide.keepsakes.title": "Keepsakes",
+  "journal.monstergirls.guide.keepsakes": "A sketchbook draws a friend as a figurine for your shelf. A bedroll makes camp on the road. Every thirty days of close friendship she remembers, with presents."
 }

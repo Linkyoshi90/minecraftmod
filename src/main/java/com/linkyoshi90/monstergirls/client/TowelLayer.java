@@ -39,6 +39,7 @@ public class TowelLayer extends GeoRenderLayer<AbstractMonsterGirl> {
                 }
             }
         }
+        if (half <= 0.0F) return;                                        // no chest on this bone: nothing to wrap
         MilkingHarnessLayer.Boxes b = new MilkingHarnessLayer.Boxes(pose.last(), buffers.getBuffer(TYPE), light, overlay);
         b.box(-half - PAD, y0, front - PAD, half + PAD, y1, back + PAD, 0);
     }
