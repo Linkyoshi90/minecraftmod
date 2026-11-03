@@ -906,7 +906,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
 
     /** One wild one in 64 by default (never a hatchling: she takes her mother's) is painted. */
     protected void rollPaint(MobSpawnType spawnType) {
-        if (spawnType != MobSpawnType.BREEDING && !this.hasVariantFromData()
+        if (this.getPaint() == 0 && spawnType != MobSpawnType.BREEDING && !this.hasVariantFromData()
                 && com.linkyoshi90.monstergirls.MonsterGirlsConfig.rollsPaint(this.random)) {
             this.setPaint(Painted.roll(this.random));
         }

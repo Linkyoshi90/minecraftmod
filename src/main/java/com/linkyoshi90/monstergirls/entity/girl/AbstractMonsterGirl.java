@@ -420,7 +420,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData groupData) {
-        if (!this.variantFromData && spawnType != MobSpawnType.BREEDING && com.linkyoshi90.monstergirls.MonsterGirlsConfig.rollsPaint(this.random)) {
+        if (!this.variantFromData && this.getPaint() == 0 && spawnType != MobSpawnType.BREEDING && com.linkyoshi90.monstergirls.MonsterGirlsConfig.rollsPaint(this.random)) {   // a summoned paint stays
             this.setPaint(com.linkyoshi90.monstergirls.entity.Painted.roll(this.random));   // a painted one: rare, like a shiny
         }
         if (!this.variantFromData) {
