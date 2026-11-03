@@ -237,7 +237,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         builder.define(DATA_VARIANT, (byte) 0);
         builder.define(DATA_BELLY, (byte) 0);
         builder.define(DATA_MOONSTRUCK, false);
-        builder.define(DATA_PAINT, (byte) 0);
+        builder.define(DATA_PAINT, 0);
     }
 
     // --- colour variant -------------------------------------------------------------------------------------------
@@ -810,8 +810,8 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
 
     // --- Harmontide paints (as for the girls, see AbstractMonsterGirl.PAINTS) --------------------------------------
 
-    private static final net.minecraft.network.syncher.EntityDataAccessor<Byte> DATA_PAINT =
-            net.minecraft.network.syncher.SynchedEntityData.defineId(AbstractAnuran.class, net.minecraft.network.syncher.EntityDataSerializers.BYTE);
+    private static final net.minecraft.network.syncher.EntityDataAccessor<Integer> DATA_PAINT =
+            net.minecraft.network.syncher.SynchedEntityData.defineId(AbstractAnuran.class, net.minecraft.network.syncher.EntityDataSerializers.INT);
 
     /** 0 unpainted, else 1 + an index into AbstractMonsterGirl.PAINTS. */
     public int getPaint() {
@@ -819,7 +819,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     }
 
     public void setPaint(int paint) {
-        this.entityData.set(DATA_PAINT, (byte) (paint < 0 || paint > com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.PAINTS.size() ? 0 : paint));
+        this.entityData.set(DATA_PAINT, (paint < 0 || paint > com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.PAINTS.size() ? 0 : paint));
     }
 
     /** Copper paint stops weathering once waxed (Painted). */

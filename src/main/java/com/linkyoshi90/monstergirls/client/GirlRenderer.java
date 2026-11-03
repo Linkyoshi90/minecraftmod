@@ -53,7 +53,7 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         if (species == GirlSpecies.SHEEP_MINOTAUR || species == GirlSpecies.RHIWOOL_MINOTAUR) this.addRenderLayer(new DyedWoolLayer(this));
         this.addRenderLayer(new BlushLayer(this));
         this.addRenderLayer(new TowelLayer(this));
-        if (species.family() == GirlSpecies.Family.MINOTAUR) this.addRenderLayer(new MilkingHarnessLayer(this));
+        this.addRenderLayer(new MilkingHarnessLayer(this));
         this.addRenderLayer(new MoonEyesLayer<>(this));
         this.addRenderLayer(new HeldItemLayer(this));
         this.addRenderLayer(new PaintGlowLayer<>(this, AbstractMonsterGirl::getPaintName));
@@ -307,7 +307,18 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
     public void scaleModelForRender(float widthScale, float heightScale, PoseStack poseStack, AbstractMonsterGirl girl, BakedGeoModel model,
                                     boolean isReRender, float partialTick, int packedLight, int packedOverlay) {
         float s = this.species.renderScale() * girl.sizeScale();
+        this.drawnScale = widthScale * s;
         super.scaleModelForRender(widthScale * s, heightScale * s, poseStack, girl, model, isReRender, partialTick, packedLight, packedOverlay);
+    }
+
+    private float drawnScale = 1.0F;
+
+    /** A mount's middle is where her rider sits, so she turns about them, not swinging them round her waist. */
+    @Override
+    protected void applyRotations(AbstractMonsterGirl girl, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTick, float nativeScale) {
+        super.applyRotations(girl, poseStack, ageInTicks, rotationYaw, partialTick, nativeScale);
+        double back = girl.seatBack();
+        if (back != 0.0 && this.drawnScale > 0.0F) poseStack.translate(0.0, 0.0, -back / this.drawnScale);
     }
 
     @Override

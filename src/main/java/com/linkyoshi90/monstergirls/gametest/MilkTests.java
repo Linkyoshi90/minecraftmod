@@ -299,4 +299,27 @@ public class MilkTests {
         HarpyTestUtil.remove(player);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 80, batch = "anyoneWearsTheHarness")
+    public static void anyoneWearsTheHarness(GameTestHelper helper) {
+        boolean[] found = options(true);
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
+        MilkingMachineBlockEntity m = machine(helper, player);
+        AbstractMonsterGirl girl = beside(helper, GirlSpecies.CYCLOPS_DEVIL, player);
+        girl.getGestation().conceive();
+        helper.runAfterDelay(45, () -> {
+            check(girl.hasFlag(AbstractMonsterGirl.FLAG_HARNESSED) && girl.hasFlag(AbstractMonsterGirl.FLAG_BLUSHING), "in the harness, blushing");
+            restore(found);
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "mountsTurnAboutTheirRider")
+    public static void mountsTurnAboutTheirRider(GameTestHelper helper) {
+        AbstractMonsterGirl horse = spawn(helper, GirlSpecies.HORSE_CENTAUR, new BlockPos(2, 2, 2));
+        check(horse.seatBack() > 0, "drawn forward");
+        AbstractMonsterGirl wolf = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(3, 2, 2));
+        check(wolf.seatBack() == 0, "nobody rides her");
+        helper.succeed();
+    }
 }

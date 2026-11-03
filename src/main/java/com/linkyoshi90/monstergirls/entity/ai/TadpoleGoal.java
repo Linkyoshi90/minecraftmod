@@ -36,6 +36,12 @@ public class TadpoleGoal extends Goal {
         return this.mob.isTadpole();
     }
 
+    /** Otherwise tick() runs every other tick, and the stranded count and the wriggle below lag behind. */
+    @Override
+    public boolean requiresUpdateEveryTick() {
+        return true;
+    }
+
     @Override
     public void tick() {
         if (!this.mob.isInWater() && this.unstick()) return;
@@ -66,6 +72,10 @@ public class TadpoleGoal extends Goal {
         this.mob.getNavigation().stop();
         this.mob.getMoveControl().setWantedPosition(water.getX() + 0.5, water.getY(), water.getZ() + 0.5, 1.0);
         if (this.mob.onGround() && this.mob.getRandom().nextInt(10) == 0) this.mob.getJumpControl().jump();
+        if (this.mob.onGround() && this.stillTicks % 10 == 0) {          // and if even that stalls, a flop straight at it
+            Vec3 to = Vec3.atBottomCenterOf(water).subtract(this.mob.position()).multiply(1, 0, 1).normalize().scale(0.25);
+            this.mob.setDeltaMovement(this.mob.getDeltaMovement().add(to.x, 0.2, to.z));
+        }
         return true;
     }
 }

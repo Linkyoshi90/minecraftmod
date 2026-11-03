@@ -68,7 +68,7 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Vodyanoy** (anuran, the first man): rivers. While no dropped item floats within 8 blocks, his friends get a fish every 2 to 4 minutes (2 with a fisherman villager within 24 blocks). With litter in the water he is grumpy: he drags swimmers under once every 10 s. He has no bed sharing, no young and no tadpole stage.
   - **Frog kin:** vanilla frogs within 16 blocks walk to any anuran girl. A slimeball puts her in the mood; next to a vanilla frog in love she conceives. A third of that spawn hatches as vanilla tadpoles, and the rest are hers (devoted to nobody).
 - [ ] Playtest the fifth wave: the pegasus leap and glide feel (the jump bar is client-side, never seen), how often you meet a mimic, whether Anubis condemning on lifetime stats is too harsh (there is no atonement yet), and whether the lich respawning at her phylactery is findable.
-- [ ] Not done: frog kin introductions (Kinship's introduce-with-food covers girl families only), and harpy guide entries.
+- [x] Frog kin introductions: Kinship covers harpies and anurans too (`kinOf`). Harpy guide entries: see below.
 - [x] Sixth wave (2026-10-24), the design in HARMONTIDE_CONCEPTS.md "Sixth wave", tested in `SixthWaveTests`:
   - **Kobold** (canid, caves and mountains): befriended, every 10 s she points out the nearest diamond, gold or emerald ore within 10 blocks (once per ore, on the action bar with the distance). She yelps when the block her friend looks at holds up sand or gravel. Every 5 s she growls at a mimic chest within 6 blocks, which rattles. Mimic chests are now fixed by the world seed (`SlimeGirl.isMimicChest`), so a kobold can smell one before it is opened. Kin: wolves.
   - **Grizzly** (canid, taiga): she fishes salmon at open water and raids full beehives within 8 blocks (the honey goes to 0, the bees go for her, and her friend gets 3 honeycomb). She hibernates (lying, no hostility) while it snows where she stands; a hit or a hand wakes her. She guards her cubs like the polar bear. Kin: polar bears.
@@ -463,7 +463,7 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Paints:** comic, blueprint, koi and lemonade (June only, `Painted.roll`), so 75 in all.
   - **Homage variants** (`AbstractMonsterGirl.HOMAGES`): octo_agent, ninja_chameleon, shell_trooper, town_clerk, scythe_green, leaf_sprout, mud_fin, trident_hood.
 - [ ] Dev client for the nineteenth wave: Tin Jack's hat and lantern, the tuskin's tusks and the sabre's fangs at game scale, the kasurenijimi's smudged face, the emberu running and kicking, the four paints, the eight homage looks.
-- [ ] Not done for the nineteenth wave: a harpy field guide entry for the emberu (that guide is hand-written).
+- [x] Not done for the nineteenth wave: a harpy field guide entry for the emberu (that guide is hand-written). Done 2026-11-03: `tools/add_harpy_guide_entries.py` writes a card for every harpy.
 - [x] **Eighteenth wave** (2026-10-28), tested in `EighteenthWaveTests`:
   - **Spoodr** (arachne, `tufts`: `hair_tufts`): every 2 s, `sweepWebs` clears a cobweb within 6 of her friend and gives them its string.
   - **Ushi-oni** (arachne, `ox_horns`: `hair_horns`): `bellow`, at most every 20 s: the monsters within 10 of her friend drop their target, get Slowness II and run.
@@ -480,7 +480,7 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Paints:** cow, rust, lava lamp (blobs glow: `PaintGlowLayer`, `gen_paints.GLOWING`) and sunflower (August only, `Painted.roll`), so 71 in all.
   - `tools/add_harpy_extras.py` also gave the condorune and pumpkingull their belly, sit and lie, which the sixteenth wave had missed.
 - [ ] Dev client for the eighteenth wave: the urchskin's spines and the ushi-oni's horns at game scale, the pineskrell's cones and the tarnhelm's gem at night, the mirror crane turning a skeleton's arrows, the domovoi at a furnace row, the four paints (lava lamp at night).
-- [ ] Not done for the eighteenth wave: a harpy field guide entry for the mirror crane (that guide is hand-written).
+- [x] Not done for the eighteenth wave: a harpy field guide entry for the mirror crane (that guide is hand-written). Done 2026-11-03: `tools/add_harpy_guide_entries.py` writes a card for every harpy.
 - [x] **Seventeenth wave** (2026-10-27), tested in `SeventeenthWaveTests`:
   - **Censer lion** (nekomata, `censer` at her hip): every second, `incense` resets her friend's time since rest (within 16, so no phantoms spawn for them) and clears the aim of phantoms within 32 of her at her friend.
   - **Conch mail turtle** (lizardfolk, dome shell with a `conch` spire): every second, `conchCall` gives her friend within 8, eyes underwater, Conduit Power.
@@ -497,7 +497,7 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
 - [ ] Dev client for the seventeenth wave: the conch spire and the sawfin's saw at game scale, the yurei floating (and her satchel), the frondbat's crown, the four paints (circuit at night).
 - [ ] Dev client for the sixteenth wave: the jorogumo's back legs at game scale (do they clip walls or doorways?), her four eyes, the kikimora at a real house at night, the valkyrie holding and returning a real death's drops (with keepInventory off and on), the condorune catching a real fall, the pumpkin hat, and the four paints (neon at night).
 - [x] The eight sixteenth-wave originals reworked against `harmontide-creature-images/` (their blue looks): the floodcrab's stone fan shell (`hair_fan`), the temple mantis' ring arch (`halo`, `hair_arch`), the sword koi's katana (`katana`), the reedbull's regalia, the squidkin on the octopus body, the pumpkingull in a pumpkin (old look: the `orange` variant), the dunefennec and condorune recoloured. `tools/harmontide_roster.py` now reads that folder.
-- [ ] Not done for the sixteenth wave: harpy field guide entries for the pumpkingull and condorune (that guide is hand-written).
+- [x] Not done for the sixteenth wave: harpy field guide entries for the pumpkingull and condorune (that guide is hand-written). Done 2026-11-03: `tools/add_harpy_guide_entries.py` writes a card for every harpy.
 - [ ] Dev client for the fifteenth wave: the rokurokubi's neck at night (does the head ride up smoothly, and come back down at dawn?), the crocora rescue in deep water, the bellmare walking a herd home, the vicunero's spit, the reeffin's coral, and the four paints (thunder at night).
 - [ ] Dev client for the fourteenth wave: the ittan-momen ride (does the rider sit well on the ribbon, can you land?), the halberelk felling a big spruce and leaving a log cabin alone, the vulphea's ashes and rising, the bronzejaw ox ploughing on a lead, the silkcoon washing, and the four paints.
 - [ ] Dev client for the thirteenth wave: the peaflare's display fan in play, the jaglare in real jungle trees, the kamaitachi's gusts near a player's leaf builds (persistent leaves should be spared), the chochin-obake's light, and the hologram paint.
@@ -543,7 +543,7 @@ In since 2026-10-21: `entity/girl/Kinship.java`, tested in `KinshipTests`.
 - Feed her and one of her kin her family's food within 30 seconds, close together: she **introduces** you. Cats, horses, donkeys, mules and llamas are tamed, ocelots and foxes trust you, and everything else becomes a persistent friend that follows you and never targets a player.
 - Kin: nekomata and cats (ocelot nekomata and ocelots), kitsune and foxes, arachne and spiders, the horse and zebra centaur and horses, donkeys and mules, the alpaca and llamas, the goat centaur and goats, dolphin and orca mermaids and dolphins, the axolotl mermaid and axolotls, slimes and slimes (magma: magma cubes), jackalopes and rabbits, minotaurs and cows and mooshrooms, kraken, ika and octopus and squid, the zombie girl and zombies, husks, drowned and zombie villagers, the phantom girl and phantoms, the turtles and turtles, bees and bees. Everyone else has no kin and bonds and breeds with players only, as before. Minotaur cows already breed with bulls.
 - [ ] Playtest: does a befriended zombie still go for villagers? (It does today. Decide whether friends should leave villagers alone too.) Befriended zombies still burn in daylight.
-- [ ] Harpies and anurans are separate classes, not covered yet: parrots and chickens, frogs.
+- [x] Harpies and anurans have kin (parrots, chickens, frogs): `Kinship.kinOf`.
 - [ ] Slimes and phantoms have no pathfinding, so they do not visibly follow. They only stop attacking.
 
 ## 0e. Stick orders and stances
@@ -556,9 +556,9 @@ In since 2026-10-21: `entity/Orders.java`, used by harpies, anurans and every gi
   - Self-defence only hits back.
   - Peaceful never fights.
 - **No friendly fire:** two companions (both fond of the same player) never hurt or target each other, nor each other's befriended vanilla mobs. That is the phoenix and ostrich crossfire fix. Stray shots never hit her player either; deliberate pokes (a swat, a clumsy kick) still do.
-- [ ] **Next command:** even a sitting girl should run for water when she is drying out (anurans, merfolk) or on fire. She should get up, save herself and then go back to her spot.
+- [x] **Next command** (2026-11-02/03, `SitWhenOrderedGoal.inDanger`): even a sitting girl should run for water when she is drying out (anurans, merfolk) or on fire. She should get up, save herself and then go back to her spot.
 - [ ] Playtest: is patrol at 10 blocks and follow at 7 the right size? Does the follow teleport feel right for flying harpies?
-- [ ] Befriended vanilla mobs (Kinship) do not take stick orders yet.
+- [x] Befriended vanilla mobs take stick orders (`Kinship.command`).
 - [ ] `RelationshipTests.eggHatchesIntoAGrowingHatchling` failed once and then passed on the next run. It is flaky and needs looking at.
 
 ## 0f. Answers to the field guides' open questions (2026-10-22)

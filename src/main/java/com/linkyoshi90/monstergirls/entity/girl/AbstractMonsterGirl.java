@@ -70,7 +70,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     private static final EntityDataAccessor<Boolean> DATA_YOUNG = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> DATA_VARIANT = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> DATA_BELLY = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
-    private static final EntityDataAccessor<Byte> DATA_PAINT = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> DATA_PAINT = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.INT);
     /** The Harmontide paints (textures/entity/&lt;model&gt;_paint_&lt;name&gt;.png, tools/gen_paints.py); 0 is unpainted. */
     public static final java.util.List<String> PAINTS = java.util.List.of("blue", "red", "green", "yellow", "purple", "black", "inverted",
             "chocolate", "icecream", "strawberry", "jello", "milk",           // treats: drips, patterns, see-through jello
@@ -126,7 +126,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     private static final Map<String, RawAnimation> ANIMATIONS = new ConcurrentHashMap<>();
 
     /** Synced flags (bits of DATA_FLAGS). */
-    private int blushTicks, towelTicks;
+    private int blushTicks, towelTicks, harnessTicks;
     public static final int FLAG_TRUE_FORM = 1, FLAG_HIDDEN = 2, FLAG_DECOY = 4, FLAG_HALF = 8, FLAG_CARRYING = 16, FLAG_SADDLED = 32, FLAG_CHEST = 64,
             FLAG_CALM = 128, FLAG_SHELLS = 256, FLAG_SMILE = 512, FLAG_MALE = 1024, FLAG_RETRACTED = 2048, FLAG_LIT = 4096, FLAG_MASKED = 8192,
             FLAG_MERCHANT = 16384, FLAG_TOWING = 32768, FLAG_MOONSTRUCK = 65536, FLAG_INJURED = 131072, FLAG_WAXED = 262144,
@@ -303,7 +303,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         builder.define(DATA_VARIANT, (byte) 0);
         builder.define(DATA_BELLY, (byte) 0);
         builder.define(DATA_FLAGS, 0);
-        builder.define(DATA_PAINT, (byte) 0);
+        builder.define(DATA_PAINT, 0);
         builder.define(DATA_TAILS, (byte) 1);
         builder.define(DATA_AIM, (byte) AIM_NONE);
     }
@@ -370,6 +370,17 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     public void blushFor(int ticks) {
         this.blushTicks = Math.max(this.blushTicks, ticks);
         this.setFlag(FLAG_BLUSHING, true);
+    }
+
+    /** How far behind her waist a rider sits, in blocks: her model is drawn this far forward so she turns about her rider (GirlRenderer). */
+    public double seatBack() {
+        return 0.0;
+    }
+
+    /** The milking harness for a while (client/MilkingHarnessLayer); minotaur cows run their own. */
+    public void harnessFor(int ticks) {
+        this.harnessTicks = Math.max(this.harnessTicks, ticks);
+        this.setFlag(FLAG_HARNESSED, true);
     }
 
     /** The vanity mirror: her next colour, leaving out the ones she has to earn. */
@@ -899,6 +910,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (!this.level().isClientSide && this.blushTicks > 0 && --this.blushTicks == 0) this.setFlag(FLAG_BLUSHING, false);
         if (this.level() instanceof ServerLevel party && this.tickCount % 101 == 0) com.linkyoshi90.monstergirls.entity.HomeLife.dance(party, this, com.linkyoshi90.monstergirls.entity.JukeboxSensing.findPlaying(party, this.blockPosition(), 16) != null);
         if (!this.level().isClientSide && this.towelTicks > 0 && --this.towelTicks == 0) this.setFlag(FLAG_TOWEL, false);
+        if (!this.level().isClientSide && this.harnessTicks > 0 && --this.harnessTicks == 0) this.setFlag(FLAG_HARNESSED, false);
         if (this.level() instanceof ServerLevel milky) com.linkyoshi90.monstergirls.entity.Lactation.tick(milky, this);
         SerpentSegment.follow(this, this.segments);
         if (this.level() instanceof ServerLevel healerLevel && this.tickCount % 600 == 0) this.tendCompanions(healerLevel);
@@ -1273,7 +1285,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     }
 
     public void setPaint(int paint) {
-        this.entityData.set(DATA_PAINT, (byte) (paint < 0 || paint > PAINTS.size() ? 0 : paint));
+        this.entityData.set(DATA_PAINT, (paint < 0 || paint > PAINTS.size() ? 0 : paint));
     }
 
     @Nullable

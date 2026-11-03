@@ -42,7 +42,7 @@ SPECIES = {
                   "dark": dict(FUR="#a87a40", MARK="#3a2410", HAIR="#3a2410"), "rothschild": dict(FUR="#d8a858", MARK="#5a3418")}),
     # thirty-fifth wave: the elephant: vast, grey and gentle, gold on her brow, a trumpet of a voice
     "elephant_centaur": dict(
-        rig="elephant", waist=24.0, ears=None,
+        rig="elephant", waist=21.5, ears=None,
         build="strong", outfit=dict(top=["bandeau", "vest"], extras=["pearls", "armlets"], colors=dict(cloth2="#c83a4a", leather="#c83a4a")),
         hair="flowing", bangs="parted", tail=(1, 7, 1),
         pal=dict(SKIN=skin("tan"), HAIR="#3a3a40", FUR="#8a8a90", LIGHT="#b8b8bc", MARK="#6a6a70", EYE="#3a2a1e", CLOTH="#c83a4a", TRIM="#e8c050",

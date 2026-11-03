@@ -112,7 +112,7 @@ public enum GirlSpecies {
     ZOGLINTAUR_CENTAUR("zoglintaur_centaur", Family.CENTAUR, 2.4F, 36.1F, 1.1F, MobCategory.CREATURE, 0xB87A78, 0x5A3A3E, "pink", "ashen", "crimson", "warped", "bone"),
     DONKEY_CENTAUR("donkey_centaur", Family.CENTAUR, 2.0F, 36.1F, 1.1F, MobCategory.CREATURE, 0x8A8078, 0x3A3430, "grey", "brown", "black", "white", "dun"),
     GIRAFFE_CENTAUR("giraffe_centaur", Family.CENTAUR, 2.8F, 52.5F, 1.1F, MobCategory.CREATURE, 0xE0B860, 0x7A4A22, "gold", "reticulated", "white", "dark", "rothschild"),
-    ELEPHANT_CENTAUR("elephant_centaur", Family.CENTAUR, 2.8F, 40.5F, 1.5F, MobCategory.CREATURE, 0x8A8A90, 0x3A3A40, "grey", "dusty", "dark", "white", "pink"),
+    ELEPHANT_CENTAUR("elephant_centaur", Family.CENTAUR, 2.8F, 38.0F, 1.5F, MobCategory.CREATURE, 0x8A8A90, 0x3A3A40, "grey", "dusty", "dark", "white", "pink"),
     OKAPI_CENTAUR("okapi_centaur", Family.CENTAUR, 2.0F, 36.0F, 1.1F, MobCategory.CREATURE, 0x4A2A22, 0x2A1A14, "velvet", "chestnut", "black", "grey", "plum"),
     MOOSE_CENTAUR("moose_centaur", Family.CENTAUR, 2.5F, 36.1F, 1.1F, MobCategory.CREATURE, 0x4A3424, 0x2A1E16, "brown", "dark", "pale", "grey", "red"),
     ORCA_MERMAID("orca_mermaid", Family.MERFOLK, 2.3F, 28.5F, 0.8F, MobCategory.WATER_CREATURE, 0x141418, 0x8A8C90, "resident", "transient", "typeb", "white", "typed"),

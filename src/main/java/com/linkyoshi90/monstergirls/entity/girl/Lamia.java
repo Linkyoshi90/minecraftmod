@@ -898,7 +898,12 @@ public class Lamia extends AbstractMonsterGirl {
 
     @Override
     protected Vec3 getPassengerAttachmentPoint(net.minecraft.world.entity.Entity passenger, net.minecraft.world.entity.EntityDimensions dims, float scale) {
-        return new Vec3(0.0, dims.height() * 0.3, -0.9);                  // in her coils, behind her (+Z is her front)
+        return new Vec3(0.0, dims.height() * 0.3, 0.0);                   // in her coils: her model is drawn seatBack() forward
+    }
+
+    @Override
+    public double seatBack() {
+        return 0.9;
     }
 
     // --- the naga guards treasure -------------------------------------------------------------------------------------
