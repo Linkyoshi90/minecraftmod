@@ -237,9 +237,11 @@ lang = {
     "message.monstergirls.weaned": "%s eats her first solid food: %s weans her", "message.monstergirls.her_mother": "her mother",
     "jade.monstergirls.nursing": "Nursing her baby", "jade.monstergirls.keeps_milk": "Keeps her milk (never weaned)",
     "jade.monstergirls.milk_full": "Uncomfortably full: needs a milking machine",
+    "message.monstergirls.rescue_offer": "%s hurries over with a cup of her milk. Right-click her with an empty hand to drink it",
+    "message.monstergirls.rescue_drink": "You drink %s's milk: the poison fades",
     "journal.monstergirls.guide.nursing.title": "Nursing",
-    "journal.monstergirls.guide.nursing": "A mother with milk nurses her newborn every few minutes, and the baby grows a little faster for it. "
-                                          "Hand-feed the baby her first solid food to wean her. Never weaned, she grows up and her mother keeps her milk for good.",
+    "journal.monstergirls.guide.nursing": "A mother with milk nurses her baby every few minutes. Feed the baby by hand to wean her; never weaned, her mother "
+                                          "keeps her milk for good. Mothers foster orphans of any kind. Poisoned or withering under a roof? A friend with milk brings you a cup.",
     "journal.monstergirls.guide.dairy.title": "Dairy",
     "journal.monstergirls.guide.dairy": "Pour milk into a butter churn and work it, by hand or with redstone. Set it on a cheese shelf underground: it firms in a day and hardens in three, stronger each time. "
                                          "A fridge feeds the household; berries, honey, fish and the like flavour a friend's milk for a day, and so does food from your hand.",

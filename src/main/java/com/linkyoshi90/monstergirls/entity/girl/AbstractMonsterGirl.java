@@ -252,9 +252,9 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     // --- nursing (Nursing, NurseGoal) -------------------------------------------------------------------------------
 
-    /** Her baby, held to her chest while she nurses. */
+    /** Her baby (or a foster child), held to her chest while she nurses. */
     public boolean nursingRider(Entity passenger) {
-        return passenger instanceof AbstractMonsterGirl baby && baby.isBaby() && this.getAction() == Action.NURSE;
+        return passenger instanceof LivingEntity baby && baby.isBaby() && this.getAction() == Action.NURSE;
     }
 
     @Override
@@ -783,6 +783,9 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
                 }
                 return InteractionResult.sidedSuccess(this.level().isClientSide);
             }
+        }
+        if (stack.isEmpty() && this.level() instanceof ServerLevel rescue && com.linkyoshi90.monstergirls.entity.MilkRescue.accept(rescue, this, player)) {
+            return InteractionResult.SUCCESS;                           // a cup of her milk, offered when they were poisoned
         }
         if (stack.isEmpty() && !player.isShiftKeyDown()) return this.pet(player);
         return super.mobInteract(player, hand);

@@ -465,6 +465,9 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
             if (!this.level().isClientSide) Orders.onStick(this, this.orders, player);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
+        if (hand == InteractionHand.MAIN_HAND && stack.isEmpty() && this.level() instanceof ServerLevel rescue && MilkRescue.accept(rescue, this, player)) {
+            return InteractionResult.SUCCESS;                           // a cup of her milk, offered when they were poisoned
+        }
         if (hand == InteractionHand.MAIN_HAND && stack.isEmpty() && !player.isShiftKeyDown()) {
             if (this.level() instanceof ServerLevel server) {
                 if (server.getGameTime() >= this.nextPetTime) {

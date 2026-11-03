@@ -9,6 +9,7 @@ import com.linkyoshi90.monstergirls.block.MilkTankBlock;
 import com.linkyoshi90.monstergirls.block.MilkTankBlockEntity;
 import com.linkyoshi90.monstergirls.entity.Dairy;
 import com.linkyoshi90.monstergirls.entity.Lactation;
+import com.linkyoshi90.monstergirls.entity.MilkRescue;
 import com.linkyoshi90.monstergirls.entity.Nursing;
 import com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl;
 import com.linkyoshi90.monstergirls.entity.girl.GirlSpecies;
@@ -225,6 +226,51 @@ public class DairyTests {
         var map = Dairy.recipeFlavours(List.of(pie, dye), reg);
         check(map.get(Items.BREAD) == MobEffects.REGENERATION, "a berry bread flavours like berries");
         check(!map.containsKey(Items.RED_DYE), "a dye is no dish");
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "sheFostersOrphans")
+    public static void sheFostersOrphans(GameTestHelper helper) {
+        Minotaur cow = still(helper, GirlSpecies.CATTLE_MINOTAUR, new BlockPos(1, 2, 1));
+        cow.setMale(false);
+        cow.setNextMilk(0);
+        var calf = helper.spawn(net.minecraft.world.entity.EntityType.COW, new BlockPos(3, 2, 3));
+        calf.setAge(-24000);
+        calf.setNoAi(true);
+        var child = helper.spawn(net.minecraft.world.entity.EntityType.VILLAGER, new BlockPos(3, 2, 1));
+        child.setAge(-24000);
+        child.setNoAi(true);
+        check(Nursing.isOrphan(helper.getLevel(), calf) && !Nursing.isOrphan(helper.getLevel(), child), "a lone calf, never a villager's child");
+        cow.setAction(AbstractMonsterGirl.Action.NURSE);
+        check(cow.nursingRider(calf), "held to her chest");
+        int age = calf.getAge();
+        Nursing.fed(helper.getLevel(), cow, calf);
+        check(calf.getAge() > age && cow.getUUID().equals(calf.getPersistentData().getUUID(Nursing.FOSTER)), "she grows, and remembers her");
+        var mom = helper.spawn(net.minecraft.world.entity.EntityType.COW, new BlockPos(3, 2, 4));
+        mom.setNoAi(true);
+        check(!Nursing.isOrphan(helper.getLevel(), calf), "with her own mother by, no orphan");
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "aCupOfMilkForThePoisoned")
+    public static void aCupOfMilkForThePoisoned(GameTestHelper helper) {
+        Minotaur cow = still(helper, GirlSpecies.CATTLE_MINOTAUR, new BlockPos(1, 2, 1));
+        cow.setMale(false);
+        cow.setNextMilk(0);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
+        cow.addAffection(p, 30);
+        p.addEffect(new net.minecraft.world.effect.MobEffectInstance(MobEffects.POISON, 600));
+        p.setHealth(4.0F);
+        check(MilkRescue.inDanger(p), "poisoned, three hearts left");
+        helper.setBlock(new BlockPos(3, 5, 3), net.minecraft.world.level.block.Blocks.STONE);
+        check(MilkRescue.sheltered(helper.getLevel(), p), "under a roof");
+        check(!MilkRescue.accept(helper.getLevel(), cow, p), "nothing offered yet");
+        MilkRescue.offer(helper.getLevel(), cow, p);
+        int before = cow.getAffection(p);
+        check(MilkRescue.accept(helper.getLevel(), cow, p) && !p.hasEffect(MobEffects.POISON) && p.hasEffect(MobEffects.REGENERATION)
+                && cow.getAffection(p) == before + MilkRescue.AFFECTION && !Lactation.isLactating(cow), "she helps them drink, and her milk is used");
+        check(!MilkRescue.accept(helper.getLevel(), cow, p), "once per offer");
+        HarpyTestUtil.remove(p);
         helper.succeed();
     }
 }

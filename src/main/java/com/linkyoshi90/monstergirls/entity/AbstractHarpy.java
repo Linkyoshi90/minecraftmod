@@ -312,6 +312,9 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
+        if (hand == InteractionHand.MAIN_HAND && player.getMainHandItem().isEmpty() && this.level() instanceof ServerLevel rescue && MilkRescue.accept(rescue, this, player)) {
+            return InteractionResult.SUCCESS;                           // a cup of her milk, offered when they were poisoned
+        }
         if (hand != InteractionHand.MAIN_HAND || !player.getMainHandItem().isEmpty() || player.isShiftKeyDown()) {
             return super.mobInteract(player, hand);
         }

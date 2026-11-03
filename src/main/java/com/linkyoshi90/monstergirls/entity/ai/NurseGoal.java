@@ -12,14 +12,16 @@ import java.util.EnumSet;
 
 /**
  * Every three to six minutes a nursing mother with milk ready calls her baby over (within SEARCH), sits, and holds her to her chest for
- * Nursing.FEED_TICKS: the baby rides her, both in the NURSE action, hearts now and then. A joey stays in her pouch for it.
+ * Nursing.FEED_TICKS: the baby rides her, both in the NURSE action, hearts now and then. A joey stays in her pouch for it. With no baby
+ * of her own to feed, a mother with milk fosters an orphan within FOSTER (Nursing.isOrphan): a calf, a wolf pup, a hatchling, any
+ * species but a villager's child.
  */
 public class NurseGoal extends Goal {
-    public static final int SEARCH = 16, EVERY = 3600, PATIENCE = 400;
+    public static final int SEARCH = 16, FOSTER = 8, EVERY = 3600, PATIENCE = 400;
     public static final String NEXT = "NurseAt";
     private final AbstractMonsterGirl mother;
     @Nullable
-    private AbstractMonsterGirl baby;
+    private net.minecraft.world.entity.Mob baby;
     private int patience, feeding;
 
     public NurseGoal(AbstractMonsterGirl mother) {
@@ -30,7 +32,7 @@ public class NurseGoal extends Goal {
     @Override
     public boolean canUse() {
         if (this.mother.tickCount % 41 != 0 || !(this.mother.level() instanceof ServerLevel level) || this.mother.isBaby() || this.mother.isPassenger()) return false;
-        if (!Nursing.isNursing(this.mother) || !Lactation.isLactating(this.mother) || this.mother.getAction() != AbstractMonsterGirl.Action.NONE) return false;
+        if (!Lactation.isLactating(this.mother) || this.mother.getAction() != AbstractMonsterGirl.Action.NONE) return false;
         long next = this.mother.getPersistentData().getLong(NEXT);
         if (level.getGameTime() < next) return false;
         this.baby = null;
@@ -40,6 +42,10 @@ public class NurseGoal extends Goal {
                 this.baby = c;
                 break;
             }
+        }
+        if (this.baby == null) {
+            this.baby = level.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, this.mother.getBoundingBox().inflate(FOSTER),
+                    m -> !m.isPassenger() && Nursing.isOrphan(level, m)).stream().findFirst().orElse(null);
         }
         if (this.baby == null) this.mother.getPersistentData().putLong(NEXT, level.getGameTime() + 1200);
         return this.baby != null;
@@ -75,7 +81,7 @@ public class NurseGoal extends Goal {
             this.baby.getNavigation().stop();
             if (this.baby.getVehicle() != this.mother) this.baby.startRiding(this.mother, true);
             this.mother.setAction(AbstractMonsterGirl.Action.NURSE);
-            this.baby.setAction(AbstractMonsterGirl.Action.NURSE);
+            if (this.baby instanceof AbstractMonsterGirl girl) girl.setAction(AbstractMonsterGirl.Action.NURSE);
             this.feeding = 1;
             return;
         }
@@ -100,8 +106,8 @@ public class NurseGoal extends Goal {
 
     /** Down from her arms (a joey stays in the pouch), and both back to what they were doing. */
     @Nullable
-    private AbstractMonsterGirl finish(AbstractMonsterGirl baby) {
-        if (baby.getAction() == AbstractMonsterGirl.Action.NURSE) baby.setAction(AbstractMonsterGirl.Action.NONE);
+    private net.minecraft.world.entity.Mob finish(net.minecraft.world.entity.Mob baby) {
+        if (baby instanceof AbstractMonsterGirl girl && girl.getAction() == AbstractMonsterGirl.Action.NURSE) girl.setAction(AbstractMonsterGirl.Action.NONE);
         if (this.mother.getAction() == AbstractMonsterGirl.Action.NURSE) this.mother.setAction(AbstractMonsterGirl.Action.NONE);
         if (baby.getVehicle() == this.mother && !(this.mother instanceof com.linkyoshi90.monstergirls.entity.girl.Marsupial)) baby.stopRiding();
         return null;

@@ -80,6 +80,7 @@ public final class Lactation {
         if (creature.tickCount % DRIP_INTERVAL == 0 && !(creature instanceof Minotaur) && isDripping(creature)) drip(level, creature);
         if (creature.tickCount % 20 == 0) comfort(level, creature);
         Nursing.tick(level, creature);
+        MilkRescue.tick(level, creature);
     }
 
     /** Uncomfortably full: lactating, and unmilked for FULL_AFTER. */

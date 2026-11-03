@@ -25,13 +25,17 @@ import java.util.UUID;
  * Milk after a live birth. A mother with milk (FamilyMilk, grown and full size) nurses her newborns: she keeps her milk until they are
  * weaned, and a friend weans a baby by hand-feeding her her first solid food. Left unweaned, a daughter grows up and her mother keeps
  * her milk for good: the player's choice. Every few minutes she sits with her baby held to her chest (NurseGoal, the cradle pose);
- * the baby grows a little faster for it, and it uses her milk as a milking would.
+ * the baby grows a little faster for it, and it uses her milk as a milking would. A mother with milk also fosters orphans of any kind
+ * (isOrphan): Romulus and Remus, the other way round.
  */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class Nursing {
     public static final String CHILDREN = "NursingChildren", MOTHER = "MotherId", WEANED = "Weaned";
     /** Ticks a feed takes, and the growing it is worth to the baby. */
     public static final int FEED_TICKS = 200, GROWTH = 1800;
+    /** How far an orphan's own kind would be; who fostered her. */
+    public static final int ORPHAN = 16;
+    public static final String FOSTER = "FosterMother";
 
     private Nursing() {}
 
@@ -98,12 +102,13 @@ public final class Nursing {
 
     /** Now and then: lets go of children who were weaned while she was away, or who have died. */
     public static void tick(ServerLevel level, LivingEntity mother) {
-        if (mother.tickCount % 100 != 0 || !isNursing(mother)) return;
-        if (!(mother instanceof com.linkyoshi90.monstergirls.entity.girl.Marsupial) && mother instanceof AbstractMonsterGirl m) {   // after a reload, out of her arms
+        if (mother.tickCount % 100 != 0) return;
+        if (mother.isVehicle() && !(mother instanceof com.linkyoshi90.monstergirls.entity.girl.Marsupial) && mother instanceof AbstractMonsterGirl m) {   // after a reload, out of her arms
             for (Entity rider : List.copyOf(mother.getPassengers())) {
-                if (!m.nursingRider(rider) && mother.getUUID().equals(motherOf(rider))) rider.stopRiding();
+                if (!m.nursingRider(rider) && rider instanceof LivingEntity l && l.isBaby()) rider.stopRiding();
             }
         }
+        if (!isNursing(mother)) return;
         for (UUID id : children(mother)) {
             Entity c = level.getEntity(id);
             if (c != null && (c.getPersistentData().getBoolean(WEANED) || !c.isAlive())) release(mother, id);
@@ -117,9 +122,23 @@ public final class Nursing {
         if (mother != null && level.getEntity(mother) instanceof LivingEntity m) release(m, event.getEntity().getUUID());
     }
 
-    /** One feed done: the baby grows, and the milk is used. */
-    public static void fed(ServerLevel level, LivingEntity mother, AbstractMonsterGirl baby) {
-        baby.setGrowTicks(baby.getGrowTicks() + GROWTH);
+    /**
+     * A baby of any kind that has nobody else to nurse her: no grown one of her kind within ORPHAN, and (for ours) her own mother not
+     * here. Never a villager's child, nor a monster's.
+     */
+    public static boolean isOrphan(ServerLevel level, net.minecraft.world.entity.Mob baby) {
+        if (!baby.isBaby() || !baby.isAlive() || baby instanceof net.minecraft.world.entity.npc.AbstractVillager || baby instanceof net.minecraft.world.entity.monster.Enemy) return false;
+        if (!(baby instanceof net.minecraft.world.entity.animal.Animal) && !(baby instanceof Bonded)) return false;
+        UUID mother = motherOf(baby);
+        if (mother != null && level.getEntity(mother) instanceof LivingEntity m && m.isAlive()) return false;
+        return level.getEntitiesOfClass(LivingEntity.class, baby.getBoundingBox().inflate(ORPHAN), e -> e.getType() == baby.getType() && !e.isBaby() && e.isAlive()).isEmpty();
+    }
+
+    /** One feed done: the baby grows, and the milk is used. A foster child remembers who nursed her. */
+    public static void fed(ServerLevel level, LivingEntity mother, LivingEntity baby) {
+        if (baby instanceof Bonded b) b.setGrowTicks(b.getGrowTicks() + GROWTH);
+        else if (baby instanceof net.minecraft.world.entity.AgeableMob a) a.ageUp(GROWTH / 20);
+        if (!mother.getUUID().equals(motherOf(baby))) baby.getPersistentData().putUUID(FOSTER, mother.getUUID());
         Lactation.relieve(level, mother, null);
         MilkingMachineBlockEntity.markMilked(mother, level.getGameTime() + com.linkyoshi90.monstergirls.entity.girl.Minotaur.MILK_COOLDOWN);
     }

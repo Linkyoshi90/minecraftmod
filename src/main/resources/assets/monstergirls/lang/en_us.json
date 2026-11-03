@@ -2691,5 +2691,7 @@
   "jade.monstergirls.keeps_milk": "Keeps her milk (never weaned)",
   "jade.monstergirls.milk_full": "Uncomfortably full: needs a milking machine",
   "journal.monstergirls.guide.nursing.title": "Nursing",
-  "journal.monstergirls.guide.nursing": "A mother with milk nurses her newborn every few minutes, and the baby grows a little faster for it. Hand-feed the baby her first solid food to wean her. Never weaned, she grows up and her mother keeps her milk for good."
+  "journal.monstergirls.guide.nursing": "A mother with milk nurses her baby every few minutes. Feed the baby by hand to wean her; never weaned, her mother keeps her milk for good. Mothers foster orphans of any kind. Poisoned or withering under a roof? A friend with milk brings you a cup.",
+  "message.monstergirls.rescue_offer": "%s hurries over with a cup of her milk. Right-click her with an empty hand to drink it",
+  "message.monstergirls.rescue_drink": "You drink %s's milk: the poison fades"
 }
