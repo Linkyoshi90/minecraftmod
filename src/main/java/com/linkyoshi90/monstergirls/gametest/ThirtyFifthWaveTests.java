@@ -221,4 +221,18 @@ public class ThirtyFifthWaveTests {
         check(helper.getLevel().canSeeSky(bear.blockPosition()) || !bear.seekDen(helper.getLevel()), "under a roof already: no need to move");
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "harpiesFlirtToo")
+    public static void harpiesFlirtToo(GameTestHelper helper) {
+        var owl = helper.spawn(com.linkyoshi90.monstergirls.registry.ModEntities.OWL_HARPY.get(), new BlockPos(1, 2, 1));
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
+        owl.addAffection(p, 10);
+        check(!Flirting.canFlirt(owl, p), "not a close friend yet");
+        owl.addAffection(p, 30);
+        check(Flirting.canFlirt(owl, p) == (owl.getBbHeight() >= com.linkyoshi90.monstergirls.entity.Bonded.CHILDLIKE_HEIGHT), "a grown close friend");
+        owl.setFather(p.getUUID());
+        check(!Flirting.canFlirt(owl, p), "never with her father");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

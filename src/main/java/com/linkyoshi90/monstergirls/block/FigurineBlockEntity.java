@@ -26,6 +26,8 @@ public class FigurineBlockEntity extends BlockEntity {
     private CompoundTag mob = new CompoundTag();
     @Nullable
     private Entity shown;
+    /** Whether breaking it gives the figurine back (not in creative). */
+    boolean keep = true;
 
     public FigurineBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.FIGURINE.get(), pos, state);

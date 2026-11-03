@@ -693,7 +693,7 @@ New designs, tested in `ThirtyFifthWaveTests`.
 | **Troll** | Devil | Stone under the open sky by day: unhurt and not moving. At night she flattens monsters near her friend. |
 | **Selkie** | Merfolk | Sings fish up for her friend. |
 
-**Flirting** (`entity/Flirting`, option `flirting`, on by default): one pat in four from a close friend (25+) gets a teasing line and hearts, and sharing the soaking tub has lines of its own. Words only, nothing past a tease. Only grown, full-size girls: anyone under `CHILDLIKE_HEIGHT` stays out, constructs too, and never a girl and her own father.
+**Flirting** (`entity/Flirting`, option `flirting`, on by default): one pat in four from a close friend (25+) gets a teasing line and hearts, and sharing the soaking tub has lines of its own. Words only, nothing past a tease. Harpies and frogs too since 2026-11-03. Only grown, full-size ones: anyone under `CHILDLIKE_HEIGHT` stays out, constructs too, and never a girl and her own father.
 
 **Own rigs:** the Elephant (`rig="elephant"`, pillar legs, a great barrel, a swinging trunk, tusks, fanning ears) and the Giraffe (`rig="giraffe"`, long legs, standing on a long spotted neck, ossicones) use `rig_lower` in `gen_centaur.py`: the same bone names as `G.taur`, so they share its gaits.
 

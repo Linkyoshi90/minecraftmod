@@ -322,6 +322,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
             this.getLookControl().setLookAt(player);
             server.sendParticles(ParticleTypes.HEART, this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ(), 2, 0.3, 0.2, 0.3, 0.0);
             this.onPetted(player);
+            Flirting.onPet(server, this, player);
         }
         return InteractionResult.sidedSuccess(this.level().isClientSide);
     }

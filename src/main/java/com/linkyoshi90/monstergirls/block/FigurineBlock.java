@@ -44,10 +44,17 @@ public class FigurineBlock extends SimpleTickerBlock {
         return new FigurineBlockEntity(pos, state);
     }
 
+    /** Broken in creative, nothing drops, as with any block. */
+    @Override
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, net.minecraft.world.entity.player.Player player) {
+        if (player.isCreative() && level.getBlockEntity(pos) instanceof FigurineBlockEntity figurine) figurine.keep = false;
+        return super.playerWillDestroy(level, pos, state, player);
+    }
+
     /** She keeps who she shows when the block is broken. */
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState next, boolean moved) {
-        if (!state.is(next.getBlock()) && level.getBlockEntity(pos) instanceof FigurineBlockEntity figurine) Block.popResource(level, pos, figurine.toItem());
+        if (!state.is(next.getBlock()) && level.getBlockEntity(pos) instanceof FigurineBlockEntity figurine && figurine.keep) Block.popResource(level, pos, figurine.toItem());
         super.onRemove(state, level, pos, next, moved);
     }
 }
