@@ -316,8 +316,10 @@ public class Minotaur extends AbstractMonsterGirl {
                     boolean friend = this.getAffection(player) >= BED_AFFECTION;
                     this.setNextMilk(server.getGameTime() + (friend ? MILK_COOLDOWN / 2 : MILK_COOLDOWN));
                     stack.consume(1, player);
-                    ItemStack milk = new ItemStack(Items.MILK_BUCKET);
+                    com.linkyoshi90.monstergirls.entity.Lactation.relieve(server, this, player);
+                    ItemStack milk = com.linkyoshi90.monstergirls.entity.Dairy.flavoured(this, new ItemStack(Items.MILK_BUCKET));
                     if (!player.getInventory().add(milk)) player.drop(milk, false);
+                    com.linkyoshi90.monstergirls.entity.Dairy.recordMilk(player, this);
                     this.addAffection(player, 1);
                     this.startTimedAction(Action.MILK, 40);
                     if (com.linkyoshi90.monstergirls.MonsterGirlsConfig.milkEmbarrassed()) this.blush(BUCKET_BLUSH_TICKS);

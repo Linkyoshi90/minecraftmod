@@ -95,6 +95,20 @@ public final class ModBlocks {
             com.linkyoshi90.monstergirls.block.GiftBoxBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(1.0F).sound(SoundType.WOOD).noOcclusion());
 
+    // dairy (entity.Dairy): the churn, the cheese shelf, the milk tank, and the fridge the girls eat from
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.ButterChurnBlock> BUTTER_CHURN = BLOCKS.registerBlock("butter_churn",
+            com.linkyoshi90.monstergirls.block.ButterChurnBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1.5F).sound(SoundType.WOOD).noOcclusion());
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.CheeseShelfBlock> CHEESE_SHELF = BLOCKS.registerBlock("cheese_shelf",
+            com.linkyoshi90.monstergirls.block.CheeseShelfBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1.0F).sound(SoundType.WOOD).noOcclusion());
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.MilkTankBlock> MILK_TANK = BLOCKS.registerBlock("milk_tank",
+            com.linkyoshi90.monstergirls.block.MilkTankBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(2.0F, 6.0F).sound(SoundType.COPPER).noOcclusion().requiresCorrectToolForDrops());
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.FridgeBlock> FRIDGE = BLOCKS.registerBlock("fridge",
+            com.linkyoshi90.monstergirls.block.FridgeBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(2.0F, 6.0F).sound(SoundType.METAL).noOcclusion().requiresCorrectToolForDrops());
+
     /** The nectar fluid's block (see ModFluids). */
     public static final DeferredBlock<net.minecraft.world.level.block.LiquidBlock> NECTAR = BLOCKS.register("nectar",
             () -> new net.minecraft.world.level.block.LiquidBlock(ModFluids.NECTAR.get(),

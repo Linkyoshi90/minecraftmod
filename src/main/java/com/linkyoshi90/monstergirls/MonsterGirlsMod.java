@@ -32,6 +32,9 @@ public final class MonsterGirlsMod {
         ModSounds.SOUND_EVENTS.register(modBus);
         com.linkyoshi90.monstergirls.registry.ModParticles.PARTICLE_TYPES.register(modBus);
         com.linkyoshi90.monstergirls.registry.ModAttachments.ATTACHMENT_TYPES.register(modBus);
+        com.linkyoshi90.monstergirls.registry.ModComponents.COMPONENTS.register(modBus);
+        com.linkyoshi90.monstergirls.registry.ModMenus.MENUS.register(modBus);
+        com.linkyoshi90.monstergirls.item.IceCreamRecipe.SERIALIZERS.register(modBus);
 
         modBus.addListener(ModEntities::registerAttributes);
         modBus.addListener(ModEntities::registerSpawnPlacements);
@@ -46,6 +49,10 @@ public final class MonsterGirlsMod {
     private static void registerCapabilities(net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, com.linkyoshi90.monstergirls.registry.ModBlockEntities.MILKING_MACHINE.get(),
                 (machine, side) -> machine.hopperHandler());
+        event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, ModBlockEntities.BUTTER_CHURN.get(), (churn, side) -> churn.hopperHandler());
+        event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, ModBlockEntities.CHEESE_SHELF.get(), (shelf, side) -> shelf.hopperHandler());
+        event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, ModBlockEntities.MILK_TANK.get(), (tank, side) -> tank.hopperHandler(side));
+        event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, ModBlockEntities.FRIDGE.get(), (fridge, side) -> fridge.hopperHandler());
         for (var holder : ModGirls.TYPES.values()) {
             event.registerEntity(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.ENTITY, holder.get(),
                     (girl, ctx) -> new net.neoforged.neoforge.items.wrapper.InvWrapper(girl.ammoPouch()));

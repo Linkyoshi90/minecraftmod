@@ -1,0 +1,304 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "particle": "monstergirls:block/umbrella_canopy",
+    "canopy": "monstergirls:block/umbrella_canopy",
+    "handle": "monstergirls:block/umbrella_handle"
+  },
+  "elements": [
+    {
+      "from": [
+        -16,
+        26,
+        -16
+      ],
+      "to": [
+        32,
+        27,
+        32
+      ],
+      "faces": {
+        "down": {
+          "texture": "#canopy"
+        },
+        "up": {
+          "texture": "#canopy"
+        },
+        "north": {
+          "texture": "#canopy"
+        },
+        "south": {
+          "texture": "#canopy"
+        },
+        "west": {
+          "texture": "#canopy"
+        },
+        "east": {
+          "texture": "#canopy"
+        }
+      }
+    },
+    {
+      "from": [
+        -11,
+        27,
+        -11
+      ],
+      "to": [
+        27,
+        29,
+        27
+      ],
+      "faces": {
+        "down": {
+          "texture": "#canopy"
+        },
+        "up": {
+          "texture": "#canopy"
+        },
+        "north": {
+          "texture": "#canopy"
+        },
+        "south": {
+          "texture": "#canopy"
+        },
+        "west": {
+          "texture": "#canopy"
+        },
+        "east": {
+          "texture": "#canopy"
+        }
+      }
+    },
+    {
+      "from": [
+        -5,
+        29,
+        -5
+      ],
+      "to": [
+        21,
+        31,
+        21
+      ],
+      "faces": {
+        "down": {
+          "texture": "#canopy"
+        },
+        "up": {
+          "texture": "#canopy"
+        },
+        "north": {
+          "texture": "#canopy"
+        },
+        "south": {
+          "texture": "#canopy"
+        },
+        "west": {
+          "texture": "#canopy"
+        },
+        "east": {
+          "texture": "#canopy"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        31,
+        4
+      ],
+      "to": [
+        12,
+        32,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#canopy"
+        },
+        "up": {
+          "texture": "#canopy"
+        },
+        "north": {
+          "texture": "#canopy"
+        },
+        "south": {
+          "texture": "#canopy"
+        },
+        "west": {
+          "texture": "#canopy"
+        },
+        "east": {
+          "texture": "#canopy"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        -8,
+        7.5
+      ],
+      "to": [
+        8.5,
+        31,
+        8.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#handle"
+        },
+        "up": {
+          "texture": "#handle"
+        },
+        "north": {
+          "texture": "#handle"
+        },
+        "south": {
+          "texture": "#handle"
+        },
+        "west": {
+          "texture": "#handle"
+        },
+        "east": {
+          "texture": "#handle"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        -10,
+        7.5
+      ],
+      "to": [
+        11.5,
+        -8,
+        8.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#handle"
+        },
+        "up": {
+          "texture": "#handle"
+        },
+        "north": {
+          "texture": "#handle"
+        },
+        "south": {
+          "texture": "#handle"
+        },
+        "west": {
+          "texture": "#handle"
+        },
+        "east": {
+          "texture": "#handle"
+        }
+      }
+    },
+    {
+      "from": [
+        10.5,
+        -8,
+        7.5
+      ],
+      "to": [
+        11.5,
+        -6,
+        8.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#handle"
+        },
+        "up": {
+          "texture": "#handle"
+        },
+        "north": {
+          "texture": "#handle"
+        },
+        "south": {
+          "texture": "#handle"
+        },
+        "west": {
+          "texture": "#handle"
+        },
+        "east": {
+          "texture": "#handle"
+        }
+      }
+    }
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        6,
+        0
+      ],
+      "scale": [
+        0.68,
+        0.68,
+        0.68
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        6,
+        0
+      ],
+      "scale": [
+        0.68,
+        0.68,
+        0.68
+      ]
+    }
+  }
+}

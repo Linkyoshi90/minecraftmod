@@ -1,6 +1,17 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "monstergirls:item/umbrella"
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "monstergirls:item/umbrella_open"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "monstergirls:item/umbrella_icon"
+    },
+    "ground": {
+      "parent": "monstergirls:item/umbrella_icon"
+    },
+    "fixed": {
+      "parent": "monstergirls:item/umbrella_icon"
+    }
   }
 }

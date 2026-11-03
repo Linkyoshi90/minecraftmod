@@ -195,6 +195,10 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> FIGURINE = ITEMS.registerSimpleBlockItem(ModBlocks.FIGURINE);
     public static final DeferredItem<Item> SKETCHBOOK = ITEMS.registerSimpleItem("sketchbook", new Item.Properties().durability(16));
     public static final DeferredItem<BlockItem> GIFT_BOX = ITEMS.registerSimpleBlockItem(ModBlocks.GIFT_BOX);
+    public static final DeferredItem<BlockItem> BUTTER_CHURN = ITEMS.registerSimpleBlockItem(ModBlocks.BUTTER_CHURN);
+    public static final DeferredItem<BlockItem> CHEESE_SHELF = ITEMS.registerSimpleBlockItem(ModBlocks.CHEESE_SHELF);
+    public static final DeferredItem<BlockItem> MILK_TANK = ITEMS.registerSimpleBlockItem(ModBlocks.MILK_TANK);
+    public static final DeferredItem<BlockItem> FRIDGE = ITEMS.registerSimpleBlockItem(ModBlocks.FRIDGE);
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.FriendCompassItem> FRIEND_COMPASS = ITEMS.register("friend_compass", () -> new com.linkyoshi90.monstergirls.item.FriendCompassItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> FRIENDSHIP_BRACELET = ITEMS.registerSimpleItem("friendship_bracelet", new Item.Properties().stacksTo(16));
     public static final DeferredItem<Item> LOVE_LETTER = ITEMS.registerSimpleItem("love_letter", new Item.Properties().stacksTo(16));
@@ -202,8 +206,8 @@ public final class ModItems {
     public static final DeferredItem<Item> GROOMING_BRUSH = ITEMS.registerSimpleItem("grooming_brush", new Item.Properties().durability(64));
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.ToyBallItem> TOY_BALL = ITEMS.register("toy_ball", () -> new com.linkyoshi90.monstergirls.item.ToyBallItem(new Item.Properties().stacksTo(16)));
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.WhistleItem> WHISTLE = ITEMS.register("friend_whistle", () -> new com.linkyoshi90.monstergirls.item.WhistleItem(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> HOMEMADE_MEAL = ITEMS.registerSimpleItem("homemade_meal", new Item.Properties().stacksTo(16)
-            .food(new net.minecraft.world.food.FoodProperties.Builder().nutrition(10).saturationModifier(0.8F).usingConvertsTo(net.minecraft.world.item.Items.BOWL).build()));
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.DairyItem> HOMEMADE_MEAL = ITEMS.register("homemade_meal", () -> new com.linkyoshi90.monstergirls.item.DairyItem(new Item.Properties().stacksTo(16)
+            .food(new net.minecraft.world.food.FoodProperties.Builder().nutrition(10).saturationModifier(0.8F).usingConvertsTo(net.minecraft.world.item.Items.BOWL).build())));
     /** A fertilised harpy egg: place it somewhere solid and it hatches in about a day. */
     public static final DeferredItem<BlockItem> HARPY_EGG = ITEMS.register("harpy_egg",
             () -> new HarpyEggItem(ModBlocks.HARPY_EGG.get(), new Item.Properties().stacksTo(16)));
@@ -218,7 +222,15 @@ public final class ModItems {
     }
 
     /** Made from a minotaur cow's milk (or brought by her). */
-    public static final DeferredItem<Item> CHEESE = food("cheese", 4, 0.8F);
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.DairyItem> CHEESE = ITEMS.registerItem("cheese",
+            props -> new com.linkyoshi90.monstergirls.item.DairyItem(props.food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.8F).build())));
+    /** Churned from a bucket of milk (ButterChurnBlock); a little of her family's effects. */
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.DairyItem> BUTTER = ITEMS.registerItem("butter",
+            props -> new com.linkyoshi90.monstergirls.item.DairyItem(props.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.3F).fast().build())));
+    /** Milk, sugar, snow and a bowl (item.IceCreamRecipe). */
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.DairyItem> ICE_CREAM = ITEMS.registerItem("ice_cream",
+            props -> new com.linkyoshi90.monstergirls.item.DairyItem(props.stacksTo(16).food(new FoodProperties.Builder().nutrition(5).saturationModifier(0.4F).alwaysEdible()
+                    .usingConvertsTo(net.minecraft.world.item.Items.BOWL).build())));
     /** The Inaba's present at full devotion; also the base of mochi. */
     public static final DeferredItem<Item> RICE_CAKE = food("rice_cake", 5, 0.6F);
     public static final DeferredItem<Item> APPLE_MOCHI = food("apple_mochi", 7, 0.8F);

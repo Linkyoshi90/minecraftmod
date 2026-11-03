@@ -238,7 +238,7 @@ icon("umbrella", [
     "................", ".......kk.......", ".....pppppp.....", "...pppwppppppp..", "..ppwwppppppppp.", ".pppppppppppppp.", ".p.p.p.hp.p.p.p.", ".......h........",
     ".......h........", ".......h........", ".......h........", ".......h........", ".......h........", ".....h.h........", ".....hhh........", "................"],
      dict(k="#3a3a40", p="#d85a8a", w="#f8c8d8", h="#5a3a22"))
-plain_item("umbrella")
+# the umbrella's item model is written by gen_dairy_assets.py (its open 3D model)
 
 # --- recipes ------------------------------------------------------------------------------------------------------------
 shaped("picnic_blanket", ["WR", "RW"], dict(W="minecraft:white_wool", R="minecraft:red_wool"), 2)

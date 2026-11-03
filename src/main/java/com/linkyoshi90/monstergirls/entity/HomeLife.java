@@ -267,6 +267,7 @@ public final class HomeLife {
             if (groom(level, mob, player)) stack.hurtAndBreak(1, player, net.minecraft.world.entity.LivingEntity.getSlotForHand(event.getHand()));
             else player.displayClientMessage(Component.translatable("message.monstergirls.groomed", mob.getDisplayName()), true);
         } else if (eatMeal(level, mob, player)) {
+            Dairy.ate(mob, stack);
             stack.consume(1, player);
             player.getInventory().placeItemBackInInventory(new ItemStack(Items.BOWL));
         } else {

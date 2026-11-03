@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "powered=false,stroke=false": {
+      "model": "monstergirls:block/butter_churn"
+    },
+    "powered=false,stroke=true": {
+      "model": "monstergirls:block/butter_churn_stroke"
+    },
+    "powered=true,stroke=false": {
+      "model": "monstergirls:block/butter_churn"
+    },
+    "powered=true,stroke=true": {
+      "model": "monstergirls:block/butter_churn_stroke"
+    }
+  }
+}

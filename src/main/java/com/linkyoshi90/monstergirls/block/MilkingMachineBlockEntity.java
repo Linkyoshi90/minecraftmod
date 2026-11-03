@@ -133,8 +133,11 @@ public class MilkingMachineBlockEntity extends BlockEntity {
         if (bucket < 0) return;
         for (LivingEntity creature : level.getEntitiesOfClass(LivingEntity.class, new AABB(pos).inflate(RADIUS), e -> this.canMilk(e, level))) {
             FamilyMilk milk = FamilyMilk.of(creature);
+            net.minecraft.world.entity.player.Player friend = level.getPlayerByUUID(this.owner);
+            com.linkyoshi90.monstergirls.entity.Lactation.relieve(level, creature, friend);
             this.store.getItem(bucket).shrink(1);
-            this.put(new ItemStack(ModItems.MILK.get(milk).get()));
+            this.put(com.linkyoshi90.monstergirls.entity.Dairy.flavoured(creature, new ItemStack(ModItems.MILK.get(milk).get())));
+            if (friend != null) com.linkyoshi90.monstergirls.entity.Dairy.recordMilk(friend, creature);
             markMilked(creature, level.getGameTime() + Minotaur.MILK_COOLDOWN);
             if (creature instanceof Minotaur cow) cow.milkedByMachine();
             else if (creature instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl girl && com.linkyoshi90.monstergirls.MonsterGirlsConfig.milkHarness()) girl.harnessFor(Minotaur.MACHINE_MILK_TICKS);

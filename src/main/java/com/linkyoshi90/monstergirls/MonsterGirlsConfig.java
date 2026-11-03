@@ -59,6 +59,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue FLIRTING;
     public static final ModConfigSpec.BooleanValue MILK_EMBARRASSED;
     public static final ModConfigSpec.BooleanValue MILK_HARNESS;
+    public static final ModConfigSpec.BooleanValue MILK_DISCOMFORT;
 
     static {
         BUILDER.comment("Natural spawns of one family, as a percent of normal, on top of spawnRate.").push("familySpawnRates");
@@ -83,6 +84,9 @@ public final class MonsterGirlsConfig {
         MILK_HARNESS = BUILDER
                 .comment("The milking machine becomes a pump cart, and a minotaur cow wears its harness and two pumps while it works.")
                 .define("milkHarness", false);
+        MILK_DISCOMFORT = BUILDER
+                .comment("Left unmilked for ten minutes, she grows uncomfortably full: slower, a little grumpy, and she asks her friends for the machine. Milking her is a relief.")
+                .define("milkDiscomfort", true);
         BUILDER.pop();
     }
 
@@ -150,6 +154,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean milkEmbarrassed() {
         return SPEC.isLoaded() ? MILK_EMBARRASSED.get() : MILK_EMBARRASSED.getDefault();
+    }
+
+    public static boolean milkDiscomfort() {
+        return SPEC.isLoaded() ? MILK_DISCOMFORT.get() : MILK_DISCOMFORT.getDefault();
     }
 
     public static boolean milkHarness() {

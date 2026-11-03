@@ -208,6 +208,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.goalSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StayNearGoal<>(this));
         this.goalSelector.addGoal(2, new com.linkyoshi90.monstergirls.entity.ai.FetchBallGoal<>(this));
         this.goalSelector.addGoal(3, new com.linkyoshi90.monstergirls.entity.ai.SeekMilkingMachineGoal<>(this));
+        this.goalSelector.addGoal(4, new com.linkyoshi90.monstergirls.entity.ai.FridgeGoal<>(this));
         this.goalSelector.addGoal(3, new FarmhandGoal<>(this));
         this.goalSelector.addGoal(7, new SleepGoal(this));
         this.targetSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StanceTargetGoal<>(this));
@@ -724,6 +725,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             if (hurt || welcome) {
                 if (this.level() instanceof ServerLevel server) {
                     int value = this.foodValue(player, stack);
+                    com.linkyoshi90.monstergirls.entity.Dairy.ate(this, stack);
                     stack.consume(1, player);
                     if (hurt) this.heal(4.0F);
                     if (welcome) {

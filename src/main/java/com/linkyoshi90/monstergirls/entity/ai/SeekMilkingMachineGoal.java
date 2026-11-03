@@ -31,7 +31,7 @@ public class SeekMilkingMachineGoal<T extends PathfinderMob & Bonded> extends Go
     @Override
     public boolean canUse() {
         if (this.mob.tickCount % 41 != 0 || !(this.mob.level() instanceof ServerLevel level) || !Lactation.isLactating(this.mob)) return false;
-        this.machine = MilkingMachineBlockEntity.nearestFor(level, this.mob, SEARCH);
+        this.machine = MilkingMachineBlockEntity.nearestFor(level, this.mob, Lactation.isFull(this.mob) ? SEARCH * 2 : SEARCH);   // full, she goes further
         return this.machine != null;
     }
 

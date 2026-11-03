@@ -24,6 +24,8 @@ import java.util.List;
  */
 public class UmbrellaItem extends Item {
     public static final int RANGE = 8, MINUTE = 60;
+    /** How near she keeps: the open canopy (models/item/umbrella_open.json) is three blocks across. */
+    public static final double CLOSE = 1.2;
     private static final String SHARED = "UmbrellaShared";
 
     public UmbrellaItem(Properties properties) {
@@ -48,7 +50,7 @@ public class UmbrellaItem extends Item {
             player.getPersistentData().remove(SHARED);
             return null;
         }
-        if (friend.distanceToSqr(player) > 4.0) friend.getNavigation().moveTo(player, 1.1);
+        if (friend.distanceToSqr(player) > CLOSE * CLOSE) friend.getNavigation().moveTo(player, 1.1);   // right beside them, under the canopy
         else friend.getNavigation().stop();
         friend.getLookControl().setLookAt(player);
         int shared = player.getPersistentData().getInt(SHARED) + 1;

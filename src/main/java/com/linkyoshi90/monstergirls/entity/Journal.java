@@ -34,8 +34,10 @@ import java.util.Set;
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class Journal {
     private static final double SIGHT = 12.0;
-    /** The guide pages after the contents: befriending, the hearth, expeditions, weapons, scouting, life at home, the milking machine, keepsakes. */
-    public static final List<String> GUIDE = List.of("friends", "hearth", "expedition", "weapons", "scouting", "home", "milking", "keepsakes");
+    /** The guide pages after the contents: befriending, the hearth, expeditions, weapons, scouting, life at home, the milking machine, keepsakes, dairy. */
+    public static final List<String> GUIDE = List.of("friends", "hearth", "expedition", "weapons", "scouting", "home", "milking", "keepsakes", "dairy");
+    /** How many givers the milk page lists. */
+    public static final int MILK_LINES = 8;
 
     private Journal() {
     }
@@ -122,6 +124,18 @@ public final class Journal {
         for (String guide : GUIDE) {                                                 // how to live with them: hearth, expeditions, weapons
             pages.add(Filterable.passThrough(Component.translatable("journal.monstergirls.guide." + guide + ".title").withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_BLUE)
                     .append("\n\n").append(Component.translatable("journal.monstergirls.guide." + guide).withStyle(ChatFormatting.RESET, ChatFormatting.BLACK))));
+        }
+        CompoundTag milk = player.getData(ModAttachments.JOURNAL).getCompound("Milk");
+        if (!milk.isEmpty()) {                                                       // every bucket a friend has given them, most first
+            MutableComponent page = Component.translatable("journal.monstergirls.milk.title").withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_BLUE)
+                    .append("\n").append(Component.translatable("journal.monstergirls.milk.total", player.getData(ModAttachments.JOURNAL).getInt("MilkTotal")).withStyle(ChatFormatting.RESET, ChatFormatting.GRAY))
+                    .append("\n");
+            List<String> givers = new ArrayList<>(milk.getAllKeys());
+            givers.sort((a, b) -> milk.getInt(b) - milk.getInt(a));
+            for (String name : givers.subList(0, Math.min(MILK_LINES, givers.size()))) {
+                page.append("\n").append(Component.translatable("journal.monstergirls.milk.line", name, milk.getInt(name)).withStyle(ChatFormatting.RESET, ChatFormatting.BLACK));
+            }
+            pages.add(Filterable.passThrough(page));
         }
         List<String> all = new ArrayList<>(girls);
         all.addAll(others);

@@ -133,6 +133,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.goalSelector.addGoal(2, new BuildNestGoal(this));
         this.goalSelector.addGoal(2, new com.linkyoshi90.monstergirls.entity.ai.FetchBallGoal<>(this));
         this.goalSelector.addGoal(3, new com.linkyoshi90.monstergirls.entity.ai.SeekMilkingMachineGoal<>(this));
+        this.goalSelector.addGoal(4, new com.linkyoshi90.monstergirls.entity.ai.FridgeGoal<>(this));
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));
         this.goalSelector.addGoal(3, new GiftGoal<>(this));
     }
@@ -403,6 +404,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.onItemPickup(itemEntity);
         this.take(itemEntity, 1);
         ItemStack single = stack.split(1);
+        if (itemEntity.getOwner() instanceof Player && this.isEdible(single)) Dairy.ate(this, single);   // thrown to her: as good as from the hand
         this.onPickedUp(itemEntity, single);
         this.takeIntoHands(single);
         if (stack.isEmpty()) itemEntity.discard();

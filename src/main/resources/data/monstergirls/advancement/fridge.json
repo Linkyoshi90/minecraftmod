@@ -1,0 +1,23 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "monstergirls:fridge"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.fridge"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.fridge.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

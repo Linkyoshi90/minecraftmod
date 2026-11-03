@@ -20,10 +20,12 @@ import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-/** How many foods are in the pot, how long they've cooked and how many meals wait. */
+/** How many foods are in the pot, how long they've cooked and how many meals wait. Butter or cheese in it flavours the meals (entity.Dairy). */
 public class CookingPotBlockEntity extends BlockEntity {
     public static final int RECIPE = 3, COOK_TICKS = 300, MEALS = 2;
     private int ingredients, cooked, meals;
+    /** The last dairy food put in, whose family and flavours the meals take. */
+    private ItemStack flavour = ItemStack.EMPTY;
 
     public CookingPotBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.COOKING_POT.get(), pos, state);
@@ -41,6 +43,8 @@ public class CookingPotBlockEntity extends BlockEntity {
     public boolean add(ItemStack stack) {
         if (this.meals > 0 || this.ingredients >= RECIPE) return false;
         if (stack.is(ModItems.HOMEMADE_MEAL.get()) || (!stack.has(DataComponents.FOOD) && !stack.is(ModTags.MEAT))) return false;
+        if (this.ingredients == 0) this.flavour = ItemStack.EMPTY;
+        if (com.linkyoshi90.monstergirls.entity.Dairy.familyOf(stack) != null) this.flavour = stack.copyWithCount(1);
         this.ingredients++;
         this.setChanged();
         return true;
@@ -51,7 +55,7 @@ public class CookingPotBlockEntity extends BlockEntity {
         if (!stack.is(Items.BOWL) || this.meals <= 0) return ItemStack.EMPTY;
         this.meals--;
         this.setChanged();
-        return new ItemStack(ModItems.HOMEMADE_MEAL.get());
+        return this.flavour.isEmpty() ? new ItemStack(ModItems.HOMEMADE_MEAL.get()) : com.linkyoshi90.monstergirls.entity.Dairy.madeFrom(this.flavour, ModItems.HOMEMADE_MEAL.get(), 1);
     }
 
     public static boolean heated(Level level, BlockPos pos) {
@@ -79,6 +83,7 @@ public class CookingPotBlockEntity extends BlockEntity {
         tag.putInt("Ingredients", this.ingredients);
         tag.putInt("Cooked", this.cooked);
         tag.putInt("Meals", this.meals);
+        if (!this.flavour.isEmpty()) tag.put("Flavour", this.flavour.save(registries));
     }
 
     @Override
@@ -87,5 +92,6 @@ public class CookingPotBlockEntity extends BlockEntity {
         this.ingredients = tag.getInt("Ingredients");
         this.cooked = tag.getInt("Cooked");
         this.meals = tag.getInt("Meals");
+        this.flavour = tag.contains("Flavour") ? ItemStack.parseOptional(registries, tag.getCompound("Flavour")) : ItemStack.EMPTY;
     }
 }

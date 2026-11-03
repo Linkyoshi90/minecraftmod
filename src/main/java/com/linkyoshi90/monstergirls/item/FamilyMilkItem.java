@@ -52,6 +52,15 @@ public class FamilyMilkItem extends Item {
         return drinker instanceof Player player ? ItemUtils.createFilledResult(stack, player, new ItemStack(Items.BUCKET)) : stack;
     }
 
+    /** The flavours her diet gave it (entity.Dairy), on top of the family's effects. */
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, java.util.List<net.minecraft.network.chat.Component> tooltip, net.minecraft.world.item.TooltipFlag flag) {
+        java.util.List<Holder<MobEffect>> diet = stack.get(com.linkyoshi90.monstergirls.registry.ModComponents.MILK_DIET.get());
+        if (diet != null) for (Holder<MobEffect> e : diet) {
+            tooltip.add(net.minecraft.network.chat.Component.translatable("item.monstergirls.milk.flavour", e.value().getDisplayName()).withStyle(net.minecraft.ChatFormatting.BLUE));
+        }
+    }
+
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity user) {
         return DRINK_TICKS;

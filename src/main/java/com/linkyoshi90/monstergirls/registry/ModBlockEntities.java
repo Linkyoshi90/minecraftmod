@@ -60,5 +60,21 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("gift_box", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.GiftBoxBlockEntity::new,
                     ModBlocks.GIFT_BOX.get()).build(null));
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.linkyoshi90.monstergirls.block.ButterChurnBlockEntity>> BUTTER_CHURN =
+            BLOCK_ENTITIES.register("butter_churn", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.ButterChurnBlockEntity::new,
+                    ModBlocks.BUTTER_CHURN.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.linkyoshi90.monstergirls.block.CheeseShelfBlockEntity>> CHEESE_SHELF =
+            BLOCK_ENTITIES.register("cheese_shelf", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.CheeseShelfBlockEntity::new,
+                    ModBlocks.CHEESE_SHELF.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.linkyoshi90.monstergirls.block.MilkTankBlockEntity>> MILK_TANK =
+            BLOCK_ENTITIES.register("milk_tank", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.MilkTankBlockEntity::new,
+                    ModBlocks.MILK_TANK.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.linkyoshi90.monstergirls.block.FridgeBlockEntity>> FRIDGE =
+            BLOCK_ENTITIES.register("fridge", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.FridgeBlockEntity::new,
+                    ModBlocks.FRIDGE.get()).build(null));
+
     private ModBlockEntities() {}
 }

@@ -149,6 +149,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         this.goalSelector.addGoal(-1, new SitWhenOrderedGoal<>(this));
         this.goalSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StayNearGoal<>(this));
         this.goalSelector.addGoal(3, new com.linkyoshi90.monstergirls.entity.ai.SeekMilkingMachineGoal<>(this));
+        this.goalSelector.addGoal(4, new com.linkyoshi90.monstergirls.entity.ai.FridgeGoal<>(this));
         this.goalSelector.addGoal(3, new com.linkyoshi90.monstergirls.entity.girl.FarmhandGoal<>(this));
         this.targetSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StanceTargetGoal<>(this));
         this.goalSelector.addGoal(2, new LaySpawnGoal(this));
@@ -491,6 +492,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
             boolean giftWelcome = this.level().getGameTime() >= this.nextGiftTime;
             if (hurt || giftWelcome) {
                 if (this.level() instanceof ServerLevel server) {
+                    Dairy.ate(this, stack);
                     if (!player.getAbilities().instabuild) stack.shrink(1);
                     if (hurt) this.heal(4.0F);
                     if (giftWelcome) {

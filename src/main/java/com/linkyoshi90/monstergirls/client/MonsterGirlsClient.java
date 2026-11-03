@@ -98,6 +98,12 @@ public final class MonsterGirlsClient {
         }, com.linkyoshi90.monstergirls.registry.ModFluids.NECTAR_TYPE.get());
     }
 
+    /** The fridge opens in vanilla's chest screen. */
+    @SubscribeEvent
+    public static void registerScreens(net.neoforged.neoforge.client.event.RegisterMenuScreensEvent event) {
+        event.register(com.linkyoshi90.monstergirls.registry.ModMenus.FRIDGE.get(), net.minecraft.client.gui.screens.inventory.ContainerScreen::new);
+    }
+
     @SubscribeEvent
     @SuppressWarnings("deprecation")
     public static void clientSetup(net.neoforged.fml.event.lifecycle.FMLClientSetupEvent event) {
