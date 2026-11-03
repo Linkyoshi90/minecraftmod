@@ -123,4 +123,16 @@ public class ThirtyNinthWaveTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "milkDripsFromHerChestLyingDown")
+    public static void milkDripsFromHerChestLyingDown(GameTestHelper helper) {
+        AbstractMonsterGirl cow = still(helper, GirlSpecies.CATTLE_MINOTAUR, new BlockPos(2, 2, 2));
+        double standing = com.linkyoshi90.monstergirls.entity.Lactation.chest(cow)[0];
+        cow.setAction(AbstractMonsterGirl.Action.LYING);
+        double[] lying = com.linkyoshi90.monstergirls.entity.Lactation.chest(cow);
+        check(lying[0] < standing / 2 && lying[1] < 0, "low, and towards her head behind her");
+        cow.setAction(AbstractMonsterGirl.Action.SITTING);
+        check(com.linkyoshi90.monstergirls.entity.Lactation.chest(cow)[0] < standing, "lower sitting");
+        helper.succeed();
+    }
 }
