@@ -23,7 +23,8 @@ import java.util.List;
 
 /**
  * Jade (optional): under a girl's name, "Pregnant: yes/no" and "Friendship: 12/25", the looking player's affection
- * out of the next milestone (BondInfo). Both live on the server only, so the server sends them with Jade's data
+ * out of the next milestone (BondInfo); a nursing mother says so (or that she keeps her milk), and one uncomfortably full
+ * says she needs a milking machine. Both live on the server only, so the server sends them with Jade's data
  * packet. Jade finds this class by its annotation; nothing else refers to it, so the mod runs without Jade.
  */
 @WailaPlugin
@@ -49,6 +50,11 @@ public class JadePlugin implements IWailaPlugin {
             if (!(accessor.getEntity() instanceof Bonded b)) return;
             data.putInt("Affection", accessor.getPlayer() == null ? 0 : b.getAffection(accessor.getPlayer()));
             if (BondInfo.canCarry(accessor.getEntity())) data.putBoolean("Pregnant", b.getGestation().isCarrying());
+            if (accessor.getEntity() instanceof LivingEntity l && l.level() instanceof net.minecraft.server.level.ServerLevel level) {
+                int nursing = com.linkyoshi90.monstergirls.entity.Nursing.status(level, l);
+                if (nursing > 0) data.putInt("Nursing", nursing);
+                if (com.linkyoshi90.monstergirls.entity.Lactation.isFull(l)) data.putBoolean("MilkFull", true);
+            }
         }
 
         @Override
@@ -58,6 +64,8 @@ public class JadePlugin implements IWailaPlugin {
                 tooltip.add(Component.translatable("jade.monstergirls.pregnant",
                         Component.translatable(data.getBoolean("Pregnant") ? "jade.monstergirls.yes" : "jade.monstergirls.no")));
             }
+            if (data.contains("Nursing")) tooltip.add(Component.translatable(data.getInt("Nursing") == 2 ? "jade.monstergirls.keeps_milk" : "jade.monstergirls.nursing"));
+            if (data.getBoolean("MilkFull")) tooltip.add(Component.translatable("jade.monstergirls.milk_full").withStyle(net.minecraft.ChatFormatting.RED));
             if (data.contains("Affection")) {
                 int a = data.getInt("Affection");
                 tooltip.add(Component.translatable("jade.monstergirls.friendship", a, BondInfo.nextMilestone(a)));

@@ -9,6 +9,7 @@ import com.linkyoshi90.monstergirls.block.MilkTankBlock;
 import com.linkyoshi90.monstergirls.block.MilkTankBlockEntity;
 import com.linkyoshi90.monstergirls.entity.Dairy;
 import com.linkyoshi90.monstergirls.entity.Lactation;
+import com.linkyoshi90.monstergirls.entity.Nursing;
 import com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl;
 import com.linkyoshi90.monstergirls.entity.girl.GirlSpecies;
 import com.linkyoshi90.monstergirls.entity.girl.Minotaur;
@@ -176,6 +177,54 @@ public class DairyTests {
         ItemStack ice = recipe.assemble(grid, helper.getLevel().registryAccess());
         check(ice.is(ModItems.ICE_CREAM.get()) && ice.get(ModComponents.MILK_FAMILY.get()) == FamilyMilk.LAMIA, "lamia ice cream");
         check(!recipe.matches(CraftingInput.of(2, 2, List.of(milk(FamilyMilk.LAMIA), new ItemStack(Items.SUGAR), new ItemStack(Items.DIRT), new ItemStack(Items.BOWL))), helper.getLevel()), "not with dirt");
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "nursingUntilWeaned")
+    public static void nursingUntilWeaned(GameTestHelper helper) {
+        AbstractMonsterGirl mother = still(helper, GirlSpecies.WOLF_CANID, new BlockPos(1, 2, 1));
+        check(!Lactation.isLactating(mother), "no milk before");
+        AbstractMonsterGirl baby = mother.spawnYoung(helper.getLevel(), helper.absolutePos(new BlockPos(3, 2, 3)), null);
+        baby.setNoAi(true);
+        check(Nursing.isNursing(mother) && Lactation.isLactating(mother) && Nursing.status(helper.getLevel(), mother) == 1, "her milk comes in with the baby");
+        mother.setAction(AbstractMonsterGirl.Action.NURSE);
+        check(baby.startRiding(mother, true) && baby.getVehicle() == mother && mother.getControllingPassenger() == null, "held, not steering");
+        int grow = baby.getGrowTicks();
+        Nursing.fed(helper.getLevel(), mother, baby);
+        check(baby.getGrowTicks() == grow + Nursing.GROWTH && !Lactation.isLactating(mother), "she grows, and the milk is used for now");
+        baby.stopRiding();
+        mother.setAction(AbstractMonsterGirl.Action.NONE);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 1));
+        p.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(Items.BREAD));
+        baby.interact(p, net.minecraft.world.InteractionHand.MAIN_HAND);
+        check(baby.getPersistentData().getBoolean(Nursing.WEANED) && !Nursing.isNursing(mother) && p.getMainHandItem().isEmpty(), "weaned with bread from a hand");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "unweanedSheKeepsHerMilk")
+    public static void unweanedSheKeepsHerMilk(GameTestHelper helper) {
+        AbstractMonsterGirl mother = still(helper, GirlSpecies.WOLF_CANID, new BlockPos(1, 2, 1));
+        AbstractMonsterGirl daughter = mother.spawnYoung(helper.getLevel(), helper.absolutePos(new BlockPos(3, 2, 3)), null);
+        daughter.setNoAi(true);
+        daughter.setBaby(false);
+        check(Nursing.keepsMilk(helper.getLevel(), mother) && Nursing.status(helper.getLevel(), mother) == 2 && Lactation.isLactating(mother), "grown unweaned: milk for good");
+        check(!Nursing.wean(helper.getLevel(), daughter, null), "too late to wean");
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "dishesCarryTheirFlavour")
+    public static void dishesCarryTheirFlavour(GameTestHelper helper) {
+        var reg = helper.getLevel().registryAccess();
+        var pie = new net.minecraft.world.item.crafting.RecipeHolder<>(MonsterGirlsMod.id("test_pie"), new net.minecraft.world.item.crafting.ShapelessRecipe("",
+                CraftingBookCategory.MISC, new ItemStack(Items.BREAD), net.minecraft.core.NonNullList.of(net.minecraft.world.item.crafting.Ingredient.EMPTY,
+                net.minecraft.world.item.crafting.Ingredient.of(Items.WHEAT), net.minecraft.world.item.crafting.Ingredient.of(Items.SWEET_BERRIES))));
+        var dye = new net.minecraft.world.item.crafting.RecipeHolder<>(MonsterGirlsMod.id("test_dye"), new net.minecraft.world.item.crafting.ShapelessRecipe("",
+                CraftingBookCategory.MISC, new ItemStack(Items.RED_DYE), net.minecraft.core.NonNullList.of(net.minecraft.world.item.crafting.Ingredient.EMPTY,
+                net.minecraft.world.item.crafting.Ingredient.of(Items.SWEET_BERRIES))));
+        var map = Dairy.recipeFlavours(List.of(pie, dye), reg);
+        check(map.get(Items.BREAD) == MobEffects.REGENERATION, "a berry bread flavours like berries");
+        check(!map.containsKey(Items.RED_DYE), "a dye is no dish");
         helper.succeed();
     }
 }

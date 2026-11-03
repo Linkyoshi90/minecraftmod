@@ -724,6 +724,7 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
 
     @Override
     protected Vec3 getPassengerAttachmentPoint(net.minecraft.world.entity.Entity passenger, net.minecraft.world.entity.EntityDimensions dims, float scale) {
+        if (this.nursingRider(passenger)) return super.getPassengerAttachmentPoint(passenger, dims, scale);   // her baby at her chest
         double seat = this.species == GirlSpecies.GIRAFFE_CENTAUR ? 0.46 : 0.55;   // the giraffe's back is low: most of her height is neck
         return new Vec3(0.0, dims.height() * seat, 0.0);                // over her middle: her model is drawn seatBack() forward
     }

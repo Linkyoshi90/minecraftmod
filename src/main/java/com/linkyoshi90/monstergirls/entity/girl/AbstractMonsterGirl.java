@@ -22,6 +22,8 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -35,6 +37,7 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -157,7 +160,9 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         PINCH("pinch", true), CURL("curl", false), SLAM("slam", true), CLING("cling", false),
         ROOST("roost", false), PRAY("pray", false), STRIKE("strike", true), SNAP("snap", true), PERCH("perch", false),
         HANG("hang", false), RUNDOWN("rundown", false), WATCH("watch", true),
-        PLAY("play", false), DANCE("dance", false);
+        PLAY("play", false), DANCE("dance", false),
+        /** Sitting with her baby held to her chest (or, for the baby, held there): the sit animation with the cradle pose over it. */
+        NURSE("sit", false);
 
         public final String animation;
         public final boolean once;
@@ -209,6 +214,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.goalSelector.addGoal(2, new com.linkyoshi90.monstergirls.entity.ai.FetchBallGoal<>(this));
         this.goalSelector.addGoal(3, new com.linkyoshi90.monstergirls.entity.ai.SeekMilkingMachineGoal<>(this));
         this.goalSelector.addGoal(4, new com.linkyoshi90.monstergirls.entity.ai.FridgeGoal<>(this));
+        this.goalSelector.addGoal(3, new com.linkyoshi90.monstergirls.entity.ai.NurseGoal(this));
         this.goalSelector.addGoal(3, new FarmhandGoal<>(this));
         this.goalSelector.addGoal(7, new SleepGoal(this));
         this.targetSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StanceTargetGoal<>(this));
@@ -242,6 +248,39 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             this.navigation = new net.minecraft.world.entity.ai.navigation.GroundPathNavigation(this, this.level());
             this.setNoGravity(false);
         }
+    }
+
+    // --- nursing (Nursing, NurseGoal) -------------------------------------------------------------------------------
+
+    /** Her baby, held to her chest while she nurses. */
+    public boolean nursingRider(Entity passenger) {
+        return passenger instanceof AbstractMonsterGirl baby && baby.isBaby() && this.getAction() == Action.NURSE;
+    }
+
+    @Override
+    protected Vec3 getPassengerAttachmentPoint(Entity passenger, net.minecraft.world.entity.EntityDimensions dims, float scale) {
+        if (this.nursingRider(passenger)) {                             // her middle at her mother's chest, just in front of it
+            double[] chest = com.linkyoshi90.monstergirls.entity.Lactation.chest(this);
+            return new Vec3(0.0, chest[0] - passenger.getBbHeight() * 0.55, chest[1] + passenger.getBbWidth() * 0.5);
+        }
+        return super.getPassengerAttachmentPoint(passenger, dims, scale);
+    }
+
+    @Override
+    protected void positionRider(Entity passenger, Entity.MoveFunction move) {
+        super.positionRider(passenger, move);
+        if (this.nursingRider(passenger) && passenger instanceof LivingEntity baby) {   // facing her mother
+            float yaw = this.yBodyRot + 180.0F;
+            baby.setYRot(yaw);
+            baby.yBodyRot = yaw;
+            baby.yHeadRot = yaw;
+        }
+    }
+
+    /** A baby carried about never steers. */
+    @Override
+    public boolean canControlVehicle() {
+        return !this.isBaby() && super.canControlVehicle();
     }
 
     /** A young one stays near the closest grown woman of her species. */
@@ -719,6 +758,13 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (arms != null) return arms;
         InteractionResult family = this.familyInteract(player, hand, stack);
         if (family != null) return family;
+        if (this.isBaby() && (this.isFood(stack) || stack.is(ModTags.MEAT) || stack.has(net.minecraft.core.component.DataComponents.FOOD))
+                && this.level() instanceof ServerLevel weaning && com.linkyoshi90.monstergirls.entity.Nursing.wean(weaning, this, player)) {   // her first solid food
+            stack.consume(1, player);
+            this.playSound(this.getEatSound(), 1.0F, this.getVoicePitch());
+            this.hearts(weaning, 3);
+            return InteractionResult.SUCCESS;
+        }
         if (!this.isBaby() && (this.isFood(stack) || stack.is(ModTags.MEAT))) {
             boolean hurt = this.getHealth() < this.getMaxHealth();
             boolean welcome = this.level().getGameTime() >= this.nextFoodTime;
@@ -754,6 +800,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
                 this.getLookControl().setLookAt(player);
                 this.hearts(server, 2);
                 com.linkyoshi90.monstergirls.entity.Flirting.onPet(server, this, player);
+                com.linkyoshi90.monstergirls.entity.Lactation.onPet(this, player);
                 this.playSound(this.getChirpSound(), 1.0F, this.getVoicePitch() * 1.1F);
             }
         }
@@ -884,6 +931,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         young.setPersistenceRequired();                                   // born here, she stays here: no despawning
         level.addFreshEntity(young);
         young.bornTo(father);
+        com.linkyoshi90.monstergirls.entity.Nursing.born(this, young);   // she nurses her newborn
         return young;
     }
 

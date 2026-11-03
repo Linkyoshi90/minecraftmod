@@ -207,6 +207,11 @@ shaped("fridge", ["III", "ICI", "IPI"], dict(I="minecraft:iron_ingot", C="#c:che
 dump(os.path.join(DATA, "recipe", "ice_cream.json"), {"type": "monstergirls:ice_cream", "category": "misc"})
 tag_add(os.path.join(MC, "axe.json"), ["monstergirls:butter_churn", "monstergirls:cheese_shelf"])
 tag_add(os.path.join(MC, "pickaxe.json"), ["monstergirls:milk_tank", "monstergirls:fridge"])
+CTAGS = os.path.join(I.RES, "data", "c", "tags", "item")
+for t in ("foods/butter", "butter", "butters"):                   # other mods' recipes that take any butter or cheese take ours
+    tag_add(os.path.join(CTAGS, t + ".json"), ["monstergirls:butter"])
+for t in ("foods/cheese", "cheese", "cheeses"):
+    tag_add(os.path.join(CTAGS, t + ".json"), ["monstergirls:cheese"])
 advancement("first_milk", "monstergirls:minotaur_milk")
 advancement("churned", "monstergirls:butter")
 advancement("hard_cheese", "monstergirls:cheese", "goal")
@@ -228,7 +233,13 @@ lang = {
     "message.monstergirls.cheese_filter_all": "Hoppers take any cheese", "message.monstergirls.tank": "%s/%s buckets of %s, %s empty buckets",
     "message.monstergirls.tank_nothing": "nothing", "message.monstergirls.tank_full": "The tank is full", "message.monstergirls.tank_other": "The tank holds another milk",
     "message.monstergirls.milk_full": "%s is uncomfortably full: she needs a milking machine", "message.monstergirls.milk_relief": "%s sighs with relief",
-    "monstergirls.configuration.milkDiscomfort": "Milk discomfort",
+    "monstergirls.configuration.milkDiscomfort": "Milk discomfort", "monstergirls.configuration.recipeFlavours": "Flavours from recipes",
+    "message.monstergirls.weaned": "%s eats her first solid food: %s weans her", "message.monstergirls.her_mother": "her mother",
+    "jade.monstergirls.nursing": "Nursing her baby", "jade.monstergirls.keeps_milk": "Keeps her milk (never weaned)",
+    "jade.monstergirls.milk_full": "Uncomfortably full: needs a milking machine",
+    "journal.monstergirls.guide.nursing.title": "Nursing",
+    "journal.monstergirls.guide.nursing": "A mother with milk nurses her newborn every few minutes, and the baby grows a little faster for it. "
+                                          "Hand-feed the baby her first solid food to wean her. Never weaned, she grows up and her mother keeps her milk for good.",
     "journal.monstergirls.guide.dairy.title": "Dairy",
     "journal.monstergirls.guide.dairy": "Pour milk into a butter churn and work it, by hand or with redstone. Set it on a cheese shelf underground: it firms in a day and hardens in three, stronger each time. "
                                          "A fridge feeds the household; berries, honey, fish and the like flavour a friend's milk for a day, and so does food from your hand.",

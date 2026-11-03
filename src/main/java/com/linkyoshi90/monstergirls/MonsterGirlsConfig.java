@@ -60,6 +60,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue MILK_EMBARRASSED;
     public static final ModConfigSpec.BooleanValue MILK_HARNESS;
     public static final ModConfigSpec.BooleanValue MILK_DISCOMFORT;
+    public static final ModConfigSpec.BooleanValue RECIPE_FLAVOURS;
 
     static {
         BUILDER.comment("Natural spawns of one family, as a percent of normal, on top of spawnRate.").push("familySpawnRates");
@@ -87,6 +88,9 @@ public final class MonsterGirlsConfig {
         MILK_DISCOMFORT = BUILDER
                 .comment("Left unmilked for ten minutes, she grows uncomfortably full: slower, a little grumpy, and she asks her friends for the machine. Milking her is a relief.")
                 .define("milkDiscomfort", true);
+        RECIPE_FLAVOURS = BUILDER
+                .comment("A dish made from a flavouring food (any mod's recipe: a berry pie, a honey cake) flavours her milk as that food does, one flavour per dish.")
+                .define("recipeFlavours", true);
         BUILDER.pop();
     }
 
@@ -158,6 +162,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean milkDiscomfort() {
         return SPEC.isLoaded() ? MILK_DISCOMFORT.get() : MILK_DISCOMFORT.getDefault();
+    }
+
+    public static boolean recipeFlavours() {
+        return SPEC.isLoaded() ? RECIPE_FLAVOURS.get() : RECIPE_FLAVOURS.getDefault();
     }
 
     public static boolean milkHarness() {

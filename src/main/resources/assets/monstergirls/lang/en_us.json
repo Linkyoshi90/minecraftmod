@@ -2683,5 +2683,13 @@
   "family.monstergirls.armoured": "Armoured",
   "family.monstergirls.bat": "Bat",
   "family.monstergirls.theropod": "Theropod",
-  "family.monstergirls.rider": "Rider"
+  "family.monstergirls.rider": "Rider",
+  "monstergirls.configuration.recipeFlavours": "Flavours from recipes",
+  "message.monstergirls.weaned": "%s eats her first solid food: %s weans her",
+  "message.monstergirls.her_mother": "her mother",
+  "jade.monstergirls.nursing": "Nursing her baby",
+  "jade.monstergirls.keeps_milk": "Keeps her milk (never weaned)",
+  "jade.monstergirls.milk_full": "Uncomfortably full: needs a milking machine",
+  "journal.monstergirls.guide.nursing.title": "Nursing",
+  "journal.monstergirls.guide.nursing": "A mother with milk nurses her newborn every few minutes, and the baby grows a little faster for it. Hand-feed the baby her first solid food to wean her. Never weaned, she grows up and her mother keeps her milk for good."
 }

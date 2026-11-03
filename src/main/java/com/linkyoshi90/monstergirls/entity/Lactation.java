@@ -21,7 +21,8 @@ import javax.annotation.Nullable;
  * Who has milk just now: a minotaur cow whose milk is ready, and anyone in the last third of expecting (grown and full size, as for the
  * machine). They go looking for a milking machine (SeekMilkingMachineGoal), and with the milkDrips option on they drip until milked.
  * With milkDiscomfort on, ten minutes of milk unmilked leaves her uncomfortably full: slowed, a grumpy puff now and then and a word to
- * her friends nearby, and she looks twice as far for a machine. Milking her (machine or bucket) is a relief, worth a little friendship.
+ * her friends nearby (and to a friend who pets her), and she looks twice as far for a machine. A mother nursing her baby
+ * (Nursing) has milk until the baby is weaned. Milking her (machine or bucket) is a relief, worth a little friendship.
  */
 public final class Lactation {
     /** How far along she has to be: the last of the three stages. */
@@ -43,12 +44,12 @@ public final class Lactation {
     public static boolean isLactating(LivingEntity creature) {
         if (!(creature instanceof Bonded bonded) || creature.isBaby() || creature.getBbHeight() < MilkingMachineBlockEntity.MIN_HEIGHT) return false;
         if (FamilyMilk.of(creature) == null || !MilkingMachineBlockEntity.isReady(creature, creature.level().getGameTime())) return false;
-        return lastStage(bonded) || creature instanceof Minotaur cow && !cow.isMale();
+        return lastStage(bonded) || Nursing.isNursing(creature) || creature instanceof Minotaur cow && !cow.isMale();
     }
 
     /** Late in expecting, unmilked, and the option is on. A cow's own bell is on top of this (Minotaur.isDripping). */
     public static boolean isDripping(LivingEntity creature) {
-        return MonsterGirlsConfig.milkDrips() && creature instanceof Bonded bonded && lastStage(bonded) && isLactating(creature);
+        return MonsterGirlsConfig.milkDrips() && creature instanceof Bonded bonded && (lastStage(bonded) || Nursing.isNursing(creature)) && isLactating(creature);
     }
 
     /** Where her chest is: height above her feet and distance ahead of them, by pose. Lying (in bed) she is tipped onto her back, head behind her. */
@@ -57,7 +58,7 @@ public final class Lactation {
         if (creature instanceof AbstractMonsterGirl girl) {
             AbstractMonsterGirl.Action action = girl.getAction();
             if (action == AbstractMonsterGirl.Action.LYING) return new double[] {LYING_CHEST, -height * 0.65};
-            if (action == AbstractMonsterGirl.Action.SITTING) return new double[] {height * 0.42, creature.getBbWidth() * 0.3};
+            if (action == AbstractMonsterGirl.Action.SITTING || action == AbstractMonsterGirl.Action.NURSE) return new double[] {height * 0.42, creature.getBbWidth() * 0.3};
         }
         if (creature.isSleeping()) return new double[] {LYING_CHEST, 0.0};   // vanilla sleep lays her along the bed about her middle
         return new double[] {height * 0.6, creature.getBbWidth() * 0.3};
@@ -78,6 +79,7 @@ public final class Lactation {
     public static void tick(ServerLevel level, LivingEntity creature) {
         if (creature.tickCount % DRIP_INTERVAL == 0 && !(creature instanceof Minotaur) && isDripping(creature)) drip(level, creature);
         if (creature.tickCount % 20 == 0) comfort(level, creature);
+        Nursing.tick(level, creature);
     }
 
     /** Uncomfortably full: lactating, and unmilked for FULL_AFTER. */
@@ -108,6 +110,11 @@ public final class Lactation {
         for (Player p : level.getEntitiesOfClass(Player.class, creature.getBoundingBox().inflate(16), p -> bonded.getAffection(p) >= HomeLife.FRIEND)) {
             p.displayClientMessage(Component.translatable("message.monstergirls.milk_full", creature.getDisplayName()), true);
         }
+    }
+
+    /** A pat from a friend while she is full: she says so. */
+    public static void onPet(LivingEntity creature, Player player) {
+        if (isFull(creature)) player.displayClientMessage(Component.translatable("message.monstergirls.milk_full", creature.getDisplayName()), true);
     }
 
     /** She has just been milked: if she was full, a sigh of relief and a little friendship for whoever did it. */

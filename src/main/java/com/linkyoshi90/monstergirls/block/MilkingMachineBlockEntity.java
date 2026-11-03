@@ -185,14 +185,14 @@ public class MilkingMachineBlockEntity extends BlockEntity {
         if (FamilyMilk.of(creature) == null || !isReady(creature, level.getGameTime())) return false;
         net.minecraft.world.entity.player.Player friend = level.getPlayerByUUID(this.owner);
         if (friend == null || bonded.getAffection(friend) < Orders.AFFECTION) return false;
-        return bonded.getGestation().isCarrying() || creature instanceof Minotaur cow && !cow.isMale();
+        return bonded.getGestation().isCarrying() || com.linkyoshi90.monstergirls.entity.Nursing.isNursing(creature) || creature instanceof Minotaur cow && !cow.isMale();
     }
 
     public static boolean isReady(LivingEntity creature, long now) {
         return creature instanceof Minotaur cow ? cow.isMilkReady() : now >= creature.getData(ModAttachments.NEXT_MILK);
     }
 
-    private static void markMilked(LivingEntity creature, long next) {
+    public static void markMilked(LivingEntity creature, long next) {
         if (creature instanceof Minotaur cow) cow.setNextMilk(next);
         else creature.setData(ModAttachments.NEXT_MILK, next);
     }

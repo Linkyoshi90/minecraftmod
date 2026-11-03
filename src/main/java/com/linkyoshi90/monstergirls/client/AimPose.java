@@ -51,7 +51,7 @@ final class AimPose {
     }
 
     /** A bone's rotation in keyframe degrees, over its rest pose. */
-    private static void set(AnimationProcessor<AbstractMonsterGirl> proc, String name, float x, float y, float z) {
+    static void set(AnimationProcessor<AbstractMonsterGirl> proc, String name, float x, float y, float z) {
         GeoBone b = proc.getBone(name);
         if (b == null) return;
         var rest = b.getInitialSnapshot();

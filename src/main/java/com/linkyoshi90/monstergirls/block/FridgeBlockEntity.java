@@ -111,7 +111,7 @@ public class FridgeBlockEntity extends BlockEntity {
             ItemStack s = this.store.getItem(i);
             if (!isFood(s)) continue;
             any.add(i);
-            if (Dairy.FLAVOURS.containsKey(s.getItem())) flavours.add(i);
+            if (Dairy.flavourOf(level, s) != null) flavours.add(i);
         }
         List<Integer> pick = flavours.isEmpty() ? any : flavours;
         if (pick.isEmpty()) return ItemStack.EMPTY;

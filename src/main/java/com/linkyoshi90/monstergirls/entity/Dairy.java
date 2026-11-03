@@ -26,7 +26,18 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 
+import com.linkyoshi90.monstergirls.MonsterGirlsConfig;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.Level;
+
 import javax.annotation.Nullable;
+import java.lang.ref.WeakReference;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +46,8 @@ import java.util.Map;
  * Milk after it leaves her. Her diet: certain foods she ate from the fridge or a friend's hand flavour her milk for a day with one
  * effect each (two at most), carried on the bucket (ModComponents.MILK_DIET) and into anything made from it. The dairy foods (butter
  * from the churn, cheese from the cheese shelf, ice cream, a meal cooked with them) carry the family too, and give its effects, weaker
- * than a bucket: a cheese grows stronger the longer it ages. The journal counts every bucket a girl gives, and the dairy advancements.
+ * than a bucket: a cheese grows stronger the longer it ages. A dish from any mod's recipe made with a flavouring food flavours her milk
+ * the same way, one flavour per dish (the recipeFlavours option). The journal counts every bucket a girl gives, and the dairy advancements.
  */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class Dairy {
@@ -65,7 +77,7 @@ public final class Dairy {
 
     /** She ate this from the fridge or a friend's hand. Whether it flavours her milk. */
     public static boolean ate(LivingEntity girl, ItemStack food) {
-        Holder<MobEffect> flavour = food.is(ModItems.HOMEMADE_MEAL.get()) ? MobEffects.HEALTH_BOOST : FLAVOURS.get(food.getItem());
+        Holder<MobEffect> flavour = flavourOf(girl.level(), food);
         if (flavour == null) return false;
         long now = girl.level().getGameTime();
         ListTag list = girl.getPersistentData().getList(DIET, Tag.TAG_COMPOUND);
@@ -81,6 +93,57 @@ public final class Dairy {
         list.add(entry);
         girl.getPersistentData().put(DIET, list);
         return true;
+    }
+
+    /** How this food flavours her milk, if it does: by itself, or (recipeFlavours) as a dish made from a flavouring food. */
+    @Nullable
+    public static Holder<MobEffect> flavourOf(Level level, ItemStack food) {
+        if (food.is(ModItems.HOMEMADE_MEAL.get())) return MobEffects.HEALTH_BOOST;
+        Holder<MobEffect> direct = FLAVOURS.get(food.getItem());
+        if (direct != null || !MonsterGirlsConfig.recipeFlavours() || level.getServer() == null) return direct;
+        return recipeFlavours(level.getServer().getRecipeManager(), level.registryAccess()).get(food.getItem());
+    }
+
+    private static WeakReference<RecipeManager> builtFor = new WeakReference<>(null);
+    private static Map<Item, Holder<MobEffect>> fromRecipes = Map.of();
+
+    /** Every food any recipe makes from a flavouring food (built again after a reload, which brings a new recipe manager). */
+    private static synchronized Map<Item, Holder<MobEffect>> recipeFlavours(RecipeManager recipes, HolderLookup.Provider registries) {
+        if (builtFor.get() != recipes) {
+            fromRecipes = recipeFlavours(recipes.getRecipes(), registries);
+            builtFor = new WeakReference<>(recipes);
+        }
+        return fromRecipes;
+    }
+
+    /**
+     * The dishes among these recipes (a food result, not a flavouring food itself) and the flavour of the first flavouring food among
+     * each one's ingredients. One level deep and one flavour per dish, so a dish is never stronger than the food it was made from.
+     */
+    public static Map<Item, Holder<MobEffect>> recipeFlavours(Collection<RecipeHolder<?>> recipes, HolderLookup.Provider registries) {
+        Map<Item, Holder<MobEffect>> out = new HashMap<>();
+        for (RecipeHolder<?> holder : recipes) {
+            ItemStack dish;
+            List<Ingredient> ingredients;
+            try {                                                    // another mod's recipe may not answer either for a lookup like this
+                dish = holder.value().getResultItem(registries);
+                ingredients = holder.value().getIngredients();
+            } catch (RuntimeException e) {
+                continue;
+            }
+            if (dish == null || dish.isEmpty() || !dish.has(DataComponents.FOOD) || FLAVOURS.containsKey(dish.getItem()) || out.containsKey(dish.getItem())) continue;
+            search:
+            for (Ingredient ingredient : ingredients) {
+                for (ItemStack option : ingredient.getItems()) {
+                    Holder<MobEffect> f = FLAVOURS.get(option.getItem());
+                    if (f != null) {
+                        out.put(dish.getItem(), f);
+                        break search;
+                    }
+                }
+            }
+        }
+        return out;
     }
 
     /** The flavours in her milk right now. */
