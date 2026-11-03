@@ -28,5 +28,6 @@ M.add_lang({
                                              "Cut the web, fight off the chasers, or lead her under a roof, and she won't forget it. "
                                              "One found hurt mends with a healing balm.",
     "monstergirls.configuration.encounterRate": "Encounter rate",
+    "monstergirls.configuration.missingCountsOffline": "Missing counts offline days",
 })
 print("encounter assets written")

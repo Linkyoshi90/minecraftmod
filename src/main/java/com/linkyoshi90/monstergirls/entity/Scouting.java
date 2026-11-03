@@ -226,7 +226,7 @@ public final class Scouting {
         mob.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, mob.getRandom().nextFloat() * 360F, 0);
         mob.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
         if (!level.addFreshEntity(mob)) return null;
-        Missing.forgive(mob, player.getUUID());
+        Missing.forgive(mob, player);
         ResourceKey<Biome> biome = ResourceKey.create(Registries.BIOME, ResourceLocation.parse(e.getString("Biome")));
         ItemStack pack = new ItemStack(ModItems.SCOUT_PACK.get());
         List<ItemStack> all = new ArrayList<>(finds(biome, e.getInt("Rolls"), e.getInt("Affection"), mob.getRandom()));
@@ -237,7 +237,7 @@ public final class Scouting {
             BlockPos near = Expeditions.arrival(level, player, member);
             member.moveTo(near.getX() + 0.5, near.getY(), near.getZ() + 0.5, member.getRandom().nextFloat() * 360F, 0);
             member.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
-            if (level.addFreshEntity(member)) Missing.forgive(member, player.getUUID());
+            if (level.addFreshEntity(member)) Missing.forgive(member, player);
             all.addAll(finds(ResourceKey.create(Registries.BIOME, ResourceLocation.parse(m.getString("Biome"))), m.getInt("Rolls"), m.getInt("Affection"), member.getRandom()));
         }
         pack.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(all.size() > CAPACITY ? all.subList(0, CAPACITY) : all));

@@ -59,6 +59,10 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.IntValue MISSING_RATE = BUILDER
             .comment("How quickly friends start to miss a player they haven't seen, in percent (0 turns it off, 200 is twice as soon).")
             .defineInRange("missingRate", 100, 0, MAX_RATE);
+    public static final ModConfigSpec.BooleanValue MISSING_COUNTS_OFFLINE = BUILDER
+            .comment("Friends miss a player for days the world went on without them (the server kept running while they were away).",
+                    "Off, only days the player was online count.")
+            .define("missingCountsOffline", false);
     public static final ModConfigSpec.IntValue CONCEPTION_CHANCE = BUILDER
             .comment("The chance of young after a shared night, in percent. One who missed you beats it; a full moon is always certain.")
             .defineInRange("conceptionChance", 50, 0, 100);
@@ -125,6 +129,10 @@ public final class MonsterGirlsConfig {
     /** The chance a wild one carries an encounter, where that is normally one in rarity. */
     public static double encounterChance(int rarity) {
         return rate(ENCOUNTER_RATE) / rarity;
+    }
+
+    public static boolean missingCountsOffline() {
+        return SPEC.isLoaded() ? MISSING_COUNTS_OFFLINE.get() : MISSING_COUNTS_OFFLINE.getDefault();
     }
 
     public static double rareSpawnRate() {

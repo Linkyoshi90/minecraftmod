@@ -109,7 +109,7 @@ public final class Expeditions {
         girl.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, girl.getRandom().nextFloat() * 360F, 0);
         girl.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
         if (!level.addFreshEntity(girl)) return null;
-        com.linkyoshi90.monstergirls.entity.Missing.forgive(girl, player.getUUID());
+        com.linkyoshi90.monstergirls.entity.Missing.forgive(girl, player);
         for (ItemStack s : finds(girl, player)) girl.spawnAtLocation(s);
         if (girl.getRandom().nextInt(COMPANION_CHANCE) == 0) companion(level, player, girl);
         girl.hearts(level, 5);

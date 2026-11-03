@@ -65,7 +65,7 @@ public class TwentyNinthWaveTests {
     private static void apart(AbstractMonsterGirl girl, ServerPlayer player, int days) {
         Missing.meet(girl, player);
         var seen = girl.getPersistentData().getCompound("MissingSeen");
-        seen.putLong(player.getUUID().toString(), girl.level().getDayTime() - days * (long) Missing.DAY);
+        seen.putLong(player.getUUID().toString(), Missing.clock(player) - days * (long) Missing.DAY);
     }
 
     @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "theCloserTheSooner")
@@ -74,6 +74,31 @@ public class TwentyNinthWaveTests {
         check(Missing.stage(30, 3) == 0 && Missing.stage(30, 4) == 1 && Missing.stage(30, 8) == 2, "a fond friend takes her time");
         check(Missing.stage(70, 3) == 1 && Missing.stage(70, 6) == 2, "a devoted one sooner");
         check(Missing.stage(100, 2) == 1 && Missing.stage(100, 4) == 2, "the closest soonest");
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "onlyDaysOnlineCount")
+    public static void onlyDaysOnlineCount(GameTestHelper helper) {
+        AbstractMonsterGirl g = still(helper, GirlSpecies.WOLF_CANID, new BlockPos(1, 2, 1));
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
+        g.setAffection(p.getUUID(), 50);
+        long now = helper.getLevel().getDayTime();
+        var data = p.getData(com.linkyoshi90.monstergirls.registry.ModAttachments.JOURNAL);
+        data.putLong("ClockLast", now - 600);
+        p.setData(com.linkyoshi90.monstergirls.registry.ModAttachments.JOURNAL, data);
+        long before = Missing.clock(p);
+        Missing.advance(p);
+        check(Missing.clock(p) == before + 600, "time online counts");
+        Missing.meet(g, p);
+        data = p.getData(com.linkyoshi90.monstergirls.registry.ModAttachments.JOURNAL);
+        data.putLong("ClockLast", now - 6L * Missing.DAY);                  // they logged off six days ago, while the server ran on
+        p.setData(com.linkyoshi90.monstergirls.registry.ModAttachments.JOURNAL, data);
+        Missing.loggedIn(p);
+        Missing.advance(p);
+        check(Missing.clock(p) - (before + 600) <= 20, "their clock stood still while they were away");
+        Missing.meet(g, p);
+        check(g.getAffection(p) == 50 && Missing.activeStage(g, p) == 0, "days offline don't");
+        HarpyTestUtil.remove(p);
         helper.succeed();
     }
 
@@ -128,7 +153,7 @@ public class TwentyNinthWaveTests {
         ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
         s.setAffection(p.getUUID(), 40);
         Missing.meet(s, p);
-        s.getPersistentData().getCompound("MissingSeen").putLong(p.getUUID().toString(), s.level().getDayTime() - 4L * Missing.DAY);
+        s.getPersistentData().getCompound("MissingSeen").putLong(p.getUUID().toString(), Missing.clock(p) - 4L * Missing.DAY);
         Missing.meet(s, p);
         check(Missing.activeStage(s, p) == 1, "not only the girl families");
         HarpyTestUtil.remove(p);
