@@ -678,7 +678,7 @@ public class Nekomata extends AbstractMonsterGirl {
             if (Nekomata.this.tickCount % 23 != 0 || Nekomata.this.getTarget() != null || Nekomata.this.isBaby()) return false;
             long now = Nekomata.this.level().getGameTime();
             for (Player p : Nekomata.this.level().players()) {
-                if (p.isSpectator() || p.distanceToSqr(Nekomata.this) > 8 * 8) continue;
+                if (p.isSpectator() || p.distanceToSqr(Nekomata.this) > 12 * 12) continue;          // she notices you a fair way off
                 boolean still = p.getDeltaMovement().horizontalDistanceSqr() < 1.0E-4 || p.isShiftKeyDown();
                 if (!still || now < Nekomata.this.patience.getOrDefault(p.getUUID(), 0L)) continue;
                 this.player = p;

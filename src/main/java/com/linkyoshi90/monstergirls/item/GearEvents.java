@@ -49,6 +49,12 @@ public final class GearEvents {
             stack.consume(1, p);
             return;
         }
+        if (target instanceof net.minecraft.world.entity.Mob hurt && com.linkyoshi90.monstergirls.entity.Injury.isInjured(hurt)) {   // a wounded harpy or frog
+            applyBalm(level, target);
+            com.linkyoshi90.monstergirls.entity.Injury.mend(level, hurt, p);
+            stack.consume(1, p);
+            return;
+        }
         if (!befriended(target, p)) {
             p.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.balm_refused", target.getDisplayName()), true);
             return;

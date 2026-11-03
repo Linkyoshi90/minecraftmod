@@ -209,4 +209,17 @@ public class HomeLifeTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "harpiesAndFrogsCanBeInjured")
+    public static void harpiesAndFrogsCanBeInjured(GameTestHelper helper) {
+        var owl = helper.spawn(com.linkyoshi90.monstergirls.registry.ModEntities.OWL_HARPY.get(), new BlockPos(1, 2, 1));
+        double speed = owl.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED);
+        com.linkyoshi90.monstergirls.entity.Injury.set(owl, true);
+        check(com.linkyoshi90.monstergirls.entity.Injury.isInjured(owl) && owl.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED) < speed, "slowed");
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
+        com.linkyoshi90.monstergirls.entity.Injury.mend(helper.getLevel(), owl, p);
+        check(!com.linkyoshi90.monstergirls.entity.Injury.isInjured(owl) && owl.getAffection(p) >= com.linkyoshi90.monstergirls.entity.Injury.MEND, "mended, and grateful");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

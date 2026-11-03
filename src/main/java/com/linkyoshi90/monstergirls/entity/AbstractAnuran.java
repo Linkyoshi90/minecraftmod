@@ -281,6 +281,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType,
                                         @Nullable SpawnGroupData groupData) {
         this.rollPaint(spawnType);
+        Injury.roll(this, spawnType);
         if (!this.variantFromData) this.rollVariant(level.getBiome(this.blockPosition()));
         return super.finalizeSpawn(level, difficulty, spawnType, groupData);
     }
@@ -424,6 +425,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     public void aiStep() {
         super.aiStep();
         if (!this.level().isClientSide && this.blushTicks > 0 && --this.blushTicks == 0) this.entityData.set(DATA_BLUSHING, false);
+        if (this.level() instanceof ServerLevel hurt) Injury.tick(hurt, this);
         if (this.level() instanceof ServerLevel milky) com.linkyoshi90.monstergirls.entity.Lactation.tick(milky, this);
         if (this.level() instanceof ServerLevel) {
             Painted.tickCopper(this, this);
@@ -580,7 +582,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     /** Her stance has the last word on whom she fights (and companions never fight each other). */
     @Override
     public void setTarget(@Nullable net.minecraft.world.entity.LivingEntity target) {
-        super.setTarget(this.orders == null || this.orders.allows(this, target) ? target : null);
+        super.setTarget(Injury.isInjured(this) ? null : this.orders == null || this.orders.allows(this, target) ? target : null);
     }
 
     @Override
@@ -749,6 +751,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        Injury.reapply(this);
         this.waxed = tag.getBoolean("Waxed");
         this.dryTicks = tag.getInt("DryTicks");
         this.entityData.set(DATA_STAGE, tag.contains("Stage") ? tag.getByte("Stage") : (tag.getBoolean("Baby") ? FROGLET : ADULT));

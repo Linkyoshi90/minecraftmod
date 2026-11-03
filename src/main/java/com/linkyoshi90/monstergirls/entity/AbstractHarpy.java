@@ -355,6 +355,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        Injury.reapply(this);
         this.waxed = tag.getBoolean("Waxed");
         this.homePos = tag.contains("Home") ? BlockPos.of(tag.getLong("Home")) : null;
         if (tag.contains("Variant")) this.variantFromData = true;
@@ -597,7 +598,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     /** Her stance has the last word on whom she fights (and companions never fight each other). */
     @Override
     public void setTarget(@Nullable net.minecraft.world.entity.LivingEntity target) {
-        super.setTarget(this.orders == null || this.orders.allows(this, target) ? target : null);
+        super.setTarget(Injury.isInjured(this) ? null : this.orders == null || this.orders.allows(this, target) ? target : null);
     }
 
     @Override
@@ -656,6 +657,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     public void aiStep() {
         super.aiStep();
         if (!this.level().isClientSide && this.blushTicks > 0 && --this.blushTicks == 0) this.entityData.set(DATA_BLUSHING, false);
+        if (this.level() instanceof ServerLevel hurt) Injury.tick(hurt, this);
         if (this.level() instanceof ServerLevel milky) com.linkyoshi90.monstergirls.entity.Lactation.tick(milky, this);
         if (this.level() instanceof ServerLevel) {
             Painted.tickCopper(this, this);
@@ -914,6 +916,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     public net.minecraft.world.entity.SpawnGroupData finalizeSpawn(net.minecraft.world.level.ServerLevelAccessor level, net.minecraft.world.DifficultyInstance difficulty,
                                                                    MobSpawnType spawnType, @Nullable net.minecraft.world.entity.SpawnGroupData group) {
         this.rollPaint(spawnType);
+        Injury.roll(this, spawnType);
         if (!this.hasVariantFromData() && spawnType != MobSpawnType.BREEDING && !com.linkyoshi90.monstergirls.MonsterGirlsConfig.keepsBiomeVariant(this.random)) this.plainVariant();
         return super.finalizeSpawn(level, difficulty, spawnType, group);
     }

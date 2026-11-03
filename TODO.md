@@ -44,7 +44,7 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
   - **Penguin harpy:** snowy beaches, ice and frozen ocean, in colonies of 4 to 8. Fast underwater. She hunts fish, and when befriended she brings her player one for every fish she catches. One in 12 is a wanderer who walks off alone in a straight line until befriended. Orca mermaids hunt penguins nobody has befriended, and wild penguins go for koi mermaids.
   - **The injured girl:** 1 wild girl in 50 (1 hornet in 5) spawns at 30% health, half speed, unable to fight. A flier cannot fly, and a broken wing hangs limp. A healing balm mends her even when she is wild: +40 friendship, and a hornet goes straight to full.
 - [ ] Playtest the fourth wave: does the broken wing droop the right way (`GirlRenderer`, the angle was never seen in a client)? Is the kelpie's water speed fun and does it keep the rider dry? Do tengu ever come down to drink often enough to meet? Does the penguin wanderer get stuck on the first cliff? Is the wadjet's blessing too strong for a desert you just walk through?
-- [ ] Not done for the fourth wave: injured harpies and anurans (only the girl families get injured), the harpy field guide entries for the tengu, toucan and penguin (that guide is hand-written), and sounds of their own (they borrow the crow's, the parrot's and a pitched-up donkey bray).
+- [x] Injured harpies and anurans (2026-11-03, `entity/Injury`: slow, no fighting, the balm mends them; a harpy still flies, with no broken wing pose). Still not done for the fourth wave: the harpy field guide entries for the tengu, toucan and penguin (that guide is hand-written), and sounds of their own (they borrow the crow's, the parrot's and a pitched-up donkey bray).
 - [x] Playtest fixes (2026-10-24):
   - The penguin swims face down; her swim pose had her on her back.
   - The wadjet cannot be ridden; she walks on legs and has no coils.
@@ -446,7 +446,7 @@ See [HARMONTIDE_CONCEPTS.md](HARMONTIDE_CONCEPTS.md) for the next wave of 39 spe
 - [x] Own models for two homage looks (2026-10-28): `axolotl_mermaid_mud_fin` (Mudkip) and `shark_mermaid_trident_hood` (Gawr Gura), in `gen_merfolk.HOMAGE_MODELS`; `AbstractMonsterGirl.OWN_MODELS` makes `GirlRenderer` draw them; painted like any model. Tested in `TwentiethWaveTests.homagesWithTheirOwnModels`.
 - [ ] Dev client: the Mudkip and Gura models (the trident in her hand while she swims and sits, the hood's fin, the head fan).
 - [ ] Dev client for the twentieth wave: the turtworld's island, the fernstalker's fronds, the moo's frill, the manticore's sting, the mouse's ears and the Gregory props at game scale; the four paints; the nine homage looks.
-- [ ] Not done for the twentieth wave: Celty's cat-eared helmet and Lala's scythe (both are palette-only for now); a dullahan-only prop each would do it.
+- [x] Celty's helmet and Lala's scythe are props (`envoy_kit` in gen_undead.py, twenty-second wave).
 - [x] **Nineteenth wave** (2026-10-28), tested in `NineteenthWaveTests`:
   - **Tin Jack** (construct, `witch_hat`: `hair_hat`, a lantern that glows): every second, `scarePhantoms` gives the phantoms within 24 of her friend Weakness II, clears their target and sends them off.
   - **Turquoise serpent** (lamia): every second, `scaleWard` gives her friend within 10, below half health, Resistance I.
