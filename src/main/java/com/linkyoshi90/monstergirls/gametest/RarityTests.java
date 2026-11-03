@@ -68,4 +68,21 @@ public class RarityTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "eachAtHerMoment")
+    public static void eachAtHerMoment(GameTestHelper helper) {
+        for (String id : com.linkyoshi90.monstergirls.entity.SpawnConditions.all().keySet()) {
+            check(BuiltInRegistries.ENTITY_TYPE.containsKey(MonsterGirlsMod.id(id)), "a real kind: " + id);
+        }
+        check(com.linkyoshi90.monstergirls.entity.SpawnConditions.of("moon_rabbit_jackalope") == com.linkyoshi90.monstergirls.entity.SpawnConditions.When.FULL_MOON, "the moon rabbit");
+        check(!met("FULL_MOON", 18000, 1, false, false) && met("FULL_MOON", 18000, 0, false, false) && !met("FULL_MOON", 6000, 0, false, false), "a full moon, at night");
+        check(met("NIGHT", 24000L * 5 + 14000, 3, false, false) && !met("NIGHT", 1000, 3, false, false), "night on any day");
+        check(met("STORM", 1000, 0, true, false) && met("RAIN", 1000, 0, true, false) && !met("RAIN", 1000, 0, false, false), "weather");
+        check(com.linkyoshi90.monstergirls.entity.SpawnConditions.of("wolf_canid") == null, "most come whenever");
+        helper.succeed();
+    }
+
+    private static boolean met(String when, long time, int moon, boolean rain, boolean thunder) {
+        return com.linkyoshi90.monstergirls.entity.SpawnConditions.met(com.linkyoshi90.monstergirls.entity.SpawnConditions.When.valueOf(when), time, moon, rain, thunder);
+    }
 }

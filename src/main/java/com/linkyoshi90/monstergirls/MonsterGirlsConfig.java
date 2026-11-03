@@ -51,6 +51,11 @@ public final class MonsterGirlsConfig {
                     "(normal is one in " + com.linkyoshi90.monstergirls.entity.Encounters.RARITY + "; 0 turns them off).")
             .defineInRange("encounterRate", 100, 0, MAX_RATE);
 
+    public static final ModConfigSpec.BooleanValue SPAWN_CONDITIONS = BUILDER
+            .comment("Some kinds come out only at their moment in the overworld: the moon rabbit under a full moon, the vampire at night,",
+                    "the ziz in a storm, the kappa in the rain. Off, they come whenever.")
+            .define("spawnConditions", true);
+
     public static final ModConfigSpec.IntValue VARIANT_RATE = BUILDER
             .comment("How often a wild one has a colour other than the default, as a percent of normal.",
                     "Harpies and anurans take their colours from the biome, so above 100 changes nothing for them.")
@@ -133,6 +138,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean missingCountsOffline() {
         return SPEC.isLoaded() ? MISSING_COUNTS_OFFLINE.get() : MISSING_COUNTS_OFFLINE.getDefault();
+    }
+
+    public static boolean spawnConditions() {
+        return SPEC.isLoaded() ? SPAWN_CONDITIONS.get() : SPAWN_CONDITIONS.getDefault();
     }
 
     public static double rareSpawnRate() {

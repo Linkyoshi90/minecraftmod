@@ -149,6 +149,8 @@ public final class Journal {
                             : Component.translatable("journal.monstergirls.met")).withStyle(ChatFormatting.RESET, friends.contains(id) ? ChatFormatting.GOLD : ChatFormatting.GRAY));
             Rarity.Tier tier = Rarity.of(id);
             if (tier != Rarity.Tier.COMMON) page.append("\n").append(Component.translatable(tier.key()).withStyle(ChatFormatting.RESET, tier == Rarity.Tier.LEGENDARY ? ChatFormatting.GOLD : ChatFormatting.DARK_AQUA));
+            SpawnConditions.When when = SpawnConditions.of(id);
+            if (when != null) page.append("\n").append(Component.translatable(when.key()).withStyle(ChatFormatting.RESET, ChatFormatting.DARK_PURPLE));
             if (girl) {
                 page.append("\n\n").append(Component.translatable("journal.monstergirls.home",
                         Component.translatable("journal.monstergirls." + id + ".home")).withStyle(ChatFormatting.RESET, ChatFormatting.DARK_GREEN));

@@ -2719,5 +2719,10 @@
   "journal.monstergirls.guide.encounters.title": "Encounters",
   "journal.monstergirls.guide.encounters": "Now and then you meet one in trouble: caught in a web, chased by zombies, or lost in the rain. Cut the web, fight off the chasers, or lead her under a roof, and she won't forget it. One found hurt mends with a healing balm.",
   "monstergirls.configuration.encounterRate": "Encounter rate",
-  "monstergirls.configuration.missingCountsOffline": "Missing counts offline days"
+  "monstergirls.configuration.missingCountsOffline": "Missing counts offline days",
+  "monstergirls.configuration.spawnConditions": "Spawn conditions",
+  "journal.monstergirls.when.full_moon": "Comes out under a full moon",
+  "journal.monstergirls.when.night": "Comes out at night",
+  "journal.monstergirls.when.storm": "Comes out in stormy weather",
+  "journal.monstergirls.when.rain": "Comes out in the rain"
 }

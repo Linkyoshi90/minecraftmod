@@ -29,5 +29,10 @@ M.add_lang({
                                              "One found hurt mends with a healing balm.",
     "monstergirls.configuration.encounterRate": "Encounter rate",
     "monstergirls.configuration.missingCountsOffline": "Missing counts offline days",
+    "monstergirls.configuration.spawnConditions": "Spawn conditions",
+    "journal.monstergirls.when.full_moon": "Comes out under a full moon",
+    "journal.monstergirls.when.night": "Comes out at night",
+    "journal.monstergirls.when.storm": "Comes out in stormy weather",
+    "journal.monstergirls.when.rain": "Comes out in the rain",
 })
 print("encounter assets written")
