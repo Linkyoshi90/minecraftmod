@@ -2707,5 +2707,16 @@
   "journal.monstergirls.guide.legends": "Most kinds are common. The storied ones are rare. The figures of myth are legendary: only one of each comes to a region, she glints now and then, and she stays until befriended.",
   "monstergirls.configuration.rareSpawnRate": "Rare spawn rate",
   "monstergirls.configuration.legendarySpawnRate": "Legendary spawn rate",
-  "monstergirls.configuration.legendaryOncePerRegion": "One legend per region"
+  "monstergirls.configuration.legendaryOncePerRegion": "One legend per region",
+  "message.monstergirls.encounter.webbed": "%s is caught in a web! Cut her free.",
+  "message.monstergirls.encounter.chased": "%s is running from zombies, straight towards you!",
+  "message.monstergirls.encounter.lost": "%s is lost in the rain. Lead her somewhere with a roof.",
+  "message.monstergirls.encounter.thanks": "%s won't forget that you helped her.",
+  "advancement.monstergirls.first_rescue": "In the Nick of Time",
+  "advancement.monstergirls.first_rescue.desc": "Help a creature in trouble",
+  "advancement.monstergirls.every_rescue": "Knight Errant",
+  "advancement.monstergirls.every_rescue.desc": "Cut one free of a web, see off her chasers, and lead one in from the rain",
+  "journal.monstergirls.guide.encounters.title": "Encounters",
+  "journal.monstergirls.guide.encounters": "Now and then you meet one in trouble: caught in a web, chased by zombies, or lost in the rain. Cut the web, fight off the chasers, or lead her under a roof, and she won't forget it. One found hurt mends with a healing balm.",
+  "monstergirls.configuration.encounterRate": "Encounter rate"
 }

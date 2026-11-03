@@ -46,6 +46,11 @@ public final class MonsterGirlsConfig {
             .comment("Only one of each legendary kind comes to every " + com.linkyoshi90.monstergirls.entity.Rarity.REGION + " blocks square, and she stays. One who dies unbefriended frees the region again.")
             .define("legendaryOncePerRegion", true);
 
+    public static final ModConfigSpec.IntValue ENCOUNTER_RATE = BUILDER
+            .comment("How often a wild one meets you in trouble (caught in a web, chased by zombies, lost in the rain), as a percent of normal",
+                    "(normal is one in " + com.linkyoshi90.monstergirls.entity.Encounters.RARITY + "; 0 turns them off).")
+            .defineInRange("encounterRate", 100, 0, MAX_RATE);
+
     public static final ModConfigSpec.IntValue VARIANT_RATE = BUILDER
             .comment("How often a wild one has a colour other than the default, as a percent of normal.",
                     "Harpies and anurans take their colours from the biome, so above 100 changes nothing for them.")
@@ -115,6 +120,11 @@ public final class MonsterGirlsConfig {
 
     public static int wildSpacing() {
         return SPEC.isLoaded() ? WILD_SPACING.get() : WILD_SPACING.getDefault();
+    }
+
+    /** The chance a wild one carries an encounter, where that is normally one in rarity. */
+    public static double encounterChance(int rarity) {
+        return rate(ENCOUNTER_RATE) / rarity;
     }
 
     public static double rareSpawnRate() {
