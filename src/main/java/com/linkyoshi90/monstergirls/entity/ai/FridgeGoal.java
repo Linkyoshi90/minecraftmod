@@ -63,6 +63,7 @@ public class FridgeGoal<T extends PathfinderMob & Bonded> extends Goal {
 
     @Override
     public void tick() {
+        if (this.fridge == null) return;                    // she has eaten: the goal ends at the next check (ticks can come in between)
         this.patience--;
         this.mob.getLookControl().setLookAt(this.fridge.getX() + 0.5, this.fridge.getY() + 0.5, this.fridge.getZ() + 0.5);
         if (this.mob.distanceToSqr(this.fridge.getCenter()) > 2.5 * 2.5) {

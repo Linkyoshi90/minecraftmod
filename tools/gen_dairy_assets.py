@@ -50,6 +50,8 @@ def cube(frm, to, tex, faces=("down", "up", "north", "south", "west", "east"), *
 
 def model(name, textures, elements, parent="minecraft:block/block", render=None, folder="block", display=None):
     doc = {"parent": parent, "textures": textures, "elements": elements}
+    if parent is None:                     # a held 3D item: a parent ending in item/generated would draw only (missing) layers
+        del doc["parent"]
     if render:
         doc["render_type"] = render
     if display:
@@ -190,7 +192,7 @@ canopy = [cube([-16, 26, -16], [32, 27, 32], "canopy"), cube([-11, 27, -11], [27
           cube([4, 31, 4], [12, 32, 12], "canopy")]
 shaft = [cube([7.5, -8, 7.5], [8.5, 31, 8.5], "handle"), cube([7.5, -10, 7.5], [11.5, -8, 8.5], "handle"), cube([10.5, -8, 7.5], [11.5, -6, 8.5], "handle")]
 held = {"rotation": [0, 0, 0], "translation": [0, 3, 1], "scale": [1, 1, 1]}
-model("umbrella_open", um, canopy + shaft, parent="minecraft:item/handheld", folder="item",
+model("umbrella_open", um, canopy + shaft, parent=None, folder="item",
       display={"thirdperson_righthand": held, "thirdperson_lefthand": held,
                "firstperson_righthand": {"rotation": [0, 0, 0], "translation": [0, 6, 0], "scale": [0.68, 0.68, 0.68]},
                "firstperson_lefthand": {"rotation": [0, 0, 0], "translation": [0, 6, 0], "scale": [0.68, 0.68, 0.68]}})
