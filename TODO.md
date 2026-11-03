@@ -758,3 +758,4 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [ ] Switch the family classes from `SoundEvents.*` to the per-species events.
 - [ ] Record or source the `.ogg` files (CC0/licensed), one folder per species.
 - [ ] Give the girls without an ambient sound one: elves, the living doll, Kannae, most lizardfolk and the moths/scorpions/papillons.
+- [ ] Shelved for a later add-on (2026-11-03): a conversation menu (chat, ask about her day, joke, compliment, flirt behind the setting, ask for help), discovered personalities, moods, and a family-tree journal page; maybe an optional MCA Reborn family-tree bridge.
