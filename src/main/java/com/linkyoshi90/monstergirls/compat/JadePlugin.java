@@ -60,6 +60,8 @@ public class JadePlugin implements IWailaPlugin {
         @Override
         public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig config) {
             CompoundTag data = accessor.getServerData();
+            com.linkyoshi90.monstergirls.entity.Rarity.Tier tier = com.linkyoshi90.monstergirls.entity.Rarity.of(accessor.getEntity());
+            if (tier != com.linkyoshi90.monstergirls.entity.Rarity.Tier.COMMON) tooltip.add(Component.translatable(tier.key()).withStyle(tier.colour));
             if (data.contains("Pregnant")) {
                 tooltip.add(Component.translatable("jade.monstergirls.pregnant",
                         Component.translatable(data.getBoolean("Pregnant") ? "jade.monstergirls.yes" : "jade.monstergirls.no")));

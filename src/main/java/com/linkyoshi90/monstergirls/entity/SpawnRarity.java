@@ -17,7 +17,7 @@ public final class SpawnRarity {
     }
 
     public static boolean allows(LevelAccessor level, Mob mob, RandomSource random) {
-        return random.nextDouble() < MonsterGirlsConfig.wildSpawnChance() * MonsterGirlsConfig.spawnRate(mob) && spacedOut(level, mob);
+        return random.nextDouble() < MonsterGirlsConfig.wildSpawnChance() * MonsterGirlsConfig.spawnRate(mob) * Rarity.spawnFactor(mob) && spacedOut(level, mob);
     }
 
     /** No other wild one near (friends stay out of it: they are yours, not the world's). */

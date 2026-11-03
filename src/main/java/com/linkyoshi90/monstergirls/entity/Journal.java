@@ -35,7 +35,7 @@ import java.util.Set;
 public final class Journal {
     private static final double SIGHT = 12.0;
     /** The guide pages after the contents: befriending, the hearth, expeditions, weapons, scouting, life at home, the milking machine, keepsakes, dairy, nursing. */
-    public static final List<String> GUIDE = List.of("friends", "hearth", "expedition", "weapons", "scouting", "home", "milking", "keepsakes", "dairy", "nursing");
+    public static final List<String> GUIDE = List.of("friends", "hearth", "expedition", "weapons", "scouting", "home", "milking", "keepsakes", "dairy", "nursing", "legends");
     /** How many givers the milk page lists. */
     public static final int MILK_LINES = 8;
 
@@ -74,7 +74,10 @@ public final class Journal {
         if (creature instanceof LivingEntity l && l.isBaby()) befriended = false;   // a child's friendship is her mother's page
         CompoundTag data = player.getData(ModAttachments.JOURNAL);
         boolean news = add(data, "Met", id) | (befriended && add(data, "Friends", id));
-        if (news) player.setData(ModAttachments.JOURNAL, data);
+        if (news) {
+            player.setData(ModAttachments.JOURNAL, data);
+            Rarity.recorded(player, creature, befriended);
+        }
         return news;
     }
 
@@ -144,6 +147,8 @@ public final class Journal {
             MutableComponent page = Component.translatable("entity.monstergirls." + id).withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_BLUE)
                     .append("\n").append((friends.contains(id) ? Component.literal("★ ").append(Component.translatable("journal.monstergirls.befriended"))
                             : Component.translatable("journal.monstergirls.met")).withStyle(ChatFormatting.RESET, friends.contains(id) ? ChatFormatting.GOLD : ChatFormatting.GRAY));
+            Rarity.Tier tier = Rarity.of(id);
+            if (tier != Rarity.Tier.COMMON) page.append("\n").append(Component.translatable(tier.key()).withStyle(ChatFormatting.RESET, tier == Rarity.Tier.LEGENDARY ? ChatFormatting.GOLD : ChatFormatting.DARK_AQUA));
             if (girl) {
                 page.append("\n\n").append(Component.translatable("journal.monstergirls.home",
                         Component.translatable("journal.monstergirls." + id + ".home")).withStyle(ChatFormatting.RESET, ChatFormatting.DARK_GREEN));

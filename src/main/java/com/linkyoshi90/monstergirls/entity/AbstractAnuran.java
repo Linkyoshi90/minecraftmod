@@ -733,6 +733,11 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
 
     /** Wild pond and forest dwellers stay put rather than blinking out of existence when you walk away. */
     @Override
+    public boolean hasAnyAffection() {
+        return this.affection.values().stream().anyMatch(v -> v > 0);
+    }
+
+    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return false;
     }

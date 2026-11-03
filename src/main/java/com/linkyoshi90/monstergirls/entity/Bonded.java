@@ -30,6 +30,9 @@ public interface Bonded {
 
     void addAffection(Player player, int amount);
 
+    /** Whether anyone at all is her friend (affection above nothing). */
+    boolean hasAnyAffection();
+
     /** Sets her affection for a player who may not be online (a newborn's father). */
     void setAffection(UUID player, int amount);
 

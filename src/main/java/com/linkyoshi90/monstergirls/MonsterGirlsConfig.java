@@ -36,6 +36,16 @@ public final class MonsterGirlsConfig {
                     "wildSpacing still limits how many can be around at once.")
             .defineInRange("spawnRate", 100, 0, MAX_RATE);
 
+    public static final ModConfigSpec.IntValue RARE_SPAWN_RATE = BUILDER
+            .comment("Natural spawns of the rare kinds (the storied ones: a unicorn, a dullahan), as a percent of a common kind's.")
+            .defineInRange("rareSpawnRate", 40, 0, 100);
+    public static final ModConfigSpec.IntValue LEGENDARY_SPAWN_RATE = BUILDER
+            .comment("Natural spawns of the legendary kinds (the one-of-a-kind figures of myth: Bahamut, the Phoenix), as a percent of a common kind's.")
+            .defineInRange("legendarySpawnRate", 10, 0, 100);
+    public static final ModConfigSpec.BooleanValue LEGENDARY_ONCE_PER_REGION = BUILDER
+            .comment("Only one of each legendary kind comes to every " + com.linkyoshi90.monstergirls.entity.Rarity.REGION + " blocks square, and she stays. One who dies unbefriended frees the region again.")
+            .define("legendaryOncePerRegion", true);
+
     public static final ModConfigSpec.IntValue VARIANT_RATE = BUILDER
             .comment("How often a wild one has a colour other than the default, as a percent of normal.",
                     "Harpies and anurans take their colours from the biome, so above 100 changes nothing for them.")
@@ -105,6 +115,18 @@ public final class MonsterGirlsConfig {
 
     public static int wildSpacing() {
         return SPEC.isLoaded() ? WILD_SPACING.get() : WILD_SPACING.getDefault();
+    }
+
+    public static double rareSpawnRate() {
+        return rate(RARE_SPAWN_RATE);
+    }
+
+    public static double legendarySpawnRate() {
+        return rate(LEGENDARY_SPAWN_RATE);
+    }
+
+    public static boolean legendaryOncePerRegion() {
+        return SPEC.isLoaded() ? LEGENDARY_ONCE_PER_REGION.get() : LEGENDARY_ONCE_PER_REGION.getDefault();
     }
 
     private static double rate(ModConfigSpec.IntValue value) {

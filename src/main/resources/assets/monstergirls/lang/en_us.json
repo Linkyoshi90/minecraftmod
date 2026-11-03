@@ -2693,5 +2693,19 @@
   "journal.monstergirls.guide.nursing.title": "Nursing",
   "journal.monstergirls.guide.nursing": "A mother with milk nurses her baby every few minutes. Feed the baby by hand to wean her; never weaned, her mother keeps her milk for good. Mothers foster orphans of any kind. Poisoned or withering under a roof? A friend with milk brings you a cup.",
   "message.monstergirls.rescue_offer": "%s hurries over with a cup of her milk. Right-click her with an empty hand to drink it",
-  "message.monstergirls.rescue_drink": "You drink %s's milk: the poison fades"
+  "message.monstergirls.rescue_drink": "You drink %s's milk: the poison fades",
+  "rarity.monstergirls.common": "Common",
+  "rarity.monstergirls.rare": "Rare",
+  "rarity.monstergirls.legendary": "Legendary",
+  "advancement.monstergirls.legendary_encounter": "A Living Legend",
+  "advancement.monstergirls.legendary_encounter.desc": "Come face to face with a legendary creature",
+  "advancement.monstergirls.legendary_friend": "Storybook Friend",
+  "advancement.monstergirls.legendary_friend.desc": "Befriend a legendary creature",
+  "advancement.monstergirls.every_legend": "Keeper of Legends",
+  "advancement.monstergirls.every_legend.desc": "Befriend every one of the 55 legendary creatures",
+  "journal.monstergirls.guide.legends.title": "Legends",
+  "journal.monstergirls.guide.legends": "Most kinds are common. The storied ones are rare. The figures of myth are legendary: only one of each comes to a region, she glints now and then, and she stays until befriended.",
+  "monstergirls.configuration.rareSpawnRate": "Rare spawn rate",
+  "monstergirls.configuration.legendarySpawnRate": "Legendary spawn rate",
+  "monstergirls.configuration.legendaryOncePerRegion": "One legend per region"
 }
