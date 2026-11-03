@@ -115,9 +115,9 @@ def build(f):
     out = []
     w = out.append
     w('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">')
-    w(f"<title>{E(f['title'])} — Field Guide</title>\n<style>{CSS % f['theme']}</style>\n</head>\n<body>")
+    w(f"<title>{E(f['title'])} — Harmontide Field Guide</title>\n<style>{CSS % f['theme']}</style>\n</head>\n<body>")
     w("<header>")
-    w(f'  <div class="eyebrow">A field guide to an inhabited world · volume {f["volume"]} · {E(f["subtitle"])}</div>')
+    w(f'  <div class="eyebrow">Harmontide · a field guide to an inhabited world · volume {f["volume"]} · {E(f["subtitle"])}</div>')
     w(f"  <h1>{E(f['title'])}</h1>")
     w(f'  <p class="lede">{E(f["lede"])}</p>')
     if f.get("food"):

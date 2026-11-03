@@ -257,10 +257,10 @@ public class MilkTests {
         MilkingMachineBlockEntity m = machine(helper, player);
         m.store().setItem(0, new ItemStack(net.minecraft.world.item.Items.BUCKET, 2));
         Minotaur cow = spawn(helper, GirlSpecies.CATTLE_MINOTAUR, new BlockPos(7, 2, 7));
+        cow.setMale(false);                                             // a cow, every time
         cow.addAffection(player, com.linkyoshi90.monstergirls.entity.Orders.AFFECTION);
-        check(com.linkyoshi90.monstergirls.entity.Lactation.isLactating(cow) || cow.isMale(), "a cow has milk");
+        check(com.linkyoshi90.monstergirls.entity.Lactation.isLactating(cow), "a cow has milk");
         helper.succeedWhen(() -> {
-            if (cow.isMale()) return;                                   // one in a few spawns a bull
             check(count(m, FamilyMilk.of(cow)) == 1, "she came and was milked");
         });
     }
@@ -321,5 +321,18 @@ public class MilkTests {
         AbstractMonsterGirl wolf = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(3, 2, 2));
         check(wolf.seatBack() == 0, "nobody rides her");
         helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 500, batch = "expectingGirlWalksToTheMachine")
+    public static void expectingGirlWalksToTheMachine(GameTestHelper helper) {
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 6));
+        MilkingMachineBlockEntity m = machine(helper, player);
+        m.store().setItem(0, new ItemStack(net.minecraft.world.item.Items.BUCKET, 2));
+        AbstractMonsterGirl girl = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(7, 2, 7));
+        girl.addAffection(player, com.linkyoshi90.monstergirls.entity.Orders.AFFECTION);
+        girl.getGestation().conceive();
+        girl.getGestation().setTicksLeft(com.linkyoshi90.monstergirls.entity.Gestation.DURATION / 4);
+        check(com.linkyoshi90.monstergirls.entity.Lactation.isLactating(girl), "late enough to have milk");
+        helper.succeedWhen(() -> check(count(m, FamilyMilk.of(girl)) == 1, "she came and was milked"));
     }
 }
