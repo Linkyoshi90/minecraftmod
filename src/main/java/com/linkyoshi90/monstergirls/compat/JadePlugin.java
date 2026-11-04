@@ -53,6 +53,14 @@ public class JadePlugin implements IWailaPlugin {
             if (accessor.getEntity() instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g && com.linkyoshi90.monstergirls.entity.girl.Roles.of(g) != null) {
                 data.putString("Role", com.linkyoshi90.monstergirls.entity.girl.Roles.of(g).key());
             }
+            if (accessor.getEntity() instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g && com.linkyoshi90.monstergirls.entity.girl.Colds.hasCold(g)) data.putBoolean("Cold", true);
+            if (accessor.getEntity() instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g && accessor.getPlayer() != null) {
+                net.minecraft.nbt.CompoundTag f = com.linkyoshi90.monstergirls.entity.girl.Favours.of(g, accessor.getPlayer());
+                if (f != null) {
+                    data.putString("FavourItem", f.getString("Item"));
+                    data.putInt("FavourCount", f.getInt("Count"));
+                }
+            }
             if (accessor.getEntity() instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g && accessor.getPlayer() != null
                     && g.getAffection(accessor.getPlayer()) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION && !g.isBaby()) {   // what her friends know
                 data.putInt("Birthday", com.linkyoshi90.monstergirls.entity.girl.Treats.birthday(g) + 1);
@@ -80,6 +88,11 @@ public class JadePlugin implements IWailaPlugin {
             if (accessor.getEntity() instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g && !g.isBaby()
                     && com.linkyoshi90.monstergirls.entity.girl.Foraging.forages(g)) {
                 tooltip.add(Component.translatable("jade.monstergirls.forager").withStyle(net.minecraft.ChatFormatting.GRAY));
+            }
+            if (data.getBoolean("Cold")) tooltip.add(Component.translatable("jade.monstergirls.cold").withStyle(net.minecraft.ChatFormatting.AQUA));
+            if (data.contains("FavourItem")) {
+                net.minecraft.world.item.Item want = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(net.minecraft.resources.ResourceLocation.parse(data.getString("FavourItem")));
+                tooltip.add(Component.translatable("jade.monstergirls.favour", data.getInt("FavourCount"), want.getDescription()).withStyle(net.minecraft.ChatFormatting.YELLOW));
             }
             if (data.contains("Role")) tooltip.add(Component.translatable(data.getString("Role")).withStyle(net.minecraft.ChatFormatting.DARK_GREEN));
             if (data.contains("Pregnant")) {

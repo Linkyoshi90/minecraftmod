@@ -77,8 +77,12 @@ public final class MonsterGirlsConfig {
             .define("teamwork", true);
 
     public static final ModConfigSpec.BooleanValue COMFORT = BUILDER
-            .comment("Friends look out for you: the nearest rushes to steady you when you are badly hurt, and they warn you a minute before rain.")
+            .comment("Friends look out for you: the nearest rushes to steady you when you are badly hurt, shares a snack when you are hungry, and they warn you a minute before rain.")
             .define("comfort", true);
+
+    public static final ModConfigSpec.BooleanValue COLDS = BUILDER
+            .comment("Girls left out in cold rain or snow can catch a cold: sneezing and a little slow for three days, until someone brings her soup or honey.")
+            .define("colds", true);
 
     public static final ModConfigSpec.BooleanValue STARGAZING = BUILDER
             .comment("On a clear night, stand still under open sky and your friends nearby sit down beside you; a shooting star brings each of them closer.")
@@ -186,6 +190,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean teamwork() {
         return SPEC.isLoaded() ? TEAMWORK.get() : TEAMWORK.getDefault();
+    }
+
+    public static boolean colds() {
+        return SPEC.isLoaded() ? COLDS.get() : COLDS.getDefault();
     }
 
     public static boolean stargazing() {

@@ -63,4 +63,23 @@ public class ComfortTests {
             HarpyTestUtil.remove(p);
         });
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "aFriendSharesASnack")
+    public static void aFriendSharesASnack(GameTestHelper helper) {
+        var level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(4, 2, 4));
+        p.getInventory().clearContent();
+        AbstractMonsterGirl girl = spawn(helper, GirlSpecies.INABA_JACKALOPE, new BlockPos(5, 2, 4));
+        girl.setNoAi(true);
+        girl.addAffection(p, Orders.AFFECTION);
+        check(Comfort.lunch(level, p) == null, "not hungry");
+        p.getFoodData().setFoodLevel(4);
+        check(Comfort.lunch(level, p) == girl, "she shares a snack");
+        int food = 0;
+        for (var st : p.getInventory().items) if (st.has(net.minecraft.core.component.DataComponents.FOOD)) food += st.getCount();
+        check(food >= 1, "something to eat: " + food);
+        check(Comfort.lunch(level, p) == null, "once a day");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

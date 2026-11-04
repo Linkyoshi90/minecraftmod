@@ -42,6 +42,9 @@ public class StargazingTests {
             check(Stargazing.shootingStar(level, p) == 1, "she sees it with them");
             check(girl.getAffection(p) - before == Stargazing.WISH, "closer for it");
             check(Treats.knows(p, girl), "and she whispers her wish");
+            check(Stargazing.seen(p).size() == 1, "a constellation on the chart");
+            for (int i = 1; i < Stargazing.CONSTELLATIONS.size(); i++) Stargazing.chart(p);
+            check(Stargazing.chart(p) == null && Stargazing.seen(p).size() == Stargazing.CONSTELLATIONS.size(), "all twelve");
             check(Stargazing.seenTonight(level, p) && Stargazing.step(level, p) == 0, "one star a night");
             helper.setDayTime(1000);   // back to morning: later tests share this world's clock
             HarpyTestUtil.remove(p);

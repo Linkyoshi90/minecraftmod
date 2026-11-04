@@ -35,7 +35,7 @@ import java.util.Set;
 public final class Journal {
     private static final double SIGHT = 12.0;
     /** The guide pages after the contents: befriending, the hearth, expeditions, weapons, scouting, life at home, the milking machine, keepsakes, dairy, nursing. */
-    public static final List<String> GUIDE = List.of("friends", "hearth", "expedition", "weapons", "scouting", "home", "milking", "keepsakes", "dairy", "nursing", "legends", "encounters", "chores", "festivals", "market", "rivals", "roles", "teamwork", "bestiary", "treats", "games", "mining", "foraging", "longing", "stargazing");
+    public static final List<String> GUIDE = List.of("friends", "hearth", "expedition", "weapons", "scouting", "home", "milking", "keepsakes", "dairy", "nursing", "legends", "encounters", "chores", "festivals", "market", "rivals", "roles", "teamwork", "bestiary", "treats", "games", "mining", "foraging", "longing", "stargazing", "favours", "stories", "colds");
     /** Bestiary: sightings (one per two seconds in view) before her home shows, and before her whole page does (befriending her does too). */
     public static final int KNOWN = 3, STUDIED = 20, NATURALIST = 25;
     public static final String SEEN = "Seen", NATURALIST_ADVANCEMENT = "naturalist";
@@ -107,6 +107,18 @@ public final class Journal {
         return n;
     }
 
+    /** Heard of a kind (a story by the fire): her page opens as if seen KNOWN times. Whether that was news. */
+    public static boolean hearOf(Player player, String id) {
+        CompoundTag data = player.getData(ModAttachments.JOURNAL);
+        CompoundTag seen = data.getCompound(SEEN);
+        if (seen.getInt(id) >= KNOWN) return false;
+        seen.putInt(id, KNOWN);
+        data.put(SEEN, seen);
+        add(data, "Heard", id);
+        player.setData(ModAttachments.JOURNAL, data);
+        return true;
+    }
+
     public static int sightings(Player player, String id) {
         return player.getData(ModAttachments.JOURNAL).getCompound(SEEN).getInt(id);
     }
@@ -157,14 +169,18 @@ public final class Journal {
         Set<String> met = met(player), friends = friends(player);
         List<String> girls = new ArrayList<>(), others = new ArrayList<>();
         for (String id : met) (GirlSpecies.byId(id) != null ? girls : others).add(id);
+        int metGirls = girls.size();
+        for (String id : read(player, "Heard")) if (!met.contains(id)) girls.add(id);   // known only from stories by the fire
         List<Filterable<Component>> pages = new ArrayList<>();
         MutableComponent cover = Component.translatable("journal.monstergirls.title").withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_BLUE)
-                .append("\n\n").append(Component.translatable("journal.monstergirls.girls", girls.size(), GirlSpecies.values().length).withStyle(ChatFormatting.RESET))
+                .append("\n\n").append(Component.translatable("journal.monstergirls.girls", metGirls, GirlSpecies.values().length).withStyle(ChatFormatting.RESET))
                 .append("\n").append(Component.translatable("journal.monstergirls.friends", friends.size()).withStyle(ChatFormatting.RESET))
                 .append("\n").append(Component.translatable("journal.monstergirls.others", others.size()).withStyle(ChatFormatting.RESET))
                 .append("\n").append(Component.translatable("journal.monstergirls.studied", studied(player), met.size()).withStyle(ChatFormatting.RESET));
         String missedBy = player.getData(ModAttachments.JOURNAL).getString("MissedBy");
         int letters = player.getData(ModAttachments.JOURNAL).getInt(Letters.COUNT);
+        int stars = player.getData(ModAttachments.JOURNAL).getList(Stargazing.CHART, Tag.TAG_STRING).size();
+        if (stars > 0) cover.append("\n").append(Component.translatable("journal.monstergirls.constellations", stars, Stargazing.CONSTELLATIONS.size()).withStyle(ChatFormatting.RESET));
         if (letters > 0) cover.append("\n").append(Component.translatable("journal.monstergirls.letters", letters).withStyle(ChatFormatting.RESET));
         if (!missedBy.isEmpty()) cover.append("\n\n").append(Component.translatable("journal.monstergirls.missed", missedBy).withStyle(ChatFormatting.RESET));
         if (met.isEmpty()) cover.append("\n\n").append(Component.translatable("journal.monstergirls.empty").withStyle(ChatFormatting.RESET, ChatFormatting.ITALIC));
@@ -199,7 +215,7 @@ public final class Journal {
             boolean girl = girls.contains(id);
             MutableComponent page = Component.translatable("entity.monstergirls." + id).withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_BLUE)
                     .append("\n").append((friends.contains(id) ? Component.literal("★ ").append(Component.translatable("journal.monstergirls.befriended"))
-                            : Component.translatable("journal.monstergirls.met")).withStyle(ChatFormatting.RESET, friends.contains(id) ? ChatFormatting.GOLD : ChatFormatting.GRAY));
+                            : Component.translatable(met.contains(id) ? "journal.monstergirls.met" : "journal.monstergirls.heard")).withStyle(ChatFormatting.RESET, friends.contains(id) ? ChatFormatting.GOLD : ChatFormatting.GRAY));
             Rarity.Tier tier = Rarity.of(id);
             if (tier != Rarity.Tier.COMMON) page.append("\n").append(Component.translatable(tier.key()).withStyle(ChatFormatting.RESET, tier == Rarity.Tier.LEGENDARY ? ChatFormatting.GOLD : ChatFormatting.DARK_AQUA));
             int seen = sightings(player, id);

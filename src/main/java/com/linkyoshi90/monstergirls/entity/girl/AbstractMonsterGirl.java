@@ -736,6 +736,10 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (hand != InteractionHand.MAIN_HAND) return super.mobInteract(player, hand);
         InteractionResult paint = com.linkyoshi90.monstergirls.entity.Painted.interact(this, this, player, hand);
         if (paint != null) return paint;
+        InteractionResult favour = Favours.interact(this, player, stack);    // what she asked them for
+        if (favour != null) return favour;
+        InteractionResult soup = Colds.interact(this, player, stack);      // a warm soup for a cold
+        if (soup != null) return soup;
         if (stack.is(Items.STICK)) {
             if (!this.takesOrders()) {                                     // the chupacabra answers to nobody
                 if (!this.level().isClientSide) player.displayClientMessage(Component.translatable("message.monstergirls.ignores_orders", this.getDisplayName()), true);
@@ -991,6 +995,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         com.linkyoshi90.monstergirls.entity.Painted.tickCopper(this, this);
         if (this.tickCount % 100 == 0) Settlement.tick(server, this);
         if (this.tickCount % 100 == 50) Treats.tick(server, this);
+        if (this.tickCount % 100 == 25) Colds.tick(server, this);
         if (this.tickCount % 10 == 3) HideAndSeek.tick(server, this);
         if (this.tickCount % 20 == 9 && Mining.holdsHaul(this)) Mining.handOver(server, this);
         if (this.tickCount % 97 == 0) Rivalries.squabble(server, this);

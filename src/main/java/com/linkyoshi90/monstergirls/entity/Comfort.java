@@ -13,6 +13,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.ServerLevelData;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -23,13 +25,16 @@ import javax.annotation.Nullable;
 /**
  * Looking out for their friend. Comfort: when a player is badly hurt (under a third of their health) the nearest friend within
  * 16 rushes to their side and, once there, steadies them (regeneration and a moment's resistance), at most every two minutes.
+ * A snack: when a player is hungry (three drumsticks or fewer) the nearest friend brings them something of hers to eat, once a day.
  * The forecast: a minute before rain comes, a friend near them sniffs the air and says so; frogs croak about it.
  */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class Comfort {
     public static final double CALL = 16, REACH = 3;
     public static final long COOLDOWN = 2400, FORECAST = 1200;
-    public static final String NEXT = "ComfortAt", FORECAST_DAY = "ForecastFor";
+    public static final String NEXT = "ComfortAt", FORECAST_DAY = "ForecastFor", LUNCH = "LunchAt";
+    public static final int HUNGRY = 6;
+    public static final long LUNCH_WAIT = 24000;
 
     private Comfort() {
     }
@@ -77,6 +82,32 @@ public final class Comfort {
         return friend;
     }
 
+    /** Every ten seconds for a hungry player: the nearest friend comes over and shares a snack. Who did, or null. */
+    @Nullable
+    public static Mob lunch(ServerLevel level, ServerPlayer p) {
+        if (!MonsterGirlsConfig.comfort() || p.getFoodData().getFoodLevel() > HUNGRY || p.isCreative() || p.isSpectator()) return null;
+        CompoundTag data = p.getData(ModAttachments.JOURNAL);
+        if (level.getGameTime() < data.getLong(LUNCH)) return null;
+        Mob friend = nearestFriend(level, p, CALL);
+        if (friend == null) return null;
+        if (friend.distanceToSqr(p) > REACH * REACH) {
+            friend.getNavigation().moveTo(p, 1.1);
+            return null;
+        }
+        data.putLong(LUNCH, level.getGameTime() + LUNCH_WAIT);
+        p.setData(ModAttachments.JOURNAL, data);
+        ItemStack snack = friend instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl girl
+                ? new ItemStack(net.minecraft.Util.getRandom(com.linkyoshi90.monstergirls.entity.girl.Treats.TREATS.get(Letters.country(girl.getSpecies().family())), level.random))
+                : new ItemStack(Items.BREAD);
+        snack.setCount(Math.min(2, snack.getMaxStackSize()));                     // a bowl of stew is one bowl
+        friend.getNavigation().stop();
+        friend.getLookControl().setLookAt(p);
+        if (!p.addItem(snack.copy())) p.drop(snack.copy(), false);
+        level.sendParticles(ParticleTypes.HAPPY_VILLAGER, p.getX(), p.getY() + 1.2, p.getZ(), 5, 0.3, 0.2, 0.3, 0);
+        p.displayClientMessage(Component.translatable("message.monstergirls.lunch", friend.getDisplayName(), snack.getHoverName()), false);
+        return friend;
+    }
+
     /** Ticks until rain (0 while it rains, or when the weather is held). */
     public static int untilRain(ServerLevel level) {
         if (level.isRaining() || !level.getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_WEATHER_CYCLE)
@@ -108,5 +139,6 @@ public final class Comfort {
         if (!(event.getEntity() instanceof ServerPlayer p) || !(p.level() instanceof ServerLevel level)) return;
         if (p.tickCount % 20 == 0) check(level, p);
         if (p.tickCount % 200 == 7) forecast(level, p);
+        if (p.tickCount % 200 == 113) lunch(level, p);
     }
 }
