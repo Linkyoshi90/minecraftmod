@@ -35,7 +35,10 @@ import java.util.Set;
 public final class Journal {
     private static final double SIGHT = 12.0;
     /** The guide pages after the contents: befriending, the hearth, expeditions, weapons, scouting, life at home, the milking machine, keepsakes, dairy, nursing. */
-    public static final List<String> GUIDE = List.of("friends", "hearth", "expedition", "weapons", "scouting", "home", "milking", "keepsakes", "dairy", "nursing", "legends", "encounters", "chores", "festivals", "market", "rivals", "roles", "teamwork");
+    public static final List<String> GUIDE = List.of("friends", "hearth", "expedition", "weapons", "scouting", "home", "milking", "keepsakes", "dairy", "nursing", "legends", "encounters", "chores", "festivals", "market", "rivals", "roles", "teamwork", "bestiary");
+    /** Bestiary: sightings (one per two seconds in view) before her home shows, and before her whole page does (befriending her does too). */
+    public static final int KNOWN = 3, STUDIED = 20, NATURALIST = 25;
+    public static final String SEEN = "Seen", NATURALIST_ADVANCEMENT = "naturalist";
     /** How many givers the milk page lists. */
     public static final int MILK_LINES = 8;
 
@@ -60,7 +63,10 @@ public final class Journal {
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         if (!(event.getEntity() instanceof ServerPlayer player) || player.tickCount % 40 != 0 || player.isSpectator()) return;
         for (Entity e : player.level().getEntities(player, player.getBoundingBox().inflate(SIGHT), e -> e instanceof Bonded && isOurs(e))) {
-            if (player.hasLineOfSight(e)) record(player, e, ((Bonded) e).getAffection(player) >= Orders.AFFECTION);
+            if (player.hasLineOfSight(e)) {
+                record(player, e, ((Bonded) e).getAffection(player) >= Orders.AFFECTION);
+                watch(player, e);
+            }
         }
     }
 
@@ -79,6 +85,42 @@ public final class Journal {
             Rarity.recorded(player, creature, befriended);
         }
         return news;
+    }
+
+    /** One more sighting of her kind for the bestiary (up to STUDIED). How many sightings now. */
+    public static int watch(Player player, Entity creature) {
+        String id = BuiltInRegistries.ENTITY_TYPE.getKey(creature.getType()).getPath();
+        CompoundTag data = player.getData(ModAttachments.JOURNAL);
+        CompoundTag seen = data.getCompound(SEEN);
+        int n = seen.getInt(id);
+        if (n >= STUDIED) return n;
+        seen.putInt(id, ++n);
+        data.put(SEEN, seen);
+        player.setData(ModAttachments.JOURNAL, data);
+        if (n == STUDIED && player instanceof ServerPlayer sp) {
+            sp.displayClientMessage(Component.translatable("message.monstergirls.studied", creature.getType().getDescription()).withStyle(ChatFormatting.DARK_GREEN), true);
+            if (studied(sp) >= NATURALIST) {
+                var a = sp.server.getAdvancements().get(MonsterGirlsMod.id(NATURALIST_ADVANCEMENT));
+                if (a != null) sp.getAdvancements().award(a, "done");
+            }
+        }
+        return n;
+    }
+
+    public static int sightings(Player player, String id) {
+        return player.getData(ModAttachments.JOURNAL).getCompound(SEEN).getInt(id);
+    }
+
+    /** Whether her whole page is known: watched long enough, or befriended. */
+    public static boolean isStudied(Player player, String id) {
+        return sightings(player, id) >= STUDIED || friends(player).contains(id);
+    }
+
+    /** How many kinds are fully known. */
+    public static int studied(Player player) {
+        int n = 0;
+        for (String id : met(player)) if (isStudied(player, id)) n++;
+        return n;
     }
 
     /** Who last missed them: a line on the cover. */
@@ -119,7 +161,8 @@ public final class Journal {
         MutableComponent cover = Component.translatable("journal.monstergirls.title").withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_BLUE)
                 .append("\n\n").append(Component.translatable("journal.monstergirls.girls", girls.size(), GirlSpecies.values().length).withStyle(ChatFormatting.RESET))
                 .append("\n").append(Component.translatable("journal.monstergirls.friends", friends.size()).withStyle(ChatFormatting.RESET))
-                .append("\n").append(Component.translatable("journal.monstergirls.others", others.size()).withStyle(ChatFormatting.RESET));
+                .append("\n").append(Component.translatable("journal.monstergirls.others", others.size()).withStyle(ChatFormatting.RESET))
+                .append("\n").append(Component.translatable("journal.monstergirls.studied", studied(player), met.size()).withStyle(ChatFormatting.RESET));
         String missedBy = player.getData(ModAttachments.JOURNAL).getString("MissedBy");
         int letters = player.getData(ModAttachments.JOURNAL).getInt(Letters.COUNT);
         if (letters > 0) cover.append("\n").append(Component.translatable("journal.monstergirls.letters", letters).withStyle(ChatFormatting.RESET));
@@ -159,12 +202,20 @@ public final class Journal {
                             : Component.translatable("journal.monstergirls.met")).withStyle(ChatFormatting.RESET, friends.contains(id) ? ChatFormatting.GOLD : ChatFormatting.GRAY));
             Rarity.Tier tier = Rarity.of(id);
             if (tier != Rarity.Tier.COMMON) page.append("\n").append(Component.translatable(tier.key()).withStyle(ChatFormatting.RESET, tier == Rarity.Tier.LEGENDARY ? ChatFormatting.GOLD : ChatFormatting.DARK_AQUA));
+            int seen = sightings(player, id);
+            boolean known = seen >= KNOWN || friends.contains(id), studied = isStudied(player, id);
+            if (!known) {                                                            // a glimpse: just her name, for now
+                page.append("\n\n").append(Component.translatable("journal.monstergirls.glimpsed").withStyle(ChatFormatting.RESET, ChatFormatting.ITALIC, ChatFormatting.GRAY));
+                pages.add(Filterable.passThrough(page));
+                continue;
+            }
             SpawnConditions.When when = SpawnConditions.of(id);
             if (when != null) page.append("\n").append(Component.translatable(when.key()).withStyle(ChatFormatting.RESET, ChatFormatting.DARK_PURPLE));
             if (girl) {
                 page.append("\n\n").append(Component.translatable("journal.monstergirls.home",
                         Component.translatable("journal.monstergirls." + id + ".home")).withStyle(ChatFormatting.RESET, ChatFormatting.DARK_GREEN));
-                page.append("\n\n").append(Component.translatable("journal.monstergirls." + id + ".signature").withStyle(ChatFormatting.RESET, ChatFormatting.BLACK));
+                page.append("\n\n").append(studied ? Component.translatable("journal.monstergirls." + id + ".signature").withStyle(ChatFormatting.RESET, ChatFormatting.BLACK)
+                        : Component.translatable("journal.monstergirls.watch_more", seen, STUDIED).withStyle(ChatFormatting.RESET, ChatFormatting.ITALIC, ChatFormatting.GRAY));
             }
             pages.add(Filterable.passThrough(page));
         }

@@ -83,4 +83,23 @@ public class RoleTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "theBestiaryFillsIn")
+    public static void theBestiaryFillsIn(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        AbstractMonsterGirl girl = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(5, 2, 5));
+        String id = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(girl.getType()).getPath();
+        com.linkyoshi90.monstergirls.entity.Journal.record(p, girl, false);
+        java.util.function.Supplier<String> page = () -> {
+            var pages = com.linkyoshi90.monstergirls.entity.Journal.book(p).pages();
+            return pages.get(pages.size() - 1).raw().toString();
+        };
+        check(page.get().contains("journal.monstergirls.glimpsed") && !page.get().contains(id + ".home"), "a glimpse: just her name");
+        for (int i = 0; i < com.linkyoshi90.monstergirls.entity.Journal.KNOWN; i++) com.linkyoshi90.monstergirls.entity.Journal.watch(p, girl);
+        check(page.get().contains(id + ".home") && page.get().contains("journal.monstergirls.watch_more") && !page.get().contains(id + ".signature"), "her home, then");
+        while (com.linkyoshi90.monstergirls.entity.Journal.watch(p, girl) < com.linkyoshi90.monstergirls.entity.Journal.STUDIED) { }
+        check(page.get().contains(id + ".signature") && com.linkyoshi90.monstergirls.entity.Journal.studied(p) == 1, "watched long enough, her whole page");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

@@ -2808,5 +2808,13 @@
   "journal.monstergirls.guide.teamwork": "Two friends fighting the same foe set each other up: a blow within three seconds of a teammate's lands half again as hard. A harpy knocks the foe into the air, and a slime or spider girl slows it down.",
   "advancement.monstergirls.teamwork": "Fighting as One",
   "advancement.monstergirls.teamwork.desc": "Have two of your friends land a combined blow",
-  "monstergirls.configuration.teamwork": "Teamwork"
+  "monstergirls.configuration.teamwork": "Teamwork",
+  "journal.monstergirls.glimpsed": "Only glimpsed so far. Watch her kind a while to learn more.",
+  "journal.monstergirls.watch_more": "Watched %s of %s times. Keep watching, or make a friend of one, to learn her ways.",
+  "journal.monstergirls.studied": "Fully studied: %s of %s",
+  "message.monstergirls.studied": "Your journal page on the %s is complete",
+  "advancement.monstergirls.naturalist": "Naturalist",
+  "advancement.monstergirls.naturalist.desc": "Fully study 25 kinds in your journal",
+  "journal.monstergirls.guide.bestiary.title": "Watching",
+  "journal.monstergirls.guide.bestiary": "A kind you have only glimpsed gets just her name here. Watch her kind a while and her home and her moment fill in; watch longer, or befriend one, and you learn her ways. Fully study 25 kinds to be a naturalist."
 }
