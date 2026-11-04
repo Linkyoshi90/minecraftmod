@@ -68,6 +68,10 @@ public final class GirlEvents {
                 && !com.linkyoshi90.monstergirls.entity.SpawnRarity.allows(event.getLevel(), event.getEntity(), event.getEntity().getRandom())) {
             event.setResult(net.neoforged.neoforge.event.entity.living.MobSpawnEvent.PositionCheck.Result.FAIL);
         }
+        if (event.getEntity() instanceof net.minecraft.world.entity.monster.Enemy && type == net.minecraft.world.entity.MobSpawnType.NATURAL
+                && com.linkyoshi90.monstergirls.block.HearthBlockEntity.shelters(event.getLevel().getLevel(), event.getEntity().position())) {
+            event.setResult(net.neoforged.neoforge.event.entity.living.MobSpawnEvent.PositionCheck.Result.FAIL);   // a lived-in hearth is safe ground
+        }
     }
 
     /** An aegis boar takes a share of every blow meant for her friend (Armoured.shield). */

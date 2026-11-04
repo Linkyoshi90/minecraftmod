@@ -81,6 +81,19 @@ public class HearthBlockEntity extends BlockEntity {
         return this.store;
     }
 
+    /** A hearth with this many living there keeps hostile mobs from spawning around it (config hearthSafeRadius). */
+    public static final int SAFE_RESIDENTS = 2;
+
+    /** Whether a spot is within the safe ring of a lived-in hearth. */
+    public static boolean shelters(Level level, net.minecraft.world.phys.Vec3 pos) {
+        int r = com.linkyoshi90.monstergirls.MonsterGirlsConfig.hearthSafeRadius();
+        if (r <= 0) return false;
+        for (BlockPos p : java.util.List.copyOf(loaded(level))) {
+            if (p.distToCenterSqr(pos) <= (double) r * r && level.getBlockEntity(p) instanceof HearthBlockEntity h && h.residentCount() >= SAFE_RESIDENTS) return true;
+        }
+        return false;
+    }
+
     public int residentCount() {
         return this.residents.size();
     }

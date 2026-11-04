@@ -76,6 +76,14 @@ public final class MonsterGirlsConfig {
             .comment("Two of your friends fighting the same foe set each other up: a blow within three seconds of a teammate's lands half again as hard.")
             .define("teamwork", true);
 
+    public static final ModConfigSpec.BooleanValue COMFORT = BUILDER
+            .comment("Friends look out for you: the nearest rushes to steady you when you are badly hurt, and they warn you a minute before rain.")
+            .define("comfort", true);
+
+    public static final ModConfigSpec.IntValue HEARTH_SAFE_RADIUS = BUILDER
+            .comment("No hostile mob spawns naturally within this many blocks of a hearth with " + com.linkyoshi90.monstergirls.block.HearthBlockEntity.SAFE_RESIDENTS + " or more living there (0 turns it off).")
+            .defineInRange("hearthSafeRadius", 24, 0, 128);
+
     public static final ModConfigSpec.IntValue VARIANT_RATE = BUILDER
             .comment("How often a wild one has a colour other than the default, as a percent of normal.",
                     "Harpies and anurans take their colours from the biome, so above 100 changes nothing for them.")
@@ -174,6 +182,14 @@ public final class MonsterGirlsConfig {
 
     public static boolean teamwork() {
         return SPEC.isLoaded() ? TEAMWORK.get() : TEAMWORK.getDefault();
+    }
+
+    public static boolean comfort() {
+        return SPEC.isLoaded() ? COMFORT.get() : COMFORT.getDefault();
+    }
+
+    public static int hearthSafeRadius() {
+        return SPEC.isLoaded() ? HEARTH_SAFE_RADIUS.get() : HEARTH_SAFE_RADIUS.getDefault();
     }
 
     public static boolean chores() {

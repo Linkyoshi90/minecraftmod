@@ -1554,7 +1554,7 @@
   "journal.monstergirls.guide.friends.title": "Making friends",
   "journal.monstergirls.guide.friends": "Feed her what she likes and pat her with an empty hand. At 10 friendship she is your friend: her gift of a behaviour starts, and a stick gives her orders (sneak for her stance).",
   "journal.monstergirls.guide.hearth.title": "A hearth",
-  "journal.monstergirls.guide.hearth": "A campfire ringed by eight stone bricks. Your friends roaming free within 16 blocks settle there; a day later each builds a hut nearby. With three or more, every morning they leave presents in the hearth.",
+  "journal.monstergirls.guide.hearth": "A campfire ringed by eight stone bricks. Your friends roaming free within 16 blocks settle there; a day later each builds a hut nearby. With two or more no monster spawns within 24 blocks; with three or more, every morning they leave presents in the hearth.",
   "journal.monstergirls.guide.expedition.title": "Expeditions",
   "journal.monstergirls.guide.expedition": "Give a grown friend an empty map: she sets off and comes back a day later with finds of her homeland, and now and then a new friend. Halfway through she writes you a letter.",
   "journal.monstergirls.guide.weapons.title": "Weapons",
@@ -2825,5 +2825,10 @@
   "advancement.monstergirls.birthday": "Many Happy Returns",
   "advancement.monstergirls.birthday.desc": "Bring a friend something to eat on her birthday",
   "journal.monstergirls.guide.treats.title": "Treats and Birthdays",
-  "journal.monstergirls.guide.treats": "Every girl has a favourite treat from her homeland. She takes it even if it isn't what she usually eats, and it means three times as much. And every girl has a birthday on one of the 24 days of the calendar: bring a friend something to eat that day and she'll never forget it. Look at a friend to see her birthday."
+  "journal.monstergirls.guide.treats": "Every girl has a favourite treat from her homeland. She takes it even if it isn't what she usually eats, and it means three times as much. And every girl has a birthday on one of the 24 days of the calendar: bring a friend something to eat that day and she'll never forget it. Look at a friend to see her birthday.",
+  "message.monstergirls.comfort": "%s rushes to your side and steadies you",
+  "message.monstergirls.forecast": "%s sniffs the air: \"Rain's coming soon.\"",
+  "message.monstergirls.forecast.frog": "%s croaks loudly: rain is coming!",
+  "monstergirls.configuration.comfort": "Comfort and forecasts",
+  "monstergirls.configuration.hearthSafeRadius": "Safe radius around a hearth"
 }
