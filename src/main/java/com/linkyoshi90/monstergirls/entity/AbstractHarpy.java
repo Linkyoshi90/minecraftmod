@@ -129,6 +129,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.goalSelector.addGoal(-1, new SitWhenOrderedGoal<>(this));
         this.goalSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StayNearGoal<>(this));
         this.goalSelector.addGoal(3, new com.linkyoshi90.monstergirls.entity.girl.FarmhandGoal<>(this));
+        this.goalSelector.addGoal(5, new com.linkyoshi90.monstergirls.entity.girl.Chores.ChoresGoal<>(this));
         this.targetSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StanceTargetGoal<>(this));
         this.goalSelector.addGoal(2, new BuildNestGoal(this));
         this.goalSelector.addGoal(2, new com.linkyoshi90.monstergirls.entity.ai.FetchBallGoal<>(this));

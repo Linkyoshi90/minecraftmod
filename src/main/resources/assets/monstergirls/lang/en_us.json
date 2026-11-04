@@ -2724,5 +2724,13 @@
   "journal.monstergirls.when.full_moon": "Comes out under a full moon",
   "journal.monstergirls.when.night": "Comes out at night",
   "journal.monstergirls.when.storm": "Comes out in stormy weather",
-  "journal.monstergirls.when.rain": "Comes out in the rain"
+  "journal.monstergirls.when.rain": "Comes out in the rain",
+  "message.monstergirls.order.patrol_chores": "%s patrols here and does the chores",
+  "advancement.monstergirls.first_chore": "Many Hands",
+  "advancement.monstergirls.first_chore.desc": "Have a friend on patrol do a chore",
+  "advancement.monstergirls.every_chore": "A Working Household",
+  "advancement.monstergirls.every_chore.desc": "Have your friends gather eggs, take honey, shear sheep and catch fish",
+  "journal.monstergirls.guide.chores.title": "Chores",
+  "journal.monstergirls.guide.chores": "A friend you leave on patrol keeps the place: she gathers eggs, feathers and wool, takes the honey from full hives without upsetting the bees (put glass bottles in a chest for honey bottles), shears sheep, and fishes from the shore when there is nothing else to do. Food goes in a fridge nearby, the rest in a chest.",
+  "monstergirls.configuration.chores": "Chores"
 }

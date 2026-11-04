@@ -5,12 +5,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
@@ -27,8 +25,6 @@ public class FarmhandGoal<T extends net.minecraft.world.entity.PathfinderMob & c
     private final T girl;
     @Nullable
     private BlockPos crop;
-    @Nullable
-    private BlockPos store;
     private int cooldown;
     private int ticks;
 
@@ -139,20 +135,8 @@ public class FarmhandGoal<T extends net.minecraft.world.entity.PathfinderMob & c
         }
     }
 
-    /** Into a chest, barrel (any container) in her patrol area, if there is room. */
+    /** Into a fridge if it is food, else a chest or barrel (any container) in her patrol area, if there is room (Chores.store). */
     private ItemStack storeAway(ServerLevel level, ItemStack stack) {
-        if (this.store == null || !(level.getBlockEntity(this.store) instanceof Container)) {
-            this.store = null;
-            BlockPos anchor = this.girl.getOrders().anchor();
-            int r = (int) Orders.PATROL_RADIUS;
-            for (BlockPos p : BlockPos.betweenClosed(anchor.offset(-r, -3, -r), anchor.offset(r, 3, r))) {
-                if (level.getBlockEntity(p) instanceof Container) {
-                    this.store = p.immutable();
-                    break;
-                }
-            }
-        }
-        if (this.store != null && level.getBlockEntity(this.store) instanceof Container box) return HopperBlockEntity.addItem(null, box, stack, null);
-        return stack;
+        return Chores.store(level, this.girl.getOrders().anchor(), stack);
     }
 }

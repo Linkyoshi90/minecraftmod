@@ -149,7 +149,9 @@ public final class Orders {
         String key = switch (next) {
             case SIT -> "message.monstergirls.sits";
             case PATROL -> com.linkyoshi90.monstergirls.entity.girl.FarmhandGoal.hasFarmland(mob.level(), mob.blockPosition())
-                    && !(mob instanceof com.linkyoshi90.monstergirls.entity.girl.Merfolk) ? "message.monstergirls.order.patrol_farm" : "message.monstergirls.order.patrol";
+                    && !(mob instanceof com.linkyoshi90.monstergirls.entity.girl.Merfolk) ? "message.monstergirls.order.patrol_farm"
+                    : mob.level() instanceof net.minecraft.server.level.ServerLevel sl && com.linkyoshi90.monstergirls.entity.girl.Chores.hasWork(sl, mob, mob.blockPosition())
+                    ? "message.monstergirls.order.patrol_chores" : "message.monstergirls.order.patrol";
             case FOLLOW -> "message.monstergirls.order.follow";
             case FREE_ROAM -> now == Command.SIT ? "message.monstergirls.stands" : "message.monstergirls.order.free";
         };

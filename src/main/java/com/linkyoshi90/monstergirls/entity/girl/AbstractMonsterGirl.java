@@ -216,6 +216,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.goalSelector.addGoal(4, new com.linkyoshi90.monstergirls.entity.ai.FridgeGoal<>(this));
         this.goalSelector.addGoal(3, new com.linkyoshi90.monstergirls.entity.ai.NurseGoal(this));
         this.goalSelector.addGoal(3, new FarmhandGoal<>(this));
+        this.goalSelector.addGoal(5, new Chores.ChoresGoal<>(this));
         this.goalSelector.addGoal(7, new SleepGoal(this));
         this.targetSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StanceTargetGoal<>(this));
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));
