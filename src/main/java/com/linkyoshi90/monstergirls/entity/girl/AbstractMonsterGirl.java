@@ -790,6 +790,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             return InteractionResult.SUCCESS;                           // a cup of her milk, offered when they were poisoned
         }
         if (stack.isEmpty() && !player.isShiftKeyDown()) return this.pet(player);
+        if (stack.isEmpty() && this.level() instanceof ServerLevel game && HideAndSeek.start(game, this, player)) return InteractionResult.SUCCESS;   // crouching: let's play
         return super.mobInteract(player, hand);
     }
 
@@ -973,6 +974,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         com.linkyoshi90.monstergirls.entity.Painted.tickCopper(this, this);
         if (this.tickCount % 100 == 0) Settlement.tick(server, this);
         if (this.tickCount % 100 == 50) Treats.tick(server, this);
+        if (this.tickCount % 10 == 3) HideAndSeek.tick(server, this);
         if (this.tickCount % 97 == 0) Rivalries.squabble(server, this);
         if (this.hutOrigin != null && this.tickCount % 10 == 0) Settlement.buildStep(server, this);
         this.gestation.tick();
