@@ -758,6 +758,21 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         }
         InteractionResult arms = GirlArms.interact(this, player, stack);
         if (arms != null) return arms;
+        if (Mining.isMiner(this) && !this.isBaby() && this.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {   // a pickaxe, then what to dig for
+            boolean pickaxe = this.getMainHandItem().getItem() instanceof net.minecraft.world.item.PickaxeItem;
+            if (stack.getItem() instanceof net.minecraft.world.item.PickaxeItem) {
+                if (this.level() instanceof ServerLevel s) Mining.takePickaxe(this, player, stack);
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
+            }
+            if (pickaxe && Mining.vein(stack) != null) {
+                if (this.level() instanceof ServerLevel s) Mining.send(s, this, player, stack);
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
+            }
+            if (pickaxe && stack.isEmpty() && player.isShiftKeyDown() && this.getPersistentData().getBoolean(Mining.GIVEN)) {   // the pickaxe back
+                if (this.level() instanceof ServerLevel) Mining.givePickaxeBack(this, player);
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
+            }
+        }
         InteractionResult family = this.familyInteract(player, hand, stack);
         if (family != null) return family;
         if (this.isBaby() && (this.isFood(stack) || stack.is(ModTags.MEAT) || stack.has(net.minecraft.core.component.DataComponents.FOOD))
@@ -975,6 +990,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (this.tickCount % 100 == 0) Settlement.tick(server, this);
         if (this.tickCount % 100 == 50) Treats.tick(server, this);
         if (this.tickCount % 10 == 3) HideAndSeek.tick(server, this);
+        if (this.tickCount % 20 == 9 && Mining.holdsHaul(this)) Mining.handOver(server, this);
         if (this.tickCount % 97 == 0) Rivalries.squabble(server, this);
         if (this.hutOrigin != null && this.tickCount % 10 == 0) Settlement.buildStep(server, this);
         this.gestation.tick();
