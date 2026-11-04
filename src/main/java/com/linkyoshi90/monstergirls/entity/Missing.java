@@ -23,13 +23,21 @@ import javax.annotation.Nullable;
  * Days apart are the player's own (clock): time passes for it only while they are online, as the world's day does then (a night
  * slept through counts), so a week away from a server that others kept running costs nothing. missingCountsOffline puts it back
  * on the world's days.
+ * <p>
+ * Longing adds to it, in percent of missing them badly, kept until they meet again: a tar-shroom near her (TarShroomBlock) and
+ * a salami fed to her raise it while the player is around. When they come back after a minute or more away and she misses
+ * them, a grown friend comes over and cuddles up to them, which raises the odds of the bed and of young for that day.
  */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class Missing {
     public static final int DAY = 24000;
+    /** Ticks of the player's time apart before a meeting counts as coming back; how long she tries to reach them for a cuddle. */
+    public static final long AWAY = 1200, CUDDLE_WINDOW = 600;
+    public static final int SALAMI = 25, SHROOM = 5, MAX_LONGING = 100;
     private static final String SEEN = "MissingSeen";
     private static final String BACK = "MissingBack";
     private static final String STAGE = "MissingStage";
+    private static final String LONGING = "MissingLonging", CUDDLE = "MissingCuddleBy", CUDDLED = "MissingCuddled";
     private static final String MET = "MissingMetOn", KEPT = "MissingKeptOn";   // in the player's days (MissingMet was the world's)
     private static final String CLOCK = "Clock", CLOCK_LAST = "ClockLast";
     public static final int MONTH = 30;
@@ -79,9 +87,37 @@ public final class Missing {
 
     /** 0 not at all, 1 she misses them, 2 badly. */
     public static int stage(int affection, long daysApart) {
+        return stage(affection, daysApart, 0);
+    }
+
+    /** With longing on top: half of missing them badly is missing them. */
+    public static int stage(int affection, long daysApart, int longing) {
+        int percent = percent(affection, daysApart, longing);
+        return percent >= 100 ? 2 : percent >= 50 ? 1 : 0;
+    }
+
+    /** How much she misses them, in percent of missing them badly (more is possible). */
+    public static int percent(int affection, long daysApart, int longing) {
         if (affection < Bonded.BED_AFFECTION || MonsterGirlsConfig.missingRate() <= 0) return 0;
-        int start = startDays(affection);
-        return daysApart >= start * 2L ? 2 : daysApart >= start ? 1 : 0;
+        return (int) Math.min(1000, daysApart * 50 / startDays(affection)) + longing;
+    }
+
+    /** Grown and full size: the only friends who long, cuddle and come to bed for it. */
+    public static boolean canLong(Mob mob) {
+        return !mob.isBaby() && mob.getBbHeight() >= Bonded.CHILDLIKE_HEIGHT && mob instanceof Bonded;
+    }
+
+    public static int longing(Mob mob, Player player) {
+        return tag(mob, LONGING).getInt(player.getUUID().toString());
+    }
+
+    /** Raises her longing for a close friend, up to MAX_LONGING. False if she doesn't long for them. */
+    public static boolean addLonging(Mob mob, Player player, int percent) {
+        if (!canLong(mob) || ((Bonded) mob).getAffection(player) < Bonded.BED_AFFECTION || MonsterGirlsConfig.missingRate() <= 0) return false;
+        CompoundTag longing = tag(mob, LONGING);
+        String id = player.getUUID().toString();
+        longing.putInt(id, Math.min(MAX_LONGING, longing.getInt(id) + percent));
+        return true;
     }
 
     private static CompoundTag tag(Mob mob, String key) {
@@ -100,11 +136,12 @@ public final class Missing {
         long now = clock(player);
         CompoundTag seen = tag(mob, SEEN);
         if (seen.contains(id)) {
-            long days = Math.max(0, now - seen.getLong(id)) / DAY;
-            int stage = stage(affection, days);
-            if (stage > 0) reunite(level, mob, player, stage, days);
+            long apart = Math.max(0, now - seen.getLong(id)), days = apart / DAY;
+            int stage = stage(affection, days, longing(mob, player));
+            if (stage > 0 && apart >= AWAY) reunite(level, mob, player, stage, days);
         }
         seen.putLong(id, now);
+        cuddle(level, mob, player);
         anniversary(level, mob, player, id, now / DAY);
         if (activeStage(mob, player) > 0 && mob.getRandom().nextInt(4) == 0) tears(level, mob);
     }
@@ -129,17 +166,48 @@ public final class Missing {
     private static void reunite(ServerLevel level, Mob mob, Player player, int stage, long days) {
         Bonded bonded = (Bonded) mob;
         int affection = bonded.getAffection(player);
-        int lost = (int) (days - startDays(affection) + 1);
+        int lost = (int) Math.max(0, days - startDays(affection) + 1);
         if (Keepsakes.wearsBracelet(mob, player)) lost /= 2;
         if (affection > Bonded.BED_AFFECTION) bonded.setAffection(player.getUUID(), Math.max(Bonded.BED_AFFECTION, affection - lost));
         String id = player.getUUID().toString();
         tag(mob, BACK).putLong(id, level.getDayTime() + DAY);
         tag(mob, STAGE).putInt(id, stage);
+        tag(mob, LONGING).remove(id);
+        tag(mob, CUDDLED).remove(id);
+        if (canLong(mob)) tag(mob, CUDDLE).putLong(id, level.getGameTime() + CUDDLE_WINDOW);
         if (mob instanceof GiftGiver giver) giver.setNextGiftTime(level.getGameTime());
         tears(level, mob);
         mob.playAmbientSound();
         player.displayClientMessage(Component.translatable("message.monstergirls.missed." + stage, mob.getDisplayName()), true);
         Journal.recordMissed(player, mob);
+    }
+
+    /** Just back and missed: she comes over and, once there, cuddles up to them. True the moment she does. */
+    public static boolean cuddle(ServerLevel level, Mob mob, Player player) {
+        String id = player.getUUID().toString();
+        CompoundTag pending = tag(mob, CUDDLE);
+        if (!pending.contains(id)) return false;
+        if (level.getGameTime() > pending.getLong(id) || mob.isSleeping() || mob.getTarget() != null) {
+            pending.remove(id);
+            return false;
+        }
+        if (mob.distanceToSqr(player) > 2.5 * 2.5) {
+            if (!mob.isPassenger()) mob.getNavigation().moveTo(player, 1.2);
+            return false;
+        }
+        pending.remove(id);
+        tag(mob, CUDDLED).putBoolean(id, true);
+        mob.getNavigation().stop();
+        mob.getLookControl().setLookAt(player);
+        ((Bonded) mob).blushFor(100);
+        level.sendParticles(ParticleTypes.HEART, (mob.getX() + player.getX()) / 2, mob.getEyeY() + 0.3, (mob.getZ() + player.getZ()) / 2, 8, 0.4, 0.2, 0.4, 0.0);
+        player.displayClientMessage(Component.translatable("message.monstergirls.cuddle", mob.getDisplayName()), true);
+        return true;
+    }
+
+    /** Whether she cuddled up to them since they came back (for that day). */
+    public static boolean cuddled(Mob mob, @Nullable Player player) {
+        return activeStage(mob, player) > 0 && tag(mob, CUDDLED).getBoolean(player.getUUID().toString());
     }
 
     private static void tears(ServerLevel level, Mob mob) {
@@ -156,13 +224,30 @@ public final class Missing {
 
     /** What it adds to tonight's odds of her coming to bed. */
     public static float bedBonus(Mob mob, Player player) {
-        return activeStage(mob, player) * 0.25F;
+        return activeStage(mob, player) * 0.25F + (cuddled(mob, player) ? 0.25F : 0.0F);
     }
 
-    /** The odds of young after a shared night: the setting, rising to certain for one who missed them badly. */
+    /** The odds of young after a shared night: the setting, rising to certain for one who missed them badly; a cuddle adds a quarter. */
     public static float conceptionChance(Mob mob, Player player) {
         float base = MonsterGirlsConfig.conceptionChance() / 100.0F;
-        return base + (1.0F - base) * activeStage(mob, player) / 2.0F;
+        float more = Math.min(1.0F, activeStage(mob, player) / 2.0F + (cuddled(mob, player) ? 0.25F : 0.0F));
+        return base + (1.0F - base) * more;
+    }
+
+    /** A salami fed to a close friend: she eats it and misses them more. */
+    @SubscribeEvent
+    public static void onInteract(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract event) {
+        if (!event.getItemStack().is(com.linkyoshi90.monstergirls.registry.ModItems.SALAMI.get()) || !(event.getTarget() instanceof Mob mob)
+                || !(mob instanceof Bonded b) || !canLong(mob) || b.getAffection(event.getEntity()) < Bonded.BED_AFFECTION) return;
+        event.setCanceled(true);
+        event.setCancellationResult(net.minecraft.world.InteractionResult.sidedSuccess(event.getLevel().isClientSide));
+        if (!(event.getLevel() instanceof ServerLevel level)) return;
+        Player player = event.getEntity();
+        if (!addLonging(mob, player, SALAMI)) return;
+        event.getItemStack().consume(1, player);
+        mob.playSound(net.minecraft.sounds.SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
+        level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.3, mob.getZ(), 3, 0.3, 0.2, 0.3, 0.0);
+        player.displayClientMessage(Component.translatable("message.monstergirls.salami", mob.getDisplayName(), longing(mob, player)), true);
     }
 
     /** She went because you sent her (an expedition): nothing to forgive. */
@@ -174,6 +259,10 @@ public final class Missing {
     @Nullable
     public static Component describe(Mob mob, Player player) {
         int stage = activeStage(mob, player);
-        return stage == 0 ? null : Component.translatable("bond.monstergirls.missed." + stage);
+        if (stage == 0) {
+            int longing = longing(mob, player);
+            return longing == 0 ? null : Component.translatable("bond.monstergirls.longing", longing);
+        }
+        return Component.translatable("bond.monstergirls.missed." + stage);
     }
 }

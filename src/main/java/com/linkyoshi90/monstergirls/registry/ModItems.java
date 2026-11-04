@@ -202,6 +202,10 @@ public final class ModItems {
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.FriendCompassItem> FRIEND_COMPASS = ITEMS.register("friend_compass", () -> new com.linkyoshi90.monstergirls.item.FriendCompassItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> FRIENDSHIP_BRACELET = ITEMS.registerSimpleItem("friendship_bracelet", new Item.Properties().stacksTo(16));
     public static final DeferredItem<Item> LOVE_LETTER = ITEMS.registerSimpleItem("love_letter", new Item.Properties().stacksTo(16));
+    /** A fancy salami: food for the player, and fed to a close friend she misses them more (Missing). */
+    public static final DeferredItem<Item> SALAMI = ITEMS.registerItem("salami",
+            props -> new Item(props.stacksTo(16).food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.8F).build())));
+    public static final DeferredItem<BlockItem> TAR_SHROOM = ITEMS.registerSimpleBlockItem(ModBlocks.TAR_SHROOM);
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.UmbrellaItem> UMBRELLA = ITEMS.register("umbrella", () -> new com.linkyoshi90.monstergirls.item.UmbrellaItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> GROOMING_BRUSH = ITEMS.registerSimpleItem("grooming_brush", new Item.Properties().durability(64));
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.ToyBallItem> TOY_BALL = ITEMS.register("toy_ball", () -> new com.linkyoshi90.monstergirls.item.ToyBallItem(new Item.Properties().stacksTo(16)));

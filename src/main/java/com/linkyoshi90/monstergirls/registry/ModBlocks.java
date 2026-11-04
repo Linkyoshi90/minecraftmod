@@ -114,5 +114,11 @@ public final class ModBlocks {
             () -> new net.minecraft.world.level.block.LiquidBlock(ModFluids.NECTAR.get(),
                     BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.WATER).mapColor(MapColor.COLOR_YELLOW)));
 
+    /** A black swamp mushroom whose spores make friends nearby miss their player (TarShroomBlock). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.TarShroomBlock> TAR_SHROOM = BLOCKS.registerBlock("tar_shroom",
+            com.linkyoshi90.monstergirls.block.TarShroomBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).instabreak().noCollission().randomTicks().sound(SoundType.FUNGUS)
+                    .offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY));
+
     private ModBlocks() {}
 }

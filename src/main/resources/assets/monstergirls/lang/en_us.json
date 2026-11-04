@@ -2852,5 +2852,10 @@
   "advancement.monstergirls.miner": "Strike the Earth",
   "advancement.monstergirls.miner.desc": "Have a friend come back from a mining trip",
   "journal.monstergirls.guide.mining.title": "Mining Trips",
-  "journal.monstergirls.guide.mining": "Diggers (dwarves, gnomes, kobolds, moles, ants, constructs and more; look for \"Miner\") will mine for you. Hand one a pickaxe, then show her what to look for: an ore, raw metal, an ingot, a gem, coal or stone. She digs in at her patrol spot (or where she stands) and comes back there with a stack, into a chest beside the spot or into your hands. Rare things take days and wear the pickaxe; Efficiency, Fortune and Unbreaking help. Crouch with an empty hand to take your pickaxe back."
+  "journal.monstergirls.guide.mining": "Diggers (dwarves, gnomes, kobolds, moles, ants, constructs and more; look for \"Miner\") will mine for you. Hand one a pickaxe, then show her what to look for: an ore, raw metal, an ingot, a gem, coal or stone. She digs in at her patrol spot (or where she stands) and comes back there with a stack, into a chest beside the spot or into your hands. Rare things take days and wear the pickaxe; Efficiency, Fortune and Unbreaking help. Crouch with an empty hand to take your pickaxe back.",
+  "item.monstergirls.salami": "Salami",
+  "block.monstergirls.tar_shroom": "Tar-Shroom",
+  "message.monstergirls.cuddle": "%s cuddles up to you",
+  "message.monstergirls.salami": "%s eats the salami and longs for you (%s%%)",
+  "bond.monstergirls.longing": ", longing for you (%s%%)"
 }
