@@ -767,12 +767,12 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             this.hearts(weaning, 3);
             return InteractionResult.SUCCESS;
         }
-        if (!this.isBaby() && (this.isFood(stack) || stack.is(ModTags.MEAT))) {
+        if (!this.isBaby() && (this.isFood(stack) || stack.is(ModTags.MEAT) || stack.is(Treats.favourite(this)))) {
             boolean hurt = this.getHealth() < this.getMaxHealth();
             boolean welcome = this.level().getGameTime() >= this.nextFoodTime;
             if (hurt || welcome) {
                 if (this.level() instanceof ServerLevel server) {
-                    int value = this.foodValue(player, stack);
+                    int value = welcome ? Treats.value(server, this, player, stack, this.foodValue(player, stack)) : 0;   // her favourite, her birthday
                     com.linkyoshi90.monstergirls.entity.Dairy.ate(this, stack);
                     stack.consume(1, player);
                     if (hurt) this.heal(4.0F);
@@ -972,6 +972,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (!(this.level() instanceof ServerLevel server)) return;
         com.linkyoshi90.monstergirls.entity.Painted.tickCopper(this, this);
         if (this.tickCount % 100 == 0) Settlement.tick(server, this);
+        if (this.tickCount % 100 == 50) Treats.tick(server, this);
         if (this.tickCount % 97 == 0) Rivalries.squabble(server, this);
         if (this.hutOrigin != null && this.tickCount % 10 == 0) Settlement.buildStep(server, this);
         this.gestation.tick();

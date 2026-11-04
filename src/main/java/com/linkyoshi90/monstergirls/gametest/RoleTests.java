@@ -15,6 +15,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -99,6 +100,49 @@ public class RoleTests {
         check(page.get().contains(id + ".home") && page.get().contains("journal.monstergirls.watch_more") && !page.get().contains(id + ".signature"), "her home, then");
         while (com.linkyoshi90.monstergirls.entity.Journal.watch(p, girl) < com.linkyoshi90.monstergirls.entity.Journal.STUDIED) { }
         check(page.get().contains(id + ".signature") && com.linkyoshi90.monstergirls.entity.Journal.studied(p) == 1, "watched long enough, her whole page");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "herFavouriteTreat")
+    public static void herFavouriteTreat(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        AbstractMonsterGirl girl = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(3, 2, 3));
+        girl.addAffection(p, Orders.AFFECTION);
+        var level = helper.getLevel();
+        girl.getPersistentData().putLong(com.linkyoshi90.monstergirls.entity.girl.Treats.BIRTHDAY_DONE, level.getDayTime() / 24000L + 1);   // not her birthday, for the sums
+        var fav = com.linkyoshi90.monstergirls.entity.girl.Treats.favourite(girl);
+        check(fav == com.linkyoshi90.monstergirls.entity.girl.Treats.favourite(girl), "always the same favourite");
+        check(!com.linkyoshi90.monstergirls.entity.girl.Treats.knows(p, girl), "not found out yet");
+        int before = girl.getAffection(p);
+        JackalopeTests.interact(girl, p, new ItemStack(fav));
+        check(girl.getAffection(p) >= before + com.linkyoshi90.monstergirls.entity.girl.Treats.FAVOURITE_TIMES, "she takes her favourite, and it means a lot");
+        check(com.linkyoshi90.monstergirls.entity.girl.Treats.knows(p, girl), "and the journal remembers");
+        Item other = fav == Items.BREAD ? Items.COOKIE : Items.BREAD;
+        check(com.linkyoshi90.monstergirls.entity.girl.Treats.value(level, girl, p, new ItemStack(other), 1) == 1, "anything else is ordinary");
+        int b = com.linkyoshi90.monstergirls.entity.girl.Treats.birthday(girl);
+        check(b >= 0 && b < com.linkyoshi90.monstergirls.entity.girl.Festivals.CYCLE
+                && com.linkyoshi90.monstergirls.entity.girl.Treats.isBirthday(girl, (b + 24) * 24000L + 5)
+                && !com.linkyoshi90.monstergirls.entity.girl.Treats.isBirthday(girl, (b + 1) * 24000L), "a birthday once in every 24 days");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "harpyFriendsComeToFestivals")
+    public static void harpyFriendsComeToFestivals(GameTestHelper helper) {
+        BlockPos hp = new BlockPos(1, 2, 1);
+        helper.setBlock(hp, ModBlocks.HEARTH.get());
+        var hearth = (com.linkyoshi90.monstergirls.block.HearthBlockEntity) helper.getBlockEntity(hp);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
+        hearth.setOwner(p.getUUID());
+        AbstractMonsterGirl girl = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(4, 2, 2));
+        girl.addAffection(p, Orders.AFFECTION);
+        check(com.linkyoshi90.monstergirls.entity.girl.Settlement.settle(helper.getLevel(), girl, hearth), "she lives there");
+        var crow = helper.spawn(com.linkyoshi90.monstergirls.registry.ModEntities.CROW_HARPY.get(), new BlockPos(2, 2, 5));
+        crow.addAffection(p, Orders.AFFECTION);
+        var wild = helper.spawn(com.linkyoshi90.monstergirls.registry.ModEntities.CROW_HARPY.get(), new BlockPos(5, 2, 5));
+        check(com.linkyoshi90.monstergirls.entity.girl.Festivals.celebrate(helper.getLevel(), p, helper.absolutePos(hp),
+                com.linkyoshi90.monstergirls.entity.girl.Festivals.Festival.GIFTS) == 2 && wild.getAffection(p) == 0, "her harpy friend comes along; a stranger doesn't");
         HarpyTestUtil.remove(p);
         helper.succeed();
     }

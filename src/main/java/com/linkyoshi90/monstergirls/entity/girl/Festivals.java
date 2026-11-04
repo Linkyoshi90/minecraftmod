@@ -101,6 +101,16 @@ public final class Festivals {
         return out;
     }
 
+    /** Everyone at the festival: the residents, and the owner's harpy and frog friends who have come along (they don't live at hearths). */
+    public static List<net.minecraft.world.entity.Mob> party(ServerLevel level, BlockPos hearth, Player owner) {
+        List<net.minecraft.world.entity.Mob> out = new ArrayList<>(guests(level, hearth));
+        for (net.minecraft.world.entity.Mob m : level.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, new AABB(hearth).inflate(RANGE), net.minecraft.world.entity.Mob::isAlive)) {
+            if (!(m instanceof AbstractMonsterGirl) && m instanceof com.linkyoshi90.monstergirls.entity.Bonded b && !m.isBaby()
+                    && b.getAffection(owner) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) out.add(m);
+        }
+        return out;
+    }
+
     /** What the festival still wants, as a hint key, or null if it is ready. */
     @Nullable
     public static String wants(ServerLevel level, BlockPos hearth, Festival f) {
@@ -122,9 +132,9 @@ public final class Festivals {
 
     /** The owner celebrates with the girls at her hearth. How many celebrated (0: no one home, or the festival isn't ready). */
     public static int celebrate(ServerLevel level, ServerPlayer player, BlockPos hearth, Festival f) {
-        List<AbstractMonsterGirl> guests = guests(level, hearth);
+        List<net.minecraft.world.entity.Mob> guests = party(level, hearth, player);
         if (guests.isEmpty() || wants(level, hearth, f) != null) return 0;
-        for (AbstractMonsterGirl g : guests) {
+        for (net.minecraft.world.entity.Mob g : guests) {
             switch (f) {
                 case DANCE -> {
                     g.getJumpControl().jump();
@@ -135,12 +145,12 @@ public final class Festivals {
                     if (fridge != null) fridge.serve(level, g);
                 }
                 case GIFTS -> {
-                    ItemStack gift = g.rollGift(player);
+                    ItemStack gift = g instanceof com.linkyoshi90.monstergirls.entity.GiftGiver giver ? giver.rollGift(player) : ItemStack.EMPTY;
                     if (!gift.isEmpty() && !player.addItem(gift)) player.drop(gift, false);
                 }
             }
-            g.addAffection(player, BONUS);
-            g.hearts(level, 4);
+            ((com.linkyoshi90.monstergirls.entity.Bonded) g).addAffection(player, BONUS);
+            level.sendParticles(ParticleTypes.HEART, g.getX(), g.getY() + g.getBbHeight() + 0.3, g.getZ(), 4, 0.4, 0.2, 0.4, 0);
         }
         if (f == Festival.HARVEST) {
             player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 600, 0));

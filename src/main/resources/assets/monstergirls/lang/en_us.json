@@ -2816,5 +2816,14 @@
   "advancement.monstergirls.naturalist": "Naturalist",
   "advancement.monstergirls.naturalist.desc": "Fully study 25 kinds in your journal",
   "journal.monstergirls.guide.bestiary.title": "Watching",
-  "journal.monstergirls.guide.bestiary": "A kind you have only glimpsed gets just her name here. Watch her kind a while and her home and her moment fill in; watch longer, or befriend one, and you learn her ways. Fully study 25 kinds to be a naturalist."
+  "journal.monstergirls.guide.bestiary": "A kind you have only glimpsed gets just her name here. Watch her kind a while and her home and her moment fill in; watch longer, or befriend one, and you learn her ways. Fully study 25 kinds to be a naturalist.",
+  "message.monstergirls.favourite": "%s loves %s! It's her favourite.",
+  "message.monstergirls.birthday": "It's %s's birthday today!",
+  "message.monstergirls.birthday.thanks": "%s is delighted you remembered her birthday!",
+  "jade.monstergirls.birthday": "Birthday: day %s of 24",
+  "jade.monstergirls.favourite": "Loves: %s",
+  "advancement.monstergirls.birthday": "Many Happy Returns",
+  "advancement.monstergirls.birthday.desc": "Bring a friend something to eat on her birthday",
+  "journal.monstergirls.guide.treats.title": "Treats and Birthdays",
+  "journal.monstergirls.guide.treats": "Every girl has a favourite treat from her homeland. She takes it even if it isn't what she usually eats, and it means three times as much. And every girl has a birthday on one of the 24 days of the calendar: bring a friend something to eat that day and she'll never forget it. Look at a friend to see her birthday."
 }
