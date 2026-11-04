@@ -33,7 +33,7 @@ public final class Missing {
     public static final int DAY = 24000;
     /** Ticks of the player's time apart before a meeting counts as coming back; how long she tries to reach them for a cuddle. */
     public static final long AWAY = 1200, CUDDLE_WINDOW = 600;
-    public static final int SALAMI = 25, SHROOM = 5, MAX_LONGING = 100;
+    public static final int SALAMI = 25, SHROOM = 5, MAX_LONGING = 100, CUDDLE_SIT = 200;
     private static final String SEEN = "MissingSeen";
     private static final String BACK = "MissingBack";
     private static final String STAGE = "MissingStage";
@@ -200,6 +200,9 @@ public final class Missing {
         mob.getNavigation().stop();
         mob.getLookControl().setLookAt(player);
         ((Bonded) mob).blushFor(100);
+        if (mob instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl girl) {   // she settles down snug against them for a while
+            girl.startTimedAction(com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.Action.SITTING, CUDDLE_SIT);
+        }
         level.sendParticles(ParticleTypes.HEART, (mob.getX() + player.getX()) / 2, mob.getEyeY() + 0.3, (mob.getZ() + player.getZ()) / 2, 8, 0.4, 0.2, 0.4, 0.0);
         player.displayClientMessage(Component.translatable("message.monstergirls.cuddle", mob.getDisplayName()), true);
         return true;

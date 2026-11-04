@@ -77,6 +77,10 @@ public class JadePlugin implements IWailaPlugin {
             if (com.linkyoshi90.monstergirls.entity.girl.Mining.isMiner(accessor.getEntity()) && !((net.minecraft.world.entity.LivingEntity) accessor.getEntity()).isBaby()) {
                 tooltip.add(Component.translatable("jade.monstergirls.miner").withStyle(net.minecraft.ChatFormatting.GRAY));
             }
+            if (accessor.getEntity() instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g && !g.isBaby()
+                    && com.linkyoshi90.monstergirls.entity.girl.Foraging.forages(g)) {
+                tooltip.add(Component.translatable("jade.monstergirls.forager").withStyle(net.minecraft.ChatFormatting.GRAY));
+            }
             if (data.contains("Role")) tooltip.add(Component.translatable(data.getString("Role")).withStyle(net.minecraft.ChatFormatting.DARK_GREEN));
             if (data.contains("Pregnant")) {
                 tooltip.add(Component.translatable("jade.monstergirls.pregnant",

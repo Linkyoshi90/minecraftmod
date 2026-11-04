@@ -773,6 +773,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
                 return InteractionResult.sidedSuccess(this.level().isClientSide);
             }
         }
+        InteractionResult errand = Foraging.interact(this, player, stack);   // a crouched sample: off to gather it
+        if (errand != null) return errand;
         InteractionResult family = this.familyInteract(player, hand, stack);
         if (family != null) return family;
         if (this.isBaby() && (this.isFood(stack) || stack.is(ModTags.MEAT) || stack.has(net.minecraft.core.component.DataComponents.FOOD))

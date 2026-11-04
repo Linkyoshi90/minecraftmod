@@ -72,7 +72,7 @@ public class LongingTests {
         p.setData(com.linkyoshi90.monstergirls.registry.ModAttachments.JOURNAL, journal);
         Missing.meet(girl, p);
         check(Missing.activeStage(girl, p) == 1 && Missing.longing(girl, p) == 0, "came back: she missed them, longing spent");
-        check(Missing.cuddled(girl, p), "and cuddled up, being right there");
+        check(Missing.cuddled(girl, p) && girl.getAction() == AbstractMonsterGirl.Action.SITTING, "and cuddled up, being right there");
         check(Missing.conceptionChance(girl, p) > before && Missing.bedBonus(girl, p) == 0.5F, "more likely");
         HarpyTestUtil.remove(p);
         helper.succeed();

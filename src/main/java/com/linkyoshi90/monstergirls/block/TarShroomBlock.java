@@ -24,7 +24,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 /**
  * The tar-shroom: a black, sticky mushroom of swamps and dark forests that grows where a mushroom would (or on mud in any light).
  * Its sweet, heavy spores make friends near it long for the players they are close to: now and then each grown friend within
- * RANGE misses them five percent more, even with the player standing right there (Missing#addLonging).
+ * RANGE misses them five percent more, even with the player standing right there (Missing#addLonging). It spreads slowly, as
+ * a mushroom does.
  */
 public class TarShroomBlock extends BushBlock {
     public static final MapCodec<TarShroomBlock> CODEC = simpleCodec(TarShroomBlock::new);
@@ -61,6 +62,24 @@ public class TarShroomBlock extends BushBlock {
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (random.nextBoolean()) breathe(level, pos);
+        if (random.nextInt(25) == 0) spread(state, level, pos, random);
+    }
+
+    /** As a mushroom spreads: to a free spot nearby where it survives, unless five already grow within four blocks. Where, or null. */
+    @javax.annotation.Nullable
+    public static BlockPos spread(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        int crowd = 5;
+        for (BlockPos p : BlockPos.betweenClosed(pos.offset(-4, -1, -4), pos.offset(4, 1, 4))) {
+            if (level.getBlockState(p).is(state.getBlock()) && --crowd <= 0) return null;
+        }
+        BlockPos to = pos.offset(random.nextInt(3) - 1, random.nextInt(2) - random.nextInt(2), random.nextInt(3) - 1);
+        for (int i = 0; i < 4; i++) {
+            if (level.isEmptyBlock(to) && state.canSurvive(level, to)) pos = to;
+            to = pos.offset(random.nextInt(3) - 1, random.nextInt(2) - random.nextInt(2), random.nextInt(3) - 1);
+        }
+        if (!level.isEmptyBlock(to) || !state.canSurvive(level, to)) return null;
+        level.setBlock(to, state, Block.UPDATE_CLIENTS);
+        return to;
     }
 
     /** One puff of spores: every grown friend in range longs a little more for each player she is close to. How many longed. */
