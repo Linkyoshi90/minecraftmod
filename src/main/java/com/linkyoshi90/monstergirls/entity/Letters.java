@@ -62,7 +62,8 @@ public final class Letters {
         int n = 0;
         for (Tag t : list) {
             CompoundTag e = (CompoundTag) t;
-            if (e.getBoolean(WROTE) || level.getGameTime() < e.getLong("Back") - Expeditions.DURATION / 2) continue;
+            long length = e.contains("Length") ? e.getLong("Length") : Expeditions.DURATION;
+            if (e.getBoolean(WROTE) || level.getGameTime() < e.getLong("Back") - length / 2) continue;
             e.putBoolean(WROTE, true);
             if (write(level, player, e.getCompound("Girl"))) n++;
         }

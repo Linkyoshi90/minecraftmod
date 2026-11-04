@@ -72,6 +72,10 @@ public final class MonsterGirlsConfig {
             .comment("Wild ones of rival kinds (cats and mice, wolves and rabbits, spiders and bugs...) squabble when they meet: one glowers, the other bolts. Nobody is hurt.")
             .define("rivalries", true);
 
+    public static final ModConfigSpec.BooleanValue TEAMWORK = BUILDER
+            .comment("Two of your friends fighting the same foe set each other up: a blow within three seconds of a teammate's lands half again as hard.")
+            .define("teamwork", true);
+
     public static final ModConfigSpec.IntValue VARIANT_RATE = BUILDER
             .comment("How often a wild one has a colour other than the default, as a percent of normal.",
                     "Harpies and anurans take their colours from the biome, so above 100 changes nothing for them.")
@@ -166,6 +170,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean rivalries() {
         return SPEC.isLoaded() ? RIVALRIES.get() : RIVALRIES.getDefault();
+    }
+
+    public static boolean teamwork() {
+        return SPEC.isLoaded() ? TEAMWORK.get() : TEAMWORK.getDefault();
     }
 
     public static boolean chores() {

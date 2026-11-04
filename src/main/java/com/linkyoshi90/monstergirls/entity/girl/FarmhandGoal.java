@@ -66,7 +66,7 @@ public class FarmhandGoal<T extends net.minecraft.world.entity.PathfinderMob & c
         for (BlockPos p : BlockPos.betweenClosed(anchor.offset(-r, -2, -r), anchor.offset(r, 2, r))) {
             BlockState s = this.girl.level().getBlockState(p);
             if (!ripe(s)) {
-                if (this.girl instanceof Flora && s.getBlock() instanceof CropBlock c
+                if ((this.girl instanceof Flora || Roles.is(this.girl, Roles.Role.FARMHAND)) && s.getBlock() instanceof CropBlock c
                         && this.girl.getRandom().nextInt(400) == 0 && this.girl.level() instanceof ServerLevel level) {
                     c.performBonemeal(level, level.random, p, s);           // a flora girl's touch: growing crops get a nudge
                 }

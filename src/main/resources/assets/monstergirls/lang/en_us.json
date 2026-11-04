@@ -2796,5 +2796,17 @@
   "journal.monstergirls.guide.rivals.title": "Rivals",
   "journal.monstergirls.guide.rivals": "Some wild kinds can't stand each other: cats and mice, snakes and mice, wolves and rabbits, foxes and rabbits, spiders and bugs, bats and bugs. When they meet, one glowers and the other runs. Nobody gets hurt, and once a girl is your friend she has better things to do.",
   "monstergirls.configuration.travellingMarket": "Travelling market",
-  "monstergirls.configuration.rivalries": "Rivalries"
+  "monstergirls.configuration.rivalries": "Rivalries",
+  "role.monstergirls.farmhand": "Farmhand",
+  "role.monstergirls.cook": "Cook",
+  "role.monstergirls.guard": "Guard",
+  "role.monstergirls.scout": "Scout",
+  "message.monstergirls.role.chosen": "%s has grown up and wants to be a %s.",
+  "journal.monstergirls.guide.roles.title": "Callings",
+  "journal.monstergirls.guide.roles": "A daughter who grows up picks a calling from what she grew up around. Farmland makes a farmhand: crops grow faster where she tends them. A kitchen (furnace, smoker, campfire or fridge) makes a cook: now and then she cooks something raw in a fridge. A bell or an iron golem makes a guard, tougher and stronger. Otherwise she becomes a scout: her expeditions take half the time and bring more home.",
+  "journal.monstergirls.guide.teamwork.title": "Teamwork",
+  "journal.monstergirls.guide.teamwork": "Two friends fighting the same foe set each other up: a blow within three seconds of a teammate's lands half again as hard. A harpy knocks the foe into the air, and a slime or spider girl slows it down.",
+  "advancement.monstergirls.teamwork": "Fighting as One",
+  "advancement.monstergirls.teamwork.desc": "Have two of your friends land a combined blow",
+  "monstergirls.configuration.teamwork": "Teamwork"
 }

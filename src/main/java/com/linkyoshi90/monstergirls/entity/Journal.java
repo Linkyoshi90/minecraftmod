@@ -35,7 +35,7 @@ import java.util.Set;
 public final class Journal {
     private static final double SIGHT = 12.0;
     /** The guide pages after the contents: befriending, the hearth, expeditions, weapons, scouting, life at home, the milking machine, keepsakes, dairy, nursing. */
-    public static final List<String> GUIDE = List.of("friends", "hearth", "expedition", "weapons", "scouting", "home", "milking", "keepsakes", "dairy", "nursing", "legends", "encounters", "chores", "festivals", "market", "rivals");
+    public static final List<String> GUIDE = List.of("friends", "hearth", "expedition", "weapons", "scouting", "home", "milking", "keepsakes", "dairy", "nursing", "legends", "encounters", "chores", "festivals", "market", "rivals", "roles", "teamwork");
     /** How many givers the milk page lists. */
     public static final int MILK_LINES = 8;
 

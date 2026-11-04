@@ -50,6 +50,9 @@ public class JadePlugin implements IWailaPlugin {
             if (!(accessor.getEntity() instanceof Bonded b)) return;
             data.putInt("Affection", accessor.getPlayer() == null ? 0 : b.getAffection(accessor.getPlayer()));
             if (BondInfo.canCarry(accessor.getEntity())) data.putBoolean("Pregnant", b.getGestation().isCarrying());
+            if (accessor.getEntity() instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g && com.linkyoshi90.monstergirls.entity.girl.Roles.of(g) != null) {
+                data.putString("Role", com.linkyoshi90.monstergirls.entity.girl.Roles.of(g).key());
+            }
             if (accessor.getEntity() instanceof LivingEntity l && l.level() instanceof net.minecraft.server.level.ServerLevel level) {
                 int nursing = com.linkyoshi90.monstergirls.entity.Nursing.status(level, l);
                 if (nursing > 0) data.putInt("Nursing", nursing);
@@ -62,6 +65,7 @@ public class JadePlugin implements IWailaPlugin {
             CompoundTag data = accessor.getServerData();
             com.linkyoshi90.monstergirls.entity.Rarity.Tier tier = com.linkyoshi90.monstergirls.entity.Rarity.of(accessor.getEntity());
             if (tier != com.linkyoshi90.monstergirls.entity.Rarity.Tier.COMMON) tooltip.add(Component.translatable(tier.key()).withStyle(tier.colour));
+            if (data.contains("Role")) tooltip.add(Component.translatable(data.getString("Role")).withStyle(net.minecraft.ChatFormatting.DARK_GREEN));
             if (data.contains("Pregnant")) {
                 tooltip.add(Component.translatable("jade.monstergirls.pregnant",
                         Component.translatable(data.getBoolean("Pregnant") ? "jade.monstergirls.yes" : "jade.monstergirls.no")));

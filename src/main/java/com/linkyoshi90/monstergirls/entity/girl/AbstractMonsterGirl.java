@@ -976,7 +976,11 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (this.hutOrigin != null && this.tickCount % 10 == 0) Settlement.buildStep(server, this);
         this.gestation.tick();
         if (this.tickCount % 10 == 0) this.entityData.set(DATA_BELLY, (byte) Math.round(this.bellyProgress() * 100));
-        if (this.isBaby() && ++this.growTicks >= GROW_TICKS) this.setBaby(false);
+        if (this.isBaby() && ++this.growTicks >= GROW_TICKS) {
+            this.setBaby(false);
+            Roles.grownUp(server, this);                                  // she picks her calling
+        }
+        if (this.tickCount % Roles.COOK_EVERY == 0) Roles.cook(server, this);
         if (this.isInjured() && this.tickCount % 60 == 0) {
             server.sendParticles(ParticleTypes.DAMAGE_INDICATOR, this.getX(), this.getY() + this.getBbHeight() * 0.6, this.getZ(), 2, 0.3, 0.2, 0.3, 0.0);
         }

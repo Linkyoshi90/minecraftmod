@@ -54,7 +54,9 @@ public final class Expeditions {
         if (!girl.saveAsPassenger(saved)) return false;
         CompoundTag e = new CompoundTag();
         e.put("Girl", saved);
-        e.putLong("Back", level.getGameTime() + DURATION);
+        long length = com.linkyoshi90.monstergirls.entity.girl.Roles.expedition(girl, DURATION);   // a scout is quicker
+        e.putLong("Back", level.getGameTime() + length);
+        e.putLong("Length", length);
         e.putString("Dim", level.dimension().location().toString());
         CompoundTag data = player.getData(ModAttachments.EXPEDITIONS);
         ListTag list = data.getList("Away", Tag.TAG_COMPOUND);
@@ -142,6 +144,9 @@ public final class Expeditions {
         }
         Item[] land = land(girl.getSpecies().family());
         for (int i = 0, n = 2 + r.nextInt(3); i < n; i++) out.add(new ItemStack(land[r.nextInt(land.length)], 1 + r.nextInt(4)));
+        if (com.linkyoshi90.monstergirls.entity.girl.Roles.is(girl, com.linkyoshi90.monstergirls.entity.girl.Roles.Role.SCOUT)) {
+            out.add(new ItemStack(land[r.nextInt(land.length)], 1 + r.nextInt(4)));      // a scout finds a little more
+        }
         if (r.nextInt(8) == 0) out.add(new ItemStack(Items.EMERALD, 2 + r.nextInt(3)));
         if (r.nextInt(25) == 0) out.add(new ItemStack(Items.DIAMOND));
         return out;
