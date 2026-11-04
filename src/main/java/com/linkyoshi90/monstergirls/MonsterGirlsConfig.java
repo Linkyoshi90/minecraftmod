@@ -64,6 +64,14 @@ public final class MonsterGirlsConfig {
             .comment("Three festivals in every " + com.linkyoshi90.monstergirls.entity.girl.Festivals.CYCLE + " days (a dance, a harvest feast, a gift exchange): the girls at your hearth gather round it at dusk.")
             .define("festivals", true);
 
+    public static final ModConfigSpec.BooleanValue TRAVELLING_MARKET = BUILDER
+            .comment("Every " + com.linkyoshi90.monstergirls.entity.girl.Market.EVERY + " days, when you are home, a travelling girl from far away sets up by your hearth and trades her finds for emeralds.")
+            .define("travellingMarket", true);
+
+    public static final ModConfigSpec.BooleanValue RIVALRIES = BUILDER
+            .comment("Wild ones of rival kinds (cats and mice, wolves and rabbits, spiders and bugs...) squabble when they meet: one glowers, the other bolts. Nobody is hurt.")
+            .define("rivalries", true);
+
     public static final ModConfigSpec.IntValue VARIANT_RATE = BUILDER
             .comment("How often a wild one has a colour other than the default, as a percent of normal.",
                     "Harpies and anurans take their colours from the biome, so above 100 changes nothing for them.")
@@ -150,6 +158,14 @@ public final class MonsterGirlsConfig {
 
     public static boolean festivals() {
         return SPEC.isLoaded() ? FESTIVALS.get() : FESTIVALS.getDefault();
+    }
+
+    public static boolean travellingMarket() {
+        return SPEC.isLoaded() ? TRAVELLING_MARKET.get() : TRAVELLING_MARKET.getDefault();
+    }
+
+    public static boolean rivalries() {
+        return SPEC.isLoaded() ? RIVALRIES.get() : RIVALRIES.getDefault();
     }
 
     public static boolean chores() {

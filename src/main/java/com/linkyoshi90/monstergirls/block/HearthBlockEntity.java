@@ -103,6 +103,7 @@ public class HearthBlockEntity extends BlockEntity {
         if (day != h.lastMarketDay && server.getDayTime() % 24000L < 6000L) {        // the morning market
             h.lastMarketDay = day;
             h.market(server);
+            com.linkyoshi90.monstergirls.entity.girl.Market.morning(server, h);
             h.setChanged();
         }
     }

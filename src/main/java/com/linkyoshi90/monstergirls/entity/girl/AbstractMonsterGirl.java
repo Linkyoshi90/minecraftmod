@@ -972,6 +972,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (!(this.level() instanceof ServerLevel server)) return;
         com.linkyoshi90.monstergirls.entity.Painted.tickCopper(this, this);
         if (this.tickCount % 100 == 0) Settlement.tick(server, this);
+        if (this.tickCount % 97 == 0) Rivalries.squabble(server, this);
         if (this.hutOrigin != null && this.tickCount % 10 == 0) Settlement.buildStep(server, this);
         this.gestation.tick();
         if (this.tickCount % 10 == 0) this.entityData.set(DATA_BELLY, (byte) Math.round(this.bellyProgress() * 100));

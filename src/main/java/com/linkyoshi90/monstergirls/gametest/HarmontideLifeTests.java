@@ -173,4 +173,31 @@ public class HarmontideLifeTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "aLetterFromTheRoad")
+    public static void aLetterFromTheRoad(GameTestHelper helper) {
+        AbstractMonsterGirl girl = still(helper, GirlSpecies.SPHINX_CENTAUR, new BlockPos(3, 2, 3));
+        ServerPlayer p = friendOf(helper, girl, new BlockPos(5, 2, 5));
+        p.getInventory().clearContent();
+        check(Expeditions.send(girl, p, new ItemStack(Items.MAP)), "she sets off");
+        check(com.linkyoshi90.monstergirls.entity.Letters.writeDue(p) == 0, "no letter as she leaves");
+        var data = p.getData(com.linkyoshi90.monstergirls.registry.ModAttachments.EXPEDITIONS);
+        var away = data.getList("Away", net.minecraft.nbt.Tag.TAG_COMPOUND);
+        away.getCompound(0).putLong("Back", helper.getLevel().getGameTime() + Expeditions.DURATION / 2);
+        data.put("Away", away);
+        p.setData(com.linkyoshi90.monstergirls.registry.ModAttachments.EXPEDITIONS, data);
+        check(com.linkyoshi90.monstergirls.entity.Letters.writeDue(p) == 1, "halfway, she writes");
+        ItemStack letter = ItemStack.EMPTY;
+        int things = 0;
+        for (ItemStack s : p.getInventory().items) {
+            if (s.is(Items.WRITTEN_BOOK)) letter = s;
+            if (!s.isEmpty()) things++;
+        }
+        var content = letter.get(net.minecraft.core.component.DataComponents.WRITTEN_BOOK_CONTENT);
+        check(content != null && content.pages().size() == 1 && !content.author().isEmpty() && things == 2, "a signed letter, and a find tucked in");
+        check(com.linkyoshi90.monstergirls.entity.Letters.writeDue(p) == 0 && Expeditions.away(p) == 1, "just the one; she is still away");
+        check(p.getData(com.linkyoshi90.monstergirls.registry.ModAttachments.JOURNAL).getInt(com.linkyoshi90.monstergirls.entity.Letters.COUNT) == 1, "the journal counts it");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

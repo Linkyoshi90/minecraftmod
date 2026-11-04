@@ -76,6 +76,7 @@ public final class Expeditions {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         if (event.getEntity() instanceof ServerPlayer player && player.tickCount % 100 == 0) {
+            Letters.writeDue(player);
             returnDue(player, false);
             Scouting.returnDue(player, false);
         }
@@ -147,7 +148,7 @@ public final class Expeditions {
     }
 
     /** The finds of her kind's country. */
-    static Item[] land(GirlSpecies.Family family) {
+    public static Item[] land(GirlSpecies.Family family) {
         return switch (family) {
             case MERFOLK, MOLLUSK, CRUSTACEAN -> new Item[]{Items.PRISMARINE_SHARD, Items.PRISMARINE_CRYSTALS, Items.KELP, Items.SEA_PICKLE, Items.COD, Items.NAUTILUS_SHELL};
             case UNDEAD, DEVIL, RIDER -> new Item[]{Items.BONE, Items.CANDLE, Items.AMETHYST_SHARD, Items.SOUL_TORCH, Items.ROTTEN_FLESH};
