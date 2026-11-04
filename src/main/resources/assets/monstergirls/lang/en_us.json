@@ -2865,5 +2865,12 @@
   "journal.monstergirls.guide.foraging.title": "Foraging",
   "journal.monstergirls.guide.foraging": "Gatherers (plants, rabbits, rodents, foxes, bugs, marsupials and centaurs; look for \"Forager\") will forage for you. Crouch and show one something that grows wild: berries, mushrooms, tar-shrooms, apples, flowers, saplings, seeds, honeycomb. She goes out and comes back to her patrol spot (or where she stood) with sixteen of it and your sample, into a chest beside the spot or into your hands. Berries take a few hours, rare seeds days.",
   "journal.monstergirls.guide.longing.title": "Longing",
-  "journal.monstergirls.guide.longing": "Close friends miss you when you are away, and longing adds to it even while you are near. Tar-shrooms (black mushrooms of swamps and dark forests; they spread in the dark) make grown friends nearby long for you a little at a time, and a salami fed to one makes her long a lot. Leave for a minute or more and come back: if she misses you, she cuddles up to you, and is more likely to come to bed and to have young that day."
+  "journal.monstergirls.guide.longing": "Close friends miss you when you are away, and longing adds to it even while you are near. Tar-shrooms (black mushrooms of swamps and dark forests; they spread in the dark) make grown friends nearby long for you a little at a time, and a salami fed to one makes her long a lot. Leave for a minute or more and come back: if she misses you, she cuddles up to you, and is more likely to come to bed and to have young that day.",
+  "message.monstergirls.stargazing.join": "%s comes and sits down beside you to watch the stars",
+  "message.monstergirls.stargazing.wish": "A shooting star! %s makes a wish, and whispers it to you: a never-ending pile of %s",
+  "message.monstergirls.stargazing.star": "A shooting star! Your friends make their wishes",
+  "message.monstergirls.stargazing.alone": "A shooting star streaks across the sky",
+  "monstergirls.configuration.stargazing": "Stargazing",
+  "journal.monstergirls.guide.stargazing.title": "Stargazing",
+  "journal.monstergirls.guide.stargazing": "On a clear night, stand still under open sky. After a while your friends nearby come and sit beside you to look up. Before long a shooting star crosses the sky (one a night): everyone beside you grows a little closer, and one of them whispers her wish, which tells you her favourite treat."
 }

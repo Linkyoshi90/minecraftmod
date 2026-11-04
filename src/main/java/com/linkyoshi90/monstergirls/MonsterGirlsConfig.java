@@ -80,6 +80,10 @@ public final class MonsterGirlsConfig {
             .comment("Friends look out for you: the nearest rushes to steady you when you are badly hurt, and they warn you a minute before rain.")
             .define("comfort", true);
 
+    public static final ModConfigSpec.BooleanValue STARGAZING = BUILDER
+            .comment("On a clear night, stand still under open sky and your friends nearby sit down beside you; a shooting star brings each of them closer.")
+            .define("stargazing", true);
+
     public static final ModConfigSpec.IntValue HEARTH_SAFE_RADIUS = BUILDER
             .comment("No hostile mob spawns naturally within this many blocks of a hearth with " + com.linkyoshi90.monstergirls.block.HearthBlockEntity.SAFE_RESIDENTS + " or more living there (0 turns it off).")
             .defineInRange("hearthSafeRadius", 24, 0, 128);
@@ -182,6 +186,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean teamwork() {
         return SPEC.isLoaded() ? TEAMWORK.get() : TEAMWORK.getDefault();
+    }
+
+    public static boolean stargazing() {
+        return SPEC.isLoaded() ? STARGAZING.get() : STARGAZING.getDefault();
     }
 
     public static boolean comfort() {

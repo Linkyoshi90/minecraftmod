@@ -69,6 +69,17 @@ public final class Treats {
         return player.getData(ModAttachments.JOURNAL).getCompound(KNOWN).contains(girl.getStringUUID());
     }
 
+    /** A player finds out her favourite (kept in their journal) and is told so with the given message (her name, the treat). */
+    public static void learn(Player player, AbstractMonsterGirl girl, String message) {
+        Item fav = favourite(girl);
+        CompoundTag data = player.getData(ModAttachments.JOURNAL);
+        CompoundTag known = data.getCompound(KNOWN);
+        known.putString(girl.getStringUUID(), BuiltInRegistries.ITEM.getKey(fav).toString());
+        data.put(KNOWN, known);
+        player.setData(ModAttachments.JOURNAL, data);
+        player.displayClientMessage(Component.translatable(message, girl.getDisplayName(), fav.getDescription()).withStyle(ChatFormatting.LIGHT_PURPLE), false);
+    }
+
     /**
      * Food from a hand (AbstractMonsterGirl.mobInteract): what it is worth to her, with the favourite and birthday counted in.
      * Call when she has accepted it.
@@ -78,14 +89,7 @@ public final class Treats {
         if (stack.is(favourite(girl))) {
             value = normal * FAVOURITE_TIMES;
             level.sendParticles(ParticleTypes.HEART, girl.getX(), girl.getY() + girl.getBbHeight() + 0.3, girl.getZ(), 6, 0.4, 0.2, 0.4, 0);
-            if (!knows(player, girl)) {
-                CompoundTag data = player.getData(ModAttachments.JOURNAL);
-                CompoundTag known = data.getCompound(KNOWN);
-                known.putString(girl.getStringUUID(), BuiltInRegistries.ITEM.getKey(stack.getItem()).toString());
-                data.put(KNOWN, known);
-                player.setData(ModAttachments.JOURNAL, data);
-                player.displayClientMessage(Component.translatable("message.monstergirls.favourite", girl.getDisplayName(), stack.getHoverName()).withStyle(ChatFormatting.LIGHT_PURPLE), false);
-            }
+            if (!knows(player, girl)) learn(player, girl, "message.monstergirls.favourite");
         }
         long day = level.getDayTime() / 24000L + 1;
         if (isBirthday(girl, level.getDayTime()) && girl.getAffection(player) >= Orders.AFFECTION && girl.getPersistentData().getLong(BIRTHDAY_DONE) != day) {

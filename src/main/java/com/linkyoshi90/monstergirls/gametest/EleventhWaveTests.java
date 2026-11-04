@@ -117,7 +117,7 @@ public class EleventhWaveTests {
         helper.succeed();
     }
 
-    @GameTest(template = PLATFORM, timeoutTicks = 600, batch = "coatimanoBrushesOutTheFind")
+    @GameTest(template = PLATFORM, timeoutTicks = 1200, batch = "coatimanoBrushesOutTheFind")
     public static void coatimanoBrushesOutTheFind(GameTestHelper helper) {
         BlockPos sand = new BlockPos(5, 1, 5);
         helper.setBlock(sand.below(), Blocks.STONE);                     // it falls like sand

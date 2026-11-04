@@ -3,6 +3,7 @@ package com.linkyoshi90.monstergirls.gametest;
 import com.linkyoshi90.monstergirls.MonsterGirlsMod;
 import com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl;
 import com.linkyoshi90.monstergirls.entity.girl.GirlSpecies;
+import com.linkyoshi90.monstergirls.entity.girl.Treats;
 import com.linkyoshi90.monstergirls.entity.girl.Jackalope;
 import com.linkyoshi90.monstergirls.registry.ModBlocks;
 import com.linkyoshi90.monstergirls.registry.ModGirls;
@@ -59,7 +60,8 @@ public class JackalopeTests {
         check(inaba.isCaught(), "a hand on her: caught");
         int before = inaba.getAffection(player);
         interact(inaba, player, new ItemStack(Items.CARROT));
-        check(inaba.getAffection(player) - before == 2, "a carrot is worth double now: " + (inaba.getAffection(player) - before));
+        int worth = Treats.favourite(inaba) == Items.CARROT ? 2 * Treats.FAVOURITE_TIMES : 2;
+        check(inaba.getAffection(player) - before == worth, "a carrot is worth double now: " + (inaba.getAffection(player) - before));
         check(!Jackalope.spawnRule(GirlSpecies.INABA_JACKALOPE, helper.getLevel(), helper.absolutePos(new BlockPos(7, 2, 7)), helper.getLevel().random)
                 || helper.getLevel().isNight(), "Inaba never spawns by day");
         HarpyTestUtil.remove(player);
