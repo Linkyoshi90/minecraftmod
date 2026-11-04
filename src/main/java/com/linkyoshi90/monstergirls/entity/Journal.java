@@ -35,7 +35,7 @@ import java.util.Set;
 public final class Journal {
     private static final double SIGHT = 12.0;
     /** The guide pages after the contents: befriending, the hearth, expeditions, weapons, scouting, life at home, the milking machine, keepsakes, dairy, nursing. */
-    public static final List<String> GUIDE = List.of("friends", "hearth", "expedition", "weapons", "scouting", "home", "milking", "keepsakes", "dairy", "nursing", "legends", "encounters", "chores");
+    public static final List<String> GUIDE = List.of("friends", "hearth", "expedition", "weapons", "scouting", "home", "milking", "keepsakes", "dairy", "nursing", "legends", "encounters", "chores", "festivals");
     /** How many givers the milk page lists. */
     public static final int MILK_LINES = 8;
 
@@ -125,8 +125,16 @@ public final class Journal {
         if (met.isEmpty()) cover.append("\n\n").append(Component.translatable("journal.monstergirls.empty").withStyle(ChatFormatting.RESET, ChatFormatting.ITALIC));
         pages.add(Filterable.passThrough(cover));
         for (String guide : GUIDE) {                                                 // how to live with them: hearth, expeditions, weapons
-            pages.add(Filterable.passThrough(Component.translatable("journal.monstergirls.guide." + guide + ".title").withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_BLUE)
-                    .append("\n\n").append(Component.translatable("journal.monstergirls.guide." + guide).withStyle(ChatFormatting.RESET, ChatFormatting.BLACK))));
+            MutableComponent page = Component.translatable("journal.monstergirls.guide." + guide + ".title").withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_BLUE)
+                    .append("\n\n").append(Component.translatable("journal.monstergirls.guide." + guide).withStyle(ChatFormatting.RESET, ChatFormatting.BLACK));
+            if (guide.equals("festivals")) {                                         // and when the next one is
+                long time = player.level().getDayTime();
+                var next = com.linkyoshi90.monstergirls.entity.girl.Festivals.next(time);
+                int days = com.linkyoshi90.monstergirls.entity.girl.Festivals.daysUntil(time);
+                page.append("\n\n").append(Component.translatable(days == 0 ? "journal.monstergirls.festival.today" : "journal.monstergirls.festival.next",
+                        Component.translatable("festival.monstergirls." + next.key()), days).withStyle(ChatFormatting.RESET, ChatFormatting.DARK_PURPLE));
+            }
+            pages.add(Filterable.passThrough(page));
         }
         CompoundTag milk = player.getData(ModAttachments.JOURNAL).getCompound("Milk");
         if (!milk.isEmpty()) {                                                       // every bucket a friend has given them, most first

@@ -60,6 +60,10 @@ public final class MonsterGirlsConfig {
             .comment("Friends on patrol do the chores around their patrol spot: gather eggs and wool, take honey from full hives, shear sheep, fish.")
             .define("chores", true);
 
+    public static final ModConfigSpec.BooleanValue FESTIVALS = BUILDER
+            .comment("Three festivals in every " + com.linkyoshi90.monstergirls.entity.girl.Festivals.CYCLE + " days (a dance, a harvest feast, a gift exchange): the girls at your hearth gather round it at dusk.")
+            .define("festivals", true);
+
     public static final ModConfigSpec.IntValue VARIANT_RATE = BUILDER
             .comment("How often a wild one has a colour other than the default, as a percent of normal.",
                     "Harpies and anurans take their colours from the biome, so above 100 changes nothing for them.")
@@ -142,6 +146,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean missingCountsOffline() {
         return SPEC.isLoaded() ? MISSING_COUNTS_OFFLINE.get() : MISSING_COUNTS_OFFLINE.getDefault();
+    }
+
+    public static boolean festivals() {
+        return SPEC.isLoaded() ? FESTIVALS.get() : FESTIVALS.getDefault();
     }
 
     public static boolean chores() {

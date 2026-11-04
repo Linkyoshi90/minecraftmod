@@ -229,6 +229,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             this.goalSelector.addGoal(1, new GirlArms.RangedGoal(this));
             this.goalSelector.addGoal(2, new GirlArms.SpotterGoal(this));
         }
+        this.goalSelector.addGoal(5, new Festivals.GatherGoal(this));
         this.goalSelector.addGoal(6, new Settlement.HomeGoal(this));
         if (this.canFly()) {                                // the winged and the floating: fly instead of walking
             this.useFlight(true);
