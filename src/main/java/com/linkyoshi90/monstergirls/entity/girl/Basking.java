@@ -40,15 +40,22 @@ public final class Basking {
     public static boolean tick(ServerLevel level, AbstractMonsterGirl girl) {
         if (!MonsterGirlsConfig.comfort() || !coldBlooded(girl) || !girl.onGround() || !RainMoods.free(girl) || !sunny(level, girl)) return false;
         long day = level.getDayTime() / 24000L;
-        if (girl.getPersistentData().getLong(DAY) == day + 1 || girl.getAction() == AbstractMonsterGirl.Action.SITTING || girl.getRandom().nextInt(3) != 0) return false;
+        if (girl.getPersistentData().getLong(DAY) == day + 1 || girl.getAction() != AbstractMonsterGirl.Action.NONE || girl.getRandom().nextInt(3) != 0) return false;
         return bask(level, girl);
+    }
+
+    /** Lamias, lizardfolk and theropods have a basking pose of their own (they also bask now and then by their own form's habits); the rest sit. */
+    public static AbstractMonsterGirl.Action pose(AbstractMonsterGirl girl) {
+        GirlSpecies.Family f = girl.getSpecies().family();
+        return f == GirlSpecies.Family.LAMIA || f == GirlSpecies.Family.LIZARDFOLK || f == GirlSpecies.Family.THEROPOD
+                ? AbstractMonsterGirl.Action.BASK : AbstractMonsterGirl.Action.SITTING;
     }
 
     /** She lies down in the sun and comes up warm. */
     public static boolean bask(ServerLevel level, AbstractMonsterGirl girl) {
         girl.getPersistentData().putLong(DAY, level.getDayTime() / 24000L + 1);
         girl.getNavigation().stop();
-        girl.startTimedAction(AbstractMonsterGirl.Action.SITTING, BASK);
+        girl.startTimedAction(pose(girl), BASK);
         girl.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, BASK + WARM, 0, true, false));
         level.sendParticles(ParticleTypes.WAX_ON, girl.getX(), girl.getY() + 0.6, girl.getZ(), 6, 0.4, 0.3, 0.4, 0);
         company(level, girl);

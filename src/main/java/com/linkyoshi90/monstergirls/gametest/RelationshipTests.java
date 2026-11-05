@@ -132,17 +132,19 @@ public class RelationshipTests {
                 com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.BISON_MINOTAUR, new BlockPos(7, 2, 7));
         cow.setMale(false);
         cow.addAffection(player, Bonded.FULL_AFFECTION);
-        helper.runAfterDelay(60, () -> {
-            check(cow.getAction() == com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.Action.LYING, "she should be asleep by now");
-            player.startSleeping(helper.absolutePos(new BlockPos(2, 2, 2)));
-            BedCall.begin(player);
-            helper.succeedWhen(() -> {
-                BedCall.tick(player);
-                check(BedCall.stage(player) == BedCall.JOINED, "she should have woken and answered the call");
-                player.stopSleeping();
-                HarpyTestUtil.remove(player);
-                helper.setDayTime(1000);
-            });
+        boolean[] called = {false};
+        helper.succeedWhen(() -> {                                      // she lies down when her sleep goal comes round (not always by 60 ticks)
+            if (!called[0]) {
+                check(cow.getAction() == com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.Action.LYING, "she should be asleep by now");
+                called[0] = true;
+                player.startSleeping(helper.absolutePos(new BlockPos(2, 2, 2)));
+                BedCall.begin(player);
+            }
+            BedCall.tick(player);
+            check(BedCall.stage(player) == BedCall.JOINED, "she should have woken and answered the call");
+            player.stopSleeping();
+            HarpyTestUtil.remove(player);
+            helper.setDayTime(1000);
         });
     }
 

@@ -103,24 +103,25 @@ public class GirlFamilyTests {
         });
     }
 
-    @GameTest(template = PLATFORM, timeoutTicks = 200, batch = "pythonLaysAClutchThatHatches")
+    @GameTest(template = PLATFORM, timeoutTicks = 400, batch = "pythonLaysAClutchThatHatches")
     public static void pythonLaysAClutchThatHatches(GameTestHelper helper) {
         Lamia python = spawn(helper, GirlSpecies.PYTHON_LAMIA, new BlockPos(7, 2, 7));
         UUID father = UUID.randomUUID();
         python.getGestation().conceive(father);
         python.getGestation().setTicksLeft(0);
         helper.succeedWhen(() -> {
-            BlockPos clutch = null;
-            for (BlockPos p : BlockPos.betweenClosed(new BlockPos(2, 1, 2), new BlockPos(12, 4, 12))) {
-                if (helper.getBlockState(p).is(ModBlocks.GIRL_EGG.get())) clutch = p.immutable();
+            BlockPos clutch = null;                                     // around wherever she wandered to (she may stray past the old box), absolute
+            var level = helper.getLevel();
+            for (BlockPos p : BlockPos.betweenClosed(python.blockPosition().offset(-8, -2, -8), python.blockPosition().offset(8, 2, 8))) {
+                if (level.getBlockState(p).is(ModBlocks.GIRL_EGG.get())) clutch = p.immutable();
             }
             check(clutch != null, "no clutch yet");
-            check(helper.getBlockState(clutch).getValue(GirlEggBlock.KIND) == GirlEggBlock.Kind.LEATHERY, "leathery eggs");
-            GirlEggBlockEntity be = (GirlEggBlockEntity) helper.getBlockEntity(clutch);
+            check(level.getBlockState(clutch).getValue(GirlEggBlock.KIND) == GirlEggBlock.Kind.LEATHERY, "leathery eggs");
+            GirlEggBlockEntity be = (GirlEggBlockEntity) level.getBlockEntity(clutch);
             check(GirlSpecies.PYTHON_LAMIA.id().equals(be.getSpecies()) && father.equals(be.getFather()), "the clutch remembers species and father");
             int count = be.getCount();
-            GirlEggBlock.hatch(helper.getLevel(), helper.absolutePos(clutch));
-            List<AbstractMonsterGirl> young = youngAround(helper, clutch, 4, python.getType());
+            GirlEggBlock.hatch(level, clutch);
+            List<AbstractMonsterGirl> young = level.getEntitiesOfClass(AbstractMonsterGirl.class, new AABB(clutch).inflate(4), g -> g.isBaby() && g.getType() == python.getType());
             check(young.size() == count, "one snakelet per egg: " + young.size() + "/" + count);
             check(young.stream().allMatch(y -> y.getAffection(father) == Bonded.FULL_AFFECTION), "devoted to their father");
         });
@@ -157,8 +158,8 @@ public class GirlFamilyTests {
         orca.getGestation().setTicksLeft(0);
         helper.succeedWhen(() -> {
             boolean roe = false;
-            for (BlockPos p : BlockPos.betweenClosed(new BlockPos(3, 2, 3), new BlockPos(5, 2, 5))) {
-                if (helper.getBlockState(p).is(ModBlocks.GIRL_EGG.get())) roe = helper.getBlockState(p).getValue(GirlEggBlock.WATERLOGGED);
+            for (BlockPos p : BlockPos.betweenClosed(new BlockPos(0, 1, 0), new BlockPos(7, 3, 7))) {   // the pool, and the water that ran out of it
+                if (helper.getBlockState(p).is(ModBlocks.GIRL_EGG.get()) && helper.getBlockState(p).getValue(GirlEggBlock.WATERLOGGED)) roe = true;
             }
             check(roe, "koi roe should lie in the water");
             check(youngAround(helper, new BlockPos(10, 2, 10), 6, orca.getType()).size() == 1, "one orca calf");

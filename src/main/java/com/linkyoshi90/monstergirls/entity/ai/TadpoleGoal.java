@@ -20,6 +20,9 @@ public class TadpoleGoal extends Goal {
     private final AbstractAnuran mob;
     private Vec3 lastPos = Vec3.ZERO;
     private int stillTicks;
+    /** The pond she is making for: one she has a path to (the nearest as the crow flies can lie past a drop). */
+    @javax.annotation.Nullable
+    private BlockPos pond;
 
     public TadpoleGoal(AbstractAnuran mob) {
         this.mob = mob;
@@ -51,7 +54,9 @@ public class TadpoleGoal extends Goal {
             // stay in the water: only pick spots that are wet themselves
             if (pos != null && this.mob.level().getFluidState(BlockPos.containing(pos)).is(FluidTags.WATER)) this.mob.getNavigation().moveTo(pos.x, pos.y, pos.z, 1.0);
         } else {
-            BlockPos water = AbstractAnuran.findWater(this.mob.level(), this.mob.blockPosition(), 12);
+            BlockPos water = AbstractAnuran.findReachableWater(this.mob, 12);
+            if (water == null) water = AbstractAnuran.findWater(this.mob.level(), this.mob.blockPosition(), 12);
+            this.pond = water;
             if (water != null) this.mob.getNavigation().moveTo(water.getX() + 0.5, water.getY(), water.getZ() + 0.5, 1.0);
         }
     }
@@ -67,7 +72,8 @@ public class TadpoleGoal extends Goal {
             return false;
         }
         if (++this.stillTicks < STUCK_TICKS) return false;
-        BlockPos water = AbstractAnuran.findWater(this.mob.level(), this.mob.blockPosition(), 12);
+        BlockPos water = this.pond != null && this.pond.distSqr(this.mob.blockPosition()) <= 16 * 16 ? this.pond
+                : AbstractAnuran.findWater(this.mob.level(), this.mob.blockPosition(), 12);
         if (water == null) return false;
         this.mob.getNavigation().stop();
         this.mob.getMoveControl().setWantedPosition(water.getX() + 0.5, water.getY(), water.getZ() + 0.5, 1.0);

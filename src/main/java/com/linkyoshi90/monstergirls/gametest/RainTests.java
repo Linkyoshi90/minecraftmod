@@ -59,7 +59,7 @@ public class RainTests {
         check(com.linkyoshi90.monstergirls.entity.girl.Basking.coldBlooded(iguana) && !com.linkyoshi90.monstergirls.entity.girl.Basking.coldBlooded(wolf), "the iguana is cold-blooded, the wolf isn't");
         check(com.linkyoshi90.monstergirls.entity.girl.Basking.sunny(level, iguana), "a clear morning under open sky");
         check(com.linkyoshi90.monstergirls.entity.girl.Basking.bask(level, iguana), "she lies in the sun");
-        check(iguana.getAction() == AbstractMonsterGirl.Action.SITTING && iguana.hasEffect(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED), "and warms up");
+        check(iguana.getAction() == AbstractMonsterGirl.Action.BASK && iguana.hasEffect(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED), "and warms up");
         check(iguana.getAffection(p) > before, "her friend kept her company");
         check(!com.linkyoshi90.monstergirls.entity.girl.Basking.tick(level, iguana), "once a day");
         HarpyTestUtil.remove(p);
