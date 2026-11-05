@@ -27,6 +27,7 @@ public class SkittishGoal extends Goal {
 
     private boolean isThreat(Player player) {
         if (player.isSpectator() || this.albatross.isTrusting(player)) return false;
+        if (player.getVehicle() instanceof net.minecraft.world.entity.vehicle.Boat) return false;   // someone at sea in a boat is company: she follows ships
         double radius = player.isShiftKeyDown() ? 6.0 : 12.0;
         return this.albatross.distanceToSqr(player) < radius * radius;
     }

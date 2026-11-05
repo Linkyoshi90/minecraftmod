@@ -26,7 +26,7 @@ public class SeagullHarpyTests {
     private static final BlockPos ROCK = new BlockPos(7, 3, 7);
 
     /** Floods the platform one block deep, optionally with a two-block stone rock standing in the middle. */
-    private static void buildSea(GameTestHelper helper, boolean rock) {
+    static void buildSea(GameTestHelper helper, boolean rock) {
         for (int x = 0; x < 15; x++) {
             for (int z = 0; z < 15; z++) helper.setBlock(new BlockPos(x, 2, z), Blocks.WATER);
         }
@@ -37,7 +37,7 @@ public class SeagullHarpyTests {
     }
 
     /** A boat floating on the water at this column (spawned on the surface, not inside the water block). */
-    private static Boat mannedBoat(GameTestHelper helper, BlockPos pos, ServerPlayer sailor) {
+    static Boat mannedBoat(GameTestHelper helper, BlockPos pos, ServerPlayer sailor) {
         Boat boat = helper.spawn(EntityType.BOAT, pos.above());
         sailor.startRiding(boat, true);
         return boat;

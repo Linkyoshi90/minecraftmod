@@ -213,6 +213,7 @@ public class AlbatrossHarpy extends AbstractHarpy {
         }, null));
         this.goalSelector.addGoal(3, new SnatchGoal(this, 1.5, SnatchGoal.From.INVENTORY, 3600, 9000, p -> !this.isTrusting(p)));
         this.goalSelector.addGoal(4, new SeekItemGoal(this, 1.2, 16.0));
+        this.goalSelector.addGoal(5, new com.linkyoshi90.monstergirls.entity.ai.FollowBoatGoal(this, 5.0, 6.0));   // she follows ships, wide and high
         this.goalSelector.addGoal(6, new AlbatrossFlightGoal(this));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 16.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));

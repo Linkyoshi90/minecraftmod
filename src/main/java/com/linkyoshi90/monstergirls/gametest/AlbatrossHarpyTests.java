@@ -73,4 +73,18 @@ public class AlbatrossHarpyTests {
         check(!AlbatrossHarpy.isClearing(helper.getLevel(), cramped), "a tree trunk next to the spot should spoil it");
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 800, batch = "albatrossFollowsShips")
+    public static void albatrossFollowsShips(GameTestHelper helper) {
+        SeagullHarpyTests.buildSea(helper, false);
+        com.linkyoshi90.monstergirls.entity.AlbatrossHarpy bird = helper.spawn(com.linkyoshi90.monstergirls.registry.ModEntities.ALBATROSS_HARPY.get(), new BlockPos(2, 3, 12));
+        net.minecraft.server.level.ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(12, 3, 2));
+        net.minecraft.world.entity.vehicle.Boat boat = SeagullHarpyTests.mannedBoat(helper, new BlockPos(12, 2, 2), player);
+        helper.succeedWhen(() -> {
+            boolean following = bird.goalSelector.getAvailableGoals().stream()
+                    .anyMatch(g -> g.isRunning() && g.getGoal() instanceof com.linkyoshi90.monstergirls.entity.ai.FollowBoatGoal f && f.getBoat() == boat);
+            check(following && bird.isAlive() && bird.distanceToSqr(boat) < 10.0 * 10.0, "the wild albatross isn't flying with the boat");
+            HarpyTestUtil.remove(player);
+        });
+    }
 }
