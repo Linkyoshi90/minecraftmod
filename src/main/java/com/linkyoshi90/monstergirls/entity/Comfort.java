@@ -26,13 +26,15 @@ import javax.annotation.Nullable;
  * Looking out for their friend. Comfort: when a player is badly hurt (under a third of their health) the nearest friend within
  * 16 rushes to their side and, once there, steadies them (regeneration and a moment's resistance), at most every two minutes.
  * A snack: when a player is hungry (three drumsticks or fewer) the nearest friend brings them something of hers to eat, once a day.
+ * The rain call: after three dry days, a frog friend near them croaks the rain in.
  * The forecast: a minute before rain comes, a friend near them sniffs the air and says so; frogs croak about it.
  */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class Comfort {
     public static final double CALL = 16, REACH = 3;
     public static final long COOLDOWN = 2400, FORECAST = 1200;
-    public static final String NEXT = "ComfortAt", FORECAST_DAY = "ForecastFor", LUNCH = "LunchAt";
+    public static final String NEXT = "ComfortAt", FORECAST_DAY = "ForecastFor", LUNCH = "LunchAt", DRY = "DryFrom";
+    public static final long DRY_SPELL = 72000;
     public static final int HUNGRY = 6;
     public static final long LUNCH_WAIT = 24000;
 
@@ -134,11 +136,35 @@ public final class Comfort {
         return friend;
     }
 
+    /** Every ten seconds: the dry days counted, and after a dry spell a frog friend near croaks for rain. Who called it, or null. */
+    @Nullable
+    public static Mob rainCall(ServerLevel level, ServerPlayer p) {
+        CompoundTag data = p.getData(ModAttachments.JOURNAL);
+        long now = level.getGameTime();
+        if (level.isRaining() || !data.contains(DRY)) {
+            data.putLong(DRY, now);
+            p.setData(ModAttachments.JOURNAL, data);
+            return null;
+        }
+        if (!MonsterGirlsConfig.comfort() || now - data.getLong(DRY) < DRY_SPELL || !level.dimensionType().natural()
+                || !level.getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_WEATHER_CYCLE)) return null;
+        Mob frog = null;
+        for (Mob m : HomeLife.friendsOf(level, p, p.getBoundingBox().inflate(CALL))) if (m instanceof AbstractAnuran) frog = m;
+        if (frog == null) return null;
+        data.putLong(DRY, now);
+        p.setData(ModAttachments.JOURNAL, data);
+        level.setWeatherParameters(0, 6000 + level.random.nextInt(6000), true, false);
+        level.playSound(null, frog.blockPosition(), SoundEvents.FROG_AMBIENT, SoundSource.NEUTRAL, 2.0F, 0.6F);
+        p.displayClientMessage(Component.translatable("message.monstergirls.rain_call", frog.getDisplayName()), false);
+        return frog;
+    }
+
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         if (!(event.getEntity() instanceof ServerPlayer p) || !(p.level() instanceof ServerLevel level)) return;
         if (p.tickCount % 20 == 0) check(level, p);
         if (p.tickCount % 200 == 7) forecast(level, p);
         if (p.tickCount % 200 == 113) lunch(level, p);
+        if (p.tickCount % 200 == 157) rainCall(level, p);
     }
 }

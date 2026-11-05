@@ -54,6 +54,9 @@ public class JadePlugin implements IWailaPlugin {
                 data.putString("Role", com.linkyoshi90.monstergirls.entity.girl.Roles.of(g).key());
             }
             if (accessor.getEntity() instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g && com.linkyoshi90.monstergirls.entity.girl.Colds.hasCold(g)) data.putBoolean("Cold", true);
+            if (accessor.getPlayer() != null && accessor.getEntity() instanceof net.minecraft.world.entity.Mob m && com.linkyoshi90.monstergirls.entity.Visits.streak(m, accessor.getPlayer()) > 1) {
+                data.putInt("Visits", com.linkyoshi90.monstergirls.entity.Visits.streak(m, accessor.getPlayer()));
+            }
             if (accessor.getEntity() instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g && accessor.getPlayer() != null) {
                 net.minecraft.nbt.CompoundTag f = com.linkyoshi90.monstergirls.entity.girl.Favours.of(g, accessor.getPlayer());
                 if (f != null) {
@@ -89,6 +92,7 @@ public class JadePlugin implements IWailaPlugin {
                     && com.linkyoshi90.monstergirls.entity.girl.Foraging.forages(g)) {
                 tooltip.add(Component.translatable("jade.monstergirls.forager").withStyle(net.minecraft.ChatFormatting.GRAY));
             }
+            if (data.getInt("Visits") > 1) tooltip.add(Component.translatable("jade.monstergirls.visits", data.getInt("Visits")).withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
             if (data.getBoolean("Cold")) tooltip.add(Component.translatable("jade.monstergirls.cold").withStyle(net.minecraft.ChatFormatting.AQUA));
             if (data.contains("FavourItem")) {
                 net.minecraft.world.item.Item want = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(net.minecraft.resources.ResourceLocation.parse(data.getString("FavourItem")));

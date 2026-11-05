@@ -996,6 +996,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (this.tickCount % 100 == 0) Settlement.tick(server, this);
         if (this.tickCount % 100 == 50) Treats.tick(server, this);
         if (this.tickCount % 100 == 25) Colds.tick(server, this);
+        if (this.tickCount % 600 == 300) GreenThumb.tend(server, this);
         if (this.tickCount % 10 == 3) HideAndSeek.tick(server, this);
         if (this.tickCount % 20 == 9 && Mining.holdsHaul(this)) Mining.handOver(server, this);
         if (this.tickCount % 97 == 0) Rivalries.squabble(server, this);

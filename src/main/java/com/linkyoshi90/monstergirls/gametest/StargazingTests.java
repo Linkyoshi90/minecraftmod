@@ -32,7 +32,8 @@ public class StargazingTests {
         girl.addAffection(p, HomeLife.FRIEND);
         helper.runAfterDelay(2, () -> {
             check(Stargazing.clearNight(level), "a clear night");
-            Stargazing.step(level, p);
+            check(Stargazing.step(level, p) == 0 && Stargazing.step(level, p) == 0, "looking ahead, not up");
+            p.setXRot(-60);
             int still = Stargazing.step(level, p);
             if (level.canSeeSky(p.blockPosition().above())) check(still == 1, "standing still: " + still);
             p.teleportTo(p.getX() + 1, p.getY(), p.getZ());

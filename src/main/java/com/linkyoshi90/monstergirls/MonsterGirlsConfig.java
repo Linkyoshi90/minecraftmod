@@ -77,7 +77,7 @@ public final class MonsterGirlsConfig {
             .define("teamwork", true);
 
     public static final ModConfigSpec.BooleanValue COMFORT = BUILDER
-            .comment("Friends look out for you: the nearest rushes to steady you when you are badly hurt, shares a snack when you are hungry, and they warn you a minute before rain.")
+            .comment("Friends look out for you: the nearest rushes to steady you when you are badly hurt, shares a snack when you are hungry, and they warn you a minute before rain. Friends near say good morning (well rested), and timid ones huddle against you in thunderstorms.")
             .define("comfort", true);
 
     public static final ModConfigSpec.BooleanValue COLDS = BUILDER
@@ -85,7 +85,7 @@ public final class MonsterGirlsConfig {
             .define("colds", true);
 
     public static final ModConfigSpec.BooleanValue STARGAZING = BUILDER
-            .comment("On a clear night, stand still under open sky and your friends nearby sit down beside you; a shooting star brings each of them closer.")
+            .comment("On a clear night, stand still under open sky looking up and your friends nearby sit down beside you; a shooting star brings each of them closer.")
             .define("stargazing", true);
 
     public static final ModConfigSpec.IntValue HEARTH_SAFE_RADIUS = BUILDER

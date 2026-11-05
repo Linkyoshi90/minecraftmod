@@ -35,7 +35,7 @@ import java.util.Set;
 public final class Journal {
     private static final double SIGHT = 12.0;
     /** The guide pages after the contents: befriending, the hearth, expeditions, weapons, scouting, life at home, the milking machine, keepsakes, dairy, nursing. */
-    public static final List<String> GUIDE = List.of("friends", "hearth", "expedition", "weapons", "scouting", "home", "milking", "keepsakes", "dairy", "nursing", "legends", "encounters", "chores", "festivals", "market", "rivals", "roles", "teamwork", "bestiary", "treats", "games", "mining", "foraging", "longing", "stargazing", "favours", "stories", "colds");
+    public static final List<String> GUIDE = List.of("friends", "hearth", "expedition", "weapons", "scouting", "home", "milking", "keepsakes", "dairy", "nursing", "legends", "encounters", "chores", "festivals", "market", "rivals", "roles", "teamwork", "bestiary", "treats", "games", "mining", "foraging", "longing", "stargazing", "favours", "stories", "colds", "visits", "watch");
     /** Bestiary: sightings (one per two seconds in view) before her home shows, and before her whole page does (befriending her does too). */
     public static final int KNOWN = 3, STUDIED = 20, NATURALIST = 25;
     public static final String SEEN = "Seen", NATURALIST_ADVANCEMENT = "naturalist";
@@ -179,6 +179,8 @@ public final class Journal {
                 .append("\n").append(Component.translatable("journal.monstergirls.studied", studied(player), met.size()).withStyle(ChatFormatting.RESET));
         String missedBy = player.getData(ModAttachments.JOURNAL).getString("MissedBy");
         int letters = player.getData(ModAttachments.JOURNAL).getInt(Letters.COUNT);
+        List<String> gone = NightWatch.remembered(player);
+        if (!gone.isEmpty()) cover.append("\n\n").append(Component.translatable("journal.monstergirls.remembered", String.join(", ", gone)).withStyle(ChatFormatting.RESET, ChatFormatting.GRAY));
         int stars = player.getData(ModAttachments.JOURNAL).getList(Stargazing.CHART, Tag.TAG_STRING).size();
         if (stars > 0) cover.append("\n").append(Component.translatable("journal.monstergirls.constellations", stars, Stargazing.CONSTELLATIONS.size()).withStyle(ChatFormatting.RESET));
         if (letters > 0) cover.append("\n").append(Component.translatable("journal.monstergirls.letters", letters).withStyle(ChatFormatting.RESET));

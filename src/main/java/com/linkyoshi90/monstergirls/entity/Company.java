@@ -1,0 +1,139 @@
+package com.linkyoshi90.monstergirls.entity;
+
+import com.linkyoshi90.monstergirls.MonsterGirlsConfig;
+import com.linkyoshi90.monstergirls.MonsterGirlsMod;
+import com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl;
+import com.linkyoshi90.monstergirls.entity.girl.GirlSpecies;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.ItemFishedEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerWakeUpEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * Small things friends do just by being around. Good morning: waking from a night's sleep with friends near, a player is well rested
+ * (absorption for a few minutes). A fishing buddy: a friend within {@link #BUDDY} cheers them on, and one catch in {@link #EXTRA} brings
+ * up a second. Thunder: timid girls (rabbits, rodents, cats, marsupials) run to a friend in a thunderstorm and huddle against them
+ * once a storm, for {@link #HUDDLE} friendship. A swim buddy: a sea-folk friend within {@link #BUDDY} of a swimming player keeps them
+ * company in the water (dolphin's grace and water breathing while she is near). Warmth: a fire-proof friend within {@link #WARM} thaws a
+ * freezing player.
+ */
+@EventBusSubscriber(modid = MonsterGirlsMod.MODID)
+public final class Company {
+    public static final double MORNING = 12, BUDDY = 8, STORM = 24, CLOSE = 2.5, WARM = 4;
+    public static final int EXTRA = 3, HUDDLE = 3, RESTED = 3600;
+    public static final String STORM_DAY = "HuddledOn";
+    static final Set<GirlSpecies.Family> TIMID = Set.of(GirlSpecies.Family.JACKALOPE, GirlSpecies.Family.RODENT, GirlSpecies.Family.NEKOMATA, GirlSpecies.Family.MARSUPIAL);
+
+    private Company() {
+    }
+
+    /** A night's sleep over: friends near say good morning. How many. */
+    public static int goodMorning(ServerLevel level, ServerPlayer p) {
+        List<Mob> friends = HomeLife.friendsOf(level, p, p.getBoundingBox().inflate(MORNING));
+        if (friends.isEmpty() || !MonsterGirlsConfig.comfort()) return 0;
+        p.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, RESTED, friends.size() >= 3 ? 1 : 0));
+        p.displayClientMessage(Component.translatable(friends.size() == 1 ? "message.monstergirls.morning" : "message.monstergirls.morning.many",
+                friends.get(0).getDisplayName(), friends.size() - 1), true);
+        return friends.size();
+    }
+
+    @Nullable
+    public static Mob buddy(ServerLevel level, ServerPlayer p) {
+        List<Mob> friends = HomeLife.friendsOf(level, p, p.getBoundingBox().inflate(BUDDY));
+        return friends.isEmpty() ? null : friends.get(0);
+    }
+
+    public static boolean timid(Mob mob) {
+        return mob instanceof AbstractMonsterGirl g && TIMID.contains(g.getSpecies().family());
+    }
+
+    /** Every five seconds in a thunderstorm: timid friends come to them, and huddle once they are close. How many huddled. */
+    public static int thunder(ServerLevel level, ServerPlayer p) {
+        if (!level.isThundering() || !MonsterGirlsConfig.comfort()) return 0;
+        long day = level.getDayTime() / 24000L + 1;
+        int n = 0;
+        for (Mob m : HomeLife.friendsOf(level, p, p.getBoundingBox().inflate(STORM))) {
+            if (!timid(m) || m.isSleeping() || m.isPassenger() || m.getPersistentData().getLong(STORM_DAY) == day) continue;
+            if (m.distanceToSqr(p) > CLOSE * CLOSE) {
+                m.getNavigation().moveTo(p, 1.3);
+                continue;
+            }
+            m.getPersistentData().putLong(STORM_DAY, day);
+            AbstractMonsterGirl g = (AbstractMonsterGirl) m;
+            g.getNavigation().stop();
+            g.getLookControl().setLookAt(p);
+            g.blushFor(80);
+            g.addAffection(p, HUDDLE);
+            level.sendParticles(ParticleTypes.HEART, (m.getX() + p.getX()) / 2, m.getEyeY() + 0.3, (m.getZ() + p.getZ()) / 2, 3, 0.3, 0.2, 0.3, 0);
+            p.displayClientMessage(Component.translatable("message.monstergirls.thunder", m.getDisplayName()), true);
+            n++;
+        }
+        return n;
+    }
+
+    /** Every two seconds for a swimming player: a sea-folk friend near lends them her ease in the water. Who, or null. */
+    @Nullable
+    public static Mob swim(ServerLevel level, ServerPlayer p) {
+        if (!(p.isInWater() || level.getFluidState(p.blockPosition()).is(net.minecraft.tags.FluidTags.WATER)) || !MonsterGirlsConfig.comfort()) return null;
+        for (Mob m : HomeLife.friendsOf(level, p, p.getBoundingBox().inflate(BUDDY))) {
+            if (!(m instanceof AbstractMonsterGirl g) || g.getSpecies().family() != GirlSpecies.Family.MERFOLK || !g.isInWater()) continue;
+            if (!p.hasEffect(MobEffects.DOLPHINS_GRACE)) p.displayClientMessage(Component.translatable("message.monstergirls.swim_buddy", g.getDisplayName()), true);
+            p.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 60, 0, true, false));
+            p.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 60, 0, true, false));
+            return g;
+        }
+        return null;
+    }
+
+    /** Every two seconds for a freezing player: a friend who is warm to the touch (fire never hurts her) close by thaws them. Who, or null. */
+    @Nullable
+    public static Mob warm(ServerLevel level, ServerPlayer p) {
+        if (p.getTicksFrozen() <= 0 || !MonsterGirlsConfig.comfort()) return null;
+        for (Mob m : HomeLife.friendsOf(level, p, p.getBoundingBox().inflate(WARM))) {
+            if (!m.fireImmune()) continue;
+            p.setTicksFrozen(0);
+            level.sendParticles(ParticleTypes.FLAME, p.getX(), p.getY() + 1.0, p.getZ(), 6, 0.3, 0.4, 0.3, 0.01);
+            p.displayClientMessage(Component.translatable("message.monstergirls.warm", m.getDisplayName()), true);
+            return m;
+        }
+        return null;
+    }
+
+    @SubscribeEvent
+    public static void onWake(PlayerWakeUpEvent event) {
+        if (event.getEntity() instanceof ServerPlayer p && !event.updateLevel() && p.level() instanceof ServerLevel level && level.getDayTime() % 24000L < 12000L) goodMorning(level, p);   // the night slept through (the sky has not caught up yet)
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void onFished(ItemFishedEvent event) {
+        if (event.isCanceled() || !(event.getEntity() instanceof ServerPlayer p) || !(p.level() instanceof ServerLevel level) || event.getDrops().isEmpty()) return;
+        Mob buddy = buddy(level, p);
+        if (buddy == null || level.random.nextInt(EXTRA) != 0) return;
+        ItemStack again = event.getDrops().get(0).copy();
+        if (!p.addItem(again)) p.drop(again, false);
+        p.displayClientMessage(Component.translatable("message.monstergirls.fishing_buddy", buddy.getDisplayName()), true);
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        if (event.getEntity() instanceof ServerPlayer p && p.level() instanceof ServerLevel level && p.tickCount % 100 == 61) thunder(level, p);
+        if (event.getEntity() instanceof ServerPlayer p && p.level() instanceof ServerLevel level && p.tickCount % 40 == 17) {
+            swim(level, p);
+            warm(level, p);
+        }
+    }
+}

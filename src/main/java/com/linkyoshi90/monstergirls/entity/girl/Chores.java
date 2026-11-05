@@ -43,13 +43,14 @@ import java.util.List;
 /**
  * Chores (after the farmhand, FarmhandGoal): a friend on patrol (harpies and anurans too) keeps the place around her patrol spot.
  * She gathers the eggs, feathers and wool lying about, takes the honey from a full hive without angering the bees (into a glass
- * bottle if there is one in a chest, else as honeycomb), shears woolly sheep, and when there is nothing else to do she fishes from
+ * bottle if there is one in a chest, else as honeycomb), shears woolly sheep, sets torches from a chest in dark corners where monsters
+ * could spawn (the lamplighter), and when there is nothing else to do she fishes from
  * the shore (a swimmer from the water), a catch every minute or two. Food goes into a fridge in the area, the rest into a chest
  * or barrel, or at her feet. Shearing and honey obey mobGriefing; gathering and fishing don't need it. Each friend keeps a tally,
  * and her commander earns two advancements.
  */
 public final class Chores {
-    public enum Kind {EGGS, HONEY, WOOL, FISH}
+    public enum Kind {EGGS, HONEY, WOOL, FISH, TORCH}
 
     public static final String TALLY = "Chores", FIRST = "first_chore", EVERY = "every_chore";
     public static final int CATCH_MIN = 900, CATCH_SPREAD = 1500;
@@ -97,17 +98,48 @@ public final class Chores {
 
     /** Takes a glass bottle from a chest in the area. Whether there was one. */
     private static boolean takeBottle(ServerLevel level, BlockPos anchor) {
+        return take(level, anchor, Items.GLASS_BOTTLE, true);
+    }
+
+    /** Whether a chest or barrel in her area has one of these (and takes it out, when told to). */
+    static boolean take(ServerLevel level, BlockPos anchor, net.minecraft.world.item.Item item, boolean remove) {
         int r = (int) Orders.PATROL_RADIUS;
         for (BlockPos p : BlockPos.betweenClosed(anchor.offset(-r, -3, -r), anchor.offset(r, 3, r))) {
             if (!(level.getBlockEntity(p) instanceof Container box)) continue;
             for (int i = 0; i < box.getContainerSize(); i++) {
-                if (box.getItem(i).is(Items.GLASS_BOTTLE)) {
-                    box.removeItem(i, 1);
+                if (box.getItem(i).is(item)) {
+                    if (remove) box.removeItem(i, 1);
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    /** Somewhere in her area dark enough for monsters to spawn, where a torch would stand (one of a few tries), or null. */
+    @Nullable
+    public static BlockPos darkSpot(ServerLevel level, BlockPos anchor) {
+        int r = (int) Orders.PATROL_RADIUS;
+        for (int i = 0; i < 48; i++) {
+            BlockPos p = anchor.offset(level.random.nextInt(2 * r + 1) - r, level.random.nextInt(7) - 3, level.random.nextInt(2 * r + 1) - r);
+            if (dark(level, p)) return p;
+        }
+        return null;
+    }
+
+    public static boolean dark(ServerLevel level, BlockPos p) {
+        return level.isEmptyBlock(p) && level.getBrightness(net.minecraft.world.level.LightLayer.BLOCK, p) == 0
+                && level.getBlockState(p.below()).isFaceSturdy(level, p.below(), net.minecraft.core.Direction.UP)
+                && net.minecraft.world.level.block.Blocks.TORCH.defaultBlockState().canSurvive(level, p);
+    }
+
+    /** A torch from the chest set down in a dark spot. Whether she lit it. */
+    public static boolean lightUp(ServerLevel level, Mob mob, BlockPos anchor, BlockPos at) {
+        if (!dark(level, at) || !take(level, anchor, Items.TORCH, true)) return false;
+        level.setBlock(at, net.minecraft.world.level.block.Blocks.TORCH.defaultBlockState(), 3);
+        level.playSound(null, at, net.minecraft.sounds.SoundEvents.WOOD_PLACE, net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
+        done(mob, Kind.TORCH);
+        return true;
     }
 
     /** One chore done: her tally, and her commander's advancements. */
@@ -326,6 +358,10 @@ public final class Chores {
                     if (hive != null) return this.choose(Kind.HONEY, null, hive);
                     Sheep sheep = this.nearest(level.getEntitiesOfClass(Sheep.class, box, s -> s.isAlive() && s.readyForShearing()));
                     if (sheep != null) return this.choose(Kind.WOOL, sheep, sheep.blockPosition());
+                    if (take(level, anchor, Items.TORCH, false)) {                 // the lamplighter: torches from the chest in the dark corners
+                        BlockPos dark = darkSpot(level, anchor);
+                        if (dark != null) return this.choose(Kind.TORCH, null, dark);
+                    }
                 }
             }
             if (!level.isDay()) return false;                              // she fishes by day
@@ -410,6 +446,10 @@ public final class Chores {
                 }
                 case WOOL -> {
                     if (this.target instanceof Sheep sheep) shear(level, this.girl, anchor, sheep);
+                    this.kind = null;
+                }
+                case TORCH -> {
+                    lightUp(level, this.girl, anchor, this.at);
                     this.kind = null;
                 }
                 case FISH -> {

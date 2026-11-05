@@ -28,7 +28,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 /**
- * Stargazing: on a clear night, a player standing still under open sky for {@link #SETTLE} seconds is joined by their friends
+ * Stargazing: on a clear night, a player standing still under open sky, looking up, for {@link #SETTLE} seconds is joined by their friends
  * within {@link #RANGE}, who sit down beside them and look up. Before long a shooting star crosses the sky (one a night): each
  * friend there gains {@link #WISH} friendship, and one of them whispers her wish, which tells the player her favourite treat.
  * Each star falls through a constellation they have not seen yet; the journal keeps the chart, and all twelve is an advancement.
@@ -37,6 +37,7 @@ import javax.annotation.Nullable;
 public final class Stargazing {
     public static final int SETTLE = 20, STAR_CHANCE = 30, STAR_LATEST = 90, WISH = 3, SIT = 300;
     public static final double RANGE = 12, BESIDE = 3;
+    public static final float LOOK_UP = -40;
     public static final String STILL = "StargazeStill", AT = "StargazeAt", NIGHT = "StarNight", CHART = "Constellations", ADVANCEMENT = "stargazer";
     /** What the shooting star falls through: one new constellation a night, until a player has seen them all. */
     public static final List<String> CONSTELLATIONS = List.of("harpy", "fox", "serpent", "frog", "mermaid", "spider", "centaur", "dragon",
@@ -67,7 +68,8 @@ public final class Stargazing {
     public static int step(ServerLevel level, ServerPlayer p) {
         CompoundTag pd = p.getPersistentData();
         long at = p.blockPosition().asLong();
-        boolean ok = MonsterGirlsConfig.stargazing() && clearNight(level) && level.canSeeSky(p.blockPosition().above()) && !p.isSpectator();
+        boolean ok = MonsterGirlsConfig.stargazing() && clearNight(level) && level.canSeeSky(p.blockPosition().above()) && !p.isSpectator()
+                && p.getXRot() <= LOOK_UP;                                         // looking up at the sky
         if (!ok || pd.getLong(AT) != at || seenTonight(level, p)) {
             pd.putLong(AT, at);
             pd.putInt(STILL, 0);
