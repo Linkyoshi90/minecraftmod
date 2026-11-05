@@ -111,9 +111,8 @@ public final class MonsterGirlsConfig {
             .comment("How often a wild one is painted, as a percent of normal (normal is one in " + PAINT_RARITY + ").")
             .defineInRange("paintRate", 100, 0, MAX_RATE);
 
-    private static final ModConfigSpec.IntValue HARPY_RATE;
-    private static final ModConfigSpec.IntValue ANURAN_RATE;
-    private static final Map<GirlSpecies.Family, ModConfigSpec.IntValue> FAMILY_RATES = new EnumMap<>(GirlSpecies.Family.class);
+    /** One per clade (entity.Clade, TAXONOMY_PLAN.md); harpies are aves and anurans amphibia. */
+    private static final Map<com.linkyoshi90.monstergirls.entity.Clade, ModConfigSpec.IntValue> FAMILY_RATES = new EnumMap<>(com.linkyoshi90.monstergirls.entity.Clade.class);
 
     public static final ModConfigSpec.BooleanValue MILK_DRIPS;
     public static final ModConfigSpec.BooleanValue FLIRTING;
@@ -124,10 +123,8 @@ public final class MonsterGirlsConfig {
 
     static {
         BUILDER.comment("Natural spawns of one family, as a percent of normal, on top of spawnRate.").push("familySpawnRates");
-        HARPY_RATE = BUILDER.defineInRange("harpy", 100, 0, MAX_RATE);
-        ANURAN_RATE = BUILDER.defineInRange("anuran", 100, 0, MAX_RATE);
-        for (GirlSpecies.Family family : GirlSpecies.Family.values()) {
-            FAMILY_RATES.put(family, BUILDER.defineInRange(family.name().toLowerCase(Locale.ROOT), 100, 0, MAX_RATE));
+        for (com.linkyoshi90.monstergirls.entity.Clade clade : com.linkyoshi90.monstergirls.entity.Clade.values()) {
+            FAMILY_RATES.put(clade, BUILDER.defineInRange(clade.key(), 100, 0, MAX_RATE));
         }
         BUILDER.pop();
 
@@ -232,12 +229,12 @@ public final class MonsterGirlsConfig {
         return (SPEC.isLoaded() ? value.get() : value.getDefault()) / 100.0;
     }
 
-    /** The spawn rate for this mob's family, with the overall one: 1 is normal. */
+    /** The spawn rate for this mob's clade, with the overall one: 1 is normal. */
     public static double spawnRate(Mob mob) {
-        double family = 1.0;
-        if (mob instanceof AbstractMonsterGirl girl) family = rate(FAMILY_RATES.get(girl.getSpecies().family()));
-        else if (mob instanceof AbstractHarpy) family = rate(HARPY_RATE);
-        else if (mob instanceof AbstractAnuran) family = rate(ANURAN_RATE);
+        com.linkyoshi90.monstergirls.entity.Clade clade = com.linkyoshi90.monstergirls.entity.Clade.of(mob);
+        if (clade == null && mob instanceof AbstractHarpy) clade = com.linkyoshi90.monstergirls.entity.Clade.AVES;
+        if (clade == null && mob instanceof AbstractAnuran) clade = com.linkyoshi90.monstergirls.entity.Clade.AMPHIBIA;
+        double family = clade == null ? 1.0 : rate(FAMILY_RATES.get(clade));
         return rate(SPAWN_RATE) * family;
     }
 

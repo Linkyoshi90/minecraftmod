@@ -16,18 +16,9 @@ RES = I.RES
 ASSETS = I.ASSETS
 DATA = I.DATA
 
-# family -> (name, milk colour); order matches item/FamilyMilk.java
-MILKS = {
-    "harpy": ("Harpy", "#f4efe2"), "anuran": ("Anuran", "#dcecc8"), "nekomata": ("Nekomata", "#f6ecd8"),
-    "kitsune": ("Kitsune", "#f8e0c4"), "lamia": ("Lamia", "#e4efd0"), "arachne": ("Arachne", "#e8e0ee"),
-    "centaur": ("Centaur", "#f6efe0"), "merfolk": ("Merfolk", "#d4ecf2"), "slime": ("Slime", "#c8f0d0"),
-    "jackalope": ("Jackalope", "#f8ecec"), "minotaur": ("Minotaur", "#fbf8f0"), "mollusk": ("Mollusk", "#d8dcf0"),
-    "elf": ("Elf", "#eef6e4"), "undead": ("Undead", "#d8dcdc"), "lizardfolk": ("Lizardfolk", "#ecf0c8"),
-    "dragon": ("Dragon", "#f8d8b8"), "devil": ("Devil", "#f4d0d4"), "bug": ("Bug", "#f4eab0"),
-    "canid": ("Canid", "#ece4d8"), "rodent": ("Rodent", "#f0e6d4"), "crustacean": ("Crustacean", "#f4d8cc"),
-    "marsupial": ("Marsupial", "#f0e4cc"), "armoured": ("Armoured", "#e0dccc"), "bat": ("Bat", "#dcd4e4"),
-    "theropod": ("Theropod", "#e8ecd0"), "rider": ("Rider", "#e8e0d0"),
-}
+# milk prefix -> (name, milk colour), one per clade with milk; order matches item/FamilyMilk.java (tools/taxonomy.py)
+import taxonomy  # noqa: E402
+MILKS = taxonomy.milks()
 
 BUCKET = [
     "................",

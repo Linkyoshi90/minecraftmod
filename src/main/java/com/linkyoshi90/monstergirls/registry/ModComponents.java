@@ -18,9 +18,9 @@ import java.util.List;
 public final class ModComponents {
     public static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, MonsterGirlsMod.MODID);
 
-    /** The family a butter, cheese, ice cream or meal was made from. */
+    /** The clade a butter, cheese, ice cream or meal was made from (old family names still read: FamilyMilk.byName). */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<FamilyMilk>> MILK_FAMILY = COMPONENTS.registerComponentType("milk_family",
-            b -> b.persistent(Codec.STRING.xmap(FamilyMilk::valueOf, FamilyMilk::name)).networkSynchronized(NeoForgeStreamCodecs.enumCodec(FamilyMilk.class)));
+            b -> b.persistent(Codec.STRING.xmap(FamilyMilk::byName, FamilyMilk::name)).networkSynchronized(NeoForgeStreamCodecs.enumCodec(FamilyMilk.class)));
     /** What she had eaten from the fridge or a friend's hand before she was milked: one effect each, on top of the family's. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<Holder<MobEffect>>>> MILK_DIET = COMPONENTS.registerComponentType("milk_diet",
             b -> b.persistent(MobEffect.CODEC.listOf()).networkSynchronized(MobEffect.STREAM_CODEC.apply(ByteBufCodecs.list())));

@@ -333,6 +333,7 @@ import java.util.List;
 public enum GirlSpecies {
 %s;
 
+    /** Her form: body, rig, model script and behaviour. Not her taxonomy (that is clade()). */
     public enum Family { %s }
 
     private final String id;
@@ -364,6 +365,11 @@ public enum GirlSpecies {
 
     public Family family() {
         return this.family;
+    }
+
+    /** Where she really sits in the tree of life (entity.Clade, tools/taxonomy.py): her milk, dairy name, spawn rate and guide. Her family is her form. */
+    public com.linkyoshi90.monstergirls.entity.Clade clade() {
+        return com.linkyoshi90.monstergirls.entity.Clade.of(this.id);
     }
 
     /** Standing height in blocks (the hitbox). */
@@ -523,3 +529,5 @@ def eggs_block():
 
 if __name__ == "__main__":
     main()
+    import taxonomy  # noqa: E402  every species needs a clade; rewrites entity/Clade.java
+    taxonomy.main()

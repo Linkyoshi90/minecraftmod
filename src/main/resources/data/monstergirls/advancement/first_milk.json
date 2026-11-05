@@ -2,7 +2,7 @@
   "parent": "minecraft:husbandry/root",
   "display": {
     "icon": {
-      "id": "monstergirls:minotaur_milk"
+      "id": "monstergirls:bovid_milk"
     },
     "title": {
       "translate": "advancement.monstergirls.first_milk"

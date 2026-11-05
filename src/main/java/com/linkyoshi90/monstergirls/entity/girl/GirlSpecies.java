@@ -469,6 +469,7 @@ public enum GirlSpecies {
     DEATH_RIDER("death_rider", Family.RIDER, 1.6F, 28.5F, 0.7F, MobCategory.CREATURE, 0xC8B8A0, 0x7A6A54, "brown", "black", "grey", "white", "violet"),
     CHARRO_NEGRO_RIDER("charro_negro_rider", Family.RIDER, 1.8F, 28.5F, 0.7F, MobCategory.CREATURE, 0x14182A, 0x0A0C16, "black", "silver", "red", "bone", "green");
 
+    /** Her form: body, rig, model script and behaviour. Not her taxonomy (that is clade()). */
     public enum Family { NEKOMATA, KITSUNE, LAMIA, ARACHNE, CENTAUR, MERFOLK, SLIME, JACKALOPE, MINOTAUR, MOLLUSK, ELF, UNDEAD, LIZARDFOLK, DRAGON, DEVIL, BUG, FLORA, CANID, RODENT, CRUSTACEAN, MARSUPIAL, ARMOURED, CONSTRUCT, BAT, THEROPOD, RIDER }
 
     private final String id;
@@ -500,6 +501,11 @@ public enum GirlSpecies {
 
     public Family family() {
         return this.family;
+    }
+
+    /** Where she really sits in the tree of life (entity.Clade, tools/taxonomy.py): her milk, dairy name, spawn rate and guide. Her family is her form. */
+    public com.linkyoshi90.monstergirls.entity.Clade clade() {
+        return com.linkyoshi90.monstergirls.entity.Clade.of(this.id);
     }
 
     /** Standing height in blocks (the hitbox). */

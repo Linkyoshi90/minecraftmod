@@ -167,11 +167,11 @@ public final class Expeditions {
         };
     }
 
-    /** A girl of her family she met on the way, who came home with her and already likes her friend. */
+    /** A girl of her clade she met on the way, who came home with her and already likes her friend. */
     @Nullable
     public static AbstractMonsterGirl companion(ServerLevel level, Player player, AbstractMonsterGirl guide) {
         List<GirlSpecies> kin = new ArrayList<>();
-        for (GirlSpecies s : GirlSpecies.values()) if (s.family() == guide.getSpecies().family()) kin.add(s);
+        for (GirlSpecies s : GirlSpecies.values()) if (s.clade() == guide.getSpecies().clade()) kin.add(s);
         GirlSpecies pick = kin.get(guide.getRandom().nextInt(kin.size()));
         AbstractMonsterGirl girl = ModGirls.type(pick).create(level);
         if (girl == null) return null;

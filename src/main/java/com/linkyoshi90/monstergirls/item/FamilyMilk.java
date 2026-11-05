@@ -2,8 +2,7 @@ package com.linkyoshi90.monstergirls.item;
 
 import com.linkyoshi90.monstergirls.entity.AbstractAnuran;
 import com.linkyoshi90.monstergirls.entity.AbstractHarpy;
-import com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl;
-import com.linkyoshi90.monstergirls.entity.girl.GirlSpecies;
+import com.linkyoshi90.monstergirls.entity.Clade;
 import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
@@ -12,43 +11,65 @@ import net.minecraft.world.entity.LivingEntity;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
- * Each family's milk and what a bucket of it does for whoever drinks it. Constructs and flora have none: they never
- * carry young the way the others do.
+ * Each clade's milk (entity.Clade, TAXONOMY_PLAN.md) and what a bucket of it does for whoever drinks it. Every clade gives
+ * milk except the plants and fungi and the constructs: they never carry young the way the others do. The constant names
+ * match the clades, so name().toLowerCase() is the clade's lang key.
  */
 public enum FamilyMilk {
-    HARPY(MobEffects.SLOW_FALLING),
-    ANURAN(MobEffects.JUMP, MobEffects.WATER_BREATHING),
-    NEKOMATA(MobEffects.NIGHT_VISION),
-    KITSUNE(MobEffects.LUCK),
-    LAMIA(MobEffects.REGENERATION),
-    ARACHNE(MobEffects.DAMAGE_RESISTANCE),
-    CENTAUR(MobEffects.MOVEMENT_SPEED),
-    MERFOLK(MobEffects.WATER_BREATHING),
-    SLIME(MobEffects.HEALTH_BOOST, MobEffects.JUMP),
-    JACKALOPE(MobEffects.JUMP),
-    MINOTAUR(MobEffects.DAMAGE_BOOST),
-    MOLLUSK(MobEffects.DOLPHINS_GRACE),
-    ELF(MobEffects.HERO_OF_THE_VILLAGE),
-    UNDEAD(MobEffects.INVISIBILITY),
-    LIZARDFOLK(MobEffects.FIRE_RESISTANCE, MobEffects.MOVEMENT_SPEED),
-    DRAGON(MobEffects.FIRE_RESISTANCE, MobEffects.DAMAGE_BOOST),
-    DEVIL(MobEffects.ABSORPTION),
-    BUG(MobEffects.DIG_SPEED),
-    CANID(MobEffects.MOVEMENT_SPEED, MobEffects.NIGHT_VISION),
-    RODENT(MobEffects.DIG_SPEED, MobEffects.LUCK),
-    CRUSTACEAN(MobEffects.CONDUIT_POWER),
-    MARSUPIAL(MobEffects.JUMP, MobEffects.DAMAGE_RESISTANCE),
-    ARMOURED(MobEffects.DAMAGE_RESISTANCE, MobEffects.ABSORPTION),
-    BAT(MobEffects.NIGHT_VISION, MobEffects.SLOW_FALLING),
-    THEROPOD(MobEffects.DAMAGE_BOOST, MobEffects.MOVEMENT_SPEED),
-    RIDER(MobEffects.DAMAGE_BOOST, MobEffects.DAMAGE_RESISTANCE);
+    FELIFORMIA("feliform", MobEffects.NIGHT_VISION),
+    CANIDAE("canid", MobEffects.MOVEMENT_SPEED, MobEffects.LUCK),
+    ARCTOIDEA("arctoid", MobEffects.DAMAGE_RESISTANCE, MobEffects.WATER_BREATHING),
+    RODENTIA("rodent", MobEffects.DIG_SPEED, MobEffects.LUCK),
+    LAGOMORPHA("lagomorph", MobEffects.JUMP),
+    PRIMATES("primate", MobEffects.JUMP, MobEffects.DAMAGE_BOOST),
+    CHIROPTERA("bat", MobEffects.NIGHT_VISION, MobEffects.SLOW_FALLING),
+    MARSUPIALIA("marsupial", MobEffects.JUMP, MobEffects.DAMAGE_RESISTANCE),
+    XENARTHRA("xenarthran", MobEffects.DAMAGE_RESISTANCE, MobEffects.ABSORPTION),
+    PAENUNGULATA("paenungulate", MobEffects.HEALTH_BOOST),
+    PERISSODACTYLA("perissodactyl", MobEffects.MOVEMENT_SPEED),
+    BOVIDAE("bovid", MobEffects.DAMAGE_BOOST),
+    CERVIDAE("cervid", MobEffects.MOVEMENT_SPEED, MobEffects.JUMP),
+    CAMELIDAE("camelid", MobEffects.FIRE_RESISTANCE),
+    SUINA("suine", MobEffects.DIG_SPEED, MobEffects.ABSORPTION),
+    WHIPPOMORPHA("whippomorph", MobEffects.DOLPHINS_GRACE, MobEffects.WATER_BREATHING),
+    AVES("bird", MobEffects.SLOW_FALLING),
+    ARCHOSAURIA("archosaur", MobEffects.DAMAGE_BOOST, MobEffects.MOVEMENT_SPEED),
+    TESTUDINES("testudine", MobEffects.DAMAGE_RESISTANCE, MobEffects.WATER_BREATHING),
+    SQUAMATA("squamate", MobEffects.REGENERATION),
+    AMPHIBIA("amphibian", MobEffects.JUMP, MobEffects.WATER_BREATHING),
+    ACTINOPTERYGII("fish", MobEffects.WATER_BREATHING),
+    CHELICERATA("chelicerate", MobEffects.DAMAGE_RESISTANCE),
+    HEXAPODA("insect", MobEffects.DIG_SPEED),
+    MALACOSTRACA("malacostracan", MobEffects.CONDUIT_POWER),
+    MOLLUSCA("mollusk", MobEffects.DOLPHINS_GRACE),
+    FAE("fae", MobEffects.HERO_OF_THE_VILLAGE),
+    DRAGON("dragon", MobEffects.FIRE_RESISTANCE, MobEffects.DAMAGE_BOOST),
+    UNDEAD("undead", MobEffects.INVISIBILITY),
+    DEVIL("devil", MobEffects.ABSORPTION),
+    SLIME("slime", MobEffects.HEALTH_BOOST, MobEffects.JUMP),
+    RIDER("rider", MobEffects.DAMAGE_BOOST, MobEffects.DAMAGE_RESISTANCE);
 
+    /**
+     * The milks before the taxonomy (2026-11-05), each to the clade that kept most of that family. Old saves name them on
+     * dairy stacks (the milk_family component) and as bucket item ids (ModItems registers aliases).
+     */
+    public static final Map<String, FamilyMilk> OLD = Map.ofEntries(
+            Map.entry("NEKOMATA", FELIFORMIA), Map.entry("KITSUNE", CANIDAE), Map.entry("CANID", CANIDAE), Map.entry("LAMIA", SQUAMATA),
+            Map.entry("ARACHNE", CHELICERATA), Map.entry("CENTAUR", PERISSODACTYLA), Map.entry("MERFOLK", ACTINOPTERYGII),
+            Map.entry("JACKALOPE", LAGOMORPHA), Map.entry("MINOTAUR", BOVIDAE), Map.entry("MOLLUSK", MOLLUSCA), Map.entry("ELF", FAE),
+            Map.entry("LIZARDFOLK", TESTUDINES), Map.entry("BUG", HEXAPODA), Map.entry("RODENT", RODENTIA), Map.entry("CRUSTACEAN", MALACOSTRACA),
+            Map.entry("MARSUPIAL", MARSUPIALIA), Map.entry("ARMOURED", XENARTHRA), Map.entry("BAT", CHIROPTERA), Map.entry("THEROPOD", ARCHOSAURIA),
+            Map.entry("HARPY", AVES), Map.entry("ANURAN", AMPHIBIA));
+
+    private final String prefix;
     private final List<Holder<MobEffect>> effects;
 
     @SafeVarargs
-    FamilyMilk(Holder<MobEffect>... effects) {
+    FamilyMilk(String prefix, Holder<MobEffect>... effects) {
+        this.prefix = prefix;
         this.effects = List.of(effects);
     }
 
@@ -56,20 +77,34 @@ public enum FamilyMilk {
         return this.effects;
     }
 
+    /** The bucket's item id, e.g. "feliform_milk". */
     public String id() {
-        return this.name().toLowerCase(Locale.ROOT) + "_milk";
+        return this.prefix + "_milk";
     }
 
-    /** Whose milk she gives, or null if her family has none. */
+    public Clade clade() {
+        return Clade.valueOf(this.name());
+    }
+
+    /** By name, old family names included (an old cheese says "NEKOMATA"). */
+    public static FamilyMilk byName(String name) {
+        FamilyMilk old = OLD.get(name.toUpperCase(Locale.ROOT));
+        return old != null ? old : valueOf(name.toUpperCase(Locale.ROOT));
+    }
+
+    /** The clade's milk, or null for the plants and fungi and the constructs. */
+    @Nullable
+    public static FamilyMilk of(@Nullable Clade clade) {
+        if (clade == null || clade == Clade.FLORA || clade == Clade.CONSTRUCT) return null;
+        return valueOf(clade.name());
+    }
+
+    /** Whose milk she gives, or null if her clade has none. */
     @Nullable
     public static FamilyMilk of(LivingEntity creature) {
-        if (creature instanceof AbstractHarpy) return HARPY;
-        if (creature instanceof AbstractAnuran) return ANURAN;
-        if (creature instanceof AbstractMonsterGirl girl) {
-            GirlSpecies.Family family = girl.getSpecies().family();
-            if (family == GirlSpecies.Family.CONSTRUCT || family == GirlSpecies.Family.FLORA) return null;
-            return valueOf(family.name());
-        }
-        return null;
+        Clade clade = Clade.of(creature);
+        if (clade == null && creature instanceof AbstractHarpy) clade = Clade.AVES;
+        if (clade == null && creature instanceof AbstractAnuran) clade = Clade.AMPHIBIA;
+        return of(clade);
     }
 }

@@ -214,7 +214,7 @@ for t in ("foods/butter", "butter", "butters"):                   # other mods' 
     tag_add(os.path.join(CTAGS, t + ".json"), ["monstergirls:butter"])
 for t in ("foods/cheese", "cheese", "cheeses"):
     tag_add(os.path.join(CTAGS, t + ".json"), ["monstergirls:cheese"])
-advancement("first_milk", "monstergirls:minotaur_milk")
+advancement("first_milk", "monstergirls:bovid_milk")
 advancement("churned", "monstergirls:butter")
 advancement("hard_cheese", "monstergirls:cheese", "goal")
 advancement("full_tank", "monstergirls:milk_tank", "goal")
@@ -254,7 +254,7 @@ lang = {
     "advancement.monstergirls.full_tank": "Dairy Farmer", "advancement.monstergirls.full_tank.desc": "Fill a milk tank to the top",
     "advancement.monstergirls.fridge": "Help Yourself", "advancement.monstergirls.fridge.desc": "Have a friend eat from your fridge",
 }
-for fam, (name, _col) in M.MILKS.items():
-    lang[f"family.monstergirls.{fam}"] = name
+import taxonomy  # noqa: E402  the clade names on dairy ("Firm Feliform Cheese")
+lang.update({k: v for k, v in taxonomy.lang_entries().items() if k.startswith("family.")})
 M.add_lang(lang)
 print("dairy assets written")

@@ -61,7 +61,7 @@ public class DairyTests {
         check(Dairy.ate(girl, new ItemStack(Items.SWEET_BERRIES)) && Dairy.ate(girl, new ItemStack(Items.HONEY_BOTTLE)), "berries and honey");
         check(Dairy.ate(girl, new ItemStack(Items.COOKIE)) && Dairy.diet(girl).size() == Dairy.DIET_KINDS && !Dairy.diet(girl).contains(MobEffects.REGENERATION),
                 "two flavours at most, the oldest goes");
-        ItemStack bucket = Dairy.flavoured(girl, milk(FamilyMilk.CANID));
+        ItemStack bucket = Dairy.flavoured(girl, milk(FamilyMilk.CANIDAE));
         check(bucket.getOrDefault(ModComponents.MILK_DIET.get(), List.of()).contains(MobEffects.DIG_SPEED), "the bucket carries it");
         ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
         check(Dairy.apply(p, bucket) == 2 && p.hasEffect(MobEffects.ABSORPTION), "drinking it gives the flavours");
@@ -77,15 +77,15 @@ public class DairyTests {
         check(!churn.churn(helper.getLevel(), pos), "nothing to churn");
         var hopper = churn.hopperHandler();
         check(!hopper.insertItem(0, new ItemStack(Items.DIRT), false).isEmpty(), "no dirt");
-        check(hopper.insertItem(0, milk(FamilyMilk.HARPY), false).isEmpty(), "milk goes in");
-        check(!churn.pour(milk(FamilyMilk.ANURAN)), "one milk at a time");
+        check(hopper.insertItem(0, milk(FamilyMilk.AVES), false).isEmpty(), "milk goes in");
+        check(!churn.pour(milk(FamilyMilk.AMPHIBIA)), "one milk at a time");
         for (int i = 0; i < ButterChurnBlockEntity.CHURNS; i++) {
             check(churn.churn(helper.getLevel(), pos), "a stroke");
             for (int t = 0; t < ButterChurnBlockEntity.STROKE_TICKS; t++) ButterChurnBlockEntity.serverTick(helper.getLevel(), pos, helper.getLevel().getBlockState(pos), churn);
         }
         ItemStack butter = hopper.extractItem(ButterChurnBlockEntity.BUTTER, 64, false);
         check(butter.is(ModItems.BUTTER.get()) && butter.getCount() == ButterChurnBlockEntity.BUTTER_PER_BUCKET
-                && butter.get(ModComponents.MILK_FAMILY.get()) == FamilyMilk.HARPY, "harpy butter");
+                && butter.get(ModComponents.MILK_FAMILY.get()) == FamilyMilk.AVES, "bird butter");
         check(hopper.extractItem(ButterChurnBlockEntity.BUCKETS, 64, false).is(Items.BUCKET), "the bucket comes back");
         check(hopper.extractItem(ButterChurnBlockEntity.MILK, 64, false).isEmpty(), "milk stays in");
         helper.succeed();
@@ -96,7 +96,7 @@ public class DairyTests {
         helper.setBlock(AT, ModBlocks.CHEESE_SHELF.get());
         CheeseShelfBlockEntity shelf = (CheeseShelfBlockEntity) helper.getBlockEntity(AT);
         var hopper = shelf.hopperHandler();
-        check(hopper.insertItem(0, milk(FamilyMilk.MINOTAUR), false).isEmpty() && shelf.count() == 1, "milk set as cheese");
+        check(hopper.insertItem(0, milk(FamilyMilk.BOVIDAE), false).isEmpty() && shelf.count() == 1, "milk set as cheese");
         check(helper.getBlockState(AT).getValue(CheeseShelfBlock.CHEESES) == 1, "one wheel on the shelf");
         check(helper.getBlockState(AT).getValue(CheeseShelfBlock.PULL_HARD) && hopper.extractItem(0, 1, true).isEmpty(), "soft cheese stays");
         check(hopper.extractItem(CheeseShelfBlockEntity.CHEESES, 1, false).is(Items.BUCKET), "its bucket comes out");
@@ -105,7 +105,7 @@ public class DairyTests {
         check(Dairy.hardness(cheese) == 2 && Dairy.seconds(cheese) == Dairy.HARD, "hard cheese comes out");
         ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(4, 2, 4));
         check(Dairy.apply(p, cheese) == 1 && p.getEffect(MobEffects.DAMAGE_BOOST).getAmplifier() == 1, "and gives level II");
-        shelf.addMilk(milk(FamilyMilk.MINOTAUR));
+        shelf.addMilk(milk(FamilyMilk.BOVIDAE));
         check(!CheeseShelfBlock.press(helper.getLevel(), helper.absolutePos(AT), helper.getBlockState(AT)) && !hopper.extractItem(0, 1, false).isEmpty(), "the button lets soft cheese go");
         HarpyTestUtil.remove(p);
         helper.succeed();
@@ -117,13 +117,13 @@ public class DairyTests {
         MilkTankBlockEntity tank = (MilkTankBlockEntity) helper.getBlockEntity(AT);
         var top = tank.hopperHandler(Direction.UP);
         var tap = tank.hopperHandler(Direction.DOWN);
-        for (int i = 0; i < 3; i++) check(top.insertItem(1, milk(FamilyMilk.CENTAUR), false).isEmpty(), "milk in");
-        check(!top.insertItem(1, milk(FamilyMilk.HARPY), false).isEmpty(), "not another milk");
+        for (int i = 0; i < 3; i++) check(top.insertItem(1, milk(FamilyMilk.PERISSODACTYLA), false).isEmpty(), "milk in");
+        check(!top.insertItem(1, milk(FamilyMilk.AVES), false).isEmpty(), "not another milk");
         check(tank.amount() == 3 && tank.buckets() == 3 && helper.getBlockState(AT).getValue(MilkTankBlock.LEVEL) > 0, "three buckets' worth, shown");
         ItemStack out = tap.extractItem(0, 2, false);
-        check(out.is(ModItems.MILK.get(FamilyMilk.CENTAUR).get()) && out.getCount() == 2 && tank.amount() == 1 && tank.buckets() == 1, "filled into its buckets");
+        check(out.is(ModItems.MILK.get(FamilyMilk.PERISSODACTYLA).get()) && out.getCount() == 2 && tank.amount() == 1 && tank.buckets() == 1, "filled into its buckets");
         tap.extractItem(0, 1, false);
-        check(top.insertItem(1, milk(FamilyMilk.CENTAUR), false).isEmpty() && tap.extractItem(0, 1, false).getCount() == 1, "empty again, then refilled");
+        check(top.insertItem(1, milk(FamilyMilk.PERISSODACTYLA), false).isEmpty() && tap.extractItem(0, 1, false).getCount() == 1, "empty again, then refilled");
         check(tap.extractItem(0, 1, false).isEmpty(), "no milk, nothing to pull");
         helper.succeed();
     }
@@ -173,11 +173,11 @@ public class DairyTests {
     @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "iceCreamKeepsTheMilk")
     public static void iceCreamKeepsTheMilk(GameTestHelper helper) {
         IceCreamRecipe recipe = new IceCreamRecipe(CraftingBookCategory.MISC);
-        CraftingInput grid = CraftingInput.of(2, 2, List.of(milk(FamilyMilk.LAMIA), new ItemStack(Items.SUGAR), new ItemStack(Items.SNOWBALL), new ItemStack(Items.BOWL)));
+        CraftingInput grid = CraftingInput.of(2, 2, List.of(milk(FamilyMilk.SQUAMATA), new ItemStack(Items.SUGAR), new ItemStack(Items.SNOWBALL), new ItemStack(Items.BOWL)));
         check(recipe.matches(grid, helper.getLevel()), "the four make it");
         ItemStack ice = recipe.assemble(grid, helper.getLevel().registryAccess());
-        check(ice.is(ModItems.ICE_CREAM.get()) && ice.get(ModComponents.MILK_FAMILY.get()) == FamilyMilk.LAMIA, "lamia ice cream");
-        check(!recipe.matches(CraftingInput.of(2, 2, List.of(milk(FamilyMilk.LAMIA), new ItemStack(Items.SUGAR), new ItemStack(Items.DIRT), new ItemStack(Items.BOWL))), helper.getLevel()), "not with dirt");
+        check(ice.is(ModItems.ICE_CREAM.get()) && ice.get(ModComponents.MILK_FAMILY.get()) == FamilyMilk.SQUAMATA, "squamate ice cream");
+        check(!recipe.matches(CraftingInput.of(2, 2, List.of(milk(FamilyMilk.SQUAMATA), new ItemStack(Items.SUGAR), new ItemStack(Items.DIRT), new ItemStack(Items.BOWL))), helper.getLevel()), "not with dirt");
         helper.succeed();
     }
 

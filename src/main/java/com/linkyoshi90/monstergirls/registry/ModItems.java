@@ -254,6 +254,11 @@ public final class ModItems {
             milks.put(milk, ITEMS.registerItem(milk.id(), props -> new com.linkyoshi90.monstergirls.item.FamilyMilkItem(milk,
                     props.stacksTo(16).craftRemainder(net.minecraft.world.item.Items.BUCKET))));
         }
+        // the buckets from before the taxonomy (2026-11-05) turn into their clade's bucket in old saves
+        for (var old : com.linkyoshi90.monstergirls.item.FamilyMilk.OLD.entrySet()) {
+            String from = old.getKey().toLowerCase(java.util.Locale.ROOT) + "_milk";
+            if (!from.equals(old.getValue().id())) ITEMS.addAlias(com.linkyoshi90.monstergirls.MonsterGirlsMod.id(from), com.linkyoshi90.monstergirls.MonsterGirlsMod.id(old.getValue().id()));
+        }
         return milks;
     }
 

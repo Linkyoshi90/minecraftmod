@@ -57,11 +57,11 @@ public class MilkTests {
         MilkingMachineBlockEntity m = machine(helper, player);
         AbstractMonsterGirl centaur = beside(helper, GirlSpecies.HORSE_CENTAUR, player);
         helper.runAfterDelay(50, () -> {
-            check(count(m, FamilyMilk.CENTAUR) == 0, "not expecting, so no milk");
+            check(count(m, FamilyMilk.PERISSODACTYLA) == 0, "not expecting, so no milk");
             centaur.getGestation().conceive(player.getUUID());
         });
         helper.runAfterDelay(120, () -> {
-            check(count(m, FamilyMilk.CENTAUR) == 1, "one bucket, then she rests");
+            check(count(m, FamilyMilk.PERISSODACTYLA) == 1, "one bucket, then she rests");
             check(m.store().countItem(Items.BUCKET) == 1, "a bucket was used");
             helper.succeed();
         });
@@ -74,7 +74,7 @@ public class MilkTests {
         Minotaur cow = beside(helper, GirlSpecies.CATTLE_MINOTAUR, player);
         cow.setMale(false);
         helper.runAfterDelay(50, () -> {
-            check(count(m, FamilyMilk.MINOTAUR) == 1, "cows need not be expecting");
+            check(count(m, FamilyMilk.BOVIDAE) == 1, "cows need not be expecting");
             check(!cow.isMilkReady(), "shares the bell's clock");
             helper.succeed();
         });
@@ -223,7 +223,7 @@ public class MilkTests {
     public static void milkStacksInTheMachine(GameTestHelper helper) {
         ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
         MilkingMachineBlockEntity m = machine(helper, player);
-        ItemStack milk = new ItemStack(ModItems.MILK.get(FamilyMilk.MINOTAUR).get(), 3);
+        ItemStack milk = new ItemStack(ModItems.MILK.get(FamilyMilk.BOVIDAE).get(), 3);
         check(milk.getMaxStackSize() == 16, "stacks as buckets do");
         m.store().setItem(1, milk);
         Minotaur cow = beside(helper, GirlSpecies.CATTLE_MINOTAUR, player);
@@ -239,7 +239,7 @@ public class MilkTests {
         ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
         AbstractMonsterGirl foal = spawn(helper, GirlSpecies.HORSE_CENTAUR, new BlockPos(2, 2, 2));
         foal.setBaby(true);
-        FamilyMilkItem item = ModItems.MILK.get(FamilyMilk.LAMIA).get();
+        FamilyMilkItem item = ModItems.MILK.get(FamilyMilk.SQUAMATA).get();
         ItemStack stack = new ItemStack(item);
         player.setItemInHand(InteractionHand.MAIN_HAND, stack);
         item.interactLivingEntity(stack, player, foal, InteractionHand.MAIN_HAND);
@@ -247,7 +247,7 @@ public class MilkTests {
         check(player.getMainHandItem().is(Items.BUCKET), "the bucket comes back");
         check(foal.isBaby(), "one bucket is not enough");
         item.finishUsingItem(new ItemStack(item), helper.getLevel(), player);
-        check(FamilyMilk.LAMIA.effects().stream().allMatch(player::hasEffect), "the family's effect");
+        check(FamilyMilk.SQUAMATA.effects().stream().allMatch(player::hasEffect), "the family's effect");
         helper.succeed();
     }
 

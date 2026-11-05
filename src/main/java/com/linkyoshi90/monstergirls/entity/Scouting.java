@@ -186,8 +186,10 @@ public final class Scouting {
         return true;
     }
 
+    /** Her clade (a party of different kinds scouts better), or her base class for anything that has none. */
     private static String family(Mob mob) {
-        return mob instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g ? g.getSpecies().family().name() : mob.getClass().getSuperclass().getSimpleName();
+        Clade clade = Clade.of(mob);
+        return clade != null ? clade.name() : mob.getClass().getSuperclass().getSimpleName();
     }
 
     private static Component biomeName(String id) {

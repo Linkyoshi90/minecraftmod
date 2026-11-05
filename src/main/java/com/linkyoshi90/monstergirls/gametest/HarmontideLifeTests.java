@@ -168,8 +168,8 @@ public class HarmontideLifeTests {
                 "she comes back, herself, and still your friend");
         check(!Expeditions.finds(back.get(0), p).isEmpty(), "with finds");
         AbstractMonsterGirl friend = Expeditions.companion(helper.getLevel(), p, back.get(0));
-        check(friend != null && friend.getSpecies().family() == GirlSpecies.Family.CENTAUR && friend.getAffection(p) >= Orders.AFFECTION,
-                "and sometimes a friend of her family, who likes you already");
+        check(friend != null && friend.getSpecies().clade() == back.get(0).getSpecies().clade() && friend.getAffection(p) >= Orders.AFFECTION,
+                "and sometimes a friend of her clade, who likes you already");
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
