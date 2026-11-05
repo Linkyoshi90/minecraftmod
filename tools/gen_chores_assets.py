@@ -23,7 +23,7 @@ M.add_lang({
     "journal.monstergirls.guide.chores.title": "Chores",
     "journal.monstergirls.guide.chores": "A friend you leave on patrol keeps the place: she gathers eggs, feathers and wool, takes the honey "
                                          "from full hives without upsetting the bees (put glass bottles in a chest for honey bottles), shears "
-                                         "sheep, and fishes from the shore when there is nothing else to do. Food goes in a fridge nearby, "
+                                         "sheep, picks ripe berries, and fishes from the shore when there is nothing else to do. Food goes in a fridge nearby, "
                                          "the rest in a chest.",
     "monstergirls.configuration.chores": "Chores",
 })

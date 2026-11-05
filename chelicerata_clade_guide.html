@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spiders &amp; scorpions — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · Arthropoda &gt; Chelicerata &gt; Arachnida</div>
+  <h1>Spiders &amp; scorpions</h1>
+  <p class="lede">Spiders, scorpions and their kin: eight legs, no antennae. Every arachne, and the scorpion-tailed folk.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Resistance · <b style="display:inline;color:var(--accent)">Was:</b> Arachne</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Arachne form · 11</b><a href="arachne_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="arachne_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Bug form · 2</b><a href="bug_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="bug_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (13)</h2>
+    <div class="grid">
+      <article class="card" id="black_widow_arachne">
+        <div class="card-top"><span class="group">Dark forests</span><span class="tag">Glossy · patient</span></div>
+        <h3>Black Widow <span style="color:var(--muted);font-size:.9rem">(about 1.75 blocks)</span></h3>
+        <p><b>Temperament</b>Patient</p>
+        <p><b>Ecology &amp; behaviour</b>Gloss black, a red hourglass on her abdomen. She is in no hurry and never has been.</p>
+        <p><b>Signature: Hourglass</b>Befriended, she threads the monsters near her friend with venom: poisoned and slowed.</p>
+        <p><b>Player interaction</b>Raw meat and spider eyes.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Steel</strong> · Steel</span><span class="swatch"><strong>Wine</strong> · Wine</span><span class="swatch"><strong>White</strong> · White</span></div>
+        <p><b>Spawns in</b><code>dark_forest, badlands</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Araneae: Theridiidae, Latrodectus</p><p><b>Body</b>Arachne form · <a href="arachne_field_guide.html#black_widow_arachne">her card in that guide</a></p>
+      </article>
+      <article class="card" id="cave_spider_arachne">
+        <div class="card-top"><span class="group">Deep caves</span><span class="tag">Wiry · territorial</span></div>
+        <h3>Cave Spider <span style="color:var(--muted);font-size:.9rem">(about 1.45 blocks)</span></h3>
+        <p><b>Temperament</b>Territorial</p>
+        <p><b>Ecology &amp; behaviour</b>She grew up in the mineshafts and has opinions about how they were built.</p>
+        <p><b>Signature: Clearing Webs</b>Befriended, she pulls down the cobwebs near her friend and hands over the string. Cave spiders are her kin.</p>
+        <p><b>Player interaction</b>Raw meat and spider eyes.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Teal (default)</strong> · Teal</span><span class="swatch"><strong>Moss</strong> · Moss</span><span class="swatch"><strong>Rust</strong> · Rust</span><span class="swatch"><strong>Ash</strong> · Ash</span><span class="swatch"><strong>Violet</strong> · Violet</span></div>
+        <p><b>Spawns in</b><code>dripstone_caves, lush_caves</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>Araneae (Minecraft cave spider)</p><p><b>Body</b>Arachne form · <a href="arachne_field_guide.html#cave_spider_arachne">her card in that guide</a></p>
+      </article>
+      <article class="card" id="girtablilu_bug">
+        <div class="card-top"><span class="group">Deserts</span><span class="tag">Stern · loyal</span></div>
+        <h3>Girtablilu <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Stern, loyal</p>
+        <p><b>Ecology &amp; behaviour</b>The scorpion folk of Mesopotamia, who guard the gates of the sun: a veiled girl on a scorpion&#x27;s legs, pincers in place of hands and a raised tail, spiral tattoos on her arms.</p>
+        <p><b>Signature: Gate guard</b>Befriended, at night she stings the monsters that come near her friend.</p>
+        <p><b>Player interaction</b>Spider eyes and gold.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue</span><span class="swatch"><strong>Sand</strong> · Sand</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Green</strong> · Green</span></div>
+        <p><b>Spawns in</b><code>desert, badlands</code></p>
+        <p class="risk"><b>Danger</b>Moderate (her sting).</p>
+              <p class="place"><b>True position</b>Arachnida: Scorpiones (myth)</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#girtablilu_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="jorogumo_arachne">
+        <div class="card-top"><span class="group">Bamboo forests at night</span><span class="tag">Sweet · patient</span></div>
+        <h3>Jorogumo <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Sweet, patient</p>
+        <p><b>Ecology &amp; behaviour</b>The “binding bride” of Japanese folklore: a spider who walks as a girl in a web-patterned kimono, with four red eyes and eight long legs spread behind her back.</p>
+        <p><b>Signature: Binding web</b>At night, a monster that comes within 8 blocks of her friend is caught in a cobweb at its feet. The web melts away after 10 seconds.</p>
+        <p><b>Player interaction</b>Chicken, rabbit and string.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Violet (default)</strong> · Violet kimono, red obi</span><span class="swatch"><strong>Crimson</strong> · Crimson</span><span class="swatch"><strong>Indigo</strong> · Night blue</span><span class="swatch"><strong>White</strong> · White, a black obi</span><span class="swatch"><strong>Black</strong> · Black, gold legs</span><span class="swatch"><strong>Bake Sale</strong> · Lilac skin, five eyes, black pigtails with red bows, a teacup</span></div>
+        <p><b>Spawns in</b><code>bamboo_jungle, cherry_grove, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>Low (her bite).</p>
+              <p class="place"><b>True position</b>Araneae: Trichonephila clavata (folklore)</p><p><b>Body</b>Arachne form · <a href="arachne_field_guide.html#jorogumo_arachne">her card in that guide</a></p>
+      </article>
+      <article class="card" id="jumping_spider_arachne">
+        <div class="card-top"><span class="group">Meadows, plains &amp; flower forests</span><span class="tag">Curious · tiny</span></div>
+        <h3>Jumping Spider <span style="color:var(--muted);font-size:.9rem">(about 1.3 blocks)</span></h3>
+        <p><b>Temperament</b>Curious, playful, fearless</p>
+        <p><b>Ecology &amp; behaviour</b>The smallest and only daytime arachne, with two enormous front eyes. Hunts by sight, stalking and then leaping, always on a safety line of silk.</p>
+        <p><b>Signature: Leap &amp; shiny things</b>She leaps up to eight blocks to a target (a safety line means no fall damage). She follows any player holding gold, diamonds or emeralds, head tilting, and bonds fastest of the family.</p>
+        <p><b>Player interaction</b>Hold something shiny. She will watch it and follow it anywhere.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Regal (default)</strong> · Black with white spots and stripes, teal fangs</span><span class="swatch"><strong>Bold</strong> · Black with orange-red spots</span><span class="swatch"><strong>Zebra</strong> · Black and white stripes</span><span class="swatch"><strong>Golden</strong> · Golden brown with a cream band</span><span class="swatch"><strong>Teal</strong> · Iridescent teal and black</span><span class="swatch"><strong>Tiny Jumper</strong> · Round, black and gold</span><span class="swatch"><strong>Web Hero</strong> · Red and blue</span></div>
+        <p><b>Spawns in</b><code>meadow, plains, flower_forest, sunflower_plains, cherry_grove</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Araneae: Salticidae</p><p><b>Body</b>Arachne form · <a href="arachne_field_guide.html#jumping_spider_arachne">her card in that guide</a></p>
+      </article>
+      <article class="card" id="orb_weaver_arachne">
+        <div class="card-top"><span class="group">Forests &amp; swamps</span><span class="tag">Builder · patient</span></div>
+        <h3>Orb Weaver <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Patient, artistic, house-proud</p>
+        <p><b>Ecology &amp; behaviour</b>Builds a new great wheel web between trees every night and eats it again in the morning. Sits head-down in the centre, waiting.</p>
+        <p><b>Signature: Hunting web and phantom net</b>Wild, she strings cobwebs round the spot she settled on and goes for whatever they catch (players included) until fed meat. Bonded, she spins a web at night by your bed instead; phantoms, bats and vexes are caught in it. It fades at dawn.</p>
+        <p><b>Player interaction</b>Walk around her web, never through it. Compliment it with string.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Garden cross (default)</strong> · Brown with a white cross on the abdomen</span><span class="swatch"><strong>Golden silk</strong> · Gold and cream with banded legs</span><span class="swatch"><strong>Marbled</strong> · Orange and cream marbling</span><span class="swatch"><strong>Spiny</strong> · White with red spines and black spots</span><span class="swatch"><strong>Wasp spider</strong> · Yellow, black and white stripes</span></div>
+        <p><b>Spawns in</b><code>forest, dark_forest, swamp, birch_forest, flower_forest</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Araneae: Araneidae</p><p><b>Body</b>Arachne form · <a href="arachne_field_guide.html#orb_weaver_arachne">her card in that guide</a></p>
+      </article>
+      <article class="card" id="peacock_spider_arachne">
+        <div class="card-top"><span class="group">Flower forests</span><span class="tag">Dazzling · showy</span></div>
+        <h3>Peacock Spider <span style="color:var(--muted);font-size:.9rem">(about 1.4 blocks)</span></h3>
+        <p><b>Temperament</b>Showy</p>
+        <p><b>Ecology &amp; behaviour</b>A very small spider in very loud colours, always in the middle of a routine.</p>
+        <p><b>Signature: Showtime</b>Befriended, when she dances near a villager, her friend gets better prices.</p>
+        <p><b>Player interaction</b>Sweet berries and spider eyes.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue</span><span class="swatch"><strong>Teal</strong> · Teal</span><span class="swatch"><strong>Violet</strong> · Violet</span><span class="swatch"><strong>Ember</strong> · Ember</span><span class="swatch"><strong>Green</strong> · Green</span></div>
+        <p><b>Spawns in</b><code>flower_forest, meadow</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Araneae: Salticidae, Maratus</p><p><b>Body</b>Arachne form · <a href="arachne_field_guide.html#peacock_spider_arachne">her card in that guide</a></p>
+      </article>
+      <article class="card" id="scorpion_bug">
+        <div class="card-top"><span class="group">Deserts &amp; badlands</span><span class="tag">Prickly · protective</span></div>
+        <h3>Scorpion <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Prickly, protective, warm underneath</p>
+        <p><b>Ecology &amp; behaviour</b>A girl on a scorpion&#x27;s body, with pincers and a curled stinging tail. Her young ride on her back.</p>
+        <p><b>Signature: Sting and brood</b>Her tail stings (Poison II). Her young ride on her back for a day after they are born.</p>
+        <p><b>Player interaction</b>Honey; respect her young.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Sand (default)</strong> · Sandy yellow</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Emperor</strong> · Blue-black</span><span class="swatch"><strong>Bark</strong> · Brown</span></div>
+        <p><b>Spawns in</b><code>desert, badlands</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>Arachnida: Scorpiones</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#scorpion_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="spoodr_arachne">
+        <div class="card-top"><span class="group">Old houses and caves</span><span class="tag">Cuddly · curious</span></div>
+        <h3>Spoodr <span style="color:var(--muted);font-size:.9rem">(about 1.1 blocks)</span></h3>
+        <p><b>Temperament</b>Cuddly, curious</p>
+        <p><b>Ecology &amp; behaviour</b>A round, fluffy little Harmontide spider, navy with pale blue tips, all big shining eyes, who tidies up old webs.</p>
+        <p><b>Signature: Web sweeper</b>Befriended, every few seconds she clears a cobweb near her friend and keeps the string for them.</p>
+        <p><b>Player interaction</b>Spider eyes and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Navy (default)</strong> · Navy, pale blue tips</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Purple</strong> · Purple</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Yellow</strong> · Yellow</span></div>
+        <p><b>Spawns in</b><code>forest, dark_forest, dripstone_caves</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Araneae (Harmontide)</p><p><b>Body</b>Arachne form · <a href="arachne_field_guide.html#spoodr_arachne">her card in that guide</a></p>
+      </article>
+      <article class="card" id="tarantula_arachne">
+        <div class="card-top"><span class="group">Desert, badlands &amp; savanna</span><span class="tag">Gentle giant · fuzzy</span></div>
+        <h3>Tarantula <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Docile, slow, very cuddly</p>
+        <p><b>Ecology &amp; behaviour</b>Big, fuzzy and calm. Lives in a silk-lined burrow, wanders at night, and kicks a cloud of itchy hairs at anything that bothers her.</p>
+        <p><b>Signature: Itchy hairs &amp; moulting</b>Attackers get a face full of hairs (Nausea and Slowness). Every few days she moults and leaves an Exoskeleton (it works like Shed Skin). Petting builds affection twice as fast.</p>
+        <p><b>Player interaction</b>Move slowly and offer food. She loves being held (petting builds double).</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Chilean rose (default)</strong> · Dusty rose-brown with pink hairs</span><span class="swatch"><strong>Mexican red-knee</strong> · Black with orange-red knees</span><span class="swatch"><strong>Cobalt blue</strong> · Deep metallic blue</span><span class="swatch"><strong>Pink-toe</strong> · Black with pink feet</span><span class="swatch"><strong>Goliath</strong> · Rich brown, huge</span></div>
+        <p><b>Spawns in</b><code>desert, badlands, savanna, wooded_badlands</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Araneae: Theraphosidae</p><p><b>Body</b>Arachne form · <a href="arachne_field_guide.html#tarantula_arachne">her card in that guide</a></p>
+      </article>
+      <article class="card" id="trapdoor_spider_arachne">
+        <div class="card-top"><span class="group">Badlands, dirt banks &amp; lush caves</span><span class="tag">Ambush · homebody</span></div>
+        <h3>Trapdoor Spider <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>A homebody, territorial, deeply loyal</p>
+        <p><b>Ecology &amp; behaviour</b>Lives in a burrow with a silk-hinged trapdoor (a real trapdoor block) and almost never leaves it. Feels footsteps through her silk tripwires and lunges out.</p>
+        <p><b>Signature: Burrow ambush</b>She digs a hole in soft ground, sinks into it out of sight and bursts out at anything that comes within three blocks. Wild, that includes you, until she is fed meat. Calm, only monsters.</p>
+        <p><b>Player interaction</b>Throw her meat before she bursts out at you; more meat after that.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Glossy dark brown</span><span class="swatch"><strong>Black</strong> · Glossy black</span><span class="swatch"><strong>Red-legged</strong> · Black with red legs</span><span class="swatch"><strong>Sandy</strong> · Sand brown</span><span class="swatch"><strong>Mossy</strong> · Dark brown with moss-green flecks</span></div>
+        <p><b>Spawns in</b><code>badlands, wooded_badlands, lush_caves, savanna_plateau</code></p>
+        <p class="risk"><b>Danger</b>High while wild: the ambush hurts.</p>
+              <p class="place"><b>True position</b>Araneae: Mygalomorphae</p><p><b>Body</b>Arachne form · <a href="arachne_field_guide.html#trapdoor_spider_arachne">her card in that guide</a></p>
+      </article>
+      <article class="card" id="ushi_oni_arachne">
+        <div class="card-top"><span class="group">Rocky shores</span><span class="tag">Fearsome · loyal</span></div>
+        <h3>Ushi-oni <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Fearsome, loyal</p>
+        <p><b>Ecology &amp; behaviour</b>The ox-headed spider demon of Japanese coasts: a great black and red spider body, an ox&#x27;s horns and a bellow that carries over the waves.</p>
+        <p><b>Signature: Bellow</b>Befriended, when monsters come near her friend she bellows: they flee, slowed.</p>
+        <p><b>Player interaction</b>Beef and cod.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black and red</span><span class="swatch"><strong>Crimson</strong> · Red and black</span><span class="swatch"><strong>Indigo</strong> · Indigo and gold</span><span class="swatch"><strong>Ash</strong> · Ash grey</span><span class="swatch"><strong>Ochre</strong> · Ochre</span></div>
+        <p><b>Spawns in</b><code>stony_shore, beach, windswept_hills</code></p>
+        <p class="risk"><b>Danger</b>High (her fangs and horns).</p>
+              <p class="place"><b>True position</b>Araneae: spider body (folklore; the ox head is an ornament)</p><p><b>Body</b>Arachne form · <a href="arachne_field_guide.html#ushi_oni_arachne">her card in that guide</a></p>
+      </article>
+      <article class="card" id="wolf_spider_arachne">
+        <div class="card-top"><span class="group">Plains, taiga &amp; riverbanks</span><span class="tag">Hunter · motherly</span></div>
+        <h3>Wolf Spider <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Brisk, motherly, brave</p>
+        <p><b>Ecology &amp; behaviour</b>Spins no web at all: she runs her prey down. Carries her egg sac on her spinnerets and then her spiderlings on her back. Her eyes shine in torchlight.</p>
+        <p><b>Signature: Carries her young &amp; eyeshine</b>Her spiderlings ride on her back for their first day. Her eyes glow (a glow mask). Bonded, she runs ahead of you and hunts down hostile mobs first.</p>
+        <p><b>Player interaction</b>Follow the eyeshine at night. Bring her raw meat.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Brown with pale stripes</span><span class="swatch"><strong>Grey striped</strong> · Grey with bold stripes</span><span class="swatch"><strong>Sand</strong> · Pale sand</span><span class="swatch"><strong>Dark</strong> · Near-black</span><span class="swatch"><strong>Raft</strong> · Dark with white side stripes; she walks on water</span></div>
+        <p><b>Spawns in</b><code>plains, taiga, river, meadow, snowy_taiga</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Araneae: Lycosidae</p><p><b>Body</b>Arachne form · <a href="arachne_field_guide.html#wolf_spider_arachne">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

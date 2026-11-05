@@ -35,3 +35,7 @@ runs/
 repo/
 **/src/generated/**/.cache/
 /harmontide-creature-images
+
+# Python caches
+__pycache__/
+*.pyc

@@ -68,8 +68,9 @@ public class MarketTests {
         var level = helper.getLevel();
         AbstractMonsterGirl wolf = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(3, 2, 3));
         AbstractMonsterGirl hare = spawn(helper, GirlSpecies.JACK_JACKALOPE, new BlockPos(6, 2, 6));
-        check(Rivalries.hunts(GirlSpecies.Family.CANID, GirlSpecies.Family.JACKALOPE) && !Rivalries.hunts(GirlSpecies.Family.JACKALOPE, GirlSpecies.Family.CANID),
-                "the wolf hunts the hare, not the other way");
+        check(Rivalries.hunts(com.linkyoshi90.monstergirls.entity.Clade.CANIDAE, com.linkyoshi90.monstergirls.entity.Clade.LAGOMORPHA) && !Rivalries.hunts(com.linkyoshi90.monstergirls.entity.Clade.LAGOMORPHA, com.linkyoshi90.monstergirls.entity.Clade.CANIDAE)
+                && Rivalries.hunts(GirlSpecies.HYENA_CANID.clade(), GirlSpecies.CAPYBARA_RODENT.clade()),
+                "the wolf hunts the hare, not the other way; the hyena is a feliform and minds the mice");
         check(Rivalries.squabble(level, hare) == null, "the hare starts nothing");
         check(Rivalries.squabble(level, wolf) == hare, "the wolf glowers at the hare");
         check(hare.getPersistentData().getLong(Rivalries.FLED) == level.getGameTime(), "and the hare bolts");

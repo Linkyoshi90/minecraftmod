@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Insects — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · Arthropoda &gt; Pancrustacea &gt; Hexapoda</div>
+  <h1>Insects</h1>
+  <p class="lede">Insects: bees, beetles, moths, mantises and ants. Six legs and a body in three parts. The centipede and the tardigrade are guests.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Haste · <b style="display:inline;color:var(--accent)">Was:</b> Bug</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Bug form · 22</b><a href="bug_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="bug_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Lamia form · 1</b><a href="lamia_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="lamia_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (23)</h2>
+    <div class="grid">
+      <article class="card" id="ant_bug">
+        <div class="card-top"><span class="group">Forests</span><span class="tag">Tireless · orderly</span></div>
+        <h3>Ant <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Tireless</p>
+        <p><b>Ecology &amp; behaviour</b>One ant is a worker in a vest. She carries things and has views on the right way to do it.</p>
+        <p><b>Signature: Hauling</b>Befriended, she carries the loose items near her friend to them.</p>
+        <p><b>Player interaction</b>Sugar and honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Honey</strong> · Honey</span><span class="swatch"><strong>Leaf</strong> · Leaf</span><span class="swatch"><strong>Fire</strong> · Fire</span></div>
+        <p><b>Spawns in</b><code>forest, birch_forest, plains</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Insecta: Hymenoptera, Formicidae</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#ant_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="antlion_bug">
+        <div class="card-top"><span class="group">Sand</span><span class="tag">Patient · hungry</span></div>
+        <h3>Antlion <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Patient</p>
+        <p><b>Ecology &amp; behaviour</b>She has dug a pit somewhere near here and she will not say where.</p>
+        <p><b>Signature: Pit</b>Befriended, monsters on the sand near her friend sink and slow.</p>
+        <p><b>Player interaction</b>Sugar and spider eyes.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Sand (default)</strong> · Sand</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Gold</strong> · Gold</span></div>
+        <p><b>Spawns in</b><code>desert, badlands</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>Insecta: Neuroptera, Myrmeleontidae</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#antlion_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="bee_bug">
+        <div class="card-top"><span class="group">Flower forests &amp; plains</span><span class="tag">Busy · sweet</span></div>
+        <h3>Bee <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Busy, sweet, protective of her hive</p>
+        <p><b>Ecology &amp; behaviour</b>Striped, fuzzy and always busy. She does what bees do: flowers, crops, hive, honey.</p>
+        <p><b>Signature: Pollinator</b>She visits flowers, makes crops grow and fills the nearest beehive with honey. Hurt the hive and she stings.</p>
+        <p><b>Player interaction</b>Flowers and honey; never hurt her hive.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Honey (default)</strong> · Gold and black</span><span class="swatch"><strong>Bumble</strong> · Fuzzy gold, black and white</span><span class="swatch"><strong>Carpenter</strong> · Black</span><span class="swatch"><strong>Orchid</strong> · Metallic green</span><span class="swatch"><strong>Red-tailed</strong> · Black with a red tail</span><span class="swatch"><strong>Flight Cap</strong> · An orange vest, an aviator&#x27;s cap and goggles</span></div>
+        <p><b>Spawns in</b><code>flower_forest, plains, sunflower_plains, meadow</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Insecta: Hymenoptera, Apidae</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#bee_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="centipede_lamia">
+        <div class="card-top"><span class="group">Deep caves</span><span class="tag">Many-legged · patient</span></div>
+        <h3>Centipede <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Patient</p>
+        <p><b>Ecology &amp; behaviour</b>She goes on for some time. On the rearing rig: she climbs walls.</p>
+        <p><b>Signature: Forcipules</b>She climbs walls. Befriended, her bite sickens the monster nearest her friend.</p>
+        <p><b>Player interaction</b>Raw meat and spider eyes.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Cave</strong> · Cave</span><span class="swatch"><strong>Green</strong> · Green</span></div>
+        <p><b>Spawns in</b><code>dripstone_caves, lush_caves, jungle</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Myriapoda: Chilopoda; the insects&#x27; nearest relatives here (Mandibulata) A guest here: her true kin are too few, so she lives with her nearest relatives.</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#centipede_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="cicada_bug">
+        <div class="card-top"><span class="group">Forests</span><span class="tag">Loud · brief</span></div>
+        <h3>Cicada <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Loud</p>
+        <p><b>Ecology &amp; behaviour</b>She waited a very long time to say this, and she will say it all afternoon.</p>
+        <p><b>Signature: Chorus</b>Befriended, a burst of song every few minutes: Speed and Haste for her friend.</p>
+        <p><b>Player interaction</b>Sugar and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Green</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Periodical</strong> · Periodical</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Blue</strong> · Blue</span></div>
+        <p><b>Spawns in</b><code>forest, birch_forest, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Insecta: Hemiptera, Cicadidae</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#cicada_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="date_beetle_bug">
+        <div class="card-top"><span class="group">Oases</span><span class="tag">Sweet · busy</span></div>
+        <h3>Date Palm Beetle <span style="color:var(--muted);font-size:.9rem">(about 1.1 blocks)</span></h3>
+        <p><b>Temperament</b>Sweet, busy</p>
+        <p><b>Ecology &amp; behaviour</b>A round little Harmontide beetle of the oasis palms, who always carries a cluster of dates in her hair.</p>
+        <p><b>Signature: Date share</b>Befriended, when her friend near her is hungry she shares a date with them (three hunger points).</p>
+        <p><b>Player interaction</b>Sweet berries and apples.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue shell, violet wings</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Amber</strong> · Amber</span><span class="swatch"><strong>Plum</strong> · Plum</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>desert, savanna</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Insecta: Coleoptera (Harmontide)</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#date_beetle_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="dragonfly_bug">
+        <div class="card-top"><span class="group">Ponds</span><span class="tag">Swift · exact</span></div>
+        <h3>Dragonfly <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Exact</p>
+        <p><b>Ecology &amp; behaviour</b>The best hunter in the air, by any count. She catches what she goes for.</p>
+        <p><b>Signature: Hawking</b>Befriended, she takes phantoms and vexes out of the air near her friend.</p>
+        <p><b>Player interaction</b>Sugar and spider eyes.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Green</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Violet</strong> · Violet</span></div>
+        <p><b>Spawns in</b><code>swamp, river, mangrove_swamp</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>Insecta: Odonata</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#dragonfly_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="firefly_bug">
+        <div class="card-top"><span class="group">Meadows at night</span><span class="tag">Twinkling · tiny</span></div>
+        <h3>Firefly <span style="color:var(--muted);font-size:.9rem">(about 0.9 blocks)</span></h3>
+        <p><b>Temperament</b>Shy, twinkling</p>
+        <p><b>Ecology &amp; behaviour</b>Fireflies (Coleoptera: Lampyridae), whose glowing bellies blink, in some places all in time.</p>
+        <p><b>Signature: Blinking</b>She glows at night, and the fireflies around her blink in time. A glass bottle catches her (or a fairy) in a jar, a light block; break it to let her out.</p>
+        <p><b>Player interaction</b>Sugar and honey. A glass bottle catches her (why?).</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Amber (default)</strong> · Amber glow</span><span class="swatch"><strong>Green</strong> · Green glow</span><span class="swatch"><strong>Blue</strong> · Blue ghost</span><span class="swatch"><strong>Pink</strong> · Pink glow</span><span class="swatch"><strong>White</strong> · White glow</span></div>
+        <p><b>Spawns in</b><code>meadow, plains, swamp, mangrove_swamp</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Insecta: Coleoptera, Lampyridae</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#firefly_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="hornet_bug">
+        <div class="card-top"><span class="group">Forests</span><span class="tag">Fierce · territorial</span></div>
+        <h3>Hornet <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Fierce, territorial, fiercely loyal once won</p>
+        <p><b>Ecology &amp; behaviour</b>Vespa (Hymenoptera: Vespidae), the largest of the social wasps. She chews wood into paper for her nest and hunts other insects, bees above all.</p>
+        <p><b>Signature: Territorial</b>She stings players who come too close and hunts bees and bee girls until someone befriends her. On patrol she tears into hostile mobs. Friends get paper and clay.</p>
+        <p><b>Player interaction</b>Keep your distance until she knows you. She eats meat and fruit. A hornet with a broken wing can&#x27;t fly: mend it with a healing balm and she is yours for life.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>European (default)</strong> · Brown-red and yellow</span><span class="swatch"><strong>Giant</strong> · Orange head, dark bands</span><span class="swatch"><strong>Bald-faced</strong> · Black and white</span><span class="swatch"><strong>Yellow-legged</strong> · Dark with an orange band</span><span class="swatch"><strong>Oriental</strong> · Red-brown with a yellow band</span><span class="swatch"><strong>Needle Knight</strong> · A white mask of a face, a red cloak</span></div>
+        <p><b>Spawns in</b><code>forest, birch_forest, dark_forest, flower_forest</code></p>
+        <p class="risk"><b>Danger</b>High up close.</p>
+              <p class="place"><b>True position</b>Insecta: Hymenoptera, Vespidae</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#hornet_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="ladybug_bug">
+        <div class="card-top"><span class="group">Gardens</span><span class="tag">Round · lucky</span></div>
+        <h3>Ladybug <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Lucky</p>
+        <p><b>Ecology &amp; behaviour</b>Land on someone and it&#x27;s good luck. She has decided this applies to her.</p>
+        <p><b>Signature: Lucky Spots</b>Befriended, her friend near her has Luck, and the berry bushes near her ripen.</p>
+        <p><b>Player interaction</b>Sugar and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red</span><span class="swatch"><strong>Yellow</strong> · Yellow</span><span class="swatch"><strong>Orange</strong> · Orange</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Pink</strong> · Pink</span></div>
+        <p><b>Spawns in</b><code>meadow, flower_forest, sunflower_plains</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Insecta: Coleoptera, Coccinellidae</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#ladybug_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="mantis_bug">
+        <div class="card-top"><span class="group">Flower forests</span><span class="tag">Still · lightning-fast</span></div>
+        <h3>Mantis <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Patient, then sudden</p>
+        <p><b>Ecology &amp; behaviour</b>Praying mantises (Mantodea), ambush hunters who wait folded in prayer and strike faster than the eye can follow.</p>
+        <p><b>Signature: Ambush</b>She holds a still prayer pose, then strikes in a flash at silverfish, endermites and spiders. The orchid mantis cannot be seen among flowers.</p>
+        <p><b>Player interaction</b>Spider eyes. Keep still.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Green</span><span class="swatch"><strong>Brown</strong> · Bark brown</span><span class="swatch"><strong>Orchid</strong> · Pink and white</span><span class="swatch"><strong>Leaf</strong> · Leaf green, a leaf cape</span><span class="swatch"><strong>Ghost</strong> · Pale</span><span class="swatch"><strong>Scythe Green</strong> · Bright green, cream belly, pale blades</span></div>
+        <p><b>Spawns in</b><code>flower_forest, jungle, meadow, savanna</code></p>
+        <p class="risk"><b>Danger</b>Low (to players).</p>
+              <p class="place"><b>True position</b>Insecta: Mantodea</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#mantis_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="mosquito_bug">
+        <div class="card-top"><span class="group">Swamps &amp; jungles</span><span class="tag">Thirsty · ruthless</span></div>
+        <h3>Mosquito <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Thirsty, flighty, ruthless</p>
+        <p><b>Ecology &amp; behaviour</b>A whining girl with a proboscis and thin wings. She drinks blood and does not care what happens after.</p>
+        <p><b>Signature: Drinks blood</b>Hostile: drains blood (damage plus Hunger, Weakness or Poison). Calmed with honey, she drains hostile mobs for you instead.</p>
+        <p><b>Player interaction</b>Let her feed on a mob instead, then feed her honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Grey (default)</strong> · Grey and black</span><span class="swatch"><strong>Tiger</strong> · Black and white stripes</span><span class="swatch"><strong>Red</strong> · Red-brown</span><span class="swatch"><strong>Swamp</strong> · Green-grey</span><span class="swatch"><strong>Gold</strong> · Gold</span></div>
+        <p><b>Spawns in</b><code>swamp, mangrove_swamp, jungle</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Insecta: Diptera, Culicidae</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#mosquito_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="moth_bug">
+        <div class="card-top"><span class="group">Taiga &amp; dark forests, at night</span><span class="tag">Fluffy · dreamy</span></div>
+        <h3>Moth <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Dreamy, fluffy, easily distracted</p>
+        <p><b>Ecology &amp; behaviour</b>Fluffy antennae, a fur collar and dusty wings. At night she cannot resist a light.</p>
+        <p><b>Signature: Drawn to light</b>At night she flies to the brightest light within 16 blocks and circles it. Devoted, she gives Night Vision.</p>
+        <p><b>Player interaction</b>Light a lantern and wait.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Luna (default)</strong> · Pale green</span><span class="swatch"><strong>Atlas</strong> · Red-brown</span><span class="swatch"><strong>Rosy maple</strong> · Pink and yellow</span><span class="swatch"><strong>Silk</strong> · Cream white</span><span class="swatch"><strong>Hawk</strong> · Grey-brown</span><span class="swatch"><strong>Kaiju Moth</strong> · Gold and orange wings, a white ruff</span></div>
+        <p><b>Spawns in</b><code>taiga, dark_forest, old_growth_spruce_taiga</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Insecta: Lepidoptera (moth)</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#moth_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="moth_larva_bug">
+        <div class="card-top"><span class="group">Hatched from moth eggs</span><span class="tag">Hungry · crawly</span></div>
+        <h3>Moth Caterpillar <span style="color:var(--muted);font-size:.9rem">(about 0.9 blocks)</span></h3>
+        <p><b>Temperament</b>Hungry, curious, slow</p>
+        <p><b>Ecology &amp; behaviour</b>A soft, fuzzy caterpillar girl who eats and eats until she is ready to change.</p>
+        <p><b>Signature: Metamorphosis</b>She crawls, eats grass, leaves and dropped food, and after five days spins a cocoon and emerges as a moth.</p>
+        <p><b>Player interaction</b>Feed her leaves... or honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Green</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Pale</strong> · Pale green</span><span class="swatch"><strong>Spotted</strong> · Spotted</span><span class="swatch"><strong>Orange</strong> · Orange</span></div>
+        <p><b>Spawns in</b><code></code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Insecta: Lepidoptera (moth)</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#moth_larva_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="mothman_bug">
+        <div class="card-top"><span class="group">Dark forests</span><span class="tag">Ominous · gentle</span></div>
+        <h3>Mothman <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Ominous, gentle</p>
+        <p><b>Ecology &amp; behaviour</b>The Mothman of Point Pleasant, here a soft blue moth girl with feathery antennae, a furry ruff and spotted wings, her red eyes shining in the dark. Where she appears, trouble is coming.</p>
+        <p><b>Signature: Omen</b>Befriended, at night the monsters near her friend glow, seen through walls.</p>
+        <p><b>Player interaction</b>Honey and glow berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, red eyes</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Pink</strong> · Pink</span></div>
+        <p><b>Spawns in</b><code>dark_forest, taiga, old_growth_birch_forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Insecta: Lepidoptera (cryptid)</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#mothman_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="papillon_bug">
+        <div class="card-top"><span class="group">Flower forests &amp; cherry groves</span><span class="tag">Graceful · vain</span></div>
+        <h3>Papillon <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Graceful, vain, cheerful</p>
+        <p><b>Ecology &amp; behaviour</b>A butterfly girl with great painted wings who loves flowers above all.</p>
+        <p><b>Signature: Flowers</b>She gathers around flowers and plants new ones where she rests.</p>
+        <p><b>Player interaction</b>Flowers. Lots of flowers.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Monarch (default)</strong> · Orange and black</span><span class="swatch"><strong>Morpho</strong> · Blue</span><span class="swatch"><strong>Swallowtail</strong> · Yellow and black</span><span class="swatch"><strong>Cabbage</strong> · White</span><span class="swatch"><strong>Emerald</strong> · Green</span></div>
+        <p><b>Spawns in</b><code>flower_forest, cherry_grove, meadow, jungle</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Insecta: Lepidoptera, Papilionoidea</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#papillon_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="papillon_larva_bug">
+        <div class="card-top"><span class="group">Hatched from papillon eggs</span><span class="tag">Hungry · bright</span></div>
+        <h3>Papillon Caterpillar <span style="color:var(--muted);font-size:.9rem">(about 0.9 blocks)</span></h3>
+        <p><b>Temperament</b>Hungry, bright, curious</p>
+        <p><b>Ecology &amp; behaviour</b>A striped caterpillar girl who eats leaves until she is ready to change.</p>
+        <p><b>Signature: Metamorphosis</b>She crawls and eats, and after five days becomes a papillon.</p>
+        <p><b>Player interaction</b>Feed her.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Monarch (default)</strong> · Yellow, black and white stripes</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Swallowtail</strong> · Green with eyespots</span><span class="swatch"><strong>Blue</strong> · Blue-grey</span><span class="swatch"><strong>Red</strong> · Red</span></div>
+        <p><b>Spawns in</b><code></code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Insecta: Lepidoptera, Papilionoidea</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#papillon_larva_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="queen_ant_bug">
+        <div class="card-top"><span class="group">Forests</span><span class="tag">Regal · busy</span></div>
+        <h3>Queen Ant <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Regal</p>
+        <p><b>Ecology &amp; behaviour</b>Winged, tall and in charge of everyone. A colony is whoever she says it is.</p>
+        <p><b>Signature: Brood</b>Befriended, she raises an ant now and then (four at most near her), and the ant knows her friend.</p>
+        <p><b>Player interaction</b>Sugar and honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Honey</strong> · Honey</span><span class="swatch"><strong>Leaf</strong> · Leaf</span><span class="swatch"><strong>Fire</strong> · Fire</span></div>
+        <p><b>Spawns in</b><code>forest, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Insecta: Hymenoptera, Formicidae</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#queen_ant_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="queen_bee_bug">
+        <div class="card-top"><span class="group">Rules a hive</span><span class="tag">Regal · affectionate</span></div>
+        <h3>Queen Bee <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Regal, motherly, very affectionate</p>
+        <p><b>Ecology &amp; behaviour</b>A tall queen with four arms and a royal ruff, who rules a hive of bee girls and adores whoever looks after it.</p>
+        <p><b>Signature: Hive keeper&#x27;s friend</b>Every beehive a player places near her is worth +5. Bees near her work twice as fast.</p>
+        <p><b>Player interaction</b>Place beehives near her and keep them safe.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Royal (default)</strong> · Gold and black</span><span class="swatch"><strong>Amber</strong> · Amber</span><span class="swatch"><strong>Ebony</strong> · Black</span><span class="swatch"><strong>Orchid</strong> · Green</span><span class="swatch"><strong>Crimson</strong> · Red</span></div>
+        <p><b>Spawns in</b><code>flower_forest, meadow</code></p>
+        <p class="risk"><b>Danger</b>Moderate (her hive).</p>
+              <p class="place"><b>True position</b>Insecta: Hymenoptera, Apidae</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#queen_bee_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="scarabronze_bug">
+        <div class="card-top"><span class="group">Deserts</span><span class="tag">Steadfast · shining</span></div>
+        <h3>Scarabronze <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Steadfast</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide scarab cased in bronze and gold, who rolls the sun up the sky each morning.</p>
+        <p><b>Signature: The roller</b>Hand her rotten flesh and she rolls it into bone meal. At sunrise her friend gets Haste for the morning. Her shell is armour.</p>
+        <p><b>Player interaction</b>Rotten flesh, which she rolls away.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Bronze (default)</strong> · Bronze, lapis cloth</span><span class="swatch"><strong>Blue</strong> · Lapis</span><span class="swatch"><strong>Green</strong> · Malachite</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Black</strong> · Obsidian</span></div>
+        <p><b>Spawns in</b><code>desert, badlands</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Insecta: Coleoptera, Scarabaeidae (Harmontide)</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#scarabronze_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="spider_wasp_bug">
+        <div class="card-top"><span class="group">Badlands</span><span class="tag">Metallic · fearless</span></div>
+        <h3>Spider-Wasp <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Fearless</p>
+        <p><b>Ecology &amp; behaviour</b>The tarantula hawk: blue steel and burning orange. Spiders stop moving when they hear her.</p>
+        <p><b>Signature: Paralysis</b>Befriended, she stings the spiders near her friend and they cannot move.</p>
+        <p><b>Player interaction</b>Sugar and spider eyes.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Violet</strong> · Violet</span><span class="swatch"><strong>Amber</strong> · Amber</span></div>
+        <p><b>Spawns in</b><code>badlands, wooded_badlands, savanna</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Insecta: Hymenoptera, Pompilidae</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#spider_wasp_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="tardigrade_bug">
+        <div class="card-top"><span class="group">Everywhere damp</span><span class="tag">Round · unstoppable</span></div>
+        <h3>Tardigrade <span style="color:var(--muted);font-size:.9rem">(about 1.45 blocks)</span></h3>
+        <p><b>Temperament</b>Unstoppable</p>
+        <p><b>Ecology &amp; behaviour</b>She has survived space, and you.</p>
+        <p><b>Signature: Tun</b>Once a day, nearly dead, she curls up and comes back.</p>
+        <p><b>Player interaction</b>Sugar and moss.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Grey (default)</strong> · Grey</span><span class="swatch"><strong>Pink</strong> · Pink</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Gold</strong> · Gold</span></div>
+        <p><b>Spawns in</b><code>swamp, lush_caves, river</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Tardigrada: a cousin of the arthropods (Panarthropoda) A guest here: her true kin are too few, so she lives with her nearest relatives.</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#tardigrade_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="temple_mantis_bug">
+        <div class="card-top"><span class="group">Jungle temples</span><span class="tag">Solemn · watchful</span></div>
+        <h3>Temple Mantis <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Solemn, watchful</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide mantis who keeps the old temples, lapis blue worked with gold, a jewelled crown and a gold ring arch behind her head.</p>
+        <p><b>Signature: Trapbreaker</b>Befriended, she cuts the tripwires of old temples and other structures within 8 blocks of her friend before anyone can trip them. Wires a player strung up are left alone.</p>
+        <p><b>Player interaction</b>Spider eyes and rotten flesh.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Lapis (default)</strong> · Lapis blue and gold</span><span class="swatch"><strong>Jade</strong> · Jade and gold</span><span class="swatch"><strong>Orchid</strong> · Orchid pink</span><span class="swatch"><strong>Sand</strong> · Sand, for the pyramids</span><span class="swatch"><strong>Ruby</strong> · Ruby and gold</span></div>
+        <p><b>Spawns in</b><code>jungle, sparse_jungle, desert</code></p>
+        <p class="risk"><b>Danger</b>Low (her scythes).</p>
+              <p class="place"><b>True position</b>Insecta: Mantodea (Harmontide)</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#temple_mantis_bug">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

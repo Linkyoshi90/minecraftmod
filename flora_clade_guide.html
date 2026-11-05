@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plants &amp; fungi — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · Plantae + Fungi (two kingdoms, one guide)</div>
+  <h1>Plants &amp; fungi</h1>
+  <p class="lede">Plants and fungi, two kingdoms in one guide: flowers, trees, mushrooms and mosses. They give no milk.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> none · <b style="display:inline;color:var(--accent)">Was:</b> Flora</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Flora form · 13</b><a href="flora_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="flora_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Centaur form · 1</b><a href="centaur_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="centaur_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (14)</h2>
+    <div class="grid">
+      <article class="card" id="alraune_flora">
+        <div class="card-top"><span class="group">Flower forests &amp; meadows</span><span class="tag">Sweet · alluring</span></div>
+        <h3>Alraune <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Sweet, alluring, patient</p>
+        <p><b>Ecology &amp; behaviour</b>Her upper body rises from the heart of a great flower; vines and petals are her lower body.</p>
+        <p><b>Signature: Pollen</b>Attackers are dusted with pollen (Nausea and Slowness). She barely moves, and flowers spring up around her.</p>
+        <p><b>Player interaction</b>Bone meal and a little water.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Rose (default)</strong> · Pink petals</span><span class="swatch"><strong>Violet</strong> · Violet petals</span><span class="swatch"><strong>Sunflower</strong> · Yellow petals</span><span class="swatch"><strong>Lily</strong> · White petals</span><span class="swatch"><strong>Crimson</strong> · Red petals</span></div>
+        <p><b>Spawns in</b><code>flower_forest, meadow, swamp</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Plantae: flowering plant (folklore)</p><p><b>Body</b>Flora form · <a href="flora_field_guide.html#alraune_flora">her card in that guide</a></p>
+      </article>
+      <article class="card" id="cactus_flora">
+        <div class="card-top"><span class="group">Deserts &amp; badlands</span><span class="tag">Prickly · resilient</span></div>
+        <h3>Cactus <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Prickly on the outside, sweet inside</p>
+        <p><b>Ecology &amp; behaviour</b>A tall green girl covered in spines, with a flower in her hair. She needs almost no water.</p>
+        <p><b>Signature: Thorns</b>Anything that hits her is hurt by her spines. She blooms when happy (a flower present).</p>
+        <p><b>Player interaction</b>A water bottle is a luxury to her.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Green with a pink flower</span><span class="swatch"><strong>Blue</strong> · Blue-green with a yellow flower</span><span class="swatch"><strong>Golden</strong> · Gold</span><span class="swatch"><strong>Purple</strong> · Purple-green</span><span class="swatch"><strong>Old lady</strong> · White fuzz</span><span class="swatch"><strong>Gunman</strong> · A straw sombrero, a big black mustache, a poncho and a bandolier</span><span class="swatch"><strong>Blossom</strong> · A straw sombrero, braids with red bows, a cow-print top and a blue poncho, a lasso</span><span class="swatch"><strong>Needle Runner</strong> · Bright green, dark eyes</span></div>
+        <p><b>Spawns in</b><code>desert, badlands</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Plantae: Cactaceae</p><p><b>Body</b>Flora form · <a href="flora_field_guide.html#cactus_flora">her card in that guide</a></p>
+      </article>
+      <article class="card" id="censhroom_centaur">
+        <div class="card-top"><span class="group">Mushroom fields</span><span class="tag">Calm · sturdy</span></div>
+        <h3>Censhroom <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Calm</p>
+        <p><b>Ecology &amp; behaviour</b>A pale taur whose back has grown a shelf of fungus, flat enough to ride on.</p>
+        <p><b>Signature: Fungal saddle</b>She needs no saddle, and no poison can touch her rider.</p>
+        <p><b>Player interaction</b>Mushrooms and wheat.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Brown</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Glow</strong> · Glow</span><span class="swatch"><strong>Dark</strong> · Dark</span><span class="swatch"><strong>Violet</strong> · Violet</span></div>
+        <p><b>Spawns in</b><code>mushroom_fields, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Fungi on an unspecified taur; the fungus is the only clear animal-or-not A judgement call: TAXONOMY_PLAN.md gives the reasons.</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#censhroom_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="dryad_flora">
+        <div class="card-top"><span class="group">Forests</span><span class="tag">Kind · rooted</span></div>
+        <h3>Dryad <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Kind, rooted</p>
+        <p><b>Ecology &amp; behaviour</b>The tree nymph of Greek myth, bound to her tree: a girl of smooth pale wood, with leafy branches for antlers.</p>
+        <p><b>Signature: Tree mother</b>Befriended, every half minute the saplings near her friend grow as if given bone meal.</p>
+        <p><b>Player interaction</b>Bone meal and apples.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Pale blue wood</span><span class="swatch"><strong>Oak</strong> · Oak</span><span class="swatch"><strong>Birch</strong> · Birch</span><span class="swatch"><strong>Cherry</strong> · Cherry</span><span class="swatch"><strong>Autumn</strong> · Autumn</span></div>
+        <p><b>Spawns in</b><code>forest, flower_forest, old_growth_birch_forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Plantae: tree (myth)</p><p><b>Body</b>Flora form · <a href="flora_field_guide.html#dryad_flora">her card in that guide</a></p>
+      </article>
+      <article class="card" id="ent_flora">
+        <div class="card-top"><span class="group">Old-growth forests</span><span class="tag">Huge · gentle</span></div>
+        <h3>Ent <span style="color:var(--muted);font-size:.9rem">(about 3.2 blocks)</span></h3>
+        <p><b>Temperament</b>Slow, gentle, ancient</p>
+        <p><b>Ecology &amp; behaviour</b>A living tree as tall as a house, with a kind face in the bark and a crown of leaves.</p>
+        <p><b>Signature: Planter</b>She plants saplings as she walks and hits extremely hard. Axes and fire anger her.</p>
+        <p><b>Player interaction</b>Plant saplings with her.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Oak (default)</strong> · Oak bark, green leaves</span><span class="swatch"><strong>Birch</strong> · White bark</span><span class="swatch"><strong>Spruce</strong> · Dark bark</span><span class="swatch"><strong>Cherry</strong> · Pink blossom</span><span class="swatch"><strong>Autumn</strong> · Orange leaves</span><span class="swatch"><strong>Tree Guard</strong> · Brown bark, a few leaves, amber eyes</span></div>
+        <p><b>Spawns in</b><code>old_growth_spruce_taiga, old_growth_pine_taiga, old_growth_birch_forest, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>High if provoked.</p>
+              <p class="place"><b>True position</b>Plantae: tree (myth)</p><p><b>Body</b>Flora form · <a href="flora_field_guide.html#ent_flora">her card in that guide</a></p>
+      </article>
+      <article class="card" id="kesaran_pasaran_flora">
+        <div class="card-top"><span class="group">Meadows</span><span class="tag">Fluffy · drifting</span></div>
+        <h3>Kesaran Pasaran <span style="color:var(--muted);font-size:.9rem">(about 0.7 blocks)</span></h3>
+        <p><b>Temperament</b>Gentle, carefree</p>
+        <p><b>Ecology &amp; behaviour</b>The lucky puff of Japanese folklore, here a little dandelion seed of a girl hanging under her fluffy puff.</p>
+        <p><b>Signature: On the wind</b>She never touches the ground: the wind carries her along, all of them drifting the same way; befriended, she drifts after her friend and brings them Luck. Fed sugar, she splits in two (up to three of her).</p>
+        <p><b>Player interaction</b>Sugar.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>White (default)</strong> · A white puff</span><span class="swatch"><strong>Yellow</strong> · A dandelion-yellow puff</span><span class="swatch"><strong>Blue</strong> · A blue puff</span><span class="swatch"><strong>Pink</strong> · A pink puff</span><span class="swatch"><strong>Black</strong> · A black puff</span></div>
+        <p><b>Spawns in</b><code>meadow, plains, sunflower_plains, flower_forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Plantae: Asteraceae (dandelion seed per this design)</p><p><b>Body</b>Flora form · <a href="flora_field_guide.html#kesaran_pasaran_flora">her card in that guide</a></p>
+      </article>
+      <article class="card" id="lotus_flora">
+        <div class="card-top"><span class="group">Still water</span><span class="tag">Calm · renewed</span></div>
+        <h3>Lotus <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Calm</p>
+        <p><b>Ecology &amp; behaviour</b>She closes at night and opens at dawn, and is always a little surprised to be back.</p>
+        <p><b>Signature: Dawn Bloom</b>Befriended, at sunrise her friend near her loses every ill effect and is fed.</p>
+        <p><b>Player interaction</b>Bone meal and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Pink (default)</strong> · Pink</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Violet</strong> · Violet</span></div>
+        <p><b>Spawns in</b><code>swamp, river, cherry_grove</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Plantae: Nelumbonaceae, Nelumbo</p><p><b>Body</b>Flora form · <a href="flora_field_guide.html#lotus_flora">her card in that guide</a></p>
+      </article>
+      <article class="card" id="mandragora_flora">
+        <div class="card-top"><span class="group">Swamps, dark forests &amp; plains</span><span class="tag">Tiny · loud</span></div>
+        <h3>Mandragora <span style="color:var(--muted);font-size:.9rem">(about 1.0 blocks)</span></h3>
+        <p><b>Temperament</b>Shy, sulky, very loud</p>
+        <p><b>Ecology &amp; behaviour</b>A little root girl who spends most of her life buried, with only her leaves showing.</p>
+        <p><b>Signature: Scream</b>She hides in the ground with only her leaves showing. Pulled out, she screams: mobs nearby (not you) are stunned (Slowness IV, Nausea).</p>
+        <p><b>Player interaction</b>Pull her out (and cover your ears), then give her bone meal.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Root (default)</strong> · Pale root, green leaves</span><span class="swatch"><strong>Red</strong> · Red root</span><span class="swatch"><strong>Purple</strong> · Purple root</span><span class="swatch"><strong>Golden</strong> · Golden root</span><span class="swatch"><strong>Dark</strong> · Dark root</span><span class="swatch"><strong>Leaf Sprout</strong> · Blue skin, a leaf on a stalk</span></div>
+        <p><b>Spawns in</b><code>swamp, dark_forest, plains</code></p>
+        <p class="risk"><b>Danger</b>Low (the scream).</p>
+              <p class="place"><b>True position</b>Plantae: Solanaceae, Mandragora</p><p><b>Body</b>Flora form · <a href="flora_field_guide.html#mandragora_flora">her card in that guide</a></p>
+      </article>
+      <article class="card" id="matango_flora">
+        <div class="card-top"><span class="group">Mushroom fields &amp; dark forests</span><span class="tag">Drowsy · odd</span></div>
+        <h3>Matango <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Drowsy, odd, gentle</p>
+        <p><b>Ecology &amp; behaviour</b>Covered in mushrooms, with a cap for a hat. Below the waist she fades into a carpet of mycelium.</p>
+        <p><b>Signature: Mycelium travel</b>She sinks into mycelium or podzol and rises again nearby. Her spores make attackers sick (Nausea, Poison).</p>
+        <p><b>Player interaction</b>Bone meal; let her drift.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red cap with white spots</span><span class="swatch"><strong>Brown</strong> · Brown cap</span><span class="swatch"><strong>Glowing</strong> · Blue glowing cap</span><span class="swatch"><strong>Purple</strong> · Purple cap</span><span class="swatch"><strong>White</strong> · White cap</span><span class="swatch"><strong>Spore Retainer</strong> · A white cap with red spots, a blue vest</span></div>
+        <p><b>Spawns in</b><code>mushroom_fields, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Fungi: Agaricales (fungi are closer to animals than to plants)</p><p><b>Body</b>Flora form · <a href="flora_field_guide.html#matango_flora">her card in that guide</a></p>
+      </article>
+      <article class="card" id="rafflesia_flora">
+        <div class="card-top"><span class="group">Jungles</span><span class="tag">Proud · pungent</span></div>
+        <h3>Rafflesia <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Proud</p>
+        <p><b>Ecology &amp; behaviour</b>One vast red bloom spotted white. Beautiful from a distance, which is where everyone stays.</p>
+        <p><b>Signature: Stench</b>Befriended, monsters that come close to her reel back, weakened.</p>
+        <p><b>Player interaction</b>Rotten flesh and bone meal.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red</span><span class="swatch"><strong>Dark</strong> · Dark</span><span class="swatch"><strong>Orange</strong> · Orange</span><span class="swatch"><strong>Pink</strong> · Pink</span><span class="swatch"><strong>Brown</strong> · Brown</span></div>
+        <p><b>Spawns in</b><code>jungle, sparse_jungle</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Plantae: Rafflesiaceae</p><p><b>Body</b>Flora form · <a href="flora_field_guide.html#rafflesia_flora">her card in that guide</a></p>
+      </article>
+      <article class="card" id="rose_flora">
+        <div class="card-top"><span class="group">Flower meadows</span><span class="tag">Thorny · elegant</span></div>
+        <h3>Rose <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Elegant</p>
+        <p><b>Ecology &amp; behaviour</b>A rose from the hips up, thorns included. She is well aware of how she looks.</p>
+        <p><b>Signature: Thorns</b>Befriended, whatever hurts her friend near her is pricked and slowed.</p>
+        <p><b>Player interaction</b>Bone meal and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Yellow</strong> · Yellow</span><span class="swatch"><strong>Pink</strong> · Pink</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>flower_forest, sunflower_plains</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Plantae: Rosaceae, Rosa</p><p><b>Body</b>Flora form · <a href="flora_field_guide.html#rose_flora">her card in that guide</a></p>
+      </article>
+      <article class="card" id="shiitake_flora">
+        <div class="card-top"><span class="group">Mushroom fields</span><span class="tag">Plural · patient</span></div>
+        <h3>Shiitake <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Patient, talkative</p>
+        <p><b>Ecology &amp; behaviour</b>A brown-capped mushroom woman with two small offshoots of herself growing from her, all three of one mind.</p>
+        <p><b>Signature: Offshoots</b>Her offshoots throw themselves in front of a blow meant for her friend, then regrow over a day.</p>
+        <p><b>Player interaction</b>Brown mushrooms and bone meal.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Brown</span><span class="swatch"><strong>Chestnut</strong> · Chestnut</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Ink</strong> · Ink</span><span class="swatch"><strong>Violet</strong> · Violet</span></div>
+        <p><b>Spawns in</b><code>mushroom_fields</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Fungi: Lentinula edodes</p><p><b>Body</b>Flora form · <a href="flora_field_guide.html#shiitake_flora">her card in that guide</a></p>
+      </article>
+      <article class="card" id="sunflower_flora">
+        <div class="card-top"><span class="group">Fields</span><span class="tag">Bright · loyal</span></div>
+        <h3>Sunflower <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Bright</p>
+        <p><b>Ecology &amp; behaviour</b>She faces the sun all day, and at night she faces you.</p>
+        <p><b>Signature: Solar</b>Befriended, by day her friend near her is kept fed.</p>
+        <p><b>Player interaction</b>Bone meal and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Gold (default)</strong> · Gold</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Dwarf</strong> · Dwarf</span><span class="swatch"><strong>Night</strong> · Night</span></div>
+        <p><b>Spawns in</b><code>sunflower_plains, plains</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Plantae: Asteraceae, Helianthus</p><p><b>Body</b>Flora form · <a href="flora_field_guide.html#sunflower_flora">her card in that guide</a></p>
+      </article>
+      <article class="card" id="venus_flytrap_flora">
+        <div class="card-top"><span class="group">Swamps</span><span class="tag">Hungry · snappy</span></div>
+        <h3>Venus Flytrap <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Hungry, quick</p>
+        <p><b>Ecology &amp; behaviour</b>Dionaea muscipula, the carnivorous plant of the Carolina bogs, whose leaves snap shut when touched twice.</p>
+        <p><b>Signature: Snap trap</b>Rooted like the alraune. Her trap snaps shut on any mob or stranger that steps into reach, holding and biting. Befriended, she only snaps at monsters: a garden guard.</p>
+        <p><b>Player interaction</b>Meat. Keep a step back.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Green, red trap</span><span class="swatch"><strong>Red</strong> · All red</span><span class="swatch"><strong>Purple</strong> · Purple</span><span class="swatch"><strong>Yellow</strong> · Yellow-green</span><span class="swatch"><strong>Dark</strong> · Dark green</span></div>
+        <p><b>Spawns in</b><code>swamp, mangrove_swamp</code></p>
+        <p class="risk"><b>Danger</b>Medium (in reach).</p>
+              <p class="place"><b>True position</b>Plantae: Droseraceae, Dionaea muscipula</p><p><b>Body</b>Flora form · <a href="flora_field_guide.html#venus_flytrap_flora">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

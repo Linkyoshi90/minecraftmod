@@ -114,7 +114,7 @@ public class HarmontideLifeTests {
         check(Journal.record(p, girl, false) && !Journal.record(p, girl, false), "met once is news, twice is not");
         check(Journal.met(p).contains("yurei_undead") && Journal.friends(p).isEmpty(), "met, not yet befriended");
         check(Journal.record(p, girl, true) && Journal.friends(p).contains("yurei_undead"), "befriended");
-        check(Journal.book(p).pages().size() == 2 + Journal.GUIDE.size(), "and she has her page");
+        check(Journal.book(p).pages().size() == 3 + Journal.GUIDE.size(), "and she has her page (and the tree of life its first branch)");
         HarpyTestUtil.remove(p);
         helper.succeed();
     }

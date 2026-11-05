@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arctoids (bears, weasels, raccoons &amp; seals) — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · Mammalia &gt; Carnivora &gt; Caniformia &gt; Arctoidea</div>
+  <h1>Arctoids (bears, weasels, raccoons &amp; seals)</h1>
+  <p class="lede">The other half of the dog-like carnivores: bears, weasels and badgers, raccoons and red pandas, and the seals and walruses that took to the sea. Most arrived scattered across other families; they meet here.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Resistance + Water Breathing</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Rodent form · 8</b><a href="rodent_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="rodent_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Merfolk form · 6</b><a href="merfolk_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="merfolk_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Canid form · 6</b><a href="canid_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="canid_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (20)</h2>
+    <div class="grid">
+      <article class="card" id="ahuizotl_mermaid">
+        <div class="card-top"><span class="group">Rivers</span><span class="tag">Thieving · playful</span></div>
+        <h3>Ahuizotl <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>A playful thief</p>
+        <p><b>Ecology &amp; behaviour</b>The Aztec water creature with a hand at the end of her tail, perhaps inspired by the neotropical otter.</p>
+        <p><b>Signature: Fish thief</b>A wild ahuizotl steals fish off your fishing line with the hand on her tail. A lantern in your hand keeps her away. Befriended, she fishes for you instead.</p>
+        <p><b>Player interaction</b>Fish. Keep a lantern in your hand.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Otter (default)</strong> · Brown</span><span class="swatch"><strong>Dark</strong> · Near black</span><span class="swatch"><strong>Golden</strong> · Golden brown</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Jade</strong> · Green-tinged</span></div>
+        <p><b>Spawns in</b><code>river, jungle, mangrove_swamp</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Mustelidae: Lontra longicaudis (myth)</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#ahuizotl_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="bambadger_rodent">
+        <div class="card-top"><span class="group">Bamboo jungles</span><span class="tag">Cheerful · musical</span></div>
+        <h3>Bambadger <span style="color:var(--muted);font-size:.9rem">(about 1.2 blocks)</span></h3>
+        <p><b>Temperament</b>Cheerful</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide badger striped like green bamboo, who plays a bamboo flute on a cord round her neck.</p>
+        <p><b>Signature: Flute</b>Befriended, every half minute she plays her flute, and the bamboo and sugar cane around her grow.</p>
+        <p><b>Player interaction</b>Bamboo and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Bamboo green</span><span class="swatch"><strong>Golden</strong> · Golden bamboo</span><span class="swatch"><strong>Black</strong> · Black bamboo</span><span class="swatch"><strong>Red</strong> · Red bamboo</span><span class="swatch"><strong>Pale</strong> · Pale</span></div>
+        <p><b>Spawns in</b><code>bamboo_jungle, jungle</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Mustelidae: badger (Harmontide)</p><p><b>Body</b>Rodent form · <a href="rodent_field_guide.html#bambadger_rodent">her card in that guide</a></p>
+      </article>
+      <article class="card" id="black_bear_canid">
+        <div class="card-top"><span class="group">Forests</span><span class="tag">Timid · greedy for berries</span></div>
+        <h3>Black Bear <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Timid, hungry</p>
+        <p><b>Ecology &amp; behaviour</b>Ursus americanus (Carnivora: Ursidae), the forest bear who climbs trees and raids berry patches.</p>
+        <p><b>Signature: Scares easily</b>She climbs trees and eats berry bushes bare. A sprinting stranger, an explosion, a bell or a goat horn sends her running, dropping what she holds; befriended, only explosions still do.</p>
+        <p><b>Player interaction</b>Sweet berries and honey. Move slowly.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black</span><span class="swatch"><strong>Cinnamon</strong> · Red-brown</span><span class="swatch"><strong>Glacier</strong> · Blue-grey</span><span class="swatch"><strong>Kermode</strong> · White, the spirit bear</span><span class="swatch"><strong>Brown</strong> · Brown</span></div>
+        <p><b>Spawns in</b><code>forest, birch_forest, taiga, old_growth_birch_forest</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Ursidae: Ursus americanus</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#black_bear_canid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="coatimano_rodent">
+        <div class="card-top"><span class="group">Deserts &amp; jungles</span><span class="tag">Nosy · busy</span></div>
+        <h3>Coatimano <span style="color:var(--muted);font-size:.9rem">(about 1.35 blocks)</span></h3>
+        <p><b>Temperament</b>Nosy, busy</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide coati, ring-tailed and long-nosed, who digs in everything.</p>
+        <p><b>Signature: Digger</b>She sniffs out suspicious sand and gravel within 12 blocks and brushes it out; befriended, she brings you what she finds.</p>
+        <p><b>Player interaction</b>Fruit and eggs.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, ringed tail</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Ringed</strong> · Grey, bold rings</span><span class="swatch"><strong>Red</strong> · Rust red</span><span class="swatch"><strong>White</strong> · Pale</span></div>
+        <p><b>Spawns in</b><code>desert, jungle, badlands, savanna</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Procyonidae: Nasua (Harmontide)</p><p><b>Body</b>Rodent form · <a href="rodent_field_guide.html#coatimano_rodent">her card in that guide</a></p>
+      </article>
+      <article class="card" id="grizzly_canid">
+        <div class="card-top"><span class="group">Taiga</span><span class="tag">Hearty · hungry</span></div>
+        <h3>Grizzly <span style="color:var(--muted);font-size:.9rem">(about 2.25 blocks)</span></h3>
+        <p><b>Temperament</b>Hearty, hungry, sleepy in winter</p>
+        <p><b>Ecology &amp; behaviour</b>Ursus arctos horribilis (Carnivora: Ursidae), the brown bear of the northern forests.</p>
+        <p><b>Signature: Forager</b>She fishes salmon from rivers, raids full beehives for honey (the bees sting her for it) and hibernates while it snows.</p>
+        <p><b>Player interaction</b>Salmon and honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Brown</span><span class="swatch"><strong>Cinnamon</strong> · Red-brown</span><span class="swatch"><strong>Silvertip</strong> · Grizzled</span><span class="swatch"><strong>Dark</strong> · Near black</span><span class="swatch"><strong>Blond</strong> · Pale gold</span><span class="swatch"><strong>Backpack Bear</strong> · Warm brown, yellow shorts, a blue pack</span><span class="swatch"><strong>Sleepy Giant</strong> · Blue-green fur, a cream belly</span></div>
+        <p><b>Spawns in</b><code>taiga, old_growth_pine_taiga, old_growth_spruce_taiga, windswept_forest</code></p>
+        <p class="risk"><b>Danger</b>High if provoked.</p>
+              <p class="place"><b>True position</b>Ursidae: Ursus arctos horribilis</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#grizzly_canid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="kamaitachi_rodent">
+        <div class="card-top"><span class="group">Mountains</span><span class="tag">Swift · sharp</span></div>
+        <h3>Kamaitachi <span style="color:var(--muted);font-size:.9rem">(about 1.35 blocks)</span></h3>
+        <p><b>Temperament</b>Swift, mischievous</p>
+        <p><b>Ecology &amp; behaviour</b>The sickle weasel of Japanese folklore, who rides the whirlwind with a blade on each forearm.</p>
+        <p><b>Signature: Whirlwind</b>She is fast. Befriended, her gusts cut the tall grass, leaves and cobwebs around her friend. Her slashes knock back.</p>
+        <p><b>Player interaction</b>Chicken and eggs.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Fawn (default)</strong> · Fawn</span><span class="swatch"><strong>White</strong> · An ermine</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, windswept_forest, meadow, cherry_grove</code></p>
+        <p class="risk"><b>Danger</b>Low (her slashes).</p>
+              <p class="place"><b>True position</b>Mustelidae: Mustela (folklore weasel)</p><p><b>Body</b>Rodent form · <a href="rodent_field_guide.html#kamaitachi_rodent">her card in that guide</a></p>
+      </article>
+      <article class="card" id="moonseal_mermaid">
+        <div class="card-top"><span class="group">Frozen seas</span><span class="tag">Dreamy · moonlit</span></div>
+        <h3>Moonseal <span style="color:var(--muted);font-size:.9rem">(about 1.55 blocks)</span></h3>
+        <p><b>Temperament</b>Calm, dreamy</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide seal of the frozen seas, blue as the night, with crescent moons on her fur and little antlers.</p>
+        <p><b>Signature: Moon song</b>Her crescents glow at night; on a full moon she sings, and her friend near her regenerates. Befriended, she gives Dolphin&#x27;s Grace to her friend swimming beside her.</p>
+        <p><b>Player interaction</b>Fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Night blue, white crescents</span><span class="swatch"><strong>Purple</strong> · Purple</span><span class="swatch"><strong>Green</strong> · Sea green</span><span class="swatch"><strong>Silver</strong> · Silver</span><span class="swatch"><strong>Night</strong> · Black, gold crescents</span></div>
+        <p><b>Spawns in</b><code>frozen_ocean, cold_ocean, snowy_beach, frozen_river</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Pinnipedia (Harmontide)</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#moonseal_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="panda_canid">
+        <div class="card-top"><span class="group">Bamboo jungles</span><span class="tag">Lazy · lovable</span></div>
+        <h3>Panda <span style="color:var(--muted);font-size:.9rem">(about 1.75 blocks)</span></h3>
+        <p><b>Temperament</b>Born with a personality</p>
+        <p><b>Ecology &amp; behaviour</b>Ailuropoda melanoleuca (Carnivora: Ursidae). A bear who eats almost nothing but bamboo, and sleeps a lot.</p>
+        <p><b>Signature: Personality</b>Lazy (lies about), worried (fears strangers and storms), playful (rolls), aggressive (hits back hard, guards her friends), weak (sneezes often) or normal. She sneezes up slimeballs now and then.</p>
+        <p><b>Player interaction</b>Bamboo, and cake.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black and white</span><span class="swatch"><strong>Brown</strong> · Brown and white</span><span class="swatch"><strong>Cream</strong> · Cream and white</span><span class="swatch"><strong>Grey</strong> · Grey and white</span><span class="swatch"><strong>Red</strong> · Rusty red and white</span><span class="swatch"><strong>Forest Keeper</strong> · Soft grey, a cream belly</span><span class="swatch"><strong>Fight Panda</strong> · An orange and gold top</span></div>
+        <p><b>Spawns in</b><code>bamboo_jungle</code></p>
+        <p class="risk"><b>Danger</b>Low (aggressive ones: moderate).</p>
+              <p class="place"><b>True position</b>Ursidae: Ailuropoda melanoleuca</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#panda_canid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="polar_bear_canid">
+        <div class="card-top"><span class="group">Snow &amp; ice</span><span class="tag">Mighty · protective</span></div>
+        <h3>Polar Bear <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Calm, mighty, fiercely protective</p>
+        <p><b>Ecology &amp; behaviour</b>Ursus maritimus (Carnivora: Ursidae). The great white bear of the sea ice, who hunts seals.</p>
+        <p><b>Signature: Ice hunter</b>Wild, she hunts seal mermaids and penguin harpies. She fishes at open water, and attacks anyone near her cubs.</p>
+        <p><b>Player interaction</b>Fish. Keep clear of her cubs.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>White (default)</strong> · White</span><span class="swatch"><strong>Cream</strong> · Cream</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Pizzly</strong> · Brown and white</span><span class="swatch"><strong>Ice</strong> · Pale blue</span></div>
+        <p><b>Spawns in</b><code>snowy_plains, ice_spikes, snowy_beach, frozen_ocean</code></p>
+        <p class="risk"><b>Danger</b>High near her cubs.</p>
+              <p class="place"><b>True position</b>Ursidae: Ursus maritimus</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#polar_bear_canid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="raccoon_rodent">
+        <div class="card-top"><span class="group">Woods and towns</span><span class="tag">Clever · light-fingered</span></div>
+        <h3>Raccoon <span style="color:var(--muted);font-size:.9rem">(about 1.55 blocks)</span></h3>
+        <p><b>Temperament</b>Clever</p>
+        <p><b>Ecology &amp; behaviour</b>A masked bandit with clever hands, up all night going through everything.</p>
+        <p><b>Signature: Rummage</b>Befriended, now and then she comes up with something useful from who knows where.</p>
+        <p><b>Player interaction</b>Sweet berries and bread.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Grey (default)</strong> · Grey</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Dark</strong> · Dark</span></div>
+        <p><b>Spawns in</b><code>forest, swamp, river</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Procyonidae: Procyon lotor</p><p><b>Body</b>Rodent form · <a href="rodent_field_guide.html#raccoon_rodent">her card in that guide</a></p>
+      </article>
+      <article class="card" id="red_panda_rodent">
+        <div class="card-top"><span class="group">Bamboo and cherry groves</span><span class="tag">Sleepy · cosy</span></div>
+        <h3>Red Panda <span style="color:var(--muted);font-size:.9rem">(about 1.45 blocks)</span></h3>
+        <p><b>Temperament</b>Cosy</p>
+        <p><b>Ecology &amp; behaviour</b>Russet and ringed-tailed, and she sleeps curled up wherever is warmest, usually on you.</p>
+        <p><b>Signature: Snug</b>Befriended, her friend near her never freezes.</p>
+        <p><b>Player interaction</b>Bamboo and apples.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Russet (default)</strong> · Russet</span><span class="swatch"><strong>Dark</strong> · Dark</span><span class="swatch"><strong>Golden</strong> · Golden</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Styan</strong> · Styan</span></div>
+        <p><b>Spawns in</b><code>bamboo_jungle, cherry_grove</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Ailuridae: Ailurus fulgens</p><p><b>Body</b>Rodent form · <a href="rodent_field_guide.html#red_panda_rodent">her card in that guide</a></p>
+      </article>
+      <article class="card" id="rheintalensis_canid">
+        <div class="card-top"><span class="group">Caves and old forests</span><span class="tag">Loud · fearless</span></div>
+        <h3>Rheintalensis <span style="color:var(--muted);font-size:.9rem">(about 2.1 blocks)</span></h3>
+        <p><b>Temperament</b>Loud, fearless</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide cave bear girl, broad and shaggy, wild blue hair, pelts and a necklace of teeth. She carries a club as long as her arm and laughs as she swings it.</p>
+        <p><b>Signature: Brute swing</b>Befriended, she clubs a monster that comes close to her friend and knocks it away.</p>
+        <p><b>Player interaction</b>Salmon, honey and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue fur, a stone-grey club</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Red</strong> · Red-brown</span></div>
+        <p><b>Spawns in</b><code>old_growth_spruce_taiga, taiga, windswept_forest, dripstone_caves</code></p>
+        <p class="risk"><b>Danger</b>High (her club).</p>
+              <p class="place"><b>True position</b>Ursidae: Ursus spelaeus (extinct cave bear, Harmontide)</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#rheintalensis_canid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="rust_otter_mermaid">
+        <div class="card-top"><span class="group">Rivers</span><span class="tag">Handy · tinkering</span></div>
+        <h3>Rust Otter <span style="color:var(--muted);font-size:.9rem">(about 1.4 blocks)</span></h3>
+        <p><b>Temperament</b>Busy, practical</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide river otter, dark and sleek, hung with copper charms she polishes endlessly.</p>
+        <p><b>Signature: Copper</b>Befriended, she scrapes the green off weathered copper blocks near her friend, one stage at a time. She dives up raw copper and nuggets as presents.</p>
+        <p><b>Player interaction</b>Fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black, copper charms</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Grey</strong> · Grey, verdigris charms</span><span class="swatch"><strong>Copper</strong> · Rust red</span><span class="swatch"><strong>Pale</strong> · Pale</span></div>
+        <p><b>Spawns in</b><code>river, swamp</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Mustelidae: Lutrinae (Harmontide)</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#rust_otter_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="seal_mermaid">
+        <div class="card-top"><span class="group">Cold ocean, beaches &amp; ice</span><span class="tag">Playful · lazy</span></div>
+        <h3>Seal <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Playful, lazy, endlessly curious</p>
+        <p><b>Ecology &amp; behaviour</b>The selkie of the family: as happy on a beach as in the water. Lounges on sand and ice in groups, barks, follows boats and catches fish for fun.</p>
+        <p><b>Signature: Beach lounger &amp; fisher</b>She moves on land at half speed (the best of the family) and never dries out on a beach. A bonded seal catches fish and brings them to you.</p>
+        <p><b>Player interaction</b>Throw her a fish (or a snowball: she balances it on her nose).</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Harbour (default)</strong> · Grey with dark speckles</span><span class="swatch"><strong>Grey seal</strong> · Dark grey blotches on silver</span><span class="swatch"><strong>Harp</strong> · Silver-white with a dark harp mark</span><span class="swatch"><strong>Leopard</strong> · Grey with leopard spots</span><span class="swatch"><strong>Ringed</strong> · Dark with pale rings</span></div>
+        <p><b>Spawns in</b><code>cold_ocean, frozen_ocean, snowy_beach, beach, stony_shore</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Pinnipedia: Phocidae</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#seal_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="selkie_mermaid">
+        <div class="card-top"><span class="group">Cold shores</span><span class="tag">Quiet · homesick</span></div>
+        <h3>Selkie <span style="color:var(--muted);font-size:.9rem">(about 1.75 blocks)</span></h3>
+        <p><b>Temperament</b>Quiet</p>
+        <p><b>Ecology &amp; behaviour</b>A seal who keeps her skin round her shoulders, in case. The stories about hiding it never end well for anyone.</p>
+        <p><b>Signature: Seal Song</b>Befriended, by the water near her friend she sings fish up out of the sea.</p>
+        <p><b>Player interaction</b>Cod and salmon.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Grey (default)</strong> · Grey</span><span class="swatch"><strong>Silver</strong> · Silver</span><span class="swatch"><strong>Dark</strong> · Dark</span><span class="swatch"><strong>Russet</strong> · Russet</span><span class="swatch"><strong>White</strong> · White</span></div>
+        <p><b>Spawns in</b><code>stony_shore, cold_ocean, snowy_beach</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Pinnipedia: Phocidae (folklore)</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#selkie_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="silkcoon_rodent">
+        <div class="card-top"><span class="group">Rivers</span><span class="tag">Fussy · clean</span></div>
+        <h3>Silkcoon <span style="color:var(--muted);font-size:.9rem">(about 1.3 blocks)</span></h3>
+        <p><b>Temperament</b>Fussy, curious</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide raccoon of silky fur swirled in blue, who washes everything she touches.</p>
+        <p><b>Signature: Washer</b>By water, hand her dyed wool, carpet, a bed, terracotta, glass or leather armour and she washes the dye out.</p>
+        <p><b>Player interaction</b>Fish, eggs and berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · White, blue swirls</span><span class="swatch"><strong>Grey</strong> · A classic raccoon</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Shopkeeper</strong> · Brown and tan, a green apron</span></div>
+        <p><b>Spawns in</b><code>forest, swamp, river</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Procyonidae: Procyon (Harmontide)</p><p><b>Body</b>Rodent form · <a href="rodent_field_guide.html#silkcoon_rodent">her card in that guide</a></p>
+      </article>
+      <article class="card" id="skunk_rodent">
+        <div class="card-top"><span class="group">Forest edges</span><span class="tag">Polite · final</span></div>
+        <h3>Skunk <span style="color:var(--muted);font-size:.9rem">(about 1.55 blocks)</span></h3>
+        <p><b>Temperament</b>Polite</p>
+        <p><b>Ecology &amp; behaviour</b>She will warn you. She has an enormous tail and she will warn you.</p>
+        <p><b>Signature: Spray</b>Hit her, or her friend near her, and everything round her is blinded and sick.</p>
+        <p><b>Player interaction</b>Sweet berries and spider eyes.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Spotted</strong> · Spotted</span><span class="swatch"><strong>Cream</strong> · Cream</span></div>
+        <p><b>Spawns in</b><code>forest, plains, taiga</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>Mephitidae</p><p><b>Body</b>Rodent form · <a href="rodent_field_guide.html#skunk_rodent">her card in that guide</a></p>
+      </article>
+      <article class="card" id="sobolnik_rodent">
+        <div class="card-top"><span class="group">Cold forests</span><span class="tag">Curious · secretive</span></div>
+        <h3>Sobolnik <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Curious, secretive</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide sable in blue, big dark eyes in a white face, frosty swirls in her fur, a bushy tail and a little blue gem at her throat. She knows every burrow and tunnel under the snow.</p>
+        <p><b>Signature: Burrow eyes</b>Befriended, her friend near her sees in the dark when out of the sky&#x27;s sight (Night Vision).</p>
+        <p><b>Player interaction</b>Sweet berries, eggs and fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, a white face</span><span class="swatch"><strong>Sable</strong> · Dark brown, an amber gem</span><span class="swatch"><strong>Silver</strong> · Silver</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Red</strong> · Red</span></div>
+        <p><b>Spawns in</b><code>taiga, snowy_taiga, old_growth_pine_taiga</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Mustelidae: Martes zibellina (Harmontide sable)</p><p><b>Body</b>Rodent form · <a href="rodent_field_guide.html#sobolnik_rodent">her card in that guide</a></p>
+      </article>
+      <article class="card" id="walrus_mermaid">
+        <div class="card-top"><span class="group">Frozen oceans and shores</span><span class="tag">Lazy · warm</span></div>
+        <h3>Walrus <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Lazy, warm</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide walrus girl, round and blue, long pale hair, two white tusks and a broad flipper tail. Her blubber keeps anyone who cuddles up to her warm.</p>
+        <p><b>Signature: Blubber</b>Befriended, her friend near her never freezes.</p>
+        <p><b>Player interaction</b>Fish and kelp.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, white tusks</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Pink</strong> · Sun-pink</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>White</strong> · White</span></div>
+        <p><b>Spawns in</b><code>frozen_ocean, cold_ocean, snowy_beach</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Pinnipedia: Odobenus rosmarus</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#walrus_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="wolverine_canid">
+        <div class="card-top"><span class="group">Snowy taiga</span><span class="tag">Fierce · stubborn</span></div>
+        <h3>Wolverine <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Fierce</p>
+        <p><b>Ecology &amp; behaviour</b>Low and broad with a pale band down her side, and nothing in the north makes her back down.</p>
+        <p><b>Signature: Berserk</b>Badly hurt, she fights harder and shrugs off blows.</p>
+        <p><b>Player interaction</b>Mutton and rabbit.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Brown</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Snow</strong> · Snow</span></div>
+        <p><b>Spawns in</b><code>snowy_taiga, grove, taiga</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>Mustelidae: Gulo gulo</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#wolverine_canid">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

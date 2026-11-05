@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fae &amp; folk (elves, fairies, spirits) — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · outside the tree</div>
+  <h1>Fae &amp; folk (elves, fairies, spirits)</h1>
+  <p class="lede">Elves, fairies, gnomes and spirits: people of legend with no one animal behind them. The fairies were bugs in the old sorting, the leshy a plant.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Hero of the Village · <b style="display:inline;color:var(--accent)">Was:</b> Elf</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Elf form · 21</b><a href="elf_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="elf_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Bug form · 4</b><a href="bug_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="bug_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Flora form · 1</b><a href="flora_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="flora_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (26)</h2>
+    <div class="grid">
+      <article class="card" id="angel_elf">
+        <div class="card-top"><span class="group">Mountain meadows</span><span class="tag">Kind · shining</span></div>
+        <h3>Angel <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Kind, shining</p>
+        <p><b>Ecology &amp; behaviour</b>A small winged girl with a glowing halo and a plain dress. She flies, and stays close to anyone who is hurt.</p>
+        <p><b>Signature: Mercy</b>Befriended, she heals her friend when their health runs low.</p>
+        <p><b>Player interaction</b>Golden apples and honey bottles.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Pale blue</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Rose</strong> · Rose</span><span class="swatch"><strong>Grey</strong> · Grey</span></div>
+        <p><b>Spawns in</b><code>meadow, cherry_grove, snowy_slopes</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#angel_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="apsara_elf">
+        <div class="card-top"><span class="group">Rivers by the blossom</span><span class="tag">Graceful · playful</span></div>
+        <h3>Apsara <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Graceful, playful</p>
+        <p><b>Ecology &amp; behaviour</b>The celestial dancer and water nymph of Hindu and Buddhist lore, water-blue, in a dancer&#x27;s full costume.</p>
+        <p><b>Signature: Dance</b>To any music she dances, and her friend moves quicker. With a Gandharva playing, her friend heals as well.</p>
+        <p><b>Player interaction</b>Cod, salmon and honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue</span><span class="swatch"><strong>Lotus</strong> · Lotus</span><span class="swatch"><strong>Jade</strong> · Jade</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Night</strong> · Night</span></div>
+        <p><b>Spawns in</b><code>river, cherry_grove</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#apsara_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="blood_elf">
+        <div class="card-top"><span class="group">Nether forests &amp; fortresses</span><span class="tag">Fierce · fireproof</span></div>
+        <h3>Blood Elf <span style="color:var(--muted);font-size:.9rem">(about 1.85 blocks)</span></h3>
+        <p><b>Temperament</b>Fierce, ambitious, loyal to her word</p>
+        <p><b>Ecology &amp; behaviour</b>Elves who made the Nether their home. Fire cannot hurt them, and they barter like piglins (for gold).</p>
+        <p><b>Signature: Fireproof trader</b>Immune to fire and lava. She trades Nether goods for gold, and her blade sets enemies alight.</p>
+        <p><b>Player interaction</b>Gold. Then golden apples.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Crimson (default)</strong> · Red and gold</span><span class="swatch"><strong>Warped</strong> · Teal and black</span><span class="swatch"><strong>Ember</strong> · Orange and black</span><span class="swatch"><strong>Ash</strong> · Grey and red</span><span class="swatch"><strong>Gilded</strong> · Gold and white</span></div>
+        <p><b>Spawns in</b><code>crimson_forest, warped_forest, nether_wastes</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#blood_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="brownie_elf">
+        <div class="card-top"><span class="group">Villages</span><span class="tag">Tiny · tidy</span></div>
+        <h3>Brownie <span style="color:var(--muted);font-size:.9rem">(about 0.9 blocks)</span></h3>
+        <p><b>Temperament</b>Shy, house-proud</p>
+        <p><b>Ecology &amp; behaviour</b>The small house spirit of Scottish folklore who does the chores at night, for a bowl of milk or bread.</p>
+        <p><b>Signature: Chores</b>At night she tidies the chests near her friend&#x27;s bed (merging stacks) and gathers loose items lying nearby into a chest.</p>
+        <p><b>Player interaction</b>Leave her milk or bread. Never thank her too much.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Brown rags</span><span class="swatch"><strong>Green</strong> · Green rags</span><span class="swatch"><strong>Grey</strong> · Grey rags</span><span class="swatch"><strong>Red</strong> · A red cap</span><span class="swatch"><strong>Patched</strong> · Patchwork</span></div>
+        <p><b>Spawns in</b><code>plains, meadow, forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#brownie_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="dark_elf">
+        <div class="card-top"><span class="group">The deep dark</span><span class="tag">Silent · watchful</span></div>
+        <h3>Dark Elf <span style="color:var(--muted);font-size:.9rem">(about 1.75 blocks)</span></h3>
+        <p><b>Temperament</b>Silent, watchful</p>
+        <p><b>Ecology &amp; behaviour</b>Elves who went down into the deep dark and learned to live beside the Warden.</p>
+        <p><b>Signature: Warden&#x27;s kin</b>She walks silently and never sets off sculk sensors or shriekers. While she likes you, a Warden near her lets you be. Her gifts are echo shards and sculk.</p>
+        <p><b>Player interaction</b>Echo shards and sculk. Move quietly.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Sculk (default)</strong> · Grey-blue skin, teal glow</span><span class="swatch"><strong>Ash</strong> · Ash grey</span><span class="swatch"><strong>Abyss</strong> · Near black</span><span class="swatch"><strong>Echo</strong> · Teal</span><span class="swatch"><strong>Pale</strong> · White hair, pale skin</span><span class="swatch"><strong>Shadow Ranger</strong> · White hair, dark skin, a black cloak</span></div>
+        <p><b>Spawns in</b><code>deep_dark</code></p>
+        <p class="risk"><b>Danger</b>Low (the Warden is not).</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#dark_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="desert_elf">
+        <div class="card-top"><span class="group">Desert villages</span><span class="tag">Bold · gunslinger</span></div>
+        <h3>Desert Elf <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Bold, laconic, fair</p>
+        <p><b>Ecology &amp; behaviour</b>A frontier elf of the desert towns: wide-brimmed hat, bandana, boots and a crossbow at her hip.</p>
+        <p><b>Signature: Gunslinger</b>Spawns only near desert villages. Quick on the draw with a crossbow, she guards the town and trades leather, crossbows and cactus goods.</p>
+        <p><b>Player interaction</b>Trade honestly with her; face trouble together.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Sand (default)</strong> · Tan hat, red bandana</span><span class="swatch"><strong>Dusk</strong> · Black hat, purple bandana</span><span class="swatch"><strong>Sage</strong> · Grey-green</span><span class="swatch"><strong>Rust</strong> · Rust-red</span><span class="swatch"><strong>Bone</strong> · White hat, blue bandana</span></div>
+        <p><b>Spawns in</b><code>desert</code></p>
+        <p class="risk"><b>Danger</b>Moderate (crossbow).</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#desert_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="domovoi_elf">
+        <div class="card-top"><span class="group">Villages</span><span class="tag">Homely · fussy</span></div>
+        <h3>Domovoi <span style="color:var(--muted);font-size:.9rem">(about 1.2 blocks)</span></h3>
+        <p><b>Temperament</b>Homely, fussy</p>
+        <p><b>Ecology &amp; behaviour</b>The house spirit of Slavic folklore, who lives behind the stove: a little straw-haired girl in an embroidered smock and a red kerchief, a smudge of soot on her nose.</p>
+        <p><b>Signature: Hearth keeper</b>Befriended, the lit furnaces, smokers and blast furnaces near her friend smelt faster.</p>
+        <p><b>Player interaction</b>Bread and milk.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red kerchief, white smock</span><span class="swatch"><strong>Blue</strong> · Blue kerchief</span><span class="swatch"><strong>Green</strong> · Green kerchief</span><span class="swatch"><strong>Soot</strong> · Sooty</span><span class="swatch"><strong>Gold</strong> · Gold kerchief</span></div>
+        <p><b>Spawns in</b><code>plains, taiga, meadow</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#domovoi_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="dwarf_elf">
+        <div class="card-top"><span class="group">Mountains</span><span class="tag">Broad · tireless</span></div>
+        <h3>Dwarf <span style="color:var(--muted);font-size:.9rem">(about 1.45 blocks)</span></h3>
+        <p><b>Temperament</b>Tireless</p>
+        <p><b>Ecology &amp; behaviour</b>Soot on her cheeks and a real pickaxe in her hand, which she will use.</p>
+        <p><b>Signature: Vein Finder</b>Befriended, she mines the ore next to her friend with the pickaxe she carries.</p>
+        <p><b>Player interaction</b>Bread and cake.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Copper</strong> · Copper</span></div>
+        <p><b>Spawns in</b><code>stony_peaks, windswept_hills, dripstone_caves</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#dwarf_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="fairy_bug">
+        <div class="card-top"><span class="group">Flower forests &amp; meadows</span><span class="tag">Tiny · kind</span></div>
+        <h3>Fairy <span style="color:var(--muted);font-size:.9rem">(about 0.6 blocks)</span></h3>
+        <p><b>Temperament</b>Kind, giggly, flighty</p>
+        <p><b>Ecology &amp; behaviour</b>A tiny winged girl who looks after the hurt and builds fairy fountains of flowers and water.</p>
+        <p><b>Signature: Healing and fountains</b>She heals hurt players near her (Regeneration) and slowly builds a fairy fountain: a pool ringed with flowers. Its water heals.</p>
+        <p><b>Player interaction</b>Flowers and honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Pink (default)</strong> · Pink wings</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Violet</strong> · Violet</span></div>
+        <p><b>Spawns in</b><code>flower_forest, meadow, cherry_grove</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (fairy: insect wings are an ornament)</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#fairy_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="fairy_queen_bug">
+        <div class="card-top"><span class="group">Fairy fountains</span><span class="tag">Radiant · generous</span></div>
+        <h3>Fairy Queen <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Radiant, generous, theatrical</p>
+        <p><b>Ecology &amp; behaviour</b>The queen of the fairies, player-sized, with great shimmering wings. She only appears from a finished fairy fountain.</p>
+        <p><b>Signature: Blessings</b>Rises from a finished fountain. She grants positive effects (Regeneration, Strength, Speed, Luck) to those she favours.</p>
+        <p><b>Player interaction</b>Visit her fountain.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Rose (default)</strong> · Rose and gold</span><span class="swatch"><strong>Azure</strong> · Blue</span><span class="swatch"><strong>Emerald</strong> · Green</span><span class="swatch"><strong>Sun</strong> · Gold</span><span class="swatch"><strong>Amethyst</strong> · Violet</span></div>
+        <p><b>Spawns in</b><code></code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (fairy: insect wings are an ornament)</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#fairy_queen_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="gandharva_elf">
+        <div class="card-top"><span class="group">Cherry groves</span><span class="tag">Musical · courteous</span></div>
+        <h3>Gandharva <span style="color:var(--muted);font-size:.9rem">(about 1.75 blocks)</span></h3>
+        <p><b>Temperament</b>Courteous, dreamy</p>
+        <p><b>Ecology &amp; behaviour</b>The celestial musician of Hindu and Buddhist lore: a youth in a long robe, small blue wings, a lute on his back.</p>
+        <p><b>Signature: Lute</b>He truly plays: a melody of notes on his lute. With a jukebox or a note block nearby he joins in, and his friends heal to the music.</p>
+        <p><b>Player interaction</b>Sweet berries and honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue</span><span class="swatch"><strong>Saffron</strong> · Saffron</span><span class="swatch"><strong>Rose</strong> · Rose</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>White</strong> · White</span></div>
+        <p><b>Spawns in</b><code>cherry_grove, meadow</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#gandharva_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="gnome_elf">
+        <div class="card-top"><span class="group">Gardens</span><span class="tag">Still · industrious</span></div>
+        <h3>Gnome <span style="color:var(--muted);font-size:.9rem">(about 1.3 blocks)</span></h3>
+        <p><b>Temperament</b>Industrious</p>
+        <p><b>Ecology &amp; behaviour</b>A short grown woman in a tall hat, who tends the garden and stops dead when you look at her.</p>
+        <p><b>Signature: Garden Keeper</b>She freezes when you watch her. Befriended, the crops near her grow.</p>
+        <p><b>Player interaction</b>Sweet berries and cake.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Yellow</strong> · Yellow</span><span class="swatch"><strong>Ginger</strong> · Ginger</span></div>
+        <p><b>Spawns in</b><code>flower_forest, meadow, plains</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#gnome_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="high_elf">
+        <div class="card-top"><span class="group">Birch forests &amp; meadows</span><span class="tag">Proud · builder</span></div>
+        <h3>High Elf <span style="color:var(--muted);font-size:.9rem">(about 1.95 blocks)</span></h3>
+        <p><b>Temperament</b>Proud, refined, aloof</p>
+        <p><b>Ecology &amp; behaviour</b>Golden-haired and dressed in white and gold. High elves raise elegant pavilions in clearings and do not like strangers in them.</p>
+        <p><b>Signature: Settlement builder</b>Her group builds an elven pavilion (quartz, birch and lanterns) block by block. Strangers inside it are warned, then attacked.</p>
+        <p><b>Player interaction</b>Keep your distance until she is used to you; bring honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Gold (default)</strong> · Golden hair, white robes</span><span class="swatch"><strong>Silver</strong> · Silver hair</span><span class="swatch"><strong>Auburn</strong> · Auburn hair, green robes</span><span class="swatch"><strong>Ivory</strong> · White hair</span><span class="swatch"><strong>Sunlit</strong> · Strawberry blonde</span><span class="swatch"><strong>Sage Princess</strong> · Golden-brown hair, a white and lilac gown</span></div>
+        <p><b>Spawns in</b><code>birch_forest, old_growth_birch_forest, meadow, cherry_grove</code></p>
+        <p class="risk"><b>Danger</b>Moderate to trespassers.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#high_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="kaguya_elf">
+        <div class="card-top"><span class="group">End highlands</span><span class="tag">Aloof · homesick</span></div>
+        <h3>Kaguya <span style="color:var(--muted);font-size:.9rem">(about 1.75 blocks)</span></h3>
+        <p><b>Temperament</b>Aloof</p>
+        <p><b>Ecology &amp; behaviour</b>The moon&#x27;s exiled princess of the Japanese tale.</p>
+        <p><b>Signature: Moon&#x27;s weight</b>Befriended, her friend near her falls softly and jumps high.</p>
+        <p><b>Player interaction</b>Sweet berries and honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Night (default)</strong> · Night</span><span class="swatch"><strong>Silver</strong> · Silver</span><span class="swatch"><strong>Bamboo</strong> · Bamboo</span><span class="swatch"><strong>Rose</strong> · Rose</span><span class="swatch"><strong>Gold</strong> · Gold</span></div>
+        <p><b>Spawns in</b><code>end_highlands</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#kaguya_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="knocker_elf">
+        <div class="card-top"><span class="group">Dripstone caves</span><span class="tag">Gruff · helpful</span></div>
+        <h3>Knocker <span style="color:var(--muted);font-size:.9rem">(about 1.4 blocks)</span></h3>
+        <p><b>Temperament</b>Gruff</p>
+        <p><b>Ecology &amp; behaviour</b>The Cornish mine spirit, who knocks on the rock to warn of a cave-in.</p>
+        <p><b>Signature: Knocking</b>She knocks when loose rock hangs over her friend, and in the direction of ore.</p>
+        <p><b>Player interaction</b>Bread and cooked pork.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Brown</span><span class="swatch"><strong>Copper</strong> · Copper</span><span class="swatch"><strong>Soot</strong> · Soot</span><span class="swatch"><strong>Tin</strong> · Tin</span><span class="swatch"><strong>Ochre</strong> · Ochre</span></div>
+        <p><b>Spawns in</b><code>dripstone_caves</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#knocker_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="leshy_flora">
+        <div class="card-top"><span class="group">Old-growth taiga</span><span class="tag">Ancient · territorial</span></div>
+        <h3>Leshy <span style="color:var(--muted);font-size:.9rem">(about 2.3 blocks)</span></h3>
+        <p><b>Temperament</b>Ancient, jealous of his trees</p>
+        <p><b>Ecology &amp; behaviour</b>The lord of the Slavic forest, antlered and bearded with moss, who leads woodcutters astray. The Vodyanoy&#x27;s rival.</p>
+        <p><b>Signature: Forest lord</b>He counts the logs you cut and the saplings you plant near him. Planters get saplings and apples; clear-cutters get lost in his fog. Meeting a vodyanoy, he bellows at him.</p>
+        <p><b>Player interaction</b>Plant saplings near him. Never clear-cut his forest.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Oak (default)</strong> · Oak bark, green moss</span><span class="swatch"><strong>Birch</strong> · Pale birch</span><span class="swatch"><strong>Spruce</strong> · Dark spruce</span><span class="swatch"><strong>Autumn</strong> · Autumn moss</span><span class="swatch"><strong>Frost</strong> · Frosted</span></div>
+        <p><b>Spawns in</b><code>old_growth_pine_taiga, old_growth_spruce_taiga</code></p>
+        <p class="risk"><b>Danger</b>Low (he misleads, he does not fight).</p>
+              <p class="place"><b>True position</b>outside taxonomy (forest spirit; moss beard is an ornament) A judgement call: TAXONOMY_PLAN.md gives the reasons.</p><p><b>Body</b>Flora form · <a href="flora_field_guide.html#leshy_flora">her card in that guide</a></p>
+      </article>
+      <article class="card" id="mad_hatter_elf">
+        <div class="card-top"><span class="group">Flower forests</span><span class="tag">Merry · unhinged</span></div>
+        <h3>Mad Hatter <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Merry, unhinged</p>
+        <p><b>Ecology &amp; behaviour</b>Of Wonderland, like the Cheshire and the clockhare: purple hair, a blue tailcoat, a huge hat and a teacup she never puts down.</p>
+        <p><b>Signature: Tea time</b>Befriended, once a day she pours her friend a cup: one good effect, chosen entirely at random.</p>
+        <p><b>Player interaction</b>Cookies and cake.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue coat, purple hair</span><span class="swatch"><strong>Green</strong> · Green coat</span><span class="swatch"><strong>Plum</strong> · Plum coat</span><span class="swatch"><strong>Red</strong> · Red coat</span><span class="swatch"><strong>Gold</strong> · Gold coat</span></div>
+        <p><b>Spawns in</b><code>flower_forest, cherry_grove, meadow</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#mad_hatter_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="night_elf">
+        <div class="card-top"><span class="group">Dark forests &amp; taiga, at night</span><span class="tag">Mysterious · wandering</span></div>
+        <h3>Night Elf <span style="color:var(--muted);font-size:.9rem">(about 1.85 blocks)</span></h3>
+        <p><b>Temperament</b>Mysterious, quiet, curious</p>
+        <p><b>Ecology &amp; behaviour</b>Violet-skinned wanderers who travel by night and trade under the stars. By day they rest in the shade.</p>
+        <p><b>Signature: Night trader</b>She only roams at night and trades moonlit goods: glowstone, ender pearls, amethyst, night vision potions, phantom membrane.</p>
+        <p><b>Player interaction</b>Meet her at night; buy something.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Violet (default)</strong> · Violet skin, white hair</span><span class="swatch"><strong>Indigo</strong> · Indigo skin, silver hair</span><span class="swatch"><strong>Teal</strong> · Teal skin, green hair</span><span class="swatch"><strong>Dusk</strong> · Grey-blue skin, black hair</span><span class="swatch"><strong>Moon</strong> · Pale lilac skin, blue hair</span><span class="swatch"><strong>Night Warden</strong> · Lilac skin, teal hair, dark armour</span></div>
+        <p><b>Spawns in</b><code>dark_forest, taiga, old_growth_spruce_taiga, birch_forest</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#night_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="norn_elf">
+        <div class="card-top"><span class="group">End midlands</span><span class="tag">Remote · exact</span></div>
+        <h3>Norn <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Remote</p>
+        <p><b>Ecology &amp; behaviour</b>A Norse weaver of fate, in undyed wool.</p>
+        <p><b>Signature: Foretold</b>Befriended, she warns her friend just before something comes for them, and steadies them.</p>
+        <p><b>Player interaction</b>Bread and honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Wool (default)</strong> · Wool</span><span class="swatch"><strong>Past</strong> · Past</span><span class="swatch"><strong>Present</strong> · Present</span><span class="swatch"><strong>Future</strong> · Future</span><span class="swatch"><strong>Red</strong> · Red</span></div>
+        <p><b>Spawns in</b><code>end_midlands</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#norn_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="nymph_elf">
+        <div class="card-top"><span class="group">Springs</span><span class="tag">Bright · flighty</span></div>
+        <h3>Nymph <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Bright</p>
+        <p><b>Ecology &amp; behaviour</b>A spirit of the spring, and wherever she stands for long, flowers come up.</p>
+        <p><b>Signature: Bloom</b>Befriended, flowers come up on the grass near her.</p>
+        <p><b>Player interaction</b>Sweet berries and cake.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Meadow (default)</strong> · Meadow</span><span class="swatch"><strong>River</strong> · River</span><span class="swatch"><strong>Autumn</strong> · Autumn</span><span class="swatch"><strong>Blossom</strong> · Blossom</span><span class="swatch"><strong>Night</strong> · Night</span></div>
+        <p><b>Spawns in</b><code>flower_forest, cherry_grove, river</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#nymph_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="ophanim_elf">
+        <div class="card-top"><span class="group">End highlands</span><span class="tag">Unblinking · solemn</span></div>
+        <h3>Ophanim <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Solemn</p>
+        <p><b>Ecology &amp; behaviour</b>The biblical wheel covered in eyes, a pale woman inside a ring of them.</p>
+        <p><b>Signature: All-seeing</b>Befriended, every monster around her friend shows through the walls.</p>
+        <p><b>Player interaction</b>Golden carrots and honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Gold (default)</strong> · Gold</span><span class="swatch"><strong>Silver</strong> · Silver</span><span class="swatch"><strong>Ember</strong> · Ember</span><span class="swatch"><strong>Azure</strong> · Azure</span><span class="swatch"><strong>Pale</strong> · Pale</span></div>
+        <p><b>Spawns in</b><code>end_highlands</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#ophanim_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="pixi_bug">
+        <div class="card-top"><span class="group">Mushroom fields</span><span class="tag">Tiny · mischievous</span></div>
+        <h3>Pixi <span style="color:var(--muted);font-size:.9rem">(about 0.7 blocks)</span></h3>
+        <p><b>Temperament</b>Mischievous</p>
+        <p><b>Ecology &amp; behaviour</b>A tiny blue fairy in a plain sundress, no bigger than a cat.</p>
+        <p><b>Signature: Shrink</b>Crouch and ask her, empty-handed, and she shrinks her friend for half a minute, small enough for a one-block gap.</p>
+        <p><b>Player interaction</b>Sugar and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue</span><span class="swatch"><strong>Candy</strong> · Candy</span><span class="swatch"><strong>Mint</strong> · Mint</span><span class="swatch"><strong>Lemon</strong> · Lemon</span><span class="swatch"><strong>Dusk</strong> · Dusk</span></div>
+        <p><b>Spawns in</b><code>mushroom_fields, flower_forest</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (fairy: insect wings are an ornament)</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#pixi_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="rlff_bug">
+        <div class="card-top"><span class="group">Forest streams</span><span class="tag">Serene · ancient</span></div>
+        <h3>Rlff <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Serene</p>
+        <p><b>Ecology &amp; behaviour</b>A tall golden spirit of forest streams, in a long gown, on wide pale wings.</p>
+        <p><b>Signature: Healing water</b>While her friend stands in water near her, the water heals them.</p>
+        <p><b>Player interaction</b>Glow berries and honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Gold (default)</strong> · Gold</span><span class="swatch"><strong>Moss</strong> · Moss</span><span class="swatch"><strong>Brook</strong> · Brook</span><span class="swatch"><strong>Autumn</strong> · Autumn</span><span class="swatch"><strong>Pale</strong> · Pale</span></div>
+        <p><b>Spawns in</b><code>lush_caves, river</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (fairy: insect wings are an ornament)</p><p><b>Body</b>Bug form · <a href="bug_field_guide.html#rlff_bug">her card in that guide</a></p>
+      </article>
+      <article class="card" id="snow_elf">
+        <div class="card-top"><span class="group">Frozen peaks</span><span class="tag">Cool · steady</span></div>
+        <h3>Snow Elf <span style="color:var(--muted);font-size:.9rem">(about 1.85 blocks)</span></h3>
+        <p><b>Temperament</b>Steady</p>
+        <p><b>Ecology &amp; behaviour</b>Elves of the high snow, who skate where others wade.</p>
+        <p><b>Signature: Snow Tread</b>Befriended, her friend near her walks on snow without sinking and freezing does not touch them.</p>
+        <p><b>Player interaction</b>Sweet berries and cake.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Frost (default)</strong> · Frost</span><span class="swatch"><strong>Aurora</strong> · Aurora</span><span class="swatch"><strong>Pine</strong> · Pine</span><span class="swatch"><strong>Dusk</strong> · Dusk</span><span class="swatch"><strong>Ember</strong> · Ember</span></div>
+        <p><b>Spawns in</b><code>snowy_taiga, grove, snowy_slopes</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#snow_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="valkyrie_elf">
+        <div class="card-top"><span class="group">Mountain peaks</span><span class="tag">Stern · faithful</span></div>
+        <h3>Valkyrie <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Stern, faithful</p>
+        <p><b>Ecology &amp; behaviour</b>The chooser of the slain of Norse myth, armoured and winged, who carries the fallen home.</p>
+        <p><b>Signature: Chooser of the slain</b>Befriended, when her friend dies within 32 blocks of her, she gathers everything they drop and gives it back when they come within 6 blocks of her again.</p>
+        <p><b>Player interaction</b>Cooked beef and honey bottles.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Silver (default)</strong> · Silver mail, white wings</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Raven</strong> · Black wings</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Blue</strong> · Blue</span></div>
+        <p><b>Spawns in</b><code>jagged_peaks, frozen_peaks, snowy_slopes</code></p>
+        <p class="risk"><b>Danger</b>Low (her spear).</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#valkyrie_elf">her card in that guide</a></p>
+      </article>
+      <article class="card" id="wood_elf">
+        <div class="card-top"><span class="group">Forest villages</span><span class="tag">Friendly · archer</span></div>
+        <h3>Wood Elf <span style="color:var(--muted);font-size:.9rem">(about 1.75 blocks)</span></h3>
+        <p><b>Temperament</b>Friendly, practical, protective</p>
+        <p><b>Ecology &amp; behaviour</b>She lives alongside villagers in forest and taiga villages, hunting, trading and keeping watch.</p>
+        <p><b>Signature: Village guardian</b>Spawns only near villages. She shoots raiders and zombies that threaten villagers, and trades arrows, saplings and honey.</p>
+        <p><b>Player interaction</b>Help her village; trade with her.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Green hood, brown hair</span><span class="swatch"><strong>Autumn</strong> · Rust and gold</span><span class="swatch"><strong>Moss</strong> · Moss green, black hair</span><span class="swatch"><strong>Birch</strong> · Pale grey, blonde</span><span class="swatch"><strong>Bark</strong> · Dark brown, red hair</span><span class="swatch"><strong>Green Hero</strong> · Blonde, a green tunic and long green cap</span></div>
+        <p><b>Spawns in</b><code>forest, taiga, birch_forest, plains</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (humanoid folk)</p><p><b>Body</b>Elf form · <a href="elf_field_guide.html#wood_elf">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

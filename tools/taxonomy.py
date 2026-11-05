@@ -461,6 +461,7 @@ def lang_entries():
     for k, (name, pre, col) in SHORT.items():
         out["family.monstergirls." + k.lower()] = name
         out["monstergirls.configuration." + k.lower()] = FAM[k][0] + " (%)"
+        out["clade.monstergirls." + k.lower()] = FAM[k][0]          # the journal's page line and tree of life
     for pre, (name, col) in milks().items():
         out["item.monstergirls." + pre + "_milk"] = name + " Milk"
     return out
@@ -617,12 +618,36 @@ def write_java(rows):
     return by
 
 
+def write_mobs_by_date(rows):
+    """Labels each line of MOBS_BY_DATE.md with her clade ("**Wolverine Canid** · *Arctoid*"; the id suffix is her form). Can be run twice."""
+    path = os.path.join(ROOT, "MOBS_BY_DATE.md")
+    if not os.path.exists(path):
+        return 0
+    old = dict(rows)
+    out, n = [], 0
+    for line in open(path, encoding="utf-8").read().split(chr(10)):
+        m = re.match(r"^(\d+\. \*\*([^*]+)\*\*)(?: · \*[^*]+\*)?(.*)$", line)
+        if m:
+            sp = m.group(2).lower().replace(" ", "_").replace("-", "_").replace("'", "")
+            if sp in old:
+                line = "%s · *%s*%s" % (m.group(1), SHORT[place(sp, old[sp])[0]][0], m.group(3))
+                n += 1
+        out.append(line)
+    text = chr(10).join(out)
+    if "*Feliform*" in text and "clade (her real kin" not in text:
+        text = text.replace("(git history).", "(git history). Each name is followed by her clade (her real kin, TAXONOMY_PLAN.md); the family word in her name is her form.", 1)
+    with open(path, "w", encoding="utf-8", newline=chr(10)) as fh:
+        fh.write(text)
+    return n
+
+
 def main():
     rows = species_rows()
     check(rows)
     by = write_java(rows)
     gone, added = write_lang()
     print("lang: %d old keys removed, %d added" % (gone, added))
+    print("MOBS_BY_DATE.md: %d lines labelled" % write_mobs_by_date(rows))
     moved = sum(1 for sp, old in rows if place(sp, old)[0] != D[old])
     print("%d species in %d clades, %d moved" % (len(rows), len(FAM), moved))
     for k, ids in by.items():

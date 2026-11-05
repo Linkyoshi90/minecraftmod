@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marsupials — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · Mammalia &gt; Marsupialia</div>
+  <h1>Marsupials</h1>
+  <p class="lede">Pouched mammals: kangaroos, koalas, wombats and opossums. Their young finish growing in the pouch.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Jump Boost + Resistance · <b style="display:inline;color:var(--accent)">Was:</b> Marsupial</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Marsupial form · 4</b><a href="marsupial_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="marsupial_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Merfolk form · 1</b><a href="merfolk_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="merfolk_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (5)</h2>
+    <div class="grid">
+      <article class="card" id="gliderune_marsupial">
+        <div class="card-top"><span class="group">Forests</span><span class="tag">Tiny · clingy</span></div>
+        <h3>Gliderune <span style="color:var(--muted);font-size:.9rem">(about 1.2 blocks)</span></h3>
+        <p><b>Temperament</b>Playful, clingy</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide sugar glider who sails from tree to tree on the skin between her arms and legs.</p>
+        <p><b>Signature: Glider</b>She glides down from any height. Befriended, she rides on your shoulder and you fall slowly while she is there (Slow Falling).</p>
+        <p><b>Player interaction</b>Sweet berries and honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Grey (default)</strong> · Grey, a dark stripe</span><span class="swatch"><strong>Blue</strong> · Blue-grey</span><span class="swatch"><strong>Leucistic</strong> · White</span><span class="swatch"><strong>Mosaic</strong> · White with grey patches</span><span class="swatch"><strong>Cinnamon</strong> · Ginger</span></div>
+        <p><b>Spawns in</b><code>forest, birch_forest, jungle, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Diprotodontia: Petaurus breviceps (Harmontide)</p><p><b>Body</b>Marsupial form · <a href="marsupial_field_guide.html#gliderune_marsupial">her card in that guide</a></p>
+      </article>
+      <article class="card" id="kangaroo_marsupial">
+        <div class="card-top"><span class="group">Savanna</span><span class="tag">Bouncy · scrappy</span></div>
+        <h3>Kangaroo <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Bouncy, scrappy</p>
+        <p><b>Ecology &amp; behaviour</b>Red and grey kangaroos (Diprotodontia: Macropodidae), who box and kick to settle things.</p>
+        <p><b>Signature: Pouch and kick</b>Her joey rides in her pouch until it is grown. She fights with kicks that knock back hard. The outback variant wears a red hoodie and sunglasses.</p>
+        <p><b>Player interaction</b>Grass and berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red-brown</span><span class="swatch"><strong>Eastern grey</strong> · Grey</span><span class="swatch"><strong>Wallaroo</strong> · Dark</span><span class="swatch"><strong>Albino</strong> · White</span><span class="swatch"><strong>Outback</strong> · A red hoodie and sunglasses</span><span class="swatch"><strong>Bandicoot</strong> · Orange fur, red hair, blue jeans</span></div>
+        <p><b>Spawns in</b><code>savanna, savanna_plateau, badlands</code></p>
+        <p class="risk"><b>Danger</b>Medium (if provoked).</p>
+              <p class="place"><b>True position</b>Diprotodontia: Macropodidae</p><p><b>Body</b>Marsupial form · <a href="marsupial_field_guide.html#kangaroo_marsupial">her card in that guide</a></p>
+      </article>
+      <article class="card" id="koala_marsupial">
+        <div class="card-top"><span class="group">Forests</span><span class="tag">Sleepy · clingy</span></div>
+        <h3>Koala <span style="color:var(--muted);font-size:.9rem">(about 1.4 blocks)</span></h3>
+        <p><b>Temperament</b>Sleepy</p>
+        <p><b>Ecology &amp; behaviour</b>Phascolarctos cinereus (Diprotodontia: Phascolarctidae), who eats only leaves and sleeps most of the day.</p>
+        <p><b>Signature: Asleep</b>Awake only at dawn and dusk; the rest of the time she sleeps clinging to a tree trunk. Her joey rides on her back. The rare drop bear drops onto whoever walks under her tree (a hug, once she likes you).</p>
+        <p><b>Player interaction</b>Leaves. Do not wake her.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Grey (default)</strong> · Grey</span><span class="swatch"><strong>Brown</strong> · Brown-grey</span><span class="swatch"><strong>Pale</strong> · Pale grey</span><span class="swatch"><strong>Dark</strong> · Dark grey</span><span class="swatch"><strong>Drop bear</strong> · Red eyes, sharp claws (rare)</span></div>
+        <p><b>Spawns in</b><code>forest, birch_forest, savanna_plateau</code></p>
+        <p class="risk"><b>Danger</b>None (the drop bear: a fright).</p>
+              <p class="place"><b>True position</b>Diprotodontia: Phascolarctidae</p><p><b>Body</b>Marsupial form · <a href="marsupial_field_guide.html#koala_marsupial">her card in that guide</a></p>
+      </article>
+      <article class="card" id="opossum_marsupial">
+        <div class="card-top"><span class="group">Woods and swamps</span><span class="tag">Shy · dramatic</span></div>
+        <h3>Opossum <span style="color:var(--muted);font-size:.9rem">(about 1.55 blocks)</span></h3>
+        <p><b>Temperament</b>Dramatic</p>
+        <p><b>Ecology &amp; behaviour</b>Grey and white-faced with a long bare tail, and the best actress in the forest.</p>
+        <p><b>Signature: Playing Possum</b>Befriended, when her friend near her is nearly dead they vanish for a moment and the monsters lose them.</p>
+        <p><b>Player interaction</b>Sweet berries and eggs.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Grey (default)</strong> · Grey</span><span class="swatch"><strong>Dark</strong> · Dark</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Ginger</strong> · Ginger</span></div>
+        <p><b>Spawns in</b><code>forest, swamp, birch_forest</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Didelphimorphia: Didelphidae</p><p><b>Body</b>Marsupial form · <a href="marsupial_field_guide.html#opossum_marsupial">her card in that guide</a></p>
+      </article>
+      <article class="card" id="platypus_mermaid">
+        <div class="card-top"><span class="group">Rivers</span><span class="tag">Odd · clever</span></div>
+        <h3>Platypus <span style="color:var(--muted);font-size:.9rem">(about 1.35 blocks)</span></h3>
+        <p><b>Temperament</b>Shy, clever</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide platypus: a duck-billed cap, a flat beaver tail, and a sixth sense for anything that moves.</p>
+        <p><b>Signature: Electrosense</b>Underwater she senses every monster within 16 blocks of her friend and makes them glow. Strangers who hit her are poisoned by her spur.</p>
+        <p><b>Player interaction</b>Fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Brown</span><span class="swatch"><strong>Dark</strong> · Dark brown</span><span class="swatch"><strong>Golden</strong> · Golden</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Pale</strong> · Pale</span></div>
+        <p><b>Spawns in</b><code>river, swamp</code></p>
+        <p class="risk"><b>Danger</b>Low (her spur).</p>
+              <p class="place"><b>True position</b>Monotremata: Ornithorhynchus anatinus; mammals that are neither marsupial nor placental A guest here: her true kin are too few, so she lives with her nearest relatives.</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#platypus_mermaid">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

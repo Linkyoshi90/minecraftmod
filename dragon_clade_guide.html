@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dragons &amp; chimeras — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · outside the tree</div>
+  <h1>Dragons &amp; chimeras</h1>
+  <p class="lede">Dragons and wyrms of every land. A reptile body, a story bigger than any reptile.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Fire Resistance + Strength · <b style="display:inline;color:var(--accent)">Was:</b> Dragon</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Dragon form · 16</b><a href="dragon_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="dragon_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Centaur form · 1</b><a href="centaur_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="centaur_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (17)</h2>
+    <div class="grid">
+      <article class="card" id="alebrije_dragon">
+        <div class="card-top"><span class="group">Badlands</span><span class="tag">Bright · joyful</span></div>
+        <h3>Alebrije <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Joyful</p>
+        <p><b>Ecology &amp; behaviour</b>A spirit of colour from Mexican folk art: a winged chimera painted in bright patterns, every one her own.</p>
+        <p><b>Signature: Colours</b>She flies. Befriended, now and then she dyes a sheep near her in a bright colour, and her presents are dyes.</p>
+        <p><b>Player interaction</b>Fruit and dyes.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, pink and yellow</span><span class="swatch"><strong>Green</strong> · Green, orange and pink</span><span class="swatch"><strong>Pink</strong> · Pink, teal and yellow</span><span class="swatch"><strong>Orange</strong> · Orange, purple and green</span><span class="swatch"><strong>Purple</strong> · Purple, lime and red</span></div>
+        <p><b>Spawns in</b><code>savanna, badlands, wooded_badlands</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (chimera of several animals)</p><p><b>Body</b>Dragon form · <a href="dragon_field_guide.html#alebrije_dragon">her card in that guide</a></p>
+      </article>
+      <article class="card" id="amphiptere_dragon">
+        <div class="card-top"><span class="group">High winds</span><span class="tag">Swift · weightless</span></div>
+        <h3>Amphiptere <span style="color:var(--muted);font-size:.9rem">(about 2.4 blocks)</span></h3>
+        <p><b>Temperament</b>Swift</p>
+        <p><b>Ecology &amp; behaviour</b>A winged serpent with no legs at all: she never lands if she can help it.</p>
+        <p><b>Signature: Tailwind</b>Befriended, her friend gliding on an elytra near her is carried along faster.</p>
+        <p><b>Player interaction</b>Raw meat and gold.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Green</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, windswept_forest, jagged_peaks</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>outside taxonomy (dragon)</p><p><b>Body</b>Dragon form · <a href="dragon_field_guide.html#amphiptere_dragon">her card in that guide</a></p>
+      </article>
+      <article class="card" id="bahamut_dragon">
+        <div class="card-top"><span class="group">High peaks</span><span class="tag">Regal · gentle</span></div>
+        <h3>Bahamut <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Regal, gentle</p>
+        <p><b>Ecology &amp; behaviour</b>The king of dragons, far softer than the stories say: pale blue and round, curled horns, fins for ears. She flies.</p>
+        <p><b>Signature: Judgement</b>Befriended, once a day a beam of light strikes down on every monster around her friend.</p>
+        <p><b>Player interaction</b>Prismarine crystals and cooked salmon.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Pale blue</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Red</strong> · Red</span></div>
+        <p><b>Spawns in</b><code>jagged_peaks, frozen_peaks, stony_peaks</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>outside taxonomy (dragon)</p><p><b>Body</b>Dragon form · <a href="dragon_field_guide.html#bahamut_dragon">her card in that guide</a></p>
+      </article>
+      <article class="card" id="chimera_dragon">
+        <div class="card-top"><span class="group">Volcanic hills</span><span class="tag">Three-minded · burning</span></div>
+        <h3>Chimera <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Three-minded</p>
+        <p><b>Ecology &amp; behaviour</b>Lion, goat and snake, and they do not always agree, except about fire.</p>
+        <p><b>Signature: Three Heads</b>Befriended, she burns the monster nearest her friend, and its wounds fester.</p>
+        <p><b>Player interaction</b>Raw meat and gold.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Gold (default)</strong> · Gold</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Ash</strong> · Ash</span></div>
+        <p><b>Spawns in</b><code>badlands, windswept_savanna, basalt_deltas</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>outside taxonomy (chimera of several animals)</p><p><b>Body</b>Dragon form · <a href="dragon_field_guide.html#chimera_dragon">her card in that guide</a></p>
+      </article>
+      <article class="card" id="cockatrice_dragon">
+        <div class="card-top"><span class="group">Badlands</span><span class="tag">Haughty · fierce</span></div>
+        <h3>Cockatrice <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Haughty, fierce</p>
+        <p><b>Ecology &amp; behaviour</b>The rooster-dragon of European legend, with a red comb, feathered wings and a scaly tail, whose glare stops creatures in their tracks.</p>
+        <p><b>Signature: Stony glare</b>Befriended, every 3 seconds she glares at a monster near her friend and it is slowed almost to a stop.</p>
+        <p><b>Player interaction</b>Seeds and chicken.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red comb, bronze feathers</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Green</strong> · Green</span></div>
+        <p><b>Spawns in</b><code>badlands, wooded_badlands, savanna</code></p>
+        <p class="risk"><b>Danger</b>Moderate (her glare and claws).</p>
+              <p class="place"><b>True position</b>outside taxonomy (chimera of several animals)</p><p><b>Body</b>Dragon form · <a href="dragon_field_guide.html#cockatrice_dragon">her card in that guide</a></p>
+      </article>
+      <article class="card" id="ender_dragon">
+        <div class="card-top"><span class="group">The End</span><span class="tag">Vast · imperious</span></div>
+        <h3>Ender Dragon <span style="color:var(--muted);font-size:.9rem">(about 2.4 blocks)</span></h3>
+        <p><b>Temperament</b>Imperious</p>
+        <p><b>Ecology &amp; behaviour</b>The dragon of the End, or something that looks back at you from a girl&#x27;s shape. Very rare. She is not impressed.</p>
+        <p><b>Signature: Dragon&#x27;s Breath</b>Befriended, she breathes into a glass bottle once every ten minutes: dragon&#x27;s breath.</p>
+        <p><b>Player interaction</b>Chorus fruit and gold.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black</span><span class="swatch"><strong>Violet</strong> · Violet</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>End_stone</strong> · End_stone</span><span class="swatch"><strong>Void</strong> · Void</span></div>
+        <p><b>Spawns in</b><code>end_highlands, end_midlands</code></p>
+        <p class="risk"><b>Danger</b>Extreme.</p>
+              <p class="place"><b>True position</b>outside taxonomy (dragon)</p><p><b>Body</b>Dragon form · <a href="dragon_field_guide.html#ender_dragon">her card in that guide</a></p>
+      </article>
+      <article class="card" id="gryphon_dragon">
+        <div class="card-top"><span class="group">Windswept hills &amp; savanna plateaus</span><span class="tag">Noble · swift</span></div>
+        <h3>Gryphon <span style="color:var(--muted);font-size:.9rem">(about 2.5 blocks)</span></h3>
+        <p><b>Temperament</b>Noble, loyal, proud</p>
+        <p><b>Ecology &amp; behaviour</b>Like a centaur: a girl on the body of a lion with an eagle&#x27;s forelegs and wings.</p>
+        <p><b>Signature: Rideable flyer</b>At high friendship she carries you and flies (jump to climb).</p>
+        <p><b>Player interaction</b>Feed her meat; ride her once she trusts you.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Golden (default)</strong> · Gold lion, brown eagle</span><span class="swatch"><strong>White</strong> · White eagle, cream lion</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Silver</strong> · Silver</span><span class="swatch"><strong>Red</strong> · Red-brown</span><span class="swatch"><strong>Night Wing</strong> · Black all over, bright green eyes</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, savanna_plateau, meadow</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>outside taxonomy (chimera of several animals)</p><p><b>Body</b>Dragon form · <a href="dragon_field_guide.html#gryphon_dragon">her card in that guide</a></p>
+      </article>
+      <article class="card" id="kannae_dragon">
+        <div class="card-top"><span class="group">Meadows &amp; cherry groves</span><span class="tag">Small · clingy</span></div>
+        <h3>Kannae <span style="color:var(--muted);font-size:.9rem">(about 1.3 blocks)</span></h3>
+        <p><b>Temperament</b>Quiet, clingy, secretly powerful</p>
+        <p><b>Ecology &amp; behaviour</b>A small dragon girl with little horns and a fat tail, who loves company and sweets and is far stronger than she looks.</p>
+        <p><b>Signature: Lightning</b>Once in a while she calls lightning on an enemy. She clings to her favourite player and naps on their head (sits on their shoulder area).</p>
+        <p><b>Player interaction</b>Pet her; give her steak and cake.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>White (default)</strong> · White hair, lilac tips</span><span class="swatch"><strong>Pink</strong> · Pink</span><span class="swatch"><strong>Lilac</strong> · Lilac</span><span class="swatch"><strong>Mint</strong> · Mint</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>meadow, cherry_grove, plains</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (dragon)</p><p><b>Body</b>Dragon form · <a href="dragon_field_guide.html#kannae_dragon">her card in that guide</a></p>
+      </article>
+      <article class="card" id="kun_dragon">
+        <div class="card-top"><span class="group">End midlands</span><span class="tag">Vast · serene</span></div>
+        <h3>Kun <span style="color:var(--muted);font-size:.9rem">(about 3.0 blocks)</span></h3>
+        <p><b>Temperament</b>Serene</p>
+        <p><b>Ecology &amp; behaviour</b>The great fish of the Zhuangzi that became a bird, swimming the sky between the islands.</p>
+        <p><b>Signature: Over the void</b>Once a day she catches a friend falling into the void.</p>
+        <p><b>Player interaction</b>Cod and chorus fruit.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Sky (default)</strong> · Sky</span><span class="swatch"><strong>Void</strong> · Void</span><span class="swatch"><strong>Dawn</strong> · Dawn</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Jade</strong> · Jade</span></div>
+        <p><b>Spawns in</b><code>end_midlands</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>outside taxonomy (dragon)</p><p><b>Body</b>Dragon form · <a href="dragon_field_guide.html#kun_dragon">her card in that guide</a></p>
+      </article>
+      <article class="card" id="long_dragon">
+        <div class="card-top"><span class="group">Peaks &amp; cherry groves</span><span class="tag">Serene · ominous</span></div>
+        <h3>Long <span style="color:var(--muted);font-size:.9rem">(about 2.6 blocks)</span></h3>
+        <p><b>Temperament</b>Serene, wise, mostly neutral</p>
+        <p><b>Ecology &amp; behaviour</b>A Chinese dragon: a long serpentine body that swims through the sky, a mane, antlers and whiskers.</p>
+        <p><b>Signature: Rain bringer</b>She flies slowly and ominously in high circles. A devoted long dragon can bring rain to dry farmland (once a day).</p>
+        <p><b>Player interaction</b>Offer meat at a high place; never startle her.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Jade (default)</strong> · Green with gold</span><span class="swatch"><strong>Azure</strong> · Blue</span><span class="swatch"><strong>Vermilion</strong> · Red</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Pearl</strong> · White</span><span class="swatch"><strong>Wish Dragon</strong> · Green scales, red eyes</span></div>
+        <p><b>Spawns in</b><code>jagged_peaks, cherry_grove, bamboo_jungle, windswept_hills</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (dragon)</p><p><b>Body</b>Dragon form · <a href="dragon_field_guide.html#long_dragon">her card in that guide</a></p>
+      </article>
+      <article class="card" id="macawtl_dragon">
+        <div class="card-top"><span class="group">Jungles</span><span class="tag">Proud · bright</span></div>
+        <h3>Macawtl <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Proud, bright</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide feathered serpent in deep macaw blue: a crest of plumes, a hooked beak of a mask, diamond-patterned feathers and a long tail of plumes hung with silver beads. She rides the winds above the canopy.</p>
+        <p><b>Signature: Tailwind</b>Befriended, out under the open sky her friend near her runs faster (Speed).</p>
+        <p><b>Player interaction</b>Melon, cocoa beans and seeds.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Deep blue, silver beads</span><span class="swatch"><strong>Scarlet</strong> · Scarlet macaw red</span><span class="swatch"><strong>Green</strong> · Military macaw green</span><span class="swatch"><strong>Gold</strong> · Blue and gold</span><span class="swatch"><strong>Hyacinth</strong> · Violet blue</span></div>
+        <p><b>Spawns in</b><code>jungle, bamboo_jungle, sparse_jungle</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (feathered serpent: bird + snake)</p><p><b>Body</b>Dragon form · <a href="dragon_field_guide.html#macawtl_dragon">her card in that guide</a></p>
+      </article>
+      <article class="card" id="nenekea_dragon">
+        <div class="card-top"><span class="group">Warm oceans and reefs</span><span class="tag">Graceful · generous</span></div>
+        <h3>Nenekea <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Graceful, generous</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide sea dragon who walks on land as gladly as she swims: blue scales, fins for ears, a crest of fins on her head and a long tail ending in a great fan of a fin. She hangs herself with beads and pearls from the reef.</p>
+        <p><b>Signature: Tidal balm</b>Befriended, her hurt friend near her heals while they stand in water (Regeneration).</p>
+        <p><b>Player interaction</b>Fish and prismarine crystals.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, white fins, gold beads</span><span class="swatch"><strong>Teal</strong> · Teal</span><span class="swatch"><strong>Coral</strong> · Coral pink</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Violet</strong> · Violet</span></div>
+        <p><b>Spawns in</b><code>warm_ocean, lukewarm_ocean, beach</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (dragon)</p><p><b>Body</b>Dragon form · <a href="dragon_field_guide.html#nenekea_dragon">her card in that guide</a></p>
+      </article>
+      <article class="card" id="quetzalcoatl_dragon">
+        <div class="card-top"><span class="group">Jungles</span><span class="tag">Gentle · radiant</span></div>
+        <h3>Quetzalcoatl <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Gentle, radiant</p>
+        <p><b>Ecology &amp; behaviour</b>The feathered serpent of Mesoamerica: a teal snake from the bust down, a crest of green leaves and feathers round her head, a woven orange headband and pale wings. She flies at dawn.</p>
+        <p><b>Signature: Morning star</b>Befriended, at dawn she ripens the crops near her friend.</p>
+        <p><b>Player interaction</b>Melon, cocoa beans and maize-yellow carrots.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Teal (default)</strong> · Teal, orange band</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Rose</strong> · Rose</span><span class="swatch"><strong>Violet</strong> · Violet</span></div>
+        <p><b>Spawns in</b><code>jungle, sparse_jungle, savanna</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (feathered serpent: bird + snake)</p><p><b>Body</b>Dragon form · <a href="dragon_field_guide.html#quetzalcoatl_dragon">her card in that guide</a></p>
+      </article>
+      <article class="card" id="shedim_centaur">
+        <div class="card-top"><span class="group">Lonely places</span><span class="tag">Timid · uncanny</span></div>
+        <h3>Shedim <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Timid, uncanny</p>
+        <p><b>Ecology &amp; behaviour</b>A spirit of Jewish lore, drawn as a soft deer-fox: long ears, little antlers, a bushy tail. By night you cannot see her at all.</p>
+        <p><b>Signature: Elsewhere</b>Unseen at night. Befriended, when her friend is badly hurt with a monster close, she takes them away from it in a blink.</p>
+        <p><b>Player interaction</b>Sweet berries and honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue</span><span class="swatch"><strong>Gold</strong> · Golden yellow</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Violet</strong> · Violet</span><span class="swatch"><strong>White</strong> · White</span></div>
+        <p><b>Spawns in</b><code>desert, meadow, old_growth_birch_forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>no single animal (deer-fox spirit)</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#shedim_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="wyrm_dragon">
+        <div class="card-top"><span class="group">Windswept peaks &amp; badlands</span><span class="tag">Fierce · greedy</span></div>
+        <h3>Wyrm <span style="color:var(--muted);font-size:.9rem">(about 2.6 blocks)</span></h3>
+        <p><b>Temperament</b>Fierce, greedy, magnificent</p>
+        <p><b>Ecology &amp; behaviour</b>A European dragon with horns, four limbs and great wings, who breathes fire and sleeps on gold.</p>
+        <p><b>Signature: Fire breath</b>She flies and breathes fire at enemies. At full devotion she lets you ride her through the sky.</p>
+        <p><b>Player interaction</b>Gold for her hoard, steak for her.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Crimson scales</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>White</strong> · White (frost)</span><span class="swatch"><strong>Bronze</strong> · Bronze</span><span class="swatch"><strong>Purple Flame</strong> · Purple scales, gold horns and wing webs</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, stony_peaks, badlands, windswept_savanna</code></p>
+        <p class="risk"><b>Danger</b>High if provoked.</p>
+              <p class="place"><b>True position</b>outside taxonomy (dragon)</p><p><b>Body</b>Dragon form · <a href="dragon_field_guide.html#wyrm_dragon">her card in that guide</a></p>
+      </article>
+      <article class="card" id="wyvern_dragon">
+        <div class="card-top"><span class="group">Badlands &amp; stony peaks</span><span class="tag">Wild · territorial</span></div>
+        <h3>Wyvern <span style="color:var(--muted);font-size:.9rem">(about 2.3 blocks)</span></h3>
+        <p><b>Temperament</b>Wild, territorial, playful in the air</p>
+        <p><b>Ecology &amp; behaviour</b>No arms: her arms are great wings, and her tail ends in a stinger.</p>
+        <p><b>Signature: Poison sting</b>She dives from the sky and stings (Poison II). Her wings make her the fastest flyer.</p>
+        <p><b>Player interaction</b>Meat thrown to her (she cannot take it by hand).</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Sand (default)</strong> · Tan</span><span class="swatch"><strong>Rust</strong> · Rust</span><span class="swatch"><strong>Slate</strong> · Grey-blue</span><span class="swatch"><strong>Venom</strong> · Green</span><span class="swatch"><strong>Dusk</strong> · Purple</span></div>
+        <p><b>Spawns in</b><code>badlands, stony_peaks, windswept_savanna</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>outside taxonomy (dragon)</p><p><b>Body</b>Dragon form · <a href="dragon_field_guide.html#wyvern_dragon">her card in that guide</a></p>
+      </article>
+      <article class="card" id="orochi_dragon">
+        <div class="card-top"><span class="group">Cherry groves &amp; bamboo jungles</span><span class="tag">Grand · tipsy</span></div>
+        <h3>Yamata no Orochi <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Grand, theatrical, fond of drink</p>
+        <p><b>Ecology &amp; behaviour</b>A woman in an elaborate kimono with seven dragon heads rising around her own. In the myth she was undone by sake.</p>
+        <p><b>Signature: Seven heads</b>Each attack bites every enemy around her. A honey bottle makes her drowsy for a minute (no attacks) and +3.</p>
+        <p><b>Player interaction</b>Honey bottles (her sake) make her drowsy and friendly.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Crimson (default)</strong> · Crimson kimono, green heads</span><span class="swatch"><strong>Night</strong> · Black kimono</span><span class="swatch"><strong>Sakura</strong> · Pink</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Storm</strong> · Blue-grey</span></div>
+        <p><b>Spawns in</b><code>cherry_grove, bamboo_jungle</code></p>
+        <p class="risk"><b>Danger</b>High if provoked.</p>
+              <p class="place"><b>True position</b>outside taxonomy (dragon)</p><p><b>Body</b>Dragon form · <a href="dragon_field_guide.html#orochi_dragon">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

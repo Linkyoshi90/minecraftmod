@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Snakes &amp; lizards — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · Reptilia &gt; Lepidosauria &gt; Squamata</div>
+  <h1>Snakes &amp; lizards</h1>
+  <p class="lede">Snakes and lizards: every lamia, the geckos and iguanas, the monitors and the great sea serpents.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Regeneration · <b style="display:inline;color:var(--accent)">Was:</b> Lamia</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Lamia form · 19</b><a href="lamia_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="lamia_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Lizardfolk form · 9</b><a href="lizardfolk_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="lizardfolk_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Merfolk form · 1</b><a href="merfolk_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="merfolk_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Dragon form · 1</b><a href="dragon_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="dragon_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (30)</h2>
+    <div class="grid">
+      <article class="card" id="anaconda_lamia">
+        <div class="card-top"><span class="group">Jungle rivers</span><span class="tag">Heavy · glamorous</span></div>
+        <h3>Anaconda <span style="color:var(--muted);font-size:.9rem">(about 2.1 blocks)</span></h3>
+        <p><b>Temperament</b>Glamorous</p>
+        <p><b>Ecology &amp; behaviour</b>The heaviest snake in the world and she knows it: all curves, gold and attitude. Nobody hurries her.</p>
+        <p><b>Signature: Gulp and Groove</b>Befriended, she swallows a small monster near her friend whole, and when music plays near her, her friend moves faster and hits harder.</p>
+        <p><b>Player interaction</b>Raw meat and fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Olive (default)</strong> · Olive</span><span class="swatch"><strong>Yellow</strong> · Yellow</span><span class="swatch"><strong>Dark</strong> · Dark</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Brown</strong> · Brown</span></div>
+        <p><b>Spawns in</b><code>jungle, swamp, mangrove_swamp, river</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>Serpentes: Boidae, Eunectes</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#anaconda_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="basilisk_lizardfolk">
+        <div class="card-top"><span class="group">Badlands and deserts</span><span class="tag">Regal · stony</span></div>
+        <h3>Basilisk <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Regal, cold</p>
+        <p><b>Ecology &amp; behaviour</b>The king of serpents of European bestiaries, here a little blue lizard girl with a crest of spines down her back and a gold crown. A look from her turns living things to stone.</p>
+        <p><b>Signature: Stone gaze</b>Befriended, she stares down a monster near her friend: it can barely move (Slowness).</p>
+        <p><b>Player interaction</b>Eggs and spider eyes.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, a gold crown</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Stone</strong> · Stone grey</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Gold</strong> · Gold, a silver crown</span></div>
+        <p><b>Spawns in</b><code>badlands, eroded_badlands, desert</code></p>
+        <p class="risk"><b>Danger</b>Moderate (her gaze).</p>
+              <p class="place"><b>True position</b>Squamata: Corytophanidae, Basiliscus (a real lizard shares her name)</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#basilisk_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="boa_lamia">
+        <div class="card-top"><span class="group">Mangrove, swamp &amp; jungle floor</span><span class="tag">Laid-back · ambush</span></div>
+        <h3>Boa <span style="color:var(--muted);font-size:.9rem">(about 1.95 blocks)</span></h3>
+        <p><b>Temperament</b>Laid-back, friendly, a little lazy</p>
+        <p><b>Ecology &amp; behaviour</b>Hangs from branches by her tail and drops onto prey. Gives birth to live young. The easiest lamia to befriend: she is curious about people and loves being carried around (she follows you closely).</p>
+        <p><b>Signature: Tree ambush &amp; easy bond</b>She hangs from leaves and logs and drops onto mobs walking below. Affection gifts count double with her.</p>
+        <p><b>Player interaction</b>Offer a rabbit and an arm to hold. She bonds fastest of the family (every gift counts double).</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red-tailed (default)</strong> · Cream-brown saddles fading to a red tail</span><span class="swatch"><strong>Rainbow</strong> · Copper with an iridescent sheen and dark rings</span><span class="swatch"><strong>Emerald</strong> · Bright emerald green with white flashes</span><span class="swatch"><strong>Sand</strong> · Sandy with dark brown spots</span><span class="swatch"><strong>Rosy</strong> · Pale grey with rosy stripes</span></div>
+        <p><b>Spawns in</b><code>mangrove_swamp, swamp, jungle, bamboo_jungle</code></p>
+        <p class="risk"><b>Danger</b>Moderate (coils), and only if attacked.</p>
+              <p class="place"><b>True position</b>Serpentes: Boidae</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#boa_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="caraviper_lamia">
+        <div class="card-top"><span class="group">Deserts</span><span class="tag">Haughty · fierce</span></div>
+        <h3>Caraviper <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Haughty, protective</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide cobra with a wide hood, patterned with glyphs in gold.</p>
+        <p><b>Signature: Spitting cobra</b>Befriended, she spits venom at the monsters near her friend: they are blinded and poisoned.</p>
+        <p><b>Player interaction</b>Eggs and rabbit.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, gold glyphs</span><span class="swatch"><strong>Sand</strong> · Sand</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Green</strong> · Green</span></div>
+        <p><b>Spawns in</b><code>desert, badlands</code></p>
+        <p class="risk"><b>Danger</b>Low (her venom).</p>
+              <p class="place"><b>True position</b>Serpentes: Elapidae, Naja (Harmontide)</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#caraviper_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="cave_gekko_lizardfolk">
+        <div class="card-top"><span class="group">Dripstone caves</span><span class="tag">Sticky · watchful</span></div>
+        <h3>Cave Gekko <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Watchful</p>
+        <p><b>Ecology &amp; behaviour</b>A pale gecko with huge dark eyes, who walks up walls.</p>
+        <p><b>Signature: Sticky hold</b>She climbs walls, and a friend near her who falls drifts down.</p>
+        <p><b>Player interaction</b>Spider eyes and glow berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Pale (default)</strong> · Pale</span><span class="swatch"><strong>Ochre</strong> · Ochre</span><span class="swatch"><strong>Slate</strong> · Slate</span><span class="swatch"><strong>Moss</strong> · Moss</span><span class="swatch"><strong>Rust</strong> · Rust</span></div>
+        <p><b>Spawns in</b><code>dripstone_caves, lush_caves</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Squamata: Gekkota</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#cave_gekko_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="chameleon_lizardfolk">
+        <div class="card-top"><span class="group">Jungles</span><span class="tag">Shy · watchful</span></div>
+        <h3>Chameleon <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Shy, watchful, dry humour</p>
+        <p><b>Ecology &amp; behaviour</b>A slow, deliberate climber with a curled tail who vanishes against the leaves.</p>
+        <p><b>Signature: Vanishing</b>Invisible while standing still. Her long tongue snatches dropped items (and insects) from four blocks away.</p>
+        <p><b>Player interaction</b>Hold still and let her come out.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Leaf green</span><span class="swatch"><strong>Panther</strong> · Turquoise and red</span><span class="swatch"><strong>Yellow</strong> · Yellow-green</span><span class="swatch"><strong>Veiled</strong> · Green with bands</span><span class="swatch"><strong>Brown</strong> · Bark brown</span><span class="swatch"><strong>Ninja Chameleon</strong> · Purple scales, a black wrap, yellow trim</span></div>
+        <p><b>Spawns in</b><code>jungle, bamboo_jungle, sparse_jungle</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Squamata: Chamaeleonidae</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#chameleon_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="chupacabra_lizardfolk">
+        <div class="card-top"><span class="group">Mountain edges</span><span class="tag">Shy · unruly</span></div>
+        <h3>Chupacabra <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Shy, ungovernable</p>
+        <p><b>Ecology &amp; behaviour</b>The goat-sucker of 1990s Puerto Rico: a spiny reptilian cryptid. (The later &#x27;canine chupacabras&#x27; were coyotes with mange.)</p>
+        <p><b>Signature: Goat hunter</b>She hunts wild goats only, never tamed, named, leashed or fenced ones, and hides when you look straight at her. Fed, she lingers near you but takes no orders; at high friendship she leaves mutton.</p>
+        <p><b>Player interaction</b>Mutton. Do not stare.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Grey (default)</strong> · Grey-green, red spines</span><span class="swatch"><strong>Dark</strong> · Charcoal</span><span class="swatch"><strong>Sand</strong> · Sandy</span><span class="swatch"><strong>Blue</strong> · Blue-grey</span><span class="swatch"><strong>Red</strong> · Rust red</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, jagged_peaks, meadow, badlands</code></p>
+        <p class="risk"><b>Danger</b>None (to players).</p>
+              <p class="place"><b>True position</b>Squamata (cryptid, spiny reptile)</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#chupacabra_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="cocoskink_lizardfolk">
+        <div class="card-top"><span class="group">Jungles</span><span class="tag">Jingling · sunny</span></div>
+        <h3>Cocoskink <span style="color:var(--muted);font-size:.9rem">(about 1.45 blocks)</span></h3>
+        <p><b>Temperament</b>Sunny, chatty</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide skink with a crest of leaves and little bells on her tail, who loves the cocoa trees.</p>
+        <p><b>Signature: Cocoa</b>Befriended, she grows cocoa pods on the jungle logs near her friend.</p>
+        <p><b>Player interaction</b>Melon and cocoa beans.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, leafy crest</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Orange</strong> · Orange</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>jungle, sparse_jungle, beach</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Squamata: Scincidae (Harmontide)</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#cocoskink_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="echidna_lamia">
+        <div class="card-top"><span class="group">Dark caves</span><span class="tag">Maternal · terrible</span></div>
+        <h3>Echidna <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Maternal</p>
+        <p><b>Ecology &amp; behaviour</b>Mother of monsters in the Greek tales, and every creeper knows her voice.</p>
+        <p><b>Signature: Mother of Monsters</b>Befriended, she hushes the creepers near her friend, and they stand down.</p>
+        <p><b>Player interaction</b>Raw meat and cake.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Dusk (default)</strong> · Dusk</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Bronze</strong> · Bronze</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>White</strong> · White</span></div>
+        <p><b>Spawns in</b><code>deep_dark, dripstone_caves, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Serpentes (myth; serpent body)</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#echidna_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="gecko_lizardfolk">
+        <div class="card-top"><span class="group">Jungles &amp; deserts</span><span class="tag">Quick · curious</span></div>
+        <h3>Gecko <span style="color:var(--muted);font-size:.9rem">(about 1.35 blocks)</span></h3>
+        <p><b>Temperament</b>Quick, curious</p>
+        <p><b>Ecology &amp; behaviour</b>Geckos (Squamata: Gekkota), who climb sheer walls on sticky toe pads and lick their own eyes clean.</p>
+        <p><b>Signature: Climber</b>Fast, and she climbs walls. Curious: she trails you and goes to look at anything you drop. She sheds her tail when hit, and it grows back.</p>
+        <p><b>Player interaction</b>Fruit.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Leopard (default)</strong> · Yellow with spots</span><span class="swatch"><strong>Crested</strong> · Orange, a crest</span><span class="swatch"><strong>Tokay</strong> · Blue-grey, orange spots</span><span class="swatch"><strong>Day gecko</strong> · Bright green</span><span class="swatch"><strong>Gargoyle</strong> · Mottled grey</span><span class="swatch"><strong>Green Dino</strong> · Bright green, a white front, a red saddle</span></div>
+        <p><b>Spawns in</b><code>jungle, sparse_jungle, desert, savanna</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Squamata: Gekkota</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#gecko_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="hoop_snake_lamia">
+        <div class="card-top"><span class="group">Hills and badlands</span><span class="tag">Bouncy · prickly</span></div>
+        <h3>Hoop Snake <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Bouncy, quick to sting</p>
+        <p><b>Ecology &amp; behaviour</b>The hoop snake of American tall tales, who takes her tail in her mouth and rolls downhill like a wheel. Her tail ends in a sting so strong a tree it pricks withers.</p>
+        <p><b>Signature: Tail sting</b>Befriended, every few seconds she stings a monster near her friend: poisoned.</p>
+        <p><b>Player interaction</b>Rabbit and eggs.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Sky (default)</strong> · Sky blue, a cream belly</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Yellow</strong> · Yellow</span></div>
+        <p><b>Spawns in</b><code>badlands, wooded_badlands, windswept_hills, savanna</code></p>
+        <p class="risk"><b>Danger</b>Moderate (her sting).</p>
+              <p class="place"><b>True position</b>Serpentes (myth; serpent body)</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#hoop_snake_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="iguana_lizardfolk">
+        <div class="card-top"><span class="group">Jungles, beaches &amp; savanna</span><span class="tag">Fast · sunny</span></div>
+        <h3>Iguana <span style="color:var(--muted);font-size:.9rem">(about 1.75 blocks)</span></h3>
+        <p><b>Temperament</b>Sunny, energetic, a show-off</p>
+        <p><b>Ecology &amp; behaviour</b>Spiny-backed with a dewlap, she sunbathes on beaches and sprints faster than anyone.</p>
+        <p><b>Signature: Speed</b>The fastest of the family: she outruns a sprinting player and swims well. She bobs her head at rivals.</p>
+        <p><b>Player interaction</b>Race her; bring eggs.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Green</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Orange</strong> · Orange</span><span class="swatch"><strong>Marine</strong> · Black-grey</span><span class="swatch"><strong>Rhino</strong> · Grey with horns</span></div>
+        <p><b>Spawns in</b><code>jungle, beach, savanna, mangrove_swamp</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Squamata: Iguanidae</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#iguana_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="iron_kobold_lizardfolk">
+        <div class="card-top"><span class="group">Mountains</span><span class="tag">Gruff · handy</span></div>
+        <h3>Iron Kobold <span style="color:var(--muted);font-size:.9rem">(about 1.1 blocks)</span></h3>
+        <p><b>Temperament</b>Gruff, hard-working</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide kobold smith in plated armour, who carries a hammer as big as her head.</p>
+        <p><b>Signature: Smith</b>Hand her a damaged iron or chainmail tool or piece of armour and she mends a quarter of it, for one iron ingot from your pack.</p>
+        <p><b>Player interaction</b>Cooked beef and mutton.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue scales, iron plate</span><span class="swatch"><strong>Copper</strong> · Copper plate</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, windswept_gravelly_hills, stony_peaks</code></p>
+        <p class="risk"><b>Danger</b>Low (her hammer).</p>
+              <p class="place"><b>True position</b>Squamata (Harmontide reptile kobold)</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#iron_kobold_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="jormungandr_dragon">
+        <div class="card-top"><span class="group">Jungles &amp; swamps</span><span class="tag">Vast · lazy</span></div>
+        <h3>Jormungandr <span style="color:var(--muted);font-size:.9rem">(about 2.4 blocks)</span></h3>
+        <p><b>Temperament</b>Lazy, vast, crushing when roused</p>
+        <p><b>Ecology &amp; behaviour</b>The world serpent, python-like and enormous. She sleeps coiled for days.</p>
+        <p><b>Signature: Coil</b>Her coils hold anything she grabs (Slowness IV) and crush it. Arrows barely hurt her.</p>
+        <p><b>Player interaction</b>Bring meat; do not wake her rudely.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Midgard (default)</strong> · Green-grey</span><span class="swatch"><strong>Ash</strong> · Grey</span><span class="swatch"><strong>Venom</strong> · Green and yellow</span><span class="swatch"><strong>Abyss</strong> · Blue-black</span><span class="swatch"><strong>Gold</strong> · Gold</span></div>
+        <p><b>Spawns in</b><code>jungle, swamp, mangrove_swamp</code></p>
+        <p class="risk"><b>Danger</b>High if provoked.</p>
+              <p class="place"><b>True position</b>Serpentes (myth; this design is a python)</p><p><b>Body</b>Dragon form · <a href="dragon_field_guide.html#jormungandr_dragon">her card in that guide</a></p>
+      </article>
+      <article class="card" id="cobra_lamia">
+        <div class="card-top"><span class="group">Jungle &amp; bamboo</span><span class="tag">Proud · nesting</span></div>
+        <h3>King Cobra <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Proud, alert, dramatic</p>
+        <p><b>Ecology &amp; behaviour</b>Rears up a third of her length and spreads her hood when threatened, with a low growl of a hiss. Hunts other snakes. Builds a real nest of leaves for her eggs and guards it.</p>
+        <p><b>Signature: Hood &amp; snake charming</b>The hood display is a warning: back off and nothing happens; come closer and she spits venom (Blindness and Poison). A jukebox within 16 blocks keeps her calm, and a bonded cobra sways to it (the existing music system).</p>
+        <p><b>Player interaction</b>Music calms her: play a record near her and she sways along instead of rearing.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Olive (default)</strong> · Olive-brown with pale chevrons, cream hood</span><span class="swatch"><strong>Black</strong> · Glossy black, cream throat</span><span class="swatch"><strong>Banded</strong> · Black with bright yellow bands</span><span class="swatch"><strong>Golden</strong> · Golden brown with a dark hood</span><span class="swatch"><strong>Spectacled</strong> · Pale brown with a spectacle mark on the hood</span></div>
+        <p><b>Spawns in</b><code>bamboo_jungle, jungle, sparse_jungle</code></p>
+        <p class="risk"><b>Danger</b>High if threatened; she always warns first.</p>
+              <p class="place"><b>True position</b>Serpentes: Elapidae, Ophiophagus hannah</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#cobra_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="komodo_lizardfolk">
+        <div class="card-top"><span class="group">Island scrub</span><span class="tag">Heavy · unhurried</span></div>
+        <h3>Komodo <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Unhurried</p>
+        <p><b>Ecology &amp; behaviour</b>She bites once and then simply follows until it is over.</p>
+        <p><b>Signature: Slow Venom</b>Befriended, any monster near her friend that has already been hurt starts to sicken.</p>
+        <p><b>Player interaction</b>Raw meat.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Dust (default)</strong> · Dust</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Gold</strong> · Gold</span></div>
+        <p><b>Spawns in</b><code>savanna, stony_shore, windswept_savanna</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Squamata: Varanidae, Varanus komodoensis</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#komodo_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="medusa_lamia">
+        <div class="card-top"><span class="group">Stony shores</span><span class="tag">Stony-eyed · lonely</span></div>
+        <h3>Medusa <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Lonely, guarded</p>
+        <p><b>Ecology &amp; behaviour</b>The gorgon of Greek myth, with living snakes for hair, whose gaze turns onlookers to stone.</p>
+        <p><b>Signature: Petrifying gaze</b>Look a stranger medusa in the eyes and you are slowed nearly to a stop; monsters that meet her gaze freeze for a few seconds. Befriended, she wears a blindfold so it is safe to look at her.</p>
+        <p><b>Player interaction</b>Rabbit and eggs. Do not meet her eyes.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Emerald (default)</strong> · Green snakes</span><span class="swatch"><strong>Bronze</strong> · Bronze snakes</span><span class="swatch"><strong>Onyx</strong> · Black snakes</span><span class="swatch"><strong>Marble</strong> · White, stone-pale</span><span class="swatch"><strong>Coral</strong> · Red-banded snakes</span></div>
+        <p><b>Spawns in</b><code>stony_shore, stony_peaks, desert</code></p>
+        <p class="risk"><b>Danger</b>Medium (her gaze).</p>
+              <p class="place"><b>True position</b>Serpentes (myth; serpent body)</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#medusa_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="mosasaurus_mermaid">
+        <div class="card-top"><span class="group">Deep oceans</span><span class="tag">Huge · playful</span></div>
+        <h3>Mosasaurus <span style="color:var(--muted);font-size:.9rem">(about 2.4 blocks)</span></h3>
+        <p><b>Temperament</b>Huge, playful</p>
+        <p><b>Ecology &amp; behaviour</b>The great sea lizard of the Cretaceous as a Harmontide mermaid: grey-blue scales, a long toothy jaw, flippers for hands and a crescent fluke. She loves to push boats along.</p>
+        <p><b>Signature: Tow</b>Befriended, her friend&#x27;s boat near her surges forward as she tows it.</p>
+        <p><b>Player interaction</b>Fish and kelp.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Grey-blue</span><span class="swatch"><strong>Green</strong> · Sea green</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>White</strong> · White</span></div>
+        <p><b>Spawns in</b><code>deep_ocean, deep_cold_ocean, deep_lukewarm_ocean, ocean</code></p>
+        <p class="risk"><b>Danger</b>High (if provoked).</p>
+              <p class="place"><b>True position</b>Squamata: Mosasauridae (extinct; mosasaurs were giant sea lizards)</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#mosasaurus_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="naga_lamia">
+        <div class="card-top"><span class="group">Jungle temples</span><span class="tag">Regal · watchful</span></div>
+        <h3>Naga <span style="color:var(--muted);font-size:.9rem">(about 2.3 blocks)</span></h3>
+        <p><b>Temperament</b>Regal, watchful, generous to friends</p>
+        <p><b>Ecology &amp; behaviour</b>The serpent guardians of South and Southeast Asian myth, who keep watch over water and treasure. Her serpent half is a king cobra (Ophiophagus hannah, Squamata: Elapidae): a hood, and a crown of her own.</p>
+        <p><b>Signature: Guardian</b>Nobody she is not fond of opens a treasure chest (an unopened structure chest) within 10 blocks of her: she spreads her hood and warns them off. Your own chests are never hers to guard.</p>
+        <p><b>Player interaction</b>Earn her trust before you go for the temple&#x27;s treasure.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>King cobra (default)</strong> · Olive with pale bands</span><span class="swatch"><strong>Black</strong> · Glossy black</span><span class="swatch"><strong>Golden</strong> · Gold and cream</span><span class="swatch"><strong>Jade</strong> · Green</span><span class="swatch"><strong>Crimson</strong> · Deep red</span></div>
+        <p><b>Spawns in</b><code>jungle, sparse_jungle, bamboo_jungle</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>Serpentes: Elapidae, Ophiophagus hannah (myth)</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#naga_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="python_lamia">
+        <div class="card-top"><span class="group">Jungle &amp; swamp</span><span class="tag">Gentle · heavy</span></div>
+        <h3>Python <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Slow, gentle, very affectionate when warm</p>
+        <p><b>Ecology &amp; behaviour</b>The heaviest lamia: a long, thick tail and a calm temper. Basks for hours, lies in water in the heat, and constricts rather than bites.</p>
+        <p><b>Signature: Coiled brood &amp; warm hug</b>She broods her eggs by shivering (they hatch twice as fast). Bonded, she is the best bed partner in the mod: Resistance I and Regeneration I on waking.</p>
+        <p><b>Player interaction</b>Share a campfire with her. Never startle her when she is cold.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Normal (default)</strong> · Dark brown with golden-tan blotches</span><span class="swatch"><strong>Banana</strong> · Lavender and yellow, freckled</span><span class="swatch"><strong>Piebald</strong> · Bright white patches across the pattern</span><span class="swatch"><strong>Albino</strong> · White and butter yellow, pink-red eyes</span><span class="swatch"><strong>Reticulated</strong> · A net of black and gold diamonds</span></div>
+        <p><b>Spawns in</b><code>jungle, sparse_jungle, swamp, mangrove_swamp</code></p>
+        <p class="risk"><b>Danger</b>Moderate: her coils, if attacked.</p>
+              <p class="place"><b>True position</b>Serpentes: Pythonidae</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#python_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="rattlesnake_lamia">
+        <div class="card-top"><span class="group">Desert &amp; badlands</span><span class="tag">Fair · warning</span></div>
+        <h3>Rattlesnake <span style="color:var(--muted);font-size:.9rem">(about 1.85 blocks)</span></h3>
+        <p><b>Temperament</b>Prickly, fair, protective</p>
+        <p><b>Ecology &amp; behaviour</b>Rests in the shade of rocks and dead bushes by day and hunts at night with heat-sensing pits that let her see warm bodies in the dark. Gives birth to live young and guards them.</p>
+        <p><b>Signature: Fair warning &amp; heat sight</b>Three stages like the ostrich: rattle, rattle louder and coil, then strike (Poison II). At night a bonded rattlesnake marks warm mobs within 20 blocks with Glowing for her player.</p>
+        <p><b>Player interaction</b>Listen for the rattle and step back. She only strikes when ignored.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Western diamondback (default)</strong> · Dusty brown diamonds, a black-and-white banded tail</span><span class="swatch"><strong>Timber</strong> · Tan with dark chevrons</span><span class="swatch"><strong>Sidewinder</strong> · Pale sand with horn-like brow scales</span><span class="swatch"><strong>Mojave green</strong> · Olive green diamonds</span><span class="swatch"><strong>Prairie</strong> · Light tan with brown blotches</span></div>
+        <p><b>Spawns in</b><code>desert, badlands, eroded_badlands, wooded_badlands</code></p>
+        <p class="risk"><b>Danger</b>Moderate; she always warns twice.</p>
+              <p class="place"><b>True position</b>Serpentes: Viperidae, Crotalus</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#rattlesnake_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="sea_serpent_lamia">
+        <div class="card-top"><span class="group">Open sea</span><span class="tag">Vast · stormy</span></div>
+        <h3>Sea Serpent <span style="color:var(--muted);font-size:.9rem">(about 2.4 blocks)</span></h3>
+        <p><b>Temperament</b>Stormy</p>
+        <p><b>Ecology &amp; behaviour</b>The thing at the edge of the old charts, long and barred, and at her best in bad weather.</p>
+        <p><b>Signature: Storm Caller</b>Befriended, in the rain, lightning finds the monsters near her friend.</p>
+        <p><b>Player interaction</b>Cod and salmon.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>White</strong> · White</span></div>
+        <p><b>Spawns in</b><code>deep_ocean, deep_lukewarm_ocean, ocean</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Serpentes (myth; serpent body)</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#sea_serpent_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="sea_snake_lamia">
+        <div class="card-top"><span class="group">Warm ocean &amp; beaches</span><span class="tag">Aquatic · docile</span></div>
+        <h3>Sea Snake <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Docile, inquisitive, unbothered</p>
+        <p><b>Ecology &amp; behaviour</b>A flattened paddle tail and nostrils that close: she lives in the reef and comes ashore only to bask on rocks. Her venom is the strongest of any lamia, and she almost never uses it.</p>
+        <p><b>Signature: Reef guide &amp; breath sharing</b>In a boat or swimming, a bonded sea snake leads you towards the nearest shipwreck or ocean ruin. Swimming beside her you have Water Breathing.</p>
+        <p><b>Player interaction</b>Swim with her. She follows divers out of curiosity.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Banded krait (default)</strong> · Silver-blue with black bands, yellow lips</span><span class="swatch"><strong>Yellow-bellied</strong> · Black back, bright yellow belly</span><span class="swatch"><strong>Olive</strong> · Olive-brown, cream belly</span><span class="swatch"><strong>Turtle-headed</strong> · Dark grey with faint bands</span><span class="swatch"><strong>Pale ringed</strong> · Pale grey with fine dark rings</span></div>
+        <p><b>Spawns in</b><code>warm_ocean, lukewarm_ocean, deep_lukewarm_ocean, beach</code></p>
+        <p class="risk"><b>Danger</b>Low unless grabbed.</p>
+              <p class="place"><b>True position</b>Serpentes: Elapidae, Hydrophiinae</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#sea_snake_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="serpopard_lamia">
+        <div class="card-top"><span class="group">Deserts and river banks</span><span class="tag">Watchful · fierce</span></div>
+        <h3>Serpopard <span style="color:var(--muted);font-size:.9rem">(about 2.1 blocks)</span></h3>
+        <p><b>Temperament</b>Watchful, fierce</p>
+        <p><b>Ecology &amp; behaviour</b>The serpent-leopard of ancient Egyptian palettes, a long-necked spotted serpent with a leopard&#x27;s ears and face. Pairs of them guarded order against chaos.</p>
+        <p><b>Signature: Venom bite</b>Befriended, she bites a monster near her friend: Poison.</p>
+        <p><b>Player interaction</b>Rabbit and chicken.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Gold (default)</strong> · Gold with rosettes</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Snow</strong> · Snow</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Sand</strong> · Sand</span></div>
+        <p><b>Spawns in</b><code>desert, river, savanna</code></p>
+        <p class="risk"><b>Danger</b>Moderate (her venom).</p>
+              <p class="place"><b>True position</b>Serpentes per her rig (myth; the Egyptian serpopard is a leopard with a snake&#x27;s neck) A judgement call: TAXONOMY_PLAN.md gives the reasons.</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#serpopard_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="titanoboa_lamia">
+        <div class="card-top"><span class="group">Jungles and swamps</span><span class="tag">Huge · lazy</span></div>
+        <h3>Titanoboa <span style="color:var(--muted);font-size:.9rem">(about 3.9 blocks)</span></h3>
+        <p><b>Temperament</b>Huge, lazy</p>
+        <p><b>Ecology &amp; behaviour</b>The greatest snake that ever lived: twice the size of any boa, olive-brown with dark blotches and a cream belly. She sleeps for days after a meal, coiled in the warm shallows.</p>
+        <p><b>Signature: Constrict</b>Befriended, she coils round the biggest monster near her friend, holding it fast and squeezing it for five seconds.</p>
+        <p><b>Player interaction</b>Raw meat and fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Olive (default)</strong> · Olive-brown blotches</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Blue</strong> · Blue</span></div>
+        <p><b>Spawns in</b><code>jungle, swamp, mangrove_swamp</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Serpentes: Boidae, Titanoboa (extinct)</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#titanoboa_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="tsuchinoko_lamia">
+        <div class="card-top"><span class="group">Mountain forests</span><span class="tag">Stubby · roly-poly</span></div>
+        <h3>Tsuchinoko <span style="color:var(--muted);font-size:.9rem">(about 1.0 blocks)</span></h3>
+        <p><b>Temperament</b>Lazy, greedy</p>
+        <p><b>Ecology &amp; behaviour</b>The fat little snake of Japanese legend that rolls down hills like a wheel and loves a drink.</p>
+        <p><b>Signature: Rolling</b>Downhill she curls up and rolls, faster than you can run. Her rare presents are golden.</p>
+        <p><b>Player interaction</b>Honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Brown, a pale belly</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Green</strong> · Moss green</span><span class="swatch"><strong>Gold</strong> · Golden</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>forest, cherry_grove, windswept_forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Serpentes (cryptid)</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#tsuchinoko_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="turquoise_serpent_lamia">
+        <div class="card-top"><span class="group">Jungle rivers</span><span class="tag">Proud · bejewelled</span></div>
+        <h3>Turquoise Serpent <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Proud, generous</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide river serpent in royal blue with a turquoise belly, a feathered crest and coils hung with gold and turquoise. Her scales are as hard as the stones she wears.</p>
+        <p><b>Signature: Scale ward</b>Befriended, her friend within 10 blocks of her has Resistance while they are badly hurt.</p>
+        <p><b>Player interaction</b>Gold nuggets, cod and melon.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, a turquoise belly</span><span class="swatch"><strong>Jade</strong> · Jade green</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Coral</strong> · Coral red</span><span class="swatch"><strong>Obsidian</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>jungle, sparse_jungle, bamboo_jungle</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>Serpentes (Harmontide)</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#turquoise_serpent_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="urchskin_lamia">
+        <div class="card-top"><span class="group">Reefs and warm shores</span><span class="tag">Prickly · protective</span></div>
+        <h3>Urchskin <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Prickly, protective</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide sea serpent, teal with a cream belly, bristling with purple urchin spines from her crest to her tail tip.</p>
+        <p><b>Signature: Urchin spines</b>Befriended, monsters that hurt her friend near her are pricked by her spines in return.</p>
+        <p><b>Player interaction</b>Cod, salmon and kelp.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Teal (default)</strong> · Teal, purple spines</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Yellow</strong> · Yellow</span></div>
+        <p><b>Spawns in</b><code>warm_ocean, beach, lukewarm_ocean</code></p>
+        <p class="risk"><b>Danger</b>Moderate (her spines).</p>
+              <p class="place"><b>True position</b>Serpentes (Harmontide)</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#urchskin_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="wadjet_lamia">
+        <div class="card-top"><span class="group">Desert</span><span class="tag">Protective · fierce</span></div>
+        <h3>Wadjet <span style="color:var(--muted);font-size:.9rem">(about 1.85 blocks)</span></h3>
+        <p><b>Temperament</b>Protective, proud, merciless to monsters</p>
+        <p><b>Ecology &amp; behaviour</b>The cobra goddess of Lower Egypt, the uraeus on the pharaoh&#x27;s crown, here in a two-legged form. Her hood is the Egyptian cobra&#x27;s (Naja haje, Squamata: Elapidae). Her sister Nekhbet, the vulture, guards Upper Egypt.</p>
+        <p><b>Signature: Blessing</b>Every player who passes within 8 blocks, and the girls following them, gets Regeneration and Resistance. She hunts every hostile mob in sight. Name her Nekhbet and the blessing and her bite grow stronger.</p>
+        <p><b>Player interaction</b>Walk past her: she blesses you. Stay and be kind, and she pays in emeralds.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Egyptian (default)</strong> · Olive-brown scales, gold</span><span class="swatch"><strong>Green</strong> · The green one: jade scales</span><span class="swatch"><strong>Black</strong> · Black-necked</span><span class="swatch"><strong>Gold</strong> · Gold and cream</span><span class="swatch"><strong>Red</strong> · Red spitting cobra</span></div>
+        <p><b>Spawns in</b><code>desert</code></p>
+        <p class="risk"><b>Danger</b>Deadly to monsters, none to players.</p>
+              <p class="place"><b>True position</b>Serpentes: Elapidae, Naja haje (deity)</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#wadjet_lamia">her card in that guide</a></p>
+      </article>
+      <article class="card" id="xiangliu_lamia">
+        <div class="card-top"><span class="group">Swamps</span><span class="tag">Chatty · venomous</span></div>
+        <h3>Xiangliu <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Chatty, venomous</p>
+        <p><b>Ecology &amp; behaviour</b>The nine-headed serpent of Chinese myth, whose venom turned the land to swamp: a teal serpent girl with little heads of her own gathered round her head, all of them talking at once.</p>
+        <p><b>Signature: Nine heads</b>Befriended, her heads bite up to three monsters near her friend at once.</p>
+        <p><b>Player interaction</b>Fish and spider eyes.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Teal (default)</strong> · Teal</span><span class="swatch"><strong>Green</strong> · Swamp green</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Red</strong> · Red</span></div>
+        <p><b>Spawns in</b><code>swamp, mangrove_swamp, river</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Serpentes (myth; serpent body)</p><p><b>Body</b>Lamia form · <a href="lamia_field_guide.html#xiangliu_lamia">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

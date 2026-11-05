@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hares &amp; rabbits — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · Mammalia &gt; Glires &gt; Lagomorpha</div>
+  <h1>Hares &amp; rabbits</h1>
+  <p class="lede">Hares, rabbits and pikas, with the jackalope and her horned cousins. Close to the rodents, but a branch of their own.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Jump Boost · <b style="display:inline;color:var(--accent)">Was:</b> Jackalope</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Jackalope form · 9</b><a href="jackalope_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="jackalope_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (9)</h2>
+    <div class="grid">
+      <article class="card" id="al_miraj_jackalope">
+        <div class="card-top"><span class="group">Desert</span><span class="tag">Fierce · loyal</span></div>
+        <h3>Al-mi&#x27;raj <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Fierce, proud, devoted to her clan</p>
+        <p><b>Ecology &amp; behaviour</b>The golden horned hare of the desert legends, with a single spiral horn. Lives in clans that defend each other.</p>
+        <p><b>Signature: Clan defence</b>Hurt one and every Al-mi&#x27;raj within 24 blocks attacks you. Her horn hits hard. A devoted Al-mi&#x27;raj defends you the same way.</p>
+        <p><b>Player interaction</b>Bring the whole clan carrots; never hurt one of them in front of the others.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Golden (default)</strong> · Gold fur, black horn</span><span class="swatch"><strong>Sand</strong> · Pale sand</span><span class="swatch"><strong>White</strong> · White with a gold horn</span><span class="swatch"><strong>Rufous</strong> · Red-brown</span><span class="swatch"><strong>Dusk</strong> · Grey-violet</span></div>
+        <p><b>Spawns in</b><code>desert, badlands</code></p>
+        <p class="risk"><b>Danger</b>High near her clan.</p>
+              <p class="place"><b>True position</b>Leporidae: Lepus (legend; horns are an ornament)</p><p><b>Body</b>Jackalope form · <a href="jackalope_field_guide.html#al_miraj_jackalope">her card in that guide</a></p>
+      </article>
+      <article class="card" id="boghare_jackalope">
+        <div class="card-top"><span class="group">Swamps</span><span class="tag">Bouncy · soggy</span></div>
+        <h3>Boghare <span style="color:var(--muted);font-size:.9rem">(about 1.35 blocks)</span></h3>
+        <p><b>Temperament</b>Bouncy, friendly</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide swamp hare, mossy green with a lily flower on her head and long ears tipped in pink.</p>
+        <p><b>Signature: Leaps</b>She leaps huge distances; her friend near her gets Jump Boost. Frogs are her kin.</p>
+        <p><b>Player interaction</b>Carrots and lily pads.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Moss green, a red flower</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Purple</strong> · Purple</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Yellow</strong> · Yellow</span><span class="swatch"><strong>Carrot Bunny</strong> · Grey and white</span></div>
+        <p><b>Spawns in</b><code>swamp, mangrove_swamp</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Leporidae (Harmontide)</p><p><b>Body</b>Jackalope form · <a href="jackalope_field_guide.html#boghare_jackalope">her card in that guide</a></p>
+      </article>
+      <article class="card" id="clockhare_jackalope">
+        <div class="card-top"><span class="group">Villages</span><span class="tag">Punctual · fussy</span></div>
+        <h3>Clockhare <span style="color:var(--muted);font-size:.9rem">(about 1.45 blocks)</span></h3>
+        <p><b>Temperament</b>Punctual, fussy</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide hare in a waistcoat and top hat, never far from her pocket watch.</p>
+        <p><b>Signature: Pocket watch</b>Her watch chimes at dawn and at dusk, and warns her friend when phantoms are due. Her friend works faster beside her (Haste).</p>
+        <p><b>Player interaction</b>Carrots. Be on time.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black fur, brass watch</span><span class="swatch"><strong>White</strong> · White fur, silver watch</span><span class="swatch"><strong>Brown</strong> · Brown fur, copper watch</span><span class="swatch"><strong>Grey</strong> · Grey fur, gold watch</span><span class="swatch"><strong>Spotted</strong> · Dutch markings</span></div>
+        <p><b>Spawns in</b><code>plains, meadow, flower_forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Leporidae (Harmontide)</p><p><b>Body</b>Jackalope form · <a href="jackalope_field_guide.html#clockhare_jackalope">her card in that guide</a></p>
+      </article>
+      <article class="card" id="easter_jackalope">
+        <div class="card-top"><span class="group">Flower forests &amp; meadows</span><span class="tag">Cheerful · sneaky</span></div>
+        <h3>Easter Bunny <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Cheerful, secretive, giggly</p>
+        <p><b>Ecology &amp; behaviour</b>She paints eggs and hides them everywhere: in grass, under bushes, behind trees.</p>
+        <p><b>Signature: Hidden eggs</b>Every few minutes she hides a painted egg block nearby. Breaking one gives a small treat (cookies, dyes, gold nuggets, now and then an emerald).</p>
+        <p><b>Player interaction</b>Find her eggs. Every egg you find and bring back makes her laugh with delight (+2).</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Pastel pink (default)</strong> · Pink fur, a basket of eggs</span><span class="swatch"><strong>Mint</strong> · Mint green</span><span class="swatch"><strong>Lavender</strong> · Soft lilac</span><span class="swatch"><strong>Butter</strong> · Pale yellow</span><span class="swatch"><strong>Sky</strong> · Baby blue</span></div>
+        <p><b>Spawns in</b><code>flower_forest, meadow, cherry_grove, plains</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Leporidae (folklore rabbit)</p><p><b>Body</b>Jackalope form · <a href="jackalope_field_guide.html#easter_jackalope">her card in that guide</a></p>
+      </article>
+      <article class="card" id="inaba_jackalope">
+        <div class="card-top"><span class="group">Full-moon meadows</span><span class="tag">Celestial · swift</span></div>
+        <h3>Inaba <span style="color:var(--muted);font-size:.9rem">(about 1.55 blocks)</span></h3>
+        <p><b>Temperament</b>Dreamy, playful, impossible to catch</p>
+        <p><b>Ecology &amp; behaviour</b>The moon rabbit who pounds rice cakes on the moon. She only comes down on full-moon nights and is the fastest thing on two legs.</p>
+        <p><b>Signature: Moon-blessed</b>Spawns only at night under a full moon. Once a player has caught her (any right-click), all her affection gains are doubled. She glows faintly in moonlight.</p>
+        <p><b>Player interaction</b>Catch her (get a hand on her at all) and she is yours far faster than any other jackalope.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Moon white (default)</strong> · Snow white with gold eyes</span><span class="swatch"><strong>Harvest moon</strong> · Warm gold</span><span class="swatch"><strong>Blood moon</strong> · Rose red</span><span class="swatch"><strong>Blue moon</strong> · Pale silver-blue</span><span class="swatch"><strong>Eclipse</strong> · Black with a silver rim</span><span class="swatch"><strong>Moon Warrior</strong> · Golden hair, a navy and red sailor suit</span></div>
+        <p><b>Spawns in</b><code>plains, meadow, sunflower_plains, cherry_grove</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Leporidae (folklore rabbit)</p><p><b>Body</b>Jackalope form · <a href="jackalope_field_guide.html#inaba_jackalope">her card in that guide</a></p>
+      </article>
+      <article class="card" id="jack_jackalope">
+        <div class="card-top"><span class="group">Badlands &amp; savanna</span><span class="tag">Antlered · bold</span></div>
+        <h3>Jack <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Bold, cocky, a show-off</p>
+        <p><b>Ecology &amp; behaviour</b>The jackalope of tall tales: a rabbit with a deer&#x27;s antlers. She spars with anything that challenges her.</p>
+        <p><b>Signature: Antler charge</b>She charges whatever hurts her (or her player), knocking it back hard. Her antlers fall off every few days and can be collected (a bone-like trophy).</p>
+        <p><b>Player interaction</b>Carrots, and never back down when she struts at you.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Wild brown with cream antlers</span><span class="swatch"><strong>Grey</strong> · Smoky grey</span><span class="swatch"><strong>Tan</strong> · Sandy tan</span><span class="swatch"><strong>Snowshoe</strong> · White winter coat</span><span class="swatch"><strong>Black</strong> · Black with pale antlers</span></div>
+        <p><b>Spawns in</b><code>badlands, wooded_badlands, savanna, plains</code></p>
+        <p class="risk"><b>Danger</b>Moderate if you start it.</p>
+              <p class="place"><b>True position</b>Leporidae: Lepus (legend; horns are an ornament)</p><p><b>Body</b>Jackalope form · <a href="jackalope_field_guide.html#jack_jackalope">her card in that guide</a></p>
+      </article>
+      <article class="card" id="moon_rabbit_jackalope">
+        <div class="card-top"><span class="group">End highlands</span><span class="tag">Busy · kind</span></div>
+        <h3>Moon Rabbit <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Busy, kind</p>
+        <p><b>Ecology &amp; behaviour</b>The jade rabbit of Chinese legend, who pounds the elixir of life on the moon.</p>
+        <p><b>Signature: Elixir</b>Hand her chorus fruit and she pounds it into a healing potion.</p>
+        <p><b>Player interaction</b>Chorus fruit and carrots.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>White (default)</strong> · White</span><span class="swatch"><strong>Jade</strong> · Jade</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Dusk</strong> · Dusk</span><span class="swatch"><strong>Ash</strong> · Ash</span></div>
+        <p><b>Spawns in</b><code>end_highlands</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Leporidae (folklore rabbit)</p><p><b>Body</b>Jackalope form · <a href="jackalope_field_guide.html#moon_rabbit_jackalope">her card in that guide</a></p>
+      </article>
+      <article class="card" id="volcano_jackalope">
+        <div class="card-top"><span class="group">Near lava</span><span class="tag">Tiny · shy</span></div>
+        <h3>Volcano Rabbit <span style="color:var(--muted);font-size:.9rem">(about 1.2 blocks)</span></h3>
+        <p><b>Temperament</b>Very shy, sweet, easily winded</p>
+        <p><b>Ecology &amp; behaviour</b>A tiny round-eared rabbit of the volcano slopes. She lives near lava and is never burnt by it.</p>
+        <p><b>Signature: Shy and tires easily</b>She bolts from anyone not crouching, but runs out of breath after a few seconds and has to stop and pant. Immune to fire and lava.</p>
+        <p><b>Player interaction</b>Sit still near her (crouch) and offer a carrot.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Warm brown</span><span class="swatch"><strong>Dark</strong> · Charcoal brown</span><span class="swatch"><strong>Ash</strong> · Ash grey</span><span class="swatch"><strong>Cinder</strong> · Red-brown with ember flecks</span><span class="swatch"><strong>Golden</strong> · Pale gold</span></div>
+        <p><b>Spawns in</b><code>stony_peaks, windswept_gravelly_hills, basalt_deltas, badlands</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Leporidae: Romerolagus diazi</p><p><b>Body</b>Jackalope form · <a href="jackalope_field_guide.html#volcano_jackalope">her card in that guide</a></p>
+      </article>
+      <article class="card" id="wolpertinger_jackalope">
+        <div class="card-top"><span class="group">Bavarian forests</span><span class="tag">Prankster · springy</span></div>
+        <h3>Wolpertinger <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Mischievous</p>
+        <p><b>Ecology &amp; behaviour</b>The horned, winged rabbit of Bavarian folklore, said to show herself only at dusk to the right company.</p>
+        <p><b>Signature: Prankster</b>She double-jumps and glides down from heights on little wings. Now and then she swaps your boots for leather ones; feed her to get yours back.</p>
+        <p><b>Player interaction</b>Carrots. Mind your boots.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Brown, pheasant wings</span><span class="swatch"><strong>Grey</strong> · Grey, duck wings</span><span class="swatch"><strong>Snow</strong> · White</span><span class="swatch"><strong>Red</strong> · Fox-red</span><span class="swatch"><strong>Black</strong> · Black, raven wings</span></div>
+        <p><b>Spawns in</b><code>forest, taiga, old_growth_spruce_taiga, windswept_forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Leporidae (folklore; antlers and wings are ornaments)</p><p><b>Body</b>Jackalope form · <a href="jackalope_field_guide.html#wolpertinger_jackalope">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fish (and the mermaids of legend) — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · Actinopterygii</div>
+  <h1>Fish (and the mermaids of legend)</h1>
+  <p class="lede">Ray-finned fish, and the mermaids of legend whose tails are a fish&#x27;s: koi, piranhas, anglers, eels. Sharks, rays and the starfish live here as guests; none of them are ray-finned.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Water Breathing · <b style="display:inline;color:var(--accent)">Was:</b> Merfolk</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Merfolk form · 16</b><a href="merfolk_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="merfolk_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Crustacean form · 1</b><a href="crustacean_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="crustacean_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (17)</h2>
+    <div class="grid">
+      <article class="card" id="angler_mermaid">
+        <div class="card-top"><span class="group">The deep</span><span class="tag">Grinning · lit</span></div>
+        <h3>Angler <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Patient</p>
+        <p><b>Ecology &amp; behaviour</b>All teeth and a little light. She has had a lot of time to think about what she would say to you.</p>
+        <p><b>Signature: Lure</b>Befriended, her lure draws the monsters near her friend to her instead.</p>
+        <p><b>Player interaction</b>Cod and salmon.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black</span><span class="swatch"><strong>Violet</strong> · Violet</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Teal</strong> · Teal</span><span class="swatch"><strong>Pale</strong> · Pale</span></div>
+        <p><b>Spawns in</b><code>deep_ocean, deep_cold_ocean, deep_lukewarm_ocean</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Lophiiformes</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#angler_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="eel_mermaid">
+        <div class="card-top"><span class="group">Dark rivers</span><span class="tag">Long · shocking</span></div>
+        <h3>Electric Eel <span style="color:var(--muted);font-size:.9rem">(about 1.85 blocks)</span></h3>
+        <p><b>Temperament</b>Shocking</p>
+        <p><b>Ecology &amp; behaviour</b>She doesn&#x27;t need to touch you. She doesn&#x27;t even need to see you.</p>
+        <p><b>Signature: Discharge</b>Befriended, everything hostile in the water near her friend is shocked.</p>
+        <p><b>Player interaction</b>Cod and salmon.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Dark (default)</strong> · Dark</span><span class="swatch"><strong>Moray</strong> · Moray</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>river, mangrove_swamp, jungle</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Gymnotiformes: Electrophorus (not a true eel)</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#eel_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="fishman_mermaid">
+        <div class="card-top"><span class="group">Oceans and rivers</span><span class="tag">Grumpy · brave</span></div>
+        <h3>Fishman <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Grumpy, brave</p>
+        <p><b>Ecology &amp; behaviour</b>A light blue Harmontide fish girl with a fin of a ponytail, fins at her elbows, freckle spots and sharp teeth always ready to scowl. She cannot stand the drowned.</p>
+        <p><b>Signature: Disarm</b>Befriended, she wrenches the trident from a drowned near her friend.</p>
+        <p><b>Player interaction</b>Fish and kelp.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Light blue</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Pink</strong> · Pink</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Gold</strong> · Gold</span></div>
+        <p><b>Spawns in</b><code>ocean, lukewarm_ocean, river, beach</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Actinopterygii (Harmontide)</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#fishman_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="koi_mermaid">
+        <div class="card-top"><span class="group">Rivers, lakes &amp; ponds</span><span class="tag">Lucky · graceful</span></div>
+        <h3>Koi <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Serene, graceful, a little vain</p>
+        <p><b>Ecology &amp; behaviour</b>Lives in calm fresh water and in ponds people build. Koi bring good fortune, and legend says a koi who climbs a waterfall becomes a dragon.</p>
+        <p><b>Signature: Good fortune &amp; waterfall climb</b>A bonded koi in a pond within 32 blocks of you gives Luck (better fishing and loot). She swims up water columns. Ten days at full devotion turns her into a dragon koi (a golden glow mask and longer fins).</p>
+        <p><b>Player interaction</b>Build her a pond. Feed her bread or kelp at the edge.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Kohaku (default)</strong> · White with red patches</span><span class="swatch"><strong>Showa</strong> · Black with red and white</span><span class="swatch"><strong>Ogon</strong> · Metallic gold</span><span class="swatch"><strong>Asagi</strong> · Blue-grey scales with red sides</span><span class="swatch"><strong>Tancho</strong> · White with one red spot on the head</span><span class="swatch"><strong>Red Tide</strong> · Red hair, a green tail, a lilac top</span></div>
+        <p><b>Spawns in</b><code>river, swamp, cherry_grove, mangrove_swamp</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Cypriniformes: Cyprinus rubrofuscus</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#koi_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="leviathan_mermaid">
+        <div class="card-top"><span class="group">Deep oceans</span><span class="tag">Vast · calm</span></div>
+        <h3>Leviathan <span style="color:var(--muted);font-size:.9rem">(about 3.0 blocks)</span></h3>
+        <p><b>Temperament</b>Vast, calm</p>
+        <p><b>Ecology &amp; behaviour</b>The sea monster of the Book of Job, as a great pale-blue fish with a girl&#x27;s chest, curled horns and fin ears. The tide moves when she does.</p>
+        <p><b>Signature: Tide call</b>Befriended, her friend swims with Dolphin&#x27;s Grace near her, and the tide drives monsters away from them.</p>
+        <p><b>Player interaction</b>Fish and prismarine crystals.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Pale blue</span><span class="swatch"><strong>Deep</strong> · Deep blue</span><span class="swatch"><strong>Green</strong> · Sea green</span><span class="swatch"><strong>Pearl</strong> · Pearl white</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>deep_ocean, deep_cold_ocean, deep_lukewarm_ocean</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Actinopterygii per this design (the Leviathan is also read as a whale or serpent) A judgement call: TAXONOMY_PLAN.md gives the reasons.</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#leviathan_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="lorelei_mermaid">
+        <div class="card-top"><span class="group">River rocks</span><span class="tag">Golden · fatal</span></div>
+        <h3>Lorelei <span style="color:var(--muted);font-size:.9rem">(about 1.75 blocks)</span></h3>
+        <p><b>Temperament</b>Fatal</p>
+        <p><b>Ecology &amp; behaviour</b>She combs her hair on a rock above the Rhine and sings. It has never gone well for the sailors.</p>
+        <p><b>Signature: Rhine Song</b>Befriended, her song draws the monsters near her friend towards the water and her.</p>
+        <p><b>Player interaction</b>Cod and salmon.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Gold (default)</strong> · Gold</span><span class="swatch"><strong>Silver</strong> · Silver</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Dark</strong> · Dark</span><span class="swatch"><strong>River</strong> · River</span></div>
+        <p><b>Spawns in</b><code>river, stony_shore</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>generic fish tail (folklore water spirit)</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#lorelei_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="mantarrow_mermaid">
+        <div class="card-top"><span class="group">Warm ocean</span><span class="tag">Graceful · fast</span></div>
+        <h3>Mantarrow <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Graceful</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide manta ray, her fins spread wide like wings.</p>
+        <p><b>Signature: Manta ride</b>A friend can ride her across the water, faster than a boat; now and then she leaps clear of the waves.</p>
+        <p><b>Player interaction</b>Fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, a white belly</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Spotted</strong> · Black with white spots</span><span class="swatch"><strong>Teal</strong> · Teal</span><span class="swatch"><strong>Violet</strong> · Violet</span></div>
+        <p><b>Spawns in</b><code>warm_ocean, lukewarm_ocean, deep_lukewarm_ocean</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Chondrichthyes: Mobulidae (Harmontide) A guest here: her true kin are too few, so she lives with her nearest relatives.</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#mantarrow_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="piranha_mermaid">
+        <div class="card-top"><span class="group">Jungle rivers</span><span class="tag">Hungry · fierce</span></div>
+        <h3>Piranha <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Hungry, fierce</p>
+        <p><b>Ecology &amp; behaviour</b>A round little Harmontide piranha girl, blue and spotted, with a jutting jaw full of teeth and a lure of a curl on her head. Where there is blood in the water, she is there first.</p>
+        <p><b>Signature: Frenzy</b>Befriended, in water she bites every monster near her friend that is already badly hurt.</p>
+        <p><b>Player interaction</b>Any raw meat or fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, darker spots</span><span class="swatch"><strong>Red</strong> · Red-bellied</span><span class="swatch"><strong>Silver</strong> · Silver</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Gold</strong> · Gold</span></div>
+        <p><b>Spawns in</b><code>river, jungle, mangrove_swamp, swamp</code></p>
+        <p class="risk"><b>Danger</b>Moderate (her teeth).</p>
+              <p class="place"><b>True position</b>Characiformes: Serrasalmidae</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#piranha_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="pufferfish_mermaid">
+        <div class="card-top"><span class="group">Warm reefs</span><span class="tag">Round · touchy</span></div>
+        <h3>Pufferfish <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Touchy</p>
+        <p><b>Ecology &amp; behaviour</b>Soft, yellow and easily offended. Hit her and she is half as big again and covered in spines.</p>
+        <p><b>Signature: Puff</b>A hit blows her up for a few seconds: bigger, and whatever hits her then is poisoned.</p>
+        <p><b>Player interaction</b>Cod and kelp.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Yellow (default)</strong> · Yellow</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Orange</strong> · Orange</span></div>
+        <p><b>Spawns in</b><code>warm_ocean, lukewarm_ocean</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>Tetraodontiformes: Tetraodontidae</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#pufferfish_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="reeffin_mermaid">
+        <div class="card-top"><span class="group">Warm seas</span><span class="tag">Gentle · bright</span></div>
+        <h3>Reeffin <span style="color:var(--muted);font-size:.9rem">(about 1.65 blocks)</span></h3>
+        <p><b>Temperament</b>Gentle, house-proud</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide reef mermaid crowned with coral, who tends the reef like a garden.</p>
+        <p><b>Signature: Reef keeper</b>Underwater she grows coral, coral fans and sea pickles on the sand around her.</p>
+        <p><b>Player interaction</b>Tropical fish and kelp.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, a coral crown</span><span class="swatch"><strong>Pink</strong> · Pink</span><span class="swatch"><strong>Orange</strong> · Orange</span><span class="swatch"><strong>Purple</strong> · Purple</span><span class="swatch"><strong>Green</strong> · Green</span></div>
+        <p><b>Spawns in</b><code>warm_ocean, lukewarm_ocean, beach</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Actinopterygii (Harmontide)</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#reeffin_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="rusalka_mermaid">
+        <div class="card-top"><span class="group">Rivers and lakes</span><span class="tag">Wistful · playful</span></div>
+        <h3>Rusalka <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Wistful, playful</p>
+        <p><b>Ecology &amp; behaviour</b>The water spirit of Slavic rivers, pale, with long loose green hair and a white shift, who sings to fishers.</p>
+        <p><b>Signature: River&#x27;s luck</b>Befriended, her friend fishing near her has the Luck of the Sea.</p>
+        <p><b>Player interaction</b>Cod, salmon and flowers.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>River (default)</strong> · Green hair, a grey-green tail</span><span class="swatch"><strong>Moonlit</strong> · Silver</span><span class="swatch"><strong>Reed</strong> · Reed gold</span><span class="swatch"><strong>Ash</strong> · Ash</span><span class="swatch"><strong>Lily</strong> · Lily pink</span></div>
+        <p><b>Spawns in</b><code>river, swamp, birch_forest</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>generic fish tail (folklore water spirit)</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#rusalka_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="sawfin_mermaid">
+        <div class="card-top"><span class="group">Warm seas and mangroves</span><span class="tag">Earnest · brave</span></div>
+        <h3>Sawfin <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Earnest, brave</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide sawfish in blue barding with a fleur-de-lis shield, her long toothed saw of a snout out in front.</p>
+        <p><b>Signature: Undersea sapper</b>Befriended, her friend underwater near her digs fast (Haste II).</p>
+        <p><b>Player interaction</b>Cod, salmon and tropical fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, white belly</span><span class="swatch"><strong>Grey</strong> · Grey, a red shield</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Sand</strong> · Sand</span><span class="swatch"><strong>Royal</strong> · Violet, a gold shield</span></div>
+        <p><b>Spawns in</b><code>warm_ocean, lukewarm_ocean, mangrove_swamp</code></p>
+        <p class="risk"><b>Danger</b>Low (her saw).</p>
+              <p class="place"><b>True position</b>Chondrichthyes: Pristidae (Harmontide) A guest here: her true kin are too few, so she lives with her nearest relatives.</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#sawfin_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="seahorse_mermaid">
+        <div class="card-top"><span class="group">Warm reefs</span><span class="tag">Upright · polite</span></div>
+        <h3>Seahorse <span style="color:var(--muted);font-size:.9rem">(about 1.45 blocks)</span></h3>
+        <p><b>Temperament</b>Polite</p>
+        <p><b>Ecology &amp; behaviour</b>Very small, very upright, and she&#x27;d rather you held on to something.</p>
+        <p><b>Signature: Air Line</b>Befriended, when her friend runs short of air under water she shares hers.</p>
+        <p><b>Player interaction</b>Kelp and cod.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Gold (default)</strong> · Gold</span><span class="swatch"><strong>Pink</strong> · Pink</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Red</strong> · Red</span></div>
+        <p><b>Spawns in</b><code>warm_ocean, lukewarm_ocean</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Syngnathiformes: Hippocampus</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#seahorse_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="shark_mermaid">
+        <div class="card-top"><span class="group">Warm &amp; lukewarm ocean</span><span class="tag">Fierce · loyal</span></div>
+        <h3>Shark <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Blunt, fierce, loyal once won</p>
+        <p><b>Ecology &amp; behaviour</b>Smells blood from far away and comes to investigate. She is not cruel, only hungry, and she likes people who feed her.</p>
+        <p><b>Signature: Attacks anything</b>A wild shark attacks anything that swims near her: fish, squid, drowned, swimmers. Fed fish or meat once, she leaves you alone; more food and she warms up to you. Even a bonded shark hunts every fish and monster in the water.</p>
+        <p><b>Player interaction</b>Throw her fish or meat (from a boat) until she stops seeing you as prey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Grey reef (default)</strong> · Grey back, white belly, dark fin edges</span><span class="swatch"><strong>Tiger</strong> · Grey-brown with dark stripes</span><span class="swatch"><strong>Whale shark</strong> · Dark blue with white spots (gentle)</span><span class="swatch"><strong>Mako</strong> · Metallic blue</span><span class="swatch"><strong>Lemon</strong> · Yellow-brown</span><span class="swatch"><strong>Trident Hood</strong> · White hair, a blue hoodie</span></div>
+        <p><b>Spawns in</b><code>warm_ocean, lukewarm_ocean, deep_lukewarm_ocean, ocean</code></p>
+        <p class="risk"><b>Danger</b>High until fed.</p>
+              <p class="place"><b>True position</b>Chondrichthyes: Selachimorpha; sharks and rays are too few for their own family A guest here: her true kin are too few, so she lives with her nearest relatives.</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#shark_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="siren_mermaid">
+        <div class="card-top"><span class="group">Rocky coasts</span><span class="tag">Enchanting · dangerous</span></div>
+        <h3>Siren <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Enchanting</p>
+        <p><b>Ecology &amp; behaviour</b>The singers of the rocks, here the mermaid kind of the sailors&#x27; tales, whose song draws ships onto the reef.</p>
+        <p><b>Signature: Luring song</b>Her song draws strangers toward the water. Sung for a friend, it gives Conduit Power while they swim.</p>
+        <p><b>Player interaction</b>Fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Teal (default)</strong> · Teal</span><span class="swatch"><strong>Pearl</strong> · White and silver</span><span class="swatch"><strong>Coral</strong> · Coral pink</span><span class="swatch"><strong>Abyss</strong> · Deep blue</span><span class="swatch"><strong>Storm</strong> · Grey</span></div>
+        <p><b>Spawns in</b><code>stony_shore, ocean, deep_ocean, cold_ocean</code></p>
+        <p class="risk"><b>Danger</b>Medium (her song).</p>
+              <p class="place"><b>True position</b>generic fish tail (sailors&#x27; myth; the Greek sirens were bird-women)</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#siren_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="starfish_crustacean">
+        <div class="card-top"><span class="group">Warm shallows</span><span class="tag">Slow · unkillable-ish</span></div>
+        <h3>Starfish <span style="color:var(--muted);font-size:.9rem">(about 1.55 blocks)</span></h3>
+        <p><b>Temperament</b>Slow</p>
+        <p><b>Ecology &amp; behaviour</b>Whatever you take off her grows back, and she will remember.</p>
+        <p><b>Signature: Regrowth</b>Befriended, when her friend near her is badly hurt they grow back too.</p>
+        <p><b>Player interaction</b>Cod and kelp.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Orange (default)</strong> · Orange</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Pink</strong> · Pink</span><span class="swatch"><strong>Purple</strong> · Purple</span><span class="swatch"><strong>Sand</strong> · Sand</span></div>
+        <p><b>Spawns in</b><code>warm_ocean, beach</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Echinodermata: Asteroidea; starfish are closer to fish (and us) than to crabs A guest here: her true kin are too few, so she lives with her nearest relatives.</p><p><b>Body</b>Crustacean form · <a href="crustacean_field_guide.html#starfish_crustacean">her card in that guide</a></p>
+      </article>
+      <article class="card" id="sword_koi_mermaid">
+        <div class="card-top"><span class="group">Warm ocean</span><span class="tag">Bold · proud</span></div>
+        <h3>Sword Koi <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Proud, bold</p>
+        <p><b>Ecology &amp; behaviour</b>A lapis-blue Harmontide koi patched with white, in gold-trimmed armour with a katana across her back, who duels the drowned for the sea&#x27;s treasures.</p>
+        <p><b>Signature: Duellist</b>Befriended, she hunts the drowned near her friend, and a drowned she defeats always drops what it held (a trident, a nautilus shell, a fishing rod).</p>
+        <p><b>Player interaction</b>Cod, salmon and kelp.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Lapis (default)</strong> · Blue and white</span><span class="swatch"><strong>Kohaku</strong> · White and red</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Black</strong> · Black and red</span><span class="swatch"><strong>Silver</strong> · Silver</span></div>
+        <p><b>Spawns in</b><code>warm_ocean, lukewarm_ocean, deep_lukewarm_ocean</code></p>
+        <p class="risk"><b>Danger</b>Low, unless you are drowned.</p>
+              <p class="place"><b>True position</b>Cypriniformes: Cyprinus (Harmontide)</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#sword_koi_mermaid">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

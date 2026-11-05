@@ -1,6 +1,6 @@
 # Taxonomy plan: sorting every family by its real clade
 
-Planned 2026-11-05. **Steps 1-5 of section 5 are built** (taxonomy table, `Clade`, clade milks with old-save aliases, config, tests); the clade field guides (step 6) and docs (step 7) are not. It covers all 519 mobs: the 458 `GirlSpecies`, the 47 harpies and the 14 anurans.
+Planned 2026-11-05. **Steps 1-5 of section 5 are built** (taxonomy table, `Clade`, clade milks with old-save aliases, config, tests); since then (2026-11-05) `tree_of_life.html` (`tools/build_tree_guide.py`) indexes every species by clade and links her card in the form guides, `MOBS_BY_DATE.md` carries each mob's clade, and the in-game journal has a tree of life. The 34 clade guides (`<clade>_clade_guide.html`, `tools/build_clade_guides.py`) reuse the form guides' cards and link each body's life cycle in place of a per-form appendix; the form guides were kept, not deleted. It covers all 519 mobs: the 458 `GirlSpecies`, the 47 harpies and the 14 anurans.
 Result: **34 families** (27 real clades and 7 mythic groups) instead of 28. **114 species change family**, 17 are
 "guests" and 15 are judgement calls for you to confirm.
 

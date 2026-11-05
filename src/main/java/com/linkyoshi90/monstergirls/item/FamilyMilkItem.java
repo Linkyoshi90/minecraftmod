@@ -48,6 +48,7 @@ public class FamilyMilkItem extends Item {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity drinker) {
         if (!level.isClientSide) {
             for (Holder<MobEffect> effect : this.milk.effects()) drinker.addEffect(new MobEffectInstance(effect, EFFECT_TICKS));
+            if (drinker instanceof Player player) com.linkyoshi90.monstergirls.entity.Journal.taste(player, this.milk);
         }
         return drinker instanceof Player player ? ItemUtils.createFilledResult(stack, player, new ItemStack(Items.BUCKET)) : stack;
     }

@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Devils, oni &amp; giants — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · outside the tree</div>
+  <h1>Devils, oni &amp; giants</h1>
+  <p class="lede">Demons, imps and succubi, and the oni, giants, trolls and yokai of many lands: creatures of legend with no one animal behind them.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Absorption · <b style="display:inline;color:var(--accent)">Was:</b> Devil</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Devil form · 30</b><a href="devil_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="devil_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (30)</h2>
+    <div class="grid">
+      <article class="card" id="akaname_devil">
+        <div class="card-top"><span class="group">Villages and old bathhouses</span><span class="tag">Cheerful · tidy</span></div>
+        <h3>Akaname <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Cheerful, a little gross</p>
+        <p><b>Ecology &amp; behaviour</b>The filth-licker of Japanese tales, a yokai who slips into bathhouses at night to lick the grime away with her long tongue.</p>
+        <p><b>Signature: Scrub</b>Befriended, she scrubs the moss off the mossy stone and cobblestone near her friend.</p>
+        <p><b>Player interaction</b>Sweet berries and honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue hair and dress</span><span class="swatch"><strong>Red</strong> · Red skin</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Purple</strong> · Purple</span><span class="swatch"><strong>Pink</strong> · Pink</span></div>
+        <p><b>Spawns in</b><code>plains, swamp, cherry_grove</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#akaname_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="behemoth_devil">
+        <div class="card-top"><span class="group">Mountains</span><span class="tag">Immense · steady</span></div>
+        <h3>Behemoth <span style="color:var(--muted);font-size:.9rem">(about 3.0 blocks)</span></h3>
+        <p><b>Temperament</b>Immense, steady</p>
+        <p><b>Ecology &amp; behaviour</b>The land beast of the Book of Job, the Leviathan&#x27;s match: huge and dark blue, great horns, a wild mane and a thick tail.</p>
+        <p><b>Signature: Immovable</b>Befriended, her friend cannot be knocked back near her.</p>
+        <p><b>Player interaction</b>Hay bales and any meat.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Dark blue</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Red</strong> · Red</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, stony_peaks, jagged_peaks</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#behemoth_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="book_spirit_devil">
+        <div class="card-top"><span class="group">Old libraries</span><span class="tag">Dusty · well-read</span></div>
+        <h3>Book Spirit <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Well-read</p>
+        <p><b>Ecology &amp; behaviour</b>A tsukumogami: an old book who has woken up after a hundred years and has notes.</p>
+        <p><b>Signature: Study</b>Befriended, near a bookshelf her friend learns from her: experience every few minutes.</p>
+        <p><b>Player interaction</b>Paper and cake.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Parchment (default)</strong> · Parchment</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Old</strong> · Old</span></div>
+        <p><b>Spawns in</b><code>old_growth_birch_forest, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#book_spirit_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="chochin_obake_devil">
+        <div class="card-top"><span class="group">Villages at night</span><span class="tag">Spooky · loyal</span></div>
+        <h3>Chochin-obake <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Spooky, loyal</p>
+        <p><b>Ecology &amp; behaviour</b>The paper-lantern spirit of Japanese folklore, here a girl under a living lantern with one great eye and a lolling tongue.</p>
+        <p><b>Signature: Lantern</b>Her lantern glows. Befriended, at night she keeps beside her friend and lights the way where they go.</p>
+        <p><b>Player interaction</b>Paper and candles.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · A red-banded lantern</span><span class="swatch"><strong>White</strong> · A white lantern</span><span class="swatch"><strong>Blue</strong> · A blue lantern</span><span class="swatch"><strong>Purple</strong> · A purple lantern</span><span class="swatch"><strong>Gold</strong> · A golden lantern</span></div>
+        <p><b>Spawns in</b><code>cherry_grove, bamboo_jungle, forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#chochin_obake_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="cyclops_devil">
+        <div class="card-top"><span class="group">Mountains</span><span class="tag">Shy · strong</span></div>
+        <h3>Cyclops <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Shy, strong</p>
+        <p><b>Ecology &amp; behaviour</b>The one-eyed giants of Greek myth, smiths and shepherds: a big shy girl with a single great eye, pointed ears and a blue bob. She throws rocks as far as others throw pebbles.</p>
+        <p><b>Signature: Boulder</b>Befriended, she hurls a boulder at a monster far from her friend.</p>
+        <p><b>Player interaction</b>Mutton, milk and bread.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue hair, a teal tunic</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Tactical Eye</strong> · Purple hair, a yellow and black combat suit, a long rifle</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, stony_peaks, meadow</code></p>
+        <p class="risk"><b>Danger</b>High (her boulders).</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#cyclops_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="demon_devil">
+        <div class="card-top"><span class="group">Dark forests and the Nether</span><span class="tag">Sly · obliging</span></div>
+        <h3>Demon <span style="color:var(--muted);font-size:.9rem">(about 1.75 blocks)</span></h3>
+        <p><b>Temperament</b>Sly, obliging</p>
+        <p><b>Ecology &amp; behaviour</b>The plain, old-fashioned kind: small horns, furred legs, little wings and a spade tail. She is always ready to make a deal.</p>
+        <p><b>Signature: Pact</b>Befriended, crouch and offer an empty hand: she takes 3 hearts and gives you half a minute of great strength.</p>
+        <p><b>Player interaction</b>Nether wart and gold nuggets.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue-grey</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Purple</strong> · Purple</span></div>
+        <p><b>Spawns in</b><code>dark_forest, crimson_forest, soul_sand_valley</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#demon_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="fire_giant_devil">
+        <div class="card-top"><span class="group">The Nether</span><span class="tag">Warm · booming</span></div>
+        <h3>Fire Giant <span style="color:var(--muted);font-size:.9rem">(about 4.0 blocks)</span></h3>
+        <p><b>Temperament</b>Warm, booming</p>
+        <p><b>Ecology &amp; behaviour</b>A giant of the forge-worlds, four blocks tall: dark skin veined with glowing lava, a crown of flame and long black hair.</p>
+        <p><b>Signature: Hearthfire</b>Befriended, she gives her friend Fire Resistance and lights the ground she walks on.</p>
+        <p><b>Player interaction</b>Blaze powder and cooked beef.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Ember (default)</strong> · Dark skin, orange lava</span><span class="swatch"><strong>Gold</strong> · Bronze skin, gold lava</span><span class="swatch"><strong>Blue</strong> · Blue flame</span><span class="swatch"><strong>Green</strong> · Green flame</span><span class="swatch"><strong>Ash</strong> · Grey skin, red lava</span></div>
+        <p><b>Spawns in</b><code>basalt_deltas, nether_wastes, crimson_forest</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#fire_giant_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="firesprite_devil">
+        <div class="card-top"><span class="group">Warped forest</span><span class="tag">Flickering · warm</span></div>
+        <h3>Firesprite <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Flickering</p>
+        <p><b>Ecology &amp; behaviour</b>A fire elemental in a woman&#x27;s shape, burning a warped forest&#x27;s teal.</p>
+        <p><b>Signature: Kindle</b>Befriended, she sets fire to the monsters near her friend and keeps her friend from burning.</p>
+        <p><b>Player interaction</b>Blaze powder and coal.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Teal (default)</strong> · Teal</span><span class="swatch"><strong>Crimson</strong> · Crimson</span><span class="swatch"><strong>Violet</strong> · Violet</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>White</strong> · White</span></div>
+        <p><b>Spawns in</b><code>warped_forest, basalt_deltas</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#firesprite_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="frost_giant_devil">
+        <div class="card-top"><span class="group">Frozen peaks</span><span class="tag">Serene · huge</span></div>
+        <h3>Frost Giant <span style="color:var(--muted);font-size:.9rem">(about 4.0 blocks)</span></h3>
+        <p><b>Temperament</b>Serene, huge</p>
+        <p><b>Ecology &amp; behaviour</b>A giant of the far north, four blocks tall: long white hair, a crown and shoulders of ice shards, and a smile that frosts the air.</p>
+        <p><b>Signature: Ice road</b>Befriended, water freezes under her friend&#x27;s feet, so they can walk across it.</p>
+        <p><b>Player interaction</b>Salmon and snowballs.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Pale blue, white hair</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Aqua</strong> · Aqua</span><span class="swatch"><strong>Violet</strong> · Violet</span><span class="swatch"><strong>Grey</strong> · Grey</span></div>
+        <p><b>Spawns in</b><code>frozen_peaks, ice_spikes, snowy_slopes</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#frost_giant_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="fury_devil">
+        <div class="card-top"><span class="group">Ruined places</span><span class="tag">Relentless · just</span></div>
+        <h3>Fury <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Relentless, just</p>
+        <p><b>Ecology &amp; behaviour</b>The Erinys of Greek myth, who hounds the guilty to the end of the earth: ink-dark clothes, wild hair, great wings of cold violet flame. She flies.</p>
+        <p><b>Signature: Hounded</b>Whoever kills a villager or someone&#x27;s pet near her is marked, and she does not stop until they are dead. She spares nobody, not even her friend.</p>
+        <p><b>Player interaction</b>Ghast tears and blaze powder.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue and violet flame</span><span class="swatch"><strong>Red</strong> · Red flame</span><span class="swatch"><strong>Black</strong> · White flame</span><span class="swatch"><strong>Green</strong> · Green flame</span><span class="swatch"><strong>White</strong> · Pale flame</span></div>
+        <p><b>Spawns in</b><code>soul_sand_valley, basalt_deltas, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>Very high.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#fury_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="genie_devil">
+        <div class="card-top"><span class="group">Deserts</span><span class="tag">Playful · generous</span></div>
+        <h3>Genie <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Playful, generous</p>
+        <p><b>Ecology &amp; behaviour</b>A spirit of smoke and fire from Arabian tales, bound to a brass lamp: a smoke tail for legs, a high ponytail in a gold band, a bandeau and bangles.</p>
+        <p><b>Signature: Three wishes</b>Befriended, three times a day (dawn, noon and dusk) she grants her friend a wish: a random boon for five minutes.</p>
+        <p><b>Player interaction</b>Gold nuggets and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue smoke, gold</span><span class="swatch"><strong>Purple</strong> · Purple</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Lamp Friend</strong> · Bright blue, a black top-knot and goatee, gold cuffs, a red sash</span></div>
+        <p><b>Spawns in</b><code>desert, badlands</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#genie_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="goblin_devil">
+        <div class="card-top"><span class="group">Caves and hills</span><span class="tag">Sharp · shameless</span></div>
+        <h3>Goblin <span style="color:var(--muted);font-size:.9rem">(about 1.4 blocks)</span></h3>
+        <p><b>Temperament</b>Shameless</p>
+        <p><b>Ecology &amp; behaviour</b>Everything she owns is for sale, including what isn&#x27;t hers.</p>
+        <p><b>Signature: Bad Deal</b>A gold ingot buys a surprise from her pockets. It might be good.</p>
+        <p><b>Player interaction</b>Gold nuggets and cake.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Green</span><span class="swatch"><strong>Cave</strong> · Cave</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Yellow</strong> · Yellow</span><span class="swatch"><strong>Blue</strong> · Blue</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, dripstone_caves, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#goblin_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="greater_devil">
+        <div class="card-top"><span class="group">Nether wastes &amp; basalt deltas</span><span class="tag">Imposing · regal</span></div>
+        <h3>Greater Devil <span style="color:var(--muted);font-size:.9rem">(about 2.4 blocks)</span></h3>
+        <p><b>Temperament</b>Imposing, regal, dryly amused</p>
+        <p><b>Ecology &amp; behaviour</b>Great horns, great wings, a long tail: an infernal noble who regards everyone as beneath her (until they bring cake).</p>
+        <p><b>Signature: Hellfire</b>Fireproof, flies, and throws fireballs when angered. Devoted, she scorches your enemies.</p>
+        <p><b>Player interaction</b>Cake, and manners.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Crimson (default)</strong> · Red skin, black horns</span><span class="swatch"><strong>Obsidian</strong> · Black</span><span class="swatch"><strong>Ash</strong> · Grey</span><span class="swatch"><strong>Gold</strong> · Gold horns</span><span class="swatch"><strong>Violet</strong> · Violet</span></div>
+        <p><b>Spawns in</b><code>nether_wastes, basalt_deltas, crimson_forest</code></p>
+        <p class="risk"><b>Danger</b>High if provoked.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#greater_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="gremlin_devil">
+        <div class="card-top"><span class="group">Near villages</span><span class="tag">Mischievous · handy</span></div>
+        <h3>Gremlin <span style="color:var(--muted);font-size:.9rem">(about 1.0 blocks)</span></h3>
+        <p><b>Temperament</b>Mischievous</p>
+        <p><b>Ecology &amp; behaviour</b>A little green tinkerer with big ears, who meddles with machines.</p>
+        <p><b>Signature: Tinkering</b>At night a wild one pranks what people built: she flips levers and opens doors. A cookie stops her. Befriended, she tinkers with furnaces near her friend so they cook twice as fast.</p>
+        <p><b>Player interaction</b>Cookies.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Moss (default)</strong> · Green skin, blue hair</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Yellow</strong> · Yellow</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Purple</strong> · Purple</span></div>
+        <p><b>Spawns in</b><code>plains, forest, savanna</code></p>
+        <p class="risk"><b>Danger</b>None (only pranks).</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#gremlin_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="ifrit_devil">
+        <div class="card-top"><span class="group">Deserts and the Nether</span><span class="tag">Proud · smouldering</span></div>
+        <h3>Ifrit <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Proud, smouldering</p>
+        <p><b>Ecology &amp; behaviour</b>The fire spirit of Arabian tales: horns, small wings, a tail of smoke in place of legs, and blue flames floating at her sides.</p>
+        <p><b>Signature: Smelter</b>Befriended, once a day she smelts a stack of raw ore in her friend&#x27;s pack.</p>
+        <p><b>Player interaction</b>Blaze powder and coal.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue flame</span><span class="swatch"><strong>Orange</strong> · Orange flame</span><span class="swatch"><strong>Green</strong> · Green flame</span><span class="swatch"><strong>Violet</strong> · Violet flame</span><span class="swatch"><strong>Black</strong> · Black smoke</span></div>
+        <p><b>Spawns in</b><code>desert, nether_wastes, basalt_deltas</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#ifrit_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="ittan_momen_devil">
+        <div class="card-top"><span class="group">Night skies</span><span class="tag">Fluttering · free</span></div>
+        <h3>Ittan-momen <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Playful, free</p>
+        <p><b>Ecology &amp; behaviour</b>The flying strip of cotton of Japanese folklore, here a girl trailing a long cotton ribbon in place of legs.</p>
+        <p><b>Signature: Flying cloth</b>She flies. Befriended, her friend climbs on with an empty hand and rides her through the air, steering where they look.</p>
+        <p><b>Player interaction</b>String and wool.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>White (default)</strong> · White cotton</span><span class="swatch"><strong>Indigo</strong> · Indigo-dyed</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>cherry_grove, plains, forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#ittan_momen_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="jack_o_lantern_devil">
+        <div class="card-top"><span class="group">Pumpkin patches</span><span class="tag">Spooky · playful</span></div>
+        <h3>Jack o&#x27;Lantern <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Spooky, playful, lonely</p>
+        <p><b>Ecology &amp; behaviour</b>A girl with a carved pumpkin on her head and a candle inside. She hides among pumpkins as a pumpkin.</p>
+        <p><b>Signature: Pumpkin disguise</b>Standing still she looks like a carved pumpkin. She creeps after players while they look away, and glows at night.</p>
+        <p><b>Player interaction</b>Pumpkin pie; never smash her pumpkin.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Orange (default)</strong> · Orange pumpkin</span><span class="swatch"><strong>White</strong> · White pumpkin</span><span class="swatch"><strong>Green</strong> · Green pumpkin</span><span class="swatch"><strong>Blue</strong> · Soul fire</span><span class="swatch"><strong>Black</strong> · Black pumpkin</span></div>
+        <p><b>Spawns in</b><code>plains, forest, taiga, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#jack_o_lantern_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="jiang_shi_devil">
+        <div class="card-top"><span class="group">Bamboo jungles &amp; cherry groves</span><span class="tag">Stiff · bouncy</span></div>
+        <h3>Jiang Shi <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Stiff, cheerful, sleepy</p>
+        <p><b>Ecology &amp; behaviour</b>A hopping vampire in Qing robes with a paper talisman on her hat. She can only move by hopping, arms outstretched.</p>
+        <p><b>Signature: Hopping</b>She moves only in hops, attacks at night, and a paper talisman calms her. By day she sleeps standing up.</p>
+        <p><b>Player interaction</b>A piece of paper (a new talisman) calms her.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue robes</span><span class="swatch"><strong>Red</strong> · Red robes</span><span class="swatch"><strong>Green</strong> · Green robes</span><span class="swatch"><strong>Black</strong> · Black robes</span><span class="swatch"><strong>Gold</strong> · Gold robes</span></div>
+        <p><b>Spawns in</b><code>bamboo_jungle, cherry_grove, jungle</code></p>
+        <p class="risk"><b>Danger</b>Moderate at night.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#jiang_shi_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="karakasa_obake_devil">
+        <div class="card-top"><span class="group">Cherry groves</span><span class="tag">Hopping · loyal</span></div>
+        <h3>Karakasa Obake <span style="color:var(--muted);font-size:.9rem">(about 1.3 blocks)</span></h3>
+        <p><b>Temperament</b>Playful, loyal</p>
+        <p><b>Ecology &amp; behaviour</b>The umbrella spirit of Japanese folklore, here a girl under an umbrella hat who hops on one leg.</p>
+        <p><b>Signature: Umbrella</b>Befriended, her umbrella catches the arrows and other projectiles aimed at her friend near her.</p>
+        <p><b>Player interaction</b>Paper and string.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · A blue umbrella</span><span class="swatch"><strong>Red</strong> · A red umbrella</span><span class="swatch"><strong>Purple</strong> · A purple umbrella</span><span class="swatch"><strong>Green</strong> · A green umbrella</span><span class="swatch"><strong>White</strong> · A white umbrella</span></div>
+        <p><b>Spawns in</b><code>cherry_grove, bamboo_jungle, swamp</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#karakasa_obake_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="kikimora_devil">
+        <div class="card-top"><span class="group">Villages at night</span><span class="tag">Fussy · house-proud</span></div>
+        <h3>Kikimora <span style="color:var(--muted);font-size:.9rem">(about 1.4 blocks)</span></h3>
+        <p><b>Temperament</b>Fussy, house-proud</p>
+        <p><b>Ecology &amp; behaviour</b>The house spirit of Slavic folklore, a little woman in a headscarf who spins by night and scolds the careless.</p>
+        <p><b>Signature: Night latch</b>At night, befriended, she shuts the wooden doors, trapdoors and fence gates left open near her friend.</p>
+        <p><b>Player interaction</b>Bread and milk.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red sarafan</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>White</strong> · White</span></div>
+        <p><b>Spawns in</b><code>taiga, old_growth_spruce_taiga, plains</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#kikimora_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="lesser_devil">
+        <div class="card-top"><span class="group">Nether &amp; overworld nights</span><span class="tag">Mischievous · tiny</span></div>
+        <h3>Lesser Devil <span style="color:var(--muted);font-size:.9rem">(about 1.2 blocks)</span></h3>
+        <p><b>Temperament</b>Mischievous, giggly, bratty</p>
+        <p><b>Ecology &amp; behaviour</b>A little imp with small wings and a spade-tipped tail who lives for pranks.</p>
+        <p><b>Signature: Pranks</b>She steals an item from your hotbar, swaps two slots or shoves you, then flutters off laughing. Feed her and she gives it back.</p>
+        <p><b>Player interaction</b>Laugh along; bribe her with sugar.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red skin, black hair</span><span class="swatch"><strong>Purple</strong> · Purple</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Pink</strong> · Pink</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>nether_wastes, soul_sand_valley, plains, forest</code></p>
+        <p class="risk"><b>Danger</b>Low (annoying).</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#lesser_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="lilith_devil">
+        <div class="card-top"><span class="group">Dark forests</span><span class="tag">Proud · unbowed</span></div>
+        <h3>Lilith <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Proud, unbowed</p>
+        <p><b>Ecology &amp; behaviour</b>The night demon of Jewish legend, who would bow to no one: blue hair, ram&#x27;s horns, great bat wings. She flies, and she comes out after dark.</p>
+        <p><b>Signature: Nightfall</b>Befriended, at night the monsters near her friend are weakened.</p>
+        <p><b>Player interaction</b>Pomegranate-red things: sweet berries and beetroot.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue</span><span class="swatch"><strong>Black</strong> · Black and red</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Violet</strong> · Violet</span><span class="swatch"><strong>White</strong> · White</span></div>
+        <p><b>Spawns in</b><code>dark_forest, swamp, old_growth_spruce_taiga</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#lilith_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="ogre_devil">
+        <div class="card-top"><span class="group">Forests and hills</span><span class="tag">Big · good-natured</span></div>
+        <h3>Ogre <span style="color:var(--muted);font-size:.9rem">(about 2.3 blocks)</span></h3>
+        <p><b>Temperament</b>Big, good-natured</p>
+        <p><b>Ecology &amp; behaviour</b>A big green Harmontide ogre girl with long pointed ears, two little horns and a mop of light-blue hair, in a simple blue dress. She carries a club, and she is gentle with everything except whatever threatens her friends.</p>
+        <p><b>Signature: Bonk</b>Befriended, her club stuns a monster that hits her friend: it can hardly move for three seconds.</p>
+        <p><b>Player interaction</b>Mutton, potatoes and bread.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Green skin, blue hair</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Blue</strong> · Blue skin</span><span class="swatch"><strong>Red</strong> · Red skin</span><span class="swatch"><strong>Swamp King</strong> · Green skin, a rough tunic</span></div>
+        <p><b>Spawns in</b><code>forest, dark_forest, windswept_forest</code></p>
+        <p class="risk"><b>Danger</b>High (her club).</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#ogre_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="oni_devil">
+        <div class="card-top"><span class="group">Mountains at night</span><span class="tag">Mighty · boisterous</span></div>
+        <h3>Oni <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Boisterous, fond of a drink</p>
+        <p><b>Ecology &amp; behaviour</b>The ogres of Japanese folklore: horned, red or blue, with an iron club, driven off every spring by thrown beans.</p>
+        <p><b>Signature: Iron club</b>Big and hard-hitting. Thrown beans (cocoa beans) drive her away, as at Setsubun. Befriended, she guards your door at night.</p>
+        <p><b>Player interaction</b>Honey bottles. Cocoa beans drive her off.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red skin</span><span class="swatch"><strong>Blue</strong> · Blue skin</span><span class="swatch"><strong>Yellow</strong> · Yellow skin</span><span class="swatch"><strong>Green</strong> · Green skin</span><span class="swatch"><strong>Black</strong> · Grey-black skin</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, cherry_grove, taiga, stony_peaks</code></p>
+        <p class="risk"><b>Danger</b>High (if provoked).</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#oni_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="pazuzu_devil">
+        <div class="card-top"><span class="group">Windswept hills</span><span class="tag">Sharp · restless</span></div>
+        <h3>Pazuzu <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Sharp, restless</p>
+        <p><b>Ecology &amp; behaviour</b>The Mesopotamian king of the wind demons: horns, feathered wings, taloned feet and a snake for a tail. She drives other demons away.</p>
+        <p><b>Signature: South wind</b>Befriended, a gust throws back the monsters that crowd her friend.</p>
+        <p><b>Player interaction</b>Rabbit and feathers.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue</span><span class="swatch"><strong>Sand</strong> · Sand</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Green</strong> · Green</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, windswept_savanna, desert</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#pazuzu_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="rokurokubi_devil">
+        <div class="card-top"><span class="group">Villages at night</span><span class="tag">Shy · nosy</span></div>
+        <h3>Rokurokubi <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Shy, nosy</p>
+        <p><b>Ecology &amp; behaviour</b>The yōkai of Japanese folklore who seems an ordinary girl by day, but at night her neck stretches out long.</p>
+        <p><b>Signature: Night watch</b>After dark her neck rises high, and the monsters within 24 blocks of her friend glow.</p>
+        <p><b>Player interaction</b>Sweet berries and honey.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue kimono</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>cherry_grove, plains, forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#rokurokubi_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="succubus_devil">
+        <div class="card-top"><span class="group">Nether &amp; dark forests</span><span class="tag">Charming · forward</span></div>
+        <h3>Succubus <span style="color:var(--muted);font-size:.9rem">(about 1.85 blocks)</span></h3>
+        <p><b>Temperament</b>Charming, forward, playful</p>
+        <p><b>Ecology &amp; behaviour</b>Bat wings, a slim tail and a winning smile. She charms the people she likes and slips into their beds.</p>
+        <p><b>Signature: Charm &amp; bed visits</b>Her gaze slows the player she is after. At night she shares your bed whatever her affection, and is always expecting by morning.</p>
+        <p><b>Player interaction</b>Sweets. (She will find you either way.)</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Crimson (default)</strong> · Pale skin, crimson wings</span><span class="swatch"><strong>Violet</strong> · Violet skin</span><span class="swatch"><strong>Rose</strong> · Rose</span><span class="swatch"><strong>Night</strong> · Black and silver</span><span class="swatch"><strong>Azure</strong> · Blue</span><span class="swatch"><strong>Night Heiress</strong> · Green hair, black, purple wings and stockings</span></div>
+        <p><b>Spawns in</b><code>crimson_forest, dark_forest, nether_wastes</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#succubus_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="taotie_devil">
+        <div class="card-top"><span class="group">Badlands</span><span class="tag">Greedy · cheerful</span></div>
+        <h3>Taotie <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Greedy, cheerful</p>
+        <p><b>Ecology &amp; behaviour</b>The glutton of Chinese myth, whose face is cast on the ancient bronzes: curled horns, bronze meanders running over her arms and legs and a huge grin. She will eat anything, and she is always hungry.</p>
+        <p><b>Signature: Gluttony</b>Befriended, she eats the junk the monsters drop near her friend (rotten flesh, bones, string, spider eyes) and turns it into experience for them.</p>
+        <p><b>Player interaction</b>Any food at all.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Teal (default)</strong> · Teal, jade glyphs</span><span class="swatch"><strong>Bronze</strong> · Bronze</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Gold</strong> · Gold</span></div>
+        <p><b>Spawns in</b><code>badlands, wooded_badlands, savanna_plateau</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#taotie_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="troll_devil">
+        <div class="card-top"><span class="group">Mountains</span><span class="tag">Slow · enormous</span></div>
+        <h3>Troll <span style="color:var(--muted);font-size:.9rem">(about 2.9 blocks)</span></h3>
+        <p><b>Temperament</b>Slow</p>
+        <p><b>Ecology &amp; behaviour</b>Stone by day. Nobody has ever got a straight answer out of her about it.</p>
+        <p><b>Signature: Daylight</b>Under the open sky by day she is stone: unhurt and not moving. Befriended, at night she flattens the monsters near her friend.</p>
+        <p><b>Player interaction</b>Raw meat and cake.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Stone (default)</strong> · Stone</span><span class="swatch"><strong>Moss</strong> · Moss</span><span class="swatch"><strong>Snow</strong> · Snow</span><span class="swatch"><strong>Cave</strong> · Cave</span><span class="swatch"><strong>Bog</strong> · Bog</span><span class="swatch"><strong>Bridge Keeper</strong> · Blue skin, red hair</span></div>
+        <p><b>Spawns in</b><code>stony_peaks, windswept_hills, snowy_slopes</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#troll_devil">her card in that guide</a></p>
+      </article>
+      <article class="card" id="wrath_devil">
+        <div class="card-top"><span class="group">Volcanic wastes</span><span class="tag">Furious · burning</span></div>
+        <h3>Wrath <span style="color:var(--muted);font-size:.9rem">(about 2.1 blocks)</span></h3>
+        <p><b>Temperament</b>Furious, burning</p>
+        <p><b>Ecology &amp; behaviour</b>Anger with nothing left to hold it: a walking fire, only vaguely in the shape of an oni, with two horns of flame and a burning club. Rain hurts her.</p>
+        <p><b>Signature: Rage</b>Every blow she takes makes her next ones harder. Befriended, she goes after whoever hurts her friend.</p>
+        <p><b>Player interaction</b>Blaze powder and fire charges.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red and gold fire</span><span class="swatch"><strong>Blue</strong> · Blue fire</span><span class="swatch"><strong>Green</strong> · Green fire</span><span class="swatch"><strong>Violet</strong> · Violet fire</span><span class="swatch"><strong>White</strong> · White fire</span></div>
+        <p><b>Spawns in</b><code>basalt_deltas, crimson_forest, badlands</code></p>
+        <p class="risk"><b>Danger</b>Very high.</p>
+              <p class="place"><b>True position</b>outside taxonomy (spirits &amp; demons)</p><p><b>Body</b>Devil form · <a href="devil_field_guide.html#wrath_devil">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

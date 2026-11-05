@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Canids (wolves, dogs &amp; foxes) — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · Mammalia &gt; Carnivora &gt; Caniformia &gt; Canidae</div>
+  <h1>Canids (wolves, dogs &amp; foxes)</h1>
+  <p class="lede">Wolves, dogs, jackals and every fox, the kitsune included: one family of long-legged runners, with the hellhounds of legend. Foxes were a family of their own in the old sorting; here they rejoin their cousins, and the tanuki, a raccoon dog, comes with them.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Speed + Luck · <b style="display:inline;color:var(--accent)">Was:</b> Canid, Kitsune</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Kitsune form · 12</b><a href="kitsune_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="kitsune_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Canid form · 11</b><a href="canid_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="canid_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Merfolk form · 1</b><a href="merfolk_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="merfolk_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Rodent form · 1</b><a href="rodent_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="rodent_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (25)</h2>
+    <div class="grid">
+      <article class="card" id="amarok_canid">
+        <div class="card-top"><span class="group">Snowy taiga</span><span class="tag">Lone · fierce</span></div>
+        <h3>Amarok <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Solitary, fierce</p>
+        <p><b>Ecology &amp; behaviour</b>The giant lone wolf of Inuit legend, slate grey and shaggy, who hunts alone and fears nothing.</p>
+        <p><b>Signature: Pack mother</b>Befriended, her friend&#x27;s tamed wolves near her fight harder (Strength I).</p>
+        <p><b>Player interaction</b>Beef, mutton and bones.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Slate (default)</strong> · Slate grey, pale ruff</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Storm</strong> · Storm blue</span><span class="swatch"><strong>Tundra</strong> · Tundra brown</span></div>
+        <p><b>Spawns in</b><code>snowy_taiga, snowy_plains, grove</code></p>
+        <p class="risk"><b>Danger</b>High (her jaws).</p>
+              <p class="place"><b>True position</b>Canidae: Canis lupus</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#amarok_canid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="anubis_canid">
+        <div class="card-top"><span class="group">Deserts, at night</span><span class="tag">Solemn · just</span></div>
+        <h3>Anubis <span style="color:var(--muted);font-size:.9rem">(about 1.95 blocks)</span></h3>
+        <p><b>Temperament</b>Solemn, just, merciless to the guilty</p>
+        <p><b>Ecology &amp; behaviour</b>The jackal-headed guardian of Egyptian tombs, who weighs the hearts of the dead against the feather of Ma&#x27;at. Her jackal is the golden jackal (Canis aureus).</p>
+        <p><b>Signature: The weighing</b>She weighs every player who comes near. Anyone who killed villagers or iron golems is condemned and hunted. Others may open the tomb chests she guards.</p>
+        <p><b>Player interaction</b>Come with a clean conscience. Bread and honey as offerings.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black jackal, gold</span><span class="swatch"><strong>Gold</strong> · Golden jackal</span><span class="swatch"><strong>Silver</strong> · Grey</span><span class="swatch"><strong>Sand</strong> · Sandy</span><span class="swatch"><strong>Night</strong> · Blue-black</span><span class="swatch"><strong>Mummy</strong> · A bandaged head, a grey suit, a machete in the head</span></div>
+        <p><b>Spawns in</b><code>desert</code></p>
+        <p class="risk"><b>Danger</b>Deadly to the condemned, none to others.</p>
+              <p class="place"><b>True position</b>Canidae: Canis lupaster (deity)</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#anubis_canid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="arctic_kitsune">
+        <div class="card-top"><span class="group">Snowy plains &amp; ice</span><span class="tag">Hardy · cheerful</span></div>
+        <h3>Arctic Fox <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Hardy, cheerful, endlessly hungry</p>
+        <p><b>Ecology &amp; behaviour</b>Round, fluffy and built for cold: short ears, a thick coat and a tail she sleeps under like a blanket. She hears prey under the snow and dives in after it, and follows polar bears to scavenge.</p>
+        <p><b>Signature: Snow dive &amp; cold-proof</b>Never freezes, walks on powder snow, and dives into snow blocks to catch hidden prey (rabbits, silverfish). A bonded arctic fox curled in your bed keeps you from freezing all night.</p>
+        <p><b>Player interaction</b>Feed her: arctic foxes are always hungry and always grateful.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Winter white (default)</strong> · Snow white with dark eyes and nose</span><span class="swatch"><strong>Blue morph</strong> · Dark slate blue-grey all over</span><span class="swatch"><strong>Summer</strong> · Brown back, pale belly (the summer coat)</span><span class="swatch"><strong>Sable</strong> · Warm chocolate brown</span><span class="swatch"><strong>Pearl</strong> · Cream-white with a pale grey saddle</span><span class="swatch"><strong>Ice Fox</strong> · Pale blue fur, curled tails</span></div>
+        <p><b>Spawns in</b><code>snowy_plains, ice_spikes, snowy_beach, frozen_river, snowy_slopes</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Canidae: Vulpes lagopus</p><p><b>Body</b>Kitsune form · <a href="kitsune_field_guide.html#arctic_kitsune">her card in that guide</a></p>
+      </article>
+      <article class="card" id="bat_eared_kitsune">
+        <div class="card-top"><span class="group">Savanna</span><span class="tag">All ears · curious</span></div>
+        <h3>Bat-Eared Fox <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Curious</p>
+        <p><b>Ecology &amp; behaviour</b>A small fox with enormous ears who listens for termites under the ground, and hears a good deal else.</p>
+        <p><b>Signature: Ear to the Ground</b>Befriended, she tells her friend how far off the nearest monster spawner is.</p>
+        <p><b>Player interaction</b>Sweet berries and spider eyes.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Tan (default)</strong> · Tan</span><span class="swatch"><strong>Sand</strong> · Sand</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Rust</strong> · Rust</span><span class="swatch"><strong>Dark</strong> · Dark</span></div>
+        <p><b>Spawns in</b><code>savanna, savanna_plateau</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Canidae: Otocyon megalotis</p><p><b>Body</b>Kitsune form · <a href="kitsune_field_guide.html#bat_eared_kitsune">her card in that guide</a></p>
+      </article>
+      <article class="card" id="bloodhound_canid">
+        <div class="card-top"><span class="group">Dark forests</span><span class="tag">Grinning · dogged</span></div>
+        <h3>Bloodhound <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Grinning, dogged</p>
+        <p><b>Ecology &amp; behaviour</b>Matted fur sewn up with black stitches, long black hair, and a wide human grin with blood on its chin. She has never yet lost a scent.</p>
+        <p><b>Signature: The scent</b>Befriended, she tracks whatever last hurt her friend, however far it ran, or else the nearest thing hiding from them, and shows them where it went.</p>
+        <p><b>Player interaction</b>Raw meat, the rawer the better.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Matted brown</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Pale</strong> · Pale</span></div>
+        <p><b>Spawns in</b><code>dark_forest, swamp, deep_dark</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Canidae: Canis familiaris</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#bloodhound_canid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="cerberus_canid">
+        <div class="card-top"><span class="group">The Nether</span><span class="tag">Watchful · three times as loyal</span></div>
+        <h3>Cerberus <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Watchful, loyal</p>
+        <p><b>Ecology &amp; behaviour</b>The hound at the gates of the underworld: a dark-furred girl with two more little heads on her shoulders, each with its own idea about you.</p>
+        <p><b>Signature: Three watches</b>Befriended, nothing sneaks up on her friend: monsters coming from behind them are slowed and creepers lose their nerve.</p>
+        <p><b>Player interaction</b>Raw meat and honey cakes: honey bottles.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black, red eyes</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Red</strong> · Red</span></div>
+        <p><b>Spawns in</b><code>soul_sand_valley, crimson_forest</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Canidae: Canis (myth hound)</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#cerberus_canid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="corsac_kitsune">
+        <div class="card-top"><span class="group">Windswept hills &amp; plateaus</span><span class="tag">Nomad · shy</span></div>
+        <h3>Corsac Fox <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Shy, nomadic, sociable with her own kind</p>
+        <p><b>Ecology &amp; behaviour</b>Wanders the open steppe in small groups, follows herds and caravans (llamas, wandering traders) for scraps, and never digs her own earth if she can borrow one.</p>
+        <p><b>Signature: Wayfinder</b>A bonded corsac always knows the way home: at night, when you are more than 64 blocks from your bed, she trots towards it and waits for you, leaving a trail of foxfire.</p>
+        <p><b>Player interaction</b>Travel with her. Follow the wandering trader she is following.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Steppe grey (default)</strong> · Buff grey with a pale chin</span><span class="swatch"><strong>Winter</strong> · Pale, thick winter coat</span><span class="swatch"><strong>Rusty</strong> · Rust-tinged grey</span><span class="swatch"><strong>Smoky</strong> · Dark smoke grey</span><span class="swatch"><strong>Golden</strong> · Golden buff</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, windswept_gravelly_hills, savanna_plateau, windswept_savanna, meadow</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Canidae: Vulpes corsac</p><p><b>Body</b>Kitsune form · <a href="kitsune_field_guide.html#corsac_kitsune">her card in that guide</a></p>
+      </article>
+      <article class="card" id="cu_sith_canid">
+        <div class="card-top"><span class="group">Highlands</span><span class="tag">Silent · fearsome</span></div>
+        <h3>Cù-sìth <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Silent, watchful</p>
+        <p><b>Ecology &amp; behaviour</b>The great green fairy hound of the Scottish Highlands, who barks three times.</p>
+        <p><b>Signature: Three barks</b>When monsters come near her friend she barks; at her third bark they flee.</p>
+        <p><b>Player interaction</b>Meat.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Dark green</span><span class="swatch"><strong>Moss</strong> · Moss green</span><span class="swatch"><strong>Dark</strong> · Near black</span><span class="swatch"><strong>Pale</strong> · Pale green</span><span class="swatch"><strong>Teal</strong> · Teal</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, meadow, taiga</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Canidae: Canis (myth hound)</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#cu_sith_canid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="doggo_mermaid">
+        <div class="card-top"><span class="group">Cold coasts</span><span class="tag">Eager · loyal</span></div>
+        <h3>Doggo <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Eager, loyal</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide sea dog: a shaggy blue pup with floppy ears and a white chest above, a sparkling fish&#x27;s tail below. She paddles out to anyone in the water and will not let them go under.</p>
+        <p><b>Signature: Lifeguard</b>Befriended, when her friend near her runs short of air underwater she brings them up a breath.</p>
+        <p><b>Player interaction</b>Cod, salmon and cooked meat.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Shaggy blue</span><span class="swatch"><strong>Golden</strong> · Golden</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Pink</strong> · Pink</span></div>
+        <p><b>Spawns in</b><code>cold_ocean, ocean, beach, stony_shore</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Canis familiaris (Harmontide sea dog; the fish tail is an ornament) A judgement call: TAXONOMY_PLAN.md gives the reasons.</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#doggo_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="dunefennec_kitsune">
+        <div class="card-top"><span class="group">Deserts</span><span class="tag">Bright · restless</span></div>
+        <h3>Dunefennec <span style="color:var(--muted);font-size:.9rem">(about 1.3 blocks)</span></h3>
+        <p><b>Temperament</b>Restless, cheerful</p>
+        <p><b>Ecology &amp; behaviour</b>A night-blue Harmontide fennec with ears bigger than her head, gold crescents on her fur, a purple saddle-cloth and a bell.</p>
+        <p><b>Signature: Desert guide</b>Her friend near her runs fast on sand (Speed II), and husks near her lose interest in her friend.</p>
+        <p><b>Player interaction</b>Rabbit and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Night (default)</strong> · Night blue, gold crescents</span><span class="swatch"><strong>Sand</strong> · Pale sand</span><span class="swatch"><strong>Red sand</strong> · Red, like the badlands</span><span class="swatch"><strong>Cream</strong> · Cream</span><span class="swatch"><strong>Dusk</strong> · Dusky violet</span></div>
+        <p><b>Spawns in</b><code>desert, badlands</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Canidae: Vulpes zerda (Harmontide)</p><p><b>Body</b>Kitsune form · <a href="kitsune_field_guide.html#dunefennec_kitsune">her card in that guide</a></p>
+      </article>
+      <article class="card" id="fennec_kitsune">
+        <div class="card-top"><span class="group">Desert</span><span class="tag">Tiny · chatty</span></div>
+        <h3>Fennec <span style="color:var(--muted);font-size:.9rem">(about 1.35 blocks)</span></h3>
+        <p><b>Temperament</b>Chatty, social, very easily delighted</p>
+        <p><b>Ecology &amp; behaviour</b>The smallest fox, with the biggest ears: they shed heat and hear prey under the sand. Lives in family groups, digs elaborate burrows, and sleeps through the hot day.</p>
+        <p><b>Signature: Desert digger</b>She digs fast in sand and sometimes turns things up: bones, gold nuggets, pottery sherds, an occasional emerald. A bonded fennec digs for you and brings what she finds.</p>
+        <p><b>Player interaction</b>Bring water and sweet berries to her burrow at dusk.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Cream (default)</strong> · Pale cream with a buff back</span><span class="swatch"><strong>Sandy</strong> · Warm sand with a darker tail tip</span><span class="swatch"><strong>Pale</strong> · Almost white</span><span class="swatch"><strong>Red sand</strong> · Red-orange like badlands sand</span><span class="swatch"><strong>Ash</strong> · Pale ash grey with cream points</span><span class="swatch"><strong>Twin Tails</strong> · Orange and white, blue eyes, two tails, goggles</span><span class="swatch"><strong>First Fox</strong> · Warm brown fur, a big cream ruff</span></div>
+        <p><b>Spawns in</b><code>desert</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Canidae: Vulpes zerda</p><p><b>Body</b>Kitsune form · <a href="kitsune_field_guide.html#fennec_kitsune">her card in that guide</a></p>
+      </article>
+      <article class="card" id="gray_kitsune">
+        <div class="card-top"><span class="group">Old-growth &amp; dark forests</span><span class="tag">Climber · secretive</span></div>
+        <h3>Gray Fox <span style="color:var(--muted);font-size:.9rem">(about 1.65 blocks)</span></h3>
+        <p><b>Temperament</b>Quiet, secretive, unexpectedly brave</p>
+        <p><b>Ecology &amp; behaviour</b>The only fox that climbs trees, with hooked claws like a cat&#x27;s. She rests in hollows and on branches, drops onto prey from above, and is rarely seen on the ground.</p>
+        <p><b>Signature: Tree climber</b>She climbs logs and leaves like a ladder, perches in the canopy and drops onto prey (or onto zombies threatening her bonded player).</p>
+        <p><b>Player interaction</b>Look up. Leave food on a branch or a log.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Grey (default)</strong> · Pepper grey back, rust sides, black-tipped tail</span><span class="swatch"><strong>Island</strong> · Small and rusty, short-tailed</span><span class="swatch"><strong>Dark</strong> · Charcoal grey with dark rust</span><span class="swatch"><strong>Pale</strong> · Light silver grey</span><span class="swatch"><strong>Rufous</strong> · Grey back with bright rufous flanks</span><span class="swatch"><strong>Sly Fox</strong> · Orange fur, a green shirt</span></div>
+        <p><b>Spawns in</b><code>dark_forest, old_growth_birch_forest, old_growth_spruce_taiga, forest, windswept_forest</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Canidae: Urocyon cinereoargenteus</p><p><b>Body</b>Kitsune form · <a href="kitsune_field_guide.html#gray_kitsune">her card in that guide</a></p>
+      </article>
+      <article class="card" id="hellhound_canid">
+        <div class="card-top"><span class="group">The Nether</span><span class="tag">Fierce · devoted</span></div>
+        <h3>Hellhound <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Fierce, devoted</p>
+        <p><b>Ecology &amp; behaviour</b>A hound of the underworld: charcoal skin, heavy black fur on her arms and legs, spiky dark-red fur at the shoulders, wrists and ankles, flames streaming from her eyes, great claws, a skull at her collar and ember cracks that glow. She grins with every tooth. She never forgets a scent.</p>
+        <p><b>Signature: Hunted down</b>Befriended, she runs down whatever hurt her friend, wherever it is within 24 blocks, and sets it on fire.</p>
+        <p><b>Player interaction</b>Raw meat and bones.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Ember (default)</strong> · Charcoal, red-orange flames</span><span class="swatch"><strong>Black</strong> · Near black, amber flames</span><span class="swatch"><strong>Blue</strong> · Charcoal, blue flames</span><span class="swatch"><strong>Green</strong> · Charcoal, green flames</span><span class="swatch"><strong>Purple</strong> · Charcoal, purple flames</span></div>
+        <p><b>Spawns in</b><code>soul_sand_valley, basalt_deltas, nether_wastes</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Canidae: Canis (myth hound)</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#hellhound_canid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="huli_jing_kitsune">
+        <div class="card-top"><span class="group">Bamboo forests</span><span class="tag">Charming · clever</span></div>
+        <h3>Huli Jing <span style="color:var(--muted);font-size:.9rem">(about 1.55 blocks)</span></h3>
+        <p><b>Temperament</b>Clever, charming</p>
+        <p><b>Ecology &amp; behaviour</b>The fox spirit of Chinese legend, who has lived a thousand years and has nine tails to show for it.</p>
+        <p><b>Signature: Charm</b>In a village with her friend the villagers trade cheaper: her friend has Hero of the Village while near her.</p>
+        <p><b>Player interaction</b>Chicken and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Silver (default)</strong> · Silver-blue, black hair</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>bamboo_jungle, cherry_grove, forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Canidae: Vulpes (folklore fox spirit)</p><p><b>Body</b>Kitsune form · <a href="kitsune_field_guide.html#huli_jing_kitsune">her card in that guide</a></p>
+      </article>
+      <article class="card" id="obaa_kitsune">
+        <div class="card-top"><span class="group">Old forests</span><span class="tag">Knowing · amused</span></div>
+        <h3>Kitsune Obaa <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Knowing, amused</p>
+        <p><b>Ecology &amp; behaviour</b>The old fox-wife of the tales, not nearly as old as she should look: white hair, nine white tails, red berries in her hair. Nothing fools her, and she fools everything.</p>
+        <p><b>Signature: Fox-glamour</b>Befriended, once a day, when monsters close in on her friend, she hides them in a glamour and the monsters lose interest.</p>
+        <p><b>Player interaction</b>Fried tofu has not reached this world: cooked chicken and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>White (default)</strong> · White</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Silver</strong> · Silver</span></div>
+        <p><b>Spawns in</b><code>cherry_grove, old_growth_birch_forest, taiga</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Canidae: Vulpes (folklore fox spirit)</p><p><b>Body</b>Kitsune form · <a href="kitsune_field_guide.html#obaa_kitsune">her card in that guide</a></p>
+      </article>
+      <article class="card" id="kobold_canid">
+        <div class="card-top"><span class="group">Caves &amp; mountains</span><span class="tag">Eager · nose for ore</span></div>
+        <h3>Kobold <span style="color:var(--muted);font-size:.9rem">(about 1.35 blocks)</span></h3>
+        <p><b>Temperament</b>Eager, nosy, loyal</p>
+        <p><b>Ecology &amp; behaviour</b>The mine spirit of German folklore, who gave cobalt its name, here a little dog-girl miner in a helmet.</p>
+        <p><b>Signature: Nose for ore</b>Befriended, she sniffs out the nearest diamond, gold or emerald ore and points the way. She yelps when the block you look at holds up sand or gravel, and she smells mimics: a mimic chest near her rattles.</p>
+        <p><b>Player interaction</b>Bring her meat or bones and take her mining.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Tan (default)</strong> · Tan fur</span><span class="swatch"><strong>Cobalt</strong> · Cobalt blue</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Cream</strong> · Cream</span><span class="swatch"><strong>Red</strong> · Rust red</span><span class="swatch"><strong>Town Clerk</strong> · Golden fur, a green vest, a red bell</span><span class="swatch"><strong>Blue Heeler</strong> · Blue with darker patches</span></div>
+        <p><b>Spawns in</b><code>dripstone_caves, lush_caves, windswept_hills, stony_peaks</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Canidae: Canis familiaris per this design (folklore mine spirit)</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#kobold_canid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="kumiho_kitsune">
+        <div class="card-top"><span class="group">Old mountains</span><span class="tag">Nine tails · courteous</span></div>
+        <h3>Kumiho <span style="color:var(--muted);font-size:.9rem">(about 1.75 blocks)</span></h3>
+        <p><b>Temperament</b>Courteous</p>
+        <p><b>Ecology &amp; behaviour</b>The nine-tailed fox of Korean tales, nine tails from the day she is born, her fox bead at her throat.</p>
+        <p><b>Signature: Fox Bead</b>Befriended, every few minutes she lets her friend hold her bead, and they come away with experience.</p>
+        <p><b>Player interaction</b>Sweet berries and chicken.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>White (default)</strong> · White</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Silver</strong> · Silver</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>cherry_grove, windswept_forest, old_growth_birch_forest</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Canidae: Vulpes (folklore fox spirit)</p><p><b>Body</b>Kitsune form · <a href="kitsune_field_guide.html#kumiho_kitsune">her card in that guide</a></p>
+      </article>
+      <article class="card" id="meloncollie_canid">
+        <div class="card-top"><span class="group">Farmland</span><span class="tag">Cheerful · bossy</span></div>
+        <h3>Meloncollie <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Cheerful, bossy</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide herding dog with a watermelon rind for a coat.</p>
+        <p><b>Signature: Herding</b>Befriended, she rounds up stray cows, sheep, pigs and chickens and herds them back to the nearest fenced pen. She plants melon seeds.</p>
+        <p><b>Player interaction</b>Melon slices and bones.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Melon (default)</strong> · Green rind, brown and white</span><span class="swatch"><strong>Golden</strong> · A yellow melon</span><span class="swatch"><strong>Black</strong> · A black-rind melon</span><span class="swatch"><strong>Tricolour</strong> · Black, tan and white</span><span class="swatch"><strong>Seedless</strong> · Pale rind</span></div>
+        <p><b>Spawns in</b><code>plains, sunflower_plains, savanna</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Canidae: Canis familiaris (Harmontide)</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#meloncollie_canid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="obsidian_hound_canid">
+        <div class="card-top"><span class="group">Badlands and deserts</span><span class="tag">Stern · watchful</span></div>
+        <h3>Obsidian Hound <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Stern, watchful</p>
+        <p><b>Ecology &amp; behaviour</b>The obsidian macuahuitl hound: a Harmontide temple dog in navy and gold, with a wooden war club edged in obsidian slung across her back. Lava cools under her paws.</p>
+        <p><b>Signature: Lava walker</b>Befriended, still lava near her friend&#x27;s feet cools to obsidian.</p>
+        <p><b>Player interaction</b>Cooked meat and gold.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Navy (default)</strong> · Navy and gold</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Jade</strong> · Jade</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Gold</strong> · Gold</span></div>
+        <p><b>Spawns in</b><code>desert, badlands, eroded_badlands</code></p>
+        <p class="risk"><b>Danger</b>High (her club).</p>
+              <p class="place"><b>True position</b>Canidae: Canis familiaris (Harmontide)</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#obsidian_hound_canid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="red_kitsune">
+        <div class="card-top"><span class="group">Forests, plains &amp; villages</span><span class="tag">Trickster · bold</span></div>
+        <h3>Red Fox <span style="color:var(--muted);font-size:.9rem">(about 1.75 blocks)</span></h3>
+        <p><b>Temperament</b>Mischievous, bold, quick-witted</p>
+        <p><b>Ecology &amp; behaviour</b>The archetype: lives on the edge of everything, raids chicken coops, plays the stash game more than any other fox and leaves decoys behind when chased.</p>
+        <p><b>Signature: Master of illusions</b>Her decoy lasts longer and she can leave two. At three tails she plays the stash game with you on purpose: she hides a small present (an emerald, a gold nugget, sweet berries) instead of stealing.</p>
+        <p><b>Player interaction</b>Play along. Keep valuables out of your hands near her and laugh when you find her stash.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Russet orange, white chest and tail tip, black stockings</span><span class="swatch"><strong>Silver</strong> · Black frosted with silver, white tail tip</span><span class="swatch"><strong>Cross</strong> · Orange with a dark cross over the shoulders</span><span class="swatch"><strong>Platinum</strong> · Pale silver-white with grey points</span><span class="swatch"><strong>Amber</strong> · Pale golden amber with soft points</span><span class="swatch"><strong>Nine Cream</strong> · Cream fur and hair, red eyes, nine tails</span><span class="swatch"><strong>Gold Ninja</strong> · Golden fur, a white front, purple clothes</span><span class="swatch"><strong>Charm Fox</strong> · Black hair, cream tails, a red and white robe</span></div>
+        <p><b>Spawns in</b><code>forest, flower_forest, plains, meadow, taiga, birch_forest, cherry_grove</code></p>
+        <p class="risk"><b>Danger</b>Low; theft and pranks.</p>
+              <p class="place"><b>True position</b>Canidae: Vulpes vulpes</p><p><b>Body</b>Kitsune form · <a href="kitsune_field_guide.html#red_kitsune">her card in that guide</a></p>
+      </article>
+      <article class="card" id="tanuki_rodent">
+        <div class="card-top"><span class="group">Old woods</span><span class="tag">Merry · crooked</span></div>
+        <h3>Tanuki <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Merry</p>
+        <p><b>Ecology &amp; behaviour</b>The raccoon-dog of Japanese tales, who pays her bills in leaves that only look like money.</p>
+        <p><b>Signature: Leaf Money</b>Hand her leaves, friends only: once a day she turns one into an emerald. It is probably real.</p>
+        <p><b>Player interaction</b>Sweet berries and fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Brown</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Dark</strong> · Dark</span></div>
+        <p><b>Spawns in</b><code>forest, old_growth_birch_forest, cherry_grove</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Canidae: Nyctereutes procyonoides (a dog, not a raccoon)</p><p><b>Body</b>Rodent form · <a href="rodent_field_guide.html#tanuki_rodent">her card in that guide</a></p>
+      </article>
+      <article class="card" id="tarnhelm_canid">
+        <div class="card-top"><span class="group">Snowy taiga and groves</span><span class="tag">Watchful · stern</span></div>
+        <h3>Tarnhelm <span style="color:var(--muted);font-size:.9rem">(about 1.85 blocks)</span></h3>
+        <p><b>Temperament</b>Watchful, stern</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide war wolf in blue enamelled plate and a silver helm, its gem shining like the northern lights.</p>
+        <p><b>Signature: Sentinel</b>Befriended, raiders and illagers within 48 blocks of her friend glow through walls.</p>
+        <p><b>Player interaction</b>Beef, mutton and bones.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue plate, silver fur</span><span class="swatch"><strong>Silver</strong> · Silver</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Storm</strong> · Storm grey</span></div>
+        <p><b>Spawns in</b><code>snowy_taiga, grove, taiga</code></p>
+        <p class="risk"><b>Danger</b>High (her jaws).</p>
+              <p class="place"><b>True position</b>Canidae: Canis lupus (Harmontide)</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#tarnhelm_canid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="vulphea_kitsune">
+        <div class="card-top"><span class="group">Badlands</span><span class="tag">Fiery · undying</span></div>
+        <h3>Vulphea <span style="color:var(--muted);font-size:.9rem">(about 1.4 blocks)</span></h3>
+        <p><b>Temperament</b>Fiery, proud</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide fire fox, all flame-coloured fur, who rises again from her own ashes.</p>
+        <p><b>Signature: Rebirth</b>She cannot burn and her bite sets things alight. Once a day, a killing blow leaves only ashes, and a minute later she rises from them.</p>
+        <p><b>Player interaction</b>Chicken and blaze powder.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red flame</span><span class="swatch"><strong>Gold</strong> · Golden flame</span><span class="swatch"><strong>Blue</strong> · Blue flame</span><span class="swatch"><strong>Violet</strong> · Violet flame</span><span class="swatch"><strong>White</strong> · White flame</span></div>
+        <p><b>Spawns in</b><code>badlands, savanna_plateau, desert</code></p>
+        <p class="risk"><b>Danger</b>Low (her bite burns).</p>
+              <p class="place"><b>True position</b>Canidae: Vulpes (Harmontide)</p><p><b>Body</b>Kitsune form · <a href="kitsune_field_guide.html#vulphea_kitsune">her card in that guide</a></p>
+      </article>
+      <article class="card" id="wattlefox_kitsune">
+        <div class="card-top"><span class="group">Savannas</span><span class="tag">Bright · brave</span></div>
+        <h3>Wattlefox <span style="color:var(--muted);font-size:.9rem">(about 1.45 blocks)</span></h3>
+        <p><b>Temperament</b>Bright, brave</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide fox of the dry country, blue as dusk, wreathed in golden wattle that blooms after fire.</p>
+        <p><b>Signature: After the fire</b>She cannot burn. Befriended, she puts out fires near her friend and plants acacia saplings on bare ground.</p>
+        <p><b>Player interaction</b>Sweet berries and chicken.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, golden wattle</span><span class="swatch"><strong>Teal</strong> · Teal</span><span class="swatch"><strong>Violet</strong> · Violet</span><span class="swatch"><strong>Golden</strong> · Gold</span><span class="swatch"><strong>Grey</strong> · Grey</span></div>
+        <p><b>Spawns in</b><code>savanna, savanna_plateau, windswept_savanna</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Canidae: Vulpes (Harmontide)</p><p><b>Body</b>Kitsune form · <a href="kitsune_field_guide.html#wattlefox_kitsune">her card in that guide</a></p>
+      </article>
+      <article class="card" id="wolf_canid">
+        <div class="card-top"><span class="group">Taiga &amp; forests</span><span class="tag">Loyal · pack-minded</span></div>
+        <h3>Wolf <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Loyal, proud, pack-minded</p>
+        <p><b>Ecology &amp; behaviour</b>Canis lupus (Carnivora: Canidae). She runs with a pack led by its alpha, and kin of the vanilla wolves.</p>
+        <p><b>Signature: Pack hunter</b>Wild, her pack hunts sheep and rabbits. Befriended, your tamed wolves join her fights. She howls at night.</p>
+        <p><b>Player interaction</b>Bones. Never come between her and her pack.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Pale (default)</strong> · Pale grey-white</span><span class="swatch"><strong>Woods</strong> · Brown</span><span class="swatch"><strong>Snowy</strong> · White</span><span class="swatch"><strong>Ashen</strong> · Grey</span><span class="swatch"><strong>Rusty</strong> · Rust red</span><span class="swatch"><strong>Mummy</strong> · A bandaged head, red shirt and blue overalls, a cleaver in the head</span><span class="swatch"><strong>Sun Goddess</strong> · White with red markings</span><span class="swatch"><strong>Aura Guardian</strong> · Blue and black, a cream chest</span><span class="swatch"><strong>Sun Wolf</strong> · White, red markings</span></div>
+        <p><b>Spawns in</b><code>taiga, old_growth_pine_taiga, old_growth_spruce_taiga, snowy_taiga, forest, grove</code></p>
+        <p class="risk"><b>Danger</b>Moderate in a pack.</p>
+              <p class="place"><b>True position</b>Canidae: Canis lupus</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#wolf_canid">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

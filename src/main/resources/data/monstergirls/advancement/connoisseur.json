@@ -1,0 +1,28 @@
+{
+  "parent": "monstergirls:first_milk",
+  "display": {
+    "icon": {
+      "id": "monstergirls:bovid_milk"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.connoisseur"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.connoisseur.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

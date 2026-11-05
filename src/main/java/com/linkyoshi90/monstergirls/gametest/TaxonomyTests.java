@@ -98,4 +98,70 @@ public class TaxonomyTests {
         }
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "wordGetsAroundTheBranch")
+    public static void wordGetsAroundTheBranch(GameTestHelper helper) {
+        net.minecraft.server.level.ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        AbstractMonsterGirl wolf = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(3, 2, 3));
+        AbstractMonsterGirl fox = spawn(helper, GirlSpecies.RED_KITSUNE, new BlockPos(6, 2, 3));
+        AbstractMonsterGirl hyena = spawn(helper, GirlSpecies.HYENA_CANID, new BlockPos(3, 2, 6));
+        wolf.addAffection(p, com.linkyoshi90.monstergirls.entity.Orders.AFFECTION);
+        check(com.linkyoshi90.monstergirls.entity.Journal.record(p, wolf, true), "a first wolf friend");
+        check(fox.getAffection(p) == com.linkyoshi90.monstergirls.entity.Journal.WORD, "the fox is a canid too: she has heard of you");
+        check(hyena.getAffection(p) == 0, "the hyena only looks like one: a feliform hears nothing");
+        AbstractMonsterGirl wolf2 = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(6, 2, 6));
+        wolf2.addAffection(p, com.linkyoshi90.monstergirls.entity.Orders.AFFECTION);
+        com.linkyoshi90.monstergirls.entity.Journal.record(p, wolf2, true);
+        check(fox.getAffection(p) == com.linkyoshi90.monstergirls.entity.Journal.WORD, "a second wolf friend is old news");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "everyMilkTasted")
+    public static void everyMilkTasted(GameTestHelper helper) {
+        net.minecraft.server.level.ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        var bird = ModItems.MILK.get(FamilyMilk.AVES).get();
+        var left = bird.finishUsingItem(new net.minecraft.world.item.ItemStack(bird), helper.getLevel(), p);
+        check(left.is(net.minecraft.world.item.Items.BUCKET) && com.linkyoshi90.monstergirls.entity.Journal.tasted(p) == 1, "a first taste, and the bucket back");
+        check(!com.linkyoshi90.monstergirls.entity.Journal.taste(p, FamilyMilk.AVES), "the same milk again is nothing new");
+        var a = p.server.getAdvancements().get(MonsterGirlsMod.id(com.linkyoshi90.monstergirls.entity.Journal.CONNOISSEUR_ADVANCEMENT));
+        check(a != null && !p.getAdvancements().getOrStartProgress(a).isDone(), "not a connoisseur yet");
+        for (FamilyMilk m : FamilyMilk.values()) com.linkyoshi90.monstergirls.entity.Journal.taste(p, m);
+        check(com.linkyoshi90.monstergirls.entity.Journal.tasted(p) == FamilyMilk.values().length && p.getAdvancements().getOrStartProgress(a).isDone(),
+                "every milk: a connoisseur");
+        check(com.linkyoshi90.monstergirls.entity.Journal.book(p).pages().get(0).raw().toString().contains("journal.monstergirls.tasted"), "the cover keeps count");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "theTreeOfLifeFillsIn")
+    public static void theTreeOfLifeFillsIn(GameTestHelper helper) {
+        net.minecraft.server.level.ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        java.util.List<String> branch = com.linkyoshi90.monstergirls.entity.Journal.members(Clade.XENARTHRA);
+        check(branch.size() == 4 && com.linkyoshi90.monstergirls.entity.Journal.members(Clade.AVES).size() == 47, "every kind is on its branch, harpies too");
+        for (String id : branch.subList(0, 3)) {
+            var e = BuiltInRegistries.ENTITY_TYPE.get(MonsterGirlsMod.id(id)).create(helper.getLevel());
+            check(e != null && com.linkyoshi90.monstergirls.entity.Journal.record(p, e, false), id + " is news");
+        }
+        check(com.linkyoshi90.monstergirls.entity.Journal.metOn(p, Clade.XENARTHRA) == 3 && com.linkyoshi90.monstergirls.entity.Journal.wholeBranches(p).isEmpty(), "three of four");
+        AbstractMonsterGirl hyena = spawn(helper, GirlSpecies.HYENA_CANID, new BlockPos(3, 2, 3));
+        com.linkyoshi90.monstergirls.entity.Journal.record(p, hyena, false);
+        var last = BuiltInRegistries.ENTITY_TYPE.get(MonsterGirlsMod.id(branch.get(3))).create(helper.getLevel());
+        com.linkyoshi90.monstergirls.entity.Journal.record(p, last, false);
+        check(com.linkyoshi90.monstergirls.entity.Journal.wholeBranches(p).contains("XENARTHRA"), "the fourth makes the branch whole");
+        check(!com.linkyoshi90.monstergirls.entity.Journal.branch(p, Clade.XENARTHRA), "only once");
+        var pages = com.linkyoshi90.monstergirls.entity.Journal.book(p).pages();
+        int tree = -1, hyenaPage = -1, firstArmadillo = -1;
+        for (int i = 0; i < pages.size(); i++) {
+            String raw = pages.get(i).raw().toString();
+            if (raw.contains("journal.monstergirls.tree.title")) tree = i;
+            if (raw.contains("entity.monstergirls.hyena_canid")) hyenaPage = i;
+            if (firstArmadillo < 0 && raw.contains("entity.monstergirls." + branch.get(0) + "'")) firstArmadillo = i;
+        }
+        check(tree >= 0 && pages.get(tree).raw().toString().contains("family.monstergirls.xenarthra"), "the tree of life counts the branch");
+        check(hyenaPage >= 0 && firstArmadillo > hyenaPage, "pages go branch by branch: the feliform before the xenarthrans she was met after");
+        check(pages.get(hyenaPage).raw().toString().contains("clade.monstergirls.feliformia"), "her page names her branch");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

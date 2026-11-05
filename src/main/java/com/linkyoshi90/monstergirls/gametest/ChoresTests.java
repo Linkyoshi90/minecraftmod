@@ -137,4 +137,25 @@ public class ChoresTests {
         HarpyTestUtil.remove(player);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 400, batch = "picksTheBerries")
+    public static void picksTheBerries(GameTestHelper helper) {
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        BlockPos chest = new BlockPos(5, 2, 9), bush = new BlockPos(9, 2, 4), vine = new BlockPos(3, 3, 3);
+        helper.setBlock(chest, Blocks.CHEST);
+        helper.setBlock(bush, Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(net.minecraft.world.level.block.SweetBerryBushBlock.AGE, 3));
+        helper.setBlock(vine.above(), Blocks.STONE);
+        helper.setBlock(vine, Blocks.CAVE_VINES.defaultBlockState().setValue(net.minecraft.world.level.block.CaveVines.BERRIES, true));
+        AbstractMonsterGirl girl = onPatrol(helper, player, new BlockPos(6, 2, 6));
+        var level = helper.getLevel();
+        check(Chores.pick(level, girl, girl.getOrders().anchor(), helper.absolutePos(vine)), "she picks the glow berries");
+        check(!Chores.ripe(level.getBlockState(helper.absolutePos(vine))) && level.getBlockState(helper.absolutePos(vine)).is(Blocks.CAVE_VINES), "the vine stays");
+        helper.succeedWhen(() -> {
+            var box = (Container) helper.getBlockEntity(chest);
+            check(count(box, Items.SWEET_BERRIES) >= 2 && count(box, Items.GLOW_BERRIES) == 1, "she walks to the bush and picks it too, into the chest");
+            check(level.getBlockState(helper.absolutePos(bush)).getValue(net.minecraft.world.level.block.SweetBerryBushBlock.AGE) == 1
+                    && Chores.tally(girl, Chores.Kind.BERRIES) == 2, "the bush stays to fruit again");
+            HarpyTestUtil.remove(player);
+        });
+    }
 }

@@ -218,6 +218,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.goalSelector.addGoal(3, new FarmhandGoal<>(this));
         this.goalSelector.addGoal(5, new Chores.ChoresGoal<>(this));
         this.goalSelector.addGoal(7, new SleepGoal(this));
+        if (species.clade() == com.linkyoshi90.monstergirls.entity.Clade.FELIFORMIA) this.goalSelector.addGoal(6, new RainMoods.ShelterGoal(this));   // cats hate the rain
         this.targetSelector.addGoal(1, new com.linkyoshi90.monstergirls.entity.ai.StanceTargetGoal<>(this));
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));
         this.goalSelector.addGoal(3, new GiftGoal<>(this));
@@ -1000,6 +1001,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (this.tickCount % 10 == 3) HideAndSeek.tick(server, this);
         if (this.tickCount % 20 == 9 && Mining.holdsHaul(this)) Mining.handOver(server, this);
         if (this.tickCount % 97 == 0) Rivalries.squabble(server, this);
+        if (this.tickCount % 100 == 75) RainMoods.tick(server, this);
+        if (this.tickCount % 100 == 80) Basking.tick(server, this);
         if (this.hutOrigin != null && this.tickCount % 10 == 0) Settlement.buildStep(server, this);
         this.gestation.tick();
         if (this.tickCount % 10 == 0) this.entityData.set(DATA_BELLY, (byte) Math.round(this.bellyProgress() * 100));

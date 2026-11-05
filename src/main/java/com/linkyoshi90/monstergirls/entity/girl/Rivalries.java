@@ -12,31 +12,33 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Set;
 
-import static com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.Family.*;
+import com.linkyoshi90.monstergirls.entity.Clade;
 
 /**
- * Rivalries: some wild kinds can't stand each other: cats and mice, snakes and mice, wolves and rabbits, foxes and rabbits,
- * spiders and bugs, bats and bugs. Two wild ones of rival families who meet squabble: the hunter glowers and huffs, the
- * hunted one bolts. Nobody is hurt, and a girl who is anyone's friend has better things to do: friends never squabble.
+ * Rivalries: some wild kinds can't stand each other, by their branch of the tree of life (entity.Clade), not their body: cats
+ * (and hyenas, and mongooses) and snakes with rodents, wolves and foxes with hares, spiders, bats and frogs with insects, seals
+ * and bears with fish. Two wild ones of rival clades who meet squabble: the hunter glowers and huffs, the hunted one bolts.
+ * Nobody is hurt, and a girl who is anyone's friend has better things to do: friends never squabble.
  */
 public final class Rivalries {
     public static final double RANGE = 8.0;
     public static final long COOLDOWN = 1200;
     public static final String NEXT = "SquabbleAt", FLED = "FledAt";
-    /** Each hunter's family, and the families she can't stand. */
-    public static final Map<GirlSpecies.Family, Set<GirlSpecies.Family>> HUNTS = Map.of(
-            NEKOMATA, Set.of(RODENT),
-            LAMIA, Set.of(RODENT),
-            CANID, Set.of(JACKALOPE),
-            KITSUNE, Set.of(JACKALOPE),
-            ARACHNE, Set.of(BUG),
-            BAT, Set.of(BUG));
+    /** Each hunter's clade, and the clades she can't stand. */
+    public static final Map<Clade, Set<Clade>> HUNTS = Map.of(
+            Clade.FELIFORMIA, Set.of(Clade.RODENTIA),
+            Clade.SQUAMATA, Set.of(Clade.RODENTIA, Clade.AMPHIBIA),
+            Clade.CANIDAE, Set.of(Clade.LAGOMORPHA, Clade.RODENTIA),
+            Clade.CHELICERATA, Set.of(Clade.HEXAPODA),
+            Clade.CHIROPTERA, Set.of(Clade.HEXAPODA),
+            Clade.AMPHIBIA, Set.of(Clade.HEXAPODA),
+            Clade.ARCTOIDEA, Set.of(Clade.ACTINOPTERYGII));
 
     private Rivalries() {
     }
 
-    public static boolean hunts(GirlSpecies.Family hunter, GirlSpecies.Family other) {
-        return HUNTS.getOrDefault(hunter, Set.of()).contains(other);
+    public static boolean hunts(@Nullable Clade hunter, @Nullable Clade other) {
+        return hunter != null && other != null && HUNTS.getOrDefault(hunter, Set.of()).contains(other);
     }
 
     private static boolean free(AbstractMonsterGirl g, long now) {
@@ -48,11 +50,11 @@ public final class Rivalries {
     @Nullable
     public static AbstractMonsterGirl squabble(ServerLevel level, AbstractMonsterGirl hunter) {
         long now = level.getGameTime();
-        if (!MonsterGirlsConfig.rivalries() || !HUNTS.containsKey(hunter.getSpecies().family()) || !free(hunter, now)) return null;
+        if (!MonsterGirlsConfig.rivalries() || hunter.getSpecies().clade() == null || !HUNTS.containsKey(hunter.getSpecies().clade()) || !free(hunter, now)) return null;
         AbstractMonsterGirl prey = null;
         double best = RANGE * RANGE;
         for (AbstractMonsterGirl g : level.getEntitiesOfClass(AbstractMonsterGirl.class, hunter.getBoundingBox().inflate(RANGE))) {
-            if (g == hunter || !hunts(hunter.getSpecies().family(), g.getSpecies().family()) || !free(g, now)) continue;
+            if (g == hunter || !hunts(hunter.getSpecies().clade(), g.getSpecies().clade()) || !free(g, now)) continue;
             double d = g.distanceToSqr(hunter);
             if (d < best) {
                 best = d;

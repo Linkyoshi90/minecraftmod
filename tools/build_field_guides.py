@@ -19,7 +19,7 @@ import family_concepts as C  # noqa: E402
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PREV = os.path.join(REPO, "previews")
-VOLUMES = [("I", "Harpies", "harpy_field_guide.html"), ("II", "Bullywugs & Mucus Toads", "anuran_field_guide.html")] + \
+VOLUMES = [("Index", "The Tree of Life", "tree_of_life.html"), ("I", "Harpies", "harpy_field_guide.html"), ("II", "Bullywugs & Mucus Toads", "anuran_field_guide.html")] + \
           [(f["volume"], f["title"], f["id"] + "_field_guide.html") for f in C.FAMILIES]
 
 E = html.escape

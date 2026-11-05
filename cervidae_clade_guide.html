@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deer (and giraffes) — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · Mammalia &gt; Artiodactyla &gt; Ruminantia &gt; Cervidae</div>
+  <h1>Deer (and giraffes)</h1>
+  <p class="lede">Deer, elk and reindeer, whose antlers fall each year, with the giraffes kept here as their nearest guests.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Speed + Jump Boost</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Centaur form · 12</b><a href="centaur_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="centaur_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (12)</h2>
+    <div class="grid">
+      <article class="card" id="aurorantler_centaur">
+        <div class="card-top"><span class="group">Snowy taiga</span><span class="tag">Luminous · aloof</span></div>
+        <h3>Aurorantler <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Aloof, gentle</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide deer-taur whose antlers catch the northern lights.</p>
+        <p><b>Signature: Aurora antlers</b>Her antlers glow at night and light the snow around her. Her friend sees in the dark beside her (Night Vision).</p>
+        <p><b>Player interaction</b>Sweet berries and glow berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Aurora (default)</strong> · Green-blue glow</span><span class="swatch"><strong>Violet</strong> · Violet glow</span><span class="swatch"><strong>Dawn</strong> · Pink glow</span><span class="swatch"><strong>Frost</strong> · White glow</span><span class="swatch"><strong>Ember</strong> · Amber glow</span></div>
+        <p><b>Spawns in</b><code>snowy_taiga, grove, snowy_slopes</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Cervidae (Harmontide)</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#aurorantler_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="caribou_centaur">
+        <div class="card-top"><span class="group">The tundra</span><span class="tag">Hardy · wandering</span></div>
+        <h3>Caribou <span style="color:var(--muted);font-size:.9rem">(about 2.3 blocks)</span></h3>
+        <p><b>Temperament</b>Hardy, wandering</p>
+        <p><b>Ecology &amp; behaviour</b>The wild cousin of the reindeer: a blue-grey deer taur with broad antlers and wide hooves, who walks a thousand miles a year.</p>
+        <p><b>Signature: Snow stride</b>Carrying her friend over snow or ice she only gets faster, and she walks on powder snow.</p>
+        <p><b>Player interaction</b>Apples and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue-grey</span><span class="swatch"><strong>Barren-ground</strong> · Brown and cream</span><span class="swatch"><strong>Woodland</strong> · Dark brown</span><span class="swatch"><strong>Peary</strong> · Nearly white</span><span class="swatch"><strong>Dusk</strong> · Violet</span></div>
+        <p><b>Spawns in</b><code>snowy_plains, snowy_taiga, frozen_river</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Cervidae: Rangifer tarandus</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#caribou_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="giraffe_centaur">
+        <div class="card-top"><span class="group">Savanna</span><span class="tag">Tall · serene</span></div>
+        <h3>Giraffe <span style="color:var(--muted);font-size:.9rem">(about 2.8 blocks)</span></h3>
+        <p><b>Temperament</b>Serene</p>
+        <p><b>Ecology &amp; behaviour</b>She can see your house from here.</p>
+        <p><b>Signature: Browsing</b>Befriended, she reaches up into the trees near her friend and pulls down apples.</p>
+        <p><b>Player interaction</b>Leaves and apples.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Gold (default)</strong> · Gold</span><span class="swatch"><strong>Reticulated</strong> · Reticulated</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Dark</strong> · Dark</span><span class="swatch"><strong>Rothschild</strong> · Rothschild</span></div>
+        <p><b>Spawns in</b><code>savanna, savanna_plateau</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Giraffidae: Giraffa; too few giraffids for a family of their own A guest here: her true kin are too few, so she lives with her nearest relatives.</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#giraffe_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="halberelk_centaur">
+        <div class="card-top"><span class="group">Taiga</span><span class="tag">Sturdy · handy</span></div>
+        <h3>Halberelk <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Sturdy, helpful</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide elk taur whose antlers end in blades like a halberd&#x27;s.</p>
+        <p><b>Signature: Woodcutter</b>Befriended, when her friend chops a log of a tree within 8 blocks of her, she fells the whole tree (crouch to cut one log).</p>
+        <p><b>Player interaction</b>Apples and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, steel blades</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>taiga, old_growth_pine_taiga, snowy_taiga</code></p>
+        <p class="risk"><b>Danger</b>Low (her antlers).</p>
+              <p class="place"><b>True position</b>Cervidae: Cervus canadensis (Harmontide)</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#halberelk_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="momoshika_centaur">
+        <div class="card-top"><span class="group">Cherry groves</span><span class="tag">Gentle · blessed</span></div>
+        <h3>Momoshika <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Gentle</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide deer taur, white with blue spots, with peach blossoms caught in her antlers.</p>
+        <p><b>Signature: Peach blossom</b>By day her friend regenerates beside her; now and then her present is a golden apple.</p>
+        <p><b>Player interaction</b>Apples and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · White, blue spots</span><span class="swatch"><strong>Pink</strong> · Pink</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>White</strong> · White</span></div>
+        <p><b>Spawns in</b><code>cherry_grove, flower_forest, meadow</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Cervidae: Cervus nippon (Harmontide)</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#momoshika_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="moose_centaur">
+        <div class="card-top"><span class="group">Northern lakes</span><span class="tag">Massive · unbothered</span></div>
+        <h3>Moose <span style="color:var(--muted);font-size:.9rem">(about 2.5 blocks)</span></h3>
+        <p><b>Temperament</b>Unbothered</p>
+        <p><b>Ecology &amp; behaviour</b>Huge, dark and up to her chest in a lake. She swims better than you do.</p>
+        <p><b>Signature: Wader</b>Water doesn&#x27;t slow her with a rider on her back.</p>
+        <p><b>Player interaction</b>Kelp and wheat.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Brown</span><span class="swatch"><strong>Dark</strong> · Dark</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Red</strong> · Red</span></div>
+        <p><b>Spawns in</b><code>taiga, snowy_taiga, old_growth_spruce_taiga</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>Cervidae: Alces alces</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#moose_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="okapi_centaur">
+        <div class="card-top"><span class="group">Deep jungle</span><span class="tag">Elusive · velvet</span></div>
+        <h3>Okapi <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Elusive</p>
+        <p><b>Ecology &amp; behaviour</b>The forest giraffe, half a rumour. You hear of her long after she has gone.</p>
+        <p><b>Signature: Leave No Trace</b>With a rider on her back, the monsters near lose track of them.</p>
+        <p><b>Player interaction</b>Melons and leaves.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Velvet (default)</strong> · Velvet</span><span class="swatch"><strong>Chestnut</strong> · Chestnut</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Plum</strong> · Plum</span></div>
+        <p><b>Spawns in</b><code>jungle, bamboo_jungle</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Giraffidae: Okapia johnstoni A guest here: her true kin are too few, so she lives with her nearest relatives.</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#okapi_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="palmyr_centaur">
+        <div class="card-top"><span class="group">Flower forests and meadows</span><span class="tag">Graceful · quick</span></div>
+        <h3>Palmyr <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Graceful, quick</p>
+        <p><b>Ecology &amp; behaviour</b>A blue Harmontide deer taur patterned in white diamonds, with feathery frond antlers and a fan of a tail.</p>
+        <p><b>Signature: Fleet foot</b>Befriended, her friend near her runs faster while sprinting (Speed I).</p>
+        <p><b>Player interaction</b>Apples and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, white diamonds</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Teal</strong> · Teal</span><span class="swatch"><strong>Violet</strong> · Violet</span><span class="swatch"><strong>Dusk</strong> · Dusk</span></div>
+        <p><b>Spawns in</b><code>flower_forest, meadow, cherry_grove</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Cervidae (Harmontide)</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#palmyr_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="prairhorn_centaur">
+        <div class="card-top"><span class="group">Plains</span><span class="tag">Swift · skittish</span></div>
+        <h3>Prairhorn <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Swift, skittish</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide pronghorn taur, banded tan and white, the fastest runner of the plains.</p>
+        <p><b>Signature: Swift</b>The fastest ride there is: friends ride her faster than any horse can gallop.</p>
+        <p><b>Player interaction</b>Wheat and apples.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Tan (default)</strong> · Tan and white bands</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Dark</strong> · Dark</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Blue</strong> · Blue</span></div>
+        <p><b>Spawns in</b><code>plains, sunflower_plains, savanna</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Antilocapridae: Antilocapra americana (Harmontide) A guest here: her true kin are too few, so she lives with her nearest relatives.</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#prairhorn_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="qilin_centaur">
+        <div class="card-top"><span class="group">Bamboo and meadows</span><span class="tag">Gentle · auspicious</span></div>
+        <h3>Qilin <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Gentle, auspicious</p>
+        <p><b>Ecology &amp; behaviour</b>The auspicious beast of China: a scaled deer who treads so lightly she bends no grass, with soft antlers and a golden coat.</p>
+        <p><b>Signature: Gentle tread</b>Befriended, she heals the animals near her friend, and she never tramples farmland.</p>
+        <p><b>Player interaction</b>Apples and golden carrots.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Gold (default)</strong> · Gold, teal mane</span><span class="swatch"><strong>Jade</strong> · Jade</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Blue</strong> · Blue</span></div>
+        <p><b>Spawns in</b><code>bamboo_jungle, meadow, cherry_grove</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Cervidae (myth; scales are an ornament)</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#qilin_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="reindeer_centaur">
+        <div class="card-top"><span class="group">Snowy taiga &amp; tundra</span><span class="tag">Steady · migratory</span></div>
+        <h3>Reindeer <span style="color:var(--muted);font-size:.9rem">(about 2.3 blocks)</span></h3>
+        <p><b>Temperament</b>Gentle, steady, patient</p>
+        <p><b>Ecology &amp; behaviour</b>Both sexes of reindeer grow antlers, and the females keep theirs through the winter, which is why she has them. Herds migrate between snowy taiga and open snow, digging through the snow for lichen and moss.</p>
+        <p><b>Signature: Snow trekker</b>No slowdown on snow or powder snow, for her or her rider. She digs moss, glow lichen and sweet berries out of snow and brings them as presents.</p>
+        <p><b>Player interaction</b>Bring moss and sweet berries. Walk with the herd.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Tundra (default)</strong> · Brown with a pale neck and belly</span><span class="swatch"><strong>Woodland</strong> · Dark chocolate brown</span><span class="swatch"><strong>Svalbard</strong> · Short-legged, pale and woolly</span><span class="swatch"><strong>White</strong> · White coat, cream antlers</span><span class="swatch"><strong>Piebald</strong> · Brown with white patches</span><span class="swatch"><strong>Doctor Deer</strong> · Warm brown fur, pink clothes</span></div>
+        <p><b>Spawns in</b><code>snowy_taiga, snowy_plains, taiga, grove, snowy_slopes</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Cervidae: Rangifer tarandus</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#reindeer_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="stagel_centaur">
+        <div class="card-top"><span class="group">Flower forests</span><span class="tag">Shy · springy</span></div>
+        <h3>Stagel <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Shy, springy</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide fawn taur, cream dappled with blue, with budding antlers and a bound in her step.</p>
+        <p><b>Signature: Springing step</b>Befriended, her friend near her jumps high (Jump Boost II).</p>
+        <p><b>Player interaction</b>Apples and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Cream (default)</strong> · Cream, blue dapples</span><span class="swatch"><strong>Brown</strong> · Brown fawn</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Rose</strong> · Rose</span><span class="swatch"><strong>Moss</strong> · Moss green</span></div>
+        <p><b>Spawns in</b><code>flower_forest, forest, birch_forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Cervidae (Harmontide)</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#stagel_centaur">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

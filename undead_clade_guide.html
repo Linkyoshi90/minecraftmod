@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Undead — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · outside the tree</div>
+  <h1>Undead</h1>
+  <p class="lede">Ghosts, zombies, mummies and liches: whatever she was, she is this now.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Invisibility · <b style="display:inline;color:var(--accent)">Was:</b> Undead</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Undead form · 33</b><a href="undead_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="undead_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (33)</h2>
+    <div class="grid">
+      <article class="card" id="banshee_undead">
+        <div class="card-top"><span class="group">Birch forests, at night</span><span class="tag">Mournful · watchful</span></div>
+        <h3>Banshee <span style="color:var(--muted);font-size:.9rem">(about 1.75 blocks)</span></h3>
+        <p><b>Temperament</b>Mournful, gentle, protective</p>
+        <p><b>Ecology &amp; behaviour</b>The bean sí, the woman of the fairy mound in Irish folklore. Her keening warns of a coming death. Here it is a warning you can act on, not a curse. She combs her long hair with a silver comb.</p>
+        <p><b>Signature: Keening</b>When a player within 24 blocks drops to three hearts or fewer, she keens. Every hostile mob within 16 blocks of that player glows for ten seconds, as a bell shows raiders. She keens at most once a minute for each player.</p>
+        <p><b>Player interaction</b>Pumpkin pie, and listen when she cries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Keening (default)</strong> · Grey cloak, silver hair</span><span class="swatch"><strong>Green</strong> · Green dress, auburn hair</span><span class="swatch"><strong>Red</strong> · Red-haired, dark cloak</span><span class="swatch"><strong>Mist</strong> · All pale, like fog</span><span class="swatch"><strong>Raven</strong> · Black hair and cloak</span></div>
+        <p><b>Spawns in</b><code>birch_forest, old_growth_birch_forest, meadow</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#banshee_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="candle_spirit_undead">
+        <div class="card-top"><span class="group">Dark forests</span><span class="tag">Quiet · steadfast</span></div>
+        <h3>Candle Spirit <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Steadfast</p>
+        <p><b>Ecology &amp; behaviour</b>A candle that kept burning after everyone left the room, wax-pale with a wick for a crown.</p>
+        <p><b>Signature: Vigil</b>Befriended, at night the undead near her friend catch fire.</p>
+        <p><b>Player interaction</b>Honeycomb and glow berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Wax (default)</strong> · Wax</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Beeswax</strong> · Beeswax</span></div>
+        <p><b>Spawns in</b><code>dark_forest, old_growth_spruce_taiga</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#candle_spirit_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="cordyceps_undead">
+        <div class="card-top"><span class="group">Mushroom fields</span><span class="tag">Hungry · lost</span></div>
+        <h3>Cordyceps Infected <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Hostile until fed</p>
+        <p><b>Ecology &amp; behaviour</b>A zombie with fungus fruiting from her head and shoulder.</p>
+        <p><b>Signature: Staved off</b>Five feedings of rotten flesh hold the fungus back: she is calm, a friend, and well again.</p>
+        <p><b>Player interaction</b>Rotten flesh.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Infected (default)</strong> · Infected</span><span class="swatch"><strong>Cured</strong> · Cured</span><span class="swatch"><strong>Ashen</strong> · Ashen</span><span class="swatch"><strong>Violet</strong> · Violet</span><span class="swatch"><strong>Scarlet</strong> · Scarlet</span></div>
+        <p><b>Spawns in</b><code>mushroom_fields, lush_caves</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#cordyceps_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="draugr_undead">
+        <div class="card-top"><span class="group">Barrows and cold hills</span><span class="tag">Grim · loyal</span></div>
+        <h3>Draugr <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Grim, fiercely loyal</p>
+        <p><b>Ecology &amp; behaviour</b>The barrow-dweller of Norse sagas, grey as a corpse with pale glowing eyes, who guards her grave goods. The other dead do as she says.</p>
+        <p><b>Signature: Lord of the barrow</b>Befriended, the undead near her friend forget them.</p>
+        <p><b>Player interaction</b>Rotten flesh, bread and gold.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Grey (default)</strong> · Corpse grey</span><span class="swatch"><strong>Hel-blue</strong> · Hel-blue</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Bronze</strong> · Barrow gold</span><span class="swatch"><strong>Frost</strong> · Frost</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, snowy_slopes, taiga, stony_peaks</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#draugr_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="drowned_undead">
+        <div class="card-top"><span class="group">Cold seas</span><span class="tag">Hungry · cold</span></div>
+        <h3>Drowned <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Hostile until fed</p>
+        <p><b>Ecology &amp; behaviour</b>A zombie of the cold sea, blue-green, walking the sea floor.</p>
+        <p><b>Signature: Deep breath</b>Calmed and befriended, her friend under water near her doesn&#x27;t run out of air.</p>
+        <p><b>Player interaction</b>Rotten flesh.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Drowned (default)</strong> · Drowned</span><span class="swatch"><strong>Frozen</strong> · Frozen</span><span class="swatch"><strong>Deep</strong> · Deep</span><span class="swatch"><strong>Kelp</strong> · Kelp</span><span class="swatch"><strong>Pale</strong> · Pale</span></div>
+        <p><b>Spawns in</b><code>cold_ocean, deep_cold_ocean, frozen_ocean, deep_frozen_ocean</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#drowned_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="dullahan_undead">
+        <div class="card-top"><span class="group">Plains &amp; meadows, at night</span><span class="tag">Headless · dignified</span></div>
+        <h3>Dullahan <span style="color:var(--muted);font-size:.9rem">(about 1.85 blocks)</span></h3>
+        <p><b>Temperament</b>Dignified, reserved, kind underneath</p>
+        <p><b>Ecology &amp; behaviour</b>The headless rider of Irish folklore. She carries her head under her arm; a cold blue spirit flame burns where her neck ends. In the old stories the dullahan fears gold.</p>
+        <p><b>Signature: Headless rider</b>She often rides a skeleton horse through the night. Anyone holding gold makes her back away.</p>
+        <p><b>Player interaction</b>Pumpkin pie, and never hold gold at her.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Knight (default)</strong> · Dark armour, silver hair</span><span class="swatch"><strong>Crimson</strong> · Red cloak</span><span class="swatch"><strong>Ash</strong> · Grey</span><span class="swatch"><strong>Gilded</strong> · Gold trim</span><span class="swatch"><strong>Pale</strong> · White hair, pale cloak</span><span class="swatch"><strong>Headless Rider</strong> · A black rider&#x27;s suit with yellow trim</span><span class="swatch"><strong>Death Envoy</strong> · Silver hair, red eyes, a black and red gothic dress</span></div>
+        <p><b>Spawns in</b><code>plains, meadow, sunflower_plains</code></p>
+        <p class="risk"><b>Danger</b>Low unless provoked.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#dullahan_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="famished_undead">
+        <div class="card-top"><span class="group">Dripstone caves</span><span class="tag">Starving · dangerous</span></div>
+        <h3>Famished <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Hostile until fed</p>
+        <p><b>Ecology &amp; behaviour</b>Something starved in the dark, gaunt, long claws and a wide mouth. Drop food near her and she eases.</p>
+        <p><b>Signature: Sated</b>Drop food near her and she eats, turns friendly, and looks far less monstrous.</p>
+        <p><b>Player interaction</b>Any food, dropped.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Famished (default)</strong> · Famished</span><span class="swatch"><strong>Sated</strong> · Sated</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Ember</strong> · Ember</span><span class="swatch"><strong>Ash</strong> · Ash</span></div>
+        <p><b>Spawns in</b><code>dripstone_caves, deep_dark</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#famished_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="frankenstein_undead">
+        <div class="card-top"><span class="group">Swamps &amp; dark forests</span><span class="tag">Huge · shy</span></div>
+        <h3>Frankenstein&#x27;s Monster <span style="color:var(--muted);font-size:.9rem">(about 2.3 blocks)</span></h3>
+        <p><b>Temperament</b>Very shy, gentle, enormously strong</p>
+        <p><b>Ecology &amp; behaviour</b>A tall girl stitched together and woken by lightning. She hides from everyone.</p>
+        <p><b>Signature: Very shy</b>She flees anyone not crouching. Struck by lightning she is healed and stronger for a day. Devoted, she is a terrifying bodyguard.</p>
+        <p><b>Player interaction</b>Crouch, stay still, and let her come to you.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Pale green</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Blue</strong> · Blue-grey</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Patchwork</strong> · Mixed patches</span></div>
+        <p><b>Spawns in</b><code>swamp, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>None unless cornered.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#frankenstein_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="gaitress_undead">
+        <div class="card-top"><span class="group">Plains and roads</span><span class="tag">Tireless · silent</span></div>
+        <h3>Gaitress <span style="color:var(--muted);font-size:.9rem">(about 2.6 blocks)</span></h3>
+        <p><b>Temperament</b>Tireless, silent</p>
+        <p><b>Ecology &amp; behaviour</b>Four long legs and a swimsuit, and nothing else: two to walk on, two crossed up in the air where a head would be. Nobody knows who she is walking to.</p>
+        <p><b>Signature: Stride</b>Very fast, with a kick that throws things. Befriended, her friend runs faster beside her.</p>
+        <p><b>Player interaction</b>Sugar and rabbit&#x27;s feet.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · A blue swimsuit</span><span class="swatch"><strong>Black</strong> · A black swimsuit</span><span class="swatch"><strong>Green</strong> · A green swimsuit</span><span class="swatch"><strong>Purple</strong> · A purple swimsuit</span><span class="swatch"><strong>Red</strong> · A red swimsuit</span><span class="swatch"><strong>White</strong> · A white swimsuit</span></div>
+        <p><b>Spawns in</b><code>plains, sunflower_plains, savanna</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#gaitress_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="gashadokuro_undead">
+        <div class="card-top"><span class="group">Old battlefields at night</span><span class="tag">Hungry · lonely</span></div>
+        <h3>Gashadokuro <span style="color:var(--muted);font-size:.9rem">(about 2.6 blocks)</span></h3>
+        <p><b>Temperament</b>Hungry, lonely</p>
+        <p><b>Ecology &amp; behaviour</b>The &#x27;starving skeleton&#x27; of Japanese folklore, a towering skeleton of the bones of the unburied dead, dark hollows round her glowing eyes, her teeth chattering. She seizes whatever crosses her path.</p>
+        <p><b>Signature: Giant&#x27;s grasp</b>Befriended, she seizes a monster near her friend and lifts it into the air (Levitation).</p>
+        <p><b>Player interaction</b>Bones and bread.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Bone (default)</strong> · Bone white, red eyes</span><span class="swatch"><strong>Ash</strong> · Ash grey</span><span class="swatch"><strong>Black</strong> · Black bones</span><span class="swatch"><strong>Blood</strong> · Red-stained</span><span class="swatch"><strong>Jade</strong> · Ghostly jade</span></div>
+        <p><b>Spawns in</b><code>plains, dark_forest, taiga</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#gashadokuro_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="ghoul_undead">
+        <div class="card-top"><span class="group">Deserts and graveyards</span><span class="tag">Hungry · sly</span></div>
+        <h3>Ghoul <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Hungry, sly</p>
+        <p><b>Ecology &amp; behaviour</b>The ghul of Arabian tales, who haunts graveyards and empty places: blue-grey cracked skin, wild teal hair, claws and a torn shift. She eats what the dead leave behind.</p>
+        <p><b>Signature: Carrion</b>Befriended, she eats the rotten flesh lying near her friend, and it heals her.</p>
+        <p><b>Player interaction</b>Rotten flesh and bones.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue-grey, teal hair</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Sand</strong> · Sandy</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Violet</strong> · Violet</span></div>
+        <p><b>Spawns in</b><code>desert, badlands, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#ghoul_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="hand_undead">
+        <div class="card-top"><span class="group">Graveyards and cold ground</span><span class="tag">Busy · silent</span></div>
+        <h3>Hand <span style="color:var(--muted);font-size:.9rem">(about 0.6 blocks)</span></h3>
+        <p><b>Temperament</b>Busy, silent</p>
+        <p><b>Ecology &amp; behaviour</b>Not a girl at all: an ordinary severed hand with a bone sticking out of the wrist. It runs about on its fingertips like a spider, climbs walls, and drums its fingers while it waits.</p>
+        <p><b>Signature: Firm grip</b>Befriended, it grabs the monsters near its friend by the ankle and holds them back.</p>
+        <p><b>Player interaction</b>Rotten flesh and rings of gold nuggets.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Fair (default)</strong> · Fair skin</span><span class="swatch"><strong>Pale</strong> · Pale skin</span><span class="swatch"><strong>Tan</strong> · Tan skin</span><span class="swatch"><strong>Dark</strong> · Dark skin</span><span class="swatch"><strong>Zombie</strong> · Grey-green skin</span></div>
+        <p><b>Spawns in</b><code>swamp, dark_forest, deep_dark</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#hand_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="jiangshi_undead">
+        <div class="card-top"><span class="group">Bamboo and old forests</span><span class="tag">Stiff · dutiful</span></div>
+        <h3>Jiangshi <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Stiff, dutiful</p>
+        <p><b>Ecology &amp; behaviour</b>The hopping corpse of China: an official&#x27;s robe and hat, pale skin, a paper talisman on her brow, arms stretched out in front of her. She cannot bend, so she hops.</p>
+        <p><b>Signature: Stiff hop</b>Befriended, she hops at the monsters that come near her and stuns them.</p>
+        <p><b>Player interaction</b>Sticky rice: bread and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Indigo (default)</strong> · Indigo robe</span><span class="swatch"><strong>Red</strong> · Red robe</span><span class="swatch"><strong>Green</strong> · Green robe</span><span class="swatch"><strong>Black</strong> · Black robe</span><span class="swatch"><strong>Gold</strong> · Gold robe</span></div>
+        <p><b>Spawns in</b><code>bamboo_jungle, dark_forest, old_growth_pine_taiga</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#jiangshi_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="kasurenijimi_undead">
+        <div class="card-top"><span class="group">Dark forests</span><span class="tag">Shy · unseen</span></div>
+        <h3>Kasurenijimi <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Shy, hard to look at</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide ghost in a school uniform with long blue-black hair, whose face nobody can see clearly: it is smeared and scratched out like an old photograph.</p>
+        <p><b>Signature: Smudged</b>Befriended, while her friend sneaks near her they blur out of sight.</p>
+        <p><b>Player interaction</b>Cookies and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Navy (default)</strong> · Navy collar, red bow</span><span class="swatch"><strong>Black</strong> · Black uniform</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Red</strong> · Red</span></div>
+        <p><b>Spawns in</b><code>dark_forest, birch_forest, old_growth_birch_forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#kasurenijimi_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="koschei_undead">
+        <div class="card-top"><span class="group">Cold forests</span><span class="tag">Patient · deathless</span></div>
+        <h3>Koschei <span style="color:var(--muted);font-size:.9rem">(about 1.95 blocks)</span></h3>
+        <p><b>Temperament</b>Patient, deathless</p>
+        <p><b>Ecology &amp; behaviour</b>Koschei the Deathless of the Russian tales: a bone beak under a tall kokoshnik, long blue robes, chains hung all about her and a lantern at her hand.</p>
+        <p><b>Signature: Chains</b>Befriended, she chains the monsters near her friend to the spot: they can go no further than a few steps.</p>
+        <p><b>Player interaction</b>Eggs, and rotten flesh.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue robes</span><span class="swatch"><strong>Black</strong> · Black robes</span><span class="swatch"><strong>Gold</strong> · Gold robes</span><span class="swatch"><strong>Green</strong> · Green robes</span><span class="swatch"><strong>Red</strong> · Red robes</span></div>
+        <p><b>Spawns in</b><code>old_growth_spruce_taiga, snowy_taiga, taiga</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#koschei_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="llorona_undead">
+        <div class="card-top"><span class="group">Rivers, at night</span><span class="tag">Grieving · kind</span></div>
+        <h3>La Llorona <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Grieving, gentle</p>
+        <p><b>Ecology &amp; behaviour</b>The weeping woman of Mexican folklore, who searches the rivers at night. Here she brings the lost home.</p>
+        <p><b>Signature: Bringing them home</b>At night she finds lost young animals and village children and leads them home to their own kind. Bring one home with her and she stops weeping for the night.</p>
+        <p><b>Player interaction</b>Pumpkin pie. Help her bring a lost one home.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>White (default)</strong> · A white gown</span><span class="swatch"><strong>Mourning</strong> · Black</span><span class="swatch"><strong>Rose</strong> · Rose</span><span class="swatch"><strong>River</strong> · River blue</span><span class="swatch"><strong>Marigold</strong> · Marigold, for the Day of the Dead</span></div>
+        <p><b>Spawns in</b><code>river, swamp</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#llorona_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="mano_peluda_undead">
+        <div class="card-top"><span class="group">Old houses and dark ground</span><span class="tag">Vicious · quick</span></div>
+        <h3>La Mano Peluda <span style="color:var(--muted);font-size:.9rem">(about 0.6 blocks)</span></h3>
+        <p><b>Temperament</b>Vicious, quick</p>
+        <p><b>Ecology &amp; behaviour</b>The hairy hand of Mexican legend, from under the bed: a pale fist under a shaggy pelt with a bone sticking out of the wrist. It runs on its fingers and climbs walls.</p>
+        <p><b>Signature: Lunge</b>Befriended, it leaps on the face of a monster near its friend, which forgets what it was doing.</p>
+        <p><b>Player interaction</b>Rotten flesh and bones.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue-grey fur</span><span class="swatch"><strong>Black</strong> · Black fur</span><span class="swatch"><strong>Green</strong> · Green fur</span><span class="swatch"><strong>Purple</strong> · Purple fur</span><span class="swatch"><strong>Red</strong> · Red fur</span></div>
+        <p><b>Spawns in</b><code>dark_forest, swamp, desert</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#mano_peluda_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="lich_undead">
+        <div class="card-top"><span class="group">The deep dark</span><span class="tag">Ancient · scholarly</span></div>
+        <h3>Lich <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Cold, ancient, curious once calmed</p>
+        <p><b>Ecology &amp; behaviour</b>A sorcerer who put her soul into a phylactery to cheat death.</p>
+        <p><b>Signature: Phylactery</b>She casts slowness and weakness. While her phylactery stands she cannot die: she reforms beside it. Break it and she is peaceful. Befriended, she trades experience for books.</p>
+        <p><b>Player interaction</b>Find and break her phylactery first. Then books.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Soul (default)</strong> · Pale blue soul fire</span><span class="swatch"><strong>Bone</strong> · Ivory</span><span class="swatch"><strong>Crimson</strong> · Red</span><span class="swatch"><strong>Verdant</strong> · Green</span><span class="swatch"><strong>Void</strong> · Black and violet</span></div>
+        <p><b>Spawns in</b><code>deep_dark</code></p>
+        <p class="risk"><b>Danger</b>High until her phylactery breaks.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#lich_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="living_doll_undead">
+        <div class="card-top"><span class="group">Anywhere, at night</span><span class="tag">Creepy · clingy</span></div>
+        <h3>Living Doll <span style="color:var(--muted);font-size:.9rem">(about 0.95 blocks)</span></h3>
+        <p><b>Temperament</b>Clingy, jealous, very sweet once loved</p>
+        <p><b>Ecology &amp; behaviour</b>A porcelain doll who wants a home. She follows a player she has chosen, moving only when she is not watched.</p>
+        <p><b>Signature: Moves when unseen</b>She creeps after her chosen player only while not being looked at, and freezes when watched. Reaching you, she tugs at your sleeve (a small push) until fed.</p>
+        <p><b>Player interaction</b>Turn around and let her catch up; give her pie.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Porcelain (default)</strong> · White skin, black dress</span><span class="swatch"><strong>Gothic</strong> · Black lace</span><span class="swatch"><strong>Rose</strong> · Pink dress</span><span class="swatch"><strong>Blue</strong> · Blue dress, blonde</span><span class="swatch"><strong>Antique</strong> · Faded sepia</span><span class="swatch"><strong>Lost</strong> · Red curls with purple bows, a patched green dress, a second face on the back of her head</span><span class="swatch"><strong>Music Box</strong> · A white face, a black body, purple eyes</span></div>
+        <p><b>Spawns in</b><code>plains, forest, dark_forest, taiga</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#living_doll_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="lost_soul_undead">
+        <div class="card-top"><span class="group">Soul sand valley</span><span class="tag">Wistful · faint</span></div>
+        <h3>Lost Soul <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Wistful</p>
+        <p><b>Ecology &amp; behaviour</b>A pale legless soul who knows the way back to where things ended.</p>
+        <p><b>Signature: Way back</b>Ask her, empty-handed, and she points you to where you last died.</p>
+        <p><b>Player interaction</b>Bones and soul sand.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Amber</strong> · Amber</span><span class="swatch"><strong>Dusk</strong> · Dusk</span></div>
+        <p><b>Spawns in</b><code>soul_sand_valley</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#lost_soul_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="mummy_undead">
+        <div class="card-top"><span class="group">Desert pyramids</span><span class="tag">Bashful · ancient</span></div>
+        <h3>Mummy <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Ancient, bashful</p>
+        <p><b>Ecology &amp; behaviour</b>The wrapped dead of Egyptian tombs, here a bashful guardian of the pyramid&#x27;s loot.</p>
+        <p><b>Signature: Unravelling</b>Hits loosen her bandages (string and paper). Befriended, a crouching pull with an empty hand unravels her a layer at a time, down to skimpy wraps; then she hurries, spins and wraps herself up again.</p>
+        <p><b>Player interaction</b>Paper and gold. Pull gently.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Linen (default)</strong> · Pale linen</span><span class="swatch"><strong>Aged</strong> · Yellowed</span><span class="swatch"><strong>Royal</strong> · Gold and lapis</span><span class="swatch"><strong>Sand</strong> · Sandy</span><span class="swatch"><strong>Night</strong> · Grey, glowing eyes</span></div>
+        <p><b>Spawns in</b><code>desert</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#mummy_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="nasnas_undead">
+        <div class="card-top"><span class="group">Deserts by night</span><span class="tag">Quiet · faithful</span></div>
+        <h3>Nasnas <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Quiet, faithful</p>
+        <p><b>Ecology &amp; behaviour</b>The half-creature of Arabian tales, here half a ghost: pale, eyes closed, her body fading into a wisp where her legs should be.</p>
+        <p><b>Signature: Half a life</b>Befriended, once a day she takes a killing blow in her friend&#x27;s place.</p>
+        <p><b>Player interaction</b>Dates of any kind: sweet berries and bread.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Pale blue</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Rose</strong> · Rose</span><span class="swatch"><strong>Green</strong> · Green</span></div>
+        <p><b>Spawns in</b><code>desert, badlands, savanna</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#nasnas_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="phantom_undead">
+        <div class="card-top"><span class="group">The night sky</span><span class="tag">Swooping · tired</span></div>
+        <h3>Phantom <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Grumpy, sleepy, clingy</p>
+        <p><b>Ecology &amp; behaviour</b>A phantom girl with membrane wings who haunts the sleepless. She swoops on players who have not slept in three nights.</p>
+        <p><b>Signature: Insomnia</b>Spawns above players who have not slept for three nights (like a vanilla phantom) and swoops at them. Befriended, she keeps the vanilla phantoms away.</p>
+        <p><b>Player interaction</b>Sleep! Or win her over with pie.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Night blue (default)</strong> · Blue-grey wings</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Violet</strong> · Violet</span><span class="swatch"><strong>Teal</strong> · Teal</span><span class="swatch"><strong>Crimson</strong> · Red wings</span></div>
+        <p><b>Spawns in</b><code></code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#phantom_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="poltergeist_undead">
+        <div class="card-top"><span class="group">Old houses</span><span class="tag">Loud · unseen</span></div>
+        <h3>Poltergeist <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Loud</p>
+        <p><b>Ecology &amp; behaviour</b>Nobody has ever seen her throw anything. Things just fly.</p>
+        <p><b>Signature: Thrown Things</b>Befriended, things fly at the monsters near her friend.</p>
+        <p><b>Player interaction</b>Pumpkin pie.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Pale (default)</strong> · Pale</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Gold</strong> · Gold</span></div>
+        <p><b>Spawns in</b><code>dark_forest, old_growth_birch_forest, snowy_taiga</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#poltergeist_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="sandman_undead">
+        <div class="card-top"><span class="group">Night plains</span><span class="tag">Drowsy · gentle</span></div>
+        <h3>Sandman <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Drowsy</p>
+        <p><b>Ecology &amp; behaviour</b>A tall drowsy woman in midnight blue, sand always running from her sleeves.</p>
+        <p><b>Signature: Sleeping Sand</b>Befriended, at night the monsters near her friend grow drowsy and blind.</p>
+        <p><b>Player interaction</b>Pumpkin pie and milk.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Midnight (default)</strong> · Midnight</span><span class="swatch"><strong>Dusk</strong> · Dusk</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Night</strong> · Night</span><span class="swatch"><strong>Rose</strong> · Rose</span></div>
+        <p><b>Spawns in</b><code>desert, plains, meadow</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#sandman_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="skeleton_undead">
+        <div class="card-top"><span class="group">Night fields</span><span class="tag">Dry · exacting</span></div>
+        <h3>Skeleton <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Exacting</p>
+        <p><b>Ecology &amp; behaviour</b>Bone-white and thin, her bow never far. Hostile until she is given a bone. She keeps count of every arrow.</p>
+        <p><b>Signature: Arrow Counter</b>Befriended, she fights with a bow, and picks up the arrows lying near her friend and gives them back.</p>
+        <p><b>Player interaction</b>Bones and pumpkin pie.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Bone (default)</strong> · Bone</span><span class="swatch"><strong>Stray</strong> · Stray</span><span class="swatch"><strong>Wither</strong> · Wither</span><span class="swatch"><strong>Bog</strong> · Bog</span><span class="swatch"><strong>Old</strong> · Old</span></div>
+        <p><b>Spawns in</b><code>plains, dark_forest, snowy_plains</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#skeleton_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="soul_cluster_undead">
+        <div class="card-top"><span class="group">Soul sand valley</span><span class="tag">Crowded · stubborn</span></div>
+        <h3>Soul Cluster <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Stubborn</p>
+        <p><b>Ecology &amp; behaviour</b>Several pale faces gathered into one body.</p>
+        <p><b>Signature: Three lives</b>A killing blow only scatters her: she re-forms three times before she can die, and regains those over a day.</p>
+        <p><b>Player interaction</b>Bones and soul sand.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Amber</strong> · Amber</span><span class="swatch"><strong>Dusk</strong> · Dusk</span></div>
+        <p><b>Spawns in</b><code>soul_sand_valley</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#soul_cluster_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="soul_leech_undead">
+        <div class="card-top"><span class="group">Soul sand valley</span><span class="tag">Patient · thirsty</span></div>
+        <h3>Soul Leech <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Patient</p>
+        <p><b>Ecology &amp; behaviour</b>A dark ribbed soul with a round sucking mouth.</p>
+        <p><b>Signature: Drain</b>Befriended, she drains the monsters near her friend and passes the health on.</p>
+        <p><b>Player interaction</b>Bones and soul sand.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Slate (default)</strong> · Slate</span><span class="swatch"><strong>Oil</strong> · Oil</span><span class="swatch"><strong>Blood</strong> · Blood</span><span class="swatch"><strong>Ash</strong> · Ash</span><span class="swatch"><strong>Void</strong> · Void</span></div>
+        <p><b>Spawns in</b><code>soul_sand_valley</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#soul_leech_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="vampire_undead">
+        <div class="card-top"><span class="group">Dark forests, at night</span><span class="tag">Elegant · hungry</span></div>
+        <h3>Vampire <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Elegant, proud, secretly lonely</p>
+        <p><b>Ecology &amp; behaviour</b>An elegant vampire in a cape. She stalks players at night and visits their bedrooms to drink a little blood. Some ask nicely first.</p>
+        <p><b>Signature: Bedside visits</b>While you sleep she may appear and drink: you wake with two hearts less and Weakness, never killed. A polite one asks first. Sunlight slows her.</p>
+        <p><b>Player interaction</b>Let her drink (right-click when she asks), or give her pie.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Crimson (default)</strong> · Black and red</span><span class="swatch"><strong>Noble</strong> · Purple and gold</span><span class="swatch"><strong>Silver</strong> · Silver hair</span><span class="swatch"><strong>Raven</strong> · All black</span><span class="swatch"><strong>Pale</strong> · White and red</span><span class="swatch"><strong>Night Heir</strong> · Silver hair, a black and gold coat</span></div>
+        <p><b>Spawns in</b><code>dark_forest, old_growth_spruce_taiga, taiga</code></p>
+        <p class="risk"><b>Danger</b>Low (never lethal).</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#vampire_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="will_o_wisp_undead">
+        <div class="card-top"><span class="group">Swamps &amp; soul sand valleys</span><span class="tag">Flickering · luring</span></div>
+        <h3>Will-o&#x27;-wisp <span style="color:var(--muted);font-size:.9rem">(about 1.4 blocks)</span></h3>
+        <p><b>Temperament</b>Playful, flighty, a little dangerous</p>
+        <p><b>Ecology &amp; behaviour</b>A girl of cold flame who floats over marshes and leads travellers astray. Her lower body is a tail of fire.</p>
+        <p><b>Signature: Fire and light</b>She floats, glows (a real light) and is fireproof; whatever hits her catches fire. At night she leads the player she likes towards buried treasure or a shipwreck.</p>
+        <p><b>Player interaction</b>Follow her lights (sometimes they lead to treasure).</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue flame</span><span class="swatch"><strong>Green</strong> · Green flame</span><span class="swatch"><strong>Violet</strong> · Violet flame</span><span class="swatch"><strong>Amber</strong> · Amber flame</span><span class="swatch"><strong>Soul</strong> · Cyan soul fire</span><span class="swatch"><strong>Shy Ghost</strong> · All white, dark eyes</span></div>
+        <p><b>Spawns in</b><code>swamp, mangrove_swamp, soul_sand_valley</code></p>
+        <p class="risk"><b>Danger</b>Moderate (fire).</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#will_o_wisp_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="yuki_onna_undead">
+        <div class="card-top"><span class="group">Snowy biomes only</span><span class="tag">Cold · lonely</span></div>
+        <h3>Yuki-onna <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Cold, lonely, quietly affectionate</p>
+        <p><b>Ecology &amp; behaviour</b>The snow woman. She drifts through blizzards in a white kimono and follows travellers, unseen.</p>
+        <p><b>Signature: Freezing touch</b>She creeps after a player while unseen. Her touch freezes like powder snow. Only in snowy biomes; she melts away (despawns) anywhere warm.</p>
+        <p><b>Player interaction</b>Do not run. Let her catch you, then offer pie.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>White (default)</strong> · White kimono, black hair</span><span class="swatch"><strong>Frost</strong> · Pale blue</span><span class="swatch"><strong>Lilac</strong> · Lilac kimono</span><span class="swatch"><strong>Silver</strong> · Silver hair</span><span class="swatch"><strong>Crimson obi</strong> · White with a red obi</span><span class="swatch"><strong>Snow Wraith</strong> · White, a red-purple sash, purple eyes</span><span class="swatch"><strong>Frozen Queen</strong> · A white-blonde braid, an ice-blue gown</span></div>
+        <p><b>Spawns in</b><code>snowy_plains, snowy_taiga, ice_spikes, snowy_slopes, grove, frozen_peaks</code></p>
+        <p class="risk"><b>Danger</b>Moderate (cold).</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#yuki_onna_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="yurei_undead">
+        <div class="card-top"><span class="group">Cherry groves at night</span><span class="tag">Wistful · faithful</span></div>
+        <h3>Yurei <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Wistful, faithful</p>
+        <p><b>Ecology &amp; behaviour</b>The ghost of Japanese folklore: a girl in a school uniform with long black hair, her legs fading into a white wisp.</p>
+        <p><b>Signature: Haunting</b>At night, befriended, she haunts the monsters near her friend: they grow weak (Weakness I).</p>
+        <p><b>Player interaction</b>Bread and flowers.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red skirt</span><span class="swatch"><strong>Navy</strong> · Navy skirt</span><span class="swatch"><strong>White</strong> · All white</span><span class="swatch"><strong>Pale</strong> · Pale teal</span><span class="swatch"><strong>Plum</strong> · Plum</span></div>
+        <p><b>Spawns in</b><code>cherry_grove, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#yurei_undead">her card in that guide</a></p>
+      </article>
+      <article class="card" id="zombie_undead">
+        <div class="card-top"><span class="group">Plains &amp; forests, at night</span><span class="tag">Hungry · cheerful</span></div>
+        <h3>Zombie <span style="color:var(--muted);font-size:.9rem">(about 1.75 blocks)</span></h3>
+        <p><b>Temperament</b>Cheerful, clumsy, hungry</p>
+        <p><b>Ecology &amp; behaviour</b>A stitched-up zombie girl who does not quite know she is dead. Bites first, asks questions later.</p>
+        <p><b>Signature: Bite, then friendship</b>Hostile at first. Rotten flesh calms her (and only rotten flesh); then it builds friendship. She never burns in daylight, but gets lazy in it.</p>
+        <p><b>Player interaction</b>Rotten flesh calms her; more rotten flesh and she is your friend.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Green-grey skin</span><span class="swatch"><strong>Husk</strong> · Sandy skin</span><span class="swatch"><strong>Drowned</strong> · Teal skin</span><span class="swatch"><strong>Pale</strong> · Pale grey</span><span class="swatch"><strong>Patchy</strong> · Patchwork skin</span><span class="swatch"><strong>Lawn Zombie</strong> · A brown suit, a red tie, a traffic cone</span></div>
+        <p><b>Spawns in</b><code>plains, forest, taiga, savanna, desert</code></p>
+        <p class="risk"><b>Danger</b>Moderate until fed.</p>
+              <p class="place"><b>True position</b>outside taxonomy (undead)</p><p><b>Body</b>Undead form · <a href="undead_field_guide.html#zombie_undead">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

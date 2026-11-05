@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feliforms (cats &amp; kin) — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · Mammalia &gt; Carnivora &gt; Feliformia</div>
+  <h1>Feliforms (cats &amp; kin)</h1>
+  <p class="lede">The cat-shaped half of the carnivores: true cats, the sphinxes and lamassu of legend, and the kin that don&#x27;t look it. The hyena runs in a dog&#x27;s body and the mongoose and meerkat in a rodent&#x27;s, but all three sit on the cat side of the split. The pangolin lives here as a guest.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Night Vision · <b style="display:inline;color:var(--accent)">Was:</b> Nekomata</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Nekomata form · 24</b><a href="nekomata_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="nekomata_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Centaur form · 4</b><a href="centaur_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="centaur_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Rodent form · 2</b><a href="rodent_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="rodent_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Canid form · 1</b><a href="canid_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="canid_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Armoured form · 1</b><a href="armoured_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="armoured_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (32)</h2>
+    <div class="grid">
+      <article class="card" id="ammit_nekomata">
+        <div class="card-top"><span class="group">Deserts by the river</span><span class="tag">Stern · fair</span></div>
+        <h3>Ammit <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Stern, fair</p>
+        <p><b>Ecology &amp; behaviour</b>The devourer of the dead of Egyptian myth, who ate the hearts that failed the weighing: a lion&#x27;s mane and a lion&#x27;s coat over all of her, face included, a crocodile&#x27;s snout, a tufted tail.</p>
+        <p><b>Signature: Devourer</b>Befriended, when a monster dies near her friend she eats its heart and her friend heals.</p>
+        <p><b>Player interaction</b>Raw meat and fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Pale blue</span><span class="swatch"><strong>Sand</strong> · Sand</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Green</strong> · Green</span></div>
+        <p><b>Spawns in</b><code>desert, river, savanna</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>Felidae: lion per this design (the myth&#x27;s Ammit is lion + hippo + crocodile) A judgement call: TAXONOMY_PLAN.md gives the reasons.</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#ammit_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="anzu_centaur">
+        <div class="card-top"><span class="group">Mountain crags</span><span class="tag">Thieving · stormy</span></div>
+        <h3>Anzu <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Thieving, stormy</p>
+        <p><b>Ecology &amp; behaviour</b>The storm-bird of Sumerian myth, who stole the Tablet of Destinies from the gods: a blue lioness with feathered wings, long blue hair and gold at her brow.</p>
+        <p><b>Signature: Snatch</b>Befriended, she snatches the weapon out of a monster&#x27;s hand and steals its blessings for her friend.</p>
+        <p><b>Player interaction</b>Gold nuggets and raw beef.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue</span><span class="swatch"><strong>Yellow</strong> · Yellow</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>White</strong> · White</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, stony_peaks, savanna_plateau</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Felidae: lioness per this design (the Sumerian Anzu is a lion-headed eagle) A judgement call: TAXONOMY_PLAN.md gives the reasons.</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#anzu_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="ark_seraphim_centaur">
+        <div class="card-top"><span class="group">End highlands</span><span class="tag">Watchful · solemn</span></div>
+        <h3>Ark Seraphim <span style="color:var(--muted);font-size:.9rem">(about 2.4 blocks)</span></h3>
+        <p><b>Temperament</b>Solemn, watchful</p>
+        <p><b>Ecology &amp; behaviour</b>A winged blue lioness in jewelled trappings who bears a small gold ark on her back across the outer islands.</p>
+        <p><b>Signature: Blinding light</b>Once a day, when her friend is badly hurt, a blast of light burns the monsters around them and shields her friend.</p>
+        <p><b>Player interaction</b>Golden apples and raw beef.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Void</strong> · Void</span><span class="swatch"><strong>Rose</strong> · Rose</span></div>
+        <p><b>Spawns in</b><code>end_highlands, end_midlands</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Felidae: lioness body (myth; wings are an ornament)</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#ark_seraphim_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="bakeneko_nekomata">
+        <div class="card-top"><span class="group">Villages at night</span><span class="tag">Mischievous · spooky</span></div>
+        <h3>Bakeneko <span style="color:var(--muted);font-size:.9rem">(about 1.45 blocks)</span></h3>
+        <p><b>Temperament</b>Mischievous, playful</p>
+        <p><b>Ecology &amp; behaviour</b>The shapeshifting ghost cat of Japanese folklore, with will-o&#x27;-wisps dancing round her.</p>
+        <p><b>Signature: Ghost lights</b>At night her wisps light up the ground around her friend.</p>
+        <p><b>Player interaction</b>Fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, pale wisps</span><span class="swatch"><strong>Calico</strong> · Calico</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Ginger</strong> · Ginger</span></div>
+        <p><b>Spawns in</b><code>plains, forest, cherry_grove</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Felidae: Felis (folklore cat)</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#bakeneko_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="bastet_nekomata">
+        <div class="card-top"><span class="group">Deserts</span><span class="tag">Regal · aloof</span></div>
+        <h3>Bastet <span style="color:var(--muted);font-size:.9rem">(about 1.75 blocks)</span></h3>
+        <p><b>Temperament</b>Regal, aloof</p>
+        <p><b>Ecology &amp; behaviour</b>The cat goddess of Egypt, guardian of the home: a black cat girl in gold, with a goddess&#x27;s green eyes.</p>
+        <p><b>Signature: Home guardian</b>Befriended, creepers will not hunt her friend near her: they lose interest and slink away.</p>
+        <p><b>Player interaction</b>Cod and salmon.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black, gold</span><span class="swatch"><strong>Sand</strong> · Sand</span><span class="swatch"><strong>Silver</strong> · Silver</span><span class="swatch"><strong>Night</strong> · Night blue</span><span class="swatch"><strong>White</strong> · White</span></div>
+        <p><b>Spawns in</b><code>desert, badlands</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Felidae: Felis (deity)</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#bastet_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="black_panther_nekomata">
+        <div class="card-top"><span class="group">Jungle nights</span><span class="tag">Silent · proud</span></div>
+        <h3>Black Panther <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Silent</p>
+        <p><b>Ecology &amp; behaviour</b>A leopard with the lights out: the rosettes are there if you catch her in the sun.</p>
+        <p><b>Signature: Prowl</b>Befriended, after dark, her friend near her goes unseen while crouching.</p>
+        <p><b>Player interaction</b>Fish and raw meat.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Grey</strong> · Grey</span></div>
+        <p><b>Spawns in</b><code>jungle, sparse_jungle, bamboo_jungle</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>Felidae: Panthera pardus (melanistic)</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#black_panther_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="blaze_cat_nekomata">
+        <div class="card-top"><span class="group">The Nether</span><span class="tag">Fiery · haughty</span></div>
+        <h3>Blaze Cat <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Haughty</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide black cat of the Nether with flames for paws.</p>
+        <p><b>Signature: Burning paws</b>Fireproof. Her blows set things alight, and she lights campfires and candles near her. Blazes are her kin; befriended, her friend takes no harm from fire beside her.</p>
+        <p><b>Player interaction</b>Cooked fish and blaze powder.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black, orange flames</span><span class="swatch"><strong>Soul</strong> · Black, blue flames</span><span class="swatch"><strong>Ash</strong> · Grey</span><span class="swatch"><strong>Cinder</strong> · Red-black</span><span class="swatch"><strong>White</strong> · White, gold flames</span><span class="swatch"><strong>Royal Flame</strong> · Lilac fur, a white coat, pink flames</span></div>
+        <p><b>Spawns in</b><code>nether_wastes, crimson_forest, basalt_deltas</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>Felidae (Harmontide)</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#blaze_cat_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="cait_sith_nekomata">
+        <div class="card-top"><span class="group">Highlands</span><span class="tag">Aloof · uncanny</span></div>
+        <h3>Cait Sìth <span style="color:var(--muted);font-size:.9rem">(about 1.45 blocks)</span></h3>
+        <p><b>Temperament</b>Aloof, uncanny</p>
+        <p><b>Ecology &amp; behaviour</b>The fairy cat of the Scottish Highlands, black as night with a white star on her chest.</p>
+        <p><b>Signature: Fairy cat</b>Phantoms keep away from her friend. A saucer of milk (a milk bucket) brings her friend Luck for five minutes.</p>
+        <p><b>Player interaction</b>Fish, and a saucer of milk.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black, a white star</span><span class="swatch"><strong>Smoke</strong> · Smoky grey</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Tabby</strong> · Dark tabby</span><span class="swatch"><strong>Midnight</strong> · Blue-black</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, taiga, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Felidae: Felis (folklore cat)</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#cait_sith_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="caracal_nekomata">
+        <div class="card-top"><span class="group">Savannas and scrub</span><span class="tag">Quick · proud</span></div>
+        <h3>Caracal <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Quick, proud</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide caracal girl, blue-grey with long black ear tufts and a pale chest. Famous for leaping straight up to swat birds from the air.</p>
+        <p><b>Signature: Bird catcher</b>Befriended, she leaps at a flying monster near her friend (a phantom, a vex, a blaze, a ghast).</p>
+        <p><b>Player interaction</b>Chicken and rabbit.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue-grey, black tufts</span><span class="swatch"><strong>Sand</strong> · Sandy</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Lasagna Cat</strong> · Orange with black stripes</span></div>
+        <p><b>Spawns in</b><code>savanna, desert, badlands</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Felidae: Caracal caracal</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#caracal_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="censer_lion_nekomata">
+        <div class="card-top"><span class="group">Savanna</span><span class="tag">Stately · serene</span></div>
+        <h3>Censer Lion <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Stately, serene</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide lion of lapis and gold filigree who carries a smoking censer, its incense sweet and drowsy.</p>
+        <p><b>Signature: Incense</b>Befriended, her friend near her sleeps soundly in her incense, so no phantoms come for them, and phantoms already hunting her friend lose interest.</p>
+        <p><b>Player interaction</b>Cooked beef and cooked mutton.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Lapis (default)</strong> · Lapis and gold</span><span class="swatch"><strong>Desert</strong> · Sand, a red mantle</span><span class="swatch"><strong>White</strong> · White lion</span><span class="swatch"><strong>Jade</strong> · Jade</span><span class="swatch"><strong>Ember</strong> · Ember red</span></div>
+        <p><b>Spawns in</b><code>savanna, savanna_plateau, desert</code></p>
+        <p class="risk"><b>Danger</b>Moderate (her claws).</p>
+              <p class="place"><b>True position</b>Felidae: Panthera leo (Harmontide)</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#censer_lion_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="cheetah_nekomata">
+        <div class="card-top"><span class="group">Savanna &amp; badlands</span><span class="tag">Gentle · fast</span></div>
+        <h3>Cheetah <span style="color:var(--muted);font-size:.9rem">(about 1.85 blocks)</span></h3>
+        <p><b>Temperament</b>Gentle, nervous, sweet</p>
+        <p><b>Ecology &amp; behaviour</b>The fastest runner in the world, in short bursts: she sprints at double speed for five seconds and then has to rest, panting. Hunts rabbits in the open, chirps like a bird, and cannot roar or climb.</p>
+        <p><b>Signature: Sprint bursts &amp; pace-setter</b>Five-second bursts at double speed (then a rest). Sprint alongside a bonded cheetah and she paces you: you get Speed II while she runs. She hunts rabbits for you and drops them at your feet.</p>
+        <p><b>Player interaction</b>Race her. Cheetahs were hunting companions for people long ago, and she warms to anyone who runs with her.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Classic (default)</strong> · Golden with solid round spots and black tear marks</span><span class="swatch"><strong>King</strong> · Spots merged into stripes along the back</span><span class="swatch"><strong>Woolly</strong> · Pale, long-haired, faint spots</span><span class="swatch"><strong>Desert</strong> · Pale sand, small spots</span><span class="swatch"><strong>Red</strong> · Strawberry gold with red-brown spots</span></div>
+        <p><b>Spawns in</b><code>savanna, savanna_plateau, badlands, wooded_badlands</code></p>
+        <p class="risk"><b>Danger</b>Low; she would rather run.</p>
+              <p class="place"><b>True position</b>Felidae: Acinonyx jubatus</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#cheetah_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="cheshire_nekomata">
+        <div class="card-top"><span class="group">Flower forests</span><span class="tag">Grinning · elusive</span></div>
+        <h3>Cheshire <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Mischievous, curious</p>
+        <p><b>Ecology &amp; behaviour</b>The grinning cat of Wonderland, striped and smug, who fades away until only her grin is left.</p>
+        <p><b>Signature: The grin</b>Unless you look straight at her she fades away, all but her glowing grin; befriended, she blinks back to her friend&#x27;s side whenever she is left behind.</p>
+        <p><b>Player interaction</b>Fish, and a straight look.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Pink (default)</strong> · Pink and purple stripes</span><span class="swatch"><strong>Purple</strong> · Purple and teal</span><span class="swatch"><strong>Blue</strong> · Blue and white</span><span class="swatch"><strong>Gold</strong> · Gold and brown</span><span class="swatch"><strong>Black</strong> · Black and violet</span></div>
+        <p><b>Spawns in</b><code>flower_forest, dark_forest, birch_forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Felidae: Felis (folklore cat)</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#cheshire_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="hyena_canid">
+        <div class="card-top"><span class="group">Savanna</span><span class="tag">Laughing · hungry</span></div>
+        <h3>Hyena <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Laughing</p>
+        <p><b>Ecology &amp; behaviour</b>A spotted hyena with a laugh that carries and a stomach for anything.</p>
+        <p><b>Signature: Scavenger</b>Befriended, she eats the rotten flesh lying near her friend and leaves bone meal.</p>
+        <p><b>Player interaction</b>Raw meat and rotten flesh.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Spotted (default)</strong> · Spotted</span><span class="swatch"><strong>Striped</strong> · Striped</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Dark</strong> · Dark</span></div>
+        <p><b>Spawns in</b><code>savanna, savanna_plateau, windswept_savanna</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>Hyaenidae: Crocuta crocuta (hyenas are feliforms, not dogs)</p><p><b>Body</b>Canid form · <a href="canid_field_guide.html#hyena_canid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="jaglare_nekomata">
+        <div class="card-top"><span class="group">Jungles</span><span class="tag">Proud · ambusher</span></div>
+        <h3>Jaglare <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Proud, patient</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide jaguar, blue-patterned, with a lion&#x27;s mane: she lurks in the trees.</p>
+        <p><b>Signature: Ambush</b>She lurks in the jungle trees and drops on what passes below. Her roar weakens monsters near her friend.</p>
+        <p><b>Player interaction</b>Fish and meat.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue rosettes</span><span class="swatch"><strong>Gold</strong> · A golden jaguar</span><span class="swatch"><strong>Black</strong> · A black panther</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Violet</strong> · Violet</span></div>
+        <p><b>Spawns in</b><code>jungle, sparse_jungle</code></p>
+        <p class="risk"><b>Danger</b>Medium (her ambush).</p>
+              <p class="place"><b>True position</b>Felidae: Panthera onca (Harmontide)</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#jaglare_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="lamassu_centaur">
+        <div class="card-top"><span class="group">Deserts and badlands</span><span class="tag">Solemn · steadfast</span></div>
+        <h3>Lamassu <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Solemn, steadfast</p>
+        <p><b>Ecology &amp; behaviour</b>The winged, horned, lion-bodied guardian of the gates of Assyria, with long grey curls falling down her back.</p>
+        <p><b>Signature: Gate guardian</b>Befriended, her friend near her shrugs off blows (Resistance I).</p>
+        <p><b>Player interaction</b>Cooked beef and golden carrots.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Grey (default)</strong> · Grey stone</span><span class="swatch"><strong>Gold</strong> · Lion gold</span><span class="swatch"><strong>Alabaster</strong> · White</span><span class="swatch"><strong>Lapis</strong> · Lapis and gold</span><span class="swatch"><strong>Basalt</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>desert, badlands, savanna_plateau</code></p>
+        <p class="risk"><b>Danger</b>Moderate (her claws and horns).</p>
+              <p class="place"><b>True position</b>Felidae: lion body per this design (Assyrian lamassu are bull- or lion-bodied) A judgement call: TAXONOMY_PLAN.md gives the reasons.</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#lamassu_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="lioness_nekomata">
+        <div class="card-top"><span class="group">Savanna</span><span class="tag">Social · lazy</span></div>
+        <h3>Lioness <span style="color:var(--muted);font-size:.9rem">(about 1.95 blocks)</span></h3>
+        <p><b>Temperament</b>Relaxed, loyal to her pride, ferocious in a hunt</p>
+        <p><b>Ecology &amp; behaviour</b>The only social cat: lionesses live in prides of three to five sisters, nap through the heat of the day under acacias and hunt together at dusk, surrounding a cow or horse before they spring.</p>
+        <p><b>Signature: Pride</b>A bonded lioness treats you as part of her pride: when you attack something, every lioness of her pride within 24 blocks joins in, and when you are hurt they come running.</p>
+        <p><b>Player interaction</b>Meet the pride at midday when they are sleepy. Bring enough meat for all of them.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Tawny (default)</strong> · Warm tawny gold, cream belly, black ear backs</span><span class="swatch"><strong>Desert</strong> · Pale sand with a white muzzle</span><span class="swatch"><strong>White</strong> · Cream-white, pale blue eyes</span><span class="swatch"><strong>Cave</strong> · Grey-brown with faint stripes (an Ice Age lioness)</span><span class="swatch"><strong>Atlas</strong> · Dark russet with a darker back</span><span class="swatch"><strong>Pride Queen</strong> · Golden tan, blue eyes</span></div>
+        <p><b>Spawns in</b><code>savanna, savanna_plateau, windswept_savanna</code></p>
+        <p class="risk"><b>Danger</b>Moderate: one is calm, a pride is not.</p>
+              <p class="place"><b>True position</b>Felidae: Panthera leo</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#lioness_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="lynx_nekomata">
+        <div class="card-top"><span class="group">Taiga &amp; snowy forest</span><span class="tag">Elusive · patient</span></div>
+        <h3>Lynx <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Elusive, patient, quietly affectionate</p>
+        <p><b>Ecology &amp; behaviour</b>Tufted ears, a short bobbed tail and huge furry paws that work like snowshoes. She hunts rabbits almost exclusively and is gone the moment she knows she is seen.</p>
+        <p><b>Signature: Snowshoe paws &amp; rabbit hunter</b>She never sinks into powder snow and moves at full speed on snow. She keeps rabbits away from your crops and brings you rabbit hide and rabbit&#x27;s feet. Watched for too long, she slips out of sight (she breaks line of sight and hides).</p>
+        <p><b>Player interaction</b>Leave rabbit meat in snowy forest and look away. When you look back she may be eating it.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Eurasian (default)</strong> · Russet grey with dark spots</span><span class="swatch"><strong>Canada</strong> · Silver grey, faint markings</span><span class="swatch"><strong>Iberian</strong> · Gold with bold black spots</span><span class="swatch"><strong>Bobcat</strong> · Brown-red with bars on the legs</span><span class="swatch"><strong>Silver</strong> · Pale silver with charcoal ear tufts</span><span class="swatch"><strong>Boots Cat</strong> · Ginger, a dark hat&#x27;s colours</span></div>
+        <p><b>Spawns in</b><code>taiga, snowy_taiga, old_growth_pine_taiga, snowy_plains, grove</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Felidae: Lynx</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#lynx_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="manticore_nekomata">
+        <div class="card-top"><span class="group">Savannas and deserts</span><span class="tag">Fierce · vain</span></div>
+        <h3>Manticore <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Fierce, vain</p>
+        <p><b>Ecology &amp; behaviour</b>The man-eater of Persian legend, here a pale blue lion girl with a great mane, her tail ending in a scorpion&#x27;s sting that she flicks at anything she dislikes.</p>
+        <p><b>Signature: Tail spike</b>Befriended, every few seconds she stings a monster near her friend: hurt and slowed.</p>
+        <p><b>Player interaction</b>Raw beef and mutton.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Pale blue, a dark sting</span><span class="swatch"><strong>Sand</strong> · Sandy, a red mane</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Black</strong> · Black, a red sting</span><span class="swatch"><strong>White</strong> · White</span></div>
+        <p><b>Spawns in</b><code>savanna, windswept_savanna, desert</code></p>
+        <p class="risk"><b>Danger</b>High (her sting).</p>
+              <p class="place"><b>True position</b>Felidae: lion body (myth; the scorpion tail is an ornament)</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#manticore_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="meerkat_rodent">
+        <div class="card-top"><span class="group">Deserts and savanna</span><span class="tag">Watchful · loud</span></div>
+        <h3>Meerkat <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Watchful</p>
+        <p><b>Ecology &amp; behaviour</b>Up on her toes, dark-eyed, always the first to spot trouble and the loudest about it.</p>
+        <p><b>Signature: Lookout</b>Befriended, when her friend is hit she calls every friend of theirs nearby to the fight.</p>
+        <p><b>Player interaction</b>Spider eyes and melon.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Sand (default)</strong> · Sand</span><span class="swatch"><strong>Dark</strong> · Dark</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Grey</strong> · Grey</span></div>
+        <p><b>Spawns in</b><code>desert, savanna</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Herpestidae: Suricata suricatta</p><p><b>Body</b>Rodent form · <a href="rodent_field_guide.html#meerkat_rodent">her card in that guide</a></p>
+      </article>
+      <article class="card" id="mongoose_rodent">
+        <div class="card-top"><span class="group">Savanna</span><span class="tag">Quick · fearless</span></div>
+        <h3>Mongoose <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Fearless</p>
+        <p><b>Ecology &amp; behaviour</b>Poison doesn&#x27;t touch her. Snakes have noticed.</p>
+        <p><b>Signature: Antivenom</b>Poison doesn&#x27;t touch her, and it comes out of her friend near her.</p>
+        <p><b>Player interaction</b>Raw meat and eggs.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Grizzled (default)</strong> · Grizzled</span><span class="swatch"><strong>Banded</strong> · Banded</span><span class="swatch"><strong>Yellow</strong> · Yellow</span><span class="swatch"><strong>Dark</strong> · Dark</span><span class="swatch"><strong>Grey</strong> · Grey</span></div>
+        <p><b>Spawns in</b><code>savanna, desert, badlands</code></p>
+        <p class="risk"><b>Danger</b>Medium.</p>
+              <p class="place"><b>True position</b>Herpestidae</p><p><b>Body</b>Rodent form · <a href="rodent_field_guide.html#mongoose_rodent">her card in that guide</a></p>
+      </article>
+      <article class="card" id="nue_nekomata">
+        <div class="card-top"><span class="group">Night forests</span><span class="tag">Dreadful · thundering</span></div>
+        <h3>Nue <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Dreadful</p>
+        <p><b>Ecology &amp; behaviour</b>Monkey, tiger and snake in one, and the cry that made an emperor ill.</p>
+        <p><b>Signature: Night Cry</b>Befriended, at night her cry and a crack of thunder weaken the monsters near her friend.</p>
+        <p><b>Player interaction</b>Raw meat and fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Tiger (default)</strong> · Tiger</span><span class="swatch"><strong>Storm</strong> · Storm</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Red</strong> · Red</span></div>
+        <p><b>Spawns in</b><code>dark_forest, taiga, old_growth_pine_taiga</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Felidae: tiger body (myth; monkey face, snake tail are ornaments) A judgement call: TAXONOMY_PLAN.md gives the reasons.</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#nue_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="ocelot_nekomata">
+        <div class="card-top"><span class="group">Jungle &amp; bamboo</span><span class="tag">Nocturnal · climber</span></div>
+        <h3>Ocelot <span style="color:var(--muted);font-size:.9rem">(about 1.65 blocks)</span></h3>
+        <p><b>Temperament</b>Secretive, nocturnal, fiercely private</p>
+        <p><b>Ecology &amp; behaviour</b>Leopardus pardalis (Felidae). A small spotted cat of the jungle floor who hunts at dusk and dawn and climbs well. She is cousin to the vanilla ocelots and just as shy.</p>
+        <p><b>Signature: Tree climber</b>She climbs straight up tree trunks and walls like the gray fox and spends the day high in the canopy. Her presents are jungle finds: cocoa beans, feathers, the odd melon slice.</p>
+        <p><b>Player interaction</b>Come at dusk, sneak, and bring fish. Never chase her into the trees.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Jungle (default)</strong> · Gold coat with chain-like rosettes</span><span class="swatch"><strong>Grey</strong> · Grey-buff coat (a real colour morph)</span><span class="swatch"><strong>Pale</strong> · Cream coat with faded rosettes</span><span class="swatch"><strong>Melanistic</strong> · Black on black</span><span class="swatch"><strong>Golden</strong> · Rich orange-gold</span><span class="swatch"><strong>Stitched</strong> · Sewn together, a purple patch over half her head, a striped top</span></div>
+        <p><b>Spawns in</b><code>jungle, sparse_jungle, bamboo_jungle</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Felidae: Leopardus pardalis</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#ocelot_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="pangolin_armoured">
+        <div class="card-top"><span class="group">Warm forests</span><span class="tag">Shy · scaly</span></div>
+        <h3>Pangolin <span style="color:var(--muted);font-size:.9rem">(about 1.55 blocks)</span></h3>
+        <p><b>Temperament</b>Shy</p>
+        <p><b>Ecology &amp; behaviour</b>Covered in overlapping scales, and very shy about it. Lives on ants.</p>
+        <p><b>Signature: Ant Eater</b>Befriended, she snaps up the silverfish and endermites near her friend.</p>
+        <p><b>Player interaction</b>Sugar and spider eyes.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Brown</span><span class="swatch"><strong>Dark</strong> · Dark</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Red</strong> · Red</span></div>
+        <p><b>Spawns in</b><code>savanna, sparse_jungle, jungle</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Pholidota: Manidae; pangolins are the closest living relatives of the carnivores A guest here: her true kin are too few, so she lives with her nearest relatives.</p><p><b>Body</b>Armoured form · <a href="armoured_field_guide.html#pangolin_armoured">her card in that guide</a></p>
+      </article>
+      <article class="card" id="rakshasa_nekomata">
+        <div class="card-top"><span class="group">Jungles at night</span><span class="tag">Cunning · courtly</span></div>
+        <h3>Rakshasa <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Cunning, courtly</p>
+        <p><b>Ecology &amp; behaviour</b>The shape-shifting tiger demon of Hindu legend, striped orange and black, long fangs, a robe and gold jewellery. She weaves glamours that turn eyes aside.</p>
+        <p><b>Signature: Glamour</b>Befriended, the monsters hunting her friend lose sight of them.</p>
+        <p><b>Player interaction</b>Gold nuggets and cooked meat.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Orange (default)</strong> · Orange stripes, a purple robe</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Crimson</strong> · Crimson</span></div>
+        <p><b>Spawns in</b><code>jungle, bamboo_jungle, savanna</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>Felidae: Panthera tigris (myth)</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#rakshasa_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="sabre_nekomata">
+        <div class="card-top"><span class="group">Cold forests</span><span class="tag">Fierce · loyal</span></div>
+        <h3>Sabre <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Fierce, loyal</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide sabre-tooth: shaggy blue fur, white ruff and paws, two long fangs and black leather armour. She hunts the wounded and never lets one get away.</p>
+        <p><b>Signature: Finishing bite</b>Befriended, she finishes off a badly wounded monster near her friend.</p>
+        <p><b>Player interaction</b>Raw mutton and beef.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, white ruff</span><span class="swatch"><strong>Tawny</strong> · Tawny</span><span class="swatch"><strong>Snow</strong> · White</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Dun</strong> · Dun, spotted</span></div>
+        <p><b>Spawns in</b><code>snowy_taiga, old_growth_spruce_taiga, grove</code></p>
+        <p class="risk"><b>Danger</b>High (her fangs).</p>
+              <p class="place"><b>True position</b>Felidae: Machairodontinae (Harmontide)</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#sabre_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="serval_nekomata">
+        <div class="card-top"><span class="group">Savanna &amp; tall grass</span><span class="tag">Curious · bouncy</span></div>
+        <h3>Serval <span style="color:var(--muted);font-size:.9rem">(about 1.75 blocks)</span></h3>
+        <p><b>Temperament</b>Curious, chatty, easily excited</p>
+        <p><b>Ecology &amp; behaviour</b>Hunts by sound in tall grass, swivelling her huge ears, then springs high into the air to come down on her prey. Chirps and mews instead of roaring.</p>
+        <p><b>Signature: Sky pounce &amp; ear scan</b>Leaps three blocks up to catch birds and bats in mid-air. A bonded serval hears what you cannot: she hisses and flattens her ears towards the nearest hostile mob within 24 blocks, even through stone.</p>
+        <p><b>Player interaction</b>Sit quietly in tall grass at dusk and let her find you. Offer chicken or fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Savanna gold (default)</strong> · Golden coat with bold black spots and stripes</span><span class="swatch"><strong>Servaline</strong> · Fine freckled spots, a paler gold</span><span class="swatch"><strong>Melanistic</strong> · Black on black, spots only in sunlight</span><span class="swatch"><strong>Desert pale</strong> · Sandy cream with faded spots</span><span class="swatch"><strong>King</strong> · Spots merged into long blotched stripes</span></div>
+        <p><b>Spawns in</b><code>savanna, savanna_plateau</code></p>
+        <p class="risk"><b>Danger</b>Low; a swat at worst.</p>
+              <p class="place"><b>True position</b>Felidae: Leptailurus serval</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#serval_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="smilodon_nekomata">
+        <div class="card-top"><span class="group">Cold plains</span><span class="tag">Heavy · patient</span></div>
+        <h3>Smilodon <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Heavy, patient</p>
+        <p><b>Ecology &amp; behaviour</b>The great sabre-tooth of the Ice Age, furred all over in shaggy gold with a thick mane and two long fangs. She waits, then springs.</p>
+        <p><b>Signature: Ambush</b>Befriended, she springs on the nearest monster near her friend with a heavy blow, and the rest flinch back.</p>
+        <p><b>Player interaction</b>Raw beef and mutton.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Gold (default)</strong> · Shaggy gold</span><span class="swatch"><strong>Dun</strong> · Dusty brown</span><span class="swatch"><strong>Snow</strong> · White</span><span class="swatch"><strong>Dark</strong> · Dark brown</span><span class="swatch"><strong>Red</strong> · Red-gold</span></div>
+        <p><b>Spawns in</b><code>snowy_plains, snowy_taiga, savanna</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Felidae: Machairodontinae, Smilodon (extinct)</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#smilodon_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="snow_leopard_nekomata">
+        <div class="card-top"><span class="group">Snowy slopes &amp; peaks</span><span class="tag">Shy · acrobatic</span></div>
+        <h3>Snow Leopard <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Shy, gentle, a ghost of the mountains</p>
+        <p><b>Ecology &amp; behaviour</b>Lives on the highest cliffs, leaps between ledges and across chasms, and wraps her enormous fluffy tail around herself (and her favourites) against the cold.</p>
+        <p><b>Signature: Cliff leaps &amp; warm tail</b>She jumps across gaps up to six blocks and never takes fall damage. A bonded snow leopard near you stops you freezing in powder snow; asleep beside you she wraps you in her tail (no freezing, Resistance I when you wake).</p>
+        <p><b>Player interaction</b>Climb to her. Leave meat on a ledge she can reach and you cannot easily.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Snow grey (default)</strong> · Smoky grey-white with open charcoal rosettes</span><span class="swatch"><strong>Cream</strong> · Warm cream with brown rosettes</span><span class="swatch"><strong>Smoky</strong> · Dark smoke grey with black rosettes</span><span class="swatch"><strong>Silver</strong> · Almost white with faint rosettes</span><span class="swatch"><strong>Golden</strong> · Pale gold with grey rosettes</span></div>
+        <p><b>Spawns in</b><code>snowy_slopes, jagged_peaks, frozen_peaks, grove, stony_peaks</code></p>
+        <p class="risk"><b>Danger</b>Low; she would rather vanish.</p>
+              <p class="place"><b>True position</b>Felidae: Panthera uncia</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#snow_leopard_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="snowloper_nekomata">
+        <div class="card-top"><span class="group">Snowy slopes</span><span class="tag">Playful · fluffy</span></div>
+        <h3>Snowloper <span style="color:var(--muted);font-size:.9rem">(about 1.3 blocks)</span></h3>
+        <p><b>Temperament</b>Playful</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide snow-leopard cub, white with blue snowflake rosettes, who bounds across deep snow.</p>
+        <p><b>Signature: Snow strider</b>She walks on powder snow and never freezes; her friend gets Speed while on snow.</p>
+        <p><b>Player interaction</b>Fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>White (default)</strong> · White, blue rosettes</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Cream</strong> · Cream</span><span class="swatch"><strong>Blue</strong> · Ice blue</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>snowy_slopes, grove, snowy_taiga, frozen_peaks</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Felidae: Panthera uncia (Harmontide)</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#snowloper_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="sphinx_centaur">
+        <div class="card-top"><span class="group">Desert temples</span><span class="tag">Riddling · proud</span></div>
+        <h3>Sphinx <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Proud, curious</p>
+        <p><b>Ecology &amp; behaviour</b>The riddling guardian of Greek and Egyptian legend: a lioness&#x27;s body, a woman&#x27;s head and great wings.</p>
+        <p><b>Signature: Riddles</b>She asks each newcomer a riddle; answer by handing her the item it means. A right answer earns a reward, a wrong one a pounce.</p>
+        <p><b>Player interaction</b>Answer her riddle with the right item.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Sand (default)</strong> · Tawny, gold headdress</span><span class="swatch"><strong>Night</strong> · Black, silver</span><span class="swatch"><strong>Red</strong> · Red sandstone</span><span class="swatch"><strong>White</strong> · White, lapis</span><span class="swatch"><strong>Gilded</strong> · Golden</span></div>
+        <p><b>Spawns in</b><code>desert</code></p>
+        <p class="risk"><b>Danger</b>Medium (a wrong answer).</p>
+              <p class="place"><b>True position</b>Felidae: lioness body (myth; wings are an ornament)</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#sphinx_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="tiger_nekomata">
+        <div class="card-top"><span class="group">Jungle, bamboo &amp; taiga rivers</span><span class="tag">Solitary · powerful</span></div>
+        <h3>Tiger <span style="color:var(--muted);font-size:.9rem">(about 2.05 blocks)</span></h3>
+        <p><b>Temperament</b>Calm, solitary, supremely confident</p>
+        <p><b>Ecology &amp; behaviour</b>The largest cat. Patrols a wide territory, hides in bamboo and tall grass, swims rivers without a second thought and fishes with her paws. Her roar sends hostile mobs running.</p>
+        <p><b>Signature: Ambush, fishing &amp; roar</b>Crouched in bamboo or tall grass she is nearly invisible until she pounces (a strong opening strike). She catches fish in rivers and brings them to her favourites. Her roar makes hostile mobs within 12 blocks flee for a few seconds.</p>
+        <p><b>Player interaction</b>Leave raw meat at the water&#x27;s edge and back off. Never corner her.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Bengal (default)</strong> · Deep orange, black stripes, white belly</span><span class="swatch"><strong>Siberian</strong> · Pale amber, thinner stripes, a thick winter ruff</span><span class="swatch"><strong>White</strong> · White coat, chocolate stripes, blue eyes</span><span class="swatch"><strong>Golden tabby</strong> · Strawberry gold with soft red-brown stripes</span><span class="swatch"><strong>Black-striped</strong> · Stripes so wide they merge across the back</span><span class="swatch"><strong>Storm Tiger</strong> · Orange, a red silk top</span></div>
+        <p><b>Spawns in</b><code>jungle, bamboo_jungle, sparse_jungle, taiga, old_growth_spruce_taiga</code></p>
+        <p class="risk"><b>Danger</b>High if provoked; otherwise she ignores you.</p>
+              <p class="place"><b>True position</b>Felidae: Panthera tigris</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#tiger_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="waterlil_nekomata">
+        <div class="card-top"><span class="group">Swamps</span><span class="tag">Dainty · dry-footed</span></div>
+        <h3>Waterlil <span style="color:var(--muted);font-size:.9rem">(about 0.6 blocks)</span></h3>
+        <p><b>Temperament</b>Dainty</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide cat who will not get her paws wet: a big cat&#x27;s head resting on her own lily pad, a small bloom on top, her little body hidden in the water under it. Lily pads grow under her feet wherever she walks on water.</p>
+        <p><b>Signature: Lily pads</b>Lily pads grow under her as she walks on water, and fade again behind her; befriended, they grow under her friend too while they are near her.</p>
+        <p><b>Player interaction</b>Fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black, a pink lotus</span><span class="swatch"><strong>White</strong> · White, a white lotus</span><span class="swatch"><strong>Calico</strong> · Calico, a yellow lotus</span><span class="swatch"><strong>Grey</strong> · Grey, a blue lotus</span><span class="swatch"><strong>Ginger</strong> · Ginger, a red lotus</span></div>
+        <p><b>Spawns in</b><code>swamp, mangrove_swamp, river</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Felidae (Harmontide)</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#waterlil_nekomata">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

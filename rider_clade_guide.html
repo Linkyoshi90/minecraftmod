@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Riders — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · outside the tree</div>
+  <h1>Riders</h1>
+  <p class="lede">The Four Riders and their like: a rider and her mount, one creature.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Strength + Resistance · <b style="display:inline;color:var(--accent)">Was:</b> Rider</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Rider form · 5</b><a href="rider_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="rider_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (5)</h2>
+    <div class="grid">
+      <article class="card" id="charro_negro_rider">
+        <div class="card-top"><span class="group">Lonely roads</span><span class="tag">Courteous · patient</span></div>
+        <h3>Charro Negro <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Courteous, patient</p>
+        <p><b>Ecology &amp; behaviour</b>The horsewoman in black of Mexican legend, who rides the empty roads at night offering money to anyone desperate enough. It must always be paid back.</p>
+        <p><b>Signature: The loan</b>Befriended, crouch with an empty hand: she lends you 8 emeralds. Bring back 16 within three days, or she comes to collect.</p>
+        <p><b>Player interaction</b>Emeralds, and anything cooked.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black and gold</span><span class="swatch"><strong>Silver</strong> · Black and silver</span><span class="swatch"><strong>Red</strong> · Deep red</span><span class="swatch"><strong>Bone</strong> · A pale face</span><span class="swatch"><strong>Green</strong> · Dark green</span></div>
+        <p><b>Spawns in</b><code>desert, badlands, wooded_badlands, savanna</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>outside taxonomy (riders)</p><p><b>Body</b>Rider form · <a href="rider_field_guide.html#charro_negro_rider">her card in that guide</a></p>
+      </article>
+      <article class="card" id="death_rider">
+        <div class="card-top"><span class="group">Old graveyards and snow</span><span class="tag">Gentle · punctual</span></div>
+        <h3>Death <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Gentle, punctual</p>
+        <p><b>Ecology &amp; behaviour</b>The last rider: a small hooded girl with a very large scythe and a crow on her hand. She is kind about it.</p>
+        <p><b>Signature: Last call</b>Befriended, she finishes off the monsters near her friend that are nearly dead.</p>
+        <p><b>Player interaction</b>Bones and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Brown cloak</span><span class="swatch"><strong>Black</strong> · Black cloak</span><span class="swatch"><strong>Grey</strong> · Grey cloak</span><span class="swatch"><strong>White</strong> · White cloak</span><span class="swatch"><strong>Violet</strong> · Violet cloak</span></div>
+        <p><b>Spawns in</b><code>snowy_taiga, old_growth_pine_taiga, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>outside taxonomy (riders)</p><p><b>Body</b>Rider form · <a href="rider_field_guide.html#death_rider">her card in that guide</a></p>
+      </article>
+      <article class="card" id="famine_rider">
+        <div class="card-top"><span class="group">Badlands and dead lands</span><span class="tag">Quiet · hollow</span></div>
+        <h3>Famine <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Quiet, hollow</p>
+        <p><b>Ecology &amp; behaviour</b>The second rider: pale and thin in a huge white feather cloak and a dark horned hood. Food tastes of nothing to her, so she gives it away.</p>
+        <p><b>Signature: Hollow hunger</b>Befriended, she keeps her friend fed in a fight and leaves the monsters near them weak with hunger.</p>
+        <p><b>Player interaction</b>Bread, and she only ever nibbles.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>White (default)</strong> · White cloak, dark hood</span><span class="swatch"><strong>Ash</strong> · Grey cloak</span><span class="swatch"><strong>Gold</strong> · Wheat gold</span><span class="swatch"><strong>Bone</strong> · Bone</span><span class="swatch"><strong>Void</strong> · Black and violet</span></div>
+        <p><b>Spawns in</b><code>badlands, eroded_badlands, desert</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>outside taxonomy (riders)</p><p><b>Body</b>Rider form · <a href="rider_field_guide.html#famine_rider">her card in that guide</a></p>
+      </article>
+      <article class="card" id="pestilence_rider">
+        <div class="card-top"><span class="group">Swamps and dark forests</span><span class="tag">Cheerful · catching</span></div>
+        <h3>Pestilence <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Cheerful, catching</p>
+        <p><b>Ecology &amp; behaviour</b>The third rider: a tiny lilac-haired girl on a black horse, a thorned staff with teal flame at its tip. She is having a lovely time.</p>
+        <p><b>Signature: Teal cloud</b>Befriended, a teal cloud falls on the monsters near her friend, hurting and slowing them. She rides a real horse.</p>
+        <p><b>Player interaction</b>Glow berries and fermented spider eyes.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Teal (default)</strong> · Lilac hair, teal flame</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Rust</strong> · Rust</span><span class="swatch"><strong>Ash</strong> · Ash</span><span class="swatch"><strong>Rose</strong> · Rose</span></div>
+        <p><b>Spawns in</b><code>swamp, mangrove_swamp, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>outside taxonomy (riders)</p><p><b>Body</b>Rider form · <a href="rider_field_guide.html#pestilence_rider">her card in that guide</a></p>
+      </article>
+      <article class="card" id="war_rider">
+        <div class="card-top"><span class="group">Plains and old battlefields</span><span class="tag">Loud · fearless</span></div>
+        <h3>War <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Loud, fearless</p>
+        <p><b>Ecology &amp; behaviour</b>The first rider: a wild blonde mane, blue and silver armour, and a grin that says she has been looking forward to this.</p>
+        <p><b>Signature: Battle cry</b>Befriended, when several monsters close in on her friend she gives them Strength.</p>
+        <p><b>Player interaction</b>Cooked beef and iron ingots.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blonde, blue and silver</span><span class="swatch"><strong>Crimson</strong> · Red hair, red armour</span><span class="swatch"><strong>Black</strong> · Black armour</span><span class="swatch"><strong>Gold</strong> · Gold armour</span><span class="swatch"><strong>White</strong> · White armour</span></div>
+        <p><b>Spawns in</b><code>plains, windswept_savanna, savanna_plateau</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>outside taxonomy (riders)</p><p><b>Body</b>Rider form · <a href="rider_field_guide.html#war_rider">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

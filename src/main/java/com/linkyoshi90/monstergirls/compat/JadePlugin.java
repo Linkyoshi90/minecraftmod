@@ -83,6 +83,8 @@ public class JadePlugin implements IWailaPlugin {
             CompoundTag data = accessor.getServerData();
             com.linkyoshi90.monstergirls.entity.Rarity.Tier tier = com.linkyoshi90.monstergirls.entity.Rarity.of(accessor.getEntity());
             if (tier != com.linkyoshi90.monstergirls.entity.Rarity.Tier.COMMON) tooltip.add(Component.translatable(tier.key()).withStyle(tier.colour));
+            com.linkyoshi90.monstergirls.entity.Clade clade = com.linkyoshi90.monstergirls.entity.Clade.of(accessor.getEntity());   // her branch of the tree of life
+            if (clade != null) tooltip.add(Component.translatable("clade.monstergirls." + clade.key()).withStyle(clade.mythic() ? net.minecraft.ChatFormatting.DARK_PURPLE : net.minecraft.ChatFormatting.DARK_AQUA));
             if (data.contains("Birthday")) tooltip.add(Component.translatable("jade.monstergirls.birthday", data.getInt("Birthday")).withStyle(net.minecraft.ChatFormatting.GOLD));
             if (data.contains("Favourite")) tooltip.add(Component.translatable("jade.monstergirls.favourite", Component.translatable(data.getString("Favourite"))).withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
             if (com.linkyoshi90.monstergirls.entity.girl.Mining.isMiner(accessor.getEntity()) && !((net.minecraft.world.entity.LivingEntity) accessor.getEntity()).isBaby()) {

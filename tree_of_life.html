@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Tree of Life — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.clade-list{columns:3 220px;column-gap:24px;padding-left:1.1rem;color:var(--muted)}.clade-list li{break-inside:avoid;margin:.3rem 0}.clade-list a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--line)}.clade-list a:hover{color:var(--accent)}.pos{display:block;font-size:.78rem;color:var(--muted)}.flag{font-size:.72rem;color:var(--accent);margin-left:4px}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide to an inhabited world · index volume · every kind by her real kin</div>
+  <h1>The Tree of Life</h1>
+  <p class="lede">519 kinds on 34 branches: 27 real clades and 7 groups of legend that sit outside the tree. A girl's body (her form, the word in her id) decides how she moves, nests and behaves; her branch decides her milk, the name on her cheese, her spawn-rate setting and the journal's tree of life. Each name links to her card in the guide for her form.</p>
+  <nav class="volumes" aria-label="Field guide volumes"><a href="tree_of_life.html">Index · The Tree of Life</a><a href="harpy_field_guide.html">I · Harpies</a><a href="anuran_field_guide.html">II · Bullywugs &amp; Mucus Toads</a><a href="nekomata_field_guide.html">III · Nekomata</a><a href="kitsune_field_guide.html">IV · Kitsune</a><a href="lamia_field_guide.html">V · Lamia</a><a href="arachne_field_guide.html">VI · Arachne</a><a href="centaur_field_guide.html">VII · Centaurs</a><a href="merfolk_field_guide.html">VIII · Merfolk</a><a href="slime_field_guide.html">IX · Slimes</a><a href="jackalope_field_guide.html">X · Jackalopes</a><a href="minotaur_field_guide.html">XI · Minotaurs</a><a href="mollusk_field_guide.html">XII · Mollusks</a><a href="elf_field_guide.html">XIII · Elves</a><a href="undead_field_guide.html">XIV · Undead</a><a href="lizardfolk_field_guide.html">XV · Lizardfolk</a><a href="dragon_field_guide.html">XVI · Dragons</a><a href="devil_field_guide.html">XVII · Devils</a><a href="bug_field_guide.html">XVIII · Bugs</a><a href="flora_field_guide.html">XIX · Flora</a><a href="canid_field_guide.html">XX · Canids</a><a href="rodent_field_guide.html">XXI · Rodents</a><a href="crustacean_field_guide.html">XXII · Crustaceans</a><a href="marsupial_field_guide.html">XXIII · Marsupials</a><a href="armoured_field_guide.html">XXIV · Armoured</a><a href="construct_field_guide.html">XXV · Constructs</a><a href="bat_field_guide.html">XXVI · Bats</a><a href="theropod_field_guide.html">XXVII · Theropods</a><a href="rider_field_guide.html">XXVIII · The Four Riders</a></nav>
+  <nav class="toc"><a href="#feliformia">Feliform · 32</a><a href="#canidae">Canid · 25</a><a href="#arctoidea">Arctoid · 20</a><a href="#rodentia">Rodent · 7</a><a href="#lagomorpha">Lagomorph · 9</a><a href="#primates">Primate · 6</a><a href="#chiroptera">Bat · 7</a><a href="#marsupialia">Marsupial · 5</a><a href="#xenarthra">Xenarthran · 4</a><a href="#paenungulata">Paenungulate · 7</a><a href="#perissodactyla">Perissodactyl · 11</a><a href="#bovidae">Bovid · 17</a><a href="#cervidae">Cervid · 12</a><a href="#camelidae">Camelid · 6</a><a href="#suina">Suine · 5</a><a href="#whippomorpha">Whippomorph · 6</a><a href="#aves">Bird · 47</a><a href="#archosauria">Archosaur · 9</a><a href="#testudines">Testudine · 14</a><a href="#squamata">Squamate · 30</a><a href="#amphibia">Amphibian · 19</a><a href="#actinopterygii">Fish · 17</a><a href="#chelicerata">Chelicerate · 13</a><a href="#hexapoda">Insect · 23</a><a href="#malacostraca">Malacostracan · 7</a><a href="#mollusca">Mollusk · 17</a><a href="#flora">Flora · 14</a><a href="#fae">Fae · 26</a><a href="#dragon">Dragon · 17</a><a href="#undead">Undead · 33</a><a href="#devil">Devil · 30</a><a href="#slime">Slime · 11</a><a href="#construct">Construct · 8</a><a href="#rider">Rider · 5</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>How to read it</h2><ul><li><b>Branch</b>Where she really sits, from class down to family. The body animal decides; horns, wings and tails don't.</li><li><b>Guest</b>Her true kin are too few here (fewer than four), so she lives with her nearest relatives. Her true place is still given.</li><li><b>Judgement call</b>A placement that could reasonably go elsewhere (TAXONOMY_PLAN.md lists the reasons).</li><li><b>Milk</b>What a bucket of that branch's milk does for whoever drinks it. Plants, fungi and constructs give none.</li></ul></section>
+  <section id="feliformia">
+    <div class="eyebrow">Mammalia &gt; Carnivora &gt; Feliformia</div>
+    <h2>Feliforms (cats &amp; kin) <span style="color:var(--muted);font-size:1rem">(32)</span> <a href="feliformia_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Night Vision <b style="display:inline;margin:0 6px 0 14px">Was</b>Nekomata</p>
+    <ul class="clade-list">
+      <li><a href="nekomata_field_guide.html#ammit_nekomata">Ammit</a><span class=flag>judgement call</span><span class="pos">Felidae: lion per this design (the myth&#x27;s Ammit is lion + hippo + crocodile) · nekomata form</span></li>
+      <li><a href="centaur_field_guide.html#anzu_centaur">Anzu</a><span class=flag>judgement call</span><span class="pos">Felidae: lioness per this design (the Sumerian Anzu is a lion-headed eagle) · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#ark_seraphim_centaur">Ark Seraphim</a><span class="pos">Felidae: lioness body (myth; wings are an ornament) · centaur form</span></li>
+      <li><a href="nekomata_field_guide.html#bakeneko_nekomata">Bakeneko</a><span class="pos">Felidae: Felis (folklore cat) · nekomata form</span></li>
+      <li><a href="nekomata_field_guide.html#bastet_nekomata">Bastet</a><span class="pos">Felidae: Felis (deity) · nekomata form</span></li>
+      <li><a href="nekomata_field_guide.html#black_panther_nekomata">Black Panther</a><span class="pos">Felidae: Panthera pardus (melanistic) · nekomata form</span></li>
+      <li><a href="nekomata_field_guide.html#blaze_cat_nekomata">Blaze Cat</a><span class="pos">Felidae (Harmontide) · nekomata form</span></li>
+      <li><a href="nekomata_field_guide.html#cait_sith_nekomata">Cait Sìth</a><span class="pos">Felidae: Felis (folklore cat) · nekomata form</span></li>
+      <li><a href="nekomata_field_guide.html#caracal_nekomata">Caracal</a><span class="pos">Felidae: Caracal caracal · nekomata form</span></li>
+      <li><a href="nekomata_field_guide.html#censer_lion_nekomata">Censer Lion</a><span class="pos">Felidae: Panthera leo (Harmontide) · nekomata form</span></li>
+      <li><a href="nekomata_field_guide.html#cheetah_nekomata">Cheetah Nekomata</a><span class="pos">Felidae: Acinonyx jubatus · nekomata form</span></li>
+      <li><a href="nekomata_field_guide.html#cheshire_nekomata">Cheshire Cat</a><span class="pos">Felidae: Felis (folklore cat) · nekomata form</span></li>
+      <li><a href="canid_field_guide.html#hyena_canid">Hyena</a><span class="pos">Hyaenidae: Crocuta crocuta (hyenas are feliforms, not dogs) · canid form</span></li>
+      <li><a href="nekomata_field_guide.html#jaglare_nekomata">Jaglare</a><span class="pos">Felidae: Panthera onca (Harmontide) · nekomata form</span></li>
+      <li><a href="centaur_field_guide.html#lamassu_centaur">Lamassu</a><span class=flag>judgement call</span><span class="pos">Felidae: lion body per this design (Assyrian lamassu are bull- or lion-bodied) · centaur form</span></li>
+      <li><a href="nekomata_field_guide.html#lioness_nekomata">Lioness Nekomata</a><span class="pos">Felidae: Panthera leo · nekomata form</span></li>
+      <li><a href="nekomata_field_guide.html#lynx_nekomata">Lynx Nekomata</a><span class="pos">Felidae: Lynx · nekomata form</span></li>
+      <li><a href="nekomata_field_guide.html#manticore_nekomata">Manticore</a><span class="pos">Felidae: lion body (myth; the scorpion tail is an ornament) · nekomata form</span></li>
+      <li><a href="rodent_field_guide.html#meerkat_rodent">Meerkat</a><span class="pos">Herpestidae: Suricata suricatta · rodent form</span></li>
+      <li><a href="rodent_field_guide.html#mongoose_rodent">Mongoose</a><span class="pos">Herpestidae · rodent form</span></li>
+      <li><a href="nekomata_field_guide.html#nue_nekomata">Nue</a><span class=flag>judgement call</span><span class="pos">Felidae: tiger body (myth; monkey face, snake tail are ornaments) · nekomata form</span></li>
+      <li><a href="nekomata_field_guide.html#ocelot_nekomata">Ocelot Nekomata</a><span class="pos">Felidae: Leopardus pardalis · nekomata form</span></li>
+      <li><a href="armoured_field_guide.html#pangolin_armoured">Pangolin</a><span class=flag>guest</span><span class="pos">Pholidota: Manidae; pangolins are the closest living relatives of the carnivores · armoured form</span></li>
+      <li><a href="nekomata_field_guide.html#rakshasa_nekomata">Rakshasa</a><span class="pos">Felidae: Panthera tigris (myth) · nekomata form</span></li>
+      <li><a href="nekomata_field_guide.html#sabre_nekomata">Sabre</a><span class="pos">Felidae: Machairodontinae (Harmontide) · nekomata form</span></li>
+      <li><a href="nekomata_field_guide.html#serval_nekomata">Serval Nekomata</a><span class="pos">Felidae: Leptailurus serval · nekomata form</span></li>
+      <li><a href="nekomata_field_guide.html#smilodon_nekomata">Smilodon</a><span class="pos">Felidae: Machairodontinae, Smilodon (extinct) · nekomata form</span></li>
+      <li><a href="nekomata_field_guide.html#snow_leopard_nekomata">Snow Leopard Nekomata</a><span class="pos">Felidae: Panthera uncia · nekomata form</span></li>
+      <li><a href="nekomata_field_guide.html#snowloper_nekomata">Snowloper</a><span class="pos">Felidae: Panthera uncia (Harmontide) · nekomata form</span></li>
+      <li><a href="centaur_field_guide.html#sphinx_centaur">Sphinx</a><span class="pos">Felidae: lioness body (myth; wings are an ornament) · centaur form</span></li>
+      <li><a href="nekomata_field_guide.html#tiger_nekomata">Tiger Nekomata</a><span class="pos">Felidae: Panthera tigris · nekomata form</span></li>
+      <li><a href="nekomata_field_guide.html#waterlil_nekomata">Waterlil</a><span class="pos">Felidae (Harmontide) · nekomata form</span></li>
+    </ul>
+  </section>
+  <section id="canidae">
+    <div class="eyebrow">Mammalia &gt; Carnivora &gt; Caniformia &gt; Canidae</div>
+    <h2>Canids (wolves, dogs &amp; foxes) <span style="color:var(--muted);font-size:1rem">(25)</span> <a href="canidae_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Speed + Luck <b style="display:inline;margin:0 6px 0 14px">Was</b>Canid, Kitsune</p>
+    <ul class="clade-list">
+      <li><a href="canid_field_guide.html#amarok_canid">Amarok</a><span class="pos">Canidae: Canis lupus · canid form</span></li>
+      <li><a href="canid_field_guide.html#anubis_canid">Anubis</a><span class="pos">Canidae: Canis lupaster (deity) · canid form</span></li>
+      <li><a href="kitsune_field_guide.html#arctic_kitsune">Arctic Fox Kitsune</a><span class="pos">Canidae: Vulpes lagopus · kitsune form</span></li>
+      <li><a href="kitsune_field_guide.html#bat_eared_kitsune">Bat-Eared Fox</a><span class="pos">Canidae: Otocyon megalotis · kitsune form</span></li>
+      <li><a href="canid_field_guide.html#bloodhound_canid">Bloodhound</a><span class="pos">Canidae: Canis familiaris · canid form</span></li>
+      <li><a href="canid_field_guide.html#cerberus_canid">Cerberus</a><span class="pos">Canidae: Canis (myth hound) · canid form</span></li>
+      <li><a href="kitsune_field_guide.html#corsac_kitsune">Corsac Fox Kitsune</a><span class="pos">Canidae: Vulpes corsac · kitsune form</span></li>
+      <li><a href="canid_field_guide.html#cu_sith_canid">Cù-sìth</a><span class="pos">Canidae: Canis (myth hound) · canid form</span></li>
+      <li><a href="merfolk_field_guide.html#doggo_mermaid">Doggo</a><span class=flag>judgement call</span><span class="pos">Canis familiaris (Harmontide sea dog; the fish tail is an ornament) · merfolk form</span></li>
+      <li><a href="kitsune_field_guide.html#dunefennec_kitsune">Dunefennec</a><span class="pos">Canidae: Vulpes zerda (Harmontide) · kitsune form</span></li>
+      <li><a href="kitsune_field_guide.html#fennec_kitsune">Fennec Kitsune</a><span class="pos">Canidae: Vulpes zerda · kitsune form</span></li>
+      <li><a href="kitsune_field_guide.html#gray_kitsune">Gray Fox Kitsune</a><span class="pos">Canidae: Urocyon cinereoargenteus · kitsune form</span></li>
+      <li><a href="canid_field_guide.html#hellhound_canid">Hellhound</a><span class="pos">Canidae: Canis (myth hound) · canid form</span></li>
+      <li><a href="kitsune_field_guide.html#huli_jing_kitsune">Huli Jing</a><span class="pos">Canidae: Vulpes (folklore fox spirit) · kitsune form</span></li>
+      <li><a href="kitsune_field_guide.html#obaa_kitsune">Kitsune Obaa</a><span class="pos">Canidae: Vulpes (folklore fox spirit) · kitsune form</span></li>
+      <li><a href="canid_field_guide.html#kobold_canid">Kobold</a><span class="pos">Canidae: Canis familiaris per this design (folklore mine spirit) · canid form</span></li>
+      <li><a href="kitsune_field_guide.html#kumiho_kitsune">Kumiho</a><span class="pos">Canidae: Vulpes (folklore fox spirit) · kitsune form</span></li>
+      <li><a href="canid_field_guide.html#meloncollie_canid">Meloncollie</a><span class="pos">Canidae: Canis familiaris (Harmontide) · canid form</span></li>
+      <li><a href="canid_field_guide.html#obsidian_hound_canid">Obsidian Hound</a><span class="pos">Canidae: Canis familiaris (Harmontide) · canid form</span></li>
+      <li><a href="kitsune_field_guide.html#red_kitsune">Red Fox Kitsune</a><span class="pos">Canidae: Vulpes vulpes · kitsune form</span></li>
+      <li><a href="rodent_field_guide.html#tanuki_rodent">Tanuki</a><span class="pos">Canidae: Nyctereutes procyonoides (a dog, not a raccoon) · rodent form</span></li>
+      <li><a href="canid_field_guide.html#tarnhelm_canid">Tarnhelm</a><span class="pos">Canidae: Canis lupus (Harmontide) · canid form</span></li>
+      <li><a href="kitsune_field_guide.html#vulphea_kitsune">Vulphea</a><span class="pos">Canidae: Vulpes (Harmontide) · kitsune form</span></li>
+      <li><a href="kitsune_field_guide.html#wattlefox_kitsune">Wattlefox</a><span class="pos">Canidae: Vulpes (Harmontide) · kitsune form</span></li>
+      <li><a href="canid_field_guide.html#wolf_canid">Wolf Girl</a><span class="pos">Canidae: Canis lupus · canid form</span></li>
+    </ul>
+  </section>
+  <section id="arctoidea">
+    <div class="eyebrow">Mammalia &gt; Carnivora &gt; Caniformia &gt; Arctoidea</div>
+    <h2>Arctoids (bears, weasels, raccoons &amp; seals) <span style="color:var(--muted);font-size:1rem">(20)</span> <a href="arctoidea_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Resistance + Water Breathing</p>
+    <ul class="clade-list">
+      <li><a href="merfolk_field_guide.html#ahuizotl_mermaid">Ahuizotl</a><span class="pos">Mustelidae: Lontra longicaudis (myth) · merfolk form</span></li>
+      <li><a href="rodent_field_guide.html#bambadger_rodent">Bambadger</a><span class="pos">Mustelidae: badger (Harmontide) · rodent form</span></li>
+      <li><a href="canid_field_guide.html#black_bear_canid">Black Bear Girl</a><span class="pos">Ursidae: Ursus americanus · canid form</span></li>
+      <li><a href="rodent_field_guide.html#coatimano_rodent">Coatimano</a><span class="pos">Procyonidae: Nasua (Harmontide) · rodent form</span></li>
+      <li><a href="canid_field_guide.html#grizzly_canid">Grizzly Girl</a><span class="pos">Ursidae: Ursus arctos horribilis · canid form</span></li>
+      <li><a href="rodent_field_guide.html#kamaitachi_rodent">Kamaitachi</a><span class="pos">Mustelidae: Mustela (folklore weasel) · rodent form</span></li>
+      <li><a href="merfolk_field_guide.html#moonseal_mermaid">Moonseal</a><span class="pos">Pinnipedia (Harmontide) · merfolk form</span></li>
+      <li><a href="canid_field_guide.html#panda_canid">Panda Girl</a><span class="pos">Ursidae: Ailuropoda melanoleuca · canid form</span></li>
+      <li><a href="canid_field_guide.html#polar_bear_canid">Polar Bear Girl</a><span class="pos">Ursidae: Ursus maritimus · canid form</span></li>
+      <li><a href="rodent_field_guide.html#raccoon_rodent">Raccoon</a><span class="pos">Procyonidae: Procyon lotor · rodent form</span></li>
+      <li><a href="rodent_field_guide.html#red_panda_rodent">Red Panda</a><span class="pos">Ailuridae: Ailurus fulgens · rodent form</span></li>
+      <li><a href="canid_field_guide.html#rheintalensis_canid">Rheintalensis</a><span class="pos">Ursidae: Ursus spelaeus (extinct cave bear, Harmontide) · canid form</span></li>
+      <li><a href="merfolk_field_guide.html#rust_otter_mermaid">Rust Otter</a><span class="pos">Mustelidae: Lutrinae (Harmontide) · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#seal_mermaid">Seal Mermaid</a><span class="pos">Pinnipedia: Phocidae · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#selkie_mermaid">Selkie</a><span class="pos">Pinnipedia: Phocidae (folklore) · merfolk form</span></li>
+      <li><a href="rodent_field_guide.html#silkcoon_rodent">Silkcoon</a><span class="pos">Procyonidae: Procyon (Harmontide) · rodent form</span></li>
+      <li><a href="rodent_field_guide.html#skunk_rodent">Skunk</a><span class="pos">Mephitidae · rodent form</span></li>
+      <li><a href="rodent_field_guide.html#sobolnik_rodent">Sobolnik</a><span class="pos">Mustelidae: Martes zibellina (Harmontide sable) · rodent form</span></li>
+      <li><a href="merfolk_field_guide.html#walrus_mermaid">Walrus</a><span class="pos">Pinnipedia: Odobenus rosmarus · merfolk form</span></li>
+      <li><a href="canid_field_guide.html#wolverine_canid">Wolverine</a><span class="pos">Mustelidae: Gulo gulo · canid form</span></li>
+    </ul>
+  </section>
+  <section id="rodentia">
+    <div class="eyebrow">Mammalia &gt; Glires &gt; Rodentia</div>
+    <h2>Rodents <span style="color:var(--muted);font-size:1rem">(7)</span> <a href="rodentia_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Haste + Luck <b style="display:inline;margin:0 6px 0 14px">Was</b>Rodent</p>
+    <ul class="clade-list">
+      <li><a href="rodent_field_guide.html#beaver_rodent">Beaver</a><span class="pos">Rodentia: Castoridae · rodent form</span></li>
+      <li><a href="rodent_field_guide.html#capybara_rodent">Capybara Girl</a><span class="pos">Rodentia: Caviidae, Hydrochoerus · rodent form</span></li>
+      <li><a href="rodent_field_guide.html#house_mouse_rodent">House Mouse</a><span class="pos">Rodentia: Muridae, Mus musculus · rodent form</span></li>
+      <li><a href="rodent_field_guide.html#marmotaur_rodent">Marmotaur</a><span class="pos">Rodentia: Sciuridae, Marmota (Harmontide) · rodent form</span></li>
+      <li><a href="rodent_field_guide.html#pineskrell_rodent">Pineskrell</a><span class="pos">Rodentia: Sciuridae (Harmontide) · rodent form</span></li>
+      <li><a href="rodent_field_guide.html#ratatoskr_rodent">Ratatoskr</a><span class="pos">Rodentia: Sciuridae, Sciurus vulgaris (myth) · rodent form</span></li>
+      <li><a href="rodent_field_guide.html#squirricerat_rodent">Squirricerat</a><span class="pos">Rodentia: Sciuridae (Harmontide) · rodent form</span></li>
+    </ul>
+  </section>
+  <section id="lagomorpha">
+    <div class="eyebrow">Mammalia &gt; Glires &gt; Lagomorpha</div>
+    <h2>Hares &amp; rabbits <span style="color:var(--muted);font-size:1rem">(9)</span> <a href="lagomorpha_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Jump Boost <b style="display:inline;margin:0 6px 0 14px">Was</b>Jackalope</p>
+    <ul class="clade-list">
+      <li><a href="jackalope_field_guide.html#al_miraj_jackalope">Al-mi&#x27;raj</a><span class="pos">Leporidae: Lepus (legend; horns are an ornament) · jackalope form</span></li>
+      <li><a href="jackalope_field_guide.html#boghare_jackalope">Boghare</a><span class="pos">Leporidae (Harmontide) · jackalope form</span></li>
+      <li><a href="jackalope_field_guide.html#clockhare_jackalope">Clockhare</a><span class="pos">Leporidae (Harmontide) · jackalope form</span></li>
+      <li><a href="jackalope_field_guide.html#easter_jackalope">Easter Bunny</a><span class="pos">Leporidae (folklore rabbit) · jackalope form</span></li>
+      <li><a href="jackalope_field_guide.html#inaba_jackalope">Inaba</a><span class="pos">Leporidae (folklore rabbit) · jackalope form</span></li>
+      <li><a href="jackalope_field_guide.html#jack_jackalope">Jack Jackalope</a><span class="pos">Leporidae: Lepus (legend; horns are an ornament) · jackalope form</span></li>
+      <li><a href="jackalope_field_guide.html#moon_rabbit_jackalope">Moon Rabbit</a><span class="pos">Leporidae (folklore rabbit) · jackalope form</span></li>
+      <li><a href="jackalope_field_guide.html#volcano_jackalope">Volcano Rabbit</a><span class="pos">Leporidae: Romerolagus diazi · jackalope form</span></li>
+      <li><a href="jackalope_field_guide.html#wolpertinger_jackalope">Wolpertinger</a><span class="pos">Leporidae (folklore; antlers and wings are ornaments) · jackalope form</span></li>
+    </ul>
+  </section>
+  <section id="primates">
+    <div class="eyebrow">Mammalia &gt; Euarchonta &gt; Primates</div>
+    <h2>Primates <span style="color:var(--muted);font-size:1rem">(6)</span> <a href="primates_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Jump Boost + Strength</p>
+    <ul class="clade-list">
+      <li><a href="rodent_field_guide.html#gibbon_rodent">Gibbon</a><span class="pos">Hylobatidae (Harmontide) · rodent form</span></li>
+      <li><a href="canid_field_guide.html#gigantopithecus_canid">Gigantopithecus</a><span class="pos">Hominidae: Gigantopithecus blacki (extinct) · canid form</span></li>
+      <li><a href="rodent_field_guide.html#lemur_rodent">Lemur</a><span class="pos">Lemuridae: Lemur catta · rodent form</span></li>
+      <li><a href="rodent_field_guide.html#sasquatch_rodent">Sasquatch</a><span class="pos">Hominidae (cryptid) · rodent form</span></li>
+      <li><a href="rodent_field_guide.html#sun_wukong_rodent">Sun Wukong</a><span class="pos">Cercopithecidae: Macaca (myth) · rodent form</span></li>
+      <li><a href="canid_field_guide.html#yeti_canid">Yeti</a><span class="pos">Hominidae (cryptid ape) · canid form</span></li>
+    </ul>
+  </section>
+  <section id="chiroptera">
+    <div class="eyebrow">Mammalia &gt; Laurasiatheria &gt; Chiroptera</div>
+    <h2>Bats <span style="color:var(--muted);font-size:1rem">(7)</span> <a href="chiroptera_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Night Vision + Slow Falling <b style="display:inline;margin:0 6px 0 14px">Was</b>Bat</p>
+    <ul class="clade-list">
+      <li><a href="bat_field_guide.html#cave_bat">Bat Girl</a><span class="pos">Chiroptera · bat form</span></li>
+      <li><a href="bat_field_guide.html#camazotz_bat">Camazotz</a><span class="pos">Chiroptera: Phyllostomidae (myth; leaf-nosed bat) · bat form</span></li>
+      <li><a href="bat_field_guide.html#date_bat">Datebat</a><span class="pos">Chiroptera: Pteropodidae (Harmontide fruit bat) · bat form</span></li>
+      <li><a href="bat_field_guide.html#frond_bat">Frondbat</a><span class="pos">Chiroptera (Harmontide) · bat form</span></li>
+      <li><a href="rodent_field_guide.html#mole_rodent">Mole</a><span class=flag>guest</span><span class="pos">Eulipotyphla: Talpidae; closer to bats than to rodents · rodent form</span></li>
+      <li><a href="rodent_field_guide.html#needlehog_rodent">Needlehog</a><span class=flag>guest</span><span class="pos">Eulipotyphla: Erinaceidae (Harmontide hedgehog); closer to bats than to rodents · rodent form</span></li>
+      <li><a href="bat_field_guide.html#vetala_bat">Vetala</a><span class=flag>judgement call</span><span class="pos">Chiroptera per this design (Indian spirit) · bat form</span></li>
+    </ul>
+  </section>
+  <section id="marsupialia">
+    <div class="eyebrow">Mammalia &gt; Marsupialia</div>
+    <h2>Marsupials <span style="color:var(--muted);font-size:1rem">(5)</span> <a href="marsupialia_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Jump Boost + Resistance <b style="display:inline;margin:0 6px 0 14px">Was</b>Marsupial</p>
+    <ul class="clade-list">
+      <li><a href="marsupial_field_guide.html#gliderune_marsupial">Gliderune</a><span class="pos">Diprotodontia: Petaurus breviceps (Harmontide) · marsupial form</span></li>
+      <li><a href="marsupial_field_guide.html#kangaroo_marsupial">Kangaroo Girl</a><span class="pos">Diprotodontia: Macropodidae · marsupial form</span></li>
+      <li><a href="marsupial_field_guide.html#koala_marsupial">Koala Girl</a><span class="pos">Diprotodontia: Phascolarctidae · marsupial form</span></li>
+      <li><a href="marsupial_field_guide.html#opossum_marsupial">Opossum</a><span class="pos">Didelphimorphia: Didelphidae · marsupial form</span></li>
+      <li><a href="merfolk_field_guide.html#platypus_mermaid">Platypus</a><span class=flag>guest</span><span class="pos">Monotremata: Ornithorhynchus anatinus; mammals that are neither marsupial nor placental · merfolk form</span></li>
+    </ul>
+  </section>
+  <section id="xenarthra">
+    <div class="eyebrow">Mammalia &gt; Xenarthra</div>
+    <h2>Armadillos, sloths &amp; anteaters <span style="color:var(--muted);font-size:1rem">(4)</span> <a href="xenarthra_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Resistance + Absorption <b style="display:inline;margin:0 6px 0 14px">Was</b>Armoured</p>
+    <ul class="clade-list">
+      <li><a href="armoured_field_guide.html#anteater_armoured">Anteater</a><span class="pos">Pilosa: Vermilingua (Harmontide) · armoured form</span></li>
+      <li><a href="armoured_field_guide.html#armadillo_armoured">Armadillo Girl</a><span class="pos">Cingulata: Dasypodidae · armoured form</span></li>
+      <li><a href="armoured_field_guide.html#riverdillo_armoured">Riverdillo</a><span class="pos">Cingulata (Harmontide) · armoured form</span></li>
+      <li><a href="armoured_field_guide.html#slothren_armoured">Slothren</a><span class="pos">Pilosa: Folivora (Harmontide sloth) · armoured form</span></li>
+    </ul>
+  </section>
+  <section id="paenungulata">
+    <div class="eyebrow">Mammalia &gt; Afrotheria &gt; Paenungulata</div>
+    <h2>Elephants, sea cows &amp; hyraxes <span style="color:var(--muted);font-size:1rem">(7)</span> <a href="paenungulata_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Health Boost</p>
+    <ul class="clade-list">
+      <li><a href="merfolk_field_guide.html#dugong_mermaid">Dugong Mermaid</a><span class="pos">Sirenia: Dugong dugon · merfolk form</span></li>
+      <li><a href="centaur_field_guide.html#elephant_centaur">Elephant</a><span class="pos">Proboscidea: Loxodonta · centaur form</span></li>
+      <li><a href="merfolk_field_guide.html#manatee_mermaid">Manatee</a><span class="pos">Sirenia: Trichechus · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#moopie_mermaid">Moopie</a><span class="pos">Sirenia, the real &#x27;sea cows&#x27; (Harmontide) · merfolk form</span></li>
+      <li><a href="rodent_field_guide.html#rockhyrax_rodent">Rockhyrax</a><span class="pos">Hyracoidea: Procaviidae (Harmontide); elephants&#x27; cousin · rodent form</span></li>
+      <li><a href="minotaur_field_guide.html#tuskin_minotaur">Tuskin</a><span class="pos">Proboscidea: Mammuthus (Harmontide) · minotaur form</span></li>
+      <li><a href="centaur_field_guide.html#tusktaur_centaur">Tusktaur</a><span class="pos">Proboscidea: Mammuthus primigenius (extinct) · centaur form</span></li>
+    </ul>
+  </section>
+  <section id="perissodactyla">
+    <div class="eyebrow">Mammalia &gt; Laurasiatheria &gt; Perissodactyla</div>
+    <h2>Odd-toed hoofed (horses, tapirs, rhinos) <span style="color:var(--muted);font-size:1rem">(11)</span> <a href="perissodactyla_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Speed <b style="display:inline;margin:0 6px 0 14px">Was</b>Centaur</p>
+    <ul class="clade-list">
+      <li><a href="nekomata_field_guide.html#baku_nekomata">Baku</a><span class="pos">Tapiridae (myth; this design is a tapir) · nekomata form</span></li>
+      <li><a href="centaur_field_guide.html#bellmare_centaur">Bellmare</a><span class="pos">Equidae: Equus asinus (Harmontide; goat horns are an ornament) · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#donkey_centaur">Donkey</a><span class="pos">Equidae: Equus asinus · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#horse_centaur">Horse Centaur</a><span class="pos">Equidae: Equus caballus · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#kelpie_centaur">Kelpie Centaur</a><span class="pos">Equidae (folklore horse) · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#pegasus_centaur">Pegasus Centaur</a><span class="pos">Equidae (myth; wings are an ornament) · centaur form</span></li>
+      <li><a href="minotaur_field_guide.html#rhino_minotaur">Rhino</a><span class="pos">Rhinocerotidae · minotaur form</span></li>
+      <li><a href="minotaur_field_guide.html#rhiwool_minotaur">Rhiwool</a><span class="pos">Rhinocerotidae: Coelodonta antiquitatis (extinct, Harmontide) · minotaur form</span></li>
+      <li><a href="centaur_field_guide.html#tapir_centaur">Tapir Centaur</a><span class="pos">Tapiridae: Tapirus · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#unicorn_centaur">Unicorn</a><span class="pos">Equidae (folklore horse) · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#zebra_centaur">Zebra Centaur</a><span class="pos">Equidae: Equus quagga · centaur form</span></li>
+    </ul>
+  </section>
+  <section id="bovidae">
+    <div class="eyebrow">Mammalia &gt; Artiodactyla &gt; Ruminantia &gt; Bovidae</div>
+    <h2>Cattle, sheep, goats &amp; antelope <span style="color:var(--muted);font-size:1rem">(17)</span> <a href="bovidae_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Strength <b style="display:inline;margin:0 6px 0 14px">Was</b>Minotaur</p>
+    <ul class="clade-list">
+      <li><a href="minotaur_field_guide.html#aurochs_minotaur">Aurochs Minotaur</a><span class="pos">Bovidae: Bos primigenius (extinct) · minotaur form</span></li>
+      <li><a href="minotaur_field_guide.html#bison_minotaur">Bison Minotaur</a><span class="pos">Bovidae: Bison · minotaur form</span></li>
+      <li><a href="minotaur_field_guide.html#brasshorn_minotaur">Brasshorn Ram</a><span class="pos">Bovidae: Ovis (Harmontide) · minotaur form</span></li>
+      <li><a href="minotaur_field_guide.html#bronzejaw_minotaur">Bronzejaw Ox</a><span class="pos">Bovidae: Bos taurus (Harmontide) · minotaur form</span></li>
+      <li><a href="minotaur_field_guide.html#cattle_minotaur">Cattle Minotaur</a><span class="pos">Bovidae: Bos taurus · minotaur form</span></li>
+      <li><a href="minotaur_field_guide.html#dustbison_minotaur">Dustbison</a><span class="pos">Bovidae: Bison (Harmontide) · minotaur form</span></li>
+      <li><a href="minotaur_field_guide.html#highland_minotaur">Highland Minotaur</a><span class="pos">Bovidae: Bos taurus · minotaur form</span></li>
+      <li><a href="minotaur_field_guide.html#minoan_minotaur">Minoan Minotaur</a><span class="pos">Bovidae: Bos taurus (myth) · minotaur form</span></li>
+      <li><a href="minotaur_field_guide.html#mooskuh_minotaur">Mooskuh</a><span class="pos">Bovidae: Bos taurus (Harmontide) · minotaur form</span></li>
+      <li><a href="centaur_field_guide.html#goat_centaur">Mountain Goat Centaur</a><span class="pos">Bovidae: Caprinae, Oreamnos americanus · centaur form</span></li>
+      <li><a href="minotaur_field_guide.html#oryx_minotaur">Oryx</a><span class="pos">Bovidae: Oryx (Harmontide) · minotaur form</span></li>
+      <li><a href="minotaur_field_guide.html#reedbull_minotaur">Reedbull</a><span class="pos">Bovidae: Bovinae (Harmontide) · minotaur form</span></li>
+      <li><a href="minotaur_field_guide.html#sheep_minotaur">Sheep Girl</a><span class="pos">Bovidae: Ovis aries · minotaur form</span></li>
+      <li><a href="minotaur_field_guide.html#shroomotaur_minotaur">Shroomotaur</a><span class="pos">Bovidae: Bos taurus (Minecraft mooshroom) · minotaur form</span></li>
+      <li><a href="minotaur_field_guide.html#skjoldram_minotaur">Skjoldram</a><span class="pos">Bovidae: Ovis (Harmontide) · minotaur form</span></li>
+      <li><a href="minotaur_field_guide.html#water_buffalo_minotaur">Water Buffalo Minotaur</a><span class="pos">Bovidae: Bubalus bubalis · minotaur form</span></li>
+      <li><a href="minotaur_field_guide.html#yak_minotaur">Yak Minotaur</a><span class="pos">Bovidae: Bos grunniens · minotaur form</span></li>
+    </ul>
+  </section>
+  <section id="cervidae">
+    <div class="eyebrow">Mammalia &gt; Artiodactyla &gt; Ruminantia &gt; Cervidae</div>
+    <h2>Deer (and giraffes) <span style="color:var(--muted);font-size:1rem">(12)</span> <a href="cervidae_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Speed + Jump Boost</p>
+    <ul class="clade-list">
+      <li><a href="centaur_field_guide.html#aurorantler_centaur">Aurorantler</a><span class="pos">Cervidae (Harmontide) · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#caribou_centaur">Caribou</a><span class="pos">Cervidae: Rangifer tarandus · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#giraffe_centaur">Giraffe</a><span class=flag>guest</span><span class="pos">Giraffidae: Giraffa; too few giraffids for a family of their own · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#halberelk_centaur">Halberelk</a><span class="pos">Cervidae: Cervus canadensis (Harmontide) · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#momoshika_centaur">Momoshika</a><span class="pos">Cervidae: Cervus nippon (Harmontide) · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#moose_centaur">Moose</a><span class="pos">Cervidae: Alces alces · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#okapi_centaur">Okapi</a><span class=flag>guest</span><span class="pos">Giraffidae: Okapia johnstoni · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#palmyr_centaur">Palmyr</a><span class="pos">Cervidae (Harmontide) · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#prairhorn_centaur">Prairhorn</a><span class=flag>guest</span><span class="pos">Antilocapridae: Antilocapra americana (Harmontide) · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#qilin_centaur">Qilin</a><span class="pos">Cervidae (myth; scales are an ornament) · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#reindeer_centaur">Reindeer Centaur</a><span class="pos">Cervidae: Rangifer tarandus · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#stagel_centaur">Stagel</a><span class="pos">Cervidae (Harmontide) · centaur form</span></li>
+    </ul>
+  </section>
+  <section id="camelidae">
+    <div class="eyebrow">Mammalia &gt; Artiodactyla &gt; Tylopoda &gt; Camelidae</div>
+    <h2>Camels &amp; llamas <span style="color:var(--muted);font-size:1rem">(6)</span> <a href="camelidae_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Fire Resistance</p>
+    <ul class="clade-list">
+      <li><a href="centaur_field_guide.html#alpaca_centaur">Alpaca Centaur</a><span class="pos">Camelidae: Vicugna pacos · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#camel_centaur">Camel Centaur</a><span class="pos">Camelidae: Camelus bactrianus · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#ceibler_centaur">Ceibler</a><span class=flag>judgement call</span><span class="pos">Camelidae: Lama (Harmontide llama-deer) · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#dromedary_centaur">Dromedary Centaur</a><span class="pos">Camelidae: Camelus dromedarius · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#urcuchillay_centaur">Urcuchillay</a><span class="pos">Camelidae: Lama glama (deity) · centaur form</span></li>
+      <li><a href="centaur_field_guide.html#vicunero_centaur">Vicunero</a><span class="pos">Camelidae: Vicugna vicugna (Harmontide) · centaur form</span></li>
+    </ul>
+  </section>
+  <section id="suina">
+    <div class="eyebrow">Mammalia &gt; Artiodactyla &gt; Suina</div>
+    <h2>Pigs &amp; boars <span style="color:var(--muted);font-size:1rem">(5)</span> <a href="suina_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Haste + Absorption</p>
+    <ul class="clade-list">
+      <li><a href="armoured_field_guide.html#aegis_boar_armoured">Aegis Boar</a><span class="pos">Suidae: Sus scrofa (Harmontide) · armoured form</span></li>
+      <li><a href="armoured_field_guide.html#daeodon_armoured">Daeodon</a><span class=flag>judgement call</span><span class="pos">Entelodontidae (extinct &#x27;hell pig&#x27;; some trees put it nearer hippos) · armoured form</span></li>
+      <li><a href="armoured_field_guide.html#gribboar_armoured">Gribboar</a><span class="pos">Suidae: Sus scrofa (Harmontide) · armoured form</span></li>
+      <li><a href="armoured_field_guide.html#piglette_armoured">Piglette</a><span class="pos">Suidae-like (Minecraft piglin) · armoured form</span></li>
+      <li><a href="centaur_field_guide.html#zoglintaur_centaur">Zoglintaur</a><span class="pos">Suidae-like (Minecraft hoglin) · centaur form</span></li>
+    </ul>
+  </section>
+  <section id="whippomorpha">
+    <div class="eyebrow">Mammalia &gt; Artiodactyla &gt; Whippomorpha</div>
+    <h2>Whales &amp; hippos <span style="color:var(--muted);font-size:1rem">(6)</span> <a href="whippomorpha_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Dolphin&#x27;s Grace + Water Breathing</p>
+    <ul class="clade-list">
+      <li><a href="merfolk_field_guide.html#beluga_mermaid">Beluga</a><span class="pos">Cetacea: Monodontidae, Delphinapterus leucas · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#cetus_mermaid">Cetus</a><span class="pos">Cetacea (myth; this design is a whale) · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#dolphin_mermaid">Dolphin Mermaid</a><span class="pos">Cetacea: Delphinidae · merfolk form</span></li>
+      <li><a href="minotaur_field_guide.html#hippo_minotaur">Hippo</a><span class="pos">Hippopotamidae: the whales&#x27; closest living relatives · minotaur form</span></li>
+      <li><a href="merfolk_field_guide.html#narwhal_mermaid">Narwhal</a><span class="pos">Cetacea: Monodontidae, Monodon monoceros · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#orca_mermaid">Orca Mermaid</a><span class="pos">Cetacea: Delphinidae, Orcinus orca · merfolk form</span></li>
+    </ul>
+  </section>
+  <section id="aves">
+    <div class="eyebrow">Reptilia &gt; Archosauria &gt; Dinosauria &gt; Aves</div>
+    <h2>Birds (harpies) <span style="color:var(--muted);font-size:1rem">(47)</span> <a href="aves_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Slow Falling <b style="display:inline;margin:0 6px 0 14px">Was</b>Harpy Milk</p>
+    <ul class="clade-list">
+      <li><a href="harpy_field_guide.html">Albatross Harpy</a><span class="pos">Procellariiformes: Diomedeidae · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Alkonost Harpy</a><span class="pos">Neoaves (myth paradise bird) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Argentowlis</a><span class="pos">Strigiformes (Harmontide) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Bennu Harpy</a><span class="pos">Pelecaniformes: Ardeidae (myth heron) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Cassowrath Harpy</a><span class="pos">Palaeognathae: Casuarius (Harmontide) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Coin Magpie Harpy</a><span class="pos">Passeriformes: Corvidae, Pica (Harmontide) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Condorune Harpy</a><span class="pos">Accipitriformes: Cathartidae (Harmontide) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Crow Harpy</a><span class="pos">Passeriformes: Corvidae · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Dodobold Harpy</a><span class="pos">Columbiformes: Raphus cucullatus (extinct; the dodo was a pigeon) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Duck</a><span class="pos">Anseriformes: Anatidae · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Emberu Harpy</a><span class="pos">Palaeognathae: Dromaius (Harmontide) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Emu Harpy</a><span class="pos">Palaeognathae: Dromaius · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Finch Harpy</a><span class="pos">Passeriformes: Fringillidae · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Flamingo Harpy</a><span class="pos">Phoenicopteriformes · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Garuda Harpy</a><span class="pos">Accipitriformes (myth eagle-kite) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Hummingbird</a><span class="pos">Apodiformes: Trochilidae · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Ibiset Harpy</a><span class="pos">Pelecaniformes: Threskiornithidae (Harmontide) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Ibisking</a><span class="pos">Pelecaniformes: Threskiornithidae (Harmontide) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Ironbeak Harpy</a><span class=flag>judgement call</span><span class="pos">Neoaves, courier bird (Harmontide; order unclear) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">La Lechuza</a><span class="pos">Strigiformes: Tyto alba (folklore) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Landharpy</a><span class=flag>judgement call</span><span class="pos">Aves, flightless (Harmontide; order unclear) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Macaw Harpy</a><span class="pos">Psittaciformes · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Mirror Crane Harpy</a><span class="pos">Gruiformes: Gruidae (Harmontide) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Motmora</a><span class="pos">Coraciiformes: Momotidae (Harmontide) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Ostrich Harpy</a><span class="pos">Palaeognathae: Struthionidae · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Owl Harpy</a><span class="pos">Strigiformes · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Peaflare Harpy</a><span class="pos">Galliformes: Pavo (Harmontide) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Pelican</a><span class="pos">Pelecaniformes: Pelecanidae · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Penguin Harpy</a><span class="pos">Sphenisciformes · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Phoenix Harpy</a><span class="pos">Neoaves (myth) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Poultry Harpy</a><span class="pos">Galliformes: Gallus gallus · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Pumpkingull Harpy</a><span class="pos">Charadriiformes: Laridae (Harmontide) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Reliquary Dove</a><span class="pos">Columbiformes (Harmontide) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Riflebird Harpy</a><span class="pos">Passeriformes: Paradisaeidae · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Roc Harpy</a><span class="pos">Accipitriformes (myth giant raptor) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Rookmourn Harpy</a><span class="pos">Passeriformes: Corvidae, Corvus frugilegus (Harmontide) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Seagull Harpy</a><span class="pos">Charadriiformes: Laridae · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Skycrow Harpy</a><span class="pos">Passeriformes: Corvidae (Harmontide) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Sparrow Harpy</a><span class="pos">Passeriformes: Passeridae · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Stigowl Harpy</a><span class="pos">Strigiformes (Harmontide) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Swan</a><span class="pos">Anseriformes: Anatidae · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Tengu Harpy</a><span class="pos">Passeriformes: Corvidae (folklore crow tengu) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Toucan Harpy</a><span class="pos">Piciformes: Ramphastidae · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Trickster Raven Harpy</a><span class="pos">Passeriformes: Corvidae, Corvus corax (Harmontide) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Yatagarasu Harpy</a><span class="pos">Passeriformes: Corvidae (myth) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Zhuque Harpy</a><span class="pos">Neoaves (myth vermilion bird) · harpy form</span></li>
+      <li><a href="harpy_field_guide.html">Ziz Harpy</a><span class="pos">Neoaves (myth giant bird) · harpy form</span></li>
+    </ul>
+  </section>
+  <section id="archosauria">
+    <div class="eyebrow">Reptilia &gt; Archosauria (birds kept apart)</div>
+    <h2>Crocodiles, dinosaurs &amp; pterosaurs <span style="color:var(--muted);font-size:1rem">(9)</span> <a href="archosauria_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Strength + Speed <b style="display:inline;margin:0 6px 0 14px">Was</b>Theropod</p>
+    <ul class="clade-list">
+      <li><a href="lizardfolk_field_guide.html#argentinosaurus_lizardfolk">Argentinosaurus</a><span class="pos">Dinosauria: Sauropoda (extinct) · lizardfolk form</span></li>
+      <li><a href="theropod_field_guide.html#australovenator_theropod">Australovenator</a><span class="pos">Dinosauria: Theropoda, Megaraptora (extinct) · theropod form</span></li>
+      <li><a href="lizardfolk_field_guide.html#cipactli_lizardfolk">Cipactli</a><span class="pos">Crocodylia (myth) · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#croc_lizardfolk">Crocodile</a><span class="pos">Crocodylia · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#crocora_lizardfolk">Crocora</a><span class="pos">Crocodylia (Harmontide) · lizardfolk form</span></li>
+      <li><a href="theropod_field_guide.html#fernstalker_theropod">Fernstalker</a><span class="pos">Dinosauria: Theropoda, Dromaeosauridae (Harmontide) · theropod form</span></li>
+      <li><a href="dragon_field_guide.html#hairypterix_dragon">Hairypterix</a><span class="pos">Pterosauria (extinct, Harmontide) · dragon form</span></li>
+      <li><a href="dragon_field_guide.html#moo_dragon">Moo</a><span class="pos">Dinosauria: Ceratopsidae, Triceratops (extinct, Harmontide) · dragon form</span></li>
+      <li><a href="theropod_field_guide.html#spinosaur_theropod">Spinosaur</a><span class="pos">Dinosauria: Theropoda, Spinosauridae (extinct) · theropod form</span></li>
+    </ul>
+  </section>
+  <section id="testudines">
+    <div class="eyebrow">Reptilia &gt; Testudines</div>
+    <h2>Turtles &amp; tortoises <span style="color:var(--muted);font-size:1rem">(14)</span> <a href="testudines_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Resistance + Water Breathing <b style="display:inline;margin:0 6px 0 14px">Was</b>Lizardfolk</p>
+    <ul class="clade-list">
+      <li><a href="lizardfolk_field_guide.html#snapping_turtle_lizardfolk">Alligator Snapping Turtle</a><span class="pos">Testudines: Chelydridae, Macrochelys temminckii · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#anvil_tortoise_lizardfolk">Anvil Tortoise</a><span class="pos">Testudines: Testudinidae (Harmontide) · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#archelon_lizardfolk">Archelon</a><span class="pos">Testudines: Protostegidae, Archelon (extinct) · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#black_tortoise_lizardfolk">Black Tortoise</a><span class="pos">Testudines: Testudinidae (myth; the serpent is an ornament) · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#box_turtle_lizardfolk">Box Turtle</a><span class="pos">Testudines: Emydidae · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#conch_turtle_lizardfolk">Conch Mail Turtle</a><span class="pos">Testudines: Cheloniidae (Harmontide) · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#galapagos_tortoise_lizardfolk">Galapagos Tortoise</a><span class="pos">Testudines: Testudinidae, Chelonoidis niger · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#kappa_lizardfolk">Kappa</a><span class="pos">Testudines: Trionychidae (folklore) · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#matamata_lizardfolk">Matamata</a><span class="pos">Testudines: Chelidae, Chelus fimbriata · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#red_eared_slider_lizardfolk">Red-Eared Slider</a><span class="pos">Testudines: Emydidae · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#softshell_turtle_lizardfolk">Softshell Turtle</a><span class="pos">Testudines: Trionychidae, Apalone spinifera · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#turtfolk_lizardfolk">Turtfolk</a><span class="pos">Testudines (Harmontide) · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#turtle_lizardfolk">Turtle</a><span class="pos">Testudines: Cheloniidae · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#turtworld_lizardfolk">Turtworld</a><span class="pos">Testudines: Testudinidae (Harmontide) · lizardfolk form</span></li>
+    </ul>
+  </section>
+  <section id="squamata">
+    <div class="eyebrow">Reptilia &gt; Lepidosauria &gt; Squamata</div>
+    <h2>Snakes &amp; lizards <span style="color:var(--muted);font-size:1rem">(30)</span> <a href="squamata_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Regeneration <b style="display:inline;margin:0 6px 0 14px">Was</b>Lamia</p>
+    <ul class="clade-list">
+      <li><a href="lamia_field_guide.html#anaconda_lamia">Anaconda</a><span class="pos">Serpentes: Boidae, Eunectes · lamia form</span></li>
+      <li><a href="lizardfolk_field_guide.html#basilisk_lizardfolk">Basilisk</a><span class="pos">Squamata: Corytophanidae, Basiliscus (a real lizard shares her name) · lizardfolk form</span></li>
+      <li><a href="lamia_field_guide.html#boa_lamia">Boa Lamia</a><span class="pos">Serpentes: Boidae · lamia form</span></li>
+      <li><a href="lamia_field_guide.html#caraviper_lamia">Caraviper</a><span class="pos">Serpentes: Elapidae, Naja (Harmontide) · lamia form</span></li>
+      <li><a href="lizardfolk_field_guide.html#cave_gekko_lizardfolk">Cave Gekko</a><span class="pos">Squamata: Gekkota · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#chameleon_lizardfolk">Chameleon</a><span class="pos">Squamata: Chamaeleonidae · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#chupacabra_lizardfolk">Chupacabra</a><span class="pos">Squamata (cryptid, spiny reptile) · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#cocoskink_lizardfolk">Cocoskink</a><span class="pos">Squamata: Scincidae (Harmontide) · lizardfolk form</span></li>
+      <li><a href="lamia_field_guide.html#echidna_lamia">Echidna</a><span class="pos">Serpentes (myth; serpent body) · lamia form</span></li>
+      <li><a href="lizardfolk_field_guide.html#gecko_lizardfolk">Gecko Girl</a><span class="pos">Squamata: Gekkota · lizardfolk form</span></li>
+      <li><a href="lamia_field_guide.html#hoop_snake_lamia">Hoop Snake</a><span class="pos">Serpentes (myth; serpent body) · lamia form</span></li>
+      <li><a href="lizardfolk_field_guide.html#iguana_lizardfolk">Iguana</a><span class="pos">Squamata: Iguanidae · lizardfolk form</span></li>
+      <li><a href="lizardfolk_field_guide.html#iron_kobold_lizardfolk">Iron Kobold</a><span class="pos">Squamata (Harmontide reptile kobold) · lizardfolk form</span></li>
+      <li><a href="dragon_field_guide.html#jormungandr_dragon">Jormungandr</a><span class="pos">Serpentes (myth; this design is a python) · dragon form</span></li>
+      <li><a href="lamia_field_guide.html#cobra_lamia">King Cobra Lamia</a><span class="pos">Serpentes: Elapidae, Ophiophagus hannah · lamia form</span></li>
+      <li><a href="lizardfolk_field_guide.html#komodo_lizardfolk">Komodo</a><span class="pos">Squamata: Varanidae, Varanus komodoensis · lizardfolk form</span></li>
+      <li><a href="lamia_field_guide.html#medusa_lamia">Medusa</a><span class="pos">Serpentes (myth; serpent body) · lamia form</span></li>
+      <li><a href="merfolk_field_guide.html#mosasaurus_mermaid">Mosasaurus</a><span class="pos">Squamata: Mosasauridae (extinct; mosasaurs were giant sea lizards) · merfolk form</span></li>
+      <li><a href="lamia_field_guide.html#naga_lamia">Naga Lamia</a><span class="pos">Serpentes: Elapidae, Ophiophagus hannah (myth) · lamia form</span></li>
+      <li><a href="lamia_field_guide.html#python_lamia">Python Lamia</a><span class="pos">Serpentes: Pythonidae · lamia form</span></li>
+      <li><a href="lamia_field_guide.html#rattlesnake_lamia">Rattlesnake Lamia</a><span class="pos">Serpentes: Viperidae, Crotalus · lamia form</span></li>
+      <li><a href="lamia_field_guide.html#sea_serpent_lamia">Sea Serpent</a><span class="pos">Serpentes (myth; serpent body) · lamia form</span></li>
+      <li><a href="lamia_field_guide.html#sea_snake_lamia">Sea Snake Lamia</a><span class="pos">Serpentes: Elapidae, Hydrophiinae · lamia form</span></li>
+      <li><a href="lamia_field_guide.html#serpopard_lamia">Serpopard</a><span class=flag>judgement call</span><span class="pos">Serpentes per her rig (myth; the Egyptian serpopard is a leopard with a snake&#x27;s neck) · lamia form</span></li>
+      <li><a href="lamia_field_guide.html#titanoboa_lamia">Titanoboa</a><span class="pos">Serpentes: Boidae, Titanoboa (extinct) · lamia form</span></li>
+      <li><a href="lamia_field_guide.html#tsuchinoko_lamia">Tsuchinoko</a><span class="pos">Serpentes (cryptid) · lamia form</span></li>
+      <li><a href="lamia_field_guide.html#turquoise_serpent_lamia">Turquoise Serpent</a><span class="pos">Serpentes (Harmontide) · lamia form</span></li>
+      <li><a href="lamia_field_guide.html#urchskin_lamia">Urchskin</a><span class="pos">Serpentes (Harmontide) · lamia form</span></li>
+      <li><a href="lamia_field_guide.html#wadjet_lamia">Wadjet Lamia</a><span class="pos">Serpentes: Elapidae, Naja haje (deity) · lamia form</span></li>
+      <li><a href="lamia_field_guide.html#xiangliu_lamia">Xiangliu</a><span class="pos">Serpentes (myth; serpent body) · lamia form</span></li>
+    </ul>
+  </section>
+  <section id="amphibia">
+    <div class="eyebrow">Amphibia (Anura + Caudata)</div>
+    <h2>Frogs, toads &amp; salamanders <span style="color:var(--muted);font-size:1rem">(19)</span> <a href="amphibia_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Jump Boost + Water Breathing <b style="display:inline;margin:0 6px 0 14px">Was</b>Anuran Milk</p>
+    <ul class="clade-list">
+      <li><a href="merfolk_field_guide.html#axolotl_mermaid">Axolotl Mermaid</a><span class="pos">Caudata: Ambystoma mexicanum · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#axolume_mermaid">Axolume</a><span class="pos">Caudata: Ambystoma (Harmontide) · merfolk form</span></li>
+      <li><a href="anuran_field_guide.html">Bullfrog</a><span class="pos">Anura: Ranidae, Lithobates catesbeianus · anuran form</span></li>
+      <li><a href="anuran_field_guide.html">Bullywug</a><span class="pos">Anura (folklore frog-folk) · anuran form</span></li>
+      <li><a href="anuran_field_guide.html">Cane Toad</a><span class="pos">Anura: Bufonidae, Rhinella marina · anuran form</span></li>
+      <li><a href="anuran_field_guide.html">Desert Rain Frog</a><span class="pos">Anura: Breviceps macrops · anuran form</span></li>
+      <li><a href="anuran_field_guide.html">Fire-Bellied Toad</a><span class="pos">Anura: Bombinatoridae · anuran form</span></li>
+      <li><a href="anuran_field_guide.html">Glass Frog</a><span class="pos">Anura: Centrolenidae · anuran form</span></li>
+      <li><a href="anuran_field_guide.html">Goliath Frog</a><span class="pos">Anura: Conraua goliath · anuran form</span></li>
+      <li><a href="anuran_field_guide.html">Mailtoad</a><span class="pos">Anura: Bufonidae (Harmontide) · anuran form</span></li>
+      <li><a href="anuran_field_guide.html">Mucus Toad</a><span class="pos">Anura: Bufonidae (MGE) · anuran form</span></li>
+      <li><a href="anuran_field_guide.html">Natterjack</a><span class="pos">Anura: Bufonidae, Epidalea calamita · anuran form</span></li>
+      <li><a href="lizardfolk_field_guide.html#newt_lizardfolk">Newt</a><span class="pos">Caudata: Salamandridae · lizardfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#olm_mermaid">Olm</a><span class="pos">Caudata: Proteus anguinus · merfolk form</span></li>
+      <li><a href="anuran_field_guide.html">Poison Dart Frog</a><span class="pos">Anura: Dendrobatidae · anuran form</span></li>
+      <li><a href="lizardfolk_field_guide.html#salamander_lizardfolk">Salamander</a><span class="pos">Caudata: Salamandra (legend; salamanders are amphibians, not lizards) · lizardfolk form</span></li>
+      <li><a href="anuran_field_guide.html">Surinam Toad</a><span class="pos">Anura: Pipidae, Pipa pipa · anuran form</span></li>
+      <li><a href="anuran_field_guide.html">Tree Frog</a><span class="pos">Anura: Hylidae · anuran form</span></li>
+      <li><a href="anuran_field_guide.html">Vodyanoy</a><span class="pos">Anura (Slavic river spirit) · anuran form</span></li>
+    </ul>
+  </section>
+  <section id="actinopterygii">
+    <div class="eyebrow">Actinopterygii</div>
+    <h2>Fish (and the mermaids of legend) <span style="color:var(--muted);font-size:1rem">(17)</span> <a href="actinopterygii_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Water Breathing <b style="display:inline;margin:0 6px 0 14px">Was</b>Merfolk</p>
+    <ul class="clade-list">
+      <li><a href="merfolk_field_guide.html#angler_mermaid">Angler</a><span class="pos">Lophiiformes · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#eel_mermaid">Electric Eel</a><span class="pos">Gymnotiformes: Electrophorus (not a true eel) · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#fishman_mermaid">Fishman</a><span class="pos">Actinopterygii (Harmontide) · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#koi_mermaid">Koi Mermaid</a><span class="pos">Cypriniformes: Cyprinus rubrofuscus · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#leviathan_mermaid">Leviathan</a><span class=flag>judgement call</span><span class="pos">Actinopterygii per this design (the Leviathan is also read as a whale or serpent) · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#lorelei_mermaid">Lorelei</a><span class="pos">generic fish tail (folklore water spirit) · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#mantarrow_mermaid">Mantarrow</a><span class=flag>guest</span><span class="pos">Chondrichthyes: Mobulidae (Harmontide) · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#piranha_mermaid">Piranha</a><span class="pos">Characiformes: Serrasalmidae · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#pufferfish_mermaid">Pufferfish</a><span class="pos">Tetraodontiformes: Tetraodontidae · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#reeffin_mermaid">Reeffin</a><span class="pos">Actinopterygii (Harmontide) · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#rusalka_mermaid">Rusalka</a><span class="pos">generic fish tail (folklore water spirit) · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#sawfin_mermaid">Sawfin</a><span class=flag>guest</span><span class="pos">Chondrichthyes: Pristidae (Harmontide) · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#seahorse_mermaid">Seahorse</a><span class="pos">Syngnathiformes: Hippocampus · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#shark_mermaid">Shark Mermaid</a><span class=flag>guest</span><span class="pos">Chondrichthyes: Selachimorpha; sharks and rays are too few for their own family · merfolk form</span></li>
+      <li><a href="merfolk_field_guide.html#siren_mermaid">Siren</a><span class="pos">generic fish tail (sailors&#x27; myth; the Greek sirens were bird-women) · merfolk form</span></li>
+      <li><a href="crustacean_field_guide.html#starfish_crustacean">Starfish</a><span class=flag>guest</span><span class="pos">Echinodermata: Asteroidea; starfish are closer to fish (and us) than to crabs · crustacean form</span></li>
+      <li><a href="merfolk_field_guide.html#sword_koi_mermaid">Sword Koi</a><span class="pos">Cypriniformes: Cyprinus (Harmontide) · merfolk form</span></li>
+    </ul>
+  </section>
+  <section id="chelicerata">
+    <div class="eyebrow">Arthropoda &gt; Chelicerata &gt; Arachnida</div>
+    <h2>Spiders &amp; scorpions <span style="color:var(--muted);font-size:1rem">(13)</span> <a href="chelicerata_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Resistance <b style="display:inline;margin:0 6px 0 14px">Was</b>Arachne</p>
+    <ul class="clade-list">
+      <li><a href="arachne_field_guide.html#black_widow_arachne">Black Widow</a><span class="pos">Araneae: Theridiidae, Latrodectus · arachne form</span></li>
+      <li><a href="arachne_field_guide.html#cave_spider_arachne">Cave Spider</a><span class="pos">Araneae (Minecraft cave spider) · arachne form</span></li>
+      <li><a href="bug_field_guide.html#girtablilu_bug">Girtablilu</a><span class="pos">Arachnida: Scorpiones (myth) · bug form</span></li>
+      <li><a href="arachne_field_guide.html#jorogumo_arachne">Jorogumo</a><span class="pos">Araneae: Trichonephila clavata (folklore) · arachne form</span></li>
+      <li><a href="arachne_field_guide.html#jumping_spider_arachne">Jumping Spider Arachne</a><span class="pos">Araneae: Salticidae · arachne form</span></li>
+      <li><a href="arachne_field_guide.html#orb_weaver_arachne">Orb Weaver Arachne</a><span class="pos">Araneae: Araneidae · arachne form</span></li>
+      <li><a href="arachne_field_guide.html#peacock_spider_arachne">Peacock Spider</a><span class="pos">Araneae: Salticidae, Maratus · arachne form</span></li>
+      <li><a href="bug_field_guide.html#scorpion_bug">Scorpion</a><span class="pos">Arachnida: Scorpiones · bug form</span></li>
+      <li><a href="arachne_field_guide.html#spoodr_arachne">Spoodr</a><span class="pos">Araneae (Harmontide) · arachne form</span></li>
+      <li><a href="arachne_field_guide.html#tarantula_arachne">Tarantula Arachne</a><span class="pos">Araneae: Theraphosidae · arachne form</span></li>
+      <li><a href="arachne_field_guide.html#trapdoor_spider_arachne">Trapdoor Spider Arachne</a><span class="pos">Araneae: Mygalomorphae · arachne form</span></li>
+      <li><a href="arachne_field_guide.html#ushi_oni_arachne">Ushi-oni</a><span class="pos">Araneae: spider body (folklore; the ox head is an ornament) · arachne form</span></li>
+      <li><a href="arachne_field_guide.html#wolf_spider_arachne">Wolf Spider Arachne</a><span class="pos">Araneae: Lycosidae · arachne form</span></li>
+    </ul>
+  </section>
+  <section id="hexapoda">
+    <div class="eyebrow">Arthropoda &gt; Pancrustacea &gt; Hexapoda</div>
+    <h2>Insects <span style="color:var(--muted);font-size:1rem">(23)</span> <a href="hexapoda_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Haste <b style="display:inline;margin:0 6px 0 14px">Was</b>Bug</p>
+    <ul class="clade-list">
+      <li><a href="bug_field_guide.html#ant_bug">Ant</a><span class="pos">Insecta: Hymenoptera, Formicidae · bug form</span></li>
+      <li><a href="bug_field_guide.html#antlion_bug">Antlion</a><span class="pos">Insecta: Neuroptera, Myrmeleontidae · bug form</span></li>
+      <li><a href="bug_field_guide.html#bee_bug">Bee</a><span class="pos">Insecta: Hymenoptera, Apidae · bug form</span></li>
+      <li><a href="lamia_field_guide.html#centipede_lamia">Centipede</a><span class=flag>guest</span><span class="pos">Myriapoda: Chilopoda; the insects&#x27; nearest relatives here (Mandibulata) · lamia form</span></li>
+      <li><a href="bug_field_guide.html#cicada_bug">Cicada</a><span class="pos">Insecta: Hemiptera, Cicadidae · bug form</span></li>
+      <li><a href="bug_field_guide.html#date_beetle_bug">Date Palm Beetle</a><span class="pos">Insecta: Coleoptera (Harmontide) · bug form</span></li>
+      <li><a href="bug_field_guide.html#dragonfly_bug">Dragonfly</a><span class="pos">Insecta: Odonata · bug form</span></li>
+      <li><a href="bug_field_guide.html#firefly_bug">Firefly</a><span class="pos">Insecta: Coleoptera, Lampyridae · bug form</span></li>
+      <li><a href="bug_field_guide.html#hornet_bug">Hornet</a><span class="pos">Insecta: Hymenoptera, Vespidae · bug form</span></li>
+      <li><a href="bug_field_guide.html#ladybug_bug">Ladybug</a><span class="pos">Insecta: Coleoptera, Coccinellidae · bug form</span></li>
+      <li><a href="bug_field_guide.html#mantis_bug">Mantis Girl</a><span class="pos">Insecta: Mantodea · bug form</span></li>
+      <li><a href="bug_field_guide.html#mosquito_bug">Mosquito</a><span class="pos">Insecta: Diptera, Culicidae · bug form</span></li>
+      <li><a href="bug_field_guide.html#moth_bug">Moth</a><span class="pos">Insecta: Lepidoptera (moth) · bug form</span></li>
+      <li><a href="bug_field_guide.html#moth_larva_bug">Moth Caterpillar</a><span class="pos">Insecta: Lepidoptera (moth) · bug form</span></li>
+      <li><a href="bug_field_guide.html#mothman_bug">Mothman</a><span class="pos">Insecta: Lepidoptera (cryptid) · bug form</span></li>
+      <li><a href="bug_field_guide.html#papillon_bug">Papillon</a><span class="pos">Insecta: Lepidoptera, Papilionoidea · bug form</span></li>
+      <li><a href="bug_field_guide.html#papillon_larva_bug">Papillon Caterpillar</a><span class="pos">Insecta: Lepidoptera, Papilionoidea · bug form</span></li>
+      <li><a href="bug_field_guide.html#queen_ant_bug">Queen Ant</a><span class="pos">Insecta: Hymenoptera, Formicidae · bug form</span></li>
+      <li><a href="bug_field_guide.html#queen_bee_bug">Queen Bee</a><span class="pos">Insecta: Hymenoptera, Apidae · bug form</span></li>
+      <li><a href="bug_field_guide.html#scarabronze_bug">Scarabronze</a><span class="pos">Insecta: Coleoptera, Scarabaeidae (Harmontide) · bug form</span></li>
+      <li><a href="bug_field_guide.html#spider_wasp_bug">Spider-Wasp</a><span class="pos">Insecta: Hymenoptera, Pompilidae · bug form</span></li>
+      <li><a href="bug_field_guide.html#tardigrade_bug">Tardigrade</a><span class=flag>guest</span><span class="pos">Tardigrada: a cousin of the arthropods (Panarthropoda) · bug form</span></li>
+      <li><a href="bug_field_guide.html#temple_mantis_bug">Temple Mantis</a><span class="pos">Insecta: Mantodea (Harmontide) · bug form</span></li>
+    </ul>
+  </section>
+  <section id="malacostraca">
+    <div class="eyebrow">Arthropoda &gt; Pancrustacea &gt; Malacostraca</div>
+    <h2>Crabs, lobsters &amp; shrimp <span style="color:var(--muted);font-size:1rem">(7)</span> <a href="malacostraca_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Conduit Power <b style="display:inline;margin:0 6px 0 14px">Was</b>Crustacean</p>
+    <ul class="clade-list">
+      <li><a href="merfolk_field_guide.html#anomalocaris_mermaid">Anomalocaris</a><span class=flag>guest</span><span class="pos">Radiodonta (extinct stem arthropod) · merfolk form</span></li>
+      <li><a href="crustacean_field_guide.html#crab_crustacean">Crab Girl</a><span class="pos">Decapoda: Brachyura · crustacean form</span></li>
+      <li><a href="crustacean_field_guide.html#floodcrab_crustacean">Floodcrab</a><span class="pos">Decapoda: Brachyura (Harmontide) · crustacean form</span></li>
+      <li><a href="crustacean_field_guide.html#hermit_crab_crustacean">Hermit Crab Girl</a><span class="pos">Decapoda: Paguroidea · crustacean form</span></li>
+      <li><a href="crustacean_field_guide.html#lobster_crustacean">Lobster</a><span class="pos">Decapoda: Nephropidae · crustacean form</span></li>
+      <li><a href="crustacean_field_guide.html#mantis_shrimp_crustacean">Mantis Shrimp</a><span class="pos">Stomatopoda · crustacean form</span></li>
+      <li><a href="crustacean_field_guide.html#spider_crab_crustacean">Spider Crab</a><span class="pos">Decapoda: Majoidea · crustacean form</span></li>
+    </ul>
+  </section>
+  <section id="mollusca">
+    <div class="eyebrow">Mollusca</div>
+    <h2>Octopuses, squid &amp; snails <span style="color:var(--muted);font-size:1rem">(17)</span> <a href="mollusca_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Dolphin&#x27;s Grace <b style="display:inline;margin:0 6px 0 14px">Was</b>Mollusk</p>
+    <ul class="clade-list">
+      <li><a href="mollusk_field_guide.html#ammonite_mollusk">Ammonite</a><span class="pos">Cephalopoda: Ammonoidea (extinct) · mollusk form</span></li>
+      <li><a href="mollusk_field_guide.html#anemone_mollusk">Anemone</a><span class=flag>guest</span><span class="pos">Cnidaria: Actiniaria · mollusk form</span></li>
+      <li><a href="mollusk_field_guide.html#charybdis_mollusk">Charybdis</a><span class="pos">Cephalopoda per her tentacle skirt (myth) · mollusk form</span></li>
+      <li><a href="mollusk_field_guide.html#cuttlefish_mollusk">Cuttlefish</a><span class="pos">Cephalopoda: Sepiida · mollusk form</span></li>
+      <li><a href="mollusk_field_guide.html#giant_kraken_mollusk">Giant Kraken</a><span class="pos">Cephalopoda (myth) · mollusk form</span></li>
+      <li><a href="mollusk_field_guide.html#ika_mollusk">Ika</a><span class="pos">Cephalopoda: Decapodiformes (squid) · mollusk form</span></li>
+      <li><a href="mollusk_field_guide.html#jellyfish_mollusk">Jellyfish Girl</a><span class=flag>guest</span><span class="pos">Cnidaria: Scyphozoa (her guide entry already says so) · mollusk form</span></li>
+      <li><a href="mollusk_field_guide.html#kraken_mollusk">Kraken</a><span class="pos">Cephalopoda (myth) · mollusk form</span></li>
+      <li><a href="mollusk_field_guide.html#min_min_mollusk">Min Min Light</a><span class=flag>judgement call</span><span class="pos">Cnidaria per this design (cap + tentacles); the folklore Min Min is a light · mollusk form</span></li>
+      <li><a href="mollusk_field_guide.html#nautilus_mollusk">Nautilus</a><span class="pos">Cephalopoda: Nautilidae · mollusk form</span></li>
+      <li><a href="mollusk_field_guide.html#octopus_mollusk">Octopus Girl</a><span class="pos">Cephalopoda: Octopoda · mollusk form</span></li>
+      <li><a href="lamia_field_guide.html#sandworm_lamia">Sandworm</a><span class=flag>guest</span><span class="pos">Annelida (Harmontide sandworm); worms and mollusks are both Lophotrochozoa · lamia form</span></li>
+      <li><a href="mollusk_field_guide.html#scylla_mollusk">Scylla</a><span class="pos">Cephalopoda per her tentacle skirt (myth) · mollusk form</span></li>
+      <li><a href="mollusk_field_guide.html#sea_slug_mollusk">Sea Slug</a><span class="pos">Gastropoda: Nudibranchia · mollusk form</span></li>
+      <li><a href="mollusk_field_guide.html#snail_mollusk">Snail Girl</a><span class="pos">Gastropoda · mollusk form</span></li>
+      <li><a href="mollusk_field_guide.html#spewslug_mollusk">Spewslug</a><span class="pos">Gastropoda: slug (Harmontide) · mollusk form</span></li>
+      <li><a href="mollusk_field_guide.html#squidkin_mollusk">Squidkin</a><span class="pos">Cephalopoda: Decapodiformes (Harmontide) · mollusk form</span></li>
+    </ul>
+  </section>
+  <section id="flora">
+    <div class="eyebrow">Plantae + Fungi (two kingdoms, one guide)</div>
+    <h2>Plants &amp; fungi <span style="color:var(--muted);font-size:1rem">(14)</span> <a href="flora_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>none <b style="display:inline;margin:0 6px 0 14px">Was</b>Flora</p>
+    <ul class="clade-list">
+      <li><a href="flora_field_guide.html#alraune_flora">Alraune</a><span class="pos">Plantae: flowering plant (folklore) · flora form</span></li>
+      <li><a href="flora_field_guide.html#cactus_flora">Cactus Girl</a><span class="pos">Plantae: Cactaceae · flora form</span></li>
+      <li><a href="centaur_field_guide.html#censhroom_centaur">Censhroom</a><span class=flag>judgement call</span><span class="pos">Fungi on an unspecified taur; the fungus is the only clear animal-or-not · centaur form</span></li>
+      <li><a href="flora_field_guide.html#dryad_flora">Dryad</a><span class="pos">Plantae: tree (myth) · flora form</span></li>
+      <li><a href="flora_field_guide.html#ent_flora">Ent</a><span class="pos">Plantae: tree (myth) · flora form</span></li>
+      <li><a href="flora_field_guide.html#kesaran_pasaran_flora">Kesaran Pasaran</a><span class="pos">Plantae: Asteraceae (dandelion seed per this design) · flora form</span></li>
+      <li><a href="flora_field_guide.html#lotus_flora">Lotus</a><span class="pos">Plantae: Nelumbonaceae, Nelumbo · flora form</span></li>
+      <li><a href="flora_field_guide.html#mandragora_flora">Mandragora</a><span class="pos">Plantae: Solanaceae, Mandragora · flora form</span></li>
+      <li><a href="flora_field_guide.html#matango_flora">Matango</a><span class="pos">Fungi: Agaricales (fungi are closer to animals than to plants) · flora form</span></li>
+      <li><a href="flora_field_guide.html#rafflesia_flora">Rafflesia</a><span class="pos">Plantae: Rafflesiaceae · flora form</span></li>
+      <li><a href="flora_field_guide.html#rose_flora">Rose</a><span class="pos">Plantae: Rosaceae, Rosa · flora form</span></li>
+      <li><a href="flora_field_guide.html#shiitake_flora">Shiitake</a><span class="pos">Fungi: Lentinula edodes · flora form</span></li>
+      <li><a href="flora_field_guide.html#sunflower_flora">Sunflower</a><span class="pos">Plantae: Asteraceae, Helianthus · flora form</span></li>
+      <li><a href="flora_field_guide.html#venus_flytrap_flora">Venus Flytrap</a><span class="pos">Plantae: Droseraceae, Dionaea muscipula · flora form</span></li>
+    </ul>
+  </section>
+  <section id="fae">
+    <div class="eyebrow">Outside the tree</div>
+    <h2>Fae &amp; folk (elves, fairies, spirits) <span style="color:var(--muted);font-size:1rem">(26)</span> <a href="fae_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Hero of the Village <b style="display:inline;margin:0 6px 0 14px">Was</b>Elf</p>
+    <ul class="clade-list">
+      <li><a href="elf_field_guide.html#angel_elf">Angel</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="elf_field_guide.html#apsara_elf">Apsara</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="elf_field_guide.html#blood_elf">Blood Elf</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="elf_field_guide.html#brownie_elf">Brownie</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="elf_field_guide.html#dark_elf">Dark Elf</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="elf_field_guide.html#desert_elf">Desert Elf</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="elf_field_guide.html#domovoi_elf">Domovoi</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="elf_field_guide.html#dwarf_elf">Dwarf</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="bug_field_guide.html#fairy_bug">Fairy</a><span class="pos">outside taxonomy (fairy: insect wings are an ornament) · bug form</span></li>
+      <li><a href="bug_field_guide.html#fairy_queen_bug">Fairy Queen</a><span class="pos">outside taxonomy (fairy: insect wings are an ornament) · bug form</span></li>
+      <li><a href="elf_field_guide.html#gandharva_elf">Gandharva</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="elf_field_guide.html#gnome_elf">Gnome</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="elf_field_guide.html#high_elf">High Elf</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="elf_field_guide.html#kaguya_elf">Kaguya</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="elf_field_guide.html#knocker_elf">Knocker</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="flora_field_guide.html#leshy_flora">Leshy</a><span class=flag>judgement call</span><span class="pos">outside taxonomy (forest spirit; moss beard is an ornament) · flora form</span></li>
+      <li><a href="elf_field_guide.html#mad_hatter_elf">Mad Hatter</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="elf_field_guide.html#night_elf">Night Elf</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="elf_field_guide.html#norn_elf">Norn</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="elf_field_guide.html#nymph_elf">Nymph</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="elf_field_guide.html#ophanim_elf">Ophanim</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="bug_field_guide.html#pixi_bug">Pixi</a><span class="pos">outside taxonomy (fairy: insect wings are an ornament) · bug form</span></li>
+      <li><a href="bug_field_guide.html#rlff_bug">Rlff</a><span class="pos">outside taxonomy (fairy: insect wings are an ornament) · bug form</span></li>
+      <li><a href="elf_field_guide.html#snow_elf">Snow Elf</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="elf_field_guide.html#valkyrie_elf">Valkyrie</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+      <li><a href="elf_field_guide.html#wood_elf">Wood Elf</a><span class="pos">outside taxonomy (humanoid folk) · elf form</span></li>
+    </ul>
+  </section>
+  <section id="dragon">
+    <div class="eyebrow">Outside the tree</div>
+    <h2>Dragons &amp; chimeras <span style="color:var(--muted);font-size:1rem">(17)</span> <a href="dragon_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Fire Resistance + Strength <b style="display:inline;margin:0 6px 0 14px">Was</b>Dragon</p>
+    <ul class="clade-list">
+      <li><a href="dragon_field_guide.html#alebrije_dragon">Alebrije</a><span class="pos">outside taxonomy (chimera of several animals) · dragon form</span></li>
+      <li><a href="dragon_field_guide.html#amphiptere_dragon">Amphiptere</a><span class="pos">outside taxonomy (dragon) · dragon form</span></li>
+      <li><a href="dragon_field_guide.html#bahamut_dragon">Bahamut</a><span class="pos">outside taxonomy (dragon) · dragon form</span></li>
+      <li><a href="dragon_field_guide.html#chimera_dragon">Chimera</a><span class="pos">outside taxonomy (chimera of several animals) · dragon form</span></li>
+      <li><a href="dragon_field_guide.html#cockatrice_dragon">Cockatrice</a><span class="pos">outside taxonomy (chimera of several animals) · dragon form</span></li>
+      <li><a href="dragon_field_guide.html#ender_dragon">Ender Dragon</a><span class="pos">outside taxonomy (dragon) · dragon form</span></li>
+      <li><a href="dragon_field_guide.html#gryphon_dragon">Gryphon</a><span class="pos">outside taxonomy (chimera of several animals) · dragon form</span></li>
+      <li><a href="dragon_field_guide.html#kannae_dragon">Kannae</a><span class="pos">outside taxonomy (dragon) · dragon form</span></li>
+      <li><a href="dragon_field_guide.html#kun_dragon">Kun</a><span class="pos">outside taxonomy (dragon) · dragon form</span></li>
+      <li><a href="dragon_field_guide.html#long_dragon">Long Dragon</a><span class="pos">outside taxonomy (dragon) · dragon form</span></li>
+      <li><a href="dragon_field_guide.html#macawtl_dragon">Macawtl</a><span class="pos">outside taxonomy (feathered serpent: bird + snake) · dragon form</span></li>
+      <li><a href="dragon_field_guide.html#nenekea_dragon">Nenekea</a><span class="pos">outside taxonomy (dragon) · dragon form</span></li>
+      <li><a href="dragon_field_guide.html#quetzalcoatl_dragon">Quetzalcoatl</a><span class="pos">outside taxonomy (feathered serpent: bird + snake) · dragon form</span></li>
+      <li><a href="centaur_field_guide.html#shedim_centaur">Shedim</a><span class="pos">no single animal (deer-fox spirit) · centaur form</span></li>
+      <li><a href="dragon_field_guide.html#wyrm_dragon">Wyrm</a><span class="pos">outside taxonomy (dragon) · dragon form</span></li>
+      <li><a href="dragon_field_guide.html#wyvern_dragon">Wyvern</a><span class="pos">outside taxonomy (dragon) · dragon form</span></li>
+      <li><a href="dragon_field_guide.html#orochi_dragon">Yamata no Orochi</a><span class="pos">outside taxonomy (dragon) · dragon form</span></li>
+    </ul>
+  </section>
+  <section id="undead">
+    <div class="eyebrow">Outside the tree</div>
+    <h2>Undead <span style="color:var(--muted);font-size:1rem">(33)</span> <a href="undead_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Invisibility <b style="display:inline;margin:0 6px 0 14px">Was</b>Undead</p>
+    <ul class="clade-list">
+      <li><a href="undead_field_guide.html#banshee_undead">Banshee</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#candle_spirit_undead">Candle Spirit</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#cordyceps_undead">Cordyceps Infected</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#draugr_undead">Draugr</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#drowned_undead">Drowned</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#dullahan_undead">Dullahan</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#famished_undead">Famished</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#frankenstein_undead">Frankenstein&#x27;s Monster</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#gaitress_undead">Gaitress</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#gashadokuro_undead">Gashadokuro</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#ghoul_undead">Ghoul</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#hand_undead">Hand</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#jiangshi_undead">Jiangshi</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#kasurenijimi_undead">Kasurenijimi</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#koschei_undead">Koschei</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#llorona_undead">La Llorona</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#mano_peluda_undead">La Mano Peluda</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#lich_undead">Lich</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#living_doll_undead">Living Doll</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#lost_soul_undead">Lost Soul</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#mummy_undead">Mummy</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#nasnas_undead">Nasnas</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#phantom_undead">Phantom Girl</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#poltergeist_undead">Poltergeist</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#sandman_undead">Sandman</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#skeleton_undead">Skeleton</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#soul_cluster_undead">Soul Cluster</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#soul_leech_undead">Soul Leech</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#vampire_undead">Vampire</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#will_o_wisp_undead">Will-o&#x27;-wisp</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#yuki_onna_undead">Yuki-onna</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#yurei_undead">Yurei</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+      <li><a href="undead_field_guide.html#zombie_undead">Zombie Girl</a><span class="pos">outside taxonomy (undead) · undead form</span></li>
+    </ul>
+  </section>
+  <section id="devil">
+    <div class="eyebrow">Outside the tree</div>
+    <h2>Devils, oni &amp; giants <span style="color:var(--muted);font-size:1rem">(30)</span> <a href="devil_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Absorption <b style="display:inline;margin:0 6px 0 14px">Was</b>Devil</p>
+    <ul class="clade-list">
+      <li><a href="devil_field_guide.html#akaname_devil">Akaname</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#behemoth_devil">Behemoth</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#book_spirit_devil">Book Spirit</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#chochin_obake_devil">Chochin-obake</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#cyclops_devil">Cyclops</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#demon_devil">Demon</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#fire_giant_devil">Fire Giant</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#firesprite_devil">Firesprite</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#frost_giant_devil">Frost Giant</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#fury_devil">Fury</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#genie_devil">Genie</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#goblin_devil">Goblin</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#greater_devil">Greater Devil</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#gremlin_devil">Gremlin</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#ifrit_devil">Ifrit</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#ittan_momen_devil">Ittan-momen</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#jack_o_lantern_devil">Jack o&#x27;Lantern</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#jiang_shi_devil">Jiang Shi</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#karakasa_obake_devil">Karakasa Obake</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#kikimora_devil">Kikimora</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#lesser_devil">Lesser Devil</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#lilith_devil">Lilith</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#ogre_devil">Ogre</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#oni_devil">Oni</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#pazuzu_devil">Pazuzu</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#rokurokubi_devil">Rokurokubi</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#succubus_devil">Succubus</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#taotie_devil">Taotie</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#troll_devil">Troll</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+      <li><a href="devil_field_guide.html#wrath_devil">Wrath</a><span class="pos">outside taxonomy (spirits &amp; demons) · devil form</span></li>
+    </ul>
+  </section>
+  <section id="slime">
+    <div class="eyebrow">Outside the tree</div>
+    <h2>Slimes <span style="color:var(--muted);font-size:1rem">(11)</span> <a href="slime_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Health Boost + Jump Boost <b style="display:inline;margin:0 6px 0 14px">Was</b>Slime</p>
+    <ul class="clade-list">
+      <li><a href="slime_field_guide.html#amethyst_slime">Amethyst Slime</a><span class="pos">outside taxonomy (living jelly) · slime form</span></li>
+      <li><a href="slime_field_guide.html#copper_slime">Copper Slime</a><span class="pos">outside taxonomy (living jelly) · slime form</span></li>
+      <li><a href="slime_field_guide.html#ender_slime">Ender Slime</a><span class="pos">outside taxonomy (living jelly) · slime form</span></li>
+      <li><a href="slime_field_guide.html#frost_slime">Frost Slime</a><span class="pos">outside taxonomy (living jelly) · slime form</span></li>
+      <li><a href="slime_field_guide.html#honey_slime">Honey Slime</a><span class="pos">outside taxonomy (living jelly) · slime form</span></li>
+      <li><a href="slime_field_guide.html#klabuster_slime">Klabuster</a><span class="pos">outside taxonomy (living jelly) · slime form</span></li>
+      <li><a href="slime_field_guide.html#magma_slime">Magma Slime</a><span class="pos">outside taxonomy (living jelly) · slime form</span></li>
+      <li><a href="slime_field_guide.html#mimic_slime">Mimic</a><span class="pos">outside taxonomy (living jelly) · slime form</span></li>
+      <li><a href="slime_field_guide.html#mixed_slime">Mixed Slime</a><span class="pos">outside taxonomy (living jelly) · slime form</span></li>
+      <li><a href="slime_field_guide.html#undine_slime">Undine</a><span class="pos">outside taxonomy (living jelly) · slime form</span></li>
+      <li><a href="slime_field_guide.html#verdant_slime">Verdant Slime</a><span class="pos">outside taxonomy (living jelly) · slime form</span></li>
+    </ul>
+  </section>
+  <section id="construct">
+    <div class="eyebrow">Outside the tree</div>
+    <h2>Constructs <span style="color:var(--muted);font-size:1rem">(8)</span> <a href="construct_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>none <b style="display:inline;margin:0 6px 0 14px">Was</b>Construct</p>
+    <ul class="clade-list">
+      <li><a href="construct_field_guide.html#automaton_construct">Automaton</a><span class="pos">made, not born · construct form</span></li>
+      <li><a href="construct_field_guide.html#gargoyle_construct">Gargoyle</a><span class="pos">made, not born · construct form</span></li>
+      <li><a href="construct_field_guide.html#golem_construct">Golem</a><span class="pos">made, not born · construct form</span></li>
+      <li><a href="construct_field_guide.html#scarecrow_construct">Scarecrow</a><span class="pos">made, not born · construct form</span></li>
+      <li><a href="construct_field_guide.html#snowgirl_construct">Snowgirl</a><span class="pos">made, not born · construct form</span></li>
+      <li><a href="construct_field_guide.html#talosling_construct">Talosling</a><span class="pos">made, not born · construct form</span></li>
+      <li><a href="construct_field_guide.html#tin_jack_construct">Tin Jack</a><span class="pos">made, not born · construct form</span></li>
+      <li><a href="construct_field_guide.html#tin_squirrel_construct">Tin Squirrel</a><span class="pos">made, not born · construct form</span></li>
+    </ul>
+  </section>
+  <section id="rider">
+    <div class="eyebrow">Outside the tree</div>
+    <h2>Riders <span style="color:var(--muted);font-size:1rem">(5)</span> <a href="rider_clade_guide.html" style="font-size:.9rem;color:var(--accent)">the branch's guide →</a></h2>
+    <p class="section-intro"><b style="display:inline;margin-right:6px">Milk</b>Strength + Resistance <b style="display:inline;margin:0 6px 0 14px">Was</b>Rider</p>
+    <ul class="clade-list">
+      <li><a href="rider_field_guide.html#charro_negro_rider">Charro Negro</a><span class="pos">outside taxonomy (riders) · rider form</span></li>
+      <li><a href="rider_field_guide.html#death_rider">Death</a><span class="pos">outside taxonomy (riders) · rider form</span></li>
+      <li><a href="rider_field_guide.html#famine_rider">Famine</a><span class="pos">outside taxonomy (riders) · rider form</span></li>
+      <li><a href="rider_field_guide.html#pestilence_rider">Pestilence</a><span class="pos">outside taxonomy (riders) · rider form</span></li>
+      <li><a href="rider_field_guide.html#war_rider">War</a><span class="pos">outside taxonomy (riders) · rider form</span></li>
+    </ul>
+  </section>
+  <footer>Generated by <code>tools/build_tree_guide.py</code> from <code>tools/taxonomy.py</code>. The form guides (the volume bar above) keep the bodies, life cycles and behaviour.</footer>
+</main>
+</body>
+</html>

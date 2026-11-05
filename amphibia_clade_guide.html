@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frogs, toads &amp; salamanders — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · Amphibia (Anura + Caudata)</div>
+  <h1>Frogs, toads &amp; salamanders</h1>
+  <p class="lede">Frogs, toads and salamanders: the anurans, the newts and salamanders who used to sit among the lizards, and the axolotls and olms who swam with the merfolk.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Jump Boost + Water Breathing · <b style="display:inline;color:var(--accent)">Was:</b> Anuran Milk</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Anuran form · 14</b><a href="anuran_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="anuran_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Merfolk form · 3</b><a href="merfolk_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="merfolk_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Lizardfolk form · 2</b><a href="lizardfolk_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="lizardfolk_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (19)</h2>
+    <div class="grid">
+      <article class="card" id="axolotl_mermaid">
+        <div class="card-top"><span class="group">Lush caves</span><span class="tag">Sweet · resilient</span></div>
+        <h3>Axolotl <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Sweet, smiley, unflappable</p>
+        <p><b>Ecology &amp; behaviour</b>Lives in the underground lakes of lush caves. Feathery gill fronds, a permanent smile, and a body that heals almost anything. Plays dead when hurt.</p>
+        <p><b>Signature: Regeneration &amp; playing dead</b>Hurt, she plays dead and heals fast. After she fights beside you, you get Regeneration (like a vanilla axolotl). She can live on land for a long time if it is damp.</p>
+        <p><b>Player interaction</b>Bring tropical fish in a bucket. Help her fight drowned and she will help you.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Leucistic pink (default)</strong> · Pale pink with red gills</span><span class="swatch"><strong>Wild</strong> · Speckled olive brown</span><span class="swatch"><strong>Gold</strong> · Golden yellow</span><span class="swatch"><strong>Cyan</strong> · Pale cyan</span><span class="swatch"><strong>Blue</strong> · Deep blue (very rare, as in vanilla)</span><span class="swatch"><strong>Mud Fin</strong> · Blue with orange cheek gills</span></div>
+        <p><b>Spawns in</b><code>lush_caves</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Caudata: Ambystoma mexicanum</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#axolotl_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="axolume_mermaid">
+        <div class="card-top"><span class="group">Lush caves</span><span class="tag">Glowing · gentle</span></div>
+        <h3>Axolume <span style="color:var(--muted);font-size:.9rem">(about 1.4 blocks)</span></h3>
+        <p><b>Temperament</b>Gentle</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide axolotl whose frills and spots glow in the dark water of the lush caves.</p>
+        <p><b>Signature: Glow</b>She lights the water around her, and her friend heals beside her (Regeneration).</p>
+        <p><b>Player interaction</b>Tropical fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Azure (default)</strong> · Blue glow</span><span class="swatch"><strong>Rose</strong> · Pink glow</span><span class="swatch"><strong>Gold</strong> · Gold glow</span><span class="swatch"><strong>Jade</strong> · Green glow</span><span class="swatch"><strong>Void</strong> · Black, violet glow</span></div>
+        <p><b>Spawns in</b><code>lush_caves</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Caudata: Ambystoma (Harmontide)</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#axolume_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="bullfrog"><div class="card-top"><span class="group">Anuran</span></div><h3>Bullfrog</h3><p class="place"><b>True position</b>Anura: Ranidae, Lithobates catesbeianus</p><p><b>Body</b>Anuran form · <a href="anuran_field_guide.html">its guide</a></p></article>
+      <article class="card" id="bullywug"><div class="card-top"><span class="group">Anuran</span></div><h3>Bullywug</h3><p class="place"><b>True position</b>Anura (folklore frog-folk)</p><p><b>Body</b>Anuran form · <a href="anuran_field_guide.html">its guide</a></p></article>
+      <article class="card" id="cane_toad"><div class="card-top"><span class="group">Anuran</span></div><h3>Cane Toad</h3><p class="place"><b>True position</b>Anura: Bufonidae, Rhinella marina</p><p><b>Body</b>Anuran form · <a href="anuran_field_guide.html">its guide</a></p></article>
+      <article class="card" id="desert_rain_frog"><div class="card-top"><span class="group">Anuran</span></div><h3>Desert Rain Frog</h3><p class="place"><b>True position</b>Anura: Breviceps macrops</p><p><b>Body</b>Anuran form · <a href="anuran_field_guide.html">its guide</a></p></article>
+      <article class="card" id="fire_bellied_toad"><div class="card-top"><span class="group">Anuran</span></div><h3>Fire-Bellied Toad</h3><p class="place"><b>True position</b>Anura: Bombinatoridae</p><p><b>Body</b>Anuran form · <a href="anuran_field_guide.html">its guide</a></p></article>
+      <article class="card" id="glass_frog"><div class="card-top"><span class="group">Anuran</span></div><h3>Glass Frog</h3><p class="place"><b>True position</b>Anura: Centrolenidae</p><p><b>Body</b>Anuran form · <a href="anuran_field_guide.html">its guide</a></p></article>
+      <article class="card" id="goliath_frog"><div class="card-top"><span class="group">Anuran</span></div><h3>Goliath Frog</h3><p class="place"><b>True position</b>Anura: Conraua goliath</p><p><b>Body</b>Anuran form · <a href="anuran_field_guide.html">its guide</a></p></article>
+      <article class="card" id="mailtoad"><div class="card-top"><span class="group">Anuran</span></div><h3>Mailtoad</h3><p class="place"><b>True position</b>Anura: Bufonidae (Harmontide)</p><p><b>Body</b>Anuran form · <a href="anuran_field_guide.html">its guide</a></p></article>
+      <article class="card" id="mucus_toad"><div class="card-top"><span class="group">Anuran</span></div><h3>Mucus Toad</h3><p class="place"><b>True position</b>Anura: Bufonidae (MGE)</p><p><b>Body</b>Anuran form · <a href="anuran_field_guide.html">its guide</a></p></article>
+      <article class="card" id="natterjack"><div class="card-top"><span class="group">Anuran</span></div><h3>Natterjack</h3><p class="place"><b>True position</b>Anura: Bufonidae, Epidalea calamita</p><p><b>Body</b>Anuran form · <a href="anuran_field_guide.html">its guide</a></p></article>
+      <article class="card" id="newt_lizardfolk">
+        <div class="card-top"><span class="group">Ponds and streams</span><span class="tag">Low · alert</span></div>
+        <h3>Newt <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Alert</p>
+        <p><b>Ecology &amp; behaviour</b>A grown woman built like a newt: long, low and splayed out on all fours with her head up, and a keeled tail. She can stand if she wants to, for a little while, but she would rather not. She doesn&#x27;t bother with a top: anything up front would only drag.</p>
+        <p><b>Signature: Regrowth</b>Her skin stings whatever bites her. In the water she heals fast, and befriended, her friend beside her in the water heals too. She rears up to look around, then drops back down.</p>
+        <p><b>Player interaction</b>Spider eyes and kelp.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Olive (default)</strong> · Olive</span><span class="swatch"><strong>Crested</strong> · Crested</span><span class="swatch"><strong>Alpine</strong> · Alpine</span><span class="swatch"><strong>Fire</strong> · Fire</span><span class="swatch"><strong>Marbled</strong> · Marbled</span></div>
+        <p><b>Spawns in</b><code>swamp, river, forest, lush_caves</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Caudata: Salamandridae</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#newt_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="olm_mermaid">
+        <div class="card-top"><span class="group">Dripstone caves</span><span class="tag">Blind · patient</span></div>
+        <h3>Olm <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Patient</p>
+        <p><b>Ecology &amp; behaviour</b>The blind cave salamander, pale pink, no eyes at all. She has never needed them.</p>
+        <p><b>Signature: Lightless</b>Befriended, her friend near her sees in the dark, and nothing can blind them.</p>
+        <p><b>Player interaction</b>Cod and glow berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Pink (default)</strong> · Pink</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Peach</strong> · Peach</span><span class="swatch"><strong>Lilac</strong> · Lilac</span></div>
+        <p><b>Spawns in</b><code>dripstone_caves</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Caudata: Proteus anguinus</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#olm_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="poison_dart_frog"><div class="card-top"><span class="group">Anuran</span></div><h3>Poison Dart Frog</h3><p class="place"><b>True position</b>Anura: Dendrobatidae</p><p><b>Body</b>Anuran form · <a href="anuran_field_guide.html">its guide</a></p></article>
+      <article class="card" id="salamander_lizardfolk">
+        <div class="card-top"><span class="group">Near lava</span><span class="tag">Fiery · bold</span></div>
+        <h3>Salamander <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Hot-headed, bold, warm</p>
+        <p><b>Ecology &amp; behaviour</b>The fire salamander of legend, whose tail is a living flame. She bathes in lava.</p>
+        <p><b>Signature: Fire tail</b>Fireproof, swims in lava, glows. Her hits set things alight.</p>
+        <p><b>Player interaction</b>Meet her near lava; bring eggs.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Ember (default)</strong> · Orange with yellow spots</span><span class="swatch"><strong>Crimson</strong> · Red</span><span class="swatch"><strong>Soul</strong> · Blue flame</span><span class="swatch"><strong>Obsidian</strong> · Black with orange</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Nurse</strong> · Pink and spotted, a nurse&#x27;s dress and cap, a huge syringe in hand</span><span class="swatch"><strong>Ember Tail</strong> · Orange, a cream belly, a flame at her tail tip</span></div>
+        <p><b>Spawns in</b><code>basalt_deltas, nether_wastes, crimson_forest</code></p>
+        <p class="risk"><b>Danger</b>Moderate (fire).</p>
+              <p class="place"><b>True position</b>Caudata: Salamandra (legend; salamanders are amphibians, not lizards)</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#salamander_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="surinam_toad"><div class="card-top"><span class="group">Anuran</span></div><h3>Surinam Toad</h3><p class="place"><b>True position</b>Anura: Pipidae, Pipa pipa</p><p><b>Body</b>Anuran form · <a href="anuran_field_guide.html">its guide</a></p></article>
+      <article class="card" id="tree_frog"><div class="card-top"><span class="group">Anuran</span></div><h3>Tree Frog</h3><p class="place"><b>True position</b>Anura: Hylidae</p><p><b>Body</b>Anuran form · <a href="anuran_field_guide.html">its guide</a></p></article>
+      <article class="card" id="vodyanoy"><div class="card-top"><span class="group">Anuran</span></div><h3>Vodyanoy</h3><p class="place"><b>True position</b>Anura (Slavic river spirit)</p><p><b>Body</b>Anuran form · <a href="anuran_field_guide.html">its guide</a></p></article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

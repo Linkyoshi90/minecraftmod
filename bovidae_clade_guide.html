@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cattle, sheep, goats &amp; antelope — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · Mammalia &gt; Artiodactyla &gt; Ruminantia &gt; Bovidae</div>
+  <h1>Cattle, sheep, goats &amp; antelope</h1>
+  <p class="lede">Cattle, sheep, goats and antelope: horns that are never shed. Most minotaurs live here.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Strength · <b style="display:inline;color:var(--accent)">Was:</b> Minotaur</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Minotaur form · 16</b><a href="minotaur_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="minotaur_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Centaur form · 1</b><a href="centaur_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="centaur_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (17)</h2>
+    <div class="grid">
+      <article class="card" id="aurochs_minotaur">
+        <div class="card-top"><span class="group">Old-growth forests</span><span class="tag">Ancient · mighty</span></div>
+        <h3>Aurochs <span style="color:var(--muted);font-size:.9rem">(about 2.4 blocks)</span></h3>
+        <p><b>Temperament</b>Fearless, calm, ancient</p>
+        <p><b>Ecology &amp; behaviour</b>The wild ancestor of all cattle, huge and long-horned. Nothing scares her.</p>
+        <p><b>Signature: Unstoppable charge</b>Her charge breaks through leaves and fences and knocks back anything, even an iron golem. Knockback does not move her.</p>
+        <p><b>Player interaction</b>Feed her hay; let her come to you.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black with a pale stripe</span><span class="swatch"><strong>Red</strong> · Red-brown</span><span class="swatch"><strong>Dun</strong> · Dun</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Primal</strong> · Black and tan</span></div>
+        <p><b>Spawns in</b><code>old_growth_spruce_taiga, old_growth_pine_taiga, forest, plains</code></p>
+        <p class="risk"><b>Danger</b>High if provoked.</p>
+              <p class="place"><b>True position</b>Bovidae: Bos primigenius (extinct)</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#aurochs_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="bison_minotaur">
+        <div class="card-top"><span class="group">Snowy plains &amp; prairie</span><span class="tag">Shaggy · tough</span></div>
+        <h3>Bison <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Tough, stubborn, warm-hearted</p>
+        <p><b>Ecology &amp; behaviour</b>Shaggy-maned and built for winter. Bison herds roam far and stampede together.</p>
+        <p><b>Signature: Stampede</b>When one panics the whole herd runs, trampling what is in the way. She never freezes in powder snow.</p>
+        <p><b>Player interaction</b>Walk with the herd, never in front of it.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Plains (default)</strong> · Dark brown with a shaggy mane</span><span class="swatch"><strong>Wood</strong> · Darker</span><span class="swatch"><strong>White</strong> · Rare white</span><span class="swatch"><strong>Dark</strong> · Near black</span><span class="swatch"><strong>Golden</strong> · Golden brown</span></div>
+        <p><b>Spawns in</b><code>snowy_plains, plains, savanna, snowy_taiga</code></p>
+        <p class="risk"><b>Danger</b>Moderate in a herd.</p>
+              <p class="place"><b>True position</b>Bovidae: Bison</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#bison_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="brasshorn_minotaur">
+        <div class="card-top"><span class="group">Mountains</span><span class="tag">Proud · surefooted</span></div>
+        <h3>Brasshorn Ram <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Proud, surefooted</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide mountain ram girl, shaggy and blue, her great curling horns grown into brass. Brass bands her brow and hooves, a white rune shines between her eyes and a woven blanket hangs over her back. She leaps from crag to crag.</p>
+        <p><b>Signature: Mountain footing</b>Befriended, her friend near her jumps higher (Jump Boost).</p>
+        <p><b>Player interaction</b>Wheat and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue wool, brass horns</span><span class="swatch"><strong>Grey</strong> · Grey, a red blanket</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>White</strong> · White, silver horns</span><span class="swatch"><strong>Black</strong> · Black, a red blanket</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, stony_peaks, meadow, jagged_peaks</code></p>
+        <p class="risk"><b>Danger</b>Moderate (her horns).</p>
+              <p class="place"><b>True position</b>Bovidae: Ovis (Harmontide)</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#brasshorn_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="bronzejaw_minotaur">
+        <div class="card-top"><span class="group">Farmland</span><span class="tag">Steady · strong</span></div>
+        <h3>Bronzejaw Ox <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Steady, patient</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide ox in brass, with a bronze guard over her jaw and a yoke on her shoulders.</p>
+        <p><b>Signature: Plough</b>Led on a lead, she ploughs as she walks: the grass and dirt she passes over turns to farmland.</p>
+        <p><b>Player interaction</b>Wheat and hay.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, brass</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Red</strong> · Red</span></div>
+        <p><b>Spawns in</b><code>plains, savanna</code></p>
+        <p class="risk"><b>Danger</b>Low (her horns).</p>
+              <p class="place"><b>True position</b>Bovidae: Bos taurus (Harmontide)</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#bronzejaw_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="cattle_minotaur">
+        <div class="card-top"><span class="group">Plains &amp; farms</span><span class="tag">Gentle · generous</span></div>
+        <h3>Cattle <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Gentle, patient, motherly</p>
+        <p><b>Ecology &amp; behaviour</b>The farm minotaur. Grazes, gives the best milk and dozes in the sun.</p>
+        <p><b>Signature: The best milk</b>She can be milked twice as often at high friendship, and brings milk and wheat as presents.</p>
+        <p><b>Player interaction</b>Brush her and feed her wheat.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Holstein (default)</strong> · Black and white patches</span><span class="swatch"><strong>Jersey</strong> · Fawn</span><span class="swatch"><strong>Highland</strong> · Shaggy ginger</span><span class="swatch"><strong>Angus</strong> · All black</span><span class="swatch"><strong>Hereford</strong> · Red with a white face</span><span class="swatch"><strong>Pink Dairy</strong> · Pink with a cream belly and blue eyes</span></div>
+        <p><b>Spawns in</b><code>plains, sunflower_plains, meadow</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Bovidae: Bos taurus</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#cattle_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="dustbison_minotaur">
+        <div class="card-top"><span class="group">Badlands and plains</span><span class="tag">Playful · sturdy</span></div>
+        <h3>Dustbison <span style="color:var(--muted);font-size:.9rem">(about 1.4 blocks)</span></h3>
+        <p><b>Temperament</b>Playful, sturdy</p>
+        <p><b>Ecology &amp; behaviour</b>A fluffy Harmontide bison calf with cream-tipped fur and gold spots, who loves nothing more than a roll in the dust.</p>
+        <p><b>Signature: Dust bath</b>Befriended, when her friend near her catches fire she rolls them in the dust: the fire goes out and they are fireproof for a few seconds.</p>
+        <p><b>Player interaction</b>Wheat and hay.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, cream tips, gold spots</span><span class="swatch"><strong>Plains</strong> · Brown bison</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Rose</strong> · Rose</span><span class="swatch"><strong>Dusk</strong> · Dusk violet</span></div>
+        <p><b>Spawns in</b><code>badlands, savanna, plains</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Bovidae: Bison (Harmontide)</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#dustbison_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="highland_minotaur">
+        <div class="card-top"><span class="group">Snowy hills</span><span class="tag">Shaggy · unbothered</span></div>
+        <h3>Highland <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Calm, shaggy</p>
+        <p><b>Ecology &amp; behaviour</b>Highland cattle (Bovidae: Bos taurus), the long-haired cattle of the Scottish Highlands, with a fringe over the eyes.</p>
+        <p><b>Signature: Never cold</b>Her shaggy coat keeps out any cold: she never freezes, and walks on powder snow.</p>
+        <p><b>Player interaction</b>Wheat.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Ginger</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Dun</strong> · Pale gold</span><span class="swatch"><strong>White</strong> · Cream</span><span class="swatch"><strong>Brindle</strong> · Striped brown</span></div>
+        <p><b>Spawns in</b><code>snowy_slopes, grove, windswept_hills, snowy_plains</code></p>
+        <p class="risk"><b>Danger</b>Low (if provoked).</p>
+              <p class="place"><b>True position</b>Bovidae: Bos taurus</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#highland_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="minoan_minotaur">
+        <div class="card-top"><span class="group">Old ruins &amp; badlands</span><span class="tag">Fierce · noble</span></div>
+        <h3>Minoan <span style="color:var(--muted);font-size:.9rem">(about 2.3 blocks)</span></h3>
+        <p><b>Temperament</b>Proud, stern, honourable</p>
+        <p><b>Ecology &amp; behaviour</b>The minotaur of the labyrinth, in bronze and red. She guards a place and lets no one past without leave.</p>
+        <p><b>Signature: Labyrinth guard</b>She claims the spot where she spawned and charges strangers who come within ten blocks (after a warning bellow). Devoted, she guards your home instead.</p>
+        <p><b>Player interaction</b>Bring her wheat and respect her ground; she warns before she charges.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Bronze (default)</strong> · Dark brown, bronze armour</span><span class="swatch"><strong>Crimson</strong> · Red-brown, crimson cloth</span><span class="swatch"><strong>Ivory</strong> · Cream white</span><span class="swatch"><strong>Obsidian</strong> · Black</span><span class="swatch"><strong>Gilded</strong> · Gold-brown, gold trim</span></div>
+        <p><b>Spawns in</b><code>badlands, eroded_badlands, desert</code></p>
+        <p class="risk"><b>Danger</b>High if you trespass.</p>
+              <p class="place"><b>True position</b>Bovidae: Bos taurus (myth)</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#minoan_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="mooskuh_minotaur">
+        <div class="card-top"><span class="group">Lush caves</span><span class="tag">Soft · sleepy</span></div>
+        <h3>Mooskuh <span style="color:var(--muted);font-size:.9rem">(about 1.4 blocks)</span></h3>
+        <p><b>Temperament</b>Sleepy, gentle</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide calf grown all over with soft green moss.</p>
+        <p><b>Signature: Moss</b>The stone she rests on slowly grows into moss. You can milk her with a bucket.</p>
+        <p><b>Player interaction</b>Wheat and glow berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Moss green</span><span class="swatch"><strong>Lime</strong> · Bright moss</span><span class="swatch"><strong>Russet</strong> · Russet moss</span><span class="swatch"><strong>Lichen</strong> · Grey-green lichen</span><span class="swatch"><strong>Blue</strong> · Blue moss</span></div>
+        <p><b>Spawns in</b><code>lush_caves, swamp, dark_forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Bovidae: Bos taurus (Harmontide)</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#mooskuh_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="goat_centaur">
+        <div class="card-top"><span class="group">Mountains &amp; stony peaks</span><span class="tag">Bold · climber</span></div>
+        <h3>Mountain Goat <span style="color:var(--muted);font-size:.9rem">(about 2.1 blocks)</span></h3>
+        <p><b>Temperament</b>Bold, stubborn, playful</p>
+        <p><b>Ecology &amp; behaviour</b>Climbs cliffs other mobs cannot, on split hooves with soft grippy pads. Butts heads to settle arguments (with other goats, and with you if you are rude).</p>
+        <p><b>Signature: Cliff climbing &amp; head butt</b>She jumps two blocks high and never takes fall damage; ridden, so does her rider. Rude players (and hostile mobs) get rammed, like a vanilla goat but harder.</p>
+        <p><b>Player interaction</b>Climb up to her. Bring wheat.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>White (default)</strong> · White shaggy coat, black horns</span><span class="swatch"><strong>Alpine ibex</strong> · Grey-brown, ridged horns</span><span class="swatch"><strong>Chamois</strong> · Red-brown with a dark face stripe</span><span class="swatch"><strong>Grey</strong> · Slate grey</span><span class="swatch"><strong>Cream</strong> · Cream with darker legs</span></div>
+        <p><b>Spawns in</b><code>stony_peaks, jagged_peaks, snowy_slopes, frozen_peaks, windswept_hills</code></p>
+        <p class="risk"><b>Danger</b>Moderate: the ram.</p>
+              <p class="place"><b>True position</b>Bovidae: Caprinae, Oreamnos americanus</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#goat_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="oryx_minotaur">
+        <div class="card-top"><span class="group">Deserts and badlands</span><span class="tag">Calm · enduring</span></div>
+        <h3>Oryx <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Calm, enduring</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide oryx girl, pale blue with a cream crescent moon on her brow, two long horns swept back and a tufted tail. She crosses the desert for days on a single drink.</p>
+        <p><b>Signature: Desert stride</b>Befriended, her friend near her in the heat of deserts, badlands and savannas doesn&#x27;t tire (no hunger from exertion).</p>
+        <p><b>Player interaction</b>Wheat and cactus fruit (sweet berries).</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Pale blue, a cream crescent</span><span class="swatch"><strong>White</strong> · Arabian white</span><span class="swatch"><strong>Gemsbok</strong> · Grey with black marks</span><span class="swatch"><strong>Scimitar</strong> · White and chestnut</span><span class="swatch"><strong>Sand</strong> · Sand</span></div>
+        <p><b>Spawns in</b><code>desert, badlands, savanna_plateau</code></p>
+        <p class="risk"><b>Danger</b>Moderate (her horns).</p>
+              <p class="place"><b>True position</b>Bovidae: Oryx (Harmontide)</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#oryx_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="reedbull_minotaur">
+        <div class="card-top"><span class="group">River marshes</span><span class="tag">Calm · steady</span></div>
+        <h3>Reedbull <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Calm, steady</p>
+        <p><b>Ecology &amp; behaviour</b>A shaggy lapis-blue Harmontide marsh bull: gold-banded horns hung with tassels, a white rune on her brow, a woven blanket over her back.</p>
+        <p><b>Signature: Reed planter</b>Befriended, every half minute she plants sugar cane on bare sand or dirt beside the water near her friend.</p>
+        <p><b>Player interaction</b>Wheat and sugar cane.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Lapis (default)</strong> · Lapis blue, a blue blanket</span><span class="swatch"><strong>Marsh</strong> · Mud brown, a green blanket</span><span class="swatch"><strong>Grey</strong> · Grey, a red blanket</span><span class="swatch"><strong>Black</strong> · Black, gold runes</span><span class="swatch"><strong>Autumn</strong> · Russet, a rust blanket</span></div>
+        <p><b>Spawns in</b><code>river, swamp, mangrove_swamp</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Bovidae: Bovinae (Harmontide)</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#reedbull_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="sheep_minotaur">
+        <div class="card-top"><span class="group">Meadows</span><span class="tag">Woolly · gentle</span></div>
+        <h3>Sheep <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Gentle, flock-minded</p>
+        <p><b>Ecology &amp; behaviour</b>Domestic sheep (Bovidae: Ovis aries), whose wool never stops growing. The family&#x27;s mildest member.</p>
+        <p><b>Signature: Wool</b>Shears take her wool (it regrows after she grazes). Dye her like a sheep and her wool takes the colour. Vanilla sheep follow her as their shepherd.</p>
+        <p><b>Player interaction</b>Wheat and grass. Shears.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>White (default)</strong> · White wool</span><span class="swatch"><strong>Black</strong> · Black wool</span><span class="swatch"><strong>Brown</strong> · Brown wool</span><span class="swatch"><strong>Jacob</strong> · Black-spotted wool</span><span class="swatch"><strong>Merino</strong> · Cream, extra-fine wool</span></div>
+        <p><b>Spawns in</b><code>meadow, plains, windswept_hills</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Bovidae: Ovis aries</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#sheep_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="shroomotaur_minotaur">
+        <div class="card-top"><span class="group">Mushroom fields</span><span class="tag">Placid · generous</span></div>
+        <h3>Shroomotaur <span style="color:var(--muted);font-size:.9rem">(about 2.1 blocks)</span></h3>
+        <p><b>Temperament</b>Placid</p>
+        <p><b>Ecology &amp; behaviour</b>A mooshroom cow, red and white, with mushrooms growing from her shoulders.</p>
+        <p><b>Signature: Stew</b>Hold out a bowl and she fills it with mushroom stew.</p>
+        <p><b>Player interaction</b>Wheat and mushrooms.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red (default)</strong> · Red</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Glow</strong> · Glow</span><span class="swatch"><strong>Purple</strong> · Purple</span><span class="swatch"><strong>Pale</strong> · Pale</span></div>
+        <p><b>Spawns in</b><code>mushroom_fields</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Bovidae: Bos taurus (Minecraft mooshroom)</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#shroomotaur_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="skjoldram_minotaur">
+        <div class="card-top"><span class="group">Windswept hills</span><span class="tag">Stubborn · staunch</span></div>
+        <h3>Skjoldram <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Stubborn, staunch</p>
+        <p><b>Ecology &amp; behaviour</b>A shaggy teal Harmontide ram in a steel brow plate, her curling horns red as rust, who charges anything that hisses.</p>
+        <p><b>Signature: Ram charge</b>Befriended, she charges creepers that come near her friend and knocks them away before they blow.</p>
+        <p><b>Player interaction</b>Wheat and hay.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Teal (default)</strong> · Teal wool, red horns</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Purple</strong> · Purple</span><span class="swatch"><strong>Red</strong> · Red</span></div>
+        <p><b>Spawns in</b><code>windswept_hills, meadow, snowy_slopes</code></p>
+        <p class="risk"><b>Danger</b>Moderate (her horns).</p>
+              <p class="place"><b>True position</b>Bovidae: Ovis (Harmontide)</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#skjoldram_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="water_buffalo_minotaur">
+        <div class="card-top"><span class="group">Swamps &amp; rivers</span><span class="tag">Placid · strong</span></div>
+        <h3>Water Buffalo <span style="color:var(--muted);font-size:.9rem">(about 2.1 blocks)</span></h3>
+        <p><b>Temperament</b>Placid, sleepy, strong</p>
+        <p><b>Ecology &amp; behaviour</b>Swept-back horns and a love of mud. She wallows in water and mud through the heat of the day.</p>
+        <p><b>Signature: Mud wallow</b>She spends the hot hours in water or on mud, and swims well. Her milk makes the richest cheese (a present: a milk bucket and a cake now and then).</p>
+        <p><b>Player interaction</b>Join her in the water; bring wheat.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Grey (default)</strong> · Slate grey</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Albino</strong> · Pink-white</span><span class="swatch"><strong>Mud</strong> · Mud brown</span><span class="swatch"><strong>Carabao</strong> · Grey-brown</span></div>
+        <p><b>Spawns in</b><code>swamp, mangrove_swamp, river, jungle</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Bovidae: Bubalus bubalis</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#water_buffalo_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="yak_minotaur">
+        <div class="card-top"><span class="group">Mountains</span><span class="tag">Sturdy · loyal</span></div>
+        <h3>Yak <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Sturdy, patient</p>
+        <p><b>Ecology &amp; behaviour</b>The yak (Bovidae: Bos grunniens) of the Himalaya, a pack animal at home far above the tree line.</p>
+        <p><b>Signature: Pack yak</b>Give her a chest and she carries two rows of cargo (crouch and use her to open it), following you over the mountains. She never freezes either.</p>
+        <p><b>Player interaction</b>Wheat. Give her a chest.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Dark brown</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Golden</strong> · Golden</span><span class="swatch"><strong>Pied</strong> · Black and white</span></div>
+        <p><b>Spawns in</b><code>jagged_peaks, frozen_peaks, stony_peaks, snowy_slopes</code></p>
+        <p class="risk"><b>Danger</b>Low (if provoked).</p>
+              <p class="place"><b>True position</b>Bovidae: Bos grunniens</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#yak_minotaur">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

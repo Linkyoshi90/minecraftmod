@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Whales &amp; hippos — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · Mammalia &gt; Artiodactyla &gt; Whippomorpha</div>
+  <h1>Whales &amp; hippos</h1>
+  <p class="lede">Whales, dolphins and the hippos: the whales&#x27; closest living relatives walk on land. Orcas and narwhals share this page with the river horse.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Dolphin&#x27;s Grace + Water Breathing</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Merfolk form · 5</b><a href="merfolk_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="merfolk_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Minotaur form · 1</b><a href="minotaur_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="minotaur_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (6)</h2>
+    <div class="grid">
+      <article class="card" id="beluga_mermaid">
+        <div class="card-top"><span class="group">Frozen seas</span><span class="tag">Chatty · gentle</span></div>
+        <h3>Beluga <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Chatty, gentle</p>
+        <p><b>Ecology &amp; behaviour</b>A soft white whale with a round brow, the canary of the sea.</p>
+        <p><b>Signature: Sonar</b>Befriended, she sings the monsters in the water near her friend into view, and carries her friend along.</p>
+        <p><b>Player interaction</b>Cod and salmon.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>White (default)</strong> · White</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Cream</strong> · Cream</span><span class="swatch"><strong>Blush</strong> · Blush</span><span class="swatch"><strong>Ice</strong> · Ice</span></div>
+        <p><b>Spawns in</b><code>frozen_ocean, deep_frozen_ocean, cold_ocean</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Cetacea: Monodontidae, Delphinapterus leucas</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#beluga_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="cetus_mermaid">
+        <div class="card-top"><span class="group">Deep oceans</span><span class="tag">Huge · hungry</span></div>
+        <h3>Cetus <span style="color:var(--muted);font-size:.9rem">(about 3.0 blocks)</span></h3>
+        <p><b>Temperament</b>Huge, hungry</p>
+        <p><b>Ecology &amp; behaviour</b>The sea monster of the Greek myths: a vast, soft, pale whale of a girl with a great flat fluke. Whatever she opens her mouth for is gone.</p>
+        <p><b>Signature: Whole</b>Befriended, she swallows drowned and guardians near her friend whole, and coughs up what they carried.</p>
+        <p><b>Player interaction</b>Cod, salmon and tropical fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Pale blue</span><span class="swatch"><strong>Black and white</strong> · Black and white</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Deep</strong> · Deep blue</span></div>
+        <p><b>Spawns in</b><code>deep_ocean, deep_cold_ocean, deep_lukewarm_ocean</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Cetacea (myth; this design is a whale)</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#cetus_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="dolphin_mermaid">
+        <div class="card-top"><span class="group">Warm &amp; temperate ocean</span><span class="tag">Playful · quick</span></div>
+        <h3>Dolphin <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Playful, quick, a terrible tease</p>
+        <p><b>Ecology &amp; behaviour</b>Lives in big chattering pods. Rides bow waves, leaps for the fun of it and teases anything that swims.</p>
+        <p><b>Signature: Teasing &amp; leaping</b>She nudges swimmers and boats, steals a playful bump at squid and fish, then laughs and darts away. A bonded dolphin gives you Dolphin&#x27;s Grace when she swims beside you.</p>
+        <p><b>Player interaction</b>Swim with her, race her, toss her a fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Bottlenose (default)</strong> · Blue-grey with a pale belly</span><span class="swatch"><strong>Common</strong> · Dark back, a cream and grey hourglass</span><span class="swatch"><strong>Spinner</strong> · Three-tone grey, slim</span><span class="swatch"><strong>Risso&#x27;s</strong> · Pale grey, scarred white</span><span class="swatch"><strong>River pink</strong> · Rosy pink (the Amazon river dolphin)</span><span class="swatch"><strong>Star Song</strong> · Grey-blue, a pale belly</span></div>
+        <p><b>Spawns in</b><code>warm_ocean, lukewarm_ocean, deep_lukewarm_ocean, ocean, deep_ocean</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Cetacea: Delphinidae</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#dolphin_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="hippo_minotaur">
+        <div class="card-top"><span class="group">Warm rivers</span><span class="tag">Round · dangerous</span></div>
+        <h3>Hippo <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Dangerous</p>
+        <p><b>Ecology &amp; behaviour</b>The sweetest face on the river and much the worst temper.</p>
+        <p><b>Signature: Red Sweat</b>Befriended, while she is wet, her friend near her doesn&#x27;t burn.</p>
+        <p><b>Player interaction</b>Wheat and melons.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Mauve (default)</strong> · Mauve</span><span class="swatch"><strong>Pygmy</strong> · Pygmy</span><span class="swatch"><strong>Rosy</strong> · Rosy</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Mud</strong> · Mud</span></div>
+        <p><b>Spawns in</b><code>river, swamp, savanna</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Hippopotamidae: the whales&#x27; closest living relatives</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#hippo_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="narwhal_mermaid">
+        <div class="card-top"><span class="group">Frozen seas</span><span class="tag">Regal · spiralled</span></div>
+        <h3>Narwhal <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Regal</p>
+        <p><b>Ecology &amp; behaviour</b>The unicorn of the sea, and tired of the comparison.</p>
+        <p><b>Signature: Ice Breaker</b>Befriended, her tusk breaks the ice above her friend in the water.</p>
+        <p><b>Player interaction</b>Cod and salmon.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Dappled (default)</strong> · Dappled</span><span class="swatch"><strong>Dark</strong> · Dark</span><span class="swatch"><strong>Pale</strong> · Pale</span><span class="swatch"><strong>Gold</strong> · Gold</span><span class="swatch"><strong>Blue</strong> · Blue</span></div>
+        <p><b>Spawns in</b><code>frozen_ocean, deep_frozen_ocean</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Cetacea: Monodontidae, Monodon monoceros</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#narwhal_mermaid">her card in that guide</a></p>
+      </article>
+      <article class="card" id="orca_mermaid">
+        <div class="card-top"><span class="group">Cold &amp; deep ocean</span><span class="tag">Clever · pod</span></div>
+        <h3>Orca <span style="color:var(--muted);font-size:.9rem">(about 2.3 blocks)</span></h3>
+        <p><b>Temperament</b>Clever, playful, fiercely protective</p>
+        <p><b>Ecology &amp; behaviour</b>Lives in pods led by the eldest female. Hunts together, breaches for fun, and knocks prey off ice floes with a wave.</p>
+        <p><b>Signature: Pod, teasing &amp; protector</b>Orcas play with everything: they nudge swimmers, bump squid and fish up out of the water and laugh about it. A bonded orca and her pod defend you from drowned and guardians.</p>
+        <p><b>Player interaction</b>Swim with the pod, and never hurt one of them.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Resident (default)</strong> · Black and white, a grey saddle</span><span class="swatch"><strong>Transient</strong> · Black and white with a darker, sharper saddle</span><span class="swatch"><strong>Antarctic B</strong> · Grey and cream, a dark cape</span><span class="swatch"><strong>White</strong> · Snow white (rare)</span><span class="swatch"><strong>Type D</strong> · A tiny eyepatch and a rounder head</span></div>
+        <p><b>Spawns in</b><code>cold_ocean, deep_cold_ocean, ocean, deep_ocean, frozen_ocean</code></p>
+        <p class="risk"><b>Danger</b>Moderate: a pod defends itself well.</p>
+              <p class="place"><b>True position</b>Cetacea: Delphinidae, Orcinus orca</p><p><b>Body</b>Merfolk form · <a href="merfolk_field_guide.html#orca_mermaid">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

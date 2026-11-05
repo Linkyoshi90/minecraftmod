@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Constructs — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · outside the tree</div>
+  <h1>Constructs</h1>
+  <p class="lede">Golems, automatons and dolls: made, not born. They give no milk.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> none · <b style="display:inline;color:var(--accent)">Was:</b> Construct</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Construct form · 8</b><a href="construct_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="construct_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (8)</h2>
+    <div class="grid">
+      <article class="card" id="automaton_construct">
+        <div class="card-top"><span class="group">Villages and ruins</span><span class="tag">Dutiful · curious</span></div>
+        <h3>Automaton <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Dutiful, curious</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide clockwork girl in pale-blue armour plates: a round helmet with a disc over each ear, rivets down every plate and a wind-up key she never lets anyone turn but a friend. Nobody remembers who built the first of them.</p>
+        <p><b>Signature: Lamplighter</b>Befriended, she sets torches (her friend&#x27;s own) on the dark ground near her friend.</p>
+        <p><b>Player interaction</b>Redstone dust and copper ingots.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Pale-blue plates</span><span class="swatch"><strong>Silver</strong> · Silver</span><span class="swatch"><strong>Red</strong> · Red and gold</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Gold</strong> · Gold</span></div>
+        <p><b>Spawns in</b><code>plains, meadow, savanna</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>made, not born</p><p><b>Body</b>Construct form · <a href="construct_field_guide.html#automaton_construct">her card in that guide</a></p>
+      </article>
+      <article class="card" id="gargoyle_construct">
+        <div class="card-top"><span class="group">Rooftops</span><span class="tag">Still · watchful</span></div>
+        <h3>Gargoyle <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Silent by day, watchful by night</p>
+        <p><b>Ecology &amp; behaviour</b>The carved guardian of cathedral roofs: stone by day, awake at night.</p>
+        <p><b>Signature: Stone by day</b>By day she turns to stone: nothing hurts her. At night she wakes, flies, and fights monsters near her friend.</p>
+        <p><b>Player interaction</b>Stone and cobblestone. Leave her a high perch.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Granite (default)</strong> · Grey stone</span><span class="swatch"><strong>Sandstone</strong> · Sandstone</span><span class="swatch"><strong>Blackstone</strong> · Blackstone</span><span class="swatch"><strong>Mossy</strong> · Mossy stone</span><span class="swatch"><strong>Marble</strong> · White stone</span></div>
+        <p><b>Spawns in</b><code>plains, meadow, windswept_hills</code></p>
+        <p class="risk"><b>Danger</b>Medium (at night).</p>
+              <p class="place"><b>True position</b>made, not born</p><p><b>Body</b>Construct form · <a href="construct_field_guide.html#gargoyle_construct">her card in that guide</a></p>
+      </article>
+      <article class="card" id="golem_construct">
+        <div class="card-top"><span class="group">Villages</span><span class="tag">Steadfast · silent</span></div>
+        <h3>Golem <span style="color:var(--muted);font-size:.9rem">(about 2.4 blocks)</span></h3>
+        <p><b>Temperament</b>Steadfast, quiet</p>
+        <p><b>Ecology &amp; behaviour</b>The golem of Jewish folklore: a figure shaped from clay and brought to life by a word on her brow.</p>
+        <p><b>Signature: Village guardian</b>120 health, more than an iron golem. She fights monsters near villagers, and iron golems follow her. When she falls she breaks into pieces.</p>
+        <p><b>Player interaction</b>Clay. Defend the village with her.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Clay (default)</strong> · Grey clay</span><span class="swatch"><strong>Terracotta</strong> · Fired orange</span><span class="swatch"><strong>Red clay</strong> · Red</span><span class="swatch"><strong>Kaolin</strong> · White clay</span><span class="swatch"><strong>River mud</strong> · Dark brown</span><span class="swatch"><strong>Pocket Bot</strong> · Silver with green eyes</span></div>
+        <p><b>Spawns in</b><code>plains, meadow, savanna</code></p>
+        <p class="risk"><b>Danger</b>High for monsters.</p>
+              <p class="place"><b>True position</b>made, not born</p><p><b>Body</b>Construct form · <a href="construct_field_guide.html#golem_construct">her card in that guide</a></p>
+      </article>
+      <article class="card" id="scarecrow_construct">
+        <div class="card-top"><span class="group">Farmland</span><span class="tag">Stitched · dutiful</span></div>
+        <h3>Scarecrow <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Dutiful</p>
+        <p><b>Ecology &amp; behaviour</b>Burlap and straw and an unshakeable sense of duty to the turnips.</p>
+        <p><b>Signature: On Watch</b>Befriended, monsters near her are scared off, and they forget what they came for.</p>
+        <p><b>Player interaction</b>Wheat.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Burlap (default)</strong> · Burlap</span><span class="swatch"><strong>Plaid</strong> · Plaid</span><span class="swatch"><strong>Autumn</strong> · Autumn</span><span class="swatch"><strong>Dark</strong> · Dark</span><span class="swatch"><strong>Pumpkin</strong> · Pumpkin</span></div>
+        <p><b>Spawns in</b><code>plains, sunflower_plains</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>made, not born</p><p><b>Body</b>Construct form · <a href="construct_field_guide.html#scarecrow_construct">her card in that guide</a></p>
+      </article>
+      <article class="card" id="snowgirl_construct">
+        <div class="card-top"><span class="group">Snowfields</span><span class="tag">Round · cheerful</span></div>
+        <h3>Snowgirl <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Cheerful</p>
+        <p><b>Ecology &amp; behaviour</b>A snow golem who woke up pleased with herself, carrot-orange scarf and all.</p>
+        <p><b>Signature: Snowballs</b>Befriended, she pelts the monsters near her friend with snow; blazes really mind.</p>
+        <p><b>Player interaction</b>Snowballs and carrots.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>White (default)</strong> · White</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Pink</strong> · Pink</span><span class="swatch"><strong>Dirty</strong> · Dirty</span><span class="swatch"><strong>Ice</strong> · Ice</span></div>
+        <p><b>Spawns in</b><code>snowy_plains, snowy_taiga, ice_spikes</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>made, not born</p><p><b>Body</b>Construct form · <a href="construct_field_guide.html#snowgirl_construct">her card in that guide</a></p>
+      </article>
+      <article class="card" id="talosling_construct">
+        <div class="card-top"><span class="group">Ruins</span><span class="tag">Loyal · wound up</span></div>
+        <h3>Talosling <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Loyal, clockwork</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide bronze automaton hound, a little Talos, that runs on a wound spring.</p>
+        <p><b>Signature: Clockwork</b>Redstone dust winds her spring (five minutes a dust, up to twenty): while wound she guards her friend; run down, she sits still until wound again.</p>
+        <p><b>Player interaction</b>Redstone winds her up.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Bronze (default)</strong> · Bronze and blue enamel</span><span class="swatch"><strong>Copper</strong> · Copper</span><span class="swatch"><strong>Gold</strong> · Gilded</span><span class="swatch"><strong>Iron</strong> · Iron</span><span class="swatch"><strong>Verdigris</strong> · Green with age</span></div>
+        <p><b>Spawns in</b><code>desert, badlands, stony_peaks</code></p>
+        <p class="risk"><b>Danger</b>Medium (wound up).</p>
+              <p class="place"><b>True position</b>made, not born</p><p><b>Body</b>Construct form · <a href="construct_field_guide.html#talosling_construct">her card in that guide</a></p>
+      </article>
+      <article class="card" id="tin_jack_construct">
+        <div class="card-top"><span class="group">Fields and pumpkin patches</span><span class="tag">Watchful · spooky</span></div>
+        <h3>Tin Jack <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Watchful, a little spooky</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide scarecrow of riveted blue tin in a tattered cloak and a pointed hat, a carved grin for a face and a lantern at her hip. Crows perch on her arm; nothing else dares.</p>
+        <p><b>Signature: Scarecrow</b>Befriended, phantoms that come near her friend lose heart: weakened, they wheel away.</p>
+        <p><b>Player interaction</b>Pumpkin pie and wheat.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue tin, a navy hat</span><span class="swatch"><strong>Silver</strong> · Bright tin</span><span class="swatch"><strong>Copper</strong> · Copper, a green hat</span><span class="swatch"><strong>Green</strong> · Green-painted tin</span><span class="swatch"><strong>Purple</strong> · Purple, an orange hat</span></div>
+        <p><b>Spawns in</b><code>plains, sunflower_plains, meadow</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>made, not born</p><p><b>Body</b>Construct form · <a href="construct_field_guide.html#tin_jack_construct">her card in that guide</a></p>
+      </article>
+      <article class="card" id="tin_squirrel_construct">
+        <div class="card-top"><span class="group">Villages</span><span class="tag">Thrifty · clockwork</span></div>
+        <h3>Tin Squirrel <span style="color:var(--muted);font-size:.9rem">(about 1.2 blocks)</span></h3>
+        <p><b>Temperament</b>Thrifty, fussy</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide clockwork squirrel of riveted tin, who hoards every scrap of metal she finds.</p>
+        <p><b>Signature: Scrap</b>Hand her a worn-out iron or gold tool or armour piece and she breaks it down into nuggets. She picks up nuggets lying near her.</p>
+        <p><b>Player interaction</b>Iron and gold nuggets.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue tin</span><span class="swatch"><strong>Silver</strong> · Bright tin</span><span class="swatch"><strong>Copper</strong> · Copper</span><span class="swatch"><strong>Gold</strong> · Gilded</span><span class="swatch"><strong>Verdigris</strong> · Green with age</span></div>
+        <p><b>Spawns in</b><code>plains, forest, birch_forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>made, not born</p><p><b>Body</b>Construct form · <a href="construct_field_guide.html#tin_squirrel_construct">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

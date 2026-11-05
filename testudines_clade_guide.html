@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Turtles &amp; tortoises — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · Reptilia &gt; Testudines</div>
+  <h1>Turtles &amp; tortoises</h1>
+  <p class="lede">Turtles and tortoises, on land and at sea, shell and all.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Resistance + Water Breathing · <b style="display:inline;color:var(--accent)">Was:</b> Lizardfolk</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Lizardfolk form · 14</b><a href="lizardfolk_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="lizardfolk_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (14)</h2>
+    <div class="grid">
+      <article class="card" id="snapping_turtle_lizardfolk">
+        <div class="card-top"><span class="group">Swamps &amp; mangroves</span><span class="tag">Patient · ancient</span></div>
+        <h3>Alligator Snapping Turtle <span style="color:var(--muted);font-size:.9rem">(about 1.8 blocks)</span></h3>
+        <p><b>Temperament</b>Patient, grumpy, very old</p>
+        <p><b>Ecology &amp; behaviour</b>Macrochelys temminckii (Testudines: Chelydridae), the largest freshwater turtle in North America. She lies still on the riverbed with her mouth open and wiggles a pink, worm-like lure on her tongue until a fish swims in.</p>
+        <p><b>Signature: Tongue lure</b>While she sits still in water she catches a fish now and then and drops it at her feet (cod or salmon, at most three lying around at a time). Hit her and she hides in her shell. Her bite is the hardest in the family after the crocodile&#x27;s.</p>
+        <p><b>Player interaction</b>Leave her be in the water and she will feed you. Bring her fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Common (default)</strong> · Dark brown shell, olive skin</span><span class="swatch"><strong>Mossy</strong> · Algae on her shell and hair</span><span class="swatch"><strong>Dark</strong> · Almost black</span><span class="swatch"><strong>Suwannee</strong> · The Suwannee River species, paler and greyer</span><span class="swatch"><strong>Leucistic</strong> · Pale cream, very rare</span><span class="swatch"><strong>Spike King</strong> · Yellow skin, red hair, a green spiked shell</span></div>
+        <p><b>Spawns in</b><code>swamp, mangrove_swamp</code></p>
+        <p class="risk"><b>Danger</b>Moderate if provoked (a hard bite).</p>
+              <p class="place"><b>True position</b>Testudines: Chelydridae, Macrochelys temminckii</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#snapping_turtle_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="anvil_tortoise_lizardfolk">
+        <div class="card-top"><span class="group">Mountains &amp; villages</span><span class="tag">Steady · handy</span></div>
+        <h3>Anvil Tortoise <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Steady, patient</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide tortoise whose shell is a smith&#x27;s anvil.</p>
+        <p><b>Signature: Anvil shell</b>Hand her a damaged tool or armour piece with one of its repair materials and she mends it, for no experience. Too heavy to push or knock back.</p>
+        <p><b>Player interaction</b>Iron nuggets and melons. Bring her what is broken.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Iron (default)</strong> · An iron anvil</span><span class="swatch"><strong>Copper</strong> · A copper anvil</span><span class="swatch"><strong>Gold</strong> · A gold anvil</span><span class="swatch"><strong>Blackstone</strong> · A dark anvil</span><span class="swatch"><strong>Chipped</strong> · A worn, chipped anvil</span></div>
+        <p><b>Spawns in</b><code>stony_peaks, windswept_hills, plains</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Testudines: Testudinidae (Harmontide)</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#anvil_tortoise_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="archelon_lizardfolk">
+        <div class="card-top"><span class="group">Warm oceans and beaches</span><span class="tag">Steady · protective</span></div>
+        <h3>Archelon <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Steady, protective</p>
+        <p><b>Ecology &amp; behaviour</b>The greatest sea turtle that ever lived as a Harmontide girl: crystal-blue scales and a great ridged shell like a shield, flippers at her wrists.</p>
+        <p><b>Signature: Shell shield</b>Befriended, she knocks away the arrows flying at her friend near her.</p>
+        <p><b>Player interaction</b>Seagrass, kelp and fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Crystal blue</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>White</strong> · White</span></div>
+        <p><b>Spawns in</b><code>warm_ocean, lukewarm_ocean, beach</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Testudines: Protostegidae, Archelon (extinct)</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#archelon_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="black_tortoise_lizardfolk">
+        <div class="card-top"><span class="group">Frozen rivers</span><span class="tag">Steadfast · cold</span></div>
+        <h3>Black Tortoise <span style="color:var(--muted);font-size:.9rem">(about 1.85 blocks)</span></h3>
+        <p><b>Temperament</b>Steadfast, patient, cold</p>
+        <p><b>Ecology &amp; behaviour</b>Xuanwu, the north of the Chinese Four Symbols: winter and water, a tortoise with a serpent coiled round her.</p>
+        <p><b>Signature: Shell</b>Arrows glance off her shell. The north of the Four Symbols.</p>
+        <p><b>Player interaction</b>Fish and patience.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Dark (default)</strong> · Blue-black</span><span class="swatch"><strong>Jade</strong> · Jade</span><span class="swatch"><strong>Bronze</strong> · Bronze</span><span class="swatch"><strong>Ice</strong> · Pale ice</span><span class="swatch"><strong>Black</strong> · Black and red</span></div>
+        <p><b>Spawns in</b><code>frozen_river, snowy_beach, frozen_ocean</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Testudines: Testudinidae (myth; the serpent is an ornament)</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#black_tortoise_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="box_turtle_lizardfolk">
+        <div class="card-top"><span class="group">Forests</span><span class="tag">Homebody · cautious</span></div>
+        <h3>Box Turtle <span style="color:var(--muted);font-size:.9rem">(about 1.4 blocks)</span></h3>
+        <p><b>Temperament</b>A cautious homebody</p>
+        <p><b>Ecology &amp; behaviour</b>Terrapene carolina (Testudines: Emydidae), the box turtle, whose hinged shell closes completely, and who spends her whole life within a few hundred metres of where she hatched.</p>
+        <p><b>Signature: Shut tight</b>Hidden in her shell she takes no damage at all. A stranger sprinting near her makes her shut. She never strays more than 16 blocks from home.</p>
+        <p><b>Player interaction</b>Mushrooms and berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Eastern (default)</strong> · Brown with yellow</span><span class="swatch"><strong>Ornate</strong> · Bright yellow rays</span><span class="swatch"><strong>Three-toed</strong> · Olive</span><span class="swatch"><strong>Gulf Coast</strong> · Dark</span><span class="swatch"><strong>Desert</strong> · Sandy</span></div>
+        <p><b>Spawns in</b><code>forest, birch_forest, dark_forest, flower_forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Testudines: Emydidae</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#box_turtle_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="conch_turtle_lizardfolk">
+        <div class="card-top"><span class="group">Warm beaches</span><span class="tag">Gentle · steady</span></div>
+        <h3>Conch Mail Turtle <span style="color:var(--muted);font-size:.9rem">(about 1.2 blocks)</span></h3>
+        <p><b>Temperament</b>Gentle, steady</p>
+        <p><b>Ecology &amp; behaviour</b>A little Harmontide sea turtle in a scaled blue shell with a conch&#x27;s spire rising from it, strung with pearls.</p>
+        <p><b>Signature: Conch call</b>Befriended, her friend underwater near her has Conduit Power: they breathe, see and dig as if beside a conduit.</p>
+        <p><b>Player interaction</b>Seagrass and kelp.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue shell, cream conch</span><span class="swatch"><strong>Coral</strong> · Coral pink</span><span class="swatch"><strong>Kelp</strong> · Kelp green</span><span class="swatch"><strong>Sand</strong> · Sandy</span><span class="swatch"><strong>Abyss</strong> · Deep blue, glowing bands</span></div>
+        <p><b>Spawns in</b><code>beach, warm_ocean</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Testudines: Cheloniidae (Harmontide)</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#conch_turtle_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="galapagos_tortoise_lizardfolk">
+        <div class="card-top"><span class="group">Islands &amp; beaches</span><span class="tag">Ancient · unhurried</span></div>
+        <h3>Galapagos Tortoise <span style="color:var(--muted);font-size:.9rem">(about 1.95 blocks)</span></h3>
+        <p><b>Temperament</b>Ancient, patient, unhurried</p>
+        <p><b>Ecology &amp; behaviour</b>Chelonoidis niger (Testudines: Testudinidae), the giant tortoise of the Galapagos, who lives well over a century.</p>
+        <p><b>Signature: A ride on her shell</b>The slowest girl there is, and the toughest. A friend can sit on her shell: she keeps going where she was going. Cactus does not prick her.</p>
+        <p><b>Player interaction</b>Cactus and melon. Climb on with an empty hand once she is fond of you (crouch to pat her).</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Galapagos (default)</strong> · Grey-brown</span><span class="swatch"><strong>Santa Cruz</strong> · Dark</span><span class="swatch"><strong>Pinta</strong> · Pale grey, for Lonesome George</span><span class="swatch"><strong>Espanola</strong> · Brown</span><span class="swatch"><strong>Aldabra</strong> · Near black</span></div>
+        <p><b>Spawns in</b><code>beach, stony_shore, savanna</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Testudines: Testudinidae, Chelonoidis niger</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#galapagos_tortoise_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="kappa_lizardfolk">
+        <div class="card-top"><span class="group">Rivers &amp; swamps</span><span class="tag">Polite · mischievous</span></div>
+        <h3>Kappa <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Mischievous, proud, very polite</p>
+        <p><b>Ecology &amp; behaviour</b>A river yokai of Japan: a turtle&#x27;s shell on her back and a dish of water (the sara) on her head. Folklore says it comes from the softshell turtle (Pelodiscus sinensis, Testudines: Trionychidae) and the Japanese giant salamander.</p>
+        <p><b>Signature: Her dish</b>Wet (water, rain) she is strong. Two minutes dry and her dish has run empty: she is weak and slow. Bow to her and she bows back, spilling it: a kappa who was after you stops at once.</p>
+        <p><b>Player interaction</b>Bow to her (crouch while facing her): she bows back. Melon slices stand in for her beloved cucumbers.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>River (default)</strong> · Green shell and hair</span><span class="swatch"><strong>Pond</strong> · Teal</span><span class="swatch"><strong>Red</strong> · A red kappa</span><span class="swatch"><strong>Mountain</strong> · Brown</span><span class="swatch"><strong>White</strong> · Rare and pale</span></div>
+        <p><b>Spawns in</b><code>river, swamp</code></p>
+        <p class="risk"><b>Danger</b>Moderate in the water, low out of it.</p>
+              <p class="place"><b>True position</b>Testudines: Trionychidae (folklore)</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#kappa_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="matamata_lizardfolk">
+        <div class="card-top"><span class="group">Swamps</span><span class="tag">Still · strange</span></div>
+        <h3>Matamata <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Very still, very patient</p>
+        <p><b>Ecology &amp; behaviour</b>Chelus fimbriata (Testudines: Chelidae), the South American turtle who looks like a pile of dead leaves and swallows fish with a sudden gulp.</p>
+        <p><b>Signature: Leaf litter</b>Still in the water she looks like dead leaves (invisible). Fish that swim within 4 blocks are sucked into her mouth; her friend gets the fish.</p>
+        <p><b>Player interaction</b>Fish.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Matamata (default)</strong> · Leaf brown</span><span class="swatch"><strong>Mossy</strong> · Mossy green</span><span class="swatch"><strong>Dark</strong> · Dark brown</span><span class="swatch"><strong>Orinoco</strong> · Red-brown</span><span class="swatch"><strong>Pale</strong> · Pale</span></div>
+        <p><b>Spawns in</b><code>swamp, mangrove_swamp</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Testudines: Chelidae, Chelus fimbriata</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#matamata_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="red_eared_slider_lizardfolk">
+        <div class="card-top"><span class="group">Ponds &amp; rivers</span><span class="tag">Sociable · skittish</span></div>
+        <h3>Red-Eared Slider <span style="color:var(--muted);font-size:.9rem">(about 1.4 blocks)</span></h3>
+        <p><b>Temperament</b>Sociable, easily startled</p>
+        <p><b>Ecology &amp; behaviour</b>Trachemys scripta elegans (Testudines: Emydidae), the pond turtle with the red streak behind each eye, named for sliding off her log into the water at the first sign of trouble.</p>
+        <p><b>Signature: Sliding off</b>Sliders bask together by the water. When a stranger comes within 6 blocks, every slider nearby slides into the nearest water at once. Every food is worth double to her.</p>
+        <p><b>Player interaction</b>Fish and kelp. Walk up slowly.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Red-eared (default)</strong> · Green with red streaks</span><span class="swatch"><strong>Yellow-bellied</strong> · Yellow streaks</span><span class="swatch"><strong>Cumberland</strong> · Orange streaks</span><span class="swatch"><strong>Pastel</strong> · Pale pastel</span><span class="swatch"><strong>Albino</strong> · Cream and yellow</span></div>
+        <p><b>Spawns in</b><code>river, swamp, forest, flower_forest</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Testudines: Emydidae</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#red_eared_slider_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="softshell_turtle_lizardfolk">
+        <div class="card-top"><span class="group">Rivers</span><span class="tag">Quick · nippy</span></div>
+        <h3>Softshell Turtle <span style="color:var(--muted);font-size:.9rem">(about 1.55 blocks)</span></h3>
+        <p><b>Temperament</b>Quick, nippy</p>
+        <p><b>Ecology &amp; behaviour</b>Apalone spinifera (Testudines: Trionychidae), the pancake-flat river turtle with a leathery shell and a snorkel nose, who lies buried in the riverbed and bites hard.</p>
+        <p><b>Signature: Buried</b>Still on a sandy, muddy or gravel riverbed she is buried out of sight and breathes underwater. A stranger who comes within a block and a half gets bitten. No armour, but quick on land and in water.</p>
+        <p><b>Player interaction</b>Fish. Do not tread on her.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Spiny (default)</strong> · Olive, dark spots</span><span class="swatch"><strong>Dark-spotted</strong> · Dark spots</span><span class="swatch"><strong>Smooth</strong> · Plain tan</span><span class="swatch"><strong>Chinese</strong> · Green-grey</span><span class="swatch"><strong>Florida</strong> · Dark brown</span></div>
+        <p><b>Spawns in</b><code>river, swamp</code></p>
+        <p class="risk"><b>Danger</b>Low (if stepped on).</p>
+              <p class="place"><b>True position</b>Testudines: Trionychidae, Apalone spinifera</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#softshell_turtle_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="turtfolk_lizardfolk">
+        <div class="card-top"><span class="group">Beaches and rivers</span><span class="tag">Bold · warm</span></div>
+        <h3>Turtfolk <span style="color:var(--muted);font-size:.9rem">(about 1.75 blocks)</span></h3>
+        <p><b>Temperament</b>Bold, warm</p>
+        <p><b>Ecology &amp; behaviour</b>A tall Harmontide turtle warrior, blue-scaled, in bronze, with a great brown shell, long brown hair and a yellow flower behind her ear.</p>
+        <p><b>Signature: Shell guard</b>Befriended, every half minute she shields her friend near her: two hearts of absorption.</p>
+        <p><b>Player interaction</b>Seagrass and melon.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, brown shell</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Purple</strong> · Purple</span><span class="swatch"><strong>Red</strong> · Red</span></div>
+        <p><b>Spawns in</b><code>beach, river, swamp</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>Testudines (Harmontide)</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#turtfolk_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="turtle_lizardfolk">
+        <div class="card-top"><span class="group">Beaches</span><span class="tag">Calm · steady</span></div>
+        <h3>Turtle <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Calm, slow, wise</p>
+        <p><b>Ecology &amp; behaviour</b>She carries her shell on her back and comes ashore to the beach where she hatched to lay her eggs.</p>
+        <p><b>Signature: Shell retreat</b>Hurt, she pulls into her shell (80% less damage). She swims fast and lays her eggs on her home beach.</p>
+        <p><b>Player interaction</b>Seagrass or fish; patience.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Green (default)</strong> · Green with a brown shell</span><span class="swatch"><strong>Hawksbill</strong> · Amber shell</span><span class="swatch"><strong>Leatherback</strong> · Dark grey</span><span class="swatch"><strong>Loggerhead</strong> · Red-brown</span><span class="swatch"><strong>Olive</strong> · Olive</span><span class="swatch"><strong>Shell Trooper</strong> · Yellow skin, a green shell with a white rim</span></div>
+        <p><b>Spawns in</b><code>beach, warm_ocean, lukewarm_ocean</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Testudines: Cheloniidae</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#turtle_lizardfolk">her card in that guide</a></p>
+      </article>
+      <article class="card" id="turtworld_lizardfolk">
+        <div class="card-top"><span class="group">Rivers and coasts</span><span class="tag">Ancient · serene</span></div>
+        <h3>Turtworld <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Ancient, serene</p>
+        <p><b>Ecology &amp; behaviour</b>A great blue Harmontide tortoise who has carried a little world on her shell for so long it has its own turf, two snowy peaks and a waterfall. Things grow wherever she rests.</p>
+        <p><b>Signature: Living island</b>Befriended, the saplings and crops near her friend grow.</p>
+        <p><b>Player interaction</b>Melon, seagrass and saplings.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, a green island</span><span class="swatch"><strong>Green</strong> · Green, a brown shell</span><span class="swatch"><strong>Sand</strong> · Sandy</span><span class="swatch"><strong>Frost</strong> · Frosted</span><span class="swatch"><strong>Ember</strong> · Black, a smouldering island</span></div>
+        <p><b>Spawns in</b><code>river, stony_shore, beach, mangrove_swamp</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Testudines: Testudinidae (Harmontide)</p><p><b>Body</b>Lizardfolk form · <a href="lizardfolk_field_guide.html#turtworld_lizardfolk">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

@@ -44,13 +44,14 @@ import java.util.List;
  * Chores (after the farmhand, FarmhandGoal): a friend on patrol (harpies and anurans too) keeps the place around her patrol spot.
  * She gathers the eggs, feathers and wool lying about, takes the honey from a full hive without angering the bees (into a glass
  * bottle if there is one in a chest, else as honeycomb), shears woolly sheep, sets torches from a chest in dark corners where monsters
- * could spawn (the lamplighter), and when there is nothing else to do she fishes from
+ * could spawn (the lamplighter), picks ripe sweet berries and glow berries (the bushes and vines keep growing), and when there
+ * is nothing else to do she fishes from
  * the shore (a swimmer from the water), a catch every minute or two. Food goes into a fridge in the area, the rest into a chest
  * or barrel, or at her feet. Shearing and honey obey mobGriefing; gathering and fishing don't need it. Each friend keeps a tally,
  * and her commander earns two advancements.
  */
 public final class Chores {
-    public enum Kind {EGGS, HONEY, WOOL, FISH, TORCH}
+    public enum Kind {EGGS, HONEY, WOOL, FISH, TORCH, BERRIES}
 
     public static final String TALLY = "Chores", FIRST = "first_chore", EVERY = "every_chore";
     public static final int CATCH_MIN = 900, CATCH_SPREAD = 1500;
@@ -195,6 +196,33 @@ public final class Chores {
         return true;
     }
 
+    /** A sweet berry bush in full fruit, or a cave vine hung with glow berries. */
+    public static boolean ripe(BlockState s) {
+        return s.getBlock() instanceof net.minecraft.world.level.block.SweetBerryBushBlock && s.getValue(net.minecraft.world.level.block.SweetBerryBushBlock.AGE) == 3
+                || net.minecraft.world.level.block.CaveVines.hasGlowBerries(s);
+    }
+
+    /** She picks the berries (the bush or vine stays and fruits again) and puts them away. Whether she did. */
+    public static boolean pick(ServerLevel level, Mob mob, BlockPos anchor, BlockPos at) {
+        BlockState s = level.getBlockState(at);
+        if (!ripe(s)) return false;
+        ItemStack berries;
+        if (s.getBlock() instanceof net.minecraft.world.level.block.SweetBerryBushBlock) {
+            berries = new ItemStack(Items.SWEET_BERRIES, 2 + level.random.nextInt(2));
+            level.setBlock(at, s.setValue(net.minecraft.world.level.block.SweetBerryBushBlock.AGE, 1), 2);
+            level.playSound(null, at, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + level.random.nextFloat() * 0.4F);
+        } else {
+            berries = new ItemStack(Items.GLOW_BERRIES);
+            level.setBlock(at, s.setValue(net.minecraft.world.level.block.CaveVines.BERRIES, false), 2);
+            level.playSound(null, at, SoundEvents.CAVE_VINES_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + level.random.nextFloat() * 0.4F);
+        }
+        level.gameEvent(mob, GameEvent.BLOCK_CHANGE, at);
+        mob.swing(InteractionHand.MAIN_HAND);
+        putAway(level, mob, anchor, berries);
+        done(mob, Kind.BERRIES);
+        return true;
+    }
+
     /** She shears a woolly sheep and puts the wool away. Whether she did. */
     public static boolean shear(ServerLevel level, Mob mob, BlockPos anchor, Sheep sheep) {
         if (!sheep.isAlive() || !sheep.readyForShearing()) return false;
@@ -294,7 +322,9 @@ public final class Chores {
                 || !level.getEntitiesOfClass(Sheep.class, box).isEmpty()) return true;
         int r = (int) Orders.PATROL_RADIUS;
         for (BlockPos p : BlockPos.betweenClosed(anchor.offset(-r, -3, -r), anchor.offset(r, 3, r))) {
-            if (level.getBlockState(p).getBlock() instanceof BeehiveBlock) return true;
+            BlockState s = level.getBlockState(p);
+            if (s.getBlock() instanceof BeehiveBlock || s.getBlock() instanceof net.minecraft.world.level.block.SweetBerryBushBlock
+                    || s.getBlock() instanceof net.minecraft.world.level.block.CaveVines) return true;
         }
         return fishingSpot(level, mob, anchor) != null;
     }
@@ -344,20 +374,24 @@ public final class Chores {
                 ItemEntity item = this.nearest(level.getEntitiesOfClass(ItemEntity.class, box, Chores::produce));
                 if (item != null) return this.choose(Kind.EGGS, item, item.blockPosition());
                 if (this.griefs(level)) {
-                    BlockPos hive = null;
-                    double best = Double.MAX_VALUE;
+                    BlockPos hive = null, bush = null;
+                    double best = Double.MAX_VALUE, bestBush = Double.MAX_VALUE;
                     int r = (int) Orders.PATROL_RADIUS;
                     for (BlockPos p : BlockPos.betweenClosed(anchor.offset(-r, -3, -r), anchor.offset(r, 3, r))) {
-                        if (!fullHive(level.getBlockState(p))) continue;
+                        BlockState s = level.getBlockState(p);
                         double d = p.distSqr(this.girl.blockPosition());
-                        if (d < best) {
+                        if (fullHive(s) && d < best) {
                             best = d;
                             hive = p.immutable();
+                        } else if (ripe(s) && d < bestBush) {
+                            bestBush = d;
+                            bush = p.immutable();
                         }
                     }
                     if (hive != null) return this.choose(Kind.HONEY, null, hive);
                     Sheep sheep = this.nearest(level.getEntitiesOfClass(Sheep.class, box, s -> s.isAlive() && s.readyForShearing()));
                     if (sheep != null) return this.choose(Kind.WOOL, sheep, sheep.blockPosition());
+                    if (bush != null) return this.choose(Kind.BERRIES, null, bush);
                     if (take(level, anchor, Items.TORCH, false)) {                 // the lamplighter: torches from the chest in the dark corners
                         BlockPos dark = darkSpot(level, anchor);
                         if (dark != null) return this.choose(Kind.TORCH, null, dark);
@@ -450,6 +484,10 @@ public final class Chores {
                 }
                 case TORCH -> {
                     lightUp(level, this.girl, anchor, this.at);
+                    this.kind = null;
+                }
+                case BERRIES -> {
+                    pick(level, this.girl, anchor, this.at);
                     this.kind = null;
                 }
                 case FISH -> {

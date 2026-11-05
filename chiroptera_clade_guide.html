@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bats — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · Mammalia &gt; Laurasiatheria &gt; Chiroptera</div>
+  <h1>Bats</h1>
+  <p class="lede">Every bat, from fruit bats to vampires: the only mammals that truly fly. The hedgehog and the mole live here as guests, their nearest kin among ours.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Night Vision + Slow Falling · <b style="display:inline;color:var(--accent)">Was:</b> Bat</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Bat form · 5</b><a href="bat_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="bat_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Rodent form · 2</b><a href="rodent_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="rodent_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (7)</h2>
+    <div class="grid">
+      <article class="card" id="cave_bat">
+        <div class="card-top"><span class="group">Caves &amp; forests</span><span class="tag">Nocturnal · keen-eared</span></div>
+        <h3>Bat <span style="color:var(--muted);font-size:.9rem">(about 1.4 blocks)</span></h3>
+        <p><b>Temperament</b>Shy by day, lively by night</p>
+        <p><b>Ecology &amp; behaviour</b>Bats (Chiroptera), the only mammals that truly fly, who find their way in the dark by echolocation.</p>
+        <p><b>Signature: Roost and ping</b>She hangs upside down from ceilings to rest. Befriended, she pings every few seconds and monsters near her friend glow for a moment, through walls. The fruit bat has a fox face.</p>
+        <p><b>Player interaction</b>Fruit. Let her sleep.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Brown</span><span class="swatch"><strong>Fruit bat</strong> · Fox-faced, golden mantle</span><span class="swatch"><strong>Vampire</strong> · Dark grey, red eyes</span><span class="swatch"><strong>Ghost</strong> · White</span><span class="swatch"><strong>Hoary</strong> · Frosted brown</span><span class="swatch"><strong>Jewel Thief</strong> · White hair, a black bodysuit with a pink heart, white gloves and boots</span></div>
+        <p><b>Spawns in</b><code>dripstone_caves, lush_caves, dark_forest, jungle</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Chiroptera</p><p><b>Body</b>Bat form · <a href="bat_field_guide.html#cave_bat">her card in that guide</a></p>
+      </article>
+      <article class="card" id="camazotz_bat">
+        <div class="card-top"><span class="group">Jungle caves</span><span class="tag">Dread · devoted</span></div>
+        <h3>Camazotz <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Dread, devoted</p>
+        <p><b>Ecology &amp; behaviour</b>The death bat of the Maya, a leaf-nosed bat with great pink ears and jade at her ears and arms, who flies at night and drinks the strength of her prey.</p>
+        <p><b>Signature: Night bite</b>Befriended, at night she bites a monster near her friend and the stolen strength heals them.</p>
+        <p><b>Player interaction</b>Melon, berries and raw chicken.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue-grey, pink ears</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Red</strong> · Red</span><span class="swatch"><strong>Jade</strong> · Jade</span></div>
+        <p><b>Spawns in</b><code>jungle, bamboo_jungle, lush_caves</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>Chiroptera: Phyllostomidae (myth; leaf-nosed bat)</p><p><b>Body</b>Bat form · <a href="bat_field_guide.html#camazotz_bat">her card in that guide</a></p>
+      </article>
+      <article class="card" id="date_bat">
+        <div class="card-top"><span class="group">Oases</span><span class="tag">Sweet · nocturnal</span></div>
+        <h3>Datebat <span style="color:var(--muted);font-size:.9rem">(about 1.4 blocks)</span></h3>
+        <p><b>Temperament</b>Sweet, sleepy</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide fruit bat of the oasis, with date-palm fronds in her hair and a cluster of dates by her ear.</p>
+        <p><b>Signature: Pollinator</b>She roosts by day. At night she flies from flower to flower, and the crops near her friend grow.</p>
+        <p><b>Player interaction</b>Sweet berries, apples and melon.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, gold cloth</span><span class="swatch"><strong>Sand</strong> · Sandy</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Gold</strong> · Golden</span></div>
+        <p><b>Spawns in</b><code>desert, savanna, jungle</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Chiroptera: Pteropodidae (Harmontide fruit bat)</p><p><b>Body</b>Bat form · <a href="bat_field_guide.html#date_bat">her card in that guide</a></p>
+      </article>
+      <article class="card" id="frond_bat">
+        <div class="card-top"><span class="group">Jungle canopy</span><span class="tag">Merry · flighty</span></div>
+        <h3>Frondbat <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Merry, flighty</p>
+        <p><b>Ecology &amp; behaviour</b>A blue Harmontide bat of the canopy with leafy wings and a crown of white flowers, who naps hanging in the leaves.</p>
+        <p><b>Signature: Leaf shaker</b>Befriended, every half minute she shakes the leaves near her friend: saplings, sticks and apples fall.</p>
+        <p><b>Player interaction</b>Apples, melon and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, teal wings</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Autumn</strong> · Autumn orange</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>jungle, sparse_jungle, bamboo_jungle</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Chiroptera (Harmontide)</p><p><b>Body</b>Bat form · <a href="bat_field_guide.html#frond_bat">her card in that guide</a></p>
+      </article>
+      <article class="card" id="mole_rodent">
+        <div class="card-top"><span class="group">Meadows</span><span class="tag">Patient · short-sighted</span></div>
+        <h3>Mole <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Patient</p>
+        <p><b>Ecology &amp; behaviour</b>Velvet-black with broad digging hands; she can&#x27;t see you, but she knows exactly where you are.</p>
+        <p><b>Signature: Tunneller</b>Befriended, her friend digs faster near her when out of the sky&#x27;s sight.</p>
+        <p><b>Player interaction</b>Beetroot and worms.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Velvet (default)</strong> · Velvet</span><span class="swatch"><strong>Star</strong> · Star</span><span class="swatch"><strong>Grey</strong> · Grey</span><span class="swatch"><strong>Golden</strong> · Golden</span><span class="swatch"><strong>Pale</strong> · Pale</span></div>
+        <p><b>Spawns in</b><code>meadow, plains</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Eulipotyphla: Talpidae; closer to bats than to rodents A guest here: her true kin are too few, so she lives with her nearest relatives.</p><p><b>Body</b>Rodent form · <a href="rodent_field_guide.html#mole_rodent">her card in that guide</a></p>
+      </article>
+      <article class="card" id="needlehog_rodent">
+        <div class="card-top"><span class="group">Forests</span><span class="tag">Prickly · studious</span></div>
+        <h3>Needlehog <span style="color:var(--muted);font-size:.9rem">(about 1.3 blocks)</span></h3>
+        <p><b>Temperament</b>Shy, studious</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide hedgehog with quills long enough to pin notes to.</p>
+        <p><b>Signature: Quills</b>Frightened, she rolls into a ball of quills that pricks whatever touches her. She hunts silverfish and picks up paper and books she finds.</p>
+        <p><b>Player interaction</b>Spider eyes and berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Brown quills</span><span class="swatch"><strong>Blue</strong> · Blue-grey quills</span><span class="swatch"><strong>Albino</strong> · White quills</span><span class="swatch"><strong>Cinnamon</strong> · Ginger quills</span><span class="swatch"><strong>Dark</strong> · Dark quills</span><span class="swatch"><strong>Blue Blur</strong> · Blue quills, a tan belly, red clothes</span></div>
+        <p><b>Spawns in</b><code>forest, birch_forest, dark_forest, meadow</code></p>
+        <p class="risk"><b>Danger</b>Low (her quills).</p>
+              <p class="place"><b>True position</b>Eulipotyphla: Erinaceidae (Harmontide hedgehog); closer to bats than to rodents A guest here: her true kin are too few, so she lives with her nearest relatives.</p><p><b>Body</b>Rodent form · <a href="rodent_field_guide.html#needlehog_rodent">her card in that guide</a></p>
+      </article>
+      <article class="card" id="vetala_bat">
+        <div class="card-top"><span class="group">Old forests at night</span><span class="tag">Eerie · clever</span></div>
+        <h3>Vetala <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Eerie, clever</p>
+        <p><b>Ecology &amp; behaviour</b>The spirit of the Indian tales who hangs upside down from the trees by the burning grounds and rides the bodies of the dead, and who told a king twenty-five riddles: ash-pale, ragged, red-eyed, with tattered wings.</p>
+        <p><b>Signature: Possession</b>Befriended, she rides a zombie near her friend, and it fights for them for 30 seconds.</p>
+        <p><b>Player interaction</b>Rotten flesh and sweet berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Pale (default)</strong> · Ash-pale, white hair</span><span class="swatch"><strong>Ash</strong> · Dark ash</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Red</strong> · Red</span></div>
+        <p><b>Spawns in</b><code>dark_forest, swamp, old_growth_birch_forest</code></p>
+        <p class="risk"><b>Danger</b>Moderate.</p>
+              <p class="place"><b>True position</b>Chiroptera per this design (Indian spirit) A judgement call: TAXONOMY_PLAN.md gives the reasons.</p><p><b>Body</b>Bat form · <a href="bat_field_guide.html#vetala_bat">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

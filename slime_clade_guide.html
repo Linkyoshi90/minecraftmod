@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slimes — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · outside the tree</div>
+  <h1>Slimes</h1>
+  <p class="lede">Slimes and jellies: a body that is all one thing.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Health Boost + Jump Boost · <b style="display:inline;color:var(--accent)">Was:</b> Slime</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="perissodactyla_clade_guide.html">Perissodactyl</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Slime form · 11</b><a href="slime_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="slime_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (11)</h2>
+    <div class="grid">
+      <article class="card" id="amethyst_slime">
+        <div class="card-top"><span class="group">Geodes &amp; dripstone caves</span><span class="tag">Dreamy · crystalline</span></div>
+        <h3>Amethyst Slime <span style="color:var(--muted);font-size:.9rem">(about 1.55 blocks)</span></h3>
+        <p><b>Temperament</b>Dreamy, musical, a little absent-minded</p>
+        <p><b>Ecology &amp; behaviour</b>Jelly grown around amethyst crystals in geodes. She chimes when she moves and hums with the crystals.</p>
+        <p><b>Signature: Resonance</b>She glows and chimes faster the nearer she is to ore (iron, gold, diamond, emerald within 8 blocks): an ore finder. Devoted, she brings amethyst shards and an occasional quartz or diamond.</p>
+        <p><b>Player interaction</b>Bring amethyst shards. Listen to her chime.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Amethyst (default)</strong> · Violet with purple crystals</span><span class="swatch"><strong>Rose quartz</strong> · Soft pink</span><span class="swatch"><strong>Citrine</strong> · Pale gold</span><span class="swatch"><strong>Smoky quartz</strong> · Smoky brown-grey</span><span class="swatch"><strong>Emerald</strong> · Clear green</span><span class="swatch"><strong>Puffball</strong> · Pink, rosy cheeks, red crystals</span></div>
+        <p><b>Spawns in</b><code>dripstone_caves, deep_dark, lush_caves</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (living jelly)</p><p><b>Body</b>Slime form · <a href="slime_field_guide.html#amethyst_slime">her card in that guide</a></p>
+      </article>
+      <article class="card" id="copper_slime">
+        <div class="card-top"><span class="group">Copper caves</span><span class="tag">Bright · weathering</span></div>
+        <h3>Copper Slime <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Bright</p>
+        <p><b>Ecology &amp; behaviour</b>A slime of living copper. She weathers like the blocks do, from bright metal to green, and a little vain about it.</p>
+        <p><b>Signature: Weathering</b>She ages a stage every forty minutes. Honeycomb waxes her, an axe scrapes her back. Lightning polishes her all the way, and she stores the charge as speed for her friend.</p>
+        <p><b>Player interaction</b>Copper ingots and slime balls.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Copper (default)</strong> · Copper</span><span class="swatch"><strong>Exposed</strong> · Exposed</span><span class="swatch"><strong>Weathered</strong> · Weathered</span><span class="swatch"><strong>Oxidized</strong> · Oxidized</span><span class="swatch"><strong>Polished</strong> · Polished</span></div>
+        <p><b>Spawns in</b><code>dripstone_caves, stony_shore</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (living jelly)</p><p><b>Body</b>Slime form · <a href="slime_field_guide.html#copper_slime">her card in that guide</a></p>
+      </article>
+      <article class="card" id="ender_slime">
+        <div class="card-top"><span class="group">The End</span><span class="tag">Flickering · light-fingered</span></div>
+        <h3>Ender Slime <span style="color:var(--muted);font-size:.9rem">(about 1.7 blocks)</span></h3>
+        <p><b>Temperament</b>Shy, light-fingered</p>
+        <p><b>Ecology &amp; behaviour</b>A slime that ate an ender pearl: she flickers from place to place and moves the world around a block at a time.</p>
+        <p><b>Signature: Teleporting</b>She teleports away when hit, like an enderman, picks up loose blocks and puts them down somewhere else. Endermites are her kin.</p>
+        <p><b>Player interaction</b>Chorus fruit and ender pearls.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Void (default)</strong> · Black and violet</span><span class="swatch"><strong>Chorus</strong> · Pale purple</span><span class="swatch"><strong>Pearl</strong> · Teal</span><span class="swatch"><strong>End stone</strong> · Pale yellow</span><span class="swatch"><strong>Shulker</strong> · Purple and gold</span></div>
+        <p><b>Spawns in</b><code>end_highlands, end_midlands, warped_forest</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (living jelly)</p><p><b>Body</b>Slime form · <a href="slime_field_guide.html#ender_slime">her card in that guide</a></p>
+      </article>
+      <article class="card" id="frost_slime">
+        <div class="card-top"><span class="group">Frozen peaks &amp; ice</span><span class="tag">Cool · calm</span></div>
+        <h3>Frost Slime <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Calm, cool-headed, quietly funny</p>
+        <p><b>Ecology &amp; behaviour</b>Living ice jelly with snowflakes drifting inside. Water freezes under her, and she rests in the coldest places she can find.</p>
+        <p><b>Signature: Chill</b>Water under her freezes (frost walker). Bonded, she puts out a burning player she touches and gives Fire Resistance for ten seconds (once a minute).</p>
+        <p><b>Player interaction</b>Give her ice and snowballs. Keep her out of the Nether.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Ice blue (default)</strong> · Clear ice blue</span><span class="swatch"><strong>Glacier</strong> · Milky white-blue</span><span class="swatch"><strong>Aurora</strong> · Green and violet</span><span class="swatch"><strong>Deep</strong> · Deep sea blue</span><span class="swatch"><strong>Snow pink</strong> · Pale pink, like snow at sunset</span></div>
+        <p><b>Spawns in</b><code>frozen_peaks, ice_spikes, frozen_ocean, snowy_slopes, deep_frozen_ocean</code></p>
+        <p class="risk"><b>Danger</b>Low: the chill slows.</p>
+              <p class="place"><b>True position</b>outside taxonomy (living jelly)</p><p><b>Body</b>Slime form · <a href="slime_field_guide.html#frost_slime">her card in that guide</a></p>
+      </article>
+      <article class="card" id="honey_slime">
+        <div class="card-top"><span class="group">Flower forests &amp; meadows</span><span class="tag">Sweet · sticky</span></div>
+        <h3>Honey Slime <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Sweet, slow, sleepy</p>
+        <p><b>Ecology &amp; behaviour</b>Lives among bee nests. Bees treat her as one of their own. Everything that touches her sticks a little.</p>
+        <p><b>Signature: Sticky &amp; beloved by bees</b>Mobs that touch her get Slowness. Bees never sting her bonded player while she is near. Hand her a glass bottle and she fills it with honey (once an hour).</p>
+        <p><b>Player interaction</b>Give her honey and flowers. Never smoke out the bees she lives with.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Golden (default)</strong> · Clear golden honey</span><span class="swatch"><strong>Amber</strong> · Dark amber</span><span class="swatch"><strong>Clover</strong> · Pale clover honey</span><span class="swatch"><strong>Buckwheat</strong> · Dark brown</span><span class="swatch"><strong>Blossom</strong> · Pink cherry-blossom honey</span></div>
+        <p><b>Spawns in</b><code>flower_forest, meadow, sunflower_plains, cherry_grove</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (living jelly)</p><p><b>Body</b>Slime form · <a href="slime_field_guide.html#honey_slime">her card in that guide</a></p>
+      </article>
+      <article class="card" id="klabuster_slime">
+        <div class="card-top"><span class="group">Pastures and swamps</span><span class="tag">Cheerful · shameless</span></div>
+        <h3>Klabuster <span style="color:var(--muted);font-size:.9rem">(about 1.2 blocks)</span></h3>
+        <p><b>Temperament</b>Cheerful, shameless</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide jest: a glossy little swirl of a slime, named for the German “Klabusterbeere”, who dangles on a single strand from a tuft of hair and is very pleased with herself.</p>
+        <p><b>Signature: Manure</b>Befriended, every half minute the crops near her friend grow a stage, as if given bone meal.</p>
+        <p><b>Player interaction</b>Wheat, carrots and beetroot.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Brown (default)</strong> · Glossy brown</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Green</strong> · Green</span><span class="swatch"><strong>Purple</strong> · Purple</span><span class="swatch"><strong>Gold</strong> · Gold</span></div>
+        <p><b>Spawns in</b><code>plains, meadow, swamp</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (living jelly)</p><p><b>Body</b>Slime form · <a href="slime_field_guide.html#klabuster_slime">her card in that guide</a></p>
+      </article>
+      <article class="card" id="magma_slime">
+        <div class="card-top"><span class="group">Nether &amp; lava lakes</span><span class="tag">Hot-headed · warm</span></div>
+        <h3>Magma Slime <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Hot-headed, warm-hearted, impatient</p>
+        <p><b>Ecology &amp; behaviour</b>Molten jelly around a burning core. Lives in the Nether and by lava lakes, never takes fire damage, and glows in the dark.</p>
+        <p><b>Signature: Living furnace</b>Hand her raw food and she gives it back cooked (one item every few seconds). She glows (light) and sets nothing on fire unless angry.</p>
+        <p><b>Player interaction</b>Bring magma cream. Keep her away from water.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Ember (default)</strong> · Orange-red with a yellow core</span><span class="swatch"><strong>Cinder</strong> · Dark crust over glowing cracks</span><span class="swatch"><strong>Blue flame</strong> · Soul-fire blue</span><span class="swatch"><strong>White hot</strong> · Pale yellow-white</span><span class="swatch"><strong>Crimson</strong> · Deep red</span></div>
+        <p><b>Spawns in</b><code>basalt_deltas, nether_wastes, crimson_forest</code></p>
+        <p class="risk"><b>Danger</b>Low: touching her when she is angry burns.</p>
+              <p class="place"><b>True position</b>outside taxonomy (living jelly)</p><p><b>Body</b>Slime form · <a href="slime_field_guide.html#magma_slime">her card in that guide</a></p>
+      </article>
+      <article class="card" id="mimic_slime">
+        <div class="card-top"><span class="group">Unopened loot chests</span><span class="tag">Greedy · cuddly</span></div>
+        <h3>Mimic <span style="color:var(--muted);font-size:.9rem">(about 1.5 blocks)</span></h3>
+        <p><b>Temperament</b>Greedy, then devoted</p>
+        <p><b>Ecology &amp; behaviour</b>A slime who lives in a treasure chest and keeps its loot inside her. She waits in dungeons and mineshafts.</p>
+        <p><b>Signature: Treasure chest</b>One unopened loot chest in eight is a mimic: she bites once and keeps the loot. Gold wins her over; then she follows you and her loot is yours (crouch and right-click to open her).</p>
+        <p><b>Player interaction</b>Open a loot chest at your own risk. Feed her gold.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Oak (default)</strong> · An oak chest</span><span class="swatch"><strong>Spruce</strong> · A dark chest</span><span class="swatch"><strong>Gilded</strong> · A gold-trimmed chest</span><span class="swatch"><strong>Ender</strong> · An ender chest</span><span class="swatch"><strong>Christmas</strong> · A festive chest</span></div>
+        <p><b>Spawns in</b><code></code></p>
+        <p class="risk"><b>Danger</b>One bite.</p>
+              <p class="place"><b>True position</b>outside taxonomy (living jelly)</p><p><b>Body</b>Slime form · <a href="slime_field_guide.html#mimic_slime">her card in that guide</a></p>
+      </article>
+      <article class="card" id="mixed_slime">
+        <div class="card-top"><span class="group">Made, not found</span><span class="tag">Two in one · marbled</span></div>
+        <h3>Mixed Slime <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Two moods at once</p>
+        <p><b>Ecology &amp; behaviour</b>Two slime girls of different kinds who trust the same player can flow together into one marbled slime. She is both of them: a killing blow does not split her into halves, it separates her back into the two she was.</p>
+        <p><b>Signature: Two in one</b>One slime carrying both girls, their bonds and their belongings. Never lost: hurt badly, she comes apart into the two again.</p>
+        <p><b>Player interaction</b>Hold a slime ball and right-click one of two slimes (of different kinds, both at high friendship with you) standing together. Sneak and do it again to separate them.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Verdant and magma (default)</strong> · Marbled verdant and magma jelly</span><span class="swatch"><strong>Verdant and honey</strong> · Marbled verdant and honey jelly</span><span class="swatch"><strong>Verdant and frost</strong> · Marbled verdant and frost jelly</span><span class="swatch"><strong>Verdant and amethyst</strong> · Marbled verdant and amethyst jelly</span><span class="swatch"><strong>Magma and honey</strong> · Marbled magma and honey jelly</span><span class="swatch"><strong>Magma and frost</strong> · Marbled magma and frost jelly</span><span class="swatch"><strong>Magma and amethyst</strong> · Marbled magma and amethyst jelly</span><span class="swatch"><strong>Honey and frost</strong> · Marbled honey and frost jelly</span><span class="swatch"><strong>Honey and amethyst</strong> · Marbled honey and amethyst jelly</span><span class="swatch"><strong>Frost and amethyst</strong> · Marbled frost and amethyst jelly</span></div>
+        <p><b>Spawns in</b><code></code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>outside taxonomy (living jelly)</p><p><b>Body</b>Slime form · <a href="slime_field_guide.html#mixed_slime">her card in that guide</a></p>
+      </article>
+      <article class="card" id="undine_slime">
+        <div class="card-top"><span class="group">Rivers</span><span class="tag">Flowing · nurturing</span></div>
+        <h3>Undine <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Calm, nurturing</p>
+        <p><b>Ecology &amp; behaviour</b>A water elemental of European legend, a girl of living water.</p>
+        <p><b>Signature: Living water</b>Befriended, she keeps the farmland near her watered, fills the cauldrons near her, and gives her friend Water Breathing in the water.</p>
+        <p><b>Player interaction</b>Water bottles and kelp.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Clear blue</span><span class="swatch"><strong>Teal</strong> · Teal</span><span class="swatch"><strong>Clear</strong> · Nearly clear</span><span class="swatch"><strong>Deep</strong> · Deep blue</span><span class="swatch"><strong>Sea</strong> · Sea green</span><span class="swatch"><strong>Drop Smile</strong> · Clear blue, a drop&#x27;s point on her head, a wide smile</span><span class="swatch"><strong>Copy Blob</strong> · Soft pink, dot eyes</span></div>
+        <p><b>Spawns in</b><code>river, swamp, mangrove_swamp</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (living jelly)</p><p><b>Body</b>Slime form · <a href="slime_field_guide.html#undine_slime">her card in that guide</a></p>
+      </article>
+      <article class="card" id="verdant_slime">
+        <div class="card-top"><span class="group">Swamps &amp; slime chunks</span><span class="tag">Classic · cheerful</span></div>
+        <h3>Verdant Slime <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Cheerful, clingy, simple</p>
+        <p><b>Ecology &amp; behaviour</b>The classic green slime girl, from the same swamps and underground slime chunks as vanilla slimes. Bounces everywhere, hums, and leaves plants growing where she naps.</p>
+        <p><b>Signature: Garden jelly</b>Crops and saplings within 4 blocks of where she rests grow faster (a bone meal tick every half minute). Devoted, she follows you and fertilises as she goes.</p>
+        <p><b>Player interaction</b>Give her slime balls and apples. Let her nap in your garden.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Lime (default)</strong> · Bright lime jelly, a green core</span><span class="swatch"><strong>Mint</strong> · Pale mint</span><span class="swatch"><strong>Olive</strong> · Murky olive</span><span class="swatch"><strong>Teal</strong> · Blue-green</span><span class="swatch"><strong>Moss gold</strong> · Yellow-green with a golden core</span></div>
+        <p><b>Spawns in</b><code>swamp, mangrove_swamp, lush_caves</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>outside taxonomy (living jelly)</p><p><b>Body</b>Slime form · <a href="slime_field_guide.html#verdant_slime">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>

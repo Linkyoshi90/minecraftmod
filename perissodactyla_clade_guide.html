@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Odd-toed hoofed (horses, tapirs, rhinos) — Harmontide Field Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#10140f;--panel:#182016;--panel2:#1f2a1c;--ink:#eef2e6;--muted:#a9b59c;--accent:#9fd36a;--line:#2f3d2a;--green:#c8e6a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:clamp(28px,6vw,72px) max(20px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#24361c,var(--bg) 75%);border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-size:.78rem;font-weight:750}
+h1{font-size:clamp(2.3rem,6.5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lede{max-width:780px;color:var(--muted);font-size:1.1rem}
+main{max-width:1180px;margin:auto;padding:28px 20px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:26px;align-items:center;margin-bottom:42px}
+.hero img,.hero .stand-in{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.stand-in{padding:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stand-in div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-weight:650}
+.stand-in small{display:block;color:var(--muted);font-weight:400}
+.note{background:var(--panel);padding:24px;border:1px solid var(--line);border-radius:16px}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:-.025em;margin:0 0 12px}
+h3{font-size:1.35rem;margin:.45rem 0 .8rem}
+section{margin-top:48px}
+p{margin:.55rem 0;color:var(--ink);opacity:.92}b{display:block;color:var(--green);font-size:.77rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.note ul,.card ul{padding-left:1.2rem;color:var(--muted)}.note li,.card li{margin:.45rem 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;min-width:0}
+.card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.group{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tag{border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:.76rem}
+.card p{margin:.85rem 0}.risk{border-top:1px solid var(--line);padding-top:12px}
+.section-intro{color:var(--muted);max-width:780px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 10px}
+.rules.four{grid-template-columns:repeat(4,1fr)}
+.rule{background:var(--panel2);border-radius:12px;padding:18px;border:1px solid var(--line)}
+.rule strong{display:block;color:var(--accent);margin-bottom:5px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;margin:18px 0 10px}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--panel)}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tbody th{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700;width:16%}
+td{color:var(--ink);opacity:.92}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.swatch{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted);background:var(--panel2)}
+.swatch strong{color:var(--ink);font-weight:650}
+.volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.volumes a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.82rem}
+.volumes a.here{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+code{font-size:.9em;color:var(--green)}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.rules.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.rules,.rules.four{grid-template-columns:1fr}}
+@media print{body{background:white;color:#111}.card,.note,.rule,table,thead th{background:white;border-color:#aaa;color:#111}p,td,.lede,.section-intro,footer{color:#333}}
+.place{border-top:1px solid var(--line);padding-top:10px}.place a{color:var(--accent)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.toc a{color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Harmontide · a field guide by branch · Mammalia &gt; Laurasiatheria &gt; Perissodactyla</div>
+  <h1>Odd-toed hoofed (horses, tapirs, rhinos)</h1>
+  <p class="lede">Odd-toed hoofed beasts: horses, zebras, tapirs and rhinos, and the centaurs, unicorns and pegasi of legend.</p>
+  <p class="lede" style="font-size:.95rem"><b style="color:var(--accent)">Milk:</b> Speed · <b style="display:inline;color:var(--accent)">Was:</b> Centaur</p>
+  <nav class="toc"><a href="tree_of_life.html">← The Tree of Life</a><a href="feliformia_clade_guide.html">Feliform</a><a href="canidae_clade_guide.html">Canid</a><a href="arctoidea_clade_guide.html">Arctoid</a><a href="rodentia_clade_guide.html">Rodent</a><a href="lagomorpha_clade_guide.html">Lagomorph</a><a href="primates_clade_guide.html">Primate</a><a href="chiroptera_clade_guide.html">Bat</a><a href="marsupialia_clade_guide.html">Marsupial</a><a href="xenarthra_clade_guide.html">Xenarthran</a><a href="paenungulata_clade_guide.html">Paenungulate</a><a href="bovidae_clade_guide.html">Bovid</a><a href="cervidae_clade_guide.html">Cervid</a><a href="camelidae_clade_guide.html">Camelid</a><a href="suina_clade_guide.html">Suine</a><a href="whippomorpha_clade_guide.html">Whippomorph</a><a href="aves_clade_guide.html">Bird</a><a href="archosauria_clade_guide.html">Archosaur</a><a href="testudines_clade_guide.html">Testudine</a><a href="squamata_clade_guide.html">Squamate</a><a href="amphibia_clade_guide.html">Amphibian</a><a href="actinopterygii_clade_guide.html">Fish</a><a href="chelicerata_clade_guide.html">Chelicerate</a><a href="hexapoda_clade_guide.html">Insect</a><a href="malacostraca_clade_guide.html">Malacostracan</a><a href="mollusca_clade_guide.html">Mollusk</a><a href="flora_clade_guide.html">Flora</a><a href="fae_clade_guide.html">Fae</a><a href="dragon_clade_guide.html">Dragon</a><a href="undead_clade_guide.html">Undead</a><a href="devil_clade_guide.html">Devil</a><a href="slime_clade_guide.html">Slime</a><a href="construct_clade_guide.html">Construct</a><a href="rider_clade_guide.html">Rider</a></nav>
+</header>
+<main>
+  <section class="note" style="margin-top:0"><h2>Bodies on this branch</h2>
+    <p class="section-intro">A girl's body (her form) decides how she moves, nests, bears young and behaves; that is in the guide for her form. Her branch decides her milk, the name on her cheese, her spawn-rate setting and where she sits in the journal's tree of life.</p><ul>
+      <li><b>Centaur form · 8</b><a href="centaur_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="centaur_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Minotaur form · 2</b><a href="minotaur_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="minotaur_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+      <li><b>Nekomata form · 1</b><a href="nekomata_field_guide.html#mating" style="color:var(--accent)">life cycle</a> · <a href="nekomata_field_guide.html#systems" style="color:var(--accent)">behaviour</a></li>
+    </ul></section>
+  <section id="species">
+    <h2>Every kind on the branch (11)</h2>
+    <div class="grid">
+      <article class="card" id="baku_nekomata">
+        <div class="card-top"><span class="group">Meadows at night</span><span class="tag">Sleepy · kind</span></div>
+        <h3>Baku <span style="color:var(--muted);font-size:.9rem">(about 1.6 blocks)</span></h3>
+        <p><b>Temperament</b>Sleepy, kind</p>
+        <p><b>Ecology &amp; behaviour</b>The dream-eater of Japan: a tapir&#x27;s short trunk, round ears and a two-tone coat. She eats nightmares and is always a little full.</p>
+        <p><b>Signature: Dream eater</b>Befriended, she eats her friend&#x27;s nightmares: they never grow tired enough for phantoms to come.</p>
+        <p><b>Player interaction</b>Sweet berries and glow berries.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black and white</span><span class="swatch"><strong>Lilac</strong> · Lilac</span><span class="swatch"><strong>Blue</strong> · Blue</span><span class="swatch"><strong>Rose</strong> · Rose</span><span class="swatch"><strong>Grey</strong> · Grey</span></div>
+        <p><b>Spawns in</b><code>meadow, flower_forest, cherry_grove, end_midlands</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Tapiridae (myth; this design is a tapir)</p><p><b>Body</b>Nekomata form · <a href="nekomata_field_guide.html#baku_nekomata">her card in that guide</a></p>
+      </article>
+      <article class="card" id="bellmare_centaur">
+        <div class="card-top"><span class="group">Meadows</span><span class="tag">Jingling · bossy</span></div>
+        <h3>Bellmare <span style="color:var(--muted);font-size:.9rem">(about 1.9 blocks)</span></h3>
+        <p><b>Temperament</b>Bossy, cheerful</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide donkey with little goat&#x27;s horns, hung all over with bells, who leads the herd.</p>
+        <p><b>Signature: Bellwether</b>Befriended, the cows, sheep, goats and pigs within 12 blocks follow her while she follows her friend.</p>
+        <p><b>Player interaction</b>Wheat and carrots.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Blue (default)</strong> · Blue, silver bells</span><span class="swatch"><strong>Grey</strong> · A grey donkey</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Black</strong> · Black</span></div>
+        <p><b>Spawns in</b><code>meadow, plains, sunflower_plains</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Equidae: Equus asinus (Harmontide; goat horns are an ornament)</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#bellmare_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="donkey_centaur">
+        <div class="card-top"><span class="group">Pastures</span><span class="tag">Stubborn · loyal</span></div>
+        <h3>Donkey <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Stubborn</p>
+        <p><b>Ecology &amp; behaviour</b>Farmers keep donkeys with their sheep because nothing gets past one. She will not be pushed, and she will not be argued with.</p>
+        <p><b>Signature: Guard Donkey</b>She can&#x27;t be shoved. Befriended, she kicks the monsters near the farm animals around her.</p>
+        <p><b>Player interaction</b>Wheat and carrots.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Grey (default)</strong> · Grey</span><span class="swatch"><strong>Brown</strong> · Brown</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Dun</strong> · Dun</span></div>
+        <p><b>Spawns in</b><code>plains, sunflower_plains, meadow</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Equidae: Equus asinus</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#donkey_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="horse_centaur">
+        <div class="card-top"><span class="group">Plains &amp; meadows</span><span class="tag">Spirited · fast</span></div>
+        <h3>Horse <span style="color:var(--muted);font-size:.9rem">(about 2.4 blocks)</span></h3>
+        <p><b>Temperament</b>Friendly, spirited, curious</p>
+        <p><b>Ecology &amp; behaviour</b>The archetype. Herds of horse centaurs gallop across open plains, graze at dawn and dusk and sleep standing up.</p>
+        <p><b>Signature: Gallop</b>Ridden, she is the fastest mount in the mod (faster than a vanilla horse, slower than an ostrich sprint). Her lead mare leads the whole herd to safety.</p>
+        <p><b>Player interaction</b>Brush her and bring apples. Let her come to you before you try a saddle.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Bay (default)</strong> · Red-brown coat, black mane, tail and stockings</span><span class="swatch"><strong>Chestnut</strong> · Copper red all over</span><span class="swatch"><strong>Palomino</strong> · Gold coat, cream mane and tail</span><span class="swatch"><strong>Dapple grey</strong> · Grey with darker dapples</span><span class="swatch"><strong>Black</strong> · Glossy black</span></div>
+        <p><b>Spawns in</b><code>plains, sunflower_plains, meadow, savanna</code></p>
+        <p class="risk"><b>Danger</b>Low; kicks if hit from behind.</p>
+              <p class="place"><b>True position</b>Equidae: Equus caballus</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#horse_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="kelpie_centaur">
+        <div class="card-top"><span class="group">Rivers, at night</span><span class="tag">Wild · beguiling</span></div>
+        <h3>Kelpie <span style="color:var(--muted);font-size:.9rem">(about 2.3 blocks)</span></h3>
+        <p><b>Temperament</b>Charming by day, dangerous by night</p>
+        <p><b>Ecology &amp; behaviour</b>The water horse of Scottish lochs and rivers: a dark mare with weed in her mane who invites travellers to ride, then carries them into the deep. Here the dive is a prank and the danger is only at night.</p>
+        <p><b>Signature: Water horse</b>Saddled, she carries you over water faster than any boat, and on land like a horse. By day she is calm. At night she attacks any player she is not fond of.</p>
+        <p><b>Player interaction</b>Make friends by day (kelp, apples), then saddle her. Never stand on her bank at night as a stranger.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Loch (default)</strong> · Black-green coat, kelp in her mane</span><span class="swatch"><strong>Grey</strong> · Grey mare</span><span class="swatch"><strong>White</strong> · Pale as river mist</span><span class="swatch"><strong>Peat</strong> · Peat-brown</span><span class="swatch"><strong>Sea</strong> · Blue-green</span></div>
+        <p><b>Spawns in</b><code>river, frozen_river</code></p>
+        <p class="risk"><b>Danger</b>High at night, none by day.</p>
+              <p class="place"><b>True position</b>Equidae (folklore horse)</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#kelpie_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="pegasus_centaur">
+        <div class="card-top"><span class="group">Meadows near mountains</span><span class="tag">Noble · proud</span></div>
+        <h3>Pegasus <span style="color:var(--muted);font-size:.9rem">(about 2.4 blocks)</span></h3>
+        <p><b>Temperament</b>Proud, gentle, free</p>
+        <p><b>Ecology &amp; behaviour</b>The winged horse of Greek myth, tamed by Bellerophon with a golden bridle.</p>
+        <p><b>Signature: Winged</b>Ridden, she leaps high into the air (hold jump) and glides down slowly. No true flight.</p>
+        <p><b>Player interaction</b>Golden apples, and a golden bridle (gold horse armour) once she trusts you.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>White (default)</strong> · White</span><span class="swatch"><strong>Grey</strong> · Dapple grey</span><span class="swatch"><strong>Palomino</strong> · Gold</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Dawn</strong> · Rose and gold</span><span class="swatch"><strong>Angel Guard</strong> · White and gold, dark hair</span></div>
+        <p><b>Spawns in</b><code>meadow, cherry_grove</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Equidae (myth; wings are an ornament)</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#pegasus_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="rhino_minotaur">
+        <div class="card-top"><span class="group">Savanna</span><span class="tag">Short-sighted · decisive</span></div>
+        <h3>Rhino <span style="color:var(--muted);font-size:.9rem">(about 2.1 blocks)</span></h3>
+        <p><b>Temperament</b>Decisive</p>
+        <p><b>Ecology &amp; behaviour</b>She can&#x27;t see far, so she has decided not to need to.</p>
+        <p><b>Signature: Charge</b>She charges in a straight line at what she&#x27;s fighting, and it goes a long way.</p>
+        <p><b>Player interaction</b>Wheat and melons.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Slate (default)</strong> · Slate</span><span class="swatch"><strong>White</strong> · White</span><span class="swatch"><strong>Black</strong> · Black</span><span class="swatch"><strong>Dust</strong> · Dust</span><span class="swatch"><strong>Armour</strong> · Armour</span></div>
+        <p><b>Spawns in</b><code>savanna, savanna_plateau, windswept_savanna</code></p>
+        <p class="risk"><b>Danger</b>High.</p>
+              <p class="place"><b>True position</b>Rhinocerotidae</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#rhino_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="rhiwool_minotaur">
+        <div class="card-top"><span class="group">Tundra</span><span class="tag">Shaggy · headstrong</span></div>
+        <h3>Rhiwool <span style="color:var(--muted);font-size:.9rem">(about 2.0 blocks)</span></h3>
+        <p><b>Temperament</b>Headstrong</p>
+        <p><b>Ecology &amp; behaviour</b>A Harmontide woolly rhino: a great horn on her brow and wool to the ground.</p>
+        <p><b>Signature: Rhino charge</b>She charges in a straight line and sends whatever she hits flying. Shears take her wool, which grows back once she grazes.</p>
+        <p><b>Player interaction</b>Wheat. Shears.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Black (default)</strong> · Black wool</span><span class="swatch"><strong>Brown</strong> · Brown wool</span><span class="swatch"><strong>Grey</strong> · Grey wool</span><span class="swatch"><strong>White</strong> · White wool</span><span class="swatch"><strong>Red</strong> · Red wool</span></div>
+        <p><b>Spawns in</b><code>snowy_plains, frozen_peaks, windswept_gravelly_hills</code></p>
+        <p class="risk"><b>Danger</b>High (if provoked).</p>
+              <p class="place"><b>True position</b>Rhinocerotidae: Coelodonta antiquitatis (extinct, Harmontide)</p><p><b>Body</b>Minotaur form · <a href="minotaur_field_guide.html#rhiwool_minotaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="tapir_centaur">
+        <div class="card-top"><span class="group">Jungle &amp; swamp</span><span class="tag">Gentle · dream-eater</span></div>
+        <h3>Tapir <span style="color:var(--muted);font-size:.9rem">(about 2.1 blocks)</span></h3>
+        <p><b>Temperament</b>Gentle, sleepy, quietly protective</p>
+        <p><b>Ecology &amp; behaviour</b>Tapirus (Perissodactyla: Tapiridae), the same order as horses, so she belongs with the centaurs. A shy browser of the jungle and swamp who eats fruit and leaves at night. In Japan the tapir became the baku, the eater of nightmares.</p>
+        <p><b>Signature: Baku</b>Phantoms never spawn for a player sleeping within 32 blocks of a tapir, and the phantom girl stays away too. She eats the bad dreams.</p>
+        <p><b>Player interaction</b>Bring melons and apples. Brush her.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Malayan (default)</strong> · Black with a white saddle</span><span class="swatch"><strong>Lowland</strong> · Even dark brown</span><span class="swatch"><strong>Mountain</strong> · Woolly black-brown</span><span class="swatch"><strong>Baird&#x27;s</strong> · Grey-brown</span><span class="swatch"><strong>Calf coat</strong> · Brown with pale stripes and spots, like a baby tapir</span></div>
+        <p><b>Spawns in</b><code>jungle, sparse_jungle, bamboo_jungle, swamp, mangrove_swamp</code></p>
+        <p class="risk"><b>Danger</b>Low.</p>
+              <p class="place"><b>True position</b>Tapiridae: Tapirus</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#tapir_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="unicorn_centaur">
+        <div class="card-top"><span class="group">Flower forests</span><span class="tag">Pure · healing</span></div>
+        <h3>Unicorn <span style="color:var(--muted);font-size:.9rem">(about 2.2 blocks)</span></h3>
+        <p><b>Temperament</b>Gentle, wary of the impure</p>
+        <p><b>Ecology &amp; behaviour</b>The unicorn of European legend: a white horse with a single spiralled horn, who only lets the pure of heart come near.</p>
+        <p><b>Signature: Pure heart, healing horn</b>A player who has killed villagers or iron golems can never befriend her, and she keeps away from them. Her horn clears poison and wither from friends near her and speeds up the cure of zombie villagers. Friends may ride her.</p>
+        <p><b>Player interaction</b>Golden carrots and sugar. Come with clean hands.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>White (default)</strong> · White, golden horn</span><span class="swatch"><strong>Silver</strong> · Silver-grey</span><span class="swatch"><strong>Rose</strong> · Rose pink</span><span class="swatch"><strong>Midnight</strong> · Deep blue</span><span class="swatch"><strong>Rainbow</strong> · A rainbow mane</span></div>
+        <p><b>Spawns in</b><code>flower_forest, cherry_grove, meadow</code></p>
+        <p class="risk"><b>Danger</b>None.</p>
+              <p class="place"><b>True position</b>Equidae (folklore horse)</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#unicorn_centaur">her card in that guide</a></p>
+      </article>
+      <article class="card" id="zebra_centaur">
+        <div class="card-top"><span class="group">Savanna</span><span class="tag">Wild · fierce</span></div>
+        <h3>Zebra <span style="color:var(--muted);font-size:.9rem">(about 2.3 blocks)</span></h3>
+        <p><b>Temperament</b>Wary, quick-tempered, fiercely loyal</p>
+        <p><b>Ecology &amp; behaviour</b>Famously never tamed: she will be your friend, never your mount. The herd&#x27;s stripes blur together when it runs, and a zebra&#x27;s kick can break a jaw.</p>
+        <p><b>Signature: Dazzle &amp; alarm bark</b>When the herd runs, hostile mobs lose track of them (they drop their target). A bonded zebra guards your home: she barks an alarm (a loud call) when hostile mobs come within 16 blocks.</p>
+        <p><b>Player interaction</b>Earn her friendship and accept her terms.</p>
+        <p><b>Colour variants</b></p><div class="swatches"><span class="swatch"><strong>Plains (default)</strong> · Broad black stripes with grey shadow stripes</span><span class="swatch"><strong>Grevy&#x27;s</strong> · Fine, narrow stripes, white belly</span><span class="swatch"><strong>Mountain</strong> · Bold stripes with a grid on the rump</span><span class="swatch"><strong>Golden</strong> · Gold stripes on cream (amelanistic)</span><span class="swatch"><strong>Quagga</strong> · Brown back, stripes only on the front</span></div>
+        <p><b>Spawns in</b><code>savanna, savanna_plateau, windswept_savanna</code></p>
+        <p class="risk"><b>Danger</b>Moderate: kicks and bites when angry.</p>
+              <p class="place"><b>True position</b>Equidae: Equus quagga</p><p><b>Body</b>Centaur form · <a href="centaur_field_guide.html#zebra_centaur">her card in that guide</a></p>
+      </article>
+    </div>
+  </section>
+  <footer>Generated by <code>tools/build_clade_guides.py</code> from <code>tools/taxonomy.py</code> and the form guides' cards.</footer>
+</main>
+</body>
+</html>
