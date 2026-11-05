@@ -113,7 +113,7 @@ add species later. Candidates: a sloth or tamandua, a warthog or babirusa, a wom
 | Needlehog `needlehog_rodent` | Bats | Eulipotyphla: Erinaceidae (Harmontide hedgehog); closer to bats than to rodents |
 | Mole `mole_rodent` | Bats | Eulipotyphla: Talpidae; closer to bats than to rodents |
 
-### Judgement calls (please confirm or overrule)
+### Judgement calls (confirmed by the user 2026-11-05: all stay as placed)
 
 | Species | Placed in | Reasoning |
 |---|---|---|

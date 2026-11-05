@@ -83,4 +83,20 @@ public class MarketTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "travellersAreStrangers")
+    public static void travellersAreStrangers(GameTestHelper helper) {
+        var level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        var from = Market.candidates(level, helper.absolutePos(new BlockPos(5, 2, 5)));
+        check(from.contains(GirlSpecies.WOLF_CANID), "a wolf could come to market");
+        var data = p.getData(com.linkyoshi90.monstergirls.registry.ModAttachments.JOURNAL);
+        var met = new net.minecraft.nbt.ListTag();
+        for (GirlSpecies s : from) if (s != GirlSpecies.WOLF_CANID) met.add(net.minecraft.nbt.StringTag.valueOf(s.id()));
+        data.put("Met", met);
+        p.setData(com.linkyoshi90.monstergirls.registry.ModAttachments.JOURNAL, data);
+        check(Market.unmet(from, p).equals(java.util.List.of(GirlSpecies.WOLF_CANID)), "met everyone but the wolf: she is the stranger");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

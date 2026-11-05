@@ -69,9 +69,8 @@ public final class Market {
         arrive(level, hearth.getBlockPos(), owner);
     }
 
-    /** A trader sets up by the hearth: a grown girl of a family not living there, nothing legendary. She, or null. */
-    @Nullable
-    public static AbstractMonsterGirl arrive(ServerLevel level, BlockPos hearth, Player owner) {
+    /** Who could come: grown girls of a family not living at the hearth, land folk, nothing hostile, nothing legendary. */
+    public static List<GirlSpecies> candidates(ServerLevel level, BlockPos hearth) {
         Set<GirlSpecies.Family> home = EnumSet.noneOf(GirlSpecies.Family.class);
         for (AbstractMonsterGirl g : Festivals.guests(level, hearth)) home.add(g.getSpecies().family());
         List<GirlSpecies> from = new ArrayList<>();
@@ -80,7 +79,24 @@ public final class Market {
                     && s.category() == net.minecraft.world.entity.MobCategory.CREATURE
                     && Rarity.of(s.id()) != Rarity.Tier.LEGENDARY) from.add(s);   // nothing hostile, nothing legendary
         }
+        return from;
+    }
+
+    /** Of these, the kinds the owner has never met (the market is a way to fill in the journal's tree of life). */
+    public static List<GirlSpecies> unmet(List<GirlSpecies> from, Player owner) {
+        Set<String> met = com.linkyoshi90.monstergirls.entity.Journal.met(owner);
+        List<GirlSpecies> out = new ArrayList<>();
+        for (GirlSpecies s : from) if (!met.contains(s.id())) out.add(s);
+        return out;
+    }
+
+    /** A trader sets up by the hearth (three times in four a kind the owner has never met, while there are any). She, or null. */
+    @Nullable
+    public static AbstractMonsterGirl arrive(ServerLevel level, BlockPos hearth, Player owner) {
+        List<GirlSpecies> from = candidates(level, hearth);
         if (from.isEmpty()) return null;
+        List<GirlSpecies> fresh = unmet(from, owner);
+        if (!fresh.isEmpty() && level.random.nextInt(4) != 0) from = fresh;
         AbstractMonsterGirl girl = ModGirls.type(from.get(level.random.nextInt(from.size()))).create(level);
         if (girl == null) return null;
         BlockPos at = spot(level, hearth, girl);
