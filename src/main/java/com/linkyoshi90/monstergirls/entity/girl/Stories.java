@@ -57,16 +57,17 @@ public final class Stories {
         return out;
     }
 
-    /** Who her story is about: a kind they have not heard of, from her own people if she can. Null when they know them all. */
+    /** Who her story is about: a kind they have not heard of, of her own branch of the tree of life if she can, else from her own people. Null when they know them all. */
     @Nullable
     public static GirlSpecies subject(ServerLevel level, ServerPlayer p, AbstractMonsterGirl teller) {
         String home = Letters.country(teller.getSpecies().family());
-        List<GirlSpecies> near = new ArrayList<>(), far = new ArrayList<>();
+        com.linkyoshi90.monstergirls.entity.Clade clade = teller.getSpecies().clade();
+        List<GirlSpecies> kin = new ArrayList<>(), near = new ArrayList<>(), far = new ArrayList<>();
         for (GirlSpecies s : GirlSpecies.values()) {
             if (s == teller.getSpecies() || Journal.sightings(p, s.id()) >= Journal.KNOWN || Journal.friends(p).contains(s.id())) continue;
-            (Letters.country(s.family()).equals(home) ? near : far).add(s);
+            (clade != null && s.clade() == clade ? kin : Letters.country(s.family()).equals(home) ? near : far).add(s);
         }
-        List<GirlSpecies> pool = near.isEmpty() ? far : near;
+        List<GirlSpecies> pool = !kin.isEmpty() ? kin : near.isEmpty() ? far : near;
         return pool.isEmpty() ? null : pool.get(level.random.nextInt(pool.size()));
     }
 

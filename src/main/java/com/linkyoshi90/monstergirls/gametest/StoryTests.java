@@ -49,6 +49,7 @@ public class StoryTests {
             GirlSpecies other = Stories.subject(level, p, a);
             check(other != null && Journal.hearOf(p, other.id()) && !Journal.hearOf(p, other.id()), "a kind heard of once");
             check(Journal.sightings(p, other.id()) == Journal.KNOWN, "her home shows");
+            check(other.clade() == GirlSpecies.INABA_JACKALOPE.clade(), "she tells of her own branch first: " + other.id());
             helper.setDayTime(1000);
             HarpyTestUtil.remove(p);
             helper.succeed();
