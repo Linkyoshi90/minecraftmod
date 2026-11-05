@@ -150,6 +150,11 @@ public class TaxonomyTests {
         com.linkyoshi90.monstergirls.entity.Journal.record(p, last, false);
         check(com.linkyoshi90.monstergirls.entity.Journal.wholeBranches(p).contains("XENARTHRA"), "the fourth makes the branch whole");
         check(!com.linkyoshi90.monstergirls.entity.Journal.branch(p, Clade.XENARTHRA), "only once");
+        var charm = p.getInventory().items.stream().filter(s -> s.is(ModItems.BRANCH_CHARM.get())).findFirst().orElse(net.minecraft.world.item.ItemStack.EMPTY);
+        check(charm.get(ModComponents.CLADE.get()) == Clade.XENARTHRA && charm.getCount() == 1, "and its branch charm, once");
+        check(com.linkyoshi90.monstergirls.item.BranchCharmItem.effect(charm) == net.minecraft.world.effect.MobEffects.DAMAGE_RESISTANCE
+                && com.linkyoshi90.monstergirls.item.BranchCharmItem.effect(com.linkyoshi90.monstergirls.item.BranchCharmItem.of(Clade.FLORA)) == null,
+                "the charm lends the branch's milk's first effect; the plants' is a keepsake");
         var pages = com.linkyoshi90.monstergirls.entity.Journal.book(p).pages();
         int tree = -1, hyenaPage = -1, firstArmadillo = -1;
         for (int i = 0; i < pages.size(); i++) {

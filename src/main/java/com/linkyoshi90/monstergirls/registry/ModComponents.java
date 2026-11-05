@@ -21,6 +21,10 @@ public final class ModComponents {
     /** The clade a butter, cheese, ice cream or meal was made from (old family names still read: FamilyMilk.byName). */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<FamilyMilk>> MILK_FAMILY = COMPONENTS.registerComponentType("milk_family",
             b -> b.persistent(Codec.STRING.xmap(FamilyMilk::byName, FamilyMilk::name)).networkSynchronized(NeoForgeStreamCodecs.enumCodec(FamilyMilk.class)));
+    /** The branch of the tree of life a branch charm stands for (entity.Clade). */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<com.linkyoshi90.monstergirls.entity.Clade>> CLADE = COMPONENTS.registerComponentType("clade",
+            b -> b.persistent(Codec.STRING.xmap(com.linkyoshi90.monstergirls.entity.Clade::valueOf, com.linkyoshi90.monstergirls.entity.Clade::name))
+                    .networkSynchronized(NeoForgeStreamCodecs.enumCodec(com.linkyoshi90.monstergirls.entity.Clade.class)));
     /** What she had eaten from the fridge or a friend's hand before she was milked: one effect each, on top of the family's. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<Holder<MobEffect>>>> MILK_DIET = COMPONENTS.registerComponentType("milk_diet",
             b -> b.persistent(MobEffect.CODEC.listOf()).networkSynchronized(MobEffect.STREAM_CODEC.apply(ByteBufCodecs.list())));

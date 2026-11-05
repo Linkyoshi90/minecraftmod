@@ -154,6 +154,8 @@ public final class Journal {
             var a = sp.server.getAdvancements().get(MonsterGirlsMod.id(WHOLE_BRANCH_ADVANCEMENT));
             if (a != null) sp.getAdvancements().award(a, "done");
         }
+        net.minecraft.world.item.ItemStack charm = com.linkyoshi90.monstergirls.item.BranchCharmItem.of(clade);   // the branch's charm, to keep
+        if (!player.getInventory().add(charm)) player.drop(charm, false);
         return true;
     }
 

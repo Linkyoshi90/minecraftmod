@@ -24,7 +24,7 @@ M.add_lang({
     "journal.monstergirls.guide.tree.title": "The tree of life",
     "journal.monstergirls.guide.tree": "Every kind belongs to a branch of the tree of life: cats with hyenas and mongooses, whales with hippos, "
                                        "salamanders with frogs. A body can fool you (the hyena runs like a dog), her branch decides her milk. "
-                                       "The pages after the guide keep count of each branch you have started; meet every kind on one branch to complete it. "
+                                       "The pages after the guide keep count of each branch you have started; meet every kind on one branch to complete it and earn its charm (in your offhand it lends that branch's milk's first effect). "
                                        "Your first friend of a kind gets talked about: wild ones of her branch nearby start a little fond of you.",
     "advancement.monstergirls.whole_branch": "A Whole Branch", "advancement.monstergirls.whole_branch.desc": "Meet every kind on one branch of the tree of life",
 })

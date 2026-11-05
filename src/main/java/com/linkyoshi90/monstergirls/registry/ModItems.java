@@ -201,6 +201,9 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> FRIDGE = ITEMS.registerSimpleBlockItem(ModBlocks.FRIDGE);
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.FriendCompassItem> FRIEND_COMPASS = ITEMS.register("friend_compass", () -> new com.linkyoshi90.monstergirls.item.FriendCompassItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> FRIENDSHIP_BRACELET = ITEMS.registerSimpleItem("friendship_bracelet", new Item.Properties().stacksTo(16));
+    /** Given for meeting every kind on one branch of the tree of life (Journal.branch); in the offhand it gives that branch's milk's first effect. */
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.BranchCharmItem> BRANCH_CHARM = ITEMS.register("branch_charm",
+            () -> new com.linkyoshi90.monstergirls.item.BranchCharmItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> LOVE_LETTER = ITEMS.registerSimpleItem("love_letter", new Item.Properties().stacksTo(16));
     /** A fancy salami: food for the player, and fed to a close friend she misses them more (Missing). */
     public static final DeferredItem<Item> SALAMI = ITEMS.registerItem("salami",
