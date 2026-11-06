@@ -211,8 +211,13 @@ public final class Settlement {
         if (!girl.hutDone() || !level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) return null;
         for (Piece p : homely(girl)) {
             BlockState there = level.getBlockState(p.pos());
-            if (there.is(p.state().getBlock())) continue;
             boolean sign = p.state().getBlock() instanceof net.minecraft.world.level.block.SignBlock;
+            if (there.is(p.state().getBlock())) {
+                if (sign && level.getBlockEntity(p.pos()) instanceof net.minecraft.world.level.block.entity.SignBlockEntity board && board.isWaxed()
+                        && !board.getFrontText().getMessage(1, false).getString().equals(girl.getName().getString()))   // a new name: she repaints it
+                    board.setText(board.getFrontText().setMessage(1, girl.getName().copy()), true);
+                continue;
+            }
             if (sign ? !there.canBeReplaced() || there.liquid() || !level.getBlockState(p.pos().below()).isFaceSturdy(level, p.pos().below(), Direction.UP)
                     : !there.isAir()) continue;                                       // her friend put something there: leave it
             level.setBlock(p.pos(), p.state(), Block.UPDATE_ALL);

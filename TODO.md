@@ -833,3 +833,4 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [x] Huts get a waxed oak sign with her name and kind outside, beside the path to the door (first homely piece).
 - [x] Well Taught advancement: a lesson from all 35 branches.
 - [ ] Flaky: `crowStoresOreInTheMatchingChest` failed once 2026-11-06 ("put her find in the chest: 3"), passed on rerun.
+- [x] Supper: the bell rung at dusk (day time 11500-14000) with the owner within 8 of the hearth: each resident who comes within 4 eats with them once (+2 friendship, the owner fed a little); once a day. Hut signs follow a new name (checked on homely mornings).

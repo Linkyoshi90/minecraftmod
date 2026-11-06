@@ -243,6 +243,30 @@ public class HarmontideLifeTests {
         });
     }
 
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "supperByTheHearth")
+    public static void supperByTheHearth(GameTestHelper helper) {
+        BlockPos hp = new BlockPos(5, 2, 5);
+        helper.setBlock(hp, ModBlocks.HEARTH.get());
+        HearthBlockEntity hearth = (HearthBlockEntity) helper.getBlockEntity(hp);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 8));
+        hearth.setOwner(p.getUUID());
+        AbstractMonsterGirl girl = still(helper, GirlSpecies.FENNEC_KITSUNE, new BlockPos(6, 2, 6));
+        AbstractMonsterGirl far = still(helper, GirlSpecies.WOLF_CANID, new BlockPos(12, 2, 12));
+        for (AbstractMonsterGirl g : List.of(girl, far)) {
+            g.addAffection(p, Orders.AFFECTION);
+            Settlement.settle(helper.getLevel(), g, hearth);
+        }
+        check(hearth.supper(helper.getLevel()) == 0, "no supper till the bell rings for it");
+        check(hearth.startSupper(helper.getLevel()) && !hearth.startSupper(helper.getLevel()), "supper once a day");
+        p.getFoodData().setFoodLevel(10);
+        int before = girl.getAffection(p);
+        check(hearth.supper(helper.getLevel()) == 1, "she sits down to eat; the one still out on the hill doesn't, yet");
+        check(girl.getAffection(p) == before + HearthBlockEntity.SUPPER_AFFECTION && p.getFoodData().getFoodLevel() > 10, "closer, and fed");
+        check(hearth.supper(helper.getLevel()) == 0, "one helping each");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
     @GameTest(template = PLATFORM, timeoutTicks = 200, batch = "settledGirlBuildsHerHut")
     public static void settledGirlBuildsHerHut(GameTestHelper helper) {
         AbstractMonsterGirl girl = still(helper, GirlSpecies.FENNEC_KITSUNE, new BlockPos(1, 2, 1));
@@ -269,6 +293,9 @@ public class HarmontideLifeTests {
                 && board.getFrontText().getMessage(1, false).getString().equals(girl.getName().getString()) && board.isWaxed(), "her name on a sign outside");
         BlockPos doorway = origin.offset(2, 0, 0);
         check(signAt.distManhattan(doorway) == 2 && !signAt.equals(doorway.north()), "beside the path to her door, not on it: " + signAt);
+        girl.setCustomName(net.minecraft.network.chat.Component.literal("Clementine"));
+        check(Settlement.makeHomely(helper.getLevel(), girl) == null && helper.getLevel().getBlockEntity(signAt) instanceof net.minecraft.world.level.block.entity.SignBlockEntity renamed
+                && renamed.getFrontText().getMessage(1, false).getString().equals("Clementine"), "a new name, a repainted sign");
         helper.succeed();
     }
 

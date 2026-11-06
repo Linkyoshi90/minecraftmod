@@ -34,6 +34,7 @@ M.add_lang({
     "advancement.monstergirls.herbarium": "Herbarium",
     "advancement.monstergirls.herbarium.desc": "Press every kind of small flower in your journal",
     "message.monstergirls.supper_bell": "The bell calls them home: %s coming",
+    "message.monstergirls.supper": "%s shares supper with you by the fire",
     "advancement.monstergirls.well_taught": "Well Taught",
     "advancement.monstergirls.well_taught.desc": "Learn a lesson from every branch of the tree of life",
 })

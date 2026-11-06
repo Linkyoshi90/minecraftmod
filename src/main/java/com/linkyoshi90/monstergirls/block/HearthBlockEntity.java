@@ -36,6 +36,9 @@ public class HearthBlockEntity extends BlockEntity {
     private final Set<UUID> residents = new LinkedHashSet<>();
     private final SimpleContainer store = new SimpleContainer(27);
     private long lastMarketDay = -1;
+    /** Supper (the bell at dusk): until when it lasts, the last day it was held, and who has eaten. Not saved but the day. */
+    private long supperUntil = -1, lastSupperDay = -1;
+    private final Set<UUID> served = new java.util.HashSet<>();
 
     public HearthBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.HEARTH.get(), pos, state);
@@ -111,6 +114,7 @@ public class HearthBlockEntity extends BlockEntity {
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, HearthBlockEntity h) {
+        if (level.getGameTime() % 20 == 10 && level instanceof ServerLevel s && level.getGameTime() < h.supperUntil) h.supper(s);
         if (level.getGameTime() % 100 != 0 || !(level instanceof ServerLevel server)) return;
         long day = server.getDayTime() / 24000L;
         if (day != h.lastMarketDay && server.getDayTime() % 24000L < 6000L) {        // the morning market
@@ -206,12 +210,59 @@ public class HearthBlockEntity extends BlockEntity {
                 if (!(level.getEntity(id) instanceof AbstractMonsterGirl girl) || !girl.isAlive() || !at.equals(girl.homeHearth())
                         || girl.distanceToSqr(at.getCenter()) > BELL_HEARD * BELL_HEARD) continue;
                 girl.callHome(level.getGameTime() + BELL_CALL);
+                if (dusk(level)) h.startSupper(level);
                 level.sendParticles(net.minecraft.core.particles.ParticleTypes.NOTE, girl.getX(), girl.getEyeY() + 0.5, girl.getZ(), 1, 0, 0, 0, 0.5);
                 n++;
             }
         }
         if (n > 0) for (Player p : level.getEntitiesOfClass(Player.class, new net.minecraft.world.phys.AABB(bell).inflate(16)))
             p.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.supper_bell", n), true);
+        return n;
+    }
+
+    public static final int SUPPER_NEAR = 4, SUPPER_OWNER = 8, SUPPER_AFFECTION = 2;
+
+    /** Evening: from sunset till the first stars (the bell rung then is the supper bell). */
+    public static boolean dusk(Level level) {
+        long t = level.getDayTime() % 24000L;
+        return t >= 11500L && t < 14000L;
+    }
+
+    /** The bell rang at dusk: supper is on, once a day. Whether it started. */
+    public boolean startSupper(ServerLevel level) {
+        long day = level.getDayTime() / 24000L;
+        if (day == this.lastSupperDay || !com.linkyoshi90.monstergirls.MonsterGirlsConfig.comfort()) return false;
+        this.lastSupperDay = day;
+        this.supperUntil = level.getGameTime() + BELL_CALL;
+        this.served.clear();
+        this.setChanged();
+        return true;
+    }
+
+    public boolean supperOn(Level level) {
+        return level.getGameTime() < this.supperUntil;
+    }
+
+    /**
+     * While supper is on: each resident who has come to the fire (within {@value #SUPPER_NEAR}) while its owner sits by it
+     * (within {@value #SUPPER_OWNER}) eats with them, once: +{@value #SUPPER_AFFECTION} friendship, and the owner is fed a little
+     * too. How many sat down just now.
+     */
+    public int supper(ServerLevel level) {
+        Player owner = this.owner == null ? null : level.getPlayerByUUID(this.owner);
+        if (owner == null || !this.supperOn(level) || owner.distanceToSqr(this.worldPosition.getCenter()) > SUPPER_OWNER * SUPPER_OWNER) return 0;
+        int n = 0;
+        for (UUID id : Set.copyOf(this.residents)) {
+            if (this.served.contains(id) || !(level.getEntity(id) instanceof AbstractMonsterGirl girl) || !girl.isAlive()
+                    || !this.worldPosition.equals(girl.homeHearth()) || girl.distanceToSqr(this.worldPosition.getCenter()) > SUPPER_NEAR * SUPPER_NEAR) continue;
+            this.served.add(id);
+            girl.addAffection(owner, SUPPER_AFFECTION);
+            owner.getFoodData().eat(2, 0.5F);
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.HEART, girl.getX(), girl.getEyeY() + 0.4, girl.getZ(), 2, 0.2, 0.1, 0.2, 0.0);
+            level.playSound(null, girl.blockPosition(), net.minecraft.sounds.SoundEvents.GENERIC_EAT, net.minecraft.sounds.SoundSource.NEUTRAL, 0.6F, 1.1F);
+            owner.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.supper", girl.getName()), true);
+            n++;
+        }
         return n;
     }
 
@@ -235,6 +286,7 @@ public class HearthBlockEntity extends BlockEntity {
         tag.put("Residents", r);
         tag.put("Store", this.store.createTag(registries));
         tag.putLong("LastMarketDay", this.lastMarketDay);
+        tag.putLong("LastSupperDay", this.lastSupperDay);
     }
 
     @Override
@@ -246,5 +298,6 @@ public class HearthBlockEntity extends BlockEntity {
         this.store.clearContent();
         this.store.fromTag(tag.getList("Store", Tag.TAG_COMPOUND), registries);
         this.lastMarketDay = tag.getLong("LastMarketDay");
+        this.lastSupperDay = tag.contains("LastSupperDay") ? tag.getLong("LastSupperDay") : -1;
     }
 }
