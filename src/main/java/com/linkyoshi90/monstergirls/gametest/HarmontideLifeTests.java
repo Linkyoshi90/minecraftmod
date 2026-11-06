@@ -189,6 +189,37 @@ public class HarmontideLifeTests {
         helper.succeed();
     }
 
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "residentsPlantAGarden")
+    public static void residentsPlantAGarden(GameTestHelper helper) {
+        BlockPos hp = new BlockPos(5, 2, 5);
+        helper.setBlock(hp, ModBlocks.HEARTH.get());
+        HearthBlockEntity hearth = (HearthBlockEntity) helper.getBlockEntity(hp);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        hearth.setOwner(p.getUUID());
+        AbstractMonsterGirl sphinx = still(helper, GirlSpecies.SPHINX_CENTAUR, new BlockPos(2, 2, 8));
+        AbstractMonsterGirl wolf = still(helper, GirlSpecies.WOLF_CANID, new BlockPos(8, 2, 2));
+        check(hearth.garden(helper.getLevel()) == 0, "nobody lives here yet");
+        for (AbstractMonsterGirl g : java.util.List.of(sphinx, wolf)) {
+            g.addAffection(p, Orders.AFFECTION);
+            Settlement.settle(helper.getLevel(), g, hearth);
+        }
+        check(hearth.garden(helper.getLevel()) == 2, "each resident plants one flower");
+        int sphinxes = 0, flowers = 0;
+        BlockPos mid = helper.absolutePos(hp);
+        for (BlockPos q : BlockPos.betweenClosed(mid.offset(-7, -1, -7), mid.offset(7, 1, 7))) {
+            var state = helper.getLevel().getBlockState(q);
+            if (!state.is(net.minecraft.tags.BlockTags.SMALL_FLOWERS)) continue;
+            flowers++;
+            if (state.is(HearthBlockEntity.flowerOf(sphinx))) sphinxes++;
+            check(Math.max(Math.abs(q.getX() - mid.getX()), Math.abs(q.getZ() - mid.getZ())) >= HearthBlockEntity.GARDEN_NEAR, "not right at the fire");
+        }
+        check(flowers == 2 && sphinxes >= 1, "her kind's flower among them, got " + flowers);
+        for (int i = 0; i < 10; i++) hearth.garden(helper.getLevel());
+        check(hearth.garden(helper.getLevel()) == 0, "a garden, not a meadow: it stops at " + HearthBlockEntity.GARDEN_MAX);
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
     @GameTest(template = PLATFORM, timeoutTicks = 200, batch = "settledGirlBuildsHerHut")
     public static void settledGirlBuildsHerHut(GameTestHelper helper) {
         AbstractMonsterGirl girl = still(helper, GirlSpecies.FENNEC_KITSUNE, new BlockPos(1, 2, 1));
@@ -199,6 +230,17 @@ public class HarmontideLifeTests {
         girl.planHutAt(origin, Direction.NORTH);
         for (int i = 0; i < 3; i++) Settlement.buildStep(helper.getLevel(), girl);
         check(girl.hutStep() == 3 && helper.getLevel().getBlockState(plan.get(0).pos()).is(plan.get(0).state().getBlock()), "she builds it a block at a time");
+        for (int i = 3; i < plan.size(); i++) Settlement.buildStep(helper.getLevel(), girl);
+        int halves = 0;
+        for (Settlement.Piece pc : plan) if (helper.getLevel().getBlockState(pc.pos()).getBlock() instanceof BedBlock) halves++;
+        check(halves == 2, "the whole bed inside, not half of it in the wall: " + halves);
+        for (Settlement.Piece pc : plan) check(helper.getLevel().getBlockState(pc.pos()).is(pc.state().getBlock()), "every piece in its place: " + pc);
+        var homely = Settlement.homely(girl);
+        for (Settlement.Piece pc : homely) check(plan.stream().noneMatch(q -> q.pos().equals(pc.pos())), "her things go where nothing of the hut is: " + pc);
+        for (int i = 0; i < homely.size(); i++) check(Settlement.makeHomely(helper.getLevel(), girl) != null, "one thing each morning");
+        check(Settlement.makeHomely(helper.getLevel(), girl) == null, "and then it's homely");
+        check(homely.stream().anyMatch(pc -> pc.state().getBlock() instanceof net.minecraft.world.level.block.FlowerPotBlock
+                && helper.getLevel().getBlockState(pc.pos()).getBlock() instanceof net.minecraft.world.level.block.FlowerPotBlock), "her flower in a pot");
         helper.succeed();
     }
 

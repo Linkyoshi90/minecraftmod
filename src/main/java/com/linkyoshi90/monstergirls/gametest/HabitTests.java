@@ -219,4 +219,31 @@ public class HabitTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "devotedFriendsTeachALesson")
+    public static void devotedFriendsTeachALesson(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        check(com.linkyoshi90.monstergirls.entity.Lessons.TAUGHT.size() == com.linkyoshi90.monstergirls.entity.Clade.values().length, "every branch teaches something");
+        var speed = p.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED);
+        double base = speed.getValue();
+        int pages = com.linkyoshi90.monstergirls.entity.Journal.book(p).pages().size();
+        AbstractMonsterGirl wolf = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(3, 2, 3));
+        AbstractMonsterGirl fox = spawn(helper, GirlSpecies.RED_KITSUNE, new BlockPos(4, 2, 3));
+        AbstractMonsterGirl hare = spawn(helper, GirlSpecies.JACK_JACKALOPE, new BlockPos(5, 2, 3));
+        for (AbstractMonsterGirl g : java.util.List.of(wolf, fox, hare)) g.setNoAi(true);
+        check(com.linkyoshi90.monstergirls.entity.Journal.devoted(p, wolf) && com.linkyoshi90.monstergirls.entity.Lessons.knows(p, com.linkyoshi90.monstergirls.entity.Clade.CANIDAE),
+                "a devoted wolf teaches her branch's lesson");
+        check(speed.getValue() > base, "a wolf's stride: faster");
+        check(com.linkyoshi90.monstergirls.entity.Journal.devoted(p, fox) && com.linkyoshi90.monstergirls.entity.Lessons.learned(p).size() == 1, "a second canid has nothing new to teach");
+        com.linkyoshi90.monstergirls.entity.Journal.devoted(p, hare);
+        var lessons = com.linkyoshi90.monstergirls.entity.Lessons.learned(p);
+        check(lessons.size() == 2 && lessons.getCompound(1).getString("Teacher").equals(hare.getName().getString()), "the hare teaches hers, and the journal says who");
+        speed.removeModifier(com.linkyoshi90.monstergirls.entity.Lessons.id(com.linkyoshi90.monstergirls.entity.Clade.CANIDAE));
+        check(com.linkyoshi90.monstergirls.entity.Lessons.apply(p) == 2 && speed.getValue() > base, "lessons come back after death");
+        double once = speed.getValue();
+        check(com.linkyoshi90.monstergirls.entity.Lessons.apply(p) == 2 && speed.getValue() == once, "and are never doubled");
+        check(com.linkyoshi90.monstergirls.entity.Journal.book(p).pages().size() == pages + 2, "a Lessons page (and the dearest friends page)");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

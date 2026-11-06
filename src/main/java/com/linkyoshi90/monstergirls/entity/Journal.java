@@ -40,7 +40,7 @@ public final class Journal {
     public static final int KNOWN = 3, STUDIED = 20, NATURALIST = 25;
     public static final String SEEN = "Seen", NATURALIST_ADVANCEMENT = "naturalist";
     /** How many givers the milk page lists. */
-    public static final int MILK_LINES = 8;
+    public static final int MILK_LINES = 8, LESSON_LINES = 5;            // a lesson line "Rooting out luck (Wilhelmina)" wraps to two
     /** The tree of life: branches whose every kind they have met, and how many branch lines fit on a page. */
     public static final String BRANCHES = "Branches", WHOLE_BRANCH_ADVANCEMENT = "whole_branch";
     /** A branch with this many kinds or fewer left to meet gets hints where they live ('Still to meet'), this many to a page. */
@@ -163,6 +163,7 @@ public final class Journal {
         player.setData(ModAttachments.JOURNAL, data);
         if (player instanceof ServerPlayer sp) sp.displayClientMessage(Component.translatable("message.monstergirls.devoted", girl.getName())
                 .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        Lessons.learn(player, girl);                                          // her branch's lesson, if it's the first
         return true;
     }
 
@@ -487,6 +488,18 @@ public final class Journal {
                 Component flower = BuiltInRegistries.ITEM.get(net.minecraft.resources.ResourceLocation.parse(f.getString("Id"))).getDescription();
                 page.append(NL_TEXT).append((f.getString("With").isEmpty() ? Component.translatable("journal.monstergirls.pressed.alone", flower)
                         : Component.translatable("journal.monstergirls.pressed.line", flower, f.getString("With"))).withStyle(ChatFormatting.RESET, ChatFormatting.BLACK));
+            }
+            pages.add(Filterable.passThrough(page));
+        }
+        ListTag lessons = Lessons.learned(player);
+        for (int i = 0; i < lessons.size(); i += LESSON_LINES) {                  // what devoted friends have taught them, and who
+            MutableComponent page = Component.translatable("journal.monstergirls.lessons.title").withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_AQUA)
+                    .append(NL_TEXT).append(Component.translatable("journal.monstergirls.lessons.count", lessons.size(), Lessons.TAUGHT.size()).withStyle(ChatFormatting.RESET, ChatFormatting.GRAY));
+            for (int j = i; j < Math.min(i + LESSON_LINES, lessons.size()); j++) {
+                CompoundTag l = lessons.getCompound(j);
+                page.append(NL_TEXT).append(Component.translatable("journal.monstergirls.lessons.line",
+                        Component.translatable("lesson.monstergirls." + l.getString("Clade").toLowerCase(java.util.Locale.ROOT) + ".short"), l.getString("Teacher"))
+                        .withStyle(ChatFormatting.RESET, ChatFormatting.BLACK));
             }
             pages.add(Filterable.passThrough(page));
         }

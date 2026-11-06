@@ -114,7 +114,7 @@ public final class Settlement {
             }
         }
         Direction bed = door.getOpposite();                                         // the bed against the back wall, its head to it
-        BlockPos foot = origin.offset(2 + bed.getStepX(), 0, 2 + bed.getStepZ());
+        BlockPos foot = origin.offset(2, 0, 2);                                    // (one further back, its head was in the wall, which went up first)
         BlockState b = st.bed().defaultBlockState().setValue(BedBlock.FACING, bed);
         out.add(new Piece(foot, b.setValue(BedBlock.PART, BedPart.FOOT)));
         out.add(new Piece(foot.relative(bed), b.setValue(BedBlock.PART, BedPart.HEAD)));
@@ -172,6 +172,47 @@ public final class Settlement {
             break;
         }
         girl.setHutStep(i);
+    }
+
+    // --- a homely hut ----------------------------------------------------------------------------------------------
+
+    /** Her flower in a pot (the same order as HearthBlockEntity.GARDEN_FLOWERS). */
+    static final List<Block> POTTED = List.of(Blocks.POTTED_DANDELION, Blocks.POTTED_POPPY, Blocks.POTTED_BLUE_ORCHID, Blocks.POTTED_ALLIUM,
+            Blocks.POTTED_AZURE_BLUET, Blocks.POTTED_RED_TULIP, Blocks.POTTED_ORANGE_TULIP, Blocks.POTTED_WHITE_TULIP, Blocks.POTTED_PINK_TULIP,
+            Blocks.POTTED_OXEYE_DAISY, Blocks.POTTED_CORNFLOWER, Blocks.POTTED_LILY_OF_THE_VALLEY, Blocks.POTTED_TORCHFLOWER);
+
+    /** What she adds to her finished hut over the mornings, in order, each in its own spot on the floor (the way from the door to
+     *  the bed stays clear): a candle across from the lantern, her flower in a pot in a back corner, then rugs in her bed's colour. */
+    public static List<Piece> homely(AbstractMonsterGirl girl) {
+        BlockPos origin = girl.hutOrigin();
+        if (origin == null) return List.of();
+        Direction back = girl.hutDoor().getOpposite(), side = back.getClockWise();
+        BlockPos mid = origin.offset(2, 0, 2);
+        int flower = HearthBlockEntity.GARDEN_FLOWERS.indexOf(HearthBlockEntity.flowerOf(girl));
+        net.minecraft.world.item.DyeColor colour = ((BedBlock) style(girl.getSpecies()).bed()).getColor();
+        Block rug = net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(net.minecraft.resources.ResourceLocation.withDefaultNamespace(colour.getName() + "_carpet"));
+        BlockPos front = mid.relative(back.getOpposite());
+        return List.of(
+                new Piece(mid.relative(side.getOpposite()), Blocks.CANDLE.defaultBlockState().setValue(net.minecraft.world.level.block.CandleBlock.LIT, true)),
+                new Piece(mid.relative(back).relative(side), POTTED.get(Math.max(0, flower)).defaultBlockState()),
+                new Piece(mid.relative(back).relative(side.getOpposite()), rug.defaultBlockState()),
+                new Piece(front.relative(side), rug.defaultBlockState()),
+                new Piece(front.relative(side.getOpposite()), rug.defaultBlockState()));
+    }
+
+    /** A morning at home in her finished hut: she adds the next thing it lacks (into an empty spot only). What she added, or null. */
+    @Nullable
+    public static Piece makeHomely(ServerLevel level, AbstractMonsterGirl girl) {
+        if (!girl.hutDone() || !level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) return null;
+        for (Piece p : homely(girl)) {
+            BlockState there = level.getBlockState(p.pos());
+            if (there.is(p.state().getBlock())) continue;
+            if (!there.isAir()) continue;                                              // her friend put something there: leave it
+            level.setBlock(p.pos(), p.state(), Block.UPDATE_ALL);
+            level.playSound(null, p.pos(), p.state().getSoundType().getPlaceSound(), SoundSource.BLOCKS, 0.8F, 1.0F);
+            return p;
+        }
+        return null;
     }
 
     /** She wanders home when she has strayed far (by day) or is out after dark. */

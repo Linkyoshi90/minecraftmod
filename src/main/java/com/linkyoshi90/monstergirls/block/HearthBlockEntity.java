@@ -116,6 +116,8 @@ public class HearthBlockEntity extends BlockEntity {
         if (day != h.lastMarketDay && server.getDayTime() % 24000L < 6000L) {        // the morning market
             h.lastMarketDay = day;
             h.market(server);
+            h.garden(server);
+            h.homely(server);
             com.linkyoshi90.monstergirls.entity.girl.Market.morning(server, h);
             h.setChanged();
         }
@@ -139,6 +141,61 @@ public class HearthBlockEntity extends BlockEntity {
             if (gift.isEmpty()) continue;
             ItemStack rest = this.store.addItem(gift);
             if (rest.getCount() < gift.getCount()) n++;
+        }
+        return n;
+    }
+
+    // --- the garden -------------------------------------------------------------------------------------------------
+
+    public static final int GARDEN_NEAR = 3, GARDEN_FAR = 7, GARDEN_MAX = 16;
+    /** The flowers girls plant (no wither roses): each kind has her own, the same everywhere. */
+    public static final java.util.List<net.minecraft.world.level.block.Block> GARDEN_FLOWERS = java.util.List.of(
+            net.minecraft.world.level.block.Blocks.DANDELION, net.minecraft.world.level.block.Blocks.POPPY, net.minecraft.world.level.block.Blocks.BLUE_ORCHID,
+            net.minecraft.world.level.block.Blocks.ALLIUM, net.minecraft.world.level.block.Blocks.AZURE_BLUET, net.minecraft.world.level.block.Blocks.RED_TULIP,
+            net.minecraft.world.level.block.Blocks.ORANGE_TULIP, net.minecraft.world.level.block.Blocks.WHITE_TULIP, net.minecraft.world.level.block.Blocks.PINK_TULIP,
+            net.minecraft.world.level.block.Blocks.OXEYE_DAISY, net.minecraft.world.level.block.Blocks.CORNFLOWER, net.minecraft.world.level.block.Blocks.LILY_OF_THE_VALLEY,
+            net.minecraft.world.level.block.Blocks.TORCHFLOWER);
+
+    /** Her kind's flower. */
+    public static net.minecraft.world.level.block.Block flowerOf(AbstractMonsterGirl girl) {
+        return GARDEN_FLOWERS.get(Math.floorMod(girl.getSpecies().id().hashCode(), GARDEN_FLOWERS.size()));
+    }
+
+    /**
+     * Every morning each resident at home plants her kind's flower on the grass between 3 and 7 blocks from the hearth, until
+     * {@value #GARDEN_MAX} flowers grow there: a garden that shows who lives here. Mob griefing off: none. How many were planted.
+     */
+    public int garden(ServerLevel level) {
+        if (!level.getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_MOBGRIEFING) || !com.linkyoshi90.monstergirls.MonsterGirlsConfig.comfort()) return 0;
+        java.util.List<BlockPos> spots = new java.util.ArrayList<>();
+        int flowers = 0;
+        for (BlockPos p : BlockPos.betweenClosed(this.worldPosition.offset(-GARDEN_FAR, -2, -GARDEN_FAR), this.worldPosition.offset(GARDEN_FAR, 2, GARDEN_FAR))) {
+            if (level.getBlockState(p).is(net.minecraft.tags.BlockTags.SMALL_FLOWERS)) {
+                flowers++;
+                continue;
+            }
+            int d = Math.max(Math.abs(p.getX() - this.worldPosition.getX()), Math.abs(p.getZ() - this.worldPosition.getZ()));
+            if (d >= GARDEN_NEAR && level.isEmptyBlock(p) && level.getBlockState(p.below()).is(net.minecraft.world.level.block.Blocks.GRASS_BLOCK)) spots.add(p.immutable());
+        }
+        int n = 0;
+        for (UUID id : Set.copyOf(this.residents)) {
+            if (flowers + n >= GARDEN_MAX || spots.isEmpty()) break;
+            if (!(level.getEntity(id) instanceof AbstractMonsterGirl girl) || !girl.isAlive() || !this.worldPosition.equals(girl.homeHearth())) continue;
+            BlockPos at = spots.remove(level.random.nextInt(spots.size()));
+            level.setBlock(at, flowerOf(girl).defaultBlockState(), 3);
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.HAPPY_VILLAGER, at.getX() + 0.5, at.getY() + 0.4, at.getZ() + 0.5, 4, 0.3, 0.2, 0.3, 0.0);
+            n++;
+        }
+        return n;
+    }
+
+    /** Every other morning or so, each resident at home in a finished hut adds something to it (Settlement.homely). How many did. */
+    public int homely(ServerLevel level) {
+        int n = 0;
+        for (UUID id : Set.copyOf(this.residents)) {
+            if (!(level.getEntity(id) instanceof AbstractMonsterGirl girl) || !girl.isAlive() || !this.worldPosition.equals(girl.homeHearth())
+                    || level.random.nextInt(2) != 0) continue;
+            if (com.linkyoshi90.monstergirls.entity.girl.Settlement.makeHomely(level, girl) != null) n++;
         }
         return n;
     }

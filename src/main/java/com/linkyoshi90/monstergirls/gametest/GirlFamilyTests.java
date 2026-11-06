@@ -148,6 +148,9 @@ public class GirlFamilyTests {
 
     @GameTest(template = PLATFORM, timeoutTicks = 300, batch = "koiLaysRoeOrcaHasACalf")
     public static void koiLaysRoeOrcaHasACalf(GameTestHelper helper) {
+        for (int c : new int[]{4, 10}) {                                   // walled in: water that runs over the platform takes her roe out of reach
+            for (int dx = -2; dx <= 2; dx++) for (int dz = -2; dz <= 2; dz++) if (Math.abs(dx) == 2 || Math.abs(dz) == 2) helper.setBlock(new BlockPos(c + dx, 2, c + dz), Blocks.GLASS);
+        }
         pool(helper, 4, 4);
         pool(helper, 10, 10);
         Merfolk koi = spawn(helper, GirlSpecies.KOI_MERMAID, new BlockPos(4, 2, 4));
