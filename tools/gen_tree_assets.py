@@ -27,6 +27,8 @@ R.advancement("whole_tree", "minecraft:flowering_azalea", "challenge", ["done"],
 M.add_lang({
     "journal.monstergirls.tree.title": "The tree of life",
     "journal.monstergirls.tree.line": "%s %s/%s",
+    "journal.monstergirls.still.title": "Still to meet",
+    "journal.monstergirls.still.line": "%s: one lives in %s",
     "journal.monstergirls.milestones": "Milestones",
     "journal.monstergirls.branches": "Whole branches: %s of %s (boughs %s of %s)",
     "jade.monstergirls.branch": "%s · met %s of %s",

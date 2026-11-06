@@ -120,6 +120,28 @@ public class TaxonomyTests {
         helper.succeed();
     }
 
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "stillToMeetHintsTheLastKinds")
+    public static void stillToMeetHintsTheLastKinds(GameTestHelper helper) {
+        net.minecraft.server.level.ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        var hares = com.linkyoshi90.monstergirls.entity.Journal.members(Clade.LAGOMORPHA);
+        String last = hares.stream().filter(id -> GirlSpecies.byId(id) != null).reduce((x, y) -> y).orElseThrow();
+        java.util.function.Supplier<String> book = () -> com.linkyoshi90.monstergirls.entity.Journal.book(p).pages().toString();
+        var first = BuiltInRegistries.ENTITY_TYPE.get(MonsterGirlsMod.id(hares.get(0).equals(last) ? hares.get(1) : hares.get(0))).create(helper.getLevel());
+        com.linkyoshi90.monstergirls.entity.Journal.record(p, first, false);
+        check(hares.size() - 1 <= com.linkyoshi90.monstergirls.entity.Journal.LAST_FEW || !book.get().contains(last + ".home"), "one hare met of many: no hints yet");
+        for (String id : hares) {
+            if (id.equals(last)) continue;
+            com.linkyoshi90.monstergirls.entity.Journal.record(p, BuiltInRegistries.ENTITY_TYPE.get(MonsterGirlsMod.id(id)).create(helper.getLevel()), false);
+        }
+        check(book.get().contains("journal.monstergirls.still.title") && book.get().contains("journal.monstergirls." + last + ".home"),
+                "one hare left: the journal says where she lives");
+        check(!book.get().contains("entity.monstergirls." + last + "'"), "but not who she is");
+        com.linkyoshi90.monstergirls.entity.Journal.record(p, BuiltInRegistries.ENTITY_TYPE.get(MonsterGirlsMod.id(last)).create(helper.getLevel()), false);
+        check(!book.get().contains("journal.monstergirls.still.title"), "the branch whole: nothing still to meet");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
     @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "wordGetsAroundTheBranch")
     public static void wordGetsAroundTheBranch(GameTestHelper helper) {
         net.minecraft.server.level.ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));

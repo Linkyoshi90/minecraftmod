@@ -43,7 +43,9 @@ public final class Journal {
     public static final int MILK_LINES = 8;
     /** The tree of life: branches whose every kind they have met, and how many branch lines fit on a page. */
     public static final String BRANCHES = "Branches", WHOLE_BRANCH_ADVANCEMENT = "whole_branch";
-    public static final int TREE_LINES = 11;                                 // a page is 14 lines: the title, a blank, and room for one name that wraps
+    /** A branch with this many kinds or fewer left to meet gets hints where they live ('Still to meet'), this many to a page. */
+    public static final int LAST_FEW = 2, STILL_LINES = 4;
+    public static final int TREE_LINES = 11;                                // a page is 14 lines: the title, a blank, and room for one name that wraps
     /** Word of a first friend reaches wild kin this far away, and warms them this much. */
     public static final double WORD_RANGE = 24.0;
     public static final int WORD = 3;
@@ -420,6 +422,21 @@ public final class Journal {
         for (int i = 0; i < tree.size(); i += TREE_LINES) {
             MutableComponent page = Component.translatable("journal.monstergirls.tree.title").withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_BLUE).append("\n");
             for (MutableComponent line : tree.subList(i, Math.min(i + TREE_LINES, tree.size()))) page.append("\n").append(line);
+            pages.add(Filterable.passThrough(page));
+        }
+        List<MutableComponent> still = new ArrayList<>();                            // a branch nearly whole: where its last kinds live, not who they are
+        for (Clade clade : Clade.values()) {
+            int n = metOn(player, clade);
+            if (n == 0 || members(clade).size() - n > LAST_FEW) continue;
+            for (String id : members(clade)) {
+                if (met.contains(id) || GirlSpecies.byId(id) == null) continue;
+                still.add(Component.translatable("journal.monstergirls.still.line", Component.translatable("family.monstergirls." + clade.key()),
+                        Component.translatable("journal.monstergirls." + id + ".home")).withStyle(ChatFormatting.RESET, ChatFormatting.DARK_GREEN));
+            }
+        }
+        for (int i = 0; i < still.size(); i += STILL_LINES) {
+            MutableComponent page = Component.translatable("journal.monstergirls.still.title").withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_BLUE).append(NL_TEXT);
+            for (MutableComponent line : still.subList(i, Math.min(i + STILL_LINES, still.size()))) page.append(NL_TEXT).append(line);
             pages.add(Filterable.passThrough(page));
         }
         ListTag dearest = player.getData(ModAttachments.JOURNAL).getList(DEAREST, Tag.TAG_COMPOUND);
