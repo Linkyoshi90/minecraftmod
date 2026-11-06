@@ -26,6 +26,8 @@ import javax.annotation.Nullable;
  * <li>Elephants and their kin (on land) spray a burning friend out with their trunks, every half minute.</li>
  * <li>Crabs, lobsters and shrimp comb the beach: a friend standing on sand by the water gets what she digs up at their feet, every
  * couple of minutes (kelp, clay, bones and flint, now and then a shard, a sea pickle or ink, rarely gold or a nautilus shell).</li>
+ * <li>Fairies, pixies and the leshy leave a fairy ring: on a night out on the grass with a friend near, a ring of mushrooms comes up
+ * around her, every few days. Anyone standing in a ring at night (theirs, or one a player planted) is lucky till morning.</li>
  * </ul>
  */
 public final class Habits {
@@ -166,5 +168,62 @@ public final class Habits {
         if (friend instanceof ServerPlayer sp) sp.displayClientMessage(Component.translatable("message.monstergirls.beachcombed", girl.getDisplayName(),
                 stack.getHoverName()).withStyle(net.minecraft.ChatFormatting.YELLOW), true);
         return stack;
+    }
+
+    // --- fairy rings ------------------------------------------------------------------------------------------------
+
+    public static final String RING_AT = "FairyRingAt", RING_NIGHT = "FairyRingNight";
+    public static final int RING_GAP = 72000, RING_MIN = 6;
+    public static final double RING_FRIEND = 16.0;
+    /** The ring: eight spots two blocks out around its middle. */
+    public static final java.util.List<net.minecraft.core.BlockPos> RING = java.util.List.of(
+            new net.minecraft.core.BlockPos(2, 0, 1), new net.minecraft.core.BlockPos(2, 0, -1), new net.minecraft.core.BlockPos(-2, 0, 1), new net.minecraft.core.BlockPos(-2, 0, -1),
+            new net.minecraft.core.BlockPos(1, 0, 2), new net.minecraft.core.BlockPos(-1, 0, 2), new net.minecraft.core.BlockPos(1, 0, -2), new net.minecraft.core.BlockPos(-1, 0, -2));
+
+    private static boolean isNight(ServerLevel level) {
+        long time = level.getDayTime() % 24000L;
+        return time > 13000 && time < 23000;
+    }
+
+    /** Every ten seconds for a grown fae at night on the grass with a friend near: now and then (every few days at most) a ring of
+     *  mushrooms comes up around her. How many mushrooms. Mob griefing off: none. */
+    public static int fairyRing(ServerLevel level, AbstractMonsterGirl girl, boolean force) {
+        if (!MonsterGirlsConfig.comfort() || girl.isBaby() || girl.getSpecies().clade() != Clade.FAE || !isNight(level)
+                || !level.getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_MOBGRIEFING)
+                || level.getGameTime() < girl.getPersistentData().getLong(RING_AT) || (!force && girl.getRandom().nextInt(30) != 0)) return 0;
+        if (girl.bondedPlayer(Orders.AFFECTION, RING_FRIEND) == null) return 0;
+        net.minecraft.core.BlockPos mid = girl.blockPosition();
+        if (!level.getBlockState(mid.below()).is(net.minecraft.world.level.block.Blocks.GRASS_BLOCK)) return 0;
+        int n = 0;
+        for (net.minecraft.core.BlockPos off : RING) {
+            net.minecraft.core.BlockPos at = mid.offset(off);
+            if (!level.isEmptyBlock(at) || !level.getBlockState(at.below()).is(net.minecraft.tags.BlockTags.DIRT)) continue;
+            level.setBlock(at, (girl.getRandom().nextInt(3) == 0 ? net.minecraft.world.level.block.Blocks.RED_MUSHROOM
+                    : net.minecraft.world.level.block.Blocks.BROWN_MUSHROOM).defaultBlockState(), 2);
+            level.sendParticles(ParticleTypes.ENCHANT, at.getX() + 0.5, at.getY() + 0.3, at.getZ() + 0.5, 6, 0.2, 0.2, 0.2, 0.3);
+            n++;
+        }
+        if (n > 0) girl.getPersistentData().putLong(RING_AT, level.getGameTime() + RING_GAP);
+        return n;
+    }
+
+    /** Whether a ring of mushrooms (at least six of the eight spots) stands around this spot. */
+    public static boolean inRing(ServerLevel level, net.minecraft.core.BlockPos mid) {
+        int n = 0;
+        for (net.minecraft.core.BlockPos off : RING) if (level.getBlockState(mid.offset(off)).getBlock() instanceof net.minecraft.world.level.block.MushroomBlock) n++;
+        return n >= RING_MIN;
+    }
+
+    /** Every two seconds for a player: standing in a fairy ring at night, they are lucky till morning (once a night). Whether they were just blessed. */
+    public static boolean ringLuck(ServerLevel level, ServerPlayer p) {
+        if (!MonsterGirlsConfig.comfort() || !isNight(level) || !inRing(level, p.blockPosition())) return false;
+        long tonight = (level.getDayTime() + 12000L) / 24000L + 1;
+        if (p.getPersistentData().getLong(RING_NIGHT) == tonight) return false;
+        p.getPersistentData().putLong(RING_NIGHT, tonight);
+        long left = 23000 - level.getDayTime() % 24000L;
+        p.addEffect(new MobEffectInstance(net.minecraft.world.effect.MobEffects.LUCK, (int) Math.max(1200, left), 0));
+        level.sendParticles(ParticleTypes.ENCHANT, p.getX(), p.getY() + 1.0, p.getZ(), 30, 0.6, 0.6, 0.6, 0.5);
+        p.displayClientMessage(Component.translatable("message.monstergirls.fairy_ring").withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE), true);
+        return true;
     }
 }

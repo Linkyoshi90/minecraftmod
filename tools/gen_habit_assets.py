@@ -20,6 +20,7 @@ M.add_lang({
                                          "Walk beside a hoofed friend (cattle, goats, deer, camels, horses) and you find your footing the way she does, "
                                          "stepping up whole blocks without a jump.",
     "message.monstergirls.beachcombed": "%s digs in the sand at your feet and turns up %s",
+    "message.monstergirls.fairy_ring": "You stand in a fairy ring, and luck is with you till morning",
     "message.monstergirls.sure_footed": "Beside %s you find your footing: you step up whole blocks",
 })
 print("habit assets written")

@@ -169,6 +169,7 @@ public final class Company {
             swim(level, p);
             warm(level, p);
             sureFooted(level, p);
+            com.linkyoshi90.monstergirls.entity.girl.Habits.ringLuck(level, p);
         }
     }
 }

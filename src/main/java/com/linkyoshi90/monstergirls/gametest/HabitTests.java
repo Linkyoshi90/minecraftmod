@@ -82,6 +82,34 @@ public class HabitTests {
         helper.succeed();
     }
 
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "fairiesLeaveAFairyRing")
+    public static void fairiesLeaveAFairyRing(GameTestHelper helper) {
+        var level = helper.getLevel();
+        for (int x = 2; x <= 8; x++) for (int z = 2; z <= 8; z++) helper.setBlock(new BlockPos(x, 1, z), net.minecraft.world.level.block.Blocks.GRASS_BLOCK);
+        helper.setDayTime(18000);                                       // night (checked in this one tick: the clock is shared)
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 9));
+        AbstractMonsterGirl fairy = spawn(helper, GirlSpecies.FAIRY_BUG, new BlockPos(5, 2, 5));
+        fairy.setNoAi(true);
+        fairy.setNoGravity(true);
+        check(Habits.fairyRing(level, fairy, true) == 0, "no friend near: no ring");
+        fairy.addAffection(p, Orders.AFFECTION);
+        fairy.teleportTo(helper.absoluteVec(new BlockPos(5, 2, 5).getBottomCenter()).x, helper.absolutePos(new BlockPos(5, 2, 5)).getY(), helper.absoluteVec(new BlockPos(5, 2, 5).getBottomCenter()).z);
+        int ring = Habits.fairyRing(level, fairy, true);
+        check(ring == Habits.RING.size(), "a ring of mushrooms comes up around her, got " + ring);
+        check(Habits.fairyRing(level, fairy, true) == 0, "one ring every few days");
+        BlockPos mid = helper.absolutePos(new BlockPos(5, 2, 5));
+        check(Habits.inRing(level, mid), "it's a ring");
+        p.teleportTo(mid.getX() + 0.5, mid.getY(), mid.getZ() + 0.5);
+        check(Habits.ringLuck(level, p) && p.hasEffect(MobEffects.LUCK), "standing in it at night: lucky");
+        check(!Habits.ringLuck(level, p), "once a night");
+        AbstractMonsterGirl gibbon = spawn(helper, GirlSpecies.GIBBON_RODENT, new BlockPos(3, 2, 3));
+        gibbon.addAffection(p, Orders.AFFECTION);
+        check(Habits.fairyRing(level, gibbon, true) == 0, "a gibbon grows no mushrooms");
+        HarpyTestUtil.remove(p);
+        helper.setDayTime(1000);
+        helper.succeed();
+    }
+
     @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "elephantsDouseAFriendOnFire")
     public static void elephantsDouseAFriendOnFire(GameTestHelper helper) {
         var level = helper.getLevel();
