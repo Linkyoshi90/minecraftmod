@@ -180,4 +180,20 @@ public class ChoresTests {
         HarpyTestUtil.remove(player);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 400, batch = "patrolEmptiesTheNestingBox")
+    public static void patrolEmptiesTheNestingBox(GameTestHelper helper) {
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        BlockPos chest = new BlockPos(5, 2, 9), nest = new BlockPos(9, 2, 4);
+        helper.setBlock(chest, Blocks.CHEST);
+        helper.setBlock(nest, com.linkyoshi90.monstergirls.registry.ModBlocks.NESTING_BOX.get());
+        ((com.linkyoshi90.monstergirls.block.NestingBoxBlockEntity) helper.getBlockEntity(nest)).lay(new ItemStack(Items.EGG, 3));
+        AbstractMonsterGirl girl = onPatrol(helper, player, new BlockPos(6, 2, 6));
+        helper.succeedWhen(() -> {
+            var box = (Container) helper.getBlockEntity(chest);
+            check(count(box, Items.EGG) == 3 && !helper.getBlockState(nest).getValue(com.linkyoshi90.monstergirls.block.NestingBoxBlock.EGGS),
+                    "she empties the nesting box into the chest");
+            HarpyTestUtil.remove(player);
+        });
+    }
 }

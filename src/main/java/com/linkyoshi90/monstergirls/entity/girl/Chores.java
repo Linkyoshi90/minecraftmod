@@ -42,7 +42,7 @@ import java.util.List;
 
 /**
  * Chores (after the farmhand, FarmhandGoal): a friend on patrol (harpies and anurans too) keeps the place around her patrol spot.
- * She gathers the eggs, feathers and wool lying about, takes the honey from a full hive without angering the bees (into a glass
+ * She gathers the eggs, feathers and wool lying about (and empties the nesting boxes), takes the honey from a full hive without angering the bees (into a glass
  * bottle if there is one in a chest, else as honeycomb), shears woolly sheep, sets torches from a chest in dark corners where monsters
  * could spawn (the lamplighter), picks ripe sweet berries and glow berries (the bushes and vines keep growing), and when there
  * is nothing else to do she fishes from
@@ -66,6 +66,35 @@ public final class Chores {
         ItemStack s = item.getItem();
         return item.isAlive() && item.getOwner() == null && (s.is(Items.EGG) || s.is(Items.FEATHER) || s.is(ItemTags.WOOL) || s.is(Items.HONEYCOMB)
                 || s.is(Items.RABBIT_HIDE) || s.is(Items.TURTLE_SCUTE) || s.is(Items.ARMADILLO_SCUTE));
+    }
+
+    /** A nesting box in her patrol area with eggs in it, the nearest, or null. */
+    @Nullable
+    public static BlockPos fullNest(ServerLevel level, Mob mob, BlockPos anchor) {
+        int r = (int) Orders.PATROL_RADIUS;
+        BlockPos best = null;
+        double bestDist = Double.MAX_VALUE;
+        for (BlockPos p : BlockPos.betweenClosed(anchor.offset(-r, -3, -r), anchor.offset(r, 3, r))) {
+            BlockState s = level.getBlockState(p);
+            if (!s.hasProperty(com.linkyoshi90.monstergirls.block.NestingBoxBlock.EGGS) || !s.getValue(com.linkyoshi90.monstergirls.block.NestingBoxBlock.EGGS)) continue;
+            double d = p.distSqr(mob.blockPosition());
+            if (d < bestDist) {
+                bestDist = d;
+                best = p.immutable();
+            }
+        }
+        return best;
+    }
+
+    /** She empties a nesting box and puts the eggs away. Whether there were any. */
+    public static boolean emptyNest(ServerLevel level, Mob mob, BlockPos anchor, BlockPos nest) {
+        if (!(level.getBlockEntity(nest) instanceof com.linkyoshi90.monstergirls.block.NestingBoxBlockEntity box)) return false;
+        java.util.List<ItemStack> eggs = box.takeAll();
+        if (eggs.isEmpty()) return false;
+        mob.swing(InteractionHand.MAIN_HAND);
+        for (ItemStack s : eggs) putAway(level, mob, anchor, s);
+        done(mob, Kind.EGGS);
+        return true;
     }
 
     /** Her patrol area. */
@@ -373,6 +402,8 @@ public final class Chores {
             if (!swimmer) {
                 ItemEntity item = this.nearest(level.getEntitiesOfClass(ItemEntity.class, box, Chores::produce));
                 if (item != null) return this.choose(Kind.EGGS, item, item.blockPosition());
+                BlockPos nest = fullNest(level, this.girl, anchor);               // the nesting boxes, emptied into the fridge
+                if (nest != null) return this.choose(Kind.EGGS, null, nest);
                 if (this.griefs(level)) {
                     BlockPos hive = null, bush = null;
                     double best = Double.MAX_VALUE, bestBush = Double.MAX_VALUE;
@@ -472,6 +503,7 @@ public final class Chores {
             switch (this.kind) {
                 case EGGS -> {
                     if (this.target instanceof ItemEntity item) gather(level, this.girl, anchor, item);
+                    else emptyNest(level, this.girl, anchor, this.at);
                     this.kind = null;
                 }
                 case HONEY -> {

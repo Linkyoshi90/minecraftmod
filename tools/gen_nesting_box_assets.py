@@ -59,7 +59,7 @@ def main():
         "journal.monstergirls.guide.nesting.title": "Nesting boxes",
         "journal.monstergirls.guide.nesting": "Build a nesting box (planks around a bit of wheat) and set it down where your hens are. Any egg laid within "
                                               "four blocks of it, by a chicken or a harpy, goes into the hay instead of rolling about. Take the eggs out "
-                                              "with an empty hand, or let a hopper do it.",
+                                              "with an empty hand, or let a hopper do it; a friend on patrol nearby empties it into the fridge.",
     })
     print("nesting box assets written")
 
