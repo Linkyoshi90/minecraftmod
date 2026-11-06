@@ -76,4 +76,18 @@ public class HabitTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "friendsCheerForAnAdvancement")
+    public static void friendsCheerForAnAdvancement(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        AbstractMonsterGirl friend = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(3, 2, 3));
+        AbstractMonsterGirl stranger = spawn(helper, GirlSpecies.RED_KITSUNE, new BlockPos(5, 2, 5));
+        friend.addAffection(p, Orders.AFFECTION);
+        int before = friend.getAffection(p);
+        var cheered = com.linkyoshi90.monstergirls.entity.Cheers.cheer(p);
+        check(cheered.contains(friend) && !cheered.contains(stranger), "her friend cheers, a stranger doesn't");
+        check(friend.getAffection(p) == before, "only a celebration: friendship is counted by the deed itself");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

@@ -71,6 +71,11 @@ public class JadePlugin implements IWailaPlugin {
                     data.putString("Favourite", com.linkyoshi90.monstergirls.entity.girl.Treats.favourite(g).getDescriptionId());
                 }
             }
+            com.linkyoshi90.monstergirls.entity.Clade branch = com.linkyoshi90.monstergirls.entity.Clade.of(accessor.getEntity());
+            if (branch != null && accessor.getPlayer() != null) {                // how much of her branch of the tree of life they have met
+                data.putInt("BranchMet", com.linkyoshi90.monstergirls.entity.Journal.metOn(accessor.getPlayer(), branch));
+                data.putInt("BranchAll", com.linkyoshi90.monstergirls.entity.Journal.members(branch).size());
+            }
             if (accessor.getEntity() instanceof LivingEntity l && l.level() instanceof net.minecraft.server.level.ServerLevel level) {
                 int nursing = com.linkyoshi90.monstergirls.entity.Nursing.status(level, l);
                 if (nursing > 0) data.putInt("Nursing", nursing);
@@ -84,7 +89,11 @@ public class JadePlugin implements IWailaPlugin {
             com.linkyoshi90.monstergirls.entity.Rarity.Tier tier = com.linkyoshi90.monstergirls.entity.Rarity.of(accessor.getEntity());
             if (tier != com.linkyoshi90.monstergirls.entity.Rarity.Tier.COMMON) tooltip.add(Component.translatable(tier.key()).withStyle(tier.colour));
             com.linkyoshi90.monstergirls.entity.Clade clade = com.linkyoshi90.monstergirls.entity.Clade.of(accessor.getEntity());   // her branch of the tree of life
-            if (clade != null) tooltip.add(Component.translatable("clade.monstergirls." + clade.key()).withStyle(clade.mythic() ? net.minecraft.ChatFormatting.DARK_PURPLE : net.minecraft.ChatFormatting.DARK_AQUA));
+            if (clade != null) {
+                Component name = Component.translatable("clade.monstergirls." + clade.key());
+                tooltip.add((data.contains("BranchAll") ? Component.translatable("jade.monstergirls.branch", name, data.getInt("BranchMet"), data.getInt("BranchAll")) : name.copy())
+                        .withStyle(clade.mythic() ? net.minecraft.ChatFormatting.DARK_PURPLE : net.minecraft.ChatFormatting.DARK_AQUA));
+            }
             if (data.contains("Birthday")) tooltip.add(Component.translatable("jade.monstergirls.birthday", data.getInt("Birthday")).withStyle(net.minecraft.ChatFormatting.GOLD));
             if (data.contains("Favourite")) tooltip.add(Component.translatable("jade.monstergirls.favourite", Component.translatable(data.getString("Favourite"))).withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
             if (com.linkyoshi90.monstergirls.entity.girl.Mining.isMiner(accessor.getEntity()) && !((net.minecraft.world.entity.LivingEntity) accessor.getEntity()).isBaby()) {
