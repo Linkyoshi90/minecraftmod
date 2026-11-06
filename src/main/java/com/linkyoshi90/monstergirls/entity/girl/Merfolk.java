@@ -343,15 +343,21 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     @Override
     protected boolean giveBirth(ServerLevel level, @Nullable UUID father) {
         if (!this.laysRoe()) return super.giveBirth(level, father);
-        BlockPos o = this.blockPosition();
+        BlockPos o = this.blockPosition(), best = null;                  // the nearest still bottom, not the first one the search meets
+        double bestDist = Double.MAX_VALUE;
         for (BlockPos p : BlockPos.betweenClosed(o.offset(-6, -4, -6), o.offset(6, 2, 6))) {
             if (!level.getFluidState(p).is(FluidTags.WATER) || !level.getFluidState(p).isSource() || !level.getBlockState(p).is(net.minecraft.world.level.block.Blocks.WATER)) continue;
             if (!level.getBlockState(p.below()).isFaceSturdy(level, p.below(), net.minecraft.core.Direction.UP)) continue;
-            level.setBlock(p, ModBlocks.GIRL_EGG.get().defaultBlockState().setValue(GirlEggBlock.KIND, GirlEggBlock.Kind.ROE).setValue(GirlEggBlock.WATERLOGGED, true), 3);
-            if (level.getBlockEntity(p) instanceof GirlEggBlockEntity be) be.setup(this.species.id(), this.litterSize(), father).withPaint(this.getPaint());
-            return true;
+            double d = p.distSqr(o);
+            if (d < bestDist) {
+                bestDist = d;
+                best = p.immutable();
+            }
         }
-        return false;                                                   // no water nearby: she keeps carrying
+        if (best == null) return false;                                 // no water nearby: she keeps carrying
+        level.setBlock(best, ModBlocks.GIRL_EGG.get().defaultBlockState().setValue(GirlEggBlock.KIND, GirlEggBlock.Kind.ROE).setValue(GirlEggBlock.WATERLOGGED, true), 3);
+        if (level.getBlockEntity(best) instanceof GirlEggBlockEntity be) be.setup(this.species.id(), this.litterSize(), father).withPaint(this.getPaint());
+        return true;
     }
 
     @Override
