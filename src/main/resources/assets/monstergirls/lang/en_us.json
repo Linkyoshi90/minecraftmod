@@ -3028,5 +3028,6 @@
   "journal.monstergirls.guide.nesting": "Build a nesting box (planks around a bit of wheat) and set it down where your hens are. Any egg laid within four blocks of it, by a chicken or a harpy, goes into the hay instead of rolling about. Take the eggs out with an empty hand, or let a hopper do it.",
   "jade.monstergirls.branch": "%s · met %s of %s",
   "message.monstergirls.cheer": "%s cheers for you!",
-  "message.monstergirls.cheer.many": "%s and %s more cheer for you!"
+  "message.monstergirls.cheer.many": "%s and %s more cheer for you!",
+  "message.monstergirls.named": "%s! She loves her new name"
 }

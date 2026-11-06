@@ -90,4 +90,20 @@ public class HabitTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "aNameOfHerOwn")
+    public static void aNameOfHerOwn(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        AbstractMonsterGirl friend = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(3, 2, 3));
+        AbstractMonsterGirl stranger = spawn(helper, GirlSpecies.RED_KITSUNE, new BlockPos(5, 2, 5));
+        var name = net.minecraft.network.chat.Component.literal("Fluffy");
+        check(!com.linkyoshi90.monstergirls.entity.Names.named(p, stranger, name), "a stranger just gets a name");
+        friend.addAffection(p, Orders.AFFECTION);
+        int before = friend.getAffection(p);
+        check(com.linkyoshi90.monstergirls.entity.Names.named(p, friend, name) && friend.getAffection(p) == before + com.linkyoshi90.monstergirls.entity.Names.CLOSER,
+                "a friend loves her first name");
+        check(!com.linkyoshi90.monstergirls.entity.Names.named(p, friend, name), "the first time only");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }
