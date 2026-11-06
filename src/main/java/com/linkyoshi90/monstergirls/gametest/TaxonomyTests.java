@@ -113,7 +113,7 @@ public class TaxonomyTests {
             com.linkyoshi90.monstergirls.entity.Journal.record(p, e, false);
         }
         check(com.linkyoshi90.monstergirls.entity.Journal.boughs(p).equals(java.util.List.of("gnawers")), "every hare met: the gnawers are whole");
-        check(com.linkyoshi90.monstergirls.entity.Journal.book(p).pages().get(0).raw().toString().contains("journal.monstergirls.branches"), "the cover counts whole branches");
+        check(com.linkyoshi90.monstergirls.entity.Journal.book(p).pages().get(1).raw().toString().contains("journal.monstergirls.branches"), "the milestones page, over the cover, counts whole branches");
         var a = p.server.getAdvancements().get(MonsterGirlsMod.id("bough_gnawers"));
         check(a != null && p.getAdvancements().getOrStartProgress(a).isDone(), "and the advancement");
         HarpyTestUtil.remove(p);
@@ -150,7 +150,7 @@ public class TaxonomyTests {
         for (FamilyMilk m : FamilyMilk.values()) com.linkyoshi90.monstergirls.entity.Journal.taste(p, m);
         check(com.linkyoshi90.monstergirls.entity.Journal.tasted(p) == FamilyMilk.values().length && p.getAdvancements().getOrStartProgress(a).isDone(),
                 "every milk: a connoisseur");
-        check(com.linkyoshi90.monstergirls.entity.Journal.book(p).pages().get(0).raw().toString().contains("journal.monstergirls.tasted"), "the cover keeps count");
+        check(com.linkyoshi90.monstergirls.entity.Journal.book(p).pages().get(1).raw().toString().contains("journal.monstergirls.tasted"), "the milestones page keeps count");
         HarpyTestUtil.remove(p);
         helper.succeed();
     }

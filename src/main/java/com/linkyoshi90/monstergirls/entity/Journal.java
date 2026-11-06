@@ -43,7 +43,7 @@ public final class Journal {
     public static final int MILK_LINES = 8;
     /** The tree of life: branches whose every kind they have met, and how many branch lines fit on a page. */
     public static final String BRANCHES = "Branches", WHOLE_BRANCH_ADVANCEMENT = "whole_branch";
-    public static final int TREE_LINES = 12;
+    public static final int TREE_LINES = 11;                                 // a page is 14 lines: the title, a blank, and room for one name that wraps
     /** Word of a first friend reaches wild kin this far away, and warms them this much. */
     public static final double WORD_RANGE = 24.0;
     public static final int WORD = 3;
@@ -142,7 +142,7 @@ public final class Journal {
     }
 
     /** Affection at which a friend is devoted, and goes in the journal's list of dearest friends; how many lines fit a page. */
-    public static final int DEVOTED = 60, DEAREST_LINES = 10;
+    public static final int DEVOTED = 60, DEAREST_LINES = 4;                // each line "name, kind (day n)" wraps to two or three of a page's 14
     public static final String DEAREST = "Dearest";
 
     /** She is devoted to them: the first time, the journal notes her name, her kind and the day. Whether that was news. */
@@ -361,8 +361,11 @@ public final class Journal {
                 .append("\n").append(Component.translatable("journal.monstergirls.studied", studied(player), met.size()).withStyle(ChatFormatting.RESET));
         String missedBy = player.getData(ModAttachments.JOURNAL).getString("MissedBy");
         int letters = player.getData(ModAttachments.JOURNAL).getInt(Letters.COUNT);
+        if (met.isEmpty()) cover.append("\n\n").append(Component.translatable("journal.monstergirls.empty").withStyle(ChatFormatting.RESET, ChatFormatting.ITALIC));
+        pages.add(Filterable.passThrough(cover));
+        cover = Component.translatable("journal.monstergirls.milestones").withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_BLUE).append("\n");   // over the page: one held up to 21 lines of 14
         List<String> gone = NightWatch.remembered(player);
-        if (!gone.isEmpty()) cover.append("\n\n").append(Component.translatable("journal.monstergirls.remembered", String.join(", ", gone)).withStyle(ChatFormatting.RESET, ChatFormatting.GRAY));
+        if (!gone.isEmpty()) cover.append("\n").append(Component.translatable("journal.monstergirls.remembered", String.join(", ", gone)).withStyle(ChatFormatting.RESET, ChatFormatting.GRAY));
         int stars = player.getData(ModAttachments.JOURNAL).getList(Stargazing.CHART, Tag.TAG_STRING).size();
         if (stars > 0) cover.append("\n").append(Component.translatable("journal.monstergirls.constellations", stars, Stargazing.CONSTELLATIONS.size()).withStyle(ChatFormatting.RESET));
         int branchesWhole = wholeBranches(player).size();
@@ -372,8 +375,8 @@ public final class Journal {
         if (tasted > 0) cover.append("\n").append(Component.translatable("journal.monstergirls.tasted", tasted, com.linkyoshi90.monstergirls.item.FamilyMilk.values().length).withStyle(ChatFormatting.RESET));
         if (letters > 0) cover.append("\n").append(Component.translatable("journal.monstergirls.letters", letters).withStyle(ChatFormatting.RESET));
         if (!missedBy.isEmpty()) cover.append("\n\n").append(Component.translatable("journal.monstergirls.missed", missedBy).withStyle(ChatFormatting.RESET));
-        if (met.isEmpty()) cover.append("\n\n").append(Component.translatable("journal.monstergirls.empty").withStyle(ChatFormatting.RESET, ChatFormatting.ITALIC));
-        pages.add(Filterable.passThrough(cover));
+        int milestones = (gone.isEmpty() ? 0 : 1) + stars + branchesWhole + tasted + letters + (missedBy.isEmpty() ? 0 : 1);
+        if (milestones > 0) pages.add(Filterable.passThrough(cover));
         for (String guide : GUIDE) {                                                 // how to live with them: hearth, expeditions, weapons
             int parts = GuidePages.of(guide);                                        // a long guide runs over pages (tools/split_guides.py)
             MutableComponent page = null;
