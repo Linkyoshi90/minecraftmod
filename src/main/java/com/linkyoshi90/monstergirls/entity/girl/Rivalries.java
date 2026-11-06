@@ -17,7 +17,7 @@ import com.linkyoshi90.monstergirls.entity.Clade;
 /**
  * Rivalries: some wild kinds can't stand each other, by their branch of the tree of life (entity.Clade), not their body: cats
  * (and hyenas, and mongooses) and snakes with rodents, wolves and foxes with hares, spiders, bats and frogs with insects, seals
- * and bears with fish. Two wild ones of rival clades who meet squabble: the hunter glowers and huffs, the hunted one bolts.
+ * and bears with fish. The mongoose and the meerkat take on snakes as well (the meerkat scorpions too). Two wild ones of rival clades who meet squabble: the hunter glowers and huffs, the hunted one bolts.
  * Nobody is hurt, and a girl who is anyone's friend has better things to do: friends never squabble.
  */
 public final class Rivalries {
@@ -34,7 +34,21 @@ public final class Rivalries {
             Clade.AMPHIBIA, Set.of(Clade.HEXAPODA),
             Clade.ARCTOIDEA, Set.of(Clade.ACTINOPTERYGII));
 
+    /** Hunters of their own on top of their clade's: the mongoose and the meerkat take on snakes (the meerkat scorpions too). */
+    public static final Map<GirlSpecies, Set<Clade>> SPECIES_HUNTS = Map.of(
+            GirlSpecies.MONGOOSE_RODENT, Set.of(Clade.SQUAMATA),
+            GirlSpecies.MEERKAT_RODENT, Set.of(Clade.SQUAMATA, Clade.CHELICERATA));
+
     private Rivalries() {
+    }
+
+    /** Whether this kind can't stand that one: by clade, or by her own species' grudge. */
+    public static boolean hunts(GirlSpecies hunter, GirlSpecies other) {
+        return hunts(hunter.clade(), other.clade()) || other.clade() != null && SPECIES_HUNTS.getOrDefault(hunter, Set.of()).contains(other.clade());
+    }
+
+    private static boolean hunter(GirlSpecies s) {
+        return s.clade() != null && HUNTS.containsKey(s.clade()) || SPECIES_HUNTS.containsKey(s);
     }
 
     public static boolean hunts(@Nullable Clade hunter, @Nullable Clade other) {
@@ -50,11 +64,11 @@ public final class Rivalries {
     @Nullable
     public static AbstractMonsterGirl squabble(ServerLevel level, AbstractMonsterGirl hunter) {
         long now = level.getGameTime();
-        if (!MonsterGirlsConfig.rivalries() || hunter.getSpecies().clade() == null || !HUNTS.containsKey(hunter.getSpecies().clade()) || !free(hunter, now)) return null;
+        if (!MonsterGirlsConfig.rivalries() || !hunter(hunter.getSpecies()) || !free(hunter, now)) return null;
         AbstractMonsterGirl prey = null;
         double best = RANGE * RANGE;
         for (AbstractMonsterGirl g : level.getEntitiesOfClass(AbstractMonsterGirl.class, hunter.getBoundingBox().inflate(RANGE))) {
-            if (g == hunter || !hunts(hunter.getSpecies().clade(), g.getSpecies().clade()) || !free(g, now)) continue;
+            if (g == hunter || !hunts(hunter.getSpecies(), g.getSpecies()) || !free(g, now)) continue;
             double d = g.distanceToSqr(hunter);
             if (d < best) {
                 best = d;

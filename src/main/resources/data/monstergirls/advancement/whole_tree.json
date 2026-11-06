@@ -1,0 +1,28 @@
+{
+  "parent": "monstergirls:whole_branch",
+  "display": {
+    "icon": {
+      "id": "minecraft:flowering_azalea"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.whole_tree"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.whole_tree.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

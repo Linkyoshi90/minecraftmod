@@ -71,6 +71,8 @@ public class MarketTests {
         check(Rivalries.hunts(com.linkyoshi90.monstergirls.entity.Clade.CANIDAE, com.linkyoshi90.monstergirls.entity.Clade.LAGOMORPHA) && !Rivalries.hunts(com.linkyoshi90.monstergirls.entity.Clade.LAGOMORPHA, com.linkyoshi90.monstergirls.entity.Clade.CANIDAE)
                 && Rivalries.hunts(GirlSpecies.HYENA_CANID.clade(), GirlSpecies.CAPYBARA_RODENT.clade()),
                 "the wolf hunts the hare, not the other way; the hyena is a feliform and minds the mice");
+        check(Rivalries.hunts(GirlSpecies.MONGOOSE_RODENT, GirlSpecies.COBRA_LAMIA) && !Rivalries.hunts(GirlSpecies.TIGER_NEKOMATA, GirlSpecies.COBRA_LAMIA)
+                && Rivalries.hunts(GirlSpecies.COBRA_LAMIA, GirlSpecies.CAPYBARA_RODENT), "the mongoose takes on the cobra; other cats leave her be; the cobra still minds the rodents");
         check(Rivalries.squabble(level, hare) == null, "the hare starts nothing");
         check(Rivalries.squabble(level, wolf) == hare, "the wolf glowers at the hare");
         check(hare.getPersistentData().getLong(Rivalries.FLED) == level.getGameTime(), "and the hare bolts");

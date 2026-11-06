@@ -1,0 +1,28 @@
+{
+  "parent": "monstergirls:whole_branch",
+  "display": {
+    "icon": {
+      "id": "minecraft:wheat"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.bough_hooves"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.bough_hooves.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

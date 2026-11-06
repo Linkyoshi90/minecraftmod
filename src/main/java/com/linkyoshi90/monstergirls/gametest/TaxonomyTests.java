@@ -99,6 +99,26 @@ public class TaxonomyTests {
         helper.succeed();
     }
 
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "aWholeBoughOfTheTree")
+    public static void aWholeBoughOfTheTree(GameTestHelper helper) {
+        net.minecraft.server.level.ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        var data = p.getData(com.linkyoshi90.monstergirls.registry.ModAttachments.JOURNAL);
+        var branches = new net.minecraft.nbt.ListTag();
+        branches.add(net.minecraft.nbt.StringTag.valueOf(Clade.RODENTIA.name()));       // the rodents done already
+        data.put(com.linkyoshi90.monstergirls.entity.Journal.BRANCHES, branches);
+        p.setData(com.linkyoshi90.monstergirls.registry.ModAttachments.JOURNAL, data);
+        check(com.linkyoshi90.monstergirls.entity.Journal.boughs(p).isEmpty(), "one branch of the gnawers is not the bough");
+        for (String id : com.linkyoshi90.monstergirls.entity.Journal.members(Clade.LAGOMORPHA)) {
+            var e = BuiltInRegistries.ENTITY_TYPE.get(MonsterGirlsMod.id(id)).create(helper.getLevel());
+            com.linkyoshi90.monstergirls.entity.Journal.record(p, e, false);
+        }
+        check(com.linkyoshi90.monstergirls.entity.Journal.boughs(p).equals(java.util.List.of("gnawers")), "every hare met: the gnawers are whole");
+        var a = p.server.getAdvancements().get(MonsterGirlsMod.id("bough_gnawers"));
+        check(a != null && p.getAdvancements().getOrStartProgress(a).isDone(), "and the advancement");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
     @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "wordGetsAroundTheBranch")
     public static void wordGetsAroundTheBranch(GameTestHelper helper) {
         net.minecraft.server.level.ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));

@@ -143,6 +143,42 @@ public final class Journal {
     }
 
     /** They met a kind on this branch: if that was the last one, the branch is whole (a message, once, and the advancement). Whether it was. */
+    /**
+     * Bigger boughs of the tree of life: every branch of one of these complete is an advancement of its own (grove_<name>),
+     * and every branch of all is the whole tree.
+     */
+    public static final java.util.Map<String, List<Clade>> BOUGHS = java.util.Map.of(
+            "carnivores", List.of(Clade.FELIFORMIA, Clade.CANIDAE, Clade.ARCTOIDEA),
+            "gnawers", List.of(Clade.RODENTIA, Clade.LAGOMORPHA),
+            "hooves", List.of(Clade.PERISSODACTYLA, Clade.BOVIDAE, Clade.CERVIDAE, Clade.CAMELIDAE, Clade.SUINA, Clade.WHIPPOMORPHA),
+            "reptiles", List.of(Clade.ARCHOSAURIA, Clade.TESTUDINES, Clade.SQUAMATA),
+            "arthropods", List.of(Clade.CHELICERATA, Clade.HEXAPODA, Clade.MALACOSTRACA),
+            "legends", java.util.Arrays.stream(Clade.values()).filter(Clade::mythic).toList());
+    public static final String WHOLE_TREE_ADVANCEMENT = "whole_tree";
+
+    /** The boughs (BOUGHS keys) whose every branch they have made whole. */
+    public static List<String> boughs(Player player) {
+        Set<String> whole = wholeBranches(player);
+        List<String> out = new ArrayList<>();
+        for (var e : BOUGHS.entrySet()) if (e.getValue().stream().allMatch(c -> whole.contains(c.name()))) out.add(e.getKey());
+        return out;
+    }
+
+    private static void boughsGrown(ServerPlayer sp, Clade clade) {
+        Set<String> whole = wholeBranches(sp);
+        for (var e : BOUGHS.entrySet()) {
+            if (!e.getValue().contains(clade) || !e.getValue().stream().allMatch(c -> whole.contains(c.name()))) continue;
+            sp.displayClientMessage(Component.translatable("message.monstergirls.bough", Component.translatable("bough.monstergirls." + e.getKey()))
+                    .withStyle(ChatFormatting.GOLD), false);
+            var a = sp.server.getAdvancements().get(MonsterGirlsMod.id("bough_" + e.getKey()));
+            if (a != null) sp.getAdvancements().award(a, "done");
+        }
+        if (whole.size() >= Clade.values().length) {
+            var a = sp.server.getAdvancements().get(MonsterGirlsMod.id(WHOLE_TREE_ADVANCEMENT));
+            if (a != null) sp.getAdvancements().award(a, "done");
+        }
+    }
+
     public static boolean branch(Player player, @javax.annotation.Nullable Clade clade) {
         if (clade == null || metOn(player, clade) < members(clade).size()) return false;
         CompoundTag data = player.getData(ModAttachments.JOURNAL);
@@ -153,6 +189,7 @@ public final class Journal {
                     Component.translatable("clade.monstergirls." + clade.key())).withStyle(ChatFormatting.DARK_GREEN), false);
             var a = sp.server.getAdvancements().get(MonsterGirlsMod.id(WHOLE_BRANCH_ADVANCEMENT));
             if (a != null) sp.getAdvancements().award(a, "done");
+            boughsGrown(sp, clade);
         }
         net.minecraft.world.item.ItemStack charm = com.linkyoshi90.monstergirls.item.BranchCharmItem.of(clade);   // the branch's charm, to keep
         if (!player.getInventory().add(charm)) player.drop(charm, false);
