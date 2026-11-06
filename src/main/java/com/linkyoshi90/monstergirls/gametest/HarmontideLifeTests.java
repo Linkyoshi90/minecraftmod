@@ -241,7 +241,7 @@ public class HarmontideLifeTests {
             if (!s.isEmpty()) things++;
         }
         var content = letter.get(net.minecraft.core.component.DataComponents.WRITTEN_BOOK_CONTENT);
-        check(content != null && content.pages().size() == 1 && !content.author().isEmpty() && things == 2, "a signed letter, and a find tucked in");
+        check(content != null && content.pages().size() == 2 && !content.author().isEmpty() && things == 2, "a signed letter, and a find tucked in");
         check(com.linkyoshi90.monstergirls.entity.Letters.writeDue(p) == 0 && Expeditions.away(p) == 1, "just the one; she is still away");
         check(p.getData(com.linkyoshi90.monstergirls.registry.ModAttachments.JOURNAL).getInt(com.linkyoshi90.monstergirls.entity.Letters.COUNT) == 1, "the journal counts it");
         HarpyTestUtil.remove(p);

@@ -92,20 +92,20 @@ public final class Letters {
         return true;
     }
 
-    /** The signed book: a greeting, two lines of her country, what she tucked in, and her name. */
+    /** The signed book: a greeting and two lines of her country, then over the page what she tucked in, and her name. */
     public static ItemStack letter(AbstractMonsterGirl girl, @Nullable ServerPlayer player) {
         String c = country(girl.getSpecies().family());
         int a = girl.getRandom().nextInt(LINES), b = (a + 1 + girl.getRandom().nextInt(LINES - 1)) % LINES;
         String nl = "\n\n";
         MutableComponent page = Component.translatable("letter.monstergirls.dear", player == null ? "" : player.getName().getString())
                 .append(nl).append(Component.translatable("letter.monstergirls." + c + "." + a))
-                .append(" ").append(Component.translatable("letter.monstergirls." + c + "." + b))
-                .append(nl).append(Component.translatable("letter.monstergirls.enclosed"))
+                .append(" ").append(Component.translatable("letter.monstergirls." + c + "." + b));
+        MutableComponent end = Component.translatable("letter.monstergirls.enclosed")       // over the page: one page held up to 18 lines of a book's 14
                 .append(nl).append(Component.translatable("letter.monstergirls.signed", girl.getDisplayName()));
         String name = girl.getDisplayName().getString();
         ItemStack book = new ItemStack(Items.WRITTEN_BOOK);
         book.set(DataComponents.WRITTEN_BOOK_CONTENT, new WrittenBookContent(Filterable.passThrough("Letter"),
-                name.length() > 32 ? name.substring(0, 32) : name, 0, List.of(Filterable.passThrough(page)), true));
+                name.length() > 32 ? name.substring(0, 32) : name, 0, List.of(Filterable.passThrough(page), Filterable.passThrough(end)), true));
         book.set(DataComponents.CUSTOM_NAME, Component.translatable("item.monstergirls.letter", girl.getDisplayName()));
         return book;
     }
