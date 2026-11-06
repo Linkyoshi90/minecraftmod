@@ -58,4 +58,22 @@ public class HabitTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "elephantsDouseAFriendOnFire")
+    public static void elephantsDouseAFriendOnFire(GameTestHelper helper) {
+        var level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
+        AbstractMonsterGirl ele = spawn(helper, GirlSpecies.ELEPHANT_CENTAUR, new BlockPos(4, 2, 2));
+        p.setRemainingFireTicks(200);
+        check(!Habits.douse(level, ele), "a stranger lets you burn");
+        ele.addAffection(p, Orders.AFFECTION);
+        p.clearFire();
+        check(!Habits.douse(level, ele), "nothing to put out");
+        p.setRemainingFireTicks(200);
+        check(Habits.douse(level, ele) && !p.isOnFire(), "she sprays the flames out");
+        p.setRemainingFireTicks(200);
+        check(!Habits.douse(level, ele) && p.isOnFire(), "every half minute, not every moment");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
  * <li>Canids howl at the full moon, once a night, and every canid in earshot answers; a friend out under the moon with one
  * of them is a little closer for it.</li>
  * <li>Primates groom: a friend beside you picks out one harmful effect (poison, hunger, slowness and the like), every two minutes.</li>
+ * <li>Elephants and their kin (on land) spray a burning friend out with their trunks, every half minute.</li>
  * </ul>
  */
 public final class Habits {
@@ -95,5 +96,30 @@ public final class Habits {
             return effect;
         }
         return null;
+    }
+
+    // --- the trunk's water ------------------------------------------------------------------------------------------
+
+    public static final String DOUSE_AT = "DouseAt";
+    public static final double DOUSE_REACH = 6.0;
+    public static final int DOUSE_GAP = 600;
+
+    /** Every second for a grown elephant, hyrax or tusked kin who walks on land: a friend within reach who is on fire is sprayed out (every 30 s). True if she did. */
+    public static boolean douse(ServerLevel level, AbstractMonsterGirl girl) {
+        if (!MonsterGirlsConfig.comfort() || girl.isBaby() || girl.getSpecies().clade() != Clade.PAENUNGULATA
+                || girl.getSpecies().family() == GirlSpecies.Family.MERFOLK || level.getGameTime() < girl.getPersistentData().getLong(DOUSE_AT)) return false;
+        Player friend = girl.bondedPlayer(Orders.AFFECTION, DOUSE_REACH);
+        if (friend == null || !friend.isOnFire()) return false;
+        friend.clearFire();
+        girl.getPersistentData().putLong(DOUSE_AT, level.getGameTime() + DOUSE_GAP);
+        girl.getLookControl().setLookAt(friend);
+        girl.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+        girl.playSound(SoundEvents.GENERIC_SPLASH, 1.0F, 1.0F);
+        girl.addAffection(friend, 1);
+        level.sendParticles(ParticleTypes.SPLASH, friend.getX(), friend.getY() + 1.0, friend.getZ(), 30, 0.4, 0.6, 0.4, 0.1);
+        level.sendParticles(ParticleTypes.HEART, friend.getX(), friend.getEyeY() + 0.4, friend.getZ(), 1, 0.2, 0.1, 0.2, 0);
+        if (friend instanceof ServerPlayer sp) sp.displayClientMessage(Component.translatable("message.monstergirls.doused", girl.getDisplayName())
+                .withStyle(net.minecraft.ChatFormatting.AQUA), true);
+        return true;
     }
 }

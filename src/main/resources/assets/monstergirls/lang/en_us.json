@@ -3000,5 +3000,6 @@
   "item.monstergirls.branch_charm": "Branch Charm",
   "item.monstergirls.branch_charm.blank": "Meet every kind on one branch of the tree of life to earn one",
   "item.monstergirls.branch_charm.effect": "In your offhand: %s",
-  "item.monstergirls.branch_charm.keepsake": "A keepsake: this branch gives no milk"
+  "item.monstergirls.branch_charm.keepsake": "A keepsake: this branch gives no milk",
+  "message.monstergirls.doused": "%s sprays you with her trunk and puts you out"
 }
