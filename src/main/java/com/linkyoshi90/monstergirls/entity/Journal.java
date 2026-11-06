@@ -365,6 +365,9 @@ public final class Journal {
         if (!gone.isEmpty()) cover.append("\n\n").append(Component.translatable("journal.monstergirls.remembered", String.join(", ", gone)).withStyle(ChatFormatting.RESET, ChatFormatting.GRAY));
         int stars = player.getData(ModAttachments.JOURNAL).getList(Stargazing.CHART, Tag.TAG_STRING).size();
         if (stars > 0) cover.append("\n").append(Component.translatable("journal.monstergirls.constellations", stars, Stargazing.CONSTELLATIONS.size()).withStyle(ChatFormatting.RESET));
+        int branchesWhole = wholeBranches(player).size();
+        if (branchesWhole > 0) cover.append(NL_TEXT).append(Component.translatable("journal.monstergirls.branches", branchesWhole, Clade.values().length,
+                boughs(player).size(), BOUGHS.size()).withStyle(ChatFormatting.RESET));
         int tasted = tasted(player);
         if (tasted > 0) cover.append("\n").append(Component.translatable("journal.monstergirls.tasted", tasted, com.linkyoshi90.monstergirls.item.FamilyMilk.values().length).withStyle(ChatFormatting.RESET));
         if (letters > 0) cover.append("\n").append(Component.translatable("journal.monstergirls.letters", letters).withStyle(ChatFormatting.RESET));
