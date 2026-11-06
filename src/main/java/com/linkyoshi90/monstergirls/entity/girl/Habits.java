@@ -24,6 +24,8 @@ import javax.annotation.Nullable;
  * of them is a little closer for it.</li>
  * <li>Primates groom: a friend beside you picks out one harmful effect (poison, hunger, slowness and the like), every two minutes.</li>
  * <li>Elephants and their kin (on land) spray a burning friend out with their trunks, every half minute.</li>
+ * <li>Crabs, lobsters and shrimp comb the beach: a friend standing on sand by the water gets what she digs up at their feet, every
+ * couple of minutes (kelp, clay, bones and flint, now and then a shard, a sea pickle or ink, rarely gold or a nautilus shell).</li>
  * </ul>
  */
 public final class Habits {
@@ -121,5 +123,48 @@ public final class Habits {
         if (friend instanceof ServerPlayer sp) sp.displayClientMessage(Component.translatable("message.monstergirls.doused", girl.getDisplayName())
                 .withStyle(net.minecraft.ChatFormatting.AQUA), true);
         return true;
+    }
+
+    // --- beachcombing -----------------------------------------------------------------------------------------------
+
+    public static final String COMB_AT = "CombAt";
+    public static final double COMB_REACH = 10.0;
+    public static final int COMB_GAP = 2400, SHORE = 6;
+
+    /** What turns up in the sand, out of 40. */
+    private static net.minecraft.world.item.Item find(int roll) {
+        if (roll == 0) return net.minecraft.world.item.Items.NAUTILUS_SHELL;
+        if (roll < 4) return net.minecraft.world.item.Items.GOLD_NUGGET;
+        if (roll < 8) return net.minecraft.world.item.Items.PRISMARINE_SHARD;
+        if (roll < 12) return net.minecraft.world.item.Items.SEA_PICKLE;
+        if (roll < 16) return net.minecraft.world.item.Items.INK_SAC;
+        if (roll < 22) return net.minecraft.world.item.Items.CLAY_BALL;
+        if (roll < 28) return net.minecraft.world.item.Items.BONE;
+        if (roll < 34) return net.minecraft.world.item.Items.KELP;
+        return net.minecraft.world.item.Items.FLINT;
+    }
+
+    /** Every five seconds for a grown crab, lobster or shrimp out of the water: a friend within reach on sand by the water gets
+     *  what she digs up at their feet (every two minutes). The find, or null. */
+    @Nullable
+    public static net.minecraft.world.item.ItemStack beachcomb(ServerLevel level, AbstractMonsterGirl girl) {
+        if (!MonsterGirlsConfig.comfort() || girl.isBaby() || girl.getSpecies().clade() != Clade.MALACOSTRACA || girl.isInWater()
+                || girl.getSpecies().family() == GirlSpecies.Family.MERFOLK || level.getGameTime() < girl.getPersistentData().getLong(COMB_AT)) return null;
+        Player friend = girl.bondedPlayer(Orders.AFFECTION, COMB_REACH);
+        if (friend == null || friend.isInWater()) return null;
+        net.minecraft.core.BlockPos under = friend.blockPosition().below();
+        if (!level.getBlockState(under).is(net.minecraft.tags.BlockTags.SAND)) return null;
+        if (net.minecraft.core.BlockPos.findClosestMatch(under, SHORE, 2, p -> level.getFluidState(p).is(net.minecraft.tags.FluidTags.WATER)).isEmpty()) return null;
+        girl.getPersistentData().putLong(COMB_AT, level.getGameTime() + COMB_GAP);
+        net.minecraft.world.item.ItemStack stack = new net.minecraft.world.item.ItemStack(find(girl.getRandom().nextInt(40)));
+        net.minecraft.world.entity.item.ItemEntity drop = new net.minecraft.world.entity.item.ItemEntity(level, friend.getX(), friend.getY() + 0.3, friend.getZ(), stack.copy());
+        drop.setDefaultPickUpDelay();
+        level.addFreshEntity(drop);
+        level.levelEvent(2001, under, net.minecraft.world.level.block.Block.getId(level.getBlockState(under)));
+        girl.getLookControl().setLookAt(friend);
+        girl.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+        if (friend instanceof ServerPlayer sp) sp.displayClientMessage(Component.translatable("message.monstergirls.beachcombed", girl.getDisplayName(),
+                stack.getHoverName()).withStyle(net.minecraft.ChatFormatting.YELLOW), true);
+        return stack;
     }
 }

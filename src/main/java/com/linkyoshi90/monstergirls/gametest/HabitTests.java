@@ -18,7 +18,7 @@ import static com.linkyoshi90.monstergirls.gametest.HarpyTestUtil.PLATFORM;
 import static com.linkyoshi90.monstergirls.gametest.HarpyTestUtil.check;
 import static com.linkyoshi90.monstergirls.gametest.JackalopeTests.spawn;
 
-/** Habits of a branch (entity.girl.Habits): the full-moon howl, grooming. */
+/** Habits of a branch (entity.girl.Habits): the full-moon howl, grooming, the trunk's spray, beachcombing. */
 @GameTestHolder(MonsterGirlsMod.MODID)
 @PrefixGameTestTemplate(false)
 public class HabitTests {
@@ -55,6 +55,29 @@ public class HabitTests {
         check(Habits.groom(level, gibbon) != null && !p.hasEffect(MobEffects.POISON) && p.hasEffect(MobEffects.MOVEMENT_SPEED), "she picks out the poison and leaves the good");
         p.addEffect(new MobEffectInstance(MobEffects.HUNGER, 600));
         check(Habits.groom(level, gibbon) == null && p.hasEffect(MobEffects.HUNGER), "every two minutes, not every moment");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "crabsCombTheBeach")
+    public static void crabsCombTheBeach(GameTestHelper helper) {
+        var level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
+        AbstractMonsterGirl crab = spawn(helper, GirlSpecies.CRAB_CRUSTACEAN, new BlockPos(4, 2, 2));
+        crab.setNoAi(true);
+        crab.addAffection(p, Orders.AFFECTION);
+        check(Habits.beachcomb(level, crab) == null, "not on sand");
+        helper.setBlock(new BlockPos(2, 1, 2), net.minecraft.world.level.block.Blocks.SAND);
+        check(Habits.beachcomb(level, crab) == null, "sand, but no sea in sight");
+        helper.setBlock(new BlockPos(2, 1, 6), net.minecraft.world.level.block.Blocks.WATER);
+        var find = Habits.beachcomb(level, crab);
+        check(find != null && !find.isEmpty(), "on the beach she digs something up");
+        check(!level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, p.getBoundingBox().inflate(1.5), e -> e.getItem().is(find.getItem())).isEmpty(),
+                "at her friend's feet");
+        check(Habits.beachcomb(level, crab) == null, "every couple of minutes, not every moment");
+        AbstractMonsterGirl gibbon = spawn(helper, GirlSpecies.GIBBON_RODENT, new BlockPos(3, 2, 3));
+        gibbon.addAffection(p, Orders.AFFECTION);
+        check(Habits.beachcomb(level, gibbon) == null, "a gibbon doesn't dig for shells");
         HarpyTestUtil.remove(p);
         helper.succeed();
     }

@@ -258,6 +258,12 @@ public class BehaviourTests {
             helper.setBlock(new BlockPos(x, 2, z), Blocks.WATER);
             helper.setBlock(new BlockPos(x, 3, z), Blocks.WATER);
         }
+        for (int i = 3; i <= 11; i++) for (int y = 2; y <= 4; y++) {                       // walled in: the water stays a pool over the sand
+            helper.setBlock(new BlockPos(i, y, 3), Blocks.GLASS);
+            helper.setBlock(new BlockPos(i, y, 11), Blocks.GLASS);
+            helper.setBlock(new BlockPos(3, y, i), Blocks.GLASS);
+            helper.setBlock(new BlockPos(11, y, i), Blocks.GLASS);
+        }
         Merfolk orca = spawn(helper, GirlSpecies.MANATEE_MERMAID, new BlockPos(7, 2, 7));   // a gentle one: an orca hunts prey from the tests nearby, and a hunter doesn't sift for shells
         orca.setShellChance(1);
         helper.succeedWhen(() -> {

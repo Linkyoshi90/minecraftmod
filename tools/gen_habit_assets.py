@@ -19,6 +19,7 @@ M.add_lang({
                                          "beside them, picking out poison, hunger or the like now and then. Elephants and their kin spray a burning friend out. "
                                          "Walk beside a hoofed friend (cattle, goats, deer, camels, horses) and you find your footing the way she does, "
                                          "stepping up whole blocks without a jump.",
+    "message.monstergirls.beachcombed": "%s digs in the sand at your feet and turns up %s",
     "message.monstergirls.sure_footed": "Beside %s you find your footing: you step up whole blocks",
 })
 print("habit assets written")

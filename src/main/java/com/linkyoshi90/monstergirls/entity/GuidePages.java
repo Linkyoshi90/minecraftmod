@@ -24,7 +24,7 @@ public final class GuidePages {
             Map.entry("colds", 2),
             Map.entry("tree", 3),
             Map.entry("rain", 3),
-            Map.entry("habits", 3),
+            Map.entry("habits", 4),
             Map.entry("nesting", 2));
     public static final Map<String, Integer> SIGNATURES = Map.ofEntries(
             Map.entry("cobra_lamia", 2),
