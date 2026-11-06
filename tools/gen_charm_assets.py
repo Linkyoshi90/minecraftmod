@@ -62,6 +62,8 @@ def main():
         "item.monstergirls.branch_charm.blank": "Meet every kind on one branch of the tree of life to earn one",
         "item.monstergirls.branch_charm.effect": "In your offhand: %s",
         "item.monstergirls.branch_charm.keepsake": "A keepsake: this branch gives no milk",
+        "item.monstergirls.branch_charm.kin": "Wild ones of this branch who see it warm to you",
+        "message.monstergirls.charmed": "%s recognises your charm and warms to you",
     })
     if "--preview" in sys.argv:
         out = sys.argv[sys.argv.index("--preview") + 1]

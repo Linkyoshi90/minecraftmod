@@ -18,6 +18,7 @@ R.advancement("connoisseur", "monstergirls:bovid_milk", "challenge", ["done"], "
 M.add_lang({
     "message.monstergirls.tasted": "A first taste of %s (%s of %s milks)",
     "journal.monstergirls.tasted": "Milks tasted: %s of %s",
+    "jade.monstergirls.milk_kind": "Her milk: %s",
     "advancement.monstergirls.connoisseur": "Connoisseur",
     "advancement.monstergirls.connoisseur.desc": f"Drink a bucket of every one of the {len(T.milks())} kinds of milk",
 })

@@ -76,6 +76,7 @@ public final class Journal {
             if (player.hasLineOfSight(e)) {
                 record(player, e, ((Bonded) e).getAffection(player) >= Orders.AFFECTION);
                 if (((Bonded) e).getAffection(player) >= DEVOTED && !((LivingEntity) e).isBaby()) devoted(player, e);
+                charmed(player, e);
                 watch(player, e);
             }
         }
@@ -120,6 +121,24 @@ public final class Journal {
                     Component.translatable("clade.monstergirls." + clade.key())).withStyle(ChatFormatting.GREEN), true);
         }
         return n;
+    }
+
+    public static final String CHARMED = "CharmGreeted";
+    public static final int CHARM_WARMTH = 2;
+
+    /**
+     * A wild grown one sees her own branch's charm in their offhand: she knows they have met all her kin, and starts a little fond
+     * of them ({@link #CHARM_WARMTH}, once per girl). Whether she was charmed.
+     */
+    public static boolean charmed(Player player, Entity e) {
+        if (!(e instanceof Bonded b) || !(e instanceof LivingEntity l) || l.isBaby() || b.getAffection(player) > 0 || e.getPersistentData().getBoolean(CHARMED)) return false;
+        Clade clade = Clade.of(e);
+        if (clade == null || player.getOffhandItem().get(com.linkyoshi90.monstergirls.registry.ModComponents.CLADE.get()) != clade) return false;
+        e.getPersistentData().putBoolean(CHARMED, true);
+        b.addAffection(player, CHARM_WARMTH);
+        if (e.level() instanceof net.minecraft.server.level.ServerLevel level) level.sendParticles(net.minecraft.core.particles.ParticleTypes.HAPPY_VILLAGER, e.getX(), e.getEyeY() + 0.3, e.getZ(), 4, 0.3, 0.2, 0.3, 0);
+        if (player instanceof ServerPlayer sp) sp.displayClientMessage(Component.translatable("message.monstergirls.charmed", e.getName()).withStyle(ChatFormatting.GREEN), true);
+        return true;
     }
 
     /** Affection at which a friend is devoted, and goes in the journal's list of dearest friends; how many lines fit a page. */

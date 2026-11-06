@@ -189,4 +189,18 @@ public class TaxonomyTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "kinKnowTheCharm")
+    public static void kinKnowTheCharm(GameTestHelper helper) {
+        net.minecraft.server.level.ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        AbstractMonsterGirl fox = spawn(helper, GirlSpecies.RED_KITSUNE, new BlockPos(3, 2, 3));
+        AbstractMonsterGirl cat = spawn(helper, GirlSpecies.TIGER_NEKOMATA, new BlockPos(5, 2, 5));
+        check(!com.linkyoshi90.monstergirls.entity.Journal.charmed(p, fox), "no charm, no welcome");
+        p.setItemInHand(net.minecraft.world.InteractionHand.OFF_HAND, com.linkyoshi90.monstergirls.item.BranchCharmItem.of(Clade.CANIDAE));
+        check(com.linkyoshi90.monstergirls.entity.Journal.charmed(p, fox) && fox.getAffection(p) == com.linkyoshi90.monstergirls.entity.Journal.CHARM_WARMTH, "the fox knows the canid charm");
+        check(!com.linkyoshi90.monstergirls.entity.Journal.charmed(p, cat) && cat.getAffection(p) == 0, "a cat doesn't");
+        check(!com.linkyoshi90.monstergirls.entity.Journal.charmed(p, fox), "once");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

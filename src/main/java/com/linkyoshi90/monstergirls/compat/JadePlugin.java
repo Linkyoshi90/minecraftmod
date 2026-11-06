@@ -116,6 +116,11 @@ public class JadePlugin implements IWailaPlugin {
             }
             if (data.contains("Nursing")) tooltip.add(Component.translatable(data.getInt("Nursing") == 2 ? "jade.monstergirls.keeps_milk" : "jade.monstergirls.nursing"));
             if (data.getBoolean("MilkFull")) tooltip.add(Component.translatable("jade.monstergirls.milk_full").withStyle(net.minecraft.ChatFormatting.RED));
+            if ((data.getBoolean("MilkFull") || data.contains("Nursing")) && accessor.getEntity() instanceof LivingEntity milky) {   // which milk she gives
+                com.linkyoshi90.monstergirls.item.FamilyMilk kind = com.linkyoshi90.monstergirls.item.FamilyMilk.of(milky);
+                if (kind != null) tooltip.add(Component.translatable("jade.monstergirls.milk_kind",
+                        Component.translatable("item.monstergirls." + kind.id())).withStyle(net.minecraft.ChatFormatting.GRAY));
+            }
             if (data.contains("Affection")) {
                 int a = data.getInt("Affection");
                 tooltip.add(Component.translatable("jade.monstergirls.friendship", a, BondInfo.nextMilestone(a)));

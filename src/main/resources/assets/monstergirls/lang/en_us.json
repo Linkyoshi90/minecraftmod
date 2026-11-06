@@ -3032,5 +3032,8 @@
   "message.monstergirls.named": "%s! She loves her new name",
   "message.monstergirls.devoted": "%s is devoted to you: your journal remembers the day",
   "journal.monstergirls.dearest.title": "Dearest friends",
-  "journal.monstergirls.dearest.line": "%s, %s (day %s)"
+  "journal.monstergirls.dearest.line": "%s, %s (day %s)",
+  "jade.monstergirls.milk_kind": "Her milk: %s",
+  "item.monstergirls.branch_charm.kin": "Wild ones of this branch who see it warm to you",
+  "message.monstergirls.charmed": "%s recognises your charm and warms to you"
 }

@@ -20,7 +20,8 @@ import java.util.List;
 /**
  * A branch charm: given once for meeting every kind on one branch of the tree of life (entity.Journal.branch). Carried in
  * the offhand it lends its bearer the first effect of that branch's milk, quietly, for as long as it is held. The plants
- * and the constructs give no milk, so theirs is a keepsake only.
+ * and the constructs give no milk, so theirs is a keepsake for that. Wild ones of its branch who see it in the offhand warm to its
+ * bearer (Journal.charmed).
  */
 public class BranchCharmItem extends Item {
     public static final int REFRESH = 40, LASTS = 300;
@@ -66,5 +67,6 @@ public class BranchCharmItem extends Item {
         Holder<MobEffect> effect = effect(stack);
         tooltip.add(effect == null ? Component.translatable("item.monstergirls.branch_charm.keepsake").withStyle(ChatFormatting.GRAY)
                 : Component.translatable("item.monstergirls.branch_charm.effect", effect.value().getDisplayName()).withStyle(ChatFormatting.BLUE));
+        tooltip.add(Component.translatable("item.monstergirls.branch_charm.kin").withStyle(ChatFormatting.GREEN));
     }
 }
