@@ -16,6 +16,9 @@ M.add_lang({
     "journal.monstergirls.guide.habits.title": "Habits",
     "journal.monstergirls.guide.habits": "Each branch has its habits. Wolves, dogs and foxes howl at the full moon, and every canid in earshot answers; "
                                          "stand under the moon with a friend among them and you are closer for it. Monkeys and apes groom a friend "
-                                         "beside them, picking out poison, hunger or the like now and then. Elephants and their kin spray a burning friend out.",
+                                         "beside them, picking out poison, hunger or the like now and then. Elephants and their kin spray a burning friend out. "
+                                         "Walk beside a hoofed friend (cattle, goats, deer, camels, horses) and you find your footing the way she does, "
+                                         "stepping up whole blocks without a jump.",
+    "message.monstergirls.sure_footed": "Beside %s you find your footing: you step up whole blocks",
 })
 print("habit assets written")

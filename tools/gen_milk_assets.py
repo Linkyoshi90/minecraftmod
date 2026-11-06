@@ -52,6 +52,9 @@ def add_lang(entries):
         body = body[:-1].rstrip() + ",\n" + ",\n".join(new) + "\n}\n"
         with open(path, "w", encoding="utf-8", newline="\n") as fh:
             fh.write(body)
+        if any(k.startswith("journal.monstergirls.guide.") for k in entries if k not in have):
+            import split_guides                                                    # long guides run over pages
+            split_guides.main()
 
 
 def cake(egg):

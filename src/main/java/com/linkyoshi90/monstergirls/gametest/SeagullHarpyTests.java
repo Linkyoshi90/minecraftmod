@@ -88,7 +88,8 @@ public class SeagullHarpyTests {
         ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(7, 3, 9));
         Boat boat = mannedBoat(helper, new BlockPos(7, 2, 8), player);
         helper.succeedWhen(() -> {
-            check(boat.isRemoved(), "the boat that reached the rock hasn't been wrecked");
+            check(boat.isRemoved(), "the boat that reached the rock hasn't been wrecked (the gull at " + helper.relativeVec(gull.position())
+                    + ", " + gull.getAction() + (gull.isHoldingSomething() ? ", holding something" : "") + ", the boat at " + helper.relativeVec(boat.position()) + ")");
             check(player.getVehicle() == null, "the crew should end up in the water");
             HarpyTestUtil.remove(player);
         });

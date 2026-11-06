@@ -147,22 +147,33 @@ public class HarmontideTests {
         var centaur = spawn(helper, GirlSpecies.HORSE_CENTAUR, new BlockPos(4, 2, 4));
         var fox = spawn(helper, GirlSpecies.RED_KITSUNE, new BlockPos(10, 2, 10));
         check(fox instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl k && k.isNocturnal(), "a fox is up at night");
-        helper.runAfterDelay(80, () -> {
-            check(centaur.getAction() == com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.Action.LYING, "a day girl sleeps at night: " + centaur.getAction());
-            check(((com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl) fox).getAction() != com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.Action.LYING, "a fox does not");
-            centaur.hurt(level.damageSources().generic(), 1.0F);
-            helper.runAfterDelay(5, () -> {
-                check(centaur.getAction() != com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.Action.LYING, "a hit wakes her");
-                clock[0] = 6000;                                             // noon: now the fox sleeps
+        var girl = (com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl) centaur;
+        var kitsune = (com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl) fox;
+        var LYING = com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.Action.LYING;
+        int[] phase = {0};
+        long[] hitAt = {0};
+        // Polled, not checked at a set tick: another test may set the shared clock for a tick and wake her briefly.
+        helper.onEachTick(() -> {
+            if (phase[0] == 0 && girl.getAction() == LYING && kitsune.getAction() != LYING) {        // a day girl sleeps at night, a fox does not
+                centaur.hurt(level.damageSources().generic(), 1.0F);
+                hitAt[0] = helper.getTick();
+                phase[0] = 1;
+            } else if (phase[0] == 1 && helper.getTick() >= hitAt[0] + 5) {
+                check(girl.getAction() != LYING, "a hit wakes her");
+                clock[0] = 6000;                                                                      // noon: now the fox sleeps
                 level.setDayTime(clock[0]);
-                helper.runAfterDelay(80, () -> {
-                    check(((com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl) fox).getAction() == com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.Action.LYING,
-                            "the fox sleeps through the day");
-                    clock[0] = was;
-                    level.setDayTime(was);
-                    helper.succeed();
-                });
-            });
+                phase[0] = 2;
+            } else if (phase[0] == 2 && kitsune.getAction() == LYING) {
+                clock[0] = was;
+                level.setDayTime(was);
+                phase[0] = 3;
+                helper.succeed();
+            }
+        });
+        helper.runAtTickTime(290, () -> {
+            if (phase[0] < 3) clock[0] = was;
+            check(phase[0] != 0, "a day girl sleeps at night: " + girl.getAction() + ", the fox: " + kitsune.getAction());
+            check(phase[0] != 2, "the fox sleeps through the day");
         });
     }
 

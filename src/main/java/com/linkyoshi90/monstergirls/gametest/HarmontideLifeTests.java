@@ -106,15 +106,46 @@ public class HarmontideLifeTests {
         helper.succeed();
     }
 
+    static int guidePages() {
+        return Journal.GUIDE.stream().mapToInt(com.linkyoshi90.monstergirls.entity.GuidePages::of).sum();
+    }
+
+    /** Each long guide is split over pages by tools/split_guides.py; the parts must be there and add up to the whole (run it again after an edit). */
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "guidePagesMatchTheirText")
+    public static void guidePagesMatchTheirText(GameTestHelper helper) throws java.io.IOException {
+        com.google.gson.JsonObject lang;
+        try (var in = MonsterGirlsMod.class.getResourceAsStream("/assets/monstergirls/lang/en_us.json")) {
+            check(in != null, "the lang file is on the classpath");
+            lang = com.google.gson.JsonParser.parseReader(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();
+        }
+        for (String guide : Journal.GUIDE) {
+            String key = "journal.monstergirls.guide." + guide;
+            check(lang.has(key) && lang.has(key + ".title"), "no text for the " + guide + " guide");
+            int parts = com.linkyoshi90.monstergirls.entity.GuidePages.of(guide);
+            if (parts == 1) {
+                check(!lang.has(key + ".p1"), "the " + guide + " guide has parts but one page: run tools/split_guides.py");
+                continue;
+            }
+            StringBuilder whole = new StringBuilder();
+            for (int i = 1; i <= parts; i++) {
+                check(lang.has(key + ".p" + i), "the " + guide + " guide is missing part " + i + ": run tools/split_guides.py");
+                whole.append(i > 1 ? " " : "").append(lang.get(key + ".p" + i).getAsString());
+            }
+            check(!lang.has(key + ".p" + (parts + 1)) && whole.toString().equals(lang.get(key).getAsString()),
+                    "the " + guide + " guide's pages are out of date: run tools/split_guides.py");
+        }
+        helper.succeed();
+    }
+
     @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "journalRecordsMeetingsAndFriends")
     public static void journalRecordsMeetingsAndFriends(GameTestHelper helper) {
         AbstractMonsterGirl girl = still(helper, GirlSpecies.YUREI_UNDEAD, new BlockPos(3, 2, 3));
         ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
-        check(Journal.book(p).pages().size() == 1 + Journal.GUIDE.size(), "a fresh journal: the contents and the guide");
+        check(Journal.book(p).pages().size() == 1 + guidePages(), "a fresh journal: the contents and the guide");
         check(Journal.record(p, girl, false) && !Journal.record(p, girl, false), "met once is news, twice is not");
         check(Journal.met(p).contains("yurei_undead") && Journal.friends(p).isEmpty(), "met, not yet befriended");
         check(Journal.record(p, girl, true) && Journal.friends(p).contains("yurei_undead"), "befriended");
-        check(Journal.book(p).pages().size() == 3 + Journal.GUIDE.size(), "and she has her page (and the tree of life its first branch)");
+        check(Journal.book(p).pages().size() == 3 + guidePages(), "and she has her page (and the tree of life its first branch)");
         HarpyTestUtil.remove(p);
         helper.succeed();
     }

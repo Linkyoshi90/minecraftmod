@@ -29,7 +29,8 @@ import java.util.Set;
  * up a second. Thunder: timid girls (rabbits, rodents, cats, marsupials) run to a friend in a thunderstorm and huddle against them
  * once a storm, for {@link #HUDDLE} friendship. A swim buddy: a sea-folk friend within {@link #BUDDY} of a swimming player keeps them
  * company in the water (dolphin's grace and water breathing while she is near). Warmth: a fire-proof friend within {@link #WARM} thaws a
- * freezing player.
+ * freezing player. Sure-footed: walking beside a hoofed friend (cattle, goats, deer, camels, horses and their kin), a player steps up whole
+ * blocks the way she does.
  */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class Company {
@@ -99,6 +100,34 @@ public final class Company {
         return null;
     }
 
+    public static final java.util.Set<Clade> HOOVES = java.util.EnumSet.of(Clade.BOVIDAE, Clade.CERVIDAE, Clade.CAMELIDAE, Clade.PERISSODACTYLA);
+    public static final net.minecraft.resources.ResourceLocation SURE_FOOTED = net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(MonsterGirlsMod.MODID, "sure_footed");
+    public static final double STEP = 0.5;
+
+    /** Every two seconds: a hoofed friend walking near a player on foot lends them her footing (a whole block's step), and it goes when she does. Who, or null. */
+    @Nullable
+    public static Mob sureFooted(ServerLevel level, ServerPlayer p) {
+        var step = p.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.STEP_HEIGHT);
+        if (step == null) return null;
+        Mob with = null;
+        if (MonsterGirlsConfig.comfort() && !p.isPassenger() && !p.isInWater() && !p.getAbilities().flying) {
+            for (Mob m : HomeLife.friendsOf(level, p, p.getBoundingBox().inflate(BUDDY))) {
+                if (m instanceof AbstractMonsterGirl g && HOOVES.contains(g.getSpecies().clade()) && g.getSpecies().family() != GirlSpecies.Family.MERFOLK
+                        && !g.isInWater() && !g.isSleeping()) {
+                    with = g;
+                    break;
+                }
+            }
+        }
+        boolean had = step.hasModifier(SURE_FOOTED);
+        if (with != null && !had) {
+            step.addTransientModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(SURE_FOOTED, STEP,
+                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE));
+            p.displayClientMessage(Component.translatable("message.monstergirls.sure_footed", with.getDisplayName()), true);
+        } else if (with == null && had) step.removeModifier(SURE_FOOTED);
+        return with;
+    }
+
     /** Every two seconds for a freezing player: a friend who is warm to the touch (fire never hurts her) close by thaws them. Who, or null. */
     @Nullable
     public static Mob warm(ServerLevel level, ServerPlayer p) {
@@ -134,6 +163,7 @@ public final class Company {
         if (event.getEntity() instanceof ServerPlayer p && p.level() instanceof ServerLevel level && p.tickCount % 40 == 17) {
             swim(level, p);
             warm(level, p);
+            sureFooted(level, p);
         }
     }
 }

@@ -375,8 +375,14 @@ public final class Journal {
         if (met.isEmpty()) cover.append("\n\n").append(Component.translatable("journal.monstergirls.empty").withStyle(ChatFormatting.RESET, ChatFormatting.ITALIC));
         pages.add(Filterable.passThrough(cover));
         for (String guide : GUIDE) {                                                 // how to live with them: hearth, expeditions, weapons
-            MutableComponent page = Component.translatable("journal.monstergirls.guide." + guide + ".title").withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_BLUE)
-                    .append("\n\n").append(Component.translatable("journal.monstergirls.guide." + guide).withStyle(ChatFormatting.RESET, ChatFormatting.BLACK));
+            int parts = GuidePages.of(guide);                                        // a long guide runs over pages (tools/split_guides.py)
+            MutableComponent page = null;
+            for (int i = 1; i <= parts; i++) {
+                if (page != null) pages.add(Filterable.passThrough(page));
+                page = Component.translatable("journal.monstergirls.guide." + guide + ".title").withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_BLUE)
+                        .append("\n\n").append(Component.translatable("journal.monstergirls.guide." + guide + (parts > 1 ? ".p" + i : ""))
+                                .withStyle(ChatFormatting.RESET, ChatFormatting.BLACK));
+            }
             if (guide.equals("festivals")) {                                         // and when the next one is
                 long time = player.level().getDayTime();
                 var next = com.linkyoshi90.monstergirls.entity.girl.Festivals.next(time);

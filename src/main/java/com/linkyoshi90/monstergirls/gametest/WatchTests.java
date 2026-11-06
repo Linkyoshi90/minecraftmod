@@ -56,6 +56,28 @@ public class WatchTests {
         helper.succeed();
     }
 
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "sureFootedBesideAHoofedFriend")
+    public static void sureFootedBesideAHoofedFriend(GameTestHelper helper) {
+        var level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
+        var step = p.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.STEP_HEIGHT);
+        double base = step.getValue();
+        AbstractMonsterGirl rabbit = spawn(helper, GirlSpecies.INABA_JACKALOPE, new BlockPos(4, 2, 2));
+        rabbit.setNoAi(true);
+        rabbit.addAffection(p, HomeLife.FRIEND);
+        check(Company.sureFooted(level, p) == null && step.getValue() == base, "a rabbit has no hooves");
+        AbstractMonsterGirl deer = spawn(helper, GirlSpecies.REINDEER_CENTAUR, new BlockPos(5, 2, 5));
+        deer.setNoAi(true);
+        check(Company.sureFooted(level, p) == null, "not with a stranger");
+        deer.addAffection(p, HomeLife.FRIEND);
+        check(Company.sureFooted(level, p) == deer && step.getValue() >= 1.0, "a whole block's step beside her, step=" + step.getValue());
+        check(Company.sureFooted(level, p) == deer && step.getValue() == base + Company.STEP, "the step is lent once, not stacked");
+        deer.discard();
+        check(Company.sureFooted(level, p) == null && step.getValue() == base, "and it goes with her");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
     @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "aGuardCallsOut")
     public static void aGuardCallsOut(GameTestHelper helper) {
         var level = helper.getLevel();
