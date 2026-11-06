@@ -48,6 +48,7 @@ public final class Journal {
     public static final double WORD_RANGE = 24.0;
     public static final int WORD = 3;
     private static java.util.Map<Clade, List<String>> members;
+    private static final String NL_TEXT = String.valueOf((char) 10);
     /** Every milk they have drunk (the clades' names), and the advancement for all of them. */
     public static final String TASTED = "Tasted", CONNOISSEUR_ADVANCEMENT = "connoisseur";
 
@@ -74,6 +75,7 @@ public final class Journal {
         for (Entity e : player.level().getEntities(player, player.getBoundingBox().inflate(SIGHT), e -> e instanceof Bonded && isOurs(e))) {
             if (player.hasLineOfSight(e)) {
                 record(player, e, ((Bonded) e).getAffection(player) >= Orders.AFFECTION);
+                if (((Bonded) e).getAffection(player) >= DEVOTED && !((LivingEntity) e).isBaby()) devoted(player, e);
                 watch(player, e);
             }
         }
@@ -118,6 +120,29 @@ public final class Journal {
                     Component.translatable("clade.monstergirls." + clade.key())).withStyle(ChatFormatting.GREEN), true);
         }
         return n;
+    }
+
+    /** Affection at which a friend is devoted, and goes in the journal's list of dearest friends; how many lines fit a page. */
+    public static final int DEVOTED = 60, DEAREST_LINES = 10;
+    public static final String DEAREST = "Dearest";
+
+    /** She is devoted to them: the first time, the journal notes her name, her kind and the day. Whether that was news. */
+    public static boolean devoted(Player player, Entity girl) {
+        CompoundTag data = player.getData(ModAttachments.JOURNAL);
+        ListTag list = data.getList(DEAREST, Tag.TAG_COMPOUND);
+        String id = girl.getUUID().toString();
+        for (Tag t : list) if (((CompoundTag) t).getString("Id").equals(id)) return false;
+        CompoundTag entry = new CompoundTag();
+        entry.putString("Id", id);
+        entry.putString("Name", girl.getName().getString());
+        entry.putString("Kind", BuiltInRegistries.ENTITY_TYPE.getKey(girl.getType()).getPath());
+        entry.putLong("Day", player.level().getDayTime() / 24000L + 1);
+        list.add(entry);
+        data.put(DEAREST, list);
+        player.setData(ModAttachments.JOURNAL, data);
+        if (player instanceof ServerPlayer sp) sp.displayClientMessage(Component.translatable("message.monstergirls.devoted", girl.getName())
+                .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        return true;
     }
 
     /** Every kind on each branch of the tree of life, in registry order (the harpies' and anurans' young have no branch of their own). */
@@ -364,6 +389,16 @@ public final class Journal {
         for (int i = 0; i < tree.size(); i += TREE_LINES) {
             MutableComponent page = Component.translatable("journal.monstergirls.tree.title").withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_BLUE).append("\n");
             for (MutableComponent line : tree.subList(i, Math.min(i + TREE_LINES, tree.size()))) page.append("\n").append(line);
+            pages.add(Filterable.passThrough(page));
+        }
+        ListTag dearest = player.getData(ModAttachments.JOURNAL).getList(DEAREST, Tag.TAG_COMPOUND);
+        for (int i = 0; i < dearest.size(); i += DEAREST_LINES) {                // the friends devoted to them, with the day it happened
+            MutableComponent page = Component.translatable("journal.monstergirls.dearest.title").withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_PURPLE).append(NL_TEXT);
+            for (int j = i; j < Math.min(i + DEAREST_LINES, dearest.size()); j++) {
+                CompoundTag d = dearest.getCompound(j);
+                page.append(NL_TEXT).append(Component.translatable("journal.monstergirls.dearest.line", d.getString("Name"),
+                        Component.translatable("entity.monstergirls." + d.getString("Kind")), d.getLong("Day")).withStyle(ChatFormatting.RESET, ChatFormatting.BLACK));
+            }
             pages.add(Filterable.passThrough(page));
         }
         List<String> all = new ArrayList<>(girls);

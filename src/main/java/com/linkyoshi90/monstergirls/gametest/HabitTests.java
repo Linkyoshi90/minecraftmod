@@ -106,4 +106,17 @@ public class HabitTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "theJournalRemembersTheDearest")
+    public static void theJournalRemembersTheDearest(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        AbstractMonsterGirl girl = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(3, 2, 3));
+        girl.setCustomName(net.minecraft.network.chat.Component.literal("Rin"));
+        check(com.linkyoshi90.monstergirls.entity.Journal.devoted(p, girl) && !com.linkyoshi90.monstergirls.entity.Journal.devoted(p, girl), "noted once");
+        var pages = com.linkyoshi90.monstergirls.entity.Journal.book(p).pages();
+        check(pages.stream().anyMatch(pg -> pg.raw().toString().contains("journal.monstergirls.dearest.title") && pg.raw().toString().contains("Rin")),
+                "her name on the dearest friends page");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }
