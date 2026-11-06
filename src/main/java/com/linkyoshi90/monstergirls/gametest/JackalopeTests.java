@@ -54,6 +54,7 @@ public class JackalopeTests {
     public static void inabaWarmsUpTwiceAsFastOnceCaught(GameTestHelper helper) {
         ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 7));
         Jackalope inaba = spawn(helper, GirlSpecies.INABA_JACKALOPE, new BlockPos(7, 2, 7));
+        inaba.getPersistentData().putLong(Treats.BIRTHDAY_DONE, helper.getLevel().getDayTime() / 24000L + 1);   // not her birthday, for the sums
         check(!inaba.isCaught(), "not caught yet");
         player.setShiftKeyDown(true);
         interact(inaba, player, ItemStack.EMPTY);

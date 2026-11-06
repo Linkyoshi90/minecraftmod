@@ -326,15 +326,17 @@ public class FourthWaveTests {
         helper.succeed();
     }
 
-    @GameTest(template = PLATFORM, timeoutTicks = 200, batch = "orcaHuntsPenguinsWhoHuntKoi")
+    @GameTest(template = PLATFORM, timeoutTicks = 400, batch = "orcaHuntsPenguinsWhoHuntKoi")
     public static void orcaHuntsPenguinsWhoHuntKoi(GameTestHelper helper) {
         PenguinHarpy penguin = helper.spawn(ModEntities.PENGUIN_HARPY.get(), new BlockPos(7, 2, 7));
         Merfolk koi = spawn(helper, GirlSpecies.KOI_MERMAID, new BlockPos(9, 2, 7));
         Merfolk orca = spawn(helper, GirlSpecies.ORCA_MERMAID, new BlockPos(4, 2, 7));
         koi.setNoAi(true);
+        orca.setNoAi(true);                                        // she waits: bitten first, the penguin would turn on her and never hunt
         boolean[] seen = new boolean[2];                           // once bitten, the penguin turns on the orca: count each hunt when it happens
         helper.onEachTick(() -> {
             seen[0] |= penguin.getTarget() == koi;
+            if (seen[0] && orca.isNoAi()) orca.setNoAi(false);     // the penguin has made her move; now the orca's
             seen[1] |= orca.getTarget() == penguin;
         });
         helper.succeedWhen(() -> {
