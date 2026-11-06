@@ -141,7 +141,9 @@ public class HarmontideTests {
     public static void girlsSleepTheirOffHours(GameTestHelper helper) {
         var level = helper.getLevel();
         long was = level.getDayTime();
-        level.setDayTime(18000);                                             // midnight
+        long[] clock = {18000};                                              // midnight, held every tick (other tests set the shared clock too)
+        level.setDayTime(clock[0]);
+        helper.onEachTick(() -> level.setDayTime(clock[0]));
         var centaur = spawn(helper, GirlSpecies.HORSE_CENTAUR, new BlockPos(4, 2, 4));
         var fox = spawn(helper, GirlSpecies.RED_KITSUNE, new BlockPos(10, 2, 10));
         check(fox instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl k && k.isNocturnal(), "a fox is up at night");
@@ -151,10 +153,12 @@ public class HarmontideTests {
             centaur.hurt(level.damageSources().generic(), 1.0F);
             helper.runAfterDelay(5, () -> {
                 check(centaur.getAction() != com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.Action.LYING, "a hit wakes her");
-                level.setDayTime(6000);                                      // noon: now the fox sleeps
+                clock[0] = 6000;                                             // noon: now the fox sleeps
+                level.setDayTime(clock[0]);
                 helper.runAfterDelay(80, () -> {
                     check(((com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl) fox).getAction() == com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.Action.LYING,
                             "the fox sleeps through the day");
+                    clock[0] = was;
                     level.setDayTime(was);
                     helper.succeed();
                 });
