@@ -84,6 +84,28 @@ public class WatchTests {
         helper.succeed();
     }
 
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "slimesCushionAFallConstructsSteadyAnvils")
+    public static void slimesCushionAFallConstructsSteadyAnvils(GameTestHelper helper) {
+        var level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
+        AbstractMonsterGirl slime = spawn(helper, GirlSpecies.VERDANT_SLIME, new BlockPos(4, 2, 2));
+        slime.setNoAi(true);
+        AbstractMonsterGirl golem = spawn(helper, GirlSpecies.TIN_SQUIRREL_CONSTRUCT, new BlockPos(2, 2, 5));
+        golem.setNoAi(true);
+        check(Company.cushion(level, p, 10.0F) == null, "a stranger lets you fall");
+        check(Company.steadyAnvil(level, p) == null, "a stranger leaves the anvil be");
+        slime.addAffection(p, HomeLife.FRIEND);
+        golem.addAffection(p, HomeLife.FRIEND);
+        check(Company.cushion(level, p, 2.0F) == null, "a hop needs no cushion");
+        check(Company.cushion(level, p, 10.0F) == slime, "a real fall: she breaks it");
+        check(Company.steadyAnvil(level, p) == golem, "a construct friend keeps the anvil steady");
+        check(Company.steadyAnvil(level, p) != slime, "a slime is no smith");
+        slime.discard();
+        golem.discard();
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
     @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "aGuardCallsOut")
     public static void aGuardCallsOut(GameTestHelper helper) {
         var level = helper.getLevel();

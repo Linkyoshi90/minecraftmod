@@ -59,6 +59,10 @@ public class GiftGoal<T extends PathfinderMob & Bonded & GiftGiver> extends Goal
         if (best == null) return false;
         ItemStack gift = this.harpy instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl girl && girl.isHealer()
                 && girl.getRandom().nextInt(5) == 0 ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.HEALING_BALM.get()) : this.harpy.rollGift(best);
+        if (!gift.isEmpty() && this.harpy.getRandom().nextInt(com.linkyoshi90.monstergirls.entity.Journal.FLOWER_GIFT) == 0) {   // she knows they press flowers
+            ItemStack flower = com.linkyoshi90.monstergirls.entity.Journal.missingFlower(best, this.harpy.getRandom());
+            if (!flower.isEmpty()) gift = flower;
+        }
         if (gift.isEmpty()) {
             this.harpy.scheduleNextGift();
             return false;

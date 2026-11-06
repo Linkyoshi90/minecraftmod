@@ -1008,6 +1008,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (this.tickCount % 20 == 11) Habits.douse(server, this);
         if (this.tickCount % 100 == 95) Habits.beachcomb(server, this);
         if (this.tickCount % 200 == 170) Habits.fairyRing(server, this, false);
+        if (this.tickCount % 40 == 23) Habits.thump(server, this);
         if (this.hutOrigin != null && this.tickCount % 10 == 0) Settlement.buildStep(server, this);
         this.gestation.tick();
         if (this.tickCount % 10 == 0) this.entityData.set(DATA_BELLY, (byte) Math.round(this.bellyProgress() * 100));

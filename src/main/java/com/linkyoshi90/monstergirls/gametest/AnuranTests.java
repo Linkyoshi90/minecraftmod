@@ -191,6 +191,7 @@ public class AnuranTests {
 
     @GameTest(template = PLATFORM, timeoutTicks = 800, batch = "toadEatsPests")
     public static void toadEatsPests(GameTestHelper helper) {
+        for (int x = 1; x <= 9; x++) for (int z = 1; z <= 7; z++) helper.setBlock(new BlockPos(x, 1, z), net.minecraft.world.level.block.Blocks.STONE);   // grass: by day (the clock is shared) she'd dig in instead
         helper.spawn(ModEntities.MUCUS_TOAD.get(), new BlockPos(4, 2, 4));
         Silverfish pest = helper.spawn(EntityType.SILVERFISH, new BlockPos(8, 2, 4));
         pest.setNoAi(true);

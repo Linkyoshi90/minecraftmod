@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-/** The Harmontide journal: opened, it is written afresh from what its reader has met and befriended (Journal). */
+/** The Harmontide journal: opened, it is written afresh from what its reader has met and befriended (Journal). With a flower in the other hand, the flower is pressed between its pages instead. */
 public class JournalItem extends Item {
     public JournalItem(Properties props) {
         super(props);
@@ -23,6 +23,11 @@ public class JournalItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        ItemStack other = player.getItemInHand(hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
+        if (other.is(net.minecraft.tags.ItemTags.SMALL_FLOWERS)) {            // a flower in the other hand: pressed between the pages
+            if (player instanceof ServerPlayer sp) Journal.press(sp, other);
+            return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+        }
         if (player instanceof ServerPlayer sp) {
             stack.set(DataComponents.WRITTEN_BOOK_CONTENT, Journal.book(sp));
             sp.containerMenu.broadcastChanges();            // the pages must reach her client's copy before the book opens

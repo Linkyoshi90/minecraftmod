@@ -28,6 +28,8 @@ import javax.annotation.Nullable;
  * couple of minutes (kelp, clay, bones and flint, now and then a shard, a sea pickle or ink, rarely gold or a nautilus shell).</li>
  * <li>Fairies, pixies and the leshy leave a fairy ring: on a night out on the grass with a friend near, a ring of mushrooms comes up
  * around her, every few days. Anyone standing in a ring at night (theirs, or one a player planted) is lucky till morning.</li>
+ * <li>Hares and rabbits thump: a monster coming on a friend makes her stamp the ground, and the friend learns what it is and which
+ * way it comes from (every half minute at most).</li>
  * </ul>
  */
 public final class Habits {
@@ -225,5 +227,41 @@ public final class Habits {
         level.sendParticles(ParticleTypes.ENCHANT, p.getX(), p.getY() + 1.0, p.getZ(), 30, 0.6, 0.6, 0.6, 0.5);
         p.displayClientMessage(Component.translatable("message.monstergirls.fairy_ring").withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE), true);
         return true;
+    }
+
+    // --- the hare's thump -------------------------------------------------------------------------------------------
+
+    public static final String THUMP_AT = "ThumpAt";
+    public static final int THUMP_GAP = 600;
+    public static final double THUMP_FRIEND = 16.0, THUMP_HEAR = 24.0, THUMP_LEVEL = 6.0, THUMP_CLOSE = 6.0;   // (not the caves under the house)
+
+    /** Every two seconds for a grown hare or rabbit awake near a friend: the nearest monster within earshot that is coming on
+     *  them (not on top of them yet, when they know already) makes her thump the ground, and the friend is told what and which way.
+     *  Every half minute at most. The monster, or null. */
+    @Nullable
+    public static net.minecraft.world.entity.Mob thump(ServerLevel level, AbstractMonsterGirl girl) {
+        if (!MonsterGirlsConfig.comfort() || girl.isBaby() || girl.getSpecies().clade() != Clade.LAGOMORPHA || girl.isSleeping()
+                || level.getGameTime() < girl.getPersistentData().getLong(THUMP_AT)) return null;
+        if (!(girl.bondedPlayer(Orders.AFFECTION, THUMP_FRIEND) instanceof ServerPlayer friend) || friend.isSpectator()) return null;
+        net.minecraft.world.entity.monster.Monster near = null;
+        double best = Double.MAX_VALUE;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class,
+                girl.getBoundingBox().inflate(THUMP_HEAR, THUMP_LEVEL, THUMP_HEAR), m -> m.isAlive() && !(m instanceof net.minecraft.world.entity.NeutralMob n && !n.isAngry()))) {
+            double d = m.distanceToSqr(friend);
+            if (d < best) {
+                best = d;
+                near = m;
+            }
+        }
+        if (near == null || best < THUMP_CLOSE * THUMP_CLOSE) return null;
+        girl.getPersistentData().putLong(THUMP_AT, level.getGameTime() + THUMP_GAP);
+        net.minecraft.core.BlockPos under = girl.blockPosition().below();
+        level.levelEvent(2001, under, net.minecraft.world.level.block.Block.getId(level.getBlockState(under)));
+        level.playSound(null, girl.blockPosition(), SoundEvents.RABBIT_JUMP, SoundSource.NEUTRAL, 1.5F, 0.6F);
+        girl.getLookControl().setLookAt(near);
+        friend.displayClientMessage(Component.translatable("message.monstergirls.thumped", girl.getDisplayName(), near.getType().getDescription(),
+                Component.translatable("direction.monstergirls." + com.linkyoshi90.monstergirls.item.FriendCompassItem.way(friend, near)))
+                .withStyle(net.minecraft.ChatFormatting.GOLD), true);
+        return near;
     }
 }

@@ -22,5 +22,17 @@ M.add_lang({
     "message.monstergirls.beachcombed": "%s digs in the sand at your feet and turns up %s",
     "message.monstergirls.fairy_ring": "You stand in a fairy ring, and luck is with you till morning",
     "message.monstergirls.sure_footed": "Beside %s you find your footing: you step up whole blocks",
+    "message.monstergirls.thumped": "%s thumps the ground: %s, coming from the %s",
+    "message.monstergirls.pressed": "You press the %s between the pages (%s of %s)",
+    "message.monstergirls.pressed_already": "Your journal already holds a pressed %s",
+    "journal.monstergirls.pressed.title": "Pressed Flowers",
+    "journal.monstergirls.pressed.count": "%s of %s kinds",
+    "journal.monstergirls.pressed.line": "%s, with %s",
+    "journal.monstergirls.pressed.alone": "%s",
+    "message.monstergirls.cushioned": "%s catches you: the landing is soft",
+    "message.monstergirls.steady_anvil": "%s steadies the anvil: it doesn't wear",
+    "advancement.monstergirls.herbarium": "Herbarium",
+    "advancement.monstergirls.herbarium.desc": "Press every kind of small flower in your journal",
 })
+# the habits and keepsakes guides have since been edited by hand in en_us.json (thumping, pressed flowers): edit them there
 print("habit assets written")

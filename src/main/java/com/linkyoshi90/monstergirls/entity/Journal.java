@@ -348,6 +348,75 @@ public final class Journal {
         return out;
     }
 
+    // --- pressed flowers ---------------------------------------------------------------------------------------------
+
+    public static final String PRESSED = "Pressed", HERBARIUM_ADVANCEMENT = "herbarium";
+    public static final int PRESSED_LINES = 4;                              // a line "Lily of the Valley, with <name>" wraps to three of a page's 14
+
+    /** Every kind of small flower there is (vanilla's and any other mod's in the tag). */
+    public static int flowerKinds() {
+        return BuiltInRegistries.ITEM.getTag(net.minecraft.tags.ItemTags.SMALL_FLOWERS).map(net.minecraft.core.HolderSet::size).orElse(0);
+    }
+
+    /** The flowers pressed in their journal, in the order pressed: each the flower's id and the friend near them then ("" for nobody). */
+    public static ListTag pressed(Player player) {
+        return player.getData(ModAttachments.JOURNAL).getList(PRESSED, Tag.TAG_COMPOUND);
+    }
+
+    /** One gift in this many, a friend of someone who presses flowers brings a kind they haven't pressed yet. */
+    public static final int FLOWER_GIFT = 4;
+
+    /** A small flower they have not pressed yet (never a wither rose), if they have started pressing at all; else empty. */
+    public static net.minecraft.world.item.ItemStack missingFlower(Player player, net.minecraft.util.RandomSource random) {
+        ListTag list = pressed(player);
+        if (list.isEmpty()) return net.minecraft.world.item.ItemStack.EMPTY;
+        Set<String> have = new java.util.HashSet<>();
+        for (int i = 0; i < list.size(); i++) have.add(list.getCompound(i).getString("Id"));
+        List<net.minecraft.world.item.Item> missing = new ArrayList<>();
+        BuiltInRegistries.ITEM.getTag(net.minecraft.tags.ItemTags.SMALL_FLOWERS).ifPresent(tag -> tag.forEach(h -> {
+            if (h.value() != net.minecraft.world.item.Items.WITHER_ROSE && !have.contains(BuiltInRegistries.ITEM.getKey(h.value()).toString())) missing.add(h.value());
+        }));
+        return missing.isEmpty() ? net.minecraft.world.item.ItemStack.EMPTY : new net.minecraft.world.item.ItemStack(missing.get(random.nextInt(missing.size())));
+    }
+
+    /** They press a flower between the journal's pages: the first of its kind is kept (one taken from the stack), with the name of the
+     *  nearest friend within 8 blocks. Whether it was new. */
+    public static boolean press(ServerPlayer player, net.minecraft.world.item.ItemStack flower) {
+        if (!flower.is(net.minecraft.tags.ItemTags.SMALL_FLOWERS)) return false;
+        String id = BuiltInRegistries.ITEM.getKey(flower.getItem()).toString();
+        CompoundTag data = player.getData(ModAttachments.JOURNAL);
+        ListTag list = data.getList(PRESSED, Tag.TAG_COMPOUND);
+        for (int i = 0; i < list.size(); i++) {
+            if (list.getCompound(i).getString("Id").equals(id)) {
+                player.displayClientMessage(Component.translatable("message.monstergirls.pressed_already", flower.getHoverName()), true);
+                return false;
+            }
+        }
+        String with = "";
+        if (player.level() instanceof net.minecraft.server.level.ServerLevel level) {
+            net.minecraft.world.entity.Mob near = null;
+            for (net.minecraft.world.entity.Mob m : HomeLife.friendsOf(level, player, player.getBoundingBox().inflate(8.0))) {
+                if (near == null || m.distanceToSqr(player) < near.distanceToSqr(player)) near = m;
+            }
+            if (near != null) with = near.getName().getString();
+        }
+        CompoundTag entry = new CompoundTag();
+        entry.putString("Id", id);
+        entry.putString("With", with);
+        list.add(entry);
+        data.put(PRESSED, list);
+        player.setData(ModAttachments.JOURNAL, data);
+        Component name = flower.getHoverName();
+        if (!player.getAbilities().instabuild) flower.shrink(1);
+        player.level().playSound(null, player.blockPosition(), net.minecraft.sounds.SoundEvents.BOOK_PAGE_TURN, net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F);
+        player.displayClientMessage(Component.translatable("message.monstergirls.pressed", name, list.size(), flowerKinds()).withStyle(ChatFormatting.DARK_GREEN), true);
+        if (list.size() >= flowerKinds()) {                                    // every kind: the herbarium
+            var a = player.server.getAdvancements().get(MonsterGirlsMod.id(HERBARIUM_ADVANCEMENT));
+            if (a != null) player.getAdvancements().award(a, "done");
+        }
+        return true;
+    }
+
     /** The journal's pages for this player, as a written book. */
     public static WrittenBookContent book(Player player) {
         Set<String> met = met(player), friends = friends(player);
@@ -406,6 +475,18 @@ public final class Journal {
             givers.sort((a, b) -> milk.getInt(b) - milk.getInt(a));
             for (String name : givers.subList(0, Math.min(MILK_LINES, givers.size()))) {
                 page.append("\n").append(Component.translatable("journal.monstergirls.milk.line", name, milk.getInt(name)).withStyle(ChatFormatting.RESET, ChatFormatting.BLACK));
+            }
+            pages.add(Filterable.passThrough(page));
+        }
+        ListTag flowers = pressed(player);
+        for (int i = 0; i < flowers.size(); i += PRESSED_LINES) {                 // the flowers pressed between the pages, and who was there
+            MutableComponent page = Component.translatable("journal.monstergirls.pressed.title").withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_GREEN)
+                    .append(NL_TEXT).append(Component.translatable("journal.monstergirls.pressed.count", flowers.size(), flowerKinds()).withStyle(ChatFormatting.RESET, ChatFormatting.GRAY));
+            for (int j = i; j < Math.min(i + PRESSED_LINES, flowers.size()); j++) {
+                CompoundTag f = flowers.getCompound(j);
+                Component flower = BuiltInRegistries.ITEM.get(net.minecraft.resources.ResourceLocation.parse(f.getString("Id"))).getDescription();
+                page.append(NL_TEXT).append((f.getString("With").isEmpty() ? Component.translatable("journal.monstergirls.pressed.alone", flower)
+                        : Component.translatable("journal.monstergirls.pressed.line", flower, f.getString("With"))).withStyle(ChatFormatting.RESET, ChatFormatting.BLACK));
             }
             pages.add(Filterable.passThrough(page));
         }

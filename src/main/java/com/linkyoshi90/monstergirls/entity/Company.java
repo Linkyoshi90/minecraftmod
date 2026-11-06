@@ -30,7 +30,8 @@ import java.util.Set;
  * once a storm, for {@link #HUDDLE} friendship. A swim buddy: a sea-folk friend within {@link #BUDDY} of a swimming player keeps them
  * company in the water (dolphin's grace and water breathing while she is near). Warmth: a fire-proof friend (or a bear or one of her furry kin) within
  * {@link #WARM} thaws a freezing player. Sure-footed: walking beside a hoofed friend (cattle, goats, deer, camels, horses and their kin), a player steps up whole
- * blocks the way she does.
+ * blocks the way she does. A soft landing: falling beside a slime friend, a player lands on her and it hurts a quarter as much. A steady anvil:
+ * with a construct friend beside them, an anvil a player works never wears down.
  */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class Company {
@@ -145,6 +146,52 @@ public final class Company {
             return m;
         }
         return null;
+    }
+
+    // --- a soft landing, a steady anvil ------------------------------------------------------------------------------
+
+    public static final double CUSHION = 4;
+    public static final float CUSHIONED = 0.25F;
+
+    /** A friend of this branch within reach of the player, or null. */
+    @Nullable
+    public static Mob friendOf(ServerLevel level, ServerPlayer p, Clade clade, double reach) {
+        for (Mob m : HomeLife.friendsOf(level, p, p.getBoundingBox().inflate(reach))) if (m instanceof AbstractMonsterGirl g && g.getSpecies().clade() == clade) return m;
+        return null;
+    }
+
+    /** A fall that would hurt, with a slime friend within {@link #CUSHION}: she breaks it (a quarter of the damage). The slime, or null. */
+    @Nullable
+    public static Mob cushion(ServerLevel level, ServerPlayer p, float distance) {
+        if (!MonsterGirlsConfig.comfort() || distance <= 4.0F) return null;                     // (a hop off a ledge needs no cushion)
+        Mob slime = friendOf(level, p, Clade.SLIME, CUSHION);
+        if (slime == null) return null;
+        level.playSound(null, p.blockPosition(), net.minecraft.sounds.SoundEvents.SLIME_JUMP, net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 0.9F);
+        level.sendParticles(ParticleTypes.ITEM_SLIME, p.getX(), p.getY() + 0.2, p.getZ(), 12, 0.4, 0.1, 0.4, 0.1);
+        p.displayClientMessage(Component.translatable("message.monstergirls.cushioned", slime.getDisplayName()), true);
+        return slime;
+    }
+
+    /** A construct friend within {@link #BUDDY} keeps the anvil they work steady. Her, or null. */
+    @Nullable
+    public static Mob steadyAnvil(ServerLevel level, ServerPlayer p) {
+        return MonsterGirlsConfig.comfort() ? friendOf(level, p, Clade.CONSTRUCT, BUDDY) : null;
+    }
+
+    @SubscribeEvent
+    public static void onFall(net.neoforged.neoforge.event.entity.living.LivingFallEvent event) {
+        if (event.getEntity() instanceof ServerPlayer p && p.level() instanceof ServerLevel level && cushion(level, p, event.getDistance()) != null)
+            event.setDamageMultiplier(event.getDamageMultiplier() * CUSHIONED);
+    }
+
+    @SubscribeEvent
+    public static void onAnvil(net.neoforged.neoforge.event.entity.player.AnvilRepairEvent event) {
+        if (event.getEntity() instanceof ServerPlayer p && p.level() instanceof ServerLevel level && event.getBreakChance() > 0) {
+            Mob smith = steadyAnvil(level, p);
+            if (smith == null) return;
+            event.setBreakChance(0.0F);
+            p.displayClientMessage(Component.translatable("message.monstergirls.steady_anvil", smith.getDisplayName()), true);
+        }
     }
 
     @SubscribeEvent

@@ -18,7 +18,7 @@ import static com.linkyoshi90.monstergirls.gametest.HarpyTestUtil.PLATFORM;
 import static com.linkyoshi90.monstergirls.gametest.HarpyTestUtil.check;
 import static com.linkyoshi90.monstergirls.gametest.JackalopeTests.spawn;
 
-/** Habits of a branch (entity.girl.Habits): the full-moon howl, grooming, the trunk's spray, beachcombing. */
+/** Habits of a branch (entity.girl.Habits): the full-moon howl, grooming, the trunk's spray, beachcombing, fairy rings, the hare's thump; pressed flowers in the journal. */
 @GameTestHolder(MonsterGirlsMod.MODID)
 @PrefixGameTestTemplate(false)
 public class HabitTests {
@@ -167,6 +167,55 @@ public class HabitTests {
         var pages = com.linkyoshi90.monstergirls.entity.Journal.book(p).pages();
         check(pages.stream().anyMatch(pg -> pg.raw().toString().contains("journal.monstergirls.dearest.title") && pg.raw().toString().contains("Rin")),
                 "her name on the dearest friends page");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "haresThumpAWarning")
+    public static void haresThumpAWarning(GameTestHelper helper) {
+        var level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        AbstractMonsterGirl hare = spawn(helper, GirlSpecies.JACK_JACKALOPE, new BlockPos(2, 2, 1));
+        hare.setNoAi(true);
+        var zombie = helper.spawn(net.minecraft.world.entity.EntityType.ZOMBIE, new BlockPos(9, 2, 9));
+        zombie.setNoAi(true);
+        check(Habits.thump(level, hare) == null, "a stranger keeps her warnings to herself");
+        hare.addAffection(p, Orders.AFFECTION);
+        check(Habits.thump(level, hare) == zombie, "a zombie coming on her friend: she thumps");
+        check(Habits.thump(level, hare) == null, "every half minute, not every moment");
+        hare.getPersistentData().remove(Habits.THUMP_AT);
+        zombie.teleportTo(p.getX() + 2, p.getY(), p.getZ() + 2);
+        check(Habits.thump(level, hare) == null, "on top of them already: they know");
+        AbstractMonsterGirl gibbon = spawn(helper, GirlSpecies.GIBBON_RODENT, new BlockPos(3, 2, 3));
+        gibbon.addAffection(p, Orders.AFFECTION);
+        zombie.teleportTo(helper.absoluteVec(new BlockPos(9, 2, 9).getBottomCenter()).x, p.getY(), helper.absoluteVec(new BlockPos(9, 2, 9).getBottomCenter()).z);
+        check(Habits.thump(level, gibbon) == null, "a gibbon doesn't thump");
+        zombie.discard();
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "flowersPressedInTheJournal")
+    public static void flowersPressedInTheJournal(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        AbstractMonsterGirl wolf = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(3, 2, 3));
+        wolf.setNoAi(true);
+        wolf.addAffection(p, Orders.AFFECTION);
+        int before = com.linkyoshi90.monstergirls.entity.Journal.book(p).pages().size();
+        var poppies = new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.POPPY, 2);
+        check(!com.linkyoshi90.monstergirls.entity.Journal.press(p, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.DIRT)), "only flowers press");
+        check(com.linkyoshi90.monstergirls.entity.Journal.press(p, poppies) && poppies.getCount() == 1, "a poppy pressed, one taken");
+        var pressed = com.linkyoshi90.monstergirls.entity.Journal.pressed(p);
+        check(pressed.size() == 1 && pressed.getCompound(0).getString("With").equals(wolf.getName().getString()), "the friend beside them is remembered");
+        check(!com.linkyoshi90.monstergirls.entity.Journal.press(p, poppies) && poppies.getCount() == 1, "one of each kind");
+        check(com.linkyoshi90.monstergirls.entity.Journal.press(p, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.CORNFLOWER)), "a cornflower too");
+        check(com.linkyoshi90.monstergirls.entity.Journal.book(p).pages().size() == before + 1, "both on one Pressed Flowers page");
+        for (int i = 0; i < 20; i++) {
+            var gift = com.linkyoshi90.monstergirls.entity.Journal.missingFlower(p, wolf.getRandom());
+            check(gift.is(net.minecraft.tags.ItemTags.SMALL_FLOWERS) && !gift.is(net.minecraft.world.item.Items.POPPY) && !gift.is(net.minecraft.world.item.Items.CORNFLOWER)
+                    && !gift.is(net.minecraft.world.item.Items.WITHER_ROSE), "a friend brings one they haven't pressed, got " + gift);
+        }
+        check(com.linkyoshi90.monstergirls.entity.Journal.flowerKinds() >= 13, "every small flower counts, got " + com.linkyoshi90.monstergirls.entity.Journal.flowerKinds());
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
