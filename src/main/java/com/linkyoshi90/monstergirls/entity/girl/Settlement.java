@@ -181,8 +181,9 @@ public final class Settlement {
             Blocks.POTTED_AZURE_BLUET, Blocks.POTTED_RED_TULIP, Blocks.POTTED_ORANGE_TULIP, Blocks.POTTED_WHITE_TULIP, Blocks.POTTED_PINK_TULIP,
             Blocks.POTTED_OXEYE_DAISY, Blocks.POTTED_CORNFLOWER, Blocks.POTTED_LILY_OF_THE_VALLEY, Blocks.POTTED_TORCHFLOWER);
 
-    /** What she adds to her finished hut over the mornings, in order, each in its own spot on the floor (the way from the door to
-     *  the bed stays clear): a candle across from the lantern, her flower in a pot in a back corner, then rugs in her bed's colour. */
+    /** What she adds to her finished hut over the mornings, in order: a sign with her name outside, beside the path to the door; then
+     *  each in its own spot on the floor (the way from the door to the bed stays clear): a candle across from the lantern, her flower
+     *  in a pot in a back corner, then rugs in her bed's colour. */
     public static List<Piece> homely(AbstractMonsterGirl girl) {
         BlockPos origin = girl.hutOrigin();
         if (origin == null) return List.of();
@@ -192,7 +193,11 @@ public final class Settlement {
         net.minecraft.world.item.DyeColor colour = ((BedBlock) style(girl.getSpecies()).bed()).getColor();
         Block rug = net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(net.minecraft.resources.ResourceLocation.withDefaultNamespace(colour.getName() + "_carpet"));
         BlockPos front = mid.relative(back.getOpposite());
+        Direction door = back.getOpposite();
+        BlockPos outside = origin.offset(2 + door.getStepX() * 3, 0, 2 + door.getStepZ() * 3).relative(side);   // beside the path to the door
         return List.of(
+                new Piece(outside, Blocks.OAK_SIGN.defaultBlockState().setValue(net.minecraft.world.level.block.StandingSignBlock.ROTATION,
+                        net.minecraft.world.level.block.state.properties.RotationSegment.convertToSegment(door))),
                 new Piece(mid.relative(side.getOpposite()), Blocks.CANDLE.defaultBlockState().setValue(net.minecraft.world.level.block.CandleBlock.LIT, true)),
                 new Piece(mid.relative(back).relative(side), POTTED.get(Math.max(0, flower)).defaultBlockState()),
                 new Piece(mid.relative(back).relative(side.getOpposite()), rug.defaultBlockState()),
@@ -207,8 +212,16 @@ public final class Settlement {
         for (Piece p : homely(girl)) {
             BlockState there = level.getBlockState(p.pos());
             if (there.is(p.state().getBlock())) continue;
-            if (!there.isAir()) continue;                                              // her friend put something there: leave it
+            boolean sign = p.state().getBlock() instanceof net.minecraft.world.level.block.SignBlock;
+            if (sign ? !there.canBeReplaced() || there.liquid() || !level.getBlockState(p.pos().below()).isFaceSturdy(level, p.pos().below(), Direction.UP)
+                    : !there.isAir()) continue;                                       // her friend put something there: leave it
             level.setBlock(p.pos(), p.state(), Block.UPDATE_ALL);
+            if (sign && level.getBlockEntity(p.pos()) instanceof net.minecraft.world.level.block.entity.SignBlockEntity board) {   // her name on it
+                board.setText(new net.minecraft.world.level.block.entity.SignText()
+                        .setMessage(1, girl.getName().copy())
+                        .setMessage(2, girl.getType().getDescription().copy().withStyle(net.minecraft.ChatFormatting.DARK_GRAY)), true);
+                board.setWaxed(true);
+            }
             level.playSound(null, p.pos(), p.state().getSoundType().getPlaceSound(), SoundSource.BLOCKS, 0.8F, 1.0F);
             return p;
         }
@@ -225,27 +238,28 @@ public final class Settlement {
         }
 
         private double limit() {
-            return this.girl.level().isDay() ? 24.0 : 6.0;
+            return this.girl.calledHome() ? 3.0 : this.girl.level().isDay() ? 24.0 : 6.0;
         }
 
         @Override
         public boolean canUse() {
             BlockPos home = this.girl.homeHearth();
-            if (home == null || this.girl.getTarget() != null || this.girl.getOrders().command(this.girl) != Orders.Command.FREE_ROAM
-                    || this.girl.getRandom().nextInt(reducedTickDelay(40)) != 0) return false;
+            if (home == null || this.girl.getTarget() != null || this.girl.getOrders().command(this.girl) != Orders.Command.FREE_ROAM) return false;
+            if (!this.girl.calledHome() && this.girl.getRandom().nextInt(reducedTickDelay(40)) != 0) return false;   // the bell: at once
             return home.distToCenterSqr(this.girl.position()) > this.limit() * this.limit();
         }
 
         @Override
         public boolean canContinueToUse() {
             BlockPos home = this.girl.homeHearth();
-            return home != null && !this.girl.getNavigation().isDone() && home.distToCenterSqr(this.girl.position()) > 9;
+            double near = this.girl.calledHome() ? 2.5 : 3.0;
+            return home != null && !this.girl.getNavigation().isDone() && home.distToCenterSqr(this.girl.position()) > near * near;
         }
 
         @Override
         public void start() {
             BlockPos home = this.girl.homeHearth();
-            if (home != null) this.girl.getNavigation().moveTo(home.getX() + 0.5, home.getY(), home.getZ() + 0.5, 1.0);
+            if (home != null) this.girl.getNavigation().moveTo(home.getX() + 0.5, home.getY(), home.getZ() + 0.5, this.girl.calledHome() ? 1.2 : 1.0);
         }
     }
 }

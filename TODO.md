@@ -829,3 +829,7 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [ ] Record or source the `.ogg` files (CC0/licensed), one folder per species.
 - [ ] Give the girls without an ambient sound one: elves, the living doll, Kannae, most lizardfolk and the moths/scorpions/papillons.
 - [ ] Shelved for a later add-on (2026-11-03): a conversation menu (chat, ask about her day, joke, compliment, flirt behind the setting, ask for help), discovered personalities, moods, and a family-tree journal page; maybe an optional MCA Reborn family-tree bridge.
+- [x] Supper bell: a bell rung within 8 blocks of a hearth calls its residents (within 96) home; they come and stay by it half a minute (`HearthBlockEntity.bell`, `Settlement.HomeGoal`). Not seen in game: does she drop chores or follow mode? (Orders other than free roam ignore it, on purpose.)
+- [x] Huts get a waxed oak sign with her name and kind outside, beside the path to the door (first homely piece).
+- [x] Well Taught advancement: a lesson from all 35 branches.
+- [ ] Flaky: `crowStoresOreInTheMatchingChest` failed once 2026-11-06 ("put her find in the chest: 3"), passed on rerun.

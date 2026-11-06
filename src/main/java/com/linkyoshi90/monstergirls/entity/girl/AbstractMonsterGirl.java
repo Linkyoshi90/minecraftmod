@@ -203,6 +203,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     private BlockPos hutOrigin;
     private net.minecraft.core.Direction hutDoor = net.minecraft.core.Direction.NORTH;
     private int hutStep;
+    /** Called home by the hearth's bell (HearthBlockEntity.bell): till this game time she comes to the hearth and stays near it. Not saved. */
+    private long calledHomeUntil = -1L;
 
     protected AbstractMonsterGirl(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level);
@@ -1217,6 +1219,15 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     public long settledSince() {
         return this.settledSince;
+    }
+
+    public void callHome(long until) {
+        this.calledHomeUntil = until;
+    }
+
+    /** The hearth's bell called her and she is still answering it. */
+    public boolean calledHome() {
+        return this.homeHearth != null && this.level().getGameTime() < this.calledHomeUntil;
     }
 
     void settleAt(BlockPos hearth, long time) {

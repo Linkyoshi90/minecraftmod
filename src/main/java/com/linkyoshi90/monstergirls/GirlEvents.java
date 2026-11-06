@@ -261,6 +261,7 @@ public final class GirlEvents {
         boolean bell = e.is(net.minecraft.world.level.gameevent.GameEvent.BLOCK_CHANGE)
                 && level.getBlockState(net.minecraft.core.BlockPos.containing(event.getEventPosition())).getBlock() instanceof net.minecraft.world.level.block.BellBlock;
         if (boom || horn || bell) com.linkyoshi90.monstergirls.entity.girl.Canid.startle(level, event.getEventPosition(), boom);
+        if (bell) com.linkyoshi90.monstergirls.block.HearthBlockEntity.bell(level, net.minecraft.core.BlockPos.containing(event.getEventPosition()));   // the supper bell
     }
 
     /** A wild ahuizotl near the hook steals the catch off your line. */

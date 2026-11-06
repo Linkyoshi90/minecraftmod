@@ -189,6 +189,32 @@ public class HearthBlockEntity extends BlockEntity {
         return n;
     }
 
+    // --- the supper bell ---------------------------------------------------------------------------------------------
+
+    public static final int BELL_NEAR = 8, BELL_HEARD = 96, BELL_CALL = 600;
+
+    /**
+     * A bell rung within {@value #BELL_NEAR} blocks of a hearth calls its residents home: each one in earshot ({@value #BELL_HEARD}
+     * blocks) drops what she is doing (unless she is fighting or under orders) and comes to the hearth, and stays by it for half a
+     * minute. How many answered, over every hearth near the bell.
+     */
+    public static int bell(ServerLevel level, BlockPos bell) {
+        int n = 0;
+        for (BlockPos at : Set.copyOf(loaded(level))) {
+            if (at.distSqr(bell) > BELL_NEAR * BELL_NEAR || !(level.getBlockEntity(at) instanceof HearthBlockEntity h)) continue;
+            for (UUID id : Set.copyOf(h.residents)) {
+                if (!(level.getEntity(id) instanceof AbstractMonsterGirl girl) || !girl.isAlive() || !at.equals(girl.homeHearth())
+                        || girl.distanceToSqr(at.getCenter()) > BELL_HEARD * BELL_HEARD) continue;
+                girl.callHome(level.getGameTime() + BELL_CALL);
+                level.sendParticles(net.minecraft.core.particles.ParticleTypes.NOTE, girl.getX(), girl.getEyeY() + 0.5, girl.getZ(), 1, 0, 0, 0, 0.5);
+                n++;
+            }
+        }
+        if (n > 0) for (Player p : level.getEntitiesOfClass(Player.class, new net.minecraft.world.phys.AABB(bell).inflate(16)))
+            p.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.monstergirls.supper_bell", n), true);
+        return n;
+    }
+
     /** Every other morning or so, each resident at home in a finished hut adds something to it (Settlement.homely). How many did. */
     public int homely(ServerLevel level) {
         int n = 0;

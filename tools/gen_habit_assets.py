@@ -33,6 +33,9 @@ M.add_lang({
     "message.monstergirls.steady_anvil": "%s steadies the anvil: it doesn't wear",
     "advancement.monstergirls.herbarium": "Herbarium",
     "advancement.monstergirls.herbarium.desc": "Press every kind of small flower in your journal",
+    "message.monstergirls.supper_bell": "The bell calls them home: %s coming",
+    "advancement.monstergirls.well_taught": "Well Taught",
+    "advancement.monstergirls.well_taught.desc": "Learn a lesson from every branch of the tree of life",
 })
 # the habits and keepsakes guides have since been edited by hand in en_us.json (thumping, pressed flowers): edit them there
 print("habit assets written")

@@ -34,7 +34,7 @@ import java.util.Map;
  */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class Lessons {
-    public static final String LESSONS = "Lessons";
+    public static final String LESSONS = "Lessons", WELL_TAUGHT_ADVANCEMENT = "well_taught";
 
     public record Lesson(Holder<Attribute> attribute, double amount, Operation op) {
     }
@@ -109,6 +109,10 @@ public final class Lessons {
         data.put(LESSONS, list);
         player.setData(ModAttachments.JOURNAL, data);
         apply(player);
+        if (player instanceof ServerPlayer sp && list.size() >= TAUGHT.size()) {         // every branch has taught them
+            var a = sp.server.getAdvancements().get(MonsterGirlsMod.id(WELL_TAUGHT_ADVANCEMENT));
+            if (a != null) sp.getAdvancements().award(a, "done");
+        }
         if (player instanceof ServerPlayer sp) sp.displayClientMessage(Component.translatable("message.monstergirls.lesson", teacher.getName(),
                 Component.translatable("lesson.monstergirls." + clade.key())).withStyle(ChatFormatting.AQUA), false);
         return TAUGHT.get(clade);

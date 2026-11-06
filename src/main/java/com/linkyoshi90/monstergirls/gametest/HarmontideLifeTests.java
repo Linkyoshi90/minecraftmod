@@ -220,6 +220,29 @@ public class HarmontideLifeTests {
         helper.succeed();
     }
 
+    @GameTest(template = PLATFORM, timeoutTicks = 240, batch = "hearthBellCallsResidentsHome")
+    public static void hearthBellCallsResidentsHome(GameTestHelper helper) {
+        BlockPos hp = new BlockPos(2, 2, 2);
+        helper.setBlock(hp, ModBlocks.HEARTH.get());
+        HearthBlockEntity hearth = (HearthBlockEntity) helper.getBlockEntity(hp);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 4));
+        hearth.setOwner(p.getUUID());
+        AbstractMonsterGirl girl = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(12, 2, 12));
+        girl.addAffection(p, Orders.AFFECTION);
+        Settlement.settle(helper.getLevel(), girl, hearth);
+        check(girl.homeHearth() != null && !girl.calledHome(), "she lives here, roaming by day");
+        BlockPos home = helper.absolutePos(hp);
+        helper.runAfterDelay(2, () -> {                                     // the hearth counts as loaded from the next tick
+            check(HearthBlockEntity.bell(helper.getLevel(), helper.absolutePos(new BlockPos(14, 2, 14))) == 0, "a bell far from the hearth isn't hers");
+            check(HearthBlockEntity.bell(helper.getLevel(), helper.absolutePos(new BlockPos(3, 2, 2))) == 1 && girl.calledHome(), "the hearth's bell calls her");
+        });
+        helper.succeedWhen(() -> {
+            check(girl.calledHome(), "rung first");
+            check(home.distToCenterSqr(girl.position()) < 3.5 * 3.5, "she comes home: " + Math.sqrt(home.distToCenterSqr(girl.position())));
+            HarpyTestUtil.remove(p);
+        });
+    }
+
     @GameTest(template = PLATFORM, timeoutTicks = 200, batch = "settledGirlBuildsHerHut")
     public static void settledGirlBuildsHerHut(GameTestHelper helper) {
         AbstractMonsterGirl girl = still(helper, GirlSpecies.FENNEC_KITSUNE, new BlockPos(1, 2, 1));
@@ -241,6 +264,11 @@ public class HarmontideLifeTests {
         check(Settlement.makeHomely(helper.getLevel(), girl) == null, "and then it's homely");
         check(homely.stream().anyMatch(pc -> pc.state().getBlock() instanceof net.minecraft.world.level.block.FlowerPotBlock
                 && helper.getLevel().getBlockState(pc.pos()).getBlock() instanceof net.minecraft.world.level.block.FlowerPotBlock), "her flower in a pot");
+        BlockPos signAt = homely.get(0).pos();
+        check(helper.getLevel().getBlockEntity(signAt) instanceof net.minecraft.world.level.block.entity.SignBlockEntity board
+                && board.getFrontText().getMessage(1, false).getString().equals(girl.getName().getString()) && board.isWaxed(), "her name on a sign outside");
+        BlockPos doorway = origin.offset(2, 0, 0);
+        check(signAt.distManhattan(doorway) == 2 && !signAt.equals(doorway.north()), "beside the path to her door, not on it: " + signAt);
         helper.succeed();
     }
 
