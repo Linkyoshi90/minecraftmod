@@ -158,4 +158,26 @@ public class ChoresTests {
             HarpyTestUtil.remove(player);
         });
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "henLaysInTheNestingBox")
+    public static void henLaysInTheNestingBox(GameTestHelper helper) {
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        BlockPos nest = new BlockPos(6, 2, 6);
+        helper.setBlock(nest, com.linkyoshi90.monstergirls.registry.ModBlocks.NESTING_BOX.get());
+        var box = (com.linkyoshi90.monstergirls.block.NestingBoxBlockEntity) helper.getBlockEntity(nest);
+        var hen = helper.spawn(EntityType.CHICKEN, new BlockPos(8, 2, 7));
+        var level = helper.getLevel();
+        ItemEntity laid = new ItemEntity(level, hen.getX(), hen.getY(), hen.getZ(), new ItemStack(Items.EGG));
+        level.addFreshEntity(laid);
+        check(count(box.eggs(), Items.EGG) == 1 && !laid.isAlive(), "the hen's egg goes into the box, not on the ground");
+        check(helper.getBlockState(nest).getValue(com.linkyoshi90.monstergirls.block.NestingBoxBlock.EGGS), "and shows in the hay");
+        Vec3 far = helper.absoluteVec(new Vec3(4.5, 2.1, 9.5));
+        ItemEntity mine = new ItemEntity(level, far.x, far.y, far.z, new ItemStack(Items.EGG));
+        mine.setThrower(player);
+        level.addFreshEntity(mine);
+        check(mine.isAlive() && count(box.eggs(), Items.EGG) == 1, "an egg a player dropped stays where it fell");
+        check(box.takeAll().stream().mapToInt(ItemStack::getCount).sum() == 1 && box.eggs().isEmpty(), "an empty hand takes them out");
+        HarpyTestUtil.remove(player);
+        helper.succeed();
+    }
 }

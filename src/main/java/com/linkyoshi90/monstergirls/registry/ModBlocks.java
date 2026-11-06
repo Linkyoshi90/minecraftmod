@@ -109,6 +109,11 @@ public final class ModBlocks {
             com.linkyoshi90.monstergirls.block.FridgeBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(2.0F, 6.0F).sound(SoundType.METAL).noOcclusion().requiresCorrectToolForDrops());
 
+    /** A box of hay that catches the eggs laid near it (NestingBoxBlock). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.NestingBoxBlock> NESTING_BOX = BLOCKS.registerBlock("nesting_box",
+            com.linkyoshi90.monstergirls.block.NestingBoxBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1.0F).sound(SoundType.WOOD).noOcclusion());
+
     /** The nectar fluid's block (see ModFluids). */
     public static final DeferredBlock<net.minecraft.world.level.block.LiquidBlock> NECTAR = BLOCKS.register("nectar",
             () -> new net.minecraft.world.level.block.LiquidBlock(ModFluids.NECTAR.get(),

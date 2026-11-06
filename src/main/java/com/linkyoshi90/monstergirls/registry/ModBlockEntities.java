@@ -76,5 +76,9 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("fridge", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.FridgeBlockEntity::new,
                     ModBlocks.FRIDGE.get()).build(null));
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.linkyoshi90.monstergirls.block.NestingBoxBlockEntity>> NESTING_BOX =
+            BLOCK_ENTITIES.register("nesting_box", () -> BlockEntityType.Builder.of(com.linkyoshi90.monstergirls.block.NestingBoxBlockEntity::new,
+                    ModBlocks.NESTING_BOX.get()).build(null));
+
     private ModBlockEntities() {}
 }

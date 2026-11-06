@@ -53,6 +53,7 @@ public final class MonsterGirlsMod {
         event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, ModBlockEntities.CHEESE_SHELF.get(), (shelf, side) -> shelf.hopperHandler());
         event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, ModBlockEntities.MILK_TANK.get(), (tank, side) -> tank.hopperHandler(side));
         event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, ModBlockEntities.FRIDGE.get(), (fridge, side) -> fridge.hopperHandler());
+        event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, ModBlockEntities.NESTING_BOX.get(), (box, side) -> box.hopperHandler());
         for (var holder : ModGirls.TYPES.values()) {
             event.registerEntity(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.ENTITY, holder.get(),
                     (girl, ctx) -> new net.neoforged.neoforge.items.wrapper.InvWrapper(girl.ammoPouch()));

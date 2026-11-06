@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "eggs=false": {
+      "model": "monstergirls:block/nesting_box"
+    },
+    "eggs=true": {
+      "model": "monstergirls:block/nesting_box_eggs"
+    }
+  }
+}

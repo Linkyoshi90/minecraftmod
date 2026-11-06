@@ -199,6 +199,7 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> CHEESE_SHELF = ITEMS.registerSimpleBlockItem(ModBlocks.CHEESE_SHELF);
     public static final DeferredItem<BlockItem> MILK_TANK = ITEMS.registerSimpleBlockItem(ModBlocks.MILK_TANK);
     public static final DeferredItem<BlockItem> FRIDGE = ITEMS.registerSimpleBlockItem(ModBlocks.FRIDGE);
+    public static final DeferredItem<BlockItem> NESTING_BOX = ITEMS.registerSimpleBlockItem(ModBlocks.NESTING_BOX);
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.FriendCompassItem> FRIEND_COMPASS = ITEMS.register("friend_compass", () -> new com.linkyoshi90.monstergirls.item.FriendCompassItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> FRIENDSHIP_BRACELET = ITEMS.registerSimpleItem("friendship_bracelet", new Item.Properties().stacksTo(16));
     /** Given for meeting every kind on one branch of the tree of life (Journal.branch); in the offhand it gives that branch's milk's first effect. */

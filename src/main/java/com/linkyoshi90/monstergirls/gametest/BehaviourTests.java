@@ -258,13 +258,13 @@ public class BehaviourTests {
             helper.setBlock(new BlockPos(x, 2, z), Blocks.WATER);
             helper.setBlock(new BlockPos(x, 3, z), Blocks.WATER);
         }
-        Merfolk orca = spawn(helper, GirlSpecies.ORCA_MERMAID, new BlockPos(7, 2, 7));
+        Merfolk orca = spawn(helper, GirlSpecies.MANATEE_MERMAID, new BlockPos(7, 2, 7));   // a gentle one: an orca hunts prey from the tests nearby, and a hunter doesn't sift for shells
         orca.setShellChance(1);
         helper.succeedWhen(() -> {
             check(orca.hasShells(), "she should find a pair of seashells");
             CompoundTag tag = new CompoundTag();
             orca.saveWithoutId(tag);
-            AbstractMonsterGirl copy = ModGirls.type(GirlSpecies.ORCA_MERMAID).create(helper.getLevel());
+            AbstractMonsterGirl copy = ModGirls.type(GirlSpecies.MANATEE_MERMAID).create(helper.getLevel());
             copy.load(tag);
             check(copy.hasFlag(AbstractMonsterGirl.FLAG_SHELLS), "and keep wearing them");
         });
