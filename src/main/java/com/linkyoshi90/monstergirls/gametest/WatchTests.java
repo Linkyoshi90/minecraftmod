@@ -52,6 +52,12 @@ public class WatchTests {
         lava.setNoAi(true);
         lava.addAffection(p, HomeLife.FRIEND);
         check(Company.warm(level, p) == lava && p.getTicksFrozen() == 0, "a volcano rabbit is");
+        lava.discard();
+        AbstractMonsterGirl bear = spawn(helper, GirlSpecies.POLAR_BEAR_CANID, new BlockPos(3, 2, 3));
+        bear.setNoAi(true);
+        bear.addAffection(p, HomeLife.FRIEND);
+        p.setTicksFrozen(100);
+        check(Company.warm(level, p) == bear && p.getTicksFrozen() == 0, "and so is a polar bear's fur");
         HarpyTestUtil.remove(p);
         helper.succeed();
     }

@@ -134,6 +134,21 @@ public class HarmontideLifeTests {
             check(!lang.has(key + ".p" + (parts + 1)) && whole.toString().equals(lang.get(key).getAsString()),
                     "the " + guide + " guide's pages are out of date: run tools/split_guides.py");
         }
+        int signatures = 0;
+        for (String key : lang.keySet()) {                                         // and each kind's signature, on its own pages
+            if (!key.startsWith("journal.monstergirls.") || !key.endsWith(".signature")) continue;
+            String kind = key.substring("journal.monstergirls.".length(), key.length() - ".signature".length());
+            int parts = com.linkyoshi90.monstergirls.entity.GuidePages.signature(kind);
+            StringBuilder whole = new StringBuilder();
+            for (int i = 1; i <= parts && parts > 1; i++) {
+                check(lang.has(key + ".p" + i), kind + "'s signature is missing part " + i + ": run tools/split_guides.py");
+                whole.append(i > 1 ? " " : "").append(lang.get(key + ".p" + i).getAsString());
+            }
+            check(parts == 1 ? !lang.has(key + ".p1") : !lang.has(key + ".p" + (parts + 1)) && whole.toString().equals(lang.get(key).getAsString()),
+                    kind + "'s signature pages are out of date: run tools/split_guides.py");
+            signatures++;
+        }
+        check(signatures > 400, "every kind has a signature, found " + signatures);
         helper.succeed();
     }
 
@@ -145,7 +160,8 @@ public class HarmontideLifeTests {
         check(Journal.record(p, girl, false) && !Journal.record(p, girl, false), "met once is news, twice is not");
         check(Journal.met(p).contains("yurei_undead") && Journal.friends(p).isEmpty(), "met, not yet befriended");
         check(Journal.record(p, girl, true) && Journal.friends(p).contains("yurei_undead"), "befriended");
-        check(Journal.book(p).pages().size() == 3 + guidePages(), "and she has her page (and the tree of life its first branch)");
+        check(Journal.book(p).pages().size() == 3 + guidePages() + com.linkyoshi90.monstergirls.entity.GuidePages.signature("yurei_undead"),
+                "and she has her pages, what she does on its own (and the tree of life its first branch)");
         HarpyTestUtil.remove(p);
         helper.succeed();
     }

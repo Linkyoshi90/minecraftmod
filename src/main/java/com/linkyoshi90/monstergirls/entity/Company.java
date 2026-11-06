@@ -28,8 +28,8 @@ import java.util.Set;
  * (absorption for a few minutes). A fishing buddy: a friend within {@link #BUDDY} cheers them on, and one catch in {@link #EXTRA} brings
  * up a second. Thunder: timid girls (rabbits, rodents, cats, marsupials) run to a friend in a thunderstorm and huddle against them
  * once a storm, for {@link #HUDDLE} friendship. A swim buddy: a sea-folk friend within {@link #BUDDY} of a swimming player keeps them
- * company in the water (dolphin's grace and water breathing while she is near). Warmth: a fire-proof friend within {@link #WARM} thaws a
- * freezing player. Sure-footed: walking beside a hoofed friend (cattle, goats, deer, camels, horses and their kin), a player steps up whole
+ * company in the water (dolphin's grace and water breathing while she is near). Warmth: a fire-proof friend (or a bear or one of her furry kin) within
+ * {@link #WARM} thaws a freezing player. Sure-footed: walking beside a hoofed friend (cattle, goats, deer, camels, horses and their kin), a player steps up whole
  * blocks the way she does.
  */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
@@ -128,12 +128,17 @@ public final class Company {
         return with;
     }
 
+    /** Bears, raccoons, weasels and their kin out of the water: thick fur to huddle into. */
+    public static boolean furred(Mob m) {
+        return m instanceof AbstractMonsterGirl g && g.getSpecies().clade() == Clade.ARCTOIDEA && g.getSpecies().family() != GirlSpecies.Family.MERFOLK;
+    }
+
     /** Every two seconds for a freezing player: a friend who is warm to the touch (fire never hurts her) close by thaws them. Who, or null. */
     @Nullable
     public static Mob warm(ServerLevel level, ServerPlayer p) {
         if (p.getTicksFrozen() <= 0 || !MonsterGirlsConfig.comfort()) return null;
         for (Mob m : HomeLife.friendsOf(level, p, p.getBoundingBox().inflate(WARM))) {
-            if (!m.fireImmune()) continue;
+            if (!m.fireImmune() && !furred(m)) continue;
             p.setTicksFrozen(0);
             level.sendParticles(ParticleTypes.FLAME, p.getX(), p.getY() + 1.0, p.getZ(), 6, 0.3, 0.4, 0.3, 0.01);
             p.displayClientMessage(Component.translatable("message.monstergirls.warm", m.getDisplayName()), true);

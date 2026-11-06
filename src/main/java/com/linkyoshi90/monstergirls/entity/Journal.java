@@ -458,8 +458,16 @@ public final class Journal {
             if (girl) {
                 page.append("\n\n").append(Component.translatable("journal.monstergirls.home",
                         Component.translatable("journal.monstergirls." + id + ".home")).withStyle(ChatFormatting.RESET, ChatFormatting.DARK_GREEN));
-                page.append("\n\n").append(studied ? Component.translatable("journal.monstergirls." + id + ".signature").withStyle(ChatFormatting.RESET, ChatFormatting.BLACK)
-                        : Component.translatable("journal.monstergirls.watch_more", seen, STUDIED).withStyle(ChatFormatting.RESET, ChatFormatting.ITALIC, ChatFormatting.GRAY));
+                if (!studied) page.append("\n\n").append(Component.translatable("journal.monstergirls.watch_more", seen, STUDIED).withStyle(ChatFormatting.RESET, ChatFormatting.ITALIC, ChatFormatting.GRAY));
+                else {                                                               // what she does, on its own page(s) under her name (a long one runs over)
+                    int parts = GuidePages.signature(id);
+                    for (int i = 1; i <= parts; i++) {
+                        pages.add(Filterable.passThrough(page));
+                        page = Component.translatable("entity.monstergirls." + id).withStyle(ChatFormatting.BOLD, ChatFormatting.DARK_BLUE)
+                                .append("\n\n").append(Component.translatable("journal.monstergirls." + id + ".signature" + (parts > 1 ? ".p" + i : ""))
+                                        .withStyle(ChatFormatting.RESET, ChatFormatting.BLACK));
+                    }
+                }
             }
             pages.add(Filterable.passThrough(page));
         }
