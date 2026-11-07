@@ -136,6 +136,17 @@ public final class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).randomTicks().noCollission().instabreak().sound(SoundType.SWEET_BERRY_BUSH)
                     .pushReaction(PushReaction.DESTROY));
 
+    /** Leaves the Demon Realm has crept into: they weep violet sap and remember what they were (RealmLeavesBlock). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.RealmLeavesBlock> REALM_LEAVES = BLOCKS.registerBlock("realm_leaves",
+            com.linkyoshi90.monstergirls.block.RealmLeavesBlock::new,
+            BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.OAK_LEAVES).mapColor(MapColor.COLOR_PURPLE));
+
+    /** The weepcap: a pale glowing realm mushroom weeping droplets from its rim (WeepcapBlock). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.WeepcapBlock> WEEPCAP = BLOCKS.registerBlock("weepcap",
+            com.linkyoshi90.monstergirls.block.WeepcapBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).noCollission().instabreak().randomTicks().sound(SoundType.FUNGUS)
+                    .lightLevel(s -> 6).offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY));
+
     /** The exchange liaison's workstation (registry/ModVillagers, entity/Liaison). */
     public static final DeferredBlock<net.minecraft.world.level.block.Block> EXCHANGE_DESK = BLOCKS.registerSimpleBlock("exchange_desk",
             BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.5F).sound(SoundType.WOOD));

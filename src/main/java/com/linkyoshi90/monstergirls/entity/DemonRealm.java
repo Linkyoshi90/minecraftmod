@@ -75,6 +75,8 @@ public final class DemonRealm {
                 if (!RealmGrassBlock.corrupt(level, ground)) continue;
                 level.sendParticles(RealmGrassBlock.HAZE, ground.getX() + 0.5, ground.getY() + 1.2, ground.getZ() + 0.5, 6, 0.4, 0.2, 0.4, 0.0);
                 if (lilith.getRandom().nextInt(6) == 0) HeartfruitBushBlock.sprout(level, ground);
+                else if (lilith.getRandom().nextInt(8) == 0) com.linkyoshi90.monstergirls.block.WeepcapBlock.sprout(level, ground);
+                com.linkyoshi90.monstergirls.block.RealmLeavesBlock.creep(level, ground, lilith.getRandom());
                 return ground;
             }
         }

@@ -165,4 +165,38 @@ public class DemonRealmTests {
         HarpyTestUtil.remove(other);
         helper.succeed();
     }
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "realmCreepsIntoTrees")
+    public static void realmCreepsIntoTrees(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos g = ground(helper, 7, 7);
+        RealmGrassBlock.corrupt(level, g);
+        for (BlockPos p : BlockPos.betweenClosed(g.offset(-2, 4, -2), g.offset(2, 4, 2))) {
+            level.setBlockAndUpdate(p.immutable(), Blocks.BIRCH_LEAVES.defaultBlockState().setValue(net.minecraft.world.level.block.LeavesBlock.PERSISTENT, true));
+        }
+        BlockPos took = null;
+        for (int i = 0; i < 40 && took == null; i++) took = com.linkyoshi90.monstergirls.block.RealmLeavesBlock.creep(level, g, level.random);
+        check(took != null && level.getBlockState(took).is(ModBlocks.REALM_LEAVES.get()), "the realm reaches the leaves above it");
+        BlockState s = level.getBlockState(took);
+        check(s.getValue(com.linkyoshi90.monstergirls.block.RealmLeavesBlock.KIND) == com.linkyoshi90.monstergirls.block.RealmLeavesBlock.Kind.BIRCH
+                && s.getValue(net.minecraft.world.level.block.LeavesBlock.PERSISTENT), "remembering what they were");
+        HolyWaterItem.cleanse(level, g);
+        check(level.getBlockState(took).is(Blocks.BIRCH_LEAVES) && level.getBlockState(took).getValue(net.minecraft.world.level.block.LeavesBlock.PERSISTENT),
+                "holy water gives the tree back its own leaves");
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "weepcapsGrowOnTheRealm")
+    public static void weepcapsGrowOnTheRealm(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos g = ground(helper, 4, 4);
+        check(!com.linkyoshi90.monstergirls.block.WeepcapBlock.sprout(level, g), "not on plain grass");
+        for (BlockPos p : BlockPos.betweenClosed(g.offset(-2, 0, -2), g.offset(2, 0, 2))) RealmGrassBlock.corrupt(level, p.immutable());
+        int grown = 0;
+        for (BlockPos p : BlockPos.betweenClosed(g.offset(-2, 0, -2), g.offset(2, 0, 2))) if (com.linkyoshi90.monstergirls.block.WeepcapBlock.sprout(level, p.immutable())) grown++;
+        check(grown >= com.linkyoshi90.monstergirls.block.WeepcapBlock.CROWD && grown <= 12, "a scattering, not a carpet: " + grown);
+        check(level.getBlockState(g.above()).getLightEmission(level, g.above()) > 0 || level.getBlockState(g.offset(-2, 1, -2)).is(ModBlocks.WEEPCAP.get()), "they glow");
+        RealmGrassBlock.purify(level, g.offset(-2, 0, -2));
+        check(!level.getBlockState(g.offset(-2, 1, -2)).is(ModBlocks.WEEPCAP.get()), "and wither with the realm");
+        helper.succeed();
+    }
 }

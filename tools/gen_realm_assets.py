@@ -236,8 +236,85 @@ def data():
         dump(path, old)
 
 
+LEAF_TINT = (0.86, 0.42, 0.90)
+
+
+def realm_leaves():
+    """vanilla oak leaves (greyscale, normally tinted green) dyed dusky purple, with a few beads of violet sap"""
+    rnd = random.Random(51)
+    src = _vanilla_rgba("oak_leaves")
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    px = img.load()
+    for y in range(16):
+        for x in range(16):
+            r, g, b, a = src[y][x]
+            if a == 0:
+                continue
+            v = (r + g + b) / 3
+            px[x, y] = (int(v * LEAF_TINT[0]), int(v * LEAF_TINT[1]), int(v * LEAF_TINT[2]), 255)
+    for _ in range(5):
+        x, y = rnd.randrange(16), rnd.randrange(16)
+        if px[x, y][3]:
+            px[x, y] = (210, 90, 220, 255)
+    return save(img, "block", "realm_leaves.png")
+
+
+def weepcap():
+    """a wide drooping bell of a cap on a thin stem, its frilled rim hanging in strands, droplets falling from them"""
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    px = img.load()
+    cap, cap_dark, gill, glow, stem, drop = rgb("#CFE6F2"), rgb("#9CC4E0"), rgb("#7FA6C8"), rgb("#F2FCFF"), rgb("#E4EEF2"), rgb("#BFE8FF")
+    rows = {2: (5, 10), 3: (3, 12), 4: (2, 13), 5: (1, 14), 6: (1, 14), 7: (1, 14)}
+    for y, (a, b) in rows.items():
+        for x in range(a, b + 1):
+            px[x, y] = cap if x < 9 or y < 4 else cap_dark
+    for x in range(2, 14):
+        px[x, 8] = gill
+    for x in (1, 3, 5, 10, 12, 14):                                      # frilled strands hanging from the rim
+        px[x, 8] = cap_dark
+        px[x, 9] = cap_dark
+    for x, y in ((6, 3), (4, 5), (10, 4), (8, 6)):
+        px[x, y] = glow
+    for y in range(9, 16):
+        px[7, y] = stem
+        px[8, y] = shade(stem, 0.85)
+    for x, y in ((1, 11), (5, 12), (14, 11), (12, 13), (3, 14)):          # droplets
+        px[x, y] = drop
+    return save(img, "block", "weepcap.png")
+
+
+def realm_plant_data():
+    m = os.path.join(ASSETS, "models")
+    dump(os.path.join(m, "block", "realm_leaves.json"), {"parent": "minecraft:block/cube_all", "render_type": "minecraft:cutout_mipped",
+                                                        "textures": {"all": "monstergirls:block/realm_leaves"}})
+    dump(os.path.join(ASSETS, "blockstates", "realm_leaves.json"), {"variants": {"": {"model": "monstergirls:block/realm_leaves"}}})
+    dump(os.path.join(m, "item", "realm_leaves.json"), {"parent": "monstergirls:block/realm_leaves"})
+    dump(os.path.join(m, "block", "weepcap.json"), {"parent": "minecraft:block/cross", "render_type": "minecraft:cutout",
+                                                   "textures": {"cross": "monstergirls:block/weepcap"}})
+    dump(os.path.join(ASSETS, "blockstates", "weepcap.json"), {"variants": {"": {"model": "monstergirls:block/weepcap"}}})
+    dump(os.path.join(m, "item", "weepcap.json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:block/weepcap"}})
+    silk_or_shears = {"condition": "minecraft:any_of", "terms": [
+        {"condition": "minecraft:match_tool", "predicate": {"items": "minecraft:shears"}},
+        {"condition": "minecraft:match_tool", "predicate": {"predicates": {"minecraft:enchantments": [{"enchantments": "minecraft:silk_touch", "levels": {"min": 1}}]}}}]}
+    dump(os.path.join(DATA, "loot_table", "blocks", "realm_leaves.json"), {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [
+        {"type": "minecraft:alternatives", "children": [
+            {"type": "minecraft:item", "conditions": [silk_or_shears], "name": "monstergirls:realm_leaves"},
+            {"type": "minecraft:item", "conditions": [{"condition": "minecraft:survives_explosion"},
+                                                      {"condition": "minecraft:table_bonus", "enchantment": "minecraft:fortune", "chances": [0.02, 0.022, 0.025, 0.033, 0.1]}],
+             "name": "monstergirls:heartfruit"}]}]}]})
+    dump(os.path.join(DATA, "loot_table", "blocks", "weepcap.json"), {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [
+        {"type": "minecraft:item", "name": "monstergirls:weepcap"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
+    for tag, entries in (("leaves", ["monstergirls:realm_leaves"]), ("mineable/hoe", ["monstergirls:realm_leaves"])):
+        path = os.path.join(MC_DATA, "tags", "block", tag + ".json")
+        old = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {"replace": False, "values": []}
+        for e in entries:
+            if e not in old["values"]:
+                old["values"].append(e)
+        dump(path, old)
+
+
 def preview(path):
-    tiles = [realm_top(), realm_side()] + [bush(s) for s in range(4)] + [heartfruit(), holy_water()]
+    tiles = [realm_top(), realm_side(), realm_leaves(), weepcap()] + [bush(s) for s in range(4)] + [heartfruit(), holy_water()]
     sheet = Image.new("RGBA", (len(tiles) * 18 * 6, 18 * 6), (40, 40, 48, 255))
     for i, t in enumerate(tiles):
         sheet.paste(t.resize((96, 96), Image.NEAREST), (i * 108 + 6, 6), t.resize((96, 96), Image.NEAREST))
@@ -252,7 +329,10 @@ def main():
         bush(s)
     heartfruit()
     holy_water()
+    realm_leaves()
+    weepcap()
     data()
+    realm_plant_data()
     if "--preview" in sys.argv:
         preview(sys.argv[sys.argv.index("--preview") + 1])
 

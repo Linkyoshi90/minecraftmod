@@ -212,6 +212,8 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> TAR_SHROOM = ITEMS.registerSimpleBlockItem(ModBlocks.TAR_SHROOM);
     /** The Demon Realm (entity/DemonRealm): its grass, its heart-shaped fruit (plants the bush), and the holy water that drives it back. */
     public static final DeferredItem<BlockItem> REALM_GRASS = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_GRASS);
+    public static final DeferredItem<BlockItem> REALM_LEAVES = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_LEAVES);
+    public static final DeferredItem<BlockItem> WEEPCAP = ITEMS.registerSimpleBlockItem(ModBlocks.WEEPCAP);
     public static final DeferredItem<net.minecraft.world.item.ItemNameBlockItem> HEARTFRUIT = ITEMS.register("heartfruit",
             () -> new net.minecraft.world.item.ItemNameBlockItem(ModBlocks.HEARTFRUIT_BUSH.get(),
                     new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.5F).build())));

@@ -18,7 +18,7 @@ import net.minecraft.world.level.Level;
 
 /** Holy water: poured on the ground it turns Demon Realm grass within {@link #RADIUS} back into grass, and the bottle is left. */
 public class HolyWaterItem extends Item {
-    public static final int RADIUS = 5;
+    public static final int RADIUS = 5, CANOPY = 20;
 
     public HolyWaterItem(Properties properties) {
         super(properties);
@@ -31,6 +31,9 @@ public class HolyWaterItem extends Item {
             if (p.distSqr(centre) > (RADIUS + 0.5) * (RADIUS + 0.5) || !level.getBlockState(p).is(ModBlocks.REALM_GRASS.get())) continue;
             RealmGrassBlock.purify(level, p.immutable());
             count++;
+        }
+        for (BlockPos p : BlockPos.betweenClosed(centre.offset(-RADIUS, 0, -RADIUS), centre.offset(RADIUS, CANOPY, RADIUS))) {   // and the trees above
+            if (level.getBlockState(p).is(ModBlocks.REALM_LEAVES.get())) com.linkyoshi90.monstergirls.block.RealmLeavesBlock.purify(level, p.immutable());
         }
         return count;
     }

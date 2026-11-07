@@ -58,10 +58,11 @@ public class RealmGrassBlock extends SnowyDirtBlock {
         return true;
     }
 
-    /** Back to plain grass (dirt if covered), and a heartfruit bush on it withers. */
+    /** Back to plain grass (dirt if covered), and a heartfruit bush or weepcap on it withers. */
     public static void purify(Level level, BlockPos ground) {
         if (!level.getBlockState(ground).is(ModBlocks.REALM_GRASS.get())) return;
-        if (level.getBlockState(ground.above()).is(ModBlocks.HEARTFRUIT_BUSH.get())) level.setBlock(ground.above(), Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+        BlockState plant = level.getBlockState(ground.above());
+        if (plant.is(ModBlocks.HEARTFRUIT_BUSH.get()) || plant.is(ModBlocks.WEEPCAP.get())) level.setBlock(ground.above(), Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
         level.setBlock(ground, (open(level, ground) ? Blocks.GRASS_BLOCK : Blocks.DIRT).defaultBlockState(), Block.UPDATE_ALL);
     }
 
@@ -78,6 +79,8 @@ public class RealmGrassBlock extends SnowyDirtBlock {
         if (!MonsterGirlsConfig.demonRealm()) return;
         if (random.nextInt(3) == 0) spread(level, pos, random);
         if (random.nextInt(HeartfruitBushBlock.SPROUT) == 0) HeartfruitBushBlock.sprout(level, pos);
+        if (random.nextInt(WeepcapBlock.SPROUT) == 0) WeepcapBlock.sprout(level, pos);
+        if (random.nextInt(3) == 0) RealmLeavesBlock.creep(level, pos, random);
     }
 
     /** One try at the ground nearby, as grass spreads. Where it went, or null. */
