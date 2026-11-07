@@ -131,6 +131,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue FLIRTING;
     public static final ModConfigSpec.BooleanValue DEMON_REALM;
     public static final ModConfigSpec.BooleanValue LUCKY_MOMENTS;
+    public static final ModConfigSpec.BooleanValue MONSTERIZATION;
     public static final ModConfigSpec.BooleanValue MILK_EMBARRASSED;
     public static final ModConfigSpec.BooleanValue MILK_HARNESS;
     public static final ModConfigSpec.BooleanValue MILK_DISCOMFORT;
@@ -154,6 +155,10 @@ public final class MonsterGirlsConfig {
         LUCKY_MOMENTS = BUILDER
                 .comment("Slapstick moments: a bathing girl who catches you looking splashes you (a close friend just blushes), and friends beside you now and then trip into you.")
                 .define("luckyMoments", true);
+
+        MONSTERIZATION = BUILDER
+                .comment("Grown vanilla animals and monsters that linger on Demon Realm grass in the dark turn into monster girls of their kind (a tamed pet stays her owner's friend).")
+                .define("monsterization", true);
 
         BUILDER.push("milking");
         MILK_DRIPS = BUILDER
@@ -299,6 +304,10 @@ public final class MonsterGirlsConfig {
 
     public static int conceptionChance() {
         return SPEC.isLoaded() ? CONCEPTION_CHANCE.get() : CONCEPTION_CHANCE.getDefault();
+    }
+
+    public static boolean monsterization() {
+        return SPEC.isLoaded() ? MONSTERIZATION.get() : MONSTERIZATION.getDefault();
     }
 
     public static boolean luckyMoments() {

@@ -28,7 +28,7 @@ public final class GuidePages {
             Map.entry("habits", 7),
             Map.entry("nesting", 2),
             Map.entry("orders", 3),
-            Map.entry("realm", 3));
+            Map.entry("realm", 4));
     public static final Map<String, Integer> SIGNATURES = Map.ofEntries(
             Map.entry("cobra_lamia", 2),
             Map.entry("koi_mermaid", 2),
