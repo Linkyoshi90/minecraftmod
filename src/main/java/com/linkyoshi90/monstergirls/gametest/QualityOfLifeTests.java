@@ -95,6 +95,9 @@ public class QualityOfLifeTests {
             check(friend.isAlive() && friend.getHealth() > 0, "she faints instead of dying");
             check(friend.isOrderedToSit(), "and sits until she is helped up");
             check(Fainting.recovering(friend), "she is recovering");
+            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(net.minecraft.world.item.Items.STICK));
+            friend.interact(player, InteractionHand.MAIN_HAND);
+            check(Orders.current(friend) == Orders.Command.FOLLOW, "a stick helps her up and she follows: " + Orders.current(friend));
             check(helper.getLevel().getEntitiesOfClass(ItemEntity.class, friend.getBoundingBox().inflate(4)).isEmpty(), "a fainted rodent keeps her things");
             stranger.hurt(stranger.damageSources().generic(), 10000);
             check(!stranger.isAlive(), "a wild one with no friends still dies");

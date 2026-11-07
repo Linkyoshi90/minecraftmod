@@ -176,7 +176,8 @@ public final class Orders {
         Command now = orders.command(mob);
         Command next = switch (now) {
             case FREE_ROAM -> Command.SIT;
-            case SIT -> fond ? Command.PATROL : Command.FREE_ROAM;   // a stranger can only make her sit and get up
+            case SIT -> fond && Fainting.recovering(mob) ? Command.FOLLOW      // helped up after fainting: she sticks with you
+                    : fond ? Command.PATROL : Command.FREE_ROAM;   // a stranger can only make her sit and get up
             case PATROL -> Command.FOLLOW;
             case FOLLOW -> Command.FREE_ROAM;
         };
@@ -188,7 +189,7 @@ public final class Orders {
                     && !(mob instanceof com.linkyoshi90.monstergirls.entity.girl.Merfolk) ? "message.monstergirls.order.patrol_farm"
                     : mob.level() instanceof net.minecraft.server.level.ServerLevel sl && com.linkyoshi90.monstergirls.entity.girl.Chores.hasWork(sl, mob, mob.blockPosition())
                     ? "message.monstergirls.order.patrol_chores" : "message.monstergirls.order.patrol";
-            case FOLLOW -> "message.monstergirls.order.follow";
+            case FOLLOW -> now == Command.SIT ? "message.monstergirls.helped_up" : "message.monstergirls.order.follow";
             case FREE_ROAM -> now == Command.SIT ? "message.monstergirls.stands" : "message.monstergirls.order.free";
         };
         player.displayClientMessage(Component.translatable(key, mob.getDisplayName()), true);

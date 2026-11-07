@@ -66,7 +66,8 @@ public class StayNearGoal<T extends PathfinderMob & Bonded> extends Goal {
         }
         if (--this.repath <= 0) {
             this.repath = 20;
-            this.mob.getNavigation().moveTo(this.centre.x, this.centre.y, this.centre.z, 1.15);
+            double far = this.radius() * 2;                                  // well behind: she hurries to catch up
+            this.mob.getNavigation().moveTo(this.centre.x, this.centre.y, this.centre.z, this.mob.distanceToSqr(this.centre) > far * far ? 1.45 : 1.15);
         }
     }
 }
