@@ -311,7 +311,7 @@ public class Devil extends AbstractMonsterGirl {
 
     @Override
     public float bedChanceFor(Player player) {
-        return this.species == GirlSpecies.SUCCUBUS_DEVIL ? 0.5F + this.getAffection(player) / 200.0F : super.bedChanceFor(player);
+        return this.species == GirlSpecies.SUCCUBUS_DEVIL ? Math.max(0.5F + this.getAffection(player) / 200.0F, super.bedChanceFor(player)) : super.bedChanceFor(player);
     }
 
     // --- the jack o'lantern's disguise ---------------------------------------------------------------------------

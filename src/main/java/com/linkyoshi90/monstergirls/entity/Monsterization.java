@@ -128,6 +128,7 @@ public final class Monsterization {
         girl.finalizeSpawn(level, level.getCurrentDifficultyAt(girl.blockPosition()), MobSpawnType.CONVERSION, null);
         girl.setPersistenceRequired();                                  // a far player must not despawn the one creature this happened to
         girl.getPersistentData().remove(SOAKED);
+        girl.getPersistentData().putBoolean(MONSTERIZED, true);
         level.sendParticles(ParticleTypes.HEART, girl.getX(), girl.getEyeY(), girl.getZ(), 6, 0.4, 0.3, 0.4, 0.0);
         level.sendParticles(RealmGrassBlock.HAZE, girl.getX(), girl.getY() + 1.0, girl.getZ(), 30, 0.5, 0.7, 0.5, 0.0);
         girl.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 0.7F, 1.4F);
@@ -143,7 +144,19 @@ public final class Monsterization {
         return girl;
     }
 
-    private static final String PENDING_OWNER = "MonsterizedOwner";
+    private static final String PENDING_OWNER = "MonsterizedOwner", MONSTERIZED = "Monsterized";
+    /** A changed girl's odds of joining a sleeping player, friend or not; affection only adds to it. */
+    public static final float EAGER = 0.75F;
+
+    /** Changed by the realm: she still burns with it, and is eager for any sleeper's bed (as a succubus is), friend or not. */
+    public static boolean monsterized(net.minecraft.world.entity.Mob mob) {
+        return mob.getPersistentData().getBoolean(MONSTERIZED);
+    }
+
+    /** Her odds tonight with a player (0 if she isn't one who changed). */
+    public static float eagerness(AbstractMonsterGirl girl, Player player) {
+        return monsterized(girl) ? Math.min(1.0F, EAGER + girl.getAffection(player) / 400.0F) : 0.0F;
+    }
 
     /** An owner who was away when their pet changed: the first time they come near, she is their devoted friend. */
     @SubscribeEvent

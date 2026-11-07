@@ -592,6 +592,18 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         return this.gestation;
     }
 
+    /** A girl monsterized by the Demon Realm joins any sleeper's bed, friend or not, but never her father's (entity/Monsterization). */
+    @Override
+    public boolean trustsEnoughForBed(Player player) {
+        if (com.linkyoshi90.monstergirls.entity.Monsterization.monsterized(this)) return !player.getUUID().equals(this.getFather());
+        return com.linkyoshi90.monstergirls.entity.Bonded.super.trustsEnoughForBed(player);
+    }
+
+    @Override
+    public float bedChanceFor(Player player) {
+        return Math.max(com.linkyoshi90.monstergirls.entity.Bonded.super.bedChanceFor(player), com.linkyoshi90.monstergirls.entity.Monsterization.eagerness(this, player));
+    }
+
     @Override
     public boolean canShareBed() {
         return !this.isBaby() && this.species.height() >= CHILDLIKE_HEIGHT && this.gestation.canConceive() && !this.hasFlag(FLAG_DECOY) && !this.hasFlag(FLAG_HALF);
