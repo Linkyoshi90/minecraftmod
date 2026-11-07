@@ -62,6 +62,9 @@ public final class DemonRealm {
         if (!(e.level() instanceof ServerLevel level) || !(e instanceof Mob mob) || !(e instanceof Bonded)) return;
         if (e.tickCount % SEED_EVERY == 0 && seeds(e) && MonsterGirlsConfig.demonRealm()) seed(level, mob);
         if (e.tickCount % BREATHE_EVERY == 0) breathe(level, mob);
+        if (e.tickCount % 23 == 0 && mob.getPersistentData().contains(UNTIL) && level.getGameTime() < mob.getPersistentData().getLong(UNTIL)) {
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.5, mob.getZ(), 1, 0.2, 0.1, 0.2, 0.0);  // lovestruck
+        }
     }
 
     /** A Lilith's touch: one patch of ground near her becomes realm grass, now and then with a bush on it. Where, or null. */

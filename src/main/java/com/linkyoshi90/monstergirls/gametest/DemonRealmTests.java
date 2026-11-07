@@ -199,4 +199,20 @@ public class DemonRealmTests {
         check(!level.getBlockState(g.offset(-2, 1, -2)).is(ModBlocks.WEEPCAP.get()), "and wither with the realm");
         helper.succeed();
     }
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "realmRootsAndVines")
+    public static void realmRootsAndVines(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos g = ground(helper, 3, 3);
+        level.setBlockAndUpdate(g.above(), Blocks.SHORT_GRASS.defaultBlockState());
+        check(RealmGrassBlock.corrupt(level, g) && level.getBlockState(g.above()).is(Blocks.CRIMSON_ROOTS), "the tufts turn crimson");
+        RealmGrassBlock.purify(level, g);
+        check(level.getBlockState(g).is(Blocks.GRASS_BLOCK) && level.getBlockState(g.above()).is(Blocks.SHORT_GRASS), "and back");
+        BlockPos leaf = ground(helper, 10, 10).above(5);
+        level.setBlockAndUpdate(leaf, Blocks.OAK_LEAVES.defaultBlockState().setValue(net.minecraft.world.level.block.LeavesBlock.PERSISTENT, true));
+        check(com.linkyoshi90.monstergirls.block.RealmLeavesBlock.corrupt(level, leaf), "realm leaves");
+        check(com.linkyoshi90.monstergirls.block.RealmLeavesBlock.hangVine(level, leaf) && level.getBlockState(leaf.below()).is(Blocks.WEEPING_VINES), "a weeping vine hangs");
+        com.linkyoshi90.monstergirls.block.RealmLeavesBlock.purify(level, leaf);
+        check(level.getBlockState(leaf).is(Blocks.OAK_LEAVES) && level.getBlockState(leaf.below()).isAir(), "the vine withers with the realm");
+        helper.succeed();
+    }
 }

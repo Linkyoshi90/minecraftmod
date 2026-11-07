@@ -24,6 +24,8 @@ public class RealmGrassBlock extends SnowyDirtBlock {
     public static final MapCodec<RealmGrassBlock> CODEC = simpleCodec(RealmGrassBlock::new);
     /** Block light (not daylight) at or above this keeps the realm away. */
     public static final int LIGHT = 8;
+    /** One random tick in this many grows a tuft of crimson roots on bare realm grass. */
+    public static final int ROOTS = 60;
     public static final DustParticleOptions HAZE = new DustParticleOptions(new Vector3f(0.95F, 0.45F, 0.78F), 1.0F);
 
     public RealmGrassBlock(Properties properties) {
@@ -55,6 +57,8 @@ public class RealmGrassBlock extends SnowyDirtBlock {
     public static boolean corrupt(Level level, BlockPos ground) {
         if (!canTake(level, ground)) return false;
         level.setBlock(ground, ModBlocks.REALM_GRASS.get().defaultBlockState(), Block.UPDATE_ALL);
+        BlockState tuft = level.getBlockState(ground.above());
+        if (tuft.is(Blocks.SHORT_GRASS) || tuft.is(Blocks.FERN)) level.setBlock(ground.above(), Blocks.CRIMSON_ROOTS.defaultBlockState(), Block.UPDATE_ALL);  // the tufts turn too
         return true;
     }
 
@@ -63,6 +67,7 @@ public class RealmGrassBlock extends SnowyDirtBlock {
         if (!level.getBlockState(ground).is(ModBlocks.REALM_GRASS.get())) return;
         BlockState plant = level.getBlockState(ground.above());
         if (plant.is(ModBlocks.HEARTFRUIT_BUSH.get()) || plant.is(ModBlocks.WEEPCAP.get())) level.setBlock(ground.above(), Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+        if (plant.is(Blocks.CRIMSON_ROOTS)) level.setBlock(ground.above(), Blocks.SHORT_GRASS.defaultBlockState(), Block.UPDATE_ALL);
         level.setBlock(ground, (open(level, ground) ? Blocks.GRASS_BLOCK : Blocks.DIRT).defaultBlockState(), Block.UPDATE_ALL);
     }
 
@@ -80,6 +85,7 @@ public class RealmGrassBlock extends SnowyDirtBlock {
         if (random.nextInt(3) == 0) spread(level, pos, random);
         if (random.nextInt(HeartfruitBushBlock.SPROUT) == 0) HeartfruitBushBlock.sprout(level, pos);
         if (random.nextInt(WeepcapBlock.SPROUT) == 0) WeepcapBlock.sprout(level, pos);
+        if (random.nextInt(ROOTS) == 0 && level.isEmptyBlock(pos.above())) level.setBlock(pos.above(), Blocks.CRIMSON_ROOTS.defaultBlockState(), Block.UPDATE_ALL);
         if (random.nextInt(3) == 0) RealmLeavesBlock.creep(level, pos, random);
     }
 

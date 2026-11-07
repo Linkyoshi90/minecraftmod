@@ -83,10 +83,13 @@ public class RealmLeavesBlock extends LeavesBlock {
         return true;
     }
 
-    /** Back to the leaves they were. */
+    /** Back to the leaves they were; the weeping vines hanging from them wither. */
     public static void purify(Level level, BlockPos pos) {
         BlockState s = level.getBlockState(pos);
         if (!s.is(ModBlocks.REALM_LEAVES.get())) return;
+        for (BlockPos p = pos.below(); level.getBlockState(p).is(Blocks.WEEPING_VINES) || level.getBlockState(p).is(Blocks.WEEPING_VINES_PLANT); p = p.below()) {
+            level.setBlock(p, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+        }
         level.setBlock(pos, s.getValue(KIND).block().defaultBlockState()
                 .setValue(DISTANCE, s.getValue(DISTANCE)).setValue(PERSISTENT, s.getValue(PERSISTENT)).setValue(WATERLOGGED, s.getValue(WATERLOGGED)), Block.UPDATE_ALL);
     }
@@ -113,7 +116,20 @@ public class RealmLeavesBlock extends LeavesBlock {
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         super.randomTick(state, level, pos, random);
-        if (level.getBlockState(pos).is(this) && level.getBrightness(net.minecraft.world.level.LightLayer.BLOCK, pos) >= RealmGrassBlock.LIGHT) purify(level, pos);
+        if (!level.getBlockState(pos).is(this)) return;
+        if (level.getBrightness(net.minecraft.world.level.LightLayer.BLOCK, pos) >= RealmGrassBlock.LIGHT) purify(level, pos);
+        else if (random.nextInt(VINES) == 0) hangVine(level, pos);
+    }
+
+    /** One random tick in this many hangs a short weeping vine under leaves with open air below. */
+    public static final int VINES = 80;
+
+    /** A crimson weeping vine under these leaves, short (it can only grow a few blocks more). True if one was hung. */
+    public static boolean hangVine(Level level, BlockPos pos) {
+        BlockPos below = pos.below();
+        if (!level.isEmptyBlock(below) || !level.isEmptyBlock(below.below())) return false;
+        level.setBlock(below, Blocks.WEEPING_VINES.defaultBlockState().setValue(net.minecraft.world.level.block.GrowingPlantHeadBlock.AGE, 22), Block.UPDATE_ALL);
+        return true;
     }
 
     @Override
