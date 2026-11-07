@@ -129,6 +129,7 @@ public final class MonsterGirlsConfig {
 
     public static final ModConfigSpec.BooleanValue MILK_DRIPS;
     public static final ModConfigSpec.BooleanValue FLIRTING;
+    public static final ModConfigSpec.BooleanValue DEMON_REALM;
     public static final ModConfigSpec.BooleanValue MILK_EMBARRASSED;
     public static final ModConfigSpec.BooleanValue MILK_HARNESS;
     public static final ModConfigSpec.BooleanValue MILK_DISCOMFORT;
@@ -144,6 +145,10 @@ public final class MonsterGirlsConfig {
         FLIRTING = BUILDER
                 .comment("Close friends now and then answer a pat with a teasing line and a few hearts.")
                 .define("flirting", true);
+
+        DEMON_REALM = BUILDER
+                .comment("A wild Lilith grows Demon Realm grass around her, and it spreads in the dark until light or holy water drives it back. Off: no new realm grows or spreads.")
+                .define("demonRealm", true);
 
         BUILDER.push("milking");
         MILK_DRIPS = BUILDER
@@ -289,6 +294,10 @@ public final class MonsterGirlsConfig {
 
     public static int conceptionChance() {
         return SPEC.isLoaded() ? CONCEPTION_CHANCE.get() : CONCEPTION_CHANCE.getDefault();
+    }
+
+    public static boolean demonRealm() {
+        return SPEC.isLoaded() ? DEMON_REALM.get() : DEMON_REALM.getDefault();
     }
 
     public static boolean flirting() {

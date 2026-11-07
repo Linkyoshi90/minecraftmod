@@ -210,6 +210,13 @@ public final class ModItems {
     public static final DeferredItem<Item> SALAMI = ITEMS.registerItem("salami",
             props -> new Item(props.stacksTo(16).food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.8F).build())));
     public static final DeferredItem<BlockItem> TAR_SHROOM = ITEMS.registerSimpleBlockItem(ModBlocks.TAR_SHROOM);
+    /** The Demon Realm (entity/DemonRealm): its grass, its heart-shaped fruit (plants the bush), and the holy water that drives it back. */
+    public static final DeferredItem<BlockItem> REALM_GRASS = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_GRASS);
+    public static final DeferredItem<net.minecraft.world.item.ItemNameBlockItem> HEARTFRUIT = ITEMS.register("heartfruit",
+            () -> new net.minecraft.world.item.ItemNameBlockItem(ModBlocks.HEARTFRUIT_BUSH.get(),
+                    new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.5F).build())));
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.HolyWaterItem> HOLY_WATER = ITEMS.register("holy_water",
+            () -> new com.linkyoshi90.monstergirls.item.HolyWaterItem(new Item.Properties().stacksTo(16)));
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.UmbrellaItem> UMBRELLA = ITEMS.register("umbrella", () -> new com.linkyoshi90.monstergirls.item.UmbrellaItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> GROOMING_BRUSH = ITEMS.registerSimpleItem("grooming_brush", new Item.Properties().durability(64));
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.ToyBallItem> TOY_BALL = ITEMS.register("toy_ball", () -> new com.linkyoshi90.monstergirls.item.ToyBallItem(new Item.Properties().stacksTo(16)));

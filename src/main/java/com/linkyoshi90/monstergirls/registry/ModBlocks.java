@@ -125,5 +125,16 @@ public final class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).instabreak().noCollission().randomTicks().sound(SoundType.FUNGUS)
                     .offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY));
 
+    /** Demon Realm grass: grows around a Lilith and spreads in the dark (RealmGrassBlock, entity/DemonRealm). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.RealmGrassBlock> REALM_GRASS = BLOCKS.registerBlock("realm_grass",
+            com.linkyoshi90.monstergirls.block.RealmGrassBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_MAGENTA).randomTicks().strength(0.6F).sound(SoundType.GRASS));
+
+    /** The bush that bears heartfruit, on realm grass only (HeartfruitBushBlock). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.HeartfruitBushBlock> HEARTFRUIT_BUSH = BLOCKS.registerBlock("heartfruit_bush",
+            com.linkyoshi90.monstergirls.block.HeartfruitBushBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).randomTicks().noCollission().instabreak().sound(SoundType.SWEET_BERRY_BUSH)
+                    .pushReaction(PushReaction.DESTROY));
+
     private ModBlocks() {}
 }

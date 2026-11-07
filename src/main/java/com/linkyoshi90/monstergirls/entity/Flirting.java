@@ -38,9 +38,15 @@ public final class Flirting {
     }
 
     public static boolean onPet(ServerLevel level, net.minecraft.world.entity.Mob mob, Player player) {
-        if (!canFlirt(mob, player) || mob.getRandom().nextInt(CHANCE) != 0) return false;
+        if (!canFlirt(mob, player) || mob.getRandom().nextInt(chance(mob, player)) != 0) return false;
         tease(level, mob, player, "flirt", LINES);
         return true;
+    }
+
+    /** One pat in this many gets a tease: every pat when she is lovestruck with this player, every other one in the Demon Realm. */
+    public static int chance(net.minecraft.world.entity.Mob mob, Player player) {
+        if (DemonRealm.lovestruck(mob, player)) return 1;
+        return DemonRealm.inRealm(mob) ? 2 : CHANCE;
     }
 
     /** Sharing the tub, a line of her own. */
