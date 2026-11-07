@@ -208,4 +208,18 @@ public class QualityOfLifeTests {
         HarpyTestUtil.remove(player);
         helper.succeed();
     }
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "milestonesAreAnnounced")
+    public static void milestonesAreAnnounced(GameTestHelper helper) {
+        check(com.linkyoshi90.monstergirls.entity.Milestones.crossed(9, 10) == 0, "friend at 10");
+        check(com.linkyoshi90.monstergirls.entity.Milestones.crossed(20, 30) == 1, "close at 25");
+        check(com.linkyoshi90.monstergirls.entity.Milestones.crossed(0, 100) == 3, "a big jump names the highest");
+        check(com.linkyoshi90.monstergirls.entity.Milestones.crossed(30, 40) == -1, "nothing between milestones");
+        check(com.linkyoshi90.monstergirls.entity.Milestones.crossed(30, 5) == -1, "losses say nothing");
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2), "qol-befriender");
+        AbstractMonsterGirl girl = spawn(helper, GirlSpecies.HORSE_CENTAUR, new BlockPos(6, 2, 6));
+        girl.addAffection(player, Orders.AFFECTION);                       // must not throw on the way through every family's addAffection
+        check(girl.getAffection(player) == Orders.AFFECTION, "affection still adds up");
+        HarpyTestUtil.remove(player);
+        helper.succeed();
+    }
 }

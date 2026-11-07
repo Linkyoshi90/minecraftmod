@@ -556,7 +556,9 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
 
     @Override
     public void addAffection(Player player, int amount) {
+        int before = this.getAffection(player);
         this.affection.merge(player.getUUID(), amount, Integer::sum);
+        Milestones.after(this, player, before, this.getAffection(player));
     }
 
     @Override

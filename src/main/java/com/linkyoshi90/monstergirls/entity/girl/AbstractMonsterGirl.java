@@ -536,9 +536,11 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     @Override
     public void addAffection(Player player, int amount) {
+        int before = this.getAffection(player);
         this.affection.merge(player.getUUID(), amount, (a, b) -> Math.max(0, Math.min(FULL_AFFECTION, a + b)));
         this.affection.computeIfPresent(player.getUUID(), (k, v) -> Math.max(0, Math.min(FULL_AFFECTION, v)));
         com.linkyoshi90.monstergirls.entity.FourSymbols.onAffection(this, player, this.getAffection(player));
+        com.linkyoshi90.monstergirls.entity.Milestones.after(this, player, before, this.getAffection(player));
     }
 
     @Override

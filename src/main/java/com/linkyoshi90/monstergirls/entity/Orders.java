@@ -195,6 +195,14 @@ public final class Orders {
         return InteractionResult.SUCCESS;
     }
 
+    /** A reminder on every stick (the client fires this event only). */
+    @SubscribeEvent
+    public static void onTooltip(net.neoforged.neoforge.event.entity.player.ItemTooltipEvent event) {
+        if (event.getItemStack().is(net.minecraft.world.item.Items.STICK)) {
+            event.getToolTip().add(Component.translatable("item.monstergirls.stick.tip").withStyle(net.minecraft.ChatFormatting.GRAY));
+        }
+    }
+
     // --- fighting -----------------------------------------------------------------------------------------------
 
     /** Two monster girls (or a girl and a player, or a vanilla friend) on the same side: both fond of one player. */

@@ -99,7 +99,10 @@ public final class GirlEvents {
         if (event.isCanceled() || !(event.getEntity() instanceof com.linkyoshi90.monstergirls.entity.Bonded bonded)
                 || !(event.getEntity().level() instanceof net.minecraft.server.level.ServerLevel level)
                 || !level.getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_SHOWDEATHMESSAGES)) return;
-        net.minecraft.network.chat.Component message = event.getEntity().getCombatTracker().getDeathMessage();
+        net.minecraft.world.entity.LivingEntity dead = event.getEntity();
+        net.minecraft.network.chat.Component message = dead.getCombatTracker().getDeathMessage().copy()       // and where, to find what she dropped
+                .append(net.minecraft.network.chat.Component.translatable("message.monstergirls.died_at", dead.getBlockX(), dead.getBlockY(), dead.getBlockZ())
+                        .withStyle(net.minecraft.ChatFormatting.GRAY));
         for (net.minecraft.server.level.ServerPlayer p : level.getServer().getPlayerList().getPlayers()) {
             if (bonded.getAffection(p) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) p.sendSystemMessage(message);
         }

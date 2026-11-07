@@ -266,7 +266,9 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     }
 
     public void addAffection(Player player, int amount) {
+        int before = this.getAffection(player);
         this.affection.merge(player.getUUID(), amount, Integer::sum);
+        Milestones.after(this, player, before, this.getAffection(player));
     }
 
     public void setAffection(Player player, int amount) {
