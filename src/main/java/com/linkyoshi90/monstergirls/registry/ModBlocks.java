@@ -141,6 +141,11 @@ public final class ModBlocks {
             com.linkyoshi90.monstergirls.block.RealmLeavesBlock::new,
             BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.OAK_LEAVES).mapColor(MapColor.COLOR_PURPLE));
 
+    /** A trunk the realm has crept up: dark, violet-veined bark that remembers its wood (RealmLogBlock). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.RealmLogBlock> REALM_LOG = BLOCKS.registerBlock("realm_log",
+            com.linkyoshi90.monstergirls.block.RealmLogBlock::new,
+            BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.OAK_LOG).mapColor(MapColor.COLOR_PURPLE).lightLevel(s -> 2));
+
     /** The weepcap: a pale glowing realm mushroom weeping droplets from its rim (WeepcapBlock). */
     public static final DeferredBlock<com.linkyoshi90.monstergirls.block.WeepcapBlock> WEEPCAP = BLOCKS.registerBlock("weepcap",
             com.linkyoshi90.monstergirls.block.WeepcapBlock::new,

@@ -34,6 +34,7 @@ public class HolyWaterItem extends Item {
         }
         for (BlockPos p : BlockPos.betweenClosed(centre.offset(-RADIUS, 0, -RADIUS), centre.offset(RADIUS, CANOPY, RADIUS))) {   // and the trees above
             if (level.getBlockState(p).is(ModBlocks.REALM_LEAVES.get())) com.linkyoshi90.monstergirls.block.RealmLeavesBlock.purify(level, p.immutable());
+            else if (level.getBlockState(p).is(ModBlocks.REALM_LOG.get())) com.linkyoshi90.monstergirls.block.RealmLogBlock.purify(level, p.immutable());
         }
         return count;
     }

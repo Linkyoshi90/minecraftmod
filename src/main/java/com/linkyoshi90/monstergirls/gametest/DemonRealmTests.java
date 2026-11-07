@@ -215,4 +215,20 @@ public class DemonRealmTests {
         check(level.getBlockState(leaf).is(Blocks.OAK_LEAVES) && level.getBlockState(leaf.below()).isAir(), "the vine withers with the realm");
         helper.succeed();
     }
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "realmCreepsUpTrunks")
+    public static void realmCreepsUpTrunks(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos g = ground(helper, 7, 7);
+        RealmGrassBlock.corrupt(level, g);
+        for (int dx = -2; dx <= 2; dx++) for (int dz = -2; dz <= 2; dz++) {
+            if (dx != 0 || dz != 0) RealmGrassBlock.corrupt(level, g.offset(dx, 0, dz));
+            level.setBlockAndUpdate(g.offset(dx, 1, dz), Blocks.SPRUCE_LOG.defaultBlockState());   // a wide stump: wherever the realm looks, a trunk
+        }
+        BlockPos took = com.linkyoshi90.monstergirls.block.RealmLeavesBlock.creep(level, g, level.random);
+        check(took != null && level.getBlockState(took).is(ModBlocks.REALM_LOG.get()), "up the trunk");
+        check(level.getBlockState(took).getValue(com.linkyoshi90.monstergirls.block.RealmLogBlock.KIND) == com.linkyoshi90.monstergirls.block.RealmLogBlock.Kind.SPRUCE, "a spruce at heart");
+        HolyWaterItem.cleanse(level, g);
+        check(level.getBlockState(took).is(Blocks.SPRUCE_LOG), "spruce again");
+        helper.succeed();
+    }
 }

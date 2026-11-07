@@ -94,14 +94,15 @@ public class RealmLeavesBlock extends LeavesBlock {
                 .setValue(DISTANCE, s.getValue(DISTANCE)).setValue(PERSISTENT, s.getValue(PERSISTENT)).setValue(WATERLOGGED, s.getValue(WATERLOGGED)), Block.UPDATE_ALL);
     }
 
-    /** The realm reaching up from a patch of ground: the first leaves above a spot near it. Where, or null. */
+    /** The realm reaching up from a patch of ground: the first log or leaves above a spot near it. Where, or null. */
     @Nullable
     public static BlockPos creep(Level level, BlockPos ground, RandomSource random) {
         int dx = random.nextInt(5) - 2, dz = random.nextInt(5) - 2;
         for (int dy = 1; dy <= 20; dy++) {
             BlockPos p = ground.offset(dx, dy, dz);
             BlockState s = level.getBlockState(p);
-            if (s.is(ModBlocks.REALM_LEAVES.get())) continue;
+            if (s.is(ModBlocks.REALM_LEAVES.get()) || s.is(ModBlocks.REALM_LOG.get())) continue;
+            if (RealmLogBlock.Kind.of(s) != null) return RealmLogBlock.corrupt(level, p) ? p : null;   // up the trunk first
             if (s.is(BlockTags.LEAVES)) return corrupt(level, p) ? p : null;
             if (s.isSolidRender(level, p) && !s.is(BlockTags.LOGS)) return null;          // a roof between: the realm doesn't reach
         }

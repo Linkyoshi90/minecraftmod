@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "monstergirls:block/realm_log_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "monstergirls:block/realm_log"
+    },
+    "axis=z": {
+      "model": "monstergirls:block/realm_log_horizontal",
+      "x": 90
+    }
+  }
+}

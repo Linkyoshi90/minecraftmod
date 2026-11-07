@@ -313,8 +313,54 @@ def realm_plant_data():
         dump(path, old)
 
 
+def realm_log():
+    """vanilla oak bark darkened to near-black plum, split by glowing violet veins; the cut end gets violet rings"""
+    rnd = random.Random(61)
+    side_src, top_src = _vanilla_rgba("oak_log"), _vanilla_rgba("oak_log_top")
+    side, top = Image.new("RGBA", (16, 16)), Image.new("RGBA", (16, 16))
+    sp, tp = side.load(), top.load()
+    for y in range(16):
+        for x in range(16):
+            v = sum(side_src[y][x][:3]) / 3
+            sp[x, y] = (int(v * 0.42), int(v * 0.24), int(v * 0.40), 255)
+            t = sum(top_src[y][x][:3]) / 3
+            tp[x, y] = (int(t * 0.55), int(t * 0.30), int(t * 0.52), 255)
+    for vx in (3, 9, 13):                                                  # veins running up the bark, wandering a little
+        x = vx
+        for y in range(16):
+            sp[x % 16, y] = (196, 92, 220, 255) if y % 5 else (240, 150, 250, 255)
+            if rnd.random() < 0.3:
+                x += rnd.choice((-1, 1))
+    for y in range(16):
+        for x in range(16):
+            r = ((x - 7.5) ** 2 + (y - 7.5) ** 2) ** 0.5
+            if 2.5 < r < 3.3 or 5.2 < r < 5.9:
+                tp[x, y] = (170, 80, 190, 255)
+    save(side, "block", "realm_log.png")
+    save(top, "block", "realm_log_top.png")
+    m = os.path.join(ASSETS, "models")
+    dump(os.path.join(m, "block", "realm_log.json"), {"parent": "minecraft:block/cube_column",
+                                                     "textures": {"end": "monstergirls:block/realm_log_top", "side": "monstergirls:block/realm_log"}})
+    dump(os.path.join(m, "block", "realm_log_horizontal.json"), {"parent": "minecraft:block/cube_column_horizontal",
+                                                                "textures": {"end": "monstergirls:block/realm_log_top", "side": "monstergirls:block/realm_log"}})
+    dump(os.path.join(ASSETS, "blockstates", "realm_log.json"), {"variants": {
+        "axis=x": {"model": "monstergirls:block/realm_log_horizontal", "x": 90, "y": 90},
+        "axis=y": {"model": "monstergirls:block/realm_log"},
+        "axis=z": {"model": "monstergirls:block/realm_log_horizontal", "x": 90}}})
+    dump(os.path.join(m, "item", "realm_log.json"), {"parent": "monstergirls:block/realm_log"})
+    dump(os.path.join(DATA, "loot_table", "blocks", "realm_log.json"), {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [
+        {"type": "minecraft:item", "name": "monstergirls:realm_log"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
+    for tag in ("logs", "logs_that_burn", "mineable/axe"):
+        path = os.path.join(MC_DATA, "tags", "block", tag + ".json")
+        old = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {"replace": False, "values": []}
+        if "monstergirls:realm_log" not in old["values"]:
+            old["values"].append("monstergirls:realm_log")
+        dump(path, old)
+    return side, top
+
+
 def preview(path):
-    tiles = [realm_top(), realm_side(), realm_leaves(), weepcap()] + [bush(s) for s in range(4)] + [heartfruit(), holy_water()]
+    tiles = [realm_top(), realm_side(), realm_leaves(), *realm_log(), weepcap()] + [bush(s) for s in range(4)] + [heartfruit(), holy_water()]
     sheet = Image.new("RGBA", (len(tiles) * 18 * 6, 18 * 6), (40, 40, 48, 255))
     for i, t in enumerate(tiles):
         sheet.paste(t.resize((96, 96), Image.NEAREST), (i * 108 + 6, 6), t.resize((96, 96), Image.NEAREST))
@@ -333,6 +379,7 @@ def main():
     weepcap()
     data()
     realm_plant_data()
+    realm_log()
     if "--preview" in sys.argv:
         preview(sys.argv[sys.argv.index("--preview") + 1])
 
