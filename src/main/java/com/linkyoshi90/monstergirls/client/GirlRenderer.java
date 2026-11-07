@@ -53,6 +53,7 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         if (species == GirlSpecies.SHEEP_MINOTAUR || species == GirlSpecies.RHIWOOL_MINOTAUR) this.addRenderLayer(new DyedWoolLayer(this));
         this.addRenderLayer(new BlushLayer(this));
         this.addRenderLayer(new TowelLayer(this));
+        this.addRenderLayer(new VeilLayer(this));
         this.addRenderLayer(new MilkingHarnessLayer(this));
         this.addRenderLayer(new MoonEyesLayer<>(this));
         this.addRenderLayer(new HeldItemLayer(this));

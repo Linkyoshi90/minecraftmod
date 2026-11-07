@@ -215,6 +215,8 @@ public final class ModItems {
     public static final DeferredItem<net.minecraft.world.item.ItemNameBlockItem> HEARTFRUIT = ITEMS.register("heartfruit",
             () -> new net.minecraft.world.item.ItemNameBlockItem(ModBlocks.HEARTFRUIT_BUSH.get(),
                     new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.5F).build())));
+    /** Given to a devoted friend, a proposal (entity/Marriage). */
+    public static final DeferredItem<Item> WEDDING_RING = ITEMS.registerSimpleItem("wedding_ring", new Item.Properties().stacksTo(1));
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.HolyWaterItem> HOLY_WATER = ITEMS.register("holy_water",
             () -> new com.linkyoshi90.monstergirls.item.HolyWaterItem(new Item.Properties().stacksTo(16)));
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.UmbrellaItem> UMBRELLA = ITEMS.register("umbrella", () -> new com.linkyoshi90.monstergirls.item.UmbrellaItem(new Item.Properties().stacksTo(1)));

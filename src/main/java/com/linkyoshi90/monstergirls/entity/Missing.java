@@ -168,6 +168,7 @@ public final class Missing {
         int affection = bonded.getAffection(player);
         int lost = (int) Math.max(0, days - startDays(affection) + 1);
         if (Keepsakes.wearsBracelet(mob, player)) lost /= 2;
+        if (Marriage.married(mob, player)) lost = 0;                       // a spouse forgives any absence
         if (affection > Bonded.BED_AFFECTION) bonded.setAffection(player.getUUID(), Math.max(Bonded.BED_AFFECTION, affection - lost));
         String id = player.getUUID().toString();
         tag(mob, BACK).putLong(id, level.getDayTime() + DAY);
@@ -227,7 +228,7 @@ public final class Missing {
 
     /** What it adds to tonight's odds of her coming to bed. */
     public static float bedBonus(Mob mob, Player player) {
-        return activeStage(mob, player) * 0.25F + (cuddled(mob, player) ? 0.25F : 0.0F) + DemonRealm.bedBonus(mob, player) + MatingSeason.bedBonus(mob, player);
+        return activeStage(mob, player) * 0.25F + (cuddled(mob, player) ? 0.25F : 0.0F) + DemonRealm.bedBonus(mob, player) + MatingSeason.bedBonus(mob, player) + Marriage.bedBonus(mob, player);
     }
 
     /** The odds of young after a shared night: the setting, rising to certain for one who missed them badly; a cuddle adds a quarter. */

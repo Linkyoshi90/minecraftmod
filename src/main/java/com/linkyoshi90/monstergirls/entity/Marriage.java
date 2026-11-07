@@ -1,0 +1,281 @@
+package com.linkyoshi90.monstergirls.entity;
+
+import com.linkyoshi90.monstergirls.MonsterGirlsConfig;
+import com.linkyoshi90.monstergirls.MonsterGirlsMod;
+import com.linkyoshi90.monstergirls.block.HearthBlockEntity;
+import com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl;
+import com.linkyoshi90.monstergirls.registry.ModAttachments;
+import com.linkyoshi90.monstergirls.registry.ModItems;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+
+import java.util.UUID;
+import javax.annotation.Nullable;
+
+/**
+ * Marriage, where Monmusu's exchange programme was always heading. A wedding ring given to a grown, full-size friend at
+ * {@link Bonded#FULL_AFFECTION} who would flirt with the player is a proposal: she says yes and they are engaged. Once the two of them
+ * stand by a hearth together ({@link #WED_RANGE}) the wedding is held: the friends within {@link #GUESTS} gather round the fire, a bell
+ * rings, and she wears a veil for the day (FLAG_VEIL).
+ * <p>
+ * A spouse forgives any absence (no friendship lost to Missing), is half again likelier to come to bed ({@link #BED}), and while she is within
+ * {@link #NEAR} her player has {@link #HEALTH} more health. Every {@link #YEAR} days the wedding day comes round again: the veil, hearts, and
+ * a little more fondness. How many spouses a player may have is the maxSpouses setting (1; 0 for any number).
+ */
+@EventBusSubscriber(modid = MonsterGirlsMod.MODID)
+public final class Marriage {
+    public static final double WED_RANGE = 8, GUESTS = 32, NEAR = 32;
+    public static final float BED = 0.5F;
+    public static final int HEALTH = 4, YEAR = 40, VEIL = 24000, EVERY = 41;
+    public static final ResourceLocation BLISS = ResourceLocation.fromNamespaceAndPath(MonsterGirlsMod.MODID, "wedded_bliss");
+    private static final String SPOUSE = "SpouseOf", ENGAGED = "EngagedTo", WED_DAY = "WedDay", VEIL_UNTIL = "VeilUntil", LAST_ANNIVERSARY = "WedAnniversary";
+    private static final String SPOUSES = "Spouses";
+
+    public enum Answer { SHY, TAKEN, ALREADY, ENGAGED }
+
+    private Marriage() {
+    }
+
+    // --- who is whose --------------------------------------------------------------------------------------------------
+
+    @Nullable
+    public static UUID spouse(Mob mob) {
+        return mob.getPersistentData().hasUUID(SPOUSE) ? mob.getPersistentData().getUUID(SPOUSE) : null;
+    }
+
+    public static boolean married(Mob mob, Player player) {
+        return player.getUUID().equals(spouse(mob));
+    }
+
+    public static boolean engaged(Mob mob, Player player) {
+        return mob.getPersistentData().hasUUID(ENGAGED) && player.getUUID().equals(mob.getPersistentData().getUUID(ENGAGED));
+    }
+
+    private static ListTag spouses(Player player) {
+        return player.getData(ModAttachments.JOURNAL).getList(SPOUSES, Tag.TAG_STRING);
+    }
+
+    /** How many a player is married to, or engaged to. */
+    public static int count(Player player) {
+        return spouses(player).size();
+    }
+
+    private static void setSpouses(Player player, ListTag list) {
+        CompoundTag journal = player.getData(ModAttachments.JOURNAL);
+        journal.put(SPOUSES, list);
+        player.setData(ModAttachments.JOURNAL, journal);
+    }
+
+    private static void remember(Player player, Mob mob) {
+        ListTag list = spouses(player);
+        String id = mob.getUUID().toString();
+        for (Tag t : list) if (t.getAsString().equals(id)) return;
+        list.add(StringTag.valueOf(id));
+        setSpouses(player, list);
+    }
+
+    private static void forget(Player player, UUID mob) {
+        ListTag list = spouses(player);
+        list.removeIf(t -> t.getAsString().equals(mob.toString()));
+        setSpouses(player, list);
+    }
+
+    // --- the proposal --------------------------------------------------------------------------------------------------
+
+    /** The ring is offered. Her answer; ENGAGED means it was taken. */
+    public static Answer propose(ServerLevel level, Mob mob, Player player) {
+        Bonded b = (Bonded) mob;
+        if (married(mob, player) || engaged(mob, player)) {
+            say(player, "marriage.already", mob, true);
+            return Answer.ALREADY;
+        }
+        if (spouse(mob) != null || mob.getPersistentData().hasUUID(ENGAGED)) {
+            say(player, "marriage.taken", mob, true);
+            return Answer.TAKEN;
+        }
+        int limit = MonsterGirlsConfig.maxSpouses();
+        if (limit > 0 && count(player) >= limit) {
+            say(player, "marriage.limit", mob, true);
+            return Answer.TAKEN;
+        }
+        if (!Flirting.canFlirt(mob, player) || b.getAffection(player) < Bonded.FULL_AFFECTION) {
+            b.blushFor(100);
+            say(player, "marriage.shy", mob, true);
+            return Answer.SHY;
+        }
+        mob.getPersistentData().putUUID(ENGAGED, player.getUUID());
+        remember(player, mob);
+        b.blushFor(400);
+        level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.3, mob.getZ(), 12, 0.5, 0.4, 0.5, 0.0);
+        mob.playSound(SoundEvents.AMETHYST_BLOCK_CHIME, 1.0F, 1.2F);
+        player.displayClientMessage(Component.translatable("message.monstergirls.marriage.yes." + mob.getRandom().nextInt(4), mob.getDisplayName()), false);
+        return Answer.ENGAGED;
+    }
+
+    @SubscribeEvent
+    public static void onInteract(PlayerInteractEvent.EntityInteract event) {
+        if (!event.getItemStack().is(ModItems.WEDDING_RING.get()) || !(event.getTarget() instanceof Mob mob) || !(mob instanceof Bonded)) return;
+        event.setCanceled(true);
+        event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide));
+        if (event.getLevel() instanceof ServerLevel level && propose(level, mob, event.getEntity()) == Answer.ENGAGED) event.getItemStack().consume(1, event.getEntity());
+    }
+
+    // --- the wedding ---------------------------------------------------------------------------------------------------
+
+    /** The hearth both of them stand by, or null. */
+    @Nullable
+    public static BlockPos hearthFor(ServerLevel level, Mob mob, Player player) {
+        for (BlockPos h : HearthBlockEntity.loaded(level)) {
+            double r = WED_RANGE * WED_RANGE;
+            if (mob.distanceToSqr(h.getCenter()) <= r && player.distanceToSqr(h.getCenter()) <= r) return h;
+        }
+        return null;
+    }
+
+    /** Engaged and both by a hearth: the wedding. True if it was held. */
+    public static boolean tryWed(ServerLevel level, Mob mob, Player player) {
+        if (!engaged(mob, player)) return false;
+        BlockPos hearth = hearthFor(level, mob, player);
+        if (hearth == null) return false;
+        wed(level, mob, player, hearth);
+        return true;
+    }
+
+    /** The wedding itself. How many guests came. */
+    public static int wed(ServerLevel level, Mob mob, Player player, BlockPos hearth) {
+        CompoundTag pd = mob.getPersistentData();
+        pd.remove(ENGAGED);
+        pd.putUUID(SPOUSE, player.getUUID());
+        pd.putLong(WED_DAY, MatingSeason.today(level));
+        pd.putLong(LAST_ANNIVERSARY, MatingSeason.today(level));
+        pd.putLong(VEIL_UNTIL, level.getGameTime() + VEIL);
+        remember(player, mob);
+        Bonded b = (Bonded) mob;
+        b.setAffection(player.getUUID(), Math.max(b.getAffection(player), Bonded.FULL_AFFECTION));
+        b.blushFor(VEIL);
+        veil(level, mob);
+        int guests = 0;
+        for (Mob m : HomeLife.friendsOf(level, player, new AABB(hearth).inflate(GUESTS))) {
+            if (m == mob) continue;
+            m.getNavigation().moveTo(hearth.getX() + 0.5, hearth.getY(), hearth.getZ() + 0.5, 1.0);
+            level.sendParticles(ParticleTypes.HEART, m.getX(), m.getEyeY() + 0.3, m.getZ(), 2, 0.2, 0.1, 0.2, 0.0);
+            guests++;
+        }
+        level.playSound(null, hearth, SoundEvents.BELL_BLOCK, SoundSource.BLOCKS, 1.5F, 1.0F);
+        level.playSound(null, hearth, SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1.0F, 1.2F);
+        level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.4, mob.getZ(), 20, 0.7, 0.5, 0.7, 0.0);
+        level.sendParticles(ParticleTypes.FIREWORK, hearth.getX() + 0.5, hearth.getY() + 2.5, hearth.getZ() + 0.5, 60, 1.5, 1.0, 1.5, 0.08);
+        Component news = Component.translatable("message.monstergirls.marriage.wed", player.getDisplayName(), mob.getDisplayName(), guests).withStyle(ChatFormatting.LIGHT_PURPLE);
+        for (Player p : level.players()) if (p.distanceToSqr(mob) < 64 * 64) p.displayClientMessage(news, false);
+        return guests;
+    }
+
+    private static void veil(ServerLevel level, Mob mob) {
+        if (mob instanceof AbstractMonsterGirl g) g.setFlag(AbstractMonsterGirl.FLAG_VEIL, level.getGameTime() < mob.getPersistentData().getLong(VEIL_UNTIL));
+    }
+
+    // --- married life --------------------------------------------------------------------------------------------------
+
+    public static float bedBonus(Mob mob, Player player) {
+        return married(mob, player) ? BED : 0.0F;
+    }
+
+    @SubscribeEvent
+    public static void onTick(EntityTickEvent.Post event) {
+        Entity e = event.getEntity();
+        if (e.tickCount % EVERY != 0 || !(e instanceof Mob mob) || !(e instanceof Bonded) || !(e.level() instanceof ServerLevel level)) return;
+        CompoundTag pd = mob.getPersistentData();
+        if (pd.hasUUID(ENGAGED)) {
+            Player p = level.getPlayerByUUID(pd.getUUID(ENGAGED));
+            if (p != null) tryWed(level, mob, p);
+        }
+        if (pd.hasUUID(SPOUSE)) {
+            anniversary(level, mob);
+            veil(level, mob);
+        }
+    }
+
+    /** Every YEAR days after the wedding: the veil again, hearts and a line for her spouse. True on the day. */
+    public static boolean anniversary(ServerLevel level, Mob mob) {
+        CompoundTag pd = mob.getPersistentData();
+        long today = MatingSeason.today(level), since = today - pd.getLong(WED_DAY);
+        if (since <= 0 || since % YEAR != 0 || pd.getLong(LAST_ANNIVERSARY) == today) return false;
+        Player p = level.getPlayerByUUID(pd.getUUID(SPOUSE));
+        if (p == null || p.distanceToSqr(mob) > NEAR * NEAR) return false;            // she waits until they are together on the day
+        pd.putLong(LAST_ANNIVERSARY, today);
+        pd.putLong(VEIL_UNTIL, level.getGameTime() + VEIL);
+        Bonded b = (Bonded) mob;
+        b.blushFor(400);
+        level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.3, mob.getZ(), 10, 0.5, 0.4, 0.5, 0.0);
+        p.displayClientMessage(Component.translatable("message.monstergirls.marriage.anniversary", mob.getDisplayName(), since / YEAR), false);
+        return true;
+    }
+
+    /** Wedded bliss: more health while a spouse is near. */
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        if (event.getEntity().tickCount % 40 == 23 && event.getEntity().level() instanceof ServerLevel level) bliss(level, event.getEntity());
+    }
+
+    /** Whether a spouse is near; applies or lifts the health bonus. */
+    public static boolean bliss(ServerLevel level, Player p) {
+        AttributeInstance attr = p.getAttribute(Attributes.MAX_HEALTH);
+        if (attr == null) return false;
+        boolean near = count(p) > 0 && !level.getEntitiesOfClass(Mob.class, p.getBoundingBox().inflate(NEAR), m -> m.isAlive() && married(m, p)).isEmpty();
+        if (near && !attr.hasModifier(BLISS)) attr.addTransientModifier(new AttributeModifier(BLISS, HEALTH, AttributeModifier.Operation.ADD_VALUE));
+        if (!near && attr.hasModifier(BLISS)) {
+            attr.removeModifier(BLISS);
+            if (p.getHealth() > p.getMaxHealth()) p.setHealth(p.getMaxHealth());
+        }
+        return near;
+    }
+
+    /** A spouse or fiancée dies: the player is told, and free to marry again. */
+    @SubscribeEvent
+    public static void onDeath(LivingDeathEvent event) {
+        if (!(event.getEntity() instanceof Mob mob) || !(mob.level() instanceof ServerLevel level)) return;
+        CompoundTag pd = mob.getPersistentData();
+        UUID who = pd.hasUUID(SPOUSE) ? pd.getUUID(SPOUSE) : pd.hasUUID(ENGAGED) ? pd.getUUID(ENGAGED) : null;
+        if (who == null) return;
+        Player p = level.getServer().getPlayerList().getPlayer(who);
+        if (p == null) return;
+        forget(p, mob.getUUID());
+        p.displayClientMessage(Component.translatable("message.monstergirls.marriage.lost", mob.getDisplayName()).withStyle(ChatFormatting.GRAY), false);
+    }
+
+    /** A line for /monstergirls bonds, or null. */
+    @Nullable
+    public static Component describe(Mob mob, Player player) {
+        if (married(mob, player)) return Component.translatable("bond.monstergirls.spouse").withStyle(ChatFormatting.LIGHT_PURPLE);
+        if (engaged(mob, player)) return Component.translatable("bond.monstergirls.engaged").withStyle(ChatFormatting.LIGHT_PURPLE);
+        return null;
+    }
+
+    private static void say(Player player, String key, Mob mob, boolean bar) {
+        player.displayClientMessage(Component.translatable("message.monstergirls." + key, mob.getDisplayName()), bar);
+    }
+}

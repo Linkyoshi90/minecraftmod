@@ -134,6 +134,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue MONSTERIZATION;
     public static final ModConfigSpec.BooleanValue DREAM_VISITS;
     public static final ModConfigSpec.BooleanValue MATING_SEASON;
+    public static final ModConfigSpec.IntValue MAX_SPOUSES;
     public static final ModConfigSpec.BooleanValue MILK_EMBARRASSED;
     public static final ModConfigSpec.BooleanValue MILK_HARNESS;
     public static final ModConfigSpec.BooleanValue MILK_DISCOMFORT;
@@ -169,6 +170,10 @@ public final class MonsterGirlsConfig {
         MATING_SEASON = BUILDER
                 .comment("Each branch of the tree of life has three restless days in every forty: grown friends cling to you, blush, flirt more and come to bed more readily. Cold calms them.")
                 .define("matingSeason", true);
+
+        MAX_SPOUSES = BUILDER
+                .comment("How many monster girls one player may marry (0: any number).")
+                .defineInRange("maxSpouses", 1, 0, 64);
 
         BUILDER.push("milking");
         MILK_DRIPS = BUILDER
@@ -314,6 +319,10 @@ public final class MonsterGirlsConfig {
 
     public static int conceptionChance() {
         return SPEC.isLoaded() ? CONCEPTION_CHANCE.get() : CONCEPTION_CHANCE.getDefault();
+    }
+
+    public static int maxSpouses() {
+        return SPEC.isLoaded() ? MAX_SPOUSES.get() : MAX_SPOUSES.getDefault();
     }
 
     public static boolean matingSeason() {
