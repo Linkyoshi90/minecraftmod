@@ -19,17 +19,29 @@ import org.joml.Vector3f;
  * Demon Realm grass (entity/DemonRealm): the purple, faintly sweet-smelling turf that grows around a Lilith. It spreads over grass
  * and dirt in the dark, as mycelium does, but light drives it back: where a torch's light ({@link #LIGHT} or more) reaches the air
  * above it, it turns back into grass, and it never spreads into such a spot. Now and then a heartfruit bush sprouts on it.
+ * <p>
+ * Each patch knows how far it is from where the realm was seeded ({@link #DEPTH}): it spreads no further than {@link #MAX_DEPTH} blocks
+ * past its source, so a realm grows to its size round a Lilith (or a wild patch) and stops there, instead of swallowing the world.
  */
 public class RealmGrassBlock extends SnowyDirtBlock {
     public static final MapCodec<RealmGrassBlock> CODEC = simpleCodec(RealmGrassBlock::new);
     /** Block light (not daylight) at or above this keeps the realm away. */
     public static final int LIGHT = 8;
     /** One random tick in this many grows a tuft of crimson roots on bare realm grass. */
-    public static final int ROOTS = 60;
+    public static final int ROOTS = 60, MAX_DEPTH = 8;
+    public static final net.minecraft.world.level.block.state.properties.IntegerProperty DEPTH =
+            net.minecraft.world.level.block.state.properties.IntegerProperty.create("depth", 0, MAX_DEPTH);
     public static final DustParticleOptions HAZE = new DustParticleOptions(new Vector3f(0.95F, 0.45F, 0.78F), 1.0F);
 
     public RealmGrassBlock(Properties properties) {
         super(properties);
+        this.registerDefaultState(this.defaultBlockState().setValue(DEPTH, 0));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(net.minecraft.world.level.block.state.StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+        builder.add(DEPTH);
     }
 
     @Override
@@ -38,32 +50,37 @@ public class RealmGrassBlock extends SnowyDirtBlock {
     }
 
     /** Lit by a lamp or torch: no realm here. */
-    public static boolean lit(Level level, BlockPos ground) {
+    public static boolean lit(net.minecraft.world.level.LevelAccessor level, BlockPos ground) {
         return level.getBrightness(LightLayer.BLOCK, ground.above()) >= LIGHT;
     }
 
-    private static boolean open(Level level, BlockPos ground) {
+    private static boolean open(net.minecraft.world.level.LevelAccessor level, BlockPos ground) {
         BlockState above = level.getBlockState(ground.above());
         return !above.isSolidRender(level, ground.above()) && above.getFluidState().isEmpty();
     }
 
     /** Ground the realm can take: grass or dirt with open air above, out of torchlight. */
-    public static boolean canTake(Level level, BlockPos ground) {
+    public static boolean canTake(net.minecraft.world.level.LevelAccessor level, BlockPos ground) {
         BlockState s = level.getBlockState(ground);
         return (s.is(Blocks.GRASS_BLOCK) || s.is(Blocks.DIRT) || s.is(Blocks.PODZOL) || s.is(Blocks.COARSE_DIRT)) && open(level, ground) && !lit(level, ground);
     }
 
-    /** Turns one block into realm grass. True if it did. */
-    public static boolean corrupt(Level level, BlockPos ground) {
+    /** Turns one block into realm grass, a source of its own (depth 0). True if it did. */
+    public static boolean corrupt(net.minecraft.world.level.LevelAccessor level, BlockPos ground) {
+        return corrupt(level, ground, 0);
+    }
+
+    /** Turns one block into realm grass this far from its source. True if it did. */
+    public static boolean corrupt(net.minecraft.world.level.LevelAccessor level, BlockPos ground, int depth) {
         if (!canTake(level, ground)) return false;
-        level.setBlock(ground, ModBlocks.REALM_GRASS.get().defaultBlockState(), Block.UPDATE_ALL);
+        level.setBlock(ground, ModBlocks.REALM_GRASS.get().defaultBlockState().setValue(DEPTH, Math.min(MAX_DEPTH, depth)), Block.UPDATE_ALL);
         BlockState tuft = level.getBlockState(ground.above());
         if (tuft.is(Blocks.SHORT_GRASS) || tuft.is(Blocks.FERN)) level.setBlock(ground.above(), Blocks.CRIMSON_ROOTS.defaultBlockState(), Block.UPDATE_ALL);  // the tufts turn too
         return true;
     }
 
     /** Back to plain grass (dirt if covered), and a heartfruit bush or weepcap on it withers. */
-    public static void purify(Level level, BlockPos ground) {
+    public static void purify(net.minecraft.world.level.LevelAccessor level, BlockPos ground) {
         if (!level.getBlockState(ground).is(ModBlocks.REALM_GRASS.get())) return;
         BlockState plant = level.getBlockState(ground.above());
         if (plant.is(ModBlocks.HEARTFRUIT_BUSH.get()) || plant.is(ModBlocks.WEEPCAP.get())) level.setBlock(ground.above(), Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
@@ -89,11 +106,14 @@ public class RealmGrassBlock extends SnowyDirtBlock {
         if (random.nextInt(3) == 0) RealmLeavesBlock.creep(level, pos, random);
     }
 
-    /** One try at the ground nearby, as grass spreads. Where it went, or null. */
+    /** One try at the ground nearby, as grass spreads, a step further from the source; none at the realm's edge. Where it went, or null. */
     @javax.annotation.Nullable
     public static BlockPos spread(ServerLevel level, BlockPos pos, RandomSource random) {
+        BlockState here = level.getBlockState(pos);
+        int depth = here.hasProperty(DEPTH) ? here.getValue(DEPTH) : MAX_DEPTH;
+        if (depth >= MAX_DEPTH) return null;
         BlockPos to = pos.offset(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
-        return corrupt(level, to) ? to : null;
+        return corrupt(level, to, depth + 1) ? to : null;
     }
 
     @Override

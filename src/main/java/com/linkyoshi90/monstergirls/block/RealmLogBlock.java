@@ -71,7 +71,7 @@ public class RealmLogBlock extends RotatedPillarBlock {
     }
 
     /** A vanilla log of a kind it knows turns, keeping its axis. True if it did. */
-    public static boolean corrupt(Level level, BlockPos pos) {
+    public static boolean corrupt(net.minecraft.world.level.LevelAccessor level, BlockPos pos) {
         BlockState s = level.getBlockState(pos);
         Kind kind = Kind.of(s);
         if (kind == null || level.getBrightness(LightLayer.BLOCK, pos) >= RealmGrassBlock.LIGHT) return false;
@@ -79,7 +79,7 @@ public class RealmLogBlock extends RotatedPillarBlock {
         return true;
     }
 
-    public static void purify(Level level, BlockPos pos) {
+    public static void purify(net.minecraft.world.level.LevelAccessor level, BlockPos pos) {
         BlockState s = level.getBlockState(pos);
         if (!s.is(ModBlocks.REALM_LOG.get())) return;
         level.setBlock(pos, s.getValue(KIND).block().defaultBlockState().setValue(AXIS, s.getValue(AXIS)), Block.UPDATE_ALL);

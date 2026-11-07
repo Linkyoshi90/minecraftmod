@@ -231,4 +231,29 @@ public class DemonRealmTests {
         check(level.getBlockState(took).is(Blocks.SPRUCE_LOG), "spruce again");
         helper.succeed();
     }
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "realmStopsAtItsEdge")
+    public static void realmStopsAtItsEdge(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos edge = ground(helper, 7, 7), source = ground(helper, 3, 3);
+        RealmGrassBlock.corrupt(level, edge, RealmGrassBlock.MAX_DEPTH);
+        for (int i = 0; i < 200; i++) check(RealmGrassBlock.spread(level, edge, level.random) == null, "the edge of the realm spreads no further");
+        RealmGrassBlock.corrupt(level, source);
+        BlockPos to = null;
+        for (int i = 0; i < 200 && to == null; i++) to = RealmGrassBlock.spread(level, source, level.random);
+        check(to != null && level.getBlockState(to).getValue(RealmGrassBlock.DEPTH) == 1, "a step from its source");
+        helper.succeed();
+    }
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "wildRealmPatch")
+    public static void wildRealmPatch(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos centre = ground(helper, 7, 7);
+        BlockPos trunk = centre.offset(1, 1, 0);
+        for (int y = 0; y < 4; y++) level.setBlockAndUpdate(trunk.above(y), Blocks.DARK_OAK_LOG.defaultBlockState());
+        level.setBlockAndUpdate(trunk.above(4), Blocks.DARK_OAK_LEAVES.defaultBlockState().setValue(net.minecraft.world.level.block.LeavesBlock.PERSISTENT, true));
+        int taken = com.linkyoshi90.monstergirls.world.RealmPatchFeature.placePatch(level, centre, level.random, (x, z) -> centre.getY());
+        check(taken >= 30, "a patch of realm: " + taken);
+        check(level.getBlockState(centre).is(ModBlocks.REALM_GRASS.get()) && level.getBlockState(centre).getValue(RealmGrassBlock.DEPTH) == 0, "its heart is a source");
+        check(level.getBlockState(trunk.above(2)).is(ModBlocks.REALM_LOG.get()) && level.getBlockState(trunk.above(4)).is(ModBlocks.REALM_LEAVES.get()), "the tree over it turned");
+        helper.succeed();
+    }
 }

@@ -67,7 +67,7 @@ public class HeartfruitBushBlock extends BushBlock implements BonemealableBlock 
     }
 
     /** A young bush on this realm grass, unless one already grows within four blocks. True if it sprouted. */
-    public static boolean sprout(Level level, BlockPos ground) {
+    public static boolean sprout(net.minecraft.world.level.LevelAccessor level, BlockPos ground) {
         BlockPos at = ground.above();
         if (!level.getBlockState(ground).is(ModBlocks.REALM_GRASS.get()) || !level.isEmptyBlock(at)) return false;
         for (BlockPos p : BlockPos.betweenClosed(at.offset(-4, -2, -4), at.offset(4, 2, 4))) {

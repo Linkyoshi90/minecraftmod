@@ -44,7 +44,7 @@ public class WeepcapBlock extends BushBlock {
     }
 
     /** A weepcap on this realm grass, unless the spot is taken or crowded. True if one grew. */
-    public static boolean sprout(Level level, BlockPos ground) {
+    public static boolean sprout(net.minecraft.world.level.LevelAccessor level, BlockPos ground) {
         BlockPos at = ground.above();
         if (!level.getBlockState(ground).is(ModBlocks.REALM_GRASS.get()) || !level.isEmptyBlock(at)) return false;
         int crowd = 0;

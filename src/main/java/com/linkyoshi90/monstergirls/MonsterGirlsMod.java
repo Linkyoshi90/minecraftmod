@@ -30,6 +30,7 @@ public final class MonsterGirlsMod {
         ModItems.ITEMS.register(modBus);
         com.linkyoshi90.monstergirls.registry.ModVillagers.POI_TYPES.register(modBus);
         com.linkyoshi90.monstergirls.registry.ModVillagers.PROFESSIONS.register(modBus);
+        com.linkyoshi90.monstergirls.registry.ModFeatures.FEATURES.register(modBus);
         ModItems.TABS.register(modBus);
         ModSounds.SOUND_EVENTS.register(modBus);
         com.linkyoshi90.monstergirls.registry.ModParticles.PARTICLE_TYPES.register(modBus);

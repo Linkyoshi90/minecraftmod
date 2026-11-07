@@ -74,7 +74,7 @@ public class RealmLeavesBlock extends LeavesBlock {
     }
 
     /** Vanilla leaves of a kind it knows become realm leaves, keeping their distance, persistence and water. True if they did. */
-    public static boolean corrupt(Level level, BlockPos pos) {
+    public static boolean corrupt(net.minecraft.world.level.LevelAccessor level, BlockPos pos) {
         BlockState s = level.getBlockState(pos);
         Kind kind = Kind.of(s);
         if (kind == null || level.getBrightness(net.minecraft.world.level.LightLayer.BLOCK, pos) >= RealmGrassBlock.LIGHT) return false;
@@ -84,7 +84,7 @@ public class RealmLeavesBlock extends LeavesBlock {
     }
 
     /** Back to the leaves they were; the weeping vines hanging from them wither. */
-    public static void purify(Level level, BlockPos pos) {
+    public static void purify(net.minecraft.world.level.LevelAccessor level, BlockPos pos) {
         BlockState s = level.getBlockState(pos);
         if (!s.is(ModBlocks.REALM_LEAVES.get())) return;
         for (BlockPos p = pos.below(); level.getBlockState(p).is(Blocks.WEEPING_VINES) || level.getBlockState(p).is(Blocks.WEEPING_VINES_PLANT); p = p.below()) {
@@ -96,7 +96,7 @@ public class RealmLeavesBlock extends LeavesBlock {
 
     /** The realm reaching up from a patch of ground: the first log or leaves above a spot near it. Where, or null. */
     @Nullable
-    public static BlockPos creep(Level level, BlockPos ground, RandomSource random) {
+    public static BlockPos creep(net.minecraft.world.level.LevelAccessor level, BlockPos ground, RandomSource random) {
         int dx = random.nextInt(5) - 2, dz = random.nextInt(5) - 2;
         for (int dy = 1; dy <= 20; dy++) {
             BlockPos p = ground.offset(dx, dy, dz);
@@ -126,7 +126,7 @@ public class RealmLeavesBlock extends LeavesBlock {
     public static final int VINES = 80;
 
     /** A crimson weeping vine under these leaves, short (it can only grow a few blocks more). True if one was hung. */
-    public static boolean hangVine(Level level, BlockPos pos) {
+    public static boolean hangVine(net.minecraft.world.level.LevelAccessor level, BlockPos pos) {
         BlockPos below = pos.below();
         if (!level.isEmptyBlock(below) || !level.isEmptyBlock(below.below())) return false;
         level.setBlock(below, Blocks.WEEPING_VINES.defaultBlockState().setValue(net.minecraft.world.level.block.GrowingPlantHeadBlock.AGE, 22), Block.UPDATE_ALL);
