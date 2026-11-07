@@ -88,6 +88,15 @@ public final class MonsterGirlsConfig {
             .comment("On a clear night, stand still under open sky looking up and your friends nearby sit down beside you; a shooting star brings each of them closer.")
             .define("stargazing", true);
 
+    public static final ModConfigSpec.BooleanValue TRAVEL_TOGETHER = BUILDER
+            .comment("Friends told to follow you who are within 16 blocks come along when you go through a portal.")
+            .define("travelTogether", true);
+
+    public static final ModConfigSpec.BooleanValue FRIENDS_FAINT = BUILDER
+            .comment("A friend who would die faints instead: she keeps a quarter of her health, sits down and waits for you to help her up.",
+                    "She can't faint twice within a minute, and /kill or the void still kill her.")
+            .define("friendsFaint", false);
+
     public static final ModConfigSpec.IntValue HEARTH_SAFE_RADIUS = BUILDER
             .comment("No hostile mob spawns naturally within this many blocks of a hearth with " + com.linkyoshi90.monstergirls.block.HearthBlockEntity.SAFE_RESIDENTS + " or more living there (0 turns it off).")
             .defineInRange("hearthSafeRadius", 24, 0, 128);
@@ -191,6 +200,14 @@ public final class MonsterGirlsConfig {
 
     public static boolean colds() {
         return SPEC.isLoaded() ? COLDS.get() : COLDS.getDefault();
+    }
+
+    public static boolean travelTogether() {
+        return SPEC.isLoaded() ? TRAVEL_TOGETHER.get() : TRAVEL_TOGETHER.getDefault();
+    }
+
+    public static boolean friendsFaint() {
+        return SPEC.isLoaded() ? FRIENDS_FAINT.get() : FRIENDS_FAINT.getDefault();
     }
 
     public static boolean stargazing() {

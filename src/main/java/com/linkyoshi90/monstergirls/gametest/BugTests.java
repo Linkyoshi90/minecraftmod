@@ -75,6 +75,7 @@ public class BugTests {
 
     @GameTest(template = PLATFORM, timeoutTicks = 1200, batch = "beeFillsTheHive")
     public static void beeFillsTheHive(GameTestHelper helper) {
+        helper.setDayTime(1000);                                          // she sleeps at night (SleepGoal), and the test world keeps its clock
         helper.setBlock(new BlockPos(5, 1, 5), Blocks.GRASS_BLOCK);
         helper.setBlock(new BlockPos(5, 2, 5), Blocks.POPPY.defaultBlockState());
         helper.setBlock(new BlockPos(9, 2, 9), Blocks.BEEHIVE);

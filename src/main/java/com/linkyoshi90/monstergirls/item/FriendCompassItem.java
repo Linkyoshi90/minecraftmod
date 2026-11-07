@@ -17,8 +17,16 @@ import java.util.List;
 public class FriendCompassItem extends Item {
     private static final String[] WAYS = {"south", "southwest", "west", "northwest", "north", "northeast", "east", "southeast"};
 
+    public static final double GLOW_REACH = 128;
+
     public FriendCompassItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, net.minecraft.world.item.TooltipFlag flag) {
+        tooltip.add(Component.translatable("item.monstergirls.friend_compass.tip").withStyle(net.minecraft.ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("item.monstergirls.friend_compass.tip_sneak").withStyle(net.minecraft.ChatFormatting.GRAY));
     }
 
     /** Which way from the player, as a compass point. */
@@ -32,6 +40,18 @@ public class FriendCompassItem extends Item {
         ItemStack stack = player.getItemInHand(hand);
         if (level instanceof ServerLevel server) {
             List<Mob> friends = HomeLife.allFriends(server, player);
+            if (player.isShiftKeyDown()) {                                        // everyone within reach glows for ten seconds
+                int lit = 0;
+                for (Mob m : friends) {
+                    if (m.distanceToSqr(player) > GLOW_REACH * GLOW_REACH) break;  // nearest first
+                    m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.GLOWING, 200, 0, false, false));
+                    lit++;
+                }
+                player.displayClientMessage(lit == 0 ? Component.translatable("message.monstergirls.compass_none")
+                        : Component.translatable("message.monstergirls.compass_glow", lit), true);
+                player.getCooldowns().addCooldown(this, 100);
+                return InteractionResultHolder.sidedSuccess(stack, false);
+            }
             if (friends.isEmpty()) {
                 player.displayClientMessage(Component.translatable("message.monstergirls.compass_none"), true);
             } else {

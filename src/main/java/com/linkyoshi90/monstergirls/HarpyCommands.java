@@ -20,6 +20,7 @@ import java.util.List;
 /**
  * /monstergirls bonds [radius] : lists the monster girls around you (harpies, anurans and every girl family; default 32
  * blocks) and how each one feels about you.
+ * /monstergirls friends : every friend in the loaded world (all dimensions), how far and which way, and her orders.
  * Usable by every player.
  */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
@@ -35,7 +36,8 @@ public final class HarpyCommands {
                 .then(Commands.literal("bonds")
                         .executes(ctx -> listBonds(ctx.getSource(), DEFAULT_RADIUS))
                         .then(Commands.argument("radius", IntegerArgumentType.integer(1, 128))
-                                .executes(ctx -> listBonds(ctx.getSource(), IntegerArgumentType.getInteger(ctx, "radius"))))));
+                                .executes(ctx -> listBonds(ctx.getSource(), IntegerArgumentType.getInteger(ctx, "radius")))))
+                .then(Commands.literal("friends").executes(ctx -> listFriends(ctx.getSource()))));
     }
 
     static int listBonds(CommandSourceStack source, int radius) throws CommandSyntaxException {
@@ -55,6 +57,45 @@ public final class HarpyCommands {
             source.sendSuccess(() -> line, false);
         }
         return harpies.size();
+    }
+
+    /** Every friend in the loaded world, in every dimension: where she is from you and what she was told. */
+    static int listFriends(CommandSourceStack source) throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+        List<Component> lines = friendLines(player);
+        if (lines.isEmpty()) {
+            source.sendSuccess(() -> Component.translatable("message.monstergirls.compass_none"), false);
+            return 0;
+        }
+        source.sendSuccess(() -> Component.translatable("commands.monstergirls.friends.header", lines.size()).withStyle(ChatFormatting.GOLD), false);
+        for (Component line : lines.subList(0, Math.min(lines.size(), MAX_FRIEND_LINES))) source.sendSuccess(() -> line, false);
+        if (lines.size() > MAX_FRIEND_LINES) source.sendSuccess(() -> Component.translatable("commands.monstergirls.friends.more", lines.size() - MAX_FRIEND_LINES), false);
+        return lines.size();
+    }
+
+    private static final int MAX_FRIEND_LINES = 40;
+
+    /** One line per friend: here first (nearest first), then the other dimensions. */
+    public static List<Component> friendLines(ServerPlayer player) {
+        List<Component> out = new java.util.ArrayList<>();
+        java.util.List<net.minecraft.server.level.ServerLevel> levels = new java.util.ArrayList<>();
+        levels.add(player.serverLevel());
+        for (net.minecraft.server.level.ServerLevel l : player.server.getAllLevels()) if (l != player.serverLevel()) levels.add(l);
+        for (net.minecraft.server.level.ServerLevel level : levels) {
+            for (Mob m : com.linkyoshi90.monstergirls.entity.HomeLife.allFriends(level, player)) {
+                Component name = m.getDisplayName().copy().withStyle(ChatFormatting.AQUA);
+                Component order = Component.translatable("jade.monstergirls.order."
+                        + com.linkyoshi90.monstergirls.entity.Orders.current((Bonded) m).name().toLowerCase(java.util.Locale.ROOT));
+                if (level == player.serverLevel()) {
+                    out.add(Component.translatable("commands.monstergirls.friends.entry", name, (int) player.distanceTo(m),
+                            Component.translatable("direction.monstergirls." + com.linkyoshi90.monstergirls.item.FriendCompassItem.way(player, m)), order));
+                } else {
+                    out.add(Component.translatable("commands.monstergirls.friends.away", name, level.dimension().location().toString(),
+                            m.getBlockX(), m.getBlockY(), m.getBlockZ(), order));
+                }
+            }
+        }
+        return out;
     }
 
     /** For tests: the same lines /monstergirls bonds would print, without needing a command source. */

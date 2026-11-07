@@ -71,6 +71,11 @@ public class JadePlugin implements IWailaPlugin {
                     data.putString("Favourite", com.linkyoshi90.monstergirls.entity.girl.Treats.favourite(g).getDescriptionId());
                 }
             }
+            if (accessor.getPlayer() != null && b.getAffection(accessor.getPlayer()) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {   // her orders, for her friends
+                com.linkyoshi90.monstergirls.entity.Orders.Command order = com.linkyoshi90.monstergirls.entity.Orders.current(b);
+                if (order != com.linkyoshi90.monstergirls.entity.Orders.Command.FREE_ROAM) data.putString("Order", order.name().toLowerCase(java.util.Locale.ROOT));
+                if (b.getOrders().stance() != com.linkyoshi90.monstergirls.entity.Orders.Stance.NATURAL) data.putString("Stance", b.getOrders().stance().name().toLowerCase(java.util.Locale.ROOT));
+            }
             com.linkyoshi90.monstergirls.entity.Clade branch = com.linkyoshi90.monstergirls.entity.Clade.of(accessor.getEntity());
             if (branch != null && accessor.getPlayer() != null) {                // how much of her branch of the tree of life they have met
                 data.putInt("BranchMet", com.linkyoshi90.monstergirls.entity.Journal.metOn(accessor.getPlayer(), branch));
@@ -108,6 +113,13 @@ public class JadePlugin implements IWailaPlugin {
             if (data.contains("FavourItem")) {
                 net.minecraft.world.item.Item want = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(net.minecraft.resources.ResourceLocation.parse(data.getString("FavourItem")));
                 tooltip.add(Component.translatable("jade.monstergirls.favour", data.getInt("FavourCount"), want.getDescription()).withStyle(net.minecraft.ChatFormatting.YELLOW));
+            }
+            if (data.contains("Order") || data.contains("Stance")) {
+                net.minecraft.network.chat.MutableComponent line = Component.empty();
+                if (data.contains("Order")) line.append(Component.translatable("jade.monstergirls.order." + data.getString("Order")));
+                if (data.contains("Order") && data.contains("Stance")) line.append(", ");
+                if (data.contains("Stance")) line.append(Component.translatable("jade.monstergirls.stance." + data.getString("Stance")));
+                tooltip.add(line.withStyle(net.minecraft.ChatFormatting.BLUE));
             }
             if (data.contains("Role")) tooltip.add(Component.translatable(data.getString("Role")).withStyle(net.minecraft.ChatFormatting.DARK_GREEN));
             if (data.contains("Pregnant")) {

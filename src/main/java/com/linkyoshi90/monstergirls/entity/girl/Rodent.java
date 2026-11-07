@@ -708,7 +708,7 @@ public class Rodent extends AbstractMonsterGirl {
     @Override
     public void die(DamageSource source) {
         super.die(source);
-        if (this.level().isClientSide) return;
+        if (this.level().isClientSide || this.getHealth() > 0) return;      // she fainted instead (Fainting): she keeps her things
         this.spawnAtLocation(this.parcel);
         for (int i = 0; i < this.cache.getContainerSize(); i++) this.spawnAtLocation(this.cache.removeItemNoUpdate(i));
     }

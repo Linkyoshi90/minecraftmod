@@ -87,7 +87,12 @@ public final class Orders {
             case PATROL -> this.anchor == null ? null : Vec3.atBottomCenterOf(this.anchor);
             case FOLLOW -> {
                 Player p = this.commander(mob);
-                yield p != null && !p.isSpectator() && p.level() == mob.level() ? p.position() : null;
+                if (p != null && !p.isSpectator() && p.level() == mob.level()) {
+                    this.anchor = null;
+                    yield p.position();
+                }
+                if (this.anchor == null) this.anchor = mob.blockPosition();      // her player is away (logged out, another dimension): she waits here
+                yield Vec3.atBottomCenterOf(this.anchor);
             }
             default -> null;
         };
@@ -114,6 +119,37 @@ public final class Orders {
     /** Under any order but free roam: her own following (flock, home, family, her player) gives way to the order. */
     public static boolean commanded(Entity e) {
         return holdsPlace(e) || e instanceof Bonded b && b.getOrders().command == Command.FOLLOW;
+    }
+
+    /** Her order as it stands, for any Bonded (the generic {@link #command} needs a PathfinderMob type). */
+    public static Command current(Bonded b) {
+        if (b.isOrderedToSit()) return Command.SIT;
+        Command c = b.getOrders().command;
+        return c == Command.SIT ? Command.FREE_ROAM : c;
+    }
+
+    // --- the whistle, sneaking: orders for everyone at once ------------------------------------------------------
+
+    /** Everyone within reach who takes this player's orders (grown friends). */
+    public static java.util.List<net.minecraft.world.entity.Mob> squad(net.minecraft.server.level.ServerLevel level, Player player, double reach) {
+        java.util.List<net.minecraft.world.entity.Mob> out = HomeLife.friendsOf(level, player, player.getBoundingBox().inflate(reach));
+        out.removeIf(m -> !(m instanceof PathfinderMob) || m.distanceToSqr(player) > reach * reach);
+        return out;
+    }
+
+    /** What a group order does next: everyone stays put, or, once they all sit already, everyone follows. */
+    public static Command nextGroupOrder(java.util.List<net.minecraft.world.entity.Mob> squad) {
+        return !squad.isEmpty() && squad.stream().allMatch(m -> ((Bonded) m).isOrderedToSit()) ? Command.FOLLOW : Command.SIT;
+    }
+
+    /** Gives the whole squad one order (sit, or follow this player). */
+    public static void orderAll(java.util.List<net.minecraft.world.entity.Mob> squad, Command order, Player player) {
+        for (net.minecraft.world.entity.Mob m : squad) {
+            Bonded b = (Bonded) m;
+            b.getOrders().set(order, player, null);
+            b.setOrderedToSit(order == Command.SIT);
+            m.getNavigation().stop();
+        }
     }
 
     // --- the stick ----------------------------------------------------------------------------------------------
@@ -203,6 +239,22 @@ public final class Orders {
         Entity attacker = event.getSource().getEntity();
         if (attacker == null || attacker.level().isClientSide || !companions(attacker, event.getEntity())) return;
         if (!(event.getEntity() instanceof Player) || event.getSource().getDirectEntity() != attacker) event.setCanceled(true);
+    }
+
+    /** A player's own explosions (TNT they lit, a firework, a bed in the Nether) spare their friends. */
+    @SubscribeEvent
+    public static void onFriendlyBlast(LivingIncomingDamageEvent event) {
+        if (event.getSource().getEntity() instanceof Player p && !p.level().isClientSide && event.getSource().is(net.minecraft.tags.DamageTypeTags.IS_EXPLOSION)
+                && event.getEntity() instanceof Bonded b && b.getAffection(p) >= AFFECTION) event.setCanceled(true);
+    }
+
+    /** A player's arrows and tridents fly past their friends, on to whatever is behind them. Snowballs and potions still land. */
+    @SubscribeEvent
+    public static void onFriendlyArrow(net.neoforged.neoforge.event.entity.ProjectileImpactEvent event) {
+        if (event.getRayTraceResult() instanceof net.minecraft.world.phys.EntityHitResult hit
+                && event.getProjectile() instanceof net.minecraft.world.entity.projectile.AbstractArrow arrow
+                && arrow.getOwner() instanceof Player p && !p.level().isClientSide
+                && hit.getEntity() instanceof Bonded b && b.getAffection(p) >= AFFECTION) event.setCanceled(true);
     }
 
     // --- saving -------------------------------------------------------------------------------------------------
