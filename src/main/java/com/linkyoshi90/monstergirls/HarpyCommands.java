@@ -78,11 +78,13 @@ public final class HarpyCommands {
     /** One line per friend: here first (nearest first), then the other dimensions. */
     public static List<Component> friendLines(ServerPlayer player) {
         List<Component> out = new java.util.ArrayList<>();
+        java.util.Set<java.util.UUID> listed = new java.util.HashSet<>();
         java.util.List<net.minecraft.server.level.ServerLevel> levels = new java.util.ArrayList<>();
         levels.add(player.serverLevel());
         for (net.minecraft.server.level.ServerLevel l : player.server.getAllLevels()) if (l != player.serverLevel()) levels.add(l);
         for (net.minecraft.server.level.ServerLevel level : levels) {
             for (Mob m : com.linkyoshi90.monstergirls.entity.HomeLife.allFriends(level, player)) {
+                listed.add(m.getUUID());
                 Component name = m.getDisplayName().copy().withStyle(ChatFormatting.AQUA);
                 Component order = Component.translatable("jade.monstergirls.order."
                         + com.linkyoshi90.monstergirls.entity.Orders.current((Bonded) m).name().toLowerCase(java.util.Locale.ROOT));
@@ -94,6 +96,11 @@ public final class HarpyCommands {
                             m.getBlockX(), m.getBlockY(), m.getBlockZ(), order));
                 }
             }
+        }
+        for (com.linkyoshi90.monstergirls.entity.FriendLog.Seen s : com.linkyoshi90.monstergirls.entity.FriendLog.get(player.server).of(player)) {
+            if (listed.contains(s.mob())) continue;                              // out of the loaded world: where she was last seen
+            out.add(Component.translatable("commands.monstergirls.friends.unloaded", Component.literal(s.name()).withStyle(ChatFormatting.DARK_AQUA),
+                    s.pos().getX(), s.pos().getY(), s.pos().getZ(), s.dimension(), com.linkyoshi90.monstergirls.entity.FriendLog.ago(player.server, s)));
         }
         return out;
     }

@@ -31,7 +31,12 @@ public class FriendCompassItem extends Item {
 
     /** Which way from the player, as a compass point. */
     public static String way(Player player, Mob mob) {
-        double angle = Math.toDegrees(Math.atan2(player.getX() - mob.getX(), mob.getZ() - player.getZ()));
+        return way(player, mob.position());
+    }
+
+    /** Which way a spot lies from the player. */
+    public static String way(Player player, net.minecraft.world.phys.Vec3 at) {
+        double angle = Math.toDegrees(Math.atan2(player.getX() - at.x, at.z - player.getZ()));
         return WAYS[(int) Math.floorMod(Math.round(angle / 45.0), 8L)];
     }
 
@@ -53,7 +58,11 @@ public class FriendCompassItem extends Item {
                 return InteractionResultHolder.sidedSuccess(stack, false);
             }
             if (friends.isEmpty()) {
-                player.displayClientMessage(Component.translatable("message.monstergirls.compass_none"), true);
+                com.linkyoshi90.monstergirls.entity.FriendLog.Seen last = com.linkyoshi90.monstergirls.entity.FriendLog.get(server.getServer()).of(player).stream()
+                        .filter(s -> s.dimension().equals(level.dimension().location().toString())).findFirst().orElse(null);
+                player.displayClientMessage(last == null ? Component.translatable("message.monstergirls.compass_none")
+                        : Component.translatable("message.monstergirls.compass_last", last.name(), (int) Math.sqrt(last.pos().distToCenterSqr(player.position())),
+                        Component.translatable("direction.monstergirls." + way(player, net.minecraft.world.phys.Vec3.atCenterOf(last.pos())))), true);
             } else {
                 int next = stack.getOrDefault(net.minecraft.core.component.DataComponents.REPAIR_COST, 0) + 1;
                 stack.set(net.minecraft.core.component.DataComponents.REPAIR_COST, next);

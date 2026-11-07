@@ -243,4 +243,25 @@ public class QualityOfLifeTests {
         HarpyTestUtil.remove(player);
         helper.succeed();
     }
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "friendLogRemembersTheLastSpot")
+    public static void friendLogRemembersTheLastSpot(GameTestHelper helper) {
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2), "qol-rememberer");
+        AbstractMonsterGirl away = spawn(helper, GirlSpecies.HORSE_CENTAUR, new BlockPos(6, 2, 6));
+        AbstractMonsterGirl doomed = spawn(helper, GirlSpecies.HORSE_CENTAUR, new BlockPos(10, 2, 10));
+        away.setAffection(player.getUUID(), Orders.AFFECTION);
+        doomed.setAffection(player.getUUID(), Orders.AFFECTION);
+        com.linkyoshi90.monstergirls.entity.FriendLog.update(player);
+        var log = com.linkyoshi90.monstergirls.entity.FriendLog.get(helper.getLevel().getServer());
+        check(log.of(player).size() == 2, "both friends are noted: " + log.of(player).size());
+        BlockPos spot = away.blockPosition();
+        away.discard();                                                     // gone from the loaded world, not dead
+        doomed.kill();
+        List<com.linkyoshi90.monstergirls.entity.FriendLog.Seen> seen = log.of(player);
+        check(seen.size() == 1 && seen.get(0).pos().equals(spot), "the one out of sight is remembered where she was, the dead one forgotten: " + seen);
+        List<net.minecraft.network.chat.Component> lines = HarpyCommands.friendLines(player);
+        check(lines.size() == 1 && lines.get(0).getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents t
+                && t.getKey().equals("commands.monstergirls.friends.unloaded"), "the command lists where she was last seen: " + lines);
+        HarpyTestUtil.remove(player);
+        helper.succeed();
+    }
 }

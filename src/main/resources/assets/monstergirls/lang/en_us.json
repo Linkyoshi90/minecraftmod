@@ -3241,5 +3241,10 @@
   "item.monstergirls.stick.tip": "Use on a monster girl friend: orders; sneak: her stance",
   "message.monstergirls.died_at": " (at %s %s %s)",
   "monstergirls.configuration.friendNotices": "Friend Notices",
-  "message.monstergirls.helped_up": "You help %s up; she stays close to you"
+  "message.monstergirls.helped_up": "You help %s up; she stays close to you",
+  "commands.monstergirls.friends.unloaded": " %s: last seen at %s %s %s in %s, %s",
+  "message.monstergirls.seen_now": "just now",
+  "message.monstergirls.seen_minutes": "%s min ago",
+  "message.monstergirls.seen_days": "%s days ago",
+  "message.monstergirls.compass_last": "None nearby; %s was last seen %s blocks %s"
 }
