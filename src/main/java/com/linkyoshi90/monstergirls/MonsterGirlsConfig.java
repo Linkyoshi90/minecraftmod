@@ -92,6 +92,10 @@ public final class MonsterGirlsConfig {
             .comment("Friends told to follow you who are within 16 blocks come along when you go through a portal.")
             .define("travelTogether", true);
 
+    public static final ModConfigSpec.BooleanValue FRIEND_NOTICES = BUILDER
+            .comment("Friends tell you how things stand: a warning when one is badly hurt, and a line when your friendship reaches a milestone.")
+            .define("friendNotices", true);
+
     public static final ModConfigSpec.BooleanValue FRIENDS_FAINT = BUILDER
             .comment("A friend who would die faints instead: she keeps a quarter of her health, sits down and waits for you to help her up.",
                     "She can't faint twice within a minute, and /kill or the void still kill her.")
@@ -204,6 +208,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean travelTogether() {
         return SPEC.isLoaded() ? TRAVEL_TOGETHER.get() : TRAVEL_TOGETHER.getDefault();
+    }
+
+    public static boolean friendNotices() {
+        return SPEC.isLoaded() ? FRIEND_NOTICES.get() : FRIEND_NOTICES.getDefault();
     }
 
     public static boolean friendsFaint() {

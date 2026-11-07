@@ -31,7 +31,7 @@ import java.util.UUID;
  *   <li>Sneak + right-click: when to fight. Hostile (goes for hostile mobs), neutral (defends herself and you),
  *   self-defence (only hits back) or peaceful (never fights). Until someone sets one she follows her instincts.</li>
  * </ul>
- * Companions (two who are both fond of the same player) never hurt or target each other, and never their player.
+ * Companions (two who are both fond of the same player) never hurt or target each other, their player or that player's tamed pets.
  */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class Orders {
@@ -210,10 +210,11 @@ public final class Orders {
         if (b == null || a == b || !(a instanceof Bonded ba)) return false;
         if (b instanceof Player p) return ba.getAffection(p) >= AFFECTION;
         UUID friend = Kinship.friendOf(b);
+        UUID owner = b instanceof net.minecraft.world.entity.OwnableEntity pet ? pet.getOwnerUUID() : null;   // a tamed wolf, cat, horse or parrot
         for (Player p : a.level().players()) {
             if (ba.getAffection(p) < AFFECTION) continue;
             if (b instanceof Bonded bb && bb.getAffection(p) >= AFFECTION) return true;
-            if (p.getUUID().equals(friend)) return true;
+            if (p.getUUID().equals(friend) || p.getUUID().equals(owner)) return true;
         }
         return false;
     }

@@ -31,7 +31,7 @@ public final class Milestones {
     /** Tells the player, if this gain crossed a milestone. */
     public static void after(Mob mob, @Nullable Player player, int before, int after) {
         int i = crossed(before, after);
-        if (i < 0 || player == null || mob.level().isClientSide) return;
+        if (i < 0 || player == null || !com.linkyoshi90.monstergirls.MonsterGirlsConfig.friendNotices() || mob.level().isClientSide) return;
         player.displayClientMessage(Component.translatable("message.monstergirls.milestone." + KEYS[i], mob.getDisplayName())
                 .withStyle(ChatFormatting.LIGHT_PURPLE), false);
         if (player instanceof net.minecraft.server.level.ServerPlayer sp) sp.playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.NEUTRAL, 1.0F, 1.2F);

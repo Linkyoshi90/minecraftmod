@@ -30,7 +30,7 @@ public final class HurtAlert {
     public static List<ServerPlayer> warn(Mob mob, float before) {
         List<ServerPlayer> warned = new ArrayList<>();
         float line = mob.getMaxHealth() * LINE;
-        if (!(mob instanceof Bonded b) || !(mob.level() instanceof ServerLevel level) || !mob.isAlive() || before < line || mob.getHealth() >= line) return warned;
+        if (!com.linkyoshi90.monstergirls.MonsterGirlsConfig.friendNotices() || !(mob instanceof Bonded b) || !(mob.level() instanceof ServerLevel level) || !mob.isAlive() || before < line || mob.getHealth() >= line) return warned;
         for (ServerPlayer p : level.players()) {
             if (b.getAffection(p) < Orders.AFFECTION || p.distanceToSqr(mob) > REACH * REACH) continue;
             p.displayClientMessage(Component.translatable("message.monstergirls.friend_hurt", mob.getDisplayName(), (int) p.distanceTo(mob))

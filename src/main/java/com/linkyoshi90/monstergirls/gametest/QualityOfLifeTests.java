@@ -222,4 +222,22 @@ public class QualityOfLifeTests {
         HarpyTestUtil.remove(player);
         helper.succeed();
     }
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "friendsSpareYourPets")
+    public static void friendsSpareYourPets(GameTestHelper helper) {
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2), "qol-petowner");
+        AbstractMonsterGirl friend = spawn(helper, GirlSpecies.HORSE_CENTAUR, new BlockPos(6, 2, 6));
+        friend.setAffection(player.getUUID(), Orders.AFFECTION);
+        net.minecraft.world.entity.animal.Wolf pet = helper.spawn(net.minecraft.world.entity.EntityType.WOLF, new BlockPos(8, 2, 8));
+        net.minecraft.world.entity.animal.Wolf stray = helper.spawn(net.minecraft.world.entity.EntityType.WOLF, new BlockPos(10, 2, 10));
+        pet.tame(player);
+        check(Orders.companions(friend, pet), "her friend's wolf is on her side");
+        check(!Orders.companions(friend, stray), "a stray is not");
+        friend.setTarget(pet);
+        check(friend.getTarget() == null, "she never goes for it");
+        float health = pet.getHealth();
+        pet.hurt(friend.damageSources().mobAttack(friend), 4);
+        check(pet.getHealth() == health, "nor hurts it");
+        HarpyTestUtil.remove(player);
+        helper.succeed();
+    }
 }

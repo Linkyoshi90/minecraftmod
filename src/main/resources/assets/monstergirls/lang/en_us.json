@@ -3239,5 +3239,6 @@
   "message.monstergirls.milestone.devoted": "%s is devoted to you now",
   "message.monstergirls.milestone.fondest": "%s could not be any fonder of you",
   "item.monstergirls.stick.tip": "Use on a monster girl friend: orders; sneak: her stance",
-  "message.monstergirls.died_at": " (at %s %s %s)"
+  "message.monstergirls.died_at": " (at %s %s %s)",
+  "monstergirls.configuration.friendNotices": "Friend Notices"
 }
