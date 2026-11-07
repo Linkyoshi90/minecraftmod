@@ -1,0 +1,29 @@
+package com.linkyoshi90.monstergirls.registry;
+
+import com.google.common.collect.ImmutableSet;
+import com.linkyoshi90.monstergirls.MonsterGirlsMod;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+/** The exchange liaison (entity/Liaison): a villager who works at the exchange desk. */
+public final class ModVillagers {
+    public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(Registries.POINT_OF_INTEREST_TYPE, MonsterGirlsMod.MODID);
+    public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(Registries.VILLAGER_PROFESSION, MonsterGirlsMod.MODID);
+
+    public static final ResourceKey<PoiType> DESK_KEY = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, MonsterGirlsMod.id("exchange_desk"));
+
+    public static final DeferredHolder<PoiType, PoiType> DESK = POI_TYPES.register("exchange_desk",
+            () -> new PoiType(ImmutableSet.copyOf(ModBlocks.EXCHANGE_DESK.get().getStateDefinition().getPossibleStates()), 1, 1));
+
+    public static final DeferredHolder<VillagerProfession, VillagerProfession> LIAISON = PROFESSIONS.register("liaison",
+            () -> new VillagerProfession("liaison", holder -> holder.is(DESK_KEY), holder -> holder.is(DESK_KEY),
+                    ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER));
+
+    private ModVillagers() {
+    }
+}

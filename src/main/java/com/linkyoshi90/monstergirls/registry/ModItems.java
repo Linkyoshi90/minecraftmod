@@ -215,6 +215,9 @@ public final class ModItems {
     public static final DeferredItem<net.minecraft.world.item.ItemNameBlockItem> HEARTFRUIT = ITEMS.register("heartfruit",
             () -> new net.minecraft.world.item.ItemNameBlockItem(ModBlocks.HEARTFRUIT_BUSH.get(),
                     new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.5F).build())));
+    /** The exchange liaison's desk, and the permit she issues (entity/Liaison). */
+    public static final DeferredItem<BlockItem> EXCHANGE_DESK = ITEMS.registerSimpleBlockItem(ModBlocks.EXCHANGE_DESK);
+    public static final DeferredItem<Item> HOMESTAY_PERMIT = ITEMS.registerSimpleItem("homestay_permit", new Item.Properties().stacksTo(1));
     /** Clothes for her wardrobe (entity/Wardrobe): she wears them over her own when the moment comes. */
     public static final DeferredItem<Item> RAINCOAT = ITEMS.registerSimpleItem("raincoat", new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> WINTER_COAT = ITEMS.registerSimpleItem("winter_coat", new Item.Properties().stacksTo(1));

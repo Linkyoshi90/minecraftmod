@@ -136,5 +136,9 @@ public final class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).randomTicks().noCollission().instabreak().sound(SoundType.SWEET_BERRY_BUSH)
                     .pushReaction(PushReaction.DESTROY));
 
+    /** The exchange liaison's workstation (registry/ModVillagers, entity/Liaison). */
+    public static final DeferredBlock<net.minecraft.world.level.block.Block> EXCHANGE_DESK = BLOCKS.registerSimpleBlock("exchange_desk",
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.5F).sound(SoundType.WOOD));
+
     private ModBlocks() {}
 }
