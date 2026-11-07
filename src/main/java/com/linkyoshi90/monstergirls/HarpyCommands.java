@@ -110,6 +110,10 @@ public final class HarpyCommands {
         net.minecraft.network.chat.MutableComponent bond = bonded.describeBond(player).copy();
         Component missed = com.linkyoshi90.monstergirls.entity.Missing.describe((Mob) bonded, player);
         if (missed != null) bond.append(missed);
+        com.linkyoshi90.monstergirls.entity.Orders.Command order = com.linkyoshi90.monstergirls.entity.Orders.current(bonded);
+        if (order != com.linkyoshi90.monstergirls.entity.Orders.Command.FREE_ROAM && bonded.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {
+            bond.append(Component.literal(" · ")).append(Component.translatable("jade.monstergirls.order." + order.name().toLowerCase(java.util.Locale.ROOT)).withStyle(ChatFormatting.BLUE));
+        }
         return bonded.getGestation().isCarrying() ? bond.append(Component.translatable("bond.monstergirls.expecting")) : bond;
     }
 }

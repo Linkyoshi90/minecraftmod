@@ -172,4 +172,40 @@ public class QualityOfLifeTests {
         check(wait != null && wait.distanceTo(friend.position()) < 1.5, "with her player gone she waits where she is: " + wait);
         helper.succeed();
     }
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "followerTakesTheBoatSeat")
+    public static void followerTakesTheBoatSeat(GameTestHelper helper) {
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5), "qol-boater");
+        AbstractMonsterGirl friend = spawn(helper, GirlSpecies.BAKENEKO_NEKOMATA, new BlockPos(7, 2, 7));
+        AbstractMonsterGirl broad = spawn(helper, GirlSpecies.HORSE_CENTAUR, new BlockPos(3, 2, 3));
+        for (AbstractMonsterGirl g : List.of(friend, broad)) {
+            g.setAffection(player.getUUID(), Orders.AFFECTION);
+            g.getOrders().set(Orders.Command.FOLLOW, player, null);
+        }
+        net.minecraft.world.phys.Vec3 at = helper.absoluteVec(new net.minecraft.world.phys.Vec3(5.5, 2, 5.5));
+        net.minecraft.world.entity.vehicle.Boat boat = new net.minecraft.world.entity.vehicle.Boat(helper.getLevel(), at.x, at.y, at.z);
+        helper.getLevel().addFreshEntity(boat);
+        player.startRiding(boat, true);
+        com.linkyoshi90.monstergirls.entity.BoatBuddies.tick(player);
+        check(friend.getVehicle() == boat, "she takes the free seat");
+        check(broad.getVehicle() == null, "a centaur is too broad for a boat");
+        player.stopRiding();
+        com.linkyoshi90.monstergirls.entity.BoatBuddies.tick(player);
+        check(friend.getVehicle() == null, "and gets out when her player does");
+        boat.discard();
+        HarpyTestUtil.remove(player);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "badlyHurtFriendIsHeard")
+    public static void badlyHurtFriendIsHeard(GameTestHelper helper) {
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2), "qol-listener");
+        AbstractMonsterGirl friend = spawn(helper, GirlSpecies.HORSE_CENTAUR, new BlockPos(6, 2, 6));
+        friend.setAffection(player.getUUID(), Orders.AFFECTION);
+        float max = friend.getMaxHealth();
+        friend.setHealth(max * 0.2F);
+        check(com.linkyoshi90.monstergirls.entity.HurtAlert.warn(friend, max * 0.5F).contains(player), "her friend hears she is badly hurt");
+        check(com.linkyoshi90.monstergirls.entity.HurtAlert.warn(friend, max * 0.25F).isEmpty(), "only once, as she crosses the line");
+        HarpyTestUtil.remove(player);
+        helper.succeed();
+    }
 }
