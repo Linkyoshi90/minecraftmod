@@ -73,6 +73,15 @@ public final class RealmAtmosphere {
         return Mth.lerp(partialTick, last, strength);
     }
 
+    /** Deep in the realm the music changes: the crimson forest's uneasy score, as long as you stay. */
+    @SubscribeEvent
+    public static void onMusic(net.neoforged.neoforge.client.event.SelectMusicEvent event) {
+        if (strength < 0.6F || Minecraft.getInstance().player == null || Minecraft.getInstance().player.level().dimension() != Level.OVERWORLD) return;
+        event.setMusic(REALM_MUSIC);
+    }
+
+    private static final net.minecraft.sounds.Music REALM_MUSIC = net.minecraft.sounds.Musics.createGameMusic(SoundEvents.MUSIC_BIOME_CRIMSON_FOREST);
+
     @SubscribeEvent
     public static void onFogColour(ViewportEvent.ComputeFogColor event) {
         float s = now((float) event.getPartialTick()) * 0.75F;

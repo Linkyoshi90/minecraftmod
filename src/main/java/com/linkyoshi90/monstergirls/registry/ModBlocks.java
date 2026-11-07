@@ -128,7 +128,7 @@ public final class ModBlocks {
     /** Demon Realm grass: grows around a Lilith and spreads in the dark (RealmGrassBlock, entity/DemonRealm). */
     public static final DeferredBlock<com.linkyoshi90.monstergirls.block.RealmGrassBlock> REALM_GRASS = BLOCKS.registerBlock("realm_grass",
             com.linkyoshi90.monstergirls.block.RealmGrassBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_MAGENTA).randomTicks().strength(0.6F).sound(SoundType.GRASS));
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_MAGENTA).randomTicks().strength(0.6F).sound(SoundType.NYLIUM));
 
     /** The bush that bears heartfruit, on realm grass only (HeartfruitBushBlock). */
     public static final DeferredBlock<com.linkyoshi90.monstergirls.block.HeartfruitBushBlock> HEARTFRUIT_BUSH = BLOCKS.registerBlock("heartfruit_bush",
@@ -145,7 +145,7 @@ public final class ModBlocks {
     /** A trunk the realm has crept up: dark, violet-veined bark that remembers its wood (RealmLogBlock). */
     public static final DeferredBlock<com.linkyoshi90.monstergirls.block.RealmLogBlock> REALM_LOG = BLOCKS.registerBlock("realm_log",
             com.linkyoshi90.monstergirls.block.RealmLogBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.OAK_LOG).mapColor(MapColor.COLOR_PURPLE).lightLevel(s -> 2));
+            BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.OAK_LOG).mapColor(MapColor.COLOR_PURPLE).lightLevel(s -> 2).sound(SoundType.STEM));
 
     /** The weepcap: a pale glowing realm mushroom weeping droplets from its rim (WeepcapBlock). */
     public static final DeferredBlock<com.linkyoshi90.monstergirls.block.WeepcapBlock> WEEPCAP = BLOCKS.registerBlock("weepcap",
