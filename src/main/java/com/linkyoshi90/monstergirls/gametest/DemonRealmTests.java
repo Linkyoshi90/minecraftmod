@@ -267,4 +267,17 @@ public class DemonRealmTests {
         check(grown > 3 && roots > 0, "the realm's own plants: " + grown);
         helper.succeed();
     }
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "vinesStayFew")
+    public static void vinesStayFew(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos base = ground(helper, 7, 7).above(5);
+        for (BlockPos p : BlockPos.betweenClosed(base.offset(-2, 0, -2), base.offset(2, 0, 2))) {
+            level.setBlockAndUpdate(p.immutable(), Blocks.OAK_LEAVES.defaultBlockState().setValue(net.minecraft.world.level.block.LeavesBlock.PERSISTENT, true));
+            com.linkyoshi90.monstergirls.block.RealmLeavesBlock.corrupt(level, p.immutable());
+        }
+        int hung = 0;
+        for (BlockPos p : BlockPos.betweenClosed(base.offset(-1, 0, -1), base.offset(1, 0, 1))) if (com.linkyoshi90.monstergirls.block.RealmLeavesBlock.hangVine(level, p.immutable())) hung++;
+        check(hung == 2, "a few strands, not a curtain: " + hung);
+        helper.succeed();
+    }
 }

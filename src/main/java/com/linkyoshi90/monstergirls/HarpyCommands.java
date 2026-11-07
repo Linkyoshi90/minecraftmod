@@ -121,6 +121,8 @@ public final class HarpyCommands {
         if (season != null) bond.append(season);
         Component wed = com.linkyoshi90.monstergirls.entity.Marriage.describe((Mob) bonded, player);
         if (wed != null) bond.append(wed);
+        Component changed = com.linkyoshi90.monstergirls.entity.Monsterization.describe((Mob) bonded);
+        if (changed != null) bond.append(changed);
         com.linkyoshi90.monstergirls.entity.Orders.Command order = com.linkyoshi90.monstergirls.entity.Orders.current(bonded);
         if (order != com.linkyoshi90.monstergirls.entity.Orders.Command.FREE_ROAM && bonded.getAffection(player) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION) {
             bond.append(Component.literal(" · ")).append(Component.translatable("jade.monstergirls.order." + order.name().toLowerCase(java.util.Locale.ROOT)).withStyle(ChatFormatting.BLUE));

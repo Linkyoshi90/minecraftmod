@@ -45,6 +45,7 @@ public class MonsterizationTests {
         check(girl.hasCustomName() && "Bessie".equals(girl.getCustomName().getString()) && girl.isPersistenceRequired(), "her name kept, and she stays");
         ServerPlayer stranger = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
         check(Monsterization.monsterized(girl) && girl.trustsEnoughForBed(stranger) && girl.bedChanceFor(stranger) >= Monsterization.EAGER, "eager for a stranger's bed");
+        check(Monsterization.describe(girl) != null, "her bond says what happened to her");
         AbstractMonsterGirl born = spawn(helper, GirlSpecies.CATTLE_MINOTAUR, new BlockPos(11, 2, 3));
         check(!Monsterization.monsterized(born) && !born.trustsEnoughForBed(stranger) && born.bedChanceFor(stranger) == 0.0F, "one born a holstaur waits for friendship");
         girl.setFather(stranger.getUUID());

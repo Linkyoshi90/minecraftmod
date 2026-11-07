@@ -153,6 +153,20 @@ public final class Monsterization {
         return mob.getPersistentData().getBoolean(MONSTERIZED);
     }
 
+    /** A line for /monstergirls bonds, or null. */
+    @Nullable
+    public static Component describe(net.minecraft.world.entity.Mob mob) {
+        return monsterized(mob) ? Component.translatable("bond.monstergirls.monsterized").withStyle(net.minecraft.ChatFormatting.DARK_PURPLE) : null;
+    }
+
+    /** Now and then the realm's haze still rises from her. */
+    @SubscribeEvent
+    public static void onHaze(EntityTickEvent.Post event) {
+        if (event.getEntity().tickCount % 61 != 0 || !(event.getEntity() instanceof AbstractMonsterGirl girl) || !(girl.level() instanceof ServerLevel level)
+                || !monsterized(girl)) return;
+        level.sendParticles(RealmGrassBlock.HAZE, girl.getX(), girl.getY() + girl.getBbHeight() * 0.6, girl.getZ(), 3, 0.3, 0.4, 0.3, 0.0);
+    }
+
     /** Her odds tonight with a player (0 if she isn't one who changed). */
     public static float eagerness(AbstractMonsterGirl girl, Player player) {
         return monsterized(girl) ? Math.min(1.0F, EAGER + girl.getAffection(player) / 400.0F) : 0.0F;

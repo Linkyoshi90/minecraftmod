@@ -129,6 +129,10 @@ public class RealmLeavesBlock extends LeavesBlock {
     public static boolean hangVine(net.minecraft.world.level.LevelAccessor level, BlockPos pos) {
         BlockPos below = pos.below();
         if (!level.isEmptyBlock(below) || !level.isEmptyBlock(below.below())) return false;
+        int near = 0;                                                         // a few strands, not a curtain
+        for (BlockPos p : BlockPos.betweenClosed(below.offset(-2, -1, -2), below.offset(2, 1, 2))) {
+            if (level.getBlockState(p).is(Blocks.WEEPING_VINES) && ++near >= 2) return false;
+        }
         level.setBlock(below, Blocks.WEEPING_VINES.defaultBlockState().setValue(net.minecraft.world.level.block.GrowingPlantHeadBlock.AGE, 22), Block.UPDATE_ALL);
         return true;
     }
