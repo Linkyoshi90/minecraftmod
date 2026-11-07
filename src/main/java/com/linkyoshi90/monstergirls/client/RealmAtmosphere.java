@@ -53,7 +53,7 @@ public final class RealmAtmosphere {
         Minecraft mc = Minecraft.getInstance();
         Player p = mc.player;
         if (p == null || mc.level == null || mc.isPaused()) return;
-        if (p.tickCount % 10 == 0) target = density(mc.level, p.blockPosition());
+        if (p.tickCount % 10 == 0) target = com.linkyoshi90.monstergirls.MonsterGirlsConfig.realmFog() ? density(mc.level, p.blockPosition()) : 0.0F;
         last = strength;
         strength += (target - strength) * 0.04F;
         if (strength < 0.02F) return;

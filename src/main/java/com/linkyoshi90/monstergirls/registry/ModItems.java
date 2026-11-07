@@ -215,6 +215,11 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> REALM_LEAVES = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_LEAVES);
     public static final DeferredItem<BlockItem> REALM_LOG = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_LOG);
     public static final DeferredItem<BlockItem> WEEPCAP = ITEMS.registerSimpleBlockItem(ModBlocks.WEEPCAP);
+    /** Weepcap stew: the realm's pale mushrooms let you see in the dark for a while. */
+    public static final DeferredItem<Item> WEEPCAP_STEW = ITEMS.registerItem("weepcap_stew", props -> new Item(props.stacksTo(1)
+            .craftRemainder(net.minecraft.world.item.Items.BOWL)
+            .food(new FoodProperties.Builder().nutrition(5).saturationModifier(0.6F).usingConvertsTo(net.minecraft.world.item.Items.BOWL)
+                    .effect(() -> new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.NIGHT_VISION, 1200, 0), 1.0F).build())));
     public static final DeferredItem<net.minecraft.world.item.ItemNameBlockItem> HEARTFRUIT = ITEMS.register("heartfruit",
             () -> new net.minecraft.world.item.ItemNameBlockItem(ModBlocks.HEARTFRUIT_BUSH.get(),
                     new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.5F).build())));

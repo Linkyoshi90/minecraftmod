@@ -359,8 +359,29 @@ def realm_log():
     return side, top
 
 
+def weepcap_stew():
+    """a wooden bowl of pale blue broth with a weepcap cap floating in it"""
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    px = img.load()
+    wood, wood_dark, broth, cap = rgb("#8A5A30"), rgb("#5A3A1E"), rgb("#A8D8F0"), rgb("#E4F2FA")
+    for y in range(8, 14):
+        half = 7 - (y - 8) // 2 if y > 9 else 7
+        for x in range(8 - half, 8 + half):
+            px[x, y] = wood if y > 8 else broth
+    for x in range(2, 14):
+        px[x, 8] = broth
+        px[x, 9] = broth if 3 <= x <= 12 else wood_dark
+    for x in range(5, 11):
+        px[x, 7] = cap
+    for x in (6, 7, 8, 9):
+        px[x, 6] = cap
+    for x in range(4, 12):
+        px[x, 13] = wood_dark
+    return save(img, "item", "weepcap_stew.png")
+
+
 def preview(path):
-    tiles = [realm_top(), realm_side(), realm_leaves(), *realm_log(), weepcap()] + [bush(s) for s in range(4)] + [heartfruit(), holy_water()]
+    tiles = [realm_top(), realm_side(), realm_leaves(), *realm_log(), weepcap(), weepcap_stew()] + [bush(s) for s in range(4)] + [heartfruit(), holy_water()]
     sheet = Image.new("RGBA", (len(tiles) * 18 * 6, 18 * 6), (40, 40, 48, 255))
     for i, t in enumerate(tiles):
         sheet.paste(t.resize((96, 96), Image.NEAREST), (i * 108 + 6, 6), t.resize((96, 96), Image.NEAREST))
@@ -380,6 +401,7 @@ def main():
     data()
     realm_plant_data()
     realm_log()
+    weepcap_stew()
     if "--preview" in sys.argv:
         preview(sys.argv[sys.argv.index("--preview") + 1])
 

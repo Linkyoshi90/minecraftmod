@@ -130,6 +130,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue MILK_DRIPS;
     public static final ModConfigSpec.BooleanValue FLIRTING;
     public static final ModConfigSpec.BooleanValue DEMON_REALM;
+    public static final ModConfigSpec.BooleanValue REALM_FOG;
     public static final ModConfigSpec.BooleanValue LUCKY_MOMENTS;
     public static final ModConfigSpec.BooleanValue MONSTERIZATION;
     public static final ModConfigSpec.BooleanValue DREAM_VISITS;
@@ -154,6 +155,10 @@ public final class MonsterGirlsConfig {
         DEMON_REALM = BUILDER
                 .comment("A wild Lilith grows Demon Realm grass around her, and it spreads in the dark until light or holy water drives it back. Off: no new realm grows or spreads.")
                 .define("demonRealm", true);
+
+        REALM_FOG = BUILDER
+                .comment("Inside the Demon Realm a rose-violet fog closes in, haze drifts and distant sighs play (client side).")
+                .define("realmFog", true);
 
         LUCKY_MOMENTS = BUILDER
                 .comment("Slapstick moments: a bathing girl who catches you looking splashes you (a close friend just blushes), and friends beside you now and then trip into you.")
@@ -339,6 +344,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean luckyMoments() {
         return SPEC.isLoaded() ? LUCKY_MOMENTS.get() : LUCKY_MOMENTS.getDefault();
+    }
+
+    public static boolean realmFog() {
+        return SPEC.isLoaded() ? REALM_FOG.get() : REALM_FOG.getDefault();
     }
 
     public static boolean demonRealm() {

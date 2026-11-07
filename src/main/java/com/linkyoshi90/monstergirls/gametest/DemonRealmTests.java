@@ -256,4 +256,15 @@ public class DemonRealmTests {
         check(level.getBlockState(trunk.above(2)).is(ModBlocks.REALM_LOG.get()) && level.getBlockState(trunk.above(4)).is(ModBlocks.REALM_LEAVES.get()), "the tree over it turned");
         helper.succeed();
     }
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "boneMealOnTheRealm")
+    public static void boneMealOnTheRealm(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos g = ground(helper, 7, 7);
+        for (BlockPos p : BlockPos.betweenClosed(g.offset(-3, 0, -3), g.offset(3, 0, 3))) RealmGrassBlock.corrupt(level, p.immutable());
+        int grown = RealmGrassBlock.bloom(level, g, level.random);
+        int roots = 0;
+        for (BlockPos p : BlockPos.betweenClosed(g.offset(-3, 1, -3), g.offset(3, 1, 3))) if (level.getBlockState(p).is(Blocks.CRIMSON_ROOTS)) roots++;
+        check(grown > 3 && roots > 0, "the realm's own plants: " + grown);
+        helper.succeed();
+    }
 }

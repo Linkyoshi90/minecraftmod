@@ -134,6 +134,7 @@ public final class ModBlocks {
     public static final DeferredBlock<com.linkyoshi90.monstergirls.block.HeartfruitBushBlock> HEARTFRUIT_BUSH = BLOCKS.registerBlock("heartfruit_bush",
             com.linkyoshi90.monstergirls.block.HeartfruitBushBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).randomTicks().noCollission().instabreak().sound(SoundType.SWEET_BERRY_BUSH)
+                    .lightLevel(s -> s.getValue(com.linkyoshi90.monstergirls.block.HeartfruitBushBlock.AGE) == 3 ? 5 : 0)
                     .pushReaction(PushReaction.DESTROY));
 
     /** Leaves the Demon Realm has crept into: they weep violet sap and remember what they were (RealmLeavesBlock). */

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "monstergirls:weepcap"
+    },
+    {
+      "item": "monstergirls:weepcap"
+    },
+    {
+      "item": "minecraft:bowl"
+    }
+  ],
+  "result": {
+    "id": "monstergirls:weepcap_stew",
+    "count": 1
+  }
+}

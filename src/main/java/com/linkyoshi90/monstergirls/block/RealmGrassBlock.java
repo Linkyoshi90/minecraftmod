@@ -23,7 +23,7 @@ import org.joml.Vector3f;
  * Each patch knows how far it is from where the realm was seeded ({@link #DEPTH}): it spreads no further than {@link #MAX_DEPTH} blocks
  * past its source, so a realm grows to its size round a Lilith (or a wild patch) and stops there, instead of swallowing the world.
  */
-public class RealmGrassBlock extends SnowyDirtBlock {
+public class RealmGrassBlock extends SnowyDirtBlock implements net.minecraft.world.level.block.BonemealableBlock {
     public static final MapCodec<RealmGrassBlock> CODEC = simpleCodec(RealmGrassBlock::new);
     /** Block light (not daylight) at or above this keeps the realm away. */
     public static final int LIGHT = 8;
@@ -114,6 +114,40 @@ public class RealmGrassBlock extends SnowyDirtBlock {
         if (depth >= MAX_DEPTH) return null;
         BlockPos to = pos.offset(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
         return corrupt(level, to, depth + 1) ? to : null;
+    }
+
+    // --- bone meal: the realm's own plants, as grass grows its own ------------------------------------------------------
+
+    @Override
+    public boolean isValidBonemealTarget(net.minecraft.world.level.LevelReader level, BlockPos pos, BlockState state) {
+        return level.getBlockState(pos.above()).isAir();
+    }
+
+    @Override
+    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
+        return true;
+    }
+
+    @Override
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+        bloom(level, pos, random);
+    }
+
+    /** Crimson roots on the bare realm grass round a spot, a weepcap or heartfruit bush now and then. How many plants grew. */
+    public static int bloom(net.minecraft.world.level.LevelAccessor level, BlockPos pos, RandomSource random) {
+        int grown = 0;
+        for (int i = 0; i < 24; i++) {
+            BlockPos ground = pos.offset(random.nextInt(7) - 3, random.nextInt(3) - 1, random.nextInt(7) - 3);
+            if (!level.getBlockState(ground).is(ModBlocks.REALM_GRASS.get()) || !level.isEmptyBlock(ground.above())) continue;
+            int roll = random.nextInt(12);
+            if (roll == 0 && WeepcapBlock.sprout(level, ground)) grown++;
+            else if (roll == 1 && HeartfruitBushBlock.sprout(level, ground)) grown++;
+            else if (roll > 1) {
+                level.setBlock(ground.above(), Blocks.CRIMSON_ROOTS.defaultBlockState(), Block.UPDATE_ALL);
+                grown++;
+            }
+        }
+        return grown;
     }
 
     @Override
