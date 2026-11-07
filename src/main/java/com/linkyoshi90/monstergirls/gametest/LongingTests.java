@@ -27,6 +27,7 @@ public class LongingTests {
     private static AbstractMonsterGirl still(GameTestHelper helper, BlockPos at) {
         AbstractMonsterGirl girl = spawn(helper, GirlSpecies.SERVAL_NEKOMATA, at);
         girl.setNoAi(true);
+        com.linkyoshi90.monstergirls.entity.MatingSeason.settle(girl);
         return girl;
     }
 

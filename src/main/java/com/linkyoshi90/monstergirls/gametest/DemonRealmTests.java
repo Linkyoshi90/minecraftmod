@@ -128,6 +128,8 @@ public class DemonRealmTests {
         AbstractMonsterGirl girl = spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(2, 2, 2)), away = spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(11, 2, 11));
         girl.setNoAi(true);
         away.setNoAi(true);
+        com.linkyoshi90.monstergirls.entity.MatingSeason.settle(girl);
+        com.linkyoshi90.monstergirls.entity.MatingSeason.settle(away);
         RealmGrassBlock.corrupt(level, ground(helper, 2, 2));
         ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
         check(DemonRealm.inRealm(girl) && !DemonRealm.inRealm(away), "standing in it");
@@ -146,6 +148,7 @@ public class DemonRealmTests {
         AbstractMonsterGirl girl = spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(2, 2, 2)), shy = spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(6, 2, 2));
         girl.setNoAi(true);
         shy.setNoAi(true);
+        com.linkyoshi90.monstergirls.entity.MatingSeason.settle(girl);
         ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 2)), other = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 4), "other");
         girl.addAffection(p, 60);
         girl.addAffection(other, 60);

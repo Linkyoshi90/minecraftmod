@@ -117,6 +117,7 @@ public class TwentyNinthWaveTests {
     @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "sheMissedYou")
     public static void sheMissedYou(GameTestHelper helper) {
         AbstractMonsterGirl g = still(helper, GirlSpecies.WOLF_CANID, new BlockPos(1, 2, 1));
+        com.linkyoshi90.monstergirls.entity.MatingSeason.settle(g);
         ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
         g.setAffection(p.getUUID(), 50);
         apart(g, p, 5);
@@ -138,6 +139,7 @@ public class TwentyNinthWaveTests {
         AbstractMonsterGirl g = still(helper, GirlSpecies.WOLF_CANID, new BlockPos(1, 2, 1));
         ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
         g.setAffection(p.getUUID(), 30);
+        com.linkyoshi90.monstergirls.entity.MatingSeason.settle(g);
         apart(g, p, 400);
         Missing.meet(g, p);
         check(g.getAffection(p) == Bonded.BED_AFFECTION, "she stays a friend");

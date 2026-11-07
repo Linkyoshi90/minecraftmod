@@ -43,10 +43,11 @@ public final class Flirting {
         return true;
     }
 
-    /** One pat in this many gets a tease: every pat when she is lovestruck with this player, every other one in the Demon Realm. */
+    /** One pat in this many gets a tease: every pat when she is lovestruck with this player, every other one in the Demon Realm, twice as often in her season. */
     public static int chance(net.minecraft.world.entity.Mob mob, Player player) {
         if (DemonRealm.lovestruck(mob, player)) return 1;
-        return DemonRealm.inRealm(mob) ? 2 : CHANCE;
+        int chance = DemonRealm.inRealm(mob) ? 2 : CHANCE;
+        return MatingSeason.inSeason(mob) ? Math.max(1, chance / 2) : chance;
     }
 
     /** Sharing the tub, a line of her own. */

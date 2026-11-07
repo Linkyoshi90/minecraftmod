@@ -133,6 +133,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue LUCKY_MOMENTS;
     public static final ModConfigSpec.BooleanValue MONSTERIZATION;
     public static final ModConfigSpec.BooleanValue DREAM_VISITS;
+    public static final ModConfigSpec.BooleanValue MATING_SEASON;
     public static final ModConfigSpec.BooleanValue MILK_EMBARRASSED;
     public static final ModConfigSpec.BooleanValue MILK_HARNESS;
     public static final ModConfigSpec.BooleanValue MILK_DISCOMFORT;
@@ -164,6 +165,10 @@ public final class MonsterGirlsConfig {
         DREAM_VISITS = BUILDER
                 .comment("Succubi visit your dreams: a close succubus friend brings a sweet dream (Luck in the morning); a wild one nearby feeds on some of your experience and leaves a heartfruit.")
                 .define("dreamVisits", true);
+
+        MATING_SEASON = BUILDER
+                .comment("Each branch of the tree of life has three restless days in every forty: grown friends cling to you, blush, flirt more and come to bed more readily. Cold calms them.")
+                .define("matingSeason", true);
 
         BUILDER.push("milking");
         MILK_DRIPS = BUILDER
@@ -309,6 +314,10 @@ public final class MonsterGirlsConfig {
 
     public static int conceptionChance() {
         return SPEC.isLoaded() ? CONCEPTION_CHANCE.get() : CONCEPTION_CHANCE.getDefault();
+    }
+
+    public static boolean matingSeason() {
+        return SPEC.isLoaded() ? MATING_SEASON.get() : MATING_SEASON.getDefault();
     }
 
     public static boolean dreamVisits() {
