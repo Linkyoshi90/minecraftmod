@@ -132,6 +132,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue DEMON_REALM;
     public static final ModConfigSpec.BooleanValue LUCKY_MOMENTS;
     public static final ModConfigSpec.BooleanValue MONSTERIZATION;
+    public static final ModConfigSpec.BooleanValue DREAM_VISITS;
     public static final ModConfigSpec.BooleanValue MILK_EMBARRASSED;
     public static final ModConfigSpec.BooleanValue MILK_HARNESS;
     public static final ModConfigSpec.BooleanValue MILK_DISCOMFORT;
@@ -159,6 +160,10 @@ public final class MonsterGirlsConfig {
         MONSTERIZATION = BUILDER
                 .comment("Grown vanilla animals and monsters that linger on Demon Realm grass in the dark turn into monster girls of their kind (a tamed pet stays her owner's friend).")
                 .define("monsterization", true);
+
+        DREAM_VISITS = BUILDER
+                .comment("Succubi visit your dreams: a close succubus friend brings a sweet dream (Luck in the morning); a wild one nearby feeds on some of your experience and leaves a heartfruit.")
+                .define("dreamVisits", true);
 
         BUILDER.push("milking");
         MILK_DRIPS = BUILDER
@@ -304,6 +309,10 @@ public final class MonsterGirlsConfig {
 
     public static int conceptionChance() {
         return SPEC.isLoaded() ? CONCEPTION_CHANCE.get() : CONCEPTION_CHANCE.getDefault();
+    }
+
+    public static boolean dreamVisits() {
+        return SPEC.isLoaded() ? DREAM_VISITS.get() : DREAM_VISITS.getDefault();
     }
 
     public static boolean monsterization() {
