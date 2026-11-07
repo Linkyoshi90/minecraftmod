@@ -120,6 +120,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     /** One wild girl in this many is painted, like a shiny. */
     private static final EntityDataAccessor<Integer> DATA_FLAGS = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> DATA_TAILS = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
+    /** What she is wearing over her own clothes (entity/Wardrobe.Outfit ordinal + 1; 0 for nothing). */
+    private static final EntityDataAccessor<Byte> DATA_OUTFIT = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
     /** What she is aiming (GirlArms.RangedGoal), for the client's aiming pose (client.AimPose). */
     private static final EntityDataAccessor<Byte> DATA_AIM = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
     public static final int AIM_NONE = 0, AIM_BOW = 1, AIM_CROSSBOW = 2, AIM_GUN = 3;
@@ -350,6 +352,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         builder.define(DATA_FLAGS, 0);
         builder.define(DATA_PAINT, 0);
         builder.define(DATA_TAILS, (byte) 1);
+        builder.define(DATA_OUTFIT, (byte) 0);
         builder.define(DATA_AIM, (byte) AIM_NONE);
     }
 
@@ -366,6 +369,14 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (this.getAction() != Action.NONE && this.getAction() != Action.SITTING && this.timedActionTicks <= 0) return;
         this.setAction(action);
         this.timedActionTicks = ticks;
+    }
+
+    public int getOutfit() {
+        return this.entityData.get(DATA_OUTFIT);
+    }
+
+    public void setOutfit(int outfit) {
+        this.entityData.set(DATA_OUTFIT, (byte) outfit);
     }
 
     public boolean hasFlag(int flag) {

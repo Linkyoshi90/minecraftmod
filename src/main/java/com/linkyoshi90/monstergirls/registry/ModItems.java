@@ -215,6 +215,11 @@ public final class ModItems {
     public static final DeferredItem<net.minecraft.world.item.ItemNameBlockItem> HEARTFRUIT = ITEMS.register("heartfruit",
             () -> new net.minecraft.world.item.ItemNameBlockItem(ModBlocks.HEARTFRUIT_BUSH.get(),
                     new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.5F).build())));
+    /** Clothes for her wardrobe (entity/Wardrobe): she wears them over her own when the moment comes. */
+    public static final DeferredItem<Item> RAINCOAT = ITEMS.registerSimpleItem("raincoat", new Item.Properties().stacksTo(1));
+    public static final DeferredItem<Item> WINTER_COAT = ITEMS.registerSimpleItem("winter_coat", new Item.Properties().stacksTo(1));
+    public static final DeferredItem<Item> YUKATA = ITEMS.registerSimpleItem("yukata", new Item.Properties().stacksTo(1));
+    public static final DeferredItem<Item> MAID_APRON = ITEMS.registerSimpleItem("maid_apron", new Item.Properties().stacksTo(1));
     /** Given to a devoted friend, a proposal (entity/Marriage). */
     public static final DeferredItem<Item> WEDDING_RING = ITEMS.registerSimpleItem("wedding_ring", new Item.Properties().stacksTo(1));
     public static final DeferredItem<com.linkyoshi90.monstergirls.item.HolyWaterItem> HOLY_WATER = ITEMS.register("holy_water",
