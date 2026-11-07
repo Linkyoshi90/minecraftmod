@@ -3260,5 +3260,22 @@
   "journal.monstergirls.koi_mermaid.signature.p1": "Good fortune & waterfall climb: A bonded koi in a pond within 32 blocks of you gives Luck (better fishing and loot). She swims up water columns.",
   "journal.monstergirls.koi_mermaid.signature.p2": "Ten days at full devotion turns her into a dragon koi (a golden glow mask and longer fins).",
   "journal.monstergirls.snapping_turtle_lizardfolk.signature.p1": "Tongue lure: While she sits still in water she catches a fish now and then and drops it at her feet (cod or salmon, at most three lying around at a time). Hit her and she hides in her shell.",
-  "journal.monstergirls.snapping_turtle_lizardfolk.signature.p2": "Her bite is the hardest in the family after the crocodile's."
+  "journal.monstergirls.snapping_turtle_lizardfolk.signature.p2": "Her bite is the hardest in the family after the crocodile's.",
+  "monstergirls.configuration.luckyMoments": "Lucky Moments",
+  "message.monstergirls.peek_caught.0": "%s shrieks and splashes water in your face: \"Don't look!\"",
+  "message.monstergirls.peek_caught.1": "%s: \"Eek! How long have you been standing there?!\"",
+  "message.monstergirls.peek_caught.2": "%s sinks to her chin and glares at you, bright red",
+  "message.monstergirls.peek_caught.3": "%s throws a wet sponge at you: \"Pervert!\"",
+  "message.monstergirls.peek_close.0": "%s notices you looking and sinks a little lower, blushing",
+  "message.monstergirls.peek_close.1": "%s: \"Enjoying the view? ...Turn around, silly.\"",
+  "message.monstergirls.peek_close.2": "%s pulls her towel tighter and laughs: \"You could just ask to join, you know\"",
+  "message.monstergirls.peek_close.3": "%s flicks a little water your way, pink-cheeked",
+  "message.monstergirls.trip.0": "%s trips and tumbles right into you. \"S-sorry!\"",
+  "message.monstergirls.trip.1": "%s stumbles and you both end up in a heap, red-faced",
+  "message.monstergirls.trip.2": "%s catches her foot and grabs you to keep from falling",
+  "message.monstergirls.trip.3": "%s bumps into you nose first and jumps back, flustered",
+  "message.monstergirls.trip_close.0": "%s trips into your arms and doesn't hurry to get up",
+  "message.monstergirls.trip_close.1": "%s falls against you: \"...Oops. Totally an accident.\"",
+  "message.monstergirls.trip_close.2": "%s stumbles into you and hides her red face in your shoulder",
+  "message.monstergirls.trip_close.3": "%s lands on top of you, blinks, and giggles"
 }

@@ -130,6 +130,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue MILK_DRIPS;
     public static final ModConfigSpec.BooleanValue FLIRTING;
     public static final ModConfigSpec.BooleanValue DEMON_REALM;
+    public static final ModConfigSpec.BooleanValue LUCKY_MOMENTS;
     public static final ModConfigSpec.BooleanValue MILK_EMBARRASSED;
     public static final ModConfigSpec.BooleanValue MILK_HARNESS;
     public static final ModConfigSpec.BooleanValue MILK_DISCOMFORT;
@@ -149,6 +150,10 @@ public final class MonsterGirlsConfig {
         DEMON_REALM = BUILDER
                 .comment("A wild Lilith grows Demon Realm grass around her, and it spreads in the dark until light or holy water drives it back. Off: no new realm grows or spreads.")
                 .define("demonRealm", true);
+
+        LUCKY_MOMENTS = BUILDER
+                .comment("Slapstick moments: a bathing girl who catches you looking splashes you (a close friend just blushes), and friends beside you now and then trip into you.")
+                .define("luckyMoments", true);
 
         BUILDER.push("milking");
         MILK_DRIPS = BUILDER
@@ -294,6 +299,10 @@ public final class MonsterGirlsConfig {
 
     public static int conceptionChance() {
         return SPEC.isLoaded() ? CONCEPTION_CHANCE.get() : CONCEPTION_CHANCE.getDefault();
+    }
+
+    public static boolean luckyMoments() {
+        return SPEC.isLoaded() ? LUCKY_MOMENTS.get() : LUCKY_MOMENTS.getDefault();
     }
 
     public static boolean demonRealm() {
