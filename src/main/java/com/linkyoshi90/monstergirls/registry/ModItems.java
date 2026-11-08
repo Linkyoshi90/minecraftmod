@@ -215,6 +215,7 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> REALM_LEAVES = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_LEAVES);
     public static final DeferredItem<BlockItem> REALM_LOG = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_LOG);
     public static final DeferredItem<BlockItem> WEEPCAP = ITEMS.registerSimpleBlockItem(ModBlocks.WEEPCAP);
+    public static final DeferredItem<BlockItem> REALM_CENSER = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_CENSER);
     /** Weepcap stew: the realm's pale mushrooms let you see in the dark for a while. */
     public static final DeferredItem<Item> WEEPCAP_STEW = ITEMS.registerItem("weepcap_stew", props -> new Item(props.stacksTo(1)
             .craftRemainder(net.minecraft.world.item.Items.BOWL)

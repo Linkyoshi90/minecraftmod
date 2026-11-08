@@ -71,7 +71,41 @@ public class RealmPatchFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private boolean place(WorldGenLevel level, BlockPos origin, RandomSource random) {
-        return placePatch(level, origin, random) > 0;
+        int taken = placePatch(level, origin, random);
+        if (taken > 0 && random.nextInt(SHRINE) == 0) {
+            BlockPos ground = new BlockPos(origin.getX(), level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, origin.getX(), origin.getZ()) - 1, origin.getZ());
+            placeShrine(level, ground, random);
+        }
+        return taken > 0;
+    }
+
+    /** One patch in this many has a shrine at its heart. */
+    public static final int SHRINE = 4;
+    public static final net.minecraft.resources.ResourceKey<net.minecraft.world.level.storage.loot.LootTable> SHRINE_LOOT =
+            net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.LOOT_TABLE, com.linkyoshi90.monstergirls.MonsterGirlsMod.id("chests/realm_shrine"));
+
+    /**
+     * A little shrine of the realm on this ground: a chiseled blackstone stone with a chest on it (the realm's gifts, SHRINE_LOOT),
+     * and at the corners blackstone pillars, each with one lit purple candle (dim, so the realm stays). True if it stood.
+     */
+    public static boolean placeShrine(WorldGenLevel level, BlockPos ground, RandomSource random) {
+        if (!level.getBlockState(ground.above()).canBeReplaced() || !level.getBlockState(ground.above(2)).canBeReplaced()) return false;
+        level.setBlock(ground, Blocks.CHISELED_POLISHED_BLACKSTONE.defaultBlockState(), Block.UPDATE_CLIENTS);
+        BlockPos chest = ground.above();
+        level.setBlock(chest, Blocks.CHEST.defaultBlockState().setValue(net.minecraft.world.level.block.ChestBlock.FACING,
+                net.minecraft.core.Direction.Plane.HORIZONTAL.getRandomDirection(random)), Block.UPDATE_CLIENTS);
+        net.minecraft.world.RandomizableContainer.setBlockEntityLootTable(level, random, chest, SHRINE_LOOT);
+        for (int dx : new int[]{-2, 2}) {
+            for (int dz : new int[]{-2, 2}) {
+                BlockPos foot = ground.offset(dx, 0, dz);
+                for (int dy = 1; dy <= 3; dy++) if (!level.getBlockState(foot.above(dy)).canBeReplaced()) foot = null;
+                if (foot == null || !level.getBlockState(foot).isSolid()) continue;
+                level.setBlock(foot.above(), Blocks.POLISHED_BLACKSTONE_BRICK_WALL.defaultBlockState(), Block.UPDATE_CLIENTS);
+                level.setBlock(foot.above(2), Blocks.POLISHED_BLACKSTONE_BRICK_WALL.defaultBlockState(), Block.UPDATE_CLIENTS);
+                level.setBlock(foot.above(3), Blocks.PURPLE_CANDLE.defaultBlockState().setValue(net.minecraft.world.level.block.CandleBlock.LIT, true), Block.UPDATE_CLIENTS);
+            }
+        }
+        return true;
     }
 
     /** The column above a patch of ground: its logs and leaves turned, vines under the leaves. */

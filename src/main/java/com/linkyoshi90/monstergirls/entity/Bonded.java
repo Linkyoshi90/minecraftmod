@@ -76,6 +76,7 @@ public interface Bonded {
     Orders getOrders();
 
     default boolean trustsEnoughForBed(Player player) {
+        if (this instanceof net.minecraft.world.entity.Mob m && Monsterization.monsterized(m)) return !player.getUUID().equals(this.getFather());   // the realm changed her: any sleeper
         return this.getAffection(player) >= BED_AFFECTION && !player.getUUID().equals(this.getFather());
     }
 
@@ -85,6 +86,7 @@ public interface Bonded {
      */
     /** Tonight's odds for this player (a succubus does not wait for friendship). */
     default float bedChanceFor(Player player) {
+        if (this instanceof net.minecraft.world.entity.Mob m && Monsterization.monsterized(m)) return Monsterization.EAGER;
         return bedChance(this.getAffection(player));
     }
 

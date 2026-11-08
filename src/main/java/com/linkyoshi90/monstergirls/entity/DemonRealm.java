@@ -61,6 +61,7 @@ public final class DemonRealm {
         if (!(com.linkyoshi90.monstergirls.registry.ModGirls.type(kind).create(level) instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl girl)) return null;
         girl.moveTo(ground.getX() + 0.5, ground.getY() + 1, ground.getZ() + 0.5, level.random.nextFloat() * 360.0F, 0.0F);
         girl.finalizeSpawn(level, level.getCurrentDifficultyAt(ground), net.minecraft.world.entity.MobSpawnType.EVENT, null);
+        girl.restrictTo(ground, 16);                                    // she keeps to the realm she came out of
         level.addFreshEntity(girl);
         level.sendParticles(com.linkyoshi90.monstergirls.block.RealmGrassBlock.HAZE, girl.getX(), girl.getY() + 1.0, girl.getZ(), 40, 0.5, 0.8, 0.5, 0.0);
         level.sendParticles(net.minecraft.core.particles.ParticleTypes.PORTAL, girl.getX(), girl.getY() + 1.0, girl.getZ(), 30, 0.4, 0.8, 0.4, 0.2);
@@ -73,7 +74,7 @@ public final class DemonRealm {
      * it, with no music but the realm's, and the haze thickens round them. Whether this one is dancing tonight.
      */
     public static boolean sabbath(Mob mob, boolean fullMoon) {
-        if (!fullMoon || !MonsterGirlsConfig.demonRealm() || !inRealm(mob)) return false;
+        if (!fullMoon || !MonsterGirlsConfig.demonRealm() || !realmAir(mob)) return false;
         return Monsterization.monsterized(mob) || mob instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g
                 && g.getSpecies().family() == com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.Family.DEVIL;
     }
@@ -91,6 +92,21 @@ public final class DemonRealm {
     }
 
     /** Standing on realm grass (or in a plant on it). */
+    /**
+     * The realm's air: standing in it, or near a lit realm censer (block/RealmCenserBlock). Flirting, longing and the sabbath
+     * go by the air; turning and the realm's own calling go by the ground ({@link #inRealm}).
+     */
+    public static boolean realmAir(Entity e) {
+        return inRealm(e) || nearCenser(e);
+    }
+
+    /** A lit realm censer within its radius. */
+    public static boolean nearCenser(Entity e) {
+        if (!(e.level() instanceof ServerLevel level)) return false;
+        return level.getPoiManager().findClosest(h -> h.is(com.linkyoshi90.monstergirls.registry.ModVillagers.CENSER_KEY), e.blockPosition(),
+                com.linkyoshi90.monstergirls.block.RealmCenserBlock.RADIUS, net.minecraft.world.entity.ai.village.poi.PoiManager.Occupancy.ANY).isPresent();
+    }
+
     public static boolean inRealm(Entity e) {
         BlockPos feet = e.blockPosition();
         Level level = e.level();
@@ -130,7 +146,7 @@ public final class DemonRealm {
 
     /** Half a minute in the realm: a grown friend blushes and longs a little more for her close friends. True if she did. */
     public static boolean breathe(ServerLevel level, Mob mob) {
-        if (!inRealm(mob) || !Missing.canLong(mob)) return false;
+        if (!realmAir(mob) || !Missing.canLong(mob)) return false;
         boolean any = false;
         for (Player player : level.players()) any |= Missing.addLonging(mob, player, LONGING);
         if (!any) return false;

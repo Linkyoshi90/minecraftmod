@@ -185,6 +185,10 @@ public class MonsterizationTests {
         net.minecraft.world.entity.Mob harpy = null;
         for (int i = 0; i < Monsterization.STEPS; i++) harpy = Monsterization.stepOther(level, parrot, true);
         check(harpy instanceof com.linkyoshi90.monstergirls.entity.MacawHarpy && Monsterization.monsterized(harpy) && !parrot.isAlive(), "she changed");
+        ServerPlayer stranger = HarpyTestUtil.survivalPlayer(helper, new BlockPos(12, 2, 12));
+        var bonded = (com.linkyoshi90.monstergirls.entity.Bonded) harpy;
+        check(bonded.trustsEnoughForBed(stranger) && bonded.bedChanceFor(stranger) == Monsterization.EAGER, "a harpy the realm changed is as eager as any");
+        HarpyTestUtil.remove(stranger);
         var frog = helper.spawn(EntityType.FROG, new BlockPos(3, 2, 3));
         frog.setVariant(level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.FROG_VARIANT).getHolderOrThrow(net.minecraft.world.entity.animal.FrogVariant.WARM));
         check(Monsterization.otherOf(frog) == com.linkyoshi90.monstergirls.registry.ModEntities.TREE_FROG.get(), "a warm frog becomes a tree frog");

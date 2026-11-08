@@ -17,6 +17,11 @@ public final class ModVillagers {
 
     public static final ResourceKey<PoiType> DESK_KEY = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, MonsterGirlsMod.id("exchange_desk"));
 
+    /** A lit realm censer (block/RealmCenserBlock): only its lit states, so the game's index answers "is one burning near her?". */
+    public static final ResourceKey<PoiType> CENSER_KEY = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, MonsterGirlsMod.id("lit_realm_censer"));
+    public static final DeferredHolder<PoiType, PoiType> CENSER = POI_TYPES.register("lit_realm_censer",
+            () -> new PoiType(ImmutableSet.copyOf(ModBlocks.REALM_CENSER.get().getStateDefinition().getPossibleStates().stream()
+                    .filter(s -> s.getValue(com.linkyoshi90.monstergirls.block.RealmCenserBlock.LIT)).toList()), 0, 1));
     public static final DeferredHolder<PoiType, PoiType> DESK = POI_TYPES.register("exchange_desk",
             () -> new PoiType(ImmutableSet.copyOf(ModBlocks.EXCHANGE_DESK.get().getStateDefinition().getPossibleStates()), 1, 1));
 

@@ -6,6 +6,7 @@ import com.linkyoshi90.monstergirls.block.RealmGrassBlock;
 import com.linkyoshi90.monstergirls.entity.DemonRealm;
 import com.linkyoshi90.monstergirls.entity.Flirting;
 import com.linkyoshi90.monstergirls.entity.Missing;
+import com.linkyoshi90.monstergirls.entity.Monsterization;
 import com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl;
 import com.linkyoshi90.monstergirls.entity.girl.GirlSpecies;
 import com.linkyoshi90.monstergirls.item.HolyWaterItem;
@@ -331,6 +332,38 @@ public class DemonRealmTests {
         check(!DemonRealm.sabbath(serval, true), "an ordinary girl stays out of it");
         serval.getPersistentData().putBoolean("Monsterized", true);
         check(DemonRealm.sabbath(serval, true), "one the realm changed joins in");
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "censerBringsTheRealmsAir")
+    public static void censerBringsTheRealmsAir(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos at = helper.absolutePos(new BlockPos(3, 2, 3));
+        level.setBlock(at, ModBlocks.REALM_CENSER.get().defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+        AbstractMonsterGirl girl = JackalopeTests.spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(6, 2, 6));
+        girl.setNoAi(true);
+        check(!DemonRealm.realmAir(girl), "an unlit censer does nothing");
+        check(com.linkyoshi90.monstergirls.block.RealmCenserBlock.light(level, at, level.getBlockState(at)), "a heartfruit lights it");
+        helper.runAfterDelay(2, () -> {
+            check(DemonRealm.realmAir(girl) && !DemonRealm.inRealm(girl), "the realm's air near it, but not its ground");
+            check(Monsterization.kindOf(girl) == null && Monsterization.soaked(girl) == 0, "nobody turns by a censer");
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "realmShrineKeepsGifts")
+    public static void realmShrineKeepsGifts(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos ground = helper.absolutePos(new BlockPos(7, 1, 7));
+        check(com.linkyoshi90.monstergirls.world.RealmPatchFeature.placeShrine(level, ground, level.random), "the shrine stands");
+        check(level.getBlockState(ground.above()).is(Blocks.CHEST) && level.getBlockEntity(ground.above()) instanceof net.minecraft.world.level.block.entity.ChestBlockEntity,
+                "a chest at its heart");
+        check(level.getBlockState(ground.offset(2, 3, 2)).is(Blocks.PURPLE_CANDLE), "candles on the pillars");
+        var chest = (net.minecraft.world.level.block.entity.ChestBlockEntity) level.getBlockEntity(ground.above());
+        chest.unpackLootTable(null);
+        boolean any = false;
+        for (int i = 0; i < chest.getContainerSize(); i++) any |= !chest.getItem(i).isEmpty();
+        check(any, "the realm's gifts are in it");
         helper.succeed();
     }
 }

@@ -148,6 +148,11 @@ public final class ModBlocks {
             BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.OAK_LOG).mapColor(MapColor.COLOR_PURPLE).lightLevel(s -> 2).sound(SoundType.STEM));
 
     /** The weepcap: a pale glowing realm mushroom weeping droplets from its rim (WeepcapBlock). */
+    /** A lantern burning the realm's violet flame: the realm's air at home, without its ground (block/RealmCenserBlock). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.RealmCenserBlock> REALM_CENSER = BLOCKS.registerBlock("realm_censer",
+            com.linkyoshi90.monstergirls.block.RealmCenserBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).forceSolidOn().requiresCorrectToolForDrops().strength(3.5F).sound(SoundType.LANTERN)
+                    .lightLevel(s -> s.getValue(com.linkyoshi90.monstergirls.block.RealmCenserBlock.LIT) ? 10 : 0).noOcclusion().pushReaction(PushReaction.DESTROY));
     public static final DeferredBlock<com.linkyoshi90.monstergirls.block.WeepcapBlock> WEEPCAP = BLOCKS.registerBlock("weepcap",
             com.linkyoshi90.monstergirls.block.WeepcapBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).noCollission().instabreak().randomTicks().sound(SoundType.FUNGUS)

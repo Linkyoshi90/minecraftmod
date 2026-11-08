@@ -399,7 +399,10 @@ public class Minotaur extends AbstractMonsterGirl {
     public ItemStack rollGift(Player player) {
         int r = this.random.nextInt(100);
         return switch (this.species) {
-            case CATTLE_MINOTAUR, HOLSTAUR_MINOTAUR -> r < 35 ? new ItemStack(Items.MILK_BUCKET) : r < 60 ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.CHEESE.get(), 2)
+            case HOLSTAUR_MINOTAUR -> r < 45 ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.HOLSTAUR_MILK.get(), 2)
+                    : r < 70 ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.CHEESE.get(), 2)
+                    : r < 85 ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.HEARTFRUIT.get()) : new ItemStack(Items.WHEAT, 4);
+            case CATTLE_MINOTAUR -> r < 35 ? new ItemStack(Items.MILK_BUCKET) : r < 60 ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.CHEESE.get(), 2)
                     : new ItemStack(Items.WHEAT, 4);
             case WATER_BUFFALO_MINOTAUR -> r < 20 ? new ItemStack(Items.CAKE) : r < 60 ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.CHEESE.get(), 2)
                     : new ItemStack(Items.MILK_BUCKET);
