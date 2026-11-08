@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:hide_and_seek",
+  "display": {
+    "icon": {
+      "id": "minecraft:white_banner"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.race"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.race.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
