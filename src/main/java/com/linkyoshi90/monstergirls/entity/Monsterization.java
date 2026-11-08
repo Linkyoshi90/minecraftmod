@@ -146,6 +146,7 @@ public final class Monsterization {
             if (possessed(mob)) {
                 murmur(level, mob);
                 giftOwner(level, mob, level.getDayTime() % 24000L < 2000L);
+                if (mob.getRandom().nextInt(SPREAD) == 0) spread(level, mob, !level.isDay());
                 breed(level, mob);
             }
             else soak(level, mob, dark(level, mob));
@@ -327,6 +328,23 @@ public final class Monsterization {
     }
 
     private static final String GIFT_DAY = "RealmGiftDay";
+
+    /** One look round in this many (each EVERY ticks) a possessed villager passes it on: about one night in four. */
+    public static final int SPREAD = 200, SPREAD_RANGE = 4;
+
+    /**
+     * At night a possessed villager passes it on to a grown villager standing within SPREAD_RANGE, so a village slowly turns
+     * (behind the possessionSpreads option). Who she passed it to, or null.
+     */
+    @Nullable
+    public static Mob spread(ServerLevel level, Mob mob, boolean night) {
+        if (!night || mob.getType() != EntityType.VILLAGER || !possessed(mob) || !MonsterGirlsConfig.possession() || !MonsterGirlsConfig.possessionSpreads()) return null;
+        Mob next = level.getEntitiesOfClass(Mob.class, mob.getBoundingBox().inflate(SPREAD_RANGE),
+                m -> m != mob && m.getType() == EntityType.VILLAGER && !m.isBaby() && !possessed(m)).stream().findFirst().orElse(null);
+        if (next == null) return null;
+        possess(level, next);
+        return next;
+    }
 
     /** Holy water drives it out. True if there was something to drive out. */
     public static boolean exorcise(ServerLevel level, Mob mob) {

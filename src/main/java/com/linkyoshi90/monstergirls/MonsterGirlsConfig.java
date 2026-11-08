@@ -135,6 +135,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue MONSTERIZATION;
     public static final ModConfigSpec.BooleanValue POSSESSION;
     public static final ModConfigSpec.BooleanValue REALM_SUMMONS;
+    public static final ModConfigSpec.BooleanValue POSSESSION_SPREADS;
     public static final ModConfigSpec.BooleanValue DREAM_VISITS;
     public static final ModConfigSpec.BooleanValue MATING_SEASON;
     public static final ModConfigSpec.IntValue MAX_SPOUSES;
@@ -177,6 +178,10 @@ public final class MonsterGirlsConfig {
         REALM_SUMMONS = BUILDER
                 .comment("At night the heart of a Demon Realm now and then calls a wild succubus or demon out of the haze (never more than one near it).")
                 .define("realmSummons", true);
+
+        POSSESSION_SPREADS = BUILDER
+                .comment("A possessed villager now and then passes it on, at night, to a villager standing close by, so a village slowly turns (holy water frees them).")
+                .define("possessionSpreads", true);
 
         DREAM_VISITS = BUILDER
                 .comment("Succubi visit your dreams: a close succubus friend brings a sweet dream (Luck in the morning); a wild one nearby feeds on some of your experience and leaves a heartfruit.")
@@ -350,6 +355,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean possession() {
         return SPEC.isLoaded() ? POSSESSION.get() : POSSESSION.getDefault();
+    }
+
+    public static boolean possessionSpreads() {
+        return SPEC.isLoaded() ? POSSESSION_SPREADS.get() : POSSESSION_SPREADS.getDefault();
     }
 
     public static boolean realmSummons() {

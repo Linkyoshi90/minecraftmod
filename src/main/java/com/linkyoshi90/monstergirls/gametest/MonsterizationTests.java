@@ -17,6 +17,8 @@ import net.minecraft.world.entity.animal.Wolf;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
+import java.util.List;
+
 import static com.linkyoshi90.monstergirls.gametest.HarpyTestUtil.PLATFORM;
 import static com.linkyoshi90.monstergirls.gametest.HarpyTestUtil.check;
 import static com.linkyoshi90.monstergirls.gametest.JackalopeTests.spawn;
@@ -263,6 +265,32 @@ public class MonsterizationTests {
         check(Monsterization.feed(level, pig), "a heartfruit makes her ready at once");
         check(Monsterization.breed(level, pig) != null, "and her young is born");
         check(!Monsterization.feed(level, boar), "an ordinary pig cares nothing for it");
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "possessionSpreadsAtNight")
+    public static void possessionSpreadsAtNight(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var first = helper.spawn(EntityType.VILLAGER, new BlockPos(5, 2, 5));
+        var near = helper.spawn(EntityType.VILLAGER, new BlockPos(7, 2, 5));
+        var far = helper.spawn(EntityType.VILLAGER, new BlockPos(13, 2, 13));
+        for (var v : List.of(first, near, far)) v.setNoAi(true);
+        Monsterization.possess(level, first);
+        check(Monsterization.spread(level, first, false) == null, "not by day");
+        check(Monsterization.spread(level, first, true) == near && Monsterization.possessed(near), "at night it passes to the villager beside her");
+        check(Monsterization.spread(level, first, true) == null && !Monsterization.possessed(far), "but not across the village at once");
+        var pig = helper.spawn(EntityType.PIG, new BlockPos(4, 2, 6));
+        Monsterization.possess(level, pig);
+        check(Monsterization.spread(level, pig, true) == null, "only villagers pass it on");
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(9, 2, 9));
+        try {
+            var dispatcher = level.getServer().getCommands().getDispatcher();
+            check(dispatcher.execute("monstergirls realm list 32", p.createCommandSourceStack()) == 3, "the list counts the three possessed");
+            check(dispatcher.execute("monstergirls bonds 8", p.createCommandSourceStack()) >= 0, "and /monstergirls bonds still works beside it");
+        } catch (com.mojang.brigadier.exceptions.CommandSyntaxException e) {
+            throw new net.minecraft.gametest.framework.GameTestAssertException("the command failed: " + e.getMessage());
+        }
+        HarpyTestUtil.remove(p);
         helper.succeed();
     }
 }
