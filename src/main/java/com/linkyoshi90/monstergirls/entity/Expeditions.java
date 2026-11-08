@@ -114,6 +114,12 @@ public final class Expeditions {
         if (!level.addFreshEntity(girl)) return null;
         com.linkyoshi90.monstergirls.entity.Missing.forgive(girl, player);
         for (ItemStack s : finds(girl, player)) girl.spawnAtLocation(s);
+        ItemStack map = ScoutMaps.onReturn(level, girl);                       // now and then, a map of a place she found
+        if (map != null) {
+            girl.spawnAtLocation(map);
+            player.displayClientMessage(Component.translatable("message.monstergirls.scout_map", girl.getDisplayName(), map.getHoverName()), false);
+            Dairy.award(player, "scout_map");
+        }
         if (girl.getRandom().nextInt(COMPANION_CHANCE) == 0) companion(level, player, girl);
         girl.hearts(level, 5);
         level.playSound(null, at, SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 0.6F, 1.4F);

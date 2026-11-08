@@ -35,6 +35,12 @@ public final class ModStructures {
     public static final DeferredHolder<StructurePieceType, StructurePieceType> REALM_MANOR_PIECE =
             PIECES.register("realm_manor", () -> (StructurePieceType.ContextlessType) (tag) -> new com.linkyoshi90.monstergirls.world.RealmManorStructure.Piece(null, tag));
     public static final ResourceKey<Structure> REALM_MANOR_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("realm_manor"));
+    /** A wayside inn (world/WaysideInnStructure). */
+    public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.WaysideInnStructure>> WAYSIDE_INN =
+            STRUCTURE_TYPES.register("wayside_inn", () -> () -> com.linkyoshi90.monstergirls.world.WaysideInnStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> WAYSIDE_INN_PIECE =
+            PIECES.register("wayside_inn", () -> (StructurePieceType.ContextlessType) (tag) -> new com.linkyoshi90.monstergirls.world.WaysideInnStructure.Piece(null, tag));
+    public static final ResourceKey<Structure> WAYSIDE_INN_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("wayside_inn"));
     /** A merfolk grotto (world/MerfolkGrottoStructure). */
     public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.MerfolkGrottoStructure>> MERFOLK_GROTTO =
             STRUCTURE_TYPES.register("merfolk_grotto", () -> () -> com.linkyoshi90.monstergirls.world.MerfolkGrottoStructure.CODEC);

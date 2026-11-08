@@ -7,6 +7,7 @@ public final class GuidePages {
     public static final Map<String, Integer> PAGES = Map.ofEntries(
             Map.entry("friends", 2),
             Map.entry("hearth", 2),
+            Map.entry("expedition", 3),
             Map.entry("home", 3),
             Map.entry("keepsakes", 3),
             Map.entry("dairy", 2),
@@ -14,7 +15,7 @@ public final class GuidePages {
             Map.entry("encounters", 4),
             Map.entry("chores", 3),
             Map.entry("festivals", 2),
-            Map.entry("market", 5),
+            Map.entry("market", 6),
             Map.entry("rivals", 2),
             Map.entry("roles", 4),
             Map.entry("treats", 2),
