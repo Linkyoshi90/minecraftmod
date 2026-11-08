@@ -229,6 +229,36 @@ public final class Monsterization {
      * A heartfruit fed to a possessed creature: she is ready for one of her kind again at once (her half day's wait is over).
      * True if she took it.
      */
+    /** A heartfruit given to a possessed villager: tonight she seeks this player's bed, from as far as SEEK_RANGE. True if she took it. */
+    public static boolean promise(ServerLevel level, Mob mob, Player player) {
+        if (!eagerForBed(mob)) return false;
+        mob.getPersistentData().putUUID(SEEKS, player.getUUID());
+        mob.getPersistentData().putLong(SEEKS_UNTIL, level.getGameTime() + 24000L - level.getDayTime() % 24000L);   // until this morning ends the night
+        mob.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.2F);
+        level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.3, mob.getZ(), 5, 0.3, 0.2, 0.3, 0.0);
+        player.displayClientMessage(Component.translatable("message.monstergirls.possessed.promise", mob.getDisplayName()), true);
+        return true;
+    }
+
+    public static final int SEEK_RANGE = 48;
+    private static final String SEEKS = "RealmSeeks", SEEKS_UNTIL = "RealmSeeksUntil";
+
+    /** She took this player's heartfruit and the night it promised isn't over. */
+    public static boolean seeks(Mob mob, Player player) {
+        return mob.getPersistentData().hasUUID(SEEKS) && player.getUUID().equals(mob.getPersistentData().getUUID(SEEKS))
+                && mob.level().getGameTime() < mob.getPersistentData().getLong(SEEKS_UNTIL);
+    }
+
+    /** The one coming to this player's bed: one who took their heartfruit first (from SEEK_RANGE), else the nearest within range. */
+    @Nullable
+    private static Mob bedMate(ServerLevel level, Player player, int range) {
+        var near = java.util.Comparator.<Mob>comparingDouble(m -> m.distanceToSqr(player));
+        Mob promised = level.getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(SEEK_RANGE), m -> eagerForBed(m) && seeks(m, player)).stream()
+                .min(near).orElse(null);
+        if (promised != null) return promised;
+        return level.getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(range), Monsterization::eagerForBed).stream().min(near).orElse(null);
+    }
+
     public static boolean feed(ServerLevel level, Mob mob) {
         if (mob instanceof net.minecraft.world.entity.npc.AbstractVillager) return false;   // villagers come to a player's bed instead
         if (!possessed(mob) || mob.isBaby() || mob.getPersistentData().getLong(NEXT_BREED) <= level.getGameTime()) return false;
@@ -244,7 +274,7 @@ public final class Monsterization {
                 || mob instanceof Bonded || !POSSESSED.containsKey(mob.getType()) || !possessed(mob)) return;
         event.setCanceled(true);
         event.setCancellationResult(net.minecraft.world.InteractionResult.sidedSuccess(event.getLevel().isClientSide));
-        if (event.getLevel() instanceof ServerLevel level && feed(level, mob)) event.getItemStack().consume(1, event.getEntity());
+        if (event.getLevel() instanceof ServerLevel level && (feed(level, mob) || promise(level, mob, event.getEntity()))) event.getItemStack().consume(1, event.getEntity());
     }
 
     /** What a possessed villager or wandering trader deals in besides her trade: the realm's goods (or, freed, she stops). */
@@ -373,7 +403,7 @@ public final class Monsterization {
     }
 
     /** How long a possessed villager carries before her young is born (a day, as a girl does), and how near the bed she must be. */
-    public static final int CARRY = 24000, BED_RANGE = 12, BED_CALL = 24;
+    public static final int CARRY = 24000, BED_RANGE = 12, BED_CALL = 24, GOSSIP = 20;
     private static final String CARRYING_BY = "RealmCarryingBy", BIRTH_AT = "RealmBirthAt";
 
     /** Grown, possessed, a villager or wandering trader, and not carrying already: she would share a sleeper's bed tonight. */
@@ -393,9 +423,10 @@ public final class Monsterization {
     @Nullable
     public static Mob shareNight(ServerLevel level, Player player) {
         if (!MonsterGirlsConfig.possession()) return null;
-        Mob she = level.getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(BED_RANGE), Monsterization::eagerForBed).stream()
-                .min(java.util.Comparator.comparingDouble(m -> m.distanceToSqr(player))).orElse(null);
+        Mob she = bedMate(level, player, BED_RANGE);
+        if (she != null && she.distanceToSqr(player) > BED_RANGE * BED_RANGE) she = null;                 // promised, but she never got there
         if (she == null || level.getEntitiesOfClass(AbstractMonsterGirl.class, she.getBoundingBox().inflate(32)).size() >= CROWD) return null;
+        she.getPersistentData().remove(SEEKS);
         she.getPersistentData().putUUID(CARRYING_BY, player.getUUID());
         she.getPersistentData().putLong(BIRTH_AT, level.getGameTime() + CARRY);
         level.sendParticles(ParticleTypes.HEART, she.getX(), she.getEyeY() + 0.3, she.getZ(), 6, 0.4, 0.3, 0.4, 0.0);
@@ -413,6 +444,9 @@ public final class Monsterization {
         List<GirlSpecies> kinds = POSSESSED.get(mob.getType());
         if (kinds == null || kinds.isEmpty()) return null;
         AbstractMonsterGirl young = AbstractMonsterGirl.youngOf(level, ModGirls.type(kinds.get(mob.getRandom().nextInt(kinds.size()))), mob.blockPosition(), father);
+        if (mob instanceof net.minecraft.world.entity.npc.Villager v) {
+            v.getGossips().add(father, net.minecraft.world.entity.ai.gossip.GossipType.MAJOR_POSITIVE, GOSSIP);   // she speaks well of her young's father: kinder prices
+        }
         if (young != null) {
             level.sendParticles(RealmGrassBlock.HAZE, young.getX(), young.getY() + 0.5, young.getZ(), 12, 0.3, 0.3, 0.3, 0.0);
             level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY(), mob.getZ(), 4, 0.3, 0.2, 0.3, 0.0);
@@ -435,8 +469,7 @@ public final class Monsterization {
         if (!player.isSleeping() || !MonsterGirlsConfig.possession()) return null;
         net.minecraft.core.BlockPos bed = player.getSleepingPos().orElse(null);
         if (bed == null) return null;
-        Mob she = level.getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(BED_CALL), Monsterization::eagerForBed).stream()
-                .min(java.util.Comparator.comparingDouble(m -> m.distanceToSqr(player))).orElse(null);
+        Mob she = bedMate(level, player, BED_CALL);
         if (she == null || she.distanceToSqr(player) < 4.0) return she;
         if (she instanceof net.minecraft.world.entity.npc.Villager v) {
             if (v.isSleeping()) v.stopSleeping();

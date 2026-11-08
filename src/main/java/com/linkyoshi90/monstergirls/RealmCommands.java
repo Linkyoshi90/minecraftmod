@@ -53,7 +53,8 @@ public final class RealmCommands {
         source.sendSuccess(() -> Component.translatable("commands.monstergirls.realm.list.header", found.size(), radius).withStyle(ChatFormatting.DARK_PURPLE), false);
         for (Mob m : found) {
             int d = (int) Math.round(Math.sqrt(m.distanceToSqr(player)));
-            Component what = Component.translatable(Monsterization.possessed(m) ? "commands.monstergirls.realm.list.possessed" : "commands.monstergirls.realm.list.changed");
+            Component what = Component.translatable(Monsterization.carrying(m) ? "commands.monstergirls.realm.list.carrying"
+                    : Monsterization.possessed(m) ? "commands.monstergirls.realm.list.possessed" : "commands.monstergirls.realm.list.changed");
             source.sendSuccess(() -> Component.translatable("commands.monstergirls.realm.list.entry", m.getDisplayName().copy().withStyle(ChatFormatting.LIGHT_PURPLE), d, what), false);
         }
         return found.size();

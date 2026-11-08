@@ -343,4 +343,23 @@ public class MonsterizationTests {
             helper.succeed();
         });
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "heartfruitPromisesTheNight")
+    public static void heartfruitPromisesTheNight(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
+        var nearer = helper.spawn(EntityType.VILLAGER, new BlockPos(4, 2, 2));
+        var promised = helper.spawn(EntityType.VILLAGER, new BlockPos(10, 2, 10));
+        for (var v : List.of(nearer, promised)) {
+            v.setNoAi(true);
+            Monsterization.possess(level, v);
+        }
+        check(Monsterization.promise(level, promised, p) && Monsterization.seeks(promised, p), "she takes the heartfruit: tonight");
+        check(Monsterization.shareNight(level, p) == promised, "the one who took the heartfruit comes, not the nearer one");
+        Monsterization.dueNow(promised);
+        Monsterization.deliver(level, promised);
+        check(promised.getGossips().getReputation(p.getUUID(), t -> true) > 0, "and she speaks well of her young's father");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }
