@@ -102,6 +102,32 @@ public class HearthBlockEntity extends BlockEntity {
     }
 
     /** Who lives here (a copy). */
+    /** Its name as a hamlet or village (entity/girl/Hamlet), or "" while it has none; and whether its banner is up. */
+    private String placeName = "";
+    private boolean bannerRaised;
+
+    public String placeName() {
+        return this.placeName;
+    }
+
+    public boolean named() {
+        return !this.placeName.isEmpty();
+    }
+
+    public void setPlaceName(String name) {
+        this.placeName = name == null ? "" : name;
+        this.setChanged();
+    }
+
+    public boolean bannerRaised() {
+        return this.bannerRaised;
+    }
+
+    public void setBannerRaised(boolean raised) {
+        this.bannerRaised = raised;
+        this.setChanged();
+    }
+
     public Set<UUID> residents() {
         return Set.copyOf(this.residents);
     }
@@ -128,6 +154,7 @@ public class HearthBlockEntity extends BlockEntity {
             h.garden(server);
             h.homely(server);
             com.linkyoshi90.monstergirls.entity.girl.Market.morning(server, h);
+            com.linkyoshi90.monstergirls.entity.girl.Hamlet.morning(server, h);
             h.setChanged();
         }
     }
@@ -292,6 +319,8 @@ public class HearthBlockEntity extends BlockEntity {
         tag.put("Store", this.store.createTag(registries));
         tag.putLong("LastMarketDay", this.lastMarketDay);
         tag.putLong("LastSupperDay", this.lastSupperDay);
+        if (!this.placeName.isEmpty()) tag.putString("PlaceName", this.placeName);
+        tag.putBoolean("BannerRaised", this.bannerRaised);
     }
 
     @Override
@@ -304,5 +333,7 @@ public class HearthBlockEntity extends BlockEntity {
         this.store.fromTag(tag.getList("Store", Tag.TAG_COMPOUND), registries);
         this.lastMarketDay = tag.getLong("LastMarketDay");
         this.lastSupperDay = tag.contains("LastSupperDay") ? tag.getLong("LastSupperDay") : -1;
+        this.placeName = tag.getString("PlaceName");
+        this.bannerRaised = tag.getBoolean("BannerRaised");
     }
 }

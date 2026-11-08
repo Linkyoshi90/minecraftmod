@@ -138,6 +138,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue POSSESSION_SPREADS;
     public static final ModConfigSpec.BooleanValue ROSE_MOON;
     public static final ModConfigSpec.BooleanValue ORDER_PATROLS;
+    public static final ModConfigSpec.BooleanValue HAMLETS;
     public static final ModConfigSpec.BooleanValue REALM_TOUCHED;
     public static final ModConfigSpec.BooleanValue ORDER_RAIDS;
     public static final ModConfigSpec.BooleanValue DREAM_VISITS;
@@ -198,6 +199,10 @@ public final class MonsterGirlsConfig {
         REALM_TOUCHED = BUILDER
                 .comment("A player who keeps company with the Demon Realm slowly becomes kin to it: night vision in its dark, its own let them be, and in the end it feeds them and makes them strong at night. Holy water washes it out.")
                 .define("realmTouched", true);
+
+        HAMLETS = BUILDER
+                .comment("A hearth with three residents becomes a named hamlet with its own banner; with six, a village, where now and then a wandering girl of a new family comes and asks to stay (up to twelve).")
+                .define("hamlets", true);
 
         ORDER_RAIDS = BUILDER
                 .comment("A player with strong enough ties to the Demon Realm draws a night crusade of the Order on their hearth.")
@@ -379,6 +384,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean realmTouched() {
         return SPEC.isLoaded() ? REALM_TOUCHED.get() : REALM_TOUCHED.getDefault();
+    }
+
+    public static boolean hamlets() {
+        return SPEC.isLoaded() ? HAMLETS.get() : HAMLETS.getDefault();
     }
 
     public static boolean orderPatrols() {

@@ -66,10 +66,27 @@ public class HearthBlock extends BaseEntityBlock {
     }
 
     @Override
+    protected net.minecraft.world.ItemInteractionResult useItemOn(net.minecraft.world.item.ItemStack stack, BlockState state, Level level, BlockPos pos,
+            Player player, net.minecraft.world.InteractionHand hand, BlockHitResult hit) {
+        // a name tag names the place (its owner only)
+        if (!stack.is(net.minecraft.world.item.Items.NAME_TAG) || !stack.has(net.minecraft.core.component.DataComponents.CUSTOM_NAME)
+                || !(level.getBlockEntity(pos) instanceof HearthBlockEntity h) || !player.getUUID().equals(h.owner())) {
+            return super.useItemOn(stack, state, level, pos, player, hand, hit);
+        }
+        if (!level.isClientSide) {
+            h.setPlaceName(stack.getHoverName().getString());
+            stack.consume(1, player);
+            player.displayClientMessage(Component.translatable("message.monstergirls.hamlet.renamed", h.placeName()), true);
+        }
+        return net.minecraft.world.ItemInteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (!(level.getBlockEntity(pos) instanceof HearthBlockEntity h)) return InteractionResult.PASS;
         if (player instanceof ServerPlayer sp) {
-            sp.displayClientMessage(Component.translatable("message.monstergirls.hearth", h.residentCount()), true);
+            Component place = com.linkyoshi90.monstergirls.entity.girl.Hamlet.describe(h);
+            sp.displayClientMessage(place != null ? place : Component.translatable("message.monstergirls.hearth", h.residentCount()), true);
             sp.openMenu(new SimpleMenuProvider((id, inv, pl) -> ChestMenu.threeRows(id, inv, h.store()), Component.translatable("block.monstergirls.hearth")));
         }
         return InteractionResult.sidedSuccess(level.isClientSide);

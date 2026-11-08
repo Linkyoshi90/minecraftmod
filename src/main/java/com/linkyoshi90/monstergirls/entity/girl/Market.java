@@ -112,7 +112,7 @@ public final class Market {
         return girl;
     }
 
-    private static BlockPos spot(ServerLevel level, BlockPos near, AbstractMonsterGirl girl) {
+    static BlockPos spot(ServerLevel level, BlockPos near, AbstractMonsterGirl girl) {
         for (int i = 0; i < 12; i++) {
             int x = near.getX() + level.random.nextInt(11) - 5, z = near.getZ() + level.random.nextInt(11) - 5;
             BlockPos p = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z);
