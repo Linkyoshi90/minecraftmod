@@ -76,6 +76,12 @@ public class JadePlugin implements IWailaPlugin {
                 if (order != com.linkyoshi90.monstergirls.entity.Orders.Command.FREE_ROAM) data.putString("Order", order.name().toLowerCase(java.util.Locale.ROOT));
                 if (b.getOrders().stance() != com.linkyoshi90.monstergirls.entity.Orders.Stance.NATURAL) data.putString("Stance", b.getOrders().stance().name().toLowerCase(java.util.Locale.ROOT));
             }
+            if (accessor.getPlayer() != null && accessor.getEntity() instanceof net.minecraft.world.entity.Mob dm) {   // dates and sweethearts
+                if (com.linkyoshi90.monstergirls.entity.Dates.canDate(dm, accessor.getPlayer())) {
+                    data.putString("DatePlace", com.linkyoshi90.monstergirls.entity.Dates.favourite(dm).name().toLowerCase(java.util.Locale.ROOT));
+                }
+                if (com.linkyoshi90.monstergirls.entity.Sweethearts.sweetheart(dm) != null) data.putBoolean("SweetWed", com.linkyoshi90.monstergirls.entity.Sweethearts.wed(dm));
+            }
             com.linkyoshi90.monstergirls.entity.Clade branch = com.linkyoshi90.monstergirls.entity.Clade.of(accessor.getEntity());
             if (branch != null && accessor.getPlayer() != null) {                // how much of her branch of the tree of life they have met
                 data.putInt("BranchMet", com.linkyoshi90.monstergirls.entity.Journal.metOn(accessor.getPlayer(), branch));
@@ -109,6 +115,8 @@ public class JadePlugin implements IWailaPlugin {
                 tooltip.add(Component.translatable("jade.monstergirls.forager").withStyle(net.minecraft.ChatFormatting.GRAY));
             }
             if (data.getInt("Visits") > 1) tooltip.add(Component.translatable("jade.monstergirls.visits", data.getInt("Visits")).withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
+            if (data.contains("DatePlace")) tooltip.add(Component.translatable("jade.monstergirls.date_place." + data.getString("DatePlace")).withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
+            if (data.contains("SweetWed")) tooltip.add(Component.translatable(data.getBoolean("SweetWed") ? "jade.monstergirls.sweetheart.wed" : "jade.monstergirls.sweetheart.courting").withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
             if (data.getBoolean("Cold")) tooltip.add(Component.translatable("jade.monstergirls.cold").withStyle(net.minecraft.ChatFormatting.AQUA));
             if (data.contains("FavourItem")) {
                 net.minecraft.world.item.Item want = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(net.minecraft.resources.ResourceLocation.parse(data.getString("FavourItem")));
