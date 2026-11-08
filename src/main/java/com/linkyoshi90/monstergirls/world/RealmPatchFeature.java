@@ -51,11 +51,11 @@ public class RealmPatchFeature extends Feature<NoneFeatureConfiguration> {
                 int x = origin.getX() + dx, z = origin.getZ() + dz;
                 BlockPos ground = new BlockPos(x, groundY.applyAsInt(x, z), z);
                 BlockState s = level.getBlockState(ground);
-                if (!(s.is(Blocks.GRASS_BLOCK) || s.is(Blocks.DIRT) || s.is(Blocks.PODZOL) || s.is(Blocks.COARSE_DIRT))) continue;
+                if (!RealmGrassBlock.takeable(s)) continue;
                 BlockState above = level.getBlockState(ground.above());
                 turnTree(level, ground, random);                                  // a trunk standing here turns, whatever the ground does
                 if (above.isSolidRender(level, ground.above()) || !above.getFluidState().isEmpty()) continue;
-                level.setBlock(ground, ModBlocks.REALM_GRASS.get().defaultBlockState().setValue(RealmGrassBlock.DEPTH, Math.min(RealmGrassBlock.MAX_DEPTH, (int) dist)), Block.UPDATE_CLIENTS);
+                level.setBlock(ground, RealmGrassBlock.variantFor(level, ground, s, (int) dist), Block.UPDATE_CLIENTS);
                 taken++;
                 if (above.is(Blocks.SHORT_GRASS) || above.is(Blocks.FERN)) level.setBlock(ground.above(), Blocks.CRIMSON_ROOTS.defaultBlockState(), Block.UPDATE_CLIENTS);
                 else if (above.isAir()) {
@@ -92,7 +92,7 @@ public class RealmPatchFeature extends Feature<NoneFeatureConfiguration> {
         for (int i = 0; i < 2; i++) {
             int x = origin.getX() + random.nextInt(5) - 2, z = origin.getZ() + random.nextInt(5) - 2;
             int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
-            if (!level.getBlockState(new BlockPos(x, y - 1, z)).is(ModBlocks.REALM_GRASS.get())) continue;
+            if (!RealmGrassBlock.realm(level.getBlockState(new BlockPos(x, y - 1, z)))) continue;
             net.minecraft.world.entity.Mob mob = type.create(level.getLevel());
             if (mob == null) continue;
             mob.moveTo(x + 0.5, y, z + 0.5, random.nextFloat() * 360.0F, 0.0F);

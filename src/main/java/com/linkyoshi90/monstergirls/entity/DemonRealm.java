@@ -119,8 +119,8 @@ public final class DemonRealm {
     public static boolean inRealm(Entity e) {
         BlockPos feet = e.blockPosition();
         Level level = e.level();
-        return level.getBlockState(feet.below()).is(ModBlocks.REALM_GRASS.get()) || level.getBlockState(feet).is(ModBlocks.REALM_GRASS.get())
-                || (level.getBlockState(feet).is(ModBlocks.HEARTFRUIT_BUSH.get()) && level.getBlockState(feet.below()).is(ModBlocks.REALM_GRASS.get()));
+        return com.linkyoshi90.monstergirls.block.RealmGrassBlock.realm(level.getBlockState(feet.below())) || com.linkyoshi90.monstergirls.block.RealmGrassBlock.realm(level.getBlockState(feet))
+                || (level.getBlockState(feet).is(ModBlocks.HEARTFRUIT_BUSH.get()) && com.linkyoshi90.monstergirls.block.RealmGrassBlock.realm(level.getBlockState(feet.below())));
     }
 
     @SubscribeEvent

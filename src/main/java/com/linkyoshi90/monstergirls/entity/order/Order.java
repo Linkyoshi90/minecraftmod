@@ -153,7 +153,7 @@ public final class Order {
                 int top = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z) - 1;
                 for (int y = top; y >= top - 2; y--) {
                     BlockPos p = new BlockPos(x, y, z);
-                    if (level.getBlockState(p).is(ModBlocks.REALM_GRASS.get())) {
+                    if (com.linkyoshi90.monstergirls.block.RealmGrassBlock.realm(level.getBlockState(p))) {
                         double d = p.distSqr(centre);
                         if (d < bestD) {
                             bestD = d;
@@ -170,7 +170,7 @@ public final class Order {
     /** Any realm grass within r blocks (and a little up and down). */
     public static boolean realmNear(ServerLevel level, BlockPos pos, int r) {
         for (BlockPos p : BlockPos.betweenClosed(pos.offset(-r, -2, -r), pos.offset(r, 1, r))) {
-            if (level.getBlockState(p).is(ModBlocks.REALM_GRASS.get())) return true;
+            if (com.linkyoshi90.monstergirls.block.RealmGrassBlock.realm(level.getBlockState(p))) return true;
         }
         return false;
     }

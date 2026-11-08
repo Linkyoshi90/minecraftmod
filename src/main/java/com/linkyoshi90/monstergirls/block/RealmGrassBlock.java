@@ -59,10 +59,36 @@ public class RealmGrassBlock extends SnowyDirtBlock implements net.minecraft.wor
         return !above.isSolidRender(level, ground.above()) && above.getFluidState().isEmpty();
     }
 
-    /** Ground the realm can take: grass or dirt with open air above, out of torchlight. */
+    /** Ground the realm takes on: grass, dirt, mud and sand. */
+    public static boolean takeable(BlockState s) {
+        return s.is(Blocks.GRASS_BLOCK) || s.is(Blocks.DIRT) || s.is(Blocks.PODZOL) || s.is(Blocks.COARSE_DIRT) || s.is(Blocks.MUD)
+                || s.is(Blocks.SAND) || s.is(Blocks.RED_SAND);
+    }
+
+    /** Any of the realm's ground: its grass, the frost and bog realms, realm sand. */
+    public static boolean realm(BlockState s) {
+        return s.getBlock() instanceof RealmGrassBlock || s.getBlock() instanceof RealmSandBlock;
+    }
+
+    /**
+     * Realm variants (2026-11-08): the realm takes on the land it spreads into. Sand becomes realm sand (heartfruit grows in it,
+     * weepcaps don't); mud, or ground in a swamp, the bog realm (weepcaps thrive, no heartfruit); ground cold enough for snow, the
+     * frost realm (weepcaps, no heartfruit); anywhere else, realm grass.
+     */
+    public static BlockState variantFor(net.minecraft.world.level.LevelReader level, BlockPos ground, BlockState was, int depth) {
+        Block b;
+        var biome = level.getBiome(ground);
+        if (was.is(Blocks.SAND) || was.is(Blocks.RED_SAND)) b = ModBlocks.REALM_SAND.get();
+        else if (was.is(Blocks.MUD) || biome.is(net.minecraft.world.level.biome.Biomes.SWAMP) || biome.is(net.minecraft.world.level.biome.Biomes.MANGROVE_SWAMP)) b = ModBlocks.REALM_BOG.get();
+        else if (biome.value().coldEnoughToSnow(ground)) b = ModBlocks.REALM_FROST.get();
+        else b = ModBlocks.REALM_GRASS.get();
+        return b.defaultBlockState().setValue(DEPTH, Math.min(MAX_DEPTH, depth));
+    }
+
+    /** Ground the realm can take: grass, dirt, mud or sand with open air above, out of torchlight. */
     public static boolean canTake(net.minecraft.world.level.LevelAccessor level, BlockPos ground) {
         BlockState s = level.getBlockState(ground);
-        return (s.is(Blocks.GRASS_BLOCK) || s.is(Blocks.DIRT) || s.is(Blocks.PODZOL) || s.is(Blocks.COARSE_DIRT)) && open(level, ground) && !lit(level, ground)
+        return takeable(s) && open(level, ground) && !lit(level, ground)
                 && !(level instanceof net.minecraft.server.level.ServerLevel server && HolyFontBlock.warded(server, ground));   // a holy font keeps it out
     }
 
@@ -74,7 +100,7 @@ public class RealmGrassBlock extends SnowyDirtBlock implements net.minecraft.wor
     /** Turns one block into realm grass this far from its source. True if it did. */
     public static boolean corrupt(net.minecraft.world.level.LevelAccessor level, BlockPos ground, int depth) {
         if (!canTake(level, ground)) return false;
-        level.setBlock(ground, ModBlocks.REALM_GRASS.get().defaultBlockState().setValue(DEPTH, Math.min(MAX_DEPTH, depth)), Block.UPDATE_ALL);
+        level.setBlock(ground, variantFor(level, ground, level.getBlockState(ground), depth), Block.UPDATE_ALL);
         BlockState tuft = level.getBlockState(ground.above());
         if (tuft.is(Blocks.SHORT_GRASS) || tuft.is(Blocks.FERN)) level.setBlock(ground.above(), Blocks.CRIMSON_ROOTS.defaultBlockState(), Block.UPDATE_ALL);  // the tufts turn too
         return true;
@@ -82,17 +108,24 @@ public class RealmGrassBlock extends SnowyDirtBlock implements net.minecraft.wor
 
     /** Back to plain grass (dirt if covered), and a heartfruit bush or weepcap on it withers. */
     public static void purify(net.minecraft.world.level.LevelAccessor level, BlockPos ground) {
-        if (!level.getBlockState(ground).is(ModBlocks.REALM_GRASS.get())) return;
+        BlockState was = level.getBlockState(ground);
+        if (!realm(was)) return;
         BlockState plant = level.getBlockState(ground.above());
         if (plant.is(ModBlocks.HEARTFRUIT_BUSH.get()) || plant.is(ModBlocks.WEEPCAP.get())) level.setBlock(ground.above(), Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
         if (plant.is(Blocks.CRIMSON_ROOTS)) level.setBlock(ground.above(), Blocks.SHORT_GRASS.defaultBlockState(), Block.UPDATE_ALL);
-        level.setBlock(ground, (open(level, ground) ? Blocks.GRASS_BLOCK : Blocks.DIRT).defaultBlockState(), Block.UPDATE_ALL);
+        level.setBlock(ground, (was.getBlock() instanceof RealmSandBlock ? (level.getBiome(ground).is(net.minecraft.tags.BiomeTags.IS_BADLANDS) ? Blocks.RED_SAND : Blocks.SAND)
+                : open(level, ground) ? Blocks.GRASS_BLOCK : Blocks.DIRT).defaultBlockState(), Block.UPDATE_ALL);
     }
 
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        realmTick(state, level, pos, random, Blocks.DIRT);
+    }
+
+    /** One random tick of any realm ground: covered it gives up ({@code covered}), lit it turns back, otherwise it spreads and grows. */
+    public static void realmTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, Block covered) {
         if (!open(level, pos)) {
-            level.setBlock(pos, Blocks.DIRT.defaultBlockState(), Block.UPDATE_ALL);
+            level.setBlock(pos, covered.defaultBlockState(), Block.UPDATE_ALL);
             return;
         }
         if (lit(level, pos)) {
@@ -103,8 +136,8 @@ public class RealmGrassBlock extends SnowyDirtBlock implements net.minecraft.wor
         boolean moon = com.linkyoshi90.monstergirls.entity.BedSharing.fullMoon(level) || com.linkyoshi90.monstergirls.entity.RoseMoon.tonight(level);
         if (random.nextInt(moon ? 1 : 3) == 0) spread(level, pos, random);   // a full or a rose moon feeds it
         if (random.nextInt(HeartfruitBushBlock.SPROUT) == 0) HeartfruitBushBlock.sprout(level, pos);
-        if (random.nextInt(WeepcapBlock.SPROUT) == 0) WeepcapBlock.sprout(level, pos);
-        if (random.nextInt(ROOTS) == 0 && level.isEmptyBlock(pos.above())) level.setBlock(pos.above(), Blocks.CRIMSON_ROOTS.defaultBlockState(), Block.UPDATE_ALL);
+        if (random.nextInt(WeepcapBlock.SPROUT) == 0 || state.is(ModBlocks.REALM_BOG.get()) && random.nextInt(WeepcapBlock.SPROUT) == 0) WeepcapBlock.sprout(level, pos);   // the bog's twice as damp
+        if (random.nextInt(ROOTS) == 0 && state.is(net.minecraft.tags.BlockTags.DIRT) && level.isEmptyBlock(pos.above())) level.setBlock(pos.above(), Blocks.CRIMSON_ROOTS.defaultBlockState(), Block.UPDATE_ALL);
         if (random.nextInt(3) == 0) RealmLeavesBlock.creep(level, pos, random);
         if (state.getValue(DEPTH) <= com.linkyoshi90.monstergirls.entity.DemonRealm.SUMMON_CORE && random.nextInt(com.linkyoshi90.monstergirls.entity.DemonRealm.SUMMON / com.linkyoshi90.monstergirls.entity.RoseMoon.stir(level)) == 0) {
             com.linkyoshi90.monstergirls.entity.DemonRealm.summon(level, pos, level.isNight());
@@ -143,11 +176,11 @@ public class RealmGrassBlock extends SnowyDirtBlock implements net.minecraft.wor
         int grown = 0;
         for (int i = 0; i < 24; i++) {
             BlockPos ground = pos.offset(random.nextInt(7) - 3, random.nextInt(3) - 1, random.nextInt(7) - 3);
-            if (!level.getBlockState(ground).is(ModBlocks.REALM_GRASS.get()) || !level.isEmptyBlock(ground.above())) continue;
+            if (!realm(level.getBlockState(ground)) || !level.isEmptyBlock(ground.above())) continue;
             int roll = random.nextInt(12);
             if (roll == 0 && WeepcapBlock.sprout(level, ground)) grown++;
             else if (roll == 1 && HeartfruitBushBlock.sprout(level, ground)) grown++;
-            else if (roll > 1) {
+            else if (roll > 1 && level.getBlockState(ground).is(net.minecraft.tags.BlockTags.DIRT)) {
                 level.setBlock(ground.above(), Blocks.CRIMSON_ROOTS.defaultBlockState(), Block.UPDATE_ALL);
                 grown++;
             }
@@ -159,6 +192,34 @@ public class RealmGrassBlock extends SnowyDirtBlock implements net.minecraft.wor
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (random.nextInt(12) == 0 && level.getBlockState(pos.above()).isAir()) {
             level.addParticle(HAZE, pos.getX() + random.nextDouble(), pos.getY() + 1.1 + random.nextDouble() * 0.6, pos.getZ() + random.nextDouble(), 0.0, 0.02, 0.0);
+        }
+    }
+
+    /** The frost realm: lilac turf rimed with frost, where it's cold enough to snow. Weepcaps, no heartfruit. */
+    public static class Frost extends RealmGrassBlock {
+        public static final MapCodec<Frost> CODEC = simpleCodec(Frost::new);
+
+        public Frost(Properties properties) {
+            super(properties);
+        }
+
+        @Override
+        protected MapCodec<? extends SnowyDirtBlock> codec() {
+            return CODEC;
+        }
+    }
+
+    /** The bog realm: dark, wet violet turf on mud and in swamps. Weepcaps thrive, no heartfruit. */
+    public static class Bog extends RealmGrassBlock {
+        public static final MapCodec<Bog> CODEC = simpleCodec(Bog::new);
+
+        public Bog(Properties properties) {
+            super(properties);
+        }
+
+        @Override
+        protected MapCodec<? extends SnowyDirtBlock> codec() {
+            return CODEC;
         }
     }
 }

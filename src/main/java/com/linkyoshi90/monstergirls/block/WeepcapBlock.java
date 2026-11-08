@@ -40,13 +40,18 @@ public class WeepcapBlock extends BushBlock {
 
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
-        return state.is(ModBlocks.REALM_GRASS.get());
+        return grows(state);
+    }
+
+    /** Weepcaps grow on the realm's turf (its grass, the frost and the bog), not in realm sand. */
+    public static boolean grows(BlockState ground) {
+        return ground.getBlock() instanceof RealmGrassBlock;
     }
 
     /** A weepcap on this realm grass, unless the spot is taken or crowded. True if one grew. */
     public static boolean sprout(net.minecraft.world.level.LevelAccessor level, BlockPos ground) {
         BlockPos at = ground.above();
-        if (!level.getBlockState(ground).is(ModBlocks.REALM_GRASS.get()) || !level.isEmptyBlock(at)) return false;
+        if (!grows(level.getBlockState(ground)) || !level.isEmptyBlock(at)) return false;
         int crowd = 0;
         for (BlockPos p : BlockPos.betweenClosed(at.offset(-3, -1, -3), at.offset(3, 1, 3))) {
             if (level.getBlockState(p).is(ModBlocks.WEEPCAP.get()) && ++crowd >= CROWD) return false;

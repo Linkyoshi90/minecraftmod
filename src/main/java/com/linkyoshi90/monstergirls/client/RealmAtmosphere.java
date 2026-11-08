@@ -55,7 +55,7 @@ public final class RealmAtmosphere {
         int n = 0;
         for (BlockPos p : BlockPos.betweenClosed(at.offset(-RADIUS, -4, -RADIUS), at.offset(RADIUS, 6, RADIUS))) {
             BlockState s = level.getBlockState(p);
-            if (s.is(ModBlocks.REALM_GRASS.get()) || s.is(ModBlocks.REALM_LEAVES.get()) || s.is(ModBlocks.WEEPCAP.get())) n++;
+            if (com.linkyoshi90.monstergirls.block.RealmGrassBlock.realm(s) || s.is(ModBlocks.REALM_LEAVES.get()) || s.is(ModBlocks.WEEPCAP.get())) n++;
         }
         return Math.min(1.0F, n / (float) FULL);
     }

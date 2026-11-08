@@ -58,7 +58,12 @@ public class HeartfruitBushBlock extends BushBlock implements BonemealableBlock 
 
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
-        return state.is(ModBlocks.REALM_GRASS.get());
+        return grows(state);
+    }
+
+    /** Heartfruit grows on realm grass and realm sand; the frost and the bog are too cold and too wet. */
+    public static boolean grows(BlockState ground) {
+        return ground.is(ModBlocks.REALM_GRASS.get()) || ground.is(ModBlocks.REALM_SAND.get());
     }
 
     @Override
@@ -69,7 +74,7 @@ public class HeartfruitBushBlock extends BushBlock implements BonemealableBlock 
     /** A young bush on this realm grass, unless one already grows within four blocks. True if it sprouted. */
     public static boolean sprout(net.minecraft.world.level.LevelAccessor level, BlockPos ground) {
         BlockPos at = ground.above();
-        if (!level.getBlockState(ground).is(ModBlocks.REALM_GRASS.get()) || !level.isEmptyBlock(at)) return false;
+        if (!grows(level.getBlockState(ground)) || !level.isEmptyBlock(at)) return false;
         for (BlockPos p : BlockPos.betweenClosed(at.offset(-4, -2, -4), at.offset(4, 2, 4))) {
             if (level.getBlockState(p).is(ModBlocks.HEARTFRUIT_BUSH.get())) return false;
         }

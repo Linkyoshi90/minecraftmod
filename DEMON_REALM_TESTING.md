@@ -166,3 +166,13 @@ New girls: raiju (canid), ame-onna (undead), sylph (elf). Spawn eggs work any ti
   - Treasury: gold blocks, amethyst, a chest (gold, diamonds, emeralds, realm silver, golden apples, rarely an enchanted golden apple or netherite scrap).
   - Roof: a throne before crying obsidian, and a grown wild Demon on it.
 - Advancements: The Spire (step in), Before the Throne (reach the roof). Look: does the foundation reach down far enough on badlands slopes (8 blocks)? Can you get off the ladder onto each floor? Does the Demon stay on her roof after a reload?
+
+## Realm variants (2026-11-08)
+
+The realm takes on the land it spreads into (spread, the worldgen realm patches, and a wild Lilith's growth all use it):
+- **Frost Realm**: on grass or dirt where it's cold enough to snow. Pale lilac turf rimed with frost. Weepcaps, no heartfruit.
+- **Bog Realm**: on mud, or any ground in a swamp or mangrove swamp. Dark wet violet over mud. Weepcaps sprout twice as often, no heartfruit. Drops mud.
+- **Realm Sand**: on sand and red sand. Rose-violet with pink glints; falls like sand; cacti and sugar cane still grow on it (it's in the sand tag). Heartfruit, no weepcaps or crimson roots. Purified it's sand again (red sand in the badlands).
+- Everything else about the realm (realm air, torchlight, holy water, holy fonts, the Order's purifying, depth limit, summons) works on all four.
+
+Look: is the frost turf readable as "realm" and not just snow? Is the bog too dark at night? Try a wild Lilith egg in a snowy plains, a swamp and a desert.

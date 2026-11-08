@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "monstergirls:block/realm_bog_top",
+    "bottom": "minecraft:block/mud",
+    "side": "monstergirls:block/realm_bog_side",
+    "particle": "minecraft:block/mud"
+  }
+}

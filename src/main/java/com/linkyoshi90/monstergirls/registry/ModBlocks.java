@@ -129,6 +129,16 @@ public final class ModBlocks {
     public static final DeferredBlock<com.linkyoshi90.monstergirls.block.RealmGrassBlock> REALM_GRASS = BLOCKS.registerBlock("realm_grass",
             com.linkyoshi90.monstergirls.block.RealmGrassBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_MAGENTA).randomTicks().strength(0.6F).sound(SoundType.NYLIUM));
+    /** Realm variants (block/RealmGrassBlock#variantFor): the frost realm, the bog realm, realm sand. */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.RealmGrassBlock.Frost> REALM_FROST = BLOCKS.registerBlock("realm_frost",
+            com.linkyoshi90.monstergirls.block.RealmGrassBlock.Frost::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).randomTicks().strength(0.6F).sound(SoundType.NYLIUM));
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.RealmGrassBlock.Bog> REALM_BOG = BLOCKS.registerBlock("realm_bog",
+            com.linkyoshi90.monstergirls.block.RealmGrassBlock.Bog::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_PURPLE).randomTicks().strength(0.6F).sound(SoundType.MUD));
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.RealmSandBlock> REALM_SAND = BLOCKS.registerBlock("realm_sand",
+            com.linkyoshi90.monstergirls.block.RealmSandBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).randomTicks().strength(0.5F).sound(SoundType.SAND));
 
     /** The bush that bears heartfruit, on realm grass only (HeartfruitBushBlock). */
     public static final DeferredBlock<com.linkyoshi90.monstergirls.block.HeartfruitBushBlock> HEARTFRUIT_BUSH = BLOCKS.registerBlock("heartfruit_bush",

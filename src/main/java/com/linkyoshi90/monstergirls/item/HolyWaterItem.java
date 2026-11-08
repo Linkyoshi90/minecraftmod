@@ -28,7 +28,7 @@ public class HolyWaterItem extends Item {
     public static int cleanse(Level level, BlockPos centre) {
         int count = 0;
         for (BlockPos p : BlockPos.betweenClosed(centre.offset(-RADIUS, -2, -RADIUS), centre.offset(RADIUS, 2, RADIUS))) {
-            if (p.distSqr(centre) > (RADIUS + 0.5) * (RADIUS + 0.5) || !level.getBlockState(p).is(ModBlocks.REALM_GRASS.get())) continue;
+            if (p.distSqr(centre) > (RADIUS + 0.5) * (RADIUS + 0.5) || !com.linkyoshi90.monstergirls.block.RealmGrassBlock.realm(level.getBlockState(p))) continue;
             RealmGrassBlock.purify(level, p.immutable());
             count++;
         }

@@ -1,0 +1,24 @@
+{
+  "variants": {
+    "snowy=false": [
+      {
+        "model": "monstergirls:block/realm_bog"
+      },
+      {
+        "model": "monstergirls:block/realm_bog",
+        "y": 90
+      },
+      {
+        "model": "monstergirls:block/realm_bog",
+        "y": 180
+      },
+      {
+        "model": "monstergirls:block/realm_bog",
+        "y": 270
+      }
+    ],
+    "snowy=true": {
+      "model": "minecraft:block/grass_block_snow"
+    }
+  }
+}

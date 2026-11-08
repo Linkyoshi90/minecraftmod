@@ -412,7 +412,7 @@ public class OrderSister extends Monster implements RangedAttackMob {
         }
         int n = 0;
         for (BlockPos p : BlockPos.betweenClosed(feet.offset(-1, -1, -1), feet.offset(1, 0, 1))) {
-            if (level.getBlockState(p).is(com.linkyoshi90.monstergirls.registry.ModBlocks.REALM_GRASS.get())) {
+            if (com.linkyoshi90.monstergirls.block.RealmGrassBlock.realm(level.getBlockState(p))) {
                 RealmGrassBlock.purify(level, p.immutable());
                 n++;
             }
