@@ -302,6 +302,15 @@ public class OrderTests {
         List<AbstractMonsterGirl> house = level.getEntitiesOfClass(AbstractMonsterGirl.class, new net.minecraft.world.phys.AABB(origin).inflate(8));
         check(house.stream().anyMatch(g -> g.getSpecies() == GirlSpecies.LILITH_DEVIL && !g.isBaby() && g.hasRestriction()), "its lady, a grown Lilith who keeps to it");
         check(house.stream().anyMatch(g -> g.getSpecies() == GirlSpecies.SUCCUBUS_DEVIL), "and a succubus");
+        AbstractMonsterGirl lady = house.stream().filter(g -> g.getSpecies() == GirlSpecies.LILITH_DEVIL).findFirst().orElseThrow();
+        lady.clearRestriction();
+        com.linkyoshi90.monstergirls.world.RealmManorStructure.keepHome(lady);
+        check(lady.hasRestriction(), "her leash comes back after a reload");
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
+        lady.addAffection(p, 1);
+        com.linkyoshi90.monstergirls.world.RealmManorStructure.keepHome(lady);
+        check(!lady.hasRestriction(), "befriended, she is free to follow");
+        HarpyTestUtil.remove(p);
         house.forEach(AbstractMonsterGirl::discard);
         helper.succeed();
     }

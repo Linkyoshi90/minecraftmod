@@ -211,7 +211,29 @@ public class RealmManorStructure extends Structure {
         girl.setBaby(false);
         girl.setPersistenceRequired();
         girl.restrictTo(home, KEEP);
+        girl.getPersistentData().putLong(HOME, home.asLong());
         level.addFreshEntityWithPassengers(girl);
+    }
+
+    private static final String HOME = "ManorHome";
+
+    /**
+     * The house keeps to the manor across reloads (a mob's leash isn't saved), until she befriends someone: then she is free
+     * to follow them.
+     */
+    public static void keepHome(AbstractMonsterGirl girl) {
+        if (!girl.getPersistentData().contains(HOME)) return;
+        if (girl.hasAnyAffection()) {
+            girl.getPersistentData().remove(HOME);
+            girl.clearRestriction();
+        } else if (!girl.hasRestriction()) {
+            girl.restrictTo(BlockPos.of(girl.getPersistentData().getLong(HOME)), KEEP);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onGirlTick(net.neoforged.neoforge.event.tick.EntityTickEvent.Post event) {
+        if (event.getEntity().tickCount % 100 == 13 && event.getEntity() instanceof AbstractMonsterGirl girl && !girl.level().isClientSide) keepHome(girl);
     }
 
     /** A player who steps inside a manor. */
