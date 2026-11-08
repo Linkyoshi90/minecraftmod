@@ -362,4 +362,13 @@ public class MonsterizationTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "besideTheBed")
+    public static void besideTheBed(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos bed = helper.absolutePos(new BlockPos(7, 2, 7));
+        BlockPos spot = Monsterization.besideBed(level, bed);
+        check(spot != null && spot.distManhattan(bed) == 1 && level.isEmptyBlock(spot), "there is room to stand beside the bed");
+        helper.succeed();
+    }
 }

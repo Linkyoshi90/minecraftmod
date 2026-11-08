@@ -6,6 +6,7 @@ import com.linkyoshi90.monstergirls.block.RealmGrassBlock;
 import com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl;
 import com.linkyoshi90.monstergirls.entity.girl.GirlSpecies;
 import com.linkyoshi90.monstergirls.registry.ModGirls;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -219,6 +220,18 @@ public final class Monsterization {
         }
     }
 
+    /** One wandering trader in this many arrives already possessed, bringing the realm's goods to players who never found it. */
+    public static final int TRADER_POSSESSED = 8;
+
+    @SubscribeEvent
+    public static void onTraderArrives(net.neoforged.neoforge.event.entity.EntityJoinLevelEvent event) {
+        if (event.loadedFromDisk() || !(event.getLevel() instanceof ServerLevel level) || !(event.getEntity() instanceof net.minecraft.world.entity.npc.WanderingTrader trader)
+                || !MonsterGirlsConfig.possession() || possessed(trader) || net.neoforged.neoforge.gametest.GameTestHooks.isGametestServer()) return;
+        if (trader.getRandom().nextInt(TRADER_POSSESSED) == 0) level.getServer().execute(() -> {
+            if (trader.isAlive()) possess(level, trader);                   // once she is in the world, so her trades and eyes reach the players
+        });
+    }
+
     /** Loaded again (goals are not saved): a possessed animal is tempted by heartfruit again. */
     @SubscribeEvent
     public static void onJoin(net.neoforged.neoforge.event.entity.EntityJoinLevelEvent event) {
@@ -291,9 +304,20 @@ public final class Monsterization {
                 new net.minecraft.world.item.ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.REALM_CENSER.get()), 3, 10, 0.05F));
         offers.add(new net.minecraft.world.item.trading.MerchantOffer(new net.minecraft.world.item.trading.ItemCost(com.linkyoshi90.monstergirls.registry.ModItems.HEARTFRUIT.get(), 6),
                 new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.EMERALD), 12, 3, 0.05F));
+        if (merchant instanceof net.minecraft.world.entity.npc.WanderingTrader) {     // a travelling one knows the way to a realm
+            var map = new net.minecraft.world.entity.npc.VillagerTrades.TreasureMapForEmeralds(8, REALM_PATCHES, REALM_MAP,
+                    net.minecraft.world.level.saveddata.maps.MapDecorationTypes.RED_X, 1, 10).getOffer(merchant, merchant.getRandom());
+            if (map != null) offers.add(map);
+        }
     }
 
+    public static final net.minecraft.tags.TagKey<net.minecraft.world.level.levelgen.structure.Structure> REALM_PATCHES =
+            net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.STRUCTURE, MonsterGirlsMod.id("realm_patches"));
+    public static final String REALM_MAP = "filled_map.monstergirls.realm";
+
     private static boolean realmGood(net.minecraft.world.item.ItemStack stack) {
+        var name = stack.get(net.minecraft.core.component.DataComponents.ITEM_NAME);
+        if (name != null && name.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents t && REALM_MAP.equals(t.getKey())) return true;
         return stack.is(com.linkyoshi90.monstergirls.registry.ModItems.HEARTFRUIT.get()) || stack.is(com.linkyoshi90.monstergirls.registry.ModItems.WEEPCAP.get())
                 || stack.is(com.linkyoshi90.monstergirls.registry.ModItems.REALM_CENSER.get());
     }
@@ -471,6 +495,17 @@ public final class Monsterization {
         if (bed == null) return null;
         Mob she = bedMate(level, player, BED_CALL);
         if (she == null || she.distanceToSqr(player) < 4.0) return she;
+        if (player.getSleepTimer() >= SLIP_IN) {                                // still not there: she slips in through the haze
+            BlockPos beside = besideBed(level, bed);
+            if (beside != null) {
+                if (she instanceof net.minecraft.world.entity.npc.Villager v && v.isSleeping()) v.stopSleeping();
+                level.sendParticles(RealmGrassBlock.HAZE, she.getX(), she.getY() + 1.0, she.getZ(), 20, 0.3, 0.6, 0.3, 0.0);
+                she.teleportTo(beside.getX() + 0.5, beside.getY(), beside.getZ() + 0.5);
+                she.getNavigation().stop();
+                level.sendParticles(RealmGrassBlock.HAZE, she.getX(), she.getY() + 1.0, she.getZ(), 20, 0.3, 0.6, 0.3, 0.0);
+                return she;
+            }
+        }
         if (she instanceof net.minecraft.world.entity.npc.Villager v) {
             if (v.isSleeping()) v.stopSleeping();
             v.getBrain().setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.WALK_TARGET,
@@ -479,6 +514,20 @@ public final class Monsterization {
             she.getNavigation().moveTo(bed.getX() + 0.5, bed.getY(), bed.getZ() + 0.5, 0.6);
         }
         return she;
+    }
+
+    /** Ticks a player must lie in bed before one who hasn't come walking slips in through the haze. */
+    public static final int SLIP_IN = 60;
+
+    /** A spot to stand beside a bed: open at her feet and head, solid ground under. */
+    @Nullable
+    public static BlockPos besideBed(ServerLevel level, BlockPos bed) {
+        for (net.minecraft.core.Direction d : net.minecraft.core.Direction.Plane.HORIZONTAL) {
+            BlockPos p = bed.relative(d);
+            if (level.getBlockState(p).getCollisionShape(level, p).isEmpty() && level.getBlockState(p.above()).getCollisionShape(level, p.above()).isEmpty()
+                    && level.getBlockState(p.below()).isFaceSturdy(level, p.below(), net.minecraft.core.Direction.UP)) return p;
+        }
+        return null;
     }
 
     @SubscribeEvent

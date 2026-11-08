@@ -47,11 +47,15 @@ Everything below passes the GameTests, but none of it has been seen in a real cl
 
 - A possessed villager passes it to a villager standing next to her at night (about one night in four), little patches of realm take root under them, and an iron golem among three of them turns into a golem girl. Is the pace right, too slow, too fast? (Option `possessionSpreads`.)
 - Possessed animals (pig, cat, chicken) breed with their own kind every half day; the young are girls (piglettes, nekomata, poultry harpies). Heartfruit lures them and readies them at once.
-- Possessed villagers and wandering traders no longer breed with each other: when you sleep, the nearest one within 24 blocks sets out for your bed (her own brain may still pull her home; she counts if she ends the night within 12 blocks). The morning message says she slipped into your bed; a day later she has a little succubus or demon, devoted to you. Does she actually walk over, or does her bedtime routine win?
+- Possessed villagers and wandering traders no longer breed with each other: when you sleep, the nearest one within 24 blocks sets out for your bed (her own brain may still pull her home; she counts if she ends the night within 12 blocks). The morning message says she slipped into your bed; a day later she has a little succubus or demon, devoted to you. She walks over if she can; if she is still not there after you have lain down three seconds, she slips in through the haze beside the bed.
 - Give a possessed villager a heartfruit and she seeks your bed that night from up to 48 blocks, ahead of nearer ones. After she bears your young her prices for you drop (village gossip).
 - Either way it stops while 6 girls live within 32 blocks.
 - Under a full moon the realm's own (devils and every girl it changed) dance in it, and the realm spreads fast.
 - Deep in a realm at night a wild succubus or demon now and then steps out (never two near each other). (Option `realmSummons`.)
+
+## Wandering traders
+
+- One in eight arrives already possessed (glowing eyes, horns), selling heartfruit, weepcaps, a realm censer and a **Realm Explorer Map** to the nearest wild realm patch (8 emeralds and a compass).
 
 ## Options
 
