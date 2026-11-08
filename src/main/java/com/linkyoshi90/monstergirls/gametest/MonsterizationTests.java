@@ -109,8 +109,9 @@ public class MonsterizationTests {
         ready(villager);
         check(Monsterization.breed(level, villager) == null, "a possessed villager's young don't come of her own kind");
         ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
-        check(Monsterization.shareNight(level, p) == villager && Monsterization.carrying(villager), "a night in a player's bed, and she carries their young");
-        check(Monsterization.shareNight(level, p) == null, "not twice while she carries");
+        Monsterization.decideTonight(villager, p, true);
+        check(Monsterization.shareNight(level, p).equals(List.of(villager)) && Monsterization.carrying(villager), "a night in a player's bed, and she carries their young");
+        check(Monsterization.shareNight(level, p).isEmpty(), "not twice while she carries");
         check(Monsterization.deliver(level, villager) == null, "not before her day is up");
         Monsterization.dueNow(villager);
         AbstractMonsterGirl young = Monsterization.deliver(level, villager);
@@ -344,6 +345,58 @@ public class MonsterizationTests {
         });
     }
 
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "possessedAnimalsRipenIntoGirls")
+    public static void possessedAnimalsRipenIntoGirls(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer stranger = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
+        var pig = helper.spawn(EntityType.PIG, new BlockPos(4, 2, 4));
+        var chicken = helper.spawn(EntityType.CHICKEN, new BlockPos(8, 2, 4));
+        var cat = helper.spawn(EntityType.CAT, new BlockPos(4, 2, 8));
+        var villager = helper.spawn(EntityType.VILLAGER, new BlockPos(8, 2, 8));
+        for (var m : List.<net.minecraft.world.entity.Mob>of(pig, chicken, cat, villager)) {
+            m.setNoAi(true);
+            Monsterization.possess(level, m);
+        }
+        check(Monsterization.ripen(level, pig, true) == null && pig.isAlive(), "not on her first night");
+        for (var m : List.<net.minecraft.world.entity.Mob>of(pig, chicken, cat, villager)) Monsterization.ripeNow(m);
+        check(Monsterization.ripen(level, pig, false) == null && pig.isAlive(), "not in daylight");
+        check(Monsterization.ripen(level, villager, true) == null && villager.isAlive(), "a villager stays as she is");
+        var piglette = Monsterization.ripen(level, pig, true);
+        check(piglette instanceof AbstractMonsterGirl g && g.getSpecies() == GirlSpecies.PIGLETTE_ARMOURED && !pig.isAlive(), "the pig becomes a piglette");
+        check(Monsterization.monsterized(piglette) && !Monsterization.possessed(piglette), "changed now, not possessed");
+        AbstractMonsterGirl girl = (AbstractMonsterGirl) piglette;
+        check(girl.trustsEnoughForBed(stranger) && girl.bedChanceFor(stranger) >= Monsterization.EAGER, "and eager for any sleeper's bed");
+        var harpy = Monsterization.ripen(level, chicken, true);
+        check(harpy != null && harpy.getType() == com.linkyoshi90.monstergirls.registry.ModEntities.POULTRY_HARPY.get(), "the chicken becomes a poultry harpy");
+        check(((com.linkyoshi90.monstergirls.entity.Bonded) harpy).trustsEnoughForBed(stranger), "she too comes to a sleeper's bed");
+        var neko = Monsterization.ripen(level, cat, true);
+        check(neko instanceof AbstractMonsterGirl n && Monsterization.POSSESSED.get(EntityType.CAT).contains(n.getSpecies()), "the cat becomes a nekomata");
+        HarpyTestUtil.remove(stranger);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "possessedAllComeToBed")
+    public static void possessedAllComeToBed(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
+        var a = helper.spawn(EntityType.VILLAGER, new BlockPos(4, 2, 2));
+        var b = helper.spawn(EntityType.VILLAGER, new BlockPos(6, 2, 4));
+        var c = helper.spawn(EntityType.VILLAGER, new BlockPos(8, 2, 6));
+        for (var v : List.of(a, b, c)) {
+            v.setNoAi(true);
+            Monsterization.possess(level, v);
+        }
+        check(Monsterization.BED_CHANCE >= 0.8F, "a possessed villager is very likely to come");
+        Monsterization.decideTonight(a, p, true);
+        Monsterization.decideTonight(b, p, true);
+        Monsterization.decideTonight(c, p, false);
+        check(Monsterization.comesTonight(a, p) == Monsterization.comesTonight(a, p), "one roll a night");
+        check(Monsterization.shareNight(level, p).equals(List.of(a, b)), "every one who chose to come shares the night, not just the nearest");
+        check(Monsterization.carrying(a) && Monsterization.carrying(b) && !Monsterization.carrying(c), "and each carries their young");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
     @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "heartfruitPromisesTheNight")
     public static void heartfruitPromisesTheNight(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
@@ -355,7 +408,8 @@ public class MonsterizationTests {
             Monsterization.possess(level, v);
         }
         check(Monsterization.promise(level, promised, p) && Monsterization.seeks(promised, p), "she takes the heartfruit: tonight");
-        check(Monsterization.shareNight(level, p) == promised, "the one who took the heartfruit comes, not the nearer one");
+        Monsterization.decideTonight(nearer, p, false);
+        check(Monsterization.shareNight(level, p).equals(List.of(promised)), "the one who took the heartfruit comes, whatever the night's odds");
         Monsterization.dueNow(promised);
         Monsterization.deliver(level, promised);
         check(promised.getGossips().getReputation(p.getUUID(), t -> true) > 0, "and she speaks well of her young's father");
