@@ -104,15 +104,25 @@ public class MonsterizationTests {
         for (int i = 0; i < Monsterization.STEPS - 1; i++) check(!Monsterization.soak(level, villager, true), "still soaking it up");
         check(Monsterization.soak(level, villager, true) && Monsterization.possessed(villager), "possessed now");
         check(villager.isAlive() && villager.getType() == EntityType.VILLAGER && villager.isPersistenceRequired(), "she keeps her own body, and stays");
-        check(Monsterization.breed(level, villager) == null, "no one of her kind near her yet");
-        var partner = helper.spawn(EntityType.VILLAGER, new BlockPos(9, 2, 7));
-        partner.setNoAi(true);
+        var other = helper.spawn(EntityType.VILLAGER, new BlockPos(9, 2, 7));
+        other.setNoAi(true);
         ready(villager);
-        var young = Monsterization.breed(level, villager);
-        check(young instanceof AbstractMonsterGirl g && g.isBaby() && (g.getSpecies() == GirlSpecies.SUCCUBUS_DEVIL || g.getSpecies() == GirlSpecies.DEMON_DEVIL),
+        check(Monsterization.breed(level, villager) == null, "a possessed villager's young don't come of her own kind");
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
+        check(Monsterization.shareNight(level, p) == villager && Monsterization.carrying(villager), "a night in a player's bed, and she carries their young");
+        check(Monsterization.shareNight(level, p) == null, "not twice while she carries");
+        check(Monsterization.deliver(level, villager) == null, "not before her day is up");
+        Monsterization.dueNow(villager);
+        AbstractMonsterGirl young = Monsterization.deliver(level, villager);
+        check(young != null && young.isBaby() && (young.getSpecies() == GirlSpecies.SUCCUBUS_DEVIL || young.getSpecies() == GirlSpecies.DEMON_DEVIL),
                 "her young is a little succubus or demon");
-        check(Monsterization.breed(level, villager) == null, "not again until half a day has passed");
-        check(!Monsterization.possessed(partner) && Monsterization.offspringOf(partner) == null, "her partner is not possessed by it");
+        check(p.getUUID().equals(young.getFather()), "devoted to the player whose bed she shared");
+        check(!Monsterization.carrying(villager) && Monsterization.eagerForBed(villager), "and she is eager again");
+        var pig = helper.spawn(EntityType.PIG, new BlockPos(11, 2, 11));
+        pig.setNoAi(true);
+        Monsterization.possess(level, pig);
+        check(!Monsterization.eagerForBed(pig), "possessed animals never come to a player's bed");
+        HarpyTestUtil.remove(p);
         helper.succeed();
     }
 

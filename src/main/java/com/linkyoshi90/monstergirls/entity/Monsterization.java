@@ -149,6 +149,7 @@ public final class Monsterization {
                 if (mob.getRandom().nextInt(SPREAD) == 0) spread(level, mob, !level.isDay());
                 if (mob.getRandom().nextInt(ROOT) == 0) takeRoot(level, mob, !level.isDay());
                 breed(level, mob);
+                deliver(level, mob);
             }
             else soak(level, mob, dark(level, mob));
         }
@@ -229,6 +230,7 @@ public final class Monsterization {
      * True if she took it.
      */
     public static boolean feed(ServerLevel level, Mob mob) {
+        if (mob instanceof net.minecraft.world.entity.npc.AbstractVillager) return false;   // villagers come to a player's bed instead
         if (!possessed(mob) || mob.isBaby() || mob.getPersistentData().getLong(NEXT_BREED) <= level.getGameTime()) return false;
         mob.getPersistentData().putLong(NEXT_BREED, level.getGameTime());
         mob.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.2F);
@@ -370,6 +372,87 @@ public final class Monsterization {
         return next;
     }
 
+    /** How long a possessed villager carries before her young is born (a day, as a girl does), and how near the bed she must be. */
+    public static final int CARRY = 24000, BED_RANGE = 12, BED_CALL = 24;
+    private static final String CARRYING_BY = "RealmCarryingBy", BIRTH_AT = "RealmBirthAt";
+
+    /** Grown, possessed, a villager or wandering trader, and not carrying already: she would share a sleeper's bed tonight. */
+    public static boolean eagerForBed(Mob mob) {
+        return mob instanceof net.minecraft.world.entity.npc.AbstractVillager && possessed(mob) && !mob.isBaby() && !carrying(mob);
+    }
+
+    public static boolean carrying(Mob mob) {
+        return mob.getPersistentData().hasUUID(CARRYING_BY);
+    }
+
+    /**
+     * The night a player slept through: the nearest possessed villager or wandering trader within BED_RANGE of their bed slipped
+     * into it, and now carries their young (a little succubus or demon, born a day later and devoted to them, as any girl's
+     * young are). Not while CROWD girls already live near. Who, or null.
+     */
+    @Nullable
+    public static Mob shareNight(ServerLevel level, Player player) {
+        if (!MonsterGirlsConfig.possession()) return null;
+        Mob she = level.getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(BED_RANGE), Monsterization::eagerForBed).stream()
+                .min(java.util.Comparator.comparingDouble(m -> m.distanceToSqr(player))).orElse(null);
+        if (she == null || level.getEntitiesOfClass(AbstractMonsterGirl.class, she.getBoundingBox().inflate(32)).size() >= CROWD) return null;
+        she.getPersistentData().putUUID(CARRYING_BY, player.getUUID());
+        she.getPersistentData().putLong(BIRTH_AT, level.getGameTime() + CARRY);
+        level.sendParticles(ParticleTypes.HEART, she.getX(), she.getEyeY() + 0.3, she.getZ(), 6, 0.4, 0.3, 0.4, 0.0);
+        player.displayClientMessage(Component.translatable("message.monstergirls.possessed.bed", she.getDisplayName()), false);
+        return she;
+    }
+
+    /** Her day is up: her young is born beside her, devoted to the player whose bed she shared. The young, or null. */
+    @Nullable
+    public static AbstractMonsterGirl deliver(ServerLevel level, Mob mob) {
+        if (!carrying(mob) || level.getGameTime() < mob.getPersistentData().getLong(BIRTH_AT)) return null;
+        java.util.UUID father = mob.getPersistentData().getUUID(CARRYING_BY);
+        mob.getPersistentData().remove(CARRYING_BY);
+        mob.getPersistentData().remove(BIRTH_AT);
+        List<GirlSpecies> kinds = POSSESSED.get(mob.getType());
+        if (kinds == null || kinds.isEmpty()) return null;
+        AbstractMonsterGirl young = AbstractMonsterGirl.youngOf(level, ModGirls.type(kinds.get(mob.getRandom().nextInt(kinds.size()))), mob.blockPosition(), father);
+        if (young != null) {
+            level.sendParticles(RealmGrassBlock.HAZE, young.getX(), young.getY() + 0.5, young.getZ(), 12, 0.3, 0.3, 0.3, 0.0);
+            level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY(), mob.getZ(), 4, 0.3, 0.2, 0.3, 0.0);
+            witnessed(level, mob, "realm_born");
+        }
+        return young;
+    }
+
+    /** For tests: her day is up now. */
+    public static void dueNow(Mob mob) {
+        if (carrying(mob)) mob.getPersistentData().putLong(BIRTH_AT, 0L);
+    }
+
+    /**
+     * A player lying in bed at night: the nearest eager possessed villager within BED_CALL blocks sets out for their bed (her
+     * brain may still take her home to her own; she has to end the night within BED_RANGE of theirs). Who, or null.
+     */
+    @Nullable
+    public static Mob callToBed(ServerLevel level, Player player) {
+        if (!player.isSleeping() || !MonsterGirlsConfig.possession()) return null;
+        net.minecraft.core.BlockPos bed = player.getSleepingPos().orElse(null);
+        if (bed == null) return null;
+        Mob she = level.getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(BED_CALL), Monsterization::eagerForBed).stream()
+                .min(java.util.Comparator.comparingDouble(m -> m.distanceToSqr(player))).orElse(null);
+        if (she == null || she.distanceToSqr(player) < 4.0) return she;
+        if (she instanceof net.minecraft.world.entity.npc.Villager v) {
+            if (v.isSleeping()) v.stopSleeping();
+            v.getBrain().setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.WALK_TARGET,
+                    new net.minecraft.world.entity.ai.memory.WalkTarget(bed, 0.6F, 1));
+        } else {
+            she.getNavigation().moveTo(bed.getX() + 0.5, bed.getY(), bed.getZ() + 0.5, 0.6);
+        }
+        return she;
+    }
+
+    @SubscribeEvent
+    public static void onSleeperTick(net.neoforged.neoforge.event.tick.PlayerTickEvent.Post event) {
+        if (event.getEntity().tickCount % 20 == 13 && event.getEntity().level() instanceof ServerLevel level) callToBed(level, event.getEntity());
+    }
+
     /** Holy water drives it out. True if there was something to drive out. */
     public static boolean exorcise(ServerLevel level, Mob mob) {
         if (!possessed(mob)) return false;
@@ -395,6 +478,7 @@ public final class Monsterization {
     @Nullable
     public static Mob breed(ServerLevel level, Mob mob) {
         if (!possessed(mob) || mob.isBaby() || !MonsterGirlsConfig.possession() || level.getGameTime() < mob.getPersistentData().getLong(NEXT_BREED)) return null;
+        if (mob instanceof net.minecraft.world.entity.npc.AbstractVillager) return null;   // a possessed villager's young come of a player's bed (shareNight)
         level.sendParticles(RealmGrassBlock.HAZE, mob.getX(), mob.getY() + mob.getBbHeight() * 0.6, mob.getZ(), 3, 0.3, 0.4, 0.3, 0.0);
         Mob partner = level.getEntitiesOfClass(Mob.class, mob.getBoundingBox().inflate(BREED_RANGE),
                 m -> m != mob && m.getType() == mob.getType() && !m.isBaby() && m.isAlive()).stream().findFirst().orElse(null);
