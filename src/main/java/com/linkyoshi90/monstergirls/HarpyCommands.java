@@ -37,7 +37,35 @@ public final class HarpyCommands {
                         .executes(ctx -> listBonds(ctx.getSource(), DEFAULT_RADIUS))
                         .then(Commands.argument("radius", IntegerArgumentType.integer(1, 128))
                                 .executes(ctx -> listBonds(ctx.getSource(), IntegerArgumentType.getInteger(ctx, "radius")))))
-                .then(Commands.literal("friends").executes(ctx -> listFriends(ctx.getSource()))));
+                .then(Commands.literal("friends").executes(ctx -> listFriends(ctx.getSource())))
+                .then(Commands.literal("locate").then(Commands.literal("realm").executes(ctx -> locateRealm(ctx.getSource())))));
+    }
+
+    /**
+     * The nearest wild patch of the Demon Realm (world/RealmPatchStructure), as /locate structure monstergirls:realm_patch finds
+     * it, with the coordinates to click. Realms a Lilith grows herself are not on any map.
+     */
+    static int locateRealm(CommandSourceStack source) {
+        net.minecraft.server.level.ServerLevel level = source.getLevel();
+        var holder = level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .getHolder(com.linkyoshi90.monstergirls.registry.ModStructures.REALM_PATCH_KEY);
+        net.minecraft.core.BlockPos from = net.minecraft.core.BlockPos.containing(source.getPosition());
+        var found = holder.isEmpty() ? null : level.getChunkSource().getGenerator().findNearestMapStructure(level,
+                net.minecraft.core.HolderSet.direct(holder.get()), from, 100, false);
+        if (found == null) {
+            source.sendFailure(Component.translatable("commands.monstergirls.locate.realm.none"));
+            return 0;
+        }
+        net.minecraft.core.BlockPos at = found.getFirst();
+        int distance = net.minecraft.util.Mth.floor(Math.sqrt(from.distSqr(new net.minecraft.core.BlockPos(at.getX(), from.getY(), at.getZ()))));
+        Component coords = net.minecraft.network.chat.ComponentUtils.wrapInSquareBrackets(Component.translatable("chat.coordinates", at.getX(), "~", at.getZ()))
+                .withStyle(s -> s.withColor(ChatFormatting.GREEN)
+                        .withClickEvent(new net.minecraft.network.chat.ClickEvent(net.minecraft.network.chat.ClickEvent.Action.SUGGEST_COMMAND,
+                                "/tp @s " + at.getX() + " ~ " + at.getZ()))
+                        .withHoverEvent(new net.minecraft.network.chat.HoverEvent(net.minecraft.network.chat.HoverEvent.Action.SHOW_TEXT,
+                                Component.translatable("chat.coordinates.tooltip"))));
+        source.sendSuccess(() -> Component.translatable("commands.monstergirls.locate.realm", coords, distance), false);
+        return distance;
     }
 
     static int listBonds(CommandSourceStack source, int radius) throws CommandSyntaxException {

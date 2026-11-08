@@ -376,4 +376,32 @@ public class DemonRealmTests {
         check(com.linkyoshi90.monstergirls.entity.Monsterization.offspringOf(pig) == GirlSpecies.PIGLETTE_ARMOURED, "and bears piglettes");
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "realmPlanksStayPurple")
+    public static void realmPlanksStayPurple(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos at = helper.absolutePos(new BlockPos(5, 2, 5));
+        level.setBlock(at, ModBlocks.REALM_PLANKS.get().defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+        level.setBlock(at.east(), Blocks.TORCH.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+        level.getBlockState(at).randomTick(level, at, level.random);
+        check(level.getBlockState(at).is(ModBlocks.REALM_PLANKS.get()), "realm planks stay purple by torchlight");
+        var recipe = level.getRecipeManager().byKey(com.linkyoshi90.monstergirls.MonsterGirlsMod.id("realm_planks"));
+        check(recipe.isPresent() && recipe.get().value().getResultItem(level.registryAccess()).getCount() == 4, "a realm log makes four planks");
+        check(new ItemStack(ModItems.REALM_PLANKS.get()).is(net.minecraft.tags.ItemTags.PLANKS), "they count as planks (sticks, crafting tables)");
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "realmPatchIsAStructure")
+    public static void realmPatchIsAStructure(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var structure = level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .getHolder(com.linkyoshi90.monstergirls.registry.ModStructures.REALM_PATCH_KEY);
+        check(structure.isPresent() && structure.get().value() instanceof com.linkyoshi90.monstergirls.world.RealmPatchStructure, "the realm patch is a structure, so /locate finds it");
+        check(level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE_SET)
+                .containsKey(com.linkyoshi90.monstergirls.MonsterGirlsMod.id("realm_patch")), "and it has a place in the world");
+        var piece = new com.linkyoshi90.monstergirls.world.RealmPatchStructure.Piece(helper.absolutePos(new BlockPos(7, 1, 7)), 42L);
+        var tag = piece.createTag(net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext.fromLevel(level));
+        check(tag.getLong("Seed") == 42L, "a piece keeps its seed when saved");
+        helper.succeed();
+    }
 }

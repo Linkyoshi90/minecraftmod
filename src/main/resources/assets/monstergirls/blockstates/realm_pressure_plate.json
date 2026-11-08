@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "monstergirls:block/realm_pressure_plate"
+    },
+    "powered=true": {
+      "model": "monstergirls:block/realm_pressure_plate_down"
+    }
+  }
+}

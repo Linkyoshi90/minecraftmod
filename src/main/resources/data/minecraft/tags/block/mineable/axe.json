@@ -7,6 +7,15 @@
     "monstergirls:butter_churn",
     "monstergirls:cheese_shelf",
     "monstergirls:nesting_box",
-    "monstergirls:realm_log"
+    "monstergirls:realm_log",
+    "monstergirls:realm_planks",
+    "monstergirls:realm_stairs",
+    "monstergirls:realm_slab",
+    "monstergirls:realm_fence",
+    "monstergirls:realm_fence_gate",
+    "monstergirls:realm_door",
+    "monstergirls:realm_trapdoor",
+    "monstergirls:realm_button",
+    "monstergirls:realm_pressure_plate"
   ]
 }

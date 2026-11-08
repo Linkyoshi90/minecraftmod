@@ -148,6 +148,31 @@ public final class ModBlocks {
             BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.OAK_LOG).mapColor(MapColor.COLOR_PURPLE).lightLevel(s -> 2).sound(SoundType.STEM));
 
     /** The weepcap: a pale glowing realm mushroom weeping droplets from its rim (WeepcapBlock). */
+    // Demon Realm wood (2026-11-08): the dark oak set in deep purple; it never turns back in the light (tools/gen_realm_wood.py)
+    private static BlockBehaviour.Properties realmWood() {
+        return BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).instrument(net.minecraft.world.level.block.state.properties.NoteBlockInstrument.BASS)
+                .strength(2.0F, 3.0F).sound(SoundType.WOOD).ignitedByLava();
+    }
+
+    public static final DeferredBlock<net.minecraft.world.level.block.Block> REALM_PLANKS = BLOCKS.registerBlock("realm_planks", net.minecraft.world.level.block.Block::new, realmWood());
+    public static final DeferredBlock<net.minecraft.world.level.block.StairBlock> REALM_STAIRS = BLOCKS.registerBlock("realm_stairs",
+            p -> new net.minecraft.world.level.block.StairBlock(REALM_PLANKS.get().defaultBlockState(), p), realmWood());
+    public static final DeferredBlock<net.minecraft.world.level.block.SlabBlock> REALM_SLAB = BLOCKS.registerBlock("realm_slab", net.minecraft.world.level.block.SlabBlock::new, realmWood());
+    public static final DeferredBlock<net.minecraft.world.level.block.FenceBlock> REALM_FENCE = BLOCKS.registerBlock("realm_fence", net.minecraft.world.level.block.FenceBlock::new, realmWood());
+    public static final DeferredBlock<net.minecraft.world.level.block.FenceGateBlock> REALM_FENCE_GATE = BLOCKS.registerBlock("realm_fence_gate",
+            p -> new net.minecraft.world.level.block.FenceGateBlock(net.minecraft.world.level.block.state.properties.WoodType.DARK_OAK, p), realmWood().forceSolidOn());
+    public static final DeferredBlock<net.minecraft.world.level.block.DoorBlock> REALM_DOOR = BLOCKS.registerBlock("realm_door",
+            p -> new net.minecraft.world.level.block.DoorBlock(net.minecraft.world.level.block.state.properties.BlockSetType.DARK_OAK, p), realmWood().strength(3.0F).noOcclusion().pushReaction(PushReaction.DESTROY));
+    public static final DeferredBlock<net.minecraft.world.level.block.TrapDoorBlock> REALM_TRAPDOOR = BLOCKS.registerBlock("realm_trapdoor",
+            p -> new net.minecraft.world.level.block.TrapDoorBlock(net.minecraft.world.level.block.state.properties.BlockSetType.DARK_OAK, p), realmWood().strength(3.0F).noOcclusion()
+                    .isValidSpawn((s, l, pos, t) -> false));
+    public static final DeferredBlock<net.minecraft.world.level.block.ButtonBlock> REALM_BUTTON = BLOCKS.registerBlock("realm_button",
+            p -> new net.minecraft.world.level.block.ButtonBlock(net.minecraft.world.level.block.state.properties.BlockSetType.DARK_OAK, 30, p),
+            BlockBehaviour.Properties.of().noCollission().strength(0.5F).pushReaction(PushReaction.DESTROY).sound(SoundType.WOOD));
+    public static final DeferredBlock<net.minecraft.world.level.block.PressurePlateBlock> REALM_PRESSURE_PLATE = BLOCKS.registerBlock("realm_pressure_plate",
+            p -> new net.minecraft.world.level.block.PressurePlateBlock(net.minecraft.world.level.block.state.properties.BlockSetType.DARK_OAK, p),
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).forceSolidOn().noCollission().strength(0.5F).ignitedByLava().pushReaction(PushReaction.DESTROY));
+
     /** A lantern burning the realm's violet flame: the realm's air at home, without its ground (block/RealmCenserBlock). */
     public static final DeferredBlock<com.linkyoshi90.monstergirls.block.RealmCenserBlock> REALM_CENSER = BLOCKS.registerBlock("realm_censer",
             com.linkyoshi90.monstergirls.block.RealmCenserBlock::new,

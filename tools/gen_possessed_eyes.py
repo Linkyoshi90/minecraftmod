@@ -24,8 +24,22 @@ EYES = {
 }
 
 
+def horns():
+    """the little horns (client/PossessedEyesLayer draws them on the head): dark plum at the root to violet at the tip, 16x16"""
+    im = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    ramp = [(0x2A, 0x14, 0x30), (0x3E, 0x1E, 0x46), (0x56, 0x2A, 0x62), (0x74, 0x3A, 0x84), (0x9A, 0x52, 0xAE), (0xC0, 0x78, 0xD8)]
+    for y in range(16):
+        for x in range(16):
+            c = ramp[min(5, (15 - y) * 6 // 16)] if x < 8 else ramp[min(5, 2 + (15 - y) * 4 // 16)]   # left half the base, right the tip
+            shade = 0.85 if (x + y) % 3 == 0 else 1.0
+            im.putpixel((x, y), tuple(int(v * shade) for v in c) + (255,))
+    im.save(os.path.join(OUT, "horns.png"))
+    print("horns (16, 16)")
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
+    horns()
     for name, (size, px) in EYES.items():
         im = Image.new("RGBA", size, (0, 0, 0, 0))
         for x, y, c in px:

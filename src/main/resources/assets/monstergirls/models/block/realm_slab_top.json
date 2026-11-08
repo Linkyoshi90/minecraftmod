@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "monstergirls:block/realm_planks",
+    "top": "monstergirls:block/realm_planks",
+    "side": "monstergirls:block/realm_planks"
+  }
+}

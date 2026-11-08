@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "monstergirls:block/realm_planks",
+    "top": "monstergirls:block/realm_planks",
+    "side": "monstergirls:block/realm_planks"
+  }
+}

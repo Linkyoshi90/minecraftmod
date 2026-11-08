@@ -216,6 +216,16 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> REALM_LOG = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_LOG);
     public static final DeferredItem<BlockItem> WEEPCAP = ITEMS.registerSimpleBlockItem(ModBlocks.WEEPCAP);
     public static final DeferredItem<BlockItem> REALM_CENSER = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_CENSER);
+    public static final DeferredItem<BlockItem> REALM_PLANKS = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_PLANKS);
+    public static final DeferredItem<BlockItem> REALM_STAIRS = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_STAIRS);
+    public static final DeferredItem<BlockItem> REALM_SLAB = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_SLAB);
+    public static final DeferredItem<BlockItem> REALM_FENCE = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_FENCE);
+    public static final DeferredItem<BlockItem> REALM_FENCE_GATE = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_FENCE_GATE);
+    public static final DeferredItem<net.minecraft.world.item.DoubleHighBlockItem> REALM_DOOR = ITEMS.registerItem("realm_door",
+            props -> new net.minecraft.world.item.DoubleHighBlockItem(ModBlocks.REALM_DOOR.get(), props));
+    public static final DeferredItem<BlockItem> REALM_TRAPDOOR = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_TRAPDOOR);
+    public static final DeferredItem<BlockItem> REALM_BUTTON = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_BUTTON);
+    public static final DeferredItem<BlockItem> REALM_PRESSURE_PLATE = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_PRESSURE_PLATE);
     /** Weepcap stew: the realm's pale mushrooms let you see in the dark for a while. */
     public static final DeferredItem<Item> WEEPCAP_STEW = ITEMS.registerItem("weepcap_stew", props -> new Item(props.stacksTo(1)
             .craftRemainder(net.minecraft.world.item.Items.BOWL)
