@@ -83,8 +83,17 @@ public final class DemonRealm {
         if (!sabbath(mob, BedSharing.fullMoon(mob.level()))) return false;
         if (mob.level() instanceof ServerLevel level) {
             level.sendParticles(com.linkyoshi90.monstergirls.block.RealmGrassBlock.HAZE, mob.getX(), mob.getY() + 0.3, mob.getZ(), 8, 0.8, 0.2, 0.8, 0.0);
+            for (Player p : level.getEntitiesOfClass(Player.class, mob.getBoundingBox().inflate(16))) com.linkyoshi90.monstergirls.entity.Dairy.award(p, "realm_sabbath");
         }
         return true;
+    }
+
+    /** A player who stands on the realm's ground for the first time. */
+    @SubscribeEvent
+    public static void onPlayerTick(net.neoforged.neoforge.event.tick.PlayerTickEvent.Post event) {
+        if (event.getEntity().tickCount % 40 == 7 && !event.getEntity().level().isClientSide && inRealm(event.getEntity())) {
+            com.linkyoshi90.monstergirls.entity.Dairy.award(event.getEntity(), "realm_entered");
+        }
     }
 
     public static boolean seeds(Entity e) {
@@ -181,6 +190,7 @@ public final class DemonRealm {
         mob.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.1F);
         level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.3, mob.getZ(), 7, 0.4, 0.3, 0.4, 0.0);
         player.displayClientMessage(Component.translatable("message.monstergirls.lovestruck." + mob.getRandom().nextInt(4), mob.getDisplayName()), true);
+        com.linkyoshi90.monstergirls.entity.Dairy.award(player, "realm_lovestruck");
         return true;
     }
 

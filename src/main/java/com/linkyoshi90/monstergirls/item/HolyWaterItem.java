@@ -44,6 +44,7 @@ public class HolyWaterItem extends Item {
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, net.minecraft.world.entity.LivingEntity target, net.minecraft.world.InteractionHand hand) {
         if (!(target instanceof net.minecraft.world.entity.Mob mob) || !com.linkyoshi90.monstergirls.entity.Monsterization.possessed(mob)) return InteractionResult.PASS;
         if (player.level() instanceof ServerLevel server && com.linkyoshi90.monstergirls.entity.Monsterization.exorcise(server, mob)) {
+            com.linkyoshi90.monstergirls.entity.Dairy.award(player, "realm_exorcist");
             server.playSound(null, mob.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1.0F, 1.4F);
             player.setItemInHand(hand, ItemUtils.createFilledResult(stack, player, new ItemStack(Items.GLASS_BOTTLE)));
         }

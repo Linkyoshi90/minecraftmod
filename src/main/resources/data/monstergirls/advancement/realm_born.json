@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:realm_changed",
+  "display": {
+    "icon": {
+      "id": "minecraft:egg"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.realm_born"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.realm_born.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

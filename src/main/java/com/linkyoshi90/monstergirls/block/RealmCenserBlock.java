@@ -62,7 +62,10 @@ public class RealmCenserBlock extends LanternBlock {
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!stack.is(ModItems.HEARTFRUIT.get())) return super.useItemOn(stack, state, level, pos, player, hand, hit);
-        if (!level.isClientSide && light(level, pos, state)) stack.consume(1, player);
+        if (!level.isClientSide && light(level, pos, state)) {
+            stack.consume(1, player);
+            com.linkyoshi90.monstergirls.entity.Dairy.award(player, "realm_censer");
+        }
         return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }
 

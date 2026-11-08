@@ -72,11 +72,35 @@ public class RealmPatchFeature extends Feature<NoneFeatureConfiguration> {
 
     private boolean place(WorldGenLevel level, BlockPos origin, RandomSource random) {
         int taken = placePatch(level, origin, random);
+        if (taken > 0 && random.nextInt(RESIDENTS) == 0) settle(level, origin, random);
         if (taken > 0 && random.nextInt(SHRINE) == 0) {
             BlockPos ground = new BlockPos(origin.getX(), level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, origin.getX(), origin.getZ()) - 1, origin.getZ());
             placeShrine(level, ground, random);
         }
         return taken > 0;
+    }
+
+    /** One patch in this many has residents: two possessed pigs or chickens. */
+    public static final int RESIDENTS = 3;
+
+    /** Two possessed pigs or chickens on the patch, if the possession option is on. How many settled. */
+    public static int settle(WorldGenLevel level, BlockPos origin, RandomSource random) {
+        if (!MonsterGirlsConfig.possession()) return 0;
+        net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.Mob> type = random.nextBoolean()
+                ? net.minecraft.world.entity.EntityType.PIG : net.minecraft.world.entity.EntityType.CHICKEN;
+        int n = 0;
+        for (int i = 0; i < 2; i++) {
+            int x = origin.getX() + random.nextInt(5) - 2, z = origin.getZ() + random.nextInt(5) - 2;
+            int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+            if (!level.getBlockState(new BlockPos(x, y - 1, z)).is(ModBlocks.REALM_GRASS.get())) continue;
+            net.minecraft.world.entity.Mob mob = type.create(level.getLevel());
+            if (mob == null) continue;
+            mob.moveTo(x + 0.5, y, z + 0.5, random.nextFloat() * 360.0F, 0.0F);
+            com.linkyoshi90.monstergirls.entity.Monsterization.markPossessed(mob);
+            level.addFreshEntityWithPassengers(mob);
+            n++;
+        }
+        return n;
     }
 
     /** One patch in this many has a shrine at its heart. */

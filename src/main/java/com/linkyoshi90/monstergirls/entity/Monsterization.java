@@ -204,6 +204,33 @@ public final class Monsterization {
         level.sendParticles(RealmGrassBlock.HAZE, mob.getX(), mob.getY() + 0.5, mob.getZ(), 30, 0.5, 0.5, 0.5, 0.0);
         mob.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 0.7F, 1.6F);
         sync(mob);
+        if (mob instanceof net.minecraft.world.entity.npc.AbstractVillager merchant) realmTrades(merchant, true);
+    }
+
+    /** What a possessed villager or wandering trader deals in besides her trade: the realm's goods (or, freed, she stops). */
+    public static void realmTrades(net.minecraft.world.entity.npc.AbstractVillager merchant, boolean add) {
+        var offers = merchant.getOffers();
+        offers.removeIf(o -> realmGood(o.getResult()) || o.getCostA().is(com.linkyoshi90.monstergirls.registry.ModItems.HEARTFRUIT.get()));
+        if (!add) return;
+        var emerald = new net.minecraft.world.item.trading.ItemCost(net.minecraft.world.item.Items.EMERALD, 1);
+        offers.add(new net.minecraft.world.item.trading.MerchantOffer(emerald, new net.minecraft.world.item.ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.HEARTFRUIT.get(), 3), 12, 3, 0.05F));
+        offers.add(new net.minecraft.world.item.trading.MerchantOffer(new net.minecraft.world.item.trading.ItemCost(net.minecraft.world.item.Items.EMERALD, 2),
+                new net.minecraft.world.item.ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.WEEPCAP.get(), 2), 8, 5, 0.05F));
+        offers.add(new net.minecraft.world.item.trading.MerchantOffer(new net.minecraft.world.item.trading.ItemCost(net.minecraft.world.item.Items.EMERALD, 5),
+                java.util.Optional.of(new net.minecraft.world.item.trading.ItemCost(net.minecraft.world.item.Items.AMETHYST_SHARD, 2)),
+                new net.minecraft.world.item.ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.REALM_CENSER.get()), 3, 10, 0.05F));
+        offers.add(new net.minecraft.world.item.trading.MerchantOffer(new net.minecraft.world.item.trading.ItemCost(com.linkyoshi90.monstergirls.registry.ModItems.HEARTFRUIT.get(), 6),
+                new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.EMERALD), 12, 3, 0.05F));
+    }
+
+    private static boolean realmGood(net.minecraft.world.item.ItemStack stack) {
+        return stack.is(com.linkyoshi90.monstergirls.registry.ModItems.HEARTFRUIT.get()) || stack.is(com.linkyoshi90.monstergirls.registry.ModItems.WEEPCAP.get())
+                || stack.is(com.linkyoshi90.monstergirls.registry.ModItems.REALM_CENSER.get());
+    }
+
+    /** The players who saw something happen here (within 16 blocks) get this advancement. */
+    static void witnessed(ServerLevel level, Mob mob, String advancement) {
+        for (Player p : level.getEntitiesOfClass(Player.class, mob.getBoundingBox().inflate(16))) com.linkyoshi90.monstergirls.entity.Dairy.award(p, advancement);
     }
 
     /** Tells everyone who can see her whether she is possessed (her eyes glow). */
@@ -218,6 +245,12 @@ public final class Monsterization {
         if (event.getTarget() instanceof Mob mob && possessed(mob) && event.getEntity() instanceof net.minecraft.server.level.ServerPlayer player) {
             net.neoforged.neoforge.network.PacketDistributor.sendToPlayer(player, new com.linkyoshi90.monstergirls.network.ModPayloads.Possessed(mob.getId(), true));
         }
+    }
+
+    /** Possessed from the start, quietly (a wild realm patch's residents, as the world is made). */
+    public static void markPossessed(Mob mob) {
+        mob.getPersistentData().putBoolean(POSSESSED_TAG, true);
+        mob.setPersistenceRequired();
     }
 
     public static boolean possessed(Mob mob) {
@@ -266,6 +299,7 @@ public final class Monsterization {
         mob.getPersistentData().remove(NEXT_BREED);
         level.sendParticles(ParticleTypes.END_ROD, mob.getX(), mob.getY() + mob.getBbHeight() * 0.6, mob.getZ(), 12, 0.3, 0.4, 0.3, 0.02);
         sync(mob);
+        if (mob instanceof net.minecraft.world.entity.npc.AbstractVillager merchant) realmTrades(merchant, false);
         return true;
     }
 
@@ -294,6 +328,7 @@ public final class Monsterization {
         mob.getPersistentData().putLong(NEXT_BREED, level.getGameTime() + BREED_EVERY);
         for (Mob m : List.of(mob, partner)) level.sendParticles(ParticleTypes.HEART, m.getX(), m.getY() + m.getBbHeight() + 0.3, m.getZ(), 5, 0.3, 0.2, 0.3, 0.0);
         Mob young = hatch != null ? hatchling(level, hatch.get(), mob) : AbstractMonsterGirl.youngOf(level, ModGirls.type(kind), mob.blockPosition(), null);
+        if (young != null) witnessed(level, mob, "realm_born");
         if (young != null) level.sendParticles(RealmGrassBlock.HAZE, young.getX(), young.getY() + 0.5, young.getZ(), 12, 0.3, 0.3, 0.3, 0.0);
         return young;
     }
@@ -325,6 +360,7 @@ public final class Monsterization {
         @Nullable UUID owner = mob instanceof OwnableEntity pet ? pet.getOwnerUUID() : null;
         Mob girl = mob.convertTo(type, false);
         if (girl == null) return null;
+        witnessed(level, girl, "realm_changed");
         girl.finalizeSpawn(level, level.getCurrentDifficultyAt(girl.blockPosition()), MobSpawnType.CONVERSION, null);
         if (girl instanceof com.linkyoshi90.monstergirls.entity.girl.Minotaur cow) cow.setMale(false);   // the realm turns cows, not bulls
         girl.setPersistenceRequired();                                  // a far player must not despawn the one creature this happened to

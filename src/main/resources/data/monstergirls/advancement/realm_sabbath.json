@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:realm_lovestruck",
+  "display": {
+    "icon": {
+      "id": "minecraft:purple_candle"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.realm_sabbath"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.realm_sabbath.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

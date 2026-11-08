@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:realm_changed",
+  "display": {
+    "icon": {
+      "id": "monstergirls:holy_water"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.realm_exorcist"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.realm_exorcist.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

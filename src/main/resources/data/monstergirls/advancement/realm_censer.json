@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:realm_lovestruck",
+  "display": {
+    "icon": {
+      "id": "monstergirls:realm_censer"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.realm_censer"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.realm_censer.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

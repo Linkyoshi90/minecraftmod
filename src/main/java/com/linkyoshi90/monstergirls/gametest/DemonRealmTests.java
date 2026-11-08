@@ -366,4 +366,14 @@ public class DemonRealmTests {
         check(any, "the realm's gifts are in it");
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "wildPatchResidents")
+    public static void wildPatchResidents(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var pig = helper.spawn(net.minecraft.world.entity.EntityType.PIG, new BlockPos(5, 2, 5));
+        com.linkyoshi90.monstergirls.entity.Monsterization.markPossessed(pig);
+        check(com.linkyoshi90.monstergirls.entity.Monsterization.possessed(pig) && pig.isPersistenceRequired(), "a resident is possessed from the start");
+        check(com.linkyoshi90.monstergirls.entity.Monsterization.offspringOf(pig) == GirlSpecies.PIGLETTE_ARMOURED, "and bears piglettes");
+        helper.succeed();
+    }
 }

@@ -235,4 +235,18 @@ public class MonsterizationTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "possessedTradersDealInTheRealm")
+    public static void possessedTradersDealInTheRealm(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var trader = helper.spawn(EntityType.WANDERING_TRADER, new BlockPos(6, 2, 6));
+        trader.setNoAi(true);
+        int before = trader.getOffers().size();
+        Monsterization.possess(level, trader);
+        check(trader.getOffers().stream().anyMatch(o -> o.getResult().is(com.linkyoshi90.monstergirls.registry.ModItems.REALM_CENSER.get())), "she sells a realm censer");
+        check(trader.getOffers().size() == before + 4, "four realm trades besides her own");
+        Monsterization.exorcise(level, trader);
+        check(trader.getOffers().size() == before, "freed, she deals only in her own wares again");
+        helper.succeed();
+    }
 }
