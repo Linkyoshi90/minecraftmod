@@ -308,7 +308,8 @@ public class Minotaur extends AbstractMonsterGirl {
             if (this.level() instanceof ServerLevel server) this.fillBowl(server, player, stack);
             return InteractionResult.sidedSuccess(client);
         }
-        if (stack.is(Items.BUCKET) && !this.isMale() && !this.isBaby()) {
+        boolean bottle = stack.is(Items.GLASS_BOTTLE) && this.species == GirlSpecies.HOLSTAUR_MINOTAUR;   // a holstaur's milk goes in a bottle too
+        if ((stack.is(Items.BUCKET) || bottle) && !this.isMale() && !this.isBaby()) {
             if (this.level() instanceof ServerLevel server) {
                 if (server.getGameTime() < this.nextMilk) {
                     player.displayClientMessage(Component.translatable("message.monstergirls.no_milk", this.getDisplayName()), true);
@@ -317,7 +318,8 @@ public class Minotaur extends AbstractMonsterGirl {
                     this.setNextMilk(server.getGameTime() + (friend ? MILK_COOLDOWN / 2 : MILK_COOLDOWN));
                     stack.consume(1, player);
                     com.linkyoshi90.monstergirls.entity.Lactation.relieve(server, this, player);
-                    ItemStack milk = com.linkyoshi90.monstergirls.entity.Dairy.flavoured(this, new ItemStack(Items.MILK_BUCKET));
+                    ItemStack milk = bottle ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.HOLSTAUR_MILK.get(), 3)
+                            : com.linkyoshi90.monstergirls.entity.Dairy.flavoured(this, new ItemStack(Items.MILK_BUCKET));
                     if (!player.getInventory().add(milk)) player.drop(milk, false);
                     com.linkyoshi90.monstergirls.entity.Dairy.recordMilk(player, this);
                     this.addAffection(player, 1);

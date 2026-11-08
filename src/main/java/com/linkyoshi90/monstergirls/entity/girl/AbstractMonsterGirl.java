@@ -1013,7 +1013,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     public void aiStep() {
         super.aiStep();
         if (!this.level().isClientSide && this.blushTicks > 0 && --this.blushTicks == 0) this.setFlag(FLAG_BLUSHING, false);
-        if (this.level() instanceof ServerLevel party && this.tickCount % 101 == 0) com.linkyoshi90.monstergirls.entity.HomeLife.dance(party, this, com.linkyoshi90.monstergirls.entity.JukeboxSensing.findPlaying(party, this.blockPosition(), 16) != null);
+        if (this.level() instanceof ServerLevel party && this.tickCount % 101 == 0) com.linkyoshi90.monstergirls.entity.HomeLife.dance(party, this, com.linkyoshi90.monstergirls.entity.JukeboxSensing.findPlaying(party, this.blockPosition(), 16) != null
+                || com.linkyoshi90.monstergirls.entity.DemonRealm.sabbath(this));
         if (!this.level().isClientSide && this.towelTicks > 0 && --this.towelTicks == 0) this.setFlag(FLAG_TOWEL, false);
         if (!this.level().isClientSide && this.harnessTicks > 0 && --this.harnessTicks == 0) this.setFlag(FLAG_HARNESSED, false);
         if (this.level() instanceof ServerLevel milky) com.linkyoshi90.monstergirls.entity.Lactation.tick(milky, this);

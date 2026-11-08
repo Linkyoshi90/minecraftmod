@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * A possessed villager, pig or cat (entity/Monsterization#POSSESSED) keeps her own body, but her eyes glow the realm's violet,
+ * A possessed villager, wandering trader, pig, cat or chicken (entity/Monsterization#POSSESSED) keeps her own body, but her eyes glow the realm's violet,
  * bright even in the dark, as a spider's do. The server tells the client who is possessed ({@link #set}); the textures come
  * from tools/gen_possessed_eyes.py.
  */
@@ -65,6 +65,8 @@ public class PossessedEyesLayer<T extends LivingEntity, M extends EntityModel<T>
             add(event, EntityType.VILLAGER, "villager_eyes");
             add(event, EntityType.PIG, "pig_eyes");
             add(event, EntityType.CAT, "cat_eyes");
+            add(event, EntityType.CHICKEN, "chicken_eyes");
+            add(event, EntityType.WANDERING_TRADER, "villager_eyes");
         }
 
         @SuppressWarnings({"unchecked", "rawtypes"})

@@ -99,11 +99,14 @@ public class RealmGrassBlock extends SnowyDirtBlock implements net.minecraft.wor
             return;
         }
         if (!MonsterGirlsConfig.demonRealm()) return;
-        if (random.nextInt(3) == 0) spread(level, pos, random);
+        if (random.nextInt(com.linkyoshi90.monstergirls.entity.BedSharing.fullMoon(level) ? 1 : 3) == 0) spread(level, pos, random);   // a full moon feeds it
         if (random.nextInt(HeartfruitBushBlock.SPROUT) == 0) HeartfruitBushBlock.sprout(level, pos);
         if (random.nextInt(WeepcapBlock.SPROUT) == 0) WeepcapBlock.sprout(level, pos);
         if (random.nextInt(ROOTS) == 0 && level.isEmptyBlock(pos.above())) level.setBlock(pos.above(), Blocks.CRIMSON_ROOTS.defaultBlockState(), Block.UPDATE_ALL);
         if (random.nextInt(3) == 0) RealmLeavesBlock.creep(level, pos, random);
+        if (state.getValue(DEPTH) <= com.linkyoshi90.monstergirls.entity.DemonRealm.SUMMON_CORE && random.nextInt(com.linkyoshi90.monstergirls.entity.DemonRealm.SUMMON) == 0) {
+            com.linkyoshi90.monstergirls.entity.DemonRealm.summon(level, pos, level.isNight());
+        }
     }
 
     /** One try at the ground nearby, as grass spreads, a step further from the source; none at the realm's edge. Where it went, or null. */

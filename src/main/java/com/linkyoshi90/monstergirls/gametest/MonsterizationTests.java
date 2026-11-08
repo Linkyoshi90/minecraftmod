@@ -106,8 +106,8 @@ public class MonsterizationTests {
         var partner = helper.spawn(EntityType.VILLAGER, new BlockPos(9, 2, 7));
         partner.setNoAi(true);
         ready(villager);
-        AbstractMonsterGirl young = Monsterization.breed(level, villager);
-        check(young != null && young.isBaby() && (young.getSpecies() == GirlSpecies.SUCCUBUS_DEVIL || young.getSpecies() == GirlSpecies.DEMON_DEVIL),
+        var young = Monsterization.breed(level, villager);
+        check(young instanceof AbstractMonsterGirl g && g.isBaby() && (g.getSpecies() == GirlSpecies.SUCCUBUS_DEVIL || g.getSpecies() == GirlSpecies.DEMON_DEVIL),
                 "her young is a little succubus or demon");
         check(Monsterization.breed(level, villager) == null, "not again until half a day has passed");
         check(!Monsterization.possessed(partner) && Monsterization.offspringOf(partner) == null, "her partner is not possessed by it");
@@ -124,8 +124,8 @@ public class MonsterizationTests {
         check(Monsterization.kindOf(pig) == null, "a pig is possessed, not changed");
         Monsterization.possess(level, pig);
         ready(pig);
-        AbstractMonsterGirl young = Monsterization.breed(level, pig);
-        check(young != null && young.getSpecies() == GirlSpecies.PIGLETTE_ARMOURED && young.isBaby() && pig.isAlive(), "a piglette, and the pig is still a pig");
+        var young = Monsterization.breed(level, pig);
+        check(young instanceof AbstractMonsterGirl g && g.getSpecies() == GirlSpecies.PIGLETTE_ARMOURED && g.isBaby() && pig.isAlive(), "a piglette, and the pig is still a pig");
         for (int i = 0; i < Monsterization.CROWD; i++) spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(10 + i % 3, 2, 10 + i / 3));
         ready(pig);
         check(Monsterization.breed(level, pig) == null, "not while the girls already crowd the place");
@@ -171,6 +171,63 @@ public class MonsterizationTests {
             AbstractMonsterGirl calf = born.spawnYoung(level, born.blockPosition(), null);
             check(calf instanceof com.linkyoshi90.monstergirls.entity.girl.Minotaur m && !m.isMale(), "a holstaur's calves are all daughters");
         }
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "harpiesAndFrogsToo")
+    public static void harpiesAndFrogsToo(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        realmUnder(helper, 7, 7);
+        var parrot = helper.spawn(EntityType.PARROT, new BlockPos(7, 2, 7));
+        parrot.setNoAi(true);
+        check(Monsterization.otherOf(parrot) == com.linkyoshi90.monstergirls.registry.ModEntities.MACAW_HARPY.get(), "a parrot becomes a macaw harpy");
+        net.minecraft.world.entity.Mob harpy = null;
+        for (int i = 0; i < Monsterization.STEPS; i++) harpy = Monsterization.stepOther(level, parrot, true);
+        check(harpy instanceof com.linkyoshi90.monstergirls.entity.MacawHarpy && Monsterization.monsterized(harpy) && !parrot.isAlive(), "she changed");
+        var frog = helper.spawn(EntityType.FROG, new BlockPos(3, 2, 3));
+        frog.setVariant(level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.FROG_VARIANT).getHolderOrThrow(net.minecraft.world.entity.animal.FrogVariant.WARM));
+        check(Monsterization.otherOf(frog) == com.linkyoshi90.monstergirls.registry.ModEntities.TREE_FROG.get(), "a warm frog becomes a tree frog");
+        frog.setVariant(level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.FROG_VARIANT).getHolderOrThrow(net.minecraft.world.entity.animal.FrogVariant.COLD));
+        check(Monsterization.otherOf(frog) == com.linkyoshi90.monstergirls.registry.ModEntities.BULLFROG.get(), "a cold one a bullfrog");
+        check(Monsterization.kindOf(helper.spawn(EntityType.TURTLE, new BlockPos(11, 2, 3))) == GirlSpecies.TURTLE_LIZARDFOLK, "a turtle a turtle girl");
+        check(Monsterization.kindOf(helper.spawn(EntityType.PIGLIN, new BlockPos(11, 2, 11))) == GirlSpecies.PIGLETTE_ARMOURED, "a piglin a piglette");
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "possessedHenHatchesHarpies")
+    public static void possessedHenHatchesHarpies(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var hen = helper.spawn(EntityType.CHICKEN, new BlockPos(4, 2, 4));
+        var rooster = helper.spawn(EntityType.CHICKEN, new BlockPos(6, 2, 4));
+        hen.setNoAi(true);
+        rooster.setNoAi(true);
+        Monsterization.possess(level, hen);
+        ready(hen);
+        var chick = Monsterization.breed(level, hen);
+        check(chick instanceof com.linkyoshi90.monstergirls.entity.PoultryHarpy p && p.isBaby() && hen.isAlive(), "her chick is a little poultry harpy");
+        var trader = helper.spawn(EntityType.WANDERING_TRADER, new BlockPos(10, 2, 10));
+        trader.setNoAi(true);
+        Monsterization.possess(level, trader);
+        GirlSpecies kind = Monsterization.offspringOf(trader);
+        check(kind == GirlSpecies.SUCCUBUS_DEVIL || kind == GirlSpecies.DEMON_DEVIL, "a wandering trader is possessed like a villager");
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "possessedCatBringsHeartfruit")
+    public static void possessedCatBringsHeartfruit(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
+        var cat = helper.spawn(EntityType.CAT, new BlockPos(6, 2, 6));
+        cat.setNoAi(true);
+        cat.tame(p);
+        check(!Monsterization.giftOwner(level, cat, true), "an ordinary cat brings no heartfruit");
+        Monsterization.possess(level, cat);
+        check(!Monsterization.giftOwner(level, cat, false), "only in the morning");
+        check(Monsterization.giftOwner(level, cat, true), "a possessed cat brings her owner a heartfruit");
+        check(!Monsterization.giftOwner(level, cat, true), "once a day");
+        check(!level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, p.getBoundingBox().inflate(2),
+                e -> e.getItem().is(com.linkyoshi90.monstergirls.registry.ModItems.HEARTFRUIT.get())).isEmpty(), "it lies at their feet");
         HarpyTestUtil.remove(p);
         helper.succeed();
     }

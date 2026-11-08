@@ -133,6 +133,8 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue REALM_FOG;
     public static final ModConfigSpec.BooleanValue LUCKY_MOMENTS;
     public static final ModConfigSpec.BooleanValue MONSTERIZATION;
+    public static final ModConfigSpec.BooleanValue POSSESSION;
+    public static final ModConfigSpec.BooleanValue REALM_SUMMONS;
     public static final ModConfigSpec.BooleanValue DREAM_VISITS;
     public static final ModConfigSpec.BooleanValue MATING_SEASON;
     public static final ModConfigSpec.IntValue MAX_SPOUSES;
@@ -167,6 +169,14 @@ public final class MonsterGirlsConfig {
         MONSTERIZATION = BUILDER
                 .comment("Grown vanilla animals and monsters that linger on Demon Realm grass in the dark turn into monster girls of their kind (a tamed pet stays her owner's friend).")
                 .define("monsterization", true);
+
+        POSSESSION = BUILDER
+                .comment("Villagers, wandering traders, pigs, cats and chickens on Demon Realm grass in the dark are possessed: they keep their bodies, their eyes glow, and every half day their young with one of their own kind is a girl (succubi and demons, piglettes, nekomata, poultry harpies).")
+                .define("possession", true);
+
+        REALM_SUMMONS = BUILDER
+                .comment("At night the heart of a Demon Realm now and then calls a wild succubus or demon out of the haze (never more than one near it).")
+                .define("realmSummons", true);
 
         DREAM_VISITS = BUILDER
                 .comment("Succubi visit your dreams: a close succubus friend brings a sweet dream (Luck in the morning); a wild one nearby feeds on some of your experience and leaves a heartfruit.")
@@ -336,6 +346,14 @@ public final class MonsterGirlsConfig {
 
     public static boolean dreamVisits() {
         return SPEC.isLoaded() ? DREAM_VISITS.get() : DREAM_VISITS.getDefault();
+    }
+
+    public static boolean possession() {
+        return SPEC.isLoaded() ? POSSESSION.get() : POSSESSION.getDefault();
+    }
+
+    public static boolean realmSummons() {
+        return SPEC.isLoaded() ? REALM_SUMMONS.get() : REALM_SUMMONS.getDefault();
     }
 
     public static boolean monsterization() {

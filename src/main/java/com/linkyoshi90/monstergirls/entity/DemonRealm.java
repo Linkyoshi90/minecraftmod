@@ -44,6 +44,48 @@ public final class DemonRealm {
     }
 
     /** Who grows a realm: a Lilith, grown and wild. */
+    /** One random tick of the realm's heart (depth SUMMON_CORE or less) in this many, at night, calls one of its own out of the haze. */
+    public static final int SUMMON = 400, SUMMON_CORE = 2, SUMMON_ALONE = 48;
+
+    /**
+     * Deep in the realm, at night, now and then one of its own steps out of the haze: a wild succubus (or, one time in three, a
+     * demon). Never while one of the devil family is already within SUMMON_ALONE blocks (a Lilith's realm has its Lilith), so
+     * there is never more than one. Who stepped out, or null.
+     */
+    @javax.annotation.Nullable
+    public static com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl summon(ServerLevel level, BlockPos ground, boolean night) {
+        if (!night || !MonsterGirlsConfig.realmSummons() || !level.isEmptyBlock(ground.above()) || !level.isEmptyBlock(ground.above(2))) return null;
+        if (!level.getEntitiesOfClass(com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl.class, new net.minecraft.world.phys.AABB(ground).inflate(SUMMON_ALONE),
+                g -> g.getSpecies().family() == com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.Family.DEVIL).isEmpty()) return null;
+        var kind = level.random.nextInt(3) == 0 ? com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.DEMON_DEVIL : com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.SUCCUBUS_DEVIL;
+        if (!(com.linkyoshi90.monstergirls.registry.ModGirls.type(kind).create(level) instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl girl)) return null;
+        girl.moveTo(ground.getX() + 0.5, ground.getY() + 1, ground.getZ() + 0.5, level.random.nextFloat() * 360.0F, 0.0F);
+        girl.finalizeSpawn(level, level.getCurrentDifficultyAt(ground), net.minecraft.world.entity.MobSpawnType.EVENT, null);
+        level.addFreshEntity(girl);
+        level.sendParticles(com.linkyoshi90.monstergirls.block.RealmGrassBlock.HAZE, girl.getX(), girl.getY() + 1.0, girl.getZ(), 40, 0.5, 0.8, 0.5, 0.0);
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.PORTAL, girl.getX(), girl.getY() + 1.0, girl.getZ(), 30, 0.4, 0.8, 0.4, 0.2);
+        level.playSound(null, ground.above(), net.minecraft.sounds.SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.value(), net.minecraft.sounds.SoundSource.HOSTILE, 1.0F, 1.2F);
+        return girl;
+    }
+
+    /**
+     * The sabbath: under a full moon, the realm's own (the devil family, and every girl it changed) dance where they stand in
+     * it, with no music but the realm's, and the haze thickens round them. Whether this one is dancing tonight.
+     */
+    public static boolean sabbath(Mob mob, boolean fullMoon) {
+        if (!fullMoon || !MonsterGirlsConfig.demonRealm() || !inRealm(mob)) return false;
+        return Monsterization.monsterized(mob) || mob instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g
+                && g.getSpecies().family() == com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.Family.DEVIL;
+    }
+
+    public static boolean sabbath(Mob mob) {
+        if (!sabbath(mob, BedSharing.fullMoon(mob.level()))) return false;
+        if (mob.level() instanceof ServerLevel level) {
+            level.sendParticles(com.linkyoshi90.monstergirls.block.RealmGrassBlock.HAZE, mob.getX(), mob.getY() + 0.3, mob.getZ(), 8, 0.8, 0.2, 0.8, 0.0);
+        }
+        return true;
+    }
+
     public static boolean seeds(Entity e) {
         return e instanceof AbstractMonsterGirl girl && girl.getSpecies() == GirlSpecies.LILITH_DEVIL && !girl.isBaby() && !girl.hasAnyAffection();
     }
@@ -110,11 +152,16 @@ public final class DemonRealm {
 
     /** She eats the heartfruit: lovestruck with this player for a while. False if she isn't one who would flirt with them. */
     public static boolean feed(ServerLevel level, Mob mob, Player player) {
+        return feed(level, mob, player, LOVESTRUCK);
+    }
+
+    /** She eats something of the realm's: lovestruck with this player for so many ticks (a heartfruit tart: three times a fruit's). */
+    public static boolean feed(ServerLevel level, Mob mob, Player player, int ticks) {
         if (!Flirting.canFlirt(mob, player)) return false;
         CompoundTag pd = mob.getPersistentData();
         pd.putString(BY, player.getUUID().toString());
-        pd.putLong(UNTIL, level.getGameTime() + LOVESTRUCK);
-        ((Bonded) mob).blushFor(LOVESTRUCK);
+        pd.putLong(UNTIL, level.getGameTime() + ticks);
+        ((Bonded) mob).blushFor(ticks);
         mob.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.1F);
         level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.3, mob.getZ(), 7, 0.4, 0.3, 0.4, 0.0);
         player.displayClientMessage(Component.translatable("message.monstergirls.lovestruck." + mob.getRandom().nextInt(4), mob.getDisplayName()), true);
@@ -123,10 +170,13 @@ public final class DemonRealm {
 
     @SubscribeEvent
     public static void onInteract(PlayerInteractEvent.EntityInteract event) {
-        if (!event.getItemStack().is(ModItems.HEARTFRUIT.get()) || !(event.getTarget() instanceof Mob mob) || !(mob instanceof Bonded)
+        boolean tart = event.getItemStack().is(ModItems.HEARTFRUIT_TART.get());
+        if (!(tart || event.getItemStack().is(ModItems.HEARTFRUIT.get())) || !(event.getTarget() instanceof Mob mob) || !(mob instanceof Bonded)
                 || !Flirting.canFlirt(mob, event.getEntity())) return;
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide));
-        if (event.getLevel() instanceof ServerLevel level && feed(level, mob, event.getEntity())) event.getItemStack().consume(1, event.getEntity());
+        if (event.getLevel() instanceof ServerLevel level && feed(level, mob, event.getEntity(), tart ? LOVESTRUCK * 3 : LOVESTRUCK)) {
+            event.getItemStack().consume(1, event.getEntity());
+        }
     }
 }

@@ -280,4 +280,57 @@ public class DemonRealmTests {
         check(hung == 2, "a few strands, not a curtain: " + hung);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "realmCallsOneOfItsOwn")
+    public static void realmCallsOneOfItsOwn(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos ground = helper.absolutePos(new BlockPos(7, 1, 7));
+        RealmGrassBlock.corrupt(level, ground);
+        check(DemonRealm.summon(level, ground, false) == null, "not by day");
+        var girl = DemonRealm.summon(level, ground, true);
+        check(girl != null && (girl.getSpecies() == com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.SUCCUBUS_DEVIL
+                || girl.getSpecies() == com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.DEMON_DEVIL), "a succubus or a demon steps out of the haze");
+        BlockPos other = helper.absolutePos(new BlockPos(3, 1, 3));
+        RealmGrassBlock.corrupt(level, other);
+        check(DemonRealm.summon(level, other, true) == null, "never a second while one is near");
+        girl.discard();
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "holstaurMilkAndTart")
+    public static void holstaurMilkAndTart(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
+        var cow = (com.linkyoshi90.monstergirls.entity.girl.Minotaur) JackalopeTests.spawn(helper, GirlSpecies.HOLSTAUR_MINOTAUR, new BlockPos(5, 2, 5));
+        cow.setNoAi(true);
+        p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(net.minecraft.world.item.Items.GLASS_BOTTLE));
+        cow.interact(p, InteractionHand.MAIN_HAND);
+        check(p.getInventory().countItem(ModItems.HOLSTAUR_MILK.get()) == 3, "a holstaur fills bottles with her milk");
+        AbstractMonsterGirl friend = JackalopeTests.spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(9, 2, 9));
+        friend.setNoAi(true);
+        friend.addAffection(p, 100);
+        if (Flirting.canFlirt(friend, p)) {
+            check(DemonRealm.feed(level, friend, p, DemonRealm.LOVESTRUCK * 3) && DemonRealm.lovestruck(friend, p), "a tart leaves her lovestruck");
+            check(friend.getPersistentData().getLong("LovestruckUntil") - level.getGameTime() == DemonRealm.LOVESTRUCK * 3, "three times as long as a fruit");
+        }
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "fullMoonSabbath")
+    public static void fullMoonSabbath(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        RealmGrassBlock.corrupt(level, helper.absolutePos(new BlockPos(5, 1, 5)));
+        RealmGrassBlock.corrupt(level, helper.absolutePos(new BlockPos(9, 1, 9)));
+        AbstractMonsterGirl succubus = JackalopeTests.spawn(helper, GirlSpecies.SUCCUBUS_DEVIL, new BlockPos(5, 2, 5));
+        AbstractMonsterGirl serval = JackalopeTests.spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(9, 2, 9));
+        succubus.setNoAi(true);
+        serval.setNoAi(true);
+        check(!DemonRealm.sabbath(succubus, false), "no sabbath without a full moon");
+        check(DemonRealm.sabbath(succubus, true), "the realm's own dance under it");
+        check(!DemonRealm.sabbath(serval, true), "an ordinary girl stays out of it");
+        serval.getPersistentData().putBoolean("Monsterized", true);
+        check(DemonRealm.sabbath(serval, true), "one the realm changed joins in");
+        helper.succeed();
+    }
 }

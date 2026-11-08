@@ -5,7 +5,7 @@
 
 One texture per vanilla model, the size of its vanilla texture, black and clear everywhere but the eyes (drawn with the
 "eyes" render type, which adds light, as a spider's eyes). The eye pixels were read off the 1.21.1 textures: the pig's on
-row 11, the villager's on row 14, every cat's on row 6.
+row 11, the villager's on row 14, every cat's on row 6, the chicken's on row 4.
 """
 import os
 
@@ -20,6 +20,7 @@ EYES = {
     "pig_eyes": ((64, 32), [(8, 11, PUPIL), (9, 11, GLOW), (14, 11, GLOW), (15, 11, PUPIL)]),
     "villager_eyes": ((64, 64), [(9, 14, GLOW), (10, 14, PUPIL), (13, 14, PUPIL), (14, 14, GLOW)]),
     "cat_eyes": ((64, 32), [(5, 6, GLOW), (6, 6, PUPIL), (8, 6, PUPIL), (9, 6, GLOW)]),
+    "chicken_eyes": ((64, 32), [(3, 4, GLOW), (6, 4, GLOW)]),           # the wandering trader wears the villager's
 }
 
 

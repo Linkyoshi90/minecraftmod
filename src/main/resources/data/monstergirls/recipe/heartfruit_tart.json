@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "monstergirls:heartfruit"
+    },
+    {
+      "item": "monstergirls:heartfruit"
+    },
+    {
+      "item": "monstergirls:holstaur_milk"
+    },
+    {
+      "item": "minecraft:wheat"
+    },
+    {
+      "item": "minecraft:sugar"
+    }
+  ],
+  "result": {
+    "id": "monstergirls:heartfruit_tart",
+    "count": 1
+  }
+}

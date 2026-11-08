@@ -223,6 +223,25 @@ public final class ModItems {
     public static final DeferredItem<net.minecraft.world.item.ItemNameBlockItem> HEARTFRUIT = ITEMS.register("heartfruit",
             () -> new net.minecraft.world.item.ItemNameBlockItem(ModBlocks.HEARTFRUIT_BUSH.get(),
                     new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.5F).build())));
+    /** A holstaur's milk, drawn into a glass bottle (entity/girl/Minotaur): rich and sweet, it makes you strong for a while. */
+    public static final DeferredItem<Item> HOLSTAUR_MILK = ITEMS.registerItem("holstaur_milk", props -> new Item(props.stacksTo(16)
+            .craftRemainder(net.minecraft.world.item.Items.GLASS_BOTTLE)
+            .food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.8F).alwaysEdible().usingConvertsTo(net.minecraft.world.item.Items.GLASS_BOTTLE)
+                    .effect(() -> new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DAMAGE_BOOST, 3600, 0), 1.0F)
+                    .effect(() -> new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.REGENERATION, 100, 0), 1.0F).build())) {
+        @Override
+        public net.minecraft.world.item.UseAnim getUseAnimation(net.minecraft.world.item.ItemStack stack) {
+            return net.minecraft.world.item.UseAnim.DRINK;
+        }
+
+        @Override
+        public net.minecraft.sounds.SoundEvent getEatingSound() {
+            return net.minecraft.sounds.SoundEvents.GENERIC_DRINK;
+        }
+    });
+    /** Heartfruit, holstaur milk, wheat and sugar: fed to a close friend she is lovestruck three times as long (entity/DemonRealm). */
+    public static final DeferredItem<Item> HEARTFRUIT_TART = ITEMS.registerItem("heartfruit_tart", props -> new Item(props
+            .food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.6F).build())));
     /** The exchange liaison's desk, and the permit she issues (entity/Liaison). */
     public static final DeferredItem<BlockItem> EXCHANGE_DESK = ITEMS.registerSimpleBlockItem(ModBlocks.EXCHANGE_DESK);
     public static final DeferredItem<Item> HOMESTAY_PERMIT = ITEMS.registerSimpleItem("homestay_permit", new Item.Properties().stacksTo(1));
