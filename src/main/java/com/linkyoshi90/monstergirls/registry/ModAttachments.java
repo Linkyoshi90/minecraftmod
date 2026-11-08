@@ -28,6 +28,10 @@ public final class ModAttachments {
     public static final Supplier<AttachmentType<Integer>> ORDER_NOTORIETY = ATTACHMENT_TYPES.register("order_notoriety",
             () -> AttachmentType.builder(() -> 0).serialize(com.mojang.serialization.Codec.INT).copyOnDeath().build());
 
+    /** How far the Demon Realm has touched a player (entity/RealmTouched); kept through death. */
+    public static final Supplier<AttachmentType<Integer>> REALM_TOUCH = ATTACHMENT_TYPES.register("realm_touch",
+            () -> AttachmentType.builder(() -> 0).serialize(com.mojang.serialization.Codec.INT).copyOnDeath().build());
+
     private ModAttachments() {
     }
 }

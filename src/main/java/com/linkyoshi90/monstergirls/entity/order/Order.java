@@ -116,7 +116,7 @@ public final class Order {
 
     /** A player's ties to the realm this minute: in its air, and up to three of the realm's own among their friends nearby. */
     public static int ties(ServerLevel level, Player player) {
-        int ties = DemonRealm.realmAir(player) ? 1 : 0;
+        int ties = (DemonRealm.realmAir(player) ? 1 : 0) + (com.linkyoshi90.monstergirls.entity.RealmTouched.kindred(player) ? 1 : 0);
         int own = level.getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(32),
                 m -> m instanceof Bonded b && realmsOwn(m) && b.getAffection(player) >= Orders.AFFECTION).size();
         return ties + Math.min(3, own);

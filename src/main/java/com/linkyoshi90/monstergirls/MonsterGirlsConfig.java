@@ -138,6 +138,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue POSSESSION_SPREADS;
     public static final ModConfigSpec.BooleanValue ROSE_MOON;
     public static final ModConfigSpec.BooleanValue ORDER_PATROLS;
+    public static final ModConfigSpec.BooleanValue REALM_TOUCHED;
     public static final ModConfigSpec.BooleanValue ORDER_RAIDS;
     public static final ModConfigSpec.BooleanValue DREAM_VISITS;
     public static final ModConfigSpec.BooleanValue MATING_SEASON;
@@ -193,6 +194,10 @@ public final class MonsterGirlsConfig {
         ORDER_PATROLS = BUILDER
                 .comment("By day, patrols of the Order (sister-knights and an inquisitrix) now and then march on a Demon Realm patch near a player to purge it, and come looking for players the Order has marked.")
                 .define("orderPatrols", true);
+
+        REALM_TOUCHED = BUILDER
+                .comment("A player who keeps company with the Demon Realm slowly becomes kin to it: night vision in its dark, its own let them be, and in the end it feeds them and makes them strong at night. Holy water washes it out.")
+                .define("realmTouched", true);
 
         ORDER_RAIDS = BUILDER
                 .comment("A player with strong enough ties to the Demon Realm draws a night crusade of the Order on their hearth.")
@@ -370,6 +375,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean possession() {
         return SPEC.isLoaded() ? POSSESSION.get() : POSSESSION.getDefault();
+    }
+
+    public static boolean realmTouched() {
+        return SPEC.isLoaded() ? REALM_TOUCHED.get() : REALM_TOUCHED.getDefault();
     }
 
     public static boolean orderPatrols() {

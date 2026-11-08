@@ -38,7 +38,8 @@ public final class HarpyCommands {
                         .then(Commands.argument("radius", IntegerArgumentType.integer(1, 128))
                                 .executes(ctx -> listBonds(ctx.getSource(), IntegerArgumentType.getInteger(ctx, "radius")))))
                 .then(Commands.literal("friends").executes(ctx -> listFriends(ctx.getSource())))
-                .then(Commands.literal("locate").then(Commands.literal("realm").executes(ctx -> locateRealm(ctx.getSource())))));
+                .then(Commands.literal("locate").then(Commands.literal("realm").executes(ctx -> locateRealm(ctx.getSource())))
+                        .then(Commands.literal("chapel").executes(ctx -> locate(ctx.getSource(), com.linkyoshi90.monstergirls.registry.ModStructures.ORDER_CHAPEL_KEY, "chapel")))));
     }
 
     /**
@@ -46,14 +47,18 @@ public final class HarpyCommands {
      * it, with the coordinates to click. Realms a Lilith grows herself are not on any map.
      */
     static int locateRealm(CommandSourceStack source) {
+        return locate(source, com.linkyoshi90.monstergirls.registry.ModStructures.REALM_PATCH_KEY, "realm");
+    }
+
+    /** The nearest structure of ours of this kind (lang commands.monstergirls.locate.<what>[.none]). */
+    static int locate(CommandSourceStack source, net.minecraft.resources.ResourceKey<net.minecraft.world.level.levelgen.structure.Structure> key, String what) {
         net.minecraft.server.level.ServerLevel level = source.getLevel();
-        var holder = level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
-                .getHolder(com.linkyoshi90.monstergirls.registry.ModStructures.REALM_PATCH_KEY);
+        var holder = level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).getHolder(key);
         net.minecraft.core.BlockPos from = net.minecraft.core.BlockPos.containing(source.getPosition());
         var found = holder.isEmpty() ? null : level.getChunkSource().getGenerator().findNearestMapStructure(level,
                 net.minecraft.core.HolderSet.direct(holder.get()), from, 100, false);
         if (found == null) {
-            source.sendFailure(Component.translatable("commands.monstergirls.locate.realm.none"));
+            source.sendFailure(Component.translatable("commands.monstergirls.locate." + what + ".none"));
             return 0;
         }
         net.minecraft.core.BlockPos at = found.getFirst();
@@ -64,7 +69,7 @@ public final class HarpyCommands {
                                 "/tp @s " + at.getX() + " ~ " + at.getZ()))
                         .withHoverEvent(new net.minecraft.network.chat.HoverEvent(net.minecraft.network.chat.HoverEvent.Action.SHOW_TEXT,
                                 Component.translatable("chat.coordinates.tooltip"))));
-        source.sendSuccess(() -> Component.translatable("commands.monstergirls.locate.realm", coords, distance), false);
+        source.sendSuccess(() -> Component.translatable("commands.monstergirls.locate." + what, coords, distance), false);
         return distance;
     }
 

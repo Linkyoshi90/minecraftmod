@@ -22,6 +22,13 @@ public final class ModStructures {
             PIECES.register("realm_patch", () -> (StructurePieceType.ContextlessType) (tag) -> new RealmPatchStructure.Piece(null, tag));
     public static final ResourceKey<Structure> REALM_PATCH_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("realm_patch"));
 
+    /** A wayside chapel of the Order (world/OrderChapelStructure). */
+    public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.OrderChapelStructure>> ORDER_CHAPEL =
+            STRUCTURE_TYPES.register("order_chapel", () -> () -> com.linkyoshi90.monstergirls.world.OrderChapelStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> ORDER_CHAPEL_PIECE =
+            PIECES.register("order_chapel", () -> (StructurePieceType.ContextlessType) (tag) -> new com.linkyoshi90.monstergirls.world.OrderChapelStructure.Piece(null, tag));
+    public static final ResourceKey<Structure> ORDER_CHAPEL_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("order_chapel"));
+
     private ModStructures() {
     }
 }

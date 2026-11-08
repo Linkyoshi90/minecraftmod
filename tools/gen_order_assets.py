@@ -324,5 +324,37 @@ def main():
         preview(sys.argv[sys.argv.index("--preview") + 1])
 
 
+def chapel():
+    """the wayside chapel (world/OrderChapelStructure): structure, spread, biomes, chest, locate lines"""
+    dump(os.path.join(DATA, "worldgen", "structure", "order_chapel.json"), {
+        "type": "monstergirls:order_chapel", "biomes": "#monstergirls:has_structure/order_chapel",
+        "step": "surface_structures", "spawn_overrides": {}, "terrain_adaptation": "none"})
+    dump(os.path.join(DATA, "worldgen", "structure_set", "order_chapel.json"), {
+        "structures": [{"structure": "monstergirls:order_chapel", "weight": 1}],
+        "placement": {"type": "minecraft:random_spread", "spacing": 36, "separation": 14, "salt": 73019441}})
+    dump(os.path.join(DATA, "tags", "worldgen", "biome", "has_structure", "order_chapel.json"), {"values": [
+        "minecraft:plains", "minecraft:sunflower_plains", "minecraft:meadow", "minecraft:forest", "minecraft:flower_forest",
+        "minecraft:birch_forest", "minecraft:cherry_grove", "minecraft:savanna"]})
+    dump(os.path.join(DATA, "loot_table", "chests", "order_chapel.json"), {"type": "minecraft:chest", "pools": [
+        {"rolls": {"type": "minecraft:uniform", "min": 3, "max": 6}, "entries": [
+            {"type": "minecraft:item", "name": "monstergirls:holy_water", "weight": 4,
+             "functions": [{"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1, "max": 2}}]},
+            {"type": "minecraft:item", "name": "monstergirls:splash_holy_water", "weight": 3,
+             "functions": [{"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1, "max": 3}}]},
+            {"type": "minecraft:item", "name": "minecraft:bread", "weight": 5,
+             "functions": [{"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1, "max": 4}}]},
+            {"type": "minecraft:item", "name": "minecraft:gold_nugget", "weight": 4,
+             "functions": [{"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 2, "max": 9}}]},
+            {"type": "minecraft:item", "name": "minecraft:candle", "weight": 3,
+             "functions": [{"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1, "max": 3}}]},
+            {"type": "minecraft:item", "name": "minecraft:book", "weight": 2},
+            {"type": "minecraft:item", "name": "minecraft:golden_apple", "weight": 1}]}]})
+    add_lang({
+        "commands.monstergirls.locate.chapel": "The nearest chapel of the Order is at %s (%s blocks away).",
+        "commands.monstergirls.locate.chapel.none": "No chapel of the Order within reach (only chunks generated after this update have them).",
+    })
+
+
 if __name__ == "__main__":
     main()
+    chapel()

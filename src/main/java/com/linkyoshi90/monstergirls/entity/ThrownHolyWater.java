@@ -78,6 +78,9 @@ public class ThrownHolyWater extends ThrowableItemProjectile {
         for (Mob mob : level.getEntitiesOfClass(Mob.class, new net.minecraft.world.phys.AABB(at).inflate(FREE))) {
             if (Monsterization.exorcise(level, mob)) freed++;
         }
+        for (Player p : level.getEntitiesOfClass(Player.class, new net.minecraft.world.phys.AABB(at).inflate(FREE))) {
+            RealmTouched.addTouch(p, -RealmTouched.SPLASH);             // and washes the realm's touch out of whoever stands in it
+        }
         if (freed > 0 && thrower != null) {
             Dairy.award(thrower, "realm_exorcist");
             com.linkyoshi90.monstergirls.entity.order.Order.addNotoriety(thrower, -com.linkyoshi90.monstergirls.entity.order.Order.EXORCISM);

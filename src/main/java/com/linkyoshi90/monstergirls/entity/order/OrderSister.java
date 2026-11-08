@@ -215,6 +215,21 @@ public class OrderSister extends Monster implements RangedAttackMob {
         this.leaveAt = time;
     }
 
+    /** The chapel she keeps (world/OrderChapelStructure), or null: she stays near it and marches nowhere. */
+    @Nullable
+    private BlockPos chapel;
+
+    public void keepChapel(BlockPos font) {
+        this.chapel = font.immutable();
+        this.restrictTo(font, com.linkyoshi90.monstergirls.world.OrderChapelStructure.KEEP);
+        this.setPersistenceRequired();
+    }
+
+    @Nullable
+    public BlockPos chapel() {
+        return this.chapel;
+    }
+
     // --- equipment ------------------------------------------------------------------------------------------------
 
     @Override
@@ -333,6 +348,7 @@ public class OrderSister extends Monster implements RangedAttackMob {
             by.displayClientMessage(Component.translatable("message.monstergirls.order.fallen", girl.getDisplayName()), false);
             Dairy.award(by, "order_fallen");
             Order.addNotoriety(by, Order.FALL_NOTORIETY);
+            com.linkyoshi90.monstergirls.entity.RealmTouched.addTouch(by, com.linkyoshi90.monstergirls.entity.RealmTouched.FALLEN);
         }
         return girl;
     }
@@ -436,6 +452,7 @@ public class OrderSister extends Monster implements RangedAttackMob {
         tag.putBoolean("Leaving", this.leaving);
         tag.putLong("LeaveAt", this.leaveAt);
         if (this.march != null) tag.put("March", NbtUtils.writeBlockPos(this.march));
+        if (this.chapel != null) tag.put("Chapel", NbtUtils.writeBlockPos(this.chapel));
         if (this.raid != 0 && this.raidHearth != null) {
             tag.putInt("Raid", this.raid);
             tag.put("RaidHearth", NbtUtils.writeBlockPos(this.raidHearth));
@@ -455,6 +472,7 @@ public class OrderSister extends Monster implements RangedAttackMob {
         this.raid = tag.getInt("Raid");
         this.raidHearth = NbtUtils.readBlockPos(tag, "RaidHearth").orElse(null);
         this.raidTarget = tag.hasUUID("RaidTarget") ? tag.getUUID("RaidTarget") : null;
+        NbtUtils.readBlockPos(tag, "Chapel").ifPresent(this::keepChapel);
     }
 
     // --- goals ----------------------------------------------------------------------------------------------------
@@ -521,7 +539,7 @@ public class OrderSister extends Monster implements RangedAttackMob {
         public boolean canUse() {
             if (OrderSister.this.getTarget() != null || OrderSister.this.kneeling()) return false;
             if (OrderSister.this.leaving) return true;
-            if (OrderSister.this.march == null && OrderSister.this.tickCount % 100 == 0 && OrderSister.this.level() instanceof ServerLevel level) {
+            if (OrderSister.this.march == null && OrderSister.this.chapel == null && OrderSister.this.tickCount % 100 == 0 && OrderSister.this.level() instanceof ServerLevel level) {
                 OrderSister.this.march = Order.findRealm(level, OrderSister.this.blockPosition(), 24);   // the realm calls to be purged
             }
             return OrderSister.this.march != null && OrderSister.this.march.distToCenterSqr(OrderSister.this.position()) > 16.0;

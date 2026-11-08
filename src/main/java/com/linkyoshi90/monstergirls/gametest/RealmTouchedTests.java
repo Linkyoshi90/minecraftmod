@@ -1,0 +1,80 @@
+package com.linkyoshi90.monstergirls.gametest;
+
+import com.linkyoshi90.monstergirls.MonsterGirlsMod;
+import com.linkyoshi90.monstergirls.block.RealmGrassBlock;
+import com.linkyoshi90.monstergirls.entity.RealmTouched;
+import com.linkyoshi90.monstergirls.entity.ThrownHolyWater;
+import com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl;
+import com.linkyoshi90.monstergirls.entity.girl.GirlSpecies;
+import com.linkyoshi90.monstergirls.entity.order.Order;
+import net.minecraft.core.BlockPos;
+import net.minecraft.gametest.framework.GameTest;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffects;
+import net.neoforged.neoforge.gametest.GameTestHolder;
+import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+
+import static com.linkyoshi90.monstergirls.gametest.HarpyTestUtil.PLATFORM;
+import static com.linkyoshi90.monstergirls.gametest.HarpyTestUtil.check;
+import static com.linkyoshi90.monstergirls.gametest.JackalopeTests.spawn;
+
+/** Realm-touched players (entity/RealmTouched): how the touch grows and washes out, and what each stage does. */
+@GameTestHolder(MonsterGirlsMod.MODID)
+@PrefixGameTestTemplate(false)
+public class RealmTouchedTests {
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "theRealmTouchesThoseInIt")
+    public static void theRealmTouchesThoseInIt(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(4, 2, 4));
+        RealmTouched.setTouch(p, 0);
+        RealmTouched.tick(level, p, true);
+        check(RealmTouched.touch(p) == 0, "outside the realm nothing happens");
+        RealmGrassBlock.corrupt(level, p.blockPosition().below());
+        RealmTouched.tick(level, p, true);
+        check(RealmTouched.touch(p) == RealmTouched.AIR, "a minute in its air touches them: " + RealmTouched.touch(p));
+        ThrownHolyWater.splash(level, p.blockPosition(), null);
+        check(RealmTouched.touch(p) == 0, "holy water washes it out");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "kindredAreLetBe")
+    public static void kindredAreLetBe(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(4, 2, 4));
+        AbstractMonsterGirl succubus = spawn(helper, GirlSpecies.SUCCUBUS_DEVIL, new BlockPos(6, 2, 6));
+        AbstractMonsterGirl wolf = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(8, 2, 8));
+        RealmTouched.setTouch(p, RealmTouched.TOUCHED);
+        check(!RealmTouched.spares(succubus, p), "only touched: she may still fight them");
+        int ties = Order.ties(level, p);
+        RealmTouched.setTouch(p, RealmTouched.KINDRED);
+        check(RealmTouched.spares(succubus, p) && !RealmTouched.spares(wolf, p), "kindred: the realm's own let them be, others don't care");
+        succubus.setTarget(p);
+        check(succubus.getTarget() == null, "she won't pick them");
+        check(RealmTouched.bedBonus(succubus, p) == RealmTouched.KIN_BED && RealmTouched.bedBonus(wolf, p) == 0.0F, "a little likelier to share their bed");
+        check(Order.ties(level, p) == ties + 1, "and the Order counts it");
+        succubus.setLastHurtByMob(p);
+        check(!RealmTouched.spares(succubus, p), "struck first, she fights back");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "theRealmFeedsItsOwn")
+    public static void theRealmFeedsItsOwn(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(4, 2, 4));
+        RealmGrassBlock.corrupt(level, p.blockPosition().below());
+        p.getFoodData().setFoodLevel(10);
+        RealmTouched.setTouch(p, RealmTouched.KINDRED);
+        RealmTouched.tick(level, p, false);
+        check(p.getFoodData().getFoodLevel() == 10, "kindred aren't fed yet");
+        RealmTouched.setTouch(p, RealmTouched.REALM_BORN);
+        RealmTouched.tick(level, p, false);
+        check(p.getFoodData().getFoodLevel() == 11, "realm-born: its air feeds them");
+        check(level.isDay() || p.hasEffect(MobEffects.NIGHT_VISION) && p.hasEffect(MobEffects.DAMAGE_BOOST), "and at night they see and are strong");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+}

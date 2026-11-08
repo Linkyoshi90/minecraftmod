@@ -259,4 +259,20 @@ public class OrderTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "aChapelOfTheOrder")
+    public static void aChapelOfTheOrder(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos origin = helper.absolutePos(new BlockPos(7, 1, 7));
+        BlockPos font = com.linkyoshi90.monstergirls.world.OrderChapelStructure.build(level, origin, level.random, true);
+        check(level.getBlockState(font).is(ModBlocks.HOLY_FONT.get()), "a holy font at the altar");
+        check(level.getBlockState(font.offset(2, 0, 0)).is(Blocks.CHEST), "the Order's stores beside it");
+        check(level.getBlockEntity(font.above(2)) instanceof net.minecraft.world.level.block.entity.BannerBlockEntity b && !b.getPatterns().layers().isEmpty(),
+                "the Order's banner behind it");
+        check(level.getBlockState(origin.offset(0, 1, -4)).isAir() && level.getBlockState(origin.offset(0, 3, -5)).is(Blocks.BELL), "a door, and a bell over it");
+        List<OrderSister> keepers = level.getEntitiesOfClass(OrderSister.class, new net.minecraft.world.phys.AABB(origin).inflate(8));
+        check(keepers.size() == 1 && font.equals(keepers.get(0).chapel()) && keepers.get(0).hasRestriction(), "one sister keeps it, and stays near");
+        keepers.forEach(OrderSister::discard);
+        helper.succeed();
+    }
 }

@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:realm_kindred",
+  "display": {
+    "icon": {
+      "id": "monstergirls:heartfruit"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.realm_born_player"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.realm_born_player.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

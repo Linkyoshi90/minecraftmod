@@ -38,7 +38,19 @@ public final class RealmCommands {
                 .then(Commands.literal("possess").requires(s -> s.hasPermission(2)).executes(ctx -> possess(ctx.getSource())))
                 .then(Commands.literal("turn").requires(s -> s.hasPermission(2)).executes(ctx -> turn(ctx.getSource())))
                 .then(Commands.literal("summon").requires(s -> s.hasPermission(2)).executes(ctx -> summon(ctx.getSource())))
-                .then(Commands.literal("rosemoon").executes(ctx -> nextRoseMoon(ctx.getSource())))));
+                .then(Commands.literal("rosemoon").executes(ctx -> nextRoseMoon(ctx.getSource())))
+                .then(Commands.literal("touch").executes(ctx -> {
+                            ServerPlayer p = ctx.getSource().getPlayerOrException();
+                            ctx.getSource().sendSuccess(() -> com.linkyoshi90.monstergirls.entity.RealmTouched.describe(p).copy().withStyle(ChatFormatting.LIGHT_PURPLE), false);
+                            return com.linkyoshi90.monstergirls.entity.RealmTouched.touch(p);
+                        })
+                        .then(Commands.literal("set").requires(s -> s.hasPermission(2))
+                                .then(Commands.argument("touch", IntegerArgumentType.integer(0, com.linkyoshi90.monstergirls.entity.RealmTouched.MAX)).executes(ctx -> {
+                                    ServerPlayer p = ctx.getSource().getPlayerOrException();
+                                    com.linkyoshi90.monstergirls.entity.RealmTouched.setTouch(p, IntegerArgumentType.getInteger(ctx, "touch"));
+                                    ctx.getSource().sendSuccess(() -> com.linkyoshi90.monstergirls.entity.RealmTouched.describe(p), true);
+                                    return com.linkyoshi90.monstergirls.entity.RealmTouched.touch(p);
+                                }))))));
     }
 
     /** The possessed creatures and the girls the realm changed within the radius, nearest first. */
