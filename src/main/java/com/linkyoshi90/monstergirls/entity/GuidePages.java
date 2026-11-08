@@ -9,6 +9,7 @@ public final class GuidePages {
             Map.entry("keepsakes", 3),
             Map.entry("dairy", 2),
             Map.entry("nursing", 2),
+            Map.entry("encounters", 2),
             Map.entry("chores", 3),
             Map.entry("festivals", 2),
             Map.entry("market", 2),

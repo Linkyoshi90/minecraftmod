@@ -118,3 +118,13 @@ Options: `realmTouched` (chapels follow `orderPatrols`). Advancements: Kindred, 
 
 - `/monstergirls locate manor` (or `/locate structure monstergirls:realm_manor`): dark forests only, about one per 48 chunks, new chunks only. A 13x11 hall of realm planks on polished blackstone, violet windows, a stepped roof, a purple runner to a realm-stair throne before crying obsidian, purple candles, two unlit realm censers (a heartfruit lights them), a purple bed and a chest (heartfruit, weepcaps, realm silver, amethyst, gold, rarely a censer, a realm silver sword or an enchanted book). Realm grass round its walls. Its lady is a wild grown Lilith (who spreads the realm, as wild ones do) with one or two succubi, kept within 14 blocks. Look: does the roof read well? Does the door face out? Do the girls stay home after a reload? (They should keep within 14 blocks until one befriends you; then she's free to follow.)
 - Tithe: right-click a holy font with a gold ingot: -10 notoriety per ingot; refused (gold kept) at 0. Advancements: An Audience, Indulgence.
+
+## Hamlets, villages and passing flocks (2026-11-08)
+
+Not realm features, but new since the last playtest.
+
+- **Hamlet** (3 residents at your hearth): next morning it takes a name (e.g. Willowmere) and raises a patterned banner beside the hearth (mobGriefing on). Walking within 32 blocks shows "Willowmere, a hamlet of 4" in the action bar; right-clicking the hearth shows it too. A renamed name tag used on the hearth (owner only) renames the place.
+- **Village** (6 residents): every 5th day (day % 5 == 2), on a morning you're within 64 blocks, a grown girl of a family not living there yet arrives, already a friend, and settles (up to 12). Too often? Too rare?
+- **Passing flocks**: every 8th day (day % 8 == 3), in the first 3000 ticks of the morning, if you're under open sky and not in the realm: 3-5 wild harpies (swan/duck/pelican/flamingo if there's water within 24 blocks, else sparrow/finch/crow) land 20-36 blocks away. A day later they vanish in a puff of feathers, except any who has made a friend. `/time set` to a flock morning to try it.
+
+Options: `hamlets`, `passingFlocks`. Advancements: A Name on the Map, Word Gets Around.

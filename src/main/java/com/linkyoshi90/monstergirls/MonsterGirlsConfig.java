@@ -139,6 +139,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue ROSE_MOON;
     public static final ModConfigSpec.BooleanValue ORDER_PATROLS;
     public static final ModConfigSpec.BooleanValue HAMLETS;
+    public static final ModConfigSpec.BooleanValue PASSING_FLOCKS;
     public static final ModConfigSpec.BooleanValue REALM_TOUCHED;
     public static final ModConfigSpec.BooleanValue ORDER_RAIDS;
     public static final ModConfigSpec.BooleanValue DREAM_VISITS;
@@ -203,6 +204,10 @@ public final class MonsterGirlsConfig {
         HAMLETS = BUILDER
                 .comment("A hearth with three residents becomes a named hamlet with its own banner; with six, a village, where now and then a wandering girl of a new family comes and asks to stay (up to twelve).")
                 .define("hamlets", true);
+
+        PASSING_FLOCKS = BUILDER
+                .comment("Every eight days a flock of wild harpies of one migratory kind rests near each player under the open sky for a day, then flies on (any who has made a friend stays).")
+                .define("passingFlocks", true);
 
         ORDER_RAIDS = BUILDER
                 .comment("A player with strong enough ties to the Demon Realm draws a night crusade of the Order on their hearth.")
@@ -384,6 +389,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean realmTouched() {
         return SPEC.isLoaded() ? REALM_TOUCHED.get() : REALM_TOUCHED.getDefault();
+    }
+
+    public static boolean passingFlocks() {
+        return SPEC.isLoaded() ? PASSING_FLOCKS.get() : PASSING_FLOCKS.getDefault();
     }
 
     public static boolean hamlets() {
