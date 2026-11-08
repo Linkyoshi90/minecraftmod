@@ -127,6 +127,7 @@ public final class MonsterGirlsClient {
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(com.linkyoshi90.monstergirls.registry.ModBlockEntities.FIGURINE.get(), FigurineRenderer::new);
+        event.registerEntityRenderer(com.linkyoshi90.monstergirls.registry.ModEntities.SPLASH_HOLY_WATER.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
         event.registerEntityRenderer(ModEntities.SPARROW_HARPY.get(), SparrowHarpyRenderer::new);
         event.registerEntityRenderer(ModEntities.CROW_HARPY.get(), CrowHarpyRenderer::new);
         event.registerEntityRenderer(ModEntities.OSTRICH_HARPY.get(), OstrichHarpyRenderer::new);

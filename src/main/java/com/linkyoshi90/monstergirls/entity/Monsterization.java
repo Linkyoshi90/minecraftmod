@@ -147,6 +147,7 @@ public final class Monsterization {
                 murmur(level, mob);
                 giftOwner(level, mob, level.getDayTime() % 24000L < 2000L);
                 if (mob.getRandom().nextInt(SPREAD) == 0) spread(level, mob, !level.isDay());
+                if (mob.getRandom().nextInt(ROOT) == 0) takeRoot(level, mob, !level.isDay());
                 breed(level, mob);
             }
             else soak(level, mob, dark(level, mob));
@@ -158,7 +159,7 @@ public final class Monsterization {
     public static AbstractMonsterGirl step(ServerLevel level, Mob mob, boolean dark) {
         GirlSpecies kind = kindOf(mob);
         if (kind == null || !MonsterGirlsConfig.monsterization()) return null;
-        if (!dark || !DemonRealm.inRealm(mob)) return null;
+        if (!dark || !(DemonRealm.inRealm(mob) || guardsTheTurned(mob))) return null;
         int soaked = soaked(mob) + 1;
         mob.getPersistentData().putInt(SOAKED, soaked);
         level.sendParticles(RealmGrassBlock.HAZE, mob.getX(), mob.getY() + mob.getBbHeight() * 0.5, mob.getZ(), 3 + soaked / 2, 0.3, 0.3, 0.3, 0.0);
@@ -328,6 +329,29 @@ public final class Monsterization {
     }
 
     private static final String GIFT_DAY = "RealmGiftDay";
+
+    /** A village's iron golem among this many possessed villagers (within GUARD_RANGE) soaks up the realm as if she stood in it. */
+    public static final int TURNED_VILLAGE = 3, GUARD_RANGE = 8;
+
+    /** An iron golem guarding a village where TURNED_VILLAGE villagers near her are possessed. */
+    public static boolean guardsTheTurned(Mob mob) {
+        return mob.getType() == EntityType.IRON_GOLEM && mob.level().getEntitiesOfClass(Mob.class, mob.getBoundingBox().inflate(GUARD_RANGE),
+                m -> m.getType() == EntityType.VILLAGER && possessed(m)).size() >= TURNED_VILLAGE;
+    }
+
+    /** One look round in this many a possessed villager, at night, lets the realm take root under her. */
+    public static final int ROOT = 40, ROOT_DEPTH = RealmGrassBlock.MAX_DEPTH - 2;
+
+    /**
+     * At night the realm takes root under a possessed villager: the grass she stands on turns, near the realm's edge (it spreads
+     * only a couple of blocks), so a turned village grows little patches of its own. Where, or null.
+     */
+    @Nullable
+    public static net.minecraft.core.BlockPos takeRoot(ServerLevel level, Mob mob, boolean night) {
+        if (!night || mob.getType() != EntityType.VILLAGER || !possessed(mob) || !MonsterGirlsConfig.demonRealm()) return null;
+        net.minecraft.core.BlockPos ground = mob.getOnPos();
+        return RealmGrassBlock.corrupt(level, ground, ROOT_DEPTH) ? ground : null;
+    }
 
     /** One look round in this many (each EVERY ticks) a possessed villager passes it on: about one night in four. */
     public static final int SPREAD = 200, SPREAD_RANGE = 4;

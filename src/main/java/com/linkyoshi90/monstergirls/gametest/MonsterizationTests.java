@@ -293,4 +293,28 @@ public class MonsterizationTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "aTurningVillage")
+    public static void aTurningVillage(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var golem = helper.spawn(EntityType.IRON_GOLEM, new BlockPos(7, 2, 7));
+        golem.setNoAi(true);
+        check(!Monsterization.guardsTheTurned(golem), "a golem among ordinary villagers is just a golem");
+        List<net.minecraft.world.entity.npc.Villager> folk = new java.util.ArrayList<>();
+        for (int i = 0; i < Monsterization.TURNED_VILLAGE; i++) {
+            var v = helper.spawn(EntityType.VILLAGER, new BlockPos(3 + i * 2, 2, 3));
+            v.setNoAi(true);
+            Monsterization.possess(level, v);
+            folk.add(v);
+        }
+        check(Monsterization.guardsTheTurned(golem), "among three possessed she soaks up the realm");
+        check(Monsterization.step(level, golem, true) != null || Monsterization.soaked(golem) == 1, "and begins to turn, no realm under her");
+        var root = Monsterization.takeRoot(level, folk.get(0), true);
+        check(root != null && level.getBlockState(root).is(com.linkyoshi90.monstergirls.registry.ModBlocks.REALM_GRASS.get()), "the realm takes root under a possessed villager");
+        check(level.getBlockState(root).getValue(RealmGrassBlock.DEPTH) == Monsterization.ROOT_DEPTH, "near its edge, so it stays small");
+        int freed = com.linkyoshi90.monstergirls.entity.ThrownHolyWater.splash(level, folk.get(1).blockPosition(), null);
+        check(freed == Monsterization.TURNED_VILLAGE && folk.stream().noneMatch(Monsterization::possessed), "a splash of holy water frees them all");
+        check(!level.getBlockState(root).is(com.linkyoshi90.monstergirls.registry.ModBlocks.REALM_GRASS.get()), "and turns the grass back");
+        helper.succeed();
+    }
 }

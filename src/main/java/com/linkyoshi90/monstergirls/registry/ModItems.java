@@ -234,6 +234,24 @@ public final class ModItems {
     public static final DeferredItem<net.minecraft.world.item.ItemNameBlockItem> HEARTFRUIT = ITEMS.register("heartfruit",
             () -> new net.minecraft.world.item.ItemNameBlockItem(ModBlocks.HEARTFRUIT_BUSH.get(),
                     new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.5F).build())));
+    /** Holy water with gunpowder: thrown, it turns the realm back and frees the possessed where it breaks (entity/ThrownHolyWater). */
+    public static final DeferredItem<Item> SPLASH_HOLY_WATER = ITEMS.registerItem("splash_holy_water", props -> new Item(props.stacksTo(16)) {
+        @Override
+        public net.minecraft.world.InteractionResultHolder<net.minecraft.world.item.ItemStack> use(net.minecraft.world.level.Level level,
+                net.minecraft.world.entity.player.Player player, net.minecraft.world.InteractionHand hand) {
+            net.minecraft.world.item.ItemStack stack = player.getItemInHand(hand);
+            level.playSound(null, player.getX(), player.getY(), player.getZ(), net.minecraft.sounds.SoundEvents.SPLASH_POTION_THROW,
+                    net.minecraft.sounds.SoundSource.PLAYERS, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
+            if (!level.isClientSide) {
+                var thrown = new com.linkyoshi90.monstergirls.entity.ThrownHolyWater(level, player);
+                thrown.setItem(stack);
+                thrown.shootFromRotation(player, player.getXRot(), player.getYRot(), -20.0F, 0.5F, 1.0F);
+                level.addFreshEntity(thrown);
+            }
+            stack.consume(1, player);
+            return net.minecraft.world.InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+        }
+    });
     /** A holstaur's milk, drawn into a glass bottle (entity/girl/Minotaur): rich and sweet, it makes you strong for a while. */
     public static final DeferredItem<Item> HOLSTAUR_MILK = ITEMS.registerItem("holstaur_milk", props -> new Item(props.stacksTo(16)
             .craftRemainder(net.minecraft.world.item.Items.GLASS_BOTTLE)

@@ -184,6 +184,11 @@ public final class ModEntities {
                     .clientTrackingRange(10)
                     .build("cassowrath_harpy"));
 
+    /** A thrown splash holy water (entity/ThrownHolyWater). */
+    public static final DeferredHolder<EntityType<?>, EntityType<com.linkyoshi90.monstergirls.entity.ThrownHolyWater>> SPLASH_HOLY_WATER =
+            ENTITY_TYPES.register("splash_holy_water", () -> EntityType.Builder.<com.linkyoshi90.monstergirls.entity.ThrownHolyWater>of(
+                    com.linkyoshi90.monstergirls.entity.ThrownHolyWater::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10)
+                    .build("splash_holy_water"));
     public static final DeferredHolder<EntityType<?>, EntityType<Mailtoad>> MAILTOAD =
             ENTITY_TYPES.register("mailtoad", () -> EntityType.Builder.of(Mailtoad::new, MobCategory.CREATURE)
                     .sized(0.65F, 1.55F)

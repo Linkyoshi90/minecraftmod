@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The Demon Realm's kitchen (2026-11-08): holstaur milk and the heartfruit tart.
+"""The Demon Realm's kitchen (2026-11-08): holstaur milk, the heartfruit tart, and the splash holy water's bottle.
 
     uv run --no-project --with pillow python tools/gen_realm_cuisine.py [--preview previews/realm_cuisine.png]
 
@@ -54,6 +54,15 @@ def heartfruit_tart():
     return save(img, "item", "heartfruit_tart.png")
 
 
+def splash_holy_water():
+    """the holy water bottle (gen_realm_assets) with white splash marks either side of the neck"""
+    img = Image.open(os.path.join(ASSETS, "textures", "item", "holy_water.png")).convert("RGBA")
+    px = img.load()
+    for x, y in ((4, 3), (5, 4), (12, 3), (11, 4), (3, 6), (13, 6)):
+        px[x, y] = (232, 248, 255, 255)
+    return save(img, "item", "splash_holy_water.png")
+
+
 def data():
     for name in ("holstaur_milk", "heartfruit_tart"):
         dump(os.path.join(ASSETS, "models", "item", name + ".json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:item/" + name}})
@@ -65,7 +74,7 @@ def data():
 
 
 def main():
-    tiles = [holstaur_milk(), heartfruit_tart()]
+    tiles = [holstaur_milk(), heartfruit_tart(), splash_holy_water()]
     data()
     if "--preview" in sys.argv:
         path = sys.argv[sys.argv.index("--preview") + 1]
