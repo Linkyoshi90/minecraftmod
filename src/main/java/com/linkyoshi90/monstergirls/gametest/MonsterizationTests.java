@@ -249,4 +249,20 @@ public class MonsterizationTests {
         check(trader.getOffers().size() == before, "freed, she deals only in her own wares again");
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "heartfruitReadiesThePossessed")
+    public static void heartfruitReadiesThePossessed(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var pig = helper.spawn(EntityType.PIG, new BlockPos(4, 2, 4));
+        var boar = helper.spawn(EntityType.PIG, new BlockPos(6, 2, 4));
+        pig.setNoAi(true);
+        boar.setNoAi(true);
+        Monsterization.possess(level, pig);
+        check(pig.goalSelector.getAvailableGoals().stream().anyMatch(g -> g.getGoal() instanceof net.minecraft.world.entity.ai.goal.TemptGoal), "heartfruit tempts her");
+        check(Monsterization.breed(level, pig) == null, "she must wait a while after the change");
+        check(Monsterization.feed(level, pig), "a heartfruit makes her ready at once");
+        check(Monsterization.breed(level, pig) != null, "and her young is born");
+        check(!Monsterization.feed(level, boar), "an ordinary pig cares nothing for it");
+        helper.succeed();
+    }
 }

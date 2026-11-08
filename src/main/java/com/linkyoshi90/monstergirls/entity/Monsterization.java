@@ -205,6 +205,42 @@ public final class Monsterization {
         mob.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 0.7F, 1.6F);
         sync(mob);
         if (mob instanceof net.minecraft.world.entity.npc.AbstractVillager merchant) realmTrades(merchant, true);
+        tempt(mob);
+    }
+
+    /** A possessed animal follows a heartfruit held out to her (villagers think with their own brains, so not them). */
+    public static void tempt(Mob mob) {
+        if (mob instanceof net.minecraft.world.entity.animal.Animal animal) {
+            animal.goalSelector.addGoal(3, new net.minecraft.world.entity.ai.goal.TemptGoal(animal, 1.1,
+                    net.minecraft.world.item.crafting.Ingredient.of(com.linkyoshi90.monstergirls.registry.ModItems.HEARTFRUIT.get()), false));
+        }
+    }
+
+    /** Loaded again (goals are not saved): a possessed animal is tempted by heartfruit again. */
+    @SubscribeEvent
+    public static void onJoin(net.neoforged.neoforge.event.entity.EntityJoinLevelEvent event) {
+        if (!event.getLevel().isClientSide && event.getEntity() instanceof Mob mob && POSSESSED.containsKey(mob.getType()) && possessed(mob)) tempt(mob);
+    }
+
+    /**
+     * A heartfruit fed to a possessed creature: she is ready for one of her kind again at once (her half day's wait is over).
+     * True if she took it.
+     */
+    public static boolean feed(ServerLevel level, Mob mob) {
+        if (!possessed(mob) || mob.isBaby() || mob.getPersistentData().getLong(NEXT_BREED) <= level.getGameTime()) return false;
+        mob.getPersistentData().putLong(NEXT_BREED, level.getGameTime());
+        mob.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.2F);
+        level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.3, mob.getZ(), 4, 0.3, 0.2, 0.3, 0.0);
+        return true;
+    }
+
+    @SubscribeEvent
+    public static void onInteract(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract event) {
+        if (!event.getItemStack().is(com.linkyoshi90.monstergirls.registry.ModItems.HEARTFRUIT.get()) || !(event.getTarget() instanceof Mob mob)
+                || mob instanceof Bonded || !POSSESSED.containsKey(mob.getType()) || !possessed(mob)) return;
+        event.setCanceled(true);
+        event.setCancellationResult(net.minecraft.world.InteractionResult.sidedSuccess(event.getLevel().isClientSide));
+        if (event.getLevel() instanceof ServerLevel level && feed(level, mob)) event.getItemStack().consume(1, event.getEntity());
     }
 
     /** What a possessed villager or wandering trader deals in besides her trade: the realm's goods (or, freed, she stops). */
