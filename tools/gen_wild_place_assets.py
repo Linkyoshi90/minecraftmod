@@ -21,6 +21,12 @@ PLACES = {
                    48, 18, 84173920, "surface_structures", "island", "sky island", "Head in the Clouds", "Set foot on a sky island", "minecraft:white_wool"),
     "silk_den": (["minecraft:dark_forest"], 36, 12, 29384715, "surface_structures", "den", "silk den",
                  "Into the Web", "Find a jorogumo's silk den", "minecraft:cobweb"),
+    "dragon_lair": (["minecraft:windswept_hills", "minecraft:windswept_gravelly_hills", "minecraft:stony_peaks", "minecraft:jagged_peaks", "minecraft:grove"],
+                    48, 18, 71820394, "surface_structures", "lair", "dragon's lair", "Here Be Dragons", "Find a dragon's lair and its hoard", "minecraft:gold_block"),
+    "centaur_camp": (["minecraft:plains", "minecraft:sunflower_plains", "minecraft:savanna", "minecraft:savanna_plateau"], 40, 14, 30918274,
+                     "surface_structures", "camp", "centaur camp", "Round the Campfire", "Find a centaur band's camp", "minecraft:campfire"),
+    "graveyard": (["minecraft:forest", "minecraft:taiga", "minecraft:plains", "minecraft:old_growth_spruce_taiga", "minecraft:dark_forest"], 40, 14, 55102938,
+                  "surface_structures", "graveyard", "old graveyard", "Here Lies...", "Find an old graveyard and its ghost", "minecraft:candle"),
 }
 
 
@@ -54,12 +60,32 @@ def main():
             item("minecraft:feather", 6, 3, 9), item("minecraft:phantom_membrane", 3, 1, 3), item("minecraft:elytra", 1), item("minecraft:firework_rocket", 3, 2, 6),
             item("minecraft:amethyst_shard", 4, 2, 5), item("minecraft:emerald", 3, 1, 3), item("minecraft:apple", 4, 2, 4),
             item("minecraft:book", 2, enchant=True)]}]})
+    dump(os.path.join(DATA, "loot_table", "chests", "dragon_lair.json"), {"type": "minecraft:chest", "pools": [
+        {"rolls": {"type": "minecraft:uniform", "min": 5, "max": 9}, "entries": [
+            item("minecraft:gold_ingot", 8, 3, 9), item("minecraft:gold_nugget", 6, 6, 18), item("minecraft:raw_gold", 5, 2, 6), item("minecraft:emerald", 4, 2, 5),
+            item("minecraft:diamond", 3, 1, 3), item("minecraft:amethyst_shard", 4, 3, 8), item("minecraft:golden_apple", 2), item("minecraft:enchanted_golden_apple", 1),
+            item("minecraft:golden_sword", 2, enchant=True), item("minecraft:golden_helmet", 1, enchant=True)]}]})
+    dump(os.path.join(DATA, "loot_table", "chests", "centaur_camp.json"), {"type": "minecraft:chest", "pools": [
+        {"rolls": {"type": "minecraft:uniform", "min": 4, "max": 7}, "entries": [
+            item("minecraft:bread", 6, 2, 5), item("minecraft:carrot", 5, 3, 8), item("minecraft:apple", 5, 2, 5), item("minecraft:arrow", 5, 6, 16),
+            item("minecraft:bow", 2, enchant=True), item("minecraft:leather", 4, 2, 5), item("minecraft:saddle", 2), item("minecraft:lead", 3, 1, 2),
+            item("minecraft:golden_carrot", 2, 1, 3)]}]})
+    dump(os.path.join(DATA, "loot_table", "chests", "graveyard.json"), {"type": "minecraft:chest", "pools": [
+        {"rolls": {"type": "minecraft:uniform", "min": 4, "max": 7}, "entries": [
+            item("minecraft:bone", 6, 2, 6), item("minecraft:candle", 5, 1, 4), item("minecraft:gold_nugget", 5, 3, 9), item("minecraft:iron_ingot", 3, 1, 3),
+            item("minecraft:emerald", 3, 1, 2), item("minecraft:book", 3, enchant=True), item("minecraft:soul_lantern", 2), item("minecraft:music_disc_13", 1),
+            item("minecraft:golden_apple", 1)]}]})
     add_lang(lang)
     gen_manor_assets.GUIDE_ADD.clear()
     gen_manor_assets.GUIDE_ADD["journal.monstergirls.guide.encounters"] = (
         " Further afield: an oasis in the desert where a sphinx keeps an old shrine (and her riddles), sky islands drifting high over "
         "the hills where a sylph lives, and in dark forests a jorogumo's silk den, its chest full of cocoons to tear open. "
         "(/monstergirls locate oasis, island, den)")
+    gen_manor_assets.append_guides()
+    gen_manor_assets.GUIDE_ADD.clear()
+    gen_manor_assets.GUIDE_ADD["journal.monstergirls.guide.encounters"] = (
+        " Up in the mountains a dragon sleeps in her lair on a glittering hoard; out on the plains a centaur band keeps camp round a "
+        "fire; and in an old graveyard a yurei drifts among the headstones. (/monstergirls locate lair, camp, graveyard)")
     gen_manor_assets.append_guides()
 
 

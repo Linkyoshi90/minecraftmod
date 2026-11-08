@@ -47,6 +47,15 @@ public final class ModStructures {
     public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.SilkDenStructure>> SILK_DEN =
             STRUCTURE_TYPES.register("silk_den", () -> () -> com.linkyoshi90.monstergirls.world.SilkDenStructure.CODEC);
     public static final ResourceKey<Structure> SILK_DEN_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("silk_den"));
+    public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.DragonLairStructure>> DRAGON_LAIR =
+            STRUCTURE_TYPES.register("dragon_lair", () -> () -> com.linkyoshi90.monstergirls.world.DragonLairStructure.CODEC);
+    public static final ResourceKey<Structure> DRAGON_LAIR_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("dragon_lair"));
+    public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.CentaurCampStructure>> CENTAUR_CAMP =
+            STRUCTURE_TYPES.register("centaur_camp", () -> () -> com.linkyoshi90.monstergirls.world.CentaurCampStructure.CODEC);
+    public static final ResourceKey<Structure> CENTAUR_CAMP_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("centaur_camp"));
+    public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.GraveyardStructure>> GRAVEYARD =
+            STRUCTURE_TYPES.register("graveyard", () -> () -> com.linkyoshi90.monstergirls.world.GraveyardStructure.CODEC);
+    public static final ResourceKey<Structure> GRAVEYARD_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("graveyard"));
     /** A Minoan labyrinth (world/LabyrinthStructure). */
     public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.LabyrinthStructure>> LABYRINTH =
             STRUCTURE_TYPES.register("labyrinth", () -> () -> com.linkyoshi90.monstergirls.world.LabyrinthStructure.CODEC);

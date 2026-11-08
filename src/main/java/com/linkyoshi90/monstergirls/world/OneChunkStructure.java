@@ -44,7 +44,10 @@ public abstract class OneChunkStructure extends Structure {
     public static final Map<String, Builder> BUILDERS = Map.of(
             "oasis", OasisStructure::build,
             "sky_island", SkyIslandStructure::build,
-            "silk_den", SilkDenStructure::build);
+            "silk_den", SilkDenStructure::build,
+            "dragon_lair", DragonLairStructure::build,
+            "centaur_camp", CentaurCampStructure::build,
+            "graveyard", GraveyardStructure::build);
 
     protected OneChunkStructure(StructureSettings settings) {
         super(settings);

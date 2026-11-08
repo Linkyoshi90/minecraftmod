@@ -5,6 +5,9 @@ import com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl;
 import com.linkyoshi90.monstergirls.entity.girl.GirlSpecies;
 import com.linkyoshi90.monstergirls.registry.ModItems;
 import com.linkyoshi90.monstergirls.world.OasisStructure;
+import com.linkyoshi90.monstergirls.world.DragonLairStructure;
+import com.linkyoshi90.monstergirls.world.CentaurCampStructure;
+import com.linkyoshi90.monstergirls.world.GraveyardStructure;
 import com.linkyoshi90.monstergirls.world.OneChunkStructure;
 import com.linkyoshi90.monstergirls.world.SilkDenStructure;
 import com.linkyoshi90.monstergirls.world.SkyIslandStructure;
@@ -37,7 +40,7 @@ public class WildPlaceTests {
 
     @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "everyPlaceHasABuilder")
     public static void everyPlaceHasABuilder(GameTestHelper helper) {
-        check(OneChunkStructure.BUILDERS.keySet().containsAll(java.util.List.of("oasis", "sky_island", "silk_den")), "all three can be built from their pieces");
+        check(OneChunkStructure.BUILDERS.keySet().containsAll(java.util.List.of("oasis", "sky_island", "silk_den", "dragon_lair", "centaur_camp", "graveyard")), "every place can be built from its piece");
         helper.succeed();
     }
 
@@ -79,6 +82,46 @@ public class WildPlaceTests {
         AbstractMonsterGirl weaver = resident(level, origin, GirlSpecies.JOROGUMO_ARACHNE);
         check(weaver != null && weaver.hasRestriction(), "and the jorogumo who weaves them");
         clear(level, origin, 4, 10);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "aDragonOnHerHoard")
+    public static void aDragonOnHerHoard(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos origin = helper.absolutePos(new BlockPos(7, 4, 7));
+        BlockPos chest = DragonLairStructure.build(level, origin, level.random, true);
+        check(level.getBlockState(chest).is(Blocks.CHEST) && level.getBlockState(origin.above(2)).isAir() && level.getBlockState(origin.above(5)).isSolid(),
+                "a hollow mound with a chest inside");
+        check(level.getBlockState(origin.offset(0, 1, -DragonLairStructure.OUTER)).isAir(), "and a way in");
+        AbstractMonsterGirl dragon = level.getEntitiesOfClass(AbstractMonsterGirl.class, new AABB(origin).inflate(8),
+                g -> g.getSpecies() == GirlSpecies.WYVERN_DRAGON || g.getSpecies() == GirlSpecies.WYRM_DRAGON).stream().findFirst().orElse(null);
+        check(dragon != null && dragon.hasRestriction(), "and a dragon on her hoard");
+        clear(level, origin, 4, 10);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "aCentaurBandsCamp")
+    public static void aCentaurBandsCamp(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos origin = helper.absolutePos(new BlockPos(7, 4, 7));
+        BlockPos chest = CentaurCampStructure.build(level, origin, level.random, true);
+        check(level.getBlockState(chest).is(Blocks.CHEST) && level.getBlockState(origin.above()).is(Blocks.CAMPFIRE), "a campfire and supplies");
+        long band = level.getEntitiesOfClass(AbstractMonsterGirl.class, new AABB(origin).inflate(8), g -> g.getSpecies().family() == GirlSpecies.Family.CENTAUR).size();
+        check(band == CentaurCampStructure.BAND, "a band of three: " + band);
+        clear(level, origin, 4, 8);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "anOldGraveyard")
+    public static void anOldGraveyard(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos origin = helper.absolutePos(new BlockPos(7, 4, 7));
+        BlockPos chest = GraveyardStructure.build(level, origin, level.random, true);
+        check(level.getBlockState(chest).is(Blocks.CHEST), "a chest in the crypt");
+        check(level.getBlockState(origin.offset(-GraveyardStructure.HALF, 1, 0)).is(Blocks.DARK_OAK_FENCE) && level.getBlockState(origin.offset(0, 1, -GraveyardStructure.HALF)).isAir(),
+                "fenced, with a gate");
+        check(resident(level, origin, GirlSpecies.YUREI_UNDEAD) != null && resident(level, origin, GirlSpecies.WILL_O_WISP_UNDEAD) != null, "a yurei and a will-o-wisp");
+        clear(level, origin, 4, 8);
         helper.succeed();
     }
 }

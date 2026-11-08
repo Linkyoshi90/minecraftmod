@@ -1,0 +1,7 @@
+{
+  "type": "monstergirls:graveyard",
+  "biomes": "#monstergirls:has_structure/graveyard",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}
