@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:stargazer",
+  "display": {
+    "icon": {
+      "id": "minecraft:feather"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.harpy_colony"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.harpy_colony.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

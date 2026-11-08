@@ -102,8 +102,15 @@ public final class Flocks {
         player.getPersistentData().putLong(DAY, day + 1);
         var kinds = nearWater(level, player.blockPosition()) ? WATERFOWL : SONGBIRDS;
         EntityType<? extends Mob> kind = kinds.get(level.random.nextInt(kinds.size())).get();
-        List<Mob> flock = land(level, player.blockPosition(), kind, MIN + level.random.nextInt(MAX - MIN + 1), NEAR, FAR);
-        if (!flock.isEmpty()) {
+        BlockPos perch = Colonies.perchNear(level, player.blockPosition());
+        List<Mob> flock = perch != null ? land(level, perch, kind, MIN + level.random.nextInt(MAX - MIN + 1), 2, 6)
+                : land(level, player.blockPosition(), kind, MIN + level.random.nextInt(MAX - MIN + 1), NEAR, FAR);
+        if (!flock.isEmpty() && perch != null) {                           // the perch draws them in: they stay
+            Colonies.settleAtPerch(flock, perch);
+            level.playSound(null, perch, SoundEvents.PARROT_FLY, SoundSource.NEUTRAL, 2.0F, 0.8F);
+            player.displayClientMessage(Component.translatable("message.monstergirls.flock.perch", kind.getDescription()).withStyle(ChatFormatting.AQUA), false);
+            Dairy.award(player, "harpy_perch");
+        } else if (!flock.isEmpty()) {
             level.playSound(null, flock.get(0).blockPosition(), SoundEvents.PARROT_FLY, SoundSource.NEUTRAL, 2.0F, 0.8F);
             player.displayClientMessage(Component.translatable("message.monstergirls.flock." + (northward(level.getDayTime()) ? "north" : "south"),
                     kind.getDescription()).withStyle(ChatFormatting.AQUA), false);
@@ -123,6 +130,11 @@ public final class Flocks {
         level.playSound(null, bird.blockPosition(), SoundEvents.PARROT_FLY, SoundSource.NEUTRAL, 1.0F, 1.0F);
         bird.discard();
         return true;
+    }
+
+    /** She stays for good (a perch drew her in). */
+    public static void stay(Mob bird) {
+        bird.getPersistentData().remove(TAG);
     }
 
     /** For tests: her day is over now. */

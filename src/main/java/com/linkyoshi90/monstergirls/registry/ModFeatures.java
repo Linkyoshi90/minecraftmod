@@ -11,6 +11,9 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public final class ModFeatures {
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Registries.FEATURE, MonsterGirlsMod.MODID);
 
+    /** A hot spring (world/HotSpringFeature). */
+    public static final DeferredHolder<Feature<?>, com.linkyoshi90.monstergirls.world.HotSpringFeature> HOT_SPRING =
+            FEATURES.register("hot_spring", com.linkyoshi90.monstergirls.world.HotSpringFeature::new);
     /** A wild patch of the Demon Realm (world/RealmPatchFeature). */
     public static final DeferredHolder<Feature<?>, com.linkyoshi90.monstergirls.world.RealmPatchFeature> REALM_PATCH =
             FEATURES.register("realm_patch", com.linkyoshi90.monstergirls.world.RealmPatchFeature::new);

@@ -45,7 +45,7 @@ public final class Colds {
     public static boolean chilly(ServerLevel level, AbstractMonsterGirl girl) {
         BlockPos at = girl.blockPosition();
         boolean wet = level.isRainingAt(at.above()) || girl.isInWater() || level.isRaining() && level.canSeeSky(at.above()) && level.getBiome(at).value().coldEnoughToSnow(at);
-        return wet && level.getBiome(at).value().getBaseTemperature() < 0.5F;
+        return wet && level.getBiome(at).value().getBaseTemperature() < 0.5F && !com.linkyoshi90.monstergirls.entity.HotSprings.inSpring(girl);   // never in a hot spring
     }
 
     public static void catchCold(ServerLevel level, AbstractMonsterGirl girl) {

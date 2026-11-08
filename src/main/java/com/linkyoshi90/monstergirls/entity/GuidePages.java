@@ -6,6 +6,7 @@ import java.util.Map;
 public final class GuidePages {
     public static final Map<String, Integer> PAGES = Map.ofEntries(
             Map.entry("hearth", 2),
+            Map.entry("home", 3),
             Map.entry("keepsakes", 3),
             Map.entry("dairy", 2),
             Map.entry("nursing", 2),
@@ -26,7 +27,7 @@ public final class GuidePages {
             Map.entry("tree", 3),
             Map.entry("rain", 3),
             Map.entry("habits", 7),
-            Map.entry("nesting", 2),
+            Map.entry("nesting", 4),
             Map.entry("orders", 3),
             Map.entry("realm", 29),
             Map.entry("order", 9),

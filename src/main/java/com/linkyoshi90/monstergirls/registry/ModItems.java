@@ -212,6 +212,8 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> TAR_SHROOM = ITEMS.registerSimpleBlockItem(ModBlocks.TAR_SHROOM);
     /** The Demon Realm (entity/DemonRealm): its grass, its heart-shaped fruit (plants the bush), and the holy water that drives it back. */
     public static final DeferredItem<BlockItem> REALM_GRASS = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_GRASS);
+    public static final DeferredItem<BlockItem> GEYSERITE = ITEMS.registerSimpleBlockItem(ModBlocks.GEYSERITE);
+    public static final DeferredItem<BlockItem> HARPY_PERCH = ITEMS.registerSimpleBlockItem(ModBlocks.HARPY_PERCH);
     public static final DeferredItem<BlockItem> REALM_FROST = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_FROST);
     public static final DeferredItem<BlockItem> REALM_BOG = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_BOG);
     public static final DeferredItem<BlockItem> REALM_SAND = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_SAND);

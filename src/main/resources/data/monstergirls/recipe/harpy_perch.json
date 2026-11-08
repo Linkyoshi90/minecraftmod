@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "decorations",
+  "pattern": [
+    "FHF",
+    " L ",
+    " L "
+  ],
+  "key": {
+    "F": {
+      "item": "minecraft:feather"
+    },
+    "H": {
+      "item": "minecraft:hay_block"
+    },
+    "L": {
+      "item": "minecraft:stripped_spruce_log"
+    }
+  },
+  "result": {
+    "id": "monstergirls:harpy_perch",
+    "count": 1
+  }
+}

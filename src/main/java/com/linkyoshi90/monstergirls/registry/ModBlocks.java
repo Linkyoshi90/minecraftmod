@@ -129,6 +129,14 @@ public final class ModBlocks {
     public static final DeferredBlock<com.linkyoshi90.monstergirls.block.RealmGrassBlock> REALM_GRASS = BLOCKS.registerBlock("realm_grass",
             com.linkyoshi90.monstergirls.block.RealmGrassBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_MAGENTA).randomTicks().strength(0.6F).sound(SoundType.NYLIUM));
+    /** A harpy perch: a flock that lands near it stays (block/HarpyPerchBlock, entity/Colonies). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.HarpyPerchBlock> HARPY_PERCH = BLOCKS.registerBlock("harpy_perch",
+            com.linkyoshi90.monstergirls.block.HarpyPerchBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1.5F).sound(SoundType.WOOD).noOcclusion());
+    /** Geyserite, the floor of a hot spring (block/GeyseriteBlock, entity/HotSprings). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.GeyseriteBlock> GEYSERITE = BLOCKS.registerBlock("geyserite",
+            com.linkyoshi90.monstergirls.block.GeyseriteBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).sound(SoundType.CALCITE));
     /** Realm variants (block/RealmGrassBlock#variantFor): the frost realm, the bog realm, realm sand. */
     public static final DeferredBlock<com.linkyoshi90.monstergirls.block.RealmGrassBlock.Frost> REALM_FROST = BLOCKS.registerBlock("realm_frost",
             com.linkyoshi90.monstergirls.block.RealmGrassBlock.Frost::new,

@@ -35,6 +35,12 @@ public final class ModStructures {
     public static final DeferredHolder<StructurePieceType, StructurePieceType> REALM_MANOR_PIECE =
             PIECES.register("realm_manor", () -> (StructurePieceType.ContextlessType) (tag) -> new com.linkyoshi90.monstergirls.world.RealmManorStructure.Piece(null, tag));
     public static final ResourceKey<Structure> REALM_MANOR_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("realm_manor"));
+    /** A harpy aerie (world/HarpyAerieStructure). */
+    public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.HarpyAerieStructure>> HARPY_AERIE =
+            STRUCTURE_TYPES.register("harpy_aerie", () -> () -> com.linkyoshi90.monstergirls.world.HarpyAerieStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> HARPY_AERIE_PIECE =
+            PIECES.register("harpy_aerie", () -> (StructurePieceType.ContextlessType) (tag) -> new com.linkyoshi90.monstergirls.world.HarpyAerieStructure.Piece(null, tag));
+    public static final ResourceKey<Structure> HARPY_AERIE_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("harpy_aerie"));
     /** The Demon's spire (world/DemonSpireStructure). */
     public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.DemonSpireStructure>> DEMON_SPIRE =
             STRUCTURE_TYPES.register("demon_spire", () -> () -> com.linkyoshi90.monstergirls.world.DemonSpireStructure.CODEC);
