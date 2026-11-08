@@ -456,6 +456,14 @@ public class DemonRealmTests {
         check(rose > 60 && rose < 140, "about one night in ten is a rose moon (" + rose + " in 1000)");
         check(!com.linkyoshi90.monstergirls.entity.RoseMoon.roseDay(seed, 0), "never the first night");
         check(com.linkyoshi90.monstergirls.entity.RoseMoon.roseDay(seed, 77) == com.linkyoshi90.monstergirls.entity.RoseMoon.roseDay(seed, 77), "the same night for everyone");
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
+        try {
+            check(helper.getLevel().getServer().getCommands().getDispatcher().execute("monstergirls realm rosemoon", p.createCommandSourceStack()) >= 0,
+                    "the command names the next rose moon");
+        } catch (com.mojang.brigadier.exceptions.CommandSyntaxException e) {
+            throw new net.minecraft.gametest.framework.GameTestAssertException("the command failed: " + e.getMessage());
+        }
+        HarpyTestUtil.remove(p);
         helper.succeed();
     }
 }

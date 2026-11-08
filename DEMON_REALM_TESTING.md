@@ -13,6 +13,7 @@ Everything below passes the GameTests, but none of it has been seen in a real cl
 | `/monstergirls realm possess` | (op) Possesses the villager, wandering trader, pig, cat or chicken you look at. |
 | `/monstergirls realm turn` | (op) Changes the creature you look at into her girl form on the spot. |
 | `/monstergirls realm summon` | (op) A succubus or demon steps out of the haze at your feet. |
+| `/monstergirls realm rosemoon` | When the next rose moon rises, with a clickable `/time set` to get there. |
 | `/gamerule randomTickSpeed 60` | Fast-forwards the realm's spread, trees turning, weepcaps (set back to 3 after). |
 | `/time set 18000` | Night: possession, summons, spreading villages and the sabbath only happen in the dark. |
 
@@ -63,7 +64,7 @@ Everything below passes the GameTests, but none of it has been seen in a real cl
 
 ## Rose moon
 
-- About one night in ten (fixed by seed and day) the moon rises rose-violet: a chat line at moonrise and a rose tint to the night fog. That night monsterization runs twice as fast, and possession spreading, summons and the realm's spread four times as often. Hard to wait for: `/time set` to nights on different days until the message appears. Is the tint pretty or too much?
+- About one night in ten (fixed by seed and day) the moon rises rose-violet: a chat line at moonrise and a rose tint to the night fog. That night monsterization runs twice as fast, and possession spreading, summons and the realm's spread four times as often. `/monstergirls realm rosemoon` names the next one and gives a click-to-go `/time set`. Is the tint pretty or too much?
 
 ## Options
 

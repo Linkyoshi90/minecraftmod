@@ -37,7 +37,8 @@ public final class RealmCommands {
                         .then(Commands.argument("radius", IntegerArgumentType.integer(1, 128)).executes(ctx -> list(ctx.getSource(), IntegerArgumentType.getInteger(ctx, "radius")))))
                 .then(Commands.literal("possess").requires(s -> s.hasPermission(2)).executes(ctx -> possess(ctx.getSource())))
                 .then(Commands.literal("turn").requires(s -> s.hasPermission(2)).executes(ctx -> turn(ctx.getSource())))
-                .then(Commands.literal("summon").requires(s -> s.hasPermission(2)).executes(ctx -> summon(ctx.getSource())))));
+                .then(Commands.literal("summon").requires(s -> s.hasPermission(2)).executes(ctx -> summon(ctx.getSource())))
+                .then(Commands.literal("rosemoon").executes(ctx -> nextRoseMoon(ctx.getSource())))));
     }
 
     /** The possessed creatures and the girls the realm changed within the radius, nearest first. */
@@ -94,6 +95,24 @@ public final class RealmCommands {
         }
         source.sendSuccess(() -> Component.translatable("commands.monstergirls.realm.turn", girl.getDisplayName()), true);
         return 1;
+    }
+
+    /** The next night with a rose moon (entity/RoseMoon), with a click to go there. */
+    static int nextRoseMoon(CommandSourceStack source) {
+        ServerLevel level = source.getServer().overworld();
+        long today = level.getDayTime() / 24000L;
+        for (long day = today; day < today + 200; day++) {
+            if (!com.linkyoshi90.monstergirls.entity.RoseMoon.roseDay(level.getSeed(), day)) continue;
+            long time = day * 24000L + 13000L;
+            long in = day - today;
+            Component go = net.minecraft.network.chat.ComponentUtils.wrapInSquareBrackets(Component.literal("/time set " + time)).withStyle(s -> s
+                    .withColor(ChatFormatting.LIGHT_PURPLE).withClickEvent(new net.minecraft.network.chat.ClickEvent(
+                            net.minecraft.network.chat.ClickEvent.Action.SUGGEST_COMMAND, "/time set " + time)));
+            source.sendSuccess(() -> Component.translatable("commands.monstergirls.realm.rosemoon", in, go), false);
+            return (int) in;
+        }
+        source.sendFailure(Component.translatable("commands.monstergirls.realm.rosemoon.none"));
+        return 0;
     }
 
     static int summon(CommandSourceStack source) throws CommandSyntaxException {

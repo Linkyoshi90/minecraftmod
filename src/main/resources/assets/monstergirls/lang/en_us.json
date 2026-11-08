@@ -3430,5 +3430,7 @@
   "journal.monstergirls.koi_mermaid.signature.p1": "Good fortune & waterfall climb: A bonded koi in a pond within 32 blocks of you gives Luck (better fishing and loot). She swims up water columns.",
   "journal.monstergirls.koi_mermaid.signature.p2": "Ten days at full devotion turns her into a dragon koi (a golden glow mask and longer fins).",
   "journal.monstergirls.snapping_turtle_lizardfolk.signature.p1": "Tongue lure: While she sits still in water she catches a fish now and then and drops it at her feet (cod or salmon, at most three lying around at a time). Hit her and she hides in her shell.",
-  "journal.monstergirls.snapping_turtle_lizardfolk.signature.p2": "Her bite is the hardest in the family after the crocodile's."
+  "journal.monstergirls.snapping_turtle_lizardfolk.signature.p2": "Her bite is the hardest in the family after the crocodile's.",
+  "commands.monstergirls.realm.rosemoon": "The next rose moon rises in %s days (0 = tonight): %s",
+  "commands.monstergirls.realm.rosemoon.none": "No rose moon in the next 200 days (is the roseMoon option off?)"
 }
