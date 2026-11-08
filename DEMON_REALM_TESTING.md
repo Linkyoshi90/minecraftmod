@@ -45,6 +45,7 @@ Everything below passes the GameTests, but none of it has been seen in a real cl
 
 **Realm silver** (iron ingot, 4 amethyst shards, heartfruit; then a sword like an iron one)
 - Hit a monster girl, harpy or frog girl: no damage, she stops attacking, blushes, +1 friendship (once per 5 seconds). Anything else takes iron-sword damage. Try it on a wild succubus.
+- Realm silver armour (ingots, the usual shapes): does it look right worn? Two pieces: girls' blows hurt half. All four: wild girls who aren't your friends won't target you.
 
 ## Behaviour worth watching over a few nights
 
@@ -66,4 +67,4 @@ Everything below passes the GameTests, but none of it has been seen in a real cl
 
 ## Advancements
 
-Under Adventure: Into the Demon Realm, A Change of Heart, Born of the Realm, Exorcist, Lovestruck, Sabbath, Home Fires, Strong Stuff, The Realm's Gifts.
+Under Adventure: Into the Demon Realm, Spirit, Not Flesh, A Change of Heart, Born of the Realm, Exorcist, Lovestruck, Sabbath, Home Fires, Strong Stuff, The Realm's Gifts.

@@ -30,6 +30,10 @@ public final class ModArmorMaterials {
     /** Leather and feathers: the winged cap. */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> WINGED_CAP = register("winged_cap", 1, 1, 1, 1, 15, SoundEvents.ARMOR_EQUIP_ELYTRA, () -> net.minecraft.world.item.Items.FEATHER);
 
+    /** Realm silver (entity/RealmSilver): iron's protection; monster girls' blows land soft on it, and a full set keeps wild ones off. */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> REALM_SILVER = register("realm_silver", 2, 5, 6, 2, 12, SoundEvents.ARMOR_EQUIP_IRON,
+            () -> ModItems.REALM_SILVER_INGOT.get());
+
     private ModArmorMaterials() {}
 
     private static DeferredHolder<ArmorMaterial, ArmorMaterial> register(String name, int boots, int legs, int chest, int helmet, int enchantability,

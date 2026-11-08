@@ -240,6 +240,18 @@ public final class ModItems {
     public static final DeferredItem<net.minecraft.world.item.SwordItem> REALM_SILVER_SWORD = ITEMS.registerItem("realm_silver_sword",
             props -> new net.minecraft.world.item.SwordItem(net.minecraft.world.item.Tiers.IRON,
                     props.attributes(net.minecraft.world.item.SwordItem.createAttributes(net.minecraft.world.item.Tiers.IRON, 3, -2.4F))));
+    public static final DeferredItem<net.minecraft.world.item.ArmorItem> REALM_SILVER_HELMET = ITEMS.registerItem("realm_silver_helmet",
+            props -> new net.minecraft.world.item.ArmorItem(ModArmorMaterials.REALM_SILVER, net.minecraft.world.item.ArmorItem.Type.HELMET,
+                    props.durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(15))));
+    public static final DeferredItem<net.minecraft.world.item.ArmorItem> REALM_SILVER_CHESTPLATE = ITEMS.registerItem("realm_silver_chestplate",
+            props -> new net.minecraft.world.item.ArmorItem(ModArmorMaterials.REALM_SILVER, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE,
+                    props.durability(net.minecraft.world.item.ArmorItem.Type.CHESTPLATE.getDurability(15))));
+    public static final DeferredItem<net.minecraft.world.item.ArmorItem> REALM_SILVER_LEGGINGS = ITEMS.registerItem("realm_silver_leggings",
+            props -> new net.minecraft.world.item.ArmorItem(ModArmorMaterials.REALM_SILVER, net.minecraft.world.item.ArmorItem.Type.LEGGINGS,
+                    props.durability(net.minecraft.world.item.ArmorItem.Type.LEGGINGS.getDurability(15))));
+    public static final DeferredItem<net.minecraft.world.item.ArmorItem> REALM_SILVER_BOOTS = ITEMS.registerItem("realm_silver_boots",
+            props -> new net.minecraft.world.item.ArmorItem(ModArmorMaterials.REALM_SILVER, net.minecraft.world.item.ArmorItem.Type.BOOTS,
+                    props.durability(net.minecraft.world.item.ArmorItem.Type.BOOTS.getDurability(15))));
     /** Holy water with gunpowder: thrown, it turns the realm back and frees the possessed where it breaks (entity/ThrownHolyWater). */
     public static final DeferredItem<Item> SPLASH_HOLY_WATER = ITEMS.registerItem("splash_holy_water", props -> new Item(props.stacksTo(16)) {
         @Override

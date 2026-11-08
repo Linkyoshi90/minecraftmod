@@ -426,4 +426,25 @@ public class DemonRealmTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "realmSilverArmour")
+    public static void realmSilverArmour(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
+        AbstractMonsterGirl girl = JackalopeTests.spawn(helper, GirlSpecies.SUCCUBUS_DEVIL, new BlockPos(6, 2, 6));
+        girl.setNoAi(true);
+        var zombie = helper.spawn(net.minecraft.world.entity.EntityType.ZOMBIE, new BlockPos(10, 2, 10));
+        zombie.setNoAi(true);
+        p.setItemSlot(net.minecraft.world.entity.EquipmentSlot.CHEST, new ItemStack(ModItems.REALM_SILVER_CHESTPLATE.get()));
+        check(com.linkyoshi90.monstergirls.entity.RealmSilver.softened(p, girl, 4.0F) == 4.0F, "one piece isn't enough");
+        p.setItemSlot(net.minecraft.world.entity.EquipmentSlot.LEGS, new ItemStack(ModItems.REALM_SILVER_LEGGINGS.get()));
+        check(com.linkyoshi90.monstergirls.entity.RealmSilver.softened(p, girl, 4.0F) == 2.0F, "two pieces soften a girl's blow by half");
+        check(com.linkyoshi90.monstergirls.entity.RealmSilver.softened(p, zombie, 4.0F) == 4.0F, "but not a zombie's");
+        check(!com.linkyoshi90.monstergirls.entity.RealmSilver.unseen(p, girl), "she still sees two pieces");
+        p.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, new ItemStack(ModItems.REALM_SILVER_HELMET.get()));
+        p.setItemSlot(net.minecraft.world.entity.EquipmentSlot.FEET, new ItemStack(ModItems.REALM_SILVER_BOOTS.get()));
+        check(com.linkyoshi90.monstergirls.entity.RealmSilver.unseen(p, girl), "a full set: a wild girl won't pick a fight");
+        check(!com.linkyoshi90.monstergirls.entity.RealmSilver.unseen(p, zombie), "a zombie still will");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Realm silver (2026-11-08, entity/RealmSilver): the ingot and the sword, the vanilla iron ones recoloured to a pale lilac
+"""Realm silver (2026-11-08, entity/RealmSilver): the ingot, the sword and the armour, the vanilla iron ones recoloured to a pale lilac
 silver with a violet sheen. Writes the textures, item models, recipes and the swords tag (so it takes sword enchantments).
 
     uv run --no-project --with pillow python tools/gen_realm_silver.py [--preview previews/realm_silver.png]
@@ -54,6 +54,25 @@ def main():
     if "monstergirls:realm_silver_sword" not in old["values"]:
         old["values"].append("monstergirls:realm_silver_sword")
     dump(path, old)
+    # the armour: items and the two worn layers (textures/models/armor/realm_silver_layer_1/2.png)
+    for piece in ("helmet", "chestplate", "leggings", "boots"):
+        tiles.append(save(silver(_vanilla_rgba("item/iron_" + piece)), "item", "realm_silver_" + piece + ".png"))
+        dump(os.path.join(ASSETS, "models", "item", "realm_silver_" + piece + ".json"),
+             {"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:item/realm_silver_" + piece}})
+    for layer in (1, 2):
+        save(silver(_vanilla_rgba(f"models/armor/iron_layer_{layer}")), "models", "armor", f"realm_silver_layer_{layer}.png")
+    shapes = {"helmet": ["SSS", "S S"], "chestplate": ["S S", "SSS", "SSS"], "leggings": ["SSS", "S S", "S S"], "boots": ["S S", "S S"]}
+    for piece, pattern in shapes.items():
+        dump(os.path.join(DATA, "recipe", "realm_silver_" + piece + ".json"), {
+            "type": "minecraft:crafting_shaped", "category": "equipment", "pattern": pattern,
+            "key": {"S": {"item": "monstergirls:realm_silver_ingot"}}, "result": {"id": "monstergirls:realm_silver_" + piece, "count": 1}})
+    tags = {"head_armor": "helmet", "chest_armor": "chestplate", "leg_armor": "leggings", "foot_armor": "boots"}
+    for tag, piece in tags.items():
+        path = os.path.join(MC_DATA, "tags", "item", tag + ".json")
+        old = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {"replace": False, "values": []}
+        if "monstergirls:realm_silver_" + piece not in old["values"]:
+            old["values"].append("monstergirls:realm_silver_" + piece)
+        dump(path, old)
     if "--preview" in sys.argv:
         p = sys.argv[sys.argv.index("--preview") + 1]
         sheet = Image.new("RGBA", (len(tiles) * 108, 108), (40, 40, 48, 255))

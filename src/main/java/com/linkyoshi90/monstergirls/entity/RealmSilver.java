@@ -30,6 +30,7 @@ public final class RealmSilver {
         mob.setLastHurtByMob(null);
         bonded.blushFor(BLUSH);
         long now = level.getGameTime();
+        Dairy.award(player, "realm_silver");
         if (now - mob.getPersistentData().getLong(WARMED) >= WARM_EVERY) {
             mob.getPersistentData().putLong(WARMED, now);
             bonded.addAffection(player, WARMTH);
@@ -38,6 +39,38 @@ public final class RealmSilver {
         level.sendParticles(com.linkyoshi90.monstergirls.block.RealmGrassBlock.HAZE, mob.getX(), mob.getY() + mob.getBbHeight() * 0.6, mob.getZ(), 6, 0.3, 0.3, 0.3, 0.0);
         mob.playSound(SoundEvents.AMETHYST_BLOCK_CHIME, 0.8F, 1.6F);
         return true;
+    }
+
+    /** Pieces of realm silver armour this one wears. */
+    public static int pieces(net.minecraft.world.entity.LivingEntity e) {
+        int n = 0;
+        for (net.minecraft.world.item.ItemStack s : e.getArmorSlots()) {
+            if (s.getItem() instanceof net.minecraft.world.item.ArmorItem a && a.getMaterial().is(com.linkyoshi90.monstergirls.registry.ModArmorMaterials.REALM_SILVER.getKey())) n++;
+        }
+        return n;
+    }
+
+    /** Two pieces or more: a monster girl's blow lands soft (half). */
+    public static final int SOFT = 2, UNSEEN = 4;
+
+    public static float softened(net.minecraft.world.entity.LivingEntity target, net.minecraft.world.entity.Entity attacker, float amount) {
+        return attacker instanceof Bonded && pieces(target) >= SOFT ? amount * 0.5F : amount;
+    }
+
+    /** A full set: wild monster girls (not her friends) don't pick its wearer to fight. */
+    public static boolean unseen(net.minecraft.world.entity.LivingEntity target, Mob attacker) {
+        return attacker instanceof Bonded b && target instanceof Player p && pieces(p) >= UNSEEN && b.getAffection(p) < Bonded.BED_AFFECTION;
+    }
+
+    @SubscribeEvent
+    public static void onSoftBlow(LivingIncomingDamageEvent event) {
+        if (event.getEntity().level().isClientSide || event.getSource().getEntity() == null) return;
+        event.setAmount(softened(event.getEntity(), event.getSource().getEntity(), event.getAmount()));
+    }
+
+    @SubscribeEvent
+    public static void onTarget(net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent event) {
+        if (event.getEntity() instanceof Mob mob && event.getNewAboutToBeSetTarget() != null && unseen(event.getNewAboutToBeSetTarget(), mob)) event.setCanceled(true);
     }
 
     @SubscribeEvent
