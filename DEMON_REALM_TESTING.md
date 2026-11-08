@@ -99,3 +99,17 @@ The realm's enemy. Sisters of the Order are human women on the vanilla slim play
 - Realm silver sword: each hit takes a point of faith (knight 6, inquisitrix 5, captain 10), no damage. The realm's air in the dark also wears 1 every 10 s. Kneeling: heartfruit = she falls (succubus; captain = demon) devoted to you (60 friendship); empty hand = spared, she walks off. Left kneeling in the realm's dark for a minute, she falls by herself.
 
 Options: `orderPatrols`, `orderRaids`. Advancements: Holy Orders, Heretic, Crisis of Faith, Mercy, Fallen, Crusade Repelled.
+
+## Realm-touched players and Order chapels (2026-11-08)
+
+| Command | What it does |
+|---|---|
+| `/monstergirls realm touch` | How far the realm has touched you (0-100). |
+| `/monstergirls realm touch set <n>` | (op) 25 touched, 50 kindred, 75 realm-born. |
+| `/monstergirls locate chapel` | The nearest chapel of the Order (new chunks only). |
+
+- **Touch** grows +1 a minute in the realm's air, +4 per heartfruit you eat, +3 waking beside a devil or realm-changed girl, +5 per sister you make fall. Splash holy water breaking within 4 blocks of you: -15. Each minute near a holy font: -1. Is the pace right?
+- **Touched**: night vision in the realm's air at night, and its haze rises from you. **Kindred**: wild devils and realm-changed girls don't pick a fight with you (unless you hit them first), +0.15 bed odds with them, and the Order counts it as a tie. **Realm-born**: no hunger in its air, Strength I at its night.
+- **Chapels**: a 7x9 calcite hall with quartz pillars, sky-blue windows, gold trim, a bell over the door, spruce pews, lanterns, a holy font (wards 12 blocks from the realm), the Order's banner on the back wall, a chest (holy water, splash holy water, bread, gold, candles, a rare golden apple), and one sister-knight who keeps it. Plains, meadows, forests, cherry groves, savannas; about one per 36 chunks. Does it sit well on uneven ground (the foundation goes down up to 6 blocks)? Does the banner face the right way?
+
+Options: `realmTouched` (chapels follow `orderPatrols`). Advancements: Kindred, Of the Realm.
