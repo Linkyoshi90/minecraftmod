@@ -147,7 +147,7 @@ public final class Monsterization {
             if (possessed(mob)) {
                 murmur(level, mob);
                 giftOwner(level, mob, level.getDayTime() % 24000L < 2000L);
-                if (mob.getRandom().nextInt(SPREAD) == 0) spread(level, mob, !level.isDay());
+                if (mob.getRandom().nextInt(SPREAD / RoseMoon.stir(level)) == 0) spread(level, mob, !level.isDay());
                 if (mob.getRandom().nextInt(ROOT) == 0) takeRoot(level, mob, !level.isDay());
                 breed(level, mob);
                 deliver(level, mob);
@@ -162,7 +162,7 @@ public final class Monsterization {
         GirlSpecies kind = kindOf(mob);
         if (kind == null || !MonsterGirlsConfig.monsterization()) return null;
         if (!dark || !(DemonRealm.inRealm(mob) || guardsTheTurned(mob)) || com.linkyoshi90.monstergirls.block.HolyFontBlock.warded(level, mob.blockPosition())) return null;
-        int soaked = soaked(mob) + 1;
+        int soaked = soaked(mob) + (RoseMoon.tonight(level) ? 2 : 1);   // a rose moon: twice as fast
         mob.getPersistentData().putInt(SOAKED, soaked);
         level.sendParticles(RealmGrassBlock.HAZE, mob.getX(), mob.getY() + mob.getBbHeight() * 0.5, mob.getZ(), 3 + soaked / 2, 0.3, 0.3, 0.3, 0.0);
         return soaked >= STEPS ? change(level, mob, kind) : null;
@@ -173,7 +173,7 @@ public final class Monsterization {
     public static Mob stepOther(ServerLevel level, Mob mob, boolean dark) {
         var into = OTHERS.get(mob.getType());
         if (into == null || mob.isBaby() || !MonsterGirlsConfig.monsterization() || !dark || !DemonRealm.inRealm(mob) || com.linkyoshi90.monstergirls.block.HolyFontBlock.warded(level, mob.blockPosition())) return null;
-        int soaked = soaked(mob) + 1;
+        int soaked = soaked(mob) + (RoseMoon.tonight(level) ? 2 : 1);   // a rose moon: twice as fast
         mob.getPersistentData().putInt(SOAKED, soaked);
         level.sendParticles(RealmGrassBlock.HAZE, mob.getX(), mob.getY() + mob.getBbHeight() * 0.5, mob.getZ(), 3 + soaked / 2, 0.3, 0.3, 0.3, 0.0);
         return soaked >= STEPS ? changeInto(level, mob, into.apply(mob)) : null;
@@ -190,7 +190,7 @@ public final class Monsterization {
     public static boolean soak(ServerLevel level, Mob mob, boolean dark) {
         if (!POSSESSED.containsKey(mob.getType()) || mob.isBaby() || possessed(mob) || !MonsterGirlsConfig.possession()) return possessed(mob);
         if (!dark || !DemonRealm.inRealm(mob) || com.linkyoshi90.monstergirls.block.HolyFontBlock.warded(level, mob.blockPosition())) return false;
-        int soaked = soaked(mob) + 1;
+        int soaked = soaked(mob) + (RoseMoon.tonight(level) ? 2 : 1);   // a rose moon: twice as fast
         mob.getPersistentData().putInt(SOAKED, soaked);
         level.sendParticles(RealmGrassBlock.HAZE, mob.getX(), mob.getY() + mob.getBbHeight() * 0.5, mob.getZ(), 3 + soaked / 2, 0.3, 0.3, 0.3, 0.0);
         if (soaked < STEPS) return false;

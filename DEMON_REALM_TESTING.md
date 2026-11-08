@@ -61,9 +61,13 @@ Everything below passes the GameTests, but none of it has been seen in a real cl
 
 - One in eight arrives already possessed (glowing eyes, horns), selling heartfruit, weepcaps, a realm censer and a **Realm Explorer Map** to the nearest wild realm patch (8 emeralds and a compass).
 
+## Rose moon
+
+- About one night in ten (fixed by seed and day) the moon rises rose-violet: a chat line at moonrise and a rose tint to the night fog. That night monsterization runs twice as fast, and possession spreading, summons and the realm's spread four times as often. Hard to wait for: `/time set` to nights on different days until the message appears. Is the tint pretty or too much?
+
 ## Options
 
-`demonRealm`, `realmFog`, `monsterization`, `possession`, `possessionSpreads`, `realmSummons` in the mod's settings.
+`demonRealm`, `realmFog`, `monsterization`, `possession`, `possessionSpreads`, `realmSummons`, `roseMoon` in the mod's settings.
 
 ## Advancements
 

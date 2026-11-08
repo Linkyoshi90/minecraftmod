@@ -34,6 +34,18 @@ public final class RealmAtmosphere {
     /** Realm blocks round the player for the full effect. */
     private static final int FULL = 40, RADIUS = 6;
     private static float target, strength, last;
+    /** A rose moon in the sky (entity/RoseMoon): the night's fog blends toward ROSE by ROSE_MIX. */
+    private static volatile boolean roseMoon;
+    private static final float ROSE_R = 0.62F, ROSE_G = 0.30F, ROSE_B = 0.52F, ROSE_MIX = 0.35F;
+
+    public static void roseMoon(boolean on) {
+        roseMoon = on;
+    }
+
+    @SubscribeEvent
+    public static void onLogout(net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent.LoggingOut event) {
+        roseMoon = false;
+    }
 
     private RealmAtmosphere() {
     }
@@ -84,6 +96,11 @@ public final class RealmAtmosphere {
 
     @SubscribeEvent
     public static void onFogColour(ViewportEvent.ComputeFogColor event) {
+        if (roseMoon && Minecraft.getInstance().level != null && Minecraft.getInstance().level.dimension() == Level.OVERWORLD) {
+            event.setRed(Mth.lerp(ROSE_MIX, event.getRed(), ROSE_R));
+            event.setGreen(Mth.lerp(ROSE_MIX, event.getGreen(), ROSE_G));
+            event.setBlue(Mth.lerp(ROSE_MIX, event.getBlue(), ROSE_B));
+        }
         float s = now((float) event.getPartialTick()) * 0.75F;
         if (s <= 0.01F) return;
         event.setRed(Mth.lerp(s, event.getRed(), R));

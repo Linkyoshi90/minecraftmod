@@ -100,12 +100,13 @@ public class RealmGrassBlock extends SnowyDirtBlock implements net.minecraft.wor
             return;
         }
         if (!MonsterGirlsConfig.demonRealm()) return;
-        if (random.nextInt(com.linkyoshi90.monstergirls.entity.BedSharing.fullMoon(level) ? 1 : 3) == 0) spread(level, pos, random);   // a full moon feeds it
+        boolean moon = com.linkyoshi90.monstergirls.entity.BedSharing.fullMoon(level) || com.linkyoshi90.monstergirls.entity.RoseMoon.tonight(level);
+        if (random.nextInt(moon ? 1 : 3) == 0) spread(level, pos, random);   // a full or a rose moon feeds it
         if (random.nextInt(HeartfruitBushBlock.SPROUT) == 0) HeartfruitBushBlock.sprout(level, pos);
         if (random.nextInt(WeepcapBlock.SPROUT) == 0) WeepcapBlock.sprout(level, pos);
         if (random.nextInt(ROOTS) == 0 && level.isEmptyBlock(pos.above())) level.setBlock(pos.above(), Blocks.CRIMSON_ROOTS.defaultBlockState(), Block.UPDATE_ALL);
         if (random.nextInt(3) == 0) RealmLeavesBlock.creep(level, pos, random);
-        if (state.getValue(DEPTH) <= com.linkyoshi90.monstergirls.entity.DemonRealm.SUMMON_CORE && random.nextInt(com.linkyoshi90.monstergirls.entity.DemonRealm.SUMMON) == 0) {
+        if (state.getValue(DEPTH) <= com.linkyoshi90.monstergirls.entity.DemonRealm.SUMMON_CORE && random.nextInt(com.linkyoshi90.monstergirls.entity.DemonRealm.SUMMON / com.linkyoshi90.monstergirls.entity.RoseMoon.stir(level)) == 0) {
             com.linkyoshi90.monstergirls.entity.DemonRealm.summon(level, pos, level.isNight());
         }
     }

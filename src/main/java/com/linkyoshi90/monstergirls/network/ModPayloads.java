@@ -49,11 +49,23 @@ public final class ModPayloads {
         }
     }
 
+    /** Server to client: a rose moon has risen (or set), so the sky turns rose (entity/RoseMoon, client/RealmAtmosphere). */
+    public record RoseMoonSky(boolean on) implements CustomPacketPayload {
+        public static final Type<RoseMoonSky> TYPE = new Type<>(MonsterGirlsMod.id("rose_moon"));
+        public static final StreamCodec<ByteBuf, RoseMoonSky> CODEC = ByteBufCodecs.BOOL.map(RoseMoonSky::new, RoseMoonSky::on);
+
+        @Override
+        public Type<RoseMoonSky> type() {
+            return TYPE;
+        }
+    }
+
     public static void register(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");
         registrar.playToClient(BedCallStage.TYPE, BedCallStage.CODEC, (payload, context) -> BedCallScreen.setStage(payload.stage()));
         registrar.playToClient(Possessed.TYPE, Possessed.CODEC,
                 (payload, context) -> com.linkyoshi90.monstergirls.client.PossessedEyesLayer.set(payload.entityId(), payload.on()));
+        registrar.playToClient(RoseMoonSky.TYPE, RoseMoonSky.CODEC, (payload, context) -> com.linkyoshi90.monstergirls.client.RealmAtmosphere.roseMoon(payload.on()));
         registrar.playToServer(SkipNight.TYPE, SkipNight.CODEC, (payload, context) -> {
             if (context.player() instanceof ServerPlayer player) BedCall.skipNight(player);
         });

@@ -447,4 +447,15 @@ public class DemonRealmTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "roseMoonNights")
+    public static void roseMoonNights(GameTestHelper helper) {
+        long seed = 12345L;
+        int rose = 0;
+        for (long day = 1; day <= 1000; day++) if (com.linkyoshi90.monstergirls.entity.RoseMoon.roseDay(seed, day)) rose++;
+        check(rose > 60 && rose < 140, "about one night in ten is a rose moon (" + rose + " in 1000)");
+        check(!com.linkyoshi90.monstergirls.entity.RoseMoon.roseDay(seed, 0), "never the first night");
+        check(com.linkyoshi90.monstergirls.entity.RoseMoon.roseDay(seed, 77) == com.linkyoshi90.monstergirls.entity.RoseMoon.roseDay(seed, 77), "the same night for everyone");
+        helper.succeed();
+    }
 }
