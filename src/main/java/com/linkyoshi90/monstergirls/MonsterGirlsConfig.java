@@ -140,6 +140,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue ORDER_PATROLS;
     public static final ModConfigSpec.BooleanValue HAMLETS;
     public static final ModConfigSpec.BooleanValue SWEETHEARTS;
+    public static final ModConfigSpec.BooleanValue DATES;
     public static final ModConfigSpec.BooleanValue PASSING_FLOCKS;
     public static final ModConfigSpec.BooleanValue REALM_TOUCHED;
     public static final ModConfigSpec.BooleanValue ORDER_RAIDS;
@@ -209,6 +210,10 @@ public final class MonsterGirlsConfig {
         SWEETHEARTS = BUILDER
                 .comment("A player's grown daughter can take a shine to a villager (or be introduced with a flower). After three mornings together they are wed, and now and then a little one comes along: the player's grandchild (two at most each).")
                 .define("sweethearts", true);
+
+        DATES = BUILDER
+                .comment("Sneak and use a flower on a close friend to ask her out: she names her kind of place (flowers, the water's edge, a view, the night sky); spend half a minute there together for affection, Regeneration and Luck. One date a day each.")
+                .define("dates", true);
 
         PASSING_FLOCKS = BUILDER
                 .comment("Every eight days a flock of wild harpies of one migratory kind rests near each player under the open sky for a day, then flies on (any who has made a friend stays).")
@@ -402,6 +407,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean sweethearts() {
         return SPEC.isLoaded() ? SWEETHEARTS.get() : SWEETHEARTS.getDefault();
+    }
+
+    public static boolean dates() {
+        return SPEC.isLoaded() ? DATES.get() : DATES.getDefault();
     }
 
     public static boolean hamlets() {

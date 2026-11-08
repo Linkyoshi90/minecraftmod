@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:stargazer",
+  "display": {
+    "icon": {
+      "id": "minecraft:poppy"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.first_date"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.first_date.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

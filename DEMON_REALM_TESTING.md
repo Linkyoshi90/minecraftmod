@@ -138,3 +138,11 @@ Options: `hamlets`, `passingFlocks`. Advancements: A Name on the Map, Word Gets 
 - If her villager dies she grieves (chat line) and may court again later. `/monstergirls bonds` shows who's courting or wed and how many little ones.
 
 Option: `sweethearts`. Advancements: Sweet on Someone, Wedding Bells, Grandparent.
+
+## Dates (2026-11-08)
+
+- Sneak and right-click a close friend (affection 25+, grown, full size, not your daughter, not a construct) with any small flower. She takes it, blushes and names her kind of place, always the same one for her: lots of flowers (6+ within 6 blocks), the water's edge (water within 4, open sky), a high place (40+ above sea level, open sky) or the night sky (13000-23000, clear, overworld).
+- She keeps within 4 blocks of you. 30 seconds together at her kind of place: +8 affection, Regeneration 30 s, Luck 5 min, a closing line. After 10 minutes without it she sighs and calls it a day. One date a day each.
+- Does following you fight her sit order or her job too much? Is half a minute too short?
+
+Option: `dates`. Advancement: It's a Date.
