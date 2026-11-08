@@ -42,6 +42,7 @@ public final class HarpyCommands {
                         .then(Commands.literal("chapel").executes(ctx -> locate(ctx.getSource(), com.linkyoshi90.monstergirls.registry.ModStructures.ORDER_CHAPEL_KEY, "chapel")))
                         .then(Commands.literal("manor").executes(ctx -> locate(ctx.getSource(), com.linkyoshi90.monstergirls.registry.ModStructures.REALM_MANOR_KEY, "manor")))
                         .then(Commands.literal("aerie").executes(ctx -> locate(ctx.getSource(), com.linkyoshi90.monstergirls.registry.ModStructures.HARPY_AERIE_KEY, "aerie")))
+                        .then(Commands.literal("grotto").executes(ctx -> locate(ctx.getSource(), com.linkyoshi90.monstergirls.registry.ModStructures.MERFOLK_GROTTO_KEY, "grotto")))
                         .then(Commands.literal("spire").executes(ctx -> locate(ctx.getSource(), com.linkyoshi90.monstergirls.registry.ModStructures.DEMON_SPIRE_KEY, "spire")))));
     }
 

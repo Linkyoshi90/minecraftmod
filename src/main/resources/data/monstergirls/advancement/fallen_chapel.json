@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:order_marked",
+  "display": {
+    "icon": {
+      "id": "monstergirls:realm_censer"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.fallen_chapel"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.fallen_chapel.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

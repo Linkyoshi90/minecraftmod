@@ -35,6 +35,12 @@ public final class ModStructures {
     public static final DeferredHolder<StructurePieceType, StructurePieceType> REALM_MANOR_PIECE =
             PIECES.register("realm_manor", () -> (StructurePieceType.ContextlessType) (tag) -> new com.linkyoshi90.monstergirls.world.RealmManorStructure.Piece(null, tag));
     public static final ResourceKey<Structure> REALM_MANOR_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("realm_manor"));
+    /** A merfolk grotto (world/MerfolkGrottoStructure). */
+    public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.MerfolkGrottoStructure>> MERFOLK_GROTTO =
+            STRUCTURE_TYPES.register("merfolk_grotto", () -> () -> com.linkyoshi90.monstergirls.world.MerfolkGrottoStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> MERFOLK_GROTTO_PIECE =
+            PIECES.register("merfolk_grotto", () -> (StructurePieceType.ContextlessType) (tag) -> new com.linkyoshi90.monstergirls.world.MerfolkGrottoStructure.Piece(null, tag));
+    public static final ResourceKey<Structure> MERFOLK_GROTTO_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("merfolk_grotto"));
     /** A harpy aerie (world/HarpyAerieStructure). */
     public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.HarpyAerieStructure>> HARPY_AERIE =
             STRUCTURE_TYPES.register("harpy_aerie", () -> () -> com.linkyoshi90.monstergirls.world.HarpyAerieStructure.CODEC);

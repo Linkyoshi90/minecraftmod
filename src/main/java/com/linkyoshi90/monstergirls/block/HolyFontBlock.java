@@ -55,6 +55,12 @@ public class HolyFontBlock extends Block {
     @Override
     protected net.minecraft.world.ItemInteractionResult useItemOn(net.minecraft.world.item.ItemStack stack, BlockState state, Level level, BlockPos pos,
             net.minecraft.world.entity.player.Player player, net.minecraft.world.InteractionHand hand, net.minecraft.world.phys.BlockHitResult hit) {
+        if (stack.is(com.linkyoshi90.monstergirls.registry.ModItems.HEARTFRUIT.get())) {   // offered at the font by night: the sabbath raid (FallenChapels)
+            if (level instanceof net.minecraft.server.level.ServerLevel server && com.linkyoshi90.monstergirls.entity.order.FallenChapels.begin(server, pos, player, true)) {
+                stack.consume(1, player);
+            }
+            return net.minecraft.world.ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
         if (!stack.is(net.minecraft.world.item.Items.GOLD_INGOT)) return super.useItemOn(stack, state, level, pos, player, hand, hit);
         if (!level.isClientSide) tithe(level, pos, player, stack);
         return net.minecraft.world.ItemInteractionResult.sidedSuccess(level.isClientSide);

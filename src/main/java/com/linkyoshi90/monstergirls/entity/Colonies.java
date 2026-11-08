@@ -53,10 +53,15 @@ public final class Colonies {
     }
 
     public static void mark(Mob harpy, BlockPos colony, boolean matriarch) {
-        harpy.getPersistentData().putLong(COLONY, colony.asLong());
-        if (matriarch) {
-            harpy.getPersistentData().putBoolean(MATRIARCH, true);
-            harpy.setCustomName(Component.translatable("entity.monstergirls.colony_matriarch", harpy.getType().getDescription()));
+        mark(harpy, colony, matriarch, "entity.monstergirls.colony_matriarch");
+    }
+
+    /** One of a colony (any kind of girl: a grotto's court too); its leader named with {@code title} ("%s Matriarch", "%s Queen"). */
+    public static void mark(Mob m, BlockPos colony, boolean leader, String title) {
+        m.getPersistentData().putLong(COLONY, colony.asLong());
+        if (leader) {
+            m.getPersistentData().putBoolean(MATRIARCH, true);
+            m.setCustomName(Component.translatable(title, m.getType().getDescription()));
         }
     }
 
@@ -90,8 +95,10 @@ public final class Colonies {
             level.sendParticles(ParticleTypes.HEART, m.getX(), m.getEyeY() + 0.3, m.getZ(), 3, 0.3, 0.2, 0.3, 0.0);
             n++;
         }
-        p.displayClientMessage(Component.translatable("message.monstergirls.colony.welcome", matriarch.getDisplayName(), n).withStyle(ChatFormatting.AQUA), false);
-        Dairy.award(p, "harpy_colony");
+        boolean harpies = matriarch instanceof AbstractHarpy;
+        p.displayClientMessage(Component.translatable(harpies ? "message.monstergirls.colony.welcome" : "message.monstergirls.grotto.welcome", matriarch.getDisplayName(), n)
+                .withStyle(ChatFormatting.AQUA), false);
+        Dairy.award(p, harpies ? "harpy_colony" : "merfolk_grotto");
         return n;
     }
 
