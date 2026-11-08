@@ -37,9 +37,23 @@ public final class ModPayloads {
         }
     }
 
+    /** Server to client: this creature is (or no longer is) possessed by the Demon Realm, so her eyes glow (client/PossessedEyesLayer). */
+    public record Possessed(int entityId, boolean on) implements CustomPacketPayload {
+        public static final Type<Possessed> TYPE = new Type<>(MonsterGirlsMod.id("possessed"));
+        public static final StreamCodec<ByteBuf, Possessed> CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT, Possessed::entityId,
+                ByteBufCodecs.BOOL, Possessed::on, Possessed::new);
+
+        @Override
+        public Type<Possessed> type() {
+            return TYPE;
+        }
+    }
+
     public static void register(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");
         registrar.playToClient(BedCallStage.TYPE, BedCallStage.CODEC, (payload, context) -> BedCallScreen.setStage(payload.stage()));
+        registrar.playToClient(Possessed.TYPE, Possessed.CODEC,
+                (payload, context) -> com.linkyoshi90.monstergirls.client.PossessedEyesLayer.set(payload.entityId(), payload.on()));
         registrar.playToServer(SkipNight.TYPE, SkipNight.CODEC, (payload, context) -> {
             if (context.player() instanceof ServerPlayer player) BedCall.skipNight(player);
         });

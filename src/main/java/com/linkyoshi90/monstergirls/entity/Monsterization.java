@@ -153,6 +153,21 @@ public final class Monsterization {
         level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY(), mob.getZ(), 6, 0.4, 0.3, 0.4, 0.0);
         level.sendParticles(RealmGrassBlock.HAZE, mob.getX(), mob.getY() + 0.5, mob.getZ(), 30, 0.5, 0.5, 0.5, 0.0);
         mob.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 0.7F, 1.6F);
+        sync(mob);
+    }
+
+    /** Tells everyone who can see her whether she is possessed (her eyes glow). */
+    public static void sync(Mob mob) {
+        net.neoforged.neoforge.network.PacketDistributor.sendToPlayersTrackingEntity(mob,
+                new com.linkyoshi90.monstergirls.network.ModPayloads.Possessed(mob.getId(), possessed(mob)));
+    }
+
+    /** A player who comes into sight of a possessed creature learns it too. */
+    @SubscribeEvent
+    public static void onStartTracking(net.neoforged.neoforge.event.entity.player.PlayerEvent.StartTracking event) {
+        if (event.getTarget() instanceof Mob mob && possessed(mob) && event.getEntity() instanceof net.minecraft.server.level.ServerPlayer player) {
+            net.neoforged.neoforge.network.PacketDistributor.sendToPlayer(player, new com.linkyoshi90.monstergirls.network.ModPayloads.Possessed(mob.getId(), true));
+        }
     }
 
     public static boolean possessed(Mob mob) {
@@ -165,6 +180,7 @@ public final class Monsterization {
         mob.getPersistentData().remove(POSSESSED_TAG);
         mob.getPersistentData().remove(NEXT_BREED);
         level.sendParticles(ParticleTypes.END_ROD, mob.getX(), mob.getY() + mob.getBbHeight() * 0.6, mob.getZ(), 12, 0.3, 0.4, 0.3, 0.02);
+        sync(mob);
         return true;
     }
 
