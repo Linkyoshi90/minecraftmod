@@ -405,4 +405,25 @@ public class DemonRealmTests {
         check(tag.getLong("Seed") == 42L, "a piece keeps its seed when saved");
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "realmSilverSparesGirls")
+    public static void realmSilverSparesGirls(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
+        p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.REALM_SILVER_SWORD.get()));
+        AbstractMonsterGirl girl = JackalopeTests.spawn(helper, GirlSpecies.SUCCUBUS_DEVIL, new BlockPos(4, 2, 3));
+        girl.setNoAi(true);
+        float health = girl.getHealth();
+        int before = girl.getAffection(p);
+        girl.hurt(level.damageSources().playerAttack(p), 6.0F);
+        check(girl.getHealth() == health, "realm silver wounds no monster girl");
+        check(girl.getAffection(p) == before + com.linkyoshi90.monstergirls.entity.RealmSilver.WARMTH, "she warms to the one who held it");
+        var zombie = helper.spawn(net.minecraft.world.entity.EntityType.ZOMBIE, new BlockPos(10, 2, 10));
+        zombie.setNoAi(true);
+        float zh = zombie.getHealth();
+        zombie.hurt(level.damageSources().playerAttack(p), 6.0F);
+        check(zombie.getHealth() < zh, "anything else it cuts like iron");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

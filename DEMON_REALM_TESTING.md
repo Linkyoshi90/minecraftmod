@@ -43,6 +43,9 @@ Everything below passes the GameTests, but none of it has been seen in a real cl
 **Holy font** (calcite, holy water, gold)
 - A calcite basin of pale ice-blue water with rising sparks. Within 12 blocks: no realm grass takes hold, nobody is possessed, passes it on or turns.
 
+**Realm silver** (iron ingot, 4 amethyst shards, heartfruit; then a sword like an iron one)
+- Hit a monster girl, harpy or frog girl: no damage, she stops attacking, blushes, +1 friendship (once per 5 seconds). Anything else takes iron-sword damage. Try it on a wild succubus.
+
 ## Behaviour worth watching over a few nights
 
 - A possessed villager passes it to a villager standing next to her at night (about one night in four), little patches of realm take root under them, and an iron golem among three of them turns into a golem girl. Is the pace right, too slow, too fast? (Option `possessionSpreads`.)

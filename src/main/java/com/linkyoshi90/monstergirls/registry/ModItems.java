@@ -235,6 +235,11 @@ public final class ModItems {
     public static final DeferredItem<net.minecraft.world.item.ItemNameBlockItem> HEARTFRUIT = ITEMS.register("heartfruit",
             () -> new net.minecraft.world.item.ItemNameBlockItem(ModBlocks.HEARTFRUIT_BUSH.get(),
                     new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.5F).build())));
+    /** Realm silver (entity/RealmSilver): an ingot, and a sword that cuts a monster girl's spirit, not her flesh. */
+    public static final DeferredItem<Item> REALM_SILVER_INGOT = ITEMS.registerSimpleItem("realm_silver_ingot");
+    public static final DeferredItem<net.minecraft.world.item.SwordItem> REALM_SILVER_SWORD = ITEMS.registerItem("realm_silver_sword",
+            props -> new net.minecraft.world.item.SwordItem(net.minecraft.world.item.Tiers.IRON,
+                    props.attributes(net.minecraft.world.item.SwordItem.createAttributes(net.minecraft.world.item.Tiers.IRON, 3, -2.4F))));
     /** Holy water with gunpowder: thrown, it turns the realm back and frees the possessed where it breaks (entity/ThrownHolyWater). */
     public static final DeferredItem<Item> SPLASH_HOLY_WATER = ITEMS.registerItem("splash_holy_water", props -> new Item(props.stacksTo(16)) {
         @Override
