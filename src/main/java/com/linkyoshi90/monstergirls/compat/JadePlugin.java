@@ -67,6 +67,7 @@ public class JadePlugin implements IWailaPlugin {
             if (accessor.getEntity() instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g && accessor.getPlayer() != null
                     && g.getAffection(accessor.getPlayer()) >= com.linkyoshi90.monstergirls.entity.Orders.AFFECTION && !g.isBaby()) {   // what her friends know
                 data.putInt("Birthday", com.linkyoshi90.monstergirls.entity.girl.Treats.birthday(g) + 1);
+                data.putString("Hobby", com.linkyoshi90.monstergirls.entity.Hobbies.hobby(g).key());
                 if (com.linkyoshi90.monstergirls.entity.girl.Treats.knows(accessor.getPlayer(), g)) {
                     data.putString("Favourite", com.linkyoshi90.monstergirls.entity.girl.Treats.favourite(g).getDescriptionId());
                 }
@@ -106,6 +107,7 @@ public class JadePlugin implements IWailaPlugin {
                         .withStyle(clade.mythic() ? net.minecraft.ChatFormatting.DARK_PURPLE : net.minecraft.ChatFormatting.DARK_AQUA));
             }
             if (data.contains("Birthday")) tooltip.add(Component.translatable("jade.monstergirls.birthday", data.getInt("Birthday")).withStyle(net.minecraft.ChatFormatting.GOLD));
+            if (data.contains("Hobby")) tooltip.add(Component.translatable("jade.monstergirls.hobby", Component.translatable("hobby.monstergirls." + data.getString("Hobby"))).withStyle(net.minecraft.ChatFormatting.GREEN));
             if (data.contains("Favourite")) tooltip.add(Component.translatable("jade.monstergirls.favourite", Component.translatable(data.getString("Favourite"))).withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
             if (com.linkyoshi90.monstergirls.entity.girl.Mining.isMiner(accessor.getEntity()) && !((net.minecraft.world.entity.LivingEntity) accessor.getEntity()).isBaby()) {
                 tooltip.add(Component.translatable("jade.monstergirls.miner").withStyle(net.minecraft.ChatFormatting.GRAY));

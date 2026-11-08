@@ -8,7 +8,7 @@ public final class GuidePages {
             Map.entry("friends", 2),
             Map.entry("hearth", 2),
             Map.entry("expedition", 3),
-            Map.entry("home", 3),
+            Map.entry("home", 6),
             Map.entry("keepsakes", 3),
             Map.entry("dairy", 2),
             Map.entry("nursing", 2),

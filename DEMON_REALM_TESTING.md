@@ -232,3 +232,18 @@ All three are small code-built places sharing one piece type (`world/OneChunkStr
 
 - **Race**: right-click a friend (25+, grown, not sitting) holding any banner while looking at a block 8-48 blocks away: green sparkles mark the finish, a 3-second count shows on the action bar, then she runs for it (speed 1.6) and so do you. First within 2 blocks (horizontally) wins; 60 seconds' limit. You win: she drops one of her presents. She wins: a victory hop. Either way +3 affection. Advancements On Your Marks, Photo Finish. Do girls get distracted by their own goals mid-race (she re-aims every second)?
 - **Treasure hunt**: right-click a friend with any shovel (not sneaking; sneaking an alraune still digs her up). She buries one of her presents (1 in 4: an emerald or two) 6-12 blocks away under suspicious sand (in sand) or suspicious gravel (anywhere else). Every second: "Warmer!" / "Colder..." / "Hot!" on the action bar. Brush it out: +3 affection. After 5 minutes she shows you the spot. Advancement Warmer, Warmer...
+
+## Hobbies (2026-11-08)
+
+- Every grown girl (harpies and frogs too) has a hobby, always the same for her: gardening, fishing, reading, music, baking, collecting or knitting. Her friends see it in Jade ("Hobby: baking").
+- Each has her own hour of the day for it, starting somewhere between day time 1000 and 9000 and lasting 1000 ticks. During it she gives off her hobby's particles and an occasional quiet sound wherever she is. A gardener also grows the crops within 3 blocks a stage now and then.
+- After 30 seconds of her hour, if a friend is within 32 she leaves what she made at her feet, once a day:
+  - gardening: flowers or seeds
+  - fishing: cod, salmon or tropical fish, rarely a nautilus shell (only with water within 6)
+  - baking: bread, cookies, pumpkin pie or now and then a cake
+  - collecting: flint, amethyst, quartz, clay, prismarine, feathers, glow ink, rarely an emerald
+  - knitting: wool, or 1 in 4 a dyed leather cap named "Cap knitted by ..."
+  - reading: 12 XP
+  - music: Haste for 2 minutes to everyone within 16
+- Stay within 4 blocks of a friend for 30 seconds of her hour: she shows you how (+4 affection, and the same kind of thing for you), once a day. Advancement Shared Interests.
+- Things to watch: is it too busy with many girls about (particles, sounds)? Does she wander off mid-hobby? She doesn't stand still for it.
