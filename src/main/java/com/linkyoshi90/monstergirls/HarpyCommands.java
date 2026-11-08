@@ -39,7 +39,8 @@ public final class HarpyCommands {
                                 .executes(ctx -> listBonds(ctx.getSource(), IntegerArgumentType.getInteger(ctx, "radius")))))
                 .then(Commands.literal("friends").executes(ctx -> listFriends(ctx.getSource())))
                 .then(Commands.literal("locate").then(Commands.literal("realm").executes(ctx -> locateRealm(ctx.getSource())))
-                        .then(Commands.literal("chapel").executes(ctx -> locate(ctx.getSource(), com.linkyoshi90.monstergirls.registry.ModStructures.ORDER_CHAPEL_KEY, "chapel")))));
+                        .then(Commands.literal("chapel").executes(ctx -> locate(ctx.getSource(), com.linkyoshi90.monstergirls.registry.ModStructures.ORDER_CHAPEL_KEY, "chapel")))
+                        .then(Commands.literal("manor").executes(ctx -> locate(ctx.getSource(), com.linkyoshi90.monstergirls.registry.ModStructures.REALM_MANOR_KEY, "manor")))));
     }
 
     /**

@@ -113,3 +113,8 @@ Options: `orderPatrols`, `orderRaids`. Advancements: Holy Orders, Heretic, Crisi
 - **Chapels**: a 7x9 calcite hall with quartz pillars, sky-blue windows, gold trim, a bell over the door, spruce pews, lanterns, a holy font (wards 12 blocks from the realm), the Order's banner on the back wall, a chest (holy water, splash holy water, bread, gold, candles, a rare golden apple), and one sister-knight who keeps it. Plains, meadows, forests, cherry groves, savannas; about one per 36 chunks. Does it sit well on uneven ground (the foundation goes down up to 6 blocks)? Does the banner face the right way?
 
 Options: `realmTouched` (chapels follow `orderPatrols`). Advancements: Kindred, Of the Realm.
+
+## A Lilith's manor; tithes (2026-11-08)
+
+- `/monstergirls locate manor` (or `/locate structure monstergirls:realm_manor`): dark forests only, about one per 48 chunks, new chunks only. A 13x11 hall of realm planks on polished blackstone, violet windows, a stepped roof, a purple runner to a realm-stair throne before crying obsidian, purple candles, two unlit realm censers (a heartfruit lights them), a purple bed and a chest (heartfruit, weepcaps, realm silver, amethyst, gold, rarely a censer, a realm silver sword or an enchanted book). Realm grass round its walls. Its lady is a wild grown Lilith (who spreads the realm, as wild ones do) with one or two succubi, kept within 14 blocks. Look: does the roof read well? Does the door face out? Do the girls stay home after a reload? (Their leash isn't saved; they may wander.)
+- Tithe: right-click a holy font with a gold ingot: -10 notoriety per ingot; refused (gold kept) at 0. Advancements: An Audience, Indulgence.

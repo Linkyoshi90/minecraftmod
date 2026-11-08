@@ -275,4 +275,34 @@ public class OrderTests {
         keepers.forEach(OrderSister::discard);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "aTitheAtTheFont")
+    public static void aTitheAtTheFont(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos font = helper.absolutePos(new BlockPos(4, 2, 4));
+        level.setBlockAndUpdate(font, ModBlocks.HOLY_FONT.get().defaultBlockState());
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 4));
+        ItemStack gold = new ItemStack(Items.GOLD_INGOT, 3);
+        Order.setNotoriety(p, 15);
+        check(com.linkyoshi90.monstergirls.block.HolyFontBlock.tithe(level, font, p, gold) && Order.notoriety(p) == 5 && gold.getCount() == 2, "a tithe buys goodwill");
+        check(com.linkyoshi90.monstergirls.block.HolyFontBlock.tithe(level, font, p, gold) && Order.notoriety(p) == 0, "down to nothing");
+        check(!com.linkyoshi90.monstergirls.block.HolyFontBlock.tithe(level, font, p, gold) && gold.getCount() == 1, "with nothing to forgive the gold is kept");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "aLilithsManor")
+    public static void aLilithsManor(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos origin = helper.absolutePos(new BlockPos(7, 1, 7));
+        BlockPos throne = com.linkyoshi90.monstergirls.world.RealmManorStructure.build(level, origin, level.random, true);
+        check(level.getBlockState(throne).is(ModBlocks.REALM_STAIRS.get()) && level.getBlockState(throne.south()).is(Blocks.CRYING_OBSIDIAN), "a throne before crying obsidian");
+        check(level.getBlockState(origin.offset(0, 1, -5)).is(ModBlocks.REALM_DOOR.get()), "a realm wood door");
+        check(level.getBlockState(origin.offset(-5, 1, -1)).is(Blocks.CHEST) && level.getBlockState(origin.offset(3, 1, 3)).is(ModBlocks.REALM_CENSER.get()), "the chest and a censer");
+        List<AbstractMonsterGirl> house = level.getEntitiesOfClass(AbstractMonsterGirl.class, new net.minecraft.world.phys.AABB(origin).inflate(8));
+        check(house.stream().anyMatch(g -> g.getSpecies() == GirlSpecies.LILITH_DEVIL && !g.isBaby() && g.hasRestriction()), "its lady, a grown Lilith who keeps to it");
+        check(house.stream().anyMatch(g -> g.getSpecies() == GirlSpecies.SUCCUBUS_DEVIL), "and a succubus");
+        house.forEach(AbstractMonsterGirl::discard);
+        helper.succeed();
+    }
 }

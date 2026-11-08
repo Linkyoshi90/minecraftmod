@@ -29,6 +29,13 @@ public final class ModStructures {
             PIECES.register("order_chapel", () -> (StructurePieceType.ContextlessType) (tag) -> new com.linkyoshi90.monstergirls.world.OrderChapelStructure.Piece(null, tag));
     public static final ResourceKey<Structure> ORDER_CHAPEL_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("order_chapel"));
 
+    /** A Lilith's manor (world/RealmManorStructure). */
+    public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.RealmManorStructure>> REALM_MANOR =
+            STRUCTURE_TYPES.register("realm_manor", () -> () -> com.linkyoshi90.monstergirls.world.RealmManorStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> REALM_MANOR_PIECE =
+            PIECES.register("realm_manor", () -> (StructurePieceType.ContextlessType) (tag) -> new com.linkyoshi90.monstergirls.world.RealmManorStructure.Piece(null, tag));
+    public static final ResourceKey<Structure> REALM_MANOR_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("realm_manor"));
+
     private ModStructures() {
     }
 }
