@@ -155,3 +155,14 @@ New girls: raiju (canid), ame-onna (undead), sylph (elf). Spawn eggs work any ti
 - **Ame-onna**: woods, swamps, rivers, cherry groves, rain only. Befriended, in the rain the crops within 6 blocks of her grow a stage every 30 s. Right-click her with a water bottle: a 5-minute shower (once a day; refused if it's already raining).
 - **Sylph**: windswept hills and meadows, any rain or storm. She flies. Befriended, you near her under the open sky get Speed I and, falling more than 3 blocks, Slow Falling. Are her fairy wings visible enough?
 - A wild one that spawned naturally leaves in a puff of cloud when her weather clears; befriend her first and she stays.
+
+## The Demon's spire (2026-11-08)
+
+- `/monstergirls locate spire` (or `/locate structure monstergirls:demon_spire`): badlands, wooded badlands, eroded badlands; about one per 56 chunks; new chunks only.
+- A 15x15 tower of polished blackstone, realm log corners, violet windows, four storeys of 7 and a battlemented roof (about 32 blocks tall). A ladder climbs the back wall (east of the middle) through every floor.
+  - Hall: realm door, purple runner, candles, two succubi kept to the spire.
+  - Library: bookshelves on every wall, an enchanting table, a lectern, a chest (enchanted books, XP bottles, lapis, heartfruit).
+  - Bedchamber: a purple bed, two unlit censers, crying obsidian.
+  - Treasury: gold blocks, amethyst, a chest (gold, diamonds, emeralds, realm silver, golden apples, rarely an enchanted golden apple or netherite scrap).
+  - Roof: a throne before crying obsidian, and a grown wild Demon on it.
+- Advancements: The Spire (step in), Before the Throne (reach the roof). Look: does the foundation reach down far enough on badlands slopes (8 blocks)? Can you get off the ladder onto each floor? Does the Demon stay on her roof after a reload?

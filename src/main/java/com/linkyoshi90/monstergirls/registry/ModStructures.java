@@ -35,6 +35,12 @@ public final class ModStructures {
     public static final DeferredHolder<StructurePieceType, StructurePieceType> REALM_MANOR_PIECE =
             PIECES.register("realm_manor", () -> (StructurePieceType.ContextlessType) (tag) -> new com.linkyoshi90.monstergirls.world.RealmManorStructure.Piece(null, tag));
     public static final ResourceKey<Structure> REALM_MANOR_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("realm_manor"));
+    /** The Demon's spire (world/DemonSpireStructure). */
+    public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.DemonSpireStructure>> DEMON_SPIRE =
+            STRUCTURE_TYPES.register("demon_spire", () -> () -> com.linkyoshi90.monstergirls.world.DemonSpireStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> DEMON_SPIRE_PIECE =
+            PIECES.register("demon_spire", () -> (StructurePieceType.ContextlessType) (tag) -> new com.linkyoshi90.monstergirls.world.DemonSpireStructure.Piece(null, tag));
+    public static final ResourceKey<Structure> DEMON_SPIRE_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("demon_spire"));
 
     private ModStructures() {
     }

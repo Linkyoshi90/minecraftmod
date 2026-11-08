@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:realm_manor",
+  "display": {
+    "icon": {
+      "id": "minecraft:polished_blackstone_bricks"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.demon_spire"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.demon_spire.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

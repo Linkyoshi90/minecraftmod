@@ -204,7 +204,7 @@ public class RealmManorStructure extends Structure {
     }
 
     /** One of the house: wild, grown, kept to the manor. */
-    private static void settle(WorldGenLevel level, GirlSpecies kind, BlockPos at, BlockPos home) {
+    static void settle(WorldGenLevel level, GirlSpecies kind, BlockPos at, BlockPos home) {
         if (!(ModGirls.type(kind).create(level.getLevel()) instanceof AbstractMonsterGirl girl)) return;
         girl.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, 180.0F, 0.0F);
         girl.finalizeSpawn(level, level.getCurrentDifficultyAt(at), MobSpawnType.STRUCTURE, null);
