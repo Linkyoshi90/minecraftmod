@@ -14,7 +14,7 @@ public final class GuidePages {
             Map.entry("festivals", 2),
             Map.entry("market", 2),
             Map.entry("rivals", 2),
-            Map.entry("roles", 3),
+            Map.entry("roles", 4),
             Map.entry("treats", 2),
             Map.entry("mining", 3),
             Map.entry("foraging", 3),

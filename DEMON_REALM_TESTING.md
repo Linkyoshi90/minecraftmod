@@ -128,3 +128,13 @@ Not realm features, but new since the last playtest.
 - **Passing flocks**: every 8th day (day % 8 == 3), in the first 3000 ticks of the morning, if you're under open sky and not in the realm: 3-5 wild harpies (swan/duck/pelican/flamingo if there's water within 24 blocks, else sparrow/finch/crow) land 20-36 blocks away. A day later they vanish in a puff of feathers, except any who has made a friend. `/time set` to a flock morning to try it.
 
 Options: `hamlets`, `passingFlocks`. Advancements: A Name on the Map, Word Gets Around.
+
+## Villager sweethearts and grandchildren (2026-11-08)
+
+- A grown daughter of yours (born to you, full size, not a construct) on a morning near free villagers has a 1 in 4 chance to take a shine to one. Or introduce them: right-click a villager with any small flower while your unattached daughter is within 16 blocks of him (the flower is used up, no trade screen).
+- By day (2000-11000) she walks over to see him from up to 24 blocks; close by they look at each other, a heart now and then, and she blushes. Does this fight her other jobs (farmhand, guard) too much?
+- Three mornings within 32 blocks of each other and they're wed: a bell, a burst of hearts, and the villager gives you major positive gossip (kinder prices).
+- Wed, every 4th day (day % 4 == 0) near him, if she can conceive: a little one on the way (two at most per daughter). The baby is born devoted to you, like a daughter (never in your bed, no lucky moments, no flirting). You get a chat line when she's born (or the eggs are laid).
+- If her villager dies she grieves (chat line) and may court again later. `/monstergirls bonds` shows who's courting or wed and how many little ones.
+
+Option: `sweethearts`. Advancements: Sweet on Someone, Wedding Bells, Grandparent.

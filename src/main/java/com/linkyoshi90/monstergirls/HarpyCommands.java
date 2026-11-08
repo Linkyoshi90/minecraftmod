@@ -89,6 +89,8 @@ public final class HarpyCommands {
             Component line = Component.translatable("commands.monstergirls.bonds.entry",
                     harpy.getDisplayName().copy().withStyle(ChatFormatting.AQUA), distance, describe((Bonded) harpy, player));
             source.sendSuccess(() -> line, false);
+            Component sweet = com.linkyoshi90.monstergirls.entity.Sweethearts.describe(harpy);
+            if (sweet != null) source.sendSuccess(() -> Component.literal("   ").append(sweet).withStyle(ChatFormatting.LIGHT_PURPLE), false);
         }
         return harpies.size();
     }

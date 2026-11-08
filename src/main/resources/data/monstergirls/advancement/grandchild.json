@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:sweethearts_wed",
+  "display": {
+    "icon": {
+      "id": "minecraft:cake"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.grandchild"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.grandchild.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
