@@ -18,6 +18,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # fortieth wave (weather spirits): the raiju, the thunder beast who rides the lightning down: bright fur barred like a bolt, a great brush of a tail
+    "raiju_canid": dict(
+        build="athletic", outfit=dict(top=["sports"], bottom="shorts", extras=["arm_wraps"], colors=dict(bandage="#2a2a34")),
+        hair="shaggy", bangs="jagged", ears="fox", legs="fur", foot="paw", tail=[(2.5, 2.5, 4), (3, 3, 4), (2, 2, 3)], tail_rest=[(-35, 0, 0), (15, 0, 0), (15, 0, 0)], tail_look="fur",
+        pal=dict(SKIN=skin("fair"), HAIR="#f0c83a", FUR="#f0c83a", LIGHT="#fff4b0", MARK="#1e1a24", EYE="#3ab8f8", CLOTH="#1e1a24", TRIM="#3ab8f8",
+                 pattern="bars", pupil=(1.6, 2.6)),
+        variants={"storm": dict(FUR="#4a7ad8", HAIR="#4a7ad8", LIGHT="#c8dcfc", MARK="#f8e860", EYE="#f8e860", TRIM="#f8e860"),
+                  "violet": dict(FUR="#8a5ad8", HAIR="#8a5ad8", LIGHT="#e0d0fc", MARK="#f0f4ff", EYE="#f0f4ff"),
+                  "white": dict(FUR="#eef2fa", HAIR="#eef2fa", LIGHT="#ffffff", MARK="#3ab8f8", CLOTH="#2a4a7a"),
+                  "black": dict(FUR="#2a2a34", HAIR="#2a2a34", LIGHT="#5a5a6a", MARK="#f8e04a", EYE="#f8e04a", TRIM="#f8e04a", CLOTH="#3a3a48")}),
     # thirty-ninth wave: the wolverine: low, broad and dark, a pale band from shoulder to hip, and she does not back down
     "wolverine_canid": dict(
         build="strong", outfit=dict(top=["sports", "vest"], bottom="loincloth", extras=["arm_wraps"], colors=dict(leather="#3a2a1e", bandage="#c8b898")),

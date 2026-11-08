@@ -239,9 +239,9 @@ s(None, "jellyfish_mollusk", "Cnidaria: Scyphozoa (her guide entry already says 
 s(None, "anemone_mollusk", "Cnidaria: Actiniaria", "guest")
 s(None, "min_min_mollusk", "Cnidaria per this design (cap + tentacles); the folklore Min Min is a light", "call")
 # ---------------------------------------------------------------- old ELF / UNDEAD / DEVIL / CONSTRUCT / RIDER
-for fam, ids in (("ELF", "night_elf high_elf wood_elf blood_elf desert_elf dark_elf brownie_elf valkyrie_elf domovoi_elf mad_hatter_elf angel_elf gandharva_elf apsara_elf knocker_elf kaguya_elf ophanim_elf norn_elf snow_elf gnome_elf dwarf_elf nymph_elf"),):
+for fam, ids in (("ELF", "night_elf high_elf wood_elf blood_elf desert_elf dark_elf brownie_elf valkyrie_elf domovoi_elf mad_hatter_elf angel_elf gandharva_elf apsara_elf knocker_elf kaguya_elf ophanim_elf norn_elf snow_elf gnome_elf dwarf_elf nymph_elf sylph_elf"),):
     s(None, ids, "outside taxonomy (humanoid folk)")
-s(None, "living_doll_undead will_o_wisp_undead yuki_onna_undead phantom_undead vampire_undead zombie_undead frankenstein_undead banshee_undead dullahan_undead lich_undead llorona_undead mummy_undead yurei_undead kasurenijimi_undead draugr_undead ghoul_undead gashadokuro_undead nasnas_undead jiangshi_undead hand_undead koschei_undead mano_peluda_undead gaitress_undead cordyceps_undead lost_soul_undead soul_cluster_undead soul_leech_undead drowned_undead famished_undead skeleton_undead poltergeist_undead sandman_undead candle_spirit_undead", "outside taxonomy (undead)")
+s(None, "living_doll_undead will_o_wisp_undead yuki_onna_undead phantom_undead vampire_undead zombie_undead frankenstein_undead banshee_undead dullahan_undead lich_undead llorona_undead mummy_undead yurei_undead kasurenijimi_undead draugr_undead ghoul_undead gashadokuro_undead nasnas_undead jiangshi_undead hand_undead koschei_undead mano_peluda_undead gaitress_undead cordyceps_undead lost_soul_undead soul_cluster_undead soul_leech_undead drowned_undead famished_undead skeleton_undead poltergeist_undead sandman_undead candle_spirit_undead ame_onna_undead", "outside taxonomy (undead)")
 s(None, "lesser_devil succubus_devil greater_devil jack_o_lantern_devil jiang_shi_devil oni_devil gremlin_devil karakasa_obake_devil chochin_obake_devil ittan_momen_devil rokurokubi_devil kikimora_devil akaname_devil cyclops_devil genie_devil ogre_devil taotie_devil behemoth_devil fire_giant_devil frost_giant_devil ifrit_devil pazuzu_devil lilith_devil wrath_devil demon_devil fury_devil firesprite_devil goblin_devil troll_devil book_spirit_devil", "outside taxonomy (spirits & demons)")
 s(None, "golem_construct gargoyle_construct talosling_construct tin_squirrel_construct tin_jack_construct automaton_construct scarecrow_construct snowgirl_construct", "made, not born")
 s(None, "war_rider famine_rider pestilence_rider death_rider charro_negro_rider", "outside taxonomy (riders)")
@@ -323,6 +323,7 @@ s(None, "kobold_canid", "Canidae: Canis familiaris per this design (folklore min
 s(None, "meloncollie_canid obsidian_hound_canid", "Canidae: Canis familiaris (Harmontide)")
 s(None, "bloodhound_canid", "Canidae: Canis familiaris")
 s(None, "cu_sith_canid hellhound_canid cerberus_canid", "Canidae: Canis (myth hound)")
+s(None, "raiju_canid", "Canidae: the thunder beast (myth; drawn wolf-like)")
 s("ARCTOIDEA", "polar_bear_canid", "Ursidae: Ursus maritimus")
 s("ARCTOIDEA", "grizzly_canid", "Ursidae: Ursus arctos horribilis")
 s("ARCTOIDEA", "black_bear_canid", "Ursidae: Ursus americanus")

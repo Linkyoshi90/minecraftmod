@@ -83,7 +83,7 @@ public enum Clade {
             case "red_kitsune", "arctic_kitsune", "fennec_kitsune", "corsac_kitsune", "gray_kitsune", "wattlefox_kitsune", "vulphea_kitsune",
                  "huli_jing_kitsune", "dunefennec_kitsune", "obaa_kitsune", "kumiho_kitsune", "bat_eared_kitsune", "doggo_mermaid", "wolf_canid",
                  "anubis_canid", "kobold_canid", "meloncollie_canid", "cu_sith_canid", "amarok_canid", "tarnhelm_canid", "obsidian_hound_canid",
-                 "hellhound_canid", "cerberus_canid", "bloodhound_canid", "tanuki_rodent" -> CANIDAE;
+                 "hellhound_canid", "cerberus_canid", "bloodhound_canid", "raiju_canid", "tanuki_rodent" -> CANIDAE;
             case "seal_mermaid", "ahuizotl_mermaid", "moonseal_mermaid", "rust_otter_mermaid", "walrus_mermaid", "selkie_mermaid",
                  "polar_bear_canid", "panda_canid", "grizzly_canid", "black_bear_canid", "rheintalensis_canid", "wolverine_canid",
                  "coatimano_rodent", "bambadger_rodent", "kamaitachi_rodent", "silkcoon_rodent", "sobolnik_rodent", "skunk_rodent", "raccoon_rodent",
@@ -145,7 +145,7 @@ public enum Clade {
                  "kesaran_pasaran_flora", "dryad_flora", "shiitake_flora", "rose_flora", "lotus_flora", "sunflower_flora", "rafflesia_flora" -> FLORA;
             case "night_elf", "high_elf", "wood_elf", "blood_elf", "desert_elf", "dark_elf", "brownie_elf", "valkyrie_elf", "domovoi_elf",
                  "mad_hatter_elf", "angel_elf", "gandharva_elf", "apsara_elf", "knocker_elf", "kaguya_elf", "ophanim_elf", "norn_elf", "snow_elf",
-                 "gnome_elf", "dwarf_elf", "nymph_elf", "fairy_bug", "fairy_queen_bug", "pixi_bug", "rlff_bug", "leshy_flora" -> FAE;
+                 "gnome_elf", "dwarf_elf", "nymph_elf", "sylph_elf", "fairy_bug", "fairy_queen_bug", "pixi_bug", "rlff_bug", "leshy_flora" -> FAE;
             case "shedim_centaur", "long_dragon", "wyrm_dragon", "gryphon_dragon", "kannae_dragon", "wyvern_dragon", "orochi_dragon",
                  "alebrije_dragon", "cockatrice_dragon", "nenekea_dragon", "macawtl_dragon", "quetzalcoatl_dragon", "bahamut_dragon", "kun_dragon",
                  "amphiptere_dragon", "ender_dragon", "chimera_dragon" -> DRAGON;
@@ -154,7 +154,7 @@ public enum Clade {
                  "kasurenijimi_undead", "draugr_undead", "ghoul_undead", "gashadokuro_undead", "nasnas_undead", "jiangshi_undead", "hand_undead",
                  "koschei_undead", "mano_peluda_undead", "gaitress_undead", "cordyceps_undead", "lost_soul_undead", "soul_cluster_undead",
                  "soul_leech_undead", "drowned_undead", "famished_undead", "skeleton_undead", "poltergeist_undead", "sandman_undead",
-                 "candle_spirit_undead" -> UNDEAD;
+                 "candle_spirit_undead", "ame_onna_undead" -> UNDEAD;
             case "lesser_devil", "succubus_devil", "greater_devil", "jack_o_lantern_devil", "jiang_shi_devil", "oni_devil", "gremlin_devil",
                  "karakasa_obake_devil", "chochin_obake_devil", "ittan_momen_devil", "rokurokubi_devil", "kikimora_devil", "akaname_devil",
                  "cyclops_devil", "genie_devil", "ogre_devil", "taotie_devil", "behemoth_devil", "fire_giant_devil", "frost_giant_devil",

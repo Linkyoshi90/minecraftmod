@@ -1015,3 +1015,15 @@ clutches; they eat raw meat and eggs.
 
 The spinosaur and the australovenator were planned for the twenty-second wave (as a dragon and a lizardfolk); they came
 with the family instead.
+
+## Weather spirits (2026-11-08, in the game)
+
+Three girls who come with the weather and, while wild, go with it: a wild one that came naturally leaves in a gust when her
+weather clears; befriend her first and she stays (`entity/girl/WeatherSpirits`, spawn gating in `SpawnConditions`, new
+`When.THUNDER`).
+
+| Species | Design |
+|---|---|
+| **Raiju** (canid) | The thunder beast of Japanese lore, drawn wolf-like: bright yellow fur barred black like a bolt, a great brush of a tail, jagged bangs, blue eyes. Only in a thunderstorm, on plains, savanna and meadows. Lightning never touches her; befriended, in a storm she calls a bolt down on a monster near her friend every ten seconds (8 damage, set alight; the bolt is visual only, so no fires). Colours: yellow, storm, violet, white, black. |
+| **Ame-onna** (undead) | The rain woman: long always-wet black hair, a kimono the grey of a downpour, cloud-pale skin. Only in the rain, in woods, swamps, rivers and cherry groves. Befriended, in the rain the crops within 6 blocks of her grow a stage every half minute, and a water bottle from her friend brings a five-minute shower (once a day). Colours: slate, indigo, plum, ivy, silver. |
+| **Sylph** (elf) | A spirit of the wind with glassy fairy wings and a high ponytail, all pale blues and greens; she flies. In any rain or storm, on the windswept hills and meadows. Befriended, her friend near her under the open sky has a tailwind (Speed I) and floats down (Slow Falling) instead of falling. Colours: breeze, dawn, gale, storm, sky. |

@@ -17,6 +17,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # fortieth wave (weather spirits): the ame-onna, the rain woman: long hair always wet, a kimono the grey of a downpour, pale as a cloud
+    "ame_onna_undead": dict(
+        build="slim", outfit=dict(top=["kimono"], bottom="hakama", colors=dict(kimono="#7a8a9a", kimono_trim="#c8d8e8", obi="#3a5a7a", cloth2="#6a7a8a")),
+        hair="hime", bangs="wispy", ears=None, legs="bare", foot="shoe",
+        pal=dict(SKIN="#e4ecf0", HAIR="#1e2630", FUR="#e4ecf0", LIGHT="#f4f8fa", MARK="#8aa0b8", EYE="#5a8ab8", CLOTH="#7a8a9a", TRIM="#c8d8e8",
+                 extra=dict(boot="#5a6a7a")),
+        variants={"indigo": dict(HAIR="#1a1e3a", extra=dict(kimono="#3a4a7a", obi="#c8d8f0", kimono_trim="#8aa0d8", cloth2="#2a3a6a", boot="#2a3a5a")),
+                  "plum": dict(HAIR="#2a1a2a", EYE="#8a5a9a", extra=dict(kimono="#6a5a7a", obi="#c8a8d8", kimono_trim="#c8a8d8", cloth2="#5a4a6a", boot="#4a3a5a")),
+                  "ivy": dict(HAIR="#1a2a22", EYE="#4a8a6a", extra=dict(kimono="#5a7a6a", obi="#c8e0c8", kimono_trim="#a8c8b0", cloth2="#4a6a5a", boot="#3a5a4a")),
+                  "silver": dict(HAIR="#c8d0d8", EYE="#8ab0d8", extra=dict(kimono="#b8c4d0", obi="#5a7a9a", kimono_trim="#eef2f6", cloth2="#a8b4c0", boot="#8a96a4"))}),
     # thirty-ninth wave: the candle spirit: wax-pale, a lit wick for a crown and a flame where her legs would be, keeping vigil
     "candle_spirit_undead": dict(
         build="slim", outfit=dict(top=["halter"], extras=["armlets"]), lower="none",

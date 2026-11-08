@@ -3843,6 +3843,26 @@ for _fid, _entries in THIRTY_NINTH.items():
             _values.append(_cols.get(_label, "-"))
 
 # monsterization (2026-11-08): what the Demon Realm makes of vanilla creatures. No biomes: they come only by monsterization.
+FORTIETH = {
+    "canid": [_c("raiju_canid", "Raiju", "Storm-swept plains", "Wild · crackling", 1.65, ['plains', 'sunflower_plains', 'savanna', 'meadow'], "Wild",
+                 "The thunder beast who rides the lightning down: bright fur striped like a bolt, and she only comes when the sky is roaring.", "Chicken and mutton.",
+                 ("Thunder Call", "Befriended, in a thunderstorm she calls lightning down on the monsters near her friend; lightning never hurts her."), "Medium.", ["Yellow", "Storm", "Violet", "White", "Black"], "Calls lightning on monsters in a storm")],
+    "undead": [_c("ame_onna_undead", "Ame-onna", "Rainy woods and rivers", "Wistful · gentle", 1.7, ['forest', 'birch_forest', 'swamp', 'river', 'cherry_grove'], "Wistful",
+                  "The rain woman: long hair always wet, a kimono the grey of a downpour, and wherever she walks it starts to rain.", "Sweet berries and kelp.",
+                  ("Rain Bringer", "Befriended, crops near her grow in the rain, and a water bottle from her friend brings a shower (once a day)."), "Low.", ["Slate", "Indigo", "Plum", "Ivy", "Silver"], "Brings rain; crops grow near her in it")],
+    "elf": [_c("sylph_elf", "Sylph", "Windswept hills", "Light · playful", 1.65, ['windswept_hills', 'windswept_gravelly_hills', 'windswept_forest', 'meadow'], "Playful",
+               "A spirit of the wind with glassy wings, who rides in on a storm front and laughs at everyone who has to walk.", "Apples and sugar.",
+               ("Tailwind", "Befriended, her friend near her under the open sky runs faster and floats down instead of falling."), "Low.", ["Breeze", "Dawn", "Gale", "Storm", "Sky"], "Tailwind and soft landings")],
+}
+for _fid, _entries in FORTIETH.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(s["id"] == _species["id"] for s in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 MONSTERIZED = {
     "minotaur": [_c("holstaur_minotaur", "Holstaur", "The Demon Realm (a turned cow)", "Gentle · eager", 1.95, [], "Gentle",
                     "A dairy cow the Demon Realm turned: soft and full of figure, little horns and a cowbell.",

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#monstergirls:spawns_ame_onna_undead",
+  "spawners": {
+    "type": "monstergirls:ame_onna_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

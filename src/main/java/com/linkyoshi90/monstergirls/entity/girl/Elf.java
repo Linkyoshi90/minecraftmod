@@ -785,7 +785,7 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
 
     @Override
     public boolean canFly() {
-        return this.species == GirlSpecies.VALKYRIE_ELF || this.species == GirlSpecies.ANGEL_ELF || this.species == GirlSpecies.GANDHARVA_ELF || this.species == GirlSpecies.OPHANIM_ELF || super.canFly();
+        return this.species == GirlSpecies.VALKYRIE_ELF || this.species == GirlSpecies.ANGEL_ELF || this.species == GirlSpecies.GANDHARVA_ELF || this.species == GirlSpecies.OPHANIM_ELF || this.species == GirlSpecies.SYLPH_ELF || super.canFly();
     }
 
     /** What she gathered up where her friend fell, and whose it is. */

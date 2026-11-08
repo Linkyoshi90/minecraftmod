@@ -13,13 +13,13 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Kinds that only come out at the right moment: under a full moon, at night, in a storm (any rain or thunder), or in the rain. It binds
+ * Kinds that only come out at the right moment: under a full moon, at night, in a storm (any rain or thunder), in the rain, or only in a thunderstorm. It binds
  * in a dimension with a sky and weather of its own (the overworld); a kind that also lives in the Nether or the End comes there as
  * always. Natural spawns only (SpawnRarity.allows); the journal says when to look. spawnConditions turns it off.
  */
 public final class SpawnConditions {
     public enum When {
-        FULL_MOON, NIGHT, STORM, RAIN;
+        FULL_MOON, NIGHT, STORM, RAIN, THUNDER;
 
         public String key() {
             return "journal.monstergirls.when." + this.name().toLowerCase(Locale.ROOT);
@@ -32,8 +32,9 @@ public final class SpawnConditions {
         put(When.FULL_MOON, "moon_rabbit_jackalope", "amarok_canid", "moonseal_mermaid");
         put(When.NIGHT, "vampire_undead", "banshee_undead", "yurei_undead", "mothman_bug", "firefly_bug", "will_o_wisp_undead", "nue_nekomata",
                 "rusalka_mermaid", "lorelei_mermaid");
-        put(When.STORM, "anzu_centaur", "ziz_harpy", "leviathan_mermaid");
-        put(When.RAIN, "kappa_lizardfolk", "boghare_jackalope", "llorona_undead");
+        put(When.STORM, "anzu_centaur", "ziz_harpy", "leviathan_mermaid", "sylph_elf");
+        put(When.THUNDER, "raiju_canid");
+        put(When.RAIN, "kappa_lizardfolk", "boghare_jackalope", "llorona_undead", "ame_onna_undead");
     }
 
     private SpawnConditions() {}
@@ -72,6 +73,7 @@ public final class SpawnConditions {
             case NIGHT -> night;
             case STORM -> raining || thundering;
             case RAIN -> raining;
+            case THUNDER -> thundering;
         };
     }
 }

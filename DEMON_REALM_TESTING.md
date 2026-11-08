@@ -146,3 +146,12 @@ Option: `sweethearts`. Advancements: Sweet on Someone, Wedding Bells, Grandparen
 - Does following you fight her sit order or her job too much? Is half a minute too short?
 
 Option: `dates`. Advancement: It's a Date.
+
+## Weather spirits (2026-11-08)
+
+New girls: raiju (canid), ame-onna (undead), sylph (elf). Spawn eggs work any time; natural spawns only in their weather (`/weather thunder`, `/weather rain`).
+
+- **Raiju**: plains, savanna, meadows, thunderstorms only. Lightning never touches her. Befriended (affection 25+), in a storm every 10 s a visual bolt hits the nearest monster within 12 blocks of you (8 damage, fire). Does the yellow-and-black barring read as lightning?
+- **Ame-onna**: woods, swamps, rivers, cherry groves, rain only. Befriended, in the rain the crops within 6 blocks of her grow a stage every 30 s. Right-click her with a water bottle: a 5-minute shower (once a day; refused if it's already raining).
+- **Sylph**: windswept hills and meadows, any rain or storm. She flies. Befriended, you near her under the open sky get Speed I and, falling more than 3 blocks, Slow Falling. Are her fairy wings visible enough?
+- A wild one that spawned naturally leaves in a puff of cloud when her weather clears; befriend her first and she stays.

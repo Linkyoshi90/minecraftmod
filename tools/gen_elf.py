@@ -16,6 +16,16 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # fortieth wave (weather spirits): the sylph, a spirit of the wind with glassy wings, airy and quick, all pale blues and greens
+    "sylph_elf": dict(
+        build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["scarf"], colors=dict(cloth2="#c8ecf0", scarf="#e8fafc")),
+        hair="ponytail", bangs="swept", ears="elf", legs="bare", foot="shoe", wings="fairy", wing_scale=1.7, flies=True,
+        pal=dict(SKIN=skin("pale"), HAIR="#a8e0e8", FUR="#a8e0e8", LIGHT="#f0fcfc", MARK="#5ab0c0", EYE="#3a9ab0", CLOTH="#d8f4f4", TRIM="#8ad0dc",
+                 extra=dict(wing="#c8f0f4", wing_vein="#8ad0dc", wing_alpha=170, boot="#8ad0dc")),
+        variants={"dawn": dict(HAIR="#f8c8d8", CLOTH="#fce4ec", TRIM="#f0a8c0", extra=dict(wing="#fcd8e4", wing_vein="#f0a8c0", wing_alpha=170, boot="#f0a8c0")),
+                  "gale": dict(HAIR="#7ad8b0", CLOTH="#d0f4e4", TRIM="#4ab890", extra=dict(wing="#c8f4e0", wing_vein="#4ab890", wing_alpha=170, boot="#4ab890")),
+                  "storm": dict(HAIR="#8a96a8", CLOTH="#c8ced8", TRIM="#5a6a80", EYE="#5a6a80", extra=dict(wing="#c8d0dc", wing_vein="#5a6a80", wing_alpha=170, boot="#5a6a80")),
+                  "sky": dict(HAIR="#7ab0f0", CLOTH="#d8e8fc", TRIM="#4a80d0", extra=dict(wing="#c8dcfc", wing_vein="#4a80d0", wing_alpha=170, boot="#4a80d0"))}),
     # thirty-seventh wave: the nymph: a spirit of the spring, dressed in a light green wrap, flowers wherever she stood
     "nymph_elf": dict(
         build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["pearls"], colors=dict(cloth2="#7ab85a")),
