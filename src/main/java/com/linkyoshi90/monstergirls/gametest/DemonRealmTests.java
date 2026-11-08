@@ -347,6 +347,7 @@ public class DemonRealmTests {
         helper.runAfterDelay(2, () -> {
             check(DemonRealm.realmAir(girl) && !DemonRealm.inRealm(girl), "the realm's air near it, but not its ground");
             check(Monsterization.kindOf(girl) == null && Monsterization.soaked(girl) == 0, "nobody turns by a censer");
+            level.removeBlock(at, false);                                   // its air must not reach the arenas beside this one
             helper.succeed();
         });
     }

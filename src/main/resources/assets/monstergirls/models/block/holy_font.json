@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/template_cauldron_full",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "minecraft:block/calcite",
+    "top": "minecraft:block/calcite",
+    "bottom": "minecraft:block/calcite",
+    "side": "minecraft:block/calcite",
+    "inside": "minecraft:block/calcite",
+    "content": "minecraft:block/blue_ice"
+  }
+}

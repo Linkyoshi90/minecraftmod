@@ -40,6 +40,9 @@ Everything below passes the GameTests, but none of it has been seen in a real cl
 **Splash holy water** (holy water + gunpowder)
 - Thrown, it shows as a bottle in flight, breaks with a splash, frees the possessed within 4 blocks and turns the realm back.
 
+**Holy font** (calcite, holy water, gold)
+- A calcite basin of pale ice-blue water with rising sparks. Within 12 blocks: no realm grass takes hold, nobody is possessed, passes it on or turns.
+
 ## Behaviour worth watching over a few nights
 
 - A possessed villager passes it to a villager standing next to her at night (about one night in four), little patches of realm take root under them, and an iron golem among three of them turns into a golem girl. Is the pace right, too slow, too fast? (Option `possessionSpreads`.)

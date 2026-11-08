@@ -317,4 +317,20 @@ public class MonsterizationTests {
         check(!level.getBlockState(root).is(com.linkyoshi90.monstergirls.registry.ModBlocks.REALM_GRASS.get()), "and turns the grass back");
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "holyFontWards")
+    public static void holyFontWards(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        level.setBlock(helper.absolutePos(new BlockPos(2, 2, 2)), com.linkyoshi90.monstergirls.registry.ModBlocks.HOLY_FONT.get().defaultBlockState(),
+                net.minecraft.world.level.block.Block.UPDATE_ALL);
+        helper.runAfterDelay(2, () -> {
+            BlockPos ground = helper.absolutePos(new BlockPos(7, 1, 7));
+            check(!RealmGrassBlock.corrupt(level, ground), "the realm can't take hold near a holy font");
+            var villager = helper.spawn(EntityType.VILLAGER, new BlockPos(7, 2, 7));
+            villager.setNoAi(true);
+            check(!Monsterization.soak(level, villager, true) && Monsterization.soaked(villager) == 0, "nobody soaks it up there");
+            level.removeBlock(helper.absolutePos(new BlockPos(2, 2, 2)), false);   // its ward must not reach the arenas beside this one
+            helper.succeed();
+        });
+    }
 }

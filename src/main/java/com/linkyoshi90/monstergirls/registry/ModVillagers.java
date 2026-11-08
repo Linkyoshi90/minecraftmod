@@ -22,6 +22,10 @@ public final class ModVillagers {
     public static final DeferredHolder<PoiType, PoiType> CENSER = POI_TYPES.register("lit_realm_censer",
             () -> new PoiType(ImmutableSet.copyOf(ModBlocks.REALM_CENSER.get().getStateDefinition().getPossibleStates().stream()
                     .filter(s -> s.getValue(com.linkyoshi90.monstergirls.block.RealmCenserBlock.LIT)).toList()), 0, 1));
+    /** A holy font (block/HolyFontBlock): the realm's ward. */
+    public static final ResourceKey<PoiType> FONT_KEY = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, MonsterGirlsMod.id("holy_font"));
+    public static final DeferredHolder<PoiType, PoiType> FONT = POI_TYPES.register("holy_font",
+            () -> new PoiType(ImmutableSet.copyOf(ModBlocks.HOLY_FONT.get().getStateDefinition().getPossibleStates()), 0, 1));
     public static final DeferredHolder<PoiType, PoiType> DESK = POI_TYPES.register("exchange_desk",
             () -> new PoiType(ImmutableSet.copyOf(ModBlocks.EXCHANGE_DESK.get().getStateDefinition().getPossibleStates()), 1, 1));
 

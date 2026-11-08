@@ -216,6 +216,7 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> REALM_LOG = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_LOG);
     public static final DeferredItem<BlockItem> WEEPCAP = ITEMS.registerSimpleBlockItem(ModBlocks.WEEPCAP);
     public static final DeferredItem<BlockItem> REALM_CENSER = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_CENSER);
+    public static final DeferredItem<BlockItem> HOLY_FONT = ITEMS.registerSimpleBlockItem(ModBlocks.HOLY_FONT);
     public static final DeferredItem<BlockItem> REALM_PLANKS = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_PLANKS);
     public static final DeferredItem<BlockItem> REALM_STAIRS = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_STAIRS);
     public static final DeferredItem<BlockItem> REALM_SLAB = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_SLAB);

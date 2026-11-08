@@ -159,7 +159,7 @@ public final class Monsterization {
     public static AbstractMonsterGirl step(ServerLevel level, Mob mob, boolean dark) {
         GirlSpecies kind = kindOf(mob);
         if (kind == null || !MonsterGirlsConfig.monsterization()) return null;
-        if (!dark || !(DemonRealm.inRealm(mob) || guardsTheTurned(mob))) return null;
+        if (!dark || !(DemonRealm.inRealm(mob) || guardsTheTurned(mob)) || com.linkyoshi90.monstergirls.block.HolyFontBlock.warded(level, mob.blockPosition())) return null;
         int soaked = soaked(mob) + 1;
         mob.getPersistentData().putInt(SOAKED, soaked);
         level.sendParticles(RealmGrassBlock.HAZE, mob.getX(), mob.getY() + mob.getBbHeight() * 0.5, mob.getZ(), 3 + soaked / 2, 0.3, 0.3, 0.3, 0.0);
@@ -170,7 +170,7 @@ public final class Monsterization {
     @Nullable
     public static Mob stepOther(ServerLevel level, Mob mob, boolean dark) {
         var into = OTHERS.get(mob.getType());
-        if (into == null || mob.isBaby() || !MonsterGirlsConfig.monsterization() || !dark || !DemonRealm.inRealm(mob)) return null;
+        if (into == null || mob.isBaby() || !MonsterGirlsConfig.monsterization() || !dark || !DemonRealm.inRealm(mob) || com.linkyoshi90.monstergirls.block.HolyFontBlock.warded(level, mob.blockPosition())) return null;
         int soaked = soaked(mob) + 1;
         mob.getPersistentData().putInt(SOAKED, soaked);
         level.sendParticles(RealmGrassBlock.HAZE, mob.getX(), mob.getY() + mob.getBbHeight() * 0.5, mob.getZ(), 3 + soaked / 2, 0.3, 0.3, 0.3, 0.0);
@@ -187,7 +187,7 @@ public final class Monsterization {
     /** One step in the realm for a creature that is possessed rather than changed. True once she is possessed. */
     public static boolean soak(ServerLevel level, Mob mob, boolean dark) {
         if (!POSSESSED.containsKey(mob.getType()) || mob.isBaby() || possessed(mob) || !MonsterGirlsConfig.possession()) return possessed(mob);
-        if (!dark || !DemonRealm.inRealm(mob)) return false;
+        if (!dark || !DemonRealm.inRealm(mob) || com.linkyoshi90.monstergirls.block.HolyFontBlock.warded(level, mob.blockPosition())) return false;
         int soaked = soaked(mob) + 1;
         mob.getPersistentData().putInt(SOAKED, soaked);
         level.sendParticles(RealmGrassBlock.HAZE, mob.getX(), mob.getY() + mob.getBbHeight() * 0.5, mob.getZ(), 3 + soaked / 2, 0.3, 0.3, 0.3, 0.0);
@@ -365,7 +365,7 @@ public final class Monsterization {
         if (!night || mob.getType() != EntityType.VILLAGER || !possessed(mob) || !MonsterGirlsConfig.possession() || !MonsterGirlsConfig.possessionSpreads()) return null;
         Mob next = level.getEntitiesOfClass(Mob.class, mob.getBoundingBox().inflate(SPREAD_RANGE),
                 m -> m != mob && m.getType() == EntityType.VILLAGER && !m.isBaby() && !possessed(m)).stream().findFirst().orElse(null);
-        if (next == null) return null;
+        if (next == null || com.linkyoshi90.monstergirls.block.HolyFontBlock.warded(level, next.blockPosition())) return null;
         possess(level, next);
         return next;
     }

@@ -62,7 +62,8 @@ public class RealmGrassBlock extends SnowyDirtBlock implements net.minecraft.wor
     /** Ground the realm can take: grass or dirt with open air above, out of torchlight. */
     public static boolean canTake(net.minecraft.world.level.LevelAccessor level, BlockPos ground) {
         BlockState s = level.getBlockState(ground);
-        return (s.is(Blocks.GRASS_BLOCK) || s.is(Blocks.DIRT) || s.is(Blocks.PODZOL) || s.is(Blocks.COARSE_DIRT)) && open(level, ground) && !lit(level, ground);
+        return (s.is(Blocks.GRASS_BLOCK) || s.is(Blocks.DIRT) || s.is(Blocks.PODZOL) || s.is(Blocks.COARSE_DIRT)) && open(level, ground) && !lit(level, ground)
+                && !(level instanceof net.minecraft.server.level.ServerLevel server && HolyFontBlock.warded(server, ground));   // a holy font keeps it out
     }
 
     /** Turns one block into realm grass, a source of its own (depth 0). True if it did. */

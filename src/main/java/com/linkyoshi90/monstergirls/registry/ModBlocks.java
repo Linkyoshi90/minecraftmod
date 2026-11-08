@@ -173,6 +173,11 @@ public final class ModBlocks {
             p -> new net.minecraft.world.level.block.PressurePlateBlock(net.minecraft.world.level.block.state.properties.BlockSetType.DARK_OAK, p),
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).forceSolidOn().noCollission().strength(0.5F).ignitedByLava().pushReaction(PushReaction.DESTROY));
 
+    /** A calcite basin of holy water: the realm can't take hold near it (block/HolyFontBlock). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.HolyFontBlock> HOLY_FONT = BLOCKS.registerBlock("holy_font",
+            com.linkyoshi90.monstergirls.block.HolyFontBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.QUARTZ).requiresCorrectToolForDrops().strength(2.0F).sound(SoundType.CALCITE).lightLevel(s -> 6).noOcclusion());
+
     /** A lantern burning the realm's violet flame: the realm's air at home, without its ground (block/RealmCenserBlock). */
     public static final DeferredBlock<com.linkyoshi90.monstergirls.block.RealmCenserBlock> REALM_CENSER = BLOCKS.registerBlock("realm_censer",
             com.linkyoshi90.monstergirls.block.RealmCenserBlock::new,
