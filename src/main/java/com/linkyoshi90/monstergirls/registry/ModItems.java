@@ -412,6 +412,14 @@ public final class ModItems {
     /** Creative only (no recipe): fills a girl's friendship with you to the full, for testing. */
     public static final DeferredItem<Item> FRIENDSHIP_CHARM = ITEMS.registerSimpleItem("friendship_charm", new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 
+    /** Spawn eggs for the Order's sisters (entity/order). */
+    public static final DeferredItem<DeferredSpawnEggItem> ORDER_KNIGHT_SPAWN_EGG = ITEMS.register("order_knight_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.ORDER_KNIGHT, 0xEDEAE0, 0xD4A93A, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> ORDER_INQUISITOR_SPAWN_EGG = ITEMS.register("order_inquisitor_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.ORDER_INQUISITOR, 0x2B3A6B, 0xEDEAE0, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> ORDER_CAPTAIN_SPAWN_EGG = ITEMS.register("order_captain_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.ORDER_CAPTAIN, 0xD4A93A, 0x6FB7E0, new Item.Properties()));
+
     // --- the Harmontide creative tab: everything the mod adds -------------------------------------------------------
 
     public static final DeferredRegister<net.minecraft.world.item.CreativeModeTab> TABS = DeferredRegister.create(net.minecraft.core.registries.Registries.CREATIVE_MODE_TAB, MonsterGirlsMod.MODID);

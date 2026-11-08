@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:order_marked",
+  "display": {
+    "icon": {
+      "id": "minecraft:shield"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.order_crusade"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.order_crusade.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

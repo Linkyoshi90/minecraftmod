@@ -26,7 +26,8 @@ public final class GuidePages {
             Map.entry("habits", 7),
             Map.entry("nesting", 2),
             Map.entry("orders", 3),
-            Map.entry("realm", 24),
+            Map.entry("realm", 25),
+            Map.entry("order", 9),
             Map.entry("season", 2),
             Map.entry("marriage", 2),
             Map.entry("liaison", 2));

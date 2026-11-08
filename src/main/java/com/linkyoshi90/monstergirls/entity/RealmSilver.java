@@ -78,6 +78,6 @@ public final class RealmSilver {
         if (!(event.getSource().getEntity() instanceof Player player) || event.getSource().getDirectEntity() != player
                 || !player.getMainHandItem().is(ModItems.REALM_SILVER_SWORD.get()) || !(event.getEntity() instanceof Mob mob)
                 || !(player.level() instanceof ServerLevel level)) return;
-        if (spare(level, mob, player)) event.setCanceled(true);
+        if (spare(level, mob, player) || com.linkyoshi90.monstergirls.entity.order.OrderSister.shake(level, mob, player)) event.setCanceled(true);
     }
 }

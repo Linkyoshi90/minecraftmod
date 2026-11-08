@@ -24,6 +24,10 @@ public final class ModAttachments {
     public static final Supplier<AttachmentType<Long>> NEXT_MILK = ATTACHMENT_TYPES.register("next_milk",
             () -> AttachmentType.builder(() -> 0L).serialize(com.mojang.serialization.Codec.LONG).build());
 
+    /** How much the Order has heard of a player's ties to the Demon Realm (entity/order/Order); kept through death. */
+    public static final Supplier<AttachmentType<Integer>> ORDER_NOTORIETY = ATTACHMENT_TYPES.register("order_notoriety",
+            () -> AttachmentType.builder(() -> 0).serialize(com.mojang.serialization.Codec.INT).copyOnDeath().build());
+
     private ModAttachments() {
     }
 }

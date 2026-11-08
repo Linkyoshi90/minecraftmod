@@ -137,6 +137,8 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue REALM_SUMMONS;
     public static final ModConfigSpec.BooleanValue POSSESSION_SPREADS;
     public static final ModConfigSpec.BooleanValue ROSE_MOON;
+    public static final ModConfigSpec.BooleanValue ORDER_PATROLS;
+    public static final ModConfigSpec.BooleanValue ORDER_RAIDS;
     public static final ModConfigSpec.BooleanValue DREAM_VISITS;
     public static final ModConfigSpec.BooleanValue MATING_SEASON;
     public static final ModConfigSpec.IntValue MAX_SPOUSES;
@@ -187,6 +189,14 @@ public final class MonsterGirlsConfig {
         ROSE_MOON = BUILDER
                 .comment("About one night in ten the moon rises rose-violet and the Demon Realm stirs: monsterization twice as fast, possession, summons and the realm's spread four times as often.")
                 .define("roseMoon", true);
+
+        ORDER_PATROLS = BUILDER
+                .comment("By day, patrols of the Order (sister-knights and an inquisitrix) now and then march on a Demon Realm patch near a player to purge it, and come looking for players the Order has marked.")
+                .define("orderPatrols", true);
+
+        ORDER_RAIDS = BUILDER
+                .comment("A player with strong enough ties to the Demon Realm draws a night crusade of the Order on their hearth.")
+                .define("orderRaids", true);
 
         DREAM_VISITS = BUILDER
                 .comment("Succubi visit your dreams: a close succubus friend brings a sweet dream (Luck in the morning); a wild one nearby feeds on some of your experience and leaves a heartfruit.")
@@ -360,6 +370,14 @@ public final class MonsterGirlsConfig {
 
     public static boolean possession() {
         return SPEC.isLoaded() ? POSSESSION.get() : POSSESSION.getDefault();
+    }
+
+    public static boolean orderPatrols() {
+        return SPEC.isLoaded() ? ORDER_PATROLS.get() : ORDER_PATROLS.getDefault();
+    }
+
+    public static boolean orderRaids() {
+        return SPEC.isLoaded() ? ORDER_RAIDS.get() : ORDER_RAIDS.getDefault();
     }
 
     public static boolean roseMoon() {

@@ -101,6 +101,11 @@ public class HearthBlockEntity extends BlockEntity {
         return this.residents.size();
     }
 
+    /** Who lives here (a copy). */
+    public Set<UUID> residents() {
+        return Set.copyOf(this.residents);
+    }
+
     public boolean isResident(UUID girl) {
         return this.residents.contains(girl);
     }

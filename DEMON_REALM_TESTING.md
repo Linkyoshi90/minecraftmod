@@ -73,3 +73,29 @@ Everything below passes the GameTests, but none of it has been seen in a real cl
 ## Advancements
 
 Under Adventure: Into the Demon Realm, Spirit, Not Flesh, A Change of Heart, Born of the Realm, Exorcist, Lovestruck, Sabbath, Home Fires, Strong Stuff, The Realm's Gifts.
+
+## The Order (2026-11-08)
+
+The realm's enemy. Sisters of the Order are human women on the vanilla slim player model with their own skins (`tools/gen_order_assets.py`).
+
+| Command | What it does |
+|---|---|
+| `/monstergirls order` | How the Order sees you (notoriety), and any crusade under way. |
+| `/monstergirls order set <0-200>` | (op) Set your notoriety: 40 = marked, 100 = a crusade comes the next night you are near your hearth (13000-19000). |
+| `/monstergirls order patrol` | (op) A patrol (two knights, an inquisitrix) sets out for the nearest realm patch, or for you. |
+| `/monstergirls order raid` | (op) A crusade sets out for your nearest hearth right now. |
+
+**Look at these in a client**
+- The three skins (sister-knight in white and gold over mail, inquisitrix in a navy hood and robe, blonde captain with a sky-blue border). Do the faces read? Does iron armour on the slim model look right?
+- The captain wears the Order's banner on her helm (like a raid captain). Does it sit right?
+- A kneeling sister crouches: does the pose look like kneeling, or just sneaking?
+- An inquisitrix throws splash holy water: the flask flies and breaks; girls in the splash take 4 damage, players only get wet.
+- The crusade boss bar ("Crusade of the Order", yellow, notched) counts the sisters still standing.
+
+**Behaviour worth watching**
+- Patrols: by day, one try every 30 s per player, 1 in 6, only with realm grass within 40 blocks (or anywhere once you're marked), never with sisters already within 96. They walk to the realm, turn it back, free the possessed, fight devils and realm-changed girls. Ordinary wild girls are left alone. Too frequent? Too rare?
+- Notoriety: each minute +1 in the realm's air, +1 per devil or realm-changed friend within 32 (up to 3); -1 a minute with no ties. +2 per heartfruit given, +5 per sister killed, +10 per sister fallen; -20 sparing one, -5 freeing the possessed with splash holy water. Is 100 the right distance to a crusade?
+- Crusade: captain + 2 knights + inquisitrix, +1 per 3 residents (max 7). Won: residents +3 friendship, notoriety back to 0. Dawn with sisters standing: they vanish, bless 5 blocks round the hearth, residents -3, notoriety 50.
+- Realm silver sword: each hit takes a point of faith (knight 6, inquisitrix 5, captain 10), no damage. The realm's air in the dark also wears 1 every 10 s. Kneeling: heartfruit = she falls (succubus; captain = demon) devoted to you (60 friendship); empty hand = spared, she walks off. Left kneeling in the realm's dark for a minute, she falls by herself.
+
+Options: `orderPatrols`, `orderRaids`. Advancements: Holy Orders, Heretic, Crisis of Faith, Mercy, Fallen, Crusade Repelled.

@@ -517,6 +517,17 @@ public final class ModEntities {
                     .clientTrackingRange(10)
                     .build("surinam_toad"));
 
+    /** The Order's sisters (entity/order): human women, on the vanilla slim player model. */
+    public static final DeferredHolder<EntityType<?>, EntityType<com.linkyoshi90.monstergirls.entity.order.OrderSister>> ORDER_KNIGHT = order("order_knight", com.linkyoshi90.monstergirls.entity.order.OrderSister.Rank.KNIGHT);
+    public static final DeferredHolder<EntityType<?>, EntityType<com.linkyoshi90.monstergirls.entity.order.OrderSister>> ORDER_INQUISITOR = order("order_inquisitor", com.linkyoshi90.monstergirls.entity.order.OrderSister.Rank.INQUISITOR);
+    public static final DeferredHolder<EntityType<?>, EntityType<com.linkyoshi90.monstergirls.entity.order.OrderSister>> ORDER_CAPTAIN = order("order_captain", com.linkyoshi90.monstergirls.entity.order.OrderSister.Rank.CAPTAIN);
+
+    private static DeferredHolder<EntityType<?>, EntityType<com.linkyoshi90.monstergirls.entity.order.OrderSister>> order(String name, com.linkyoshi90.monstergirls.entity.order.OrderSister.Rank rank) {
+        return ENTITY_TYPES.register(name, () -> EntityType.Builder.<com.linkyoshi90.monstergirls.entity.order.OrderSister>of(
+                (t, l) -> new com.linkyoshi90.monstergirls.entity.order.OrderSister(t, l, rank), MobCategory.MONSTER)
+                .sized(0.6F, 1.8F).eyeHeight(1.62F).clientTrackingRange(10).build(name));
+    }
+
     private ModEntities() {}
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -581,6 +592,9 @@ public final class ModEntities {
         event.put(NATTERJACK.get(), Natterjack.createAttributes().build());
         event.put(VODYANOY.get(), Vodyanoy.createAttributes().build());
         event.put(SURINAM_TOAD.get(), SurinamToad.createAttributes().build());
+        event.put(ORDER_KNIGHT.get(), com.linkyoshi90.monstergirls.entity.order.OrderSister.createAttributes(com.linkyoshi90.monstergirls.entity.order.OrderSister.Rank.KNIGHT).build());
+        event.put(ORDER_INQUISITOR.get(), com.linkyoshi90.monstergirls.entity.order.OrderSister.createAttributes(com.linkyoshi90.monstergirls.entity.order.OrderSister.Rank.INQUISITOR).build());
+        event.put(ORDER_CAPTAIN.get(), com.linkyoshi90.monstergirls.entity.order.OrderSister.createAttributes(com.linkyoshi90.monstergirls.entity.order.OrderSister.Rank.CAPTAIN).build());
     }
 
     public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {

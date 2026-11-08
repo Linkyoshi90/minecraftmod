@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:realm_entered",
+  "display": {
+    "icon": {
+      "id": "minecraft:white_banner"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.order_patrol"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.order_patrol.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
