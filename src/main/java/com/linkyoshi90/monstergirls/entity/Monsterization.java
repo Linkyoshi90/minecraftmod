@@ -28,7 +28,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 /**
- * Monsterization, after Monster Girl Encyclopedia: the Demon Realm's energy turns the creatures that linger in it into monster girls.
+ * Monsterization, after Monster Girl Encyclopedia (villagers, pigs and cats are possessed instead, keeping their bodies: {@link #POSSESSED}): the Demon Realm's energy turns the creatures that linger in it into monster girls.
  * A grown vanilla animal or monster standing on realm grass in the dark (at night, or out of the sky) soaks it up, one step every
  * {@link #EVERY} ticks; after {@link #STEPS} she changes into the girl of her kind ({@link #KINDS}): a witch into a succubus, a cow
  * into a holstaur, a slime into a slime girl. Only vanilla creatures change: girls of the mod stay who they are.
@@ -41,6 +41,11 @@ public final class Monsterization {
     public static final int EVERY = 199, STEPS = 12, PET_AFFECTION = 60;
     private static final String SOAKED = "RealmSoaked";
     public static final Map<EntityType<?>, List<GirlSpecies>> KINDS = new HashMap<>();
+    /** Creatures the realm possesses instead of changing: what their young are born as. */
+    public static final Map<EntityType<?>, List<GirlSpecies>> POSSESSED = new HashMap<>();
+    /** A possessed creature breeds at most this often (half a day), with one of her own kind within BREED_RANGE, unless CROWD girls already live within 32. */
+    public static final int BREED_EVERY = 12000, BREED_RANGE = 8, CROWD = 6;
+    private static final String POSSESSED_TAG = "RealmPossessed", NEXT_BREED = "RealmNextBreed";
 
     static {
         KINDS.put(EntityType.WITCH, List.of(GirlSpecies.SUCCUBUS_DEVIL));
@@ -57,14 +62,13 @@ public final class Monsterization {
         KINDS.put(EntityType.BEE, List.of(GirlSpecies.BEE_BUG));
         KINDS.put(EntityType.ALLAY, List.of(GirlSpecies.FAIRY_BUG));
         KINDS.put(EntityType.BAT, List.of(GirlSpecies.CAVE_BAT));
-        KINDS.put(EntityType.CAT, List.of(GirlSpecies.BAKENEKO_NEKOMATA));
         KINDS.put(EntityType.OCELOT, List.of(GirlSpecies.OCELOT_NEKOMATA));
         KINDS.put(EntityType.WOLF, List.of(GirlSpecies.WOLF_CANID));
         KINDS.put(EntityType.POLAR_BEAR, List.of(GirlSpecies.POLAR_BEAR_CANID));
         KINDS.put(EntityType.PANDA, List.of(GirlSpecies.PANDA_CANID));
         KINDS.put(EntityType.FOX, List.of(GirlSpecies.RED_KITSUNE));
         KINDS.put(EntityType.RABBIT, List.of(GirlSpecies.JACK_JACKALOPE));
-        KINDS.put(EntityType.COW, List.of(GirlSpecies.CATTLE_MINOTAUR));
+        KINDS.put(EntityType.COW, List.of(GirlSpecies.HOLSTAUR_MINOTAUR));
         KINDS.put(EntityType.MOOSHROOM, List.of(GirlSpecies.SHROOMOTAUR_MINOTAUR));
         KINDS.put(EntityType.SHEEP, List.of(GirlSpecies.SHEEP_MINOTAUR));
         KINDS.put(EntityType.GOAT, List.of(GirlSpecies.GOAT_CENTAUR));
@@ -76,6 +80,12 @@ public final class Monsterization {
         KINDS.put(EntityType.AXOLOTL, List.of(GirlSpecies.AXOLOTL_MERMAID));
         KINDS.put(EntityType.DOLPHIN, List.of(GirlSpecies.DOLPHIN_MERMAID));
         KINDS.put(EntityType.SQUID, List.of(GirlSpecies.SQUIDKIN_MOLLUSK));
+        KINDS.put(EntityType.IRON_GOLEM, List.of(GirlSpecies.GOLEM_CONSTRUCT));
+        KINDS.put(EntityType.SNOW_GOLEM, List.of(GirlSpecies.SNOWGIRL_CONSTRUCT));
+        // possessed: they keep their own bodies, and their young are girls (the list is weighted by repeats)
+        POSSESSED.put(EntityType.VILLAGER, List.of(GirlSpecies.SUCCUBUS_DEVIL, GirlSpecies.SUCCUBUS_DEVIL, GirlSpecies.DEMON_DEVIL));
+        POSSESSED.put(EntityType.PIG, List.of(GirlSpecies.PIGLETTE_ARMOURED));
+        POSSESSED.put(EntityType.CAT, List.of(GirlSpecies.BAKENEKO_NEKOMATA, GirlSpecies.BAKENEKO_NEKOMATA, GirlSpecies.CAIT_SITH_NEKOMATA, GirlSpecies.CHESHIRE_NEKOMATA));
     }
 
     private Monsterization() {
@@ -103,8 +113,11 @@ public final class Monsterization {
     public static void onTick(EntityTickEvent.Post event) {
         Entity e = event.getEntity();
         if (e.tickCount % EVERY != 0 || !(e instanceof Mob mob) || e instanceof Bonded || !(e.level() instanceof ServerLevel level)) return;
-        if (!KINDS.containsKey(e.getType())) return;
-        step(level, mob, dark(level, mob));
+        if (KINDS.containsKey(e.getType())) step(level, mob, dark(level, mob));
+        else if (POSSESSED.containsKey(e.getType())) {
+            if (possessed(mob)) breed(level, mob);
+            else soak(level, mob, dark(level, mob));
+        }
     }
 
     /** One step in the realm (dark: whether it is dark enough). The girl she became, or null. */
@@ -119,6 +132,70 @@ public final class Monsterization {
         return soaked >= STEPS ? change(level, mob, kind) : null;
     }
 
+    /** One step in the realm for a creature that is possessed rather than changed. True once she is possessed. */
+    public static boolean soak(ServerLevel level, Mob mob, boolean dark) {
+        if (!POSSESSED.containsKey(mob.getType()) || mob.isBaby() || possessed(mob) || !MonsterGirlsConfig.monsterization()) return possessed(mob);
+        if (!dark || !DemonRealm.inRealm(mob)) return false;
+        int soaked = soaked(mob) + 1;
+        mob.getPersistentData().putInt(SOAKED, soaked);
+        level.sendParticles(RealmGrassBlock.HAZE, mob.getX(), mob.getY() + mob.getBbHeight() * 0.5, mob.getZ(), 3 + soaked / 2, 0.3, 0.3, 0.3, 0.0);
+        if (soaked < STEPS) return false;
+        possess(level, mob);
+        return true;
+    }
+
+    /** She is possessed, here and now: her own body still, the realm in her, and eager. */
+    public static void possess(ServerLevel level, Mob mob) {
+        mob.getPersistentData().remove(SOAKED);
+        mob.getPersistentData().putBoolean(POSSESSED_TAG, true);
+        mob.getPersistentData().putLong(NEXT_BREED, level.getGameTime() + 200);
+        mob.setPersistenceRequired();
+        level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY(), mob.getZ(), 6, 0.4, 0.3, 0.4, 0.0);
+        level.sendParticles(RealmGrassBlock.HAZE, mob.getX(), mob.getY() + 0.5, mob.getZ(), 30, 0.5, 0.5, 0.5, 0.0);
+        mob.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 0.7F, 1.6F);
+    }
+
+    public static boolean possessed(Mob mob) {
+        return mob.getPersistentData().getBoolean(POSSESSED_TAG);
+    }
+
+    /** Holy water drives it out. True if there was something to drive out. */
+    public static boolean exorcise(ServerLevel level, Mob mob) {
+        if (!possessed(mob)) return false;
+        mob.getPersistentData().remove(POSSESSED_TAG);
+        mob.getPersistentData().remove(NEXT_BREED);
+        level.sendParticles(ParticleTypes.END_ROD, mob.getX(), mob.getY() + mob.getBbHeight() * 0.6, mob.getZ(), 12, 0.3, 0.4, 0.3, 0.02);
+        return true;
+    }
+
+    /** What a possessed creature's young is born as, or null if she isn't one. */
+    @Nullable
+    public static GirlSpecies offspringOf(Mob mob) {
+        List<GirlSpecies> kinds = POSSESSED.get(mob.getType());
+        return kinds == null || !possessed(mob) ? null : kinds.get(mob.getRandom().nextInt(kinds.size()));
+    }
+
+    /**
+     * A possessed creature is eager: whenever she can (every BREED_EVERY), she finds a grown one of her own kind near her and
+     * their young is a girl. Not while CROWD girls already live within 32 blocks. The young, or null.
+     */
+    @Nullable
+    public static AbstractMonsterGirl breed(ServerLevel level, Mob mob) {
+        if (!possessed(mob) || mob.isBaby() || !MonsterGirlsConfig.monsterization() || level.getGameTime() < mob.getPersistentData().getLong(NEXT_BREED)) return null;
+        level.sendParticles(RealmGrassBlock.HAZE, mob.getX(), mob.getY() + mob.getBbHeight() * 0.6, mob.getZ(), 3, 0.3, 0.4, 0.3, 0.0);
+        Mob partner = level.getEntitiesOfClass(Mob.class, mob.getBoundingBox().inflate(BREED_RANGE),
+                m -> m != mob && m.getType() == mob.getType() && !m.isBaby() && m.isAlive()).stream().findFirst().orElse(null);
+        if (partner == null) return null;
+        if (level.getEntitiesOfClass(AbstractMonsterGirl.class, mob.getBoundingBox().inflate(32)).size() >= CROWD) return null;
+        GirlSpecies kind = offspringOf(mob);
+        if (kind == null) return null;
+        mob.getPersistentData().putLong(NEXT_BREED, level.getGameTime() + BREED_EVERY);
+        for (Mob m : List.of(mob, partner)) level.sendParticles(ParticleTypes.HEART, m.getX(), m.getY() + m.getBbHeight() + 0.3, m.getZ(), 5, 0.3, 0.2, 0.3, 0.0);
+        AbstractMonsterGirl young = AbstractMonsterGirl.youngOf(level, ModGirls.type(kind), mob.blockPosition(), null);
+        if (young != null) level.sendParticles(RealmGrassBlock.HAZE, young.getX(), young.getY() + 0.5, young.getZ(), 12, 0.3, 0.3, 0.3, 0.0);
+        return young;
+    }
+
     /** She changes, here and now. The girl, or null if the change didn't take. */
     @Nullable
     public static AbstractMonsterGirl change(ServerLevel level, Mob mob, GirlSpecies kind) {
@@ -126,6 +203,7 @@ public final class Monsterization {
         AbstractMonsterGirl girl = mob.convertTo(ModGirls.type(kind), false);
         if (girl == null) return null;
         girl.finalizeSpawn(level, level.getCurrentDifficultyAt(girl.blockPosition()), MobSpawnType.CONVERSION, null);
+        if (girl instanceof com.linkyoshi90.monstergirls.entity.girl.Minotaur cow) cow.setMale(false);   // the realm turns cows, not bulls
         girl.setPersistenceRequired();                                  // a far player must not despawn the one creature this happened to
         girl.getPersistentData().remove(SOAKED);
         girl.getPersistentData().putBoolean(MONSTERIZED, true);
@@ -146,7 +224,7 @@ public final class Monsterization {
 
     private static final String PENDING_OWNER = "MonsterizedOwner", MONSTERIZED = "Monsterized";
     /** A changed girl's odds of joining a sleeping player, friend or not; affection only adds to it. */
-    public static final float EAGER = 0.75F;
+    public static final float EAGER = 1.0F;
 
     /** Changed by the realm: she still burns with it, and is eager for any sleeper's bed (as a succubus is), friend or not. */
     public static boolean monsterized(net.minecraft.world.entity.Mob mob) {

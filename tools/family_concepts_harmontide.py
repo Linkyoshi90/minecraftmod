@@ -3842,6 +3842,22 @@ for _fid, _entries in THIRTY_NINTH.items():
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
 
+# monsterization (2026-11-08): what the Demon Realm makes of vanilla creatures. No biomes: they come only by monsterization.
+MONSTERIZED = {
+    "minotaur": [_c("holstaur_minotaur", "Holstaur", "The Demon Realm (a turned cow)", "Gentle · eager", 1.95, [], "Gentle",
+                    "A dairy cow the Demon Realm turned: soft and full of figure, little horns and a cowbell.",
+                    "Wheat and heartfruit.", ("Turned", "Eager for any sleeper's bed, friend or not; she gives milk and cheese like the cattle."), "Low.",
+                    ["Holstein", "Jersey", "Brown", "Black", "Cream"], "Bears holstaurs")],
+}
+for _fid, _entries in MONSTERIZED.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(s["id"] == _species["id"] for s in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 # homage variants of 2026-10-28 (POP_CULTURE_VARIANTS.md): appended after every wave, so every species exists by now
 for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, a black bodysuit with a pink heart, white gloves and boots")),
                        ("ika_mollusk", ("ink_kid", "Ink Kid", "Bright orange tentacle hair, a white tee and black shorts")),

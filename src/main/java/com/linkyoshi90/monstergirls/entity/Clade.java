@@ -101,7 +101,7 @@ public enum Clade {
                  "bellmare_centaur", "donkey_centaur", "rhiwool_minotaur", "rhino_minotaur" -> PERISSODACTYLA;
             case "goat_centaur", "cattle_minotaur", "minoan_minotaur", "bison_minotaur", "aurochs_minotaur", "water_buffalo_minotaur",
                  "sheep_minotaur", "highland_minotaur", "yak_minotaur", "bronzejaw_minotaur", "mooskuh_minotaur", "reedbull_minotaur",
-                 "dustbison_minotaur", "skjoldram_minotaur", "brasshorn_minotaur", "oryx_minotaur", "shroomotaur_minotaur" -> BOVIDAE;
+                 "dustbison_minotaur", "skjoldram_minotaur", "brasshorn_minotaur", "oryx_minotaur", "shroomotaur_minotaur", "holstaur_minotaur" -> BOVIDAE;
             case "reindeer_centaur", "aurorantler_centaur", "momoshika_centaur", "prairhorn_centaur", "halberelk_centaur", "stagel_centaur",
                  "palmyr_centaur", "qilin_centaur", "caribou_centaur", "giraffe_centaur", "okapi_centaur", "moose_centaur" -> CERVIDAE;
             case "alpaca_centaur", "camel_centaur", "dromedary_centaur", "vicunero_centaur", "ceibler_centaur", "urcuchillay_centaur" -> CAMELIDAE;

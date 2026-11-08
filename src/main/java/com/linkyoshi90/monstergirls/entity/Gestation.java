@@ -61,6 +61,15 @@ public final class Gestation {
         this.cooldown = COOLDOWN;
     }
 
+    /** Ready again sooner (a girl changed by the realm): half the cool-down left. */
+    public void halveCooldown() {
+        this.cooldown /= 2;
+    }
+
+    public int getCooldown() {
+        return this.cooldown;
+    }
+
     public int getTicksLeft() {
         return this.ticksLeft;
     }

@@ -206,7 +206,7 @@ s(None, "wolpertinger_jackalope", "Leporidae (folklore; antlers and wings are or
 s(None, "inaba_jackalope easter_jackalope moon_rabbit_jackalope", "Leporidae (folklore rabbit)")
 s(None, "clockhare_jackalope boghare_jackalope", "Leporidae (Harmontide)")
 # ---------------------------------------------------------------- old MINOTAUR
-s(None, "cattle_minotaur highland_minotaur", "Bovidae: Bos taurus")
+s(None, "cattle_minotaur highland_minotaur holstaur_minotaur", "Bovidae: Bos taurus")
 s(None, "minoan_minotaur", "Bovidae: Bos taurus (myth)")
 s(None, "bronzejaw_minotaur mooskuh_minotaur", "Bovidae: Bos taurus (Harmontide)")
 s(None, "shroomotaur_minotaur", "Bovidae: Bos taurus (Minecraft mooshroom)")

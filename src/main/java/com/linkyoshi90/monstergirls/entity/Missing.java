@@ -233,6 +233,7 @@ public final class Missing {
 
     /** The odds of young after a shared night: the setting, rising to certain for one who missed them badly; a cuddle adds a quarter. */
     public static float conceptionChance(Mob mob, Player player) {
+        if (Monsterization.monsterized(mob)) return 1.0F;                 // changed by the realm: eager, and it always takes
         float base = MonsterGirlsConfig.conceptionChance() / 100.0F;
         float more = Math.min(1.0F, activeStage(mob, player) / 2.0F + (cuddled(mob, player) ? 0.25F : 0.0F));
         return base + (1.0F - base) * more;

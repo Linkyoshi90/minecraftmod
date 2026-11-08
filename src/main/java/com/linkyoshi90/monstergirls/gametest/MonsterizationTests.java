@@ -41,12 +41,13 @@ public class MonsterizationTests {
         for (int i = 0; i < Monsterization.STEPS - 1; i++) girl = Monsterization.step(level, cow, true);
         check(girl == null && Monsterization.soaked(cow) == Monsterization.STEPS - 1 && cow.isAlive(), "still soaking it up");
         girl = Monsterization.step(level, cow, true);
-        check(girl != null && girl.getSpecies() == GirlSpecies.CATTLE_MINOTAUR && !cow.isAlive(), "a holstaur now");
+        check(girl != null && girl.getSpecies() == GirlSpecies.HOLSTAUR_MINOTAUR && !cow.isAlive(), "a holstaur now");
+        check(!((com.linkyoshi90.monstergirls.entity.girl.Minotaur) girl).isMale(), "the realm turns cows, never bulls");
         check(girl.hasCustomName() && "Bessie".equals(girl.getCustomName().getString()) && girl.isPersistenceRequired(), "her name kept, and she stays");
         ServerPlayer stranger = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
         check(Monsterization.monsterized(girl) && girl.trustsEnoughForBed(stranger) && girl.bedChanceFor(stranger) >= Monsterization.EAGER, "eager for a stranger's bed");
         check(Monsterization.describe(girl) != null, "her bond says what happened to her");
-        AbstractMonsterGirl born = spawn(helper, GirlSpecies.CATTLE_MINOTAUR, new BlockPos(11, 2, 3));
+        AbstractMonsterGirl born = spawn(helper, GirlSpecies.HOLSTAUR_MINOTAUR, new BlockPos(11, 2, 3));
         check(!Monsterization.monsterized(born) && !born.trustsEnoughForBed(stranger) && born.bedChanceFor(stranger) == 0.0F, "one born a holstaur waits for friendship");
         girl.setFather(stranger.getUUID());
         check(!girl.trustsEnoughForBed(stranger), "never her father");
@@ -82,6 +83,94 @@ public class MonsterizationTests {
         AbstractMonsterGirl girl = Monsterization.change(level, wolf, Monsterization.kindOf(wolf));
         check(girl != null && girl.getSpecies() == GirlSpecies.WOLF_CANID, "a wolf girl");
         check(girl.getAffection(p) == Monsterization.PET_AFFECTION, "still devoted to her owner");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    /** Ready to breed right now (its half-day wait over). */
+    private static void ready(net.minecraft.world.entity.Mob mob) {
+        mob.getPersistentData().putLong("RealmNextBreed", 0L);
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "villagerPossessedBearsDemons")
+    public static void villagerPossessedBearsDemons(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        realmUnder(helper, 7, 7);
+        var villager = helper.spawn(EntityType.VILLAGER, new BlockPos(7, 2, 7));
+        villager.setNoAi(true);
+        check(!Monsterization.soak(level, villager, false) && Monsterization.soaked(villager) == 0, "not in daylight");
+        for (int i = 0; i < Monsterization.STEPS - 1; i++) check(!Monsterization.soak(level, villager, true), "still soaking it up");
+        check(Monsterization.soak(level, villager, true) && Monsterization.possessed(villager), "possessed now");
+        check(villager.isAlive() && villager.getType() == EntityType.VILLAGER && villager.isPersistenceRequired(), "she keeps her own body, and stays");
+        check(Monsterization.breed(level, villager) == null, "no one of her kind near her yet");
+        var partner = helper.spawn(EntityType.VILLAGER, new BlockPos(9, 2, 7));
+        partner.setNoAi(true);
+        ready(villager);
+        AbstractMonsterGirl young = Monsterization.breed(level, villager);
+        check(young != null && young.isBaby() && (young.getSpecies() == GirlSpecies.SUCCUBUS_DEVIL || young.getSpecies() == GirlSpecies.DEMON_DEVIL),
+                "her young is a little succubus or demon");
+        check(Monsterization.breed(level, villager) == null, "not again until half a day has passed");
+        check(!Monsterization.possessed(partner) && Monsterization.offspringOf(partner) == null, "her partner is not possessed by it");
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "possessedPigBearsPiglettes")
+    public static void possessedPigBearsPiglettes(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var pig = helper.spawn(EntityType.PIG, new BlockPos(4, 2, 4));
+        var boar = helper.spawn(EntityType.PIG, new BlockPos(6, 2, 4));
+        pig.setNoAi(true);
+        boar.setNoAi(true);
+        check(Monsterization.kindOf(pig) == null, "a pig is possessed, not changed");
+        Monsterization.possess(level, pig);
+        ready(pig);
+        AbstractMonsterGirl young = Monsterization.breed(level, pig);
+        check(young != null && young.getSpecies() == GirlSpecies.PIGLETTE_ARMOURED && young.isBaby() && pig.isAlive(), "a piglette, and the pig is still a pig");
+        for (int i = 0; i < Monsterization.CROWD; i++) spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(10 + i % 3, 2, 10 + i / 3));
+        ready(pig);
+        check(Monsterization.breed(level, pig) == null, "not while the girls already crowd the place");
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "holyWaterFreesAPossessedCat")
+    public static void holyWaterFreesAPossessedCat(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
+        var cat = helper.spawn(EntityType.CAT, new BlockPos(5, 2, 5));
+        cat.setNoAi(true);
+        Monsterization.possess(level, cat);
+        GirlSpecies kind = Monsterization.offspringOf(cat);
+        check(kind == GirlSpecies.BAKENEKO_NEKOMATA || kind == GirlSpecies.CAIT_SITH_NEKOMATA || kind == GirlSpecies.CHESHIRE_NEKOMATA, "her young would be nekomata");
+        net.minecraft.world.item.ItemStack water = new net.minecraft.world.item.ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.HOLY_WATER.get());
+        p.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, water);
+        water.getItem().interactLivingEntity(water, p, cat, net.minecraft.world.InteractionHand.MAIN_HAND);
+        check(!Monsterization.possessed(cat) && Monsterization.offspringOf(cat) == null, "the realm is driven out of her");
+        check(p.getMainHandItem().is(net.minecraft.world.item.Items.GLASS_BOTTLE), "the bottle is empty");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "golemsBecomeGolemGirls")
+    public static void golemsBecomeGolemGirls(GameTestHelper helper) {
+        check(Monsterization.kindOf(helper.spawn(EntityType.IRON_GOLEM, new BlockPos(4, 2, 4))) == GirlSpecies.GOLEM_CONSTRUCT, "an iron golem becomes a golem");
+        check(Monsterization.kindOf(helper.spawn(EntityType.SNOW_GOLEM, new BlockPos(10, 2, 10))) == GirlSpecies.SNOWGIRL_CONSTRUCT, "a snow golem becomes a snowgirl");
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "turnedGirlsAreEager")
+    public static void turnedGirlsAreEager(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
+        Cow cow = helper.spawn(EntityType.COW, new BlockPos(7, 2, 7));
+        cow.setNoAi(true);
+        AbstractMonsterGirl girl = Monsterization.change(level, cow, GirlSpecies.HOLSTAUR_MINOTAUR);
+        check(girl.bedChanceFor(p) == 1.0F, "she always comes to a sleeper's bed");
+        check(com.linkyoshi90.monstergirls.entity.Missing.conceptionChance(girl, p) == 1.0F, "and it always takes");
+        AbstractMonsterGirl born = spawn(helper, GirlSpecies.HOLSTAUR_MINOTAUR, new BlockPos(11, 2, 11));
+        for (int i = 0; i < 8; i++) {
+            AbstractMonsterGirl calf = born.spawnYoung(level, born.blockPosition(), null);
+            check(calf instanceof com.linkyoshi90.monstergirls.entity.girl.Minotaur m && !m.isMale(), "a holstaur's calves are all daughters");
+        }
         HarpyTestUtil.remove(p);
         helper.succeed();
     }

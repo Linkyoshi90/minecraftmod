@@ -482,6 +482,18 @@ SPECIES["shroomotaur_minotaur"] = dict(
               "glow": dict(HAIR="#2a6ab8", FUR="#3a7ac8", MARK="#c8f0ff", EYE="#8af0ff", extra=dict(horn="#d8e8f0", hoof="#1a2430", mcap="#2a6ab8", mspot="#8af0ff", mstalk="#d8e8f0")),
               "purple": dict(HAIR="#7a2aa8", FUR="#8a3ab8", MARK="#e8d8f4", extra=dict(horn="#e0d0e8", hoof="#2a1a30", mcap="#7a2aa8", mspot="#e8c8f8", mstalk="#ece0f0")),
               "pale": dict(HAIR="#e8dcc8", FUR="#f0e8d8", MARK="#c83a2a", extra=dict(horn="#d8ccb0", hoof="#5a4a3a", mcap="#c8302a", mspot="#f8f4ec", mstalk="#ece0cc"))})
+# monsterization (2026-11-08): the holstaur, a dairy cow the Demon Realm turned, soft and full (the plush build), little horns,
+# a cowbell, the sweetest milk. Only cows: no bulls are turned (the male model exists only because the family writes one).
+SPECIES["holstaur_minotaur"] = dict(
+    build="plush", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["bell_collar"], colors=dict(cloth2="#3a1a3a")),
+    hair="ponytail", bangs="swept", ears="cow", legs="hoof", foot="hoof", horns="bull", tail=COW_TAIL, tail_look="tuft", tail_rest=TAIL_REST,
+    male=dict(hair="shaggy", outfit=dict(bottom="loincloth", extras=["bell_collar"])),
+    pal=dict(SKIN=skin("fair"), HAIR="#f4f0ea", FUR="#f6f4f0", LIGHT="#ffffff", MARK="#1e1c1c", EYE="#a84ad0", CLOTH="#f4eef4", TRIM="#e0b040",
+             INNER="#f0b0c0", pattern="patches", extra=dict(horn="#e8e0cc", hoof="#3a3430")),
+    variants={"jersey": dict(FUR="#c8925a", HAIR="#a8723a", MARK="#8a5a2a", pattern="solid", LIGHT="#ecd0a8"),
+              "brown": dict(FUR="#f6f4f0", HAIR="#6a3a1e", MARK="#7a3a1e", pattern="patches"),
+              "black": dict(FUR="#1e1c1c", HAIR="#141212", MARK="#0a0808", pattern="solid", LIGHT="#3a3636"),
+              "cream": dict(FUR="#f0e2c4", HAIR="#f8ecd0", MARK="#d8c098", pattern="solid", LIGHT="#fff8ea")})
 _declare_m, _paint_m, _build_m = declare_hook, paint_hook, build_hook
 
 

@@ -1051,6 +1051,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (this.orderedToSit && this.getAction() == Action.NONE) this.setAction(Action.SITTING);
         if (this.gestation.isReady() && this.tickCount % 40 == 0 && this.giveBirth(server, this.gestation.getFather())) {
             this.gestation.clear();
+            if (com.linkyoshi90.monstergirls.entity.Monsterization.monsterized(this)) this.gestation.halveCooldown();   // eager again sooner
             server.playSound(null, this.blockPosition(), net.minecraft.sounds.SoundEvents.CHICKEN_EGG, net.minecraft.sounds.SoundSource.NEUTRAL, 0.8F, 1.3F);
         }
         if (this.hasTrueForm() && !this.isTrueForm() && this.tickCount % 100 == 0) {

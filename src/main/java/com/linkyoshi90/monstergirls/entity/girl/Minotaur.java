@@ -200,7 +200,7 @@ public class Minotaur extends AbstractMonsterGirl {
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType type, @Nullable SpawnGroupData group) {
-        if (type != MobSpawnType.BREEDING && this.random.nextInt(3) == 0) this.setMale(true);
+        if (type != MobSpawnType.BREEDING && this.species != GirlSpecies.HOLSTAUR_MINOTAUR && this.random.nextInt(3) == 0) this.setMale(true);
         if (this.post == null) this.post = this.blockPosition();
         return super.finalizeSpawn(level, difficulty, type, group);
     }
@@ -214,7 +214,7 @@ public class Minotaur extends AbstractMonsterGirl {
     @Override
     public AbstractMonsterGirl spawnYoung(ServerLevel level, BlockPos pos, @Nullable UUID father) {
         AbstractMonsterGirl calf = super.spawnYoung(level, pos, father);
-        if (calf instanceof Minotaur m) m.setMale(this.random.nextBoolean());   // half the calves are bulls
+        if (calf instanceof Minotaur m) m.setMale(this.species != GirlSpecies.HOLSTAUR_MINOTAUR && this.random.nextBoolean());   // half the calves are bulls, none of a holstaur
         return calf;
     }
 
@@ -397,7 +397,7 @@ public class Minotaur extends AbstractMonsterGirl {
     public ItemStack rollGift(Player player) {
         int r = this.random.nextInt(100);
         return switch (this.species) {
-            case CATTLE_MINOTAUR -> r < 35 ? new ItemStack(Items.MILK_BUCKET) : r < 60 ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.CHEESE.get(), 2)
+            case CATTLE_MINOTAUR, HOLSTAUR_MINOTAUR -> r < 35 ? new ItemStack(Items.MILK_BUCKET) : r < 60 ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.CHEESE.get(), 2)
                     : new ItemStack(Items.WHEAT, 4);
             case WATER_BUFFALO_MINOTAUR -> r < 20 ? new ItemStack(Items.CAKE) : r < 60 ? new ItemStack(com.linkyoshi90.monstergirls.registry.ModItems.CHEESE.get(), 2)
                     : new ItemStack(Items.MILK_BUCKET);
