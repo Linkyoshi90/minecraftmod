@@ -214,6 +214,8 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> REALM_GRASS = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_GRASS);
     public static final DeferredItem<BlockItem> GEYSERITE = ITEMS.registerSimpleBlockItem(ModBlocks.GEYSERITE);
     public static final DeferredItem<BlockItem> HARPY_PERCH = ITEMS.registerSimpleBlockItem(ModBlocks.HARPY_PERCH);
+    public static final DeferredItem<BlockItem> MARKET_STALL = ITEMS.registerSimpleBlockItem(ModBlocks.MARKET_STALL);
+    public static final DeferredItem<BlockItem> MAILBOX = ITEMS.registerSimpleBlockItem(ModBlocks.MAILBOX);
     public static final DeferredItem<BlockItem> REALM_FROST = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_FROST);
     public static final DeferredItem<BlockItem> REALM_BOG = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_BOG);
     public static final DeferredItem<BlockItem> REALM_SAND = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_SAND);

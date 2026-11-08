@@ -129,6 +129,14 @@ public final class ModBlocks {
     public static final DeferredBlock<com.linkyoshi90.monstergirls.block.RealmGrassBlock> REALM_GRASS = BLOCKS.registerBlock("realm_grass",
             com.linkyoshi90.monstergirls.block.RealmGrassBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_MAGENTA).randomTicks().strength(0.6F).sound(SoundType.NYLIUM));
+    /** A mailbox, for courier girls (block/MailboxBlock). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.MailboxBlock> MAILBOX = BLOCKS.registerBlock("mailbox",
+            com.linkyoshi90.monstergirls.block.MailboxBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1.5F).sound(SoundType.WOOD).noOcclusion());
+    /** A village's market stall (block/MarketStallBlock). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.MarketStallBlock> MARKET_STALL = BLOCKS.registerBlock("market_stall",
+            com.linkyoshi90.monstergirls.block.MarketStallBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.0F).sound(SoundType.WOOD).noOcclusion());
     /** A harpy perch: a flock that lands near it stays (block/HarpyPerchBlock, entity/Colonies). */
     public static final DeferredBlock<com.linkyoshi90.monstergirls.block.HarpyPerchBlock> HARPY_PERCH = BLOCKS.registerBlock("harpy_perch",
             com.linkyoshi90.monstergirls.block.HarpyPerchBlock::new,
