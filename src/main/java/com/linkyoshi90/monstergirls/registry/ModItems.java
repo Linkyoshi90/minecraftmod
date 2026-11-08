@@ -176,6 +176,9 @@ public final class ModItems {
     }
 
     /** What a lamia leaves behind every few days: a light leather (crafts into leather) and a keepsake. */
+    /** A message in a bottle (entity/MessageBottles), washed up on a beach. */
+    public static final DeferredItem<Item> MESSAGE_BOTTLE = ITEMS.registerItem("message_bottle", com.linkyoshi90.monstergirls.item.MessageBottleItem::new,
+            new Item.Properties().stacksTo(16));
     /** An aurora shard (entity/Aurora): falls on aurora nights; a gift every girl loves. */
     public static final DeferredItem<Item> AURORA_SHARD = ITEMS.registerSimpleItem("aurora_shard", new Item.Properties().stacksTo(16).rarity(net.minecraft.world.item.Rarity.UNCOMMON));
     public static final DeferredItem<Item> SHED_SKIN = ITEMS.registerSimpleItem("shed_skin", new Item.Properties().stacksTo(64));

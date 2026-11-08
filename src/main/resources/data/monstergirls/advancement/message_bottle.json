@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:pen_pal",
+  "display": {
+    "icon": {
+      "id": "monstergirls:message_bottle"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.message_bottle"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.message_bottle.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
