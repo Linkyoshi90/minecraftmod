@@ -1,0 +1,7 @@
+{
+  "type": "monstergirls:sky_island",
+  "biomes": "#monstergirls:has_structure/sky_island",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}

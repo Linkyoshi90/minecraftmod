@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:stargazer",
+  "display": {
+    "icon": {
+      "id": "minecraft:white_wool"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.sky_island"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.sky_island.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -35,6 +35,18 @@ public final class ModStructures {
     public static final DeferredHolder<StructurePieceType, StructurePieceType> REALM_MANOR_PIECE =
             PIECES.register("realm_manor", () -> (StructurePieceType.ContextlessType) (tag) -> new com.linkyoshi90.monstergirls.world.RealmManorStructure.Piece(null, tag));
     public static final ResourceKey<Structure> REALM_MANOR_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("realm_manor"));
+    /** Small one-chunk structures (world/OneChunkStructure): the oasis, the sky island, the silk den, sharing one piece type. */
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> ONE_CHUNK_PIECE =
+            PIECES.register("one_chunk", () -> (StructurePieceType.ContextlessType) (tag) -> new com.linkyoshi90.monstergirls.world.OneChunkStructure.Piece(null, tag));
+    public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.OasisStructure>> OASIS =
+            STRUCTURE_TYPES.register("oasis", () -> () -> com.linkyoshi90.monstergirls.world.OasisStructure.CODEC);
+    public static final ResourceKey<Structure> OASIS_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("oasis"));
+    public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.SkyIslandStructure>> SKY_ISLAND =
+            STRUCTURE_TYPES.register("sky_island", () -> () -> com.linkyoshi90.monstergirls.world.SkyIslandStructure.CODEC);
+    public static final ResourceKey<Structure> SKY_ISLAND_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("sky_island"));
+    public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.SilkDenStructure>> SILK_DEN =
+            STRUCTURE_TYPES.register("silk_den", () -> () -> com.linkyoshi90.monstergirls.world.SilkDenStructure.CODEC);
+    public static final ResourceKey<Structure> SILK_DEN_KEY = ResourceKey.create(Registries.STRUCTURE, MonsterGirlsMod.id("silk_den"));
     /** A Minoan labyrinth (world/LabyrinthStructure). */
     public static final DeferredHolder<StructureType<?>, StructureType<com.linkyoshi90.monstergirls.world.LabyrinthStructure>> LABYRINTH =
             STRUCTURE_TYPES.register("labyrinth", () -> () -> com.linkyoshi90.monstergirls.world.LabyrinthStructure.CODEC);

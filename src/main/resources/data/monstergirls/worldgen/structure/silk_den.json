@@ -1,0 +1,7 @@
+{
+  "type": "monstergirls:silk_den",
+  "biomes": "#monstergirls:has_structure/silk_den",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}

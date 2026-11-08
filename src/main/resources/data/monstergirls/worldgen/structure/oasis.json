@@ -1,0 +1,7 @@
+{
+  "type": "monstergirls:oasis",
+  "biomes": "#monstergirls:has_structure/oasis",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}
