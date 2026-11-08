@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:stargazer",
+  "display": {
+    "icon": {
+      "id": "minecraft:mossy_stone_bricks"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.labyrinth"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.labyrinth.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

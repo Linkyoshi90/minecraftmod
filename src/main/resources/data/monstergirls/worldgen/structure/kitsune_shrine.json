@@ -1,0 +1,7 @@
+{
+  "type": "monstergirls:kitsune_shrine",
+  "biomes": "#monstergirls:has_structure/kitsune_shrine",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}

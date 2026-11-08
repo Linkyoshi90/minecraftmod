@@ -89,7 +89,7 @@ public class MailboxBlockEntity extends BlockEntity {
 
     /** Who can carry the mail: a grown harpy or centaur, the owner's friend, not told to sit. */
     public static boolean courier(Mob m, Player owner) {
-        if (m.isBaby() || !(m instanceof Bonded b) || b.isOrderedToSit() || b.getAffection(owner) < HomeLife.FRIEND) return false;
+        if (m.isBaby() || away(m) || !(m instanceof Bonded b) || b.isOrderedToSit() || b.getAffection(owner) < HomeLife.FRIEND) return false;
         return m instanceof AbstractHarpy || m instanceof AbstractMonsterGirl g && g.getSpecies().family() == GirlSpecies.Family.CENTAUR;
     }
 
@@ -126,9 +126,39 @@ public class MailboxBlockEntity extends BlockEntity {
         long trip = 20L * Math.max(MIN_TRIP, (long) (dist / SPEED));
         this.parcels.add(new Parcel(items, level.getGameTime() + trip, dest, courier.getDisplayName().getString()));
         ((Bonded) courier).addAffection(owner, 1);
-        level.sendParticles(ParticleTypes.CLOUD, courier.getX(), courier.getY() + 1, courier.getZ(), 8, 0.3, 0.3, 0.3, 0.02);
+        setOff(level, courier, level.getGameTime() + trip * 2);           // there and back
         level.playSound(null, this.worldPosition, SoundEvents.BOOK_PAGE_TURN, SoundSource.BLOCKS, 1.0F, 1.0F);
         this.setChanged();
+        return true;
+    }
+
+    public static final String AWAY = "CourierBack";
+
+    /** Out on her round: she takes off (gone from sight, still and safe) until {@code back}. */
+    public static void setOff(ServerLevel level, Mob courier, long back) {
+        courier.getPersistentData().putLong(AWAY, back);
+        courier.getNavigation().stop();
+        courier.setNoAi(true);
+        courier.setInvisible(true);
+        courier.setInvulnerable(true);
+        courier.setSilent(true);
+        level.sendParticles(ParticleTypes.CLOUD, courier.getX(), courier.getY() + 1, courier.getZ(), 16, 0.4, 0.6, 0.4, 0.05);
+        level.playSound(null, courier.blockPosition(), SoundEvents.PHANTOM_FLAP, SoundSource.NEUTRAL, 1.0F, 1.3F);
+    }
+
+    public static boolean away(Mob m) {
+        return m.getPersistentData().contains(AWAY);
+    }
+
+    /** Back from her round: she lands where she took off. True if she came back now. */
+    public static boolean landIfDue(ServerLevel level, Mob courier, boolean now) {
+        if (!away(courier) || !now && level.getGameTime() < courier.getPersistentData().getLong(AWAY)) return false;
+        courier.getPersistentData().remove(AWAY);
+        courier.setNoAi(false);
+        courier.setInvisible(false);
+        courier.setInvulnerable(false);
+        courier.setSilent(false);
+        level.sendParticles(ParticleTypes.CLOUD, courier.getX(), courier.getY() + 1, courier.getZ(), 16, 0.4, 0.6, 0.4, 0.05);
         return true;
     }
 

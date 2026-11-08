@@ -42,6 +42,8 @@ public class MailboxTests {
         AbstractMonsterGirl centaur = spawn(helper, GirlSpecies.HORSE_CENTAUR, new BlockPos(4, 1, 4));
         centaur.addAffection(p, HomeLife.FRIEND);
         check(from.send(level) && from.store().isEmpty() && from.parcels().size() == 1, "the centaur sets off with it");
+        check(MailboxBlockEntity.away(centaur) && centaur.isInvisible() && centaur.isNoAi(), "and is gone from sight on her round");
+        check(MailboxBlockEntity.landIfDue(level, centaur, true) && !centaur.isInvisible() && !centaur.isNoAi(), "until she lands again");
         MailboxBlockEntity.Parcel parcel = from.parcels().get(0);
         from.parcels().set(0, new MailboxBlockEntity.Parcel(parcel.items(), 0L, parcel.to(), parcel.courier()));   // she's quick today
         check(from.deliver(level) == 1 && to.store().countItem(Items.APPLE) == 5, "delivered to the other mailbox");
