@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:stargazer",
+  "display": {
+    "icon": {
+      "id": "monstergirls:aurora_shard"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.aurora"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.aurora.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -142,6 +142,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue SWEETHEARTS;
     public static final ModConfigSpec.BooleanValue DATES;
     public static final ModConfigSpec.BooleanValue HOT_SPRINGS;
+    public static final ModConfigSpec.BooleanValue AURORA_NIGHTS;
     public static final ModConfigSpec.BooleanValue PASSING_FLOCKS;
     public static final ModConfigSpec.BooleanValue REALM_TOUCHED;
     public static final ModConfigSpec.BooleanValue ORDER_RAIDS;
@@ -219,6 +220,10 @@ public final class MonsterGirlsConfig {
         HOT_SPRINGS = BUILDER
                 .comment("Hot springs: water over geyserite steams, never freezes, heals and warms whoever soaks in it (friends come and join you), and cures a girl's cold. Off stops the effect and new springs in new chunks.")
                 .define("hotSprings", true);
+
+        AURORA_NIGHTS = BUILDER
+                .comment("One clear night in six, an aurora over cold country: a frost-touched girl or two comes out near each player (gone at dawn unless befriended), and aurora shards fall, a gift every girl loves.")
+                .define("auroraNights", true);
 
         PASSING_FLOCKS = BUILDER
                 .comment("Every eight days a flock of wild harpies of one migratory kind rests near each player under the open sky for a day, then flies on (any who has made a friend stays).")
@@ -412,6 +417,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean sweethearts() {
         return SPEC.isLoaded() ? SWEETHEARTS.get() : SWEETHEARTS.getDefault();
+    }
+
+    public static boolean auroraNights() {
+        return SPEC.isLoaded() ? AURORA_NIGHTS.get() : AURORA_NIGHTS.getDefault();
     }
 
     public static boolean hotSprings() {

@@ -21,7 +21,7 @@ public final class GuidePages {
             Map.entry("mining", 3),
             Map.entry("foraging", 3),
             Map.entry("longing", 3),
-            Map.entry("stargazing", 3),
+            Map.entry("stargazing", 4),
             Map.entry("favours", 2),
             Map.entry("stories", 2),
             Map.entry("colds", 2),
