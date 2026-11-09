@@ -48,7 +48,10 @@ public final class Names {
     public static void onNameTag(PlayerInteractEvent.EntityInteract event) {
         ItemStack stack = event.getItemStack();
         if (event.getLevel().isClientSide || !stack.is(Items.NAME_TAG) || !stack.has(DataComponents.CUSTOM_NAME)) return;
-        if (event.getTarget() instanceof LivingEntity target) named(event.getEntity(), target, stack.get(DataComponents.CUSTOM_NAME));
+        if (event.getTarget() instanceof LivingEntity target) {
+            named(event.getEntity(), target, stack.get(DataComponents.CUSTOM_NAME));
+            if (target.level() instanceof ServerLevel level) Marriage.renamed(level, target, stack.get(DataComponents.CUSTOM_NAME).getString());
+        }
     }
 
     /** A friend names her. Whether this was her first name from a friend (and so a moment). */

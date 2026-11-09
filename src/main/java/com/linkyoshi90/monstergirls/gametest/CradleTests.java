@@ -76,6 +76,9 @@ public class CradleTests {
         check(young.hasCustomName() && com.linkyoshi90.monstergirls.entity.Names.NEWBORN.contains(young.getCustomName().getString()), "she came with a name");
         var listed = com.linkyoshi90.monstergirls.entity.Marriage.childList(p);
         check(!listed.isEmpty() && listed.getCompound(listed.size() - 1).getString("Name").equals(young.getCustomName().getString()), "and the journal lists her");
+        com.linkyoshi90.monstergirls.entity.Marriage.renamed(level, young, "Pip");
+        listed = com.linkyoshi90.monstergirls.entity.Marriage.childList(p);
+        check(listed.getCompound(listed.size() - 1).getString("Name").equals("Pip"), "renamed, the journal follows");
         check(com.linkyoshi90.monstergirls.entity.girl.GrowingUp.tick(level, young) == null, "too little yet");
         young.setGrowTicks(AbstractMonsterGirl.GROW_TICKS * 3 / 10);
         check("word".equals(com.linkyoshi90.monstergirls.entity.girl.GrowingUp.tick(level, young)), "her first word");
@@ -141,6 +144,22 @@ public class CradleTests {
         level.setRainLevel(0.0F);
         level.setThunderLevel(0.0F);
         check(huddled == 1, "the little wolf hides against her parent: " + huddled);
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "harpyChicksHearStoriesToo")
+    public static void harpyChicksHearStoriesToo(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var chick = helper.spawn(com.linkyoshi90.monstergirls.registry.ModEntities.SPARROW_HARPY.get(), new BlockPos(7, 2, 7));
+        chick.setBaby(true);
+        chick.setNoAi(true);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(8, 2, 7));
+        int fond = chick.getAffection(p);
+        check(com.linkyoshi90.monstergirls.entity.girl.StoryTime.read(level, chick, p, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.WRITTEN_BOOK)) == 1
+                && chick.getAffection(p) > fond, "a harpy chick listens too");
+        helper.setBlock(new BlockPos(8, 2, 8), ModBlocks.CRADLE.get());
+        check(Cradle.tick(level, chick, true), "and naps by the cradle");
         HarpyTestUtil.remove(p);
         helper.succeed();
     }

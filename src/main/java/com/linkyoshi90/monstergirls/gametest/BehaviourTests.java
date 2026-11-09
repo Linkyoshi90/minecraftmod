@@ -121,7 +121,6 @@ public class BehaviourTests {
 
     @GameTest(template = PLATFORM, timeoutTicks = 1200, batch = "orbWeaverSpinsAHuntingWeb")
     public static void orbWeaverSpinsAHuntingWeb(GameTestHelper helper) {
-        helper.setDayTime(1000);                                          // awake: the test world keeps its own clock, and at night she sleeps
         Arachne spider = spawn(helper, GirlSpecies.ORB_WEAVER_ARACHNE, new BlockPos(7, 2, 7));
         Rabbit[] caught = new Rabbit[1];
         helper.onEachTick(() -> {

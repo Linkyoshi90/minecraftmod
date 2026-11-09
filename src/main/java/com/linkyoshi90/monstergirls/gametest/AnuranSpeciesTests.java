@@ -201,7 +201,6 @@ public class AnuranSpeciesTests {
 
     @GameTest(template = PLATFORM, timeoutTicks = 800, batch = "caneToadSwallowsItemsAndSmallMobs")
     public static void caneToadSwallowsItemsAndSmallMobs(GameTestHelper helper) {
-        helper.setDayTime(1000);                                          // awake: the test world keeps its own clock, and at night she sleeps
         CaneToad toad = helper.spawn(ModEntities.CANE_TOAD.get(), new BlockPos(4, 2, 4));
         Silverfish pest = helper.spawn(EntityType.SILVERFISH, new BlockPos(8, 2, 4));
         pest.setNoAi(true);

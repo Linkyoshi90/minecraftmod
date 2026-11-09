@@ -33,21 +33,23 @@ public final class StoryTime {
     }
 
     /** Reads the book to the little ones near. How many listened (0 if none was a little one). */
-    public static int read(ServerLevel level, AbstractMonsterGirl asked, Player reader, ItemStack book) {
+    public static int read(ServerLevel level, net.minecraft.world.entity.Mob asked, Player reader, ItemStack book) {
         if (!asked.isBaby()) return 0;
         long today = level.getDayTime() / 24000L;
         int n = 0;
-        for (AbstractMonsterGirl young : level.getEntitiesOfClass(AbstractMonsterGirl.class, new AABB(asked.blockPosition()).inflate(GATHER), AbstractMonsterGirl::isBaby)) {
+        for (net.minecraft.world.entity.Mob young : level.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, new AABB(asked.blockPosition()).inflate(GATHER),
+                m -> m.isBaby() && m instanceof com.linkyoshi90.monstergirls.entity.Bonded)) {
             n++;
             young.getNavigation().stop();
             young.getLookControl().setLookAt(reader);
-            young.startTimedAction(AbstractMonsterGirl.Action.SITTING, LISTEN);
+            if (young instanceof AbstractMonsterGirl g) g.startTimedAction(AbstractMonsterGirl.Action.SITTING, LISTEN);
             level.sendParticles(ParticleTypes.NOTE, young.getX(), young.getEyeY() + 0.4, young.getZ(), 1, 0.2, 0.1, 0.2, 0.3);
             var pd = young.getPersistentData();
             if (pd.contains(HEARD) && pd.getLong(HEARD) == today) continue;
             pd.putLong(HEARD, today);
-            young.addAffection(reader, CLOSER);
-            young.setGrowTicks(young.getGrowTicks() + GROWTH);
+            com.linkyoshi90.monstergirls.entity.Bonded b = (com.linkyoshi90.monstergirls.entity.Bonded) young;
+            b.addAffection(reader, CLOSER);
+            b.setGrowTicks(b.getGrowTicks() + GROWTH);
         }
         WrittenBookContent content = book.get(DataComponents.WRITTEN_BOOK_CONTENT);
         String title = content == null ? "" : content.title().raw();
@@ -59,7 +61,8 @@ public final class StoryTime {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onInteract(PlayerInteractEvent.EntityInteract event) {
-        if (!event.getItemStack().is(Items.WRITTEN_BOOK) || !(event.getTarget() instanceof AbstractMonsterGirl young) || !young.isBaby()) return;
+        if (!event.getItemStack().is(Items.WRITTEN_BOOK) || !(event.getTarget() instanceof net.minecraft.world.entity.Mob young)
+                || !(young instanceof com.linkyoshi90.monstergirls.entity.Bonded) || !young.isBaby()) return;
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide));
         if (event.getLevel() instanceof ServerLevel level) read(level, young, event.getEntity(), event.getItemStack());

@@ -17,6 +17,7 @@ import javax.annotation.Nullable;
  * word (their name), a flower she picked for them, and a drawing of the two of them (a paper to keep). Each makes her
  * {@link #CLOSER} closer, and none is missed: a moment waits until her parent is near.
  */
+@net.neoforged.fml.common.EventBusSubscriber(modid = com.linkyoshi90.monstergirls.MonsterGirlsMod.MODID)
 public final class GrowingUp {
     public static final float[] AT = {0.25F, 0.5F, 0.75F};
     public static final String[] MOMENTS = {"word", "flower", "drawing"};
@@ -27,25 +28,26 @@ public final class GrowingUp {
     private GrowingUp() {
     }
 
-    public static int done(AbstractMonsterGirl girl) {
+    public static int done(net.minecraft.world.entity.Mob girl) {
         return girl.getPersistentData().getInt(DONE);
     }
 
     /** How far along to grown she is, 0 to 1. */
-    public static float along(AbstractMonsterGirl girl) {
-        return Math.min(1.0F, (float) girl.getGrowTicks() / AbstractMonsterGirl.GROW_TICKS);
+    public static float along(net.minecraft.world.entity.Mob girl) {
+        return Math.min(1.0F, (float) ((com.linkyoshi90.monstergirls.entity.Bonded) girl).getGrowTicks() / AbstractMonsterGirl.GROW_TICKS);
     }
 
     /** Every few seconds for a little one: the next moment, if it's time and her parent is near. Which moment it was, or null. */
     @Nullable
-    public static String tick(ServerLevel level, AbstractMonsterGirl girl) {
+    public static String tick(ServerLevel level, net.minecraft.world.entity.Mob girl) {
+        if (!(girl instanceof com.linkyoshi90.monstergirls.entity.Bonded b)) return null;
         int n = done(girl);
-        if (!girl.isBaby() || n >= AT.length || along(girl) < AT[n] || girl.getFather() == null) return null;
-        Player parent = level.getPlayerByUUID(girl.getFather());
+        if (!girl.isBaby() || n >= AT.length || along(girl) < AT[n] || b.getFather() == null) return null;
+        Player parent = level.getPlayerByUUID(b.getFather());
         if (parent == null || parent.isSpectator() || parent.distanceToSqr(girl) > NEAR * NEAR) return null;
         girl.getPersistentData().putInt(DONE, n + 1);
         String moment = MOMENTS[n];
-        girl.addAffection(parent, CLOSER);
+        b.addAffection(parent, CLOSER);
         girl.getLookControl().setLookAt(parent);
         level.sendParticles(ParticleTypes.HEART, girl.getX(), girl.getEyeY() + 0.3, girl.getZ(), 4, 0.3, 0.2, 0.3, 0.0);
         girl.playSound(SoundEvents.AMETHYST_BLOCK_CHIME, 0.8F, 1.6F);
@@ -59,8 +61,17 @@ public final class GrowingUp {
         return moment;
     }
 
+    /** Harpy chicks and frog little ones have the same moments (girls tick theirs from AbstractMonsterGirl), and nap by a cradle too. */
+    @net.neoforged.bus.api.SubscribeEvent
+    public static void onTick(net.neoforged.neoforge.event.tick.EntityTickEvent.Post event) {
+        if (!(event.getEntity() instanceof net.minecraft.world.entity.Mob m) || m instanceof AbstractMonsterGirl || !(m instanceof com.linkyoshi90.monstergirls.entity.Bonded)
+                || !m.isBaby() || !(m.level() instanceof ServerLevel level)) return;
+        if (m.tickCount % 60 == 37) tick(level, m);
+        if (m.tickCount % Cradle.EVERY == 55 && !(m instanceof com.linkyoshi90.monstergirls.entity.AbstractAnuran)) Cradle.tick(level, m, level.isNight());   // tadpoles stay in the water
+    }
+
     /** A paper with her name on it: "a drawing of the two of you". */
-    static ItemStack drawing(AbstractMonsterGirl girl, Player parent) {
+    static ItemStack drawing(net.minecraft.world.entity.Mob girl, Player parent) {
         ItemStack paper = new ItemStack(Items.PAPER);
         paper.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, Component.translatable("item.monstergirls.drawing", girl.getName()));
         paper.set(net.minecraft.core.component.DataComponents.LORE, new net.minecraft.world.item.component.ItemLore(java.util.List.of(

@@ -35,7 +35,7 @@ public final class Cradle {
     }
 
     /** Every EVERY ticks for a little one: at night she goes to the cradle and naps, growing twice as fast. True while she naps. */
-    public static boolean tick(ServerLevel level, AbstractMonsterGirl young, boolean night) {
+    public static boolean tick(ServerLevel level, net.minecraft.world.entity.Mob young, boolean night) {
         if (!young.isBaby() || !night || young.isPassenger()) return false;
         BlockPos cradle = near(level, young.blockPosition());
         if (cradle == null) return false;
@@ -44,8 +44,9 @@ public final class Cradle {
             return false;
         }
         young.getNavigation().stop();
-        young.startTimedAction(AbstractMonsterGirl.Action.LYING, EVERY + 20);
-        young.setGrowTicks(young.getGrowTicks() + EVERY);
+        if (young instanceof AbstractMonsterGirl g) g.startTimedAction(AbstractMonsterGirl.Action.LYING, EVERY + 20);
+        com.linkyoshi90.monstergirls.entity.Bonded b = (com.linkyoshi90.monstergirls.entity.Bonded) young;
+        b.setGrowTicks(b.getGrowTicks() + EVERY);
         if (young.getRandom().nextInt(4) == 0) level.sendParticles(ParticleTypes.NOTE, young.getX(), young.getEyeY() + 0.4, young.getZ(), 1, 0.2, 0.1, 0.2, 0.5);
         return true;
     }
@@ -54,12 +55,13 @@ public final class Cradle {
     public static int rock(ServerLevel level, BlockPos cradle, Player player) {
         level.playSound(null, cradle, SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.BLOCKS, 0.6F, 0.7F);
         int n = 0;
-        for (AbstractMonsterGirl young : level.getEntitiesOfClass(AbstractMonsterGirl.class, new AABB(cradle).inflate(ROCK), AbstractMonsterGirl::isBaby)) {
+        for (net.minecraft.world.entity.Mob young : level.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, new AABB(cradle).inflate(ROCK),
+                m -> m.isBaby() && m instanceof com.linkyoshi90.monstergirls.entity.Bonded)) {
             n++;
             level.sendParticles(ParticleTypes.HEART, young.getX(), young.getEyeY() + 0.3, young.getZ(), 2, 0.2, 0.1, 0.2, 0.0);
             if (level.getGameTime() < young.getPersistentData().getLong(ROCKED_AT)) continue;
             young.getPersistentData().putLong(ROCKED_AT, level.getGameTime() + ROCK_COOLDOWN);
-            young.addAffection(player, ROCKED);
+            ((com.linkyoshi90.monstergirls.entity.Bonded) young).addAffection(player, ROCKED);
         }
         return n;
     }

@@ -183,6 +183,25 @@ public final class Marriage {
         player.setData(ModAttachments.JOURNAL, journal);
     }
 
+    /** Renamed: her line on the family pages (her parent's, her husband's or wife's) takes the new name. */
+    public static void renamed(ServerLevel level, Entity who, String name) {
+        java.util.Set<UUID> keepers = new java.util.HashSet<>();
+        if (who instanceof Bonded b && b.getFather() != null) keepers.add(b.getFather());
+        if (who instanceof Mob m && spouse(m) != null) keepers.add(spouse(m));
+        String id = who.getUUID().toString();
+        for (UUID k : keepers) {
+            Player p = level.getServer().getPlayerList().getPlayer(k);
+            if (p == null) continue;
+            CompoundTag journal = p.getData(ModAttachments.JOURNAL);
+            for (String list : new String[]{CHILD_LIST, FAMILY_PAGE}) {
+                ListTag entries = journal.getList(list, Tag.TAG_COMPOUND);
+                for (Tag t : entries) if (((CompoundTag) t).getString("Id").equals(id)) ((CompoundTag) t).putString("Name", name);
+                journal.put(list, entries);
+            }
+            p.setData(ModAttachments.JOURNAL, journal);
+        }
+    }
+
     public static ListTag childList(Player player) {
         return player.getData(ModAttachments.JOURNAL).getList(CHILD_LIST, Tag.TAG_COMPOUND);
     }

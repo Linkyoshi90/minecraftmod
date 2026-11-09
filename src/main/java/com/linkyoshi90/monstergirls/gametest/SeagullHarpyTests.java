@@ -83,7 +83,6 @@ public class SeagullHarpyTests {
 
     @GameTest(template = PLATFORM, timeoutTicks = 5000, batch = "seagullWrecksBoatsAtTheRock")
     public static void wrecksBoatsAtTheRock(GameTestHelper helper) {
-        helper.setDayTime(1000);                                          // awake: the test world keeps its own clock, and at night she sleeps
         buildSea(helper, true);
         SeagullHarpy gull = helper.spawn(ModEntities.SEAGULL_HARPY.get(), ROCK.above());
         ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(7, 3, 9));

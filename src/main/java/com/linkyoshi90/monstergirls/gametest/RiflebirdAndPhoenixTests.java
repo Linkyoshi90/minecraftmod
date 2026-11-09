@@ -35,7 +35,6 @@ public class RiflebirdAndPhoenixTests {
 
     @GameTest(template = PLATFORM, timeoutTicks = 3000, batch = "riflebirdDancesForAFan")
     public static void riflebirdDancesForAFan(GameTestHelper helper) {
-        helper.setDayTime(1000);                                          // awake: the test world keeps its own clock, and at night she sleeps
         RiflebirdHarpy bird = helper.spawn(ModEntities.RIFLEBIRD_HARPY.get(), new BlockPos(4, 2, 4));
         ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(9, 2, 9));
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.APPLE));
