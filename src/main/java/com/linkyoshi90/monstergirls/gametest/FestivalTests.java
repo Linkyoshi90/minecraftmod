@@ -123,4 +123,20 @@ public class FestivalTests {
         HarpyTestUtil.remove(h.owner());
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "aHerosWelcome")
+    public static void aHerosWelcome(GameTestHelper helper) {
+        Home h = home(helper);
+        var level = helper.getLevel();
+        helper.runAfterDelay(2, () -> {                                     // the hearth joins the loaded list a tick later
+            check(com.linkyoshi90.monstergirls.entity.HerosWelcome.welcome(level, h.owner()) == 0, "no news, no party");
+            com.linkyoshi90.monstergirls.entity.HerosWelcome.earned(h.owner(), "dragon");
+            int before = h.girl().getAffection(h.owner());
+            check(com.linkyoshi90.monstergirls.entity.HerosWelcome.welcome(level, h.owner()) == 1
+                    && h.girl().getAffection(h.owner()) == before + com.linkyoshi90.monstergirls.entity.HerosWelcome.CHEER, "a hero's welcome");
+            check(com.linkyoshi90.monstergirls.entity.HerosWelcome.welcome(level, h.owner()) == 0, "one party per deed");
+            HarpyTestUtil.remove(h.owner());
+            helper.succeed();
+        });
+    }
 }
