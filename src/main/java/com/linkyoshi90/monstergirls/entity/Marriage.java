@@ -160,7 +160,17 @@ public final class Marriage {
             journal.put(CHILD_LIST, list);
         }
         player.setData(ModAttachments.JOURNAL, journal);
+        awardChildren(player);
     }
+
+    /** The little-ones advancements: the first, and a full family tree of ten. */
+    static void awardChildren(Player player) {
+        int n = children(player);
+        if (n >= 1) Dairy.award(player, "first_child");
+        if (n >= FAMILY_TREE) Dairy.award(player, "family_tree");
+    }
+
+    public static final int FAMILY_TREE = 10;
 
     /**
      * Her mother, noted beside a little one already listed (live births: the mother is known at the birth). A little one whose mother is

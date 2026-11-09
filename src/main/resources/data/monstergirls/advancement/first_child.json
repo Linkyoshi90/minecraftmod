@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:wedding",
+  "display": {
+    "icon": {
+      "id": "monstergirls:cradle"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.first_child"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.first_child.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -120,6 +120,10 @@ LANG = {
     "monstergirls.configuration.cravings": "Cravings",
     "monstergirls.configuration.sharedDreams": "Shared dreams",
     "monstergirls.configuration.packedLunch": "Packed lunch",
+    "advancement.monstergirls.first_child": "A Little One of Your Own",
+    "advancement.monstergirls.first_child.desc": "Welcome a little one born to you",
+    "advancement.monstergirls.family_tree": "A Whole Family Tree",
+    "advancement.monstergirls.family_tree.desc": "Ten little ones born to you",
     "journal.monstergirls.family.title": "Family",
     "journal.monstergirls.family.children": "Little ones born to you: %s",
     "journal.monstergirls.family.line": "♥ %s, %s (wed day %s)",
@@ -153,6 +157,8 @@ def main():
     adv("realm_wedding", "monstergirls:realm_censer", "monstergirls:realm_censer")
     adv("perfect_proposal", "monstergirls:first_date", "minecraft:poppy")
     adv("dream_come_true", "monstergirls:wedding", "minecraft:filled_map")
+    adv("first_child", "monstergirls:wedding", "monstergirls:cradle")
+    adv("family_tree", "monstergirls:first_child", "minecraft:oak_sapling", "goal")
     add_lang(LANG)
     path = os.path.join(ASSETS, "lang", "en_us.json")
     with open(path, encoding="utf-8") as fh:

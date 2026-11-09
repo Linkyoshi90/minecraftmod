@@ -37,6 +37,7 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - **Notes from home**: come back after a while away; each wife who missed you leaves a note on a journal page.
 - **Honeymoon**: three days after the wedding every pat flirts and she is keener for bed. Each anniversary (every 40 days) is a one-day second honeymoon, with a present.
 - **Happy news**: a girl who conceives tells you the next morning.
+- **Wives' own words**: when a wife flirts at a pat she has her own lines. Logging in on an anniversary reminds you she's waiting.
 - **Birth**: you hear when a girl's time comes (wherever you are), and wives near the mother gather round.
 - **Loss**: if a wife dies, the others near you hold you close (Regeneration) and her ring drops, with her name on it.
 - Jade shows "Your wife" (and honeymoon), "Engaged to you", how long until an expecting girl is due, and what she craves once she has said.
@@ -50,7 +51,11 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - **Toys**, one a day: wooden hoe (farmhand), bowl (cook), wooden sword (guard), compass (scout) tip the calling she picks when she grows up.
 - **Story time**: show a little one a written book, and all the little ones within 6 sit and listen.
 - **Growing up**: be near as she grows: her first word (your name), a flower she picked, a drawing of you both. When she grows up near you she brings you the first thing of her calling (hay, stew, a shield or a spyglass).
-- **Hobbies run in the family**: half of daughters take up their mother's hobby.
+- **Hobbies run in the family**: half of daughters take up their mother's hobby, and half take after her colouring.
+- **Thunder**: in a thunderstorm, your little ones run to you and hide their face in your side.
+- **Harpy chicks and frog little ones** get the story time, growing-up moments (and chicks the cradle) too. Harpies crave as well: fed, a full clutch of four.
+- **Renaming** a wife or little one with a name tag updates the journal pages.
+- Advancements: *A Little One of Your Own*, *A Whole Family Tree* (ten), and your daughter's little ones show as grandchildren.
 
 ## Elsewhere
 
@@ -69,6 +74,10 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - **Anubis atonement**: a condemned heart lightens by one for each zombie villager you cure and each iron golem you build. Then show her a feather.
 - **Kin slimes and phantoms** now follow their girl (slimes hop after her, phantoms circle overhead). Never seen moving in a client.
 
+## Options
+
+All on by default, in the mod's config screen: `maxSpouses` (0 = any number), `nameNewborns`, `compliments`, `herosWelcome`, `cravings`, `sharedDreams`, `packedLunch`; the notices use the existing `friendNotices`.
+
 ## Known flaky tests seen tonight (unrelated to these features)
 
-`riflebirdDancesForAFan` (twice), `orbWeaverSpinsAHuntingWeb`, `caneToadSwallowsItemsAndSmallMobs`, `murdersRaidFields`, `wrecksBoatsAtTheRock`: harpy and AI timing tests, each passing on the next run.
+`riflebirdDancesForAFan`, `orbWeaverSpinsAHuntingWeb`, `caneToadSwallowsItemsAndSmallMobs`, `murdersRaidFields`, `wrecksBoatsAtTheRock`, `begsAtTheFarm`, `boneMealOnTheRealm`, `rootedFloraGrowsCrops`, `enderSlimeBlinksAndCarries`, `heartfruitMakesHerFall` (now prints who else was near), `broodsOnTheNestAtNight`: random AI rolls, each passing on the next run. Note: GameTest batches run side by side, so a test that sets the time of day can upset a neighbour.
