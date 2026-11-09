@@ -21,7 +21,7 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - **Someone's daughter**: when another player proposes to your grown daughter, you hear of it.
 - **She asks first**: after a lovely date (sneak + flower, go to her kind of place), a girl at full friendship who has never asked hands you a wedding ring herself. Give it back to say yes.
 - **The wedding** (both by a hearth): bell, fireworks, friends gather. New: your other wives come as bridesmaids (cherry petals), guests leave presents by the hearth, the bride tosses her bouquet (a grown daughter catches it and takes a shine to a villager; otherwise a flirty guest catches it and blushes at you), and you get a little figurine of her in her veil. Does the figurine keep the veil?
-- **Group wedding**: two or more fiancées standing by the hearth together are all wed at once.
+- **Group wedding**: two or more fiancées standing by the hearth together are all wed at once (one bouquet, one set of presents).
 - **By kind**: a kitsune's wedding brings a sunshower (rain from a clear day sky for a minute), harpies shed feathers, mermaids bubbles, dragons a plume of flame, the undead soul fire, slimes a wobble.
 - **Realm wedding**: wed by a *lit realm censer* instead of a hearth: violet smoke, and +15 realm touch.
 - **Three wives**: the advancement *One Big Happy Family* and a 4x3 painting, *The Whole Family*. Does it hang right?
@@ -35,13 +35,14 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - **Packed lunch**: the first time each morning you pass within 6 blocks of a wife, she hands you a named lunch.
 - **Welcome home**: log in near a wife and she greets you after a few seconds.
 - **Notes from home**: come back after a while away; each wife who missed you leaves a note on a journal page.
-- **Honeymoon**: three days after the wedding every pat flirts and she is keener for bed. Each anniversary (every 40 days) is a one-day second honeymoon, with a present.
+- **Honeymoon**: three days after the wedding every pat flirts and she is keener for bed. Each anniversary (every 40 days) is a one-day second honeymoon, with a present; the fifth brings two diamonds, the tenth an enchanted golden apple (and advancements).
+- **Portrait day**: use a plain painting on your hearth with two or more of your family within 8 blocks: it becomes *The Whole Family* with their names and the day.
 - **Happy news**: a girl who conceives tells you the next morning.
 - **Wives' own words**: when a wife flirts at a pat she has her own lines. Logging in on an anniversary reminds you she's waiting.
 - **Birth**: you hear when a girl's time comes (wherever you are), and wives near the mother gather round.
 - **Loss**: if a wife dies, the others near you hold you close (Regeneration) and her ring drops, with her name on it.
 - Jade shows "Your wife" (and honeymoon), "Engaged to you", how long until an expecting girl is due, and what she craves once she has said.
-- Journal: a **Family** page (wives, wedding day, days to each anniversary, the departed), **Our little ones** (each by name, kind, birth day and mother), **Notes from home**.
+- Journal: a **Family** guide page (all the little-ones features in one place), a **Family** page (wives, wedding day, days to each anniversary, the departed), **Our little ones** (each by name, kind, birth day and mother), **Notes from home**.
 
 ## The little ones
 
@@ -62,7 +63,8 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - **Birthday candles**: on a girl's birthday (Jade shows it), light a candle on a cake within 8 blocks of her: she comes over, blows it out and makes a wish (+8 for each friend there).
 - **The dragon egg**: crouch and use a blaze rod on the dragon egg with a dragon-girl friend within 8 blocks: it hatches into a little ender dragon girl, devoted to you. (Without the dragon friend it only grows warm.)
 - **Spyglass**: whoever is in the crosshair (up to 64 blocks) is studied twice as fast for the bestiary.
-- **Musicians**: a girl with the music hobby plays a note block within 4 blocks during her hobby hour.
+- **Musicians**: a girl with the music hobby plays a note block within 4 blocks during her hobby hour (its tuning is left alone).
+- **Hobbies at home**: with nobody about when she finishes, a girl who lives at a hearth puts what she made in a chest (food in a fridge) near it.
 - **A hero's welcome**: earn a great vanilla advancement (kill the dragon, summon the Wither, hero of the village, cure a zombie villager, full beacon, totem of undying, elytra, adventuring time, monster hunter) and the next time you are within 12 blocks of your hearth with friends about, they throw a party: fireworks, +5 each, a present each.
 - **Compliments**: put on something new (armour, trims, dyed leather) and the first friend who sees you says so (+1). Is it naggy when you swap armour a lot? (Each outfit only once.)
 - **Notices** (behind `friendNotices`): a friend warns when the tool in your hand is nearly broken, tells you to sleep after three sleepless days (before phantoms), and shouts when a creeper starts hissing at you, with the direction.

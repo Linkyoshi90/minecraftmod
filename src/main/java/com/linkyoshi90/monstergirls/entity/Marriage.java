@@ -351,7 +351,7 @@ public final class Marriage {
         java.util.List<Mob> brides = new java.util.ArrayList<>();             // every fiancée of theirs standing by it is wed in the one ceremony
         brides.add(mob);
         for (Mob other : level.getEntitiesOfClass(Mob.class, new AABB(hearth).inflate(WED_RANGE), m -> m != mob && m.isAlive() && engaged(m, player))) brides.add(other);
-        for (Mob bride : brides) wed(level, bride, player, hearth, realm);
+        for (int i = 0; i < brides.size(); i++) wed(level, brides.get(i), player, hearth, realm, i == 0);
         if (brides.size() > 1) player.displayClientMessage(Component.translatable("message.monstergirls.marriage.group", brides.size()).withStyle(ChatFormatting.GOLD), false);
         return true;
     }
@@ -365,6 +365,11 @@ public final class Marriage {
      * fireworks, and the vows leave the player {@link #REALM_VOWS} more realm-touched (RealmTouched).
      */
     public static int wed(ServerLevel level, Mob mob, Player player, BlockPos hearth, boolean realm) {
+        return wed(level, mob, player, hearth, realm, true);
+    }
+
+    /** One bride's part of a ceremony; with {@code lead} false (the second and later brides of a group wedding) the guests' bouquet and presents aren't repeated. */
+    public static int wed(ServerLevel level, Mob mob, Player player, BlockPos hearth, boolean realm, boolean lead) {
         if (realm) {
             RealmTouched.addTouch(player, REALM_VOWS);
             level.sendParticles(ParticleTypes.WITCH, hearth.getX() + 0.5, hearth.getY() + 1.5, hearth.getZ() + 0.5, 60, 1.5, 1.0, 1.5, 0.05);
@@ -406,13 +411,13 @@ public final class Marriage {
         Component news = Component.translatable("message.monstergirls.marriage.wed", player.getDisplayName(), mob.getDisplayName(), guests).withStyle(ChatFormatting.LIGHT_PURPLE);
         for (Player p : level.players()) if (p.distanceToSqr(mob) < 64 * 64) p.displayClientMessage(news, false);
         flourish(level, mob, player);
-        bouquet(level, mob, player, giving);
+        if (lead) bouquet(level, mob, player, giving);
         net.minecraft.world.item.ItemStack keepsake = com.linkyoshi90.monstergirls.block.FigurineBlockEntity.of(mob);   // her in her veil, for the mantelpiece
         if (!keepsake.isEmpty()) {
             if (!player.addItem(keepsake)) player.drop(keepsake, false);
             player.displayClientMessage(Component.translatable("message.monstergirls.marriage.figurine", mob.getDisplayName()), false);
         }
-        if (presents(level, giving, hearth) > 0) player.displayClientMessage(Component.translatable("message.monstergirls.marriage.presents", giving.size()), false);
+        if (lead && presents(level, giving, hearth) > 0) player.displayClientMessage(Component.translatable("message.monstergirls.marriage.presents", giving.size()), false);
         if (bridesmaids > 0) player.displayClientMessage(Component.translatable("message.monstergirls.marriage.bridesmaids", bridesmaids, mob.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), false);
         Dairy.award(player, "wedding");
         if (wedNow(player) >= BIG_FAMILY) {
@@ -755,8 +760,15 @@ public final class Marriage {
         level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.3, mob.getZ(), 10, 0.5, 0.4, 0.5, 0.0);
         p.displayClientMessage(Component.translatable("message.monstergirls.marriage.anniversary", mob.getDisplayName(), since / YEAR), false);
         b.addAffection(p, 2);                                                  // and a present for the day, as she had at the wedding
-        level.addFreshEntity(new net.minecraft.world.entity.item.ItemEntity(level, mob.getX(), mob.getY() + 0.5, mob.getZ(),
-                new net.minecraft.world.item.ItemStack(PRESENTS.get(mob.getRandom().nextInt(PRESENTS.size())))));
+        long years = since / YEAR;                                             // the fifth and tenth are something special
+        net.minecraft.world.item.ItemStack gift = years == 10 ? new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.ENCHANTED_GOLDEN_APPLE)
+                : years == 5 ? new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.DIAMOND, 2)
+                : new net.minecraft.world.item.ItemStack(PRESENTS.get(mob.getRandom().nextInt(PRESENTS.size())));
+        level.addFreshEntity(new net.minecraft.world.entity.item.ItemEntity(level, mob.getX(), mob.getY() + 0.5, mob.getZ(), gift));
+        if (years == 5 || years == 10) {
+            p.displayClientMessage(Component.translatable("message.monstergirls.marriage.anniversary_" + years, mob.getDisplayName()).withStyle(ChatFormatting.GOLD), false);
+            Dairy.award(p, "anniversary_" + years);
+        }
         return true;
     }
 

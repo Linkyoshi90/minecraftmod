@@ -127,6 +127,12 @@ LANG = {
     "message.monstergirls.portrait.gather": "Gather the family by the hearth first (two of them at least) for a portrait",
     "message.monstergirls.portrait.done": "Everyone squeezes in by the fire and holds still... a family portrait of %s!",
     "item.monstergirls.family_portrait.day": "Painted by the hearth on day %s",
+    "message.monstergirls.marriage.anniversary_5": "Five years with %s! She gives you two diamonds: \"One for each of us\"",
+    "message.monstergirls.marriage.anniversary_10": "Ten years with %s. She presses something golden into your hand and won't let go",
+    "advancement.monstergirls.anniversary_5": "Five Happy Years",
+    "advancement.monstergirls.anniversary_5.desc": "Celebrate a fifth wedding anniversary",
+    "advancement.monstergirls.anniversary_10": "Golden Years",
+    "advancement.monstergirls.anniversary_10.desc": "Celebrate a tenth wedding anniversary",
     "journal.monstergirls.family.title": "Family",
     "journal.monstergirls.family.children": "Little ones born to you: %s",
     "journal.monstergirls.family.line": "♥ %s, %s (wed day %s)",
@@ -161,6 +167,8 @@ def main():
     adv("perfect_proposal", "monstergirls:first_date", "minecraft:poppy")
     adv("dream_come_true", "monstergirls:wedding", "minecraft:filled_map")
     adv("first_child", "monstergirls:wedding", "monstergirls:cradle")
+    adv("anniversary_5", "monstergirls:wedding", "minecraft:diamond")
+    adv("anniversary_10", "monstergirls:anniversary_5", "minecraft:enchanted_golden_apple", "challenge")
     adv("family_tree", "monstergirls:first_child", "minecraft:oak_sapling", "goal")
     add_lang(LANG)
     path = os.path.join(ASSETS, "lang", "en_us.json")
