@@ -33,4 +33,17 @@ public class PortraitTests {
                 "a painter paints her own kind");
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "studyingThroughASpyglass")
+    public static void studyingThroughASpyglass(GameTestHelper helper) {
+        var girl = JackalopeTests.spawn(helper, com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.SERVAL_NEKOMATA, new net.minecraft.core.BlockPos(13, 2, 7));
+        girl.setNoAi(true);
+        var p = HarpyTestUtil.survivalPlayer(helper, new net.minecraft.core.BlockPos(1, 2, 7));
+        p.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, girl.position().add(0, girl.getBbHeight() / 2, 0));
+        int before = com.linkyoshi90.monstergirls.entity.Journal.sightings(p, "serval_nekomata");
+        check(com.linkyoshi90.monstergirls.entity.Journal.spyglass(p) == girl, "she is in the crosshair");
+        check(com.linkyoshi90.monstergirls.entity.Journal.sightings(p, "serval_nekomata") == before + 2, "studied twice over");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

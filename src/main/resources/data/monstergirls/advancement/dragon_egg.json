@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:dragon_lair",
+  "display": {
+    "icon": {
+      "id": "minecraft:dragon_egg"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.dragon_egg"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.dragon_egg.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

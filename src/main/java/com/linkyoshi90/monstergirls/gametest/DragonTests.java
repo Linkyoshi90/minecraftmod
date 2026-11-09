@@ -69,4 +69,22 @@ public class DragonTests {
         HarpyTestUtil.remove(player);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "theDragonEggHatches")
+    public static void theDragonEggHatches(GameTestHelper helper) {
+        BlockPos egg = new BlockPos(7, 2, 7);
+        helper.setBlock(egg, Blocks.DRAGON_EGG);
+        BlockPos at = helper.absolutePos(egg);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(8, 2, 8));
+        check(com.linkyoshi90.monstergirls.entity.girl.DragonEgg.warm(helper.getLevel(), at, p) == null && helper.getLevel().getBlockState(at).is(Blocks.DRAGON_EGG),
+                "it only grows warm without a dragon friend");
+        Dragon wyvern = spawn(helper, GirlSpecies.WYVERN_DRAGON, new BlockPos(4, 2, 7));
+        wyvern.setNoAi(true);
+        wyvern.setAffection(p.getUUID(), 30);
+        var young = com.linkyoshi90.monstergirls.entity.girl.DragonEgg.warm(helper.getLevel(), at, p);
+        check(young != null && young.getSpecies() == GirlSpecies.ENDER_DRAGON && young.isBaby() && p.getUUID().equals(young.getFather()), "a little ender dragon, theirs");
+        check(!helper.getLevel().getBlockState(at).is(Blocks.DRAGON_EGG), "the egg is used up");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

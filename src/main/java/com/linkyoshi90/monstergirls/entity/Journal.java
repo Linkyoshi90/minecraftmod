@@ -82,6 +82,24 @@ public final class Journal {
                 watch(player, e);
             }
         }
+        if (player.isScoping()) spyglass(player);                             // studying from afar
+    }
+
+    /** How far a spyglass lets a naturalist study a creature, and how many sightings each look through it is worth. */
+    public static final double SPYGLASS_RANGE = 64;
+
+    /** Looking through a spyglass: the creature of ours in the crosshair (within SPYGLASS_RANGE) is studied twice over. What was studied, or null. */
+    @javax.annotation.Nullable
+    public static Entity spyglass(ServerPlayer player) {
+        net.minecraft.world.phys.Vec3 eye = player.getEyePosition(), to = eye.add(player.getLookAngle().scale(SPYGLASS_RANGE));
+        var hit = net.minecraft.world.entity.projectile.ProjectileUtil.getEntityHitResult(player, eye, to,
+                player.getBoundingBox().expandTowards(player.getLookAngle().scale(SPYGLASS_RANGE)).inflate(1), e -> e instanceof Bonded && isOurs(e), SPYGLASS_RANGE * SPYGLASS_RANGE);
+        if (hit == null || !player.hasLineOfSight(hit.getEntity())) return null;
+        Entity e = hit.getEntity();
+        record(player, e, ((Bonded) e).getAffection(player) >= Orders.AFFECTION);
+        watch(player, e);
+        watch(player, e);
+        return e;
     }
 
     private static boolean isOurs(Entity e) {
