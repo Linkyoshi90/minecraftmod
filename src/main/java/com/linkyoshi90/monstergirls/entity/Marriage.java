@@ -183,6 +183,12 @@ public final class Marriage {
         return player.getData(ModAttachments.JOURNAL).getInt(CHILDREN);
     }
 
+    /** Whether the player already has as many spouses (and fiancées) as the maxSpouses setting allows. */
+    public static boolean atLimit(Player player) {
+        int limit = limitOverride >= 0 ? limitOverride : MonsterGirlsConfig.maxSpouses();
+        return limit > 0 && count(player) >= limit;
+    }
+
     // --- the proposal --------------------------------------------------------------------------------------------------
 
     /** The ring is offered. Her answer; ENGAGED means it was taken. */
@@ -196,8 +202,7 @@ public final class Marriage {
             say(player, "marriage.taken", mob, true);
             return Answer.TAKEN;
         }
-        int limit = limitOverride >= 0 ? limitOverride : MonsterGirlsConfig.maxSpouses();
-        if (limit > 0 && count(player) >= limit) {
+        if (atLimit(player)) {
             say(player, "marriage.limit", mob, true);
             return Answer.TAKEN;
         }
@@ -341,12 +346,8 @@ public final class Marriage {
 
     /** How many on the player's list are wed rather than engaged, counting the loaded ones' own say and the rest as wed. */
     private static int wedNow(Player player) {
-        int n = 0;
-        for (Tag t : spouses(player)) {
-            UUID id = UUID.fromString(t.getAsString());
-            Entity e = player.level() instanceof ServerLevel sl ? sl.getEntity(id) : null;
-            if (!(e instanceof Mob m) || married(m, player)) n++;
-        }
+        int n = 0;                                                             // the family page lists only weddings
+        for (Tag t : family(player)) if (!((CompoundTag) t).getBoolean("Gone")) n++;
         return n;
     }
 
@@ -457,8 +458,7 @@ public final class Marriage {
     public static boolean sheAsks(ServerLevel level, Mob mob, Player player) {
         if (!(mob instanceof Bonded b) || mob.getPersistentData().getBoolean(ASKED) || spouse(mob) != null || mob.getPersistentData().hasUUID(ENGAGED)
                 || b.getAffection(player) < Bonded.FULL_AFFECTION || !Flirting.canFlirt(mob, player)) return false;
-        int limit = limitOverride >= 0 ? limitOverride : MonsterGirlsConfig.maxSpouses();
-        if (limit > 0 && count(player) >= limit) return false;
+        if (atLimit(player)) return false;
         mob.getPersistentData().putBoolean(ASKED, true);
         net.minecraft.world.item.ItemStack ring = new net.minecraft.world.item.ItemStack(ModItems.WEDDING_RING.get());
         if (!player.addItem(ring)) player.drop(ring, false);

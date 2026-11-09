@@ -502,8 +502,9 @@ public class Canid extends AbstractMonsterGirl {
 
     /** She weighs a player she has not judged yet: a heavy heart is condemned (and hunted), a light one may pass. */
     public void weigh(ServerPlayer player) {
-        if (!this.weighed.add(player.getUUID())) return;
         boolean heavy = Atonement.netWeight(player) > 0;
+        if (this.weighed.contains(player.getUUID()) && (this.condemned.contains(player.getUUID()) || !heavy)) return;   // a light heart grown heavy is weighed again
+        this.weighed.add(player.getUUID());
         if (heavy) this.condemned.add(player.getUUID());
         this.startTimedAction(Action.JUDGE, 40);
         this.getLookControl().setLookAt(player);

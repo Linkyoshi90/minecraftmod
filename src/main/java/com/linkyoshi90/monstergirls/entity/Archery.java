@@ -29,7 +29,6 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
-import net.neoforged.neoforge.event.entity.player.ArrowLooseEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
@@ -126,7 +125,7 @@ public final class Archery {
         return points;
     }
 
-    /** The player loosed an arrow: one of their three. */
+    /** The player loosed an arrow (bow or crossbow): one of their three. */
     public static void loosed(Player p) {
         if (!p.getPersistentData().hasUUID(PLAYER_MATCH) || !(p.level() instanceof ServerLevel level)) return;
         if (level.getEntity(p.getPersistentData().getUUID(PLAYER_MATCH)) instanceof Mob m && playing(m)) {
@@ -193,15 +192,21 @@ public final class Archery {
 
     @SubscribeEvent
     public static void onImpact(ProjectileImpactEvent event) {
+        if (event.getProjectile() instanceof AbstractArrow mine && mine.getOwner() instanceof Mob shooter && playing(shooter)
+                && event.getRayTraceResult() instanceof net.minecraft.world.phys.EntityHitResult) {
+            event.setCanceled(true);                                         // her match arrows are for the target: they pass by anyone in the way
+            return;
+        }
         if (event.getProjectile() instanceof AbstractArrow arrow && event.getRayTraceResult() instanceof BlockHitResult hit
                 && arrow.level() instanceof ServerLevel level && level.getBlockState(hit.getBlockPos()).is(Blocks.TARGET)) {
             hit(level, arrow.getOwner(), hit);
         }
     }
 
+    /** Every arrow a player in a match sends off counts as a shot, from a bow or a crossbow alike (ArrowLooseEvent misses crossbows). */
     @SubscribeEvent
-    public static void onLoose(ArrowLooseEvent event) {
-        if (!event.getLevel().isClientSide) loosed(event.getEntity());
+    public static void onArrowAdded(net.neoforged.neoforge.event.entity.EntityJoinLevelEvent event) {
+        if (!event.loadedFromDisk() && !event.getLevel().isClientSide && event.getEntity() instanceof AbstractArrow arrow && arrow.getOwner() instanceof Player p) loosed(p);
     }
 
     /** Sneaking with a bow: a match, if there's a target near her (before her weapons code would take the bow). */

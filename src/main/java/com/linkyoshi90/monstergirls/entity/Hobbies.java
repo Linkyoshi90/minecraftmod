@@ -87,7 +87,8 @@ public final class Hobbies {
         }
         UUID id = girl.getUUID();
         long mix = Long.rotateLeft(id.getMostSignificantBits(), 17) ^ (id.getLeastSignificantBits() * 31L);
-        return Hobby.values()[(int) Math.floorMod(mix, (long) Hobby.values().length)];
+        if (Math.floorMod(mix, 8L) == 7L) return Hobby.PAINTING;               // painting came later: one in eight, and the rest keep the hobby they had
+        return Hobby.values()[(int) Math.floorMod(mix, 7L)];
     }
 
     /** Sets her hobby (tests, and anything that ever wants to change it). */

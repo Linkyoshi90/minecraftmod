@@ -146,6 +146,8 @@ public final class Journal {
     /** Affection at which a friend is devoted, and goes in the journal's list of dearest friends; how many lines fit a page. */
     public static final int DEVOTED = 60, DEAREST_LINES = 4;                // each line "name, kind (day n)" wraps to two or three of a page's 14
     public static final String DEAREST = "Dearest";
+    /** Wives a family page lists: each line also says when her anniversary is, so it wraps to three or four. */
+    public static final int FAMILY_LINES = 3;
 
     /** She is devoted to them: the first time, the journal notes her name, her kind and the day. Whether that was news. */
     public static boolean devoted(Player player, Entity girl) {
@@ -545,14 +547,19 @@ public final class Journal {
         }
         ListTag family = Marriage.family(player);
         int children = Marriage.children(player);
-        for (int i = 0; i < Math.max(family.size(), children > 0 ? 1 : 0); i += DEAREST_LINES) {   // wives (and the departed), and how many little ones
+        long todayMark = player.level().getDayTime() / 24000L + 1;                   // the same count the entries were written in
+        for (int i = 0; i < Math.max(family.size(), children > 0 ? 1 : 0); i += FAMILY_LINES) {   // wives (and the departed), and how many little ones
             MutableComponent page = Component.translatable("journal.monstergirls.family.title").withStyle(ChatFormatting.BOLD, ChatFormatting.LIGHT_PURPLE).append(NL_TEXT);
             if (i == 0 && children > 0) page.append(NL_TEXT).append(Component.translatable("journal.monstergirls.family.children", children).withStyle(ChatFormatting.RESET, ChatFormatting.GRAY));
-            for (int j = i; j < Math.min(i + DEAREST_LINES, family.size()); j++) {
+            for (int j = i; j < Math.min(i + FAMILY_LINES, family.size()); j++) {
                 CompoundTag d = family.getCompound(j);
                 boolean departed = d.getBoolean("Gone");
-                page.append(NL_TEXT).append(Component.translatable(departed ? "journal.monstergirls.family.gone" : "journal.monstergirls.family.line", d.getString("Name"),
-                        Component.translatable("entity.monstergirls." + d.getString("Kind")), d.getLong("Day")).withStyle(ChatFormatting.RESET, departed ? ChatFormatting.GRAY : ChatFormatting.BLACK));
+                Component kind = Component.translatable("entity.monstergirls." + d.getString("Kind"));
+                long since = todayMark - d.getLong("Day"), until = Math.floorMod(-since, (long) Marriage.YEAR);
+                page.append(NL_TEXT).append((departed ? Component.translatable("journal.monstergirls.family.gone", d.getString("Name"), kind, d.getLong("Day"))
+                        : until == 0 && since > 0 ? Component.translatable("journal.monstergirls.family.today", d.getString("Name"), kind, d.getLong("Day"))
+                        : Component.translatable("journal.monstergirls.family.next", d.getString("Name"), kind, d.getLong("Day"), until == 0 ? Marriage.YEAR : until))
+                        .withStyle(ChatFormatting.RESET, departed ? ChatFormatting.GRAY : ChatFormatting.BLACK));
             }
             pages.add(Filterable.passThrough(page));
         }

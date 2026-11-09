@@ -28,7 +28,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class Atonement {
     public static final String DEEDS = "Atonement";
-    static final String CURED_BY = "CuredBy";
+    static final String CURED_BY = "CuredBy", COUNTED = "AtonementCounted";
     public static final double BUILDER = 8;
 
     private Atonement() {
@@ -54,7 +54,8 @@ public final class Atonement {
     /** A golden apple to a zombie villager: remember who began the cure, so the deed is theirs when it takes. */
     @SubscribeEvent
     public static void onCureStarted(PlayerInteractEvent.EntityInteract event) {
-        if (!event.getLevel().isClientSide && event.getTarget() instanceof ZombieVillager zv && event.getItemStack().is(Items.GOLDEN_APPLE)) {
+        if (!event.getLevel().isClientSide && event.getTarget() instanceof ZombieVillager zv && event.getItemStack().is(Items.GOLDEN_APPLE)
+                && zv.hasEffect(net.minecraft.world.effect.MobEffects.WEAKNESS)) {                   // the apple only starts a cure on a weakened one
             zv.getPersistentData().putUUID(CURED_BY, event.getEntity().getUUID());
         }
     }
@@ -70,7 +71,9 @@ public final class Atonement {
     /** An iron golem built (player-made) beside a player: theirs. */
     @SubscribeEvent
     public static void onGolemBuilt(EntityJoinLevelEvent event) {
-        if (event.loadedFromDisk() || !(event.getEntity() instanceof IronGolem golem) || !golem.isPlayerCreated() || !(event.getLevel() instanceof ServerLevel level)) return;
+        if (event.loadedFromDisk() || !(event.getEntity() instanceof IronGolem golem) || !golem.isPlayerCreated() || !(event.getLevel() instanceof ServerLevel level)
+                || golem.getPersistentData().getBoolean(COUNTED)) return;              // once per golem (a trip through a portal re-adds it)
+        golem.getPersistentData().putBoolean(COUNTED, true);
         if (level.getNearestPlayer(golem, BUILDER) instanceof ServerPlayer p) deed(p, "golem");
     }
 

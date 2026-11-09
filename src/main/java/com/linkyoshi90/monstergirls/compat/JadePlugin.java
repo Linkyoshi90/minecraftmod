@@ -50,6 +50,7 @@ public class JadePlugin implements IWailaPlugin {
             if (!(accessor.getEntity() instanceof Bonded b)) return;
             data.putInt("Affection", accessor.getPlayer() == null ? 0 : b.getAffection(accessor.getPlayer()));
             if (BondInfo.canCarry(accessor.getEntity())) data.putBoolean("Pregnant", b.getGestation().isCarrying());
+            if (b.getGestation().isCarrying()) data.putInt("DueMinutes", Math.max(1, (b.getGestation().getTicksLeft() + 1199) / 1200));
             if (accessor.getEntity() instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g && com.linkyoshi90.monstergirls.entity.girl.Roles.of(g) != null) {
                 data.putString("Role", com.linkyoshi90.monstergirls.entity.girl.Roles.of(g).key());
             }
@@ -145,6 +146,7 @@ public class JadePlugin implements IWailaPlugin {
                 tooltip.add(Component.translatable("jade.monstergirls.pregnant",
                         Component.translatable(data.getBoolean("Pregnant") ? "jade.monstergirls.yes" : "jade.monstergirls.no")));
             }
+            if (data.getBoolean("Pregnant") && data.contains("DueMinutes")) tooltip.add(Component.translatable("jade.monstergirls.due", data.getInt("DueMinutes")));
             if (data.contains("Nursing")) tooltip.add(Component.translatable(data.getInt("Nursing") == 2 ? "jade.monstergirls.keeps_milk" : "jade.monstergirls.nursing"));
             if (data.getBoolean("MilkFull")) tooltip.add(Component.translatable("jade.monstergirls.milk_full").withStyle(net.minecraft.ChatFormatting.RED));
             if ((data.getBoolean("MilkFull") || data.contains("Nursing")) && accessor.getEntity() instanceof LivingEntity milky) {   // which milk she gives
