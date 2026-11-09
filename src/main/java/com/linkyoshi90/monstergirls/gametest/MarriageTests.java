@@ -190,4 +190,13 @@ public class MarriageTests {
             helper.succeed();
         });
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "weddingBellsRing")
+    public static void weddingBellsRing(GameTestHelper helper) {
+        helper.setBlock(new BlockPos(10, 2, 10), net.minecraft.world.level.block.Blocks.BELL);
+        helper.runAfterDelay(2, () -> {                                     // the bell's meeting point registers a tick later
+            check(Marriage.ringBells(helper.getLevel(), helper.absolutePos(new BlockPos(3, 2, 3))) == 1, "the village bell rings for the wedding");
+            helper.succeed();
+        });
+    }
 }

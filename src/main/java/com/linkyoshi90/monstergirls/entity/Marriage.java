@@ -411,7 +411,10 @@ public final class Marriage {
         Component news = Component.translatable("message.monstergirls.marriage.wed", player.getDisplayName(), mob.getDisplayName(), guests).withStyle(ChatFormatting.LIGHT_PURPLE);
         for (Player p : level.players()) if (p.distanceToSqr(mob) < 64 * 64) p.displayClientMessage(news, false);
         flourish(level, mob, player);
-        if (lead) bouquet(level, mob, player, giving);
+        if (lead) {
+            bouquet(level, mob, player, giving);
+            ringBells(level, hearth);
+        }
         net.minecraft.world.item.ItemStack keepsake = com.linkyoshi90.monstergirls.block.FigurineBlockEntity.of(mob);   // her in her veil, for the mantelpiece
         if (!keepsake.isEmpty()) {
             if (!player.addItem(keepsake)) player.drop(keepsake, false);
@@ -714,6 +717,19 @@ public final class Marriage {
         level.playSound(null, hearth, SoundEvents.PAINTING_PLACE, SoundSource.PLAYERS, 1.0F, 1.0F);
         player.displayClientMessage(Component.translatable("message.monstergirls.portrait.done", names.size()).withStyle(ChatFormatting.GOLD), false);
         return true;
+    }
+
+    public static final int BELLS = 48;
+
+    /** The village's bells (any bell within BELLS of the hearth, a few blocks up or down) ring for the wedding. How many rang. */
+    public static int ringBells(ServerLevel level, BlockPos hearth) {
+        int n = 0;
+        for (BlockPos p : level.getPoiManager().findAll(t -> t.is(net.minecraft.world.entity.ai.village.poi.PoiTypes.MEETING), q -> true, hearth, BELLS,
+                net.minecraft.world.entity.ai.village.poi.PoiManager.Occupancy.ANY).toList()) {
+            if (level.getBlockState(p).getBlock() instanceof net.minecraft.world.level.block.BellBlock bell
+                    && bell.attemptToRing(null, level, p, net.minecraft.core.Direction.NORTH)) n++;
+        }
+        return n;
     }
 
     /** Each guest who isn't family brings a little wedding present, left by the hearth. How many. */
