@@ -39,7 +39,7 @@ import java.util.UUID;
  * Hobbies (2026-11-08). Every girl has a pastime of her own, always the same for her (from her UUID): gardening, fishing,
  * reading, music, baking, collecting pretty things, knitting or painting, and an hour of the day that is hers for it. During her hour she
  * potters away at it where she is (a gardener tends the crops round her as she goes). Once she has put in {@link #WORK} ticks of it,
- * if a friend is about, she leaves what she made at her feet: flowers and seeds, a fish or two, bread and cookies, a shiny find,
+ * if a friend is about, she leaves what she made at her feet (with nobody about, a girl who lives at a hearth puts it away in a chest there): flowers and seeds, a fish or two, bread and cookies, a shiny find,
  * wool or a knitted cap, now and then a portrait (a painting; her own kind's if there is one); a reader shares what she learned (experience), a musician plays everyone near a merry tune (Haste).
  * Keep her company through it (within {@link #NEAR} for {@link #COMPANY} ticks) and she shows you how she does it: affection and a
  * share for you, once a day. Her friends see her hobby in Jade. Half of all daughters born take up their mother's hobby.
@@ -274,7 +274,7 @@ public final class Hobbies {
     public static ItemStack finish(ServerLevel level, Mob girl) {
         girl.getPersistentData().putLong(DONE_DAY, dayMark(level));
         Player friend = friendNear(level, girl, SEEN);
-        if (friend == null) return ItemStack.EMPTY;
+        if (friend == null) return putAwayAtHome(level, girl);
         ItemStack made = make(level, girl, level.random);
         if (!made.isEmpty()) {
             ItemEntity drop = new ItemEntity(level, girl.getX(), girl.getY() + 0.5, girl.getZ(), made.copy());
@@ -301,6 +301,18 @@ public final class Hobbies {
                 .withStyle(ChatFormatting.LIGHT_PURPLE), false);
         Dairy.award(player, "shared_interests");
         return true;
+    }
+
+    /**
+     * Nobody about to give it to: a girl who lives at a hearth puts what she made away in a chest (food in a fridge) near it, as the
+     * chores do. What she made and stored (empty if she has no home, made nothing, or there was no room).
+     */
+    public static ItemStack putAwayAtHome(ServerLevel level, Mob girl) {
+        if (!(girl instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g) || g.homeHearth() == null) return ItemStack.EMPTY;
+        ItemStack made = make(level, girl, level.random);
+        if (made.isEmpty()) return ItemStack.EMPTY;
+        ItemStack left = com.linkyoshi90.monstergirls.entity.girl.Chores.store(level, g.homeHearth(), made.copy());
+        return left.isEmpty() ? made : ItemStack.EMPTY;
     }
 
     /** {@code ticks} more of her hour: she works at it, a gardener tends what grows round her, and company adds up. */

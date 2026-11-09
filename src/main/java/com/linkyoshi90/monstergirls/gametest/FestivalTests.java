@@ -139,4 +139,18 @@ public class FestivalTests {
             helper.succeed();
         });
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "hobbiesKeepTheHouse")
+    public static void hobbiesKeepTheHouse(GameTestHelper helper) {
+        Home h = home(helper);
+        var level = helper.getLevel();
+        com.linkyoshi90.monstergirls.entity.Hobbies.setHobby(h.girl(), com.linkyoshi90.monstergirls.entity.Hobbies.Hobby.KNITTING);
+        BlockPos chest = new BlockPos(2, 2, 4);
+        helper.setBlock(chest, Blocks.CHEST);
+        var made = com.linkyoshi90.monstergirls.entity.Hobbies.putAwayAtHome(level, h.girl());
+        var box = (net.minecraft.world.level.block.entity.ChestBlockEntity) helper.getBlockEntity(chest);
+        check(!made.isEmpty() && !box.isEmpty(), "with nobody about, her knitting goes in the chest at home");
+        HarpyTestUtil.remove(h.owner());
+        helper.succeed();
+    }
 }
