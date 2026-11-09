@@ -1050,7 +1050,13 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         }
         if (this.timedActionTicks > 0 && --this.timedActionTicks == 0) this.setAction(this.orderedToSit ? Action.SITTING : Action.NONE);
         if (this.orderedToSit && this.getAction() == Action.NONE) this.setAction(Action.SITTING);
+        if (this.tickCount % 100 == 65 && this.gestation.isCarrying()) Cravings.tick(server, this);
+        if (this.tickCount % Cradle.EVERY == 55 && this.isBaby()) Cradle.tick(server, this, server.isNight());
+        if (this.tickCount % 60 == 37 && this.isBaby()) GrowingUp.tick(server, this);
         if (this.gestation.isReady() && this.tickCount % 40 == 0 && this.giveBirth(server, this.gestation.getFather())) {
+            boolean twins = Cravings.twins(this);
+            if (twins) this.giveBirth(server, this.gestation.getFather());   // her craving was answered: twins
+            com.linkyoshi90.monstergirls.entity.Marriage.announceBirth(server, this, this.gestation.getFather(), twins);
             this.gestation.clear();
             if (com.linkyoshi90.monstergirls.entity.Monsterization.monsterized(this)) this.gestation.halveCooldown();   // eager again sooner
             server.playSound(null, this.blockPosition(), net.minecraft.sounds.SoundEvents.CHICKEN_EGG, net.minecraft.sounds.SoundSource.NEUTRAL, 0.8F, 1.3F);

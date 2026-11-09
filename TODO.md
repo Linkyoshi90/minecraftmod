@@ -834,3 +834,13 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [x] Well Taught advancement: a lesson from all 35 branches.
 - [ ] Flaky: `crowStoresOreInTheMatchingChest` failed once 2026-11-06 ("put her find in the chest: 3"), passed on rerun.
 - [x] Supper: the bell rung at dusk (day time 11500-14000) with the owner within 8 of the hearth: each resident who comes within 4 eats with them once (+2 friendship, the owner fed a little); once a day. Hut signs follow a new name (checked on homely mornings).
+
+### Many spouses, one family (2026-11-09)
+- [x] Polygamy: `maxSpouses` now defaults to 0 (any number). Jealousy-free on purpose: a wife nearby blesses each proposal, the wives are bridesmaids, +2 hearts per spouse near (up to 3), a pat for one warms the others (+1, once a minute), two or more wives in your bed make a family bed (Absorption), and if one dies the rest comfort you. Old worlds keep their own `maxSpouses` line in `monstergirls-common.toml`.
+- [x] Weddings: guests' presents by the hearth, the bouquet toss (a grown daughter catches it and takes a shine to a villager; else a guest who'd flirt), a wedding figurine of the bride, a three-day honeymoon, presents on anniversaries. Wed by a lit realm censer instead for a realm wedding (+15 realm touch).
+- [x] Journal Family page: wives with their wedding day (the departed marked), and how many little ones were born to you. Birth announcements to the parent; wives near the mother gather round.
+- [x] Cravings: an expecting girl tells a friend the one food she craves; feed it to her before her time and she has twins.
+- [x] Cradle block: little ones nap beside it at night (growth counts double); rocking it is a lullaby (+2, once a minute each).
+- [x] Toys (Upbringing): a wooden hoe, bowl, wooden sword or compass, one a day, tips her calling (Roles) when she grows up.
+- [x] Growing up: her first word, a picked flower and a drawing, each once, saved until her parent is near.
+- [ ] Dev client: the cradle model and its facing, the wedding figurine (does it keep the veil?), a family bed with three wives (where do they lie?).

@@ -242,8 +242,8 @@ public final class MonsterGirlsConfig {
                 .define("matingSeason", true);
 
         MAX_SPOUSES = BUILDER
-                .comment("How many monster girls one player may marry (0: any number).")
-                .defineInRange("maxSpouses", 1, 0, 64);
+                .comment("How many monster girls one player may marry (0: any number). Spouses are one happy family: no jealousy, only more warmth.")
+                .defineInRange("maxSpouses", 0, 0, 64);
 
         BUILDER.push("milking");
         MILK_DRIPS = BUILDER

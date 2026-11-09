@@ -543,6 +543,19 @@ public final class Journal {
             }
             pages.add(Filterable.passThrough(page));
         }
+        ListTag family = Marriage.family(player);
+        int children = Marriage.children(player);
+        for (int i = 0; i < Math.max(family.size(), children > 0 ? 1 : 0); i += DEAREST_LINES) {   // wives (and the departed), and how many little ones
+            MutableComponent page = Component.translatable("journal.monstergirls.family.title").withStyle(ChatFormatting.BOLD, ChatFormatting.LIGHT_PURPLE).append(NL_TEXT);
+            if (i == 0 && children > 0) page.append(NL_TEXT).append(Component.translatable("journal.monstergirls.family.children", children).withStyle(ChatFormatting.RESET, ChatFormatting.GRAY));
+            for (int j = i; j < Math.min(i + DEAREST_LINES, family.size()); j++) {
+                CompoundTag d = family.getCompound(j);
+                boolean departed = d.getBoolean("Gone");
+                page.append(NL_TEXT).append(Component.translatable(departed ? "journal.monstergirls.family.gone" : "journal.monstergirls.family.line", d.getString("Name"),
+                        Component.translatable("entity.monstergirls." + d.getString("Kind")), d.getLong("Day")).withStyle(ChatFormatting.RESET, departed ? ChatFormatting.GRAY : ChatFormatting.BLACK));
+            }
+            pages.add(Filterable.passThrough(page));
+        }
         List<String> all = new ArrayList<>(girls);
         all.addAll(others);
         all.sort(java.util.Comparator.comparingInt(id -> {                           // branch by branch, as they were met within one

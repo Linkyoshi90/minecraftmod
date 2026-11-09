@@ -76,7 +76,10 @@ public final class Roles {
             else if (s.getBlock() instanceof BellBlock) guard++;
         }
         guard += level.getEntitiesOfClass(IronGolem.class, new AABB(at).inflate(LOOK)).size();
-        return new int[]{Math.min(farm, 24) / 3, Math.min(kitchen, 4) * 3, Math.min(guard, 3) * 4, 2};
+        int[] w = {Math.min(farm, 24) / 3, Math.min(kitchen, 4) * 3, Math.min(guard, 3) * 4, 2};
+        int[] toys = Upbringing.extra(girl);                                 // and the toys she was given
+        for (int i = 0; i < w.length; i++) w[i] += toys[i];
+        return w;
     }
 
     /** She has grown up: she picks her calling, and her friends near hear of it. Her role. */

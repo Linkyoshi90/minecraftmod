@@ -24,9 +24,13 @@ public final class BedSharing {
         for (ServerPlayer player : level.players()) {
             if (!player.isSleeping()) continue;
             expecting += Monsterization.shareNight(level, player).size();   // possessed villagers slipped into the bed
+            int wives = 0;
             for (Mob mob : level.getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(RADIUS), m -> m instanceof Bonded)) {
-                if (player.getUUID().equals(((Bonded) mob).getGestation().getSharingWith()) && nightShared(level, player, mob)) expecting++;
+                if (!player.getUUID().equals(((Bonded) mob).getGestation().getSharingWith())) continue;
+                if (Marriage.married(mob, player)) wives++;
+                if (nightShared(level, player, mob)) expecting++;
             }
+            Marriage.familyBed(level, player, wives);
         }
         return expecting;
     }

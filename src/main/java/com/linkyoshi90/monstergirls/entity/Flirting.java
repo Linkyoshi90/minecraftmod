@@ -38,6 +38,7 @@ public final class Flirting {
     }
 
     public static boolean onPet(ServerLevel level, net.minecraft.world.entity.Mob mob, Player player) {
+        Marriage.warmth(level, mob, player);                                    // the rest of the family is glad of it
         if (!canFlirt(mob, player) || mob.getRandom().nextInt(chance(mob, player)) != 0) return false;
         tease(level, mob, player, "flirt", LINES);
         return true;
@@ -45,7 +46,7 @@ public final class Flirting {
 
     /** One pat in this many gets a tease: every pat when she is lovestruck with this player, every other one in the Demon Realm, twice as often in her season. */
     public static int chance(net.minecraft.world.entity.Mob mob, Player player) {
-        if (DemonRealm.lovestruck(mob, player)) return 1;
+        if (DemonRealm.lovestruck(mob, player) || Marriage.honeymoon(mob) && Marriage.married(mob, player)) return 1;
         int chance = DemonRealm.realmAir(mob) ? 2 : CHANCE;
         return MatingSeason.inSeason(mob) ? Math.max(1, chance / 2) : chance;
     }

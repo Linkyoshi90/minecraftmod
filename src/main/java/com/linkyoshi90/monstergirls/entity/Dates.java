@@ -150,6 +150,7 @@ public final class Dates {
         p.displayClientMessage(Component.translatable("message.monstergirls.date.lovely." + favourite(girl).name().toLowerCase(), girl.getDisplayName())
                 .withStyle(ChatFormatting.LIGHT_PURPLE), false);
         Dairy.award(p, "first_date");
+        Marriage.sheAsks(level, girl, p);                                       // a devoted girl may ask first
     }
 
     public static void end(Mob girl) {

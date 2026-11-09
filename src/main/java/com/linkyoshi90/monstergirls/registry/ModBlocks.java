@@ -114,6 +114,11 @@ public final class ModBlocks {
             com.linkyoshi90.monstergirls.block.NestingBoxBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1.0F).sound(SoundType.WOOD).noOcclusion());
 
+    /** A wooden cradle: the little ones nap by it at night and grow faster (entity/girl/Cradle). */
+    public static final DeferredBlock<com.linkyoshi90.monstergirls.block.CradleBlock> CRADLE = BLOCKS.registerBlock("cradle",
+            com.linkyoshi90.monstergirls.block.CradleBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1.0F).sound(SoundType.WOOD).noOcclusion());
+
     /** The nectar fluid's block (see ModFluids). */
     public static final DeferredBlock<net.minecraft.world.level.block.LiquidBlock> NECTAR = BLOCKS.register("nectar",
             () -> new net.minecraft.world.level.block.LiquidBlock(ModFluids.NECTAR.get(),

@@ -44,7 +44,11 @@ import javax.annotation.Nullable;
  * <p>
  * A spouse forgives any absence (no friendship lost to Missing), is half again likelier to come to bed ({@link #BED}), and while she is within
  * {@link #NEAR} her player has {@link #HEALTH} more health. Every {@link #YEAR} days the wedding day comes round again: the veil, hearts, and
- * a little more fondness. How many spouses a player may have is the maxSpouses setting (1; 0 for any number).
+ * a little more fondness. How many spouses a player may have is the maxSpouses setting (0 for any number, the default).
+ * <p>
+ * Many spouses make one happy family, never a jealous one. A spouse nearby gives the next bride her blessing; the wives come to the
+ * wedding as bridesmaids; the hearts add up (to {@link #BLISS_CAP} spouses); love shown to one warms the others within {@link #FAMILY}
+ * (a little affection each, every {@link #WARMTH_COOLDOWN} ticks); and when one is lost, the others hold their player close.
  */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class Marriage {
@@ -53,7 +57,18 @@ public final class Marriage {
     public static final int HEALTH = 4, YEAR = 40, VEIL = 24000, EVERY = 41;
     public static final ResourceLocation BLISS = ResourceLocation.fromNamespaceAndPath(MonsterGirlsMod.MODID, "wedded_bliss");
     private static final String SPOUSE = "SpouseOf", ENGAGED = "EngagedTo", WED_DAY = "WedDay", VEIL_UNTIL = "VeilUntil", LAST_ANNIVERSARY = "WedAnniversary";
-    private static final String SPOUSES = "Spouses";
+    private static final String SPOUSES = "Spouses", WARMED = "FamilyWarmedAt";
+    public static final double FAMILY = 8;
+    public static final int BLISS_CAP = 3, WARMTH_COOLDOWN = 1200, BIG_FAMILY = 3;
+    /** Tests set this to stand in for the maxSpouses setting; negative = use the setting. */
+    public static int limitOverride = -1;
+    public static final int HONEYMOON = 3 * 24000;
+    public static final float HONEYMOON_BED = 0.25F;
+    private static final String HONEYMOON_UNTIL = "HoneymoonUntil";
+    public static final java.util.List<net.minecraft.world.item.Item> PRESENTS = java.util.List.of(net.minecraft.world.item.Items.CAKE,
+            net.minecraft.world.item.Items.HONEY_BOTTLE, net.minecraft.world.item.Items.COOKIE, net.minecraft.world.item.Items.POPPY, net.minecraft.world.item.Items.CORNFLOWER,
+            net.minecraft.world.item.Items.CANDLE, net.minecraft.world.item.Items.WHITE_WOOL, net.minecraft.world.item.Items.EMERALD, net.minecraft.world.item.Items.GOLDEN_APPLE,
+            net.minecraft.world.item.Items.GLOW_BERRIES, net.minecraft.world.item.Items.PUMPKIN_PIE, net.minecraft.world.item.Items.PINK_BED);
 
     public enum Answer { SHY, TAKEN, ALREADY, ENGAGED }
 
@@ -102,6 +117,44 @@ public final class Marriage {
         ListTag list = spouses(player);
         list.removeIf(t -> t.getAsString().equals(mob.toString()));
         setSpouses(player, list);
+        CompoundTag journal = player.getData(ModAttachments.JOURNAL);         // the family page remembers her
+        ListTag family = journal.getList(FAMILY_PAGE, Tag.TAG_COMPOUND);
+        for (Tag t : family) if (((CompoundTag) t).getString("Id").equals(mob.toString())) ((CompoundTag) t).putBoolean("Gone", true);
+        journal.put(FAMILY_PAGE, family);
+        player.setData(ModAttachments.JOURNAL, journal);
+    }
+
+    public static final String FAMILY_PAGE = "Family", CHILDREN = "Children";
+
+    /** The wedding goes in the journal's family page: her name, her kind and the day. */
+    private static void writeFamily(Player player, Mob mob) {
+        CompoundTag journal = player.getData(ModAttachments.JOURNAL);
+        ListTag family = journal.getList(FAMILY_PAGE, Tag.TAG_COMPOUND);
+        String id = mob.getUUID().toString();
+        for (Tag t : family) if (((CompoundTag) t).getString("Id").equals(id)) return;
+        CompoundTag entry = new CompoundTag();
+        entry.putString("Id", id);
+        entry.putString("Name", mob.getName().getString());
+        entry.putString("Kind", net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()).getPath());
+        entry.putLong("Day", mob.level().getDayTime() / 24000L + 1);
+        family.add(entry);
+        journal.put(FAMILY_PAGE, family);
+        player.setData(ModAttachments.JOURNAL, journal);
+    }
+
+    /** One more little one born devoted to this player. */
+    public static void childBorn(Player player) {
+        CompoundTag journal = player.getData(ModAttachments.JOURNAL);
+        journal.putInt(CHILDREN, journal.getInt(CHILDREN) + 1);
+        player.setData(ModAttachments.JOURNAL, journal);
+    }
+
+    public static ListTag family(Player player) {
+        return player.getData(ModAttachments.JOURNAL).getList(FAMILY_PAGE, Tag.TAG_COMPOUND);
+    }
+
+    public static int children(Player player) {
+        return player.getData(ModAttachments.JOURNAL).getInt(CHILDREN);
     }
 
     // --- the proposal --------------------------------------------------------------------------------------------------
@@ -117,7 +170,7 @@ public final class Marriage {
             say(player, "marriage.taken", mob, true);
             return Answer.TAKEN;
         }
-        int limit = MonsterGirlsConfig.maxSpouses();
+        int limit = limitOverride >= 0 ? limitOverride : MonsterGirlsConfig.maxSpouses();
         if (limit > 0 && count(player) >= limit) {
             say(player, "marriage.limit", mob, true);
             return Answer.TAKEN;
@@ -127,13 +180,32 @@ public final class Marriage {
             say(player, "marriage.shy", mob, true);
             return Answer.SHY;
         }
+        Mob blessing = nearestSpouse(level, mob, player, GUESTS);
         mob.getPersistentData().putUUID(ENGAGED, player.getUUID());
         remember(player, mob);
         b.blushFor(400);
         level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.3, mob.getZ(), 12, 0.5, 0.4, 0.5, 0.0);
         mob.playSound(SoundEvents.AMETHYST_BLOCK_CHIME, 1.0F, 1.2F);
         player.displayClientMessage(Component.translatable("message.monstergirls.marriage.yes." + mob.getRandom().nextInt(4), mob.getDisplayName()), false);
+        if (blessing != null) {                                                  // the family grows, and is glad of it
+            ((Bonded) blessing).blushFor(100);
+            level.sendParticles(ParticleTypes.HAPPY_VILLAGER, blessing.getX(), blessing.getEyeY() + 0.3, blessing.getZ(), 8, 0.4, 0.3, 0.4, 0.0);
+            player.displayClientMessage(Component.translatable("message.monstergirls.marriage.blessing." + mob.getRandom().nextInt(3), blessing.getDisplayName(), mob.getDisplayName()), false);
+        }
         return Answer.ENGAGED;
+    }
+
+    /** The loaded spouses of this player within range of a spot, other than the one given. */
+    public static java.util.List<Mob> spousesNear(ServerLevel level, Player player, Entity around, double range, @Nullable Mob except) {
+        if (count(player) == 0) return java.util.List.of();
+        return level.getEntitiesOfClass(Mob.class, around.getBoundingBox().inflate(range), m -> m != except && m.isAlive() && married(m, player));
+    }
+
+    @Nullable
+    private static Mob nearestSpouse(ServerLevel level, Mob mob, Player player, double range) {
+        Mob best = null;
+        for (Mob m : spousesNear(level, player, mob, range, mob)) if (best == null || m.distanceToSqr(mob) < best.distanceToSqr(mob)) best = m;
+        return best;
     }
 
     @SubscribeEvent
@@ -156,42 +228,99 @@ public final class Marriage {
         return null;
     }
 
-    /** Engaged and both by a hearth: the wedding. True if it was held. */
+    /** A lit realm censer both of them stand by, or null: the Demon Realm's own kind of wedding. */
+    @Nullable
+    public static BlockPos censerFor(ServerLevel level, Mob mob, Player player) {
+        return level.getPoiManager().findClosest(h -> h.is(com.linkyoshi90.monstergirls.registry.ModVillagers.CENSER.getKey()),
+                p -> player.distanceToSqr(p.getCenter()) <= WED_RANGE * WED_RANGE, mob.blockPosition(), (int) WED_RANGE,
+                net.minecraft.world.entity.ai.village.poi.PoiManager.Occupancy.ANY).orElse(null);
+    }
+
+    /** Engaged and both by a hearth (or a lit realm censer): the wedding. True if it was held. */
     public static boolean tryWed(ServerLevel level, Mob mob, Player player) {
         if (!engaged(mob, player)) return false;
         BlockPos hearth = hearthFor(level, mob, player);
-        if (hearth == null) return false;
-        wed(level, mob, player, hearth);
+        if (hearth != null) {
+            wed(level, mob, player, hearth);
+            return true;
+        }
+        BlockPos censer = censerFor(level, mob, player);
+        if (censer == null) return false;
+        wed(level, mob, player, censer, true);
         return true;
     }
 
-    /** The wedding itself. How many guests came. */
     public static int wed(ServerLevel level, Mob mob, Player player, BlockPos hearth) {
+        return wed(level, mob, player, hearth, false);
+    }
+
+    /**
+     * The wedding itself. How many guests came. A realm wedding (by a lit censer) is the Demon Realm's kind: violet smoke instead of
+     * fireworks, and the vows leave the player {@link #REALM_VOWS} more realm-touched (RealmTouched).
+     */
+    public static int wed(ServerLevel level, Mob mob, Player player, BlockPos hearth, boolean realm) {
+        if (realm) {
+            RealmTouched.addTouch(player, REALM_VOWS);
+            level.sendParticles(ParticleTypes.WITCH, hearth.getX() + 0.5, hearth.getY() + 1.5, hearth.getZ() + 0.5, 60, 1.5, 1.0, 1.5, 0.05);
+            level.sendParticles(ParticleTypes.PORTAL, mob.getX(), mob.getEyeY(), mob.getZ(), 40, 0.6, 0.6, 0.6, 0.3);
+            player.displayClientMessage(Component.translatable("message.monstergirls.marriage.realm", mob.getDisplayName()).withStyle(ChatFormatting.DARK_PURPLE), false);
+            Dairy.award(player, "realm_wedding");
+        }
         CompoundTag pd = mob.getPersistentData();
         pd.remove(ENGAGED);
         pd.putUUID(SPOUSE, player.getUUID());
         pd.putLong(WED_DAY, MatingSeason.today(level));
         pd.putLong(LAST_ANNIVERSARY, MatingSeason.today(level));
         pd.putLong(VEIL_UNTIL, level.getGameTime() + VEIL);
+        pd.putLong(HONEYMOON_UNTIL, level.getGameTime() + HONEYMOON);
         remember(player, mob);
+        writeFamily(player, mob);
         Bonded b = (Bonded) mob;
         b.setAffection(player.getUUID(), Math.max(b.getAffection(player), Bonded.FULL_AFFECTION));
         b.blushFor(VEIL);
         veil(level, mob);
-        int guests = 0;
+        int guests = 0, bridesmaids = 0;
+        java.util.List<Mob> giving = new java.util.ArrayList<>();
         for (Mob m : HomeLife.friendsOf(level, player, new AABB(hearth).inflate(GUESTS))) {
             if (m == mob) continue;
+            if (!married(m, player)) giving.add(m);
             m.getNavigation().moveTo(hearth.getX() + 0.5, hearth.getY(), hearth.getZ() + 0.5, 1.0);
             level.sendParticles(ParticleTypes.HEART, m.getX(), m.getEyeY() + 0.3, m.getZ(), 2, 0.2, 0.1, 0.2, 0.0);
             guests++;
+            if (married(m, player)) {                                               // the wives stand beside her, scattering petals
+                bridesmaids++;
+                ((Bonded) m).blushFor(400);
+                level.sendParticles(ParticleTypes.CHERRY_LEAVES, m.getX(), m.getEyeY() + 0.5, m.getZ(), 20, 0.6, 0.4, 0.6, 0.0);
+            }
         }
         level.playSound(null, hearth, SoundEvents.BELL_BLOCK, SoundSource.BLOCKS, 1.5F, 1.0F);
         level.playSound(null, hearth, SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1.0F, 1.2F);
         level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.4, mob.getZ(), 20, 0.7, 0.5, 0.7, 0.0);
-        level.sendParticles(ParticleTypes.FIREWORK, hearth.getX() + 0.5, hearth.getY() + 2.5, hearth.getZ() + 0.5, 60, 1.5, 1.0, 1.5, 0.08);
+        if (!realm) level.sendParticles(ParticleTypes.FIREWORK, hearth.getX() + 0.5, hearth.getY() + 2.5, hearth.getZ() + 0.5, 60, 1.5, 1.0, 1.5, 0.08);
         Component news = Component.translatable("message.monstergirls.marriage.wed", player.getDisplayName(), mob.getDisplayName(), guests).withStyle(ChatFormatting.LIGHT_PURPLE);
         for (Player p : level.players()) if (p.distanceToSqr(mob) < 64 * 64) p.displayClientMessage(news, false);
+        bouquet(level, mob, player, giving);
+        net.minecraft.world.item.ItemStack keepsake = com.linkyoshi90.monstergirls.block.FigurineBlockEntity.of(mob);   // her in her veil, for the mantelpiece
+        if (!keepsake.isEmpty()) {
+            if (!player.addItem(keepsake)) player.drop(keepsake, false);
+            player.displayClientMessage(Component.translatable("message.monstergirls.marriage.figurine", mob.getDisplayName()), false);
+        }
+        if (presents(level, giving, hearth) > 0) player.displayClientMessage(Component.translatable("message.monstergirls.marriage.presents", giving.size()), false);
+        if (bridesmaids > 0) player.displayClientMessage(Component.translatable("message.monstergirls.marriage.bridesmaids", bridesmaids, mob.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), false);
+        Dairy.award(player, "wedding");
+        if (wedNow(player) >= BIG_FAMILY) Dairy.award(player, "big_family");
         return guests;
+    }
+
+    /** How many on the player's list are wed rather than engaged, counting the loaded ones' own say and the rest as wed. */
+    private static int wedNow(Player player) {
+        int n = 0;
+        for (Tag t : spouses(player)) {
+            UUID id = UUID.fromString(t.getAsString());
+            Entity e = player.level() instanceof ServerLevel sl ? sl.getEntity(id) : null;
+            if (!(e instanceof Mob m) || married(m, player)) n++;
+        }
+        return n;
     }
 
     private static void veil(ServerLevel level, Mob mob) {
@@ -201,7 +330,103 @@ public final class Marriage {
     // --- married life --------------------------------------------------------------------------------------------------
 
     public static float bedBonus(Mob mob, Player player) {
-        return married(mob, player) ? BED : 0.0F;
+        return married(mob, player) ? BED + (honeymoon(mob) ? HONEYMOON_BED : 0.0F) : 0.0F;
+    }
+
+    /** The first HONEYMOON ticks after the wedding: keener still for bed, and every pat brings a tease (Flirting.chance). */
+    public static boolean honeymoon(Mob mob) {
+        return mob.getPersistentData().hasUUID(SPOUSE) && mob.level().getGameTime() < mob.getPersistentData().getLong(HONEYMOON_UNTIL);
+    }
+
+    /** Morning after two or more wives shared the bed: a warm tangle, and the player wakes well fed and sturdy. True if so. */
+    public static boolean familyBed(ServerLevel level, Player player, int wives) {
+        if (wives < 2) return false;
+        player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.ABSORPTION, 2400, Math.min(wives, BLISS_CAP) - 1));
+        player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SATURATION, 20, 0));
+        player.displayClientMessage(Component.translatable("message.monstergirls.marriage.family_bed." + level.random.nextInt(3), wives).withStyle(ChatFormatting.LIGHT_PURPLE), false);
+        return true;
+    }
+
+    /**
+     * The bride tosses her bouquet. A grown daughter without a sweetheart catches it first if one is there, and takes a shine to the
+     * nearest free villager (Sweethearts); otherwise a guest who would flirt with the player catches it, blushes and is
+     * {@link #BOUQUET} closer to them: she might be next. Who caught it, or null.
+     */
+    @Nullable
+    public static Mob bouquet(ServerLevel level, Mob bride, Player player, java.util.List<Mob> guests) {
+        Mob catcher = null;
+        for (Mob g : guests) if (Sweethearts.eligible(g) && Sweethearts.sweetheart(g) == null) catcher = g;
+        boolean daughter = catcher != null;
+        if (catcher == null) for (Mob g : guests) if (Flirting.canFlirt(g, player)) catcher = g;
+        if (catcher == null) return null;
+        ((Bonded) catcher).blushFor(300);
+        level.sendParticles(ParticleTypes.CHERRY_LEAVES, catcher.getX(), catcher.getEyeY() + 0.6, catcher.getZ(), 15, 0.3, 0.3, 0.3, 0.0);
+        if (daughter) {
+            final Mob d = catcher;
+            for (net.minecraft.world.entity.npc.Villager v : level.getEntitiesOfClass(net.minecraft.world.entity.npc.Villager.class, d.getBoundingBox().inflate(Sweethearts.NEAR),
+                    v -> Sweethearts.free(level, v))) {
+                if (Sweethearts.court(level, d, v)) break;
+            }
+        } else {
+            ((Bonded) catcher).addAffection(player, BOUQUET);
+        }
+        player.displayClientMessage(Component.translatable(daughter ? "message.monstergirls.marriage.bouquet.daughter" : "message.monstergirls.marriage.bouquet",
+                bride.getDisplayName(), catcher.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), false);
+        return catcher;
+    }
+
+    public static final int BOUQUET = 5, REALM_VOWS = 15;
+    private static final String ASKED = "AskedToMarry";
+
+    /**
+     * After a lovely date, a girl at FULL_AFFECTION who could marry this player and hasn't asked before doesn't wait to be asked: she
+     * presses a wedding ring into their hand. Giving it back to her is the proposal. Once per girl. True if she asked.
+     */
+    public static boolean sheAsks(ServerLevel level, Mob mob, Player player) {
+        if (!(mob instanceof Bonded b) || mob.getPersistentData().getBoolean(ASKED) || spouse(mob) != null || mob.getPersistentData().hasUUID(ENGAGED)
+                || b.getAffection(player) < Bonded.FULL_AFFECTION || !Flirting.canFlirt(mob, player)) return false;
+        int limit = limitOverride >= 0 ? limitOverride : MonsterGirlsConfig.maxSpouses();
+        if (limit > 0 && count(player) >= limit) return false;
+        mob.getPersistentData().putBoolean(ASKED, true);
+        net.minecraft.world.item.ItemStack ring = new net.minecraft.world.item.ItemStack(ModItems.WEDDING_RING.get());
+        if (!player.addItem(ring)) player.drop(ring, false);
+        b.blushFor(400);
+        level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.3, mob.getZ(), 8, 0.4, 0.3, 0.4, 0.0);
+        player.displayClientMessage(Component.translatable("message.monstergirls.marriage.she_asks", mob.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), false);
+        return true;
+    }
+
+    /**
+     * A girl has given birth: her little ones' parent hears of it wherever they are, and the parent's wives near the mother gather
+     * round (hearts and blushes). How many wives came.
+     */
+    public static int announceBirth(ServerLevel level, Mob mother, @Nullable UUID parent, boolean twins) {
+        Player p = parent == null ? null : level.getServer().getPlayerList().getPlayer(parent);
+        if (p == null) return 0;
+        p.displayClientMessage(Component.translatable(twins ? "message.monstergirls.birth.twins" : "message.monstergirls.birth", mother.getDisplayName())
+                .withStyle(ChatFormatting.LIGHT_PURPLE), false);
+        int came = 0;
+        for (Mob wife : spousesNear(level, p, mother, GUESTS, mother)) {
+            wife.getNavigation().moveTo(mother, 1.0);
+            ((Bonded) wife).blushFor(100);
+            level.sendParticles(ParticleTypes.HEART, wife.getX(), wife.getEyeY() + 0.3, wife.getZ(), 3, 0.3, 0.2, 0.3, 0.0);
+            came++;
+        }
+        return came;
+    }
+
+    /** Each guest who isn't family brings a little wedding present, left by the hearth. How many. */
+    public static int presents(ServerLevel level, java.util.List<Mob> guests, BlockPos hearth) {
+        int n = 0;
+        for (Mob g : guests) {
+            net.minecraft.world.item.Item gift = PRESENTS.get(g.getRandom().nextInt(PRESENTS.size()));
+            net.minecraft.world.entity.item.ItemEntity item = new net.minecraft.world.entity.item.ItemEntity(level, hearth.getX() + 0.5 + (g.getRandom().nextDouble() - 0.5) * 2,
+                    hearth.getY() + 1.0, hearth.getZ() + 0.5 + (g.getRandom().nextDouble() - 0.5) * 2, new net.minecraft.world.item.ItemStack(gift));
+            item.setPickUpDelay(20);
+            level.addFreshEntity(item);
+            n++;
+        }
+        return n;
     }
 
     @SubscribeEvent
@@ -232,6 +457,9 @@ public final class Marriage {
         b.blushFor(400);
         level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.3, mob.getZ(), 10, 0.5, 0.4, 0.5, 0.0);
         p.displayClientMessage(Component.translatable("message.monstergirls.marriage.anniversary", mob.getDisplayName(), since / YEAR), false);
+        b.addAffection(p, 2);                                                  // and a present for the day, as she had at the wedding
+        level.addFreshEntity(new net.minecraft.world.entity.item.ItemEntity(level, mob.getX(), mob.getY() + 0.5, mob.getZ(),
+                new net.minecraft.world.item.ItemStack(PRESENTS.get(mob.getRandom().nextInt(PRESENTS.size())))));
         return true;
     }
 
@@ -243,15 +471,56 @@ public final class Marriage {
 
     /** Whether a spouse is near; applies or lifts the health bonus. */
     public static boolean bliss(ServerLevel level, Player p) {
+        return blissFrom(level, p) > 0;
+    }
+
+    /** How many spouses are near (the bonus counts up to BLISS_CAP of them); applies, resizes or lifts the health bonus. */
+    public static int blissFrom(ServerLevel level, Player p) {
         AttributeInstance attr = p.getAttribute(Attributes.MAX_HEALTH);
-        if (attr == null) return false;
-        boolean near = count(p) > 0 && !level.getEntitiesOfClass(Mob.class, p.getBoundingBox().inflate(NEAR), m -> m.isAlive() && married(m, p)).isEmpty();
-        if (near && !attr.hasModifier(BLISS)) attr.addTransientModifier(new AttributeModifier(BLISS, HEALTH, AttributeModifier.Operation.ADD_VALUE));
-        if (!near && attr.hasModifier(BLISS)) {
-            attr.removeModifier(BLISS);
-            if (p.getHealth() > p.getMaxHealth()) p.setHealth(p.getMaxHealth());
-        }
+        if (attr == null) return 0;
+        int near = spousesNear(level, p, p, NEAR, null).size();
+        double want = HEALTH * Math.min(near, BLISS_CAP);
+        AttributeModifier have = attr.getModifier(BLISS);
+        if (have != null && have.amount() != want) attr.removeModifier(BLISS);
+        if (want > 0 && !attr.hasModifier(BLISS)) attr.addTransientModifier(new AttributeModifier(BLISS, want, AttributeModifier.Operation.ADD_VALUE));
+        if (p.getHealth() > p.getMaxHealth()) p.setHealth(p.getMaxHealth());
         return near;
+    }
+
+    /**
+     * Love shown to one spouse warms the rest of the family nearby: they smile and blush, and each gains a little affection (at most once per
+     * WARMTH_COOLDOWN). Called on every pat. How many were warmed.
+     */
+    public static int warmth(ServerLevel level, Mob petted, Player player) {
+        if (!married(petted, player)) return 0;
+        int warmed = 0;
+        for (Mob m : spousesNear(level, player, petted, FAMILY, petted)) {
+            Bonded b = (Bonded) m;
+            b.blushFor(60);
+            level.sendParticles(ParticleTypes.HAPPY_VILLAGER, m.getX(), m.getEyeY() + 0.3, m.getZ(), 4, 0.3, 0.2, 0.3, 0.0);
+            CompoundTag pd = m.getPersistentData();
+            if (level.getGameTime() < pd.getLong(WARMED)) continue;
+            pd.putLong(WARMED, level.getGameTime() + WARMTH_COOLDOWN);
+            b.addAffection(player, 1);
+            if (warmed++ == 0) player.displayClientMessage(Component.translatable("message.monstergirls.marriage.warmth." + m.getRandom().nextInt(3), m.getDisplayName(), petted.getDisplayName()), true);
+        }
+        return warmed;
+    }
+
+    /** One of the family is gone: the others nearby come to hold their player. How many came. */
+    public static int comfort(ServerLevel level, Player p, Mob lost) {
+        java.util.List<Mob> family = spousesNear(level, p, p, NEAR, lost);
+        for (Mob m : family) {
+            m.getNavigation().moveTo(p, 1.1);
+            ((Bonded) m).blushFor(200);
+            level.sendParticles(ParticleTypes.HEART, m.getX(), m.getEyeY() + 0.3, m.getZ(), 3, 0.3, 0.2, 0.3, 0.0);
+        }
+        if (!family.isEmpty()) {
+            p.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.REGENERATION, 200 * Math.min(family.size(), BLISS_CAP), 0));
+            p.displayClientMessage(Component.translatable(family.size() == 1 ? "message.monstergirls.marriage.comfort.one" : "message.monstergirls.marriage.comfort.many",
+                    family.get(0).getDisplayName(), family.size() - 1).withStyle(ChatFormatting.LIGHT_PURPLE), false);
+        }
+        return family.size();
     }
 
     /** A spouse or fiancée dies: the player is told, and free to marry again. */
@@ -265,6 +534,7 @@ public final class Marriage {
         if (p == null) return;
         forget(p, mob.getUUID());
         p.displayClientMessage(Component.translatable("message.monstergirls.marriage.lost", mob.getDisplayName()).withStyle(ChatFormatting.GRAY), false);
+        if (p.level() == level) comfort(level, p, mob);
     }
 
     /** A line for /monstergirls bonds, or null. */

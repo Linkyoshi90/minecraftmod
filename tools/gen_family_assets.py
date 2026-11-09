@@ -1,0 +1,87 @@
+#!/usr/bin/env python3
+"""Many spouses, one happy family (2026-11-09, entity/Marriage): lang, two advancements, the marriage guide.
+
+    uv run --no-project --with pillow python tools/gen_family_assets.py
+"""
+import json
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from gen_realm_assets import ASSETS, DATA, dump  # noqa: E402
+from gen_milk_assets import add_lang  # noqa: E402
+import split_guides  # noqa: E402
+
+LANG = {
+    "message.monstergirls.marriage.blessing.0": "%s nods and grins at %s: \"Welcome to the family!\"",
+    "message.monstergirls.marriage.blessing.1": "%s claps and hugs %s: \"I knew you'd ask her!\"",
+    "message.monstergirls.marriage.blessing.2": "%s gives %s a wink: \"There's always room for one more\"",
+    "message.monstergirls.marriage.bridesmaids": "%s of your wives stood by %s as her bridesmaids, scattering petals",
+    "message.monstergirls.marriage.warmth.0": "%s smiles, watching you with %s",
+    "message.monstergirls.marriage.warmth.1": "%s leans in: \"Don't forget me!\" and laughs with %s",
+    "message.monstergirls.marriage.warmth.2": "%s hums happily to see %s so content",
+    "message.monstergirls.marriage.comfort.one": "%s holds you close. You are not alone",
+    "message.monstergirls.marriage.comfort.many": "%s and %s more of your family hold you close. You are not alone",
+    "message.monstergirls.marriage.family_bed.0": "You wake in a warm tangle of %s wives, all still smiling in their sleep",
+    "message.monstergirls.marriage.family_bed.1": "Morning: %s wives, one blanket, and nobody wants to get up first",
+    "message.monstergirls.marriage.family_bed.2": "%s wives fuss over who gets to make you breakfast. Everyone wins",
+    "message.monstergirls.marriage.bouquet": "%s tosses her bouquet over her shoulder, and %s catches it! She peeks at you and turns red",
+    "message.monstergirls.marriage.bouquet.daughter": "%s tosses her bouquet over her shoulder, and %s catches it! She looks round for a certain someone in the village",
+    "message.monstergirls.marriage.figurine": "A little wedding figurine of %s in her veil, for the mantelpiece",
+    "message.monstergirls.marriage.presents": "%s guests left wedding presents by the hearth",
+    "message.monstergirls.marriage.realm": "Violet smoke curls round you both as %s whispers vows the Demon Realm keeps. You feel it in your blood",
+    "advancement.monstergirls.realm_wedding": "Wed in Violet Smoke",
+    "advancement.monstergirls.realm_wedding.desc": "Marry by a lit realm censer instead of a hearth",
+    "message.monstergirls.birth": "%s's time has come: welcome the newest of your family!",
+    "message.monstergirls.birth.twins": "%s's time has come, twice over: twins for your family!",
+    "message.monstergirls.marriage.she_asks": "%s fumbles in her pocket and presses a ring into your hand: \"I... I don't want to wait any more. Will you marry me?\" Give it back to her to say yes",
+    "journal.monstergirls.family.title": "Family",
+    "journal.monstergirls.family.children": "Little ones born to you: %s",
+    "journal.monstergirls.family.line": "♥ %s, %s (wed day %s)",
+    "journal.monstergirls.family.gone": "✝ %s, %s (wed day %s)",
+    "advancement.monstergirls.wedding": "Happily Ever After",
+    "advancement.monstergirls.wedding.desc": "Marry a monster girl at a hearth",
+    "advancement.monstergirls.big_family": "One Big Happy Family",
+    "advancement.monstergirls.big_family.desc": "Be married to three monster girls at once",
+}
+
+OLD_HEARTS = "while she is near you have two more hearts."
+NEW_HEARTS = ("while she is near you have two more hearts (each spouse near adds two more, up to six). "
+              "Many spouses are one happy family: a wife nearby blesses each new proposal, the wives are bridesmaids, "
+              "a pat for one warms the others, two or more in your bed make a family bed, and if one is lost the rest hold you close. "
+              "Guests bring wedding presents, and the first three days are a honeymoon. "
+              "Wed by a lit realm censer instead and the Demon Realm keeps your vows. A girl who adores you may not wait to be asked: after a lovely date she might hand you the ring herself.")
+
+
+def adv(name, parent, icon, frame="task"):
+    dump(os.path.join(DATA, "advancement", name + ".json"), {
+        "parent": parent,
+        "display": {"icon": {"id": icon}, "title": {"translate": f"advancement.monstergirls.{name}"},
+                    "description": {"translate": f"advancement.monstergirls.{name}.desc"},
+                    "frame": frame, "show_toast": True, "announce_to_chat": True, "hidden": False},
+        "criteria": {"done": {"trigger": "minecraft:impossible"}}})
+
+
+def main():
+    adv("wedding", "monstergirls:first_date", "monstergirls:wedding_ring")
+    adv("big_family", "monstergirls:wedding", "minecraft:cake", "goal")
+    adv("realm_wedding", "monstergirls:realm_censer", "monstergirls:realm_censer")
+    add_lang(LANG)
+    path = os.path.join(ASSETS, "lang", "en_us.json")
+    with open(path, encoding="utf-8") as fh:
+        text = fh.read()
+    key = "journal.monstergirls.guide.marriage"
+    old = json.loads(text)[key]
+    start, end = old.index(OLD_HEARTS[:-1]), old.index(" Every forty days")
+    new = old[:start] + NEW_HEARTS + old[end:]
+    if new != old:
+        a = json.dumps(key) + ": " + json.dumps(old, ensure_ascii=False)
+        assert text.count(a) == 1
+        text = text.replace(a, json.dumps(key) + ": " + json.dumps(new, ensure_ascii=False))
+        with open(path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(text)
+    split_guides.main()
+
+
+if __name__ == "__main__":
+    main()

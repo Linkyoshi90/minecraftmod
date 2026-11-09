@@ -133,7 +133,9 @@ public final class HarpyCommands {
         for (net.minecraft.server.level.ServerLevel level : levels) {
             for (Mob m : com.linkyoshi90.monstergirls.entity.HomeLife.allFriends(level, player)) {
                 listed.add(m.getUUID());
-                Component name = m.getDisplayName().copy().withStyle(ChatFormatting.AQUA);
+                boolean wife = com.linkyoshi90.monstergirls.entity.Marriage.married(m, player);   // a heart for the family
+                Component name = (wife ? Component.literal("♥ ").append(m.getDisplayName()) : m.getDisplayName().copy())
+                        .withStyle(wife ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.AQUA);
                 Component order = Component.translatable("jade.monstergirls.order."
                         + com.linkyoshi90.monstergirls.entity.Orders.current((Bonded) m).name().toLowerCase(java.util.Locale.ROOT));
                 if (level == player.serverLevel()) {

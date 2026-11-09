@@ -56,12 +56,47 @@ public class MarriageTests {
         a.setAffection(p.getUUID(), 100);
         a.setAffection(q.getUUID(), 100);
         b.setAffection(p.getUUID(), 100);
-        check(Marriage.propose(level, a, p) == Marriage.Answer.ENGAGED, "engaged");
-        check(Marriage.propose(level, b, p) == Marriage.Answer.TAKEN, "one spouse by default");
-        check(Marriage.propose(level, a, q) == Marriage.Answer.TAKEN, "her heart is promised");
+        Marriage.limitOverride = 1;
+        try {
+            check(Marriage.propose(level, a, p) == Marriage.Answer.ENGAGED, "engaged");
+            check(Marriage.propose(level, b, p) == Marriage.Answer.TAKEN, "one spouse when the setting says one");
+            check(Marriage.propose(level, a, q) == Marriage.Answer.TAKEN, "her heart is promised");
+        } finally {
+            Marriage.limitOverride = -1;
+        }
         HarpyTestUtil.remove(p);
         HarpyTestUtil.remove(q);
         helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 80, batch = "oneHappyFamily")
+    public static void oneHappyFamily(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos hp = new BlockPos(7, 2, 7);
+        helper.setBlock(hp, ModBlocks.HEARTH.get());
+        AbstractMonsterGirl a = still(helper, new BlockPos(5, 2, 7)), b = still(helper, new BlockPos(6, 2, 9)), c = still(helper, new BlockPos(8, 2, 9));
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(7, 2, 5));
+        for (AbstractMonsterGirl g : new AbstractMonsterGirl[]{a, b, c}) g.setAffection(p.getUUID(), 100);
+        helper.runAfterDelay(3, () -> {
+            check(Marriage.propose(level, a, p) == Marriage.Answer.ENGAGED && Marriage.tryWed(level, a, p), "first wedding");
+            check(Marriage.propose(level, b, p) == Marriage.Answer.ENGAGED, "any number by default: she says yes too");
+            check(Marriage.tryWed(level, b, p) && Marriage.married(a, p) && Marriage.married(b, p), "both are wives");
+            check(Marriage.blissFrom(level, p) == 2 && p.getMaxHealth() == 20 + 2 * Marriage.HEALTH, "the hearts add up");
+            b.setAffection(p.getUUID(), 90);
+            a.getPersistentData().remove("FamilyWarmedAt");
+            check(Marriage.warmth(level, a, p) == 1 && b.getAffection(p) == 91, "a pat for one warms the other");
+            check(Marriage.warmth(level, a, p) == 0 && b.getAffection(p) == 91, "once in a while");
+            check(Marriage.warmth(level, c, p) == 0, "only a wife's pat spreads");
+            check(Marriage.sheAsks(level, c, p) && p.getInventory().countItem(ModItems.WEDDING_RING.get()) == 1, "she asks first, ring and all");
+            check(!Marriage.sheAsks(level, c, p), "once");
+            check(Marriage.propose(level, c, p) == Marriage.Answer.ENGAGED && Marriage.tryWed(level, c, p) && Marriage.count(p) == 3, "three");
+            check(Marriage.blissFrom(level, p) == 3 && p.getMaxHealth() == 20 + Marriage.BLISS_CAP * Marriage.HEALTH, "capped at three");
+            a.kill();
+            check(Marriage.count(p) == 2 && p.hasEffect(net.minecraft.world.effect.MobEffects.REGENERATION), "the others hold them close");
+            check(Marriage.blissFrom(level, p) == 2 && p.getMaxHealth() == 20 + 2 * Marriage.HEALTH, "and two still near");
+            HarpyTestUtil.remove(p);
+            helper.succeed();
+        });
     }
 
     @GameTest(template = PLATFORM, timeoutTicks = 80, batch = "weddingAtTheHearth")
@@ -77,11 +112,32 @@ public class MarriageTests {
         helper.runAfterDelay(3, () -> {                                     // the hearth joins the loaded list a tick later
             check(Marriage.tryWed(level, bride, p), "wed by the fire");
             check(Marriage.married(bride, p) && !Marriage.engaged(bride, p) && bride.hasFlag(AbstractMonsterGirl.FLAG_VEIL), "married, in her veil");
-            check(Marriage.bedBonus(bride, p) == Marriage.BED && Marriage.count(p) == 1, "keener for bed");
+            check(Marriage.honeymoon(bride) && Marriage.bedBonus(bride, p) == Marriage.BED + Marriage.HONEYMOON_BED && Marriage.count(p) == 1, "keener for bed, on honeymoon");
+            check(Marriage.familyBed(level, p, 2) && !Marriage.familyBed(level, p, 1), "two wives in bed make a family bed");
+            int fond = guest.getAffection(p);
+            check(Marriage.bouquet(level, bride, p, java.util.List.of(guest)) == guest && guest.getAffection(p) == fond + Marriage.BOUQUET, "the guest catches the bouquet");
             check(Marriage.bliss(level, p) && p.getMaxHealth() == 20 + Marriage.HEALTH, "two more hearts with her near");
             bride.kill();
             check(Marriage.count(p) == 0, "free again when she is gone");
+            check(Marriage.family(p).size() == 1 && Marriage.family(p).getCompound(0).getBoolean("Gone"), "the family page remembers her");
             check(!Marriage.bliss(level, p) && p.getMaxHealth() == 20, "and the hearts go with her");
+            HarpyTestUtil.remove(p);
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "realmWeddingByTheCenser")
+    public static void realmWeddingByTheCenser(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        helper.setBlock(new BlockPos(7, 2, 7), ModBlocks.REALM_CENSER.get().defaultBlockState().setValue(com.linkyoshi90.monstergirls.block.RealmCenserBlock.LIT, true));
+        AbstractMonsterGirl bride = still(helper, new BlockPos(5, 2, 7));
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(9, 2, 7));
+        bride.setAffection(p.getUUID(), 100);
+        int touch = com.linkyoshi90.monstergirls.entity.RealmTouched.touch(p);
+        check(Marriage.propose(level, bride, p) == Marriage.Answer.ENGAGED, "engaged");
+        helper.runAfterDelay(3, () -> {
+            check(Marriage.tryWed(level, bride, p) && Marriage.married(bride, p), "wed in violet smoke");
+            check(com.linkyoshi90.monstergirls.entity.RealmTouched.touch(p) == Math.min(com.linkyoshi90.monstergirls.entity.RealmTouched.MAX, touch + Marriage.REALM_VOWS), "the realm keeps the vows");
             HarpyTestUtil.remove(p);
             helper.succeed();
         });

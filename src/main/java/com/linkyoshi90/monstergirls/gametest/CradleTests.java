@@ -1,0 +1,87 @@
+package com.linkyoshi90.monstergirls.gametest;
+
+import com.linkyoshi90.monstergirls.MonsterGirlsMod;
+import com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl;
+import com.linkyoshi90.monstergirls.entity.girl.Cradle;
+import com.linkyoshi90.monstergirls.entity.girl.GirlSpecies;
+import com.linkyoshi90.monstergirls.entity.girl.Upbringing;
+import com.linkyoshi90.monstergirls.registry.ModBlocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.gametest.framework.GameTest;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.gametest.GameTestHolder;
+import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+
+import static com.linkyoshi90.monstergirls.gametest.HarpyTestUtil.PLATFORM;
+import static com.linkyoshi90.monstergirls.gametest.HarpyTestUtil.check;
+import static com.linkyoshi90.monstergirls.gametest.JackalopeTests.spawn;
+
+/** The cradle (entity/girl/Cradle): naps at night that count double, and a lullaby. */
+@GameTestHolder(MonsterGirlsMod.MODID)
+@PrefixGameTestTemplate(false)
+public class CradleTests {
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "cradleNapsAndLullabies")
+    public static void cradleNapsAndLullabies(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos cradle = new BlockPos(7, 2, 7);
+        helper.setBlock(cradle, ModBlocks.CRADLE.get());
+        AbstractMonsterGirl young = spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(8, 2, 7)), grown = spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(6, 2, 7));
+        young.setBaby(true);
+        young.setNoAi(true);
+        grown.setNoAi(true);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(7, 2, 9));
+        check(Cradle.near(level, young.blockPosition()).equals(helper.absolutePos(cradle)), "she finds the cradle");
+        int before = young.getGrowTicks();
+        check(!Cradle.tick(level, young, false) && young.getGrowTicks() == before, "not by day");
+        check(Cradle.tick(level, young, true) && young.getGrowTicks() == before + Cradle.EVERY, "at night she naps there, growing faster");
+        check(!Cradle.tick(level, grown, true), "only the little ones");
+        int fond = young.getAffection(p);
+        check(Cradle.rock(level, helper.absolutePos(cradle), p) == 1 && young.getAffection(p) == fond + Cradle.ROCKED, "a lullaby");
+        check(Cradle.rock(level, helper.absolutePos(cradle), p) == 1 && young.getAffection(p) == fond + Cradle.ROCKED, "once a minute");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "toysTipHerCalling")
+    public static void toysTipHerCalling(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        AbstractMonsterGirl young = spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(7, 2, 7));
+        young.setBaby(true);
+        young.setNoAi(true);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(8, 2, 7));
+        int[] before = com.linkyoshi90.monstergirls.entity.girl.Roles.weights(level, young);
+        net.minecraft.world.item.ItemStack sword = new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.WOODEN_SWORD, 4);
+        check(Upbringing.give(level, young, p, sword) == Upbringing.Answer.LOVES_IT && sword.getCount() == 3, "she loves it");
+        check(Upbringing.give(level, young, p, sword) == Upbringing.Answer.TOMORROW && sword.getCount() == 3, "one a day");
+        int[] after = com.linkyoshi90.monstergirls.entity.girl.Roles.weights(level, young);
+        int guard = com.linkyoshi90.monstergirls.entity.girl.Roles.Role.GUARD.ordinal();
+        check(after[guard] == before[guard] + Upbringing.WEIGHT, "a guard is likelier: " + after[guard]);
+        check(Upbringing.give(level, young, p, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.STICK)) == null, "not a toy");
+        young.setBaby(false);
+        check(Upbringing.give(level, young, p, sword) == null, "only for little ones");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "growingUpMoments")
+    public static void growingUpMoments(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        AbstractMonsterGirl young = spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(7, 2, 7));
+        young.setBaby(true);
+        young.setNoAi(true);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(8, 2, 7));
+        young.bornTo(p.getUUID());
+        check(com.linkyoshi90.monstergirls.entity.girl.GrowingUp.tick(level, young) == null, "too little yet");
+        young.setGrowTicks(AbstractMonsterGirl.GROW_TICKS * 3 / 10);
+        check("word".equals(com.linkyoshi90.monstergirls.entity.girl.GrowingUp.tick(level, young)), "her first word");
+        check(com.linkyoshi90.monstergirls.entity.girl.GrowingUp.tick(level, young) == null, "once");
+        young.setGrowTicks(AbstractMonsterGirl.GROW_TICKS * 8 / 10);
+        check("flower".equals(com.linkyoshi90.monstergirls.entity.girl.GrowingUp.tick(level, young)), "a flower");
+        check("drawing".equals(com.linkyoshi90.monstergirls.entity.girl.GrowingUp.tick(level, young)), "a drawing");
+        check(com.linkyoshi90.monstergirls.entity.girl.GrowingUp.tick(level, young) == null, "all three");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+}
