@@ -227,6 +227,29 @@ public final class Hobbies {
         return false;
     }
 
+    /**
+     * A musician with a note block within reach plays it: a note of a little tune (her own, from her UUID), the block's real sound and
+     * note. Which block she played, or null.
+     */
+    @Nullable
+    public static BlockPos playNoteBlock(ServerLevel level, Mob girl) {
+        BlockPos at = girl.blockPosition(), found = null;
+        for (BlockPos p : BlockPos.betweenClosed(at.offset(-4, -2, -4), at.offset(4, 2, 4))) {
+            if (level.getBlockState(p).is(net.minecraft.world.level.block.Blocks.NOTE_BLOCK) && level.getBlockState(p.above()).isAir()) {
+                found = p.immutable();
+                break;
+            }
+        }
+        if (found == null) return null;
+        int[] tune = {0, 4, 7, 12, 7, 4, 5, 9, 12, 9, 7, 2};               // a little arpeggio, started where her UUID says
+        int step = (int) Math.floorMod(girl.getUUID().getLeastSignificantBits() + level.getGameTime() / 20, (long) tune.length);
+        var state = level.getBlockState(found).setValue(net.minecraft.world.level.block.NoteBlock.NOTE, 6 + tune[step] % 19);
+        level.setBlock(found, state, 3);
+        level.blockEvent(found, state.getBlock(), 0, 0);                   // the note block plays it (sound and note particle)
+        girl.getLookControl().setLookAt(found.getCenter());
+        return found;
+    }
+
     /** What the hobby gives someone besides anything she made: a reader shares what she learned, a musician's tune lifts everyone. */
     private static void extras(ServerLevel level, Mob girl, @Nullable Player to) {
         switch (hobby(girl)) {
@@ -292,6 +315,7 @@ public final class Hobbies {
         if (level.random.nextInt(2) == 0) level.sendParticles(h.particle, girl.getX(), girl.getY() + girl.getBbHeight() * 0.7, girl.getZ(), 2, 0.3, 0.2, 0.3, 0.02);
         if (level.random.nextInt(4) == 0) level.playSound(null, girl.blockPosition(), h.sound, SoundSource.NEUTRAL, 0.4F, 0.9F + level.random.nextFloat() * 0.3F);
         if (h == Hobby.GARDENING && level.random.nextInt(3) == 0) tend(level, girl);
+        if (h == Hobby.MUSIC && level.random.nextInt(2) == 0) playNoteBlock(level, girl);
         if (!doneToday(level, girl)) {
             t.putInt(WORK_TIME, work(girl) + ticks);
             if (work(girl) >= WORK) finish(level, girl);

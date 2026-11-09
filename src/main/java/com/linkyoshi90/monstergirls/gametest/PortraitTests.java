@@ -46,4 +46,14 @@ public class PortraitTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "aMusicianPlaysTheNoteBlock")
+    public static void aMusicianPlaysTheNoteBlock(GameTestHelper helper) {
+        var girl = JackalopeTests.spawn(helper, com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.SERVAL_NEKOMATA, new net.minecraft.core.BlockPos(7, 2, 7));
+        girl.setNoAi(true);
+        check(com.linkyoshi90.monstergirls.entity.Hobbies.playNoteBlock(helper.getLevel(), girl) == null, "nothing to play");
+        helper.setBlock(new net.minecraft.core.BlockPos(9, 2, 7), net.minecraft.world.level.block.Blocks.NOTE_BLOCK);
+        check(helper.absolutePos(new net.minecraft.core.BlockPos(9, 2, 7)).equals(com.linkyoshi90.monstergirls.entity.Hobbies.playNoteBlock(helper.getLevel(), girl)), "she plays it");
+        helper.succeed();
+    }
 }
