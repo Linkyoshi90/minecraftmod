@@ -103,6 +103,7 @@ LANG = {
     "message.monstergirls.marriage.perfect": "And you asked %s right here, at her kind of place. She's never going to forget this",
     "advancement.monstergirls.perfect_proposal": "The Perfect Proposal",
     "advancement.monstergirls.perfect_proposal.desc": "Propose to a girl at her favourite kind of place",
+    "message.monstergirls.marriage.daughter_engaged": "%s has asked for your daughter %s's hand, and she said yes!",
     "journal.monstergirls.family.title": "Family",
     "journal.monstergirls.family.children": "Little ones born to you: %s",
     "journal.monstergirls.family.line": "♥ %s, %s (wed day %s)",

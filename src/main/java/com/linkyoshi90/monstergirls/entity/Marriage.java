@@ -239,6 +239,11 @@ public final class Marriage {
         level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.3, mob.getZ(), 12, 0.5, 0.4, 0.5, 0.0);
         mob.playSound(SoundEvents.AMETHYST_BLOCK_CHIME, 1.0F, 1.2F);
         player.displayClientMessage(Component.translatable("message.monstergirls.marriage.yes." + mob.getRandom().nextInt(4), mob.getDisplayName()), false);
+        UUID parentId = b.getFather();                                           // someone's daughter: her parent hears of it
+        if (parentId != null && !parentId.equals(player.getUUID()) && level.getServer().getPlayerList().getPlayer(parentId) instanceof Player parent) {
+            parent.displayClientMessage(Component.translatable("message.monstergirls.marriage.daughter_engaged", player.getDisplayName(), mob.getDisplayName())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE), false);
+        }
         if (Dates.fits(level, mob.blockPosition(), Dates.favourite(mob))) {      // asked at her kind of place: perfect
             b.addAffection(player, PERFECT);
             player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.LUCK, 24000, 0));
