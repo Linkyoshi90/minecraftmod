@@ -982,6 +982,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
                 this.random.nextFloat() * 360.0F, 0.0F);
         young.setBaby(true);
         young.randomizeVariant();
+        if (this.random.nextBoolean() && !EARNED.contains(this.getVariantName())) young.setVariantIndex(this.getVariantIndex());   // she takes after her mother
         young.setPaint(this.getPaint());                                  // a painted mother has painted daughters
         young.setPersistenceRequired();                                   // born here, she stays here: no despawning
         level.addFreshEntity(young);

@@ -711,6 +711,18 @@ public final class Marriage {
     private static final String WELCOME = "WelcomeBackIn";
     public static final int WELCOME_DELAY = 200;
 
+    /** Anniversaries falling today, by her name (from the family page), for the login reminder. */
+    public static java.util.List<String> anniversariesToday(ServerLevel level, Player p) {
+        java.util.List<String> out = new java.util.ArrayList<>();
+        long today = level.getDayTime() / 24000L + 1;
+        for (Tag t : family(p)) {
+            CompoundTag d = (CompoundTag) t;
+            long since = today - d.getLong("Day");
+            if (!d.getBoolean("Gone") && since > 0 && since % YEAR == 0) out.add(d.getString("Name"));
+        }
+        return out;
+    }
+
     @Nullable
     public static Mob welcomeBack(ServerLevel level, Player p) {
         java.util.List<Mob> near = spousesNear(level, p, p, GUESTS, null);
@@ -736,6 +748,9 @@ public final class Marriage {
                 else {
                     pd.remove(WELCOME);
                     welcomeBack(level, event.getEntity());
+                    for (String name : anniversariesToday(level, event.getEntity())) {        // she waits until you're together on the day
+                        event.getEntity().displayClientMessage(Component.translatable("message.monstergirls.marriage.anniversary_today", name).withStyle(ChatFormatting.GOLD), false);
+                    }
                 }
             }
         }
