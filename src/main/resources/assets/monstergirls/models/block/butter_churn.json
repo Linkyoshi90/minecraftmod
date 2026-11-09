@@ -149,22 +149,58 @@
       ],
       "faces": {
         "down": {
-          "texture": "#stick"
+          "texture": "#stick",
+          "uv": [
+            0,
+            0,
+            1.0,
+            1.0
+          ]
         },
         "up": {
-          "texture": "#stick"
+          "texture": "#stick",
+          "uv": [
+            0,
+            0,
+            1.0,
+            1.0
+          ]
         },
         "north": {
-          "texture": "#stick"
+          "texture": "#stick",
+          "uv": [
+            0,
+            0,
+            1.0,
+            7
+          ]
         },
         "south": {
-          "texture": "#stick"
+          "texture": "#stick",
+          "uv": [
+            0,
+            0,
+            1.0,
+            7
+          ]
         },
         "west": {
-          "texture": "#stick"
+          "texture": "#stick",
+          "uv": [
+            0,
+            0,
+            1.0,
+            7
+          ]
         },
         "east": {
-          "texture": "#stick"
+          "texture": "#stick",
+          "uv": [
+            0,
+            0,
+            1.0,
+            7
+          ]
         }
       }
     },
@@ -181,22 +217,58 @@
       ],
       "faces": {
         "down": {
-          "texture": "#stick"
+          "texture": "#stick",
+          "uv": [
+            0,
+            0,
+            6,
+            1.0
+          ]
         },
         "up": {
-          "texture": "#stick"
+          "texture": "#stick",
+          "uv": [
+            0,
+            0,
+            6,
+            1.0
+          ]
         },
         "north": {
-          "texture": "#stick"
+          "texture": "#stick",
+          "uv": [
+            0,
+            0,
+            6,
+            1
+          ]
         },
         "south": {
-          "texture": "#stick"
+          "texture": "#stick",
+          "uv": [
+            0,
+            0,
+            6,
+            1
+          ]
         },
         "west": {
-          "texture": "#stick"
+          "texture": "#stick",
+          "uv": [
+            0,
+            0,
+            1.0,
+            1
+          ]
         },
         "east": {
-          "texture": "#stick"
+          "texture": "#stick",
+          "uv": [
+            0,
+            0,
+            1.0,
+            1
+          ]
         }
       }
     }

@@ -145,3 +145,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    import fix_model_uvs  # the milking machine's arms reach past the block edge: explicit UVs
+    fix_model_uvs.main()

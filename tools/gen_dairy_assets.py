@@ -191,6 +191,22 @@ um = {"particle": "monstergirls:block/umbrella_canopy", "canopy": "monstergirls:
 canopy = [cube([-16, 26, -16], [32, 27, 32], "canopy"), cube([-11, 27, -11], [27, 29, 27], "canopy"), cube([-5, 29, -5], [21, 31, 21], "canopy"),
           cube([4, 31, 4], [12, 32, 12], "canopy")]
 shaft = [cube([7.5, -8, 7.5], [8.5, 31, 8.5], "handle"), cube([7.5, -10, 7.5], [11.5, -8, 8.5], "handle"), cube([10.5, -8, 7.5], [11.5, -6, 8.5], "handle")]
+
+
+def fit_uv(el):
+    """Explicit UVs inside the texture for an element larger than a block: left to themselves, faces of a box reaching past 0..16
+    take their UVs from its position and sample the neighbouring sprites in the atlas (warped vines and doors under the umbrella)."""
+    (x0, y0, z0), (x1, y1, z1) = el["from"], el["to"]
+    size = {"x": x1 - x0, "y": y1 - y0, "z": z1 - z0}
+    axes = {"down": ("x", "z"), "up": ("x", "z"), "north": ("x", "y"), "south": ("x", "y"), "west": ("z", "y"), "east": ("z", "y")}
+    for face, spec in el["faces"].items():
+        u, v = axes[face]
+        spec["uv"] = [0, 0, min(16, size[u]), min(16, size[v])]
+    return el
+
+
+canopy = [fit_uv(e) for e in canopy]
+shaft = [fit_uv(e) for e in shaft]
 held = {"rotation": [0, 0, 0], "translation": [0, 3, 1], "scale": [1, 1, 1]}
 model("umbrella_open", um, canopy + shaft, parent=None, folder="item",
       display={"thirdperson_righthand": held, "thirdperson_lefthand": held,
@@ -257,4 +273,6 @@ lang = {
 import taxonomy  # noqa: E402  the clade names on dairy ("Firm Feliform Cheese")
 lang.update({k: v for k, v in taxonomy.lang_entries().items() if k.startswith("family.")})
 M.add_lang(lang)
+import fix_model_uvs  # noqa: E402  (boxes past the block edge need explicit UVs)
+fix_model_uvs.main()
 print("dairy assets written")

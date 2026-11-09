@@ -64,4 +64,17 @@ public class WardrobeTests {
             helper.succeed();
         });
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "everyGirlHasHerClothes")
+    public static void everyGirlHasHerClothes(GameTestHelper helper) {
+        java.util.List<String> missing = new java.util.ArrayList<>();
+        for (com.linkyoshi90.monstergirls.entity.girl.GirlSpecies s : com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.values()) {
+            for (Wardrobe.Outfit o : Wardrobe.Outfit.values()) {
+                String path = "/assets/monstergirls/textures/entity/outfit/" + s.id() + "_" + o.name().toLowerCase(java.util.Locale.ROOT) + ".png";
+                if (WardrobeTests.class.getResource(path) == null) missing.add(path);
+            }
+        }
+        check(missing.isEmpty(), "outfits painted for every girl (tools/gen_outfit_overlays.py): missing " + missing.size() + " " + missing.stream().limit(5).toList());
+        helper.succeed();
+    }
 }

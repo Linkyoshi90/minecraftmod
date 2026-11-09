@@ -85,22 +85,58 @@
       ],
       "faces": {
         "north": {
-          "texture": "#pump"
+          "texture": "#pump",
+          "uv": [
+            0,
+            0,
+            3,
+            6
+          ]
         },
         "south": {
-          "texture": "#pump"
+          "texture": "#pump",
+          "uv": [
+            0,
+            0,
+            3,
+            6
+          ]
         },
         "east": {
-          "texture": "#pump"
+          "texture": "#pump",
+          "uv": [
+            0,
+            0,
+            3,
+            6
+          ]
         },
         "west": {
-          "texture": "#pump"
+          "texture": "#pump",
+          "uv": [
+            0,
+            0,
+            3,
+            6
+          ]
         },
         "up": {
-          "texture": "#pump"
+          "texture": "#pump",
+          "uv": [
+            0,
+            0,
+            3,
+            3
+          ]
         },
         "down": {
-          "texture": "#pump"
+          "texture": "#pump",
+          "uv": [
+            0,
+            0,
+            3,
+            3
+          ]
         }
       }
     },
@@ -117,22 +153,58 @@
       ],
       "faces": {
         "north": {
-          "texture": "#pump"
+          "texture": "#pump",
+          "uv": [
+            0,
+            0,
+            3,
+            6
+          ]
         },
         "south": {
-          "texture": "#pump"
+          "texture": "#pump",
+          "uv": [
+            0,
+            0,
+            3,
+            6
+          ]
         },
         "east": {
-          "texture": "#pump"
+          "texture": "#pump",
+          "uv": [
+            0,
+            0,
+            3,
+            6
+          ]
         },
         "west": {
-          "texture": "#pump"
+          "texture": "#pump",
+          "uv": [
+            0,
+            0,
+            3,
+            6
+          ]
         },
         "up": {
-          "texture": "#pump"
+          "texture": "#pump",
+          "uv": [
+            0,
+            0,
+            3,
+            3
+          ]
         },
         "down": {
-          "texture": "#pump"
+          "texture": "#pump",
+          "uv": [
+            0,
+            0,
+            3,
+            3
+          ]
         }
       }
     },

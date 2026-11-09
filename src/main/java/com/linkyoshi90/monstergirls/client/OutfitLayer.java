@@ -14,17 +14,35 @@ import software.bernie.geckolib.cache.object.GeoVertex;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 /**
- * Clothes from her wardrobe (entity/Wardrobe), drawn over her own: plain boxes fitted to her torso and head bones, so they suit every
- * body (a lamia's tail and a centaur's flanks are other bones). textures/entity/outfits.png is a 4x4 grid of cells, one row per outfit:
- * the main cloth, its trim, a band (obi, belt), and what goes on her head.
+ * Clothes from her wardrobe (entity/Wardrobe), drawn over her own. The clothes themselves are painted onto her own model
+ * (textures/entity/outfit/&lt;model&gt;_&lt;outfit&gt;.png, by tools/gen_outfit_overlays.py: coat or kimono on her torso and sleeves, hems by
+ * her own knees and ankles) and drawn as her model again with that texture, the way dyed wool and the paints are drawn, so they follow
+ * every pose. What sticks out (the hood, the knitted hat, the hair flower and the obi's bow, the frilled headband) are small boxes on her
+ * head and back, from the 4x4 grid in textures/entity/outfits.png (one row per outfit).
  */
 public class OutfitLayer extends GeoRenderLayer<AbstractMonsterGirl> {
     private static final RenderType TYPE = RenderType.entityCutoutNoCull(MonsterGirlsMod.id("textures/entity/outfits.png"));
     private static final float U = 1.0F / 16.0F;
-    private static final int GRID = 4, MAIN = 0, TRIM = 1, BAND = 2, HEAD = 3;
+    private static final int GRID = 4, TRIM = 1, HEAD = 3;
 
     public OutfitLayer(GirlRenderer renderer) {
         super(renderer);
+    }
+
+    /** Which overlay textures exist (a model added later without its overlays just goes without). */
+    private static final java.util.Map<net.minecraft.resources.ResourceLocation, Boolean> EXISTS = new java.util.concurrent.ConcurrentHashMap<>();
+
+    @Override
+    public void render(PoseStack pose, AbstractMonsterGirl girl, software.bernie.geckolib.cache.object.BakedGeoModel model, RenderType renderType,
+                       MultiBufferSource buffers, VertexConsumer buffer, float partialTick, int light, int overlay) {
+        int code = girl.getOutfit();
+        if (code <= 0 || code > Wardrobe.Outfit.values().length || girl.isBaby()) return;
+        String outfit = Wardrobe.Outfit.values()[code - 1].name().toLowerCase(java.util.Locale.ROOT);
+        String modelName = this.getGeoModel().getModelResource(girl).getPath().replace("geo/entity/", "").replace(".geo.json", "");
+        net.minecraft.resources.ResourceLocation tex = MonsterGirlsMod.id("textures/entity/outfit/" + modelName + "_" + outfit + ".png");
+        if (!EXISTS.computeIfAbsent(tex, t -> net.minecraft.client.Minecraft.getInstance().getResourceManager().getResource(t).isPresent())) return;
+        RenderType cloth = RenderType.entityCutoutNoCull(tex);
+        this.getRenderer().reRender(model, pose, buffers, girl, cloth, buffers.getBuffer(cloth), partialTick, light, overlay, -1);
     }
 
     /** A bone's own extent, in model units: half width, lowest and highest point, front and back. */
@@ -63,37 +81,25 @@ public class OutfitLayer extends GeoRenderLayer<AbstractMonsterGirl> {
         float h = e.half, lo = e.low, hi = e.high, f = e.front, k = e.back, mid = (f + k) / 2;
         switch (outfit) {
             case RAINCOAT -> {
-                if (body) {
-                    b.box(-h - 0.4F, lo - 1.0F, f - 0.4F, h + 0.4F, hi + 0.2F, k + 0.4F, row, MAIN);
-                    b.box(-h - 0.5F, lo - 1.0F, f - 0.5F, -h - 0.2F, hi, f - 0.2F, row, TRIM);           // buttons down the front edge
-                } else {
+                if (!body) {
                     b.box(-h - 0.5F, hi - 3.5F, mid - 0.5F, h + 0.5F, hi + 0.6F, k + 0.6F, row, HEAD);      // the hood, pushed back
                 }
             }
             case WINTER_COAT -> {
-                if (body) {
-                    b.box(-h - 0.45F, lo - 1.5F, f - 0.45F, h + 0.45F, hi + 0.2F, k + 0.45F, row, MAIN);
-                    b.box(-h - 0.7F, hi - 0.8F, f - 0.7F, h + 0.7F, hi + 0.6F, k + 0.7F, row, TRIM);        // fur collar
-                    b.box(-h - 0.6F, lo - 1.9F, f - 0.6F, h + 0.6F, lo - 1.1F, k + 0.6F, row, TRIM);        // fur hem
-                } else {
+                if (!body) {
                     b.box(-h - 0.4F, hi - 0.6F, f + 0.5F, h + 0.4F, hi + 1.4F, k + 0.4F, row, HEAD);        // a knitted hat
                 }
             }
             case YUKATA -> {
                 if (body) {
-                    b.box(-h - 0.3F, lo - 2.0F, f - 0.3F, h + 0.3F, hi, k + 0.3F, row, MAIN);
-                    float obi = lo + (hi - lo) * 0.3F;
-                    b.box(-h - 0.45F, obi, f - 0.45F, h + 0.45F, obi + 1.8F, k + 0.45F, row, BAND);
-                    b.box(-1.2F, obi - 0.4F, k + 0.45F, 1.2F, obi + 2.2F, k + 1.4F, row, TRIM);            // the bow at her back
+                    float obi = bone.getPivotY() + (hi - bone.getPivotY()) * 0.32F;                         // the painted obi's height
+                    b.box(-1.2F, obi - 0.4F, k + 0.1F, 1.2F, obi + 1.6F, k + 1.0F, row, TRIM);             // the bow at her back
                 } else {
                     b.box(h - 0.2F, hi - 1.0F, mid - 1.0F, h + 0.8F, hi, mid + 1.0F, row, HEAD);           // a hair flower
                 }
             }
             case MAID_APRON -> {
-                if (body) {
-                    b.box(-h + 0.4F, lo - 2.0F, f - 0.45F, h - 0.4F, hi - 1.6F, f - 0.15F, row, MAIN);      // the apron's front
-                    b.box(-h - 0.3F, lo + (hi - lo) * 0.3F, f - 0.3F, h + 0.3F, lo + (hi - lo) * 0.3F + 0.8F, k + 0.3F, row, BAND); // its ties
-                } else {
+                if (!body) {
                     b.box(-h - 0.2F, hi - 0.3F, f + 1.5F, h + 0.2F, hi + 0.9F, f + 2.5F, row, HEAD);       // frilled headband
                 }
             }
