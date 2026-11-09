@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Player;
  */
 public final class Flirting {
     public static final int LINES = 8;
-    public static final int TUB_LINES = 3;
+    public static final int TUB_LINES = 3, WIFE_LINES = 6;
     private static final int CHANCE = 4;
 
     private Flirting() {}
@@ -40,7 +40,8 @@ public final class Flirting {
     public static boolean onPet(ServerLevel level, net.minecraft.world.entity.Mob mob, Player player) {
         Marriage.warmth(level, mob, player);                                    // the rest of the family is glad of it
         if (!canFlirt(mob, player) || mob.getRandom().nextInt(chance(mob, player)) != 0) return false;
-        tease(level, mob, player, "flirt", LINES);
+        if (Marriage.married(mob, player)) tease(level, mob, player, "flirt_wife", WIFE_LINES);   // a wife has her own way of teasing
+        else tease(level, mob, player, "flirt", LINES);
         return true;
     }
 
