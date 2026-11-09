@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen_milk_assets import add_lang  # noqa: E402
 
 LANG = {
+    "message.monstergirls.notice.creeper": "%s shrieks: \"Creeper! To the %s!\"",
     "message.monstergirls.notice.worn": "%s eyes your %s: \"That's about to fall apart, you know\"",
     "message.monstergirls.notice.tired": "%s peers at you: \"When did you last sleep? You look awful. Get some rest before the phantoms come\"",
     "message.monstergirls.notice.tired_wife": "%s takes your hand firmly: \"Bed. Now. You haven't slept in days\"",
