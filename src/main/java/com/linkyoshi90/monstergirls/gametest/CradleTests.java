@@ -82,6 +82,27 @@ public class CradleTests {
         check("flower".equals(com.linkyoshi90.monstergirls.entity.girl.GrowingUp.tick(level, young)), "a flower");
         check("drawing".equals(com.linkyoshi90.monstergirls.entity.girl.GrowingUp.tick(level, young)), "a drawing");
         check(com.linkyoshi90.monstergirls.entity.girl.GrowingUp.tick(level, young) == null, "all three");
+        check(com.linkyoshi90.monstergirls.entity.girl.Roles.comingOfAge(level, young, com.linkyoshi90.monstergirls.entity.girl.Roles.Role.SCOUT)
+                && p.getInventory().countItem(net.minecraft.world.item.Items.SPYGLASS) == 1, "grown up, she brings the first thing of her calling");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "storyTimeForTheLittleOnes")
+    public static void storyTimeForTheLittleOnes(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        AbstractMonsterGirl a = spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(7, 2, 7)), b = spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(9, 2, 7)),
+                grown = spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(5, 2, 7));
+        a.setBaby(true);
+        b.setBaby(true);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(7, 2, 9));
+        net.minecraft.world.item.ItemStack book = new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.WRITTEN_BOOK);
+        int fond = b.getAffection(p);
+        check(com.linkyoshi90.monstergirls.entity.girl.StoryTime.read(level, grown, p, book) == 0, "a story is for the little ones");
+        check(com.linkyoshi90.monstergirls.entity.girl.StoryTime.read(level, a, p, book) == 2, "both little ones listen");
+        check(b.getAffection(p) == fond + com.linkyoshi90.monstergirls.entity.girl.StoryTime.CLOSER && b.getGrowTicks() == com.linkyoshi90.monstergirls.entity.girl.StoryTime.GROWTH, "closer, and a little bigger");
+        com.linkyoshi90.monstergirls.entity.girl.StoryTime.read(level, a, p, book);
+        check(b.getAffection(p) == fond + com.linkyoshi90.monstergirls.entity.girl.StoryTime.CLOSER, "once a day");
         HarpyTestUtil.remove(p);
         helper.succeed();
     }

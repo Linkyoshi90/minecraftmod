@@ -103,7 +103,35 @@ public final class Roles {
                 p.displayClientMessage(Component.translatable("message.monstergirls.role.chosen", girl.getDisplayName(), Component.translatable(pick.key())), false);
             }
         }
+        comingOfAge(level, girl, pick);
         return pick;
+    }
+
+    /** What a daughter gives her parent on the day she grows up, by her calling. */
+    public static ItemStack firstGift(Role role) {
+        return switch (role) {
+            case FARMHAND -> new ItemStack(net.minecraft.world.item.Items.HAY_BLOCK);
+            case COOK -> new ItemStack(net.minecraft.world.item.Items.RABBIT_STEW);
+            case GUARD -> new ItemStack(net.minecraft.world.item.Items.SHIELD);
+            case SCOUT -> new ItemStack(net.minecraft.world.item.Items.SPYGLASS);
+        };
+    }
+
+    /**
+     * Coming of age: if her parent is within 32 when she grows up, she brings them the first thing of her new calling (firstGift) and
+     * thanks them for raising her. Whether they were there.
+     */
+    public static boolean comingOfAge(ServerLevel level, AbstractMonsterGirl girl, Role role) {
+        if (girl.getFather() == null) return false;
+        Player parent = level.getPlayerByUUID(girl.getFather());
+        if (parent == null || parent.distanceToSqr(girl) > 32 * 32) return false;
+        ItemStack gift = firstGift(role);
+        if (!parent.addItem(gift)) parent.drop(gift, false);
+        girl.getNavigation().moveTo(parent, 1.0);
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.HEART, girl.getX(), girl.getEyeY() + 0.3, girl.getZ(), 8, 0.4, 0.3, 0.4, 0.0);
+        parent.displayClientMessage(Component.translatable("message.monstergirls.role.coming_of_age", girl.getDisplayName(), Component.translatable(role.key()))
+                .withStyle(net.minecraft.ChatFormatting.GOLD), false);
+        return true;
     }
 
     public static void set(AbstractMonsterGirl girl, Role role) {

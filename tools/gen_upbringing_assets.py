@@ -16,6 +16,8 @@ LANG = {
     "message.monstergirls.upbringing.guard": "%s waves her wooden sword and vows to protect everyone",
     "message.monstergirls.upbringing.scout": "%s follows the compass needle in circles, giggling",
     "message.monstergirls.upbringing.enough": "%s already has plenty of those",
+    "message.monstergirls.story_time": "You read \"%s\" aloud, and %s little ones sit spellbound",
+    "message.monstergirls.story_time.untitled": "You read aloud, and %s little ones sit spellbound",
     "message.monstergirls.upbringing.tomorrow": "%s is still busy with today's toy",
 }
 
@@ -23,8 +25,8 @@ LANG = {
 def main():
     add_lang(LANG)
     gen_manor_assets.GUIDE_ADD.clear()
-    gen_manor_assets.GUIDE_ADD["journal.monstergirls.guide.roles"] = (
-        " Toys tip the scales, one a day: a wooden hoe for a farmhand, a bowl for a cook, a wooden sword for a guard, a compass for a scout.")
+    # the toys sentence (" Toys tip the scales, one a day: ...") went in first, then story time after it; append_guides only checks the end
+    gen_manor_assets.GUIDE_ADD["journal.monstergirls.guide.roles"] = " Show a little one a written book to read it to all the little ones near."
     gen_manor_assets.append_guides()
 
 
