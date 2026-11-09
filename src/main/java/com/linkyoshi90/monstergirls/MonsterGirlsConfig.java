@@ -147,6 +147,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue CRAVINGS;
     public static final ModConfigSpec.BooleanValue SHARED_DREAMS;
     public static final ModConfigSpec.BooleanValue PACKED_LUNCH;
+    public static final ModConfigSpec.BooleanValue REUNIONS;
     public static final ModConfigSpec.BooleanValue HOT_SPRINGS;
     public static final ModConfigSpec.BooleanValue AURORA_NIGHTS;
     public static final ModConfigSpec.BooleanValue PASSING_FLOCKS;
@@ -246,6 +247,10 @@ public final class MonsterGirlsConfig {
         PACKED_LUNCH = BUILDER
                 .comment("Of a morning, a wife you pass hands you a packed lunch.")
                 .define("packedLunch", true);
+
+        REUNIONS = BUILDER
+                .comment("Reunion Day (day 12 of every 24): at dusk your grown children who live away come home to your hearth with their households, and go back the next morning.")
+                .define("reunions", true);
 
         HOT_SPRINGS = BUILDER
                 .comment("Hot springs: water over geyserite steams, never freezes, heals and warms whoever soaks in it (friends come and join you), and cures a girl's cold. Off stops the effect and new springs in new chunks.")
@@ -471,6 +476,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean sharedDreams() {
         return SPEC.isLoaded() ? SHARED_DREAMS.get() : SHARED_DREAMS.getDefault();
+    }
+
+    public static boolean reunions() {
+        return SPEC.isLoaded() ? REUNIONS.get() : REUNIONS.getDefault();
     }
 
     public static boolean packedLunch() {

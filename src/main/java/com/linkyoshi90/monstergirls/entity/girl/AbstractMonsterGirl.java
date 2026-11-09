@@ -986,6 +986,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         young.setPaint(this.getPaint());                                  // a painted mother has painted daughters
         young.setPersistenceRequired();                                   // born here, she stays here: no despawning
         level.addFreshEntity(young);
+        young.getPersistentData().putUUID(com.linkyoshi90.monstergirls.entity.Reunions.BORN_OF, this.getUUID());   // whose she is (households, reunions)
         young.bornTo(father);
         if (father != null && level.getServer().getPlayerList().getPlayer(father) instanceof Player parent) {
             com.linkyoshi90.monstergirls.entity.Marriage.motherOf(parent, young, this);   // the family journal knows her mother

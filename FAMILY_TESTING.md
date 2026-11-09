@@ -58,6 +58,20 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - **Renaming** a wife or little one with a name tag updates the journal pages.
 - Advancements: *A Little One of Your Own*, *A Whole Family Tree* (ten), and your daughter's little ones show as grandchildren.
 
+## Family reunions (2026-11-10)
+
+- **Reunion Day** is the 12th day of every 24 (the journal's Family guide says how many days to go; that morning you are told).
+- At dusk, standing by your own hearth: every grown child of yours who lives further than 32 blocks away comes home, with her villager sweetheart and her little ones (your grandchildren). Daughters out of loaded range are fetched from where they were last seen (her chunk is held open for a few seconds by a self-expiring ticket). Same dimension only.
+- Fireworks, hearts, +6 friendship each, the little ones run to you; advancement *All Together Again*.
+- The next morning everyone who came from afar goes back where they were.
+- Try it: `/time set` to a day where `day % 24 == 11` (e.g. `/time set 11d`, then `/time add 11500` for dusk) with a grown daughter living away (or `/monstergirls family grow` a little one four times and walk her off).
+- Things to check in a client: does she arrive on solid ground near the hearth, and does she really end up back in her village the next morning (and her sweetheart with her)?
+- Option: `reunions`.
+
+## Wardrobe outfits, redone (2026-11-10)
+
+The raincoat, winter coat, yukata and maid apron are now painted onto each girl's own model (`previews/wardrobe_outfits.png`), drawn as her model again with that texture, so they follow her pose. Check in a client that they don't flicker against her skin (they're drawn the same way as dyed sheep wool).
+
 ## Elsewhere
 
 - **Birthday candles**: on a girl's birthday (Jade shows it), light a candle on a cake within 8 blocks of her: she comes over, blows it out and makes a wish (+8 for each friend there).

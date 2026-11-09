@@ -478,6 +478,11 @@ public final class Journal {
                         .append("\n\n").append(Component.translatable("journal.monstergirls.guide." + guide + (parts > 1 ? ".p" + i : ""))
                                 .withStyle(ChatFormatting.RESET, ChatFormatting.BLACK));
             }
+            if (guide.equals("family")) {                                            // when the family next comes home
+                int days = Reunions.daysUntil(player.level().getDayTime());
+                page.append(NL_TEXT).append(Component.translatable(days == 0 ? "journal.monstergirls.reunion.today" : "journal.monstergirls.reunion.next", days)
+                        .withStyle(ChatFormatting.RESET, ChatFormatting.DARK_PURPLE));
+            }
             if (guide.equals("festivals")) {                                         // and when the next one is
                 long time = player.level().getDayTime();
                 var next = com.linkyoshi90.monstergirls.entity.girl.Festivals.next(time);

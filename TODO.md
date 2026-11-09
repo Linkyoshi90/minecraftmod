@@ -854,3 +854,10 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [ ] Not fixed from the 2026-11-09 review: a craving's twins come from a second `giveBirth`, which an egg-layer can fail silently. (Grandchildren on the Family page: fixed, they are marked as grandchildren.)
 - [x] Later on 2026-11-09: shared dreams and going there together, /monstergirls family (+ op wed/due/grow), group weddings, the Whole Family painting, notes from home, the dragon egg hatches, spyglass study, birthday candles, the perfect proposal, musicians at note blocks, a hero's welcome, compliments, friend notices (worn tool, no sleep, creeper). All in FAMILY_TESTING.md.
 - [ ] Dev client: the cradle model and its facing, the wedding figurine (does it keep the veil?), a family bed with three wives (where do they lie?), the portraits on a wall, her arrows in an archery match (does she hit at 20 blocks?).
+
+### 2026-11-10
+- [x] Umbrella textures fixed (faces past the block edge had no UVs; `tools/fix_model_uvs.py`, eight more models fixed too).
+- [x] Wardrobe outfits painted onto every girl's model (`tools/gen_outfit_overlays.py`; rerun it after adding a species or changing a model).
+- [x] Family reunions (`entity/Reunions`, Reunion Day = day 12 of 24). Newborns now remember their mother (`BornOf`), which finds a daughter's household.
+- [ ] Dev client: outfit overlays (z-fighting?), reunion arrival spot and the trip back.
+- [ ] Next from the 2026-11-09 list: 2 daughters move out nearby, 3 family tree page, 4 vow renewal, 5 honeymoon trip, then harpy/frog wedding looks, sounds, visible mining, the Order chaplain, a performance test, a server boot test.
