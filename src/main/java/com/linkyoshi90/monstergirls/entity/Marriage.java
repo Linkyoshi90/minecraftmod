@@ -805,6 +805,11 @@ public final class Marriage {
         Player p = level.getServer().getPlayerList().getPlayer(who);
         if (p == null) return;
         forget(p, mob.getUUID());
+        CompoundTag pj = p.getData(ModAttachments.JOURNAL);                   // a dream of hers can't come true now
+        if (pj.contains(DREAM) && pj.getCompound(DREAM).hasUUID("With") && mob.getUUID().equals(pj.getCompound(DREAM).getUUID("With"))) {
+            pj.remove(DREAM);
+            p.setData(ModAttachments.JOURNAL, pj);
+        }
         p.displayClientMessage(Component.translatable("message.monstergirls.marriage.lost", mob.getDisplayName()).withStyle(ChatFormatting.GRAY), false);
         net.minecraft.world.item.ItemStack ring = new net.minecraft.world.item.ItemStack(ModItems.WEDDING_RING.get());   // her ring stays behind
         ring.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, Component.translatable("item.monstergirls.her_ring", mob.getName()));

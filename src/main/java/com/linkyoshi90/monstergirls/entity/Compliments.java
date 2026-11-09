@@ -28,9 +28,16 @@ import javax.annotation.Nullable;
 public final class Compliments {
     public static final double NEAR = 6;
     public static final int CLOSER = 1, LINES = 5;
-    static final String OUTFIT = "Outfit", PRAISED = "OutfitPraised";
+    static final String OUTFIT = "Outfit", PRAISED = "OutfitsPraised";
+
+    public static final int KEEP = 16;
 
     private Compliments() {
+    }
+
+    static boolean praised(CompoundTag journal, int outfit) {
+        for (int o : journal.getIntArray(PRAISED)) if (o == outfit) return true;
+        return false;
     }
 
     /** What the player wears, as one number (0 for nothing at all). */
@@ -58,14 +65,18 @@ public final class Compliments {
     public static Mob look(ServerLevel level, Player p) {
         int now = outfit(p);
         CompoundTag journal = p.getData(ModAttachments.JOURNAL);
-        if (now == 0 || journal.getInt(PRAISED) == now) return null;
+        if (now == 0 || praised(journal, now)) return null;
         if (journal.getInt(OUTFIT) != now) {                                  // just changed: remember it, praise comes when someone sees
             journal.putInt(OUTFIT, now);
             p.setData(ModAttachments.JOURNAL, journal);
         }
         for (Mob m : level.getEntitiesOfClass(Mob.class, new AABB(p.blockPosition()).inflate(NEAR),
                 m -> m instanceof Bonded b && m.isAlive() && !m.isBaby() && b.getAffection(p) >= HomeLife.FRIEND && m.hasLineOfSight(p))) {
-            journal.putInt(PRAISED, now);
+            int[] old = journal.getIntArray(PRAISED);                          // the last few outfits praised: swapping back is no new look
+            int[] kept = new int[Math.min(old.length + 1, KEEP)];
+            kept[0] = now;
+            System.arraycopy(old, 0, kept, 1, kept.length - 1);
+            journal.putIntArray(PRAISED, kept);
             p.setData(ModAttachments.JOURNAL, journal);
             Bonded b = (Bonded) m;
             b.addAffection(p, CLOSER);

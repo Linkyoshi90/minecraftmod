@@ -26,7 +26,7 @@ import java.util.Set;
 /**
  * Small things friends do just by being around. Good morning: waking from a night's sleep with friends near, a player is well rested
  * (absorption for a few minutes). A fishing buddy: a friend within {@link #BUDDY} cheers them on, and one catch in {@link #EXTRA} brings
- * up a second. Thunder: timid girls (rabbits, rodents, cats, marsupials) run to a friend in a thunderstorm and huddle against them
+ * up a second. Thunder: timid girls (rabbits, rodents, cats, marsupials), and any little one to her parent, run to a friend in a thunderstorm and huddle against them
  * once a storm, for {@link #HUDDLE} friendship. A swim buddy: a sea-folk friend within {@link #BUDDY} of a swimming player keeps them
  * company in the water (dolphin's grace and water breathing while she is near). Warmth: a fire-proof friend (or a bear or one of her furry kin) within
  * {@link #WARM} thaws a freezing player. Sure-footed: walking beside a hoofed friend (cattle, goats, deer, camels, horses and their kin), a player steps up whole
@@ -68,20 +68,24 @@ public final class Company {
         if (!level.isThundering() || !MonsterGirlsConfig.comfort()) return 0;
         long day = level.getDayTime() / 24000L + 1;
         int n = 0;
-        for (Mob m : HomeLife.friendsOf(level, p, p.getBoundingBox().inflate(STORM))) {
-            if (!timid(m) || m.isSleeping() || m.isPassenger() || m.getPersistentData().getLong(STORM_DAY) == day) continue;
+        java.util.List<Mob> near = new java.util.ArrayList<>(HomeLife.friendsOf(level, p, p.getBoundingBox().inflate(STORM)));
+        near.addAll(level.getEntitiesOfClass(Mob.class, p.getBoundingBox().inflate(STORM),          // friendsOf leaves out the little ones
+                m -> m.isAlive() && m.isBaby() && m instanceof Bonded b && p.getUUID().equals(b.getFather())));
+        for (Mob m : near) {
+            boolean little = m.isBaby() && p.getUUID().equals(((Bonded) m).getFather());   // any little one of theirs runs to them too
+            if (!(timid(m) || little) || m.isSleeping() || m.isPassenger() || m.getPersistentData().getLong(STORM_DAY) == day) continue;
             if (m.distanceToSqr(p) > CLOSE * CLOSE) {
                 m.getNavigation().moveTo(p, 1.3);
                 continue;
             }
             m.getPersistentData().putLong(STORM_DAY, day);
-            AbstractMonsterGirl g = (AbstractMonsterGirl) m;
-            g.getNavigation().stop();
-            g.getLookControl().setLookAt(p);
-            g.blushFor(80);
+            Bonded g = (Bonded) m;
+            m.getNavigation().stop();
+            m.getLookControl().setLookAt(p);
+            if (!little) g.blushFor(80);
             g.addAffection(p, HUDDLE);
             level.sendParticles(ParticleTypes.HEART, (m.getX() + p.getX()) / 2, m.getEyeY() + 0.3, (m.getZ() + p.getZ()) / 2, 3, 0.3, 0.2, 0.3, 0);
-            p.displayClientMessage(Component.translatable("message.monstergirls.thunder", m.getDisplayName()), true);
+            p.displayClientMessage(Component.translatable(little ? "message.monstergirls.thunder.little" : "message.monstergirls.thunder", m.getDisplayName()), true);
             n++;
         }
         return n;

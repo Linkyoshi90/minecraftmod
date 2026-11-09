@@ -124,4 +124,24 @@ public class CradleTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "littleOnesRunToThemAtTheThunder")
+    public static void littleOnesRunToThemAtTheThunder(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        AbstractMonsterGirl young = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(7, 2, 7));
+        young.setBaby(true);
+        young.setNoAi(true);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(8, 2, 7));
+        young.bornTo(p.getUUID());
+        level.setWeatherParameters(0, 600, true, true);
+        level.setRainLevel(1.0F);                                           // at full strength now, not after the usual ramp
+        level.setThunderLevel(1.0F);
+        int huddled = com.linkyoshi90.monstergirls.entity.Company.thunder(level, p);
+        level.setWeatherParameters(6000, 0, false, false);                  // put the sky back: other tests share it
+        level.setRainLevel(0.0F);
+        level.setThunderLevel(0.0F);
+        check(huddled == 1, "the little wolf hides against her parent: " + huddled);
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

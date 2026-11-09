@@ -15,6 +15,7 @@ LANG = {
     "message.monstergirls.growing_up.flower": "%s toddles over with a flower she picked just for you",
     "message.monstergirls.growing_up.drawing": "%s proudly hands you a drawing: the two of you, holding hands",
     "message.monstergirls.role.coming_of_age": "%s is all grown up! She hugs you tight, thanks you for raising her, and gives you the first fruit of her life as a %s",
+    "message.monstergirls.thunder.little": "%s runs to you at the thunder and hides her face in your side",
     "monstergirls.configuration.nameNewborns": "Name newborns",
     "item.monstergirls.drawing": "%s's Drawing",
     "item.monstergirls.drawing.lore": "Two stick figures holding hands: her, and %s",

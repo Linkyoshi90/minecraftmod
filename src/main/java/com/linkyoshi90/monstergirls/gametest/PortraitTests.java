@@ -36,7 +36,7 @@ public class PortraitTests {
 
     @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "studyingThroughASpyglass")
     public static void studyingThroughASpyglass(GameTestHelper helper) {
-        var girl = JackalopeTests.spawn(helper, com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.SERVAL_NEKOMATA, new net.minecraft.core.BlockPos(13, 2, 7));
+        var girl = JackalopeTests.spawn(helper, com.linkyoshi90.monstergirls.entity.girl.GirlSpecies.SERVAL_NEKOMATA, new net.minecraft.core.BlockPos(14, 2, 7));
         girl.setNoAi(true);
         var p = HarpyTestUtil.survivalPlayer(helper, new net.minecraft.core.BlockPos(1, 2, 7));
         p.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, girl.position().add(0, girl.getBbHeight() / 2, 0));

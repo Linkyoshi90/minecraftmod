@@ -98,7 +98,7 @@ public final class Journal {
         Entity e = hit.getEntity();
         record(player, e, ((Bonded) e).getAffection(player) >= Orders.AFFECTION);
         watch(player, e);
-        watch(player, e);
+        if (e.distanceToSqr(player) > SIGHT * SIGHT || !player.hasLineOfSight(e)) watch(player, e);   // up close the plain look already counted once
         return e;
     }
 

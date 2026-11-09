@@ -243,9 +243,11 @@ public final class Hobbies {
         if (found == null) return null;
         int[] tune = {0, 4, 7, 12, 7, 4, 5, 9, 12, 9, 7, 2};               // a little arpeggio, started where her UUID says
         int step = (int) Math.floorMod(girl.getUUID().getLeastSignificantBits() + level.getGameTime() / 20, (long) tune.length);
-        var state = level.getBlockState(found).setValue(net.minecraft.world.level.block.NoteBlock.NOTE, 6 + tune[step] % 19);
-        level.setBlock(found, state, 3);
-        level.blockEvent(found, state.getBlock(), 0, 0);                   // the note block plays it (sound and note particle)
+        int note = 6 + tune[step];                                          // played on the block's own instrument, its tuning left alone
+        var instrument = level.getBlockState(found).getValue(net.minecraft.world.level.block.NoteBlock.INSTRUMENT);
+        if (instrument.hasCustomSound() || !instrument.isTunable()) return null;
+        level.playSound(null, found, instrument.getSoundEvent().value(), SoundSource.RECORDS, 2.0F, net.minecraft.world.level.block.NoteBlock.getPitchFromNote(note));
+        level.sendParticles(ParticleTypes.NOTE, found.getX() + 0.5, found.getY() + 1.2, found.getZ() + 0.5, 0, note / 24.0, 0.0, 0.0, 1.0);
         girl.getLookControl().setLookAt(found.getCenter());
         return found;
     }
