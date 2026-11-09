@@ -36,7 +36,7 @@ public final class GuidePages {
             Map.entry("order", 11),
             Map.entry("kindred", 4),
             Map.entry("season", 2),
-            Map.entry("marriage", 6),
+            Map.entry("marriage", 7),
             Map.entry("liaison", 2));
     public static final Map<String, Integer> SIGNATURES = Map.ofEntries(
             Map.entry("anubis_canid", 2),

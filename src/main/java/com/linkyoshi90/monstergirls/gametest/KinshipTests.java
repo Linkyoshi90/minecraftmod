@@ -82,4 +82,18 @@ public class KinshipTests {
         HarpyTestUtil.remove(player);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "kinWithoutPathsStillFollow")
+    public static void kinWithoutPathsStillFollow(GameTestHelper helper) {
+        var girl = spawn(helper, GirlSpecies.HONEY_SLIME, new BlockPos(2, 2, 2));
+        var slime = helper.spawn(EntityType.SLIME, new BlockPos(12, 2, 12));
+        slime.setSize(1, true);
+        check(Kinship.unpathedLeader(slime) == girl, "a slime's girl leads it");
+        check(Kinship.follow(slime, girl), "it turns and hops after her");
+        var phantom = helper.spawn(EntityType.PHANTOM, new BlockPos(10, 6, 10));
+        check(Kinship.follow(phantom, girl) && phantom.anchorPoint.equals(girl.blockPosition().above(12)), "a phantom circles over her");
+        slime.discard();
+        phantom.discard();
+        helper.succeed();
+    }
 }

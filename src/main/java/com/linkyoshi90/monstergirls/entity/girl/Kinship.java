@@ -403,6 +403,40 @@ public final class Kinship {
         });
     }
 
+    /**
+     * Slimes and phantoms have no pathfinding, so FollowEntityGoal can't move them: every half second a kin slime turns and hops toward
+     * its leader (its girl, or once befriended its player when told to follow), and a kin phantom's circling anchor moves over the leader.
+     */
+    @SubscribeEvent
+    public static void onUnpathedTick(net.neoforged.neoforge.event.tick.EntityTickEvent.Post event) {
+        if (!(event.getEntity() instanceof Mob mob) || mob instanceof PathfinderMob || mob.tickCount % 10 != 0 || mob.level().isClientSide()
+                || !Table.ALL.contains(mob.getType())) return;
+        LivingEntity leader = unpathedLeader(mob);
+        if (leader == null) return;
+        follow(mob, leader);
+    }
+
+    @Nullable
+    public static LivingEntity unpathedLeader(Mob mob) {
+        UUID friend = friendOf(mob);
+        if (friend == null) return girlOf(mob, RANGE);
+        return orders(mob).rawCommand() == Orders.Command.FOLLOW ? mob.level().getPlayerByUUID(friend) : null;
+    }
+
+    /** One step after the leader for a mob without pathfinding. Whether it moved. */
+    public static boolean follow(Mob mob, LivingEntity leader) {
+        if (mob instanceof net.minecraft.world.entity.monster.Phantom phantom) {
+            phantom.anchorPoint = leader.blockPosition().above(12);           // she circles up there now
+            return true;
+        }
+        if (!(mob instanceof net.minecraft.world.entity.monster.Slime slime) || mob.distanceToSqr(leader) < 4.0 * 4.0) return false;
+        if (!(slime.getMoveControl() instanceof net.minecraft.world.entity.monster.Slime.SlimeMoveControl control)) return false;
+        float yaw = (float) (Math.toDegrees(Math.atan2(leader.getZ() - slime.getZ(), leader.getX() - slime.getX())) - 90.0);
+        control.setDirection(yaw, false);
+        control.setWantedMovement(1.0);
+        return true;
+    }
+
     /** Before she has a friend, a kin mob trails its girl (once befriended, its orders move it: KinOrderGoal). */
     @Nullable
     private static LivingEntity leaderOf(Mob mob) {

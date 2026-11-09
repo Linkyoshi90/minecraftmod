@@ -38,6 +38,7 @@ public final class HarpyCommands {
                         .then(Commands.argument("radius", IntegerArgumentType.integer(1, 128))
                                 .executes(ctx -> listBonds(ctx.getSource(), IntegerArgumentType.getInteger(ctx, "radius")))))
                 .then(Commands.literal("friends").executes(ctx -> listFriends(ctx.getSource())))
+                .then(Commands.literal("family").executes(ctx -> listFamily(ctx.getSource())))
                 .then(Commands.literal("locate").then(Commands.literal("realm").executes(ctx -> locateRealm(ctx.getSource())))
                         .then(Commands.literal("chapel").executes(ctx -> locate(ctx.getSource(), com.linkyoshi90.monstergirls.registry.ModStructures.ORDER_CHAPEL_KEY, "chapel")))
                         .then(Commands.literal("manor").executes(ctx -> locate(ctx.getSource(), com.linkyoshi90.monstergirls.registry.ModStructures.REALM_MANOR_KEY, "manor")))
@@ -122,6 +123,72 @@ public final class HarpyCommands {
     }
 
     private static final int MAX_FRIEND_LINES = 40;
+
+    /** /monstergirls family: the player's wives (where, and when the next anniversary is) and little ones. */
+    static int listFamily(CommandSourceStack source) throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+        List<Component> lines = familyLines(player);
+        if (lines.isEmpty()) {
+            source.sendSuccess(() -> Component.translatable("commands.monstergirls.family.none"), false);
+            return 0;
+        }
+        for (Component line : lines) source.sendSuccess(() -> line, false);
+        return lines.size();
+    }
+
+    /** The lines /monstergirls family prints (also for tests). */
+    public static List<Component> familyLines(ServerPlayer player) {
+        List<Component> out = new java.util.ArrayList<>();
+        net.minecraft.nbt.ListTag family = com.linkyoshi90.monstergirls.entity.Marriage.family(player);
+        net.minecraft.nbt.ListTag kids = com.linkyoshi90.monstergirls.entity.Marriage.childList(player);
+        long today = player.level().getDayTime() / 24000L + 1;
+        int wives = 0;
+        for (net.minecraft.nbt.Tag t : family) if (!((net.minecraft.nbt.CompoundTag) t).getBoolean("Gone")) wives++;
+        if (wives > 0 || !kids.isEmpty()) out.add(Component.translatable("commands.monstergirls.family.header", wives, kids.size()).withStyle(ChatFormatting.LIGHT_PURPLE));
+        for (net.minecraft.nbt.Tag t : family) {
+            net.minecraft.nbt.CompoundTag d = (net.minecraft.nbt.CompoundTag) t;
+            if (d.getBoolean("Gone")) continue;
+            long until = Math.floorMod(-(today - d.getLong("Day")), (long) com.linkyoshi90.monstergirls.entity.Marriage.YEAR);
+            out.add(Component.translatable("commands.monstergirls.family.wife", d.getString("Name"), where(player, d.getString("Id")),
+                    until == 0 ? com.linkyoshi90.monstergirls.entity.Marriage.YEAR : until));
+        }
+        for (net.minecraft.nbt.Tag t : kids) {
+            net.minecraft.nbt.CompoundTag k = (net.minecraft.nbt.CompoundTag) t;
+            Mob m = loaded(player, k.getString("Id"));
+            Component state = m == null ? Component.translatable("commands.monstergirls.family.unknown")
+                    : !m.isAlive() ? Component.translatable("commands.monstergirls.family.unknown")
+                    : m.isBaby() ? Component.translatable("commands.monstergirls.family.little")
+                    : m instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g && com.linkyoshi90.monstergirls.entity.girl.Roles.of(g) != null
+                            ? Component.translatable(com.linkyoshi90.monstergirls.entity.girl.Roles.of(g).key())
+                            : Component.translatable("commands.monstergirls.family.grown");
+            out.add(Component.translatable("commands.monstergirls.family.child", (m != null && m.hasCustomName() ? m.getCustomName().getString() : k.getString("Name")),
+                    state, where(player, k.getString("Id"))));
+        }
+        return out;
+    }
+
+    @javax.annotation.Nullable
+    private static Mob loaded(ServerPlayer player, String id) {
+        java.util.UUID uuid;
+        try {
+            uuid = java.util.UUID.fromString(id);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+        for (net.minecraft.server.level.ServerLevel l : player.server.getAllLevels()) {
+            if (l.getEntity(uuid) instanceof Mob m) return m;
+        }
+        return null;
+    }
+
+    /** Where she is from the player: blocks and way here, another dimension, or not about. */
+    private static Component where(ServerPlayer player, String id) {
+        Mob m = loaded(player, id);
+        if (m == null) return Component.translatable("commands.monstergirls.family.far");
+        if (m.level() != player.level()) return Component.translatable("commands.monstergirls.family.elsewhere", m.level().dimension().location().toString());
+        return Component.translatable("commands.monstergirls.family.near", (int) player.distanceTo(m),
+                Component.translatable("direction.monstergirls." + com.linkyoshi90.monstergirls.item.FriendCompassItem.way(player, m)));
+    }
 
     /** One line per friend: here first (nearest first), then the other dimensions. */
     public static List<Component> friendLines(ServerPlayer player) {

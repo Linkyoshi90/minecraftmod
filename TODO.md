@@ -622,7 +622,7 @@ In since 2026-10-21: `entity/girl/Kinship.java`, tested in `KinshipTests`.
 - Kin: nekomata and cats (ocelot nekomata and ocelots), kitsune and foxes, arachne and spiders, the horse and zebra centaur and horses, donkeys and mules, the alpaca and llamas, the goat centaur and goats, dolphin and orca mermaids and dolphins, the axolotl mermaid and axolotls, slimes and slimes (magma: magma cubes), jackalopes and rabbits, minotaurs and cows and mooshrooms, kraken, ika and octopus and squid, the zombie girl and zombies, husks, drowned and zombie villagers, the phantom girl and phantoms, the turtles and turtles, bees and bees. Everyone else has no kin and bonds and breeds with players only, as before. Minotaur cows already breed with bulls.
 - [ ] Playtest: does a befriended zombie still go for villagers? (It does today. Decide whether friends should leave villagers alone too.) Befriended zombies still burn in daylight.
 - [x] Harpies and anurans have kin (parrots, chickens, frogs): `Kinship.kinOf`.
-- [ ] Slimes and phantoms have no pathfinding, so they do not visibly follow. They only stop attacking.
+- [x] Slimes and phantoms have no pathfinding: since 2026-11-09 a kin slime turns and hops toward its leader every half second, and a kin phantom circles over her (`Kinship.follow`, access-transformed SlimeMoveControl and Phantom.anchorPoint). Not seen in a client.
 
 ## 0e. Stick orders and stances
 
