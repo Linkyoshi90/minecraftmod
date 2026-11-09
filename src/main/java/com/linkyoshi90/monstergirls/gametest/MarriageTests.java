@@ -95,7 +95,10 @@ public class MarriageTests {
             level.setDayTime((saved / 24000L + 1) * 24000L + 1000L);              // a morning, put back within the tick
             check(Marriage.lunch(level, p) != null && Marriage.lunch(level, p) == null, "one packed lunch a morning");
             level.setDayTime(saved);
+            check(Marriage.welcomeBack(level, p) != null, "a wife welcomes them back");
             a.kill();
+            check(!level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, a.getBoundingBox().inflate(3),
+                    i -> i.getItem().is(ModItems.WEDDING_RING.get())).isEmpty(), "her ring stays behind");
             check(Marriage.count(p) == 2 && p.hasEffect(net.minecraft.world.effect.MobEffects.REGENERATION), "the others hold them close");
             check(Marriage.blissFrom(level, p) == 2 && p.getMaxHealth() == 20 + 2 * Marriage.HEALTH, "and two still near");
             HarpyTestUtil.remove(p);

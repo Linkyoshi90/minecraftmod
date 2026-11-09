@@ -49,6 +49,11 @@ public final class Cravings {
         return BuiltInRegistries.ITEM.get(ResourceLocation.parse(pd.getString(CRAVING)));
     }
 
+    /** Whether she has said what she craves. */
+    public static boolean told(AbstractMonsterGirl girl) {
+        return girl.getPersistentData().getBoolean(TOLD);
+    }
+
     public static boolean answered(AbstractMonsterGirl girl) {
         return girl.getPersistentData().getBoolean(ANSWERED);
     }

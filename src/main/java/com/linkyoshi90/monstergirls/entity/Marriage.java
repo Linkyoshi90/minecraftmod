@@ -496,12 +496,41 @@ public final class Marriage {
         return true;
     }
 
+    /** Logging in: one of the player's wives (loaded and near, else any on the list) says she missed them. Who, or null. */
+    @SubscribeEvent
+    public static void onLogIn(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent event) {
+        event.getEntity().getPersistentData().putInt(WELCOME, WELCOME_DELAY);   // once the world round them has loaded
+    }
+
+    private static final String WELCOME = "WelcomeBackIn";
+    public static final int WELCOME_DELAY = 200;
+
+    @Nullable
+    public static Mob welcomeBack(ServerLevel level, Player p) {
+        java.util.List<Mob> near = spousesNear(level, p, p, GUESTS, null);
+        if (near.isEmpty()) return null;
+        Mob wife = near.get(level.random.nextInt(near.size()));
+        ((Bonded) wife).blushFor(100);
+        p.displayClientMessage(Component.translatable("message.monstergirls.marriage.welcome." + level.random.nextInt(3), wife.getDisplayName())
+                .withStyle(ChatFormatting.LIGHT_PURPLE), false);
+        return wife;
+    }
+
     /** Wedded bliss: more health while a spouse is near. */
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         if (event.getEntity().tickCount % 40 == 23 && event.getEntity().level() instanceof ServerLevel level) {
             bliss(level, event.getEntity());
             lunch(level, event.getEntity());
+            CompoundTag pd = event.getEntity().getPersistentData();
+            if (pd.contains(WELCOME)) {
+                int left = pd.getInt(WELCOME) - 40;
+                if (left > 0) pd.putInt(WELCOME, left);
+                else {
+                    pd.remove(WELCOME);
+                    welcomeBack(level, event.getEntity());
+                }
+            }
         }
     }
 
@@ -570,6 +599,9 @@ public final class Marriage {
         if (p == null) return;
         forget(p, mob.getUUID());
         p.displayClientMessage(Component.translatable("message.monstergirls.marriage.lost", mob.getDisplayName()).withStyle(ChatFormatting.GRAY), false);
+        net.minecraft.world.item.ItemStack ring = new net.minecraft.world.item.ItemStack(ModItems.WEDDING_RING.get());   // her ring stays behind
+        ring.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, Component.translatable("item.monstergirls.her_ring", mob.getName()));
+        mob.spawnAtLocation(ring);
         if (p.level() == level) comfort(level, p, mob);
     }
 
