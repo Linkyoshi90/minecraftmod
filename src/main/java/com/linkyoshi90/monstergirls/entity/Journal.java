@@ -556,6 +556,17 @@ public final class Journal {
             }
             pages.add(Filterable.passThrough(page));
         }
+        ListTag kids = Marriage.childList(player);
+        for (int i = 0; i < kids.size(); i += DEAREST_LINES) {                      // the little ones by name, and whose they are
+            MutableComponent page = Component.translatable("journal.monstergirls.children.title").withStyle(ChatFormatting.BOLD, ChatFormatting.LIGHT_PURPLE).append(NL_TEXT);
+            for (int j = i; j < Math.min(i + DEAREST_LINES, kids.size()); j++) {
+                CompoundTag k = kids.getCompound(j);
+                Component kind = Component.translatable("entity.monstergirls." + k.getString("Kind"));
+                page.append(NL_TEXT).append((k.contains("Mother") ? Component.translatable("journal.monstergirls.children.line_mother", k.getString("Name"), kind, k.getLong("Day"), k.getString("Mother"))
+                        : Component.translatable("journal.monstergirls.children.line", k.getString("Name"), kind, k.getLong("Day"))).withStyle(ChatFormatting.RESET, ChatFormatting.BLACK));
+            }
+            pages.add(Filterable.passThrough(page));
+        }
         List<String> all = new ArrayList<>(girls);
         all.addAll(others);
         all.sort(java.util.Comparator.comparingInt(id -> {                           // branch by branch, as they were met within one

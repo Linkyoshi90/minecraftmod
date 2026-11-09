@@ -986,6 +986,9 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         young.setPersistenceRequired();                                   // born here, she stays here: no despawning
         level.addFreshEntity(young);
         young.bornTo(father);
+        if (father != null && level.getServer().getPlayerList().getPlayer(father) instanceof Player parent) {
+            com.linkyoshi90.monstergirls.entity.Marriage.motherOf(parent, young, this);   // the family journal knows her mother
+        }
         com.linkyoshi90.monstergirls.entity.Nursing.born(this, young);   // she nurses her newborn
         return young;
     }

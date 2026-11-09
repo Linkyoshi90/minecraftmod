@@ -149,4 +149,16 @@ public class MarriageTests {
             helper.succeed();
         });
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "everyKindWedsHerWay")
+    public static void everyKindWedsHerWay(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(9, 2, 7));
+        AbstractMonsterGirl fox = spawn(helper, GirlSpecies.RED_KITSUNE, new BlockPos(5, 2, 7)), cat = still(helper, new BlockPos(3, 2, 7));
+        check("sunshower".equals(Marriage.flourish(level, fox, p)), "a fox's wedding");
+        check(Marriage.flourish(level, cat, p) == null, "a cat just weds");
+        level.setWeatherParameters(6000, 0, false, false);                    // the sunshower is the test world's only rain: put it back
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

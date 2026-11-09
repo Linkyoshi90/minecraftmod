@@ -142,11 +142,37 @@ public final class Marriage {
         player.setData(ModAttachments.JOURNAL, journal);
     }
 
-    /** One more little one born devoted to this player. */
-    public static void childBorn(Player player) {
+    public static final String CHILD_LIST = "ChildList";
+    public static final int MAX_CHILDREN_LISTED = 120;
+
+    /** One more little one born devoted to this player: counted, and listed (her name, kind and birth day) in the family journal. */
+    public static void childBorn(Player player, Entity young) {
         CompoundTag journal = player.getData(ModAttachments.JOURNAL);
         journal.putInt(CHILDREN, journal.getInt(CHILDREN) + 1);
+        ListTag list = journal.getList(CHILD_LIST, Tag.TAG_COMPOUND);
+        if (list.size() < MAX_CHILDREN_LISTED) {
+            CompoundTag entry = new CompoundTag();
+            entry.putString("Id", young.getUUID().toString());
+            entry.putString("Name", young.getName().getString());
+            entry.putString("Kind", net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(young.getType()).getPath());
+            entry.putLong("Day", young.level().getDayTime() / 24000L + 1);
+            list.add(entry);
+            journal.put(CHILD_LIST, list);
+        }
         player.setData(ModAttachments.JOURNAL, journal);
+    }
+
+    /** Her mother, noted beside a little one already listed (live births: the mother is known at the birth). */
+    public static void motherOf(Player player, Entity young, Entity mother) {
+        CompoundTag journal = player.getData(ModAttachments.JOURNAL);
+        ListTag list = journal.getList(CHILD_LIST, Tag.TAG_COMPOUND);
+        for (Tag t : list) if (((CompoundTag) t).getString("Id").equals(young.getUUID().toString())) ((CompoundTag) t).putString("Mother", mother.getName().getString());
+        journal.put(CHILD_LIST, list);
+        player.setData(ModAttachments.JOURNAL, journal);
+    }
+
+    public static ListTag childList(Player player) {
+        return player.getData(ModAttachments.JOURNAL).getList(CHILD_LIST, Tag.TAG_COMPOUND);
     }
 
     public static ListTag family(Player player) {
@@ -299,6 +325,7 @@ public final class Marriage {
         if (!realm) level.sendParticles(ParticleTypes.FIREWORK, hearth.getX() + 0.5, hearth.getY() + 2.5, hearth.getZ() + 0.5, 60, 1.5, 1.0, 1.5, 0.08);
         Component news = Component.translatable("message.monstergirls.marriage.wed", player.getDisplayName(), mob.getDisplayName(), guests).withStyle(ChatFormatting.LIGHT_PURPLE);
         for (Player p : level.players()) if (p.distanceToSqr(mob) < 64 * 64) p.displayClientMessage(news, false);
+        flourish(level, mob, player);
         bouquet(level, mob, player, giving);
         net.minecraft.world.item.ItemStack keepsake = com.linkyoshi90.monstergirls.block.FigurineBlockEntity.of(mob);   // her in her veil, for the mantelpiece
         if (!keepsake.isEmpty()) {
@@ -375,7 +402,52 @@ public final class Marriage {
         return catcher;
     }
 
-    public static final int BOUQUET = 5, REALM_VOWS = 15;
+    public static final int BOUQUET = 5, REALM_VOWS = 15, SUNSHOWER = 1200;
+
+    /**
+     * Each kind weds in her own way: a kitsune's wedding brings a sunshower (the fox's wedding: rain from a clear day sky, for
+     * {@link #SUNSHOWER} ticks), a harpy's a flurry of feathers, a mermaid's bubbles, a dragon's a plume of flame, the undead's soul
+     * fire, a slime's a happy splash. The flourish's key (message.monstergirls.marriage.flourish.KEY), or null for none.
+     */
+    @Nullable
+    public static String flourish(ServerLevel level, Mob bride, Player player) {
+        String key = null;
+        net.minecraft.core.particles.ParticleOptions particle = null;
+        if (bride instanceof AbstractHarpy) {
+            key = "feathers";
+            particle = new net.minecraft.core.particles.ItemParticleOption(ParticleTypes.ITEM, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.FEATHER));
+        } else if (bride instanceof AbstractMonsterGirl g) {
+            switch (g.getSpecies().family()) {
+                case KITSUNE -> {
+                    key = "sunshower";
+                    if (level.isDay() && !level.isRaining() && level.dimensionType().natural()) level.setWeatherParameters(0, SUNSHOWER, true, false);
+                    particle = ParticleTypes.FALLING_WATER;
+                }
+                case MERFOLK -> {
+                    key = "bubbles";
+                    particle = ParticleTypes.BUBBLE_POP;
+                }
+                case DRAGON -> {
+                    key = "flame";
+                    particle = ParticleTypes.FLAME;
+                }
+                case UNDEAD -> {
+                    key = "souls";
+                    particle = ParticleTypes.SOUL_FIRE_FLAME;
+                }
+                case SLIME -> {
+                    key = "splash";
+                    particle = ParticleTypes.ITEM_SLIME;
+                }
+                default -> {
+                }
+            }
+        }
+        if (key == null) return null;
+        level.sendParticles(particle, bride.getX(), bride.getEyeY() + 1.0, bride.getZ(), 40, 1.2, 0.8, 1.2, 0.05);
+        player.displayClientMessage(Component.translatable("message.monstergirls.marriage.flourish." + key, bride.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), false);
+        return key;
+    }
     private static final String ASKED = "AskedToMarry";
 
     /**
