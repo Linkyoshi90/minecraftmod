@@ -69,4 +69,17 @@ public class CravingsTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "harpiesCraveToo")
+    public static void harpiesCraveToo(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var harpy = helper.spawn(com.linkyoshi90.monstergirls.registry.ModEntities.SPARROW_HARPY.get(), new BlockPos(7, 2, 7));
+        harpy.setNoAi(true);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(8, 2, 7));
+        harpy.getGestation().conceive(p.getUUID());
+        Item want = Cravings.craving(harpy);
+        check(want != null && Cravings.feed(level, harpy, p, new ItemStack(want)) && Cravings.twins(harpy), "a harpy craves, and fed it, lays a full clutch");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

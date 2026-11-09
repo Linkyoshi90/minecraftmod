@@ -86,7 +86,7 @@ public class JadePlugin implements IWailaPlugin {
                 if (com.linkyoshi90.monstergirls.entity.Marriage.married(dm, accessor.getPlayer())) data.putBoolean("Wife", com.linkyoshi90.monstergirls.entity.Marriage.honeymoon(dm));
                 else if (com.linkyoshi90.monstergirls.entity.Marriage.engaged(dm, accessor.getPlayer())) data.putBoolean("Engaged", true);
             }
-            if (accessor.getEntity() instanceof com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl g) {   // what she craves, once she's said
+            if (accessor.getEntity() instanceof net.minecraft.world.entity.Mob g) {   // what she craves, once she has said
                 net.minecraft.world.item.Item want = com.linkyoshi90.monstergirls.entity.girl.Cravings.told(g) ? com.linkyoshi90.monstergirls.entity.girl.Cravings.craving(g) : null;
                 if (want != null && !com.linkyoshi90.monstergirls.entity.girl.Cravings.answered(g)) data.putString("Craving", want.getDescriptionId());
             }

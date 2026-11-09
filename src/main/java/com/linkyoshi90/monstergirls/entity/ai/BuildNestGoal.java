@@ -130,7 +130,8 @@ public class BuildNestGoal extends Goal {
         Level level = this.harpy.level();
         HarpyEggBlock.Species species = HarpyEggBlock.Species.forEntityId(this.harpy.speciesId());
         if (pos == null || species == null || !canNestAt(level, pos)) return;
-        int eggs = 2 + this.harpy.getRandom().nextInt(HarpyEggBlock.MAX_EGGS - 1);
+        int eggs = com.linkyoshi90.monstergirls.entity.girl.Cravings.twins(this.harpy) ? HarpyEggBlock.MAX_EGGS   // her craving answered: a full clutch
+                : 2 + this.harpy.getRandom().nextInt(HarpyEggBlock.MAX_EGGS - 1);
         BlockState nest = ModBlocks.HARPY_EGG.get().defaultBlockState().setValue(HarpyEggBlock.SPECIES, species).setValue(HarpyEggBlock.EGGS, eggs);
         if (!level.setBlock(pos, nest, 3)) return;
         ParentageBlockEntity.setFatherAt(level, pos, this.harpy.getGestation().getFather());
