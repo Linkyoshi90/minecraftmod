@@ -106,6 +106,39 @@ def painting(src, top, bottom, size=32):
     return img.convert("RGB")
 
 
+FAMILY = ["crow_harpy", "serval_nekomata", "red_kitsune", "python_lamia", "holstaur_minotaur", "honey_slime"]
+
+
+def family_painting(width=64, height=48):
+    """The whole family: six busts in two rows under a warm hearth-lit sky, one 4x3 painting."""
+    img = Image.new("RGBA", (width, height))
+    top, bottom = (250, 200, 140), (150, 80, 60)
+    for y in range(height):
+        t = y / (height - 1)
+        col = tuple(int(top[i] * (1 - t) + bottom[i] * t) for i in range(3)) + (255,)
+        for x in range(width):
+            img.putpixel((x, y), col)
+    size = 20
+    for i, kind in enumerate(FAMILY):
+        b = bust(os.path.join(REPO, "previews", kind + "_preview.png")).resize((size, size), Image.Resampling.BOX)
+        bp = b.load()
+        for y in range(size):
+            for x in range(size):
+                r, g, bb, a = bp[x, y]
+                bp[x, y] = (r, g, bb, 255 if a >= 128 else 0)
+        row, col = divmod(i, 3)
+        img.alpha_composite(b, (2 + col * size, 3 + row * (size + 2)))
+    for x in range(width):
+        for d in (0, 1):
+            img.putpixel((x, d), FRAME[2] if d == 0 else FRAME[1])
+            img.putpixel((x, height - 1 - d), FRAME[0] if d == 0 else FRAME[1])
+    for y in range(height):
+        for d in (0, 1):
+            img.putpixel((d, y), FRAME[2] if d == 0 else FRAME[1])
+            img.putpixel((width - 1 - d, y), FRAME[0] if d == 0 else FRAME[1])
+    return img.convert("RGB")
+
+
 def dump(path, doc):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8", newline="\n") as fh:
@@ -128,6 +161,13 @@ def main():
         lang[f"painting.monstergirls.{pid}.title"] = title
         lang[f"painting.monstergirls.{pid}.author"] = "Harmontide"
         ids.append(f"monstergirls:{pid}")
+    fam = family_painting()                                              # not placeable: the big_family keepsake (Marriage)
+    fam.save(os.path.join(tex_dir, "whole_family.png"))
+    dump(os.path.join(DATA, "painting_variant", "whole_family.json"), {"asset_id": "monstergirls:whole_family", "width": 4, "height": 3})
+    lang["painting.monstergirls.whole_family.title"] = "The Whole Family"
+    lang["painting.monstergirls.whole_family.author"] = "Harmontide"
+    if "--sheet" in sys.argv:
+        fam.resize((512, 384), Image.Resampling.NEAREST).save(os.path.join(REPO, "previews", "whole_family_painting.png"))
     dump(os.path.join(REPO, "src", "main", "resources", "data", "minecraft", "tags", "painting_variant", "placeable.json"),
          {"replace": False, "values": ids})
     lang["hobby.monstergirls.painting"] = "painting"

@@ -196,10 +196,15 @@ public final class Hobbies {
             if (ours.isEmpty()) return new ItemStack(Items.PAINTING);
             pick = ours.get(r.nextInt(ours.size()));
         }
+        return painting(pick);
+    }
+
+    /** A painting item that hangs as this variant. */
+    public static ItemStack painting(net.minecraft.resources.ResourceLocation variant) {
         ItemStack painting = new ItemStack(Items.PAINTING);
         net.minecraft.nbt.CompoundTag data = new net.minecraft.nbt.CompoundTag();
         data.putString("id", "minecraft:painting");
-        data.putString("variant", pick.toString());
+        data.putString("variant", variant.toString());
         painting.set(DataComponents.ENTITY_DATA, net.minecraft.world.item.component.CustomData.of(data));
         return painting;
     }
