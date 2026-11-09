@@ -35,6 +35,11 @@ LANG = {
     "message.monstergirls.birth": "%s's time has come: welcome the newest of your family!",
     "message.monstergirls.birth.twins": "%s's time has come, twice over: twins for your family!",
     "message.monstergirls.marriage.she_asks": "%s fumbles in her pocket and presses a ring into your hand: \"I... I don't want to wait any more. Will you marry me?\" Give it back to her to say yes",
+    "message.monstergirls.marriage.lunch.0": "%s presses a wrapped lunch into your hands: \"Don't skip it this time!\"",
+    "message.monstergirls.marriage.lunch.1": "%s packed you lunch, and drew a little heart on the wrapping",
+    "message.monstergirls.marriage.lunch.2": "%s catches you at the door with your lunch: \"Come home safe, okay?\"",
+    "item.monstergirls.packed_lunch": "%s's Packed Lunch",
+    "item.monstergirls.packed_lunch.lore": "Made with love",
     "journal.monstergirls.family.title": "Family",
     "journal.monstergirls.family.children": "Little ones born to you: %s",
     "journal.monstergirls.family.line": "♥ %s, %s (wed day %s)",
@@ -50,7 +55,7 @@ NEW_HEARTS = ("while she is near you have two more hearts (each spouse near adds
               "Many spouses are one happy family: a wife nearby blesses each new proposal, the wives are bridesmaids, "
               "a pat for one warms the others, two or more in your bed make a family bed, and if one is lost the rest hold you close. "
               "Guests bring wedding presents, and the first three days are a honeymoon. "
-              "Wed by a lit realm censer instead and the Demon Realm keeps your vows. A girl who adores you may not wait to be asked: after a lovely date she might hand you the ring herself.")
+              "Wed by a lit realm censer instead and the Demon Realm keeps your vows. Of a morning, a wife you pass packs you lunch. A girl who adores you may not wait to be asked: after a lovely date she might hand you the ring herself.")
 
 
 def adv(name, parent, icon, frame="task"):

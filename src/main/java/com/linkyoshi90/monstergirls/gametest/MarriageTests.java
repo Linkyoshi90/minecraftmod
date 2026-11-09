@@ -91,6 +91,10 @@ public class MarriageTests {
             check(!Marriage.sheAsks(level, c, p), "once");
             check(Marriage.propose(level, c, p) == Marriage.Answer.ENGAGED && Marriage.tryWed(level, c, p) && Marriage.count(p) == 3, "three");
             check(Marriage.blissFrom(level, p) == 3 && p.getMaxHealth() == 20 + Marriage.BLISS_CAP * Marriage.HEALTH, "capped at three");
+            long saved = level.getDayTime();
+            level.setDayTime((saved / 24000L + 1) * 24000L + 1000L);              // a morning, put back within the tick
+            check(Marriage.lunch(level, p) != null && Marriage.lunch(level, p) == null, "one packed lunch a morning");
+            level.setDayTime(saved);
             a.kill();
             check(Marriage.count(p) == 2 && p.hasEffect(net.minecraft.world.effect.MobEffects.REGENERATION), "the others hold them close");
             check(Marriage.blissFrom(level, p) == 2 && p.getMaxHealth() == 20 + 2 * Marriage.HEALTH, "and two still near");

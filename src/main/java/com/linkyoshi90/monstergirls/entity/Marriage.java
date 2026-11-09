@@ -415,6 +415,39 @@ public final class Marriage {
         return came;
     }
 
+    public static final int MORNING = 4000;
+    public static final double LUNCH_NEAR = 6;
+    private static final String LUNCH_DAY = "LunchDay";
+    public static final java.util.List<net.minecraft.world.item.Item> LUNCHES = java.util.List.of(net.minecraft.world.item.Items.COOKED_BEEF,
+            net.minecraft.world.item.Items.COOKED_PORKCHOP, net.minecraft.world.item.Items.COOKED_CHICKEN, net.minecraft.world.item.Items.COOKED_SALMON,
+            net.minecraft.world.item.Items.BAKED_POTATO, net.minecraft.world.item.Items.PUMPKIN_PIE, net.minecraft.world.item.Items.RABBIT_STEW);
+
+    /**
+     * A packed lunch: the first time each morning (before {@link #MORNING}) a player is within {@link #LUNCH_NEAR} of one of their wives,
+     * she hands them a lunch made with love (a named food). One a day, from whichever wife they pass first. Who gave it, or null.
+     */
+    @Nullable
+    public static Mob lunch(ServerLevel level, Player p) {
+        if (count(p) == 0 || level.getDayTime() % 24000L >= MORNING) return null;
+        long today = level.getDayTime() / 24000L;
+        CompoundTag journal = p.getData(ModAttachments.JOURNAL);
+        if (journal.contains(LUNCH_DAY) && journal.getLong(LUNCH_DAY) == today) return null;
+        java.util.List<Mob> near = spousesNear(level, p, p, LUNCH_NEAR, null);
+        if (near.isEmpty()) return null;
+        Mob wife = near.get(level.random.nextInt(near.size()));
+        journal.putLong(LUNCH_DAY, today);
+        p.setData(ModAttachments.JOURNAL, journal);
+        net.minecraft.world.item.ItemStack food = new net.minecraft.world.item.ItemStack(LUNCHES.get(wife.getRandom().nextInt(LUNCHES.size())), 2);
+        food.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, Component.translatable("item.monstergirls.packed_lunch", wife.getName()));
+        food.set(net.minecraft.core.component.DataComponents.LORE, new net.minecraft.world.item.component.ItemLore(java.util.List.of(
+                Component.translatable("item.monstergirls.packed_lunch.lore"))));
+        if (!p.addItem(food)) p.drop(food, false);
+        ((Bonded) wife).blushFor(80);
+        level.sendParticles(ParticleTypes.HEART, wife.getX(), wife.getEyeY() + 0.3, wife.getZ(), 3, 0.3, 0.2, 0.3, 0.0);
+        p.displayClientMessage(Component.translatable("message.monstergirls.marriage.lunch." + wife.getRandom().nextInt(3), wife.getDisplayName()), false);
+        return wife;
+    }
+
     /** Each guest who isn't family brings a little wedding present, left by the hearth. How many. */
     public static int presents(ServerLevel level, java.util.List<Mob> guests, BlockPos hearth) {
         int n = 0;
@@ -466,7 +499,10 @@ public final class Marriage {
     /** Wedded bliss: more health while a spouse is near. */
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
-        if (event.getEntity().tickCount % 40 == 23 && event.getEntity().level() instanceof ServerLevel level) bliss(level, event.getEntity());
+        if (event.getEntity().tickCount % 40 == 23 && event.getEntity().level() instanceof ServerLevel level) {
+            bliss(level, event.getEntity());
+            lunch(level, event.getEntity());
+        }
     }
 
     /** Whether a spouse is near; applies or lifts the health bonus. */
