@@ -49,6 +49,7 @@ public final class HerosWelcome {
 
     @SubscribeEvent
     public static void onAdvancement(AdvancementEvent.AdvancementEarnEvent event) {
+        if (!com.linkyoshi90.monstergirls.MonsterGirlsConfig.herosWelcome()) return;
         String deed = DEEDS.get(event.getAdvancement().id().toString());
         if (deed != null) earned(event.getEntity(), deed);
     }

@@ -556,7 +556,7 @@ public final class Marriage {
      */
     @Nullable
     public static Mob lunch(ServerLevel level, Player p) {
-        if (count(p) == 0 || level.getDayTime() % 24000L >= MORNING) return null;
+        if (!MonsterGirlsConfig.packedLunch() || count(p) == 0 || level.getDayTime() % 24000L >= MORNING) return null;
         long today = level.getDayTime() / 24000L;
         CompoundTag journal = p.getData(ModAttachments.JOURNAL);
         if (journal.contains(LUNCH_DAY) && journal.getLong(LUNCH_DAY) == today) return null;
@@ -592,7 +592,7 @@ public final class Marriage {
      */
     @Nullable
     public static String sharedDream(ServerLevel level, Player player, Mob wife, boolean force) {
-        if (!force && level.random.nextInt(DREAM_ODDS) != 0) return null;
+        if (!force && (!MonsterGirlsConfig.sharedDreams() || level.random.nextInt(DREAM_ODDS) != 0)) return null;
         java.util.List<String> kinds = new java.util.ArrayList<>(DREAM_PLACES.keySet());
         java.util.Collections.sort(kinds);
         String kind = kinds.get(level.random.nextInt(kinds.size()));

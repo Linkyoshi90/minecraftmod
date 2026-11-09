@@ -43,7 +43,7 @@ public final class Cravings {
     /** What she craves now, or null when she isn't expecting. Picks one the first time it is asked. */
     @Nullable
     public static Item craving(AbstractMonsterGirl girl) {
-        if (!girl.getGestation().isCarrying()) return null;
+        if (!girl.getGestation().isCarrying() || !com.linkyoshi90.monstergirls.MonsterGirlsConfig.cravings()) return null;
         CompoundTag pd = girl.getPersistentData();
         if (!pd.contains(CRAVING)) pd.putString(CRAVING, BuiltInRegistries.ITEM.getKey(FOODS.get(girl.getRandom().nextInt(FOODS.size()))).toString());
         return BuiltInRegistries.ITEM.get(ResourceLocation.parse(pd.getString(CRAVING)));

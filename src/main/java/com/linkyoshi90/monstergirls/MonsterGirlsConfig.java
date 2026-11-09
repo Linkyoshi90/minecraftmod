@@ -142,6 +142,11 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue SWEETHEARTS;
     public static final ModConfigSpec.BooleanValue DATES;
     public static final ModConfigSpec.BooleanValue NAME_NEWBORNS;
+    public static final ModConfigSpec.BooleanValue COMPLIMENTS;
+    public static final ModConfigSpec.BooleanValue HEROS_WELCOME;
+    public static final ModConfigSpec.BooleanValue CRAVINGS;
+    public static final ModConfigSpec.BooleanValue SHARED_DREAMS;
+    public static final ModConfigSpec.BooleanValue PACKED_LUNCH;
     public static final ModConfigSpec.BooleanValue HOT_SPRINGS;
     public static final ModConfigSpec.BooleanValue AURORA_NIGHTS;
     public static final ModConfigSpec.BooleanValue PASSING_FLOCKS;
@@ -221,6 +226,26 @@ public final class MonsterGirlsConfig {
         NAME_NEWBORNS = BUILDER
                 .comment("Little ones born to a player come with a name of their own (a name tag still renames them).")
                 .define("nameNewborns", true);
+
+        COMPLIMENTS = BUILDER
+                .comment("Put on something new and the first friend who sees you says something nice about it.")
+                .define("compliments", true);
+
+        HEROS_WELCOME = BUILDER
+                .comment("Great vanilla deeds (the dragon slain, a village saved...) reach home: your friends at the hearth throw you a party.")
+                .define("herosWelcome", true);
+
+        CRAVINGS = BUILDER
+                .comment("An expecting girl craves one food; fed it before her time, she has twins.")
+                .define("cravings", true);
+
+        SHARED_DREAMS = BUILDER
+                .comment("A wife who shared your bed may wake having dreamt of a real landmark nearby, and says which way.")
+                .define("sharedDreams", true);
+
+        PACKED_LUNCH = BUILDER
+                .comment("Of a morning, a wife you pass hands you a packed lunch.")
+                .define("packedLunch", true);
 
         HOT_SPRINGS = BUILDER
                 .comment("Hot springs: water over geyserite steams, never freezes, heals and warms whoever soaks in it (friends come and join you), and cures a girl's cold. Off stops the effect and new springs in new chunks.")
@@ -430,6 +455,26 @@ public final class MonsterGirlsConfig {
 
     public static boolean hotSprings() {
         return SPEC.isLoaded() ? HOT_SPRINGS.get() : HOT_SPRINGS.getDefault();
+    }
+
+    public static boolean compliments() {
+        return SPEC.isLoaded() ? COMPLIMENTS.get() : COMPLIMENTS.getDefault();
+    }
+
+    public static boolean herosWelcome() {
+        return SPEC.isLoaded() ? HEROS_WELCOME.get() : HEROS_WELCOME.getDefault();
+    }
+
+    public static boolean cravings() {
+        return SPEC.isLoaded() ? CRAVINGS.get() : CRAVINGS.getDefault();
+    }
+
+    public static boolean sharedDreams() {
+        return SPEC.isLoaded() ? SHARED_DREAMS.get() : SHARED_DREAMS.getDefault();
+    }
+
+    public static boolean packedLunch() {
+        return SPEC.isLoaded() ? PACKED_LUNCH.get() : PACKED_LUNCH.getDefault();
     }
 
     public static boolean nameNewborns() {

@@ -63,6 +63,7 @@ public final class Compliments {
     /** Every few seconds: a new outfit gets its compliment from the first friend near. Who said it, or null. */
     @Nullable
     public static Mob look(ServerLevel level, Player p) {
+        if (!com.linkyoshi90.monstergirls.MonsterGirlsConfig.compliments()) return null;
         int now = outfit(p);
         CompoundTag journal = p.getData(ModAttachments.JOURNAL);
         if (now == 0 || praised(journal, now)) return null;
