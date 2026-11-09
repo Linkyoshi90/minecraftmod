@@ -239,6 +239,13 @@ public final class Marriage {
         level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.3, mob.getZ(), 12, 0.5, 0.4, 0.5, 0.0);
         mob.playSound(SoundEvents.AMETHYST_BLOCK_CHIME, 1.0F, 1.2F);
         player.displayClientMessage(Component.translatable("message.monstergirls.marriage.yes." + mob.getRandom().nextInt(4), mob.getDisplayName()), false);
+        if (Dates.fits(level, mob.blockPosition(), Dates.favourite(mob))) {      // asked at her kind of place: perfect
+            b.addAffection(player, PERFECT);
+            player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.LUCK, 24000, 0));
+            level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.5, mob.getZ(), 20, 0.8, 0.6, 0.8, 0.0);
+            player.displayClientMessage(Component.translatable("message.monstergirls.marriage.perfect", mob.getDisplayName()).withStyle(ChatFormatting.GOLD), false);
+            Dairy.award(player, "perfect_proposal");
+        }
         if (blessing != null) {                                                  // the family grows, and is glad of it
             ((Bonded) blessing).blushFor(100);
             level.sendParticles(ParticleTypes.HAPPY_VILLAGER, blessing.getX(), blessing.getEyeY() + 0.3, blessing.getZ(), 8, 0.4, 0.3, 0.4, 0.0);
@@ -435,7 +442,7 @@ public final class Marriage {
         return catcher;
     }
 
-    public static final int BOUQUET = 5, REALM_VOWS = 15, SUNSHOWER = 1200;
+    public static final int BOUQUET = 5, REALM_VOWS = 15, SUNSHOWER = 1200, PERFECT = 10;
 
     /**
      * Each kind weds in her own way: a kitsune's wedding brings a sunshower (the fox's wedding: rain from a clear day sky, for

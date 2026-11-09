@@ -100,6 +100,9 @@ LANG = {
     "commands.monstergirls.family.due": "%s's time has come.",
     "commands.monstergirls.family.not_little": "Look at a little one first.",
     "commands.monstergirls.family.grown_some": "%s is a quarter of the way more grown up.",
+    "message.monstergirls.marriage.perfect": "And you asked %s right here, at her kind of place. She's never going to forget this",
+    "advancement.monstergirls.perfect_proposal": "The Perfect Proposal",
+    "advancement.monstergirls.perfect_proposal.desc": "Propose to a girl at her favourite kind of place",
     "journal.monstergirls.family.title": "Family",
     "journal.monstergirls.family.children": "Little ones born to you: %s",
     "journal.monstergirls.family.line": "♥ %s, %s (wed day %s)",
@@ -115,7 +118,7 @@ NEW_HEARTS = ("while she is near you have two more hearts (each spouse near adds
               "Many spouses are one happy family: a wife nearby blesses each new proposal, the wives are bridesmaids, "
               "a pat for one warms the others, two or more in your bed make a family bed, and if one is lost the rest hold you close. "
               "Guests bring wedding presents, and the first three days are a honeymoon. "
-              "Wed by a lit realm censer instead and the Demon Realm keeps your vows. Of a morning, a wife you pass packs you lunch, and one who shared your bed may have dreamt of a real place nearby. A girl who adores you may not wait to be asked: after a lovely date she might hand you the ring herself.")
+              "Wed by a lit realm censer instead and the Demon Realm keeps your vows. Propose at her kind of place (as on a date) and it's perfect. Of a morning, a wife you pass packs you lunch, and one who shared your bed may have dreamt of a real place nearby. A girl who adores you may not wait to be asked: after a lovely date she might hand you the ring herself.")
 
 
 def adv(name, parent, icon, frame="task"):
@@ -131,6 +134,7 @@ def main():
     adv("wedding", "monstergirls:first_date", "monstergirls:wedding_ring")
     adv("big_family", "monstergirls:wedding", "minecraft:cake", "goal")
     adv("realm_wedding", "monstergirls:realm_censer", "monstergirls:realm_censer")
+    adv("perfect_proposal", "monstergirls:first_date", "minecraft:poppy")
     add_lang(LANG)
     path = os.path.join(ASSETS, "lang", "en_us.json")
     with open(path, encoding="utf-8") as fh:
