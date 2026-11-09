@@ -520,6 +520,40 @@ public final class Marriage {
         return wife;
     }
 
+    /** The places a wife may dream of, by the name the dream line uses (message.monstergirls.marriage.dream.place.NAME). */
+    public static final java.util.Map<String, net.minecraft.resources.ResourceKey<net.minecraft.world.level.levelgen.structure.Structure>> DREAM_PLACES = java.util.Map.of(
+            "oasis", com.linkyoshi90.monstergirls.registry.ModStructures.OASIS_KEY, "island", com.linkyoshi90.monstergirls.registry.ModStructures.SKY_ISLAND_KEY,
+            "shrine", com.linkyoshi90.monstergirls.registry.ModStructures.KITSUNE_SHRINE_KEY, "inn", com.linkyoshi90.monstergirls.registry.ModStructures.WAYSIDE_INN_KEY,
+            "grotto", com.linkyoshi90.monstergirls.registry.ModStructures.MERFOLK_GROTTO_KEY, "aerie", com.linkyoshi90.monstergirls.registry.ModStructures.HARPY_AERIE_KEY,
+            "camp", com.linkyoshi90.monstergirls.registry.ModStructures.CENTAUR_CAMP_KEY, "labyrinth", com.linkyoshi90.monstergirls.registry.ModStructures.LABYRINTH_KEY,
+            "lair", com.linkyoshi90.monstergirls.registry.ModStructures.DRAGON_LAIR_KEY, "den", com.linkyoshi90.monstergirls.registry.ModStructures.SILK_DEN_KEY);
+    public static final int DREAM_ODDS = 3, DREAM_CHUNKS = 40;
+
+    /**
+     * A shared dream: the morning after a wife shared the bed, one time in {@link #DREAM_ODDS} she wakes having dreamt of a place, and
+     * it is real: one of the landmarks above, the nearest of a kind picked at random within {@link #DREAM_CHUNKS} chunks, and she
+     * says which way and roughly how far. The place's name, or null (no dream, or nothing of that kind near).
+     */
+    @Nullable
+    public static String sharedDream(ServerLevel level, Player player, Mob wife, boolean force) {
+        if (!force && level.random.nextInt(DREAM_ODDS) != 0) return null;
+        java.util.List<String> kinds = new java.util.ArrayList<>(DREAM_PLACES.keySet());
+        java.util.Collections.sort(kinds);
+        String kind = kinds.get(level.random.nextInt(kinds.size()));
+        var holder = level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).getHolder(DREAM_PLACES.get(kind));
+        if (holder.isEmpty()) return null;
+        var found = level.getChunkSource().getGenerator().findNearestMapStructure(level, net.minecraft.core.HolderSet.direct(holder.get()),
+                player.blockPosition(), DREAM_CHUNKS, false);
+        if (found == null) return null;
+        BlockPos at = found.getFirst();
+        int far = (int) Math.round(Math.sqrt(player.blockPosition().distSqr(new BlockPos(at.getX(), player.getBlockY(), at.getZ()))) / 100.0) * 100;
+        String way = com.linkyoshi90.monstergirls.item.FriendCompassItem.way(player, at.getCenter());
+        player.displayClientMessage(Component.translatable("message.monstergirls.marriage.dream", wife.getDisplayName(),
+                Component.translatable("message.monstergirls.marriage.dream.place." + kind), Component.translatable("direction.monstergirls." + way),
+                Math.max(100, far)).withStyle(ChatFormatting.LIGHT_PURPLE), false);
+        return kind;
+    }
+
     /** Each guest who isn't family brings a little wedding present, left by the hearth. How many. */
     public static int presents(ServerLevel level, java.util.List<Mob> guests, BlockPos hearth) {
         int n = 0;
