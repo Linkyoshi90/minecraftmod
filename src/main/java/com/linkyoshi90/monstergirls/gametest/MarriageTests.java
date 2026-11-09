@@ -90,12 +90,18 @@ public class MarriageTests {
             check(Marriage.sheAsks(level, c, p) && p.getInventory().countItem(ModItems.WEDDING_RING.get()) == 1, "she asks first, ring and all");
             check(!Marriage.sheAsks(level, c, p), "once");
             check(Marriage.propose(level, c, p) == Marriage.Answer.ENGAGED && Marriage.tryWed(level, c, p) && Marriage.count(p) == 3, "three");
+            check(p.getInventory().countItem(net.minecraft.world.item.Items.PAINTING) == 1, "the whole family, for the wall");
             check(Marriage.blissFrom(level, p) == 3 && p.getMaxHealth() == 20 + Marriage.BLISS_CAP * Marriage.HEALTH, "capped at three");
             long saved = level.getDayTime();
             level.setDayTime((saved / 24000L + 1) * 24000L + 1000L);              // a morning, put back within the tick
             check(Marriage.lunch(level, p) != null && Marriage.lunch(level, p) == null, "one packed lunch a morning");
             level.setDayTime(saved);
             check(Marriage.welcomeBack(level, p) != null, "a wife welcomes them back");
+            Marriage.leaveNote(p, b);
+            check(Marriage.notes(p).size() == 1 && Marriage.notes(p).getCompound(0).getString("Name").equals(b.getName().getString()), "a note from home");
+            check(com.linkyoshi90.monstergirls.HarpyCommands.familyLines(p).size() == 1 + 3, "/monstergirls family: a header and three wives");
+            String dreamt = Marriage.sharedDream(level, p, a, true);               // the flat test world may have no landmarks: just that it looks safely
+            check(dreamt == null || Marriage.DREAM_PLACES.containsKey(dreamt), "a dream of somewhere real, or none");
             a.kill();
             check(!level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, a.getBoundingBox().inflate(3),
                     i -> i.getItem().is(ModItems.WEDDING_RING.get())).isEmpty(), "her ring stays behind");
@@ -160,5 +166,22 @@ public class MarriageTests {
         level.setWeatherParameters(6000, 0, false, false);                    // the sunshower is the test world's only rain: put it back
         HarpyTestUtil.remove(p);
         helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "aDoubleWedding")
+    public static void aDoubleWedding(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        helper.setBlock(new BlockPos(7, 2, 7), ModBlocks.HEARTH.get());
+        AbstractMonsterGirl a = still(helper, new BlockPos(5, 2, 7)), b = still(helper, new BlockPos(9, 2, 9));
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(7, 2, 5));
+        a.setAffection(p.getUUID(), 100);
+        b.setAffection(p.getUUID(), 100);
+        check(Marriage.propose(level, a, p) == Marriage.Answer.ENGAGED && Marriage.propose(level, b, p) == Marriage.Answer.ENGAGED, "two engagements");
+        helper.runAfterDelay(3, () -> {
+            boolean held = Marriage.married(a, p) || Marriage.tryWed(level, a, p);    // (her own tick may have held it already)
+            check(held && Marriage.married(a, p) && Marriage.married(b, p), "both wed in one ceremony");
+            HarpyTestUtil.remove(p);
+            helper.succeed();
+        });
     }
 }

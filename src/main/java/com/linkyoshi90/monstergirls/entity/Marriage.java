@@ -124,7 +124,7 @@ public final class Marriage {
         player.setData(ModAttachments.JOURNAL, journal);
     }
 
-    public static final String FAMILY_PAGE = "Family", CHILDREN = "Children";
+    public static final String FAMILY_PAGE = "Family", CHILDREN = "Children", FAMILY_PAINTING = "FamilyPainting";
 
     /** The wedding goes in the journal's family page: her name, her kind and the day. */
     private static void writeFamily(Player player, Mob mob) {
@@ -173,6 +173,27 @@ public final class Marriage {
 
     public static ListTag childList(Player player) {
         return player.getData(ModAttachments.JOURNAL).getList(CHILD_LIST, Tag.TAG_COMPOUND);
+    }
+
+    public static final String NOTES = "HomeNotes";
+    public static final int NOTE_KINDS = 10, NOTES_KEPT = 12;
+
+    /** A wife who missed them while they were away leaves a note in their journal (Notes from home, the latest NOTES_KEPT). */
+    public static void leaveNote(Player player, Mob wife) {
+        CompoundTag journal = player.getData(ModAttachments.JOURNAL);
+        ListTag notes = journal.getList(NOTES, Tag.TAG_COMPOUND);
+        CompoundTag note = new CompoundTag();
+        note.putString("Name", wife.getName().getString());
+        note.putInt("Line", wife.getRandom().nextInt(NOTE_KINDS));
+        note.putLong("Day", wife.level().getDayTime() / 24000L + 1);
+        notes.add(note);
+        while (notes.size() > NOTES_KEPT) notes.remove(0);
+        journal.put(NOTES, notes);
+        player.setData(ModAttachments.JOURNAL, journal);
+    }
+
+    public static ListTag notes(Player player) {
+        return player.getData(ModAttachments.JOURNAL).getList(NOTES, Tag.TAG_COMPOUND);
     }
 
     public static ListTag family(Player player) {
@@ -271,13 +292,14 @@ public final class Marriage {
     public static boolean tryWed(ServerLevel level, Mob mob, Player player) {
         if (!engaged(mob, player)) return false;
         BlockPos hearth = hearthFor(level, mob, player);
-        if (hearth != null) {
-            wed(level, mob, player, hearth);
-            return true;
-        }
-        BlockPos censer = censerFor(level, mob, player);
-        if (censer == null) return false;
-        wed(level, mob, player, censer, true);
+        boolean realm = hearth == null;
+        if (realm) hearth = censerFor(level, mob, player);
+        if (hearth == null) return false;
+        java.util.List<Mob> brides = new java.util.ArrayList<>();             // every fiancée of theirs standing by it is wed in the one ceremony
+        brides.add(mob);
+        for (Mob other : level.getEntitiesOfClass(Mob.class, new AABB(hearth).inflate(WED_RANGE), m -> m != mob && m.isAlive() && engaged(m, player))) brides.add(other);
+        for (Mob bride : brides) wed(level, bride, player, hearth, realm);
+        if (brides.size() > 1) player.displayClientMessage(Component.translatable("message.monstergirls.marriage.group", brides.size()).withStyle(ChatFormatting.GOLD), false);
         return true;
     }
 
@@ -340,7 +362,17 @@ public final class Marriage {
         if (presents(level, giving, hearth) > 0) player.displayClientMessage(Component.translatable("message.monstergirls.marriage.presents", giving.size()), false);
         if (bridesmaids > 0) player.displayClientMessage(Component.translatable("message.monstergirls.marriage.bridesmaids", bridesmaids, mob.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), false);
         Dairy.award(player, "wedding");
-        if (wedNow(player) >= BIG_FAMILY) Dairy.award(player, "big_family");
+        if (wedNow(player) >= BIG_FAMILY) {
+            Dairy.award(player, "big_family");
+            CompoundTag journal = player.getData(ModAttachments.JOURNAL);
+            if (!journal.getBoolean(FAMILY_PAINTING)) {                          // the whole family, once, for the wall
+                journal.putBoolean(FAMILY_PAINTING, true);
+                player.setData(ModAttachments.JOURNAL, journal);
+                net.minecraft.world.item.ItemStack painting = Hobbies.painting(MonsterGirlsMod.id("whole_family"));
+                if (!player.addItem(painting)) player.drop(painting, false);
+                player.displayClientMessage(Component.translatable("message.monstergirls.marriage.family_painting"), false);
+            }
+        }
         return guests;
     }
 

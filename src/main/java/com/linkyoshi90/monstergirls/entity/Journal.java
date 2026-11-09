@@ -147,7 +147,7 @@ public final class Journal {
     public static final int DEVOTED = 60, DEAREST_LINES = 4;                // each line "name, kind (day n)" wraps to two or three of a page's 14
     public static final String DEAREST = "Dearest";
     /** Wives a family page lists: each line also says when her anniversary is, so it wraps to three or four. */
-    public static final int FAMILY_LINES = 3;
+    public static final int FAMILY_LINES = 3, NOTE_LINES = 3;
 
     /** She is devoted to them: the first time, the journal notes her name, her kind and the day. Whether that was news. */
     public static boolean devoted(Player player, Entity girl) {
@@ -560,6 +560,16 @@ public final class Journal {
                         : until == 0 && since > 0 ? Component.translatable("journal.monstergirls.family.today", d.getString("Name"), kind, d.getLong("Day"))
                         : Component.translatable("journal.monstergirls.family.next", d.getString("Name"), kind, d.getLong("Day"), until == 0 ? Marriage.YEAR : until))
                         .withStyle(ChatFormatting.RESET, departed ? ChatFormatting.GRAY : ChatFormatting.BLACK));
+            }
+            pages.add(Filterable.passThrough(page));
+        }
+        ListTag notes = Marriage.notes(player);
+        for (int i = notes.size() - 1; i >= 0; i -= NOTE_LINES) {                // notes from home, newest first
+            MutableComponent page = Component.translatable("journal.monstergirls.notes.title").withStyle(ChatFormatting.BOLD, ChatFormatting.LIGHT_PURPLE).append(NL_TEXT);
+            for (int j = i; j > Math.max(-1, i - NOTE_LINES); j--) {
+                CompoundTag n = notes.getCompound(j);
+                page.append(NL_TEXT).append(Component.translatable("journal.monstergirls.notes.line", n.getString("Name"),
+                        Component.translatable("journal.monstergirls.notes." + n.getInt("Line"))).withStyle(ChatFormatting.RESET, ChatFormatting.BLACK));
             }
             pages.add(Filterable.passThrough(page));
         }

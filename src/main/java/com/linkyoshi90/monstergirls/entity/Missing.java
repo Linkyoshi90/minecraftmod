@@ -168,7 +168,10 @@ public final class Missing {
         int affection = bonded.getAffection(player);
         int lost = (int) Math.max(0, days - startDays(affection) + 1);
         if (Keepsakes.wearsBracelet(mob, player)) lost /= 2;
-        if (Marriage.married(mob, player)) lost = 0;                       // a spouse forgives any absence
+        if (Marriage.married(mob, player)) {
+            lost = 0;                                                         // a spouse forgives any absence
+            Marriage.leaveNote(player, mob);                                  // and wrote while they were gone
+        }
         if (affection > Bonded.BED_AFFECTION) bonded.setAffection(player.getUUID(), Math.max(Bonded.BED_AFFECTION, affection - lost));
         String id = player.getUUID().toString();
         tag(mob, BACK).putLong(id, level.getDayTime() + DAY);
