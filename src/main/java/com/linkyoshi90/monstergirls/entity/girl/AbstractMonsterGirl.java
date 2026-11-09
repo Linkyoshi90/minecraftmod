@@ -989,6 +989,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (father != null && level.getServer().getPlayerList().getPlayer(father) instanceof Player parent) {
             com.linkyoshi90.monstergirls.entity.Marriage.motherOf(parent, young, this);   // the family journal knows her mother
         }
+        if (this.random.nextBoolean()) com.linkyoshi90.monstergirls.entity.Hobbies.setHobby(young, com.linkyoshi90.monstergirls.entity.Hobbies.hobby(this));   // like mother, like daughter
         com.linkyoshi90.monstergirls.entity.Nursing.born(this, young);   // she nurses her newborn
         return young;
     }

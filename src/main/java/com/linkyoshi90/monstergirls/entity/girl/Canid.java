@@ -503,13 +503,34 @@ public class Canid extends AbstractMonsterGirl {
     /** She weighs a player she has not judged yet: a heavy heart is condemned (and hunted), a light one may pass. */
     public void weigh(ServerPlayer player) {
         if (!this.weighed.add(player.getUUID())) return;
-        boolean heavy = heartWeight(player) > 0;
+        boolean heavy = Atonement.netWeight(player) > 0;
         if (heavy) this.condemned.add(player.getUUID());
         this.startTimedAction(Action.JUDGE, 40);
         this.getLookControl().setLookAt(player);
         this.playSound(heavy ? SoundEvents.WOLF_GROWL : SoundEvents.AMETHYST_BLOCK_CHIME, 1.0F, heavy ? 0.7F : 1.2F);
         player.displayClientMessage(Component.translatable(heavy ? "message.monstergirls.heart_heavy" : "message.monstergirls.heart_light",
                 this.getDisplayName()), false);
+    }
+
+    /**
+     * Weighed again (a feather shown to her by one she condemned): if their good deeds now balance what they did, the judgement is
+     * lifted. Whether it was.
+     */
+    public boolean reweigh(ServerPlayer player) {
+        if (!this.condemned.contains(player.getUUID())) return false;
+        this.startTimedAction(Action.JUDGE, 40);
+        this.getLookControl().setLookAt(player);
+        int left = Atonement.netWeight(player);
+        if (left > 0) {
+            this.playSound(SoundEvents.WOLF_GROWL, 1.0F, 0.8F);
+            player.displayClientMessage(Component.translatable("message.monstergirls.heart_still_heavy", this.getDisplayName(), left), false);
+            return false;
+        }
+        this.condemned.remove(player.getUUID());
+        if (this.getTarget() == player) this.setTarget(null);
+        this.playSound(SoundEvents.AMETHYST_BLOCK_CHIME, 1.0F, 1.2F);
+        player.displayClientMessage(Component.translatable("message.monstergirls.heart_atoned", this.getDisplayName()), false);
+        return true;
     }
 
     public boolean hasWeighed(Player player) {

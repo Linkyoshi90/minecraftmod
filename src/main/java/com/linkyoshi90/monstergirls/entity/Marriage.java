@@ -558,6 +558,7 @@ public final class Marriage {
         if (p == null || p.distanceToSqr(mob) > NEAR * NEAR) return false;            // she waits until they are together on the day
         pd.putLong(LAST_ANNIVERSARY, today);
         pd.putLong(VEIL_UNTIL, level.getGameTime() + VEIL);
+        pd.putLong(HONEYMOON_UNTIL, level.getGameTime() + 24000L);                // a second honeymoon, for the day
         Bonded b = (Bonded) mob;
         b.blushFor(400);
         level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.3, mob.getZ(), 10, 0.5, 0.4, 0.5, 0.0);

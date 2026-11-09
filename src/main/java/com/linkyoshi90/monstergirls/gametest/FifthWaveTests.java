@@ -123,6 +123,9 @@ public class FifthWaveTests {
         check(!anubis.isCondemned(innocent) && !anubis.isHostileTo(innocent), "a light heart passes");
         check(Canid.tombGuardOf(helper.getLevel(), abs, innocent) == null, "and may open the tomb");
         check(Canid.tombGuardOf(helper.getLevel(), abs, guilty) == anubis, "the condemned may not");
+        check(!anubis.reweigh(guilty) && anubis.isCondemned(guilty), "a feather alone won't lighten it");
+        while (com.linkyoshi90.monstergirls.entity.girl.Atonement.netWeight(guilty) > 0) com.linkyoshi90.monstergirls.entity.girl.Atonement.deed(guilty, "golem");
+        check(anubis.reweigh(guilty) && !anubis.isCondemned(guilty) && !anubis.isHostileTo(guilty), "good deeds balance it: atoned");
         HarpyTestUtil.remove(guilty);
         HarpyTestUtil.remove(innocent);
         helper.succeed();
