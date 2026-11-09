@@ -17,6 +17,8 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 ## Marriage, many times over
 
 - **Proposing again**: a wedding ring to a second girl at full friendship. A wife nearby gives her blessing in chat.
+- **The perfect proposal**: propose at her kind of place (the same one she names for a date: flowers, the water's edge, somewhere high, or the open night sky) for a bigger moment, Luck for a day and an advancement.
+- **Someone's daughter**: when another player proposes to your grown daughter, you hear of it.
 - **She asks first**: after a lovely date (sneak + flower, go to her kind of place), a girl at full friendship who has never asked hands you a wedding ring herself. Give it back to say yes.
 - **The wedding** (both by a hearth): bell, fireworks, friends gather. New: your other wives come as bridesmaids (cherry petals), guests leave presents by the hearth, the bride tosses her bouquet (a grown daughter catches it and takes a shine to a villager; otherwise a flirty guest catches it and blushes at you), and you get a little figurine of her in her veil. Does the figurine keep the veil?
 - **Group wedding**: two or more fiancées standing by the hearth together are all wed at once.
@@ -29,7 +31,7 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - **Hearts add up**: +2 hearts per wife within 32 blocks, up to three wives (+6).
 - **Warmth, not jealousy**: pet one wife and the others within 8 smile (green sparkles) and get +1 friendship, once a minute each.
 - **Family bed**: two or more wives in your bed at once. The morning message, and Absorption. Where do three of them lie? (Placement was never seen.)
-- **Shared dreams**: the morning after a wife shared your bed, one time in three she dreamt of a real landmark nearby (oasis, sky island, shrine, inn, grotto, aerie, camp, labyrinth, lair, den) and says which way and roughly how far. Is that too often, too rare?
+- **Shared dreams**: the morning after a wife shared your bed, one time in three she dreamt of a real landmark nearby (oasis, sky island, shrine, inn, grotto, aerie, camp, labyrinth, lair, den) and says which way and roughly how far. Go there with her (within 40 blocks of it, her within 16 of you) and the dream comes true: +10, Luck for a day, an advancement. Is it too often, too rare?
 - **Packed lunch**: the first time each morning you pass within 6 blocks of a wife, she hands you a named lunch.
 - **Welcome home**: log in near a wife and she greets you after a few seconds.
 - **Notes from home**: come back after a while away; each wife who missed you leaves a note on a journal page.
@@ -51,6 +53,11 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - **Hobbies run in the family**: half of daughters take up their mother's hobby.
 
 ## Elsewhere
+
+- **Birthday candles**: on a girl's birthday (Jade shows it), light a candle on a cake within 8 blocks of her: she comes over, blows it out and makes a wish (+8 for each friend there).
+- **The dragon egg**: crouch and use a blaze rod on the dragon egg with a dragon-girl friend within 8 blocks: it hatches into a little ender dragon girl, devoted to you. (Without the dragon friend it only grows warm.)
+- **Spyglass**: whoever is in the crosshair (up to 64 blocks) is studied twice as fast for the bestiary.
+- **Musicians**: a girl with the music hobby plays a note block within 4 blocks during her hobby hour.
 
 - **Portrait paintings**: 29 2x2 busts of the girls, so any painting you hang may come up as one. A girl whose hobby is the new **painting** hobby sometimes leaves you her own kind's portrait.
 - **Archery**: crouch and show a friend a bow with a target block within 24 blocks of her. Three arrows each; she really shoots. Does she hit at 20 blocks? (A centaur or elf should; a slime shouldn't.) Note: crouch + bow no longer arms a fighter; a plain right-click still does.

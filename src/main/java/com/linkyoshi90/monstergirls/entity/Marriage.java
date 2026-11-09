@@ -595,7 +595,50 @@ public final class Marriage {
         player.displayClientMessage(Component.translatable("message.monstergirls.marriage.dream", wife.getDisplayName(),
                 Component.translatable("message.monstergirls.marriage.dream.place." + kind), Component.translatable("direction.monstergirls." + way),
                 Math.max(100, far)).withStyle(ChatFormatting.LIGHT_PURPLE), false);
+        dreamOf(level, player, wife, at, kind);                                 // remembered: go there together and it comes true
         return kind;
+    }
+
+    private static final String DREAM = "SharedDream";
+    public static final double DREAM_REACHED = 40, DREAM_TOGETHER = 16;
+    public static final int DREAM_COME_TRUE = 10;
+
+    /**
+     * Checked every couple of seconds: a player who reaches the place a wife dreamt of (within {@link #DREAM_REACHED}, horizontally) with
+     * her beside them ({@link #DREAM_TOGETHER}) finds the dream come true: she is {@link #DREAM_COME_TRUE} closer, they both glow with
+     * it (Luck for a day), and the dream is spent. Whether it came true.
+     */
+    /** Plants a dream by hand (tests, commands): she dreamt of this spot. */
+    public static void dreamOf(ServerLevel level, Player player, Mob wife, BlockPos at, String kind) {
+        CompoundTag journal = player.getData(ModAttachments.JOURNAL);
+        CompoundTag dream = new CompoundTag();
+        dream.putLong("At", at.asLong());
+        dream.putUUID("With", wife.getUUID());
+        dream.putString("Kind", kind);
+        dream.putString("Dim", level.dimension().location().toString());
+        journal.put(DREAM, dream);
+        player.setData(ModAttachments.JOURNAL, journal);
+    }
+
+    public static boolean dreamComeTrue(ServerLevel level, Player player) {
+        CompoundTag journal = player.getData(ModAttachments.JOURNAL);
+        if (!journal.contains(DREAM)) return false;
+        CompoundTag dream = journal.getCompound(DREAM);
+        if (!level.dimension().location().toString().equals(dream.getString("Dim"))) return false;
+        BlockPos at = BlockPos.of(dream.getLong("At"));
+        double dx = player.getX() - at.getX(), dz = player.getZ() - at.getZ();
+        if (dx * dx + dz * dz > DREAM_REACHED * DREAM_REACHED) return false;
+        if (!(level.getEntity(dream.getUUID("With")) instanceof Mob wife) || !wife.isAlive() || wife.distanceToSqr(player) > DREAM_TOGETHER * DREAM_TOGETHER) return false;
+        journal.remove(DREAM);
+        player.setData(ModAttachments.JOURNAL, journal);
+        ((Bonded) wife).addAffection(player, DREAM_COME_TRUE);
+        ((Bonded) wife).blushFor(400);
+        player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.LUCK, 24000, 0));
+        level.sendParticles(ParticleTypes.HEART, wife.getX(), wife.getEyeY() + 0.4, wife.getZ(), 16, 0.6, 0.5, 0.6, 0.0);
+        player.displayClientMessage(Component.translatable("message.monstergirls.marriage.dream_true", wife.getDisplayName(),
+                Component.translatable("message.monstergirls.marriage.dream.place." + dream.getString("Kind"))).withStyle(ChatFormatting.GOLD), false);
+        Dairy.award(player, "dream_come_true");
+        return true;
     }
 
     /** Each guest who isn't family brings a little wedding present, left by the hearth. How many. */
@@ -673,6 +716,7 @@ public final class Marriage {
         if (event.getEntity().tickCount % 40 == 23 && event.getEntity().level() instanceof ServerLevel level) {
             bliss(level, event.getEntity());
             lunch(level, event.getEntity());
+            dreamComeTrue(level, event.getEntity());
             CompoundTag pd = event.getEntity().getPersistentData();
             if (pd.contains(WELCOME)) {
                 int left = pd.getInt(WELCOME) - 40;

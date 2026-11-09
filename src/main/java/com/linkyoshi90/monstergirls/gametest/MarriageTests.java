@@ -102,6 +102,10 @@ public class MarriageTests {
             check(com.linkyoshi90.monstergirls.HarpyCommands.familyLines(p).size() == 1 + 3, "/monstergirls family: a header and three wives");
             String dreamt = Marriage.sharedDream(level, p, a, true);               // the flat test world may have no landmarks: just that it looks safely
             check(dreamt == null || Marriage.DREAM_PLACES.containsKey(dreamt), "a dream of somewhere real, or none");
+            Marriage.dreamOf(level, p, b, p.blockPosition().offset(200, 0, 0), "oasis");
+            check(!Marriage.dreamComeTrue(level, p), "not there yet");
+            Marriage.dreamOf(level, p, b, p.blockPosition().offset(10, 0, 0), "oasis");
+            check(Marriage.dreamComeTrue(level, p) && !Marriage.dreamComeTrue(level, p), "there together: the dream comes true, once");
             a.kill();
             check(!level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, a.getBoundingBox().inflate(3),
                     i -> i.getItem().is(ModItems.WEDDING_RING.get())).isEmpty(), "her ring stays behind");

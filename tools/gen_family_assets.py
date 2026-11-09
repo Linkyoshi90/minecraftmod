@@ -104,6 +104,9 @@ LANG = {
     "advancement.monstergirls.perfect_proposal": "The Perfect Proposal",
     "advancement.monstergirls.perfect_proposal.desc": "Propose to a girl at her favourite kind of place",
     "message.monstergirls.marriage.daughter_engaged": "%s has asked for your daughter %s's hand, and she said yes!",
+    "message.monstergirls.marriage.dream_true": "%s gasps and takes your hand: \"It's just like my dream!\" You found %s, together",
+    "advancement.monstergirls.dream_come_true": "A Dream Come True",
+    "advancement.monstergirls.dream_come_true.desc": "Go with your wife to the place she dreamt of",
     "journal.monstergirls.family.title": "Family",
     "journal.monstergirls.family.children": "Little ones born to you: %s",
     "journal.monstergirls.family.line": "♥ %s, %s (wed day %s)",
@@ -119,7 +122,7 @@ NEW_HEARTS = ("while she is near you have two more hearts (each spouse near adds
               "Many spouses are one happy family: a wife nearby blesses each new proposal, the wives are bridesmaids, "
               "a pat for one warms the others, two or more in your bed make a family bed, and if one is lost the rest hold you close. "
               "Guests bring wedding presents, and the first three days are a honeymoon. "
-              "Wed by a lit realm censer instead and the Demon Realm keeps your vows. Propose at her kind of place (as on a date) and it's perfect. Of a morning, a wife you pass packs you lunch, and one who shared your bed may have dreamt of a real place nearby. A girl who adores you may not wait to be asked: after a lovely date she might hand you the ring herself.")
+              "Wed by a lit realm censer instead and the Demon Realm keeps your vows. Propose at her kind of place (as on a date) and it's perfect. Of a morning, a wife you pass packs you lunch, and one who shared your bed may have dreamt of a real place nearby: go there together. A girl who adores you may not wait to be asked: after a lovely date she might hand you the ring herself.")
 
 
 def adv(name, parent, icon, frame="task"):
@@ -136,6 +139,7 @@ def main():
     adv("big_family", "monstergirls:wedding", "minecraft:cake", "goal")
     adv("realm_wedding", "monstergirls:realm_censer", "monstergirls:realm_censer")
     adv("perfect_proposal", "monstergirls:first_date", "minecraft:poppy")
+    adv("dream_come_true", "monstergirls:wedding", "minecraft:filled_map")
     add_lang(LANG)
     path = os.path.join(ASSETS, "lang", "en_us.json")
     with open(path, encoding="utf-8") as fh:
