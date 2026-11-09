@@ -14,6 +14,7 @@ LANG = {
     "message.monstergirls.growing_up.word": "%s points at you and says her very first word: \"%s!\"",
     "message.monstergirls.growing_up.flower": "%s toddles over with a flower she picked just for you",
     "message.monstergirls.growing_up.drawing": "%s proudly hands you a drawing: the two of you, holding hands",
+    "monstergirls.configuration.nameNewborns": "Name newborns",
     "item.monstergirls.drawing": "%s's Drawing",
     "item.monstergirls.drawing.lore": "Two stick figures holding hands: her, and %s",
 }

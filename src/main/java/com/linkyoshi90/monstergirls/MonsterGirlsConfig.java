@@ -141,6 +141,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue HAMLETS;
     public static final ModConfigSpec.BooleanValue SWEETHEARTS;
     public static final ModConfigSpec.BooleanValue DATES;
+    public static final ModConfigSpec.BooleanValue NAME_NEWBORNS;
     public static final ModConfigSpec.BooleanValue HOT_SPRINGS;
     public static final ModConfigSpec.BooleanValue AURORA_NIGHTS;
     public static final ModConfigSpec.BooleanValue PASSING_FLOCKS;
@@ -216,6 +217,10 @@ public final class MonsterGirlsConfig {
         DATES = BUILDER
                 .comment("Sneak and use a flower on a close friend to ask her out: she names her kind of place (flowers, the water's edge, a view, the night sky); spend half a minute there together for affection, Regeneration and Luck. One date a day each.")
                 .define("dates", true);
+
+        NAME_NEWBORNS = BUILDER
+                .comment("Little ones born to a player come with a name of their own (a name tag still renames them).")
+                .define("nameNewborns", true);
 
         HOT_SPRINGS = BUILDER
                 .comment("Hot springs: water over geyserite steams, never freezes, heals and warms whoever soaks in it (friends come and join you), and cures a girl's cold. Off stops the effect and new springs in new chunks.")
@@ -425,6 +430,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean hotSprings() {
         return SPEC.isLoaded() ? HOT_SPRINGS.get() : HOT_SPRINGS.getDefault();
+    }
+
+    public static boolean nameNewborns() {
+        return SPEC.isLoaded() ? NAME_NEWBORNS.get() : NAME_NEWBORNS.getDefault();
     }
 
     public static boolean dates() {

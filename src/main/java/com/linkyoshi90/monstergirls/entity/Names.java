@@ -27,6 +27,23 @@ public final class Names {
     private Names() {
     }
 
+    /** Names a newborn may be given (nameNewborns): soft, a little old-fashioned, from all over. */
+    public static final java.util.List<String> NEWBORN = java.util.List.of("Ada", "Aiko", "Alma", "Amara", "Anya", "Aria", "Astrid", "Aurelia",
+            "Bea", "Bianca", "Briar", "Calla", "Camille", "Clementine", "Coral", "Dahlia", "Daisy", "Delphine", "Edda", "Elin", "Elodie", "Ember",
+            "Esme", "Faye", "Fern", "Freya", "Gemma", "Greta", "Hana", "Hazel", "Heidi", "Ida", "Ilse", "Iris", "Ivy", "Juniper", "Kaia", "Keiko",
+            "Lark", "Leona", "Lila", "Linnea", "Lotte", "Luna", "Mabel", "Maple", "Marigold", "Mei", "Mila", "Mira", "Momo", "Nell", "Nia",
+            "Nora", "Odette", "Olive", "Opal", "Pearl", "Pia", "Pippa", "Poppy", "Rhea", "Rosa", "Rowan", "Ruby", "Sage", "Saoirse", "Selma",
+            "Sienna", "Sora", "Talia", "Tamsin", "Thea", "Tilly", "Una", "Vera", "Willa", "Wren", "Yuki", "Yara", "Zara", "Zinnia");
+
+    /** A little one born to a player gets a name of her own, unless she has one. The name, or null. */
+    @javax.annotation.Nullable
+    public static String newborn(net.minecraft.world.entity.Entity young) {
+        if (!com.linkyoshi90.monstergirls.MonsterGirlsConfig.nameNewborns() || young.hasCustomName()) return null;
+        String name = NEWBORN.get(young.getRandom().nextInt(NEWBORN.size()));
+        young.setCustomName(Component.literal(name));
+        return name;
+    }
+
     @SubscribeEvent
     public static void onNameTag(PlayerInteractEvent.EntityInteract event) {
         ItemStack stack = event.getItemStack();

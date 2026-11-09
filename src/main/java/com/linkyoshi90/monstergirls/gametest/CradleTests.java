@@ -73,6 +73,7 @@ public class CradleTests {
         young.setNoAi(true);
         ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(8, 2, 7));
         young.bornTo(p.getUUID());
+        check(young.hasCustomName() && com.linkyoshi90.monstergirls.entity.Names.NEWBORN.contains(young.getCustomName().getString()), "she came with a name");
         check(com.linkyoshi90.monstergirls.entity.girl.GrowingUp.tick(level, young) == null, "too little yet");
         young.setGrowTicks(AbstractMonsterGirl.GROW_TICKS * 3 / 10);
         check("word".equals(com.linkyoshi90.monstergirls.entity.girl.GrowingUp.tick(level, young)), "her first word");

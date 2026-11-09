@@ -102,7 +102,10 @@ public interface Bonded {
         this.setAffection(father, FULL_AFFECTION);
         if (this instanceof net.minecraft.world.entity.Entity e && e.level() instanceof net.minecraft.server.level.ServerLevel level) {
             Player p = level.getServer().getPlayerList().getPlayer(father);
-            if (p != null) Marriage.childBorn(p);                         // the family journal counts the little ones
+            if (p != null) {
+                Marriage.childBorn(p);                                    // the family journal counts the little ones
+                Names.newborn(e);                                         // and she has a name of her own
+            }
         }
     }
 }
