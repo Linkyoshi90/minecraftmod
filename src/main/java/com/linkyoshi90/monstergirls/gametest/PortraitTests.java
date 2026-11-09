@@ -26,6 +26,11 @@ public class PortraitTests {
         check(crow.get().is(PaintingVariantTags.PLACEABLE), "and a painting hung on a wall can come up as her");
         long ours = reg.keySet().stream().filter(k -> k.getNamespace().equals(MonsterGirlsMod.MODID)).count();
         check(ours >= 20, "a gallery of them: " + ours);
+        var crowGirl = helper.spawn(com.linkyoshi90.monstergirls.registry.ModEntities.CROW_HARPY.get(), new net.minecraft.core.BlockPos(4, 2, 4));
+        var made = com.linkyoshi90.monstergirls.entity.Hobbies.portrait(helper.getLevel(), crowGirl, helper.getLevel().random);
+        var data = made.get(net.minecraft.core.component.DataComponents.ENTITY_DATA);
+        check(made.is(net.minecraft.world.item.Items.PAINTING) && data != null && data.copyTag().getString("variant").equals("monstergirls:portrait_crow_harpy"),
+                "a painter paints her own kind");
         helper.succeed();
     }
 }

@@ -37,12 +37,12 @@ import java.util.UUID;
 
 /**
  * Hobbies (2026-11-08). Every girl has a pastime of her own, always the same for her (from her UUID): gardening, fishing,
- * reading, music, baking, collecting pretty things or knitting, and an hour of the day that is hers for it. During her hour she
+ * reading, music, baking, collecting pretty things, knitting or painting, and an hour of the day that is hers for it. During her hour she
  * potters away at it where she is (a gardener tends the crops round her as she goes). Once she has put in {@link #WORK} ticks of it,
  * if a friend is about, she leaves what she made at her feet: flowers and seeds, a fish or two, bread and cookies, a shiny find,
- * wool or a knitted cap; a reader shares what she learned (experience), a musician plays everyone near a merry tune (Haste).
+ * wool or a knitted cap, now and then a portrait (a painting; her own kind's if there is one); a reader shares what she learned (experience), a musician plays everyone near a merry tune (Haste).
  * Keep her company through it (within {@link #NEAR} for {@link #COMPANY} ticks) and she shows you how she does it: affection and a
- * share for you, once a day. Her friends see her hobby in Jade.
+ * share for you, once a day. Her friends see her hobby in Jade. Half of all daughters born take up their mother's hobby.
  */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class Hobbies {
@@ -59,7 +59,8 @@ public final class Hobbies {
         MUSIC(ParticleTypes.NOTE, SoundEvents.NOTE_BLOCK_FLUTE.value()),
         BAKING(ParticleTypes.SMOKE, SoundEvents.SMOKER_SMOKE),
         COLLECTING(ParticleTypes.WAX_OFF, SoundEvents.AMETHYST_BLOCK_CHIME),
-        KNITTING(ParticleTypes.CLOUD, SoundEvents.WOOL_PLACE);
+        KNITTING(ParticleTypes.CLOUD, SoundEvents.WOOL_PLACE),
+        PAINTING(ParticleTypes.WAX_ON, SoundEvents.PAINTING_PLACE);
 
         public final ParticleOptions particle;
         public final SoundEvent sound;
@@ -169,6 +170,7 @@ public final class Hobbies {
             };
             case COLLECTING -> r.nextInt(30) == 0 ? new ItemStack(Items.EMERALD)
                     : new ItemStack(pick(r, Items.FLINT, Items.AMETHYST_SHARD, Items.QUARTZ, Items.CLAY_BALL, Items.PRISMARINE_SHARD, Items.FEATHER, Items.GLOW_INK_SAC), 1 + r.nextInt(3));
+            case PAINTING -> r.nextInt(3) == 0 ? portrait(level, girl, r) : new ItemStack(pick(r, Items.PAPER, Items.YELLOW_DYE, Items.CYAN_DYE, Items.PINK_DYE), 1 + r.nextInt(2));
             case KNITTING -> {
                 if (r.nextInt(4) == 0) {                                      // a knitted cap, in a colour she picked
                     ItemStack cap = new ItemStack(Items.LEATHER_HELMET);
@@ -179,6 +181,26 @@ public final class Hobbies {
                 yield new ItemStack(pick(r, Items.WHITE_WOOL, Items.PINK_WOOL, Items.LIGHT_BLUE_WOOL, Items.YELLOW_WOOL, Items.LIME_WOOL, Items.MAGENTA_WOOL), 2 + r.nextInt(2));
             }
         };
+    }
+
+    /** A painting she made: a portrait of her own kind if there is one (tools/gen_portraits.py), else of one of the others. */
+    public static ItemStack portrait(ServerLevel level, Mob girl, RandomSource r) {
+        var reg = level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.PAINTING_VARIANT);
+        net.minecraft.resources.ResourceLocation own = com.linkyoshi90.monstergirls.MonsterGirlsMod.id("portrait_"
+                + net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(girl.getType()).getPath());
+        net.minecraft.resources.ResourceLocation pick = reg.containsKey(own) ? own : null;
+        if (pick == null) {
+            java.util.List<net.minecraft.resources.ResourceLocation> ours = reg.keySet().stream()
+                    .filter(k -> k.getNamespace().equals(com.linkyoshi90.monstergirls.MonsterGirlsMod.MODID)).sorted().toList();
+            if (ours.isEmpty()) return new ItemStack(Items.PAINTING);
+            pick = ours.get(r.nextInt(ours.size()));
+        }
+        ItemStack painting = new ItemStack(Items.PAINTING);
+        net.minecraft.nbt.CompoundTag data = new net.minecraft.nbt.CompoundTag();
+        data.putString("id", "minecraft:painting");
+        data.putString("variant", pick.toString());
+        painting.set(DataComponents.ENTITY_DATA, net.minecraft.world.item.component.CustomData.of(data));
+        return painting;
     }
 
     private static Item pick(RandomSource r, Item... items) {

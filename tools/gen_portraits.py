@@ -130,6 +130,9 @@ def main():
         ids.append(f"monstergirls:{pid}")
     dump(os.path.join(REPO, "src", "main", "resources", "data", "minecraft", "tags", "painting_variant", "placeable.json"),
          {"replace": False, "values": ids})
+    lang["hobby.monstergirls.painting"] = "painting"
+    lang["message.monstergirls.hobby.shared.painting"] = ("%s: She sits you down, sketches you twice, then hands you the brush for the sky. "
+                                                          "Whatever she finished is yours.")
     if "--no-lang" not in sys.argv:
         add_lang(lang)
     if "--sheet" in sys.argv:
