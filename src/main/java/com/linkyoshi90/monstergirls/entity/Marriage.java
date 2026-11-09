@@ -682,6 +682,35 @@ public final class Marriage {
         return true;
     }
 
+    public static final double PORTRAIT_NEAR = 8;
+
+    /**
+     * Portrait day: a plain painting used on the hearth while two or more of the player's family (wives, and little ones born to them)
+     * are within {@link #PORTRAIT_NEAR}: it becomes The Whole Family, with their names and the day on it. True if it was painted.
+     */
+    public static boolean familyPortrait(ServerLevel level, BlockPos hearth, Player player, net.minecraft.world.item.ItemStack painting) {
+        java.util.List<String> names = new java.util.ArrayList<>();
+        for (Mob m : level.getEntitiesOfClass(Mob.class, new AABB(hearth).inflate(PORTRAIT_NEAR), Mob::isAlive)) {
+            if (married(m, player) || m instanceof Bonded b && player.getUUID().equals(b.getFather())) names.add(m.getName().getString());
+        }
+        if (names.size() < 2) {
+            player.displayClientMessage(Component.translatable("message.monstergirls.portrait.gather"), true);
+            return false;
+        }
+        java.util.Collections.sort(names);
+        net.minecraft.world.item.ItemStack done = Hobbies.painting(MonsterGirlsMod.id("whole_family"));
+        java.util.List<Component> lore = new java.util.ArrayList<>();
+        lore.add(Component.translatable("item.monstergirls.family_portrait.day", level.getDayTime() / 24000L + 1).withStyle(ChatFormatting.GRAY));
+        lore.add(Component.literal(String.join(", ", names)).withStyle(ChatFormatting.LIGHT_PURPLE));
+        done.set(net.minecraft.core.component.DataComponents.LORE, new net.minecraft.world.item.component.ItemLore(lore));
+        painting.consume(1, player);
+        if (!player.addItem(done)) player.drop(done, false);
+        level.sendParticles(ParticleTypes.HEART, hearth.getX() + 0.5, hearth.getY() + 1.5, hearth.getZ() + 0.5, 10, 1.0, 0.5, 1.0, 0.0);
+        level.playSound(null, hearth, SoundEvents.PAINTING_PLACE, SoundSource.PLAYERS, 1.0F, 1.0F);
+        player.displayClientMessage(Component.translatable("message.monstergirls.portrait.done", names.size()).withStyle(ChatFormatting.GOLD), false);
+        return true;
+    }
+
     /** Each guest who isn't family brings a little wedding present, left by the hearth. How many. */
     public static int presents(ServerLevel level, java.util.List<Mob> guests, BlockPos hearth) {
         int n = 0;

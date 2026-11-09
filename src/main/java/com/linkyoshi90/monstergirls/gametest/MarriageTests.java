@@ -100,6 +100,8 @@ public class MarriageTests {
             Marriage.leaveNote(p, b);
             check(Marriage.notes(p).size() == 1 && Marriage.notes(p).getCompound(0).getString("Name").equals(b.getName().getString()), "a note from home");
             check(com.linkyoshi90.monstergirls.HarpyCommands.familyLines(p).size() == 1 + 3, "/monstergirls family: a header and three wives");
+            net.minecraft.world.item.ItemStack blank = new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.PAINTING);
+            check(Marriage.familyPortrait(level, helper.absolutePos(new BlockPos(7, 2, 7)), p, blank) && blank.isEmpty(), "a family portrait by the hearth");
             String dreamt = Marriage.sharedDream(level, p, a, true);               // the flat test world may have no landmarks: just that it looks safely
             check(dreamt == null || Marriage.DREAM_PLACES.containsKey(dreamt), "a dream of somewhere real, or none");
             Marriage.dreamOf(level, p, b, p.blockPosition().offset(200, 0, 0), "oasis");

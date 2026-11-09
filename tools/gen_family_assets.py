@@ -124,6 +124,9 @@ LANG = {
     "advancement.monstergirls.first_child.desc": "Welcome a little one born to you",
     "advancement.monstergirls.family_tree": "A Whole Family Tree",
     "advancement.monstergirls.family_tree.desc": "Ten little ones born to you",
+    "message.monstergirls.portrait.gather": "Gather the family by the hearth first (two of them at least) for a portrait",
+    "message.monstergirls.portrait.done": "Everyone squeezes in by the fire and holds still... a family portrait of %s!",
+    "item.monstergirls.family_portrait.day": "Painted by the hearth on day %s",
     "journal.monstergirls.family.title": "Family",
     "journal.monstergirls.family.children": "Little ones born to you: %s",
     "journal.monstergirls.family.line": "♥ %s, %s (wed day %s)",
@@ -139,7 +142,7 @@ NEW_HEARTS = ("while she is near you have two more hearts (each spouse near adds
               "Many spouses are one happy family: a wife nearby blesses each new proposal, the wives are bridesmaids, "
               "a pat for one warms the others, two or more in your bed make a family bed, and if one is lost the rest hold you close. "
               "Guests bring wedding presents, and the first three days are a honeymoon. "
-              "Wed by a lit realm censer instead and the Demon Realm keeps your vows. Propose at her kind of place (as on a date) and it's perfect. Of a morning, a wife you pass packs you lunch, and one who shared your bed may have dreamt of a real place nearby: go there together. A girl who adores you may not wait to be asked: after a lovely date she might hand you the ring herself.")
+              "Wed by a lit realm censer instead and the Demon Realm keeps your vows. Propose at her kind of place (as on a date) and it's perfect. Of a morning, a wife you pass packs you lunch, and one who shared your bed may have dreamt of a real place nearby: go there together. Use a plain painting on your hearth with the family gathered round for a portrait with their names. A girl who adores you may not wait to be asked: after a lovely date she might hand you the ring herself.")
 
 
 def adv(name, parent, icon, frame="task"):

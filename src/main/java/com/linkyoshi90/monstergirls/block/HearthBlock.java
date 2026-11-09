@@ -68,6 +68,10 @@ public class HearthBlock extends BaseEntityBlock {
     @Override
     protected net.minecraft.world.ItemInteractionResult useItemOn(net.minecraft.world.item.ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, net.minecraft.world.InteractionHand hand, BlockHitResult hit) {
+        if (stack.is(net.minecraft.world.item.Items.PAINTING) && !stack.has(net.minecraft.core.component.DataComponents.ENTITY_DATA)
+                && level instanceof net.minecraft.server.level.ServerLevel server && com.linkyoshi90.monstergirls.entity.Marriage.familyPortrait(server, pos, player, stack)) {
+            return net.minecraft.world.ItemInteractionResult.SUCCESS;              // a portrait of the family gathered here
+        }
         // a name tag names the place (its owner only)
         if (!stack.is(net.minecraft.world.item.Items.NAME_TAG) || !stack.has(net.minecraft.core.component.DataComponents.CUSTOM_NAME)
                 || !(level.getBlockEntity(pos) instanceof HearthBlockEntity h) || !player.getUUID().equals(h.owner())) {
