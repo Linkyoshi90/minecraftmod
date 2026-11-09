@@ -22,6 +22,9 @@
     "harvest": {
       "trigger": "minecraft:impossible"
     },
+    "hearts": {
+      "trigger": "minecraft:impossible"
+    },
     "gifts": {
       "trigger": "minecraft:impossible"
     }
@@ -32,6 +35,9 @@
     ],
     [
       "harvest"
+    ],
+    [
+      "hearts"
     ],
     [
       "gifts"

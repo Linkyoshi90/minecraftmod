@@ -56,9 +56,9 @@ public class FestivalTests {
     @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "theFestivalCalendar")
     public static void theFestivalCalendar(GameTestHelper helper) {
         check(Festivals.on(0) == null && Festivals.on(7 * DAY + 100) == Festival.DANCE && Festivals.on((24 + 15) * DAY) == Festival.HARVEST
-                && Festivals.on(23 * DAY + 23999) == Festival.GIFTS, "three days in every 24");
+                && Festivals.on(23 * DAY + 23999) == Festival.GIFTS && Festivals.on(19 * DAY) == Festival.HEARTS, "four days in every 24");
         check(Festivals.gathering(7 * DAY + 12000) && !Festivals.gathering(7 * DAY + 6000) && !Festivals.gathering(8 * DAY + 12000), "they gather at dusk");
-        check(Festivals.daysUntil(0) == 7 && Festivals.next(0) == Festival.DANCE && Festivals.next(16 * DAY) == Festival.GIFTS
+        check(Festivals.daysUntil(0) == 7 && Festivals.next(0) == Festival.DANCE && Festivals.next(16 * DAY) == Festival.HEARTS && Festivals.next(20 * DAY) == Festival.GIFTS
                 && Festivals.daysUntil(23 * DAY) == 0 && Festivals.daysUntil(23 * DAY + DAY) == 7, "the journal can say when the next one is");
         helper.succeed();
     }
@@ -105,6 +105,21 @@ public class FestivalTests {
         check(Festivals.celebrate(level, h.owner(), h.hearth(), Festival.GIFTS) == 1 && h.girl().getAffection(h.owner()) == before + Festivals.BONUS
                 && stranger.getAffection(h.owner()) == 0, "she brings a present");
         check(criterion(h.owner(), "gifts"), "and it counts");
+        HarpyTestUtil.remove(h.owner());
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "theDayOfHearts")
+    public static void theDayOfHearts(GameTestHelper helper) {
+        Home h = home(helper);
+        var level = helper.getLevel();
+        check(Festivals.wants(level, h.hearth(), Festival.HEARTS) != null && Festivals.celebrate(level, h.owner(), h.hearth(), Festival.HEARTS) == 0, "no cake, no party");
+        BlockPos cp = new BlockPos(6, 2, 1);
+        helper.setBlock(cp, Blocks.CAKE);
+        int before = h.girl().getAffection(h.owner());
+        check(Festivals.celebrate(level, h.owner(), h.hearth(), Festival.HEARTS) == 1 && h.girl().getAffection(h.owner()) == before + Festivals.BONUS, "a slice each");
+        check(helper.getBlockState(cp).getValue(net.minecraft.world.level.block.CakeBlock.BITES) == 1, "one bite gone");
+        check(h.owner().getInventory().countItem(Items.COOKIE) == 1 && criterion(h.owner(), "hearts"), "a sweetheart cookie, and it counts");
         HarpyTestUtil.remove(h.owner());
         helper.succeed();
     }

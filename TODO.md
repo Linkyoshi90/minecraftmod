@@ -843,4 +843,8 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [x] Cradle block: little ones nap beside it at night (growth counts double); rocking it is a lullaby (+2, once a minute each).
 - [x] Toys (Upbringing): a wooden hoe, bowl, wooden sword or compass, one a day, tips her calling (Roles) when she grows up.
 - [x] Growing up: her first word, a picked flower and a drawing, each once, saved until her parent is near.
-- [ ] Dev client: the cradle model and its facing, the wedding figurine (does it keep the veil?), a family bed with three wives (where do they lie?).
+- [x] Portrait paintings: 29 painting variants (2x2 busts cut from the model previews by `tools/gen_portraits.py`), in `minecraft:placeable`, so any painting can come up as one. Add more by adding to PORTRAITS.
+- [x] Archery matches (`entity/Archery`): crouch + bow on a friend near a target block; three real arrows each, scored like the target's redstone. Crouch + bow no longer arms a fighter (plain bow still does).
+- [x] A wife packs your lunch of a morning (one a day); newborns come with a name (option `nameNewborns`); a wife greets you after login; a lost wife leaves her ring; Jade shows wife/honeymoon/engaged and a told craving.
+- [x] The Day of Hearts: a fourth festival on day 20 of 24. It wants a cake near the hearth; each guest takes a slice and gives you a sweetheart cookie. `every_festival` now needs all four (players who had it may see it reopen).
+- [ ] Dev client: the cradle model and its facing, the wedding figurine (does it keep the veil?), a family bed with three wives (where do they lie?), the portraits on a wall, her arrows in an archery match (does she hit at 20 blocks?).

@@ -36,13 +36,14 @@ import java.util.Locale;
  * Festivals: three days in every 24 (by the world's day count, no seasons mod needed) the girls who live at a hearth gather
  * round it at dusk. Its owner joins them there and they celebrate, once a festival: the Midsummer Dance wants a jukebox playing
  * near the hearth (each friend dances and is the fonder for it), the Harvest Feast wants food in a fridge near it (each eats,
- * and the owner feasts: regeneration), and at the Gift Exchange each brings her friend a present. The morning of a festival
+ * and the owner feasts: regeneration), at the Day of Hearts each takes a slice of the cake set out by the hearth and gives her friend a
+ * sweetheart cookie (a wife blushes all evening), and at the Gift Exchange each brings her friend a present. The morning of a festival
  * every player hears of it; her journal has the calendar.
  */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class Festivals {
     public enum Festival {
-        DANCE(7), HARVEST(15), GIFTS(23);
+        DANCE(7), HARVEST(15), HEARTS(19), GIFTS(23);
 
         /** Which day of the cycle (from 0). */
         public final int day;
@@ -117,8 +118,28 @@ public final class Festivals {
         return switch (f) {
             case DANCE -> JukeboxSensing.findPlaying(level, hearth, 16) == null ? "message.monstergirls.festival.wants_music" : null;
             case HARVEST -> fridge(level, hearth) == null ? "message.monstergirls.festival.wants_food" : null;
+            case HEARTS -> cake(level, hearth) == null ? "message.monstergirls.festival.wants_cake" : null;
             case GIFTS -> null;
         };
+    }
+
+    /** A cake (with slices left) set out within RANGE of the hearth. */
+    @Nullable
+    public static BlockPos cake(ServerLevel level, BlockPos hearth) {
+        for (BlockPos p : BlockPos.betweenClosed(hearth.offset(-RANGE, -2, -RANGE), hearth.offset(RANGE, 2, RANGE))) {
+            if (level.getBlockState(p).getBlock() instanceof net.minecraft.world.level.block.CakeBlock) return p.immutable();
+        }
+        return null;
+    }
+
+    /** A slice of the Day of Hearts cake: one bite off it, and the last bite takes the plate. */
+    static void slice(ServerLevel level, BlockPos cake) {
+        var state = level.getBlockState(cake);
+        if (!(state.getBlock() instanceof net.minecraft.world.level.block.CakeBlock)) return;
+        int bites = state.getValue(net.minecraft.world.level.block.CakeBlock.BITES);
+        if (bites < 6) level.setBlockAndUpdate(cake, state.setValue(net.minecraft.world.level.block.CakeBlock.BITES, bites + 1));
+        else level.removeBlock(cake, false);
+        level.playSound(null, cake, SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, 0.6F, 1.2F);
     }
 
     @Nullable
@@ -143,6 +164,14 @@ public final class Festivals {
                 case HARVEST -> {
                     FridgeBlockEntity fridge = fridge(level, hearth);
                     if (fridge != null) fridge.serve(level, g);
+                }
+                case HEARTS -> {
+                    BlockPos cake = cake(level, hearth);
+                    if (cake != null) slice(level, cake);
+                    ItemStack cookie = new ItemStack(net.minecraft.world.item.Items.COOKIE);
+                    cookie.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, Component.translatable("item.monstergirls.sweetheart_cookie", g.getName()));
+                    if (!player.addItem(cookie)) player.drop(cookie, false);
+                    if (com.linkyoshi90.monstergirls.entity.Marriage.married(g, player)) ((com.linkyoshi90.monstergirls.entity.Bonded) g).blushFor(2400);
                 }
                 case GIFTS -> {
                     ItemStack gift = g instanceof com.linkyoshi90.monstergirls.entity.GiftGiver giver ? giver.rollGift(player) : ItemStack.EMPTY;
