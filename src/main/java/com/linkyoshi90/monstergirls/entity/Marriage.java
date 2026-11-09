@@ -162,11 +162,23 @@ public final class Marriage {
         player.setData(ModAttachments.JOURNAL, journal);
     }
 
-    /** Her mother, noted beside a little one already listed (live births: the mother is known at the birth). */
+    /**
+     * Her mother, noted beside a little one already listed (live births: the mother is known at the birth). A little one whose mother is
+     * the player's own daughter (a sweetheart's child is born devoted to her grandparent) is a grandchild: marked so, and not counted
+     * among the player's own little ones.
+     */
     public static void motherOf(Player player, Entity young, Entity mother) {
         CompoundTag journal = player.getData(ModAttachments.JOURNAL);
         ListTag list = journal.getList(CHILD_LIST, Tag.TAG_COMPOUND);
-        for (Tag t : list) if (((CompoundTag) t).getString("Id").equals(young.getUUID().toString())) ((CompoundTag) t).putString("Mother", mother.getName().getString());
+        boolean grand = mother instanceof Bonded mb && player.getUUID().equals(mb.getFather());
+        for (Tag t : list) {
+            if (!((CompoundTag) t).getString("Id").equals(young.getUUID().toString())) continue;
+            ((CompoundTag) t).putString("Mother", mother.getName().getString());
+            if (grand && !((CompoundTag) t).getBoolean("Grand")) {
+                ((CompoundTag) t).putBoolean("Grand", true);
+                journal.putInt(CHILDREN, Math.max(0, journal.getInt(CHILDREN) - 1));
+            }
+        }
         journal.put(CHILD_LIST, list);
         player.setData(ModAttachments.JOURNAL, journal);
     }

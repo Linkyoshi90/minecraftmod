@@ -108,4 +108,20 @@ public class CradleTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "aGrandchildIsListedAsOne")
+    public static void aGrandchildIsListedAsOne(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        AbstractMonsterGirl daughter = spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(7, 2, 7));
+        daughter.setNoAi(true);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(8, 2, 7));
+        daughter.bornTo(p.getUUID());                                         // their daughter (grown here, for the test)
+        check(com.linkyoshi90.monstergirls.entity.Marriage.children(p) == 1, "one little one of theirs");
+        AbstractMonsterGirl grand = daughter.spawnYoung(level, daughter.blockPosition(), p.getUUID());
+        var list = com.linkyoshi90.monstergirls.entity.Marriage.childList(p);
+        check(grand != null && list.size() == 2 && list.getCompound(1).getBoolean("Grand"), "her little one is listed as a grandchild");
+        check(com.linkyoshi90.monstergirls.entity.Marriage.children(p) == 1, "and not counted as theirs");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

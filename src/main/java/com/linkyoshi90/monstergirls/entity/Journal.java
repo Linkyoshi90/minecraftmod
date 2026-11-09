@@ -597,7 +597,8 @@ public final class Journal {
             for (int j = i; j < Math.min(i + DEAREST_LINES, kids.size()); j++) {
                 CompoundTag k = kids.getCompound(j);
                 Component kind = Component.translatable("entity.monstergirls." + k.getString("Kind"));
-                page.append(NL_TEXT).append((k.contains("Mother") ? Component.translatable("journal.monstergirls.children.line_mother", k.getString("Name"), kind, k.getLong("Day"), k.getString("Mother"))
+                page.append(NL_TEXT).append((k.getBoolean("Grand") ? Component.translatable("journal.monstergirls.children.line_grand", k.getString("Name"), kind, k.getLong("Day"), k.getString("Mother"))
+                        : k.contains("Mother") ? Component.translatable("journal.monstergirls.children.line_mother", k.getString("Name"), kind, k.getLong("Day"), k.getString("Mother"))
                         : Component.translatable("journal.monstergirls.children.line", k.getString("Name"), kind, k.getLong("Day"))).withStyle(ChatFormatting.RESET, ChatFormatting.BLACK));
             }
             pages.add(Filterable.passThrough(page));

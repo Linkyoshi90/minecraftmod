@@ -107,6 +107,7 @@ LANG = {
     "message.monstergirls.marriage.dream_true": "%s gasps and takes your hand: \"It's just like my dream!\" You found %s, together",
     "advancement.monstergirls.dream_come_true": "A Dream Come True",
     "advancement.monstergirls.dream_come_true.desc": "Go with your wife to the place she dreamt of",
+    "journal.monstergirls.children.line_grand": "%s, %s (born day %s, your grandchild by %s)",
     "journal.monstergirls.family.title": "Family",
     "journal.monstergirls.family.children": "Little ones born to you: %s",
     "journal.monstergirls.family.line": "♥ %s, %s (wed day %s)",

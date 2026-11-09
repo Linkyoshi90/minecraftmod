@@ -58,6 +58,10 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - **The dragon egg**: crouch and use a blaze rod on the dragon egg with a dragon-girl friend within 8 blocks: it hatches into a little ender dragon girl, devoted to you. (Without the dragon friend it only grows warm.)
 - **Spyglass**: whoever is in the crosshair (up to 64 blocks) is studied twice as fast for the bestiary.
 - **Musicians**: a girl with the music hobby plays a note block within 4 blocks during her hobby hour.
+- **A hero's welcome**: earn a great vanilla advancement (kill the dragon, summon the Wither, hero of the village, cure a zombie villager, full beacon, totem of undying, elytra, adventuring time, monster hunter) and the next time you are within 12 blocks of your hearth with friends about, they throw a party: fireworks, +5 each, a present each.
+- **Compliments**: put on something new (armour, trims, dyed leather) and the first friend who sees you says so (+1). Is it naggy when you swap armour a lot? (Each outfit only once.)
+- **Notices** (behind `friendNotices`): a friend warns when the tool in your hand is nearly broken, tells you to sleep after three sleepless days (before phantoms), and shouts when a creeper starts hissing at you, with the direction.
+- **Grandchildren**: your daughter's little ones show on the children page as your grandchildren.
 
 - **Portrait paintings**: 29 2x2 busts of the girls, so any painting you hang may come up as one. A girl whose hobby is the new **painting** hobby sometimes leaves you her own kind's portrait.
 - **Archery**: crouch and show a friend a bow with a target block within 24 blocks of her. Three arrows each; she really shoots. Does she hit at 20 blocks? (A centaur or elf should; a slime shouldn't.) Note: crouch + bow no longer arms a fighter; a plain right-click still does.
