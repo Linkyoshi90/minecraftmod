@@ -90,7 +90,8 @@ public class OrderTests {
         captain.kneel(p);
         captain.interact(p, InteractionHand.MAIN_HAND);
         List<AbstractMonsterGirl> fallen = level.getEntitiesOfClass(AbstractMonsterGirl.class, captain.getBoundingBox().inflate(2));
-        check(captain.isRemoved() && fallen.size() == 1, "she falls to the realm");
+        check(captain.isRemoved() && fallen.size() == 1, "she falls to the realm: " + captain.isRemoved() + " "
+                + fallen.stream().map(g -> g.getSpecies() + (g.isBaby() ? " (little)" : "") + " " + g.blockPosition()).toList());
         AbstractMonsterGirl girl = fallen.get(0);
         check(girl.getSpecies() == GirlSpecies.DEMON_DEVIL, "a captain becomes a demon: " + girl.getSpecies());
         check(girl.getAffection(p) >= OrderSister.FALLEN_AFFECTION && Monsterization.monsterized(girl), "devoted to who fed her, and the realm's own");

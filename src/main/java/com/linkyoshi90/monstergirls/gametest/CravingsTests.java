@@ -51,4 +51,22 @@ public class CravingsTests {
             HarpyTestUtil.remove(p);
         });
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "birthdayCandles")
+    public static void birthdayCandles(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos cake = new BlockPos(8, 2, 7);
+        helper.setBlock(cake, net.minecraft.world.level.block.Blocks.CANDLE_CAKE.defaultBlockState().setValue(net.minecraft.world.level.block.CandleCakeBlock.LIT, true));
+        AbstractMonsterGirl girl = spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(7, 2, 7));
+        girl.setNoAi(true);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(6, 2, 7));
+        girl.setAffection(p.getUUID(), 30);
+        check(com.linkyoshi90.monstergirls.entity.girl.BirthdayCake.tick(level, girl, false) == -1, "not her birthday");
+        check(com.linkyoshi90.monstergirls.entity.girl.BirthdayCake.tick(level, girl, true) == 1 && girl.getAffection(p) == 30 + com.linkyoshi90.monstergirls.entity.girl.BirthdayCake.WISH,
+                "she blows the candle out and makes a wish");
+        check(!helper.getBlockState(cake).getValue(net.minecraft.world.level.block.CandleCakeBlock.LIT), "the candle is out");
+        check(com.linkyoshi90.monstergirls.entity.girl.BirthdayCake.tick(level, girl, true) == -1, "once a birthday");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }
