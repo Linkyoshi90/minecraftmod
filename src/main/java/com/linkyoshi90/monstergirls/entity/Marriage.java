@@ -184,6 +184,7 @@ public final class Marriage {
         for (Tag t : list) {
             if (!((CompoundTag) t).getString("Id").equals(young.getUUID().toString())) continue;
             ((CompoundTag) t).putString("Mother", mother.getName().getString());
+            ((CompoundTag) t).putString("MotherId", mother.getUUID().toString());   // the family tree links her by it
             if (grand && !((CompoundTag) t).getBoolean("Grand")) {
                 ((CompoundTag) t).putBoolean("Grand", true);
                 journal.putInt(CHILDREN, Math.max(0, journal.getInt(CHILDREN) - 1));

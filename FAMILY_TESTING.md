@@ -80,6 +80,12 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - Things to check in a client: the spot she picks, that she walks into her house at night, and that the villager really sleeps there.
 - Option: `daughtersMoveOut`.
 
+## Family tree (2026-11-10)
+
+- The journal has **Family Tree** pages after the Family page: you at the top, each wife (♥, the departed in grey) with the little ones she bore under her, their own little ones under them (· in green), and on down the generations. Little ones of a mother who isn't your wife come under "with her name"; those whose mother isn't known (harpy chicks, frog young) hang straight from you.
+- It's drawn from the journal's own lists, so it remembers those far away or gone. From today each child also remembers her mother's id; older entries are linked by the mother's name.
+- Check in a client: does a big tree read well in the book (indentation, the ♥ and · marks)?
+
 ## Wardrobe outfits, redone (2026-11-10)
 
 The raincoat, winter coat, yukata and maid apron are now painted onto each girl's own model (`previews/wardrobe_outfits.png`), drawn as her model again with that texture, so they follow her pose. Check in a client that they don't flicker against her skin (they're drawn the same way as dyed sheep wool).

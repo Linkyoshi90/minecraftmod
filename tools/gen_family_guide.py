@@ -26,6 +26,8 @@ LANG = {
     "journal.monstergirls.children.house": " · her own house",
     "advancement.monstergirls.moving_out": "A House of Her Own",
     "advancement.monstergirls.moving_out.desc": "Visit a grown daughter's new house near your hearth",
+    "journal.monstergirls.tree.title": "Family Tree",
+    "journal.monstergirls.tree.with": "with %s",
     "journal.monstergirls.guide.family.title": "Family",
     "journal.monstergirls.guide.family": (
         "A girl who is expecting craves one food and tells you; bring it before her time for twins (a harpy lays a full clutch). "
@@ -38,7 +40,8 @@ LANG = {
         "if you are by your hearth, and go back the next morning. "
         "A grown daughter who settles at your hearth builds a house of her own a little way off, with a cradle and a bed for her sweetheart, "
         "who moves in once they are wed; visit it when it's done. "
-        "The journal lists them all, and /monstergirls family tells you where everyone is."),
+        "The journal lists them all and draws your family tree, wife by wife and generation by generation, "
+        "and /monstergirls family tells you where everyone is."),
 }
 
 

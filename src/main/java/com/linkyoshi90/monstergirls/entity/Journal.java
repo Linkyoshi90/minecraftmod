@@ -586,6 +586,7 @@ public final class Journal {
             }
             pages.add(Filterable.passThrough(page));
         }
+        for (Component treePage : FamilyTree.pages(player.getName().getString(), family, Marriage.childList(player))) pages.add(Filterable.passThrough(treePage));   // the family tree
         ListTag notes = Marriage.notes(player);
         for (int i = notes.size() - 1; i >= 0; i -= NOTE_LINES) {                // notes from home, newest first
             MutableComponent page = Component.translatable("journal.monstergirls.notes.title").withStyle(ChatFormatting.BOLD, ChatFormatting.LIGHT_PURPLE).append(NL_TEXT);
