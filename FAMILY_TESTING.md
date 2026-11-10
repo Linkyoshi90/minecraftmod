@@ -103,7 +103,7 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 ## Server safety (2026-11-10)
 
 - `./gradlew checkServerSafe` (also part of `check` and of every GameTest run) fails the build if code a dedicated server loads names a client-only class, the usual reason a mod works in single player and crashes a server.
-- To boot a real dedicated server yourself: put `eula=true` in `run/eula.txt` (that accepts Mojang's EULA), run `./gradlew runServer`, wait for "Done", type `stop`.
+- A real dedicated server (`./gradlew runServer`, run/eula.txt in place) boots cleanly as of 2026-11-10. Gradle doesn't pass typed commands to it, so stop it with Ctrl+C. Still to try: join it from a client (`./gradlew runClient`, Multiplayer, localhost) and play a little.
 
 ## Performance (2026-11-10)
 
