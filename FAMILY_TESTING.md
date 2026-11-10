@@ -68,6 +68,18 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - Things to check in a client: does she arrive on solid ground near the hearth, and does she really end up back in her village the next morning (and her sweetheart with her)?
 - Option: `reunions`.
 
+## Daughters move out (2026-11-10)
+
+- A grown daughter of yours who settles at your hearth (free-roam near it, a day later) builds a **house of her own** 12 to 20 blocks away instead of the little hut: seven by seven, in her family's materials, two beds against the back wall, a lantern between them, a cradle and a chest in the back corners. You're told when she starts and when it's done.
+- Mornings after, she adds her sign (her name), a candle, her flower in a pot and rugs, like any hut.
+- She sleeps at her house at night instead of beside the hearth (the hearth's bell still calls her), and comes to the hearth by day as before.
+- Your first visit to the finished house is the **housewarming**: hearts, +4 friendship, advancement *A House of Her Own*. The journal's children page marks her "her own house".
+- Once she's wed to a villager sweetheart, the next morning near him he **moves in**: the second bed becomes his home (his old village bed is left free).
+- Daughters who already built a hut keep it. Harpy and frog daughters nest as before.
+- Try it: `/monstergirls family grow` a little one four times, set her to free roam near your hearth, wait a day (or `/time add 24000`).
+- Things to check in a client: the spot she picks, that she walks into her house at night, and that the villager really sleeps there.
+- Option: `daughtersMoveOut`.
+
 ## Wardrobe outfits, redone (2026-11-10)
 
 The raincoat, winter coat, yukata and maid apron are now painted onto each girl's own model (`previews/wardrobe_outfits.png`), drawn as her model again with that texture, so they follow her pose. Check in a client that they don't flicker against her skin (they're drawn the same way as dyed sheep wool).

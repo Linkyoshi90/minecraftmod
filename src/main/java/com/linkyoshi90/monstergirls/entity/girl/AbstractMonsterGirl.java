@@ -1307,7 +1307,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     }
 
     public boolean hutDone() {
-        return this.hutOrigin != null && this.hutStep >= Settlement.hut(this.species, this.hutOrigin, this.hutDoor).size();
+        return this.hutOrigin != null && this.hutStep >= Settlement.plan(this).size();
     }
 
     public net.minecraft.world.SimpleContainer ammoPouch() {

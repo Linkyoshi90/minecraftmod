@@ -139,6 +139,7 @@ public final class Sweethearts {
             if (courted(girl) >= COURT_DAYS) wedding(level, girl, v);
             return;
         }
+        if (girl instanceof AbstractMonsterGirl daughter) com.linkyoshi90.monstergirls.entity.girl.MovingOut.moveIn(level, daughter, v);   // into her house
         Gestation g = ((Bonded) girl).getGestation();
         if (littleOnes(girl) < LITTLE_ONES && Math.floorMod(day, (long) EVERY) == 0 && g.canConceive()) expecting(girl);
     }

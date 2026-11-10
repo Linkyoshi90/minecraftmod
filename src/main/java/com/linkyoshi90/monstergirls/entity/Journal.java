@@ -605,6 +605,7 @@ public final class Journal {
                 page.append(NL_TEXT).append((k.getBoolean("Grand") ? Component.translatable("journal.monstergirls.children.line_grand", k.getString("Name"), kind, k.getLong("Day"), k.getString("Mother"))
                         : k.contains("Mother") ? Component.translatable("journal.monstergirls.children.line_mother", k.getString("Name"), kind, k.getLong("Day"), k.getString("Mother"))
                         : Component.translatable("journal.monstergirls.children.line", k.getString("Name"), kind, k.getLong("Day"))).withStyle(ChatFormatting.RESET, ChatFormatting.BLACK));
+                if (k.getBoolean("House")) page.append(Component.translatable("journal.monstergirls.children.house").withStyle(ChatFormatting.RESET, ChatFormatting.DARK_GREEN));
             }
             pages.add(Filterable.passThrough(page));
         }

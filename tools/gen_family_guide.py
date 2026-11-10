@@ -18,6 +18,14 @@ LANG = {
     "journal.monstergirls.reunion.today": "Today is Reunion Day!",
     "advancement.monstergirls.family_reunion": "All Together Again",
     "advancement.monstergirls.family_reunion.desc": "Gather your family at the hearth on Reunion Day",
+    "monstergirls.configuration.daughtersMoveOut": "Grown daughters move out",
+    "message.monstergirls.moving_out.planned": "%s is moving out! She's building a house of her own, a little way down the path from your hearth",
+    "message.monstergirls.moving_out.done": "%s's house is finished. Go and see it!",
+    "message.monstergirls.moving_out.welcome": "%s shows you round her new house, beaming. A housewarming!",
+    "message.monstergirls.moving_out.moved_in": "%2$s has moved in with %1$s, into the house she built",
+    "journal.monstergirls.children.house": " · her own house",
+    "advancement.monstergirls.moving_out": "A House of Her Own",
+    "advancement.monstergirls.moving_out.desc": "Visit a grown daughter's new house near your hearth",
     "journal.monstergirls.guide.family.title": "Family",
     "journal.monstergirls.guide.family": (
         "A girl who is expecting craves one food and tells you; bring it before her time for twins (a harpy lays a full clutch). "
@@ -28,6 +36,8 @@ LANG = {
         "Grown, she brings you the first thing of her calling. Use a plain painting on your hearth with the family round you for a portrait. "
         "On Reunion Day (the 12th of every 24) your grown children who live away come home at dusk with their sweethearts and little ones, "
         "if you are by your hearth, and go back the next morning. "
+        "A grown daughter who settles at your hearth builds a house of her own a little way off, with a cradle and a bed for her sweetheart, "
+        "who moves in once they are wed; visit it when it's done. "
         "The journal lists them all, and /monstergirls family tells you where everyone is."),
 }
 
@@ -35,6 +45,7 @@ LANG = {
 def main():
     from gen_family_assets import adv
     adv("family_reunion", "monstergirls:first_child", "minecraft:campfire")
+    adv("moving_out", "monstergirls:first_child", "minecraft:oak_door")
     add_lang(LANG)
     rewrite_guide()
 

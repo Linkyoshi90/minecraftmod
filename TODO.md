@@ -860,4 +860,6 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [x] Wardrobe outfits painted onto every girl's model (`tools/gen_outfit_overlays.py`; rerun it after adding a species or changing a model).
 - [x] Family reunions (`entity/Reunions`, Reunion Day = day 12 of 24). Newborns now remember their mother (`BornOf`), which finds a daughter's household.
 - [ ] Dev client: outfit overlays (z-fighting?), reunion arrival spot and the trip back.
-- [ ] Next from the 2026-11-09 list: 2 daughters move out nearby, 3 family tree page, 4 vow renewal, 5 honeymoon trip, then harpy/frog wedding looks, sounds, visible mining, the Order chaplain, a performance test, a server boot test.
+- [x] Daughters move out nearby (`entity/girl/MovingOut`): a 7x7 house of her own, housewarming, her villager moves in.
+- [ ] Dev client: the house spot, sleeping there at night, the villager sleeping in the second bed.
+- [ ] Next from the 2026-11-09 list: 3 family tree page, 4 vow renewal, 5 honeymoon trip, then harpy/frog wedding looks, sounds, visible mining, the Order chaplain, a performance test, a server boot test.

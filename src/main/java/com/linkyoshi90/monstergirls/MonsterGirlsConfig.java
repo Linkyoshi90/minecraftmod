@@ -148,6 +148,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue SHARED_DREAMS;
     public static final ModConfigSpec.BooleanValue PACKED_LUNCH;
     public static final ModConfigSpec.BooleanValue REUNIONS;
+    public static final ModConfigSpec.BooleanValue DAUGHTERS_MOVE_OUT;
     public static final ModConfigSpec.BooleanValue HOT_SPRINGS;
     public static final ModConfigSpec.BooleanValue AURORA_NIGHTS;
     public static final ModConfigSpec.BooleanValue PASSING_FLOCKS;
@@ -251,6 +252,10 @@ public final class MonsterGirlsConfig {
         REUNIONS = BUILDER
                 .comment("Reunion Day (day 12 of every 24): at dusk your grown children who live away come home to your hearth with their households, and go back the next morning.")
                 .define("reunions", true);
+
+        DAUGHTERS_MOVE_OUT = BUILDER
+                .comment("A grown daughter who settles at your hearth builds a house of her own a little way off (two beds, a cradle), and her villager sweetheart moves in once they are wed. Off: she builds the usual hut.")
+                .define("daughtersMoveOut", true);
 
         HOT_SPRINGS = BUILDER
                 .comment("Hot springs: water over geyserite steams, never freezes, heals and warms whoever soaks in it (friends come and join you), and cures a girl's cold. Off stops the effect and new springs in new chunks.")
@@ -480,6 +485,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean reunions() {
         return SPEC.isLoaded() ? REUNIONS.get() : REUNIONS.getDefault();
+    }
+
+    public static boolean daughtersMoveOut() {
+        return SPEC.isLoaded() ? DAUGHTERS_MOVE_OUT.get() : DAUGHTERS_MOVE_OUT.getDefault();
     }
 
     public static boolean packedLunch() {

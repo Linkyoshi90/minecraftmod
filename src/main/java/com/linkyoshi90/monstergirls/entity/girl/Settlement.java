@@ -42,6 +42,7 @@ public final class Settlement {
         if (home != null) {
             if (level.isLoaded(home) && !(level.getBlockEntity(home) instanceof HearthBlockEntity h && h.isResident(girl.getUUID()))) girl.leaveHearth();
             else if (girl.hutOrigin() == null && level.getGameTime() - girl.settledSince() >= HUT_AFTER) planHut(level, girl);
+            else MovingOut.tick(level, girl);
             return;
         }
         if (girl.isBaby() || girl.getOrders().command(girl) != Orders.Command.FREE_ROAM) return;
@@ -91,29 +92,39 @@ public final class Settlement {
 
     /** Her hut's blocks in building order, from its corner (the low north-west corner of the room) and the side the door is on. */
     public static List<Piece> hut(GirlSpecies species, BlockPos origin, Direction door) {
+        return hut(species, origin, door, MovingOut.HUT);
+    }
+
+    /** Her own hut (size 5), or a grown daughter's house (size 7, MovingOut): two beds, a cradle and a chest besides. */
+    public static List<Piece> hut(GirlSpecies species, BlockPos origin, Direction door, int size) {
         Style st = style(species);
         List<Piece> out = new ArrayList<>();
-        BlockPos doorAt = origin.offset(2 + door.getStepX() * 2, 0, 2 + door.getStepZ() * 2);
+        int m = size / 2, e = size - 1;
+        BlockPos doorAt = origin.offset(m + door.getStepX() * m, 0, m + door.getStepZ() * m);
         for (int y = 0; y < 3; y++) {
-            for (int x = 0; x < 5; x++) {
-                for (int z = 0; z < 5; z++) {
-                    boolean edgeX = x == 0 || x == 4, edgeZ = z == 0 || z == 4;
+            for (int x = 0; x < size; x++) {
+                for (int z = 0; z < size; z++) {
+                    boolean edgeX = x == 0 || x == e, edgeZ = z == 0 || z == e;
                     if (!edgeX && !edgeZ) continue;
                     BlockPos p = origin.offset(x, y, z);
                     if (y < 2 && p.getX() == doorAt.getX() && p.getZ() == doorAt.getZ()) continue;    // the doorway
-                    boolean window = y == 1 && !(edgeX && edgeZ) && (x == 2 || z == 2);
+                    boolean window = y == 1 && !(edgeX && edgeZ) && (x == m || z == m);
                     out.add(new Piece(p, window ? Blocks.GLASS_PANE.defaultBlockState() : (edgeX && edgeZ ? st.post() : st.wall()).defaultBlockState()));
                 }
             }
         }
-        for (int x = 0; x < 5; x++) {
-            for (int z = 0; z < 5; z++) {
+        for (int x = 0; x < size; x++) {
+            for (int z = 0; z < size; z++) {
                 BlockState roof = st.roof().defaultBlockState();
                 if (roof.hasProperty(SlabBlock.TYPE)) roof = roof.setValue(SlabBlock.TYPE, net.minecraft.world.level.block.state.properties.SlabType.BOTTOM);
                 out.add(new Piece(origin.offset(x, 3, z), roof));
             }
         }
         Direction bed = door.getOpposite();                                         // the bed against the back wall, its head to it
+        if (size != MovingOut.HUT) {
+            MovingOut.furnish(out, st.bed(), origin.offset(m, 0, m), bed);
+            return out;
+        }
         BlockPos foot = origin.offset(2, 0, 2);                                    // (one further back, its head was in the wall, which went up first)
         BlockState b = st.bed().defaultBlockState().setValue(BedBlock.FACING, bed);
         out.add(new Piece(foot, b.setValue(BedBlock.PART, BedPart.FOOT)));
@@ -123,31 +134,41 @@ public final class Settlement {
         return out;
     }
 
-    /** She picks a flat, open spot 6 to 14 blocks from her hearth. Where (null if none yet: she tries again later). */
+    /** Her hut's (or house's) blocks. */
+    public static List<Piece> plan(AbstractMonsterGirl girl) {
+        BlockPos origin = girl.hutOrigin();
+        return origin == null ? List.of() : hut(girl.getSpecies(), origin, girl.hutDoor(), MovingOut.size(girl));
+    }
+
+    /** She picks a flat, open spot 6 to 14 blocks from her hearth (a grown daughter of its owner: 12 to 20, MovingOut). Where (null if none yet: she tries again later). */
     @Nullable
     public static BlockPos planHut(ServerLevel level, AbstractMonsterGirl girl) {
         BlockPos hearth = girl.homeHearth();
         if (hearth == null || !level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) return null;
+        boolean house = MovingOut.movesOut(level, girl);
+        int size = house ? MovingOut.HOUSE : MovingOut.HUT, m = size / 2;
         for (int tries = 0; tries < 24; tries++) {
-            double a = girl.getRandom().nextDouble() * Math.PI * 2, r = 6 + girl.getRandom().nextDouble() * 8;
+            double a = girl.getRandom().nextDouble() * Math.PI * 2, r = house ? 12 + girl.getRandom().nextDouble() * 8 : 6 + girl.getRandom().nextDouble() * 8;
             int cx = hearth.getX() + (int) Math.round(Math.cos(a) * r), cz = hearth.getZ() + (int) Math.round(Math.sin(a) * r);
             int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, cx, cz);
             if (Math.abs(y - hearth.getY()) > 4) continue;
-            BlockPos origin = new BlockPos(cx - 2, y, cz - 2);
-            if (!flatAndOpen(level, origin)) continue;
+            BlockPos origin = new BlockPos(cx - m, y, cz - m);
+            if (!flatAndOpen(level, origin, size)) continue;
             int dx = hearth.getX() - cx, dz = hearth.getZ() - cz;
             Direction door = Math.abs(dx) > Math.abs(dz) ? (dx > 0 ? Direction.EAST : Direction.WEST) : (dz > 0 ? Direction.SOUTH : Direction.NORTH);
+            MovingOut.mark(girl, house);
             girl.planHutAt(origin, door);
+            MovingOut.planned(level, girl);
             return origin;
         }
         return null;
     }
 
-    private static boolean flatAndOpen(ServerLevel level, BlockPos origin) {
-        for (int x = -1; x < 6; x++) {
-            for (int z = -1; z < 6; z++) {
+    private static boolean flatAndOpen(ServerLevel level, BlockPos origin, int size) {
+        for (int x = -1; x <= size; x++) {
+            for (int z = -1; z <= size; z++) {
                 BlockPos g = origin.offset(x, -1, z);
-                boolean inside = x >= 0 && x < 5 && z >= 0 && z < 5;
+                boolean inside = x >= 0 && x < size && z >= 0 && z < size;
                 if (inside && (!level.getBlockState(g).isFaceSturdy(level, g, Direction.UP) || !level.getFluidState(g.above()).isEmpty())) return false;
                 for (int y = 0; y < 5; y++) {
                     BlockState s = level.getBlockState(origin.offset(x, y, z));
@@ -162,7 +183,7 @@ public final class Settlement {
     public static void buildStep(ServerLevel level, AbstractMonsterGirl girl) {
         BlockPos origin = girl.hutOrigin();
         if (origin == null || girl.hutDone() || !level.isLoaded(origin)) return;
-        List<Piece> plan = hut(girl.getSpecies(), origin, girl.hutDoor());
+        List<Piece> plan = plan(girl);
         int i = girl.hutStep();
         while (i < plan.size()) {
             Piece p = plan.get(i++);
@@ -172,6 +193,7 @@ public final class Settlement {
             break;
         }
         girl.setHutStep(i);
+        if (i >= plan.size()) MovingOut.finished(level, girl);                 // the last block: a daughter's house is ready
     }
 
     // --- a homely hut ----------------------------------------------------------------------------------------------
@@ -188,13 +210,15 @@ public final class Settlement {
         BlockPos origin = girl.hutOrigin();
         if (origin == null) return List.of();
         Direction back = girl.hutDoor().getOpposite(), side = back.getClockWise();
-        BlockPos mid = origin.offset(2, 0, 2);
+        int m = MovingOut.size(girl) / 2;
+        BlockPos mid = origin.offset(m, 0, m);
         int flower = HearthBlockEntity.GARDEN_FLOWERS.indexOf(HearthBlockEntity.flowerOf(girl));
         net.minecraft.world.item.DyeColor colour = ((BedBlock) style(girl.getSpecies()).bed()).getColor();
         Block rug = net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(net.minecraft.resources.ResourceLocation.withDefaultNamespace(colour.getName() + "_carpet"));
         BlockPos front = mid.relative(back.getOpposite());
         Direction door = back.getOpposite();
-        BlockPos outside = origin.offset(2 + door.getStepX() * 3, 0, 2 + door.getStepZ() * 3).relative(side);   // beside the path to the door
+        BlockPos outside = origin.offset(m + door.getStepX() * (m + 1), 0, m + door.getStepZ() * (m + 1)).relative(side);   // beside the path to the door
+        if (m > 2) return MovingOut.homely(outside, mid, back, POTTED.get(Math.max(0, flower)), rug);
         return List.of(
                 new Piece(outside, Blocks.OAK_SIGN.defaultBlockState().setValue(net.minecraft.world.level.block.StandingSignBlock.ROTATION,
                         net.minecraft.world.level.block.state.properties.RotationSegment.convertToSegment(door))),
@@ -251,19 +275,19 @@ public final class Settlement {
             BlockPos home = this.girl.homeHearth();
             if (home == null || this.girl.getTarget() != null || this.girl.getOrders().command(this.girl) != Orders.Command.FREE_ROAM) return false;
             if (!this.girl.calledHome() && this.girl.getRandom().nextInt(reducedTickDelay(40)) != 0) return false;   // the bell: at once
-            return home.distToCenterSqr(this.girl.position()) > this.limit() * this.limit();
+            return MovingOut.homeSpot(this.girl).distToCenterSqr(this.girl.position()) > this.limit() * this.limit();
         }
 
         @Override
         public boolean canContinueToUse() {
-            BlockPos home = this.girl.homeHearth();
+            BlockPos home = this.girl.homeHearth() == null ? null : MovingOut.homeSpot(this.girl);
             double near = this.girl.calledHome() ? 2.5 : 3.0;
             return home != null && !this.girl.getNavigation().isDone() && home.distToCenterSqr(this.girl.position()) > near * near;
         }
 
         @Override
         public void start() {
-            BlockPos home = this.girl.homeHearth();
+            BlockPos home = this.girl.homeHearth() == null ? null : MovingOut.homeSpot(this.girl);
             if (home != null) this.girl.getNavigation().moveTo(home.getX() + 0.5, home.getY(), home.getZ() + 0.5, this.girl.calledHome() ? 1.2 : 1.0);
         }
     }
