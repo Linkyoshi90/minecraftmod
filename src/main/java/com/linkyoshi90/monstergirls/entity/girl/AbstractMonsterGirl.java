@@ -68,7 +68,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * devotion (the nekomata's second tail, the kitsune's nine tails, the dragon koi). Each family class adds its own
  * bond action, signature behaviours and way of bearing young.
  */
-public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEntity, Bonded, GiftGiver, com.linkyoshi90.monstergirls.entity.Painted {
+public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEntity, Bonded, GiftGiver, com.linkyoshi90.monstergirls.entity.Painted,
+        com.linkyoshi90.monstergirls.entity.Voices.Voiced {
     private static final EntityDataAccessor<Byte> DATA_ACTION = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> DATA_YOUNG = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> DATA_VARIANT = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
@@ -906,6 +907,23 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     /** Munching, when she eats from a hand. */
     public abstract SoundEvent getEatSound();
+
+    /** Her own voice (entity/Voices): one of her slots' vanilla sounds is played as her species' event. */
+    @Override
+    public void playSound(SoundEvent sound, float volume, float pitch) {
+        super.playSound(com.linkyoshi90.monstergirls.entity.Voices.voice(this, sound), volume, pitch);
+    }
+
+    @Override
+    @javax.annotation.Nullable
+    public SoundEvent slotSound(String slot) {
+        return switch (slot) {
+            case "ambient" -> this.getAmbientSound();
+            case "hurt" -> this.getHurtSound(this.damageSources().generic());
+            case "death" -> this.getDeathSound();
+            default -> this.getEatSound();
+        };
+    }
 
     @Override
     public SoundEvent getChirpSound() {

@@ -98,6 +98,10 @@ public final class ModSounds {
         return ANURAN.get("mailtoad".equals(species) ? "cane_toad" : species);   // the mailtoad croaks like the cane toad she is
     }
 
+    static {                                                                   // every species' own voice (entity/Voices)
+        com.linkyoshi90.monstergirls.entity.Voices.registerAll(name -> register(name));
+    }
+
     private ModSounds() {}
 
     private static DeferredHolder<SoundEvent, SoundEvent> register(String name) {

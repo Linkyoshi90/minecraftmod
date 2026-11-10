@@ -62,7 +62,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * home, bath cooldown, carrying one small item in her hands (eating it if it's food, otherwise dropping it
  * somewhere later), and her affection for each player (raised by feeding and petting; see /monstergirls bonds).
  */
-public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, FlyingAnimal, Bonded, GiftGiver, Painted, WeddingVeil {
+public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, FlyingAnimal, Bonded, GiftGiver, Painted, WeddingVeil, Voices.Voiced {
     private static final EntityDataAccessor<Boolean> DATA_BLUSHING = SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.BOOLEAN);
     private int blushTicks;
     private static final EntityDataAccessor<Byte> DATA_ACTION =
@@ -168,6 +168,23 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
 
     /** Munching, when she eats something. */
     protected abstract SoundEvent getEatSound();
+
+    /** Her own voice (entity/Voices): one of her slots' vanilla sounds is played as her species' event. */
+    @Override
+    public void playSound(SoundEvent sound, float volume, float pitch) {
+        super.playSound(Voices.voice(this, sound), volume, pitch);
+    }
+
+    @Override
+    @javax.annotation.Nullable
+    public SoundEvent slotSound(String slot) {
+        return switch (slot) {
+            case "ambient" -> this.getAmbientSound();
+            case "hurt" -> this.getHurtSound(this.damageSources().generic());
+            case "death" -> this.getDeathSound();
+            default -> this.getEatSound();
+        };
+    }
 
     /** A short call; used when begging, snatching and the like. Her normal ambient sound by default. */
     public SoundEvent getChirpSound() {
