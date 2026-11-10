@@ -239,3 +239,37 @@ idea {
         downloadJavadoc = true
     }
 }
+
+// Server safety (2026-11-10): no class a dedicated server loads may name a client-only class. Scans the compiled classes'
+// constant pools for vanilla client, Blaze3D, NeoForge client, GeckoLib renderer/model classes and this mod's own client package.
+// Classes in our client package are skipped (only loaded on the client); each allowed exception says why it is safe.
+// Runs with `check` and before every GameTest run.
+var checkServerSafe = tasks.register("checkServerSafe") {
+    var classesDir = layout.buildDirectory.dir("classes/java/main")
+    dependsOn "compileJava"
+    inputs.dir(classesDir)
+    doLast {
+        def allowed = [
+            "com/linkyoshi90/monstergirls/MonsterGirlsMod": "MonsterGirlsClientConfig is a plain ModConfigSpec holder, safe on a server",
+            "com/linkyoshi90/monstergirls/network/ModPayloads": "client classes only inside playToClient handlers, which never run on a server",
+            "com/linkyoshi90/monstergirls/item/WingedCapItem\$1": "GeckoLib's render provider, created only by createGeoRenderer on the client",
+        ]
+        def pattern = ~/(?:net\/minecraft\/client|com\/mojang\/blaze3d|net\/neoforged\/neoforge\/client|software\/bernie\/geckolib\/(?:renderer|model|cache\/object)|com\/linkyoshi90\/monstergirls\/client)\/[A-Za-z0-9_\/\$]+/
+        def root = classesDir.get().asFile
+        def leaks = []
+        root.eachFileRecurse { f ->
+            if (!f.name.endsWith(".class")) return
+            def name = root.toPath().relativize(f.toPath()).toString().replace(File.separator, "/") - ~/\.class$/
+            if (name.contains("/client/") || allowed.containsKey(name)) return
+            def refs = (new String(f.bytes, "ISO-8859-1") =~ pattern).collect { it }.unique().sort()
+            if (!refs.isEmpty()) leaks << "${name} -> ${refs.join(', ')}"
+        }
+        if (!leaks.isEmpty()) {
+            throw new GradleException("Client-only classes named in server code (a dedicated server would crash loading them):\n  " + leaks.join("\n  ")
+                    + "\nMove the code into the client package, or (if it only runs on the client) add the class to checkServerSafe's allowed list with why.")
+        }
+        logger.lifecycle("checkServerSafe: no client-only class named outside the client package (${allowed.size()} allowed exceptions)")
+    }
+}
+tasks.named("check") { dependsOn checkServerSafe }
+tasks.matching { it.name == "runGameTestServer" }.configureEach { dependsOn checkServerSafe }
