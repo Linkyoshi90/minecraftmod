@@ -34,6 +34,14 @@ LANG = {
     "journal.monstergirls.family.renewed": " (vows renewed %sx)",
     "advancement.monstergirls.vow_renewal": "I Still Do",
     "advancement.monstergirls.vow_renewal.desc": "Renew your vows with a wife on your anniversary, by a hearth",
+    "message.monstergirls.honeymoon_trip.wish": "%s has always wanted to see the %s. Take her there for your honeymoon!",
+    "message.monstergirls.honeymoon_trip.made": "%s gazes round the %s, hand in yours. A honeymoon to remember! She gives you a souvenir",
+    "item.monstergirls.souvenir": "Souvenir of the %s",
+    "item.monstergirls.souvenir.lore": "From your honeymoon with %s, day %s",
+    "journal.monstergirls.family.trips": " (been to: %s)",
+    "journal.monstergirls.family.wish": " (dreams of the %s)",
+    "advancement.monstergirls.honeymoon_trip": "Honeymoon Trip",
+    "advancement.monstergirls.honeymoon_trip.desc": "Take a wife to the place she has always wanted to see",
     "journal.monstergirls.guide.family.title": "Family",
     "journal.monstergirls.guide.family": (
         "A girl who is expecting craves one food and tells you; bring it before her time for twins (a harpy lays a full clutch). "
@@ -56,14 +64,17 @@ def main():
     adv("family_reunion", "monstergirls:first_child", "minecraft:campfire")
     adv("moving_out", "monstergirls:first_child", "minecraft:oak_door")
     adv("vow_renewal", "monstergirls:wedding", "monstergirls:wedding_ring")
+    adv("honeymoon_trip", "monstergirls:wedding", "minecraft:filled_map")
     add_lang(LANG)
     rewrite_guide()
     marriage_guide()
 
 
-MARRIAGE_OLD = "Every forty days she wears her veil again."
-MARRIAGE_NEW = ("Every forty days she wears her veil again; give her the ring by a hearth on the day and you renew your vows, "
+MARRIAGE_OLD = ("Every forty days she wears her veil again; give her the ring by a hearth on the day and you renew your vows, "
                 "with the friends gathered round, the bouquet and a second honeymoon.")
+MARRIAGE_NEW = ("Every forty days she wears her veil again; give her the ring by a hearth on the day and you renew your vows, "
+                "with the friends gathered round, the bouquet and a second honeymoon. "
+                "At the wedding she names a place she has always wanted to see; take her there for a souvenir and a pack of what you found.")
 
 
 def marriage_guide():
@@ -78,7 +89,7 @@ def marriage_guide():
     old = json.loads(text)[key]
     if MARRIAGE_NEW not in old:
         a = json.dumps(key) + ": " + json.dumps(old, ensure_ascii=False)
-        assert text.count(a) == 1 and old.count(MARRIAGE_OLD) == 1
+        assert text.count(a) == 1 and old.count(MARRIAGE_OLD) == 1, old
         text = text.replace(a, json.dumps(key) + ": " + json.dumps(old.replace(MARRIAGE_OLD, MARRIAGE_NEW), ensure_ascii=False))
         with open(path, "w", encoding="utf-8", newline=chr(10)) as fh:
             fh.write(text)

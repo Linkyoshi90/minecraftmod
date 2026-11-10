@@ -583,6 +583,7 @@ public final class Journal {
                         : until == 0 && since > 0 ? Component.translatable("journal.monstergirls.family.today", d.getString("Name"), kind, d.getLong("Day"))
                         : Component.translatable("journal.monstergirls.family.next", d.getString("Name"), kind, d.getLong("Day"), until == 0 ? Marriage.YEAR : until))
                         .withStyle(ChatFormatting.RESET, departed ? ChatFormatting.GRAY : ChatFormatting.BLACK));
+                page.append(HoneymoonTrip.line(d).copy().withStyle(ChatFormatting.RESET, ChatFormatting.DARK_AQUA));
                 if (d.getInt("Renewed") > 0) page.append(Component.translatable("journal.monstergirls.family.renewed", d.getInt("Renewed")).withStyle(ChatFormatting.RESET, ChatFormatting.DARK_PURPLE));
             }
             pages.add(Filterable.passThrough(page));

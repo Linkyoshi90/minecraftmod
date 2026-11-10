@@ -431,6 +431,7 @@ public final class Marriage {
         if (lead && presents(level, giving, hearth) > 0) player.displayClientMessage(Component.translatable("message.monstergirls.marriage.presents", giving.size()), false);
         if (bridesmaids > 0) player.displayClientMessage(Component.translatable("message.monstergirls.marriage.bridesmaids", bridesmaids, mob.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), false);
         Dairy.award(player, "wedding");
+        HoneymoonTrip.plan(level, mob, player);                                 // a place she'd love to see with them
         if (wedNow(player) >= BIG_FAMILY) {
             Dairy.award(player, "big_family");
             CompoundTag journal = player.getData(ModAttachments.JOURNAL);
@@ -517,6 +518,7 @@ public final class Marriage {
         journal.put(FAMILY_PAGE, family);
         player.setData(ModAttachments.JOURNAL, journal);
         Dairy.award(player, "vow_renewal");
+        if (HoneymoonTrip.wish(mob) == null) HoneymoonTrip.plan(level, mob, player);
         return true;
     }
 
@@ -535,6 +537,12 @@ public final class Marriage {
 
     public static float bedBonus(Mob mob, Player player) {
         return married(mob, player) ? BED + (honeymoon(mob) ? HONEYMOON_BED : 0.0F) : 0.0F;
+    }
+
+    /** The honeymoon runs this much longer (from now, if it was over). */
+    public static void extendHoneymoon(ServerLevel level, Mob mob, long ticks) {
+        CompoundTag pd = mob.getPersistentData();
+        pd.putLong(HONEYMOON_UNTIL, Math.max(pd.getLong(HONEYMOON_UNTIL), level.getGameTime()) + ticks);
     }
 
     /** The first HONEYMOON ticks after the wedding: keener still for bed, and every pat brings a tease (Flirting.chance). */
@@ -911,6 +919,7 @@ public final class Marriage {
             bliss(level, event.getEntity());
             lunch(level, event.getEntity());
             dreamComeTrue(level, event.getEntity());
+            HoneymoonTrip.arrived(level, event.getEntity());
             CompoundTag pd = event.getEntity().getPersistentData();
             if (pd.contains(WELCOME)) {
                 int left = pd.getInt(WELCOME) - 40;

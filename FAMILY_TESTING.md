@@ -93,6 +93,13 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - The family page shows "vows renewed Nx"; advancement *I Still Do*.
 - Try it: `/monstergirls family wed` her, then `/time add` 40 days (`/time add 960000`) and stand by the hearth with her.
 
+## Honeymoon trip (2026-11-10)
+
+- At the wedding (and at a vow renewal, if she has no wish yet) a wife names a place she has always wanted to see: one of 14 lovely overworld biomes (cherry grove, flower forest, sunflower plains, meadow, beach, warm ocean, ice spikes, mushroom fields, badlands, jungle, bamboo jungle, desert, savanna, lush caves), never the one she's standing in.
+- Go there with her: you standing in that biome, she within 16 blocks. You get a **souvenir** (an item of that place, named "Souvenir of the ...", with her name and the day on it) and a **scout pack** full of that biome's finds; +6 friendship, the honeymoon runs a day longer, advancement *Honeymoon Trip*.
+- The family page shows "(dreams of the ...)" until you go, then "(been to: ...)". At the next renewal she wishes for somewhere new.
+- Try it: `/monstergirls family wed` her, read the wish in chat, `/locate biome` it and travel there with her following.
+
 ## Wardrobe outfits, redone (2026-11-10)
 
 The raincoat, winter coat, yukata and maid apron are now painted onto each girl's own model (`previews/wardrobe_outfits.png`), drawn as her model again with that texture, so they follow her pose. Check in a client that they don't flicker against her skin (they're drawn the same way as dyed sheep wool).

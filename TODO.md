@@ -864,4 +864,5 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [ ] Dev client: the house spot, sleeping there at night, the villager sleeping in the second bed.
 - [x] Family tree pages in the journal (`entity/FamilyTree`); children now record `MotherId`.
 - [x] Vow renewal (`Marriage.renewVows`): the ring again on the anniversary by a hearth or censer.
-- [ ] Next from the 2026-11-09 list: 5 honeymoon trip, then harpy/frog wedding looks, sounds, visible mining, the Order chaplain, a performance test, a server boot test.
+- [x] Honeymoon trip (`HoneymoonTrip`): she names a biome at the wedding; go there together for a souvenir and a scout pack of finds.
+- [ ] Next from the 2026-11-09 list: 6 harpy/frog wedding looks, sounds, visible mining, the Order chaplain, a performance test, a server boot test.
