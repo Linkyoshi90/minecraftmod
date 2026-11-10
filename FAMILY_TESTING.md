@@ -100,6 +100,10 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - The family page shows "(dreams of the ...)" until you go, then "(been to: ...)". At the next renewal she wishes for somewhere new.
 - Try it: `/monstergirls family wed` her, read the wish in chat, `/locate biome` it and travel there with her following.
 
+## Performance (2026-11-10)
+
+- `PerformanceTests` times a lived-in home (41 creatures) every GameTest run and writes `run/perf_report.txt`, dearest kind first. First run: 4.4 ms a tick in all (a server tick has 50). If the game feels slow somewhere, that file is the first thing to look at.
+
 ## The Order's chaplain (2026-11-10)
 
 - A sister of the Order you spared comes back to your hearth as a chaplain for three days and blesses any wedding or vow renewal there (see DEMON_REALM_TESTING.md, The Order).
