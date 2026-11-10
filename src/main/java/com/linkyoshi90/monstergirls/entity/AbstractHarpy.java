@@ -829,11 +829,27 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         }
         if (this.roosting && this.roost != null) {
             if (--this.roostDropTime <= 0) {
-                this.roostDropTime = ROOST_DROP_INTERVAL + this.random.nextInt(ROOST_DROP_INTERVAL);
+                this.roostDropTime = this.nextRoostDrop(level);
                 ItemStack drop = this.roostDrop();
                 if (!drop.isEmpty()) this.deliver(level, drop);
             }
         }
+    }
+
+    /** Within this of her hopper, a fletching table has her shed half as often again (an arrow farm's bonus, 2026-11-10). */
+    public static final int FLETCHING_REACH = 4;
+
+    /** Ticks until she next sheds into her hopper: five to ten minutes, two thirds of that with a fletching table near the hopper. */
+    public int nextRoostDrop(ServerLevel level) {
+        int t = ROOST_DROP_INTERVAL + this.random.nextInt(ROOST_DROP_INTERVAL);
+        return this.roost != null && fletchingNear(level, this.roost) ? t * 2 / 3 : t;
+    }
+
+    public static boolean fletchingNear(net.minecraft.world.level.Level level, BlockPos at) {
+        for (BlockPos p : BlockPos.betweenClosed(at.offset(-FLETCHING_REACH, -2, -FLETCHING_REACH), at.offset(FLETCHING_REACH, 2, FLETCHING_REACH))) {
+            if (level.getBlockState(p).is(net.minecraft.world.level.block.Blocks.FLETCHING_TABLE)) return true;
+        }
+        return false;
     }
 
     /** Into her hopper while she roosts on it, otherwise on the ground at her feet. */

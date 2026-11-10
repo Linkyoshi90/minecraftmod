@@ -100,6 +100,11 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - The family page shows "(dreams of the ...)" until you go, then "(been to: ...)". At the next renewal she wishes for somewhere new.
 - Try it: `/monstergirls family wed` her, read the wish in chat, `/locate biome` it and travel there with her following.
 
+## Friendly zombies and the fletching table (2026-11-10)
+
+- Zombies, husks, drowned and zombie villagers a zombie girl introduced you to now leave villagers and wandering traders alone. Wild ones still don't.
+- A **fletching table** within 4 blocks of a gull's or sparrow's roost hopper makes her shed feathers, flint and sticks half as often again.
+
 ## Mining shafts (2026-11-10)
 
 - A digger sent mining (pickaxe, then a sample) now leaves a **real shaft** beside her spot: two rungs of ladder right away, deeper while she's down (whenever the spot is loaded), about 10 blocks for stone or coal and nearly 30 for diamonds.

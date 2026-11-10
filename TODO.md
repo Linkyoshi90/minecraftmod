@@ -620,7 +620,7 @@ In since 2026-10-21: `entity/girl/Kinship.java`, tested in `KinshipTests`.
 - A girl draws her vanilla kin to her: they follow her within 16 blocks. While she does not see a player as prey, her kin neither flee from that player nor attack them. So a calmed zombie girl's zombies leave you alone, and an ocelot nekomata's ocelots stop running.
 - Feed her and one of her kin her family's food within 30 seconds, close together: she **introduces** you. Cats, horses, donkeys, mules and llamas are tamed, ocelots and foxes trust you, and everything else becomes a persistent friend that follows you and never targets a player.
 - Kin: nekomata and cats (ocelot nekomata and ocelots), kitsune and foxes, arachne and spiders, the horse and zebra centaur and horses, donkeys and mules, the alpaca and llamas, the goat centaur and goats, dolphin and orca mermaids and dolphins, the axolotl mermaid and axolotls, slimes and slimes (magma: magma cubes), jackalopes and rabbits, minotaurs and cows and mooshrooms, kraken, ika and octopus and squid, the zombie girl and zombies, husks, drowned and zombie villagers, the phantom girl and phantoms, the turtles and turtles, bees and bees. Everyone else has no kin and bonds and breeds with players only, as before. Minotaur cows already breed with bulls.
-- [ ] Playtest: does a befriended zombie still go for villagers? (It does today. Decide whether friends should leave villagers alone too.) Befriended zombies still burn in daylight.
+- [x] Befriended kin leave villagers and wandering traders alone (user decision 2026-11-10; Kinship.onTarget cancels the target). Befriended zombies still burn in daylight.
 - [x] Harpies and anurans have kin (parrots, chickens, frogs): `Kinship.kinOf`.
 - [x] Slimes and phantoms have no pathfinding: since 2026-11-09 a kin slime turns and hops toward its leader every half second, and a kin phantom circles over her (`Kinship.follow`, access-transformed SlimeMoveControl and Phantom.anchorPoint). Not seen in a client.
 
@@ -756,7 +756,7 @@ All built (thirty-second and thirty-third waves). New ones need new concepts.
 
 - [x] Gulls shed feathers and sometimes flint while roosting in a hopper; sparrows shed feathers and sticks. Done in the 2026-10-20 batch: `AbstractHarpy.roostDrop`, `RoostInHopperGoal`. Covered by GameTests.
 - [ ] Check in a real client that an arrow farm built from it works (hopper → chest, drop rate, roost stays put).
-- [ ] Decide whether the flint and stick rates feel right. Should a fletching table nearby give a bonus?
+- [x] Fletching-table bonus (user decision 2026-11-10): a fletching table within 4 blocks (2 up/down) of the roost hopper makes her shed every 2/3 of the time (AbstractHarpy.nextRoostDrop). Rates otherwise unchanged.
 
 ## 3. Custom sounds for every species
 

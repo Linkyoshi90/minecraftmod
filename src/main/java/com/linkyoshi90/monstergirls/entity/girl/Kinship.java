@@ -307,6 +307,8 @@ public final class Kinship {
         LivingEntity target = event.getNewAboutToBeSetTarget();
         if (target instanceof Player p && ignores(event.getEntity(), p)) {
             event.setCanceled(true);
+        } else if (target instanceof net.minecraft.world.entity.npc.AbstractVillager && friendOf(event.getEntity()) != null) {
+            event.setCanceled(true);                                                // a friend's zombies leave villagers and traders alone (2026-11-10)
         } else if (target != null && event.getEntity() instanceof Mob mob && friendOf(mob) != null) {
             Orders o = orders(mob);
             if (o.stance() != Orders.Stance.NATURAL && !o.wants(mob, target)) event.setCanceled(true);   // a friend's stance decides
