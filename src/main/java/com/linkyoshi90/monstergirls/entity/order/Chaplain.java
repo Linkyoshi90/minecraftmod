@@ -106,6 +106,10 @@ public final class Chaplain {
     public static boolean bless(ServerLevel level, Mob bride, Player player, BlockPos hearth) {
         OrderSister sister = near(level, hearth);
         if (sister == null) return false;
+        if (com.linkyoshi90.monstergirls.entity.RealmTouched.kindred(player)) {   // the realm has claimed them: she won't
+            player.displayClientMessage(Component.translatable("message.monstergirls.order.chaplain.refuses", sister.chaplainName()), false);
+            return false;
+        }
         sister.getNavigation().moveTo(hearth.getX() + 0.5, hearth.getY(), hearth.getZ() + 0.5, 1.0);
         sister.getLookControl().setLookAt(bride);
         level.sendParticles(ParticleTypes.END_ROD, bride.getX(), bride.getEyeY() + 0.6, bride.getZ(), 24, 0.5, 0.4, 0.5, 0.02);

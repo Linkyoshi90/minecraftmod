@@ -116,6 +116,13 @@ Options: `orderPatrols`, `orderRaids`. Advancements: Holy Orders, Heretic, Crisi
 
 Options: `realmTouched` (chapels follow `orderPatrols`). Advancements: Kindred, Of the Realm.
 
+**Extended 2026-11-10:**
+- A spouse who is a devil or realm-changed girl within 32 blocks adds +1 touch a minute, two at most, anywhere. Marrying into the realm slowly changes you.
+- **Kindred** now also get Speed I in the realm's air. (Realm grass never slowed anyone, so this replaces "realm grass doesn't slow you".)
+- **Realm-born** now have 2 more hearts (+4 max health), everywhere, lifted again if the touch washes out.
+- **The Order**: a standing sister within 12 blocks who can see a kindred player she isn't hunting (notoriety under MARKED) sprinkles holy water on them: -5 touch, at most once every 2 minutes. A chaplain refuses to bless a kindred player's wedding or vow renewal.
+- Check in a client: is the sprinkling too frequent near a chapel? Does the health bonus show and go cleanly?
+
 ## A Lilith's manor; tithes (2026-11-08)
 
 - `/monstergirls locate manor` (or `/locate structure monstergirls:realm_manor`): dark forests only, about one per 48 chunks, new chunks only. A 13x11 hall of realm planks on polished blackstone, violet windows, a stepped roof, a purple runner to a realm-stair throne before crying obsidian, purple candles, two unlit realm censers (a heartfruit lights them), a purple bed and a chest (heartfruit, weepcaps, realm silver, amethyst, gold, rarely a censer, a realm silver sword or an enchanted book). Realm grass round its walls. Its lady is a wild grown Lilith (who spreads the realm, as wild ones do) with one or two succubi, kept within 14 blocks. Look: does the roof read well? Does the door face out? Do the girls stay home after a reload? (They should keep within 14 blocks until one befriends you; then she's free to follow.)

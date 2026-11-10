@@ -6,7 +6,12 @@ import com.linkyoshi90.monstergirls.entity.RealmTouched;
 import com.linkyoshi90.monstergirls.entity.ThrownHolyWater;
 import com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl;
 import com.linkyoshi90.monstergirls.entity.girl.GirlSpecies;
+import com.linkyoshi90.monstergirls.entity.Marriage;
+import com.linkyoshi90.monstergirls.entity.order.Chaplain;
 import com.linkyoshi90.monstergirls.entity.order.Order;
+import com.linkyoshi90.monstergirls.entity.order.OrderSister;
+import com.linkyoshi90.monstergirls.registry.ModEntities;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -74,6 +79,68 @@ public class RealmTouchedTests {
         RealmTouched.tick(level, p, false);
         check(p.getFoodData().getFoodLevel() == 11, "realm-born: its air feeds them");
         check(level.isDay() || p.hasEffect(MobEffects.NIGHT_VISION) && p.hasEffect(MobEffects.DAMAGE_BOOST), "and at night they see and are strong");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "aRealmWifeTouchesThem")
+    public static void aRealmWifeTouchesThem(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(4, 2, 4));
+        AbstractMonsterGirl wife = spawn(helper, GirlSpecies.SUCCUBUS_DEVIL, new BlockPos(6, 2, 6));
+        wife.setNoAi(true);
+        wife.setAffection(p.getUUID(), 100);
+        Marriage.wed(level, wife, p, helper.absolutePos(new BlockPos(3, 2, 3)));
+        RealmTouched.setTouch(p, 0);
+        check(RealmTouched.realmSpouses(level, p) == 1, "a wife of the realm's own at their side");
+        RealmTouched.tick(level, p, true);
+        check(RealmTouched.touch(p) == RealmTouched.SPOUSE, "she touches them, even outside the realm: " + RealmTouched.touch(p));
+        wife.discard();
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "kindredQuickRealmBornHardy")
+    public static void kindredQuickRealmBornHardy(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(4, 2, 4));
+        RealmGrassBlock.corrupt(level, p.blockPosition().below());
+        float base = p.getMaxHealth();
+        RealmTouched.setTouch(p, RealmTouched.KINDRED);
+        RealmTouched.tick(level, p, false);
+        check(p.hasEffect(MobEffects.MOVEMENT_SPEED) && p.getMaxHealth() == base, "kindred: quick in the realm, no more hearts yet");
+        RealmTouched.setTouch(p, RealmTouched.REALM_BORN);
+        RealmTouched.tick(level, p, false);
+        check(p.getMaxHealth() == base + RealmTouched.HEALTH, "realm-born: hardier: " + p.getMaxHealth());
+        p.setHealth(p.getMaxHealth());
+        RealmTouched.setTouch(p, 0);
+        RealmTouched.tick(level, p, false);
+        check(p.getMaxHealth() == base && p.getHealth() <= base, "washed out, it goes again");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "theOrderSeesTheKindred")
+    public static void theOrderSeesTheKindred(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(4, 2, 4));
+        OrderSister knight = helper.spawn(ModEntities.ORDER_KNIGHT.get(), new BlockPos(6, 2, 4));
+        knight.finalizeSpawn(level, level.getCurrentDifficultyAt(knight.blockPosition()), MobSpawnType.EVENT, null);
+        knight.setNoAi(true);
+        Order.setNotoriety(p, 0);
+        RealmTouched.setTouch(p, RealmTouched.TOUCHED);
+        check(RealmTouched.sprinkle(level, p) == null, "only touched: she doesn't see it");
+        RealmTouched.setTouch(p, RealmTouched.KINDRED + 2);
+        check(RealmTouched.sprinkle(level, p) == knight && RealmTouched.touch(p) == RealmTouched.KINDRED + 2 - RealmTouched.SPRINKLE, "kindred: she sprinkles holy water on them");
+        check(RealmTouched.sprinkle(level, p) == null, "not again so soon");
+        BlockPos hearth = helper.absolutePos(new BlockPos(3, 2, 3));
+        knight.becomeChaplain("Agnes", hearth, level.getGameTime() + 24000);
+        AbstractMonsterGirl bride = spawn(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(6, 2, 6));
+        bride.setNoAi(true);
+        RealmTouched.setTouch(p, RealmTouched.KINDRED);
+        check(!Chaplain.bless(level, bride, p, hearth), "a chaplain won't bless the kindred");
+        RealmTouched.setTouch(p, 0);
+        check(Chaplain.bless(level, bride, p, hearth), "washed clean, she will");
         HarpyTestUtil.remove(p);
         helper.succeed();
     }

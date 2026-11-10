@@ -220,7 +220,7 @@ public final class MonsterGirlsConfig {
                 .define("orderPatrols", true);
 
         REALM_TOUCHED = BUILDER
-                .comment("A player who keeps company with the Demon Realm slowly becomes kin to it: night vision in its dark, its own let them be, and in the end it feeds them and makes them strong at night. Holy water washes it out.")
+                .comment("A player who keeps company with the Demon Realm slowly becomes kin to it: night vision in its dark, its own let them be and they move quickly there, and in the end it feeds them, makes them strong at night and gives two more hearts. Realm spouses add to it; Order sisters sprinkle kindred players and chaplains won't bless them. Holy water washes it out.")
                 .define("realmTouched", true);
 
         HAMLETS = BUILDER
