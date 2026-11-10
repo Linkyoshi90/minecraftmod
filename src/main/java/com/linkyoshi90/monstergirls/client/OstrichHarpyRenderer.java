@@ -56,6 +56,7 @@ public class OstrichHarpyRenderer extends GeoEntityRenderer<OstrichHarpy> {
         this.shadowRadius = 0.5F;
         this.addRenderLayer(new MoonEyesLayer<>(this));
         this.addRenderLayer(new PaintGlowLayer<>(this, OstrichHarpy::getPaintName));
+        this.addRenderLayer(new WeddingLookLayer<>(this, false));
     }
 
     /** Hatchlings are the adult model at a small scale. */

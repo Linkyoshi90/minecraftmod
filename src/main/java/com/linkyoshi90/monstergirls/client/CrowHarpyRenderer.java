@@ -51,6 +51,7 @@ public class CrowHarpyRenderer extends GeoEntityRenderer<CrowHarpy> {
         this.addRenderLayer(new HeldItemLayer<>(this));
         this.addRenderLayer(new MoonEyesLayer<>(this));
         this.addRenderLayer(new PaintGlowLayer<>(this, CrowHarpy::getPaintName));
+        this.addRenderLayer(new WeddingLookLayer<>(this, false));
     }
 
     /** Hatchlings are the adult model at a small scale. */

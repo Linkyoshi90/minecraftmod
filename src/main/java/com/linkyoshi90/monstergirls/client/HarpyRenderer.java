@@ -59,6 +59,7 @@ public class HarpyRenderer<T extends AbstractHarpy> extends GeoEntityRenderer<T>
         this.addRenderLayer(new BlushOverlayLayer<>(this, species, T::isBlushing));
         this.addRenderLayer(new MoonEyesLayer<>(this));
         this.addRenderLayer(new PaintGlowLayer<>(this, T::getPaintName));
+        this.addRenderLayer(new WeddingLookLayer<>(this, false));
     }
 
     /** Hatchlings are the adult model at a small scale. */

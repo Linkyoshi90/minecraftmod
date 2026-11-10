@@ -64,6 +64,7 @@ public class SparrowHarpyRenderer extends GeoEntityRenderer<SparrowHarpy> {
         this.addRenderLayer(new HeldItemLayer<>(this));
         this.addRenderLayer(new MoonEyesLayer<>(this));
         this.addRenderLayer(new PaintGlowLayer<>(this, SparrowHarpy::getPaintName));
+        this.addRenderLayer(new WeddingLookLayer<>(this, false));
     }
 
     /** Hatchlings are the adult model at a small scale. */

@@ -61,6 +61,7 @@ public class AnuranRenderer<T extends AbstractAnuran> extends GeoEntityRenderer<
         this.addRenderLayer(new BlushOverlayLayer<>(this, species, T::isBlushing));
         this.addRenderLayer(new MoonEyesLayer<>(this));
         this.addRenderLayer(new PaintGlowLayer<>(this, a -> a.getPaintName()));
+        this.addRenderLayer(new WeddingLookLayer<>(this, true));
         this.shadowRadius = shadowRadius;
     }
 

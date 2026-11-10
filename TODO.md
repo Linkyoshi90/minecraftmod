@@ -865,4 +865,5 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [x] Family tree pages in the journal (`entity/FamilyTree`); children now record `MotherId`.
 - [x] Vow renewal (`Marriage.renewVows`): the ring again on the anniversary by a hearth or censer.
 - [x] Honeymoon trip (`HoneymoonTrip`): she names a biome at the wedding; go there together for a souvenir and a scout pack of finds.
-- [ ] Next from the 2026-11-09 list: 6 harpy/frog wedding looks, sounds, visible mining, the Order chaplain, a performance test, a server boot test.
+- [x] Harpy/frog wedding looks (`WeddingVeil`, client `WeddingLookLayer`): feather crown, lily-pad veil, on the figurine too.
+- [ ] Next from the 2026-11-09 list: sounds, visible mining, the Order chaplain, a performance test, a server boot test.

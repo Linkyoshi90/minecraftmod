@@ -100,6 +100,12 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - The family page shows "(dreams of the ...)" until you go, then "(been to: ...)". At the next renewal she wishes for somewhere new.
 - Try it: `/monstergirls family wed` her, read the wish in chat, `/locate biome` it and travel there with her following.
 
+## Harpy and frog wedding looks (2026-11-10)
+
+- Harpies and frogs/toads now dress for the wedding too, for the same day the girls wear the veil (and on anniversaries and vow renewals): a harpy wears a **crown of white feathers** with a short sheer veil behind; a frog or toad a **lily pad** for a hat with a pink blossom on it and the veil falling from under it.
+- Her wedding figurine wears it as well (the look is saved with her).
+- Rough proportions on four real head bones: `previews/wedding_looks.png`. Check in a client that the crown doesn't sink into big crests (owls, cassowaries) and that the pad sits right on the wide frog heads. Texture: `tools/gen_wedding_looks.py`.
+
 ## Wardrobe outfits, redone (2026-11-10)
 
 The raincoat, winter coat, yukata and maid apron are now painted onto each girl's own model (`previews/wardrobe_outfits.png`), drawn as her model again with that texture, so they follow her pose. Check in a client that they don't flicker against her skin (they're drawn the same way as dyed sheep wool).

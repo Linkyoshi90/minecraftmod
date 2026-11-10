@@ -62,7 +62,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * home, bath cooldown, carrying one small item in her hands (eating it if it's food, otherwise dropping it
  * somewhere later), and her affection for each player (raised by feeding and petting; see /monstergirls bonds).
  */
-public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, FlyingAnimal, Bonded, GiftGiver, Painted {
+public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, FlyingAnimal, Bonded, GiftGiver, Painted, WeddingVeil {
     private static final EntityDataAccessor<Boolean> DATA_BLUSHING = SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.BOOLEAN);
     private int blushTicks;
     private static final EntityDataAccessor<Byte> DATA_ACTION =
@@ -74,6 +74,8 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
             SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> DATA_MOONSTRUCK =
             SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.BOOLEAN);
+    /** Her wedding look (WeddingVeil), on the day and on anniversaries. */
+    private static final EntityDataAccessor<Boolean> DATA_VEILED = SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.BOOLEAN);
     /** Gifts for a favourite player come every five to ten minutes. */
     private static final int GIFT_INTERVAL = 6000;
     private static final Map<String, RawAnimation> ANIMATIONS = new ConcurrentHashMap<>();
@@ -191,6 +193,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         builder.define(DATA_BABY, false);
         builder.define(DATA_BELLY, (byte) 0);
         builder.define(DATA_MOONSTRUCK, false);
+        builder.define(DATA_VEILED, false);
         builder.define(DATA_PAINT, 0);
     }
 
@@ -343,6 +346,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        if (this.isVeiled()) tag.putBoolean("Veiled", true);                   // kept, so her wedding figurine wears it
         tag.putBoolean("Waxed", this.waxed);
         if (this.homePos != null) tag.putLong("Home", this.homePos.asLong());
         CompoundTag affectionTag = new CompoundTag();
@@ -364,6 +368,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.setVeiled(tag.getBoolean("Veiled"));
         Injury.reapply(this);
         this.waxed = tag.getBoolean("Waxed");
         this.homePos = tag.contains("Home") ? BlockPos.of(tag.getLong("Home")) : null;
@@ -574,6 +579,16 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
 
     /** Species with their own kind of bond (a crow's owner, a phoenix's imprint, an ostrich's loyalty) set it here. */
     protected void onBornTo(UUID father) {
+    }
+
+    @Override
+    public boolean isVeiled() {
+        return this.entityData.get(DATA_VEILED);
+    }
+
+    @Override
+    public void setVeiled(boolean veiled) {
+        this.entityData.set(DATA_VEILED, veiled);
     }
 
     @Override

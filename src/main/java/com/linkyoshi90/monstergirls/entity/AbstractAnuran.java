@@ -65,7 +65,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * doing" action that drives the GeckoLib animation, and the need for water. Any anuran left dry for too long slowly
  * takes damage (frogs dry out fast, toads slowly); water or rain resets the clock.
  */
-public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity, Bonded, Painted {
+public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity, Bonded, Painted, WeddingVeil {
     private static final EntityDataAccessor<Boolean> DATA_BLUSHING = SynchedEntityData.defineId(AbstractAnuran.class, EntityDataSerializers.BOOLEAN);
     private int blushTicks;
     private static final EntityDataAccessor<Byte> DATA_ACTION =
@@ -82,6 +82,8 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
             SynchedEntityData.defineId(AbstractAnuran.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> DATA_MOONSTRUCK =
             SynchedEntityData.defineId(AbstractAnuran.class, EntityDataSerializers.BOOLEAN);
+    /** Her wedding look (WeddingVeil), on the day and on anniversaries. */
+    private static final EntityDataAccessor<Boolean> DATA_VEILED = SynchedEntityData.defineId(AbstractAnuran.class, EntityDataSerializers.BOOLEAN);
     private static final Map<String, RawAnimation> ANIMATIONS = new ConcurrentHashMap<>();
     /** Dry skin hurts this often once the limit is passed. */
     private static final int DRY_DAMAGE_INTERVAL = 40;
@@ -239,6 +241,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         builder.define(DATA_VARIANT, (byte) 0);
         builder.define(DATA_BELLY, (byte) 0);
         builder.define(DATA_MOONSTRUCK, false);
+        builder.define(DATA_VEILED, false);
         builder.define(DATA_PAINT, 0);
     }
 
@@ -635,6 +638,16 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     }
 
     @Override
+    public boolean isVeiled() {
+        return this.entityData.get(DATA_VEILED);
+    }
+
+    @Override
+    public void setVeiled(boolean veiled) {
+        this.entityData.set(DATA_VEILED, veiled);
+    }
+
+    @Override
     public boolean isMoonstruck() {
         return this.entityData.get(DATA_MOONSTRUCK);
     }
@@ -748,6 +761,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        if (this.isVeiled()) tag.putBoolean("Veiled", true);                   // kept, so her wedding figurine wears it
         tag.putBoolean("Waxed", this.waxed);
         tag.putInt("DryTicks", this.dryTicks);
         tag.putByte("Stage", this.getStage());
@@ -766,6 +780,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.setVeiled(tag.getBoolean("Veiled"));
         Injury.reapply(this);
         this.waxed = tag.getBoolean("Waxed");
         this.dryTicks = tag.getInt("DryTicks");

@@ -530,7 +530,9 @@ public final class Marriage {
     }
 
     private static void veil(ServerLevel level, Mob mob) {
-        if (mob instanceof AbstractMonsterGirl g) g.setFlag(AbstractMonsterGirl.FLAG_VEIL, level.getGameTime() < mob.getPersistentData().getLong(VEIL_UNTIL));
+        boolean on = level.getGameTime() < mob.getPersistentData().getLong(VEIL_UNTIL);
+        if (mob instanceof AbstractMonsterGirl g) g.setFlag(AbstractMonsterGirl.FLAG_VEIL, on);
+        else if (mob instanceof WeddingVeil w && w.isVeiled() != on) w.setVeiled(on);   // a harpy's feather crown, a frog's lily-pad veil
     }
 
     // --- married life --------------------------------------------------------------------------------------------------
