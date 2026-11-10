@@ -28,6 +28,12 @@ LANG = {
     "advancement.monstergirls.moving_out.desc": "Visit a grown daughter's new house near your hearth",
     "journal.monstergirls.tree.title": "Family Tree",
     "journal.monstergirls.tree.with": "with %s",
+    "message.monstergirls.marriage.renew_hint": "Give %s the wedding ring by a hearth today to renew your vows",
+    "message.monstergirls.marriage.renew_wait": "Save it for your anniversary with %s, in %s days, to renew your vows",
+    "message.monstergirls.marriage.renewed": "%s and %s renew their vows after %s years, with %s friends gathered round!",
+    "journal.monstergirls.family.renewed": " (vows renewed %sx)",
+    "advancement.monstergirls.vow_renewal": "I Still Do",
+    "advancement.monstergirls.vow_renewal.desc": "Renew your vows with a wife on your anniversary, by a hearth",
     "journal.monstergirls.guide.family.title": "Family",
     "journal.monstergirls.guide.family": (
         "A girl who is expecting craves one food and tells you; bring it before her time for twins (a harpy lays a full clutch). "
@@ -49,8 +55,34 @@ def main():
     from gen_family_assets import adv
     adv("family_reunion", "monstergirls:first_child", "minecraft:campfire")
     adv("moving_out", "monstergirls:first_child", "minecraft:oak_door")
+    adv("vow_renewal", "monstergirls:wedding", "monstergirls:wedding_ring")
     add_lang(LANG)
     rewrite_guide()
+    marriage_guide()
+
+
+MARRIAGE_OLD = "Every forty days she wears her veil again."
+MARRIAGE_NEW = ("Every forty days she wears her veil again; give her the ring by a hearth on the day and you renew your vows, "
+                "with the friends gathered round, the bouquet and a second honeymoon.")
+
+
+def marriage_guide():
+    """Vow renewal in the marriage guide (once), then the pages split again."""
+    import json
+    from gen_realm_assets import ASSETS
+    import split_guides
+    path = os.path.join(ASSETS, "lang", "en_us.json")
+    with open(path, encoding="utf-8") as fh:
+        text = fh.read()
+    key = "journal.monstergirls.guide.marriage"
+    old = json.loads(text)[key]
+    if MARRIAGE_NEW not in old:
+        a = json.dumps(key) + ": " + json.dumps(old, ensure_ascii=False)
+        assert text.count(a) == 1 and old.count(MARRIAGE_OLD) == 1
+        text = text.replace(a, json.dumps(key) + ": " + json.dumps(old.replace(MARRIAGE_OLD, MARRIAGE_NEW), ensure_ascii=False))
+        with open(path, "w", encoding="utf-8", newline=chr(10)) as fh:
+            fh.write(text)
+    split_guides.main()
 
 
 def rewrite_guide():

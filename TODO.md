@@ -863,4 +863,5 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [x] Daughters move out nearby (`entity/girl/MovingOut`): a 7x7 house of her own, housewarming, her villager moves in.
 - [ ] Dev client: the house spot, sleeping there at night, the villager sleeping in the second bed.
 - [x] Family tree pages in the journal (`entity/FamilyTree`); children now record `MotherId`.
-- [ ] Next from the 2026-11-09 list: 4 vow renewal, 5 honeymoon trip, then harpy/frog wedding looks, sounds, visible mining, the Order chaplain, a performance test, a server boot test.
+- [x] Vow renewal (`Marriage.renewVows`): the ring again on the anniversary by a hearth or censer.
+- [ ] Next from the 2026-11-09 list: 5 honeymoon trip, then harpy/frog wedding looks, sounds, visible mining, the Order chaplain, a performance test, a server boot test.

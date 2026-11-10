@@ -70,7 +70,7 @@ public final class Marriage {
             net.minecraft.world.item.Items.CANDLE, net.minecraft.world.item.Items.WHITE_WOOL, net.minecraft.world.item.Items.EMERALD, net.minecraft.world.item.Items.GOLDEN_APPLE,
             net.minecraft.world.item.Items.GLOW_BERRIES, net.minecraft.world.item.Items.PUMPKIN_PIE, net.minecraft.world.item.Items.PINK_BED);
 
-    public enum Answer { SHY, TAKEN, ALREADY, ENGAGED }
+    public enum Answer { SHY, TAKEN, ALREADY, ENGAGED, RENEWED }
 
     private Marriage() {
     }
@@ -257,7 +257,14 @@ public final class Marriage {
     /** The ring is offered. Her answer; ENGAGED means it was taken. */
     public static Answer propose(ServerLevel level, Mob mob, Player player) {
         Bonded b = (Bonded) mob;
+        if (married(mob, player) && renewVows(level, mob, player)) return Answer.RENEWED;   // the ring again, on the day: vow renewal
         if (married(mob, player) || engaged(mob, player)) {
+            if (married(mob, player) && (hearthFor(level, mob, player) != null || censerFor(level, mob, player) != null) && !renewedToday(level, mob)) {
+                long since = MatingSeason.today(level) - mob.getPersistentData().getLong(WED_DAY);
+                long until = Math.floorMod(-since, (long) YEAR);
+                player.displayClientMessage(Component.translatable("message.monstergirls.marriage.renew_wait", mob.getDisplayName(), until == 0 ? YEAR : until), true);
+                return Answer.ALREADY;
+            }
             say(player, "marriage.already", mob, true);
             return Answer.ALREADY;
         }
@@ -436,6 +443,81 @@ public final class Marriage {
             }
         }
         return guests;
+    }
+
+    // --- vow renewal (2026-11-10) -------------------------------------------------------------------------------------
+
+    private static final String RENEWED_ON = "VowsRenewedOn";
+    /** How much closer a renewal brings them. */
+    public static final int RENEW_AFFECTION = 4;
+
+    /** Her anniversary is today (a year or more since the wedding). */
+    public static boolean anniversaryToday(ServerLevel level, Mob mob) {
+        long since = MatingSeason.today(level) - mob.getPersistentData().getLong(WED_DAY);
+        return mob.getPersistentData().hasUUID(SPOUSE) && since > 0 && since % YEAR == 0;
+    }
+
+    public static boolean renewedToday(ServerLevel level, Mob mob) {
+        return mob.getPersistentData().contains(RENEWED_ON) && mob.getPersistentData().getLong(RENEWED_ON) == MatingSeason.today(level);
+    }
+
+    /** Test hook: move her wedding day. */
+    public static void setWedDay(Mob mob, long day) {
+        mob.getPersistentData().putLong(WED_DAY, day);
+    }
+
+    /**
+     * Vow renewal: the wedding ring offered to a wife on their anniversary, both by a hearth (or a lit realm censer). The ceremony
+     * again, as a deliberate event: the friends gather, the other wives stand beside her with petals, bells and fireworks (violet smoke
+     * at a censer), the bouquet, the veil and a second honeymoon as long as the first. The family page counts the renewals. The
+     * ring stays the player's. Once a year each. Whether it was held.
+     */
+    public static boolean renewVows(ServerLevel level, Mob mob, Player player) {
+        if (!married(mob, player) || !anniversaryToday(level, mob) || renewedToday(level, mob)) return false;
+        BlockPos hearth = hearthFor(level, mob, player);
+        boolean realm = hearth == null;
+        if (realm) hearth = censerFor(level, mob, player);
+        if (hearth == null) return false;
+        CompoundTag pd = mob.getPersistentData();
+        pd.putLong(RENEWED_ON, MatingSeason.today(level));
+        pd.putLong(VEIL_UNTIL, level.getGameTime() + VEIL);
+        pd.putLong(HONEYMOON_UNTIL, level.getGameTime() + HONEYMOON);
+        Bonded b = (Bonded) mob;
+        b.addAffection(player, RENEW_AFFECTION);
+        b.blushFor(VEIL);
+        veil(level, mob);
+        int guests = 0;
+        java.util.List<Mob> giving = new java.util.ArrayList<>();
+        for (Mob m : HomeLife.friendsOf(level, player, new AABB(hearth).inflate(GUESTS))) {
+            if (m == mob) continue;
+            if (!married(m, player)) giving.add(m);
+            m.getNavigation().moveTo(hearth.getX() + 0.5, hearth.getY(), hearth.getZ() + 0.5, 1.0);
+            level.sendParticles(ParticleTypes.HEART, m.getX(), m.getEyeY() + 0.3, m.getZ(), 2, 0.2, 0.1, 0.2, 0.0);
+            guests++;
+            if (married(m, player)) {
+                ((Bonded) m).blushFor(400);
+                level.sendParticles(ParticleTypes.CHERRY_LEAVES, m.getX(), m.getEyeY() + 0.5, m.getZ(), 20, 0.6, 0.4, 0.6, 0.0);
+            }
+        }
+        level.playSound(null, hearth, SoundEvents.BELL_BLOCK, SoundSource.BLOCKS, 1.5F, 1.0F);
+        level.playSound(null, hearth, SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1.0F, 1.2F);
+        level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.4, mob.getZ(), 20, 0.7, 0.5, 0.7, 0.0);
+        if (realm) level.sendParticles(ParticleTypes.WITCH, hearth.getX() + 0.5, hearth.getY() + 1.5, hearth.getZ() + 0.5, 60, 1.5, 1.0, 1.5, 0.05);
+        else level.sendParticles(ParticleTypes.FIREWORK, hearth.getX() + 0.5, hearth.getY() + 2.5, hearth.getZ() + 0.5, 60, 1.5, 1.0, 1.5, 0.08);
+        long years = (MatingSeason.today(level) - pd.getLong(WED_DAY)) / YEAR;
+        Component news = Component.translatable("message.monstergirls.marriage.renewed", player.getDisplayName(), mob.getDisplayName(), years, guests).withStyle(ChatFormatting.LIGHT_PURPLE);
+        for (Player p : level.players()) if (p.distanceToSqr(mob) < 64 * 64) p.displayClientMessage(news, false);
+        flourish(level, mob, player);
+        bouquet(level, mob, player, giving);
+        ringBells(level, hearth);
+        CompoundTag journal = player.getData(ModAttachments.JOURNAL);              // the family page counts them
+        ListTag family = journal.getList(FAMILY_PAGE, Tag.TAG_COMPOUND);
+        String id = mob.getUUID().toString();
+        for (Tag t : family) if (((CompoundTag) t).getString("Id").equals(id)) ((CompoundTag) t).putInt("Renewed", ((CompoundTag) t).getInt("Renewed") + 1);
+        journal.put(FAMILY_PAGE, family);
+        player.setData(ModAttachments.JOURNAL, journal);
+        Dairy.award(player, "vow_renewal");
+        return true;
     }
 
     /** How many on the player's list are wed rather than engaged, counting the loaded ones' own say and the rest as wed. */
@@ -776,6 +858,7 @@ public final class Marriage {
         b.blushFor(400);
         level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getEyeY() + 0.3, mob.getZ(), 10, 0.5, 0.4, 0.5, 0.0);
         p.displayClientMessage(Component.translatable("message.monstergirls.marriage.anniversary", mob.getDisplayName(), since / YEAR), false);
+        p.displayClientMessage(Component.translatable("message.monstergirls.marriage.renew_hint", mob.getDisplayName()).withStyle(ChatFormatting.GRAY), false);
         b.addAffection(p, 2);                                                  // and a present for the day, as she had at the wedding
         long years = since / YEAR;                                             // the fifth and tenth are something special
         net.minecraft.world.item.ItemStack gift = years == 10 ? new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.ENCHANTED_GOLDEN_APPLE)

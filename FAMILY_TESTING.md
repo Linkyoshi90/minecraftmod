@@ -86,6 +86,13 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - It's drawn from the journal's own lists, so it remembers those far away or gone. From today each child also remembers her mother's id; older entries are linked by the mother's name.
 - Check in a client: does a big tree read well in the book (indentation, the ♥ and · marks)?
 
+## Vow renewal (2026-11-10)
+
+- On a wife's anniversary (every 40 days after the wedding), give her the **wedding ring** while you both stand by a hearth, or a lit realm censer: the vows are renewed. Your friends gather, the other wives stand beside her with petals, bells and fireworks (violet smoke at a censer), she tosses the bouquet, wears her veil, and you get a second honeymoon as long as the first (three days). +4 friendship. The ring stays yours.
+- Once a year with each wife. On another day, the ring by a hearth tells you how many days to wait. The anniversary message reminds you.
+- The family page shows "vows renewed Nx"; advancement *I Still Do*.
+- Try it: `/monstergirls family wed` her, then `/time add` 40 days (`/time add 960000`) and stand by the hearth with her.
+
 ## Wardrobe outfits, redone (2026-11-10)
 
 The raincoat, winter coat, yukata and maid apron are now painted onto each girl's own model (`previews/wardrobe_outfits.png`), drawn as her model again with that texture, so they follow her pose. Check in a client that they don't flicker against her skin (they're drawn the same way as dyed sheep wool).

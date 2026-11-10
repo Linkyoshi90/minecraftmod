@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:wedding",
+  "display": {
+    "icon": {
+      "id": "monstergirls:wedding_ring"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.vow_renewal"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.vow_renewal.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
