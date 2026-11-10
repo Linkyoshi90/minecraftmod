@@ -124,7 +124,7 @@ public final class Order {
 
     /** Who a sister fights. */
     public static boolean hunts(OrderSister sister, LivingEntity e) {
-        if (!sister.standing() || !e.isAlive() || e instanceof OrderSister) return false;
+        if (!sister.standing() || sister.isChaplain() || !e.isAlive() || e instanceof OrderSister) return false;
         if (e instanceof Player p) {
             return !p.isCreative() && !p.isSpectator() && (notoriety(p) >= MARKED || p.getUUID().equals(sister.raidTarget()));
         }
@@ -449,6 +449,7 @@ public final class Order {
         }
         if (t % PATROL_EVERY == 100) tryPatrol(level, player, true);
         if (t % RAID_CHECK == 50) tryRaid(level, player);
+        if (t % RAID_CHECK == 150) Chaplain.tick(level, player);
     }
 
     @SubscribeEvent
@@ -459,7 +460,7 @@ public final class Order {
     /** A kneeling sister (or one going home) is out of the fight: no creature picks her as a target, only a player can still strike. */
     @SubscribeEvent
     public static void onTarget(net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent event) {
-        if (event.getNewAboutToBeSetTarget() instanceof OrderSister s && !s.standing() && !(event.getEntity() instanceof Player)) event.setCanceled(true);
+        if (event.getNewAboutToBeSetTarget() instanceof OrderSister s && (!s.standing() || s.isChaplain()) && !(event.getEntity() instanceof Player)) event.setCanceled(true);
     }
 
     /** A sister slain: the Order hears of it. */

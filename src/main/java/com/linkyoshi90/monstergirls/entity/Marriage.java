@@ -431,6 +431,7 @@ public final class Marriage {
         if (lead && presents(level, giving, hearth) > 0) player.displayClientMessage(Component.translatable("message.monstergirls.marriage.presents", giving.size()), false);
         if (bridesmaids > 0) player.displayClientMessage(Component.translatable("message.monstergirls.marriage.bridesmaids", bridesmaids, mob.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), false);
         Dairy.award(player, "wedding");
+        if (!realm) com.linkyoshi90.monstergirls.entity.order.Chaplain.bless(level, mob, player, hearth);   // the Order's chaplain, if she's come
         HoneymoonTrip.plan(level, mob, player);                                 // a place she'd love to see with them
         if (wedNow(player) >= BIG_FAMILY) {
             Dairy.award(player, "big_family");
@@ -517,6 +518,7 @@ public final class Marriage {
         for (Tag t : family) if (((CompoundTag) t).getString("Id").equals(id)) ((CompoundTag) t).putInt("Renewed", ((CompoundTag) t).getInt("Renewed") + 1);
         journal.put(FAMILY_PAGE, family);
         player.setData(ModAttachments.JOURNAL, journal);
+        if (!realm) com.linkyoshi90.monstergirls.entity.order.Chaplain.bless(level, mob, player, hearth);
         Dairy.award(player, "vow_renewal");
         if (HoneymoonTrip.wish(mob) == null) HoneymoonTrip.plan(level, mob, player);
         return true;

@@ -100,6 +100,10 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - The family page shows "(dreams of the ...)" until you go, then "(been to: ...)". At the next renewal she wishes for somewhere new.
 - Try it: `/monstergirls family wed` her, read the wish in chat, `/locate biome` it and travel there with her following.
 
+## The Order's chaplain (2026-11-10)
+
+- A sister of the Order you spared comes back to your hearth as a chaplain for three days and blesses any wedding or vow renewal there (see DEMON_REALM_TESTING.md, The Order).
+
 ## Friendly zombies and the fletching table (2026-11-10)
 
 - Zombies, husks, drowned and zombie villagers a zombie girl introduced you to now leave villagers and wandering traders alone. Wild ones still don't.

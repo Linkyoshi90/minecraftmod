@@ -153,7 +153,12 @@ public class OrderSister extends Monster implements RangedAttackMob {
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this, OrderSister.class).setAlertOthers());
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this, OrderSister.class) {
+            @Override
+            public boolean canUse() {
+                return !OrderSister.this.isChaplain() && super.canUse();           // a chaplain doesn't strike back
+            }
+        }.setAlertOthers());
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, e -> Order.hunts(this, e)));
     }
 
@@ -228,6 +233,37 @@ public class OrderSister extends Monster implements RangedAttackMob {
     @Nullable
     public BlockPos chapel() {
         return this.chapel;
+    }
+
+    /** A spared sister come back as a chaplain (Chaplain): her name, or null. */
+    @Nullable
+    private String chaplain;
+
+    public boolean isChaplain() {
+        return this.chaplain != null;
+    }
+
+    public String chaplainName() {
+        return this.chaplain == null ? "" : this.chaplain;
+    }
+
+    /** She lays her arms aside for good, takes up the book, and keeps to this hearth until {@code until}. */
+    public void becomeChaplain(String name, BlockPos hearth, long until) {
+        this.chaplain = name;
+        for (EquipmentSlot slot : EquipmentSlot.values()) this.setItemSlot(slot, ItemStack.EMPTY);
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOOK));
+        this.setDropChance(EquipmentSlot.MAINHAND, 0.0F);
+        this.setCustomName(Component.translatable("entity.monstergirls.order_chaplain.named", name));
+        this.restrictTo(hearth, Chaplain.KEEP);
+        this.march = null;
+        this.leaveAt = until;
+        this.setTarget(null);
+        this.setPersistenceRequired();
+    }
+
+    @Override
+    protected boolean shouldDespawnInPeaceful() {
+        return !this.isChaplain() && super.shouldDespawnInPeaceful();
     }
 
     // --- equipment ------------------------------------------------------------------------------------------------
@@ -324,6 +360,14 @@ public class OrderSister extends Monster implements RangedAttackMob {
 
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
+        if (this.isChaplain() && !this.kneeling() && !this.leaving && player.getItemInHand(hand).isEmpty()) {   // she tells you why she's here
+            if (this.level() instanceof ServerLevel level) {
+                long days = Math.max(1, (this.leaveAt - level.getGameTime() + 23999) / 24000);
+                player.displayClientMessage(Component.translatable("message.monstergirls.order.chaplain.talk", this.chaplain, days), false);
+                this.getLookControl().setLookAt(player);
+            }
+            return InteractionResult.SUCCESS;
+        }
         if (!this.kneeling() || this.leaving) return super.mobInteract(player, hand);
         ItemStack stack = player.getItemInHand(hand);
         if (!(this.level() instanceof ServerLevel level)) return InteractionResult.SUCCESS;
@@ -364,6 +408,7 @@ public class OrderSister extends Monster implements RangedAttackMob {
         level.sendParticles(ParticleTypes.END_ROD, this.getX(), this.getY() + 1.2, this.getZ(), 10, 0.3, 0.4, 0.3, 0.02);
         Order.addNotoriety(by, -Order.MERCY);
         Dairy.award(by, "order_spared");
+        if (!this.isChaplain()) Chaplain.promise(level, by, this);                // she'll come back, to bless
     }
 
     // --- her day ------------------------------------------------------------------------------------------------------
@@ -387,6 +432,14 @@ public class OrderSister extends Monster implements RangedAttackMob {
             this.faith--;                                               // the realm's air wears at her
             level.sendParticles(RealmGrassBlock.HAZE, this.getX(), this.getY() + 1.0, this.getZ(), 6, 0.3, 0.4, 0.3, 0.0);
             if (this.faith <= 0) this.kneel(null);
+        }
+        if (this.isChaplain() && !this.leaving && this.leaveAt >= 0 && level.getGameTime() >= this.leaveAt) {   // her stay is over: farewell
+            this.leaving = true;
+            this.leaveAt = level.getGameTime() + LEAVE_AFTER;
+            this.clearRestriction();
+            for (Player p : level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(32))) {
+                p.displayClientMessage(Component.translatable("message.monstergirls.order.chaplain.farewell", this.chaplain), false);
+            }
         }
         if (this.leaveAt >= 0 && level.getGameTime() >= this.leaveAt
                 && (this.leaving || level.getNearestPlayer(this, 24) == null)) {
@@ -453,6 +506,10 @@ public class OrderSister extends Monster implements RangedAttackMob {
         tag.putLong("LeaveAt", this.leaveAt);
         if (this.march != null) tag.put("March", NbtUtils.writeBlockPos(this.march));
         if (this.chapel != null) tag.put("Chapel", NbtUtils.writeBlockPos(this.chapel));
+        if (this.chaplain != null) {
+            tag.putString("Chaplain", this.chaplain);
+            if (this.hasRestriction()) tag.put("ChaplainHearth", NbtUtils.writeBlockPos(this.getRestrictCenter()));
+        }
         if (this.raid != 0 && this.raidHearth != null) {
             tag.putInt("Raid", this.raid);
             tag.put("RaidHearth", NbtUtils.writeBlockPos(this.raidHearth));
@@ -473,6 +530,8 @@ public class OrderSister extends Monster implements RangedAttackMob {
         this.raidHearth = NbtUtils.readBlockPos(tag, "RaidHearth").orElse(null);
         this.raidTarget = tag.hasUUID("RaidTarget") ? tag.getUUID("RaidTarget") : null;
         NbtUtils.readBlockPos(tag, "Chapel").ifPresent(this::keepChapel);
+        this.chaplain = tag.contains("Chaplain") ? tag.getString("Chaplain") : null;
+        if (this.chaplain != null && !this.leaving) NbtUtils.readBlockPos(tag, "ChaplainHearth").ifPresent(h -> this.restrictTo(h, Chaplain.KEEP));
     }
 
     // --- goals ----------------------------------------------------------------------------------------------------
@@ -539,6 +598,7 @@ public class OrderSister extends Monster implements RangedAttackMob {
         public boolean canUse() {
             if (OrderSister.this.getTarget() != null || OrderSister.this.kneeling()) return false;
             if (OrderSister.this.leaving) return true;
+            if (OrderSister.this.isChaplain()) return false;                    // she stays by the hearth
             if (OrderSister.this.march == null && OrderSister.this.chapel == null && OrderSister.this.tickCount % 100 == 0 && OrderSister.this.level() instanceof ServerLevel level) {
                 OrderSister.this.march = Order.findRealm(level, OrderSister.this.blockPosition(), 24);   // the realm calls to be purged
             }
@@ -578,6 +638,7 @@ public class OrderSister extends Monster implements RangedAttackMob {
 
     /** For the renderer: which skin. */
     public String skin() {
+        if (this.isChaplain()) return "order_chaplain";
         return switch (this.rank) {
             case KNIGHT -> "order_knight";
             case INQUISITOR -> "order_inquisitor";

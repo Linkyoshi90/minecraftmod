@@ -210,7 +210,38 @@ def inquisitor():
     return s.img
 
 
-SKINS = {"order_knight": knight, "order_inquisitor": inquisitor, "order_captain": captain}
+def chaplain():
+    """a spared sister come back as a chaplain (entity/order/Chaplain): a black habit and veil, a white coif and collar, a gold cross"""
+    s = Skin()
+    black, black_sh = rgb("#24222A"), rgb("#16151B")
+    head(s, rgb("#6B3E22"), rgb("#4A7A3A"))
+    s.fill("hat", black, ("top", "right", "left", "back"))                # the veil
+    s.rows("hat", "front", 0, 2, WHITE)                                  # the coif's band over the brow
+    s.rows("hat", "front", 0, 8, WHITE, 0, 1)                            # and down the sides of her face
+    s.rows("hat", "front", 0, 8, WHITE, 7, 8)
+    s.rows("hat", "right", 0, 8, WHITE, 6, 8)
+    s.rows("hat", "left", 0, 8, WHITE, 0, 2)
+    for part in ("body", "rarm", "larm", "rleg", "lleg"):
+        s.fill(part, black)
+    for part in ("rarm", "larm", "body"):
+        s.rows(part, "right", 0, 12, black_sh)
+    s.rows("body", "left", 0, 12, black_sh)
+    s.rows("body", "front", 0, 2, WHITE)                                 # the collar
+    s.rows("body", "back", 0, 3, black_sh)                               # the veil falls over her shoulders
+    s.rows("body", "front", 3, 7, GOLD, 3, 5)                            # the cross on its cord
+    s.rows("body", "front", 4, 5, GOLD, 2, 6)
+    s.ring("body", 8, 9, WHITE_SH)                                       # a white cord at the waist
+    for leg in ("rleg", "lleg"):
+        s.ring(leg, 11, 12, LEATHER_SH)                                  # shoes under the hem
+        s.rows(leg, "bottom", 0, 4, LEATHER_SH)
+    for arm in ("rarm", "larm"):
+        s.ring(arm, 9, 10, WHITE)                                        # white cuffs, bare hands
+        s.ring(arm, 10, 12, SKIN)
+        s.rows(arm, "bottom", 0, 4, SKIN_SH)
+    return s.img
+
+
+SKINS = {"order_knight": knight, "order_inquisitor": inquisitor, "order_captain": captain, "order_chaplain": chaplain}
 
 
 def preview(path):
@@ -244,9 +275,12 @@ ADVANCEMENTS = {
     "order_spared": ("minecraft:white_banner", "task", "Mercy", "Spare a kneeling sister of the Order"),
     "order_fallen": ("monstergirls:heartfruit", "goal", "Fallen", "Feed a kneeling sister a heartfruit"),
     "order_crusade": ("minecraft:shield", "challenge", "Crusade Repelled", "Beat back a crusade of the Order from your hearth"),
+    "order_chaplain": ("minecraft:book", "task", "Mercy Remembered", "Have a sister you spared come back to your hearth as a chaplain"),
+    "order_blessing": ("minecraft:bell", "goal", "Blessed Union", "Be wed, or renew your vows, with the Order's chaplain's blessing"),
 }
 PARENTS = {"order_patrol": "monstergirls:realm_entered", "order_marked": "monstergirls:order_patrol", "order_humbled": "monstergirls:order_patrol",
-           "order_spared": "monstergirls:order_humbled", "order_fallen": "monstergirls:order_humbled", "order_crusade": "monstergirls:order_marked"}
+           "order_spared": "monstergirls:order_humbled", "order_fallen": "monstergirls:order_humbled", "order_crusade": "monstergirls:order_marked",
+           "order_chaplain": "monstergirls:order_spared", "order_blessing": "monstergirls:order_chaplain"}
 
 GUIDE = ("The Order is sworn to wipe out the Demon Realm. By day, now and then, a patrol of its sisters (two knights in white and gold, "
          "and an inquisitrix in a navy hood) marches on a realm patch near you to purge it: realm grass turns back where they walk, and "
@@ -258,7 +292,9 @@ GUIDE = ("The Order is sworn to wipe out the Demon Realm. By day, now and then, 
          "household is the fonder of you; if any still stand at dawn, they withdraw, and your household is shaken. A realm silver blade "
          "cuts a sister's faith, not her flesh, and so does the realm's air in the dark: with no faith left she kneels and lays down her "
          "sword. Feed a kneeling sister a heartfruit and she falls to the realm, a succubus (a captain a demon) devoted to you; with an "
-         "empty hand you spare her, and she goes home. The Order thinks better of mercy and of exorcism. (/monstergirls order tells you "
+         "empty hand you spare her, and she goes home. A sister you spared remembers: a couple of days later, while the Order doesn't have "
+         "you marked, she comes back to your hearth unarmed, as a chaplain, and stays three days. Any wedding or vow renewal at a hearth "
+         "while she is there gets her blessing. The Order thinks better of mercy and of exorcism. (/monstergirls order tells you "
          "how the Order sees you.)")
 
 LANG = {
@@ -280,6 +316,12 @@ LANG = {
     "message.monstergirls.order.kneels": "%s lays down her sword and kneels, her faith spent.",
     "message.monstergirls.order.fallen": "%s tastes the heartfruit, and the realm takes her. She looks up at you with new eyes.",
     "message.monstergirls.order.spared": "%s rises, bows to you, and turns for home.",
+    "entity.monstergirls.order_chaplain.named": "Sister %s, Chaplain",
+    "message.monstergirls.order.chaplain.came": "Sister %s, whom you spared, has come to your hearth as a chaplain. She will bless any wedding here while she stays.",
+    "message.monstergirls.order.chaplain.talk": "Sister %s: \"I'll bless any vows spoken at this hearth. %s more days, then I'm needed home.\"",
+    "message.monstergirls.order.chaplain.farewell": "Sister %s closes her book, blesses the house, and sets out for home.",
+    "message.monstergirls.order.chaplain.blessed": "Sister %s blesses the union of %s and %s.",
+    "journal.monstergirls.family.blessed": " (blessed by Sister %s)",
     "commands.monstergirls.order.standing.unknown": "The Order has barely heard of you (notoriety %s).",
     "commands.monstergirls.order.standing.rumoured": "There are rumours about you in the Order's halls (notoriety %s).",
     "commands.monstergirls.order.standing.marked": "The Order has marked you as a friend of the Demon Realm (notoriety %s).",
@@ -297,7 +339,8 @@ LANG = {
 def main():
     for name, make in SKINS.items():
         save(make(), "entity", "order", name + ".png")
-        dump(os.path.join(ASSETS, "models", "item", name + "_spawn_egg.json"), {"parent": "minecraft:item/template_spawn_egg"})
+        if name != "order_chaplain":                                     # a chaplain is a knight come back, not her own entity
+            dump(os.path.join(ASSETS, "models", "item", name + "_spawn_egg.json"), {"parent": "minecraft:item/template_spawn_egg"})
     nugget = {"rolls": 1, "entries": [{"type": "minecraft:item", "name": "minecraft:iron_nugget", "functions": [
         {"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 0, "max": 3}},
         {"function": "minecraft:enchanted_count_increase", "enchantment": "minecraft:looting", "count": {"type": "minecraft:uniform", "min": 0, "max": 1}}]}]}

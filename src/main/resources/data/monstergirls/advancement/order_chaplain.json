@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:order_spared",
+  "display": {
+    "icon": {
+      "id": "minecraft:book"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.order_chaplain"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.order_chaplain.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

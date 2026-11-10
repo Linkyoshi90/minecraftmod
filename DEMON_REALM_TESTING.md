@@ -78,6 +78,8 @@ Under Adventure: Into the Demon Realm, Spirit, Not Flesh, A Change of Heart, Bor
 
 The realm's enemy. Sisters of the Order are human women on the vanilla slim player model with their own skins (`tools/gen_order_assets.py`).
 
+- **The chaplain (2026-11-10):** spare a kneeling sister (empty hand). Two days later, by day, near your own hearth and while the Order hasn't marked you, she comes back as a chaplain: a black habit and white coif (`previews/order_sisters.png`, right), a book, no arms. She stays three days within 16 of the hearth (right-click her to ask), then walks home. Wed or renew vows at a hearth while she's there: she blesses it (Luck, the bride closer, notoriety down, "blessed by Sister ..." on the family page). Check that golems leave her alone and that she doesn't wander to realm patches.
+
 | Command | What it does |
 |---|---|
 | `/monstergirls order` | How the Order sees you (notoriety), and any crusade under way. |

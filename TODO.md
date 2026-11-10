@@ -867,4 +867,5 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [x] Honeymoon trip (`HoneymoonTrip`): she names a biome at the wedding; go there together for a souvenir and a scout pack of finds.
 - [x] Harpy/frog wedding looks (`WeddingVeil`, client `WeddingLookLayer`): feather crown, lily-pad veil, on the figurine too.
 - [x] Per-species sounds (`entity/Voices`): every species has her own events, still on the vanilla sounds.
-- [ ] Next from the 2026-11-09 list: the Order chaplain, a performance test, a server boot test.
+- [x] The Order's chaplain (2026-11-10, `entity/order/Chaplain`): sparing a sister promises a visit (journal ChaplainDue, one at a time) 2 days later, by day, notoriety under MARKED, player within 64 of their own hearth: a knight-type OrderSister with becomeChaplain (no arms, a book, "Sister <name>, Chaplain", skin order_chaplain, restricted 16 to the hearth, 3 days, then walks home). Untargetable by mobs, hunts nobody, no retaliation, survives peaceful. Blesses hearth weddings and renewals within 32: bride +4, Luck 10 min, notoriety -10, family entry "Blessed". Advancements order_chaplain, order_blessing.
+- [ ] Next from the 2026-11-09 list: a performance test, a server boot test.
