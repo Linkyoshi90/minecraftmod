@@ -1,0 +1,23 @@
+{
+  "parent": "monstergirls:hamlet",
+  "display": {
+    "icon": {
+      "id": "minecraft:writable_book"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.model_home"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.model_home.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -875,3 +875,5 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [ ] Dev client: snare frequency, duel feel, the kikimora's walk to the hearth.
 - [x] Realm-touched extended (2026-11-10, `RealmTouched`): realm spouses near add touch (+1/min each, cap 2), kindred Speed in realm air, realm-born +4 max health (transient `monstergirls:realm_born`), sisters sprinkle kindred players (-5, 2 min cooldown), chaplains refuse to bless kindred.
 - [ ] Dev client: sprinkle frequency near chapels, realm-born hearts appearing and going.
+- [x] Liaison inspections (2026-11-11, `entity/Inspections`): permit + hearth with residents -> an inspector villager every 7 days (first after 3), 5 checks x 2 points, emeralds per point at 6+, Hero of the Village at 10, written report. Advancement model_home, guide inspections, config inspections.
+- [ ] Dev client: the inspector's walk to the fire and away (villager brain WALK_TARGET).

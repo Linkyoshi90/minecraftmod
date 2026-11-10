@@ -138,6 +138,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue REALM_FOG;
     public static final ModConfigSpec.BooleanValue LUCKY_MOMENTS;
     public static final ModConfigSpec.BooleanValue COURTSHIP;
+    public static final ModConfigSpec.BooleanValue INSPECTIONS;
     public static final ModConfigSpec.BooleanValue MONSTERIZATION;
     public static final ModConfigSpec.BooleanValue POSSESSION;
     public static final ModConfigSpec.BooleanValue REALM_SUMMONS;
@@ -194,6 +195,10 @@ public final class MonsterGirlsConfig {
         COURTSHIP = BUILDER
                 .comment("Old customs: a wild fighter beaten fairly to half health yields and respects you, a wild spinner or tigress who catches you and is not struck claims you, a wild house spirit who keeps your hearth for a while stays fond of you.")
                 .define("courtship", true);
+
+        INSPECTIONS = BUILDER
+                .comment("With a homestay permit and a hearth with residents, an inspector from the exchange office calls every week: beds, food put away, the residents well and fond of you, no monsters about. Emeralds for a good home, Hero of the Village for a perfect one, a warning for a poor one.")
+                .define("inspections", true);
 
         MONSTERIZATION = BUILDER
                 .comment("Grown vanilla animals and monsters that linger on Demon Realm grass in the dark turn into monster girls of their kind (a tamed pet stays her owner's friend).")
@@ -543,6 +548,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean monsterization() {
         return SPEC.isLoaded() ? MONSTERIZATION.get() : MONSTERIZATION.getDefault();
+    }
+
+    public static boolean inspections() {
+        return SPEC.isLoaded() ? INSPECTIONS.get() : INSPECTIONS.getDefault();
     }
 
     public static boolean courtship() {

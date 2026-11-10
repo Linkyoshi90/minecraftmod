@@ -136,6 +136,15 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 
 The raincoat, winter coat, yukata and maid apron are now painted onto each girl's own model (`previews/wardrobe_outfits.png`), drawn as her model again with that texture, so they follow her pose. Check in a client that they don't flicker against her skin (they're drawn the same way as dyed sheep wool).
 
+## Liaison inspections (2026-11-11)
+
+Carry a **homestay permit** and own a hearth with residents: about 3 days later, and then every 7, an **inspector** from the exchange office (a named liaison villager) walks up to your hearth by day while you're within 64 blocks of it. At the fire she checks, within 16 blocks: a bed for each resident there, 8+ food in fridges/chests/barrels, nobody hurt or under half health, residents fond of you (average 40+), no monsters within 24. Two points each.
+
+- 6 or more: an emerald a point. 10: also Hero of the Village for a day, and the advancement Model Home.
+- Under 6: a warning, no pay. Either way you get her written report (what passed, what to fix).
+- Then she walks off and vanishes after about 20 seconds. Journal guide "Inspections", config `inspections`.
+- Check in a client: does she actually reach the fire (villager pathing), and does she leave tidily rather than joining a village?
+
 ## Old customs (2026-11-10)
 
 Some wild kinds take to a stranger in their own way, once each, and only before they're fond of you (journal guide "Old customs", advancement "The Old Ways", config `courtship`).
