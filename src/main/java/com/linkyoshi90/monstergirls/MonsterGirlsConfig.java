@@ -101,6 +101,11 @@ public final class MonsterGirlsConfig {
                     "She can't faint twice within a minute, and /kill or the void still kill her.")
             .define("friendsFaint", false);
 
+    public static final ModConfigSpec.BooleanValue MINERS_DIG_SHAFTS = BUILDER
+            .comment("A friend sent mining digs a real laddered shaft beside her spot, deeper the longer she's down (natural ground only: never through",
+                    "anything built, never into water, lava or a cave). Off: she goes underground without touching the world.")
+            .define("minersDigShafts", true);
+
     public static final ModConfigSpec.IntValue HEARTH_SAFE_RADIUS = BUILDER
             .comment("No hostile mob spawns naturally within this many blocks of a hearth with " + com.linkyoshi90.monstergirls.block.HearthBlockEntity.SAFE_RESIDENTS + " or more living there (0 turns it off).")
             .defineInRange("hearthSafeRadius", 24, 0, 128);
@@ -356,6 +361,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean friendsFaint() {
         return SPEC.isLoaded() ? FRIENDS_FAINT.get() : FRIENDS_FAINT.getDefault();
+    }
+
+    public static boolean minersDigShafts() {
+        return SPEC.isLoaded() ? MINERS_DIG_SHAFTS.get() : MINERS_DIG_SHAFTS.getDefault();
     }
 
     public static boolean stargazing() {

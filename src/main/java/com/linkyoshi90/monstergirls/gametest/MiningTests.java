@@ -4,6 +4,7 @@ import com.linkyoshi90.monstergirls.MonsterGirlsMod;
 import com.linkyoshi90.monstergirls.entity.Orders;
 import com.linkyoshi90.monstergirls.entity.girl.AbstractMonsterGirl;
 import com.linkyoshi90.monstergirls.entity.girl.GirlSpecies;
+import com.linkyoshi90.monstergirls.entity.girl.MineShaft;
 import com.linkyoshi90.monstergirls.entity.girl.Mining;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
@@ -86,6 +87,39 @@ public class MiningTests {
         check(!Mining.handOver(level, back), "her friend is too far away");
         p.teleportTo(back.getX() + 1, back.getY(), back.getZ());
         check(Mining.handOver(level, back) && count(p.getInventory().items, Items.COBBLESTONE) == plan.found() + 1 && !Mining.holdsHaul(back), "handed over");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    /** The mine she leaves (MineShaft): a laddered shaft beside the spot, deeper while she's down, stopped by a built floor; ore struck comes up. */
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "aShaftBesideHerSpot")
+    public static void aShaftBesideHerSpot(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        p.getInventory().clearContent();
+        var level = helper.getLevel();
+        for (int x = 3; x <= 11; x++) for (int z = 3; z <= 11; z++) {             // a hill of stone on a built floor
+            helper.setBlock(new BlockPos(x, 1, z), Blocks.STONE_BRICKS);
+            for (int y = 2; y <= 5; y++) helper.setBlock(new BlockPos(x, y, z), Blocks.STONE);
+        }
+        BlockPos spot = new BlockPos(7, 6, 7);
+        for (net.minecraft.core.Direction d : net.minecraft.core.Direction.Plane.HORIZONTAL) helper.setBlock(spot.relative(d).below(2), Blocks.COAL_ORE);
+        BlockPos chest = new BlockPos(9, 6, 7);
+        helper.setBlock(chest, Blocks.CHEST);
+        AbstractMonsterGirl gnome = spawn(helper, GirlSpecies.GNOME_ELF, spot);
+        gnome.addAffection(p, Orders.AFFECTION);
+        gnome.getOrders().set(Orders.Command.PATROL, p, helper.absolutePos(spot));
+        check(Mining.takePickaxe(gnome, p, new ItemStack(Items.STONE_PICKAXE)), "a pickaxe");
+        check(Mining.send(level, gnome, p, new ItemStack(Items.COAL)) && gnome.isRemoved(), "she digs in");
+        var trip = p.getData(com.linkyoshi90.monstergirls.registry.ModAttachments.EXPEDITIONS).getList(Mining.LIST, net.minecraft.nbt.Tag.TAG_COMPOUND).getCompound(0);
+        check(trip.contains(MineShaft.SHAFT) && trip.getInt(MineShaft.DUG) == MineShaft.FIRST && trip.getInt(MineShaft.DEEP) == MineShaft.depth(0.5), "the shaft opens: " + trip);
+        BlockPos top = BlockPos.of(trip.getLong(MineShaft.SHAFT));
+        check(level.getBlockState(top).is(Blocks.LADDER) && level.getBlockState(top.below()).is(Blocks.LADDER) && level.getBlockState(top.below(2)).is(Blocks.STONE),
+                "two rungs down so far");
+        check(top.equals(helper.absolutePos(spot).below().north()), "beside her spot: " + top);
+        Mining.returnDue(p, true);
+        check(level.getBlockState(top.below(2)).is(Blocks.LADDER) && level.getBlockState(top.below(3)).is(Blocks.STONE),
+                "deeper by the time she's out, but never through the built floor");
+        check(count(contents((Container) helper.getBlockEntity(chest)), Items.COAL) == Mining.STACK + 1 + 1, "the stack, the sample and the coal she struck");
         HarpyTestUtil.remove(p);
         helper.succeed();
     }

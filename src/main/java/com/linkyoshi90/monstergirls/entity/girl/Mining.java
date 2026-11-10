@@ -57,7 +57,7 @@ import java.util.Set;
  * is one, else she keeps it until her friend comes near. Her pickaxe must be able to mine it (an iron one for diamonds). How
  * long it takes and how much of the pickaxe it wears down depend on how rare the thing is: a few hours for stone, five days
  * for diamonds; Efficiency and Fortune make her quicker, Unbreaking spares the pickaxe. A pickaxe too worn to last brings
- * her back early with what she found when it broke.
+ * her back early with what she found when it broke. She leaves a real shaft beside the spot (MineShaft), deeper the longer she's down.
  */
 @EventBusSubscriber(modid = MonsterGirlsMod.MODID)
 public final class Mining {
@@ -207,6 +207,7 @@ public final class Mining {
         e.putInt("Found", trip.found());
         e.putInt("Wear", trip.wear());
         e.putBoolean("Breaks", trip.breaks());
+        MineShaft.start(level, e, at, vein.days());                              // the mouth of her mine, beside the spot
         CompoundTag data = player.getData(ModAttachments.EXPEDITIONS);
         ListTag list = data.getList(LIST, Tag.TAG_COMPOUND);
         list.add(e);
@@ -250,6 +251,7 @@ public final class Mining {
                 Component name = EntityType.create(e.getCompound("Girl"), level).map(Entity::getDisplayName).orElse(Component.literal("?"));
                 player.displayClientMessage(Component.translatable("message.monstergirls.mining.waiting", name, at.getX(), at.getY(), at.getZ()), false);
             }
+            if (level != null && !due) MineShaft.progress(level, e);              // deeper while she's down there
             still.add(e);
         }
         data.put(LIST, still);
@@ -278,6 +280,7 @@ public final class Mining {
         List<ItemStack> haul = new ArrayList<>();
         haul.add(sample.copyWithCount(e.getInt("Found")));
         haul.add(sample.copyWithCount(1));                                          // and the sample back
+        haul.addAll(MineShaft.finish(level, e));                                    // and the ore she struck on the way down
         haul = stow(level, at, haul);
         if (!haul.isEmpty()) keep(level, girl, player, haul);
         BlockState ground = level.getBlockState(spot.below());

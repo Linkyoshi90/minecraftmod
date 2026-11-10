@@ -30,6 +30,8 @@ M.add_lang({
                                          "Hand one a pickaxe, then show her what to look for: an ore, raw metal, an ingot, a gem, coal or stone. "
                                          "She digs in at her patrol spot (or where she stands) and comes back there with a stack, into a chest beside "
                                          "the spot or into your hands. Rare things take days and wear the pickaxe; Efficiency, Fortune and Unbreaking "
-                                         "help. Crouch with an empty hand to take your pickaxe back.",
+                                         "help. Crouch with an empty hand to take your pickaxe back. She leaves a laddered shaft beside the spot "
+                                         "that goes deeper while she's down (natural ground only), and brings up any ore she struck on the way.",
+    "monstergirls.configuration.minersDigShafts": "Miners dig real shafts",
 })
 print("mining assets written")

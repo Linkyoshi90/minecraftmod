@@ -100,6 +100,14 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - The family page shows "(dreams of the ...)" until you go, then "(been to: ...)". At the next renewal she wishes for somewhere new.
 - Try it: `/monstergirls family wed` her, read the wish in chat, `/locate biome` it and travel there with her following.
 
+## Mining shafts (2026-11-10)
+
+- A digger sent mining (pickaxe, then a sample) now leaves a **real shaft** beside her spot: two rungs of ladder right away, deeper while she's down (whenever the spot is loaded), about 10 blocks for stone or coal and nearly 30 for diamonds.
+- She only digs natural ground (dirt, sand, gravel, stone, ores) and stops before anything built, water or lava beside the shaft, a cave under it, or a wall that won't hold a ladder. In a built base (plank floor) no shaft opens and she goes down as before.
+- Ore she strikes on the way comes up with her haul. The shaft stays afterwards.
+- Config `minersDigShafts` (on by default) turns it off.
+- Check in a client: climb the shaft, and that it never opens into a cave or floods.
+
 ## Harpy and frog wedding looks (2026-11-10)
 
 - Harpies and frogs/toads now dress for the wedding too, for the same day the girls wear the veil (and on anniversaries and vow renewals): a harpy wears a **crown of white feathers** with a short sheer veil behind; a frog or toad a **lily pad** for a hat with a pink blossom on it and the veil falling from under it.
