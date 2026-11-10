@@ -136,6 +136,15 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 
 The raincoat, winter coat, yukata and maid apron are now painted onto each girl's own model (`previews/wardrobe_outfits.png`), drawn as her model again with that texture, so they follow her pose. Check in a client that they don't flicker against her skin (they're drawn the same way as dyed sheep wool).
 
+## Old customs (2026-11-10)
+
+Some wild kinds take to a stranger in their own way, once each, and only before they're fond of you (journal guide "Old customs", advancement "The Old Ways", config `courtship`).
+
+- **A fair duel**: lizard warriors (salamander, croc, komodo), the old bull breeds (Minoan, aurochs, bison, rhino), oni, ogres, trolls, fire and frost giants, hellhounds, cerberus, amarok, wolves, wyrms, wyverns, bahamut, valkyries, dark elves and lionesses. Hit one with a sword (not arrows) until a blow would take her below half health: she yields instead, her pack stands down too, and she respects you (+30).
+- **Her snare**: every arachne, and the tigress. One who sees you within 12 blocks now and then snares you (a web at your feet; the tigress just runs you down) and comes to claim you. Don't strike her and she claims you (+30, web cut, the tigress pins you a moment). Struck, she gives up until tomorrow.
+- **Keeping your house**: a wild kikimora, brownie or domovoi within 32 blocks of your hearth while you're home walks over and keeps it every 30 seconds: loose things into nearby chests, cobwebs down, +2. After 6 visits she stays fond of the house (+30).
+- Check in a client: how often a spider snares you (about once a minute while one is near and hasn't courted you yet; is it too often?), and whether a dueling oni's damage feels fair.
+
 ## Elsewhere
 
 - **Birthday candles**: on a girl's birthday (Jade shows it), light a candle on a cake within 8 blocks of her: she comes over, blows it out and makes a wish (+8 for each friend there).

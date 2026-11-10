@@ -512,8 +512,13 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
      * their stacks merged, and loose items lying around go into them. Returns how many stacks she merged or put away.
      */
     public int tidy(ServerLevel level, @Nullable Player friend) {
+        return tidy(level, this, friend);
+    }
+
+    /** The same tidying by any house spirit (the kikimora and the domovoi courting a hearth: entity/Courtship). */
+    public static int tidy(ServerLevel level, net.minecraft.world.entity.Mob worker, @Nullable Player friend) {
         java.util.Set<net.minecraft.world.Container> found = new java.util.LinkedHashSet<>();
-        for (BlockPos o : friend == null ? java.util.List.of(this.blockPosition()) : java.util.List.of(this.blockPosition(), friend.blockPosition())) {
+        for (BlockPos o : friend == null ? java.util.List.of(worker.blockPosition()) : java.util.List.of(worker.blockPosition(), friend.blockPosition())) {
             for (BlockPos p : BlockPos.betweenClosed(o.offset(-8, -3, -8), o.offset(8, 3, 8))) {
                 if (level.getBlockEntity(p) instanceof net.minecraft.world.level.block.entity.ChestBlockEntity chest) found.add(chest);
             }
@@ -537,7 +542,7 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
             c.setChanged();
         }
         if (!chests.isEmpty()) {                                        // and put the loose things away
-            net.minecraft.world.phys.AABB area = friend == null ? this.getBoundingBox().inflate(8) : this.getBoundingBox().inflate(8).minmax(friend.getBoundingBox().inflate(8));
+            net.minecraft.world.phys.AABB area = friend == null ? worker.getBoundingBox().inflate(8) : worker.getBoundingBox().inflate(8).minmax(friend.getBoundingBox().inflate(8));
             for (net.minecraft.world.entity.item.ItemEntity item : level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
                     area, e -> e.isAlive() && !e.hasPickUpDelay())) {
                 for (net.minecraft.world.Container c : chests) {
@@ -548,7 +553,7 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
                 }
             }
         }
-        if (n > 0) this.playSound(SoundEvents.BUNDLE_INSERT, 0.6F, 1.4F);
+        if (n > 0) worker.playSound(SoundEvents.BUNDLE_INSERT, 0.6F, 1.4F);
         return n;
     }
 

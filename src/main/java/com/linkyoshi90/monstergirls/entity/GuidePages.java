@@ -39,7 +39,8 @@ public final class GuidePages {
             Map.entry("season", 2),
             Map.entry("marriage", 9),
             Map.entry("family", 7),
-            Map.entry("liaison", 2));
+            Map.entry("liaison", 2),
+            Map.entry("courtship", 3));
     public static final Map<String, Integer> SIGNATURES = Map.ofEntries(
             Map.entry("anubis_canid", 2),
             Map.entry("cobra_lamia", 2),

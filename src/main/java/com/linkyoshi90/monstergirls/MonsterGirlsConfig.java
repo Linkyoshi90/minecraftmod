@@ -137,6 +137,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue DEMON_REALM;
     public static final ModConfigSpec.BooleanValue REALM_FOG;
     public static final ModConfigSpec.BooleanValue LUCKY_MOMENTS;
+    public static final ModConfigSpec.BooleanValue COURTSHIP;
     public static final ModConfigSpec.BooleanValue MONSTERIZATION;
     public static final ModConfigSpec.BooleanValue POSSESSION;
     public static final ModConfigSpec.BooleanValue REALM_SUMMONS;
@@ -189,6 +190,10 @@ public final class MonsterGirlsConfig {
         LUCKY_MOMENTS = BUILDER
                 .comment("Slapstick moments: a bathing girl who catches you looking splashes you (a close friend just blushes), and friends beside you now and then trip into you.")
                 .define("luckyMoments", true);
+
+        COURTSHIP = BUILDER
+                .comment("Old customs: a wild fighter beaten fairly to half health yields and respects you, a wild spinner or tigress who catches you and is not struck claims you, a wild house spirit who keeps your hearth for a while stays fond of you.")
+                .define("courtship", true);
 
         MONSTERIZATION = BUILDER
                 .comment("Grown vanilla animals and monsters that linger on Demon Realm grass in the dark turn into monster girls of their kind (a tamed pet stays her owner's friend).")
@@ -538,6 +543,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean monsterization() {
         return SPEC.isLoaded() ? MONSTERIZATION.get() : MONSTERIZATION.getDefault();
+    }
+
+    public static boolean courtship() {
+        return SPEC.isLoaded() ? COURTSHIP.get() : COURTSHIP.getDefault();
     }
 
     public static boolean luckyMoments() {
