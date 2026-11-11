@@ -877,3 +877,5 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [ ] Dev client: sprinkle frequency near chapels, realm-born hearts appearing and going.
 - [x] Liaison inspections (2026-11-11, `entity/Inspections`): permit + hearth with residents -> an inspector villager every 7 days (first after 3), 5 checks x 2 points, emeralds per point at 6+, Hero of the Village at 10, written report. Advancement model_home, guide inspections, config inspections.
 - [ ] Dev client: the inspector's walk to the fire and away (villager brain WALK_TARGET).
+- [x] Care needs (2026-11-11, `entity/girl/CareNeeds`): merfolk residents live in a pool by the hearth (MovingOut.homeSpot), nag daily without one; lamias Slowness II in the cold unless warmed; non-roost harpies moult feathers for their favourite every 4-7 days. Config careNeeds, guide care.
+- [ ] Dev client: merfolk swimming home to the pool at night; lamia cold slowness feel.

@@ -141,6 +141,8 @@ public final class MovingOut {
 
     /** Where she goes home to: her own house at night once it stands (unless the hearth's bell calls her), else the hearth. */
     public static BlockPos homeSpot(AbstractMonsterGirl girl) {
+        BlockPos pool = CareNeeds.pool(girl);                              // a merfolk lives in the pool by the hearth
+        if (pool != null) return pool;
         BlockPos mid = middle(girl);
         if (mid != null && ownHouse(girl) && girl.hutDone() && !girl.calledHome() && !girl.level().isDay()) return mid;
         return girl.homeHearth();

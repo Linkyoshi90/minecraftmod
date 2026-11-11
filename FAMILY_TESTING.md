@@ -136,6 +136,14 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 
 The raincoat, winter coat, yukata and maid apron are now painted onto each girl's own model (`previews/wardrobe_outfits.png`), drawn as her model again with that texture, so they follow her pose. Check in a client that they don't flicker against her skin (they're drawn the same way as dyed sheep wool).
 
+## Care needs (2026-11-11)
+
+- **A pool for the merfolk**: a merfolk living at your hearth with 6+ blocks of still water within 8 of the fire treats the pool as her place at home (she waits in it, so she never dries out at home). Without one she tells you once a day (-2 friendship).
+- **Lamias feel the cold**: in a cold biome (where the wardrobe's winter coat comes out) a lamia gets Slowness II unless warmed: winter coat on, a fire, lit campfire, lava or magma within 5, or a hot spring.
+- **Harpies moult**: every 4-7 days a grown harpy with a friend (10+) gives her favourite within 32 blocks 3-6 feathers. Sparrows and gulls are left out (they already shed into their roost hopper).
+- Already in the mod, so not added: lamias shedding skin, merfolk drying out ashore, slimes (water stings them here).
+- Config `careNeeds`, journal guide "Care needs". Check in a client: does a merfolk resident actually swim to the pool at night, and does the lamia's crawl in snow feel too harsh?
+
 ## Liaison inspections (2026-11-11)
 
 Carry a **homestay permit** and own a hearth with residents: about 3 days later, and then every 7, an **inspector** from the exchange office (a named liaison villager) walks up to your hearth by day while you're within 64 blocks of it. At the fire she checks, within 16 blocks: a bed for each resident there, 8+ food in fridges/chests/barrels, nobody hurt or under half health, residents fond of you (average 40+), no monsters within 24. Two points each.
