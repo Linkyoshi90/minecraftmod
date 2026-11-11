@@ -136,6 +136,12 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 
 The raincoat, winter coat, yukata and maid apron are now painted onto each girl's own model (`previews/wardrobe_outfits.png`), drawn as her model again with that texture, so they follow her pose. Check in a client that they don't flicker against her skin (they're drawn the same way as dyed sheep wool).
 
+## Wandering merchants (2026-11-11)
+
+- One wild grown girl in 25 (not merfolk, elves or legends) comes as a **wandering merchant**: green sparkles over her, and she greets you when you come within 8. An empty hand opens a real trading screen: 4 wares of her clade (e.g. spinners: spider silk, honey, cobwebs, exoskeletons; cattle: milk, leather, hay, wool, a saddle; devils: heartfruit, weepcaps, blaze powder, nether wart; dragons: gold, a diamond, blaze rods), 6 uses each, and she buys 6 bread for an emerald. Each trade +1 friendship.
+- She never picks a fight while trading. After 2 days she vanishes down the road, unless someone is her friend (10+) or she has a name tag: then she stays as an ordinary girl.
+- While she's a merchant, an empty hand trades instead of petting (crouch-patting still works where her family has it). Config `wanderingMerchants`, guide "Wandering merchants". To try one: `/summon` doesn't make merchants (natural spawns only); look for green sparkles.
+
 ## The doppelganger (2026-11-11)
 
 - A new elf, the **Doppelganger** (`/summon monstergirls:doppelganger_elf`, or her spawn egg): dark forests, birch woods and taiga.

@@ -143,6 +143,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue LEGEND_TRIALS;
     public static final ModConfigSpec.BooleanValue SPIRIT_PACTS;
     public static final ModConfigSpec.BooleanValue HEADGEAR;
+    public static final ModConfigSpec.BooleanValue WANDERING_MERCHANTS;
     public static final ModConfigSpec.BooleanValue MONSTERIZATION;
     public static final ModConfigSpec.BooleanValue POSSESSION;
     public static final ModConfigSpec.BooleanValue REALM_SUMMONS;
@@ -219,6 +220,10 @@ public final class MonsterGirlsConfig {
         HEADGEAR = BUILDER
                 .comment("A devoted kitsune, jackalope, devil or flora friend gives you her kind's headgear once (fox mask: luck; bunny ears: monsters hunting you glow; witch hat: more experience; flower crown: bees spare you, the sun heals you).")
                 .define("headgear", true);
+
+        WANDERING_MERCHANTS = BUILDER
+                .comment("Now and then a wild girl comes as a wandering merchant with her kind's wares (an empty hand opens her trades). After two days she moves on, unless she has made a friend.")
+                .define("wanderingMerchants", true);
 
         MONSTERIZATION = BUILDER
                 .comment("Grown vanilla animals and monsters that linger on Demon Realm grass in the dark turn into monster girls of their kind (a tamed pet stays her owner's friend).")
@@ -568,6 +573,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean monsterization() {
         return SPEC.isLoaded() ? MONSTERIZATION.get() : MONSTERIZATION.getDefault();
+    }
+
+    public static boolean wanderingMerchants() {
+        return SPEC.isLoaded() ? WANDERING_MERCHANTS.get() : WANDERING_MERCHANTS.getDefault();
     }
 
     public static boolean headgear() {

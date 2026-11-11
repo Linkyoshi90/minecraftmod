@@ -886,3 +886,5 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [ ] Dev client: headgear placement on the head (never rendered yet).
 - [x] Doppelganger (2026-11-11, `doppelganger_elf`, `entity/girl/Doppelganger`): borrows the nearest copyable girl's look (wild) or her friend's dearest companion's (befriended); glass pane toggles her true face. Renderer swaps geo + texture (Elf DATA_DISGUISE), keeps her animations.
 - [ ] Dev client: doppelganger disguise rendering (bones the borrowed model lacks, tails hanging still, size).
+- [x] Wandering merchants (2026-11-11, `entity/WanderingMerchants`): 1 in 25 wild grown girls (not merfolk/elves/legends) trade their clade's wares through a real trading screen (Stall wrapper as the Merchant), 2 days, then move on unless befriended. Config wanderingMerchants.
+- [ ] Maybe: a test command to make a merchant on the spot (natural spawns only today).
