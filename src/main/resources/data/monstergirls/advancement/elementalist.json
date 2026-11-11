@@ -1,0 +1,25 @@
+{
+  "parent": "monstergirls:well_taught",
+  "display": {
+    "icon": {
+      "id": "minecraft:amethyst_shard"
+    },
+    "title": {
+      "translate": "advancement.monstergirls.elementalist"
+    },
+    "description": {
+      "translate": "advancement.monstergirls.elementalist.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "fire": {"trigger": "minecraft:impossible"},
+    "water": {"trigger": "minecraft:impossible"},
+    "wind": {"trigger": "minecraft:impossible"},
+    "earth": {"trigger": "minecraft:impossible"}
+  },
+  "requirements": [["fire"], ["water"], ["wind"], ["earth"]]
+}

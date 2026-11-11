@@ -881,3 +881,4 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [ ] Dev client: merfolk swimming home to the pool at night; lamia cold slowness feel.
 - [x] Legendary trials (2026-11-11, `entity/LegendTrials`, `item/RelicItem`, `tools/gen_relic_assets.py`): 5 legend groups (sky/sea/serpent offering, dragon strength, moon vigil), 5 working relics, advancement legend_trial, guide trials, config legendTrials.
 - [ ] Dev client: trial pushiness, legends wandering off during a vigil, relic icons in hand.
+- [x] Spirit pacts (2026-11-11, `entity/SpiritPacts`): crouch + amethyst on a devoted salamander/undine/sylph/gnome; fire blows, water regen, wind jump+speed, earth haste+resistance deep. Advancement elementalist, guide pacts, config spiritPacts. Known gap: a spirit dying while her player is offline leaves the pact standing.
