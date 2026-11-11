@@ -879,3 +879,5 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [ ] Dev client: the inspector's walk to the fire and away (villager brain WALK_TARGET).
 - [x] Care needs (2026-11-11, `entity/girl/CareNeeds`): merfolk residents live in a pool by the hearth (MovingOut.homeSpot), nag daily without one; lamias Slowness II in the cold unless warmed; non-roost harpies moult feathers for their favourite every 4-7 days. Config careNeeds, guide care.
 - [ ] Dev client: merfolk swimming home to the pool at night; lamia cold slowness feel.
+- [x] Legendary trials (2026-11-11, `entity/LegendTrials`, `item/RelicItem`, `tools/gen_relic_assets.py`): 5 legend groups (sky/sea/serpent offering, dragon strength, moon vigil), 5 working relics, advancement legend_trial, guide trials, config legendTrials.
+- [ ] Dev client: trial pushiness, legends wandering off during a vigil, relic icons in hand.

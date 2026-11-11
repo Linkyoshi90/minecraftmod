@@ -136,6 +136,21 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 
 The raincoat, winter coat, yukata and maid apron are now painted onto each girl's own model (`previews/wardrobe_outfits.png`), drawn as her model again with that texture, so they follow her pose. Check in a client that they don't flicker against her skin (they're drawn the same way as dyed sheep wool).
 
+## Legendary trials (2026-11-11)
+
+A wild legend sets anyone who comes within 8 blocks (and isn't her friend yet) a trial, for 3 days. Pass it: +40 friendship and her relic (`previews/relics.png`). Each player once per legend. Advancement Worthy, guide "Legendary trials", config `legendTrials`.
+
+| Legends | Trial | Relic |
+|---|---|---|
+| Great birds (phoenix, zhuque, yatagarasu, roc, ziz, bennu, garuda, alkonost, anzu, ratatoskr) | Hand her an offering she names: golden apple, phantom membrane or blaze rod | **Sky Plume**: carried, you drift down when falling |
+| The deep (leviathan, cetus, scylla, charybdis, kraken, kun, turtworld, black tortoise) | Offering: nautilus shell, prismarine crystals or glow ink sac | **Tide Pearl**: carried, water breathing and Dolphin's Grace in water |
+| Great serpents (xiangliu, echidna, medusa, wadjet, basilisk, jormungandr, orochi, quetzalcoatl, cipactli) | Offering: emerald, golden apple or ender pearl | **Serpent's Eye**: use on a creature you look at within 16: near-stone for 5 s (not your friends), 30 s cooldown |
+| Dragons, hounds, giants, riders, Wukong (long, bahamut, ender, cerberus, amarok, behemoth, taotie, pazuzu, the five riders, sun wukong) | Beat her in melee to half health: she yields | **Dragon Scale**: carried, Fire Resistance while burning |
+| The night's own, oracles, sacred beasts, the deathless (kaguya, norn, ophanim, bastet, ammit, nue, lilith, sphinx, lamassu, qilin, urcuchillay, ark seraphim, koschei, gashadokuro) | Vigil: stay within 24 of her through a night (8000 ticks); leaving or a short night starts over | **Moon Mirror**: carried, night vision at night; use: everything within 32 glows 10 s, 60 s cooldown |
+
+- Cerberus, amarok and bahamut are no longer in the old-customs duel (their trial replaces it).
+- Check in a client: is the trial message too pushy (it comes as soon as you're within 8)? Does a flying legend wander off during a vigil? Do the icons read well?
+
 ## Care needs (2026-11-11)
 
 - **A pool for the merfolk**: a merfolk living at your hearth with 6+ blocks of still water within 8 of the fire treats the pool as her place at home (she waits in it, so she never dries out at home). Without one she tells you once a day (-2 friendship).
@@ -157,7 +172,7 @@ Carry a **homestay permit** and own a hearth with residents: about 3 days later,
 
 Some wild kinds take to a stranger in their own way, once each, and only before they're fond of you (journal guide "Old customs", advancement "The Old Ways", config `courtship`).
 
-- **A fair duel**: lizard warriors (salamander, croc, komodo), the old bull breeds (Minoan, aurochs, bison, rhino), oni, ogres, trolls, fire and frost giants, hellhounds, cerberus, amarok, wolves, wyrms, wyverns, bahamut, valkyries, dark elves and lionesses. Hit one with a sword (not arrows) until a blow would take her below half health: she yields instead, her pack stands down too, and she respects you (+30).
+- **A fair duel**: lizard warriors (salamander, croc, komodo), the old bull breeds (Minoan, aurochs, bison, rhino), oni, ogres, trolls, fire and frost giants, hellhounds, wolves, wyrms, wyverns, valkyries, dark elves and lionesses. Hit one with a sword (not arrows) until a blow would take her below half health: she yields instead, her pack stands down too, and she respects you (+30).
 - **Her snare**: every arachne, and the tigress. One who sees you within 12 blocks now and then snares you (a web at your feet; the tigress just runs you down) and comes to claim you. Don't strike her and she claims you (+30, web cut, the tigress pins you a moment). Struck, she gives up until tomorrow.
 - **Keeping your house**: a wild kikimora, brownie or domovoi within 32 blocks of your hearth while you're home walks over and keeps it every 30 seconds: loose things into nearby chests, cobwebs down, +2. After 6 visits she stays fond of the house (+30).
 - Check in a client: how often a spider snares you (about once a minute while one is near and hasn't courted you yet; is it too often?), and whether a dueling oni's damage feels fair.

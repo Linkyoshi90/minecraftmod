@@ -140,6 +140,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue COURTSHIP;
     public static final ModConfigSpec.BooleanValue INSPECTIONS;
     public static final ModConfigSpec.BooleanValue CARE_NEEDS;
+    public static final ModConfigSpec.BooleanValue LEGEND_TRIALS;
     public static final ModConfigSpec.BooleanValue MONSTERIZATION;
     public static final ModConfigSpec.BooleanValue POSSESSION;
     public static final ModConfigSpec.BooleanValue REALM_SUMMONS;
@@ -204,6 +205,10 @@ public final class MonsterGirlsConfig {
         CARE_NEEDS = BUILDER
                 .comment("Care needs: a merfolk resident wants a pool (6+ water blocks) by her hearth and lives in it; lamias crawl in the cold unless warmed (winter coat, fire, hot spring); harpies moult every few days and give their favourite feathers.")
                 .define("careNeeds", true);
+
+        LEGEND_TRIALS = BUILDER
+                .comment("A wild legend sets a player she meets a trial (an offering, a fair duel to half health, or a night's vigil beside her); passing it wins her fondness and her relic.")
+                .define("legendTrials", true);
 
         MONSTERIZATION = BUILDER
                 .comment("Grown vanilla animals and monsters that linger on Demon Realm grass in the dark turn into monster girls of their kind (a tamed pet stays her owner's friend).")
@@ -553,6 +558,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean monsterization() {
         return SPEC.isLoaded() ? MONSTERIZATION.get() : MONSTERIZATION.getDefault();
+    }
+
+    public static boolean legendTrials() {
+        return SPEC.isLoaded() ? LEGEND_TRIALS.get() : LEGEND_TRIALS.getDefault();
     }
 
     public static boolean careNeeds() {

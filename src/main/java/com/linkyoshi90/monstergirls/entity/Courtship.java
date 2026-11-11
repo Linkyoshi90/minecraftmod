@@ -36,7 +36,7 @@ import java.util.UUID;
 /**
  * Old customs (2026-11-10, after Monster Girl Encyclopedia): some kinds take to a stranger in their own way, once each.
  * <ul>
- * <li>DUEL: a wild fighter (lizard warriors, minotaurs of the old breeds, oni and giants, hellhounds and wolves, wyrms,
+ * <li>DUEL: a wild fighter (lizard warriors, minotaurs of the old breeds, oni and giants, hellhounds and wolves, wyrms (the legends among them set a trial instead: LegendTrials),
  * valkyrie and dark elf, lioness) hit in melee by a player who isn't yet her friend never falls below half health to it:
  * the blow that would take her there makes her yield instead. She stops fighting (her pack too), stops seeing the
  * winner as prey, and respects them: REWARD friendship. Arrows don't count; it has to be face to face.</li>
@@ -65,8 +65,8 @@ public final class Courtship {
             GirlSpecies.SALAMANDER_LIZARDFOLK, GirlSpecies.CROC_LIZARDFOLK, GirlSpecies.KOMODO_LIZARDFOLK,
             GirlSpecies.MINOAN_MINOTAUR, GirlSpecies.AUROCHS_MINOTAUR, GirlSpecies.BISON_MINOTAUR, GirlSpecies.RHINO_MINOTAUR,
             GirlSpecies.ONI_DEVIL, GirlSpecies.OGRE_DEVIL, GirlSpecies.TROLL_DEVIL, GirlSpecies.FIRE_GIANT_DEVIL, GirlSpecies.FROST_GIANT_DEVIL,
-            GirlSpecies.HELLHOUND_CANID, GirlSpecies.CERBERUS_CANID, GirlSpecies.AMAROK_CANID, GirlSpecies.WOLF_CANID,
-            GirlSpecies.WYRM_DRAGON, GirlSpecies.WYVERN_DRAGON, GirlSpecies.BAHAMUT_DRAGON,
+            GirlSpecies.HELLHOUND_CANID, GirlSpecies.WOLF_CANID,
+            GirlSpecies.WYRM_DRAGON, GirlSpecies.WYVERN_DRAGON,
             GirlSpecies.VALKYRIE_ELF, GirlSpecies.DARK_ELF, GirlSpecies.LIONESS_NEKOMATA);
     private static final Set<GirlSpecies> SERVANTS = EnumSet.of(GirlSpecies.KIKIMORA_DEVIL, GirlSpecies.BROWNIE_ELF, GirlSpecies.DOMOVOI_ELF);
 

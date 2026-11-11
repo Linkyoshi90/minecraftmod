@@ -306,6 +306,12 @@ public final class ModItems {
     /** The exchange liaison's desk, and the permit she issues (entity/Liaison). */
     public static final DeferredItem<BlockItem> EXCHANGE_DESK = ITEMS.registerSimpleBlockItem(ModBlocks.EXCHANGE_DESK);
     public static final DeferredItem<Item> HOMESTAY_PERMIT = ITEMS.registerSimpleItem("homestay_permit", new Item.Properties().stacksTo(1));
+    /** The legends' relics, won in their trials (entity/LegendTrials, item/RelicItem). */
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.RelicItem> SKY_PLUME = ITEMS.registerItem("sky_plume", props -> new com.linkyoshi90.monstergirls.item.RelicItem(com.linkyoshi90.monstergirls.item.RelicItem.Relic.SKY_PLUME, props.stacksTo(1).rarity(net.minecraft.world.item.Rarity.EPIC).fireResistant()));
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.RelicItem> TIDE_PEARL = ITEMS.registerItem("tide_pearl", props -> new com.linkyoshi90.monstergirls.item.RelicItem(com.linkyoshi90.monstergirls.item.RelicItem.Relic.TIDE_PEARL, props.stacksTo(1).rarity(net.minecraft.world.item.Rarity.EPIC).fireResistant()));
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.RelicItem> SERPENT_EYE = ITEMS.registerItem("serpent_eye", props -> new com.linkyoshi90.monstergirls.item.RelicItem(com.linkyoshi90.monstergirls.item.RelicItem.Relic.SERPENT_EYE, props.stacksTo(1).rarity(net.minecraft.world.item.Rarity.EPIC).fireResistant()));
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.RelicItem> DRAGON_SCALE = ITEMS.registerItem("dragon_scale", props -> new com.linkyoshi90.monstergirls.item.RelicItem(com.linkyoshi90.monstergirls.item.RelicItem.Relic.DRAGON_SCALE, props.stacksTo(1).rarity(net.minecraft.world.item.Rarity.EPIC).fireResistant()));
+    public static final DeferredItem<com.linkyoshi90.monstergirls.item.RelicItem> MOON_MIRROR = ITEMS.registerItem("moon_mirror", props -> new com.linkyoshi90.monstergirls.item.RelicItem(com.linkyoshi90.monstergirls.item.RelicItem.Relic.MOON_MIRROR, props.stacksTo(1).rarity(net.minecraft.world.item.Rarity.EPIC).fireResistant()));
     /** Clothes for her wardrobe (entity/Wardrobe): she wears them over her own when the moment comes. */
     public static final DeferredItem<Item> RAINCOAT = ITEMS.registerSimpleItem("raincoat", new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> WINTER_COAT = ITEMS.registerSimpleItem("winter_coat", new Item.Properties().stacksTo(1));
