@@ -17,6 +17,16 @@ from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
     # fortieth wave (weather spirits): the sylph, a spirit of the wind with glassy wings, airy and quick, all pale blues and greens
+    # forty-first wave: the doppelganger, a changeling of the fey roads who wears other faces; her own is ash-violet and silver
+    "doppelganger_elf": dict(
+        build="slim", outfit=dict(top=["corset", "mantle"], bottom="wrap_skirt", extras=["bracers"], colors=dict(cloth2="#1e1a26")),
+        hair="hime", bangs="wispy", ears=None, legs="stockings", foot="shoe",
+        pal=dict(SKIN="#8a7e98", HAIR="#dcdce8", FUR="#8a7e98", LIGHT="#b8b0c8", MARK="#3a3048", EYE="#d8e0f0", CLOTH="#24202e", TRIM="#c8ccdc",
+                 extra=dict(boot="#14121a", stocking="#1e1a26", pelt="#2a2434")),
+        variants={"ash": dict(SKIN="#8a8a8e", HAIR="#3a3a40", CLOTH="#2a2a30", TRIM="#9a9aa4"),
+                  "ink": dict(SKIN="#4a4458", HAIR="#14121a", CLOTH="#0e0c14", TRIM="#7a6aa8", EYE="#a898e8"),
+                  "pearl": dict(SKIN="#d8d0e0", HAIR="#f4f4f8", CLOTH="#e8e4f0", TRIM="#a8a0c0", EYE="#7a8ab0"),
+                  "dusk": dict(SKIN="#9a7a8a", HAIR="#e8b8a8", CLOTH="#3a2434", TRIM="#e89a78", EYE="#f8d0a0")}),
     "sylph_elf": dict(
         build="slim", outfit=dict(top=["halter"], bottom="wrap_skirt", extras=["scarf"], colors=dict(cloth2="#c8ecf0", scarf="#e8fafc")),
         hair="ponytail", bangs="swept", ears="elf", legs="bare", foot="shoe", wings="fairy", wing_scale=1.7, flies=True,

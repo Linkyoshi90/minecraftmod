@@ -3863,6 +3863,21 @@ for _fid, _entries in FORTIETH.items():
         for _label, _values in _fam.get("split", []):
             _values.append(_cols.get(_label, "-"))
 
+FORTY_FIRST = {
+    "elf": [_c("doppelganger_elf", "Doppelganger", "Lonely roads at dusk", "Shifting · devoted", 1.7, ['dark_forest', 'old_growth_birch_forest', 'birch_forest', 'taiga'], "Shifting",
+               "A changeling of the fey roads: ash-violet skin, mirror-silver eyes, a dark mantle, and no face of her own she likes as much as yours.",
+               "Cake and glow berries.", ("Borrowed Face", "She takes the look of a creature near her; befriended, she wears the look of the friend you love best, and can be asked to change."),
+               "Low.", ["Mirror", "Ash", "Ink", "Pearl", "Dusk"], "Takes the look of others")],
+}
+for _fid, _entries in FORTY_FIRST.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(s["id"] == _species["id"] for s in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))
+
 MONSTERIZED = {
     "minotaur": [_c("holstaur_minotaur", "Holstaur", "The Demon Realm (a turned cow)", "Gentle · eager", 1.95, [], "Gentle",
                     "A dairy cow the Demon Realm turned: soft and full of figure, little horns and a cowbell.",

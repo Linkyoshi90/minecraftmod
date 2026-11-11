@@ -372,6 +372,11 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.timedActionTicks = ticks;
     }
 
+    /** The kind whose look she wears (the doppelganger, entity/girl/Doppelganger), or "" for her own. */
+    public String disguise() {
+        return "";
+    }
+
     public int getOutfit() {
         return this.entityData.get(DATA_OUTFIT);
     }

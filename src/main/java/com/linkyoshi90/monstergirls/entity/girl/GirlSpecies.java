@@ -231,6 +231,7 @@ public enum GirlSpecies {
     DWARF_ELF("dwarf_elf", Family.ELF, 1.45F, 28.5F, 0.6F, MobCategory.CREATURE, 0xA8482A, 0x3A3A40, "red", "black", "gold", "grey", "copper"),
     NYMPH_ELF("nymph_elf", Family.ELF, 1.7F, 28.5F, 0.6F, MobCategory.CREATURE, 0x6AA85A, 0x3A7A3A, "meadow", "river", "autumn", "blossom", "night"),
     SYLPH_ELF("sylph_elf", Family.ELF, 1.65F, 28.5F, 0.6F, MobCategory.CREATURE, 0xA8E0E8, 0x5AB0C0, "breeze", "dawn", "gale", "storm", "sky"),
+    DOPPELGANGER_ELF("doppelganger_elf", Family.ELF, 1.7F, 28.4F, 0.6F, MobCategory.CREATURE, 0x8A7E98, 0xDCDCE8, "mirror", "ash", "ink", "pearl", "dusk"),
     LIVING_DOLL_UNDEAD("living_doll_undead", Family.UNDEAD, 0.95F, 28.5F, 0.4F, MobCategory.MONSTER, 0xF8EEEA, 0xE8C870, "porcelain", "gothic", "rose", "blue", "antique", "lost", "music_box"),
     WILL_O_WISP_UNDEAD("will_o_wisp_undead", Family.UNDEAD, 1.4F, 28.4F, 0.6F, MobCategory.MONSTER, 0x4AA8F0, 0x6AC8F8, "blue", "green", "violet", "amber", "soul", "shy_ghost"),
     YUKI_ONNA_UNDEAD("yuki_onna_undead", Family.UNDEAD, 1.8F, 29.5F, 0.6F, MobCategory.MONSTER, 0xEEF4FA, 0x1A1C24, "white", "frost", "lilac", "silver", "crimson", "snow_wraith", "frozen_queen"),

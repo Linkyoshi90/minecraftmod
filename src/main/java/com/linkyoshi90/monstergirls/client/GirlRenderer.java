@@ -148,7 +148,7 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         @Override
         public void render(PoseStack poseStack, AbstractMonsterGirl girl, BakedGeoModel model, RenderType renderType, MultiBufferSource buffers,
                            VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-            if (!girl.hasFlag(AbstractMonsterGirl.FLAG_BLUSHING) || girl.isBaby() || girl.hasFlag(AbstractMonsterGirl.FLAG_MALE)) return;
+            if (!girl.hasFlag(AbstractMonsterGirl.FLAG_BLUSHING) || girl.isBaby() || girl.hasFlag(AbstractMonsterGirl.FLAG_MALE) || !girl.disguise().isEmpty()) return;
             RenderType blush = RenderType.entityTranslucent(MonsterGirlsMod.id("textures/entity/" + girl.getSpecies().id() + "_blush.png"));
             this.getRenderer().reRender(model, poseStack, buffers, girl, blush, buffers.getBuffer(blush), partialTick, packedLight, packedOverlay, -1);
         }
@@ -199,6 +199,8 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
 
         @Override
         public ResourceLocation getModelResource(AbstractMonsterGirl girl) {
+            String borrowed = girl.disguise();                              // the doppelganger wears another kind's look over her own animations
+            if (!borrowed.isEmpty()) return this.textures.computeIfAbsent("geo:" + borrowed, s -> MonsterGirlsMod.id("geo/entity/" + borrowed + ".geo.json"));
             return this.textures.computeIfAbsent("geo:" + this.modelName(girl), s -> MonsterGirlsMod.id("geo/entity/" + this.modelName(girl) + ".geo.json"));
         }
 
@@ -209,6 +211,8 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
 
         @Override
         public ResourceLocation getTextureResource(AbstractMonsterGirl girl) {
+            String borrowed = girl.disguise();
+            if (!borrowed.isEmpty()) return this.textures.computeIfAbsent("tex:" + borrowed, s -> MonsterGirlsMod.id("textures/entity/" + borrowed + ".png"));
             String name = this.modelName(girl);
             if (girl instanceof com.linkyoshi90.monstergirls.entity.girl.SlimeGirl slime && slime.hasCustomColour()) {   // a light grey copy, tinted by her colour
                 return this.textures.computeIfAbsent(name + "_tint", s -> MonsterGirlsMod.id("textures/entity/" + s + ".png"));

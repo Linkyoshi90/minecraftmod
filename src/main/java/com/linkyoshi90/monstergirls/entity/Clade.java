@@ -145,7 +145,8 @@ public enum Clade {
                  "kesaran_pasaran_flora", "dryad_flora", "shiitake_flora", "rose_flora", "lotus_flora", "sunflower_flora", "rafflesia_flora" -> FLORA;
             case "night_elf", "high_elf", "wood_elf", "blood_elf", "desert_elf", "dark_elf", "brownie_elf", "valkyrie_elf", "domovoi_elf",
                  "mad_hatter_elf", "angel_elf", "gandharva_elf", "apsara_elf", "knocker_elf", "kaguya_elf", "ophanim_elf", "norn_elf", "snow_elf",
-                 "gnome_elf", "dwarf_elf", "nymph_elf", "sylph_elf", "fairy_bug", "fairy_queen_bug", "pixi_bug", "rlff_bug", "leshy_flora" -> FAE;
+                 "gnome_elf", "dwarf_elf", "nymph_elf", "sylph_elf", "doppelganger_elf", "fairy_bug", "fairy_queen_bug", "pixi_bug", "rlff_bug",
+                 "leshy_flora" -> FAE;
             case "shedim_centaur", "long_dragon", "wyrm_dragon", "gryphon_dragon", "kannae_dragon", "wyvern_dragon", "orochi_dragon",
                  "alebrije_dragon", "cockatrice_dragon", "nenekea_dragon", "macawtl_dragon", "quetzalcoatl_dragon", "bahamut_dragon", "kun_dragon",
                  "amphiptere_dragon", "ender_dragon", "chimera_dragon" -> DRAGON;

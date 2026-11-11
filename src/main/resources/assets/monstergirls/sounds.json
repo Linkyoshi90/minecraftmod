@@ -18753,5 +18753,32 @@
         "type": "event"
       }
     ]
+  },
+  "entity.doppelganger_elf.death": {
+    "subtitle": "subtitles.monstergirls.entity.doppelganger_elf.death",
+    "sounds": [
+      {
+        "name": "minecraft:entity.player.death",
+        "type": "event"
+      }
+    ]
+  },
+  "entity.doppelganger_elf.eat": {
+    "subtitle": "subtitles.monstergirls.entity.doppelganger_elf.eat",
+    "sounds": [
+      {
+        "name": "minecraft:entity.generic.eat",
+        "type": "event"
+      }
+    ]
+  },
+  "entity.doppelganger_elf.hurt": {
+    "subtitle": "subtitles.monstergirls.entity.doppelganger_elf.hurt",
+    "sounds": [
+      {
+        "name": "minecraft:entity.player.hurt",
+        "type": "event"
+      }
+    ]
   }
 }

@@ -1027,3 +1027,11 @@ weather clears; befriend her first and she stays (`entity/girl/WeatherSpirits`, 
 | **Raiju** (canid) | The thunder beast of Japanese lore, drawn wolf-like: bright yellow fur barred black like a bolt, a great brush of a tail, jagged bangs, blue eyes. Only in a thunderstorm, on plains, savanna and meadows. Lightning never touches her; befriended, in a storm she calls a bolt down on a monster near her friend every ten seconds (8 damage, set alight; the bolt is visual only, so no fires). Colours: yellow, storm, violet, white, black. |
 | **Ame-onna** (undead) | The rain woman: long always-wet black hair, a kimono the grey of a downpour, cloud-pale skin. Only in the rain, in woods, swamps, rivers and cherry groves. Befriended, in the rain the crops within 6 blocks of her grow a stage every half minute, and a water bottle from her friend brings a five-minute shower (once a day). Colours: slate, indigo, plum, ivy, silver. |
 | **Sylph** (elf) | A spirit of the wind with glassy fairy wings and a high ponytail, all pale blues and greens; she flies. In any rain or storm, on the windswept hills and meadows. Befriended, her friend near her under the open sky has a tailwind (Speed I) and floats down (Slow Falling) instead of falling. Colours: breeze, dawn, gale, storm, sky. |
+
+## The doppelganger (2026-11-11, in the game)
+
+A shapeshifter after Monster Musume and the changelings of fey lore (`entity/girl/Doppelganger`, elf family).
+
+| Species | Design |
+|---|---|
+| **Doppelganger** (elf) | Ash-violet skin, long silver hair, mirror-silver eyes, a dark corset and mantle with mirror-silver trim, dark stockings; variants mirror, ash, ink, pearl, dusk. Dark forests, birch woods and taiga at dusk. Wild, she wears the look of the nearest girl she can copy; befriended, the look of the companion her friend is fondest of. A glass pane shows her true face (and again lets her borrow one). Only her look changes: her own size, hitbox and animations stay, and she copies only the biped families (not merfolk, centaurs, lamias, arachnes, harpies, bugs or dragons). |

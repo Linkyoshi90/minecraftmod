@@ -72,6 +72,10 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
     private boolean leader;
     private int built;
     private long warnedAt = -1000;
+    /** The doppelganger's borrowed look (a species id, "" for her own) and whether her friend asked for her true face. */
+    private static final net.minecraft.network.syncher.EntityDataAccessor<String> DATA_DISGUISE =
+            net.minecraft.network.syncher.SynchedEntityData.defineId(Elf.class, net.minecraft.network.syncher.EntityDataSerializers.STRING);
+    private boolean trueFace;
 
     public Elf(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
         super(type, level, species);
@@ -103,6 +107,29 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
         if (species == GirlSpecies.HIGH_ELF) {
             this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, p -> this.isTrespasser((Player) p)));
         }
+    }
+
+    @Override
+    protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_DISGUISE, "");
+    }
+
+    @Override
+    public String disguise() {
+        return this.entityData.get(DATA_DISGUISE);
+    }
+
+    public void setDisguise(String species) {
+        this.entityData.set(DATA_DISGUISE, species);
+    }
+
+    public boolean trueFace() {
+        return this.trueFace;
+    }
+
+    public void setTrueFace(boolean on) {
+        this.trueFace = on;
     }
 
     public static AttributeSupplier.Builder createAttributes(GirlSpecies s) {
@@ -337,6 +364,10 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
     @Nullable
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        if (this.species == GirlSpecies.DOPPELGANGER_ELF && stack.is(net.minecraft.world.item.Items.GLASS_PANE) && !this.isBaby()) {   // a mirror: her own face, or a borrowed one
+            if (this.level() instanceof ServerLevel server) return Doppelganger.askFace(server, this, player) ? InteractionResult.SUCCESS : InteractionResult.PASS;
+            return InteractionResult.SUCCESS;
+        }
         if (!stack.isEmpty() || this.isBaby() || this.species == GirlSpecies.BROWNIE_ELF) return null;   // the brownie does not trade
         if (player.isShiftKeyDown()) return this.pet(player);
         if (this.getAffection(player) < TRADE_AFFECTION || this.getTradingPlayer() != null || this.getTarget() == player) return null;
@@ -477,6 +508,7 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
         if (this.species == GirlSpecies.MAD_HATTER_ELF && this.level() instanceof net.minecraft.server.level.ServerLevel party && !this.isBaby() && this.tickCount % 100 == 0) this.teaTime(party);
         if (this.species == GirlSpecies.ANGEL_ELF && this.level() instanceof net.minecraft.server.level.ServerLevel grace && !this.isBaby() && this.tickCount % 40 == 0) this.mercy(grace);
         if (this.species == GirlSpecies.DOMOVOI_ELF && this.level() instanceof ServerLevel house && !this.isBaby()) this.keepHearth(house, this.tickCount % 40 == 0);
+        if (this.species == GirlSpecies.DOPPELGANGER_ELF && this.level() instanceof ServerLevel faces && this.tickCount % Doppelganger.SHIFT_EVERY == 41) Doppelganger.shift(faces, this);
         if (!(this.level() instanceof ServerLevel server)) return;
         if (this.species == GirlSpecies.GANDHARVA_ELF && !this.isBaby()) this.tickLute(server);
         if (this.species == GirlSpecies.KNOCKER_ELF && !this.isBaby() && this.tickCount % 200 == 0) this.knock(server);
@@ -632,6 +664,8 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
         tag.putBoolean("Leader", this.leader);
         if (this.settlement != null) tag.putLong("Settlement", this.settlement.asLong());
         tag.putInt("Built", this.built);
+        if (!this.disguise().isEmpty()) tag.putString("Disguise", this.disguise());
+        tag.putBoolean("TrueFace", this.trueFace);
         if (this.offers != null) tag.put("Offers", MerchantOffers.CODEC.encodeStart(this.registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), this.offers).getOrThrow());
     }
 
@@ -644,6 +678,8 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
         this.leader = tag.getBoolean("Leader");
         this.settlement = tag.contains("Settlement") ? BlockPos.of(tag.getLong("Settlement")) : null;
         this.built = tag.getInt("Built");
+        this.setDisguise(tag.getString("Disguise"));
+        this.trueFace = tag.getBoolean("TrueFace");
         if (tag.contains("Offers")) {
             MerchantOffers.CODEC.parse(this.registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), tag.get("Offers"))
                     .resultOrPartial(e -> {}).ifPresent(o -> this.offers = o);

@@ -136,6 +136,13 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 
 The raincoat, winter coat, yukata and maid apron are now painted onto each girl's own model (`previews/wardrobe_outfits.png`), drawn as her model again with that texture, so they follow her pose. Check in a client that they don't flicker against her skin (they're drawn the same way as dyed sheep wool).
 
+## The doppelganger (2026-11-11)
+
+- A new elf, the **Doppelganger** (`/summon monstergirls:doppelganger_elf`, or her spawn egg): dark forests, birch woods and taiga.
+- Every 30 s she shifts: wild, to the look of the nearest girl she can copy; befriended (10+), to the look of whichever companion near you you're fondest of. Use a **glass pane** on her for her true face; again to let her borrow.
+- She copies elves, devils, undead (not the hand, gaitress, souls or will-o-wisp), kitsune, nekomata, canids, jackalopes, rodents, minotaurs, lizardfolk, marsupials, slimes and flora.
+- **Never seen in a client**: the borrowed model is drawn with HER animations (the bones the two share move; a tail or wings of the borrowed kind may hang still). Check that nothing looks broken, that the swap isn't a flicker, and whether the borrowed look should keep the original's size instead of hers.
+
 ## Headgear (2026-11-11)
 
 A grown friend devoted to you (60+) within 8 blocks gives you her kind's headgear once (per player and piece, whoever gives it). Worn on the head:
