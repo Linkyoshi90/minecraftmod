@@ -136,6 +136,14 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 
 The raincoat, winter coat, yukata and maid apron are now painted onto each girl's own model (`previews/wardrobe_outfits.png`), drawn as her model again with that texture, so they follow her pose. Check in a client that they don't flicker against her skin (they're drawn the same way as dyed sheep wool).
 
+## The squad (2026-11-11)
+
+- Crouch and use a **goat horn** on a fighter friend (10+; the girls who carry weapons) to enlist her, at most 4; again to let her go.
+- **Blow the horn** (plain use): every squad member within 96 blocks stands up, runs to you and goes for the monsters within 16 of you for 2 minutes.
+- **Bodyguard**: when a mob hits you, squad members within 96 turn on it (unless told to sit).
+- **Call to arms**: when the Order brings a crusade to your hearth, squad members within 160 march home and fight the sisters there.
+- The whistle still calls every friend; the horn only the squad. Config `squad`, guide "The squad". Check in a client: do they actually keep up when you run, and do they get lost marching home from far away?
+
 ## Wandering merchants (2026-11-11)
 
 - One wild grown girl in 25 (not merfolk, elves or legends) comes as a **wandering merchant**: green sparkles over her, and she greets you when you come within 8. An empty hand opens a real trading screen: 4 wares of her clade (e.g. spinners: spider silk, honey, cobwebs, exoskeletons; cattle: milk, leather, hay, wool, a saddle; devils: heartfruit, weepcaps, blaze powder, nether wart; dragons: gold, a diamond, blaze rods), 6 uses each, and she buys 6 bread for an emerald. Each trade +1 friendship.

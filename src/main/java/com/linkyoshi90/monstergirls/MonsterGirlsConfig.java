@@ -144,6 +144,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue SPIRIT_PACTS;
     public static final ModConfigSpec.BooleanValue HEADGEAR;
     public static final ModConfigSpec.BooleanValue WANDERING_MERCHANTS;
+    public static final ModConfigSpec.BooleanValue SQUAD;
     public static final ModConfigSpec.BooleanValue MONSTERIZATION;
     public static final ModConfigSpec.BooleanValue POSSESSION;
     public static final ModConfigSpec.BooleanValue REALM_SUMMONS;
@@ -224,6 +225,10 @@ public final class MonsterGirlsConfig {
         WANDERING_MERCHANTS = BUILDER
                 .comment("Now and then a wild girl comes as a wandering merchant with her kind's wares (an empty hand opens her trades). After two days she moves on, unless she has made a friend.")
                 .define("wanderingMerchants", true);
+
+        SQUAD = BUILDER
+                .comment("Enlist up to four fighter friends with a goat horn (crouch, use it on her): a blown horn rallies them to you to fight, they turn on whatever strikes you, and they march home when the Order raids your hearth.")
+                .define("squad", true);
 
         MONSTERIZATION = BUILDER
                 .comment("Grown vanilla animals and monsters that linger on Demon Realm grass in the dark turn into monster girls of their kind (a tamed pet stays her owner's friend).")
@@ -573,6 +578,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean monsterization() {
         return SPEC.isLoaded() ? MONSTERIZATION.get() : MONSTERIZATION.getDefault();
+    }
+
+    public static boolean squad() {
+        return SPEC.isLoaded() ? SQUAD.get() : SQUAD.getDefault();
     }
 
     public static boolean wanderingMerchants() {

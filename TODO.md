@@ -888,3 +888,5 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [ ] Dev client: doppelganger disguise rendering (bones the borrowed model lacks, tails hanging still, size).
 - [x] Wandering merchants (2026-11-11, `entity/WanderingMerchants`): 1 in 25 wild grown girls (not merfolk/elves/legends) trade their clade's wares through a real trading screen (Stall wrapper as the Merchant), 2 days, then move on unless befriended. Config wanderingMerchants.
 - [ ] Maybe: a test command to make a merchant on the spot (natural spawns only today).
+- [x] The squad (2026-11-11, `entity/Squad`): goat horn enlists up to 4 fighter friends (crouch-use), rallies them (use), they defend their leader when hit and march to the hearth during an Order crusade. Config squad, guide squad.
+- [ ] Dev client: squad pathing when rallied from far away.
