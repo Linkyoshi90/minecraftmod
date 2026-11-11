@@ -136,6 +136,16 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 
 The raincoat, winter coat, yukata and maid apron are now painted onto each girl's own model (`previews/wardrobe_outfits.png`), drawn as her model again with that texture, so they follow her pose. Check in a client that they don't flicker against her skin (they're drawn the same way as dyed sheep wool).
 
+## Headgear (2026-11-11)
+
+A grown friend devoted to you (60+) within 8 blocks gives you her kind's headgear once (per player and piece, whoever gives it). Worn on the head:
+
+- **Fox Mask** (kitsune): Luck I.
+- **Bunny Ears** (jackalope): monsters within 16 that are after you glow.
+- **Witch Hat** (devil): +50% from experience orbs.
+- **Flower Crown** (flora): bees never turn on you; outdoors by day you heal half a heart every 10 s.
+- One point of armour each. Models and textures from `tools/gen_headgear_assets.py` (`previews/headgear.png` shows icons and texture sheets). **Never seen on a head in a client**: check that the mask sits at the side of the head, the ears stand up, the hat isn't buried in the hair, the crown circles the brow. Guide "Headgear", config `headgear`.
+
 ## Spirit pacts (2026-11-11)
 
 Crouch and use an **amethyst shard** on a devoted (60+) grown salamander, undine, sylph or gnome: she binds herself to you and her element goes with you everywhere (her own gifts near her are unchanged). One spirit per element; the same again ends it; her death ends it (if you're online then).

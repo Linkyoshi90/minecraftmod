@@ -44,7 +44,8 @@ public final class GuidePages {
             Map.entry("courtship", 3),
             Map.entry("care", 3),
             Map.entry("trials", 3),
-            Map.entry("pacts", 2));
+            Map.entry("pacts", 2),
+            Map.entry("headgear", 2));
     public static final Map<String, Integer> SIGNATURES = Map.ofEntries(
             Map.entry("anubis_canid", 2),
             Map.entry("cobra_lamia", 2),

@@ -28,6 +28,8 @@ public final class ModArmorMaterials {
     /** Merfolk scales: flippers. */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> MERFOLK_SCALE = register("merfolk_scale", 1, 2, 3, 1, 12, SoundEvents.ARMOR_EQUIP_TURTLE, () -> ModItems.MERFOLK_SCALE.get());
     /** Leather and feathers: the winged cap. */
+    /** Headgear friends give (entity/Headgear): a point of armour, drawn by GeckoLib (the vanilla layer is blank). */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> HEADGEAR = register("headgear", 1, 1, 1, 1, 15, SoundEvents.ARMOR_EQUIP_LEATHER, () -> net.minecraft.world.item.Items.STRING);
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> WINGED_CAP = register("winged_cap", 1, 1, 1, 1, 15, SoundEvents.ARMOR_EQUIP_ELYTRA, () -> net.minecraft.world.item.Items.FEATHER);
 
     /** Realm silver (entity/RealmSilver): iron's protection; monster girls' blows land soft on it, and a full set keeps wild ones off. */

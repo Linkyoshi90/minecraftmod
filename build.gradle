@@ -253,6 +253,7 @@ var checkServerSafe = tasks.register("checkServerSafe") {
             "com/linkyoshi90/monstergirls/MonsterGirlsMod": "MonsterGirlsClientConfig is a plain ModConfigSpec holder, safe on a server",
             "com/linkyoshi90/monstergirls/network/ModPayloads": "client classes only inside playToClient handlers, which never run on a server",
             "com/linkyoshi90/monstergirls/item/WingedCapItem\$1": "GeckoLib's render provider, created only by createGeoRenderer on the client",
+            "com/linkyoshi90/monstergirls/item/HeadgearItem\$1": "the same render provider, for the headgear friends give",
         ]
         def pattern = ~/(?:net\/minecraft\/client|com\/mojang\/blaze3d|net\/neoforged\/neoforge\/client|software\/bernie\/geckolib\/(?:renderer|model|cache\/object)|com\/linkyoshi90\/monstergirls\/client)\/[A-Za-z0-9_\/\$]+/
         def root = classesDir.get().asFile

@@ -142,6 +142,7 @@ public final class MonsterGirlsConfig {
     public static final ModConfigSpec.BooleanValue CARE_NEEDS;
     public static final ModConfigSpec.BooleanValue LEGEND_TRIALS;
     public static final ModConfigSpec.BooleanValue SPIRIT_PACTS;
+    public static final ModConfigSpec.BooleanValue HEADGEAR;
     public static final ModConfigSpec.BooleanValue MONSTERIZATION;
     public static final ModConfigSpec.BooleanValue POSSESSION;
     public static final ModConfigSpec.BooleanValue REALM_SUMMONS;
@@ -214,6 +215,10 @@ public final class MonsterGirlsConfig {
         SPIRIT_PACTS = BUILDER
                 .comment("A devoted salamander, undine, sylph or gnome given an amethyst shard (crouching) binds herself to you: her element goes with you everywhere (burning blows, healing water, light quick steps, strength deep underground).")
                 .define("spiritPacts", true);
+
+        HEADGEAR = BUILDER
+                .comment("A devoted kitsune, jackalope, devil or flora friend gives you her kind's headgear once (fox mask: luck; bunny ears: monsters hunting you glow; witch hat: more experience; flower crown: bees spare you, the sun heals you).")
+                .define("headgear", true);
 
         MONSTERIZATION = BUILDER
                 .comment("Grown vanilla animals and monsters that linger on Demon Realm grass in the dark turn into monster girls of their kind (a tamed pet stays her owner's friend).")
@@ -563,6 +568,10 @@ public final class MonsterGirlsConfig {
 
     public static boolean monsterization() {
         return SPEC.isLoaded() ? MONSTERIZATION.get() : MONSTERIZATION.getDefault();
+    }
+
+    public static boolean headgear() {
+        return SPEC.isLoaded() ? HEADGEAR.get() : HEADGEAR.getDefault();
     }
 
     public static boolean spiritPacts() {
