@@ -40,6 +40,15 @@ public final class HarmontideMod {
         com.linkyoshi90.harmontide.registry.ModComponents.COMPONENTS.register(modBus);
         com.linkyoshi90.harmontide.registry.ModMenus.MENUS.register(modBus);
         com.linkyoshi90.harmontide.item.IceCreamRecipe.SERIALIZERS.register(modBus);
+        aliasOldIds(com.linkyoshi90.harmontide.registry.ModFluids.FLUID_TYPES, com.linkyoshi90.harmontide.registry.ModFluids.FLUIDS,
+                ModBlocks.BLOCKS, ModBlockEntities.BLOCK_ENTITIES, ModEntities.ENTITY_TYPES,
+                com.linkyoshi90.harmontide.registry.ModArmorMaterials.ARMOR_MATERIALS, ModItems.ITEMS,
+                com.linkyoshi90.harmontide.registry.ModVillagers.POI_TYPES, com.linkyoshi90.harmontide.registry.ModVillagers.PROFESSIONS,
+                com.linkyoshi90.harmontide.registry.ModFeatures.FEATURES, com.linkyoshi90.harmontide.registry.ModStructures.STRUCTURE_TYPES,
+                com.linkyoshi90.harmontide.registry.ModStructures.PIECES, ModItems.TABS, ModSounds.SOUND_EVENTS,
+                com.linkyoshi90.harmontide.registry.ModParticles.PARTICLE_TYPES, com.linkyoshi90.harmontide.registry.ModAttachments.ATTACHMENT_TYPES,
+                com.linkyoshi90.harmontide.registry.ModComponents.COMPONENTS, com.linkyoshi90.harmontide.registry.ModMenus.MENUS,
+                com.linkyoshi90.harmontide.item.IceCreamRecipe.SERIALIZERS);
 
         modBus.addListener(ModEntities::registerAttributes);
         modBus.addListener(ModEntities::registerSpawnPlacements);
@@ -62,6 +71,17 @@ public final class HarmontideMod {
         for (var holder : ModGirls.TYPES.values()) {
             event.registerEntity(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.ENTITY, holder.get(),
                     (girl, ctx) -> new net.neoforged.neoforge.items.wrapper.InvWrapper(girl.ammoPouch()));
+        }
+    }
+
+    /** The mod was called "monstergirls" before; old worlds still name its girls, blocks and items monstergirls:x. */
+    public static final String OLD_MODID = "monstergirls";
+
+    private static void aliasOldIds(net.neoforged.neoforge.registries.DeferredRegister<?>... registers) {
+        for (var register : registers) {
+            for (var holder : register.getEntries()) {
+                register.addAlias(ResourceLocation.fromNamespaceAndPath(OLD_MODID, holder.getId().getPath()), holder.getId());
+            }
         }
     }
 

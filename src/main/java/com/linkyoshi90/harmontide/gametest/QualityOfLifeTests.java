@@ -264,4 +264,14 @@ public class QualityOfLifeTests {
         HarpyTestUtil.remove(player);
         helper.succeed();
     }
+    /** The mod used to be "monstergirls": worlds saved then must still find its blocks, items and girls. */
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "oldModIdStillResolves")
+    public static void oldModIdStillResolves(GameTestHelper helper) {
+        var old = (java.util.function.Function<String, net.minecraft.resources.ResourceLocation>)
+                path -> net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(HarmontideMod.OLD_MODID, path);
+        helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(old.apply("hearth")) == com.linkyoshi90.harmontide.registry.ModBlocks.HEARTH.get(), "old hearth id is lost");
+        helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.ITEM.get(old.apply("friend_whistle")) == ModItems.WHISTLE.get(), "old whistle id is lost");
+        helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.get(old.apply("horse_centaur")) == com.linkyoshi90.harmontide.registry.ModGirls.TYPES.get(GirlSpecies.HORSE_CENTAUR).get(), "old centaur id is lost");
+        helper.succeed();
+    }
 }
