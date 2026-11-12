@@ -102,7 +102,7 @@ public final class Missing {
         return (int) Math.min(1000, daysApart * 50 / startDays(affection)) + longing;
     }
 
-    /** Grown and full size: the only friends who long, cuddle and come to bed for it. */
+        /** Grown and full size: the only friends who long, cuddle and come to bed for it. */
     public static boolean canLong(Mob mob) {
         return !mob.isBaby() && mob.getBbHeight() >= Bonded.CHILDLIKE_HEIGHT && mob instanceof Bonded;
     }
