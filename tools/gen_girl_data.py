@@ -2,8 +2,8 @@
 """Writes everything the game needs for the families in tools/family_concepts.py that is pure data:
 
     src/main/java/.../entity/girl/GirlSpecies.java      the species table (ids, family, sizes, render scale, colours, variants)
-    data/monstergirls/tags/worldgen/biome/spawns_<id>.json and neoforge/biome_modifier/<id>_spawns.json
-    assets/monstergirls/models/item/<id>_spawn_egg.json
+    data/harmontide/tags/worldgen/biome/spawns_<id>.json and neoforge/biome_modifier/<id>_spawns.json
+    assets/harmontide/models/item/<id>_spawn_egg.json
     data/minecraft/tags/entity_type/powder_snow_walkable_mobs.json  (cats, foxes and hooves of the snow)
     the girl egg block assets (leathery lamia eggs, silk egg sacs, merfolk roe)
     lang entries (merged into en_us.json)
@@ -22,9 +22,9 @@ import importlib  # noqa: E402
 
 REPO = H.REPO
 RES = os.path.join(REPO, "src", "main", "resources")
-ASSETS = os.path.join(RES, "assets", "monstergirls")
-DATA = os.path.join(RES, "data", "monstergirls")
-JAVA = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "girl")
+ASSETS = os.path.join(RES, "assets", "harmontide")
+DATA = os.path.join(RES, "data", "harmontide")
+JAVA = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "harmontide", "entity", "girl")
 
 # every biome of 1.21.1: a misspelt one fails its whole spawn tag when the game loads, and she never spawns
 BIOMES = set("""badlands bamboo_jungle basalt_deltas beach birch_forest cherry_grove cold_ocean crimson_forest dark_forest deep_cold_ocean deep_dark
@@ -296,22 +296,22 @@ def main():
             lo, hi = GROUP.get(sp, grp)
             hi = min(hi, 2)                                    # chance meetings: nobody comes in a crowd
             lo = min(lo, hi)
-            dump(mod_path, {"type": "neoforge:add_spawns", "biomes": f"#monstergirls:spawns_{sp}",
-                            "spawners": {"type": f"monstergirls:{sp}", "weight": weight, "minCount": lo, "maxCount": hi}})
+            dump(mod_path, {"type": "neoforge:add_spawns", "biomes": f"#harmontide:spawns_{sp}",
+                            "spawners": {"type": f"harmontide:{sp}", "weight": weight, "minCount": lo, "maxCount": hi}})
         else:
             for stale in (tag_path, mod_path):
                 if os.path.exists(stale):
                     os.remove(stale)
         dump(os.path.join(ASSETS, "models", "item", f"{sp}_spawn_egg.json"), {"parent": "minecraft:item/template_spawn_egg"})
-        lang[f"entity.monstergirls.{sp}"] = NAME.get(sp, s["name"] + SUFFIX[fid])
-        lang[f"item.monstergirls.{sp}_spawn_egg"] = lang[f"entity.monstergirls.{sp}"] + " Spawn Egg"
-        lang[f"journal.monstergirls.{sp}.home"] = s.get("group", "")                       # her page in the Harmontide journal
+        lang[f"entity.harmontide.{sp}"] = NAME.get(sp, s["name"] + SUFFIX[fid])
+        lang[f"item.harmontide.{sp}_spawn_egg"] = lang[f"entity.harmontide.{sp}"] + " Spawn Egg"
+        lang[f"journal.harmontide.{sp}.home"] = s.get("group", "")                       # her page in the Harmontide journal
         sig = s.get("signature")
         if sig:
-            lang[f"journal.monstergirls.{sp}.signature"] = f"{sig[0]}: {sig[1]}"
+            lang[f"journal.harmontide.{sp}.signature"] = f"{sig[0]}: {sig[1]}"
         if sp in ("snow_leopard_nekomata", "lynx_nekomata", "arctic_kitsune", "reindeer_centaur", "highland_minotaur", "yak_minotaur", "tusktaur_centaur",
                   "aurorantler_centaur", "snowloper_nekomata", "yeti_canid", "caribou_centaur"):
-            snow_walkers.append("monstergirls:" + sp)
+            snow_walkers.append("harmontide:" + sp)
     dump(os.path.join(RES, "data", "minecraft", "tags", "entity_type", "powder_snow_walkable_mobs.json"), {"replace": False, "values": snow_walkers})
 
     # the Java species table
@@ -319,7 +319,7 @@ def main():
     for sp, enum, height, mh, width, c1, c2, keys, cat in rows:
         ks = ", ".join(f'"{k}"' for k in keys)
         lines.append(f'    {sp.upper()}("{sp}", Family.{enum}, {height}F, {mh}F, {width}F, MobCategory.{cat.upper()}, {c1}, {c2}, {ks})')
-    java = '''package com.linkyoshi90.monstergirls.entity.girl;
+    java = '''package com.linkyoshi90.harmontide.entity.girl;
 
 import net.minecraft.world.entity.MobCategory;
 
@@ -368,8 +368,8 @@ public enum GirlSpecies {
     }
 
     /** Where she really sits in the tree of life (entity.Clade, tools/taxonomy.py): her milk, dairy name, spawn rate and guide. Her family is her form. */
-    public com.linkyoshi90.monstergirls.entity.Clade clade() {
-        return com.linkyoshi90.monstergirls.entity.Clade.of(this.id);
+    public com.linkyoshi90.harmontide.entity.Clade clade() {
+        return com.linkyoshi90.harmontide.entity.Clade.of(this.id);
     }
 
     /** Standing height in blocks (the hitbox). */
@@ -416,44 +416,44 @@ public enum GirlSpecies {
     # girl eggs: leathery (lamia), silk egg sac (arachne), roe (merfolk)
     eggs_block()
     lang.update({
-        "block.monstergirls.girl_egg": "Clutch", "block.monstergirls.girl_egg.leathery": "Lamia Eggs",
-        "item.monstergirls.shed_skin": "Shed Skin", "item.monstergirls.exoskeleton": "Moulted Exoskeleton",
-        "bond.monstergirls.girl.wild": "keeps her distance (%s)", "bond.monstergirls.girl.curious": "is curious about you (%s)",
-        "bond.monstergirls.girl.fond": "is fond of you (%s)", "bond.monstergirls.girl.high": "is very close to you (%s)",
-        "bond.monstergirls.girl.devoted": "is devoted to you (%s)", "bond.monstergirls.girl.full": "would do anything for you (%s)",
-        "message.monstergirls.true_form": "%s has awakened her true form",
-        "message.monstergirls.swat": "%s has had enough petting for now",
-        "message.monstergirls.stash_found": "You found %s's stash. She laughs and runs circles around you",
-        "message.monstergirls.cold": "%s is too cold to move",
-        "message.monstergirls.ride_refused": "%s does not let you ride her (yet)",
-        "message.monstergirls.keening": "%s keens. Danger is close",
-        "message.monstergirls.mended": "You mend %s's wound. She won't forget it",
-        "message.monstergirls.introduced": "%s introduces you to her %s. It is yours now",
-        "message.monstergirls.armed": "%s takes the weapon. She'll use it on your enemies",
-        "message.monstergirls.disarmed": "%s hands back her weapon",
-        "journal.monstergirls.title": "Harmontide Journal",
-        "journal.monstergirls.guide.friends.title": "Making friends",
-        "journal.monstergirls.guide.friends": "Feed her what she likes and pat her with an empty hand. At 10 friendship she is your friend: her gift of a behaviour starts, and a stick gives her orders (sneak for her stance).",
-        "journal.monstergirls.guide.hearth.title": "A hearth",
-        "journal.monstergirls.guide.hearth": "A campfire ringed by eight stone bricks. Your friends roaming free within 16 blocks settle there; a day later each builds a hut nearby. With three or more, every morning they leave presents in the hearth. With three living there a hearth becomes a hamlet: it takes a name (a name tag on the hearth changes it) and flies its own banner. With six it is a village, and now and then a wandering girl of a family new to it comes and asks to stay.",
-        "journal.monstergirls.guide.expedition.title": "Expeditions",
-        "journal.monstergirls.guide.expedition": "Give a grown friend an empty map: she sets off and comes back a day later with finds of her homeland, and now and then a new friend.",
-        "journal.monstergirls.guide.weapons.title": "Weapons",
-        "journal.monstergirls.guide.weapons": "The girls who fight for you take a bow, crossbow or gun: hand it over or throw it near her, and ammunition too. Sneak with an empty hand to take it back.",
-        "journal.monstergirls.girls": "Monster girls met: %s of %s",
-        "journal.monstergirls.friends": "Befriended: %s",
-        "journal.monstergirls.others": "Other creatures met: %s",
-        "journal.monstergirls.empty": "No one yet. Go and meet someone!",
-        "journal.monstergirls.home": "Lives: %s",
-        "journal.monstergirls.met": "Met",
-        "journal.monstergirls.befriended": "Befriended",
-        "block.monstergirls.hearth": "Harmontide Hearth",
-        "message.monstergirls.hearth": "%s live here",
-        "message.monstergirls.settled": "%s settles at your hearth",
-        "message.monstergirls.expedition_set_off": "%s sets off with your map. She'll be back in a day",
-        "message.monstergirls.expedition_back": "%s is back from her expedition, and brought you something!",
-        "message.monstergirls.expedition_companion": "%s brought a friend home: %s",
-        "itemGroup.monstergirls": "Harmontide",
+        "block.harmontide.girl_egg": "Clutch", "block.harmontide.girl_egg.leathery": "Lamia Eggs",
+        "item.harmontide.shed_skin": "Shed Skin", "item.harmontide.exoskeleton": "Moulted Exoskeleton",
+        "bond.harmontide.girl.wild": "keeps her distance (%s)", "bond.harmontide.girl.curious": "is curious about you (%s)",
+        "bond.harmontide.girl.fond": "is fond of you (%s)", "bond.harmontide.girl.high": "is very close to you (%s)",
+        "bond.harmontide.girl.devoted": "is devoted to you (%s)", "bond.harmontide.girl.full": "would do anything for you (%s)",
+        "message.harmontide.true_form": "%s has awakened her true form",
+        "message.harmontide.swat": "%s has had enough petting for now",
+        "message.harmontide.stash_found": "You found %s's stash. She laughs and runs circles around you",
+        "message.harmontide.cold": "%s is too cold to move",
+        "message.harmontide.ride_refused": "%s does not let you ride her (yet)",
+        "message.harmontide.keening": "%s keens. Danger is close",
+        "message.harmontide.mended": "You mend %s's wound. She won't forget it",
+        "message.harmontide.introduced": "%s introduces you to her %s. It is yours now",
+        "message.harmontide.armed": "%s takes the weapon. She'll use it on your enemies",
+        "message.harmontide.disarmed": "%s hands back her weapon",
+        "journal.harmontide.title": "Harmontide Journal",
+        "journal.harmontide.guide.friends.title": "Making friends",
+        "journal.harmontide.guide.friends": "Feed her what she likes and pat her with an empty hand. At 10 friendship she is your friend: her gift of a behaviour starts, and a stick gives her orders (sneak for her stance).",
+        "journal.harmontide.guide.hearth.title": "A hearth",
+        "journal.harmontide.guide.hearth": "A campfire ringed by eight stone bricks. Your friends roaming free within 16 blocks settle there; a day later each builds a hut nearby. With three or more, every morning they leave presents in the hearth. With three living there a hearth becomes a hamlet: it takes a name (a name tag on the hearth changes it) and flies its own banner. With six it is a village, and now and then a wandering girl of a family new to it comes and asks to stay.",
+        "journal.harmontide.guide.expedition.title": "Expeditions",
+        "journal.harmontide.guide.expedition": "Give a grown friend an empty map: she sets off and comes back a day later with finds of her homeland, and now and then a new friend.",
+        "journal.harmontide.guide.weapons.title": "Weapons",
+        "journal.harmontide.guide.weapons": "The girls who fight for you take a bow, crossbow or gun: hand it over or throw it near her, and ammunition too. Sneak with an empty hand to take it back.",
+        "journal.harmontide.girls": "Monster girls met: %s of %s",
+        "journal.harmontide.friends": "Befriended: %s",
+        "journal.harmontide.others": "Other creatures met: %s",
+        "journal.harmontide.empty": "No one yet. Go and meet someone!",
+        "journal.harmontide.home": "Lives: %s",
+        "journal.harmontide.met": "Met",
+        "journal.harmontide.befriended": "Befriended",
+        "block.harmontide.hearth": "Harmontide Hearth",
+        "message.harmontide.hearth": "%s live here",
+        "message.harmontide.settled": "%s settles at your hearth",
+        "message.harmontide.expedition_set_off": "%s sets off with your map. She'll be back in a day",
+        "message.harmontide.expedition_back": "%s is back from her expedition, and brought you something!",
+        "message.harmontide.expedition_companion": "%s brought a friend home: %s",
+        "itemGroup.harmontide": "Harmontide",
     })
     path = os.path.join(ASSETS, "lang", "en_us.json")
     import collections
@@ -475,7 +475,7 @@ def write_water_breathers(rows):
     ids = list(WATER_BREATHERS) + [r[0] for r in rows if r[1] in ("MERFOLK", "MOLLUSK") and r[0] not in NOT_WATER_BREATHERS]
     path = os.path.join(RES, "data", "minecraft", "tags", "entity_type", "can_breathe_under_water.json")
     with open(path, "w", encoding="utf-8", newline="\n") as fh:
-        fh.write(json.dumps({"values": ["monstergirls:" + i for i in dict.fromkeys(ids)]}, indent=2) + "\n")
+        fh.write(json.dumps({"values": ["harmontide:" + i for i in dict.fromkeys(ids)]}, indent=2) + "\n")
 
 
 def eggs_block():
@@ -507,11 +507,11 @@ def eggs_block():
                 elements.append({"from": [x, 0, z], "to": [x + w, h, z + w - (1 if kind == "leathery" else 0)],
                                  "faces": {f: {"texture": "#egg"} for f in ("north", "south", "east", "west", "up", "down")}})
         dump(os.path.join(ASSETS, "models", "block", f"girl_egg_{kind}.json"),
-             {"parent": "minecraft:block/block", "textures": {"particle": f"monstergirls:block/girl_egg_{kind}", "egg": f"monstergirls:block/girl_egg_{kind}"},
+             {"parent": "minecraft:block/block", "textures": {"particle": f"harmontide:block/girl_egg_{kind}", "egg": f"harmontide:block/girl_egg_{kind}"},
               "elements": elements})
-        variants[f"kind={kind}"] = {"model": f"monstergirls:block/girl_egg_{kind}"}
+        variants[f"kind={kind}"] = {"model": f"harmontide:block/girl_egg_{kind}"}
     dump(os.path.join(ASSETS, "blockstates", "girl_egg.json"), {"variants": variants})
-    dump(os.path.join(ASSETS, "models", "item", "girl_egg.json"), {"parent": "monstergirls:block/girl_egg_leathery"})
+    dump(os.path.join(ASSETS, "models", "item", "girl_egg.json"), {"parent": "harmontide:block/girl_egg_leathery"})
     dump(os.path.join(DATA, "loot_table", "blocks", "girl_egg.json"), {"type": "minecraft:block", "pools": []})
     # shed skin / exoskeleton item textures: a pale curl of skin, a hollow amber shell
     for name, base, mark in (("shed_skin", (226, 214, 180), (176, 160, 120)), ("exoskeleton", (186, 132, 82), (120, 80, 48))):
@@ -524,7 +524,7 @@ def eggs_block():
                     c = mark if (x + y) % 3 == 0 or rnd.random() < 0.15 else base
                     rows[y][x] = c + (255,)
         H.write_png(os.path.join(ASSETS, "textures", "item", name + ".png"), rows)
-        dump(os.path.join(ASSETS, "models", "item", name + ".json"), {"parent": "minecraft:item/generated", "textures": {"layer0": f"monstergirls:item/{name}"}})
+        dump(os.path.join(ASSETS, "models", "item", name + ".json"), {"parent": "minecraft:item/generated", "textures": {"layer0": f"harmontide:item/{name}"}})
 
 
 if __name__ == "__main__":

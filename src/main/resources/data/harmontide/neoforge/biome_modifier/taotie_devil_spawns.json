@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_taotie_devil",
+  "spawners": {
+    "type": "harmontide:taotie_devil",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

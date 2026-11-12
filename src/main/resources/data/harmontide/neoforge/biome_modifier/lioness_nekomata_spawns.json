@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_lioness_nekomata",
+  "spawners": {
+    "type": "harmontide:lioness_nekomata",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

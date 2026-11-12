@@ -14,7 +14,7 @@ import sys
 from PIL import Image
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ASSETS = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls")
+ASSETS = os.path.join(REPO, "src", "main", "resources", "assets", "harmontide")
 OUTLINE = (40, 30, 40, 255)
 
 
@@ -168,7 +168,7 @@ def main():
         tex.save(os.path.join(ASSETS, "textures", "item", "armor", name + ".png"))
         ic = icon(name)
         ic.save(os.path.join(ASSETS, "textures", "item", name + ".png"))
-        dump(os.path.join(ASSETS, "models", "item", name + ".json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:item/" + name}})
+        dump(os.path.join(ASSETS, "models", "item", name + ".json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "harmontide:item/" + name}})
         icons[name] = (ic, tex)
     os.makedirs(os.path.join(ASSETS, "textures", "models", "armor"), exist_ok=True)
     Image.new("RGBA", (64, 32), (0, 0, 0, 0)).save(os.path.join(ASSETS, "textures", "models", "armor", "headgear_layer_1.png"))

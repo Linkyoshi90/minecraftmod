@@ -19,7 +19,7 @@ from gen_realm_cuisine import _img  # noqa: E402
 from gen_paints import _vanilla_rgba  # noqa: E402
 
 RES = os.path.dirname(os.path.dirname(ASSETS))
-MOD = "monstergirls"
+MOD = "harmontide"
 P = "realm"                                     # realm_planks, realm_stairs, ...
 # dark purple, by lightness: deep plum shadows to a dusky violet highlight
 RAMP = [(0x1C, 0x0C, 0x22), (0x2A, 0x12, 0x32), (0x38, 0x1A, 0x42), (0x46, 0x22, 0x52), (0x56, 0x2C, 0x64), (0x68, 0x38, 0x78), (0x7C, 0x46, 0x8E)]

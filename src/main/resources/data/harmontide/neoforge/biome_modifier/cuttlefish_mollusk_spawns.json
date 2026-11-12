@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_cuttlefish_mollusk",
+  "spawners": {
+    "type": "harmontide:cuttlefish_mollusk",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

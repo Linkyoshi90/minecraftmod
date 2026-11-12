@@ -1,0 +1,36 @@
+{
+  "parent": "harmontide:first_rescue",
+  "display": {
+    "icon": {
+      "id": "minecraft:iron_sword"
+    },
+    "title": {
+      "translate": "advancement.harmontide.old_customs"
+    },
+    "description": {
+      "translate": "advancement.harmontide.old_customs.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "duel": {
+      "trigger": "minecraft:impossible"
+    },
+    "snare": {
+      "trigger": "minecraft:impossible"
+    },
+    "service": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "duel",
+      "snare",
+      "service"
+    ]
+  ]
+}

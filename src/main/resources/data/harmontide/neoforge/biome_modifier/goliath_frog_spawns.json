@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_goliath_frog",
+  "spawners": {
+    "type": "harmontide:goliath_frog",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_opossum_marsupial",
+  "spawners": {
+    "type": "harmontide:opossum_marsupial",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

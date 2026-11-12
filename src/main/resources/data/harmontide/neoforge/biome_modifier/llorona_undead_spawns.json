@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_llorona_undead",
+  "spawners": {
+    "type": "harmontide:llorona_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

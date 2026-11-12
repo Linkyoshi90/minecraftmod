@@ -1,0 +1,280 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "cheeses": "1|2|3|4"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_wheel_1",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "cheeses": "2|3|4"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_wheel_2",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "cheeses": "3|4"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_wheel_3",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "cheeses": "4"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_wheel_4",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "pull_hard": "true"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_button_red",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "pull_hard": "false"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_button_green",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "cheeses": "1|2|3|4"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_wheel_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "cheeses": "2|3|4"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_wheel_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "cheeses": "3|4"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_wheel_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "cheeses": "4"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_wheel_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "pull_hard": "true"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_button_red",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "pull_hard": "false"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_button_green",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "cheeses": "1|2|3|4"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_wheel_1",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "cheeses": "2|3|4"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_wheel_2",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "cheeses": "3|4"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_wheel_3",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "cheeses": "4"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_wheel_4",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "pull_hard": "true"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_button_red",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "pull_hard": "false"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_button_green",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "cheeses": "1|2|3|4"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_wheel_1",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "cheeses": "2|3|4"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_wheel_2",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "cheeses": "3|4"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_wheel_3",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "cheeses": "4"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_wheel_4",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "pull_hard": "true"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_button_red",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "pull_hard": "false"
+      },
+      "apply": {
+        "model": "harmontide:block/cheese_shelf_button_green",
+        "y": 270
+      }
+    }
+  ]
+}

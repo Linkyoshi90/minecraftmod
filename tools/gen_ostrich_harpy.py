@@ -512,7 +512,7 @@ def main():
 
 def write_variants():
     """ostrich_harpy_<variant>.png next to the default texture; --lineup x.png also renders them side by side"""
-    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls", "textures", "entity")
+    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "harmontide", "textures", "entity")
     texes = {"ostrich": paint()}
     for name, v in VARIANTS.items():
         texes[name] = paint(v)

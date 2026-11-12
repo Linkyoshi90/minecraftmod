@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_softshell_turtle_lizardfolk",
+  "spawners": {
+    "type": "harmontide:softshell_turtle_lizardfolk",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_dwarf_elf",
+  "spawners": {
+    "type": "harmontide:dwarf_elf",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

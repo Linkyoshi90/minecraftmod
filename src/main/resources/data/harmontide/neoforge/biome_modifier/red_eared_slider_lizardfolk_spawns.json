@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_red_eared_slider_lizardfolk",
+  "spawners": {
+    "type": "harmontide:red_eared_slider_lizardfolk",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

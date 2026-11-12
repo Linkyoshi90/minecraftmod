@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_war_rider",
+  "spawners": {
+    "type": "harmontide:war_rider",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_red_panda_rodent",
+  "spawners": {
+    "type": "harmontide:red_panda_rodent",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

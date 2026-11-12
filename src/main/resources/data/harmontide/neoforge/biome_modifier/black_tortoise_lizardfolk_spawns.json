@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_black_tortoise_lizardfolk",
+  "spawners": {
+    "type": "harmontide:black_tortoise_lizardfolk",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

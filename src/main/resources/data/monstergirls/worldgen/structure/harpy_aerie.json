@@ -1,7 +1,0 @@
-{
-  "type": "monstergirls:harpy_aerie",
-  "biomes": "#monstergirls:has_structure/harpy_aerie",
-  "step": "surface_structures",
-  "spawn_overrides": {},
-  "terrain_adaptation": "none"
-}

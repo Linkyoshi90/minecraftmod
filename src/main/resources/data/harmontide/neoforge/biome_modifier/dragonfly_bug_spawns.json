@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_dragonfly_bug",
+  "spawners": {
+    "type": "harmontide:dragonfly_bug",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:realm_entered",
+  "display": {
+    "icon": {
+      "id": "harmontide:realm_planks"
+    },
+    "title": {
+      "translate": "advancement.harmontide.realm_manor"
+    },
+    "description": {
+      "translate": "advancement.harmontide.realm_manor.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

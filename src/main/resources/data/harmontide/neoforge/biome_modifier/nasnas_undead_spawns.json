@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_nasnas_undead",
+  "spawners": {
+    "type": "harmontide:nasnas_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

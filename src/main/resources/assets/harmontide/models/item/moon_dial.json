@@ -1,0 +1,56 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "harmontide:item/moon_dial_00"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "harmontide:phase": 0.0
+      },
+      "model": "harmontide:item/moon_dial_00"
+    },
+    {
+      "predicate": {
+        "harmontide:phase": 0.125
+      },
+      "model": "harmontide:item/moon_dial_01"
+    },
+    {
+      "predicate": {
+        "harmontide:phase": 0.25
+      },
+      "model": "harmontide:item/moon_dial_02"
+    },
+    {
+      "predicate": {
+        "harmontide:phase": 0.375
+      },
+      "model": "harmontide:item/moon_dial_03"
+    },
+    {
+      "predicate": {
+        "harmontide:phase": 0.5
+      },
+      "model": "harmontide:item/moon_dial_04"
+    },
+    {
+      "predicate": {
+        "harmontide:phase": 0.625
+      },
+      "model": "harmontide:item/moon_dial_05"
+    },
+    {
+      "predicate": {
+        "harmontide:phase": 0.75
+      },
+      "model": "harmontide:item/moon_dial_06"
+    },
+    {
+      "predicate": {
+        "harmontide:phase": 0.875
+      },
+      "model": "harmontide:item/moon_dial_07"
+    }
+  ]
+}

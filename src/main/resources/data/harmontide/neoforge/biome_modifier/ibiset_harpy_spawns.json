@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_ibiset_harpy",
+  "spawners": {
+    "type": "harmontide:ibiset_harpy",
+    "weight": 4,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

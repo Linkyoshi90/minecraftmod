@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_orca_mermaid",
+  "spawners": {
+    "type": "harmontide:orca_mermaid",
+    "weight": 4,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

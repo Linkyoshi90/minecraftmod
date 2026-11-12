@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_mothman_bug",
+  "spawners": {
+    "type": "harmontide:mothman_bug",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

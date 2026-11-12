@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:realm_changed",
+  "display": {
+    "icon": {
+      "id": "harmontide:holy_water"
+    },
+    "title": {
+      "translate": "advancement.harmontide.realm_exorcist"
+    },
+    "description": {
+      "translate": "advancement.harmontide.realm_exorcist.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "kind=firefly": {
+      "model": "harmontide:block/girl_jar_firefly"
+    },
+    "kind=fairy": {
+      "model": "harmontide:block/girl_jar_fairy"
+    }
+  }
+}

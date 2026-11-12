@@ -56,6 +56,6 @@ if __name__ == "__main__":
     Fl.declare_parts()
     H.run(NAME, paint, Fl.build_model, Fl.animations, speak="sing", head_center=(0, 23.5 + Fl.L), body_center=(0, 15.5 + Fl.L),
           face_views=[("idle", 0, 0, 0), ("sing", 0.5, 0, 0), ("stand1", 2.0, 0, 0), ("idle", 0, -40, 8)])
-    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls", "textures", "entity")
+    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "harmontide", "textures", "entity")
     for k, v in VARIANTS.items():
         H.write_png(os.path.join(tex_dir, f"{NAME}_{k}.png"), paint(v))

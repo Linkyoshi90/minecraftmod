@@ -1,0 +1,7 @@
+{
+  "type": "harmontide:wayside_inn",
+  "biomes": "#harmontide:has_structure/wayside_inn",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}

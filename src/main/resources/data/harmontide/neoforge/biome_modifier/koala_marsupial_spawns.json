@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_koala_marsupial",
+  "spawners": {
+    "type": "harmontide:koala_marsupial",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

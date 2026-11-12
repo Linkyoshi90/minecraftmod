@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:stargazer",
+  "display": {
+    "icon": {
+      "id": "harmontide:offering_box"
+    },
+    "title": {
+      "translate": "advancement.harmontide.kitsune_shrine"
+    },
+    "description": {
+      "translate": "advancement.harmontide.kitsune_shrine.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,7 +1,0 @@
-{
-  "type": "monstergirls:labyrinth",
-  "biomes": "#monstergirls:has_structure/labyrinth",
-  "step": "underground_structures",
-  "spawn_overrides": {},
-  "terrain_adaptation": "none"
-}

@@ -413,8 +413,8 @@ def anims_doc(model):
 def main():
     declare_parts()
     H.pack()
-    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls", "textures", "entity")
-    geo = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls", "geo", "entity", NAME + ".geo.json")
+    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "harmontide", "textures", "entity")
+    geo = os.path.join(H.REPO, "src", "main", "resources", "assets", "harmontide", "geo", "entity", NAME + ".geo.json")
     model = build_model().doc()
     texes = {"house": paint()}
     H.write_png(os.path.join(tex_dir, NAME + ".png"), texes["house"])

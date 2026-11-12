@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "harmontide:block/vanity_mirror",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "harmontide:block/vanity_mirror",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "harmontide:block/vanity_mirror",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "harmontide:block/vanity_mirror",
+      "y": 270
+    }
+  }
+}

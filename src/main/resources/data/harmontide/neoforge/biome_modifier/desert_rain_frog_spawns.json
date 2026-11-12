@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_desert_rain_frog",
+  "spawners": {
+    "type": "harmontide:desert_rain_frog",
+    "weight": 8,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

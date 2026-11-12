@@ -44,16 +44,16 @@ COUNTRIES = {
                "A herd of horses ran beside me for a while. I almost kept up."],
 }
 lang = {
-    "letter.monstergirls.dear": "Dear %s,",
-    "letter.monstergirls.enclosed": "I've tucked something from here into the envelope. Don't lose it!",
-    "letter.monstergirls.signed": "I miss you. Back soon,\n%s",
-    "item.monstergirls.letter": "A Letter from %s",
-    "message.monstergirls.letter": "A letter arrives from %s.",
-    "journal.monstergirls.letters": "Letters received: %s",
-    "advancement.monstergirls.pen_pal": "Pen Pal", "advancement.monstergirls.pen_pal.desc": "Receive a letter from a friend on an expedition",
+    "letter.harmontide.dear": "Dear %s,",
+    "letter.harmontide.enclosed": "I've tucked something from here into the envelope. Don't lose it!",
+    "letter.harmontide.signed": "I miss you. Back soon,\n%s",
+    "item.harmontide.letter": "A Letter from %s",
+    "message.harmontide.letter": "A letter arrives from %s.",
+    "journal.harmontide.letters": "Letters received: %s",
+    "advancement.harmontide.pen_pal": "Pen Pal", "advancement.harmontide.pen_pal.desc": "Receive a letter from a friend on an expedition",
 }
 for c, lines in COUNTRIES.items():
     for i, line in enumerate(lines):
-        lang[f"letter.monstergirls.{c}.{i}"] = line
+        lang[f"letter.harmontide.{c}.{i}"] = line
 M.add_lang(lang)
 print("letter assets written")

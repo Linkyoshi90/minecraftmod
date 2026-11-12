@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_australovenator_theropod",
+  "spawners": {
+    "type": "harmontide:australovenator_theropod",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

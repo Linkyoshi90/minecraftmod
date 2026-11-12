@@ -43,42 +43,42 @@ def geyserite():
 
 def data():
     m = os.path.join(ASSETS, "models")
-    dump(os.path.join(m, "block", "geyserite.json"), {"parent": "minecraft:block/cube_all", "textures": {"all": "monstergirls:block/geyserite"}})
-    dump(os.path.join(ASSETS, "blockstates", "geyserite.json"), {"variants": {"": {"model": "monstergirls:block/geyserite"}}})
-    dump(os.path.join(m, "item", "geyserite.json"), {"parent": "monstergirls:block/geyserite"})
+    dump(os.path.join(m, "block", "geyserite.json"), {"parent": "minecraft:block/cube_all", "textures": {"all": "harmontide:block/geyserite"}})
+    dump(os.path.join(ASSETS, "blockstates", "geyserite.json"), {"variants": {"": {"model": "harmontide:block/geyserite"}}})
+    dump(os.path.join(m, "item", "geyserite.json"), {"parent": "harmontide:block/geyserite"})
     dump(os.path.join(DATA, "loot_table", "blocks", "geyserite.json"), {"type": "minecraft:block", "pools": [{"rolls": 1, "bonus_rolls": 0,
-        "entries": [{"type": "minecraft:item", "name": "monstergirls:geyserite"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
+        "entries": [{"type": "minecraft:item", "name": "harmontide:geyserite"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
     path = os.path.join(MC_DATA, "tags", "block", "mineable", "pickaxe.json")
     old = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {"replace": False, "values": []}
-    if "monstergirls:geyserite" not in old["values"]:
-        old["values"].append("monstergirls:geyserite")
+    if "harmontide:geyserite" not in old["values"]:
+        old["values"].append("harmontide:geyserite")
     dump(path, old)
     dump(os.path.join(DATA, "recipe", "geyserite.json"), {
         "type": "minecraft:crafting_shapeless", "category": "building",
         "ingredients": [{"item": "minecraft:calcite"}, {"item": "minecraft:calcite"}, {"item": "minecraft:calcite"}, {"item": "minecraft:calcite"},
                         {"item": "minecraft:magma_block"}],
-        "result": {"id": "monstergirls:geyserite", "count": 4}})
-    dump(os.path.join(DATA, "worldgen", "configured_feature", "hot_spring.json"), {"type": "monstergirls:hot_spring", "config": {}})
-    dump(os.path.join(DATA, "worldgen", "placed_feature", "hot_spring.json"), {"feature": "monstergirls:hot_spring", "placement": [
+        "result": {"id": "harmontide:geyserite", "count": 4}})
+    dump(os.path.join(DATA, "worldgen", "configured_feature", "hot_spring.json"), {"type": "harmontide:hot_spring", "config": {}})
+    dump(os.path.join(DATA, "worldgen", "placed_feature", "hot_spring.json"), {"feature": "harmontide:hot_spring", "placement": [
         {"type": "minecraft:rarity_filter", "chance": 32}, {"type": "minecraft:in_square"},
         {"type": "minecraft:heightmap", "heightmap": "WORLD_SURFACE_WG"}, {"type": "minecraft:biome"}]})
     dump(os.path.join(DATA, "neoforge", "biome_modifier", "hot_spring.json"), {
-        "type": "neoforge:add_features", "biomes": BIOMES, "features": "monstergirls:hot_spring", "step": "lakes"})
+        "type": "neoforge:add_features", "biomes": BIOMES, "features": "harmontide:hot_spring", "step": "lakes"})
     dump(os.path.join(DATA, "advancement", "hot_spring.json"), {
-        "parent": "monstergirls:stargazer",
-        "display": {"icon": {"id": "monstergirls:geyserite"}, "title": {"translate": "advancement.monstergirls.hot_spring"},
-                    "description": {"translate": "advancement.monstergirls.hot_spring.desc"},
+        "parent": "harmontide:stargazer",
+        "display": {"icon": {"id": "harmontide:geyserite"}, "title": {"translate": "advancement.harmontide.hot_spring"},
+                    "description": {"translate": "advancement.harmontide.hot_spring.desc"},
                     "frame": "task", "show_toast": True, "announce_to_chat": True, "hidden": False},
         "criteria": {"done": {"trigger": "minecraft:impossible"}}})
     add_lang({
-        "block.monstergirls.geyserite": "Geyserite",
-        "monstergirls.configuration.hotSprings": "Hot springs",
-        "message.monstergirls.hot_spring.soaked": "A long soak in the hot spring: you feel wonderful.",
-        "advancement.monstergirls.hot_spring": "Into the Steam",
-        "advancement.monstergirls.hot_spring.desc": "Soak in a hot spring",
+        "block.harmontide.geyserite": "Geyserite",
+        "harmontide.configuration.hotSprings": "Hot springs",
+        "message.harmontide.hot_spring.soaked": "A long soak in the hot spring: you feel wonderful.",
+        "advancement.harmontide.hot_spring": "Into the Steam",
+        "advancement.harmontide.hot_spring.desc": "Soak in a hot spring",
     })
     gen_manor_assets.GUIDE_ADD.clear()
-    gen_manor_assets.GUIDE_ADD["journal.monstergirls.guide.home"] = (
+    gen_manor_assets.GUIDE_ADD["journal.harmontide.guide.home"] = (
         " Out in cold and mountain country there are hot springs: pools floored with geyserite that steam and never freeze. A soak "
         "heals and warms you (a long one leaves you well soaked), your friends come and join you, and it cures a girl's cold. Lay "
         "geyserite under a pool at home (four calcite and a magma block make four) for an onsen of your own.")

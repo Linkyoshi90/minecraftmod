@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_camel_centaur",
+  "spawners": {
+    "type": "harmontide:camel_centaur",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

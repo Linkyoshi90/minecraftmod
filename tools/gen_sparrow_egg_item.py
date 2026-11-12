@@ -12,8 +12,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from harpy_lib import write_png  # noqa: E402
 
 RES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src", "main", "resources")
-ASSETS = os.path.join(RES, "assets", "monstergirls")
-DATA = os.path.join(RES, "data", "monstergirls")
+ASSETS = os.path.join(RES, "assets", "harmontide")
+DATA = os.path.join(RES, "data", "harmontide")
 
 SHELL = (232, 226, 206)
 SHADE = (196, 188, 166)
@@ -53,17 +53,17 @@ def dump(path, data):
 def main():
     write_png(os.path.join(ASSETS, "textures", "item", "sparrow_egg.png"), texture())
     dump(os.path.join(ASSETS, "models", "item", "sparrow_egg.json"),
-         {"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:item/sparrow_egg"}})
+         {"parent": "minecraft:item/generated", "textures": {"layer0": "harmontide:item/sparrow_egg"}})
     dump(os.path.join(DATA, "recipe", "cake_from_sparrow_egg.json"), {
         "type": "minecraft:crafting_shaped", "category": "food",
         "pattern": ["AAA", "BEB", "CCC"],
         "key": {"A": {"item": "minecraft:milk_bucket"}, "B": {"item": "minecraft:sugar"},
-                "C": {"item": "minecraft:wheat"}, "E": {"item": "monstergirls:sparrow_egg"}},
+                "C": {"item": "minecraft:wheat"}, "E": {"item": "harmontide:sparrow_egg"}},
         "result": {"id": "minecraft:cake", "count": 1},
     })
     dump(os.path.join(DATA, "recipe", "pumpkin_pie_from_sparrow_egg.json"), {
         "type": "minecraft:crafting_shapeless", "category": "misc",
-        "ingredients": [{"item": "minecraft:pumpkin"}, {"item": "minecraft:sugar"}, {"item": "monstergirls:sparrow_egg"}],
+        "ingredients": [{"item": "minecraft:pumpkin"}, {"item": "minecraft:sugar"}, {"item": "harmontide:sparrow_egg"}],
         "result": {"id": "minecraft:pumpkin_pie", "count": 1},
     })
     # the common tag other mods' recipes use for "any egg" is written by gen_laid_eggs.py (all the harpy eggs)

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_rafflesia_flora",
+  "spawners": {
+    "type": "harmontide:rafflesia_flora",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

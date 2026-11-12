@@ -20,11 +20,11 @@ import sys
 from PIL import Image
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ASSETS = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls")
+ASSETS = os.path.join(REPO, "src", "main", "resources", "assets", "harmontide")
 GEO = os.path.join(ASSETS, "geo", "entity")
 TEX = os.path.join(ASSETS, "textures", "entity")
 OUT = os.path.join(TEX, "outfit")
-SPECIES = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "girl", "GirlSpecies.java")
+SPECIES = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "harmontide", "entity", "girl", "GirlSpecies.java")
 OUTFITS = ("raincoat", "winter_coat", "yukata", "maid_apron")
 SIDES = ("north", "south", "east", "west")
 

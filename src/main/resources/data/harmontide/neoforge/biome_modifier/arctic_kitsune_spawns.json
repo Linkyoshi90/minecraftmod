@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_arctic_kitsune",
+  "spawners": {
+    "type": "harmontide:arctic_kitsune",
+    "weight": 7,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

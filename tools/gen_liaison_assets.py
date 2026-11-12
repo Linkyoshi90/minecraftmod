@@ -20,8 +20,8 @@ from gen_paints import VANILLA_JARS, _vanilla_rgba  # noqa: E402
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RES = os.path.join(REPO, "src", "main", "resources")
-ASSETS = os.path.join(RES, "assets", "monstergirls")
-DATA = os.path.join(RES, "data", "monstergirls")
+ASSETS = os.path.join(RES, "assets", "harmontide")
+DATA = os.path.join(RES, "data", "harmontide")
 
 
 def dump(path, data):
@@ -106,15 +106,15 @@ def desk():
     top.save(os.path.join(tex, "exchange_desk_top.png"))
     side.save(os.path.join(tex, "exchange_desk_side.png"))
     dump(os.path.join(ASSETS, "models", "block", "exchange_desk.json"), {"parent": "minecraft:block/cube_bottom_top", "textures": {
-        "top": "monstergirls:block/exchange_desk_top", "bottom": "minecraft:block/oak_planks", "side": "monstergirls:block/exchange_desk_side"}})
-    dump(os.path.join(ASSETS, "blockstates", "exchange_desk.json"), {"variants": {"": {"model": "monstergirls:block/exchange_desk"}}})
-    dump(os.path.join(ASSETS, "models", "item", "exchange_desk.json"), {"parent": "monstergirls:block/exchange_desk"})
+        "top": "harmontide:block/exchange_desk_top", "bottom": "minecraft:block/oak_planks", "side": "harmontide:block/exchange_desk_side"}})
+    dump(os.path.join(ASSETS, "blockstates", "exchange_desk.json"), {"variants": {"": {"model": "harmontide:block/exchange_desk"}}})
+    dump(os.path.join(ASSETS, "models", "item", "exchange_desk.json"), {"parent": "harmontide:block/exchange_desk"})
     dump(os.path.join(DATA, "loot_table", "blocks", "exchange_desk.json"), {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [
-        {"type": "minecraft:item", "name": "monstergirls:exchange_desk"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
+        {"type": "minecraft:item", "name": "harmontide:exchange_desk"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
     dump(os.path.join(DATA, "recipe", "exchange_desk.json"), {"type": "minecraft:crafting_shaped", "category": "misc",
                                                                "pattern": ["PBP", "WWW", "W W"],
                                                                "key": {"P": {"item": "minecraft:paper"}, "B": {"item": "minecraft:book"}, "W": {"tag": "minecraft:planks"}},
-                                                               "result": {"id": "monstergirls:exchange_desk", "count": 1}})
+                                                               "result": {"id": "harmontide:exchange_desk", "count": 1}})
     return top, side
 
 
@@ -130,7 +130,7 @@ def permit():
     for x, y in ((8, 10), (10, 10), (7, 11), (8, 11), (9, 11), (10, 11), (11, 11), (8, 12), (9, 12), (10, 12), (9, 13)):
         px[x, y] = (216, 58, 90, 255)
     img.save(os.path.join(ASSETS, "textures", "item", "homestay_permit.png"))
-    dump(os.path.join(ASSETS, "models", "item", "homestay_permit.json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:item/homestay_permit"}})
+    dump(os.path.join(ASSETS, "models", "item", "homestay_permit.json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "harmontide:item/homestay_permit"}})
     return img
 
 

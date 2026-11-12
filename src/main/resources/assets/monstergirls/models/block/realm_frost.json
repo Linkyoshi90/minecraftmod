@@ -1,9 +1,0 @@
-{
-  "parent": "minecraft:block/cube_bottom_top",
-  "textures": {
-    "top": "monstergirls:block/realm_frost_top",
-    "bottom": "minecraft:block/dirt",
-    "side": "monstergirls:block/realm_frost_side",
-    "particle": "minecraft:block/dirt"
-  }
-}

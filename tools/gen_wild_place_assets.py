@@ -34,22 +34,22 @@ def main():
     lang = {}
     for kind, (biomes, spacing, sep, salt, step, word, name, title, desc, icon) in PLACES.items():
         dump(os.path.join(DATA, "worldgen", "structure", kind + ".json"), {
-            "type": "monstergirls:" + kind, "biomes": "#monstergirls:has_structure/" + kind,
+            "type": "harmontide:" + kind, "biomes": "#harmontide:has_structure/" + kind,
             "step": step, "spawn_overrides": {}, "terrain_adaptation": "none"})
         dump(os.path.join(DATA, "worldgen", "structure_set", kind + ".json"), {
-            "structures": [{"structure": "monstergirls:" + kind, "weight": 1}],
+            "structures": [{"structure": "harmontide:" + kind, "weight": 1}],
             "placement": {"type": "minecraft:random_spread", "spacing": spacing, "separation": sep, "salt": salt}})
         dump(os.path.join(DATA, "tags", "worldgen", "biome", "has_structure", kind + ".json"), {"values": biomes})
         dump(os.path.join(DATA, "advancement", kind + ".json"), {
-            "parent": "monstergirls:stargazer",
-            "display": {"icon": {"id": icon}, "title": {"translate": "advancement.monstergirls." + kind},
-                        "description": {"translate": "advancement.monstergirls." + kind + ".desc"},
+            "parent": "harmontide:stargazer",
+            "display": {"icon": {"id": icon}, "title": {"translate": "advancement.harmontide." + kind},
+                        "description": {"translate": "advancement.harmontide." + kind + ".desc"},
                         "frame": "task", "show_toast": True, "announce_to_chat": True, "hidden": False},
             "criteria": {"done": {"trigger": "minecraft:impossible"}}})
-        lang["advancement.monstergirls." + kind] = title
-        lang["advancement.monstergirls." + kind + ".desc"] = desc
-        lang["commands.monstergirls.locate." + word] = "The nearest " + name + " is at %s (%s blocks away)."
-        lang["commands.monstergirls.locate." + word + ".none"] = "No " + name + " within reach (only chunks generated after this update have them)."
+        lang["advancement.harmontide." + kind] = title
+        lang["advancement.harmontide." + kind + ".desc"] = desc
+        lang["commands.harmontide.locate." + word] = "The nearest " + name + " is at %s (%s blocks away)."
+        lang["commands.harmontide.locate." + word + ".none"] = "No " + name + " within reach (only chunks generated after this update have them)."
     dump(os.path.join(DATA, "loot_table", "chests", "oasis.json"), {"type": "minecraft:chest", "pools": [
         {"rolls": {"type": "minecraft:uniform", "min": 4, "max": 7}, "entries": [
             item("minecraft:gold_ingot", 6, 2, 6), item("minecraft:lapis_lazuli", 5, 3, 9), item("minecraft:emerald", 3, 1, 3),
@@ -77,15 +77,15 @@ def main():
             item("minecraft:golden_apple", 1)]}]})
     add_lang(lang)
     gen_manor_assets.GUIDE_ADD.clear()
-    gen_manor_assets.GUIDE_ADD["journal.monstergirls.guide.encounters"] = (
+    gen_manor_assets.GUIDE_ADD["journal.harmontide.guide.encounters"] = (
         " Further afield: an oasis in the desert where a sphinx keeps an old shrine (and her riddles), sky islands drifting high over "
         "the hills where a sylph lives, and in dark forests a jorogumo's silk den, its chest full of cocoons to tear open. "
-        "(/monstergirls locate oasis, island, den)")
+        "(/harmontide locate oasis, island, den)")
     gen_manor_assets.append_guides()
     gen_manor_assets.GUIDE_ADD.clear()
-    gen_manor_assets.GUIDE_ADD["journal.monstergirls.guide.encounters"] = (
+    gen_manor_assets.GUIDE_ADD["journal.harmontide.guide.encounters"] = (
         " Up in the mountains a dragon sleeps in her lair on a glittering hoard; out on the plains a centaur band keeps camp round a "
-        "fire; and in an old graveyard a yurei drifts among the headstones. (/monstergirls locate lair, camp, graveyard)")
+        "fire; and in an old graveyard a yurei drifts among the headstones. (/harmontide locate lair, camp, graveyard)")
     gen_manor_assets.append_guides()
 
 

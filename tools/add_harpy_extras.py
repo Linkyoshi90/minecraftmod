@@ -12,7 +12,7 @@ import glob
 import json
 import os
 
-ROOT = os.path.join(os.path.dirname(__file__), "..", "src", "main", "resources", "assets", "monstergirls")
+ROOT = os.path.join(os.path.dirname(__file__), "..", "src", "main", "resources", "assets", "harmontide")
 MIDRIFF = [3.5, 2.75, 2.5]
 
 

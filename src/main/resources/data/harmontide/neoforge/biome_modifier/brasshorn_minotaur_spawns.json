@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_brasshorn_minotaur",
+  "spawners": {
+    "type": "harmontide:brasshorn_minotaur",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

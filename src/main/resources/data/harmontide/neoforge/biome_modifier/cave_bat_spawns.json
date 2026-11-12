@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_cave_bat",
+  "spawners": {
+    "type": "harmontide:cave_bat",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

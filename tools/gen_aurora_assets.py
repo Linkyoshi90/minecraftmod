@@ -37,22 +37,22 @@ def shard():
 
 def main():
     img = shard()
-    dump(os.path.join(ASSETS, "models", "item", "aurora_shard.json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:item/aurora_shard"}})
+    dump(os.path.join(ASSETS, "models", "item", "aurora_shard.json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "harmontide:item/aurora_shard"}})
     dump(os.path.join(DATA, "advancement", "aurora.json"), {
-        "parent": "monstergirls:stargazer",
-        "display": {"icon": {"id": "monstergirls:aurora_shard"}, "title": {"translate": "advancement.monstergirls.aurora"},
-                    "description": {"translate": "advancement.monstergirls.aurora.desc"},
+        "parent": "harmontide:stargazer",
+        "display": {"icon": {"id": "harmontide:aurora_shard"}, "title": {"translate": "advancement.harmontide.aurora"},
+                    "description": {"translate": "advancement.harmontide.aurora.desc"},
                     "frame": "goal", "show_toast": True, "announce_to_chat": True, "hidden": False},
         "criteria": {"done": {"trigger": "minecraft:impossible"}}})
     add_lang({
-        "item.monstergirls.aurora_shard": "Aurora Shard",
-        "monstergirls.configuration.auroraNights": "Aurora nights",
-        "message.monstergirls.aurora.begin": "The sky lights up in curtains of green and violet: an aurora! Something glitters as it falls to the snow.",
-        "advancement.monstergirls.aurora": "Northern Lights",
-        "advancement.monstergirls.aurora.desc": "See an aurora over cold country",
+        "item.harmontide.aurora_shard": "Aurora Shard",
+        "harmontide.configuration.auroraNights": "Aurora nights",
+        "message.harmontide.aurora.begin": "The sky lights up in curtains of green and violet: an aurora! Something glitters as it falls to the snow.",
+        "advancement.harmontide.aurora": "Northern Lights",
+        "advancement.harmontide.aurora.desc": "See an aurora over cold country",
     })
     gen_manor_assets.GUIDE_ADD.clear()
-    gen_manor_assets.GUIDE_ADD["journal.monstergirls.guide.stargazing"] = (
+    gen_manor_assets.GUIDE_ADD["journal.harmontide.guide.stargazing"] = (
         " Now and then, on a clear night in cold country, the sky fills with an aurora. A frost-touched girl or two comes out under "
         "it (and goes at dawn, unless she's made a friend), and aurora shards fall to the snow: every girl loves to be given one.")
     gen_manor_assets.append_guides()

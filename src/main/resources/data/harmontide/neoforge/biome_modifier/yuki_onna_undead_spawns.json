@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_yuki_onna_undead",
+  "spawners": {
+    "type": "harmontide:yuki_onna_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

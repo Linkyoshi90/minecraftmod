@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "harmontide:block/realm_sand"
+      },
+      {
+        "model": "harmontide:block/realm_sand",
+        "y": 90
+      },
+      {
+        "model": "harmontide:block/realm_sand",
+        "y": 180
+      },
+      {
+        "model": "harmontide:block/realm_sand",
+        "y": 270
+      }
+    ]
+  }
+}

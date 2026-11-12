@@ -150,7 +150,7 @@ VARIANTS = {
 
 
 def write_variants():
-    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls", "textures", "entity")
+    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "harmontide", "textures", "entity")
     texes = {"pink": paint()}
     for v, (pal, bib, beak) in VARIANTS.items():
         texes[v] = paint(pal, bib, beak)

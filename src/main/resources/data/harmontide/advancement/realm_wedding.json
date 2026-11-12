@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:realm_censer",
+  "display": {
+    "icon": {
+      "id": "harmontide:realm_censer"
+    },
+    "title": {
+      "translate": "advancement.harmontide.realm_wedding"
+    },
+    "description": {
+      "translate": "advancement.harmontide.realm_wedding.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

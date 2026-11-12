@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_giraffe_centaur",
+  "spawners": {
+    "type": "harmontide:giraffe_centaur",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

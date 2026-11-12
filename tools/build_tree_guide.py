@@ -40,7 +40,7 @@ def anchors():
 
 
 def main():
-    lang = json.load(open(os.path.join(REPO, "src/main/resources/assets/monstergirls/lang/en_us.json"), encoding="utf-8"))
+    lang = json.load(open(os.path.join(REPO, "src/main/resources/assets/harmontide/lang/en_us.json"), encoding="utf-8"))
     rows = T.species_rows()
     where = anchors()
     by = collections.OrderedDict((k, []) for k in T.FAM)
@@ -84,8 +84,8 @@ def main():
             bits.append(f"<b style=\"display:inline;margin:0 6px 0 14px\">Was</b>{E(folded.title())}")
         w('    <p class="section-intro">' + " ".join(bits) + "</p>")
         w('    <ul class="clade-list">')
-        for sp, old, pos, flag in sorted(members, key=lambda r: lang.get("entity.monstergirls." + r[0], r[0])):
-            label = E(lang.get("entity.monstergirls." + sp, sp.replace("_", " ").title()))
+        for sp, old, pos, flag in sorted(members, key=lambda r: lang.get("entity.harmontide." + r[0], r[0])):
+            label = E(lang.get("entity.harmontide." + sp, sp.replace("_", " ").title()))
             href = where.get(sp)
             href = f"{href}#{sp}" if href else FORM_GUIDE.get(old, "")
             link = f'<a href="{href}">{label}</a>' if href else label

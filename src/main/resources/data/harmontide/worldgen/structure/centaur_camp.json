@@ -1,0 +1,7 @@
+{
+  "type": "harmontide:centaur_camp",
+  "biomes": "#harmontide:has_structure/centaur_camp",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}

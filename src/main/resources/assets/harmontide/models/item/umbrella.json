@@ -1,0 +1,17 @@
+{
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "harmontide:item/umbrella_open"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "harmontide:item/umbrella_icon"
+    },
+    "ground": {
+      "parent": "harmontide:item/umbrella_icon"
+    },
+    "fixed": {
+      "parent": "harmontide:item/umbrella_icon"
+    }
+  }
+}

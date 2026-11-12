@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_tapir_centaur",
+  "spawners": {
+    "type": "harmontide:tapir_centaur",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

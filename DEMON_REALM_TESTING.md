@@ -6,14 +6,14 @@ Everything below passes the GameTests, but none of it has been seen in a real cl
 
 | Command | What it does |
 |---|---|
-| `/monstergirls locate realm` | Nearest wild realm patch, with clickable coordinates. Only finds patches in chunks generated after this update. |
-| `/locate structure monstergirls:realm_patch` | The same, the vanilla way. |
-| `/place feature monstergirls:realm_patch` | A patch right where you stand. |
-| `/monstergirls realm list` | The possessed and the realm-changed creatures within 48 blocks. |
-| `/monstergirls realm possess` | (op) Possesses the villager, wandering trader, pig, cat or chicken you look at. |
-| `/monstergirls realm turn` | (op) Changes the creature you look at into her girl form on the spot. |
-| `/monstergirls realm summon` | (op) A succubus or demon steps out of the haze at your feet. |
-| `/monstergirls realm rosemoon` | When the next rose moon rises, with a clickable `/time set` to get there. |
+| `/harmontide locate realm` | Nearest wild realm patch, with clickable coordinates. Only finds patches in chunks generated after this update. |
+| `/locate structure harmontide:realm_patch` | The same, the vanilla way. |
+| `/place feature harmontide:realm_patch` | A patch right where you stand. |
+| `/harmontide realm list` | The possessed and the realm-changed creatures within 48 blocks. |
+| `/harmontide realm possess` | (op) Possesses the villager, wandering trader, pig, cat or chicken you look at. |
+| `/harmontide realm turn` | (op) Changes the creature you look at into her girl form on the spot. |
+| `/harmontide realm summon` | (op) A succubus or demon steps out of the haze at your feet. |
+| `/harmontide realm rosemoon` | When the next rose moon rises, with a clickable `/time set` to get there. |
 | `/gamerule randomTickSpeed 60` | Fast-forwards the realm's spread, trees turning, weepcaps (set back to 3 after). |
 | `/time set 18000` | Night: possession, summons, spreading villages and the sabbath only happen in the dark. |
 
@@ -24,7 +24,7 @@ Everything below passes the GameTests, but none of it has been seen in a real cl
 - Two small dark horns on the head: right size, right place, do they follow the head as it turns and nods? (Pig, cat and chicken heads are found by their vanilla field name; if a horn layer is missing, that lookup failed.)
 - A low, changed call now and then, with haze.
 
-**Holstaur** (a cow on realm grass in the dark, or `/monstergirls realm turn` on a cow)
+**Holstaur** (a cow on realm grass in the dark, or `/harmontide realm turn` on a cow)
 - The new "plush" build: full chest, soft belly, wide hips, thick thighs. Does it read the way you wanted?
 - Glass bottle on her: three holstaur milk. Drinking it: Strength.
 
@@ -64,7 +64,7 @@ Everything below passes the GameTests, but none of it has been seen in a real cl
 
 ## Rose moon
 
-- About one night in ten (fixed by seed and day) the moon rises rose-violet: a chat line at moonrise and a rose tint to the night fog. That night monsterization runs twice as fast, and possession spreading, summons and the realm's spread four times as often. `/monstergirls realm rosemoon` names the next one and gives a click-to-go `/time set`. Is the tint pretty or too much?
+- About one night in ten (fixed by seed and day) the moon rises rose-violet: a chat line at moonrise and a rose tint to the night fog. That night monsterization runs twice as fast, and possession spreading, summons and the realm's spread four times as often. `/harmontide realm rosemoon` names the next one and gives a click-to-go `/time set`. Is the tint pretty or too much?
 
 ## Options
 
@@ -82,10 +82,10 @@ The realm's enemy. Sisters of the Order are human women on the vanilla slim play
 
 | Command | What it does |
 |---|---|
-| `/monstergirls order` | How the Order sees you (notoriety), and any crusade under way. |
-| `/monstergirls order set <0-200>` | (op) Set your notoriety: 40 = marked, 100 = a crusade comes the next night you are near your hearth (13000-19000). |
-| `/monstergirls order patrol` | (op) A patrol (two knights, an inquisitrix) sets out for the nearest realm patch, or for you. |
-| `/monstergirls order raid` | (op) A crusade sets out for your nearest hearth right now. |
+| `/harmontide order` | How the Order sees you (notoriety), and any crusade under way. |
+| `/harmontide order set <0-200>` | (op) Set your notoriety: 40 = marked, 100 = a crusade comes the next night you are near your hearth (13000-19000). |
+| `/harmontide order patrol` | (op) A patrol (two knights, an inquisitrix) sets out for the nearest realm patch, or for you. |
+| `/harmontide order raid` | (op) A crusade sets out for your nearest hearth right now. |
 
 **Look at these in a client**
 - The three skins (sister-knight in white and gold over mail, inquisitrix in a navy hood and robe, blonde captain with a sky-blue border). Do the faces read? Does iron armour on the slim model look right?
@@ -106,9 +106,9 @@ Options: `orderPatrols`, `orderRaids`. Advancements: Holy Orders, Heretic, Crisi
 
 | Command | What it does |
 |---|---|
-| `/monstergirls realm touch` | How far the realm has touched you (0-100). |
-| `/monstergirls realm touch set <n>` | (op) 25 touched, 50 kindred, 75 realm-born. |
-| `/monstergirls locate chapel` | The nearest chapel of the Order (new chunks only). |
+| `/harmontide realm touch` | How far the realm has touched you (0-100). |
+| `/harmontide realm touch set <n>` | (op) 25 touched, 50 kindred, 75 realm-born. |
+| `/harmontide locate chapel` | The nearest chapel of the Order (new chunks only). |
 
 - **Touch** grows +1 a minute in the realm's air, +4 per heartfruit you eat, +3 waking beside a devil or realm-changed girl, +5 per sister you make fall. Splash holy water breaking within 4 blocks of you: -15. Each minute near a holy font: -1. Is the pace right?
 - **Touched**: night vision in the realm's air at night, and its haze rises from you. **Kindred**: wild devils and realm-changed girls don't pick a fight with you (unless you hit them first), +0.15 bed odds with them, and the Order counts it as a tie. **Realm-born**: no hunger in its air, Strength I at its night.
@@ -125,7 +125,7 @@ Options: `realmTouched` (chapels follow `orderPatrols`). Advancements: Kindred, 
 
 ## A Lilith's manor; tithes (2026-11-08)
 
-- `/monstergirls locate manor` (or `/locate structure monstergirls:realm_manor`): dark forests only, about one per 48 chunks, new chunks only. A 13x11 hall of realm planks on polished blackstone, violet windows, a stepped roof, a purple runner to a realm-stair throne before crying obsidian, purple candles, two unlit realm censers (a heartfruit lights them), a purple bed and a chest (heartfruit, weepcaps, realm silver, amethyst, gold, rarely a censer, a realm silver sword or an enchanted book). Realm grass round its walls. Its lady is a wild grown Lilith (who spreads the realm, as wild ones do) with one or two succubi, kept within 14 blocks. Look: does the roof read well? Does the door face out? Do the girls stay home after a reload? (They should keep within 14 blocks until one befriends you; then she's free to follow.)
+- `/harmontide locate manor` (or `/locate structure harmontide:realm_manor`): dark forests only, about one per 48 chunks, new chunks only. A 13x11 hall of realm planks on polished blackstone, violet windows, a stepped roof, a purple runner to a realm-stair throne before crying obsidian, purple candles, two unlit realm censers (a heartfruit lights them), a purple bed and a chest (heartfruit, weepcaps, realm silver, amethyst, gold, rarely a censer, a realm silver sword or an enchanted book). Realm grass round its walls. Its lady is a wild grown Lilith (who spreads the realm, as wild ones do) with one or two succubi, kept within 14 blocks. Look: does the roof read well? Does the door face out? Do the girls stay home after a reload? (They should keep within 14 blocks until one befriends you; then she's free to follow.)
 - Tithe: right-click a holy font with a gold ingot: -10 notoriety per ingot; refused (gold kept) at 0. Advancements: An Audience, Indulgence.
 
 ## Hamlets, villages and passing flocks (2026-11-08)
@@ -144,7 +144,7 @@ Options: `hamlets`, `passingFlocks`. Advancements: A Name on the Map, Word Gets 
 - By day (2000-11000) she walks over to see him from up to 24 blocks; close by they look at each other, a heart now and then, and she blushes. Does this fight her other jobs (farmhand, guard) too much?
 - Three mornings within 32 blocks of each other and they're wed: a bell, a burst of hearts, and the villager gives you major positive gossip (kinder prices).
 - Wed, every 4th day (day % 4 == 0) near him, if she can conceive: a little one on the way (two at most per daughter). The baby is born devoted to you, like a daughter (never in your bed, no lucky moments, no flirting). You get a chat line when she's born (or the eggs are laid).
-- If her villager dies she grieves (chat line) and may court again later. `/monstergirls bonds` shows who's courting or wed and how many little ones.
+- If her villager dies she grieves (chat line) and may court again later. `/harmontide bonds` shows who's courting or wed and how many little ones.
 
 Option: `sweethearts`. Advancements: Sweet on Someone, Wedding Bells, Grandparent.
 
@@ -167,7 +167,7 @@ New girls: raiju (canid), ame-onna (undead), sylph (elf). Spawn eggs work any ti
 
 ## The Demon's spire (2026-11-08)
 
-- `/monstergirls locate spire` (or `/locate structure monstergirls:demon_spire`): badlands, wooded badlands, eroded badlands; about one per 56 chunks; new chunks only.
+- `/harmontide locate spire` (or `/locate structure harmontide:demon_spire`): badlands, wooded badlands, eroded badlands; about one per 56 chunks; new chunks only.
 - A 15x15 tower of polished blackstone, realm log corners, violet windows, four storeys of 7 and a battlemented roof (about 32 blocks tall). A ladder climbs the back wall (east of the middle) through every floor.
   - Hall: realm door, purple runner, candles, two succubi kept to the spire.
   - Library: bookshelves on every wall, an enchanting table, a lectern, a chest (enchanted books, XP bottles, lapis, heartfruit).
@@ -189,12 +189,12 @@ Look: is the frost turf readable as "realm" and not just snow? Is the bog too da
 ## Hot springs and harpy sky colonies (2026-11-08)
 
 - **Hot springs**: rounded pools (radius 3-4, two deep) floored with geyserite, rimmed with calcite and tuff, in meadows, groves, snowy slopes/plains/taiga, windswept hills, cherry groves, old spruce taiga, ice spikes (1 in 32 chunks, level ground only). Water over geyserite (up to 3 above) steams and never freezes. Standing in it: Regeneration, frost thawed; 60 s of soaking leaves you "well soaked" (Health Boost II, 5 min, once a day). Friends within 12 come and soak (towel and blush for close friends, as in the tub); a wild girl in the same spring warms to you. A girl's cold is cured, and nobody catches a chill in a hot spring. Build your own: 4 calcite + a magma block = 4 geyserite. Option `hotSprings`; advancement Into the Steam. Does the steam look right? Is the pool too small?
-- **Harpy aeries** (`/monstergirls locate aerie`): windswept hills/forest/gravelly hills, stony shores, jagged/stony/frozen peaks; about 1 per 36 chunks. 3-4 stone crags, each topped with a hay nest; the tallest (7-9 high) holds the matriarch and a clutch of two eggs. Kinds: gulls/albatrosses on shores, condorunes/tengu on peaks, crows/owls on windswept hills. The matriarch is named "<Kind> Matriarch". Befriend her (affection 25+) and every colony member within 48 becomes your friend. Advancement Welcome to the Flock.
+- **Harpy aeries** (`/harmontide locate aerie`): windswept hills/forest/gravelly hills, stony shores, jagged/stony/frozen peaks; about 1 per 36 chunks. 3-4 stone crags, each topped with a hay nest; the tallest (7-9 high) holds the matriarch and a clutch of two eggs. Kinds: gulls/albatrosses on shores, condorunes/tengu on peaks, crows/owls on windswept hills. The matriarch is named "<Kind> Matriarch". Befriend her (affection 25+) and every colony member within 48 becomes your friend. Advancement Welcome to the Flock.
 - **Harpy perch** (feather, hay bale, feather over two stripped spruce logs): a passing flock (every 8th day, `entity/Flocks`) within 32 blocks of a perch lands round it and stays for good, the first as matriarch. Advancement Come Home to Roost.
 
 ## Merfolk grottoes and fallen chapels (2026-11-08)
 
-- **Merfolk grotto** (`/monstergirls locate grotto`): warm, lukewarm and deep lukewarm oceans with at least ~12 blocks of water; about 1 per 40 chunks. A prismarine dome (radius 6) with dark prismarine flecks, sea lanterns, four arched doorways, a sandy floor with sea pickles, coral round its foot and fans on the inner walls, and a waterlogged chest in the middle (prismarine, nautilus shells, gold, emeralds, fish, rarely a trident, a turtle scute, an enchanted book; 1 in 5 a heart of the sea). A queen (dolphin, reeffin or koi mermaid, named "<Kind> Queen") and three of the reef's girls (seahorse, pufferfish, octopus, cuttlefish, nautilus, anemone) keep to it. Befriend the queen and her court befriends you. Advancements Under the Sea, The Queen's Court. Does the dome sit right on uneven sea floor?
+- **Merfolk grotto** (`/harmontide locate grotto`): warm, lukewarm and deep lukewarm oceans with at least ~12 blocks of water; about 1 per 40 chunks. A prismarine dome (radius 6) with dark prismarine flecks, sea lanterns, four arched doorways, a sandy floor with sea pickles, coral round its foot and fans on the inner walls, and a waterlogged chest in the middle (prismarine, nautilus shells, gold, emeralds, fish, rarely a trident, a turtle scute, an enchanted book; 1 in 5 a heart of the sea). A queen (dolphin, reeffin or koi mermaid, named "<Kind> Queen") and three of the reef's girls (seahorse, pufferfish, octopus, cuttlefish, nautilus, anemone) keep to it. Befriend the queen and her court befriends you. Advancements Under the Sea, The Queen's Court. Does the dome sit right on uneven sea floor?
 - **Fallen chapel**: at night, with at least two of the realm's own (devil family or realm-changed girls) among your friends within 16, use a heartfruit on an Order chapel's holy font. The bell tolls, an inquisitrix and a knight join the keeper, and your notoriety rises to at least 40 (marked). Make every defender kneel, fall or die before dawn or 3 minutes; stay within 48. The chapel turns: calcite to realm planks, quartz to blackstone and realm logs, glass violet, lanterns soul lanterns, candles purple, the banner purple, the font a realm censer, and realm grass round it. Lose (time, dawn, walked off) and nothing changes. The raid is kept in memory only. Advancement Sabbath at the Altar.
 
 ## Market stalls and courier girls (2026-11-08)
@@ -211,7 +211,7 @@ Look: is the frost turf readable as "realm" and not just snow? Is the bog too da
 ## Scout maps and wayside inns (2026-11-08)
 
 - **Scout maps**: a girl back from an expedition brings a filled map one time in four (a scout: one in two), with a red X over the nearest unexplored chapel, manor, spire, aerie or grotto within 50 chunks (merfolk, mollusks and crustaceans: grottoes only; devils and realm-changed girls: manors and spires). Named "Map to a ...". Advancement X Marks the Spot. Watch for a lag spike when one is drawn (it searches for structures).
-- **Wayside inn** (`/monstergirls locate inn`): plains, sunflower plains, meadows, savannas, forests, flower forests; about 1 per 44 chunks. An 11x9 oak and cobblestone common room under a pitched spruce roof: a barrel counter (one barrel holds the larder), two tables with stools, a campfire in a cobblestone hearth, two red beds, lanterns. A holstaur innkeeper keeps to it (befriended or not). Every morning one or two travelling girls of families not living nearby arrive; a day later they move on, unless one has made a friend. An emerald to the innkeeper: rabbit stew, two bread, Regeneration; one time in three a traveller's map too. Advancement A Hot Meal. Is the roof right?
+- **Wayside inn** (`/harmontide locate inn`): plains, sunflower plains, meadows, savannas, forests, flower forests; about 1 per 44 chunks. An 11x9 oak and cobblestone common room under a pitched spruce roof: a barrel counter (one barrel holds the larder), two tables with stools, a campfire in a cobblestone hearth, two red beds, lanterns. A holstaur innkeeper keeps to it (befriended or not). Every morning one or two travelling girls of families not living nearby arrive; a day later they move on, unless one has made a friend. An emerald to the innkeeper: rabbit stew, two bread, Regeneration; one time in three a traveller's map too. Advancement A Hot Meal. Is the roof right?
 
 ## Messages in bottles (2026-11-08)
 
@@ -221,21 +221,21 @@ Look: is the frost turf readable as "realm" and not just snow? Is the bog too da
 ## Couriers in flight, kitsune shrines, labyrinths (2026-11-08)
 
 - **Couriers** now take off: when one picks up a parcel she disappears in a puff of cloud (invisible, still, unhurtable where she stood) for the round trip (twice the one-way time), then lands again on the spot. She can't be picked for another parcel while she's away.
-- **Kitsune shrine** (`/monstergirls locate shrine`): cherry groves, bamboo jungles, birch and old birch forests; about 1 per 36 chunks. A gravel path under three red-terracotta torii with blackstone lintels, stone lanterns, a raised dark-oak hall with a bell, two lanterns and an offering box; a red kitsune shrine maiden keeps it until befriended. Any food in the offering box draws a fortune once a day: great blessing (15 %: Luck II 20 min, Regeneration), blessing (35 %: Luck 10 min), small blessing (35 %: Speed 5 min) or curse (15 %: Bad Luck 5 min), and a named Fortune Slip (paper). The offering box is craftable (red wool over dark oak planks and a trapdoor). Advancements Fortune Slip, Great Blessing. Does the roof read right? The hall has no overhang at the back (the chunk ends there).
-- **Labyrinth** (`/monstergirls locate labyrinth`): savannas, plains, deserts; about 1 per 48 chunks. A ring of mossy and chiseled stone at the surface over a ladder shaft 12 down into a 15x15 maze (7x7 cells, a new layout each time), stone/mossy/cracked brick walls 3 high, a few soul lanterns; at the heart a 3x3 room with a chest (gold, iron, string, saddle, golden horse armour, diamonds, golden apple, enchanted book, wheat, milk) and a Minoan minotaur guard, who attacks strangers on her ground. Advancements Into the Maze, Thread the Maze. Is it too dark? Is the ladder easy to get off at the top?
+- **Kitsune shrine** (`/harmontide locate shrine`): cherry groves, bamboo jungles, birch and old birch forests; about 1 per 36 chunks. A gravel path under three red-terracotta torii with blackstone lintels, stone lanterns, a raised dark-oak hall with a bell, two lanterns and an offering box; a red kitsune shrine maiden keeps it until befriended. Any food in the offering box draws a fortune once a day: great blessing (15 %: Luck II 20 min, Regeneration), blessing (35 %: Luck 10 min), small blessing (35 %: Speed 5 min) or curse (15 %: Bad Luck 5 min), and a named Fortune Slip (paper). The offering box is craftable (red wool over dark oak planks and a trapdoor). Advancements Fortune Slip, Great Blessing. Does the roof read right? The hall has no overhang at the back (the chunk ends there).
+- **Labyrinth** (`/harmontide locate labyrinth`): savannas, plains, deserts; about 1 per 48 chunks. A ring of mossy and chiseled stone at the surface over a ladder shaft 12 down into a 15x15 maze (7x7 cells, a new layout each time), stone/mossy/cracked brick walls 3 high, a few soul lanterns; at the heart a 3x3 room with a chest (gold, iron, string, saddle, golden horse armour, diamonds, golden apple, enchanted book, wheat, milk) and a Minoan minotaur guard, who attacks strangers on her ground. Advancements Into the Maze, Thread the Maze. Is it too dark? Is the ladder easy to get off at the top?
 
 ## Oases, sky islands, silk dens (2026-11-08)
 
 All three are small code-built places sharing one piece type (`world/OneChunkStructure`); each awards an advancement when you step into it.
-- **Oasis** (`/monstergirls locate oasis`, deserts, ~1 per 40 chunks): a pool (radius 3, 2 deep in the middle) ringed by grass, sugar cane and two or three palms (jungle logs and leaves, cocoa), and the broken sandstone pillars of a shrine with an altar chest (gold, lapis, emeralds, melon, sugar cane, clock, compass, rarely a diamond or golden apple). A sphinx keeps it: her riddles work as before (right-click, answer with the item). Advancement A Drink in the Desert.
-- **Sky island** (`/monstergirls locate island`, windswept hills/forest, meadows, cherry groves, sunflower plains; ~1 per 48 chunks): about 45 blocks above the ground, a 13-wide island of grass over a stone cone (some coal and iron ore), a birch, flowers, a woolly cloud at its edge, vines trailing from the rim, a chest (feathers, phantom membrane, fireworks, amethyst, rarely an elytra). A sylph keeps to it. Getting up is up to you. Advancement Head in the Clouds.
-- **Silk den** (`/monstergirls locate den`, dark forests, ~1 per 36 chunks): a podzol hollow ringed by six dead trees (stripped dark oak) with cobwebs strung between them high up, cobwebs underfoot, white-wool cocoon pillars, a bone block, and a chest of four silk cocoons (each holding a diamond, gold, emeralds, an ender pearl, a name tag or spider eyes) and string. A jorogumo keeps it. Advancement Into the Web.
+- **Oasis** (`/harmontide locate oasis`, deserts, ~1 per 40 chunks): a pool (radius 3, 2 deep in the middle) ringed by grass, sugar cane and two or three palms (jungle logs and leaves, cocoa), and the broken sandstone pillars of a shrine with an altar chest (gold, lapis, emeralds, melon, sugar cane, clock, compass, rarely a diamond or golden apple). A sphinx keeps it: her riddles work as before (right-click, answer with the item). Advancement A Drink in the Desert.
+- **Sky island** (`/harmontide locate island`, windswept hills/forest, meadows, cherry groves, sunflower plains; ~1 per 48 chunks): about 45 blocks above the ground, a 13-wide island of grass over a stone cone (some coal and iron ore), a birch, flowers, a woolly cloud at its edge, vines trailing from the rim, a chest (feathers, phantom membrane, fireworks, amethyst, rarely an elytra). A sylph keeps to it. Getting up is up to you. Advancement Head in the Clouds.
+- **Silk den** (`/harmontide locate den`, dark forests, ~1 per 36 chunks): a podzol hollow ringed by six dead trees (stripped dark oak) with cobwebs strung between them high up, cobwebs underfoot, white-wool cocoon pillars, a bone block, and a chest of four silk cocoons (each holding a diamond, gold, emeralds, an ender pearl, a name tag or spider eyes) and string. A jorogumo keeps it. Advancement Into the Web.
 
 ## Dragon lairs, centaur camps, graveyards (2026-11-08)
 
-- **Dragon's lair** (`/monstergirls locate lair`, windswept hills/gravelly hills, stony and jagged peaks, groves; ~1 per 48 chunks): a mound of stone, basalt and tuff (radius 7), hollow inside (radius 5), a tunnel in from the north, a smooth basalt floor scattered with gold and raw gold blocks, amethyst on the walls, and a chest of treasure (gold, raw gold, emeralds, diamonds, golden gear, rarely an enchanted golden apple). A wyvern or wyrm lives there: she takes that chest as her hoard and keeps to the lair until befriended. Advancement Here Be Dragons. Does the mound sit well on mountain slopes?
-- **Centaur camp** (`/monstergirls locate camp`, plains, sunflower plains, savannas; ~1 per 40 chunks): three wool A-frame tents, a campfire with log benches, hay bales and a chest of supplies (bread, carrots, arrows, a bow, leather, saddle, leads, golden carrots). Three horse centaurs (on the savanna: one horse, two zebras) keep to it. Advancement Round the Campfire.
-- **Old graveyard** (`/monstergirls locate graveyard`, forests, taigas, plains, dark forests; ~1 per 40 chunks): a 13x13 plot fenced in dark oak with a gate gap, eight mossy headstones over coarse-dirt mounds (some with lit candles), a gravel path, a dead tree, and a small stone crypt with a chest (bones, candles, gold nuggets, an enchanted book, a soul lantern, rarely music disc 13). A yurei and a will-o'-wisp keep to it. Advancement Here Lies...
+- **Dragon's lair** (`/harmontide locate lair`, windswept hills/gravelly hills, stony and jagged peaks, groves; ~1 per 48 chunks): a mound of stone, basalt and tuff (radius 7), hollow inside (radius 5), a tunnel in from the north, a smooth basalt floor scattered with gold and raw gold blocks, amethyst on the walls, and a chest of treasure (gold, raw gold, emeralds, diamonds, golden gear, rarely an enchanted golden apple). A wyvern or wyrm lives there: she takes that chest as her hoard and keeps to the lair until befriended. Advancement Here Be Dragons. Does the mound sit well on mountain slopes?
+- **Centaur camp** (`/harmontide locate camp`, plains, sunflower plains, savannas; ~1 per 40 chunks): three wool A-frame tents, a campfire with log benches, hay bales and a chest of supplies (bread, carrots, arrows, a bow, leather, saddle, leads, golden carrots). Three horse centaurs (on the savanna: one horse, two zebras) keep to it. Advancement Round the Campfire.
+- **Old graveyard** (`/harmontide locate graveyard`, forests, taigas, plains, dark forests; ~1 per 40 chunks): a 13x13 plot fenced in dark oak with a gate gap, eight mossy headstones over coarse-dirt mounds (some with lit candles), a gravel path, a dead tree, and a small stone crypt with a chest (bones, candles, gold nuggets, an enchanted book, a soul lantern, rarely music disc 13). A yurei and a will-o'-wisp keep to it. Advancement Here Lies...
 
 ## Races and treasure hunts (2026-11-08)
 

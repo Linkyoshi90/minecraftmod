@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_al_miraj_jackalope",
+  "spawners": {
+    "type": "harmontide:al_miraj_jackalope",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

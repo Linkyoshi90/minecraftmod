@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_mantis_shrimp_crustacean",
+  "spawners": {
+    "type": "harmontide:mantis_shrimp_crustacean",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

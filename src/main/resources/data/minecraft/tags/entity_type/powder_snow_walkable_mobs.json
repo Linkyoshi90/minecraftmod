@@ -1,16 +1,16 @@
 {
   "replace": false,
   "values": [
-    "monstergirls:snow_leopard_nekomata",
-    "monstergirls:lynx_nekomata",
-    "monstergirls:snowloper_nekomata",
-    "monstergirls:arctic_kitsune",
-    "monstergirls:reindeer_centaur",
-    "monstergirls:tusktaur_centaur",
-    "monstergirls:aurorantler_centaur",
-    "monstergirls:caribou_centaur",
-    "monstergirls:highland_minotaur",
-    "monstergirls:yak_minotaur",
-    "monstergirls:yeti_canid"
+    "harmontide:snow_leopard_nekomata",
+    "harmontide:lynx_nekomata",
+    "harmontide:snowloper_nekomata",
+    "harmontide:arctic_kitsune",
+    "harmontide:reindeer_centaur",
+    "harmontide:tusktaur_centaur",
+    "harmontide:aurorantler_centaur",
+    "harmontide:caribou_centaur",
+    "harmontide:highland_minotaur",
+    "harmontide:yak_minotaur",
+    "harmontide:yeti_canid"
   ]
 }

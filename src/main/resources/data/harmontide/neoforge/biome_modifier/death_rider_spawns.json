@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_death_rider",
+  "spawners": {
+    "type": "harmontide:death_rider",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

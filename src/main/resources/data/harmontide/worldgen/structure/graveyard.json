@@ -1,0 +1,7 @@
+{
+  "type": "harmontide:graveyard",
+  "biomes": "#harmontide:has_structure/graveyard",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_undine_slime",
+  "spawners": {
+    "type": "harmontide:undine_slime",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

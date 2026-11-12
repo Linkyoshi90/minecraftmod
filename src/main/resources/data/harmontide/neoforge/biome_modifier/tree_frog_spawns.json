@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_tree_frog",
+  "spawners": {
+    "type": "harmontide:tree_frog",
+    "weight": 10,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

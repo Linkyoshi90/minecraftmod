@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_cyclops_devil",
+  "spawners": {
+    "type": "harmontide:cyclops_devil",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

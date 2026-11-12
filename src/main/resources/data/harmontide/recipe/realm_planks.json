@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "planks",
+  "ingredients": [
+    {
+      "item": "harmontide:realm_log"
+    }
+  ],
+  "result": {
+    "id": "harmontide:realm_planks",
+    "count": 4
+  }
+}

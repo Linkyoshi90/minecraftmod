@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_tanuki_rodent",
+  "spawners": {
+    "type": "harmontide:tanuki_rodent",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

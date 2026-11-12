@@ -63,10 +63,10 @@ import harpy_lib as H  # noqa: E402
 from girl_lib import blob as G_blob  # noqa: E402
 
 REPO = H.REPO
-ENT = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls", "textures", "entity")
-PAINT_ENT = os.path.join(REPO, "src", "paints", "resources", "assets", "monstergirls", "textures", "entity")   # the optional paints jar
-GEO = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls", "geo", "entity")
-JAVA = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "girl", "GirlSpecies.java")
+ENT = os.path.join(REPO, "src", "main", "resources", "assets", "harmontide", "textures", "entity")
+PAINT_ENT = os.path.join(REPO, "src", "paints", "resources", "assets", "harmontide", "textures", "entity")   # the optional paints jar
+GEO = os.path.join(REPO, "src", "main", "resources", "assets", "harmontide", "geo", "entity")
+JAVA = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "harmontide", "entity", "girl", "GirlSpecies.java")
 HUES = {"blue": 0.58, "red": 0.0, "green": 0.33, "yellow": 0.14, "purple": 0.77}
 # the harpies and anurans (their own entity classes): the adult texture and the young ones (hatchling, tadpole, froglet)
 OTHERS = ["swan_harpy", "pelican_harpy", "duck_harpy", "hummingbird_harpy", "sparrow_harpy", "crow_harpy", "ostrich_harpy", "owl_harpy", "seagull_harpy", "albatross_harpy", "riflebird_harpy", "phoenix_harpy", "tengu_harpy", "toucan_harpy", "penguin_harpy", "vodyanoy", "zhuque_harpy", "finch_harpy", "flamingo_harpy", "coin_magpie_harpy", "trickster_raven_harpy", "rookmourn_harpy", "cassowrath_harpy", "dodobold_harpy", "peaflare_harpy", "pumpkingull_harpy", "condorune_harpy", "mirror_crane_harpy", "emberu_harpy", "ironbeak_harpy", "ibiset_harpy", "stigowl_harpy", "yatagarasu_harpy", "poultry_harpy", "landharpy_harpy", "argentowlis_harpy", "skycrow_harpy", "ibisking_harpy", "motmora_harpy", "reliquary_dove_harpy", "emu_harpy", "macaw_harpy", "roc_harpy", "ziz_harpy", "bennu_harpy", "garuda_harpy", "lechuza_harpy", "alkonost_harpy",

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_turtworld_lizardfolk",
+  "spawners": {
+    "type": "harmontide:turtworld_lizardfolk",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

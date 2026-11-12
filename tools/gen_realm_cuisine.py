@@ -65,12 +65,12 @@ def splash_holy_water():
 
 def data():
     for name in ("holstaur_milk", "heartfruit_tart"):
-        dump(os.path.join(ASSETS, "models", "item", name + ".json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:item/" + name}})
+        dump(os.path.join(ASSETS, "models", "item", name + ".json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "harmontide:item/" + name}})
     dump(os.path.join(DATA, "recipe", "heartfruit_tart.json"), {
         "type": "minecraft:crafting_shapeless", "category": "misc",
-        "ingredients": [{"item": "monstergirls:heartfruit"}, {"item": "monstergirls:heartfruit"}, {"item": "monstergirls:holstaur_milk"},
+        "ingredients": [{"item": "harmontide:heartfruit"}, {"item": "harmontide:heartfruit"}, {"item": "harmontide:holstaur_milk"},
                         {"item": "minecraft:wheat"}, {"item": "minecraft:sugar"}],
-        "result": {"id": "monstergirls:heartfruit_tart", "count": 1}})
+        "result": {"id": "harmontide:heartfruit_tart", "count": 1}})
 
 
 def main():

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "harmontide:block/realm_planks",
+    "top": "harmontide:block/realm_planks",
+    "side": "harmontide:block/realm_planks"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_crocora_lizardfolk",
+  "spawners": {
+    "type": "harmontide:crocora_lizardfolk",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

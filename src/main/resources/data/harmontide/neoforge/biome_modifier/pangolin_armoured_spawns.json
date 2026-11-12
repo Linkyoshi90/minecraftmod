@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_pangolin_armoured",
+  "spawners": {
+    "type": "harmontide:pangolin_armoured",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

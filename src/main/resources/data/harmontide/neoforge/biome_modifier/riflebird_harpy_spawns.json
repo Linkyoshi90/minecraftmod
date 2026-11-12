@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_riflebird_harpy",
+  "spawners": {
+    "type": "harmontide:riflebird_harpy",
+    "weight": 4,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

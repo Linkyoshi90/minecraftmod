@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_yeti_canid",
+  "spawners": {
+    "type": "harmontide:yeti_canid",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

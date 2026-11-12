@@ -1,7 +1,0 @@
-{
-  "type": "monstergirls:demon_spire",
-  "biomes": "#monstergirls:has_structure/demon_spire",
-  "step": "surface_structures",
-  "spawn_overrides": {},
-  "terrain_adaptation": "none"
-}

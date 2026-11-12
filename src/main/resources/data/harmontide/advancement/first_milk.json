@@ -1,0 +1,23 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "harmontide:bovid_milk"
+    },
+    "title": {
+      "translate": "advancement.harmontide.first_milk"
+    },
+    "description": {
+      "translate": "advancement.harmontide.first_milk.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

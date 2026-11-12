@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_medusa_lamia",
+  "spawners": {
+    "type": "harmontide:medusa_lamia",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

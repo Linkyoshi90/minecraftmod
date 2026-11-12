@@ -1,0 +1,7 @@
+{
+  "type": "harmontide:sky_island",
+  "biomes": "#harmontide:has_structure/sky_island",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}

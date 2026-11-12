@@ -11,14 +11,14 @@ from gen_milk_assets import add_lang  # noqa: E402
 import gen_manor_assets  # noqa: E402
 
 LANG = {
-    "message.monstergirls.upbringing.farmhand": "%s digs little furrows everywhere with her wooden hoe",
-    "message.monstergirls.upbringing.cook": "%s stirs pretend soup in her bowl and offers you a taste",
-    "message.monstergirls.upbringing.guard": "%s waves her wooden sword and vows to protect everyone",
-    "message.monstergirls.upbringing.scout": "%s follows the compass needle in circles, giggling",
-    "message.monstergirls.upbringing.enough": "%s already has plenty of those",
-    "message.monstergirls.story_time": "You read \"%s\" aloud, and %s little ones sit spellbound",
-    "message.monstergirls.story_time.untitled": "You read aloud, and %s little ones sit spellbound",
-    "message.monstergirls.upbringing.tomorrow": "%s is still busy with today's toy",
+    "message.harmontide.upbringing.farmhand": "%s digs little furrows everywhere with her wooden hoe",
+    "message.harmontide.upbringing.cook": "%s stirs pretend soup in her bowl and offers you a taste",
+    "message.harmontide.upbringing.guard": "%s waves her wooden sword and vows to protect everyone",
+    "message.harmontide.upbringing.scout": "%s follows the compass needle in circles, giggling",
+    "message.harmontide.upbringing.enough": "%s already has plenty of those",
+    "message.harmontide.story_time": "You read \"%s\" aloud, and %s little ones sit spellbound",
+    "message.harmontide.story_time.untitled": "You read aloud, and %s little ones sit spellbound",
+    "message.harmontide.upbringing.tomorrow": "%s is still busy with today's toy",
 }
 
 
@@ -26,7 +26,7 @@ def main():
     add_lang(LANG)
     gen_manor_assets.GUIDE_ADD.clear()
     # the toys sentence (" Toys tip the scales, one a day: ...") went in first, then story time after it; append_guides only checks the end
-    gen_manor_assets.GUIDE_ADD["journal.monstergirls.guide.roles"] = " Show a little one a written book to read it to all the little ones near."
+    gen_manor_assets.GUIDE_ADD["journal.harmontide.guide.roles"] = " Show a little one a written book to read it to all the little ones near."
     gen_manor_assets.append_guides()
 
 

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_soul_leech_undead",
+  "spawners": {
+    "type": "harmontide:soul_leech_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

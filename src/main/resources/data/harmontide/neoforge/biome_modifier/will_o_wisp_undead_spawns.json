@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_will_o_wisp_undead",
+  "spawners": {
+    "type": "harmontide:will_o_wisp_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

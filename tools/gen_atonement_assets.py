@@ -13,10 +13,10 @@ from gen_milk_assets import add_lang  # noqa: E402
 import split_guides  # noqa: E402
 
 LANG = {
-    "message.monstergirls.heart_still_heavy": "%s weighs your heart again. Still heavy: %s more good deeds to go",
-    "message.monstergirls.heart_atoned": "%s weighs your heart again. It is lighter than the feather now: she lowers her spear and lets you pass",
-    "message.monstergirls.atonement.cured": "A villager cured: your heart feels a little lighter",
-    "message.monstergirls.atonement.golem": "A golem built to guard others: your heart feels a little lighter",
+    "message.harmontide.heart_still_heavy": "%s weighs your heart again. Still heavy: %s more good deeds to go",
+    "message.harmontide.heart_atoned": "%s weighs your heart again. It is lighter than the feather now: she lowers her spear and lets you pass",
+    "message.harmontide.atonement.cured": "A villager cured: your heart feels a little lighter",
+    "message.harmontide.atonement.golem": "A golem built to guard others: your heart feels a little lighter",
 }
 SIGNATURE = ("The weighing: She weighs every player who comes near. Anyone who killed villagers or iron golems is condemned and hunted. "
              "Others may open the tomb chests she guards. Each villager you cure and each iron golem you build lightens a heavy heart by one; "
@@ -28,7 +28,7 @@ def main():
     path = os.path.join(ASSETS, "lang", "en_us.json")
     with open(path, encoding="utf-8") as fh:
         text = fh.read()
-    key = "journal.monstergirls.anubis_canid.signature"
+    key = "journal.harmontide.anubis_canid.signature"
     old = json.loads(text)[key]
     if old != SIGNATURE:
         a = json.dumps(key) + ": " + json.dumps(old, ensure_ascii=False)

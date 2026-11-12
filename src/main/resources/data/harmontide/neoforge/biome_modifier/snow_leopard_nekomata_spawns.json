@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_snow_leopard_nekomata",
+  "spawners": {
+    "type": "harmontide:snow_leopard_nekomata",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

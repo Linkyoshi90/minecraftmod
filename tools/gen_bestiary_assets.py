@@ -15,13 +15,13 @@ import gen_rarity_assets as R  # noqa: E402  (writes its own files again, harmle
 R.advancement("naturalist", "minecraft:spyglass", "goal", ["done"])
 
 M.add_lang({
-    "journal.monstergirls.glimpsed": "Only glimpsed so far. Watch her kind a while to learn more.",
-    "journal.monstergirls.watch_more": "Watched %s of %s times. Keep watching, or make a friend of one, to learn her ways.",
-    "journal.monstergirls.studied": "Fully studied: %s of %s",
-    "message.monstergirls.studied": "Your journal page on the %s is complete",
-    "journal.monstergirls.guide.bestiary.title": "Watching",
-    "journal.monstergirls.guide.bestiary": "A kind you have only glimpsed gets just her name here. Watch her kind a while and her home and her moment "
+    "journal.harmontide.glimpsed": "Only glimpsed so far. Watch her kind a while to learn more.",
+    "journal.harmontide.watch_more": "Watched %s of %s times. Keep watching, or make a friend of one, to learn her ways.",
+    "journal.harmontide.studied": "Fully studied: %s of %s",
+    "message.harmontide.studied": "Your journal page on the %s is complete",
+    "journal.harmontide.guide.bestiary.title": "Watching",
+    "journal.harmontide.guide.bestiary": "A kind you have only glimpsed gets just her name here. Watch her kind a while and her home and her moment "
                                            "fill in; watch longer, or befriend one, and you learn her ways. Fully study 25 kinds to be a naturalist.",
-    "advancement.monstergirls.naturalist": "Naturalist", "advancement.monstergirls.naturalist.desc": "Fully study 25 kinds in your journal",
+    "advancement.harmontide.naturalist": "Naturalist", "advancement.harmontide.naturalist.desc": "Fully study 25 kinds in your journal",
 })
 print("bestiary assets written")

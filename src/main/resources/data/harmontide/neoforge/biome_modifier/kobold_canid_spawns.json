@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_kobold_canid",
+  "spawners": {
+    "type": "harmontide:kobold_canid",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

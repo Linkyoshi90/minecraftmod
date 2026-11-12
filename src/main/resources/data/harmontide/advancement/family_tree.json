@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:first_child",
+  "display": {
+    "icon": {
+      "id": "minecraft:oak_sapling"
+    },
+    "title": {
+      "translate": "advancement.harmontide.family_tree"
+    },
+    "description": {
+      "translate": "advancement.harmontide.family_tree.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_manticore_nekomata",
+  "spawners": {
+    "type": "harmontide:manticore_nekomata",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

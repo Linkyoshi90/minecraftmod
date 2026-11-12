@@ -41,7 +41,7 @@ geo file has to move or be regenerated**.
 |---|---|
 | `FamilyMilk.of` and the milk buckets | `ModGirls.create / attributes / familyRule` (entity class, spawn rules) |
 | Dairy names: cheese, butter, ice cream (`DairyItem.familyName`) | `GirlRenderer` (centaur armour layer, twin tails, slime translucency) |
-| `MonsterGirlsConfig` family spawn rates | `SleepGoal`, `Company.TIMID`, `Colds.HARDY`, `Foraging`, `GreenThumb`, `GirlArms`, `Teamwork` |
+| `HarmontideConfig` family spawn rates | `SleepGoal`, `Company.TIMID`, `Colds.HARDY`, `Foraging`, `GreenThumb`, `GirlArms`, `Teamwork` |
 | Field guides and `MOBS_BY_DATE.md` labels | `Settlement`, `HomeLife`, `Rivalries.HUNTS`, `Market` sea-family checks |
 | Jade / `BondInfo` family line, `Scouting` name | `Kinship` defaults (vanilla kin follow the body: cats for cat-shaped girls) |
 | `Expeditions` "kin" list (sisters of her own clade) | `Letters.country`, `Stories`, `Treats`, `Favours` (her home region follows her form) |
@@ -147,12 +147,12 @@ add species later. Candidates: a sloth or tamandua, a warthog or babirusa, a wom
   chests, tanks and fridges survive. One successor each: the clade that kept most of the old family (kitsune and canid → canid,
   lizardfolk → testudine, merfolk → fish, armoured → xenarthran, harpy → bird, anuran → amphibian).
 * Assets: `tools/gen_milk_assets.py` `MILKS` dict gets the new keys + colours. It writes the bucket textures, item models,
-  the `c:buckets/milk` tag and `cake_from_family_milk.json`. Lang `item.monstergirls.<x>_milk`.
+  the `c:buckets/milk` tag and `cake_from_family_milk.json`. Lang `item.harmontide.<x>_milk`.
 * Effects: kept wherever a family survives. New picks for the new clades are in the summary table. Lizardfolk's Fire Resistance
   + Speed has no direct successor (turtles get Resistance + Water Breathing, like the turtle helmet).
 
 ### Cheese, butter, ice cream, cooked dishes (`entity/Dairy`, `ModComponents.MILK_FAMILY`)
-* No new items: these are single items that carry a `milk_family` component and take their name from `family.monstergirls.<clade>`
+* No new items: these are single items that carry a `milk_family` component and take their name from `family.harmontide.<clade>`
   ("Firm Feliform Cheese"). Only lang keys are added.
 * **Save migration:** the component is stored as the enum name (`Codec.STRING.xmap(FamilyMilk::valueOf, ...)`). Old cheese
   says `"NEKOMATA"`, so `valueOf` would throw. The codec gets an alias map (old name → successor) before `valueOf`. The
@@ -180,11 +180,11 @@ add species later. Candidates: a sloth or tamandua, a warthog or babirusa, a wom
 * Old guide files are deleted and the volume numbering is redone. `update_old_guides.py` and the volumes nav follow automatically.
 
 ### Lang (`en_us.json`)
-* `family.monstergirls.<clade>` for all 34 (old keys removed), `item.monstergirls.<x>_milk` for the new buckets, the config
+* `family.harmontide.<clade>` for all 34 (old keys removed), `item.harmontide.<x>_milk` for the new buckets, the config
   screen labels for the new spawn-rate keys, and any guest-note strings shown in game.
 * Species names do not change.
 
-### Config (`MonsterGirlsConfig.FAMILY_RATES`)
+### Config (`HarmontideConfig.FAMILY_RATES`)
 * Spawn-rate sliders become one per clade (the 34 keys). Old keys (`nekomata`, `lizardfolk`...) disappear from the file and
   NeoForge resets those values to 100%. Recommend accepting that and noting it in the changelog. Copying old values over to the
   successor clade is possible but adds a one-off migration for a rarely changed setting.

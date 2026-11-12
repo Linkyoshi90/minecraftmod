@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "harmontide:block/realm_bog_top",
+    "bottom": "minecraft:block/mud",
+    "side": "harmontide:block/realm_bog_side",
+    "particle": "minecraft:block/mud"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_mano_peluda_undead",
+  "spawners": {
+    "type": "harmontide:mano_peluda_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

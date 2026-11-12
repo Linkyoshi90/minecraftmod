@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_huli_jing_kitsune",
+  "spawners": {
+    "type": "harmontide:huli_jing_kitsune",
+    "weight": 7,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

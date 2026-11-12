@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:order_patrol",
+  "display": {
+    "icon": {
+      "id": "minecraft:bell"
+    },
+    "title": {
+      "translate": "advancement.harmontide.order_marked"
+    },
+    "description": {
+      "translate": "advancement.harmontide.order_marked.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

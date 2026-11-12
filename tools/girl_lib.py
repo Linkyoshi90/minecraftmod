@@ -33,7 +33,7 @@ import outfits as OF  # noqa: E402
 from harpy_lib import cube, hang, mirror_cube, pick, noise, rgb, ramp, CLEAR, BROAD  # noqa: E402,F401
 
 D = H.D
-ASSETS = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls")
+ASSETS = os.path.join(H.REPO, "src", "main", "resources", "assets", "harmontide")
 PREVIEWS = os.path.join(H.REPO, "previews")
 OUT_, REST = H.OUT_, H.REST
 

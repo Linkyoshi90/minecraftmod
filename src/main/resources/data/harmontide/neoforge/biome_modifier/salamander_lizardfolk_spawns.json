@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_salamander_lizardfolk",
+  "spawners": {
+    "type": "harmontide:salamander_lizardfolk",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

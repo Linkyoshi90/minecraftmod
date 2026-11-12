@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_vetala_bat",
+  "spawners": {
+    "type": "harmontide:vetala_bat",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

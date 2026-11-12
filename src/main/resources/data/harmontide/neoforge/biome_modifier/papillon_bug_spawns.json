@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_papillon_bug",
+  "spawners": {
+    "type": "harmontide:papillon_bug",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

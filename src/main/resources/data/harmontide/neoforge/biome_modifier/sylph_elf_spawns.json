@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_sylph_elf",
+  "spawners": {
+    "type": "harmontide:sylph_elf",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

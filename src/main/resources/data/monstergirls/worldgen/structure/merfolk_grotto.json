@@ -1,7 +1,0 @@
-{
-  "type": "monstergirls:merfolk_grotto",
-  "biomes": "#monstergirls:has_structure/merfolk_grotto",
-  "step": "surface_structures",
-  "spawn_overrides": {},
-  "terrain_adaptation": "none"
-}

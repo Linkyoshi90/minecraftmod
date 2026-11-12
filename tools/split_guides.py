@@ -4,7 +4,7 @@
     python tools/split_guides.py
 
 A written book's page shows 14 lines of 114 pixels. The server can't measure text in the reader's font, so the splitting is done here:
-each guide (and each kind's signature, under her name) whose title and text don't fit is cut at sentence ends into parts, written as `journal.monstergirls.guide.<name>.p<n>`
+each guide (and each kind's signature, under her name) whose title and text don't fit is cut at sentence ends into parts, written as `journal.harmontide.guide.<name>.p<n>`
 lines next to the whole text (which stays the source to edit), and the page count goes into GuidePages.java. The widths are vanilla's
 default font. gen_milk_assets.add_lang runs this whenever it writes a guide line. Can be run twice.
 """
@@ -13,11 +13,11 @@ import os
 import re
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LANG = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls", "lang", "en_us.json")
-JOURNAL = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "Journal.java")
-OUT = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "GuidePages.java")
-PREFIX = "journal.monstergirls.guide."
-SIG = r"journal\.monstergirls\.[a-z0-9_]+\.signature"
+LANG = os.path.join(REPO, "src", "main", "resources", "assets", "harmontide", "lang", "en_us.json")
+JOURNAL = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "harmontide", "entity", "Journal.java")
+OUT = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "harmontide", "entity", "GuidePages.java")
+PREFIX = "journal.harmontide.guide."
+SIG = r"journal\.harmontide\.[a-z0-9_]+\.signature"
 LINES, WIDTH = 14, 114
 EXTRA = {"festivals": 2}                     # lines Journal adds under the last page (the next festival)
 
@@ -88,8 +88,8 @@ def main():
                 lang[f"{PREFIX}{g}.p{i}"] = part
     signatures = {}
     for k in [k for k in lang if re.fullmatch(SIG, k)]:                         # what she does, on its own page(s) under her name
-        kind = k[len("journal.monstergirls."):-len(".signature")]
-        split = parts(lang.get("entity.monstergirls." + kind, kind), lang[k])
+        kind = k[len("journal.harmontide."):-len(".signature")]
+        split = parts(lang.get("entity.harmontide." + kind, kind), lang[k])
         if len(split) > 1:
             signatures[kind] = len(split)
             for i, part in enumerate(split, 1):
@@ -99,7 +99,7 @@ def main():
         fh.write("\n")
     entries = ",\n".join(f'            Map.entry("{g}", {n})' for g, n in counts.items())
     sig_entries = ",\n".join(f'            Map.entry("{g}", {n})' for g, n in sorted(signatures.items()))
-    java = f"""package com.linkyoshi90.monstergirls.entity;
+    java = f"""package com.linkyoshi90.harmontide.entity;
 
 import java.util.Map;
 

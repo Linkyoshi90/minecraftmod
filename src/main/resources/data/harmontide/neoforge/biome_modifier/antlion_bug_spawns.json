@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_antlion_bug",
+  "spawners": {
+    "type": "harmontide:antlion_bug",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

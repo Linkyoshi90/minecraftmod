@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_charro_negro_rider",
+  "spawners": {
+    "type": "harmontide:charro_negro_rider",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

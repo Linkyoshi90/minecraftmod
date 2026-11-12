@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_donkey_centaur",
+  "spawners": {
+    "type": "harmontide:donkey_centaur",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_bison_minotaur",
+  "spawners": {
+    "type": "harmontide:bison_minotaur",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

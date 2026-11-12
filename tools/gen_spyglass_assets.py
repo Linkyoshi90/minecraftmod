@@ -12,7 +12,7 @@ import gen_manor_assets  # noqa: E402
 
 def main():
     gen_manor_assets.GUIDE_ADD.clear()
-    gen_manor_assets.GUIDE_ADD["journal.monstergirls.guide.bestiary"] = (
+    gen_manor_assets.GUIDE_ADD["journal.harmontide.guide.bestiary"] = (
         " A spyglass helps: whoever is in its crosshair, up to 64 blocks off, is studied twice as fast.")
     gen_manor_assets.append_guides()
 

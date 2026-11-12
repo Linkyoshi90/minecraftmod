@@ -14,18 +14,18 @@ from gen_milk_assets import add_lang  # noqa: E402
 import split_guides  # noqa: E402
 
 LANG = {
-    "festival.monstergirls.hearts": "the Day of Hearts",
-    "message.monstergirls.festival.today.hearts": "Today is the Day of Hearts! At dusk your friends gather at the hearth: set out a cake.",
-    "message.monstergirls.festival.celebrate.hearts": "The Day of Hearts! %s friends share the cake and press sweetheart cookies into your hands.",
-    "message.monstergirls.festival.wants_cake": "Your friends glance at the table: the Day of Hearts wants a cake near the hearth",
-    "item.monstergirls.sweetheart_cookie": "%s's Sweetheart Cookie",
+    "festival.harmontide.hearts": "the Day of Hearts",
+    "message.harmontide.festival.today.hearts": "Today is the Day of Hearts! At dusk your friends gather at the hearth: set out a cake.",
+    "message.harmontide.festival.celebrate.hearts": "The Day of Hearts! %s friends share the cake and press sweetheart cookies into your hands.",
+    "message.harmontide.festival.wants_cake": "Your friends glance at the table: the Day of Hearts wants a cake near the hearth",
+    "item.harmontide.sweetheart_cookie": "%s's Sweetheart Cookie",
 }
 REWRITE = {
-    "journal.monstergirls.guide.festivals": (
+    "journal.harmontide.guide.festivals": (
         "Every 24 days come four festivals: the Midsummer Dance on the 8th day, the Harvest Feast on the 16th, the Day of Hearts on the "
         "20th and the Gift Exchange on the 24th. At dusk the girls who live at your hearth gather round it. Join them: play a jukebox "
         "for the dance, stock a fridge for the feast, set out a cake for the Day of Hearts, and come empty-handed for the presents."),
-    "advancement.monstergirls.every_festival.desc": "Celebrate the Midsummer Dance, the Harvest Feast, the Day of Hearts and the Gift Exchange",
+    "advancement.harmontide.every_festival.desc": "Celebrate the Midsummer Dance, the Harvest Feast, the Day of Hearts and the Gift Exchange",
 }
 
 

@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "harmontide:block/realm_grass_top",
+    "bottom": "minecraft:block/dirt",
+    "side": "harmontide:block/realm_grass_side",
+    "particle": "minecraft:block/dirt"
+  }
+}

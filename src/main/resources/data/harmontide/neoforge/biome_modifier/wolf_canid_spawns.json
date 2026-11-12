@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_wolf_canid",
+  "spawners": {
+    "type": "harmontide:wolf_canid",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

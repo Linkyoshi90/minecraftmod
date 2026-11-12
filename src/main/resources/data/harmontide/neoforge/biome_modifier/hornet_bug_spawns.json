@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_hornet_bug",
+  "spawners": {
+    "type": "harmontide:hornet_bug",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_aegis_boar_armoured",
+  "spawners": {
+    "type": "harmontide:aegis_boar_armoured",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_rusalka_mermaid",
+  "spawners": {
+    "type": "harmontide:rusalka_mermaid",
+    "weight": 4,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

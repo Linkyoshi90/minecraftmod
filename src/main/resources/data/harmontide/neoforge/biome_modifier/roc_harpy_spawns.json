@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_roc_harpy",
+  "spawners": {
+    "type": "harmontide:roc_harpy",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

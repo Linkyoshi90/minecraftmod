@@ -260,7 +260,7 @@ def write_glowmask(tex):
                 for x in range(x0, x0 + w):
                     if tex[y][x] in keep:
                         out[y][x] = tex[y][x]
-    path = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls", "textures", "entity", NAME + "_glowmask.png")
+    path = os.path.join(H.REPO, "src", "main", "resources", "assets", "harmontide", "textures", "entity", NAME + "_glowmask.png")
     H.write_png(path, out)
     print("glow mask ->", os.path.basename(path))
 

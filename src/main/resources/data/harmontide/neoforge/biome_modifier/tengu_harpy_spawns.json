@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_tengu_harpy",
+  "spawners": {
+    "type": "harmontide:tengu_harpy",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

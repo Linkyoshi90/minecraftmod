@@ -1,0 +1,352 @@
+{
+  "parent": "harmontide:legendary_friend",
+  "display": {
+    "icon": {
+      "id": "minecraft:dragon_egg"
+    },
+    "title": {
+      "translate": "advancement.harmontide.every_legend"
+    },
+    "description": {
+      "translate": "advancement.harmontide.every_legend.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "phoenix_harpy": {
+      "trigger": "minecraft:impossible"
+    },
+    "zhuque_harpy": {
+      "trigger": "minecraft:impossible"
+    },
+    "yatagarasu_harpy": {
+      "trigger": "minecraft:impossible"
+    },
+    "roc_harpy": {
+      "trigger": "minecraft:impossible"
+    },
+    "ziz_harpy": {
+      "trigger": "minecraft:impossible"
+    },
+    "bennu_harpy": {
+      "trigger": "minecraft:impossible"
+    },
+    "garuda_harpy": {
+      "trigger": "minecraft:impossible"
+    },
+    "alkonost_harpy": {
+      "trigger": "minecraft:impossible"
+    },
+    "bastet_nekomata": {
+      "trigger": "minecraft:impossible"
+    },
+    "ammit_nekomata": {
+      "trigger": "minecraft:impossible"
+    },
+    "nue_nekomata": {
+      "trigger": "minecraft:impossible"
+    },
+    "xiangliu_lamia": {
+      "trigger": "minecraft:impossible"
+    },
+    "echidna_lamia": {
+      "trigger": "minecraft:impossible"
+    },
+    "medusa_lamia": {
+      "trigger": "minecraft:impossible"
+    },
+    "wadjet_lamia": {
+      "trigger": "minecraft:impossible"
+    },
+    "sphinx_centaur": {
+      "trigger": "minecraft:impossible"
+    },
+    "lamassu_centaur": {
+      "trigger": "minecraft:impossible"
+    },
+    "qilin_centaur": {
+      "trigger": "minecraft:impossible"
+    },
+    "anzu_centaur": {
+      "trigger": "minecraft:impossible"
+    },
+    "ark_seraphim_centaur": {
+      "trigger": "minecraft:impossible"
+    },
+    "urcuchillay_centaur": {
+      "trigger": "minecraft:impossible"
+    },
+    "leviathan_mermaid": {
+      "trigger": "minecraft:impossible"
+    },
+    "cetus_mermaid": {
+      "trigger": "minecraft:impossible"
+    },
+    "scylla_mollusk": {
+      "trigger": "minecraft:impossible"
+    },
+    "charybdis_mollusk": {
+      "trigger": "minecraft:impossible"
+    },
+    "giant_kraken_mollusk": {
+      "trigger": "minecraft:impossible"
+    },
+    "kaguya_elf": {
+      "trigger": "minecraft:impossible"
+    },
+    "norn_elf": {
+      "trigger": "minecraft:impossible"
+    },
+    "ophanim_elf": {
+      "trigger": "minecraft:impossible"
+    },
+    "koschei_undead": {
+      "trigger": "minecraft:impossible"
+    },
+    "gashadokuro_undead": {
+      "trigger": "minecraft:impossible"
+    },
+    "black_tortoise_lizardfolk": {
+      "trigger": "minecraft:impossible"
+    },
+    "basilisk_lizardfolk": {
+      "trigger": "minecraft:impossible"
+    },
+    "cipactli_lizardfolk": {
+      "trigger": "minecraft:impossible"
+    },
+    "turtworld_lizardfolk": {
+      "trigger": "minecraft:impossible"
+    },
+    "long_dragon": {
+      "trigger": "minecraft:impossible"
+    },
+    "bahamut_dragon": {
+      "trigger": "minecraft:impossible"
+    },
+    "jormungandr_dragon": {
+      "trigger": "minecraft:impossible"
+    },
+    "ender_dragon": {
+      "trigger": "minecraft:impossible"
+    },
+    "quetzalcoatl_dragon": {
+      "trigger": "minecraft:impossible"
+    },
+    "kun_dragon": {
+      "trigger": "minecraft:impossible"
+    },
+    "orochi_dragon": {
+      "trigger": "minecraft:impossible"
+    },
+    "lilith_devil": {
+      "trigger": "minecraft:impossible"
+    },
+    "pazuzu_devil": {
+      "trigger": "minecraft:impossible"
+    },
+    "behemoth_devil": {
+      "trigger": "minecraft:impossible"
+    },
+    "taotie_devil": {
+      "trigger": "minecraft:impossible"
+    },
+    "cerberus_canid": {
+      "trigger": "minecraft:impossible"
+    },
+    "amarok_canid": {
+      "trigger": "minecraft:impossible"
+    },
+    "sun_wukong_rodent": {
+      "trigger": "minecraft:impossible"
+    },
+    "ratatoskr_rodent": {
+      "trigger": "minecraft:impossible"
+    },
+    "war_rider": {
+      "trigger": "minecraft:impossible"
+    },
+    "famine_rider": {
+      "trigger": "minecraft:impossible"
+    },
+    "pestilence_rider": {
+      "trigger": "minecraft:impossible"
+    },
+    "death_rider": {
+      "trigger": "minecraft:impossible"
+    },
+    "charro_negro_rider": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "phoenix_harpy"
+    ],
+    [
+      "zhuque_harpy"
+    ],
+    [
+      "yatagarasu_harpy"
+    ],
+    [
+      "roc_harpy"
+    ],
+    [
+      "ziz_harpy"
+    ],
+    [
+      "bennu_harpy"
+    ],
+    [
+      "garuda_harpy"
+    ],
+    [
+      "alkonost_harpy"
+    ],
+    [
+      "bastet_nekomata"
+    ],
+    [
+      "ammit_nekomata"
+    ],
+    [
+      "nue_nekomata"
+    ],
+    [
+      "xiangliu_lamia"
+    ],
+    [
+      "echidna_lamia"
+    ],
+    [
+      "medusa_lamia"
+    ],
+    [
+      "wadjet_lamia"
+    ],
+    [
+      "sphinx_centaur"
+    ],
+    [
+      "lamassu_centaur"
+    ],
+    [
+      "qilin_centaur"
+    ],
+    [
+      "anzu_centaur"
+    ],
+    [
+      "ark_seraphim_centaur"
+    ],
+    [
+      "urcuchillay_centaur"
+    ],
+    [
+      "leviathan_mermaid"
+    ],
+    [
+      "cetus_mermaid"
+    ],
+    [
+      "scylla_mollusk"
+    ],
+    [
+      "charybdis_mollusk"
+    ],
+    [
+      "giant_kraken_mollusk"
+    ],
+    [
+      "kaguya_elf"
+    ],
+    [
+      "norn_elf"
+    ],
+    [
+      "ophanim_elf"
+    ],
+    [
+      "koschei_undead"
+    ],
+    [
+      "gashadokuro_undead"
+    ],
+    [
+      "black_tortoise_lizardfolk"
+    ],
+    [
+      "basilisk_lizardfolk"
+    ],
+    [
+      "cipactli_lizardfolk"
+    ],
+    [
+      "turtworld_lizardfolk"
+    ],
+    [
+      "long_dragon"
+    ],
+    [
+      "bahamut_dragon"
+    ],
+    [
+      "jormungandr_dragon"
+    ],
+    [
+      "ender_dragon"
+    ],
+    [
+      "quetzalcoatl_dragon"
+    ],
+    [
+      "kun_dragon"
+    ],
+    [
+      "orochi_dragon"
+    ],
+    [
+      "lilith_devil"
+    ],
+    [
+      "pazuzu_devil"
+    ],
+    [
+      "behemoth_devil"
+    ],
+    [
+      "taotie_devil"
+    ],
+    [
+      "cerberus_canid"
+    ],
+    [
+      "amarok_canid"
+    ],
+    [
+      "sun_wukong_rodent"
+    ],
+    [
+      "ratatoskr_rodent"
+    ],
+    [
+      "war_rider"
+    ],
+    [
+      "famine_rider"
+    ],
+    [
+      "pestilence_rider"
+    ],
+    [
+      "death_rider"
+    ],
+    [
+      "charro_negro_rider"
+    ]
+  ]
+}

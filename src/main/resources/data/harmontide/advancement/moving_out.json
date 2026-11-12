@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:first_child",
+  "display": {
+    "icon": {
+      "id": "minecraft:oak_door"
+    },
+    "title": {
+      "translate": "advancement.harmontide.moving_out"
+    },
+    "description": {
+      "translate": "advancement.harmontide.moving_out.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

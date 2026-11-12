@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:archery",
+  "display": {
+    "icon": {
+      "id": "minecraft:bow"
+    },
+    "title": {
+      "translate": "advancement.harmontide.archery_won"
+    },
+    "description": {
+      "translate": "advancement.harmontide.archery_won.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,7 +1,0 @@
-{
-  "type": "monstergirls:dragon_lair",
-  "biomes": "#monstergirls:has_structure/dragon_lair",
-  "step": "surface_structures",
-  "spawn_overrides": {},
-  "terrain_adaptation": "none"
-}

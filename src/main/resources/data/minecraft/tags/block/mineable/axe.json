@@ -1,21 +1,21 @@
 {
   "replace": false,
   "values": [
-    "monstergirls:soaking_tub",
-    "monstergirls:sparring_post",
-    "monstergirls:vanity_mirror",
-    "monstergirls:butter_churn",
-    "monstergirls:cheese_shelf",
-    "monstergirls:nesting_box",
-    "monstergirls:realm_log",
-    "monstergirls:realm_planks",
-    "monstergirls:realm_stairs",
-    "monstergirls:realm_slab",
-    "monstergirls:realm_fence",
-    "monstergirls:realm_fence_gate",
-    "monstergirls:realm_door",
-    "monstergirls:realm_trapdoor",
-    "monstergirls:realm_button",
-    "monstergirls:realm_pressure_plate"
+    "harmontide:soaking_tub",
+    "harmontide:sparring_post",
+    "harmontide:vanity_mirror",
+    "harmontide:butter_churn",
+    "harmontide:cheese_shelf",
+    "harmontide:nesting_box",
+    "harmontide:realm_log",
+    "harmontide:realm_planks",
+    "harmontide:realm_stairs",
+    "harmontide:realm_slab",
+    "harmontide:realm_fence",
+    "harmontide:realm_fence_gate",
+    "harmontide:realm_door",
+    "harmontide:realm_trapdoor",
+    "harmontide:realm_button",
+    "harmontide:realm_pressure_plate"
   ]
 }

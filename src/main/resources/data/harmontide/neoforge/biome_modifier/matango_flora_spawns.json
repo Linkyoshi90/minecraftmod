@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_matango_flora",
+  "spawners": {
+    "type": "harmontide:matango_flora",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

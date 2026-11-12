@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_sea_serpent_lamia",
+  "spawners": {
+    "type": "harmontide:sea_serpent_lamia",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

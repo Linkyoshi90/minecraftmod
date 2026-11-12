@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:hamlet",
+  "display": {
+    "icon": {
+      "id": "minecraft:bell"
+    },
+    "title": {
+      "translate": "advancement.harmontide.village"
+    },
+    "description": {
+      "translate": "advancement.harmontide.village.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

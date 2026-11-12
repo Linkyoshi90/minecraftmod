@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "decorations",
+  "pattern": [
+    "RRR",
+    "PTP",
+    "PPP"
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:red_wool"
+    },
+    "P": {
+      "item": "minecraft:dark_oak_planks"
+    },
+    "T": {
+      "item": "minecraft:dark_oak_trapdoor"
+    }
+  },
+  "result": {
+    "id": "harmontide:offering_box",
+    "count": 1
+  }
+}

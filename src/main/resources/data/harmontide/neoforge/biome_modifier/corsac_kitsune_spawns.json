@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_corsac_kitsune",
+  "spawners": {
+    "type": "harmontide:corsac_kitsune",
+    "weight": 7,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

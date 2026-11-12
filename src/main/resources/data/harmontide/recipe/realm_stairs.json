@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "wooden_stairs",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "harmontide:realm_planks"
+    }
+  },
+  "result": {
+    "id": "harmontide:realm_stairs",
+    "count": 4
+  }
+}

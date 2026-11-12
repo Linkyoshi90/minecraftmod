@@ -12,7 +12,7 @@ import sys
 from PIL import Image
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ASSETS = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls")
+ASSETS = os.path.join(REPO, "src", "main", "resources", "assets", "harmontide")
 OUTLINE = (40, 30, 40, 255)
 
 
@@ -139,7 +139,7 @@ def main():
         img = draw()
         img.save(os.path.join(ASSETS, "textures", "item", name + ".png"))
         with open(os.path.join(ASSETS, "models", "item", name + ".json"), "w", encoding="utf-8", newline="\n") as fh:
-            json.dump({"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:item/" + name}}, fh, indent=2)
+            json.dump({"parent": "minecraft:item/generated", "textures": {"layer0": "harmontide:item/" + name}}, fh, indent=2)
             fh.write("\n")
         made[name] = img
     if "--preview" in sys.argv:

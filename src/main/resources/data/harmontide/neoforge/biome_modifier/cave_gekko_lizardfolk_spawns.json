@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_cave_gekko_lizardfolk",
+  "spawners": {
+    "type": "harmontide:cave_gekko_lizardfolk",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

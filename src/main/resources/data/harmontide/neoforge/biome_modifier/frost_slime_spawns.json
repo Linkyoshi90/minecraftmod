@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_frost_slime",
+  "spawners": {
+    "type": "harmontide:frost_slime",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_macawtl_dragon",
+  "spawners": {
+    "type": "harmontide:macawtl_dragon",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

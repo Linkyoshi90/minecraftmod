@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_obsidian_hound_canid",
+  "spawners": {
+    "type": "harmontide:obsidian_hound_canid",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

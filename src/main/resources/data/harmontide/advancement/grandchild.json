@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:sweethearts_wed",
+  "display": {
+    "icon": {
+      "id": "minecraft:cake"
+    },
+    "title": {
+      "translate": "advancement.harmontide.grandchild"
+    },
+    "description": {
+      "translate": "advancement.harmontide.grandchild.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

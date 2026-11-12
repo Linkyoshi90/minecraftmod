@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_famine_rider",
+  "spawners": {
+    "type": "harmontide:famine_rider",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

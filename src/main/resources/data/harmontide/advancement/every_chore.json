@@ -1,0 +1,46 @@
+{
+  "parent": "harmontide:first_chore",
+  "display": {
+    "icon": {
+      "id": "minecraft:fishing_rod"
+    },
+    "title": {
+      "translate": "advancement.harmontide.every_chore"
+    },
+    "description": {
+      "translate": "advancement.harmontide.every_chore.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "eggs": {
+      "trigger": "minecraft:impossible"
+    },
+    "honey": {
+      "trigger": "minecraft:impossible"
+    },
+    "wool": {
+      "trigger": "minecraft:impossible"
+    },
+    "fish": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "eggs"
+    ],
+    [
+      "honey"
+    ],
+    [
+      "wool"
+    ],
+    [
+      "fish"
+    ]
+  ]
+}

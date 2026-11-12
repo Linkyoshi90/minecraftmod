@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_orochi_dragon",
+  "spawners": {
+    "type": "harmontide:orochi_dragon",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

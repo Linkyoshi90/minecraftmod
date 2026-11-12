@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_rokurokubi_devil",
+  "spawners": {
+    "type": "harmontide:rokurokubi_devil",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

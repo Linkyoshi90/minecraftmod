@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_pelican_harpy",
+  "spawners": {
+    "type": "harmontide:pelican_harpy",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

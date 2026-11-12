@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_scarecrow_construct",
+  "spawners": {
+    "type": "harmontide:scarecrow_construct",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -15,8 +15,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen_milk_assets import add_lang  # noqa: E402
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ASSETS = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls")
-DATA = os.path.join(REPO, "src", "main", "resources", "data", "monstergirls")
+ASSETS = os.path.join(REPO, "src", "main", "resources", "assets", "harmontide")
+DATA = os.path.join(REPO, "src", "main", "resources", "data", "harmontide")
 BG = (44, 48, 44)
 
 # preview id -> (title, backdrop top colour, backdrop bottom colour)
@@ -186,21 +186,21 @@ def main():
         img.save(os.path.join(tex_dir, pid + ".png"))
         sheet.append(img)
         dump(os.path.join(DATA, "painting_variant", pid + ".json"), {
-            "asset_id": f"monstergirls:{pid}", "width": 2, "height": 2})
-        lang[f"painting.monstergirls.{pid}.title"] = title
-        lang[f"painting.monstergirls.{pid}.author"] = "Harmontide"
-        ids.append(f"monstergirls:{pid}")
+            "asset_id": f"harmontide:{pid}", "width": 2, "height": 2})
+        lang[f"painting.harmontide.{pid}.title"] = title
+        lang[f"painting.harmontide.{pid}.author"] = "Harmontide"
+        ids.append(f"harmontide:{pid}")
     fam = family_painting()                                              # not placeable: the big_family keepsake (Marriage)
     fam.save(os.path.join(tex_dir, "whole_family.png"))
-    dump(os.path.join(DATA, "painting_variant", "whole_family.json"), {"asset_id": "monstergirls:whole_family", "width": 4, "height": 3})
-    lang["painting.monstergirls.whole_family.title"] = "The Whole Family"
-    lang["painting.monstergirls.whole_family.author"] = "Harmontide"
+    dump(os.path.join(DATA, "painting_variant", "whole_family.json"), {"asset_id": "harmontide:whole_family", "width": 4, "height": 3})
+    lang["painting.harmontide.whole_family.title"] = "The Whole Family"
+    lang["painting.harmontide.whole_family.author"] = "Harmontide"
     if "--sheet" in sys.argv:
         fam.resize((512, 384), Image.Resampling.NEAREST).save(os.path.join(REPO, "previews", "whole_family_painting.png"))
     dump(os.path.join(REPO, "src", "main", "resources", "data", "minecraft", "tags", "painting_variant", "placeable.json"),
          {"replace": False, "values": ids})
-    lang["hobby.monstergirls.painting"] = "painting"
-    lang["message.monstergirls.hobby.shared.painting"] = ("%s: She sits you down, sketches you twice, then hands you the brush for the sky. "
+    lang["hobby.harmontide.painting"] = "painting"
+    lang["message.harmontide.hobby.shared.painting"] = ("%s: She sits you down, sketches you twice, then hands you the brush for the sky. "
                                                           "Whatever she finished is yours.")
     if "--no-lang" not in sys.argv:
         add_lang(lang)

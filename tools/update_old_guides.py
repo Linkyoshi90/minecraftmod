@@ -27,7 +27,7 @@ NAV_CSS = (".volumes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}"
 def shared_section():
     rules = "".join(f'<div class="rule"><strong>{B.E(t)}</strong>{d}</div>' for t, d in B.SHARED_CORE)
     return (f'  <section style="margin-top:48px" id="relationships">\n    <h2>Relationships (shared by every family)</h2>\n'
-            '    <p class="section-intro">Updated 2026-10-19. Every MonsterGirls family uses the same relationship core; each volume only '
+            '    <p class="section-intro">Updated 2026-10-19. Every Harmontide family uses the same relationship core; each volume only '
             'changes how trust is won, what she gives back and how she bears young. The new families (volumes III to IX) are in their own guides.</p>\n'
             f'    <div class="rules">{rules}</div>\n    {B.tiers_table()}\n  </section>\n')
 

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_seagull_harpy",
+  "spawners": {
+    "type": "harmontide:seagull_harpy",
+    "weight": 10,
+    "minCount": 3,
+    "maxCount": 6
+  }
+}

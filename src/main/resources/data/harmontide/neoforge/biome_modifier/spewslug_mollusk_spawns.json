@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_spewslug_mollusk",
+  "spawners": {
+    "type": "harmontide:spewslug_mollusk",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

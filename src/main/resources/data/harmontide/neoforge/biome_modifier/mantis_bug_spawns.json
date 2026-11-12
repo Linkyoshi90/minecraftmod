@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_mantis_bug",
+  "spawners": {
+    "type": "harmontide:mantis_bug",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

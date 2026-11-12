@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_gargoyle_construct",
+  "spawners": {
+    "type": "harmontide:gargoyle_construct",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

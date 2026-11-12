@@ -189,7 +189,7 @@ VARIANTS["papi"][0].papi = True                 # her shirt and shorts (see pain
 
 
 def write_variants():
-    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls", "textures", "entity")
+    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "harmontide", "textures", "entity")
     texes = {"house": paint()}
     for v, (pal, leaf) in VARIANTS.items():
         texes[v] = paint(pal, leaf)

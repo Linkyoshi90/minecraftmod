@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_unicorn_centaur",
+  "spawners": {
+    "type": "harmontide:unicorn_centaur",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

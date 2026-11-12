@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_yak_minotaur",
+  "spawners": {
+    "type": "harmontide:yak_minotaur",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_vulphea_kitsune",
+  "spawners": {
+    "type": "harmontide:vulphea_kitsune",
+    "weight": 7,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

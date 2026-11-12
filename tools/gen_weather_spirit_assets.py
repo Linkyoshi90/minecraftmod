@@ -11,9 +11,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen_milk_assets import add_lang  # noqa: E402
 
 LANG = {
-    "journal.monstergirls.when.thunder": "Comes out only in a thunderstorm",
-    "message.monstergirls.ame_onna.shower": "%s lifts her face to the sky, and the rain begins.",
-    "message.monstergirls.ame_onna.not_now": "%s shakes her head: not now.",
+    "journal.harmontide.when.thunder": "Comes out only in a thunderstorm",
+    "message.harmontide.ame_onna.shower": "%s lifts her face to the sky, and the rain begins.",
+    "message.harmontide.ame_onna.not_now": "%s shakes her head: not now.",
 }
 
 if __name__ == "__main__":

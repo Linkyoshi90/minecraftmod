@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:harpy_colony",
+  "display": {
+    "icon": {
+      "id": "harmontide:harpy_perch"
+    },
+    "title": {
+      "translate": "advancement.harmontide.harpy_perch"
+    },
+    "description": {
+      "translate": "advancement.harmontide.harpy_perch.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

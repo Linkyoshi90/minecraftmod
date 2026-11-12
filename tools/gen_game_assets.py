@@ -16,13 +16,13 @@ R.advancement("hide_and_seek", "minecraft:spyglass", "task", ["done"])
 R.advancement("snowball_fight", "minecraft:snowball", "task", ["done"])
 
 M.add_lang({
-    "message.monstergirls.hide.start": "Count to ten! %s runs off to hide...",
-    "message.monstergirls.hide.found": "You found %s!",
-    "message.monstergirls.hide.won": "%s wins hide and seek! She pops out of her hiding place, glowing with pride.",
-    "advancement.monstergirls.hide_and_seek": "Found You!", "advancement.monstergirls.hide_and_seek.desc": "Find a friend playing hide and seek",
-    "advancement.monstergirls.snowball_fight": "Snow Day", "advancement.monstergirls.snowball_fight.desc": "Start a snowball fight with a friend",
-    "journal.monstergirls.guide.games.title": "Games",
-    "journal.monstergirls.guide.games": "Crouch and touch a friend with an empty hand to play hide and seek: count to ten while she hides, "
+    "message.harmontide.hide.start": "Count to ten! %s runs off to hide...",
+    "message.harmontide.hide.found": "You found %s!",
+    "message.harmontide.hide.won": "%s wins hide and seek! She pops out of her hiding place, glowing with pride.",
+    "advancement.harmontide.hide_and_seek": "Found You!", "advancement.harmontide.hide_and_seek.desc": "Find a friend playing hide and seek",
+    "advancement.harmontide.snowball_fight": "Snow Day", "advancement.harmontide.snowball_fight.desc": "Start a snowball fight with a friend",
+    "journal.harmontide.guide.games.title": "Games",
+    "journal.harmontide.guide.games": "Crouch and touch a friend with an empty hand to play hide and seek: count to ten while she hides, "
                                         "then find her within three minutes. Daughters love it most. Hit a friend with a snowball and she'll "
                                         "throw them right back for a while.",
 })

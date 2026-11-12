@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_bullywug",
+  "spawners": {
+    "type": "harmontide:bullywug",
+    "weight": 10,
+    "minCount": 2,
+    "maxCount": 4
+  }
+}

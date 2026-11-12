@@ -1,0 +1,7 @@
+{
+  "type": "harmontide:dragon_lair",
+  "biomes": "#harmontide:has_structure/dragon_lair",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}

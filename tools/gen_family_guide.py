@@ -10,40 +10,40 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen_milk_assets import add_lang  # noqa: E402
 
 LANG = {
-    "monstergirls.configuration.reunions": "Family reunions",
-    "message.monstergirls.reunion.today": "Today is Reunion Day! At dusk, your children who live away come home to your hearth.",
-    "message.monstergirls.reunion.together": "A family reunion! %s of your family gather round the hearth. The little ones run to you first",
-    "message.monstergirls.reunion.arrived": "More of your family arrive, waving from the path",
-    "journal.monstergirls.reunion.next": "Next Reunion Day: in %s days.",
-    "journal.monstergirls.reunion.today": "Today is Reunion Day!",
-    "advancement.monstergirls.family_reunion": "All Together Again",
-    "advancement.monstergirls.family_reunion.desc": "Gather your family at the hearth on Reunion Day",
-    "monstergirls.configuration.daughtersMoveOut": "Grown daughters move out",
-    "message.monstergirls.moving_out.planned": "%s is moving out! She's building a house of her own, a little way down the path from your hearth",
-    "message.monstergirls.moving_out.done": "%s's house is finished. Go and see it!",
-    "message.monstergirls.moving_out.welcome": "%s shows you round her new house, beaming. A housewarming!",
-    "message.monstergirls.moving_out.moved_in": "%2$s has moved in with %1$s, into the house she built",
-    "journal.monstergirls.children.house": " · her own house",
-    "advancement.monstergirls.moving_out": "A House of Her Own",
-    "advancement.monstergirls.moving_out.desc": "Visit a grown daughter's new house near your hearth",
-    "journal.monstergirls.tree.title": "Family Tree",
-    "journal.monstergirls.tree.with": "with %s",
-    "message.monstergirls.marriage.renew_hint": "Give %s the wedding ring by a hearth today to renew your vows",
-    "message.monstergirls.marriage.renew_wait": "Save it for your anniversary with %s, in %s days, to renew your vows",
-    "message.monstergirls.marriage.renewed": "%s and %s renew their vows after %s years, with %s friends gathered round!",
-    "journal.monstergirls.family.renewed": " (vows renewed %sx)",
-    "advancement.monstergirls.vow_renewal": "I Still Do",
-    "advancement.monstergirls.vow_renewal.desc": "Renew your vows with a wife on your anniversary, by a hearth",
-    "message.monstergirls.honeymoon_trip.wish": "%s has always wanted to see the %s. Take her there for your honeymoon!",
-    "message.monstergirls.honeymoon_trip.made": "%s gazes round the %s, hand in yours. A honeymoon to remember! She gives you a souvenir",
-    "item.monstergirls.souvenir": "Souvenir of the %s",
-    "item.monstergirls.souvenir.lore": "From your honeymoon with %s, day %s",
-    "journal.monstergirls.family.trips": " (been to: %s)",
-    "journal.monstergirls.family.wish": " (dreams of the %s)",
-    "advancement.monstergirls.honeymoon_trip": "Honeymoon Trip",
-    "advancement.monstergirls.honeymoon_trip.desc": "Take a wife to the place she has always wanted to see",
-    "journal.monstergirls.guide.family.title": "Family",
-    "journal.monstergirls.guide.family": (
+    "harmontide.configuration.reunions": "Family reunions",
+    "message.harmontide.reunion.today": "Today is Reunion Day! At dusk, your children who live away come home to your hearth.",
+    "message.harmontide.reunion.together": "A family reunion! %s of your family gather round the hearth. The little ones run to you first",
+    "message.harmontide.reunion.arrived": "More of your family arrive, waving from the path",
+    "journal.harmontide.reunion.next": "Next Reunion Day: in %s days.",
+    "journal.harmontide.reunion.today": "Today is Reunion Day!",
+    "advancement.harmontide.family_reunion": "All Together Again",
+    "advancement.harmontide.family_reunion.desc": "Gather your family at the hearth on Reunion Day",
+    "harmontide.configuration.daughtersMoveOut": "Grown daughters move out",
+    "message.harmontide.moving_out.planned": "%s is moving out! She's building a house of her own, a little way down the path from your hearth",
+    "message.harmontide.moving_out.done": "%s's house is finished. Go and see it!",
+    "message.harmontide.moving_out.welcome": "%s shows you round her new house, beaming. A housewarming!",
+    "message.harmontide.moving_out.moved_in": "%2$s has moved in with %1$s, into the house she built",
+    "journal.harmontide.children.house": " · her own house",
+    "advancement.harmontide.moving_out": "A House of Her Own",
+    "advancement.harmontide.moving_out.desc": "Visit a grown daughter's new house near your hearth",
+    "journal.harmontide.tree.title": "Family Tree",
+    "journal.harmontide.tree.with": "with %s",
+    "message.harmontide.marriage.renew_hint": "Give %s the wedding ring by a hearth today to renew your vows",
+    "message.harmontide.marriage.renew_wait": "Save it for your anniversary with %s, in %s days, to renew your vows",
+    "message.harmontide.marriage.renewed": "%s and %s renew their vows after %s years, with %s friends gathered round!",
+    "journal.harmontide.family.renewed": " (vows renewed %sx)",
+    "advancement.harmontide.vow_renewal": "I Still Do",
+    "advancement.harmontide.vow_renewal.desc": "Renew your vows with a wife on your anniversary, by a hearth",
+    "message.harmontide.honeymoon_trip.wish": "%s has always wanted to see the %s. Take her there for your honeymoon!",
+    "message.harmontide.honeymoon_trip.made": "%s gazes round the %s, hand in yours. A honeymoon to remember! She gives you a souvenir",
+    "item.harmontide.souvenir": "Souvenir of the %s",
+    "item.harmontide.souvenir.lore": "From your honeymoon with %s, day %s",
+    "journal.harmontide.family.trips": " (been to: %s)",
+    "journal.harmontide.family.wish": " (dreams of the %s)",
+    "advancement.harmontide.honeymoon_trip": "Honeymoon Trip",
+    "advancement.harmontide.honeymoon_trip.desc": "Take a wife to the place she has always wanted to see",
+    "journal.harmontide.guide.family.title": "Family",
+    "journal.harmontide.guide.family": (
         "A girl who is expecting craves one food and tells you; bring it before her time for twins (a harpy lays a full clutch). "
         "When her time comes you hear of it wherever you are, and little ones born to you come with a name. "
         "A cradle (planks around wool, on two sticks) lets them nap at night and grow twice as fast; rock it for a lullaby. "
@@ -55,16 +55,16 @@ LANG = {
         "A grown daughter who settles at your hearth builds a house of her own a little way off, with a cradle and a bed for her sweetheart, "
         "who moves in once they are wed; visit it when it's done. "
         "The journal lists them all and draws your family tree, wife by wife and generation by generation, "
-        "and /monstergirls family tells you where everyone is."),
+        "and /harmontide family tells you where everyone is."),
 }
 
 
 def main():
     from gen_family_assets import adv
-    adv("family_reunion", "monstergirls:first_child", "minecraft:campfire")
-    adv("moving_out", "monstergirls:first_child", "minecraft:oak_door")
-    adv("vow_renewal", "monstergirls:wedding", "monstergirls:wedding_ring")
-    adv("honeymoon_trip", "monstergirls:wedding", "minecraft:filled_map")
+    adv("family_reunion", "harmontide:first_child", "minecraft:campfire")
+    adv("moving_out", "harmontide:first_child", "minecraft:oak_door")
+    adv("vow_renewal", "harmontide:wedding", "harmontide:wedding_ring")
+    adv("honeymoon_trip", "harmontide:wedding", "minecraft:filled_map")
     add_lang(LANG)
     rewrite_guide()
     marriage_guide()
@@ -85,7 +85,7 @@ def marriage_guide():
     path = os.path.join(ASSETS, "lang", "en_us.json")
     with open(path, encoding="utf-8") as fh:
         text = fh.read()
-    key = "journal.monstergirls.guide.marriage"
+    key = "journal.harmontide.guide.marriage"
     old = json.loads(text)[key]
     if MARRIAGE_NEW not in old:
         a = json.dumps(key) + ": " + json.dumps(old, ensure_ascii=False)
@@ -104,7 +104,7 @@ def rewrite_guide():
     path = os.path.join(ASSETS, "lang", "en_us.json")
     with open(path, encoding="utf-8") as fh:
         text = fh.read()
-    key = "journal.monstergirls.guide.family"
+    key = "journal.harmontide.guide.family"
     old = json.loads(text)[key]
     if old != LANG[key]:
         a = json.dumps(key) + ": " + json.dumps(old, ensure_ascii=False)

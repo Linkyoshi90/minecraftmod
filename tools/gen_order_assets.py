@@ -271,16 +271,16 @@ def preview(path):
 ADVANCEMENTS = {
     "order_patrol": ("minecraft:white_banner", "task", "Holy Orders", "See a patrol of the Order march on the Demon Realm"),
     "order_marked": ("minecraft:bell", "task", "Heretic", "Become known to the Order for your ties to the Demon Realm"),
-    "order_humbled": ("monstergirls:realm_silver_sword", "task", "Crisis of Faith", "Bring a sister of the Order to her knees"),
+    "order_humbled": ("harmontide:realm_silver_sword", "task", "Crisis of Faith", "Bring a sister of the Order to her knees"),
     "order_spared": ("minecraft:white_banner", "task", "Mercy", "Spare a kneeling sister of the Order"),
-    "order_fallen": ("monstergirls:heartfruit", "goal", "Fallen", "Feed a kneeling sister a heartfruit"),
+    "order_fallen": ("harmontide:heartfruit", "goal", "Fallen", "Feed a kneeling sister a heartfruit"),
     "order_crusade": ("minecraft:shield", "challenge", "Crusade Repelled", "Beat back a crusade of the Order from your hearth"),
     "order_chaplain": ("minecraft:book", "task", "Mercy Remembered", "Have a sister you spared come back to your hearth as a chaplain"),
     "order_blessing": ("minecraft:bell", "goal", "Blessed Union", "Be wed, or renew your vows, with the Order's chaplain's blessing"),
 }
-PARENTS = {"order_patrol": "monstergirls:realm_entered", "order_marked": "monstergirls:order_patrol", "order_humbled": "monstergirls:order_patrol",
-           "order_spared": "monstergirls:order_humbled", "order_fallen": "monstergirls:order_humbled", "order_crusade": "monstergirls:order_marked",
-           "order_chaplain": "monstergirls:order_spared", "order_blessing": "monstergirls:order_chaplain"}
+PARENTS = {"order_patrol": "harmontide:realm_entered", "order_marked": "harmontide:order_patrol", "order_humbled": "harmontide:order_patrol",
+           "order_spared": "harmontide:order_humbled", "order_fallen": "harmontide:order_humbled", "order_crusade": "harmontide:order_marked",
+           "order_chaplain": "harmontide:order_spared", "order_blessing": "harmontide:order_chaplain"}
 
 GUIDE = ("The Order is sworn to wipe out the Demon Realm. By day, now and then, a patrol of its sisters (two knights in white and gold, "
          "and an inquisitrix in a navy hood) marches on a realm patch near you to purge it: realm grass turns back where they walk, and "
@@ -294,45 +294,45 @@ GUIDE = ("The Order is sworn to wipe out the Demon Realm. By day, now and then, 
          "sword. Feed a kneeling sister a heartfruit and she falls to the realm, a succubus (a captain a demon) devoted to you; with an "
          "empty hand you spare her, and she goes home. A sister you spared remembers: a couple of days later, while the Order doesn't have "
          "you marked, she comes back to your hearth unarmed, as a chaplain, and stays three days. Any wedding or vow renewal at a hearth "
-         "while she is there gets her blessing. The Order thinks better of mercy and of exorcism. (/monstergirls order tells you "
+         "while she is there gets her blessing. The Order thinks better of mercy and of exorcism. (/harmontide order tells you "
          "how the Order sees you.)")
 
 LANG = {
-    "entity.monstergirls.order_knight": "Sister-Knight of the Order",
-    "entity.monstergirls.order_inquisitor": "Inquisitrix of the Order",
-    "entity.monstergirls.order_captain": "Captain of the Order",
-    "item.monstergirls.order_knight_spawn_egg": "Sister-Knight Spawn Egg",
-    "item.monstergirls.order_inquisitor_spawn_egg": "Inquisitrix Spawn Egg",
-    "item.monstergirls.order_captain_spawn_egg": "Order Captain Spawn Egg",
-    "item.monstergirls.order_banner": "Banner of the Order",
-    "event.monstergirls.order_crusade": "Crusade of the Order",
-    "monstergirls.configuration.orderPatrols": "Order patrols",
-    "monstergirls.configuration.orderRaids": "Order crusades",
-    "message.monstergirls.order.patrol": "Bells ring in the distance: a patrol of the Order is marching on the Demon Realm.",
-    "message.monstergirls.order.marked": "The Order has heard of your ties to the Demon Realm. Its sisters will know you on sight.",
-    "message.monstergirls.order.raid": "A horn sounds in the dark: a crusade of the Order is coming for your hearth!",
-    "message.monstergirls.order.victory": "The crusade is broken. Your household gathers round you, shaken but proud.",
-    "message.monstergirls.order.dawn": "At dawn the crusaders withdraw, blessing the ground as they go. Your household is shaken.",
-    "message.monstergirls.order.kneels": "%s lays down her sword and kneels, her faith spent.",
-    "message.monstergirls.order.fallen": "%s tastes the heartfruit, and the realm takes her. She looks up at you with new eyes.",
-    "message.monstergirls.order.spared": "%s rises, bows to you, and turns for home.",
-    "entity.monstergirls.order_chaplain.named": "Sister %s, Chaplain",
-    "message.monstergirls.order.chaplain.came": "Sister %s, whom you spared, has come to your hearth as a chaplain. She will bless any wedding here while she stays.",
-    "message.monstergirls.order.chaplain.talk": "Sister %s: \"I'll bless any vows spoken at this hearth. %s more days, then I'm needed home.\"",
-    "message.monstergirls.order.chaplain.farewell": "Sister %s closes her book, blesses the house, and sets out for home.",
-    "message.monstergirls.order.chaplain.blessed": "Sister %s blesses the union of %s and %s.",
-    "journal.monstergirls.family.blessed": " (blessed by Sister %s)",
-    "commands.monstergirls.order.standing.unknown": "The Order has barely heard of you (notoriety %s).",
-    "commands.monstergirls.order.standing.rumoured": "There are rumours about you in the Order's halls (notoriety %s).",
-    "commands.monstergirls.order.standing.marked": "The Order has marked you as a friend of the Demon Realm (notoriety %s).",
-    "commands.monstergirls.order.standing.crusade": "The Order is preaching a crusade against you (notoriety %s): it comes some night you are near your hearth.",
-    "commands.monstergirls.order.raid.under_way": "A crusade on your hearth at %s: %s of %s still standing.",
-    "commands.monstergirls.order.patrol": "A patrol of %s set out.",
-    "commands.monstergirls.order.raid": "A crusade of %s set out for your hearth.",
-    "commands.monstergirls.order.no_ground": "No open ground nearby for them to come from.",
-    "commands.monstergirls.order.no_hearth": "You have no hearth within 64 blocks.",
-    "journal.monstergirls.guide.order.title": "The Order",
-    "journal.monstergirls.guide.order": GUIDE,
+    "entity.harmontide.order_knight": "Sister-Knight of the Order",
+    "entity.harmontide.order_inquisitor": "Inquisitrix of the Order",
+    "entity.harmontide.order_captain": "Captain of the Order",
+    "item.harmontide.order_knight_spawn_egg": "Sister-Knight Spawn Egg",
+    "item.harmontide.order_inquisitor_spawn_egg": "Inquisitrix Spawn Egg",
+    "item.harmontide.order_captain_spawn_egg": "Order Captain Spawn Egg",
+    "item.harmontide.order_banner": "Banner of the Order",
+    "event.harmontide.order_crusade": "Crusade of the Order",
+    "harmontide.configuration.orderPatrols": "Order patrols",
+    "harmontide.configuration.orderRaids": "Order crusades",
+    "message.harmontide.order.patrol": "Bells ring in the distance: a patrol of the Order is marching on the Demon Realm.",
+    "message.harmontide.order.marked": "The Order has heard of your ties to the Demon Realm. Its sisters will know you on sight.",
+    "message.harmontide.order.raid": "A horn sounds in the dark: a crusade of the Order is coming for your hearth!",
+    "message.harmontide.order.victory": "The crusade is broken. Your household gathers round you, shaken but proud.",
+    "message.harmontide.order.dawn": "At dawn the crusaders withdraw, blessing the ground as they go. Your household is shaken.",
+    "message.harmontide.order.kneels": "%s lays down her sword and kneels, her faith spent.",
+    "message.harmontide.order.fallen": "%s tastes the heartfruit, and the realm takes her. She looks up at you with new eyes.",
+    "message.harmontide.order.spared": "%s rises, bows to you, and turns for home.",
+    "entity.harmontide.order_chaplain.named": "Sister %s, Chaplain",
+    "message.harmontide.order.chaplain.came": "Sister %s, whom you spared, has come to your hearth as a chaplain. She will bless any wedding here while she stays.",
+    "message.harmontide.order.chaplain.talk": "Sister %s: \"I'll bless any vows spoken at this hearth. %s more days, then I'm needed home.\"",
+    "message.harmontide.order.chaplain.farewell": "Sister %s closes her book, blesses the house, and sets out for home.",
+    "message.harmontide.order.chaplain.blessed": "Sister %s blesses the union of %s and %s.",
+    "journal.harmontide.family.blessed": " (blessed by Sister %s)",
+    "commands.harmontide.order.standing.unknown": "The Order has barely heard of you (notoriety %s).",
+    "commands.harmontide.order.standing.rumoured": "There are rumours about you in the Order's halls (notoriety %s).",
+    "commands.harmontide.order.standing.marked": "The Order has marked you as a friend of the Demon Realm (notoriety %s).",
+    "commands.harmontide.order.standing.crusade": "The Order is preaching a crusade against you (notoriety %s): it comes some night you are near your hearth.",
+    "commands.harmontide.order.raid.under_way": "A crusade on your hearth at %s: %s of %s still standing.",
+    "commands.harmontide.order.patrol": "A patrol of %s set out.",
+    "commands.harmontide.order.raid": "A crusade of %s set out for your hearth.",
+    "commands.harmontide.order.no_ground": "No open ground nearby for them to come from.",
+    "commands.harmontide.order.no_hearth": "You have no hearth within 64 blocks.",
+    "journal.harmontide.guide.order.title": "The Order",
+    "journal.harmontide.guide.order": GUIDE,
 }
 
 
@@ -347,7 +347,7 @@ def main():
     bread = {"rolls": 1, "entries": [{"type": "minecraft:item", "name": "minecraft:bread", "functions": [
         {"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 0, "max": 1}}]}]}
     holy = {"rolls": 1, "conditions": [{"condition": "minecraft:killed_by_player"}, {"condition": "minecraft:random_chance", "chance": 0.5}],
-            "entries": [{"type": "minecraft:item", "name": "monstergirls:holy_water"}]}
+            "entries": [{"type": "minecraft:item", "name": "harmontide:holy_water"}]}
     gold = {"rolls": 1, "entries": [{"type": "minecraft:item", "name": "minecraft:gold_ingot", "functions": [
         {"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1, "max": 3}}]}]}
     tables = {"order_knight": [nugget, bread], "order_inquisitor": [holy, bread], "order_captain": [nugget, gold, holy]}
@@ -356,12 +356,12 @@ def main():
     for adv, (icon, frame, title, desc) in ADVANCEMENTS.items():
         dump(os.path.join(DATA, "advancement", adv + ".json"), {
             "parent": PARENTS[adv],
-            "display": {"icon": {"id": icon}, "title": {"translate": "advancement.monstergirls." + adv},
-                        "description": {"translate": "advancement.monstergirls." + adv + ".desc"},
+            "display": {"icon": {"id": icon}, "title": {"translate": "advancement.harmontide." + adv},
+                        "description": {"translate": "advancement.harmontide." + adv + ".desc"},
                         "frame": frame, "show_toast": True, "announce_to_chat": True, "hidden": False},
             "criteria": {"done": {"trigger": "minecraft:impossible"}}})
-        LANG["advancement.monstergirls." + adv] = title
-        LANG["advancement.monstergirls." + adv + ".desc"] = desc
+        LANG["advancement.harmontide." + adv] = title
+        LANG["advancement.harmontide." + adv + ".desc"] = desc
     add_lang(LANG)
     if "--preview" in sys.argv:
         preview(sys.argv[sys.argv.index("--preview") + 1])
@@ -370,19 +370,19 @@ def main():
 def chapel():
     """the wayside chapel (world/OrderChapelStructure): structure, spread, biomes, chest, locate lines"""
     dump(os.path.join(DATA, "worldgen", "structure", "order_chapel.json"), {
-        "type": "monstergirls:order_chapel", "biomes": "#monstergirls:has_structure/order_chapel",
+        "type": "harmontide:order_chapel", "biomes": "#harmontide:has_structure/order_chapel",
         "step": "surface_structures", "spawn_overrides": {}, "terrain_adaptation": "none"})
     dump(os.path.join(DATA, "worldgen", "structure_set", "order_chapel.json"), {
-        "structures": [{"structure": "monstergirls:order_chapel", "weight": 1}],
+        "structures": [{"structure": "harmontide:order_chapel", "weight": 1}],
         "placement": {"type": "minecraft:random_spread", "spacing": 36, "separation": 14, "salt": 73019441}})
     dump(os.path.join(DATA, "tags", "worldgen", "biome", "has_structure", "order_chapel.json"), {"values": [
         "minecraft:plains", "minecraft:sunflower_plains", "minecraft:meadow", "minecraft:forest", "minecraft:flower_forest",
         "minecraft:birch_forest", "minecraft:cherry_grove", "minecraft:savanna"]})
     dump(os.path.join(DATA, "loot_table", "chests", "order_chapel.json"), {"type": "minecraft:chest", "pools": [
         {"rolls": {"type": "minecraft:uniform", "min": 3, "max": 6}, "entries": [
-            {"type": "minecraft:item", "name": "monstergirls:holy_water", "weight": 4,
+            {"type": "minecraft:item", "name": "harmontide:holy_water", "weight": 4,
              "functions": [{"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1, "max": 2}}]},
-            {"type": "minecraft:item", "name": "monstergirls:splash_holy_water", "weight": 3,
+            {"type": "minecraft:item", "name": "harmontide:splash_holy_water", "weight": 3,
              "functions": [{"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1, "max": 3}}]},
             {"type": "minecraft:item", "name": "minecraft:bread", "weight": 5,
              "functions": [{"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1, "max": 4}}]},
@@ -393,8 +393,8 @@ def chapel():
             {"type": "minecraft:item", "name": "minecraft:book", "weight": 2},
             {"type": "minecraft:item", "name": "minecraft:golden_apple", "weight": 1}]}]})
     add_lang({
-        "commands.monstergirls.locate.chapel": "The nearest chapel of the Order is at %s (%s blocks away).",
-        "commands.monstergirls.locate.chapel.none": "No chapel of the Order within reach (only chunks generated after this update have them).",
+        "commands.harmontide.locate.chapel": "The nearest chapel of the Order is at %s (%s blocks away).",
+        "commands.harmontide.locate.chapel.none": "No chapel of the Order within reach (only chunks generated after this update have them).",
     })
 
 

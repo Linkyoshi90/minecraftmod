@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_gliderune_marsupial",
+  "spawners": {
+    "type": "harmontide:gliderune_marsupial",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

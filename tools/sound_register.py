@@ -3,7 +3,7 @@
 
     python tools/sound_register.py
 
-Part 1 lists the mod's own sound events (assets/monstergirls/sounds.json). They still point at vanilla files, so
+Part 1 lists the mod's own sound events (assets/harmontide/sounds.json). They still point at vanilla files, so
 replacing one is a resource change only. Part 2 lists every place the Java code plays a vanilla `SoundEvents.*`
 directly (the girl families, mostly). Those need their own sound event first (see TODO.md section 3).
 Re-run after adding sounds or species. The register is generated from the code, so it never goes stale.
@@ -13,7 +13,7 @@ import os
 import re
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SOUNDS = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls", "sounds.json")
+SOUNDS = os.path.join(REPO, "src", "main", "resources", "assets", "harmontide", "sounds.json")
 JAVA = os.path.join(REPO, "src", "main", "java")
 OUT = os.path.join(REPO, "SOUNDS.md")
 
@@ -70,8 +70,8 @@ def main():
          f"- **{len(mod)} mod sound events** (part 1): already have their own id. Replacing one is a resource change only.",
          f"- **{n_uses} direct vanilla calls** using {len(distinct)} different vanilla sounds (part 2): these need a sound event of their own first.", "",
          "## How to replace a sound", "",
-         "1. Put the file at `src/main/resources/assets/monstergirls/sounds/<folder>/<name>.ogg` (mono Ogg Vorbis, so it fades with distance).",
-         "2. In `assets/monstergirls/sounds.json`, change that event's `\"name\"` to `\"monstergirls:<folder>/<name>\"`. List several files to get random variations.",
+         "1. Put the file at `src/main/resources/assets/harmontide/sounds/<folder>/<name>.ogg` (mono Ogg Vorbis, so it fades with distance).",
+         "2. In `assets/harmontide/sounds.json`, change that event's `\"name\"` to `\"harmontide:<folder>/<name>\"`. List several files to get random variations.",
          "3. For part 2 sounds, first register an event `entity.<species>.<slot>` in `ModSounds` (and `sounds.json` + subtitle), then point the listed line at it. TODO.md section 3 has the plan.", "",
          "## 1. Mod sound events (resource change only)", "",
          "| Event | Plays now (vanilla) | Custom file, for example |", "|---|---|---|"]

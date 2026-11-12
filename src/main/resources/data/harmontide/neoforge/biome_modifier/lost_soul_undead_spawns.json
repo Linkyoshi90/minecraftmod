@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_lost_soul_undead",
+  "spawners": {
+    "type": "harmontide:lost_soul_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

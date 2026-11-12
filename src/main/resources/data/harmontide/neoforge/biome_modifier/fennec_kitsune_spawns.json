@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_fennec_kitsune",
+  "spawners": {
+    "type": "harmontide:fennec_kitsune",
+    "weight": 7,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

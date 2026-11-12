@@ -47,27 +47,27 @@ def textures():
 def data():
     m = os.path.join(ASSETS, "models")
     for lit in (True, False):
-        tex = "monstergirls:block/realm_censer" + ("" if lit else "_unlit")
+        tex = "harmontide:block/realm_censer" + ("" if lit else "_unlit")
         for hanging in (False, True):
             name = "realm_censer" + ("_hanging" if hanging else "") + ("" if lit else "_unlit")
             dump(os.path.join(m, "block", name + ".json"),
                  {"parent": "minecraft:block/template_" + ("hanging_" if hanging else "") + "lantern", "render_type": "minecraft:cutout",
                   "textures": {"lantern": tex}})
     dump(os.path.join(ASSETS, "blockstates", "realm_censer.json"), {"variants": {
-        f"hanging={str(h).lower()},lit={str(l).lower()}": {"model": "monstergirls:block/realm_censer" + ("_hanging" if h else "") + ("" if l else "_unlit")}
+        f"hanging={str(h).lower()},lit={str(l).lower()}": {"model": "harmontide:block/realm_censer" + ("_hanging" if h else "") + ("" if l else "_unlit")}
         for h in (False, True) for l in (False, True)}})
-    dump(os.path.join(m, "item", "realm_censer.json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:item/realm_censer"}})
+    dump(os.path.join(m, "item", "realm_censer.json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "harmontide:item/realm_censer"}})
     dump(os.path.join(DATA, "loot_table", "blocks", "realm_censer.json"), {"type": "minecraft:block", "pools": [{"rolls": 1, "bonus_rolls": 0,
-        "entries": [{"type": "minecraft:item", "name": "monstergirls:realm_censer"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
+        "entries": [{"type": "minecraft:item", "name": "harmontide:realm_censer"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
     dump(os.path.join(DATA, "recipe", "realm_censer.json"), {
         "type": "minecraft:crafting_shaped", "category": "decorations", "pattern": [" C ", "IHI", " A "],
-        "key": {"C": {"item": "minecraft:chain"}, "I": {"item": "minecraft:iron_ingot"}, "H": {"item": "monstergirls:heartfruit"},
+        "key": {"C": {"item": "minecraft:chain"}, "I": {"item": "minecraft:iron_ingot"}, "H": {"item": "harmontide:heartfruit"},
                 "A": {"item": "minecraft:amethyst_shard"}},
-        "result": {"id": "monstergirls:realm_censer", "count": 1}})
+        "result": {"id": "harmontide:realm_censer", "count": 1}})
     path = os.path.join(MC_DATA, "tags", "block", "mineable", "pickaxe.json")
     old = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {"replace": False, "values": []}
-    if "monstergirls:realm_censer" not in old["values"]:
-        old["values"].append("monstergirls:realm_censer")
+    if "harmontide:realm_censer" not in old["values"]:
+        old["values"].append("harmontide:realm_censer")
     dump(path, old)
 
 

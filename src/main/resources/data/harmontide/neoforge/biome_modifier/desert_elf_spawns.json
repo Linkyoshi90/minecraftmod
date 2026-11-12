@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_desert_elf",
+  "spawners": {
+    "type": "harmontide:desert_elf",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

@@ -53,25 +53,25 @@ def model(name, textures, elements, parent="minecraft:block/block"):
 
 
 def simple_state(name, variants=None):
-    dump(os.path.join(ASSETS, "blockstates", name + ".json"), {"variants": variants or {"": {"model": f"monstergirls:block/{name}"}}})
+    dump(os.path.join(ASSETS, "blockstates", name + ".json"), {"variants": variants or {"": {"model": f"harmontide:block/{name}"}}})
 
 
 def block_item(name, mod=None):
-    dump(os.path.join(ASSETS, "models", "item", name + ".json"), {"parent": f"monstergirls:block/{mod or name}"})
+    dump(os.path.join(ASSETS, "models", "item", name + ".json"), {"parent": f"harmontide:block/{mod or name}"})
 
 
 def plain_item(name):
-    dump(os.path.join(ASSETS, "models", "item", name + ".json"), {"parent": "minecraft:item/generated", "textures": {"layer0": f"monstergirls:item/{name}"}})
+    dump(os.path.join(ASSETS, "models", "item", name + ".json"), {"parent": "minecraft:item/generated", "textures": {"layer0": f"harmontide:item/{name}"}})
 
 
 def loot(name):
-    dump(os.path.join(DATA, "loot_table", "blocks", name + ".json"), {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [{"type": "minecraft:item", "name": f"monstergirls:{name}"}],
+    dump(os.path.join(DATA, "loot_table", "blocks", name + ".json"), {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [{"type": "minecraft:item", "name": f"harmontide:{name}"}],
          "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
 
 
 def shaped(name, pattern, key, count=1):
     dump(os.path.join(DATA, "recipe", name + ".json"), {"type": "minecraft:crafting_shaped", "category": "misc", "pattern": pattern,
-         "key": {k: {"item": v} if ":" in v and not v.startswith("#") else {"tag": v[1:]} for k, v in key.items()}, "result": {"id": f"monstergirls:{name}", "count": count}})
+         "key": {k: {"item": v} if ":" in v and not v.startswith("#") else {"tag": v[1:]} for k, v in key.items()}, "result": {"id": f"harmontide:{name}", "count": count}})
 
 
 def tag_add(path, names):
@@ -164,22 +164,22 @@ icon("homemade_meal", [
      dict(s="#d8d8d8", o="#c8903a", c="#e8c060", g="#5a9a3a", w="#8a5a2a"))
 
 # --- models -----------------------------------------------------------------------------------------------------------
-model("picnic_blanket", {"particle": "monstergirls:block/picnic_blanket", "all": "monstergirls:block/picnic_blanket"}, [cube([0, 0, 0], [16, 1, 16], "all")])
+model("picnic_blanket", {"particle": "harmontide:block/picnic_blanket", "all": "harmontide:block/picnic_blanket"}, [cube([0, 0, 0], [16, 1, 16], "all")])
 simple_state("picnic_blanket")
-pot = {"particle": "monstergirls:block/cooking_pot_side", "side": "monstergirls:block/cooking_pot_side", "top": "monstergirls:block/cooking_pot_top"}
+pot = {"particle": "harmontide:block/cooking_pot_side", "side": "harmontide:block/cooking_pot_side", "top": "harmontide:block/cooking_pot_top"}
 pe = cube([2, 0, 2], [14, 10, 14], "side")
 pe["faces"]["up"] = {"texture": "#top"}
 model("cooking_pot", pot, [pe, cube([0, 7, 6], [2, 8, 10], "side"), cube([14, 7, 6], [16, 8, 10], "side")])
 simple_state("cooking_pot")
-tub = {"particle": "monstergirls:block/soaking_tub_side", "side": "monstergirls:block/soaking_tub_side", "wood": "monstergirls:block/soaking_tub_wood", "water": "monstergirls:block/soaking_tub_water"}
+tub = {"particle": "harmontide:block/soaking_tub_side", "side": "harmontide:block/soaking_tub_side", "wood": "harmontide:block/soaking_tub_wood", "water": "harmontide:block/soaking_tub_water"}
 walls = [cube([0, 0, 0], [16, 2, 16], "wood"), cube([0, 0, 0], [16, 8, 2], "side"), cube([0, 0, 14], [16, 8, 16], "side"), cube([0, 0, 2], [2, 8, 14], "side"), cube([14, 0, 2], [16, 8, 14], "side")]
 model("soaking_tub", tub, walls)
 model("soaking_tub_filled", tub, walls + [cube([2, 2, 2], [14, 7, 14], "water")])
-simple_state("soaking_tub", {"filled=false": {"model": "monstergirls:block/soaking_tub"}, "filled=true": {"model": "monstergirls:block/soaking_tub_filled"}})
-mirror = {"particle": "monstergirls:block/vanity_mirror_frame", "frame": "monstergirls:block/vanity_mirror_frame", "glass": "monstergirls:block/vanity_mirror_glass"}
+simple_state("soaking_tub", {"filled=false": {"model": "harmontide:block/soaking_tub"}, "filled=true": {"model": "harmontide:block/soaking_tub_filled"}})
+mirror = {"particle": "harmontide:block/vanity_mirror_frame", "frame": "harmontide:block/vanity_mirror_frame", "glass": "harmontide:block/vanity_mirror_glass"}
 model("vanity_mirror", mirror, [cube([1, 0, 6], [15, 2, 10], "frame"), cube([2, 2, 7], [14, 16, 9], "frame"), cube([3, 3, 6.5], [13, 15, 9.5], "glass")])
-simple_state("vanity_mirror", {f"facing={f}": {"model": "monstergirls:block/vanity_mirror", "y": r} for f, r in [("north", 0), ("east", 90), ("south", 180), ("west", 270)]})
-post = {"particle": "monstergirls:block/sparring_post_straw", "straw": "monstergirls:block/sparring_post_straw", "wood": "monstergirls:block/sparring_post_wood"}
+simple_state("vanity_mirror", {f"facing={f}": {"model": "harmontide:block/vanity_mirror", "y": r} for f, r in [("north", 0), ("east", 90), ("south", 180), ("west", 270)]})
+post = {"particle": "harmontide:block/sparring_post_straw", "straw": "harmontide:block/sparring_post_straw", "wood": "harmontide:block/sparring_post_wood"}
 model("sparring_post", post, [cube([6, 0, 6], [10, 16, 10], "wood"), cube([4, 4, 4], [12, 13, 12], "straw"), cube([0, 9, 7], [16, 11, 9], "wood")])
 simple_state("sparring_post")
 for name in ("picnic_blanket", "cooking_pot", "soaking_tub", "vanity_mirror", "sparring_post"):
@@ -191,15 +191,15 @@ for name in ("grooming_brush", "toy_ball", "friend_whistle", "homemade_meal", "s
 roll_w = lambda x, y: speck("#7a5a3a" if y % 4 else "#5a3e26", 8)
 tile("bedroll", roll_w)
 tile("bedroll_top", lambda x, y: speck("#c8a878" if 4 <= x <= 11 and y < 5 else "#3a5a7a" if (y // 3) % 2 else "#2e4a68", 6))
-bed = {"particle": "monstergirls:block/bedroll", "top": "monstergirls:block/bedroll_top", "side": "monstergirls:block/bedroll"}
+bed = {"particle": "harmontide:block/bedroll", "top": "harmontide:block/bedroll_top", "side": "harmontide:block/bedroll"}
 be = cube([0, 0, 1], [16, 3, 15], "side")
 be["faces"]["up"] = {"texture": "#top"}
 model("bedroll", bed, [be])
-simple_state("bedroll", {f"facing={f}": {"model": "monstergirls:block/bedroll", "y": r} for f, r in [("north", 0), ("east", 90), ("south", 180), ("west", 270)]})
+simple_state("bedroll", {f"facing={f}": {"model": "harmontide:block/bedroll", "y": r} for f, r in [("north", 0), ("east", 90), ("south", 180), ("west", 270)]})
 block_item("bedroll")
 loot("bedroll")
-model("figurine", {"particle": "monstergirls:block/soaking_tub_wood", "base": "monstergirls:block/soaking_tub_wood"}, [cube([3, 0, 3], [13, 2, 13], "base")])
-simple_state("figurine", {f"facing={f}": {"model": "monstergirls:block/figurine", "y": r} for f, r in [("north", 0), ("east", 90), ("south", 180), ("west", 270)]})
+model("figurine", {"particle": "harmontide:block/soaking_tub_wood", "base": "harmontide:block/soaking_tub_wood"}, [cube([3, 0, 3], [13, 2, 13], "base")])
+simple_state("figurine", {f"facing={f}": {"model": "harmontide:block/figurine", "y": r} for f, r in [("north", 0), ("east", 90), ("south", 180), ("west", 270)]})
 block_item("figurine")
 icon("sketchbook", [
     "................", "...bbbbbbbbbb...", "...bpppppppppb..", "...bpppppppppb..", "...bppkkkkpppb..", "...bppkppkpppb..", "...bppkkkkpppb..", "...bpppkppppb...",
@@ -211,7 +211,7 @@ H.write_png(os.path.join(ASSETS, "textures", "entity", "towel.png"), rows)
 
 tile("gift_box", lambda x, y: speck("#e8c050" if x in (7, 8) or y in (7, 8) else "#c83a4a", 6))
 tile("gift_box_top", lambda x, y: speck("#e8c050" if x in (7, 8) or y in (7, 8) else "#c83a4a", 6))
-gb = {"particle": "monstergirls:block/gift_box", "side": "monstergirls:block/gift_box", "top": "monstergirls:block/gift_box_top"}
+gb = {"particle": "harmontide:block/gift_box", "side": "harmontide:block/gift_box", "top": "harmontide:block/gift_box_top"}
 ge = cube([2, 0, 2], [14, 10, 14], "side")
 ge["faces"]["up"] = {"texture": "#top"}
 model("gift_box", gb, [ge, cube([1, 10, 1], [15, 12, 15], "side")])
@@ -257,37 +257,37 @@ shaped("friendship_bracelet", ["SDS"], dict(S="minecraft:string", D="#c:dyes"), 
 shaped("love_letter", ["P", "R"], dict(P="minecraft:paper", R="minecraft:poppy"))
 shaped("umbrella", ["WWW", " S ", " S "], dict(W="#minecraft:wool", S="minecraft:stick"))
 shaped("friend_whistle", ["  G", "GGG", " G "], dict(G="minecraft:gold_nugget"))
-tag_add(os.path.join(MC, "pickaxe.json"), ["monstergirls:cooking_pot"])
+tag_add(os.path.join(MC, "pickaxe.json"), ["harmontide:cooking_pot"])
 axe = os.path.join(MC, "axe.json")
 if not os.path.exists(axe):
     dump(axe, {"replace": False, "values": []})
-tag_add(axe, ["monstergirls:soaking_tub", "monstergirls:sparring_post", "monstergirls:vanity_mirror"])
+tag_add(axe, ["harmontide:soaking_tub", "harmontide:sparring_post", "harmontide:vanity_mirror"])
 
 M.add_lang({
-    "block.monstergirls.picnic_blanket": "Picnic Blanket", "block.monstergirls.vanity_mirror": "Vanity Mirror", "block.monstergirls.cooking_pot": "Cooking Pot",
-    "block.monstergirls.soaking_tub": "Soaking Tub", "block.monstergirls.sparring_post": "Sparring Post",
-    "item.monstergirls.grooming_brush": "Grooming Brush", "item.monstergirls.toy_ball": "Toy Ball", "item.monstergirls.friend_whistle": "Friend Whistle",
-    "item.monstergirls.homemade_meal": "Home-Cooked Meal", "message.monstergirls.anniversary": "%s remembers: %s days since you became close", "block.monstergirls.gift_box": "Gift Box", "item.monstergirls.friend_compass": "Friend Compass",
-    "message.monstergirls.compass": "%s: %s blocks %s", "message.monstergirls.compass_none": "No friends nearby in the loaded world",
-    "direction.monstergirls.north": "north", "direction.monstergirls.northeast": "northeast", "direction.monstergirls.east": "east", "direction.monstergirls.southeast": "southeast",
-    "direction.monstergirls.south": "south", "direction.monstergirls.southwest": "southwest", "direction.monstergirls.west": "west", "direction.monstergirls.northwest": "northwest", "block.monstergirls.bedroll": "Bedroll", "block.monstergirls.figurine": "Figurine", "item.monstergirls.sketchbook": "Sketchbook",
-    "item.monstergirls.figurine.of": "Figurine of %s", "message.monstergirls.camp": "%s friends gather round the camp", "message.monstergirls.sketch_refused": "%s won't sit for you", "item.monstergirls.scout_pack": "Scout Pack",
-    "item.monstergirls.scout_pack.empty": "Hand it to a friend: she'll scout her home biome", "item.monstergirls.scout_pack.line": "%s x %s",
-    "message.monstergirls.scout_set_off": "%s shoulders the pack and sets off for the %s", "message.monstergirls.scout_back": "%s is back from the %s with a full pack!",
-    "message.monstergirls.scout_full": "Empty the pack before you give it to %s", "message.monstergirls.scout_refused": "%s won't go for you",
-    "message.monstergirls.groomed": "%s has only just been brushed", "message.monstergirls.full": "%s couldn't manage another bite yet",
-    "message.monstergirls.whistle": "%s came running", "message.monstergirls.picnic": "Friends at the picnic: %s", "message.monstergirls.picnic_nobody": "Nobody has come for a picnic",
-    "message.monstergirls.mirror_nobody": "No friend near the mirror", "message.monstergirls.pot": "In the pot: %s of %s",
-    "item.monstergirls.friendship_bracelet": "Friendship Bracelet", "item.monstergirls.love_letter": "Love Letter", "item.monstergirls.umbrella": "Umbrella",
-    "item.monstergirls.love_letter.from": "Letter from %s", "message.monstergirls.bracelet": "%s ties the bracelet on and won't stop looking at it",
-    "message.monstergirls.bracelet_has": "%s already wears your bracelet", "message.monstergirls.bracelet_refused": "%s isn't close enough to you for that yet",
-    "message.monstergirls.letter": "%s reads it twice and writes back", "message.monstergirls.letter_today": "%s is still reading the last one",
-    "message.monstergirls.letter_refused": "%s doesn't know you well enough to write back", "message.monstergirls.umbrella": "%s ducks under the umbrella with you",
-    "letter.monstergirls.love.0": "\"I keep your letter under my pillow. Don't tell anyone.\"", "letter.monstergirls.love.1": "\"Come home soon. It's too quiet without you.\"",
-    "letter.monstergirls.love.2": "\"You write very nicely. I read it out loud to myself. Twice.\"", "letter.monstergirls.love.3": "\"I saved you the warm spot by the fire.\"",
-    "letter.monstergirls.love.4": "\"Next time, say it to my face. I dare you.\"", "letter.monstergirls.love.5": "\"I drew a heart on this one. Don't laugh.\"",
-    "letter.monstergirls.friend.0": "\"Thank you for the letter! Nobody ever writes to me.\"", "letter.monstergirls.friend.1": "\"Bring snacks next time.\"",
-    "letter.monstergirls.friend.2": "\"I found a nice spot by the river. I'll show you.\"", "letter.monstergirls.friend.3": "\"You're a good friend. That's all. Bye.\"",
-    "item.monstergirls.umbrella.tip": "Hold it in the rain: a friend will share it",
+    "block.harmontide.picnic_blanket": "Picnic Blanket", "block.harmontide.vanity_mirror": "Vanity Mirror", "block.harmontide.cooking_pot": "Cooking Pot",
+    "block.harmontide.soaking_tub": "Soaking Tub", "block.harmontide.sparring_post": "Sparring Post",
+    "item.harmontide.grooming_brush": "Grooming Brush", "item.harmontide.toy_ball": "Toy Ball", "item.harmontide.friend_whistle": "Friend Whistle",
+    "item.harmontide.homemade_meal": "Home-Cooked Meal", "message.harmontide.anniversary": "%s remembers: %s days since you became close", "block.harmontide.gift_box": "Gift Box", "item.harmontide.friend_compass": "Friend Compass",
+    "message.harmontide.compass": "%s: %s blocks %s", "message.harmontide.compass_none": "No friends nearby in the loaded world",
+    "direction.harmontide.north": "north", "direction.harmontide.northeast": "northeast", "direction.harmontide.east": "east", "direction.harmontide.southeast": "southeast",
+    "direction.harmontide.south": "south", "direction.harmontide.southwest": "southwest", "direction.harmontide.west": "west", "direction.harmontide.northwest": "northwest", "block.harmontide.bedroll": "Bedroll", "block.harmontide.figurine": "Figurine", "item.harmontide.sketchbook": "Sketchbook",
+    "item.harmontide.figurine.of": "Figurine of %s", "message.harmontide.camp": "%s friends gather round the camp", "message.harmontide.sketch_refused": "%s won't sit for you", "item.harmontide.scout_pack": "Scout Pack",
+    "item.harmontide.scout_pack.empty": "Hand it to a friend: she'll scout her home biome", "item.harmontide.scout_pack.line": "%s x %s",
+    "message.harmontide.scout_set_off": "%s shoulders the pack and sets off for the %s", "message.harmontide.scout_back": "%s is back from the %s with a full pack!",
+    "message.harmontide.scout_full": "Empty the pack before you give it to %s", "message.harmontide.scout_refused": "%s won't go for you",
+    "message.harmontide.groomed": "%s has only just been brushed", "message.harmontide.full": "%s couldn't manage another bite yet",
+    "message.harmontide.whistle": "%s came running", "message.harmontide.picnic": "Friends at the picnic: %s", "message.harmontide.picnic_nobody": "Nobody has come for a picnic",
+    "message.harmontide.mirror_nobody": "No friend near the mirror", "message.harmontide.pot": "In the pot: %s of %s",
+    "item.harmontide.friendship_bracelet": "Friendship Bracelet", "item.harmontide.love_letter": "Love Letter", "item.harmontide.umbrella": "Umbrella",
+    "item.harmontide.love_letter.from": "Letter from %s", "message.harmontide.bracelet": "%s ties the bracelet on and won't stop looking at it",
+    "message.harmontide.bracelet_has": "%s already wears your bracelet", "message.harmontide.bracelet_refused": "%s isn't close enough to you for that yet",
+    "message.harmontide.letter": "%s reads it twice and writes back", "message.harmontide.letter_today": "%s is still reading the last one",
+    "message.harmontide.letter_refused": "%s doesn't know you well enough to write back", "message.harmontide.umbrella": "%s ducks under the umbrella with you",
+    "letter.harmontide.love.0": "\"I keep your letter under my pillow. Don't tell anyone.\"", "letter.harmontide.love.1": "\"Come home soon. It's too quiet without you.\"",
+    "letter.harmontide.love.2": "\"You write very nicely. I read it out loud to myself. Twice.\"", "letter.harmontide.love.3": "\"I saved you the warm spot by the fire.\"",
+    "letter.harmontide.love.4": "\"Next time, say it to my face. I dare you.\"", "letter.harmontide.love.5": "\"I drew a heart on this one. Don't laugh.\"",
+    "letter.harmontide.friend.0": "\"Thank you for the letter! Nobody ever writes to me.\"", "letter.harmontide.friend.1": "\"Bring snacks next time.\"",
+    "letter.harmontide.friend.2": "\"I found a nice spot by the river. I'll show you.\"", "letter.harmontide.friend.3": "\"You're a good friend. That's all. Bye.\"",
+    "item.harmontide.umbrella.tip": "Hold it in the rain: a friend will share it",
 })
 print("home assets written")

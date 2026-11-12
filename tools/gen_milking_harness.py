@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Assets for the optional milking features (see MonsterGirlsConfig): the harness texture, each cow's blush overlay,
+"""Assets for the optional milking features (see HarmontideConfig): the harness texture, each cow's blush overlay,
 the milk drip particle, and the names on the settings page.
 
     python tools/gen_milking_harness.py
@@ -58,9 +58,9 @@ def blush_rows(u, v, size=512, s=1.0, sy=None):
 
 
 def girl_ids():
-    with open(os.path.join(H.REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "girl", "GirlSpecies.java"), encoding="utf-8") as fh:
+    with open(os.path.join(H.REPO, "src", "main", "java", "com", "linkyoshi90", "harmontide", "entity", "girl", "GirlSpecies.java"), encoding="utf-8") as fh:
         girls = re.findall(r'^\s+[A-Z0-9_]+\("([a-z0-9_]+)", Family', fh.read(), re.M)
-    with open(os.path.join(H.REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "registry", "ModEntities.java"), encoding="utf-8") as fh:
+    with open(os.path.join(H.REPO, "src", "main", "java", "com", "linkyoshi90", "harmontide", "registry", "ModEntities.java"), encoding="utf-8") as fh:
         others = re.findall(r'ENTITY_TYPES\.register\("([a-z0-9_]+)"', fh.read())     # harpies and frogs
     return girls + [n for n in others if os.path.exists(os.path.join(ASSETS, "geo", "entity", n + ".geo.json"))]
 
@@ -80,8 +80,8 @@ def main():
         H.write_png(os.path.join(ASSETS, "textures", "entity", name + "_blush.png"), rows)
     I.dump(os.path.join(ASSETS, "particles", "milk_drip.json"), {"textures": ["minecraft:drip_fall"]})
 
-    prefix = "monstergirls.configuration."
-    lang = {prefix + "title": "MonsterGirls Settings",
+    prefix = "harmontide.configuration."
+    lang = {prefix + "title": "Harmontide Settings",
             prefix + "detailedSparrowModel": "Detailed sparrow model",
             prefix + "wildSpawnChance": "Wild spawn chance",
             prefix + "wildSpacing": "Wild spacing (blocks)",

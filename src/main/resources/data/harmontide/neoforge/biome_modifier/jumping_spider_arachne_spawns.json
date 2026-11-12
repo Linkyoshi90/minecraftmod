@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_jumping_spider_arachne",
+  "spawners": {
+    "type": "harmontide:jumping_spider_arachne",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

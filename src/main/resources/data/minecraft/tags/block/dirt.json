@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "monstergirls:realm_grass",
-    "monstergirls:realm_frost",
-    "monstergirls:realm_bog"
+    "harmontide:realm_grass",
+    "harmontide:realm_frost",
+    "harmontide:realm_bog"
   ]
 }

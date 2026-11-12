@@ -13,7 +13,7 @@ import json
 import os
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TAGS = os.path.join(REPO, "src", "main", "resources", "data", "monstergirls", "tags", "worldgen", "biome")
+TAGS = os.path.join(REPO, "src", "main", "resources", "data", "harmontide", "tags", "worldgen", "biome")
 
 END = ("end_barrens", "small_end_islands", "the_end")
 EXTRA = {

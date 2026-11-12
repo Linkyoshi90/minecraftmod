@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:stargazer",
+  "display": {
+    "icon": {
+      "id": "harmontide:geyserite"
+    },
+    "title": {
+      "translate": "advancement.harmontide.hot_spring"
+    },
+    "description": {
+      "translate": "advancement.harmontide.hot_spring.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

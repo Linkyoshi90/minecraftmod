@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_gribboar_armoured",
+  "spawners": {
+    "type": "harmontide:gribboar_armoured",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

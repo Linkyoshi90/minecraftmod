@@ -124,8 +124,8 @@ def model(species, stage, count=1):
     ] + eggs_in(count)
     return {
         "parent": "minecraft:block/block",
-        "textures": {"particle": "monstergirls:block/riflebird_nest", "twigs": "monstergirls:block/riflebird_nest",
-                     "lining": "monstergirls:block/riflebird_nest_lining", "egg": f"monstergirls:block/harpy_egg_{species}_{stage}"},
+        "textures": {"particle": "harmontide:block/riflebird_nest", "twigs": "harmontide:block/riflebird_nest",
+                     "lining": "harmontide:block/riflebird_nest_lining", "egg": f"harmontide:block/harpy_egg_{species}_{stage}"},
         "elements": elements,
     }
 
@@ -142,9 +142,9 @@ def main():
                 name = f"harpy_egg_{sp}_{stage}" + ("" if count == 1 else f"_x{count}")
                 if count > 1:
                     N.dump(os.path.join(ASSETS, "models", "block", name + ".json"), model(sp, stage, count))
-                variants[f"eggs={count},hatch={stage},species={sp}"] = {"model": "monstergirls:block/" + name}
+                variants[f"eggs={count},hatch={stage},species={sp}"] = {"model": "harmontide:block/" + name}
     N.dump(os.path.join(ASSETS, "blockstates", "harpy_egg.json"), {"variants": variants})
-    N.dump(os.path.join(ASSETS, "models", "item", "harpy_egg.json"), {"parent": "monstergirls:block/harpy_egg_sparrow_harpy_0"})
+    N.dump(os.path.join(ASSETS, "models", "item", "harpy_egg.json"), {"parent": "harmontide:block/harpy_egg_sparrow_harpy_0"})
     print(f"harpy egg assets written ({len(SPECIES)} species x 4 stages x 1-4 eggs)")
 
 

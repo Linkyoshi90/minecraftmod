@@ -1,7 +1,0 @@
-{
-  "type": "monstergirls:order_chapel",
-  "biomes": "#monstergirls:has_structure/order_chapel",
-  "step": "surface_structures",
-  "spawn_overrides": {},
-  "terrain_adaptation": "none"
-}

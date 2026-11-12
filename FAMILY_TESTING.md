@@ -6,13 +6,13 @@ Built on 2026-11-09 while you were at work. Everything below passes the GameTest
 
 | Command | What it does |
 |---|---|
-| `/monstergirls family` | Your wives (where they are, days to each anniversary) and your little ones (little, grown or their calling). |
-| `/monstergirls family wed` | (op) The girl you look at adores you, says yes and is wed: by a hearth within 8 blocks if there is one (the full ceremony), else on the spot. |
-| `/monstergirls family due` | (op) The girl you look at is expecting (by you) and gives birth within two seconds. |
-| `/monstergirls family grow` | (op) The little one you look at is a quarter of the way more grown (try it three times to see the growing-up moments, a fourth to see her come of age). |
+| `/harmontide family` | Your wives (where they are, days to each anniversary) and your little ones (little, grown or their calling). |
+| `/harmontide family wed` | (op) The girl you look at adores you, says yes and is wed: by a hearth within 8 blocks if there is one (the full ceremony), else on the spot. |
+| `/harmontide family due` | (op) The girl you look at is expecting (by you) and gives birth within two seconds. |
+| `/harmontide family grow` | (op) The little one you look at is a quarter of the way more grown (try it three times to see the growing-up moments, a fourth to see her come of age). |
 | `/time add 40d` | Forty days on: the next wedding anniversary (and three days for the end of a honeymoon: `/time add 3d`). |
 
-Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/monstergirls-common.toml` to 0 (any number). Other worlds keep whatever their toml says.
+Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/harmontide-common.toml` to 0 (any number). Other worlds keep whatever their toml says.
 
 ## Marriage, many times over
 
@@ -64,7 +64,7 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - At dusk, standing by your own hearth: every grown child of yours who lives further than 32 blocks away comes home, with her villager sweetheart and her little ones (your grandchildren). Daughters out of loaded range are fetched from where they were last seen (her chunk is held open for a few seconds by a self-expiring ticket). Same dimension only.
 - Fireworks, hearts, +6 friendship each, the little ones run to you; advancement *All Together Again*.
 - The next morning everyone who came from afar goes back where they were.
-- Try it: `/time set` to a day where `day % 24 == 11` (e.g. `/time set 11d`, then `/time add 11500` for dusk) with a grown daughter living away (or `/monstergirls family grow` a little one four times and walk her off).
+- Try it: `/time set` to a day where `day % 24 == 11` (e.g. `/time set 11d`, then `/time add 11500` for dusk) with a grown daughter living away (or `/harmontide family grow` a little one four times and walk her off).
 - Things to check in a client: does she arrive on solid ground near the hearth, and does she really end up back in her village the next morning (and her sweetheart with her)?
 - Option: `reunions`.
 
@@ -76,7 +76,7 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - Your first visit to the finished house is the **housewarming**: hearts, +4 friendship, advancement *A House of Her Own*. The journal's children page marks her "her own house".
 - Once she's wed to a villager sweetheart, the next morning near him he **moves in**: the second bed becomes his home (his old village bed is left free).
 - Daughters who already built a hut keep it. Harpy and frog daughters nest as before.
-- Try it: `/monstergirls family grow` a little one four times, set her to free roam near your hearth, wait a day (or `/time add 24000`).
+- Try it: `/harmontide family grow` a little one four times, set her to free roam near your hearth, wait a day (or `/time add 24000`).
 - Things to check in a client: the spot she picks, that she walks into her house at night, and that the villager really sleeps there.
 - Option: `daughtersMoveOut`.
 
@@ -91,14 +91,14 @@ Note: your dev world's config still had `maxSpouses = 1`; I set `run/config/mons
 - On a wife's anniversary (every 40 days after the wedding), give her the **wedding ring** while you both stand by a hearth, or a lit realm censer: the vows are renewed. Your friends gather, the other wives stand beside her with petals, bells and fireworks (violet smoke at a censer), she tosses the bouquet, wears her veil, and you get a second honeymoon as long as the first (three days). +4 friendship. The ring stays yours.
 - Once a year with each wife. On another day, the ring by a hearth tells you how many days to wait. The anniversary message reminds you.
 - The family page shows "vows renewed Nx"; advancement *I Still Do*.
-- Try it: `/monstergirls family wed` her, then `/time add` 40 days (`/time add 960000`) and stand by the hearth with her.
+- Try it: `/harmontide family wed` her, then `/time add` 40 days (`/time add 960000`) and stand by the hearth with her.
 
 ## Honeymoon trip (2026-11-10)
 
 - At the wedding (and at a vow renewal, if she has no wish yet) a wife names a place she has always wanted to see: one of 14 lovely overworld biomes (cherry grove, flower forest, sunflower plains, meadow, beach, warm ocean, ice spikes, mushroom fields, badlands, jungle, bamboo jungle, desert, savanna, lush caves), never the one she's standing in.
 - Go there with her: you standing in that biome, she within 16 blocks. You get a **souvenir** (an item of that place, named "Souvenir of the ...", with her name and the day on it) and a **scout pack** full of that biome's finds; +6 friendship, the honeymoon runs a day longer, advancement *Honeymoon Trip*.
 - The family page shows "(dreams of the ...)" until you go, then "(been to: ...)". At the next renewal she wishes for somewhere new.
-- Try it: `/monstergirls family wed` her, read the wish in chat, `/locate biome` it and travel there with her following.
+- Try it: `/harmontide family wed` her, read the wish in chat, `/locate biome` it and travel there with her following.
 
 ## Server safety (2026-11-10)
 
@@ -152,7 +152,7 @@ The raincoat, winter coat, yukata and maid apron are now painted onto each girl'
 
 ## The doppelganger (2026-11-11)
 
-- A new elf, the **Doppelganger** (`/summon monstergirls:doppelganger_elf`, or her spawn egg): dark forests, birch woods and taiga.
+- A new elf, the **Doppelganger** (`/summon harmontide:doppelganger_elf`, or her spawn egg): dark forests, birch woods and taiga.
 - Every 30 s she shifts: wild, to the look of the nearest girl she can copy; befriended (10+), to the look of whichever companion near you you're fondest of. Use a **glass pane** on her for her true face; again to let her borrow.
 - She copies elves, devils, undead (not the hand, gaitress, souls or will-o-wisp), kitsune, nekomata, canids, jackalopes, rodents, minotaurs, lizardfolk, marsupials, slimes and flora.
 - **Never seen in a client**: the borrowed model is drawn with HER animations (the bones the two share move; a tail or wings of the borrowed kind may hang still). Check that nothing looks broken, that the swap isn't a flicker, and whether the borrowed look should keep the original's size instead of hers.

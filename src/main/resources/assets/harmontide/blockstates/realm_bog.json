@@ -1,0 +1,24 @@
+{
+  "variants": {
+    "snowy=false": [
+      {
+        "model": "harmontide:block/realm_bog"
+      },
+      {
+        "model": "harmontide:block/realm_bog",
+        "y": 90
+      },
+      {
+        "model": "harmontide:block/realm_bog",
+        "y": 180
+      },
+      {
+        "model": "harmontide:block/realm_bog",
+        "y": 270
+      }
+    ],
+    "snowy=true": {
+      "model": "minecraft:block/grass_block_snow"
+    }
+  }
+}

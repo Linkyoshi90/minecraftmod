@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_lamassu_centaur",
+  "spawners": {
+    "type": "harmontide:lamassu_centaur",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

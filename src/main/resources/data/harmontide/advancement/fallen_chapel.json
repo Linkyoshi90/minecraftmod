@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:order_marked",
+  "display": {
+    "icon": {
+      "id": "harmontide:realm_censer"
+    },
+    "title": {
+      "translate": "advancement.harmontide.fallen_chapel"
+    },
+    "description": {
+      "translate": "advancement.harmontide.fallen_chapel.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

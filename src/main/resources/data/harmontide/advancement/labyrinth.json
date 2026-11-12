@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:stargazer",
+  "display": {
+    "icon": {
+      "id": "minecraft:mossy_stone_bricks"
+    },
+    "title": {
+      "translate": "advancement.harmontide.labyrinth"
+    },
+    "description": {
+      "translate": "advancement.harmontide.labyrinth.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_norn_elf",
+  "spawners": {
+    "type": "harmontide:norn_elf",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

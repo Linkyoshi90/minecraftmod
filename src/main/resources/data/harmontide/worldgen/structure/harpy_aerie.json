@@ -1,0 +1,7 @@
+{
+  "type": "harmontide:harpy_aerie",
+  "biomes": "#harmontide:has_structure/harpy_aerie",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}

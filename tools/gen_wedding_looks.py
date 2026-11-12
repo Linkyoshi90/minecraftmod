@@ -8,7 +8,7 @@ import os
 
 from PIL import Image
 
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src", "main", "resources", "assets", "monstergirls",
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src", "main", "resources", "assets", "harmontide",
                    "textures", "entity", "wedding_looks.png")
 
 

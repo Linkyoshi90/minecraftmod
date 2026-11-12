@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import harpy_lib as H
 from harpy_lib import rgb, ramp, pick, noise, CLEAR, FACES
 
-ASSETS = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls")
+ASSETS = os.path.join(H.REPO, "src", "main", "resources", "assets", "harmontide")
 
 
 def q(v):

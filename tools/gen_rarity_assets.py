@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gen_harmontide_items as I  # noqa: E402
 import gen_milk_assets as M  # noqa: E402
 
-SRC = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity", "Rarity.java")
+SRC = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src", "main", "java", "com", "linkyoshi90", "harmontide", "entity", "Rarity.java")
 src = open(SRC, encoding="utf-8").read()
 LEGENDARY = re.findall(r'"([a-z_]+)"', re.search(r"LEGENDARY = List\.of\((.*?)\);", src, re.S).group(1))
 
@@ -24,8 +24,8 @@ def advancement(name, icon_id, frame, criteria, parent="minecraft:adventure/root
     path = os.path.join(I.DATA, "advancement", name + ".json")
     os.makedirs(os.path.dirname(path), exist_ok=True)
     doc = {"parent": parent,
-           "display": {"icon": {"id": icon_id}, "title": {"translate": f"advancement.monstergirls.{name}"},
-                       "description": {"translate": f"advancement.monstergirls.{name}.desc"}, "frame": frame,
+           "display": {"icon": {"id": icon_id}, "title": {"translate": f"advancement.harmontide.{name}"},
+                       "description": {"translate": f"advancement.harmontide.{name}.desc"}, "frame": frame,
                        "show_toast": True, "announce_to_chat": True, "hidden": False},
            "criteria": {c: {"trigger": "minecraft:impossible"} for c in criteria},
            "requirements": [[c] for c in criteria]}
@@ -34,22 +34,22 @@ def advancement(name, icon_id, frame, criteria, parent="minecraft:adventure/root
 
 
 advancement("legendary_encounter", "minecraft:nether_star", "task", ["done"])
-advancement("legendary_friend", "minecraft:totem_of_undying", "goal", ["done"], "monstergirls:legendary_encounter")
-advancement("every_legend", "minecraft:dragon_egg", "challenge", LEGENDARY, "monstergirls:legendary_friend")
+advancement("legendary_friend", "minecraft:totem_of_undying", "goal", ["done"], "harmontide:legendary_encounter")
+advancement("every_legend", "minecraft:dragon_egg", "challenge", LEGENDARY, "harmontide:legendary_friend")
 
 M.add_lang({
-    "rarity.monstergirls.common": "Common", "rarity.monstergirls.rare": "Rare", "rarity.monstergirls.legendary": "Legendary",
-    "advancement.monstergirls.legendary_encounter": "A Living Legend",
-    "advancement.monstergirls.legendary_encounter.desc": "Come face to face with a legendary creature",
-    "advancement.monstergirls.legendary_friend": "Storybook Friend",
-    "advancement.monstergirls.legendary_friend.desc": "Befriend a legendary creature",
-    "advancement.monstergirls.every_legend": "Keeper of Legends",
-    "advancement.monstergirls.every_legend.desc": f"Befriend every one of the {len(LEGENDARY)} legendary creatures",
-    "journal.monstergirls.guide.legends.title": "Legends",
-    "journal.monstergirls.guide.legends": "Most kinds are common. The storied ones are rare. The figures of myth are legendary: "
+    "rarity.harmontide.common": "Common", "rarity.harmontide.rare": "Rare", "rarity.harmontide.legendary": "Legendary",
+    "advancement.harmontide.legendary_encounter": "A Living Legend",
+    "advancement.harmontide.legendary_encounter.desc": "Come face to face with a legendary creature",
+    "advancement.harmontide.legendary_friend": "Storybook Friend",
+    "advancement.harmontide.legendary_friend.desc": "Befriend a legendary creature",
+    "advancement.harmontide.every_legend": "Keeper of Legends",
+    "advancement.harmontide.every_legend.desc": f"Befriend every one of the {len(LEGENDARY)} legendary creatures",
+    "journal.harmontide.guide.legends.title": "Legends",
+    "journal.harmontide.guide.legends": "Most kinds are common. The storied ones are rare. The figures of myth are legendary: "
                                           "only one of each comes to a region, she glints now and then, and she stays until befriended.",
-    "monstergirls.configuration.rareSpawnRate": "Rare spawn rate",
-    "monstergirls.configuration.legendarySpawnRate": "Legendary spawn rate",
-    "monstergirls.configuration.legendaryOncePerRegion": "One legend per region",
+    "harmontide.configuration.rareSpawnRate": "Rare spawn rate",
+    "harmontide.configuration.legendarySpawnRate": "Legendary spawn rate",
+    "harmontide.configuration.legendaryOncePerRegion": "One legend per region",
 })
 print(f"rarity assets written ({len(LEGENDARY)} legends)")

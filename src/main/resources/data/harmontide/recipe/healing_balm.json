@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "harmontide:nectar_bottle"
+    },
+    {
+      "item": "minecraft:honey_bottle"
+    },
+    {
+      "tag": "minecraft:small_flowers"
+    }
+  ],
+  "result": {
+    "id": "harmontide:healing_balm",
+    "count": 3
+  }
+}

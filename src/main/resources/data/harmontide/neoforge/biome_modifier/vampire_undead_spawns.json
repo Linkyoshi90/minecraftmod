@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_vampire_undead",
+  "spawners": {
+    "type": "harmontide:vampire_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

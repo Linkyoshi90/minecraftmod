@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "harmontide:realm_manor",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 48,
+    "separation": 18,
+    "salt": 52370913
+  }
+}

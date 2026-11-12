@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Roc Harpy - the crow's geometry and animations (gen_crow_harpy.py), drawn four blocks tall (MonsterGirlsClient scales her).
+"""Roc Harpy - the crow's geometry and animations (gen_crow_harpy.py), drawn four blocks tall (HarmontideClient scales her).
 
     python tools/gen_roc_harpy.py                 # write the three asset files and the variants
     python tools/gen_roc_harpy.py --preview x.png # also render preview sheets

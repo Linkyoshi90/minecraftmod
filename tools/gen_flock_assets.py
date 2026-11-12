@@ -13,12 +13,12 @@ import gen_manor_assets  # noqa: E402
 
 def main():
     add_lang({
-        "monstergirls.configuration.passingFlocks": "Passing flocks",
-        "message.monstergirls.flock.north": "A flock of %s comes down nearby to rest on the way north. They'll fly on tomorrow.",
-        "message.monstergirls.flock.south": "A flock of %s comes down nearby to rest on the way south. They'll fly on tomorrow.",
+        "harmontide.configuration.passingFlocks": "Passing flocks",
+        "message.harmontide.flock.north": "A flock of %s comes down nearby to rest on the way north. They'll fly on tomorrow.",
+        "message.harmontide.flock.south": "A flock of %s comes down nearby to rest on the way south. They'll fly on tomorrow.",
     })
     gen_manor_assets.GUIDE_ADD.clear()
-    gen_manor_assets.GUIDE_ADD["journal.monstergirls.guide.encounters"] = (
+    gen_manor_assets.GUIDE_ADD["journal.harmontide.guide.encounters"] = (
         " Every eight days, in the morning, a flock of wild harpies passing through comes down near you to rest: waterfowl by "
         "water, songbirds inland. They fly on the next day, all but any who has made a friend.")
     gen_manor_assets.append_guides()

@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:hide_and_seek",
+  "display": {
+    "icon": {
+      "id": "minecraft:white_banner"
+    },
+    "title": {
+      "translate": "advancement.harmontide.race"
+    },
+    "description": {
+      "translate": "advancement.harmontide.race.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

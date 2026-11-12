@@ -12,9 +12,9 @@ import re
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GUIDE = os.path.join(REPO, "harpy_field_guide.html")
-ENTITY = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "monstergirls", "entity")
-LANG = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls", "lang", "en_us.json")
-TAGS = os.path.join(REPO, "src", "main", "resources", "data", "monstergirls", "tags", "worldgen", "biome")
+ENTITY = os.path.join(REPO, "src", "main", "java", "com", "linkyoshi90", "harmontide", "entity")
+LANG = os.path.join(REPO, "src", "main", "resources", "assets", "harmontide", "lang", "en_us.json")
+TAGS = os.path.join(REPO, "src", "main", "resources", "data", "harmontide", "tags", "worldgen", "biome")
 
 
 def class_comment(path):
@@ -56,7 +56,7 @@ def card(name, sid, doc, where):
         <p class="habitat"><b>Habitat</b>{html.escape(habitat)}</p>
         <p><b>Ecology & behaviour</b>{html.escape(first)}.</p>
         <p><b>Player interaction</b>{html.escape(rest)}</p>
-        <p class="risk"><b>Entity</b><code>monstergirls:{sid}</code></p>
+        <p class="risk"><b>Entity</b><code>harmontide:{sid}</code></p>
       </article>
 
 """
@@ -73,7 +73,7 @@ def main():
         if not f.endswith("Harpy.java") or f.startswith("Abstract"):
             continue
         sid = re.sub(r"(?<!^)(?=[A-Z])", "_", f[:-5]).lower()
-        name = lang.get(f"entity.monstergirls.{sid}", "").replace(" Harpy", "")
+        name = lang.get(f"entity.harmontide.{sid}", "").replace(" Harpy", "")
         if not name or name in have:
             continue
         cards.append(card(name, sid, class_comment(os.path.join(ENTITY, f)), biomes(sid)))

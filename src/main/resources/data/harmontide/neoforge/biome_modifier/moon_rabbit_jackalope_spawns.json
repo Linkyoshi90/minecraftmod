@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_moon_rabbit_jackalope",
+  "spawners": {
+    "type": "harmontide:moon_rabbit_jackalope",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

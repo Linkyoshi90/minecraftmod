@@ -1,0 +1,347 @@
+package com.linkyoshi90.harmontide.gametest;
+
+import com.linkyoshi90.harmontide.HarmontideMod;
+import com.linkyoshi90.harmontide.block.HearthBlockEntity;
+import com.linkyoshi90.harmontide.entity.Expeditions;
+import com.linkyoshi90.harmontide.entity.Journal;
+import com.linkyoshi90.harmontide.entity.Orders;
+import com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl;
+import com.linkyoshi90.harmontide.entity.girl.GirlArms;
+import com.linkyoshi90.harmontide.entity.girl.GirlSpecies;
+import com.linkyoshi90.harmontide.entity.girl.Settlement;
+import com.linkyoshi90.harmontide.registry.ModBlocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.gametest.framework.GameTest;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.gametest.GameTestHolder;
+import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+
+import java.util.List;
+import java.util.UUID;
+
+import static com.linkyoshi90.harmontide.gametest.HarpyTestUtil.PLATFORM;
+import static com.linkyoshi90.harmontide.gametest.HarpyTestUtil.check;
+import static com.linkyoshi90.harmontide.gametest.JackalopeTests.spawn;
+
+/** Life with the girls beyond befriending: weapons for the fighters, the journal, settlements and expeditions. */
+@GameTestHolder(HarmontideMod.MODID)
+@PrefixGameTestTemplate(false)
+public class HarmontideLifeTests {
+
+    private static <T extends AbstractMonsterGirl> T still(GameTestHelper helper, GirlSpecies s, BlockPos at) {
+        T girl = spawn(helper, s, at);
+        girl.setNoAi(true);
+        return girl;
+    }
+
+    private static ServerPlayer friendOf(GameTestHelper helper, AbstractMonsterGirl girl, BlockPos at) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, at);
+        girl.addAffection(p, Orders.AFFECTION);
+        return p;
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "fighterTakesABowAndShoots")
+    public static void fighterTakesABowAndShoots(GameTestHelper helper) {
+        AbstractMonsterGirl girl = still(helper, GirlSpecies.KAMAITACHI_RODENT, new BlockPos(3, 2, 3));
+        AbstractMonsterGirl other = still(helper, GirlSpecies.FENNEC_KITSUNE, new BlockPos(3, 2, 6));
+        ServerPlayer p = friendOf(helper, girl, new BlockPos(5, 2, 5));
+        other.addAffection(p, Orders.AFFECTION);
+        ItemStack bow = new ItemStack(Items.BOW);
+        p.setItemInHand(InteractionHand.MAIN_HAND, bow);
+        check(GirlArms.interact(other, p, bow) == null, "a girl who doesn't fight for her friend won't take it");
+        check(GirlArms.interact(girl, p, bow) != null && girl.getMainHandItem().is(Items.BOW) && bow.isEmpty(), "the kamaitachi takes the bow");
+        Zombie z = helper.spawn(EntityType.ZOMBIE, new BlockPos(9, 2, 3));
+        z.setNoAi(true);
+        girl.setTarget(z);
+        check(new GirlArms.RangedGoal(girl).canUse(), "armed, with a target, she shoots");
+        check(GirlArms.aimOf(girl.getMainHandItem()) == AbstractMonsterGirl.AIM_BOW && GirlArms.aimOf(new ItemStack(Items.CROSSBOW)) == AbstractMonsterGirl.AIM_CROSSBOW,
+                "a bow is drawn, a crossbow levelled");
+        girl.setAim(GirlArms.aimOf(girl.getMainHandItem()));
+        check(girl.getAim() == AbstractMonsterGirl.AIM_BOW, "she raises her bow");
+        GirlArms.shootArrow(girl, z, girl.getMainHandItem());
+        check(girl.lastShotTick() == girl.tickCount, "the shot is announced (the client's release and recoil)");
+        List<Arrow> arrows = helper.getLevel().getEntitiesOfClass(Arrow.class, new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(16));
+        check(!arrows.isEmpty() && arrows.get(0).getOwner() == girl, "an arrow of hers is flying");
+        p.setShiftKeyDown(true);
+        check(GirlArms.interact(girl, p, ItemStack.EMPTY) != null && girl.getMainHandItem().isEmpty() && p.getInventory().contains(new ItemStack(Items.BOW)),
+                "sneaking with an empty hand, her friend takes the bow back");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "fighterFetchesAThrownWeapon")
+    public static void fighterFetchesAThrownWeapon(GameTestHelper helper) {
+        AbstractMonsterGirl girl = still(helper, GirlSpecies.KAMAITACHI_RODENT, new BlockPos(3, 2, 3));
+        ServerPlayer stranger = HarpyTestUtil.survivalPlayer(helper, new BlockPos(7, 2, 7), "stranger");
+        ServerPlayer p = friendOf(helper, girl, new BlockPos(5, 2, 5));
+        net.minecraft.world.entity.item.ItemEntity fromStranger = stranger.drop(new ItemStack(Items.BOW), true, true);
+        net.minecraft.world.entity.item.ItemEntity fromFriend = p.drop(new ItemStack(Items.CROSSBOW), true, true);
+        check(fromStranger != null && !GirlArms.wantsThrown(girl, fromStranger), "a stranger's bow is not for her");
+        check(fromFriend != null && GirlArms.wantsThrown(girl, fromFriend), "her friend's crossbow is");
+        check(GirlArms.pickUp(girl, fromFriend) && girl.getMainHandItem().is(Items.CROSSBOW) && fromFriend.isRemoved(), "she picks it up and holds it");
+        HarpyTestUtil.remove(stranger);
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    /** A trapdoor spider saved out of her burrow but still weightless (as old saves are) comes back with her gravity. */
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "trapdoorSpiderKeepsHerWeight")
+    public static void trapdoorSpiderKeepsHerWeight(GameTestHelper helper) {
+        AbstractMonsterGirl spider = still(helper, GirlSpecies.TRAPDOOR_SPIDER_ARACHNE, new BlockPos(3, 2, 3));
+        spider.setNoGravity(true);
+        net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
+        spider.saveWithoutId(tag);
+        spider.load(tag);
+        check(!spider.isNoGravity(), "reloaded outside her burrow, she falls like anyone");
+        helper.succeed();
+    }
+
+    static int guidePages() {
+        return Journal.GUIDE.stream().mapToInt(com.linkyoshi90.harmontide.entity.GuidePages::of).sum();
+    }
+
+    /** Each long guide is split over pages by tools/split_guides.py; the parts must be there and add up to the whole (run it again after an edit). */
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "guidePagesMatchTheirText")
+    public static void guidePagesMatchTheirText(GameTestHelper helper) throws java.io.IOException {
+        com.google.gson.JsonObject lang;
+        try (var in = HarmontideMod.class.getResourceAsStream("/assets/harmontide/lang/en_us.json")) {
+            check(in != null, "the lang file is on the classpath");
+            lang = com.google.gson.JsonParser.parseReader(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();
+        }
+        for (String guide : Journal.GUIDE) {
+            String key = "journal.harmontide.guide." + guide;
+            check(lang.has(key) && lang.has(key + ".title"), "no text for the " + guide + " guide");
+            int parts = com.linkyoshi90.harmontide.entity.GuidePages.of(guide);
+            if (parts == 1) {
+                check(!lang.has(key + ".p1"), "the " + guide + " guide has parts but one page: run tools/split_guides.py");
+                continue;
+            }
+            StringBuilder whole = new StringBuilder();
+            for (int i = 1; i <= parts; i++) {
+                check(lang.has(key + ".p" + i), "the " + guide + " guide is missing part " + i + ": run tools/split_guides.py");
+                whole.append(i > 1 ? " " : "").append(lang.get(key + ".p" + i).getAsString());
+            }
+            check(!lang.has(key + ".p" + (parts + 1)) && whole.toString().equals(lang.get(key).getAsString()),
+                    "the " + guide + " guide's pages are out of date: run tools/split_guides.py");
+        }
+        int signatures = 0;
+        for (String key : lang.keySet()) {                                         // and each kind's signature, on its own pages
+            if (!key.startsWith("journal.harmontide.") || !key.endsWith(".signature")) continue;
+            String kind = key.substring("journal.harmontide.".length(), key.length() - ".signature".length());
+            int parts = com.linkyoshi90.harmontide.entity.GuidePages.signature(kind);
+            StringBuilder whole = new StringBuilder();
+            for (int i = 1; i <= parts && parts > 1; i++) {
+                check(lang.has(key + ".p" + i), kind + "'s signature is missing part " + i + ": run tools/split_guides.py");
+                whole.append(i > 1 ? " " : "").append(lang.get(key + ".p" + i).getAsString());
+            }
+            check(parts == 1 ? !lang.has(key + ".p1") : !lang.has(key + ".p" + (parts + 1)) && whole.toString().equals(lang.get(key).getAsString()),
+                    kind + "'s signature pages are out of date: run tools/split_guides.py");
+            signatures++;
+        }
+        check(signatures > 400, "every kind has a signature, found " + signatures);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "journalRecordsMeetingsAndFriends")
+    public static void journalRecordsMeetingsAndFriends(GameTestHelper helper) {
+        AbstractMonsterGirl girl = still(helper, GirlSpecies.YUREI_UNDEAD, new BlockPos(3, 2, 3));
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
+        check(Journal.book(p).pages().size() == 1 + guidePages(), "a fresh journal: the contents and the guide");
+        check(Journal.record(p, girl, false) && !Journal.record(p, girl, false), "met once is news, twice is not");
+        check(Journal.met(p).contains("yurei_undead") && Journal.friends(p).isEmpty(), "met, not yet befriended");
+        check(Journal.record(p, girl, true) && Journal.friends(p).contains("yurei_undead"), "befriended");
+        check(Journal.book(p).pages().size() == 3 + guidePages() + com.linkyoshi90.harmontide.entity.GuidePages.signature("yurei_undead"),
+                "and she has her pages, what she does on its own (and the tree of life its first branch)");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "girlsSettleAndTheMarketOpens")
+    public static void girlsSettleAndTheMarketOpens(GameTestHelper helper) {
+        BlockPos hp = new BlockPos(1, 2, 1);
+        helper.setBlock(hp, ModBlocks.HEARTH.get());
+        HearthBlockEntity hearth = (HearthBlockEntity) helper.getBlockEntity(hp);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
+        hearth.setOwner(p.getUUID());
+        AbstractMonsterGirl[] girls = new AbstractMonsterGirl[3];
+        for (int i = 0; i < 3; i++) {
+            girls[i] = still(helper, GirlSpecies.SPHINX_CENTAUR, new BlockPos(3 + i * 2, 2, 3));
+            if (i < 2) girls[i].addAffection(p, Orders.AFFECTION);
+        }
+        check(Settlement.settle(helper.getLevel(), girls[0], hearth) && helper.absolutePos(hp).equals(girls[0].homeHearth()), "a friend settles");
+        check(!Settlement.settle(helper.getLevel(), girls[2], hearth), "a stranger doesn't");
+        Settlement.settle(helper.getLevel(), girls[1], hearth);
+        check(hearth.market(helper.getLevel()) == 0, "two residents: no market yet");
+        girls[2].addAffection(p, Orders.AFFECTION);
+        Settlement.settle(helper.getLevel(), girls[2], hearth);
+        check(hearth.residentCount() == 3 && hearth.market(helper.getLevel()) == 3 && !hearth.store().isEmpty(), "three: each brings a present to the market");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "residentsPlantAGarden")
+    public static void residentsPlantAGarden(GameTestHelper helper) {
+        BlockPos hp = new BlockPos(5, 2, 5);
+        helper.setBlock(hp, ModBlocks.HEARTH.get());
+        HearthBlockEntity hearth = (HearthBlockEntity) helper.getBlockEntity(hp);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 1));
+        hearth.setOwner(p.getUUID());
+        AbstractMonsterGirl sphinx = still(helper, GirlSpecies.SPHINX_CENTAUR, new BlockPos(2, 2, 8));
+        AbstractMonsterGirl wolf = still(helper, GirlSpecies.WOLF_CANID, new BlockPos(8, 2, 2));
+        check(hearth.garden(helper.getLevel()) == 0, "nobody lives here yet");
+        for (AbstractMonsterGirl g : java.util.List.of(sphinx, wolf)) {
+            g.addAffection(p, Orders.AFFECTION);
+            Settlement.settle(helper.getLevel(), g, hearth);
+        }
+        check(hearth.garden(helper.getLevel()) == 2, "each resident plants one flower");
+        int sphinxes = 0, flowers = 0;
+        BlockPos mid = helper.absolutePos(hp);
+        for (BlockPos q : BlockPos.betweenClosed(mid.offset(-7, -1, -7), mid.offset(7, 1, 7))) {
+            var state = helper.getLevel().getBlockState(q);
+            if (!state.is(net.minecraft.tags.BlockTags.SMALL_FLOWERS)) continue;
+            flowers++;
+            if (state.is(HearthBlockEntity.flowerOf(sphinx))) sphinxes++;
+            check(Math.max(Math.abs(q.getX() - mid.getX()), Math.abs(q.getZ() - mid.getZ())) >= HearthBlockEntity.GARDEN_NEAR, "not right at the fire");
+        }
+        check(flowers == 2 && sphinxes >= 1, "her kind's flower among them, got " + flowers);
+        for (int i = 0; i < 10; i++) hearth.garden(helper.getLevel());
+        check(hearth.garden(helper.getLevel()) == 0, "a garden, not a meadow: it stops at " + HearthBlockEntity.GARDEN_MAX);
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 240, batch = "hearthBellCallsResidentsHome")
+    public static void hearthBellCallsResidentsHome(GameTestHelper helper) {
+        BlockPos hp = new BlockPos(2, 2, 2);
+        helper.setBlock(hp, ModBlocks.HEARTH.get());
+        HearthBlockEntity hearth = (HearthBlockEntity) helper.getBlockEntity(hp);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(1, 2, 4));
+        hearth.setOwner(p.getUUID());
+        AbstractMonsterGirl girl = spawn(helper, GirlSpecies.WOLF_CANID, new BlockPos(12, 2, 12));
+        girl.addAffection(p, Orders.AFFECTION);
+        Settlement.settle(helper.getLevel(), girl, hearth);
+        check(girl.homeHearth() != null && !girl.calledHome(), "she lives here, roaming by day");
+        BlockPos home = helper.absolutePos(hp);
+        helper.runAfterDelay(2, () -> {                                     // the hearth counts as loaded from the next tick
+            check(HearthBlockEntity.bell(helper.getLevel(), helper.absolutePos(new BlockPos(14, 2, 14))) == 0, "a bell far from the hearth isn't hers");
+            check(HearthBlockEntity.bell(helper.getLevel(), helper.absolutePos(new BlockPos(3, 2, 2))) == 1 && girl.calledHome(), "the hearth's bell calls her");
+        });
+        helper.succeedWhen(() -> {
+            check(girl.calledHome(), "rung first");
+            check(home.distToCenterSqr(girl.position()) < 3.5 * 3.5, "she comes home: " + Math.sqrt(home.distToCenterSqr(girl.position())));
+            HarpyTestUtil.remove(p);
+        });
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "supperByTheHearth")
+    public static void supperByTheHearth(GameTestHelper helper) {
+        BlockPos hp = new BlockPos(5, 2, 5);
+        helper.setBlock(hp, ModBlocks.HEARTH.get());
+        HearthBlockEntity hearth = (HearthBlockEntity) helper.getBlockEntity(hp);
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 8));
+        hearth.setOwner(p.getUUID());
+        AbstractMonsterGirl girl = still(helper, GirlSpecies.FENNEC_KITSUNE, new BlockPos(6, 2, 6));
+        AbstractMonsterGirl far = still(helper, GirlSpecies.WOLF_CANID, new BlockPos(12, 2, 12));
+        for (AbstractMonsterGirl g : List.of(girl, far)) {
+            g.addAffection(p, Orders.AFFECTION);
+            Settlement.settle(helper.getLevel(), g, hearth);
+        }
+        check(hearth.supper(helper.getLevel()) == 0, "no supper till the bell rings for it");
+        check(hearth.startSupper(helper.getLevel()) && !hearth.startSupper(helper.getLevel()), "supper once a day");
+        p.getFoodData().setFoodLevel(10);
+        int before = girl.getAffection(p);
+        check(hearth.supper(helper.getLevel()) == 1, "she sits down to eat; the one still out on the hill doesn't, yet");
+        check(girl.getAffection(p) == before + HearthBlockEntity.SUPPER_AFFECTION && p.getFoodData().getFoodLevel() > 10, "closer, and fed");
+        check(hearth.supper(helper.getLevel()) == 0, "one helping each");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 200, batch = "settledGirlBuildsHerHut")
+    public static void settledGirlBuildsHerHut(GameTestHelper helper) {
+        AbstractMonsterGirl girl = still(helper, GirlSpecies.FENNEC_KITSUNE, new BlockPos(1, 2, 1));
+        BlockPos origin = helper.absolutePos(new BlockPos(2, 2, 2));
+        List<Settlement.Piece> plan = Settlement.hut(GirlSpecies.FENNEC_KITSUNE, origin, Direction.NORTH);
+        check(plan.size() == 46 + 25 + 3, "walls with a doorway, a roof, a bed and a lantern");
+        check(plan.stream().anyMatch(pc -> pc.state().getBlock() instanceof BedBlock), "with a bed");
+        girl.planHutAt(origin, Direction.NORTH);
+        for (int i = 0; i < 3; i++) Settlement.buildStep(helper.getLevel(), girl);
+        check(girl.hutStep() == 3 && helper.getLevel().getBlockState(plan.get(0).pos()).is(plan.get(0).state().getBlock()), "she builds it a block at a time");
+        for (int i = 3; i < plan.size(); i++) Settlement.buildStep(helper.getLevel(), girl);
+        int halves = 0;
+        for (Settlement.Piece pc : plan) if (helper.getLevel().getBlockState(pc.pos()).getBlock() instanceof BedBlock) halves++;
+        check(halves == 2, "the whole bed inside, not half of it in the wall: " + halves);
+        for (Settlement.Piece pc : plan) check(helper.getLevel().getBlockState(pc.pos()).is(pc.state().getBlock()), "every piece in its place: " + pc);
+        var homely = Settlement.homely(girl);
+        for (Settlement.Piece pc : homely) check(plan.stream().noneMatch(q -> q.pos().equals(pc.pos())), "her things go where nothing of the hut is: " + pc);
+        for (int i = 0; i < homely.size(); i++) check(Settlement.makeHomely(helper.getLevel(), girl) != null, "one thing each morning");
+        check(Settlement.makeHomely(helper.getLevel(), girl) == null, "and then it's homely");
+        check(homely.stream().anyMatch(pc -> pc.state().getBlock() instanceof net.minecraft.world.level.block.FlowerPotBlock
+                && helper.getLevel().getBlockState(pc.pos()).getBlock() instanceof net.minecraft.world.level.block.FlowerPotBlock), "her flower in a pot");
+        BlockPos signAt = homely.get(0).pos();
+        check(helper.getLevel().getBlockEntity(signAt) instanceof net.minecraft.world.level.block.entity.SignBlockEntity board
+                && board.getFrontText().getMessage(1, false).getString().equals(girl.getName().getString()) && board.isWaxed(), "her name on a sign outside");
+        BlockPos doorway = origin.offset(2, 0, 0);
+        check(signAt.distManhattan(doorway) == 2 && !signAt.equals(doorway.north()), "beside the path to her door, not on it: " + signAt);
+        girl.setCustomName(net.minecraft.network.chat.Component.literal("Clementine"));
+        check(Settlement.makeHomely(helper.getLevel(), girl) == null && helper.getLevel().getBlockEntity(signAt) instanceof net.minecraft.world.level.block.entity.SignBlockEntity renamed
+                && renamed.getFrontText().getMessage(1, false).getString().equals("Clementine"), "a new name, a repainted sign");
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "expeditionGoesAndComesBack")
+    public static void expeditionGoesAndComesBack(GameTestHelper helper) {
+        AbstractMonsterGirl girl = still(helper, GirlSpecies.SPHINX_CENTAUR, new BlockPos(3, 2, 3));
+        ServerPlayer p = friendOf(helper, girl, new BlockPos(5, 2, 5));
+        UUID id = girl.getUUID();
+        ItemStack map = new ItemStack(Items.MAP);
+        check(Expeditions.send(girl, p, map) && girl.isRemoved() && map.isEmpty() && Expeditions.away(p) == 1, "with the map, she sets off");
+        check(Expeditions.returnDue(p, false).isEmpty(), "not back before her day is up");
+        List<AbstractMonsterGirl> back = Expeditions.returnDue(p, true);
+        check(back.size() == 1 && back.get(0).getUUID().equals(id) && back.get(0).getAffection(p) >= Orders.AFFECTION && Expeditions.away(p) == 0,
+                "she comes back, herself, and still your friend");
+        check(!Expeditions.finds(back.get(0), p).isEmpty(), "with finds");
+        AbstractMonsterGirl friend = Expeditions.companion(helper.getLevel(), p, back.get(0));
+        check(friend != null && friend.getSpecies().clade() == back.get(0).getSpecies().clade() && friend.getAffection(p) >= Orders.AFFECTION,
+                "and sometimes a friend of her clade, who likes you already");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "aLetterFromTheRoad")
+    public static void aLetterFromTheRoad(GameTestHelper helper) {
+        AbstractMonsterGirl girl = still(helper, GirlSpecies.SPHINX_CENTAUR, new BlockPos(3, 2, 3));
+        ServerPlayer p = friendOf(helper, girl, new BlockPos(5, 2, 5));
+        p.getInventory().clearContent();
+        check(Expeditions.send(girl, p, new ItemStack(Items.MAP)), "she sets off");
+        check(com.linkyoshi90.harmontide.entity.Letters.writeDue(p) == 0, "no letter as she leaves");
+        var data = p.getData(com.linkyoshi90.harmontide.registry.ModAttachments.EXPEDITIONS);
+        var away = data.getList("Away", net.minecraft.nbt.Tag.TAG_COMPOUND);
+        away.getCompound(0).putLong("Back", helper.getLevel().getGameTime() + Expeditions.DURATION / 2);
+        data.put("Away", away);
+        p.setData(com.linkyoshi90.harmontide.registry.ModAttachments.EXPEDITIONS, data);
+        check(com.linkyoshi90.harmontide.entity.Letters.writeDue(p) == 1, "halfway, she writes");
+        ItemStack letter = ItemStack.EMPTY;
+        int things = 0;
+        for (ItemStack s : p.getInventory().items) {
+            if (s.is(Items.WRITTEN_BOOK)) letter = s;
+            if (!s.isEmpty()) things++;
+        }
+        var content = letter.get(net.minecraft.core.component.DataComponents.WRITTEN_BOOK_CONTENT);
+        check(content != null && content.pages().size() == 2 && !content.author().isEmpty() && things == 2, "a signed letter, and a find tucked in");
+        check(com.linkyoshi90.harmontide.entity.Letters.writeDue(p) == 0 && Expeditions.away(p) == 1, "just the one; she is still away");
+        check(p.getData(com.linkyoshi90.harmontide.registry.ModAttachments.JOURNAL).getInt(com.linkyoshi90.harmontide.entity.Letters.COUNT) == 1, "the journal counts it");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+}

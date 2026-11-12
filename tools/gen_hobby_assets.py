@@ -24,25 +24,25 @@ HOBBIES = {
 
 def main():
     lang = {
-        "jade.monstergirls.hobby": "Hobby: %s",
-        "message.monstergirls.hobby.done": "%s finishes her %s for the day and leaves you something.",
-        "message.monstergirls.hobby.invite": "%s is busy with her %s. Stay and keep her company?",
-        "item.monstergirls.knitted_cap": "Cap knitted by %s",
-        "advancement.monstergirls.shared_interests": "Shared Interests",
-        "advancement.monstergirls.shared_interests.desc": "Keep a friend company through her hobby",
+        "jade.harmontide.hobby": "Hobby: %s",
+        "message.harmontide.hobby.done": "%s finishes her %s for the day and leaves you something.",
+        "message.harmontide.hobby.invite": "%s is busy with her %s. Stay and keep her company?",
+        "item.harmontide.knitted_cap": "Cap knitted by %s",
+        "advancement.harmontide.shared_interests": "Shared Interests",
+        "advancement.harmontide.shared_interests.desc": "Keep a friend company through her hobby",
     }
     for key, line in HOBBIES.items():
-        lang["hobby.monstergirls." + key] = key
-        lang["message.monstergirls.hobby.shared." + key] = "%s: " + line
+        lang["hobby.harmontide." + key] = key
+        lang["message.harmontide.hobby.shared." + key] = "%s: " + line
     dump(os.path.join(DATA, "advancement", "shared_interests.json"), {
-        "parent": "monstergirls:hide_and_seek",
-        "display": {"icon": {"id": "minecraft:writable_book"}, "title": {"translate": "advancement.monstergirls.shared_interests"},
-                    "description": {"translate": "advancement.monstergirls.shared_interests.desc"},
+        "parent": "harmontide:hide_and_seek",
+        "display": {"icon": {"id": "minecraft:writable_book"}, "title": {"translate": "advancement.harmontide.shared_interests"},
+                    "description": {"translate": "advancement.harmontide.shared_interests.desc"},
                     "frame": "task", "show_toast": True, "announce_to_chat": True, "hidden": False},
         "criteria": {"done": {"trigger": "minecraft:impossible"}}})
     add_lang(lang)
     gen_manor_assets.GUIDE_ADD.clear()
-    gen_manor_assets.GUIDE_ADD["journal.monstergirls.guide.home"] = (
+    gen_manor_assets.GUIDE_ADD["journal.harmontide.guide.home"] = (
         " Every girl has a hobby of her own (gardening, fishing, reading, music, baking, collecting or knitting; her friends see it) "
         "and an hour of the day for it. If a friend is about she leaves what she made at her feet: a gardener tends the crops round "
         "her, a reader shares what she learned, a musician's tune quickens everyone's work. Keep her company through it and she "

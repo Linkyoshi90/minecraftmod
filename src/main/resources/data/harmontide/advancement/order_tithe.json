@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:order_marked",
+  "display": {
+    "icon": {
+      "id": "minecraft:gold_ingot"
+    },
+    "title": {
+      "translate": "advancement.harmontide.order_tithe"
+    },
+    "description": {
+      "translate": "advancement.harmontide.order_tithe.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

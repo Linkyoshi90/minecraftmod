@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_venus_flytrap_flora",
+  "spawners": {
+    "type": "harmontide:venus_flytrap_flora",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

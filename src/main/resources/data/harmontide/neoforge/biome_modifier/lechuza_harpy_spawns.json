@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_lechuza_harpy",
+  "spawners": {
+    "type": "harmontide:lechuza_harpy",
+    "weight": 4,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

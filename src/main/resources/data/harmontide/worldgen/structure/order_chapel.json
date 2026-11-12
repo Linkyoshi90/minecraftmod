@@ -1,0 +1,7 @@
+{
+  "type": "harmontide:order_chapel",
+  "biomes": "#harmontide:has_structure/order_chapel",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}

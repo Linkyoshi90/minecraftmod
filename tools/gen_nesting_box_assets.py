@@ -14,8 +14,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gen_milk_assets as M  # noqa: E402
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ASSETS = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls")
-DATA = os.path.join(REPO, "src", "main", "resources", "data", "monstergirls")
+ASSETS = os.path.join(REPO, "src", "main", "resources", "assets", "harmontide")
+DATA = os.path.join(REPO, "src", "main", "resources", "data", "harmontide")
 
 
 def dump(path, doc):
@@ -47,17 +47,17 @@ def main():
     dump(os.path.join(ASSETS, "models", "block", "nesting_box.json"), box(False))
     dump(os.path.join(ASSETS, "models", "block", "nesting_box_eggs.json"), box(True))
     dump(os.path.join(ASSETS, "blockstates", "nesting_box.json"), {"variants": {
-        "eggs=false": {"model": "monstergirls:block/nesting_box"}, "eggs=true": {"model": "monstergirls:block/nesting_box_eggs"}}})
-    dump(os.path.join(ASSETS, "models", "item", "nesting_box.json"), {"parent": "monstergirls:block/nesting_box_eggs"})
+        "eggs=false": {"model": "harmontide:block/nesting_box"}, "eggs=true": {"model": "harmontide:block/nesting_box_eggs"}}})
+    dump(os.path.join(ASSETS, "models", "item", "nesting_box.json"), {"parent": "harmontide:block/nesting_box_eggs"})
     dump(os.path.join(DATA, "loot_table", "blocks", "nesting_box.json"), {"type": "minecraft:block", "pools": [{
-        "rolls": 1, "entries": [{"type": "minecraft:item", "name": "monstergirls:nesting_box"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
+        "rolls": 1, "entries": [{"type": "minecraft:item", "name": "harmontide:nesting_box"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
     dump(os.path.join(DATA, "recipe", "nesting_box.json"), {"type": "minecraft:crafting_shaped", "category": "misc",
                                                            "pattern": ["P P", "PHP"], "key": {"P": {"tag": "minecraft:planks"}, "H": {"item": "minecraft:wheat"}},
-                                                           "result": {"id": "monstergirls:nesting_box", "count": 1}})
+                                                           "result": {"id": "harmontide:nesting_box", "count": 1}})
     M.add_lang({
-        "block.monstergirls.nesting_box": "Nesting Box",
-        "journal.monstergirls.guide.nesting.title": "Nesting boxes",
-        "journal.monstergirls.guide.nesting": "Build a nesting box (planks around a bit of wheat) and set it down where your hens are. Any egg laid within "
+        "block.harmontide.nesting_box": "Nesting Box",
+        "journal.harmontide.guide.nesting.title": "Nesting boxes",
+        "journal.harmontide.guide.nesting": "Build a nesting box (planks around a bit of wheat) and set it down where your hens are. Any egg laid within "
                                               "four blocks of it, by a chicken or a harpy, goes into the hay instead of rolling about. Take the eggs out "
                                               "with an empty hand, or let a hopper do it; a friend on patrol nearby empties it into the fridge.",
     })

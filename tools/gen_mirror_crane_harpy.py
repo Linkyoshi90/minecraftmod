@@ -86,7 +86,7 @@ def paint(v=None):
 
 
 def write_variants():
-    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls", "textures", "entity")
+    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "harmontide", "textures", "entity")
     for k, v in VARIANTS.items():
         H.write_png(os.path.join(tex_dir, f"{NAME}_{k}.png"), paint(v))
     print(f"{NAME}: {len(VARIANTS)} variants ({', '.join(VARIANTS)})")

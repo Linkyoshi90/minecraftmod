@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_lilith_devil",
+  "spawners": {
+    "type": "harmontide:lilith_devil",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

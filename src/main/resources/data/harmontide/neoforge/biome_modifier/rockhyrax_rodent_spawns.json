@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_rockhyrax_rodent",
+  "spawners": {
+    "type": "harmontide:rockhyrax_rodent",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "harmontide:labyrinth",
+  "biomes": "#harmontide:has_structure/labyrinth",
+  "step": "underground_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}

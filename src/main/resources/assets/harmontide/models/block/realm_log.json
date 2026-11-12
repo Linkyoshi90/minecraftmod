@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "harmontide:block/realm_log_top",
+    "side": "harmontide:block/realm_log"
+  }
+}

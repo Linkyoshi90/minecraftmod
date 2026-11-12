@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "wooden_door",
+  "pattern": [
+    "##",
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "harmontide:realm_planks"
+    }
+  },
+  "result": {
+    "id": "harmontide:realm_door",
+    "count": 3
+  }
+}

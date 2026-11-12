@@ -18,8 +18,8 @@ import harpy_lib as H  # noqa: E402
 
 REPO = H.REPO
 RES = os.path.join(REPO, "src", "main", "resources")
-ASSETS = os.path.join(RES, "assets", "monstergirls")
-DATA = os.path.join(RES, "data", "monstergirls")
+ASSETS = os.path.join(RES, "assets", "harmontide")
+DATA = os.path.join(RES, "data", "harmontide")
 CLEAR = (0, 0, 0, 0)
 
 
@@ -499,60 +499,60 @@ def recipes():
 
     R = {}
     R["cheese"] = {"type": "minecraft:crafting_shapeless", "category": "misc", "ingredients": [item("minecraft:milk_bucket")],
-                   "result": {"id": "monstergirls:cheese", "count": 3}}
+                   "result": {"id": "harmontide:cheese", "count": 3}}
     R["rice_cake"] = {"type": "minecraft:crafting_shapeless", "category": "misc",
                       "ingredients": [item("minecraft:wheat"), item("minecraft:wheat"), item("minecraft:sugar")],
-                      "result": {"id": "monstergirls:rice_cake", "count": 2}}
+                      "result": {"id": "harmontide:rice_cake", "count": 2}}
     flavour = {"apple_mochi": "minecraft:apple", "melon_mochi": "minecraft:melon_slice", "berry_mochi": "minecraft:sweet_berries",
                "chocolate_mochi": "minecraft:cocoa_beans", "honey_mochi": "minecraft:honey_bottle", "pumpkin_mochi": "minecraft:pumpkin"}
     for name, f in flavour.items():
-        R[name] = {"type": "minecraft:crafting_shapeless", "category": "misc", "ingredients": [item("monstergirls:rice_cake"), item(f)],
-                   "result": {"id": "monstergirls:" + name, "count": 1}}
+        R[name] = {"type": "minecraft:crafting_shapeless", "category": "misc", "ingredients": [item("harmontide:rice_cake"), item(f)],
+                   "result": {"id": "harmontide:" + name, "count": 1}}
     R["nectar_bucket"] = {"type": "minecraft:crafting_shapeless", "category": "misc",
-                          "ingredients": [item("minecraft:bucket")] + [item("monstergirls:nectar_bottle")] * 3,
-                          "result": {"id": "monstergirls:nectar_bucket", "count": 1}}
+                          "ingredients": [item("minecraft:bucket")] + [item("harmontide:nectar_bottle")] * 3,
+                          "result": {"id": "harmontide:nectar_bucket", "count": 1}}
     R["harmontide_journal"] = {"type": "minecraft:crafting_shapeless", "category": "misc",
                                 "ingredients": [item("minecraft:book"), item("minecraft:feather")],
-                                "result": {"id": "monstergirls:harmontide_journal", "count": 1}}
+                                "result": {"id": "harmontide:harmontide_journal", "count": 1}}
     R["healing_balm"] = {"type": "minecraft:crafting_shapeless", "category": "misc",
-                         "ingredients": [item("monstergirls:nectar_bottle"), item("minecraft:honey_bottle"), {"tag": "minecraft:small_flowers"}],
-                         "result": {"id": "monstergirls:healing_balm", "count": 3}}
-    R["string_from_spider_silk"] = {"type": "minecraft:crafting_shapeless", "category": "misc", "ingredients": [item("monstergirls:spider_silk")],
+                         "ingredients": [item("harmontide:nectar_bottle"), item("minecraft:honey_bottle"), {"tag": "minecraft:small_flowers"}],
+                         "result": {"id": "harmontide:healing_balm", "count": 3}}
+    R["string_from_spider_silk"] = {"type": "minecraft:crafting_shapeless", "category": "misc", "ingredients": [item("harmontide:spider_silk")],
                                     "result": {"id": "minecraft:string", "count": 2}}
     shaped = {
-        "snakeskin_cloak": (["S S", "SSS", "SSS"], {"S": "monstergirls:shed_skin"}),
-        "silk_trousers": (["SSS", "S S", "S S"], {"S": "monstergirls:spider_silk"}),
-        "silk_shoes": (["S S", "S S"], {"S": "monstergirls:spider_silk"}),
-        "flippers": (["S S", "S S", "L L"], {"S": "monstergirls:merfolk_scale", "L": "minecraft:leather"}),
+        "snakeskin_cloak": (["S S", "SSS", "SSS"], {"S": "harmontide:shed_skin"}),
+        "silk_trousers": (["SSS", "S S", "S S"], {"S": "harmontide:spider_silk"}),
+        "silk_shoes": (["S S", "S S"], {"S": "harmontide:spider_silk"}),
+        "flippers": (["S S", "S S", "L L"], {"S": "harmontide:merfolk_scale", "L": "minecraft:leather"}),
         "winged_cap": (["FLF", "L L"], {"F": "minecraft:feather", "L": "minecraft:leather"}),
     }
     for name, (pattern, key) in shaped.items():
         R[name] = {"type": "minecraft:crafting_shaped", "category": "equipment", "pattern": pattern, "key": {k: item(v) for k, v in key.items()},
-                   "result": {"id": "monstergirls:" + name, "count": 1}}
+                   "result": {"id": "harmontide:" + name, "count": 1}}
     return R
 
 
 LANG = {
-    "item.monstergirls.harmontide_journal": "Harmontide Journal",
-    "item.monstergirls.harmontide_journal.desc": "Every creature you have met, and the ones you have befriended.",
-    "item.monstergirls.cheese": "Cheese", "item.monstergirls.rice_cake": "Rice Cake",
-    "item.monstergirls.apple_mochi": "Apple Mochi", "item.monstergirls.melon_mochi": "Melon Mochi", "item.monstergirls.berry_mochi": "Berry Mochi",
-    "item.monstergirls.chocolate_mochi": "Chocolate Mochi", "item.monstergirls.honey_mochi": "Honey Mochi", "item.monstergirls.pumpkin_mochi": "Pumpkin Mochi",
-    "item.monstergirls.spider_silk": "Spider Silk", "item.monstergirls.merfolk_scale": "Merfolk Scale", "item.monstergirls.nectar_bottle": "Bottle of Nectar",
-    "item.monstergirls.silk_cocoon": "Silk Cocoon", "item.monstergirls.silk_cocoon.desc": "Something is wrapped inside. Use it to tear it open.",
-    "item.monstergirls.merfolk_bucket": "Bucket of Merfolk", "item.monstergirls.snakeskin_cloak": "Snakeskin Cloak",
-    "item.monstergirls.silk_trousers": "Silk Trousers", "item.monstergirls.silk_shoes": "Silk Shoes", "item.monstergirls.flippers": "Flippers",
-    "item.monstergirls.winged_cap": "Winged Cap",
-    "block.monstergirls.alraune_bloom": "Alraune Bloom",
-    "block.monstergirls.nectar": "Nectar", "item.monstergirls.nectar_bucket": "Bucket of Nectar",
-    "entity.monstergirls.merfolk_merchant": "%s, merchant of the sea",
-    "message.monstergirls.winded": "%s is out of breath and slows to a walk",
-    "item.monstergirls.healing_balm": "Healing Balm",
-    "item.monstergirls.friendship_charm": "Friendship Charm",
-    "message.monstergirls.merge_trust": "%s and %s would flow together, but both need high friendship with you first",
-    "message.monstergirls.order.patrol_farm": "%s patrols here and tends the fields",
-    "message.monstergirls.balm_refused": "%s will not let you near enough (befriend her first)",
-    "message.monstergirls.balm_unhurt": "%s is not hurt",
+    "item.harmontide.harmontide_journal": "Harmontide Journal",
+    "item.harmontide.harmontide_journal.desc": "Every creature you have met, and the ones you have befriended.",
+    "item.harmontide.cheese": "Cheese", "item.harmontide.rice_cake": "Rice Cake",
+    "item.harmontide.apple_mochi": "Apple Mochi", "item.harmontide.melon_mochi": "Melon Mochi", "item.harmontide.berry_mochi": "Berry Mochi",
+    "item.harmontide.chocolate_mochi": "Chocolate Mochi", "item.harmontide.honey_mochi": "Honey Mochi", "item.harmontide.pumpkin_mochi": "Pumpkin Mochi",
+    "item.harmontide.spider_silk": "Spider Silk", "item.harmontide.merfolk_scale": "Merfolk Scale", "item.harmontide.nectar_bottle": "Bottle of Nectar",
+    "item.harmontide.silk_cocoon": "Silk Cocoon", "item.harmontide.silk_cocoon.desc": "Something is wrapped inside. Use it to tear it open.",
+    "item.harmontide.merfolk_bucket": "Bucket of Merfolk", "item.harmontide.snakeskin_cloak": "Snakeskin Cloak",
+    "item.harmontide.silk_trousers": "Silk Trousers", "item.harmontide.silk_shoes": "Silk Shoes", "item.harmontide.flippers": "Flippers",
+    "item.harmontide.winged_cap": "Winged Cap",
+    "block.harmontide.alraune_bloom": "Alraune Bloom",
+    "block.harmontide.nectar": "Nectar", "item.harmontide.nectar_bucket": "Bucket of Nectar",
+    "entity.harmontide.merfolk_merchant": "%s, merchant of the sea",
+    "message.harmontide.winded": "%s is out of breath and slows to a walk",
+    "item.harmontide.healing_balm": "Healing Balm",
+    "item.harmontide.friendship_charm": "Friendship Charm",
+    "message.harmontide.merge_trust": "%s and %s would flow together, but both need high friendship with you first",
+    "message.harmontide.order.patrol_farm": "%s patrols here and tends the fields",
+    "message.harmontide.balm_refused": "%s will not let you near enough (befriend her first)",
+    "message.harmontide.balm_unhurt": "%s is not hurt",
 }
 
 
@@ -567,17 +567,17 @@ def main():
         H.write_png(os.path.join(ASSETS, "textures", "item", name + ".png"), ball(body, top, hash(name) & 255))
         names.append(name)
     for name in names:
-        dump(os.path.join(ASSETS, "models", "item", name + ".json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:item/" + name}})
+        dump(os.path.join(ASSETS, "models", "item", name + ".json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "harmontide:item/" + name}})
     # the alraune bloom: a cross-model flower block and its item
     H.write_png(os.path.join(ASSETS, "textures", "block", "alraune_bloom.png"), from_mask(*BLOOM, "alraune_bloom"))
-    dump(os.path.join(ASSETS, "blockstates", "alraune_bloom.json"), {"variants": {"": {"model": "monstergirls:block/alraune_bloom"}}})
+    dump(os.path.join(ASSETS, "blockstates", "alraune_bloom.json"), {"variants": {"": {"model": "harmontide:block/alraune_bloom"}}})
     dump(os.path.join(ASSETS, "models", "block", "alraune_bloom.json"),
-         {"parent": "minecraft:block/cross", "render_type": "minecraft:cutout", "textures": {"cross": "monstergirls:block/alraune_bloom"}})
-    dump(os.path.join(ASSETS, "models", "item", "alraune_bloom.json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:block/alraune_bloom"}})
+         {"parent": "minecraft:block/cross", "render_type": "minecraft:cutout", "textures": {"cross": "harmontide:block/alraune_bloom"}})
+    dump(os.path.join(ASSETS, "models", "item", "alraune_bloom.json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "harmontide:block/alraune_bloom"}})
     dump(os.path.join(DATA, "loot_table", "blocks", "alraune_bloom.json"), {"type": "minecraft:block", "pools": []})   # she steps out instead
     winged_cap_model()
     # the nectar fluid's block: rendered by the fluid renderer, the model only gives the breaking particle
-    dump(os.path.join(ASSETS, "blockstates", "nectar.json"), {"variants": {"": {"model": "monstergirls:block/nectar"}}})
+    dump(os.path.join(ASSETS, "blockstates", "nectar.json"), {"variants": {"": {"model": "harmontide:block/nectar"}}})
     dump(os.path.join(ASSETS, "models", "block", "nectar.json"), {"textures": {"particle": "minecraft:block/water_still"}})
     dump(os.path.join(DATA, "loot_table", "blocks", "nectar.json"), {"type": "minecraft:block", "pools": []})
     for name, img in armour_layers().items():

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_kangaroo_marsupial",
+  "spawners": {
+    "type": "harmontide:kangaroo_marsupial",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

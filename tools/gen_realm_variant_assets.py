@@ -87,35 +87,35 @@ def data():
     for name, bottom in (("realm_frost", "minecraft:block/dirt"), ("realm_bog", "minecraft:block/mud")):
         dump(os.path.join(m, "block", name + ".json"), {
             "parent": "minecraft:block/cube_bottom_top",
-            "textures": {"top": f"monstergirls:block/{name}_top", "bottom": bottom, "side": f"monstergirls:block/{name}_side", "particle": bottom}})
-        rot = [{"model": f"monstergirls:block/{name}"}, {"model": f"monstergirls:block/{name}", "y": 90},
-               {"model": f"monstergirls:block/{name}", "y": 180}, {"model": f"monstergirls:block/{name}", "y": 270}]
+            "textures": {"top": f"harmontide:block/{name}_top", "bottom": bottom, "side": f"harmontide:block/{name}_side", "particle": bottom}})
+        rot = [{"model": f"harmontide:block/{name}"}, {"model": f"harmontide:block/{name}", "y": 90},
+               {"model": f"harmontide:block/{name}", "y": 180}, {"model": f"harmontide:block/{name}", "y": 270}]
         dump(os.path.join(ASSETS, "blockstates", name + ".json"),
              {"variants": {"snowy=false": rot, "snowy=true": {"model": "minecraft:block/grass_block_snow"}}})
-        dump(os.path.join(m, "item", name + ".json"), {"parent": f"monstergirls:block/{name}"})
-    dump(os.path.join(m, "block", "realm_sand.json"), {"parent": "minecraft:block/cube_all", "textures": {"all": "monstergirls:block/realm_sand"}})
+        dump(os.path.join(m, "item", name + ".json"), {"parent": f"harmontide:block/{name}"})
+    dump(os.path.join(m, "block", "realm_sand.json"), {"parent": "minecraft:block/cube_all", "textures": {"all": "harmontide:block/realm_sand"}})
     dump(os.path.join(ASSETS, "blockstates", "realm_sand.json"), {"variants": {"": [
-        {"model": "monstergirls:block/realm_sand"}, {"model": "monstergirls:block/realm_sand", "y": 90},
-        {"model": "monstergirls:block/realm_sand", "y": 180}, {"model": "monstergirls:block/realm_sand", "y": 270}]}})
-    dump(os.path.join(m, "item", "realm_sand.json"), {"parent": "monstergirls:block/realm_sand"})
+        {"model": "harmontide:block/realm_sand"}, {"model": "harmontide:block/realm_sand", "y": 90},
+        {"model": "harmontide:block/realm_sand", "y": 180}, {"model": "harmontide:block/realm_sand", "y": 270}]}})
+    dump(os.path.join(m, "item", "realm_sand.json"), {"parent": "harmontide:block/realm_sand"})
     silk = {"condition": "minecraft:match_tool", "predicate": {"predicates": {"minecraft:enchantments": [
         {"enchantments": "minecraft:silk_touch", "levels": {"min": 1}}]}}}
     for name, plain in (("realm_frost", "minecraft:dirt"), ("realm_bog", "minecraft:mud"), ("realm_sand", "minecraft:sand")):
         dump(os.path.join(DATA, "loot_table", "blocks", name + ".json"), {"type": "minecraft:block", "pools": [{"rolls": 1, "bonus_rolls": 0, "entries": [
             {"type": "minecraft:alternatives", "children": [
-                {"type": "minecraft:item", "conditions": [silk], "name": "monstergirls:" + name},
+                {"type": "minecraft:item", "conditions": [silk], "name": "harmontide:" + name},
                 {"type": "minecraft:item", "conditions": [{"condition": "minecraft:survives_explosion"}], "name": plain}]}]}]})
-    for tag, entries in (("dirt", ["monstergirls:realm_frost", "monstergirls:realm_bog"]), ("sand", ["monstergirls:realm_sand"]),
-                         ("mineable/shovel", ["monstergirls:realm_frost", "monstergirls:realm_bog", "monstergirls:realm_sand"])):
+    for tag, entries in (("dirt", ["harmontide:realm_frost", "harmontide:realm_bog"]), ("sand", ["harmontide:realm_sand"]),
+                         ("mineable/shovel", ["harmontide:realm_frost", "harmontide:realm_bog", "harmontide:realm_sand"])):
         path = os.path.join(MC_DATA, "tags", "block", tag + ".json")
         old = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {"replace": False, "values": []}
         for e in entries:
             if e not in old["values"]:
                 old["values"].append(e)
         dump(path, old)
-    add_lang({"block.monstergirls.realm_frost": "Frost Realm", "block.monstergirls.realm_bog": "Bog Realm", "block.monstergirls.realm_sand": "Realm Sand"})
+    add_lang({"block.harmontide.realm_frost": "Frost Realm", "block.harmontide.realm_bog": "Bog Realm", "block.harmontide.realm_sand": "Realm Sand"})
     gen_manor_assets.GUIDE_ADD.clear()
-    gen_manor_assets.GUIDE_ADD["journal.monstergirls.guide.realm"] = (
+    gen_manor_assets.GUIDE_ADD["journal.harmontide.guide.realm"] = (
         " The realm takes on the land it spreads into: where it is cold enough to snow it is the frost realm, on mud and in swamps "
         "the bog realm (weepcaps thrive there, heartfruit does not), and on sand realm sand (heartfruit, but no weepcaps).")
     gen_manor_assets.append_guides()

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_anteater_armoured",
+  "spawners": {
+    "type": "harmontide:anteater_armoured",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

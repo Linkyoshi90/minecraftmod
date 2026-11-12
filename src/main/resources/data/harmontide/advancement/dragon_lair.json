@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:stargazer",
+  "display": {
+    "icon": {
+      "id": "minecraft:gold_block"
+    },
+    "title": {
+      "translate": "advancement.harmontide.dragon_lair"
+    },
+    "description": {
+      "translate": "advancement.harmontide.dragon_lair.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_rhino_minotaur",
+  "spawners": {
+    "type": "harmontide:rhino_minotaur",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

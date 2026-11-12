@@ -13,13 +13,13 @@ import gen_milk_assets as M  # noqa: E402
 import gen_rarity_assets as R  # noqa: E402  (writes its own files again, harmlessly)
 import taxonomy as T  # noqa: E402
 
-R.advancement("connoisseur", "monstergirls:bovid_milk", "challenge", ["done"], "monstergirls:first_milk")
+R.advancement("connoisseur", "harmontide:bovid_milk", "challenge", ["done"], "harmontide:first_milk")
 
 M.add_lang({
-    "message.monstergirls.tasted": "A first taste of %s (%s of %s milks)",
-    "journal.monstergirls.tasted": "Milks tasted: %s of %s",
-    "jade.monstergirls.milk_kind": "Her milk: %s",
-    "advancement.monstergirls.connoisseur": "Connoisseur",
-    "advancement.monstergirls.connoisseur.desc": f"Drink a bucket of every one of the {len(T.milks())} kinds of milk",
+    "message.harmontide.tasted": "A first taste of %s (%s of %s milks)",
+    "journal.harmontide.tasted": "Milks tasted: %s of %s",
+    "jade.harmontide.milk_kind": "Her milk: %s",
+    "advancement.harmontide.connoisseur": "Connoisseur",
+    "advancement.harmontide.connoisseur.desc": f"Drink a bucket of every one of the {len(T.milks())} kinds of milk",
 })
 print("tasting assets written")

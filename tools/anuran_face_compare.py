@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import harpy_lib as H
 from anuran_roster import load_png
 
-ASSETS = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls")
+ASSETS = os.path.join(H.REPO, "src", "main", "resources", "assets", "harmontide")
 SPECIES = [("desert_rain_frog", 22.0, (0, 14.0)), ("mucus_toad", 15.0, (0, 20.8)), ("bullywug", 12.5, (0, 24.0))]
 
 

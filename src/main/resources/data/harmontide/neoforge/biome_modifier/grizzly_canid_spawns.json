@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_grizzly_canid",
+  "spawners": {
+    "type": "harmontide:grizzly_canid",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

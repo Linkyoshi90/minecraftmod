@@ -15,14 +15,14 @@ import gen_rarity_assets as R  # noqa: E402  (writes its own files again, harmle
 R.advancement("birthday", "minecraft:cake", "task", ["done"])
 
 M.add_lang({
-    "message.monstergirls.favourite": "%s loves %s! It's her favourite.",
-    "message.monstergirls.birthday": "It's %s's birthday today!",
-    "message.monstergirls.birthday.thanks": "%s is delighted you remembered her birthday!",
-    "jade.monstergirls.birthday": "Birthday: day %s of 24",
-    "jade.monstergirls.favourite": "Loves: %s",
-    "advancement.monstergirls.birthday": "Many Happy Returns", "advancement.monstergirls.birthday.desc": "Bring a friend something to eat on her birthday",
-    "journal.monstergirls.guide.treats.title": "Treats and Birthdays",
-    "journal.monstergirls.guide.treats": "Every girl has a favourite treat from her homeland. She takes it even if it isn't what she usually eats, "
+    "message.harmontide.favourite": "%s loves %s! It's her favourite.",
+    "message.harmontide.birthday": "It's %s's birthday today!",
+    "message.harmontide.birthday.thanks": "%s is delighted you remembered her birthday!",
+    "jade.harmontide.birthday": "Birthday: day %s of 24",
+    "jade.harmontide.favourite": "Loves: %s",
+    "advancement.harmontide.birthday": "Many Happy Returns", "advancement.harmontide.birthday.desc": "Bring a friend something to eat on her birthday",
+    "journal.harmontide.guide.treats.title": "Treats and Birthdays",
+    "journal.harmontide.guide.treats": "Every girl has a favourite treat from her homeland. She takes it even if it isn't what she usually eats, "
                                          "and it means three times as much. And every girl has a birthday on one of the 24 days of the calendar: "
                                          "bring a friend something to eat that day and she'll never forget it. Look at a friend to see her birthday.",
 })

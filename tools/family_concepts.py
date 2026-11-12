@@ -1,4 +1,4 @@
-"""The concept data for the MonsterGirls families after the harpies (vol. I) and the anurans (vol. II).
+"""The concept data for the Harmontide families after the harpies (vol. I) and the anurans (vol. II).
 
 One source of truth for the design: tools/build_field_guides.py renders it into <family>_field_guide.html, the model
 scripts read the species ids / sizes / variant keys from it, and the Java side follows the numbers written here.

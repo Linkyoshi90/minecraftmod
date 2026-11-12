@@ -1,13 +1,13 @@
 {
   "replace": false,
   "values": [
-    "monstergirls:hearth",
-    "monstergirls:milking_machine",
-    "monstergirls:cooking_pot",
-    "monstergirls:milk_tank",
-    "monstergirls:fridge",
-    "monstergirls:realm_censer",
-    "monstergirls:holy_font",
-    "monstergirls:geyserite"
+    "harmontide:hearth",
+    "harmontide:milking_machine",
+    "harmontide:cooking_pot",
+    "harmontide:milk_tank",
+    "harmontide:fridge",
+    "harmontide:realm_censer",
+    "harmontide:holy_font",
+    "harmontide:geyserite"
   ]
 }

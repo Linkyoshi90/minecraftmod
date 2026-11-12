@@ -10,7 +10,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import harpy_lib as H
 
-ASSETS = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls")
+ASSETS = os.path.join(H.REPO, "src", "main", "resources", "assets", "harmontide")
 FAMILIES = {
     "frogs": ["desert_rain_frog", "glass_frog", "tree_frog", "poison_dart_frog", "bullywug", "bullfrog", "goliath_frog"],
     "toads": ["natterjack", "surinam_toad", "fire_bellied_toad", "mucus_toad", "cane_toad", "mailtoad"],

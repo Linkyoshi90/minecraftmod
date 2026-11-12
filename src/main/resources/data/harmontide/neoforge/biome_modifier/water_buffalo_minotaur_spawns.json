@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_water_buffalo_minotaur",
+  "spawners": {
+    "type": "harmontide:water_buffalo_minotaur",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

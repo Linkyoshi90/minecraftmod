@@ -1,0 +1,46 @@
+{
+  "parent": "harmontide:first_festival",
+  "display": {
+    "icon": {
+      "id": "minecraft:firework_rocket"
+    },
+    "title": {
+      "translate": "advancement.harmontide.every_festival"
+    },
+    "description": {
+      "translate": "advancement.harmontide.every_festival.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "dance": {
+      "trigger": "minecraft:impossible"
+    },
+    "harvest": {
+      "trigger": "minecraft:impossible"
+    },
+    "hearts": {
+      "trigger": "minecraft:impossible"
+    },
+    "gifts": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "dance"
+    ],
+    [
+      "harvest"
+    ],
+    [
+      "hearts"
+    ],
+    [
+      "gifts"
+    ]
+  ]
+}

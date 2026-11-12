@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:stargazer",
+  "display": {
+    "icon": {
+      "id": "minecraft:campfire"
+    },
+    "title": {
+      "translate": "advancement.harmontide.centaur_camp"
+    },
+    "description": {
+      "translate": "advancement.harmontide.centaur_camp.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

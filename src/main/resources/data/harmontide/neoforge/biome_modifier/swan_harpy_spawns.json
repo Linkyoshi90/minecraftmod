@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_swan_harpy",
+  "spawners": {
+    "type": "harmontide:swan_harpy",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

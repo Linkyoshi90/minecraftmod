@@ -1,0 +1,7 @@
+{
+  "type": "harmontide:kitsune_shrine",
+  "biomes": "#harmontide:has_structure/kitsune_shrine",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}

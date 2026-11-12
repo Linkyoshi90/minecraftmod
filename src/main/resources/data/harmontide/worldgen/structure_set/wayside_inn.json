@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "harmontide:wayside_inn",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 44,
+    "separation": 16,
+    "salt": 19384756
+  }
+}

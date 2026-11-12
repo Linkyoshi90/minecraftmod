@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_pineskrell_rodent",
+  "spawners": {
+    "type": "harmontide:pineskrell_rodent",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

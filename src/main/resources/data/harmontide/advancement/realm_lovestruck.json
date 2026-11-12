@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:realm_entered",
+  "display": {
+    "icon": {
+      "id": "harmontide:heartfruit"
+    },
+    "title": {
+      "translate": "advancement.harmontide.realm_lovestruck"
+    },
+    "description": {
+      "translate": "advancement.harmontide.realm_lovestruck.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_daeodon_armoured",
+  "spawners": {
+    "type": "harmontide:daeodon_armoured",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

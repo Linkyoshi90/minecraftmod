@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:demon_spire",
+  "display": {
+    "icon": {
+      "id": "minecraft:crying_obsidian"
+    },
+    "title": {
+      "translate": "advancement.harmontide.demon_spire_roof"
+    },
+    "description": {
+      "translate": "advancement.harmontide.demon_spire_roof.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

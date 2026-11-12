@@ -145,7 +145,7 @@ VARIANTS = {
 
 
 def write_variants():
-    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls", "textures", "entity")
+    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "harmontide", "textures", "entity")
     texes = {"emperor": paint()}
     for v, (pal, patch, crest, bonnet, strap) in VARIANTS.items():
         texes[v] = paint(pal, patch, crest, bonnet, strap)

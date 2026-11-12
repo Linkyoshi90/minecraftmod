@@ -1,7 +1,0 @@
-{
-  "type": "monstergirls:centaur_camp",
-  "biomes": "#monstergirls:has_structure/centaur_camp",
-  "step": "surface_structures",
-  "spawn_overrides": {},
-  "terrain_adaptation": "none"
-}

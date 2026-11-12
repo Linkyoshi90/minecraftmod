@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_dodobold_harpy",
+  "spawners": {
+    "type": "harmontide:dodobold_harpy",
+    "weight": 4,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

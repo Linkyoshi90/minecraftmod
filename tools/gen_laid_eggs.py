@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Writes the unfertilised harpy eggs that grown harpies lay on a hen's schedule (the sparrow's is
 tools/gen_sparrow_egg_item.py, the riflebird's existed before): 16x16 item textures, item models, the item tags
-(monstergirls:laid_eggs and the common c:eggs) and one cake and one pumpkin pie recipe that take any of them.
+(harmontide:laid_eggs and the common c:eggs) and one cake and one pumpkin pie recipe that take any of them.
     python tools/gen_laid_eggs.py
 """
 import json
@@ -13,8 +13,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from harpy_lib import write_png  # noqa: E402
 
 RES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src", "main", "resources")
-ASSETS = os.path.join(RES, "assets", "monstergirls")
-DATA = os.path.join(RES, "data", "monstergirls")
+ASSETS = os.path.join(RES, "assets", "harmontide")
+DATA = os.path.join(RES, "data", "harmontide")
 
 # name: (english, shell, shade, outline, flecks, fleck count, radius x, radius y)
 EGGS = {
@@ -72,27 +72,27 @@ def main():
     for name, (eng, *spec) in EGGS.items():
         write_png(os.path.join(ASSETS, "textures", "item", name + ".png"), texture(name, *spec))
         dump(os.path.join(ASSETS, "models", "item", name + ".json"),
-             {"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:item/" + name}})
-    laid = ["monstergirls:sparrow_egg", "monstergirls:riflebird_egg"] + ["monstergirls:" + n for n in EGGS]
+             {"parent": "minecraft:item/generated", "textures": {"layer0": "harmontide:item/" + name}})
+    laid = ["harmontide:sparrow_egg", "harmontide:riflebird_egg"] + ["harmontide:" + n for n in EGGS]
     dump(os.path.join(DATA, "tags", "item", "laid_eggs.json"), {"values": laid})
     dump(os.path.join(RES, "data", "c", "tags", "item", "eggs.json"), {"replace": False, "values": laid})
     dump(os.path.join(DATA, "recipe", "cake_from_laid_egg.json"), {
         "type": "minecraft:crafting_shaped", "category": "food",
         "pattern": ["AAA", "BEB", "CCC"],
         "key": {"A": {"item": "minecraft:milk_bucket"}, "B": {"item": "minecraft:sugar"},
-                "C": {"item": "minecraft:wheat"}, "E": {"tag": "monstergirls:laid_eggs"}},
+                "C": {"item": "minecraft:wheat"}, "E": {"tag": "harmontide:laid_eggs"}},
         "result": {"id": "minecraft:cake", "count": 1},
     })
     dump(os.path.join(DATA, "recipe", "pumpkin_pie_from_laid_egg.json"), {
         "type": "minecraft:crafting_shapeless", "category": "misc",
-        "ingredients": [{"item": "minecraft:pumpkin"}, {"item": "minecraft:sugar"}, {"tag": "monstergirls:laid_eggs"}],
+        "ingredients": [{"item": "minecraft:pumpkin"}, {"item": "minecraft:sugar"}, {"tag": "harmontide:laid_eggs"}],
         "result": {"id": "minecraft:pumpkin_pie", "count": 1},
     })
     lang_path = os.path.join(ASSETS, "lang", "en_us.json")
     import collections
     lang = json.load(open(lang_path, encoding="utf-8"), object_pairs_hook=collections.OrderedDict)
     for name, (eng, *_) in EGGS.items():
-        lang["item.monstergirls." + name] = eng
+        lang["item.harmontide." + name] = eng
     with open(lang_path, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(json.dumps(lang, indent=2, ensure_ascii=False) + "\n")
     print(len(EGGS), "laid eggs written")

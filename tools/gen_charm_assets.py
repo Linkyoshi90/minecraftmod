@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gen_milk_assets as M  # noqa: E402
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ASSETS = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls")
+ASSETS = os.path.join(REPO, "src", "main", "resources", "assets", "harmontide")
 
 CORD = (122, 84, 52, 255)
 CORD_D = (84, 56, 34, 255)
@@ -55,15 +55,15 @@ def main():
     img.save(path)
     model = os.path.join(ASSETS, "models", "item", "branch_charm.json")
     with open(model, "w", encoding="utf-8", newline="\n") as fh:
-        json.dump({"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:item/branch_charm"}}, fh, indent=2)
+        json.dump({"parent": "minecraft:item/generated", "textures": {"layer0": "harmontide:item/branch_charm"}}, fh, indent=2)
         fh.write("\n")
     M.add_lang({
-        "item.monstergirls.branch_charm": "Branch Charm",
-        "item.monstergirls.branch_charm.blank": "Meet every kind on one branch of the tree of life to earn one",
-        "item.monstergirls.branch_charm.effect": "In your offhand: %s",
-        "item.monstergirls.branch_charm.keepsake": "A keepsake: this branch gives no milk",
-        "item.monstergirls.branch_charm.kin": "Wild ones of this branch who see it warm to you",
-        "message.monstergirls.charmed": "%s recognises your charm and warms to you",
+        "item.harmontide.branch_charm": "Branch Charm",
+        "item.harmontide.branch_charm.blank": "Meet every kind on one branch of the tree of life to earn one",
+        "item.harmontide.branch_charm.effect": "In your offhand: %s",
+        "item.harmontide.branch_charm.keepsake": "A keepsake: this branch gives no milk",
+        "item.harmontide.branch_charm.kin": "Wild ones of this branch who see it warm to you",
+        "message.harmontide.charmed": "%s recognises your charm and warms to you",
     })
     if "--preview" in sys.argv:
         out = sys.argv[sys.argv.index("--preview") + 1]

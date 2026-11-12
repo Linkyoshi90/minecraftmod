@@ -19,8 +19,8 @@ from gen_paints import _vanilla_rgba  # noqa: E402
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RES = os.path.join(REPO, "src", "main", "resources")
-ASSETS = os.path.join(RES, "assets", "monstergirls")
-DATA = os.path.join(RES, "data", "monstergirls")
+ASSETS = os.path.join(RES, "assets", "harmontide")
+DATA = os.path.join(RES, "data", "harmontide")
 MC_DATA = os.path.join(RES, "data", "minecraft")
 
 
@@ -194,40 +194,40 @@ def data():
     m = os.path.join(ASSETS, "models")
     dump(os.path.join(m, "block", "realm_grass.json"), {
         "parent": "minecraft:block/cube_bottom_top",
-        "textures": {"top": "monstergirls:block/realm_grass_top", "bottom": "minecraft:block/dirt",
-                     "side": "monstergirls:block/realm_grass_side", "particle": "minecraft:block/dirt"}})
+        "textures": {"top": "harmontide:block/realm_grass_top", "bottom": "minecraft:block/dirt",
+                     "side": "harmontide:block/realm_grass_side", "particle": "minecraft:block/dirt"}})
     dump(os.path.join(ASSETS, "blockstates", "realm_grass.json"), {"variants": {
-        "snowy=false": [{"model": "monstergirls:block/realm_grass"}, {"model": "monstergirls:block/realm_grass", "y": 90},
-                        {"model": "monstergirls:block/realm_grass", "y": 180}, {"model": "monstergirls:block/realm_grass", "y": 270}],
+        "snowy=false": [{"model": "harmontide:block/realm_grass"}, {"model": "harmontide:block/realm_grass", "y": 90},
+                        {"model": "harmontide:block/realm_grass", "y": 180}, {"model": "harmontide:block/realm_grass", "y": 270}],
         "snowy=true": {"model": "minecraft:block/grass_block_snow"}}})
-    dump(os.path.join(m, "item", "realm_grass.json"), {"parent": "monstergirls:block/realm_grass"})
+    dump(os.path.join(m, "item", "realm_grass.json"), {"parent": "harmontide:block/realm_grass"})
     for s in range(4):
         dump(os.path.join(m, "block", f"heartfruit_bush_stage{s}.json"), {
             "parent": "minecraft:block/cross", "render_type": "minecraft:cutout",
-            "textures": {"cross": f"monstergirls:block/heartfruit_bush_stage{s}"}})
+            "textures": {"cross": f"harmontide:block/heartfruit_bush_stage{s}"}})
     dump(os.path.join(ASSETS, "blockstates", "heartfruit_bush.json"),
-         {"variants": {f"age={s}": {"model": f"monstergirls:block/heartfruit_bush_stage{s}"} for s in range(4)}})
+         {"variants": {f"age={s}": {"model": f"harmontide:block/heartfruit_bush_stage{s}"} for s in range(4)}})
     for item in ("heartfruit", "holy_water"):
-        dump(os.path.join(m, "item", f"{item}.json"), {"parent": "minecraft:item/generated", "textures": {"layer0": f"monstergirls:item/{item}"}})
+        dump(os.path.join(m, "item", f"{item}.json"), {"parent": "minecraft:item/generated", "textures": {"layer0": f"harmontide:item/{item}"}})
 
     silk = {"condition": "minecraft:match_tool", "predicate": {"predicates": {"minecraft:enchantments": [
         {"enchantments": "minecraft:silk_touch", "levels": {"min": 1}}]}}}
     dump(os.path.join(DATA, "loot_table", "blocks", "realm_grass.json"), {"type": "minecraft:block", "pools": [{"rolls": 1, "bonus_rolls": 0, "entries": [
         {"type": "minecraft:alternatives", "children": [
-            {"type": "minecraft:item", "conditions": [silk], "name": "monstergirls:realm_grass"},
+            {"type": "minecraft:item", "conditions": [silk], "name": "harmontide:realm_grass"},
             {"type": "minecraft:item", "conditions": [{"condition": "minecraft:survives_explosion"}], "name": "minecraft:dirt"}]}]}]})
-    ripe = lambda age: {"condition": "minecraft:block_state_property", "block": "monstergirls:heartfruit_bush", "properties": {"age": str(age)}}
+    ripe = lambda age: {"condition": "minecraft:block_state_property", "block": "harmontide:heartfruit_bush", "properties": {"age": str(age)}}
     dump(os.path.join(DATA, "loot_table", "blocks", "heartfruit_bush.json"), {"type": "minecraft:block", "pools": [
-        {"rolls": 1, "entries": [{"type": "minecraft:item", "name": "monstergirls:heartfruit"}], "conditions": [{"condition": "minecraft:survives_explosion"}]},
-        {"rolls": 1, "entries": [{"type": "minecraft:item", "name": "monstergirls:heartfruit",
+        {"rolls": 1, "entries": [{"type": "minecraft:item", "name": "harmontide:heartfruit"}], "conditions": [{"condition": "minecraft:survives_explosion"}]},
+        {"rolls": 1, "entries": [{"type": "minecraft:item", "name": "harmontide:heartfruit",
                                   "functions": [{"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1, "max": 2}}]}],
          "conditions": [{"condition": "minecraft:any_of", "terms": [ripe(2), ripe(3)]}]}]})
     dump(os.path.join(DATA, "recipe", "holy_water.json"), {
         "type": "minecraft:crafting_shapeless", "category": "misc",
         "ingredients": [{"item": "minecraft:glass_bottle"}, {"item": "minecraft:glass_bottle"}, {"item": "minecraft:glass_bottle"},
                         {"item": "minecraft:water_bucket"}, {"item": "minecraft:gold_nugget"}],
-        "result": {"id": "monstergirls:holy_water", "count": 3}})
-    for tag, entries in (("dirt", ["monstergirls:realm_grass"]), ("mineable/shovel", ["monstergirls:realm_grass"])):
+        "result": {"id": "harmontide:holy_water", "count": 3}})
+    for tag, entries in (("dirt", ["harmontide:realm_grass"]), ("mineable/shovel", ["harmontide:realm_grass"])):
         path = os.path.join(MC_DATA, "tags", "block", tag + ".json")
         old = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {"replace": False, "values": []}
         for e in entries:
@@ -286,25 +286,25 @@ def weepcap():
 def realm_plant_data():
     m = os.path.join(ASSETS, "models")
     dump(os.path.join(m, "block", "realm_leaves.json"), {"parent": "minecraft:block/cube_all", "render_type": "minecraft:cutout_mipped",
-                                                        "textures": {"all": "monstergirls:block/realm_leaves"}})
-    dump(os.path.join(ASSETS, "blockstates", "realm_leaves.json"), {"variants": {"": {"model": "monstergirls:block/realm_leaves"}}})
-    dump(os.path.join(m, "item", "realm_leaves.json"), {"parent": "monstergirls:block/realm_leaves"})
+                                                        "textures": {"all": "harmontide:block/realm_leaves"}})
+    dump(os.path.join(ASSETS, "blockstates", "realm_leaves.json"), {"variants": {"": {"model": "harmontide:block/realm_leaves"}}})
+    dump(os.path.join(m, "item", "realm_leaves.json"), {"parent": "harmontide:block/realm_leaves"})
     dump(os.path.join(m, "block", "weepcap.json"), {"parent": "minecraft:block/cross", "render_type": "minecraft:cutout",
-                                                   "textures": {"cross": "monstergirls:block/weepcap"}})
-    dump(os.path.join(ASSETS, "blockstates", "weepcap.json"), {"variants": {"": {"model": "monstergirls:block/weepcap"}}})
-    dump(os.path.join(m, "item", "weepcap.json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:block/weepcap"}})
+                                                   "textures": {"cross": "harmontide:block/weepcap"}})
+    dump(os.path.join(ASSETS, "blockstates", "weepcap.json"), {"variants": {"": {"model": "harmontide:block/weepcap"}}})
+    dump(os.path.join(m, "item", "weepcap.json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "harmontide:block/weepcap"}})
     silk_or_shears = {"condition": "minecraft:any_of", "terms": [
         {"condition": "minecraft:match_tool", "predicate": {"items": "minecraft:shears"}},
         {"condition": "minecraft:match_tool", "predicate": {"predicates": {"minecraft:enchantments": [{"enchantments": "minecraft:silk_touch", "levels": {"min": 1}}]}}}]}
     dump(os.path.join(DATA, "loot_table", "blocks", "realm_leaves.json"), {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [
         {"type": "minecraft:alternatives", "children": [
-            {"type": "minecraft:item", "conditions": [silk_or_shears], "name": "monstergirls:realm_leaves"},
+            {"type": "minecraft:item", "conditions": [silk_or_shears], "name": "harmontide:realm_leaves"},
             {"type": "minecraft:item", "conditions": [{"condition": "minecraft:survives_explosion"},
                                                       {"condition": "minecraft:table_bonus", "enchantment": "minecraft:fortune", "chances": [0.02, 0.022, 0.025, 0.033, 0.1]}],
-             "name": "monstergirls:heartfruit"}]}]}]})
+             "name": "harmontide:heartfruit"}]}]}]})
     dump(os.path.join(DATA, "loot_table", "blocks", "weepcap.json"), {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [
-        {"type": "minecraft:item", "name": "monstergirls:weepcap"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
-    for tag, entries in (("leaves", ["monstergirls:realm_leaves"]), ("mineable/hoe", ["monstergirls:realm_leaves"])):
+        {"type": "minecraft:item", "name": "harmontide:weepcap"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
+    for tag, entries in (("leaves", ["harmontide:realm_leaves"]), ("mineable/hoe", ["harmontide:realm_leaves"])):
         path = os.path.join(MC_DATA, "tags", "block", tag + ".json")
         old = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {"replace": False, "values": []}
         for e in entries:
@@ -340,21 +340,21 @@ def realm_log():
     save(top, "block", "realm_log_top.png")
     m = os.path.join(ASSETS, "models")
     dump(os.path.join(m, "block", "realm_log.json"), {"parent": "minecraft:block/cube_column",
-                                                     "textures": {"end": "monstergirls:block/realm_log_top", "side": "monstergirls:block/realm_log"}})
+                                                     "textures": {"end": "harmontide:block/realm_log_top", "side": "harmontide:block/realm_log"}})
     dump(os.path.join(m, "block", "realm_log_horizontal.json"), {"parent": "minecraft:block/cube_column_horizontal",
-                                                                "textures": {"end": "monstergirls:block/realm_log_top", "side": "monstergirls:block/realm_log"}})
+                                                                "textures": {"end": "harmontide:block/realm_log_top", "side": "harmontide:block/realm_log"}})
     dump(os.path.join(ASSETS, "blockstates", "realm_log.json"), {"variants": {
-        "axis=x": {"model": "monstergirls:block/realm_log_horizontal", "x": 90, "y": 90},
-        "axis=y": {"model": "monstergirls:block/realm_log"},
-        "axis=z": {"model": "monstergirls:block/realm_log_horizontal", "x": 90}}})
-    dump(os.path.join(m, "item", "realm_log.json"), {"parent": "monstergirls:block/realm_log"})
+        "axis=x": {"model": "harmontide:block/realm_log_horizontal", "x": 90, "y": 90},
+        "axis=y": {"model": "harmontide:block/realm_log"},
+        "axis=z": {"model": "harmontide:block/realm_log_horizontal", "x": 90}}})
+    dump(os.path.join(m, "item", "realm_log.json"), {"parent": "harmontide:block/realm_log"})
     dump(os.path.join(DATA, "loot_table", "blocks", "realm_log.json"), {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [
-        {"type": "minecraft:item", "name": "monstergirls:realm_log"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
+        {"type": "minecraft:item", "name": "harmontide:realm_log"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
     for tag in ("logs", "logs_that_burn", "mineable/axe"):
         path = os.path.join(MC_DATA, "tags", "block", tag + ".json")
         old = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {"replace": False, "values": []}
-        if "monstergirls:realm_log" not in old["values"]:
-            old["values"].append("monstergirls:realm_log")
+        if "harmontide:realm_log" not in old["values"]:
+            old["values"].append("harmontide:realm_log")
         dump(path, old)
     return side, top
 

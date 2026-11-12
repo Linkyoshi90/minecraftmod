@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:realm_lovestruck",
+  "display": {
+    "icon": {
+      "id": "harmontide:realm_censer"
+    },
+    "title": {
+      "translate": "advancement.harmontide.realm_censer"
+    },
+    "description": {
+      "translate": "advancement.harmontide.realm_censer.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

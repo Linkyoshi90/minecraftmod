@@ -32,21 +32,21 @@ def main():
     dump(os.path.join(ASSETS, "models", "block", "cradle.json"), model())
     rot = {"north": 0, "east": 90, "south": 180, "west": 270}
     dump(os.path.join(ASSETS, "blockstates", "cradle.json"), {"variants": {
-        f"facing={f}": ({"model": "monstergirls:block/cradle", "y": r} if r else {"model": "monstergirls:block/cradle"}) for f, r in rot.items()}})
-    dump(os.path.join(ASSETS, "models", "item", "cradle.json"), {"parent": "monstergirls:block/cradle"})
+        f"facing={f}": ({"model": "harmontide:block/cradle", "y": r} if r else {"model": "harmontide:block/cradle"}) for f, r in rot.items()}})
+    dump(os.path.join(ASSETS, "models", "item", "cradle.json"), {"parent": "harmontide:block/cradle"})
     dump(os.path.join(DATA, "loot_table", "blocks", "cradle.json"), {"type": "minecraft:block", "pools": [{
-        "rolls": 1, "entries": [{"type": "minecraft:item", "name": "monstergirls:cradle"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
+        "rolls": 1, "entries": [{"type": "minecraft:item", "name": "harmontide:cradle"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
     dump(os.path.join(DATA, "recipe", "cradle.json"), {"type": "minecraft:crafting_shaped", "category": "misc",
                                                       "pattern": ["P P", "PWP", "S S"],
                                                       "key": {"P": {"tag": "minecraft:planks"}, "W": {"tag": "minecraft:wool"}, "S": {"item": "minecraft:stick"}},
-                                                      "result": {"id": "monstergirls:cradle", "count": 1}})
+                                                      "result": {"id": "harmontide:cradle", "count": 1}})
     M.add_lang({
-        "block.monstergirls.cradle": "Cradle",
-        "message.monstergirls.cradle.rocked": "You rock the cradle and hum a lullaby for %s little ones",
-        "message.monstergirls.cradle.empty": "You rock the empty cradle. It creaks softly",
+        "block.harmontide.cradle": "Cradle",
+        "message.harmontide.cradle.rocked": "You rock the cradle and hum a lullaby for %s little ones",
+        "message.harmontide.cradle.empty": "You rock the empty cradle. It creaks softly",
     })
     gen_manor_assets.GUIDE_ADD.clear()
-    gen_manor_assets.GUIDE_ADD["journal.monstergirls.guide.nursing"] = (
+    gen_manor_assets.GUIDE_ADD["journal.harmontide.guide.nursing"] = (
         " A cradle (planks around wool, on two sticks) helps too: at night the little ones nap beside it and grow twice as fast, and rocking it "
         "hums them a lullaby.")
     gen_manor_assets.append_guides()

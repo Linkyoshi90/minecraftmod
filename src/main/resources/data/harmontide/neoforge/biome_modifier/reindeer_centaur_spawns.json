@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_reindeer_centaur",
+  "spawners": {
+    "type": "harmontide:reindeer_centaur",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

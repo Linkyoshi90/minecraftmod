@@ -1,0 +1,28 @@
+{
+  "parent": "harmontide:whole_branch",
+  "display": {
+    "icon": {
+      "id": "minecraft:turtle_scute"
+    },
+    "title": {
+      "translate": "advancement.harmontide.bough_reptiles"
+    },
+    "description": {
+      "translate": "advancement.harmontide.bough_reptiles.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

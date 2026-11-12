@@ -1,0 +1,26 @@
+{
+  "parent": "harmontide:legendary_encounter",
+  "display": {
+    "icon": {
+      "id": "harmontide:dragon_scale"
+    },
+    "title": {
+      "translate": "advancement.harmontide.legend_trial"
+    },
+    "description": {
+      "translate": "advancement.harmontide.legend_trial.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "sky": {"trigger": "minecraft:impossible"},
+    "sea": {"trigger": "minecraft:impossible"},
+    "serpent": {"trigger": "minecraft:impossible"},
+    "dragon": {"trigger": "minecraft:impossible"},
+    "moon": {"trigger": "minecraft:impossible"}
+  },
+  "requirements": [["sky", "sea", "serpent", "dragon", "moon"]]
+}

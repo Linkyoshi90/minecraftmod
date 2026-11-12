@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "harmontide:block/realm_log_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "harmontide:block/realm_log"
+    },
+    "axis=z": {
+      "model": "harmontide:block/realm_log_horizontal",
+      "x": 90
+    }
+  }
+}

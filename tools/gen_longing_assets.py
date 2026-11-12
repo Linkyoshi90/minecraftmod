@@ -17,8 +17,8 @@ from PIL import Image
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RES = os.path.join(REPO, "src", "main", "resources")
-ASSETS = os.path.join(RES, "assets", "monstergirls")
-DATA = os.path.join(RES, "data", "monstergirls")
+ASSETS = os.path.join(RES, "assets", "harmontide")
+DATA = os.path.join(RES, "data", "harmontide")
 
 
 def rgb(h):
@@ -127,39 +127,39 @@ def write_assets():
     s.save(os.path.join(tex, "item", "salami.png"))
     t.save(os.path.join(tex, "block", "tar_shroom.png"))
     dump(os.path.join(ASSETS, "models", "item", "salami.json"),
-         {"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:item/salami"}})
+         {"parent": "minecraft:item/generated", "textures": {"layer0": "harmontide:item/salami"}})
     dump(os.path.join(ASSETS, "models", "item", "tar_shroom.json"),
-         {"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:block/tar_shroom"}})
+         {"parent": "minecraft:item/generated", "textures": {"layer0": "harmontide:block/tar_shroom"}})
     dump(os.path.join(ASSETS, "models", "block", "tar_shroom.json"),
-         {"parent": "minecraft:block/cross", "render_type": "minecraft:cutout", "textures": {"cross": "monstergirls:block/tar_shroom"}})
-    dump(os.path.join(ASSETS, "blockstates", "tar_shroom.json"), {"variants": {"": {"model": "monstergirls:block/tar_shroom"}}})
+         {"parent": "minecraft:block/cross", "render_type": "minecraft:cutout", "textures": {"cross": "harmontide:block/tar_shroom"}})
+    dump(os.path.join(ASSETS, "blockstates", "tar_shroom.json"), {"variants": {"": {"model": "harmontide:block/tar_shroom"}}})
     dump(os.path.join(DATA, "loot_table", "blocks", "tar_shroom.json"), {
         "type": "minecraft:block",
-        "pools": [{"rolls": 1, "entries": [{"type": "minecraft:item", "name": "monstergirls:tar_shroom"}],
+        "pools": [{"rolls": 1, "entries": [{"type": "minecraft:item", "name": "harmontide:tar_shroom"}],
                    "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
     dump(os.path.join(DATA, "recipe", "salami.json"), {
         "type": "minecraft:crafting_shapeless",
         "category": "misc",
         "ingredients": [{"item": "minecraft:porkchop"}, {"item": "minecraft:beef"}, {"item": "minecraft:string"},
                         {"item": "minecraft:gold_nugget"}],
-        "result": {"id": "monstergirls:salami", "count": 2}})
+        "result": {"id": "harmontide:salami", "count": 2}})
     dump(os.path.join(DATA, "worldgen", "configured_feature", "tar_shroom_patch.json"), {
         "type": "minecraft:random_patch",
         "config": {"tries": 24, "xz_spread": 5, "y_spread": 2, "feature": {
             "feature": {"type": "minecraft:simple_block",
                         "config": {"to_place": {"type": "minecraft:simple_state_provider",
-                                                "state": {"Name": "monstergirls:tar_shroom"}}}},
+                                                "state": {"Name": "harmontide:tar_shroom"}}}},
             "placement": [{"type": "minecraft:block_predicate_filter", "predicate": {"type": "minecraft:all_of", "predicates": [
                 {"type": "minecraft:matching_blocks", "blocks": "minecraft:air"},
-                {"type": "minecraft:would_survive", "state": {"Name": "monstergirls:tar_shroom"}}]}}]}}})
+                {"type": "minecraft:would_survive", "state": {"Name": "harmontide:tar_shroom"}}]}}]}}})
     dump(os.path.join(DATA, "worldgen", "placed_feature", "tar_shroom_patch.json"), {
-        "feature": "monstergirls:tar_shroom_patch",
+        "feature": "harmontide:tar_shroom_patch",
         "placement": [{"type": "minecraft:rarity_filter", "chance": 6}, {"type": "minecraft:in_square"},
                       {"type": "minecraft:heightmap", "heightmap": "MOTION_BLOCKING"}, {"type": "minecraft:biome"}]})
     dump(os.path.join(DATA, "neoforge", "biome_modifier", "tar_shroom.json"), {
         "type": "neoforge:add_features",
         "biomes": ["minecraft:swamp", "minecraft:mangrove_swamp", "minecraft:dark_forest"],
-        "features": "monstergirls:tar_shroom_patch",
+        "features": "harmontide:tar_shroom_patch",
         "step": "vegetal_decoration"})
     return s, t
 

@@ -11,16 +11,16 @@ from gen_milk_assets import add_lang  # noqa: E402
 import gen_manor_assets  # noqa: E402
 
 LANG = {
-    "message.monstergirls.birthday.cake.0": "%s takes a deep breath and blows out the candle. She won't tell you what she wished for, but she keeps looking at you",
-    "message.monstergirls.birthday.cake.1": "%s blows the candle out in one go and cheers: \"Best birthday ever!\"",
-    "message.monstergirls.birthday.cake.2": "%s closes her eyes, makes a wish and puffs the candle out, then hugs everyone in reach",
+    "message.harmontide.birthday.cake.0": "%s takes a deep breath and blows out the candle. She won't tell you what she wished for, but she keeps looking at you",
+    "message.harmontide.birthday.cake.1": "%s blows the candle out in one go and cheers: \"Best birthday ever!\"",
+    "message.harmontide.birthday.cake.2": "%s closes her eyes, makes a wish and puffs the candle out, then hugs everyone in reach",
 }
 
 
 def main():
     add_lang(LANG)
     gen_manor_assets.GUIDE_ADD.clear()
-    gen_manor_assets.GUIDE_ADD["journal.monstergirls.guide.treats"] = (
+    gen_manor_assets.GUIDE_ADD["journal.harmontide.guide.treats"] = (
         " On her birthday, light a candle on a cake near her: she comes to blow it out, and everyone there is the closer for her wish.")
     gen_manor_assets.append_guides()
 

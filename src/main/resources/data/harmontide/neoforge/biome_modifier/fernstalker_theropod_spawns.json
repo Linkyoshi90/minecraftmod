@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_fernstalker_theropod",
+  "spawners": {
+    "type": "harmontide:fernstalker_theropod",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

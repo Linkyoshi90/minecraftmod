@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:realm_kindred",
+  "display": {
+    "icon": {
+      "id": "harmontide:heartfruit"
+    },
+    "title": {
+      "translate": "advancement.harmontide.realm_born_player"
+    },
+    "description": {
+      "translate": "advancement.harmontide.realm_born_player.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

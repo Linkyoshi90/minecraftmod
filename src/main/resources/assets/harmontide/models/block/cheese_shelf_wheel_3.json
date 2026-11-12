@@ -1,0 +1,42 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "harmontide:block/cheese_wheel_side",
+    "side": "harmontide:block/cheese_wheel_side",
+    "top": "harmontide:block/cheese_wheel_top"
+  },
+  "elements": [
+    {
+      "from": [
+        9,
+        8,
+        4
+      ],
+      "to": [
+        14,
+        12,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#top"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:market_day",
+  "display": {
+    "icon": {
+      "id": "minecraft:white_banner"
+    },
+    "title": {
+      "translate": "advancement.harmontide.hamlet"
+    },
+    "description": {
+      "translate": "advancement.harmontide.hamlet.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

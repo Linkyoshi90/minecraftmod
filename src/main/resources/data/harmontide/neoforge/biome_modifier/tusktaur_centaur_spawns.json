@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_tusktaur_centaur",
+  "spawners": {
+    "type": "harmontide:tusktaur_centaur",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

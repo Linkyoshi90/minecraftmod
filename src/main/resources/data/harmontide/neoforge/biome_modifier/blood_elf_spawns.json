@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_blood_elf",
+  "spawners": {
+    "type": "harmontide:blood_elf",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

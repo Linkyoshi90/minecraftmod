@@ -1,0 +1,929 @@
+package com.linkyoshi90.harmontide.entity.girl;
+
+import com.linkyoshi90.harmontide.HarmontideMod;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.animal.Rabbit;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Silverfish;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AbstractFurnaceBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.Nullable;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+/**
+ * The cat family (nekomata_field_guide.html): serval, tiger, lioness, snow leopard, cheetah, lynx. A cat chooses
+ * you: patience (sneaking or standing still near her) is the bond action, chasing her sets you back, and she only
+ * tolerates so much petting. Cats nap on warm blocks by day, stalk small prey, leave presents, and after ten days at
+ * full devotion become a true nekomata: a second tail, spirit fire and a spare life.
+ */
+public class Nekomata extends AbstractMonsterGirl {
+    private static final ResourceLocation BURST = HarmontideMod.id("cheetah_burst");
+    private static final int PATIENCE_COOLDOWN = 1200;
+    private static final long SPARE_LIFE_COOLDOWN = 5L * 24000L;
+
+    private final Map<UUID, Long> patience = new HashMap<>();
+    private final Map<UUID, Integer> strokes = new HashMap<>();
+    private long strokeWindow;
+    private long lastRevive = -SPARE_LIFE_COOLDOWN;
+    private int burstTicks;
+    private int tiredTicks;
+    private int watchedTicks;
+
+    public Nekomata(EntityType<? extends AbstractMonsterGirl> type, Level level, GirlSpecies species) {
+        super(type, level, species);
+        if (species == GirlSpecies.OCELOT_NEKOMATA) this.navigation = this.createNavigation(level);   // the first one was made before species was set
+        boolean tiger = species == GirlSpecies.TIGER_NEKOMATA;
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Player.class, 8.0F, 1.0, 1.4,
+                p -> p instanceof Player pl && pl.isSprinting() && this.isCalm() && this.getAffection(pl) < 10 && !pl.isSpectator()));
+        // she picks her prey and creeps up on it, belly low, before the pounce
+        this.goalSelector.addGoal(1, new StalkGoal(this, 0.55, 3.5, false, t -> !this.isAggressiveSprint()));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.3, true) {
+            @Override
+            protected void checkAndPerformAttack(LivingEntity target) {
+                if (this.canPerformAttack(target)) Nekomata.this.startTimedAction(Action.POUNCE, 16);
+                super.checkAndPerformAttack(target);
+            }
+        });
+        this.goalSelector.addGoal(4, new PatienceGoal());
+        this.goalSelector.addGoal(6, new NapGoal());
+        this.goalSelector.addGoal(8, tiger ? new RandomStrollGoal(this, 0.9) : new WaterAvoidingRandomStrollGoal(this, 0.9));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Rabbit.class, true));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Silverfish.class, true));
+        if (species != GirlSpecies.LYNX_NEKOMATA) {
+            // only a wild cat hunts chickens: one who is fond of someone leaves the farm alone
+            this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Chicken.class, true, c -> this.bestAffection() < 10));
+        }
+    }
+
+    public static net.minecraft.world.entity.ai.attributes.AttributeSupplier.Builder createAttributes(GirlSpecies s) {
+        return switch (s) {
+            case CENSER_LION_NEKOMATA -> girlAttributes(28, 0.3, 5);
+            case TIGER_NEKOMATA -> girlAttributes(30, 0.3, 6);
+            case SMILODON_NEKOMATA -> girlAttributes(38, 0.3, 8);
+            case LIONESS_NEKOMATA -> girlAttributes(26, 0.3, 5);
+            case CHEETAH_NEKOMATA -> girlAttributes(18, 0.34, 3);
+            case SNOW_LEOPARD_NEKOMATA -> girlAttributes(22, 0.3, 4).add(Attributes.JUMP_STRENGTH, 0.62);
+            case SERVAL_NEKOMATA -> girlAttributes(16, 0.3, 3).add(Attributes.JUMP_STRENGTH, 0.66);
+            case OCELOT_NEKOMATA -> girlAttributes(16, 0.32, 3);
+            case BLAZE_CAT_NEKOMATA -> girlAttributes(24, 0.32, 5);
+            case WATERLIL_NEKOMATA -> girlAttributes(16, 0.3, 2);
+            case CHESHIRE_NEKOMATA -> girlAttributes(20, 0.32, 3);
+            case SNOWLOPER_NEKOMATA -> girlAttributes(18, 0.34, 2);
+            case CAIT_SITH_NEKOMATA -> girlAttributes(18, 0.32, 3);
+            case BAKENEKO_NEKOMATA -> girlAttributes(18, 0.32, 3);
+            case JAGLARE_NEKOMATA -> girlAttributes(30, 0.32, 7).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 0.8);
+            default -> girlAttributes(18, 0.3, 3);
+        };
+    }
+
+    /** Wild cats are hunters first: a stranger is prey until she has been given meat. */
+    @Override
+    protected boolean wildHostile() {
+        return true;
+    }
+
+    /** One wild cat in ten was born a nekomata: her tail is split in two from the start. */
+    @Override
+    protected int rollTails(net.minecraft.util.RandomSource random) {
+        return random.nextInt(10) == 0 ? 2 : 1;
+    }
+
+    @Override
+    protected net.minecraft.world.entity.ai.navigation.PathNavigation createNavigation(Level level) {
+        return this.species == GirlSpecies.OCELOT_NEKOMATA ? new net.minecraft.world.entity.ai.navigation.WallClimberNavigation(this, level) : super.createNavigation(level);
+    }
+
+    /** The ocelot climbs tree trunks (and walls) like the gray fox. */
+    @Override
+    public boolean onClimbable() {
+        return (this.species == GirlSpecies.OCELOT_NEKOMATA && this.horizontalCollision) || super.onClimbable();
+    }
+
+    /** The cheetah's sprint burst skips the stalk: she simply runs her prey down. */
+    private boolean isAggressiveSprint() {
+        return this.burstTicks > 0;
+    }
+
+    // --- food, petting, presents ---------------------------------------------------------------------------------
+
+    // --- the cheshire cat (her fading is the renderer's) -----------------------------------------------------------------
+
+    /** Left more than 14 blocks behind, she blinks back to her friend's side. True if she did. */
+    public boolean blinkToFriend(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 96);
+        if (friend == null || this.isOrderedToSit() || this.isPassenger() || this.distanceToSqr(friend) < 14 * 14) return false;
+        for (int i = 0; i < 12; i++) {
+            BlockPos p = friend.blockPosition().offset(this.random.nextInt(5) - 2, this.random.nextInt(3) - 1, this.random.nextInt(5) - 2);
+            if (!level.getBlockState(p.below()).isSolid() || !level.getBlockState(p).isAir() || !level.getBlockState(p.above()).isAir()) continue;
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.WITCH, this.getX(), this.getY() + 1, this.getZ(), 12, 0.3, 0.6, 0.3, 0.0);
+            this.teleportTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5);
+            this.getNavigation().stop();
+            this.playSound(SoundEvents.CAT_PURR, 1.0F, 1.2F);
+            return true;
+        }
+        return false;
+    }
+
+    // --- the waterlil ----------------------------------------------------------------------------------------------------
+
+    /** The lily pads she has grown, and when each fades. */
+    private final java.util.Map<BlockPos, Long> pads = new java.util.HashMap<>();
+
+    /** Lily pads on the water under and ahead of this walker; true if one grew. */
+    public boolean growPads(ServerLevel level, net.minecraft.world.entity.LivingEntity walker) {
+        Vec3 step = walker.getDeltaMovement().multiply(1, 0, 1);
+        BlockPos feet = walker.blockPosition();
+        boolean grew = false;
+        for (BlockPos at : new BlockPos[]{feet, step.lengthSqr() > 1.0E-4 ? BlockPos.containing(walker.position().add(step.normalize())) : feet}) {
+            BlockPos water = at.below();
+            if (level.getFluidState(water).isSourceOfType(net.minecraft.world.level.material.Fluids.WATER) && level.getBlockState(at).isAir()) {
+                level.setBlock(at, net.minecraft.world.level.block.Blocks.LILY_PAD.defaultBlockState(), 3);
+                this.pads.put(at.immutable(), level.getGameTime() + 200);
+                grew = true;
+            }
+        }
+        return grew;
+    }
+
+    private void tickPads(ServerLevel level) {
+        this.growPads(level, this);
+        Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 6);
+        if (friend != null) this.growPads(level, friend);
+        if (this.tickCount % 20 == 0) {                              // the old ones fade, unless someone stands on them
+            this.pads.entrySet().removeIf(e -> {
+                if (level.getGameTime() < e.getValue()) return false;
+                BlockPos p = e.getKey();
+                if (!level.getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, new net.minecraft.world.phys.AABB(p).inflate(0.5)).isEmpty()) return false;
+                if (level.getBlockState(p).is(net.minecraft.world.level.block.Blocks.LILY_PAD)) level.removeBlock(p, false);
+                return true;
+            });
+        }
+    }
+
+    @Override
+    public void remove(RemovalReason reason) {
+        if (this.level() instanceof ServerLevel level) {
+            for (BlockPos p : this.pads.keySet()) if (level.getBlockState(p).is(net.minecraft.world.level.block.Blocks.LILY_PAD)) level.removeBlock(p, false);
+            this.pads.clear();
+        }
+        super.remove(reason);
+    }
+
+    // --- the blaze cat --------------------------------------------------------------------------------------------------
+
+    @Override
+    public boolean fireImmune() {
+        return this.species == GirlSpecies.BLAZE_CAT_NEKOMATA || super.fireImmune();
+    }
+
+    @Override
+    public boolean canFreeze() {
+        return this.species != GirlSpecies.SNOWLOPER_NEKOMATA && super.canFreeze();
+    }
+
+    // --- the snowloper and the jaglare --------------------------------------------------------------------------------
+
+    /** The cait sith keeps phantoms off her friend: those near them lose interest and are pushed away. Returns how many. */
+    public int warnOffPhantoms(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 32);
+        if (friend == null) return 0;
+        int n = 0;
+        for (net.minecraft.world.entity.monster.Phantom ph : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Phantom.class, friend.getBoundingBox().inflate(24))) {
+            if (ph.getTarget() == friend) ph.setTarget(null);
+            Vec3 away = ph.position().subtract(friend.position()).normalize();
+            ph.setDeltaMovement(away.x * 0.6, 0.4, away.z * 0.6);
+            n++;
+        }
+        if (n > 0) this.playSound(SoundEvents.CAT_HISS, 0.8F, 0.9F);
+        return n;
+    }
+
+    /** A saucer of milk for the cait sith: her friend has Luck for five minutes. */
+    @Nullable
+    @Override
+    protected net.minecraft.world.InteractionResult familyInteract(Player player, net.minecraft.world.InteractionHand hand, ItemStack stack) {
+        if (this.species != GirlSpecies.CAIT_SITH_NEKOMATA || !stack.is(net.minecraft.world.item.Items.MILK_BUCKET) || this.isBaby()) return null;
+        if (!this.level().isClientSide) {
+            player.setItemInHand(hand, new ItemStack(net.minecraft.world.item.Items.BUCKET));
+            player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.LUCK, 6000, 0));
+            this.addAffection(player, 2);
+            this.playSound(SoundEvents.CAT_PURR, 1.0F, 1.0F);
+        }
+        return net.minecraft.world.InteractionResult.sidedSuccess(this.level().isClientSide);
+    }
+
+    /** Speed for the snowloper's friend while they stand on snow. True if she gave it. */
+    public boolean snowStride(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 16);
+        if (friend == null) return false;
+        BlockPos under = friend.getOnPos();
+        boolean snow = level.getBlockState(friend.blockPosition()).is(net.minecraft.tags.BlockTags.SNOW) || level.getBlockState(under).is(net.minecraft.tags.BlockTags.SNOW);
+        if (snow) friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 60, 1, true, false));
+        return snow;
+    }
+
+    /** Up in the trees: prey passing at least two blocks below gets pounced on. The prey she dropped on, or null. */
+    @Nullable
+    public net.minecraft.world.entity.LivingEntity dropOnPrey(ServerLevel level) {
+        if (this.getTarget() != null || this.isOrderedToSit() || this.isBaby()) return null;
+        net.minecraft.world.entity.LivingEntity prey = this.nearest(net.minecraft.world.entity.LivingEntity.class, 7,
+                e -> e != this && e.isAlive() && this.getY() - e.getY() >= 2.0 && (e instanceof net.minecraft.world.entity.monster.Monster
+                        || e instanceof net.minecraft.world.entity.animal.Animal a && !(a instanceof net.minecraft.world.entity.TamableAnimal t && t.isTame()))
+                        && !(e instanceof com.linkyoshi90.harmontide.entity.Bonded));
+        if (prey == null) return null;
+        Vec3 to = prey.position().subtract(this.position());
+        this.setDeltaMovement(to.x * 0.2, 0.25, to.z * 0.2);
+        this.setTarget(prey);
+        this.startTimedAction(Action.POUNCE, 20);
+        this.playSound(SoundEvents.CAT_HISS, 1.0F, 0.7F);
+        return prey;
+    }
+
+    /** Onto the top of a tree within 6 blocks, to lie in wait. True if she climbed. */
+    public boolean climbTree(ServerLevel level) {
+        for (int i = 0; i < 16; i++) {
+            BlockPos p = this.blockPosition().offset(this.random.nextInt(13) - 6, 2 + this.random.nextInt(8), this.random.nextInt(13) - 6);
+            if (level.getBlockState(p.below()).is(net.minecraft.tags.BlockTags.LEAVES) && level.getBlockState(p).isAir() && level.getBlockState(p.above()).isAir()) {
+                this.teleportTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5);
+                this.getNavigation().stop();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Her roar: the monsters within 8 blocks of her friend are weakened. Returns how many. */
+    public int roar(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 16);
+        if (friend == null) return 0;
+        var near = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8));
+        for (var m : near) m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WEAKNESS, 120, 0));
+        if (!near.isEmpty()) {
+            this.playSound(SoundEvents.RAVAGER_ROAR, 0.8F, 1.6F);
+            this.startTimedAction(Action.HISS, 30);
+        }
+        return near.size();
+    }
+
+    /** Her burning paws set whatever she hits alight. */
+    @Override
+    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
+        boolean hit = super.doHurtTarget(target);
+        if (hit && this.species == GirlSpecies.BLAZE_CAT_NEKOMATA) target.igniteForSeconds(4);
+        return hit;
+    }
+
+    /** Campfires and candles near her light up; her friend beside her takes no harm from fire. */
+    public int kindle(ServerLevel level) {
+        int lit = 0;
+        BlockPos o = this.blockPosition();
+        for (BlockPos p : BlockPos.betweenClosed(o.offset(-4, -2, -4), o.offset(4, 2, 4))) {
+            var s = level.getBlockState(p);
+            if (s.hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT)
+                    && (s.getBlock() instanceof net.minecraft.world.level.block.CampfireBlock || s.getBlock() instanceof net.minecraft.world.level.block.AbstractCandleBlock)
+                    && !s.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT)
+                    && !(s.hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED)
+                    && s.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED))) {
+                level.setBlock(p, s.setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT, true), 3);
+                lit++;
+            }
+        }
+        Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 8);
+        if (friend != null) friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.FIRE_RESISTANCE, 100, 0, true, false));
+        return lit;
+    }
+
+    @Override
+    public boolean isFood(ItemStack stack) {
+        if (this.species == GirlSpecies.BLAZE_CAT_NEKOMATA && stack.is(Items.BLAZE_POWDER)) return true;
+        return stack.is(ItemTags.FISHES) || stack.is(Items.CHICKEN) || stack.is(Items.RABBIT) || stack.is(Items.COOKED_CHICKEN)
+                || stack.is(Items.COOKED_RABBIT) || stack.is(Items.MILK_BUCKET);
+    }
+
+    @Override
+    protected int foodValue(Player player, ItemStack stack) {
+        return stack.is(ItemTags.FISHES) ? 2 : super.foodValue(player, stack);
+    }
+
+    /** Every cat tolerates only so many strokes in a row (more, the fonder she is); past that she swats. */
+    @Override
+    protected int petValue(Player player) {
+        long now = this.level().getGameTime();
+        if (now > this.strokeWindow) {
+            this.strokes.clear();
+            this.strokeWindow = now + 200;
+        }
+        int n = this.strokes.merge(player.getUUID(), 1, Integer::sum);
+        int tolerance = 3 + this.getAffection(player) / 20;
+        if (n > tolerance) {
+            this.startTimedAction(Action.HISS, 30);
+            this.playSound(SoundEvents.CAT_HISS, 1.0F, this.getVoicePitch());
+            player.displayClientMessage(Component.translatable("message.harmontide.swat", this.getDisplayName()), true);
+            this.addAffection(player, -1);
+            if (this.getAffection(player) < BED_AFFECTION) player.hurt(this.damageSources().mobAttack(this), 0.5F);
+            this.strokes.put(player.getUUID(), 0);
+            return 0;
+        }
+        if (this.level() instanceof ServerLevel server && this.getAffection(player) >= 10) {
+            server.sendParticles(ParticleTypes.NOTE, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 1, 0.2, 0.1, 0.2, 0.0);
+        }
+        return 1;
+    }
+
+    @Override
+    public ItemStack rollGift(Player player) {
+        int r = this.random.nextInt(100);
+        return switch (this.species) {
+            case TIGER_NEKOMATA -> new ItemStack(this.random.nextBoolean() ? Items.COD : Items.SALMON);
+            case CHEETAH_NEKOMATA, LYNX_NEKOMATA -> new ItemStack(r < 50 ? Items.RABBIT : r < 85 ? Items.RABBIT_HIDE : Items.RABBIT_FOOT);
+            case OCELOT_NEKOMATA -> new ItemStack(r < 45 ? Items.COCOA_BEANS : r < 80 ? Items.FEATHER : Items.MELON_SLICE, r < 45 ? 3 : 1);
+            case BAKENEKO_NEKOMATA -> new ItemStack(r < 45 ? Items.COD : r < 80 ? Items.SALMON : r < 97 ? Items.CANDLE : Items.SOUL_LANTERN, r < 80 ? 2 : 1);
+            case BLAZE_CAT_NEKOMATA -> new ItemStack(r < 50 ? Items.BLAZE_POWDER : r < 85 ? Items.MAGMA_CREAM : Items.BLAZE_ROD, r < 50 ? 2 : 1);
+            default -> new ItemStack(r < 30 ? Items.FEATHER : r < 50 ? Items.RABBIT_HIDE : r < 70 ? Items.STRING : r < 85 ? Items.CHICKEN : r < 97 ? Items.RABBIT : Items.PHANTOM_MEMBRANE);
+        };
+    }
+
+    // --- sounds --------------------------------------------------------------------------------------------------
+
+    private boolean big() {
+        return this.species == GirlSpecies.TIGER_NEKOMATA || this.species == GirlSpecies.LIONESS_NEKOMATA || this.species == GirlSpecies.SNOW_LEOPARD_NEKOMATA;
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return this.getAction() == Action.LYING ? SoundEvents.CAT_PURR : SoundEvents.CAT_AMBIENT;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SoundEvents.CAT_HURT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.CAT_DEATH;
+    }
+
+    public SoundEvent getEatSound() {
+        return SoundEvents.CAT_EAT;
+    }
+
+    @Override
+    public float getVoicePitch() {
+        return super.getVoicePitch() * (this.big() ? 0.75F : 1.0F);
+    }
+
+    // --- relationships & young -----------------------------------------------------------------------------------
+
+    @Override
+    protected boolean hasTrueForm() {
+        return true;
+    }
+
+    @Override
+    protected int litterSize() {
+        return 2 + this.random.nextInt(2);
+    }
+
+    /** The litter is born in a den: the darkest roofed nook within reach, or where she is. */
+    @Override
+    protected boolean giveBirth(ServerLevel level, @Nullable UUID father) {
+        BlockPos den = this.blockPosition();
+        int best = 99;
+        for (BlockPos p : BlockPos.betweenClosed(den.offset(-8, -2, -8), den.offset(8, 2, 8))) {
+            if (!canHoldBlock(level, p) || level.canSeeSky(p)) continue;
+            int light = level.getMaxLocalRawBrightness(p);
+            if (light < best) {
+                best = light;
+                den = p.immutable();
+            }
+        }
+        for (int i = 0; i < this.litterSize(); i++) this.spawnYoung(level, den, father);
+        return true;
+    }
+
+    /** Waking up beside her: a purring cat gives Regeneration; the snow leopard's tail also Resistance. */
+    @Override
+    public void onNightShared(ServerPlayer player) {
+        player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 600, 0));
+        if (this.species == GirlSpecies.SNOW_LEOPARD_NEKOMATA) {
+            player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1200, 0));
+            player.setTicksFrozen(0);
+        }
+    }
+
+    /** A true nekomata has a spare life: once every five days a killing blow leaves her at half health. */
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (!this.level().isClientSide && this.isTrueForm() && amount >= this.getHealth()
+                && this.level().getGameTime() - this.lastRevive >= SPARE_LIFE_COOLDOWN && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            this.lastRevive = this.level().getGameTime();
+            this.setHealth(this.getMaxHealth() / 2);
+            if (this.level() instanceof ServerLevel server) {
+                server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, this.getX(), this.getY() + 1, this.getZ(), 40, 0.5, 0.8, 0.5, 0.05);
+            }
+            this.playSound(SoundEvents.TOTEM_USE, 0.6F, 1.4F);
+            return false;
+        }
+        return super.hurt(source, amount);
+    }
+
+    @Override
+    public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
+        return this.species != GirlSpecies.SNOW_LEOPARD_NEKOMATA && this.species != GirlSpecies.JAGLARE_NEKOMATA   // she drops from the trees
+                && super.causeFallDamage(Math.max(0, distance - 3), multiplier, source);
+    }
+
+    // --- tick ----------------------------------------------------------------------------------------------------
+
+    /** The bakeneko's wisps light the night around her (brighter beside her friend); by day they fade. The light level she gives. */
+    public int ghostLights(ServerLevel level, boolean night) {
+        int light = !night ? 0 : this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 12) != null ? 13 : 7;
+        this.glow(level, light);
+        if (light > 0 && this.random.nextInt(3) == 0) {
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.SOUL_FIRE_FLAME, this.getX(), this.getY() + 1.2, this.getZ(), 2, 0.6, 0.5, 0.6, 0.01);
+        }
+        return light;
+    }
+
+    /** The smilodon springs on the nearest monster within 8 of her friend for 9; the rest flinch back from it. Returns how many she moved, -1 without a friend. */
+    public int ambush(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster prey = null;
+        var near = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8));
+        for (var m : near) if (prey == null || m.distanceToSqr(friend) < prey.distanceToSqr(friend)) prey = m;
+        if (prey == null) return 0;
+        this.teleportTo(prey.getX(), prey.getY(), prey.getZ());
+        prey.hurt(level.damageSources().mobAttack(this), 9.0F);
+        for (var m : near) {
+            if (m == prey) continue;
+            net.minecraft.world.phys.Vec3 away = m.position().subtract(prey.position()).multiply(1, 0, 1);
+            away = (away.lengthSqr() < 1.0E-4 ? new net.minecraft.world.phys.Vec3(1, 0, 0) : away).normalize();
+            m.setDeltaMovement(away.x * 0.9, 0.3, away.z * 0.9);
+            m.hurtMarked = true;
+        }
+        this.playSound(SoundEvents.RAVAGER_ROAR, 0.6F, 1.3F);
+        return near.size();
+    }
+
+    /** The black panther's prowl: after dark her crouching friend near her goes unseen. 1 if so, 0 if not now, -1 without a friend. */
+    public int prowl(boolean night) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 8);
+        if (friend == null) return -1;
+        if (!night || !friend.isShiftKeyDown()) return 0;
+        friend.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.INVISIBILITY, 40, 0, true, false));
+        return 1;
+    }
+
+    /** The nue's night cry: Weakness and Slowness on the monsters within 12 of her friend, and a crack of thunder. How many, or -1 without a friend. */
+    public int nightCry(net.minecraft.server.level.ServerLevel level, boolean night) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        if (!night) return 0;
+        var near = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(12), net.minecraft.world.entity.monster.Monster::isAlive);
+        if (near.isEmpty()) return 0;
+        for (net.minecraft.world.entity.monster.Monster m : near) {
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WEAKNESS, 160, 1));
+            m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 160, 1));
+        }
+        this.playSound(net.minecraft.sounds.SoundEvents.LIGHTNING_BOLT_THUNDER, 0.6F, 1.6F);
+        return near.size();
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (this.species == GirlSpecies.NUE_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel forest && !this.isBaby() && this.tickCount % 401 == 0) this.nightCry(forest, forest.isNight());
+        if (this.species == GirlSpecies.BLACK_PANTHER_NEKOMATA && !this.level().isClientSide && !this.isBaby() && this.tickCount % 20 == 0) this.prowl(this.level().isNight());
+        if (this.species == GirlSpecies.SMILODON_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel snow && !this.isBaby() && this.tickCount % 60 == 0) this.ambush(snow);
+        if (this.species == GirlSpecies.BAKU_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel dream && !this.isBaby() && this.tickCount % 200 == 0) this.eatNightmares(dream);
+        if (this.species == GirlSpecies.CARACAL_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel leap && !this.isBaby() && this.tickCount % 40 == 0) this.birdCatch(leap);
+        if (this.species == GirlSpecies.RAKSHASA_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel maya && !this.isBaby() && this.tickCount % 40 == 0) this.glamour(maya);
+        if (this.species == GirlSpecies.AMMIT_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel judge && !this.isBaby() && this.tickCount % 10 == 0) this.devour(judge);
+        if (this.species == GirlSpecies.MANTICORE_NEKOMATA && this.level() instanceof net.minecraft.server.level.ServerLevel spike && !this.isBaby() && this.tickCount % 60 == 0) this.tailSpike(spike);
+        if (this.species == GirlSpecies.SABRE_NEKOMATA && this.level() instanceof ServerLevel hunt && !this.isBaby() && this.tickCount % 40 == 0) this.finishingBite(hunt);
+        if (this.species == GirlSpecies.BASTET_NEKOMATA && this.level() instanceof ServerLevel home && !this.isBaby() && this.tickCount % 10 == 0) this.wardCreepers(home);
+        if (this.species == GirlSpecies.CENSER_LION_NEKOMATA && this.level() instanceof ServerLevel incense && !this.isBaby() && this.tickCount % 20 == 0) this.incense(incense);
+        if (this.species == GirlSpecies.BLAZE_CAT_NEKOMATA && this.level() instanceof ServerLevel fire && this.tickCount % 40 == 0 && !this.isBaby()) this.kindle(fire);
+        if (this.species == GirlSpecies.WATERLIL_NEKOMATA && this.level() instanceof ServerLevel pond && this.tickCount % 4 == 0) this.tickPads(pond);
+        if (this.species == GirlSpecies.CHESHIRE_NEKOMATA && this.level() instanceof ServerLevel wonder && this.tickCount % 20 == 0) this.blinkToFriend(wonder);
+        if (this.species == GirlSpecies.SNOWLOPER_NEKOMATA && this.level() instanceof ServerLevel snow && this.tickCount % 20 == 0) this.snowStride(snow);
+        if (this.species == GirlSpecies.CAIT_SITH_NEKOMATA && this.level() instanceof ServerLevel fairy && this.tickCount % 20 == 0) this.warnOffPhantoms(fairy);
+        if (this.species == GirlSpecies.BAKENEKO_NEKOMATA && this.level() instanceof ServerLevel ghost && this.tickCount % 20 == 0) this.ghostLights(ghost, !ghost.isDay());
+        if (this.species == GirlSpecies.JAGLARE_NEKOMATA && this.level() instanceof ServerLevel jungle && !this.isBaby()) {
+            if (this.tickCount % 10 == 0) this.dropOnPrey(jungle);
+            if (this.tickCount % 400 == 0 && this.onGround() && this.getTarget() == null && this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 32) == null
+                    && this.random.nextInt(3) == 0) this.climbTree(jungle);
+            if (this.tickCount % 200 == 0) this.roar(jungle);
+        }
+        if (!(this.level() instanceof ServerLevel server)) return;
+        if (this.isTrueForm() && this.tickCount % 20 == 0 && !server.isDay()) {
+            server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, this.getRandomX(0.6), this.getY() + this.getBbHeight() * this.random.nextDouble(), this.getRandomZ(0.6), 1, 0, 0.02, 0, 0);
+        }
+        switch (this.species) {
+            case SERVAL_NEKOMATA -> this.earScan(server);
+            case TIGER_NEKOMATA -> this.tigerTick(server);
+            case SNOW_LEOPARD_NEKOMATA -> this.warmTail();
+            case CHEETAH_NEKOMATA -> this.cheetahTick();
+            case LYNX_NEKOMATA -> this.lynxTick();
+            default -> {
+            }
+        }
+    }
+
+    /** The serval hears what you cannot: she hisses towards the nearest monster within 24 blocks, even through stone. */
+    private void earScan(ServerLevel level) {
+        if (this.tickCount % 101 != 0 || this.bondedPlayer(BED_AFFECTION, 16) == null) return;
+        Monster m = level.getNearestEntity(Monster.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forNonCombat().ignoreLineOfSight(),
+                this, this.getX(), this.getY(), this.getZ(), this.getBoundingBox().inflate(24));
+        if (m == null) return;
+        this.getLookControl().setLookAt(m);
+        this.startTimedAction(Action.HISS, 30);
+        this.playSound(SoundEvents.CAT_HISS, 0.8F, 1.3F);
+    }
+
+    /** The tiger's roar sends monsters near her (or near her favourite) running for a moment. */
+    private void tigerTick(ServerLevel level) {
+        if (this.tickCount % 201 != 0) return;
+        boolean threat = this.getTarget() instanceof Enemy;
+        Player p = this.bondedPlayer(BED_AFFECTION, 16);
+        if (!threat && p != null) threat = !level.getEntitiesOfClass(Monster.class, p.getBoundingBox().inflate(8), m -> m.getTarget() == p).isEmpty();
+        if (!threat) return;
+        this.playSound(SoundEvents.RAVAGER_ROAR, 1.0F, 1.5F);
+        this.startTimedAction(Action.HISS, 30);
+        for (Monster m : level.getEntitiesOfClass(Monster.class, this.getBoundingBox().inflate(12))) {
+            m.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 1));
+            m.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, 0));
+            m.setTarget(null);
+        }
+    }
+
+    /** The snow leopard's tail: a favourite close by does not freeze. */
+    private void warmTail() {
+        if (this.tickCount % 20 != 0) return;
+        Player p = this.bondedPlayer(BED_AFFECTION, 4);
+        if (p != null) p.setTicksFrozen(0);
+    }
+
+    /** Five-second bursts at double speed, then she has to rest; she paces a sprinting favourite (Speed II). */
+    private void cheetahTick() {
+        AttributeInstance speed = this.getAttribute(Attributes.MOVEMENT_SPEED);
+        boolean chasing = this.getTarget() != null || this.isSprinting();
+        if (this.tiredTicks > 0) {
+            this.tiredTicks--;
+        } else if (chasing && this.burstTicks < 100) {
+            this.burstTicks++;
+            if (speed != null && !speed.hasModifier(BURST)) speed.addTransientModifier(new AttributeModifier(BURST, 1.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        } else if (this.burstTicks >= 100) {
+            this.burstTicks = 0;
+            this.tiredTicks = 100;
+        }
+        if ((this.tiredTicks > 0 || !chasing) && speed != null && speed.hasModifier(BURST)) speed.removeModifier(BURST);
+        if (this.tickCount % 20 == 0) {
+            Player p = this.bondedPlayer(BED_AFFECTION, 8);
+            if (p != null && p.isSprinting()) p.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 40, 1, true, false));
+        }
+    }
+
+    public boolean isBursting() {
+        AttributeInstance speed = this.getAttribute(Attributes.MOVEMENT_SPEED);
+        return speed != null && speed.hasModifier(BURST);
+    }
+
+    /** Watched too long by someone she does not know, the lynx slips away. */
+    private void lynxTick() {
+        if (this.tickCount % 10 != 0 || this.isOrderedToSit()) return;
+        Player watcher = null;
+        for (Player p : this.level().players()) {
+            if (this.getAffection(p) >= 10 || p.distanceToSqr(this) > 16 * 16 || !p.hasLineOfSight(this)) continue;
+            Vec3 look = p.getViewVector(1.0F).normalize();
+            Vec3 to = this.position().subtract(p.getEyePosition()).normalize();
+            if (look.dot(to) > 0.96) watcher = p;
+        }
+        this.watchedTicks = watcher == null ? 0 : this.watchedTicks + 10;
+        if (watcher != null && this.watchedTicks > 100 && this.getNavigation().isDone()) {
+            Vec3 away = this.position().add(this.position().subtract(watcher.position()).normalize().scale(12));
+            this.getNavigation().moveTo(away.x, away.y, away.z, 1.3);
+            this.watchedTicks = 0;
+        }
+    }
+
+    // --- persistence ---------------------------------------------------------------------------------------------
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putLong("LastRevive", this.lastRevive);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        if (tag.contains("LastRevive")) this.lastRevive = tag.getLong("LastRevive");
+    }
+
+    // --- goals ---------------------------------------------------------------------------------------------------
+
+    /** A cat chooses you: stay still (or sneak) near her and she comes over and headbutts you (+1, once a minute). */
+    class PatienceGoal extends Goal {
+        private Player player;
+        private int ticks;
+
+        PatienceGoal() {
+            this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+        }
+
+        @Override
+        public boolean canUse() {
+            if (Nekomata.this.tickCount % 23 != 0 || Nekomata.this.getTarget() != null || Nekomata.this.isBaby()) return false;
+            long now = Nekomata.this.level().getGameTime();
+            double best = 12 * 12;                                          // she notices you a fair way off; the nearest patient one first
+            this.player = null;
+            for (Player p : Nekomata.this.level().players()) {
+                double d = p.distanceToSqr(Nekomata.this);
+                if (p.isSpectator() || d > best) continue;
+                boolean still = p.getDeltaMovement().horizontalDistanceSqr() < 1.0E-4 || p.isShiftKeyDown();
+                if (!still || now < Nekomata.this.patience.getOrDefault(p.getUUID(), 0L)) continue;
+                this.player = p;
+                best = d;
+            }
+            return this.player != null;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.player != null && this.player.isAlive() && this.ticks < 200 && Nekomata.this.getTarget() == null;
+        }
+
+        @Override
+        public void start() {
+            this.ticks = 0;
+        }
+
+        @Override
+        public void tick() {
+            this.ticks++;
+            Nekomata.this.getLookControl().setLookAt(this.player);
+            if (Nekomata.this.distanceToSqr(this.player) > 4.0) {
+                if (this.ticks % 10 == 1) Nekomata.this.getNavigation().moveTo(this.player, 0.8);
+                return;
+            }
+            Nekomata.this.getNavigation().stop();
+            Nekomata.this.patience.put(this.player.getUUID(), Nekomata.this.level().getGameTime() + PATIENCE_COOLDOWN);
+            Nekomata.this.addAffection(this.player, 1);
+            Nekomata.this.startTimedAction(Action.GROOM, 40);
+            if (Nekomata.this.level() instanceof ServerLevel server) Nekomata.this.hearts(server, 3);
+            Nekomata.this.playSound(SoundEvents.CAT_PURREOW, 1.0F, Nekomata.this.getVoicePitch());
+            this.ticks = 999;
+        }
+
+        @Override
+        public void stop() {
+            this.player = null;
+        }
+    }
+
+    /** By day she finds a warm spot (wool, a carpet, a bed, a lit furnace) and naps there; lionesses nap the longest. */
+    class NapGoal extends Goal {
+        private BlockPos spot;
+        private int ticks;
+        private int length;
+
+        NapGoal() {
+            this.setFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));
+        }
+
+        @Override
+        public boolean canUse() {
+            Level level = Nekomata.this.level();
+            if (!level.isDay() || Nekomata.this.getTarget() != null || Nekomata.this.tickCount % 41 != 0) return false;
+            if (Nekomata.this.random.nextInt(Nekomata.this.species == GirlSpecies.LIONESS_NEKOMATA ? 2 : 6) != 0) return false;
+            BlockPos origin = Nekomata.this.blockPosition();
+            for (BlockPos p : BlockPos.betweenClosed(origin.offset(-8, -2, -8), origin.offset(8, 2, 8))) {
+                if (isWarm(level.getBlockState(p)) && level.getBlockState(p.above()).getCollisionShape(level, p.above()).isEmpty()) {
+                    this.spot = p.immutable();
+                    return true;
+                }
+            }
+            this.spot = Nekomata.this.blockPosition().below();
+            return Nekomata.this.random.nextInt(4) == 0;              // no warm spot: a nap wherever she is
+        }
+
+        private boolean isWarm(BlockState s) {
+            return s.is(BlockTags.WOOL) || s.is(BlockTags.WOOL_CARPETS) || s.is(BlockTags.BEDS)
+                    || (s.getBlock() instanceof AbstractFurnaceBlock && s.getValue(AbstractFurnaceBlock.LIT));
+        }
+
+        @Override
+        public void start() {
+            this.ticks = 0;
+            this.length = (Nekomata.this.species == GirlSpecies.LIONESS_NEKOMATA ? 1600 : 600) + Nekomata.this.random.nextInt(800);
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.ticks < this.length && Nekomata.this.getTarget() == null && Nekomata.this.level().isDay() && Nekomata.this.hurtTime == 0;
+        }
+
+        @Override
+        public void tick() {
+            this.ticks++;
+            Vec3 c = Vec3.atBottomCenterOf(this.spot.above());
+            if (Nekomata.this.distanceToSqr(c) > 1.5) {
+                if (this.ticks % 20 == 1) Nekomata.this.getNavigation().moveTo(c.x, c.y, c.z, 0.9);
+                if (this.ticks > 200) this.spot = Nekomata.this.blockPosition().below();
+                return;
+            }
+            Nekomata.this.getNavigation().stop();
+            if (Nekomata.this.getAction() == Action.NONE) Nekomata.this.setAction(Action.LYING);
+        }
+
+        @Override
+        public void stop() {
+            if (Nekomata.this.getAction() == Action.LYING) Nekomata.this.setAction(Action.NONE);
+        }
+    }
+
+    /** The lioness' pride: every lioness of the pride who loves this player joins in on their fight. */
+    public static void rallyPride(Player player, LivingEntity enemy) {
+        if (enemy instanceof Nekomata || enemy == null) return;
+        for (Nekomata n : player.level().getEntitiesOfClass(Nekomata.class, player.getBoundingBox().inflate(24),
+                n -> n.species == GirlSpecies.LIONESS_NEKOMATA && n.getAffection(player) >= BED_AFFECTION && !n.isBaby() && !n.isOrderedToSit())) {
+            if (enemy instanceof Player other && n.getAffection(other) >= BED_AFFECTION) continue;
+            n.setTarget(enemy);
+        }
+    }
+
+    public static boolean isNekomata(@Nullable Entity e) {
+        return e instanceof Nekomata;
+    }
+
+    // --- the censer lion -----------------------------------------------------------------------------------------
+
+    /** Her friend within 16 blocks rests easy (no phantoms come for the sleepless), and phantoms within 32 of her stop
+     *  hunting her friend. How many phantoms she calmed, or -1 without a friend. */
+    public int incense(ServerLevel level) {
+        Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        friend.resetStat(net.minecraft.stats.Stats.CUSTOM.get(net.minecraft.stats.Stats.TIME_SINCE_REST));
+        int calmed = 0;
+        for (var ph : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Phantom.class, this.getBoundingBox().inflate(32), ph -> ph.getTarget() == friend)) {
+            ph.setTarget(null);
+            calmed++;
+        }
+        if (this.tickCount % 60 == 0) level.sendParticles(net.minecraft.core.particles.ParticleTypes.CAMPFIRE_COSY_SMOKE, this.getX(), this.getY() + 0.6, this.getZ(), 1, 0.1, 0.1, 0.1, 0.005);
+        return calmed;
+    }
+
+    // --- Bastet (eighteenth wave) -----------------------------------------------------------------------------------
+
+    /** Creepers within 12 blocks of her friend (who is within 16 of her) stop hunting them, stamp out their fuse and slink away.
+     *  How many, or -1 without a friend. */
+    public int wardCreepers(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 16);
+        if (friend == null) return -1;
+        int n = 0;
+        for (var creeper : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Creeper.class, friend.getBoundingBox().inflate(12))) {
+            if (creeper.getTarget() == friend) creeper.setTarget(null);
+            creeper.setSwellDir(-1);
+            net.minecraft.world.phys.Vec3 away = creeper.position().add(creeper.position().subtract(friend.position()).normalize().scale(10));
+            creeper.getNavigation().moveTo(away.x, away.y, away.z, 1.2);
+            n++;
+        }
+        return n;
+    }
+
+    // --- the sabre (nineteenth wave) --------------------------------------------------------------------------------
+
+    /** A monster within 8 blocks of her friend with a quarter of its health or less: she finishes it. 1 if she did, 0 if none
+     *  was that hurt, -1 without a friend. */
+    public int finishingBite(ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(8), m -> m.isAlive() && m.getHealth() <= m.getMaxHealth() / 4)) {
+            m.hurt(level.damageSources().mobAttack(this), m.getHealth() + 1.0F);
+            this.getLookControl().setLookAt(m);
+            this.playSound(net.minecraft.sounds.SoundEvents.CAT_HISS, 1.0F, 0.7F);
+            return 1;
+        }
+        return 0;
+    }
+
+    // --- the manticore (twentieth wave) -----------------------------------------------------------------------------
+
+    /** She stings the nearest monster within 10 blocks of her friend: three points and Slowness II for three seconds. 1 if she
+     *  stung, 0 if none was near, -1 without a friend. */
+    public int tailSpike(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        net.minecraft.world.entity.monster.Monster m = level.getNearestEntity(net.minecraft.world.entity.monster.Monster.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat(), friend,
+                friend.getX(), friend.getY(), friend.getZ(), friend.getBoundingBox().inflate(10));
+        if (m == null) return 0;
+        m.hurt(level.damageSources().mobAttack(this), 3.0F);
+        m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 60, 1), this);
+        this.getLookControl().setLookAt(m);
+        this.playSound(net.minecraft.sounds.SoundEvents.BEE_STING, 1.0F, 0.6F);
+        return 1;
+    }
+
+    // --- the caracal and the rakshasa (twenty-first wave) -----------------------------------------------------------
+
+    /** She leaps at the nearest flying monster (a phantom, a ghast, a vex, a blaze) within 10 blocks of her friend: six points. 1 if
+     *  she struck, 0 if none was near, -1 without a friend. */
+    public int birdCatch(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        // phantoms and ghasts are FlyingMobs, not Monsters: look among every hostile mob
+        net.minecraft.world.entity.Mob m = level.getNearestEntity(net.minecraft.world.entity.Mob.class,
+                net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat().selector(e -> e instanceof net.minecraft.world.entity.monster.Enemy
+                        && (e instanceof net.minecraft.world.entity.FlyingMob || e instanceof net.minecraft.world.entity.monster.Vex || e instanceof net.minecraft.world.entity.monster.Blaze)),
+                friend, friend.getX(), friend.getY(), friend.getZ(), friend.getBoundingBox().inflate(10));
+        if (m == null) return 0;
+        m.hurt(level.damageSources().mobAttack(this), 6.0F);
+        this.getLookControl().setLookAt(m);
+        if (this.onGround()) this.setDeltaMovement(this.getDeltaMovement().add(0, 0.6, 0));
+        return 1;
+    }
+
+    /** The monsters within 12 blocks of her friend that are hunting them lose sight of them. How many, or -1 without a friend. */
+    public int glamour(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        int n = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(12), e -> e.getTarget() == friend)) {
+            m.setTarget(null);
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.WITCH, m.getX(), m.getEyeY(), m.getZ(), 6, 0.3, 0.3, 0.3, 0.0);
+            n++;
+        }
+        return n;
+    }
+
+    // --- the twenty-second wave ---------------------------------------------------------------------------------------
+
+    /** The monsters whose hearts she has already eaten (by id), so each death counts once. */
+    private final java.util.Set<Integer> devoured = new java.util.HashSet<>();
+
+    /** When a monster within 10 blocks of her friend dies, Ammit eats its heart and her friend heals two hearts. How many she ate,
+     *  -1 without a friend. */
+    public int devour(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 24);
+        if (friend == null) return -1;
+        int n = 0;
+        for (net.minecraft.world.entity.monster.Monster m : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, friend.getBoundingBox().inflate(10), net.minecraft.world.entity.LivingEntity::isDeadOrDying)) {
+            if (!this.devoured.add(m.getId())) continue;
+            friend.heal(4.0F);
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.HEART, friend.getX(), friend.getY(1.0), friend.getZ(), 3, 0.3, 0.3, 0.3, 0.0);
+            n++;
+        }
+        if (this.devoured.size() > 64) this.devoured.clear();
+        return n;
+    }
+
+    /** The baku's meal (twenty-fourth wave): her friend counts as freshly rested, so phantoms never come. 1 when she ate, -1 without a friend. */
+    public int eatNightmares(net.minecraft.server.level.ServerLevel level) {
+        net.minecraft.world.entity.player.Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 32);
+        if (!(friend instanceof net.minecraft.server.level.ServerPlayer sleeper)) return -1;
+        sleeper.resetStat(net.minecraft.stats.Stats.CUSTOM.get(net.minecraft.stats.Stats.TIME_SINCE_REST));
+        return 1;
+    }
+}

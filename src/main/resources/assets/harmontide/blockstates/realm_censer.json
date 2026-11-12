@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "hanging=false,lit=false": {
+      "model": "harmontide:block/realm_censer_unlit"
+    },
+    "hanging=false,lit=true": {
+      "model": "harmontide:block/realm_censer"
+    },
+    "hanging=true,lit=false": {
+      "model": "harmontide:block/realm_censer_hanging_unlit"
+    },
+    "hanging=true,lit=true": {
+      "model": "harmontide:block/realm_censer_hanging"
+    }
+  }
+}

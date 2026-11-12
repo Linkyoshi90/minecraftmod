@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end": "monstergirls:block/realm_log_top",
-    "side": "monstergirls:block/realm_log"
-  }
-}

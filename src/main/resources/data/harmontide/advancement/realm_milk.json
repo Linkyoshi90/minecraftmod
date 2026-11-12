@@ -1,0 +1,28 @@
+{
+  "parent": "harmontide:realm_entered",
+  "display": {
+    "icon": {
+      "id": "harmontide:holstaur_milk"
+    },
+    "title": {
+      "translate": "advancement.harmontide.realm_milk"
+    },
+    "description": {
+      "translate": "advancement.harmontide.realm_milk.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": "harmontide:holstaur_milk"
+        }
+      }
+    }
+  }
+}

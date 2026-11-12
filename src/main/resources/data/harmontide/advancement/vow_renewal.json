@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:wedding",
+  "display": {
+    "icon": {
+      "id": "harmontide:wedding_ring"
+    },
+    "title": {
+      "translate": "advancement.harmontide.vow_renewal"
+    },
+    "description": {
+      "translate": "advancement.harmontide.vow_renewal.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

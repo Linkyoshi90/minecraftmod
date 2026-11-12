@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_ittan_momen_devil",
+  "spawners": {
+    "type": "harmontide:ittan_momen_devil",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

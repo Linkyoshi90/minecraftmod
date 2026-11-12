@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_cassowrath_harpy",
+  "spawners": {
+    "type": "harmontide:cassowrath_harpy",
+    "weight": 4,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

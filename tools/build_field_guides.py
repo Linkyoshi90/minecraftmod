@@ -100,7 +100,7 @@ def tiers_table():
 
 
 SHARED_CORE = [
-    ("Affection", "Each monster girl remembers every player separately. Feeding, petting and her family's own bond action raise it; hurting her lowers it. <code>/monstergirls bonds</code> lists everyone nearby."),
+    ("Affection", "Each monster girl remembers every player separately. Feeding, petting and her family's own bond action raise it; hurting her lowers it. <code>/harmontide bonds</code> lists everyone nearby."),
     ("Sit", "Right-click any monster girl with a plain stick to make her sit; again to let her get up."),
     ("Sharing a bed", "At high friendship (25) she may join you in bed: once a night she decides, one in three at 25, certain at 100. Sleep through the night and she is expecting."),
     ("Expecting", "A pregnancy lasts one in-game day. Her belly rounds out as it goes on (the model shows it)."),
@@ -141,7 +141,7 @@ def build(f):
 
     # shared relationship core
     w('  <section id="relationships">\n    <h2>Relationships (shared by every family)</h2>')
-    w('    <p class="section-intro">The same relationship core runs through all MonsterGirls families, from the harpies on. '
+    w('    <p class="section-intro">The same relationship core runs through all Harmontide families, from the harpies on. '
       'This volume only changes how a ' + E(f["title"].rstrip("s").lower()) + ' builds trust, what she gives back, and how she bears young.</p>')
     w('    <div class="rules">' + "".join(f'<div class="rule"><strong>{E(t)}</strong>{d}</div>' for t, d in SHARED_CORE) + "</div>")
     w("    " + tiers_table())
@@ -222,7 +222,7 @@ def build(f):
     w('      <div class="card"><h3>Decided (2026-10-19)</h3><ul>' + "".join(f"<li>{E(x)}</li>" for x in f["decisions"]) + "</ul></div>")
     w('      <div class="card"><h3>Open questions</h3><ul>' + "".join(f"<li>{E(x)}</li>" for x in f["questions"]) + "</ul></div>")
     w("    </div>\n  </section>")
-    w('  <footer>Concept document · Minecraft-style fantasy ecology · MonsterGirls mod · the numbers here are the ones the game uses.</footer>')
+    w('  <footer>Concept document · Minecraft-style fantasy ecology · Harmontide mod · the numbers here are the ones the game uses.</footer>')
     w("</main>\n</body>\n</html>\n")
     path = os.path.join(REPO, fname)
     with open(path, "w", encoding="utf-8", newline="\n") as fh:

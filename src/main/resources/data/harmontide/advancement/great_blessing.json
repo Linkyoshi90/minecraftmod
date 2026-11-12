@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:kitsune_shrine",
+  "display": {
+    "icon": {
+      "id": "minecraft:paper"
+    },
+    "title": {
+      "translate": "advancement.harmontide.great_blessing"
+    },
+    "description": {
+      "translate": "advancement.harmontide.great_blessing.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

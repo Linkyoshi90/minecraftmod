@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_goblin_devil",
+  "spawners": {
+    "type": "harmontide:goblin_devil",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

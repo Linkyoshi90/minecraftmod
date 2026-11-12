@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:first_child",
+  "display": {
+    "icon": {
+      "id": "minecraft:campfire"
+    },
+    "title": {
+      "translate": "advancement.harmontide.family_reunion"
+    },
+    "description": {
+      "translate": "advancement.harmontide.family_reunion.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

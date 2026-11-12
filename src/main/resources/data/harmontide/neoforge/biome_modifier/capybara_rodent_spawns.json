@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_capybara_rodent",
+  "spawners": {
+    "type": "harmontide:capybara_rodent",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

@@ -32,7 +32,7 @@ def fix(doc):
 
 def main():
     n = 0
-    for path in glob.glob(os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls", "models", "**", "*.json"), recursive=True):
+    for path in glob.glob(os.path.join(REPO, "src", "main", "resources", "assets", "harmontide", "models", "**", "*.json"), recursive=True):
         with open(path, encoding="utf-8") as fh:
             doc = json.load(fh)
         if fix(doc):

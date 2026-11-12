@@ -1,7 +1,0 @@
-{
-  "type": "monstergirls:realm_manor",
-  "biomes": "#monstergirls:has_structure/realm_manor",
-  "step": "surface_structures",
-  "spawn_overrides": {},
-  "terrain_adaptation": "none"
-}

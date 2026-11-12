@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_silkcoon_rodent",
+  "spawners": {
+    "type": "harmontide:silkcoon_rodent",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

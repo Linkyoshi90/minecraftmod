@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_greater_devil",
+  "spawners": {
+    "type": "harmontide:greater_devil",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

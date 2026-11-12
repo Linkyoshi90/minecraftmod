@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:first_date",
+  "display": {
+    "icon": {
+      "id": "harmontide:wedding_ring"
+    },
+    "title": {
+      "translate": "advancement.harmontide.wedding"
+    },
+    "description": {
+      "translate": "advancement.harmontide.wedding.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

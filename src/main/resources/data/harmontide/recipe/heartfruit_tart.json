@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "harmontide:heartfruit"
+    },
+    {
+      "item": "harmontide:heartfruit"
+    },
+    {
+      "item": "harmontide:holstaur_milk"
+    },
+    {
+      "item": "minecraft:wheat"
+    },
+    {
+      "item": "minecraft:sugar"
+    }
+  ],
+  "result": {
+    "id": "harmontide:heartfruit_tart",
+    "count": 1
+  }
+}

@@ -16,8 +16,8 @@ from PIL import Image
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RES = os.path.join(REPO, "src", "main", "resources")
-ASSETS = os.path.join(RES, "assets", "monstergirls")
-DATA = os.path.join(RES, "data", "monstergirls")
+ASSETS = os.path.join(RES, "assets", "harmontide")
+DATA = os.path.join(RES, "data", "harmontide")
 
 
 def rgb(h, a=255):
@@ -107,7 +107,7 @@ def icons():
                     px[x + 1, y + 1] = rgb(pal[ch])
         path = os.path.join(ASSETS, "textures", "item", f"{name}.png")
         img.save(path)
-        dump(os.path.join(ASSETS, "models", "item", f"{name}.json"), {"parent": "minecraft:item/generated", "textures": {"layer0": f"monstergirls:item/{name}"}})
+        dump(os.path.join(ASSETS, "models", "item", f"{name}.json"), {"parent": "minecraft:item/generated", "textures": {"layer0": f"harmontide:item/{name}"}})
         out.append(img)
     return out
 
@@ -123,7 +123,7 @@ RECIPES = {
 def recipes():
     for name, items in RECIPES.items():
         dump(os.path.join(DATA, "recipe", f"{name}.json"), {"type": "minecraft:crafting_shapeless", "category": "misc",
-                                                            "ingredients": [{"item": i} for i in items], "result": {"id": f"monstergirls:{name}", "count": 1}})
+                                                            "ingredients": [{"item": i} for i in items], "result": {"id": f"harmontide:{name}", "count": 1}})
 
 
 def main():

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "harness=false,stroke=false": {
+      "model": "harmontide:block/milking_machine"
+    },
+    "harness=false,stroke=true": {
+      "model": "harmontide:block/milking_machine_stroke"
+    },
+    "harness=true,stroke=false": {
+      "model": "harmontide:block/milking_machine_cart"
+    },
+    "harness=true,stroke=true": {
+      "model": "harmontide:block/milking_machine_cart_stroke"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:order_chaplain",
+  "display": {
+    "icon": {
+      "id": "minecraft:bell"
+    },
+    "title": {
+      "translate": "advancement.harmontide.order_blessing"
+    },
+    "description": {
+      "translate": "advancement.harmontide.order_blessing.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

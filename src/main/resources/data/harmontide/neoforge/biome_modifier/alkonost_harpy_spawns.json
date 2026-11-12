@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_alkonost_harpy",
+  "spawners": {
+    "type": "harmontide:alkonost_harpy",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

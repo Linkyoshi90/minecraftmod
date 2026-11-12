@@ -12,7 +12,7 @@ import sys
 from PIL import Image
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEX = os.path.join(REPO, "src", "main", "resources", "assets", "monstergirls", "textures")
+TEX = os.path.join(REPO, "src", "main", "resources", "assets", "harmontide", "textures")
 
 
 def ring():

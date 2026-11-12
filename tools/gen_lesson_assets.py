@@ -47,13 +47,13 @@ LESSONS = {  # clade key: (short, what she teaches)
 }
 
 lang = {
-    "message.monstergirls.lesson": "%s, devoted to you, teaches you %s",
-    "journal.monstergirls.lessons.title": "Lessons",
-    "journal.monstergirls.lessons.count": "%s of %s branches",
-    "journal.monstergirls.lessons.line": "%s (%s)",
+    "message.harmontide.lesson": "%s, devoted to you, teaches you %s",
+    "journal.harmontide.lessons.title": "Lessons",
+    "journal.harmontide.lessons.count": "%s of %s branches",
+    "journal.harmontide.lessons.line": "%s (%s)",
 }
 for k, (short, full) in LESSONS.items():
-    lang[f"lesson.monstergirls.{k}"] = full
-    lang[f"lesson.monstergirls.{k}.short"] = short
+    lang[f"lesson.harmontide.{k}"] = full
+    lang[f"lesson.harmontide.{k}.short"] = short
 M.add_lang(lang)
 print("lesson assets written")

@@ -16,10 +16,10 @@ import gen_manor_assets  # noqa: E402
 
 def main():
     dump(os.path.join(DATA, "worldgen", "structure", "merfolk_grotto.json"), {
-        "type": "monstergirls:merfolk_grotto", "biomes": "#monstergirls:has_structure/merfolk_grotto",
+        "type": "harmontide:merfolk_grotto", "biomes": "#harmontide:has_structure/merfolk_grotto",
         "step": "surface_structures", "spawn_overrides": {}, "terrain_adaptation": "none"})
     dump(os.path.join(DATA, "worldgen", "structure_set", "merfolk_grotto.json"), {
-        "structures": [{"structure": "monstergirls:merfolk_grotto", "weight": 1}],
+        "structures": [{"structure": "harmontide:merfolk_grotto", "weight": 1}],
         "placement": {"type": "minecraft:random_spread", "spacing": 40, "separation": 14, "salt": 73192548}})
     dump(os.path.join(DATA, "tags", "worldgen", "biome", "has_structure", "merfolk_grotto.json"),
          {"values": ["minecraft:warm_ocean", "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean"]})
@@ -31,27 +31,27 @@ def main():
             item("minecraft:book", 2, enchant=True)]},
         {"rolls": 1, "entries": [{"type": "minecraft:empty", "weight": 4}, item("minecraft:heart_of_the_sea", 1)]}]})
     lang = {
-        "entity.monstergirls.grotto_queen": "%s Queen",
-        "message.monstergirls.grotto.welcome": "%s welcomes you to her court: %s more of the reef's girls count you a friend.",
-        "commands.monstergirls.locate.grotto": "The nearest merfolk grotto is at %s (%s blocks away).",
-        "commands.monstergirls.locate.grotto.none": "No merfolk grotto within reach (only warm seas generated after this update have them).",
+        "entity.harmontide.grotto_queen": "%s Queen",
+        "message.harmontide.grotto.welcome": "%s welcomes you to her court: %s more of the reef's girls count you a friend.",
+        "commands.harmontide.locate.grotto": "The nearest merfolk grotto is at %s (%s blocks away).",
+        "commands.harmontide.locate.grotto.none": "No merfolk grotto within reach (only warm seas generated after this update have them).",
     }
     advs = {"merfolk_grotto_found": ("stargazer", "minecraft:prismarine", "task", "Under the Sea", "Swim into a merfolk grotto"),
             "merfolk_grotto": ("merfolk_grotto_found", "minecraft:heart_of_the_sea", "goal", "The Queen's Court", "Befriend a grotto's queen, and her court with her")}
     for adv, (parent, icon, frame, title, desc) in advs.items():
         dump(os.path.join(DATA, "advancement", adv + ".json"), {
-            "parent": "monstergirls:" + parent,
-            "display": {"icon": {"id": icon}, "title": {"translate": "advancement.monstergirls." + adv},
-                        "description": {"translate": "advancement.monstergirls." + adv + ".desc"},
+            "parent": "harmontide:" + parent,
+            "display": {"icon": {"id": icon}, "title": {"translate": "advancement.harmontide." + adv},
+                        "description": {"translate": "advancement.harmontide." + adv + ".desc"},
                         "frame": frame, "show_toast": True, "announce_to_chat": True, "hidden": False},
             "criteria": {"done": {"trigger": "minecraft:impossible"}}})
-        lang["advancement.monstergirls." + adv] = title
-        lang["advancement.monstergirls." + adv + ".desc"] = desc
+        lang["advancement.harmontide." + adv] = title
+        lang["advancement.harmontide." + adv + ".desc"] = desc
     add_lang(lang)
     gen_manor_assets.GUIDE_ADD.clear()
-    gen_manor_assets.GUIDE_ADD["journal.monstergirls.guide.encounters"] = (
+    gen_manor_assets.GUIDE_ADD["journal.harmontide.guide.encounters"] = (
         " On the floor of warm seas lie merfolk grottoes: domes of prismarine and coral round a sunken chest, where a mermaid queen "
-        "holds court with three of the reef's girls. Befriend the queen and her court takes you in. (/monstergirls locate grotto)")
+        "holds court with three of the reef's girls. Befriend the queen and her court takes you in. (/harmontide locate grotto)")
     gen_manor_assets.append_guides()
 
 

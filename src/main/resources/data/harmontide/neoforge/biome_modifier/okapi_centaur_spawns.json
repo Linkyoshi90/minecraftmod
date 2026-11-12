@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_okapi_centaur",
+  "spawners": {
+    "type": "harmontide:okapi_centaur",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

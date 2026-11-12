@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_zombie_undead",
+  "spawners": {
+    "type": "harmontide:zombie_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

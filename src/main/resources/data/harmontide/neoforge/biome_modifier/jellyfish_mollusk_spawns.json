@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_jellyfish_mollusk",
+  "spawners": {
+    "type": "harmontide:jellyfish_mollusk",
+    "weight": 5,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

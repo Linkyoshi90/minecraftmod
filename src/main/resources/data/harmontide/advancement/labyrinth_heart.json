@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:labyrinth",
+  "display": {
+    "icon": {
+      "id": "minecraft:string"
+    },
+    "title": {
+      "translate": "advancement.harmontide.labyrinth_heart"
+    },
+    "description": {
+      "translate": "advancement.harmontide.labyrinth_heart.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

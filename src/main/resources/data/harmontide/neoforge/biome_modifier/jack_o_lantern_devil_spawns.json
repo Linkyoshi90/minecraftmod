@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_jack_o_lantern_devil",
+  "spawners": {
+    "type": "harmontide:jack_o_lantern_devil",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "harmontide:weepcap"
+    },
+    {
+      "item": "harmontide:weepcap"
+    },
+    {
+      "item": "minecraft:bowl"
+    }
+  ],
+  "result": {
+    "id": "harmontide:weepcap_stew",
+    "count": 1
+  }
+}

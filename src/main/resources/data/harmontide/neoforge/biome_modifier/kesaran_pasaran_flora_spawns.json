@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_kesaran_pasaran_flora",
+  "spawners": {
+    "type": "harmontide:kesaran_pasaran_flora",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

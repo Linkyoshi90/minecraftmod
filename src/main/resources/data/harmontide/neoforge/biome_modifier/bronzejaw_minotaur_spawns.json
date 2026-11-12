@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_bronzejaw_minotaur",
+  "spawners": {
+    "type": "harmontide:bronzejaw_minotaur",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

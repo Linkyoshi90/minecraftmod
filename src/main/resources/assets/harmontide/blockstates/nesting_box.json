@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "eggs=false": {
+      "model": "harmontide:block/nesting_box"
+    },
+    "eggs=true": {
+      "model": "harmontide:block/nesting_box_eggs"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "parent": "harmontide:race",
+  "display": {
+    "icon": {
+      "id": "minecraft:target"
+    },
+    "title": {
+      "translate": "advancement.harmontide.archery"
+    },
+    "description": {
+      "translate": "advancement.harmontide.archery.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

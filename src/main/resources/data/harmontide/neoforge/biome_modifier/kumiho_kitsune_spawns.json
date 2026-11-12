@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_kumiho_kitsune",
+  "spawners": {
+    "type": "harmontide:kumiho_kitsune",
+    "weight": 7,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

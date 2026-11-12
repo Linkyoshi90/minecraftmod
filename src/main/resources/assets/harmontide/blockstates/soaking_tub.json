@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "filled=false": {
+      "model": "harmontide:block/soaking_tub"
+    },
+    "filled=true": {
+      "model": "harmontide:block/soaking_tub_filled"
+    }
+  }
+}

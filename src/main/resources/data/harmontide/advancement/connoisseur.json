@@ -1,0 +1,28 @@
+{
+  "parent": "harmontide:first_milk",
+  "display": {
+    "icon": {
+      "id": "harmontide:bovid_milk"
+    },
+    "title": {
+      "translate": "advancement.harmontide.connoisseur"
+    },
+    "description": {
+      "translate": "advancement.harmontide.connoisseur.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

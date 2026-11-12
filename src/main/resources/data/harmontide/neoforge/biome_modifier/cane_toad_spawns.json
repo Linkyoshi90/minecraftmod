@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_cane_toad",
+  "spawners": {
+    "type": "harmontide:cane_toad",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

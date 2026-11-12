@@ -866,7 +866,7 @@ Paints: **crimson**, **bone**, **bamboo** and **sponge**, so 111 in all (PAINTS.
 
 Homage looks: Spark Mouse (house mouse), Green Dino (gecko), Doctor Deer (reindeer), Purple Flame (wyrm), Night Wing (gryphon), Forest Keeper (panda), Sleepy Giant (grizzly), First Fox (fennec).
 
-Also new: wild girls are rarer (`MonsterGirlsConfig`, `SpawnRarity`: a 37.5% chance on top of each species' own rules, none within 128 blocks of another wild one, groups of at most 2); anyone under 1.25 blocks tall stays out of bed (`Bonded.CHILDLIKE_HEIGHT`: fairies, not the Fairy Queen); `tactical_eye` lost her model rifle and carries real weapons, with a TaCZ sniper rifle firing out to 64 blocks.
+Also new: wild girls are rarer (`HarmontideConfig`, `SpawnRarity`: a 37.5% chance on top of each species' own rules, none within 128 blocks of another wild one, groups of at most 2); anyone under 1.25 blocks tall stays out of bed (`Bonded.CHILDLIKE_HEIGHT`: fairies, not the Fairy Queen); `tactical_eye` lost her model rifle and carries real weapons, with a TaCZ sniper rifle firing out to 64 blocks.
 
 ## Twenty-seventh wave (2026-10-31, in the game)
 

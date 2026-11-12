@@ -1,0 +1,28 @@
+{
+  "parent": "harmontide:legendary_encounter",
+  "display": {
+    "icon": {
+      "id": "minecraft:totem_of_undying"
+    },
+    "title": {
+      "translate": "advancement.harmontide.legendary_friend"
+    },
+    "description": {
+      "translate": "advancement.harmontide.legendary_friend.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

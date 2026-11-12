@@ -31,29 +31,29 @@ def main():
             box([1, 9, 12], [3, 15, 14], "#post", "#post"), box([13, 9, 12], [15, 15, 14], "#post", "#post"),
             box([0, 15, 4], [4, 16, 16], "#red", "#red"), box([4, 15, 4], [8, 16, 16], "#white", "#white"),
             box([8, 15, 4], [12, 16, 16], "#red", "#red"), box([12, 15, 4], [16, 16, 16], "#white", "#white")]})
-    dump(os.path.join(ASSETS, "blockstates", "market_stall.json"), {"variants": {"": {"model": "monstergirls:block/market_stall"}}})
-    dump(os.path.join(m, "item", "market_stall.json"), {"parent": "monstergirls:block/market_stall"})
+    dump(os.path.join(ASSETS, "blockstates", "market_stall.json"), {"variants": {"": {"model": "harmontide:block/market_stall"}}})
+    dump(os.path.join(m, "item", "market_stall.json"), {"parent": "harmontide:block/market_stall"})
     dump(os.path.join(DATA, "loot_table", "blocks", "market_stall.json"), {"type": "minecraft:block", "pools": [{"rolls": 1, "bonus_rolls": 0,
-        "entries": [{"type": "minecraft:item", "name": "monstergirls:market_stall"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
+        "entries": [{"type": "minecraft:item", "name": "harmontide:market_stall"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
     dump(os.path.join(DATA, "recipe", "market_stall.json"), {
         "type": "minecraft:crafting_shaped", "category": "decorations",
         "pattern": ["RWR", "S S", "PCP"],
         "key": {"R": {"item": "minecraft:red_wool"}, "W": {"item": "minecraft:white_wool"}, "S": {"item": "minecraft:stick"},
                 "P": {"item": "minecraft:spruce_planks"}, "C": {"item": "minecraft:chest"}},
-        "result": {"id": "monstergirls:market_stall", "count": 1}})
+        "result": {"id": "harmontide:market_stall", "count": 1}})
     dump(os.path.join(DATA, "advancement", "market_stall.json"), {
-        "parent": "monstergirls:village",
-        "display": {"icon": {"id": "monstergirls:market_stall"}, "title": {"translate": "advancement.monstergirls.market_stall"},
-                    "description": {"translate": "advancement.monstergirls.market_stall.desc"},
+        "parent": "harmontide:village",
+        "display": {"icon": {"id": "harmontide:market_stall"}, "title": {"translate": "advancement.harmontide.market_stall"},
+                    "description": {"translate": "advancement.harmontide.market_stall.desc"},
                     "frame": "task", "show_toast": True, "announce_to_chat": True, "hidden": False},
         "criteria": {"done": {"trigger": "minecraft:impossible"}}})
     add_lang({
-        "block.monstergirls.market_stall": "Market Stall",
-        "advancement.monstergirls.market_stall": "Open for Business",
-        "advancement.monstergirls.market_stall.desc": "Earn emeralds at your village's market stall",
+        "block.harmontide.market_stall": "Market Stall",
+        "advancement.harmontide.market_stall": "Open for Business",
+        "advancement.harmontide.market_stall.desc": "Earn emeralds at your village's market stall",
     })
     gen_manor_assets.GUIDE_ADD.clear()
-    gen_manor_assets.GUIDE_ADD["journal.monstergirls.guide.market"] = (
+    gen_manor_assets.GUIDE_ADD["journal.harmontide.guide.market"] = (
         " Once your hearth is a village, set a market stall within 16 blocks of it (a red and white awning over sticks, planks and a "
         "chest). Every morning the passing trade buys half of what's on it, four items to the emerald, and each resident lays out "
         "something new: a farmhand her crops, a cook her baking, a guard arrows, anyone else the kind of present she'd bring you.")

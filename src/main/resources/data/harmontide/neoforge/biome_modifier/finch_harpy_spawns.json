@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_finch_harpy",
+  "spawners": {
+    "type": "harmontide:finch_harpy",
+    "weight": 6,
+    "minCount": 3,
+    "maxCount": 5
+  }
+}

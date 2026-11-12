@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_domovoi_elf",
+  "spawners": {
+    "type": "harmontide:domovoi_elf",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

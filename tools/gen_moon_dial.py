@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """The moon dial (item/MoonDialItem.java): one 16x16 icon per moon phase, the item model that picks between them like
-vanilla's clock (predicate monstergirls:phase = phase / 8), and its recipe.
+vanilla's clock (predicate harmontide:phase = phase / 8), and its recipe.
 
     python tools/gen_moon_dial.py
 
@@ -45,14 +45,14 @@ def main():
     for p in range(8):
         H.write_png(os.path.join(ASSETS, "textures", "item", f"moon_dial_{p:02d}.png"), icon(p))
         dump(os.path.join(ASSETS, "models", "item", f"moon_dial_{p:02d}.json"),
-             {"parent": "minecraft:item/generated", "textures": {"layer0": f"monstergirls:item/moon_dial_{p:02d}"}})
+             {"parent": "minecraft:item/generated", "textures": {"layer0": f"harmontide:item/moon_dial_{p:02d}"}})
     dump(os.path.join(ASSETS, "models", "item", "moon_dial.json"), {
-        "parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:item/moon_dial_00"},
-        "overrides": [{"predicate": {"monstergirls:phase": p / 8}, "model": f"monstergirls:item/moon_dial_{p:02d}"} for p in range(8)]})
+        "parent": "minecraft:item/generated", "textures": {"layer0": "harmontide:item/moon_dial_00"},
+        "overrides": [{"predicate": {"harmontide:phase": p / 8}, "model": f"harmontide:item/moon_dial_{p:02d}"} for p in range(8)]})
     dump(os.path.join(DATA, "recipe", "moon_dial.json"), {
         "type": "minecraft:crafting_shaped", "category": "misc", "pattern": [" G ", "GAG", " G "],
         "key": {"G": {"item": "minecraft:gold_ingot"}, "A": {"item": "minecraft:amethyst_shard"}},
-        "result": {"id": "monstergirls:moon_dial", "count": 1}})
+        "result": {"id": "harmontide:moon_dial", "count": 1}})
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-ASSETS = ROOT / "src" / "main" / "resources" / "assets" / "monstergirls"
+ASSETS = ROOT / "src" / "main" / "resources" / "assets" / "harmontide"
 geo_path = ASSETS / "geo" / "entity" / "finch_harpy.geo.json"
 anim_path = ASSETS / "animations" / "entity" / "finch_harpy.animation.json"
 tex_path = ASSETS / "textures" / "entity" / "finch_harpy.png"

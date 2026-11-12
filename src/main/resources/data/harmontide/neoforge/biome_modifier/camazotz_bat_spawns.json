@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_camazotz_bat",
+  "spawners": {
+    "type": "harmontide:camazotz_bat",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_bee_bug",
+  "spawners": {
+    "type": "harmontide:bee_bug",
+    "weight": 6,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

@@ -1,4 +1,4 @@
-"""The taxonomy of every MonsterGirls mob (TAXONOMY_PLAN.md): which real clade each species belongs to, her true position,
+"""The taxonomy of every Harmontide mob (TAXONOMY_PLAN.md): which real clade each species belongs to, her true position,
 and whether she is a guest (her clade is too small, so she lives with her nearest relative) or a judgement call.
 
 Single source of truth for the clades. `python tools/taxonomy.py` checks that every species in GirlSpecies.java plus the
@@ -460,23 +460,23 @@ def milks():
 def lang_entries():
     out = collections.OrderedDict()
     for k, (name, pre, col) in SHORT.items():
-        out["family.monstergirls." + k.lower()] = name
-        out["monstergirls.configuration." + k.lower()] = FAM[k][0] + " (%)"
-        out["clade.monstergirls." + k.lower()] = FAM[k][0]          # the journal's page line and tree of life
+        out["family.harmontide." + k.lower()] = name
+        out["harmontide.configuration." + k.lower()] = FAM[k][0] + " (%)"
+        out["clade.harmontide." + k.lower()] = FAM[k][0]          # the journal's page line and tree of life
     for pre, (name, col) in milks().items():
-        out["item.monstergirls." + pre + "_milk"] = name + " Milk"
+        out["item.harmontide." + pre + "_milk"] = name + " Milk"
     return out
 
 
 def write_lang():
     """Drops the old family keys and adds the clade keys, editing en_us.json line by line (keeps its order and anyone else's edits)."""
     import json
-    path = os.path.join(ROOT, "src/main/resources/assets/monstergirls/lang/en_us.json")
+    path = os.path.join(ROOT, "src/main/resources/assets/harmontide/lang/en_us.json")
     text = open(path, encoding="utf-8").read()
     want = lang_entries()
     stale = set()
     for f in OLD_FAMILIES:
-        stale |= {"family.monstergirls." + f, "monstergirls.configuration." + f, "item.monstergirls." + f + "_milk"}
+        stale |= {"family.harmontide." + f, "harmontide.configuration." + f, "item.harmontide." + f + "_milk"}
     stale -= set(want)
     lines = [l for l in text.rstrip().split("\n") if not any(l.strip().startswith(json.dumps(k) + ":") for k in stale)]
     have = json.loads("\n".join(lines).rstrip().rstrip("}").rstrip().rstrip(",") + "\n}")
@@ -501,7 +501,7 @@ def write_lang():
 # ---------------------------------------------------------------- lookups
 def species_rows():
     """(id, old family) for every mob in the game: the GirlSpecies table, then the harpies and anurans."""
-    src = open(os.path.join(ROOT, "src/main/java/com/linkyoshi90/monstergirls/entity/girl/GirlSpecies.java"), encoding="utf-8").read()
+    src = open(os.path.join(ROOT, "src/main/java/com/linkyoshi90/harmontide/entity/girl/GirlSpecies.java"), encoding="utf-8").read()
     rows = re.findall(r'^\s+[A-Z_]+\("([a-z_]+)", Family\.([A-Z_]+)', src, re.M)
     return rows + [(i, "HARPY") for i in H] + [(i, "ANURAN") for i in A]
 
@@ -524,7 +524,7 @@ def check(rows):
     assert not extra, "clades for species not in the game: %s" % extra
 
 
-JAVA = '''package com.linkyoshi90.monstergirls.entity;
+JAVA = '''package com.linkyoshi90.harmontide.entity;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
@@ -558,7 +558,7 @@ public enum Clade {
         return this.mythic;
     }
 
-    /** "feliformia": the lang key family.monstergirls.&lt;key&gt; and the config key. */
+    /** "feliformia": the lang key family.harmontide.&lt;key&gt; and the config key. */
     public String key() {
         return this.name().toLowerCase(Locale.ROOT);
     }
@@ -575,7 +575,7 @@ public enum Clade {
     @Nullable
     public static Clade of(Entity entity) {
         var key = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
-        return "monstergirls".equals(key.getNamespace()) ? of(key.getPath()) : null;
+        return "harmontide".equals(key.getNamespace()) ? of(key.getPath()) : null;
     }
 
     /** A guest: her own clade has too few of us, so she lives with her nearest relative (the guide says so). */
@@ -613,7 +613,7 @@ def write_java(rows):
         chunk.append(line + " -> " + k + ";")
         cases.append("\n".join(chunk))
     java = JAVA % dict(consts=consts, cases="\n".join(cases), guests=", ".join('"%s"' % g for g in guests))
-    path = os.path.join(ROOT, "src/main/java/com/linkyoshi90/monstergirls/entity/Clade.java")
+    path = os.path.join(ROOT, "src/main/java/com/linkyoshi90/harmontide/entity/Clade.java")
     with open(path, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(java)
     return by

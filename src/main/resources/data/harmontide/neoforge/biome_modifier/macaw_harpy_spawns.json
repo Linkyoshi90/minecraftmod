@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_macaw_harpy",
+  "spawners": {
+    "type": "harmontide:macaw_harpy",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

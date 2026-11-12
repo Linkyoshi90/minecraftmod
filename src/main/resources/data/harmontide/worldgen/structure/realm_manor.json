@@ -1,0 +1,7 @@
+{
+  "type": "harmontide:realm_manor",
+  "biomes": "#harmontide:has_structure/realm_manor",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}

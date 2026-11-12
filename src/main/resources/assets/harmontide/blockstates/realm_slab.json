@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "harmontide:block/realm_slab"
+    },
+    "type=top": {
+      "model": "harmontide:block/realm_slab_top"
+    },
+    "type=double": {
+      "model": "harmontide:block/realm_planks"
+    }
+  }
+}

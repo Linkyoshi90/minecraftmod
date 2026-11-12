@@ -1,0 +1,23 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "id": "minecraft:glass_bottle"
+    },
+    "title": {
+      "translate": "advancement.harmontide.why"
+    },
+    "description": {
+      "translate": "advancement.harmontide.why.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "jarred": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

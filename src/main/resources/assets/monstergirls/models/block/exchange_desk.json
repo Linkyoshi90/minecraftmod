@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/cube_bottom_top",
-  "textures": {
-    "top": "monstergirls:block/exchange_desk_top",
-    "bottom": "minecraft:block/oak_planks",
-    "side": "monstergirls:block/exchange_desk_side"
-  }
-}

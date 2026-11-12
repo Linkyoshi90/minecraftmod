@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#harmontide:spawns_koschei_undead",
+  "spawners": {
+    "type": "harmontide:koschei_undead",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

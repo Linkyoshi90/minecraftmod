@@ -168,7 +168,7 @@ VARIANTS["sky_ace"] = (variant_pal([(16, 30, 90), (28, 54, 140), (46, 86, 186), 
 
 
 def write_variants():
-    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "monstergirls", "textures", "entity")
+    tex_dir = os.path.join(H.REPO, "src", "main", "resources", "assets", "harmontide", "textures", "entity")
     texes = {"karasu": paint()}
     for v, (pal, robe, bonbon, hakama) in VARIANTS.items():
         texes[v] = paint(pal, robe, bonbon, hakama)

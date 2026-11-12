@@ -52,7 +52,7 @@ def add_lang(entries):
         body = body[:-1].rstrip() + ",\n" + ",\n".join(new) + "\n}\n"
         with open(path, "w", encoding="utf-8", newline="\n") as fh:
             fh.write(body)
-        if any(k.startswith("journal.monstergirls.guide.") for k in entries if k not in have):
+        if any(k.startswith("journal.harmontide.guide.") for k in entries if k not in have):
             import split_guides                                                    # long guides run over pages
             split_guides.main()
 
@@ -96,40 +96,40 @@ def cart(lift=0):
 
 
 def main():
-    lang = {"block.monstergirls.milking_machine": "Milking Machine"}
+    lang = {"block.harmontide.milking_machine": "Milking Machine"}
     for family, (name, colour) in MILKS.items():
         item = family + "_milk"
         pal = {"i": "#c4c8cc", "h": "#eef0f2", "s": "#7a7e84", "m": colour}
         H.write_png(os.path.join(ASSETS, "textures", "item", item + ".png"), I.from_mask(BUCKET, pal, item))
         I.dump(os.path.join(ASSETS, "models", "item", item + ".json"),
-               {"parent": "minecraft:item/generated", "textures": {"layer0": "monstergirls:item/" + item}})
-        lang["item.monstergirls." + item] = name + " Milk"
+               {"parent": "minecraft:item/generated", "textures": {"layer0": "harmontide:item/" + item}})
+        lang["item.harmontide." + item] = name + " Milk"
     add_lang(lang)
     I.dump(os.path.join(RES, "data", "c", "tags", "item", "buckets", "milk.json"),
-           {"replace": False, "values": ["monstergirls:" + f + "_milk" for f in MILKS]})
+           {"replace": False, "values": ["harmontide:" + f + "_milk" for f in MILKS]})
 
     I.dump(os.path.join(ASSETS, "blockstates", "milking_machine.json"),
-           {"variants": {"harness=false,stroke=false": {"model": "monstergirls:block/milking_machine"},
-                         "harness=false,stroke=true": {"model": "monstergirls:block/milking_machine_stroke"},
-                         "harness=true,stroke=false": {"model": "monstergirls:block/milking_machine_cart"},
-                         "harness=true,stroke=true": {"model": "monstergirls:block/milking_machine_cart_stroke"}}})
+           {"variants": {"harness=false,stroke=false": {"model": "harmontide:block/milking_machine"},
+                         "harness=false,stroke=true": {"model": "harmontide:block/milking_machine_stroke"},
+                         "harness=true,stroke=false": {"model": "harmontide:block/milking_machine_cart"},
+                         "harness=true,stroke=true": {"model": "harmontide:block/milking_machine_cart_stroke"}}})
     I.dump(os.path.join(ASSETS, "models", "block", "milking_machine_cart.json"), cart())
     I.dump(os.path.join(ASSETS, "models", "block", "milking_machine_cart_stroke.json"), cart(2))
     I.dump(os.path.join(ASSETS, "models", "block", "milking_machine_stroke.json"), machine(3))
     I.dump(os.path.join(ASSETS, "models", "block", "milking_machine.json"), machine())
-    I.dump(os.path.join(ASSETS, "models", "item", "milking_machine.json"), {"parent": "monstergirls:block/milking_machine"})
+    I.dump(os.path.join(ASSETS, "models", "item", "milking_machine.json"), {"parent": "harmontide:block/milking_machine"})
     I.dump(os.path.join(DATA, "loot_table", "blocks", "milking_machine.json"),
-           {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [{"type": "minecraft:item", "name": "monstergirls:milking_machine"}],
+           {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [{"type": "minecraft:item", "name": "harmontide:milking_machine"}],
                                                   "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
     I.dump(os.path.join(DATA, "recipe", "milking_machine.json"),
            {"type": "minecraft:crafting_shaped", "category": "misc", "pattern": ["CCC", "IBI", "IRI"],
             "key": {"C": {"item": "minecraft:copper_ingot"}, "I": {"item": "minecraft:iron_ingot"},
                     "B": {"item": "minecraft:bucket"}, "R": {"item": "minecraft:redstone"}},
-            "result": {"id": "monstergirls:milking_machine", "count": 1}})
+            "result": {"id": "harmontide:milking_machine", "count": 1}})
 
     def mineable(data):
-        if "monstergirls:milking_machine" not in data["values"]:
-            data["values"].append("monstergirls:milking_machine")
+        if "harmontide:milking_machine" not in data["values"]:
+            data["values"].append("harmontide:milking_machine")
     edit(os.path.join(RES, "data", "minecraft", "tags", "block", "mineable", "pickaxe.json"), mineable)
 
     # every milk works where vanilla milk does
@@ -140,7 +140,7 @@ def main():
     I.dump(os.path.join(DATA, "recipe", "cake_from_family_milk.json"), cake({"item": "minecraft:egg"}))
     I.dump(os.path.join(DATA, "recipe", "cheese.json"),
            {"type": "minecraft:crafting_shapeless", "category": "misc", "ingredients": [{"tag": "c:buckets/milk"}],
-            "result": {"id": "monstergirls:cheese", "count": 3}})
+            "result": {"id": "harmontide:cheese", "count": 3}})
 
 
 if __name__ == "__main__":
