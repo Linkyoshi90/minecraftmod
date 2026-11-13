@@ -199,15 +199,26 @@ public final class FoodWeb {
         return true;
     }
 
-    /** She eats the kill where it fell: the meat is gone, the remains (hide, wool, feathers, a bone) are left. */
+    /** She eats from the kill where it fell (its carcass, entity/Carcass): her share comes off the bones and the rest is left for others. */
     public static void feast(ServerLevel level, AbstractMonsterGirl g, BlockPos at) {
-        for (ItemEntity drop : level.getEntitiesOfClass(ItemEntity.class, new AABB(at).inflate(3))) {
-            if (drop.getItem().is(ItemTags.MEAT) || drop.getItem().is(ItemTags.FISHES)) drop.discard();
-        }
-        level.addFreshEntity(new ItemEntity(level, at.getX() + 0.5, at.getY() + 0.3, at.getZ() + 0.5, new ItemStack(Items.BONE)));
-        level.sendParticles(new net.minecraft.core.particles.ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Items.BEEF)), at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, 10, 0.3, 0.2, 0.3, 0.05);
+        Carcass c = carcassNear(level, at, 3);
+        if (c != null) c.bite(share(g));
         fed(level, g);
-        died(level, at);
+    }
+
+    /** How much meat she eats at a meal: more the bigger she is. */
+    public static int share(AbstractMonsterGirl g) {
+        return g.getBbHeight() < SMALL ? 1 : g.getBbHeight() < LARGE ? 2 : 3;
+    }
+
+    /** The nearest carcass with meat on it, or null. */
+    @Nullable
+    public static Carcass carcassNear(ServerLevel level, BlockPos at, double range) {
+        Carcass best = null;
+        for (Carcass c : level.getEntitiesOfClass(Carcass.class, new AABB(at).inflate(range), c -> c.meat() > 0)) {
+            if (best == null || c.distanceToSqr(at.getCenter()) < best.distanceToSqr(at.getCenter())) best = c;
+        }
+        return best;
     }
 
     // --- grazing -----------------------------------------------------------------------------------------------------
@@ -263,13 +274,18 @@ public final class FoodWeb {
         return s.is(Items.ROTTEN_FLESH) || s.is(Items.BONE) || s.is(ItemTags.MEAT) || s.is(ItemTags.FISHES);
     }
 
-    /** She eats what was left lying near her. True if there was something. */
+    /** She eats what was left near her: off a carcass, or what lies about. True if there was something. */
     public static boolean scavenge(ServerLevel level, AbstractMonsterGirl g) {
+        Carcass c = carcassNear(level, g.blockPosition(), 2.5);
+        if (c != null && c.bite(share(g)) > 0) {
+            fed(level, g);
+            return true;
+        }
         List<ItemEntity> found = level.getEntitiesOfClass(ItemEntity.class, g.getBoundingBox().inflate(2.5), i -> leftovers(i.getItem()));
         if (found.isEmpty()) return false;
         for (ItemEntity i : found) i.discard();
         fed(level, g);
-        CARRION.getOrDefault(level, new ArrayDeque<>()).removeIf(c -> c.pos().closerThan(g.blockPosition(), 4));
+        CARRION.getOrDefault(level, new ArrayDeque<>()).removeIf(k -> k.pos().closerThan(g.blockPosition(), 4));
         return true;
     }
 
@@ -335,7 +351,7 @@ public final class FoodWeb {
         @Nullable private LivingEntity prey;
         @Nullable private BlockPos spot;
         private int ticks, cooldown;
-        private boolean movingOn;
+        private boolean movingOn, scavenging;
 
         public ForageGoal(AbstractMonsterGirl girl) {
             this.girl = girl;
@@ -349,8 +365,15 @@ public final class FoodWeb {
             this.prey = null;
             this.spot = null;
             this.movingOn = false;
+            this.scavenging = false;
             switch (role(this.girl)) {
                 case HUNTER, FISHER -> {
+                    Carcass c = role(this.girl) == Role.HUNTER ? carcassNear(level, this.girl.blockPosition(), SEARCH / 2.0) : null;
+                    if (c != null) {                                                // a free meal close by beats a chase
+                        this.spot = c.blockPosition();
+                        this.scavenging = true;
+                        return true;
+                    }
                     this.prey = findPrey(level, this.girl);
                     if (this.prey == null && !this.girl.hasRestriction() && preyAbout(level, this.girl) < SCARCE) {
                         this.spot = elsewhere(this.girl);
@@ -364,7 +387,10 @@ public final class FoodWeb {
                         this.movingOn = true;
                     }
                 }
-                case SCAVENGER -> this.spot = carrion(level, this.girl.blockPosition(), SEARCH * 2);
+                case SCAVENGER -> {
+                    Carcass c = carcassNear(level, this.girl.blockPosition(), SEARCH * 2);
+                    this.spot = c != null ? c.blockPosition() : carrion(level, this.girl.blockPosition(), SEARCH * 2);
+                }
                 default -> {}
             }
             return this.prey != null || this.spot != null;
@@ -400,6 +426,7 @@ public final class FoodWeb {
                 switch (role(this.girl)) {
                     case GRAZER -> { if (!this.movingOn) graze(level, this.girl, this.spot); }
                     case SCAVENGER -> scavenge(level, this.girl);
+                    case HUNTER -> { if (this.scavenging) scavenge(level, this.girl); }
                     default -> {}
                 }
                 this.spot = null;

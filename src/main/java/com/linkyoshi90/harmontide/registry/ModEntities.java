@@ -184,6 +184,11 @@ public final class ModEntities {
                     .clientTrackingRange(10)
                     .build("cassowrath_harpy"));
 
+    /** A carcass (entity/Carcass): what is left where a wild animal died to anything but a player. */
+    public static final DeferredHolder<EntityType<?>, EntityType<com.linkyoshi90.harmontide.entity.Carcass>> CARCASS =
+            ENTITY_TYPES.register("carcass", () -> EntityType.Builder.<com.linkyoshi90.harmontide.entity.Carcass>of(
+                    com.linkyoshi90.harmontide.entity.Carcass::new, MobCategory.MISC).sized(0.9F, 0.5F).clientTrackingRange(8).updateInterval(20)
+                    .build("carcass"));
     /** A thrown splash holy water (entity/ThrownHolyWater). */
     public static final DeferredHolder<EntityType<?>, EntityType<com.linkyoshi90.harmontide.entity.ThrownHolyWater>> SPLASH_HOLY_WATER =
             ENTITY_TYPES.register("splash_holy_water", () -> EntityType.Builder.<com.linkyoshi90.harmontide.entity.ThrownHolyWater>of(

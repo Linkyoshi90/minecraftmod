@@ -128,6 +128,7 @@ public final class HarmontideClient {
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(com.linkyoshi90.harmontide.registry.ModBlockEntities.FIGURINE.get(), FigurineRenderer::new);
         event.registerEntityRenderer(com.linkyoshi90.harmontide.registry.ModEntities.SPLASH_HOLY_WATER.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
+        event.registerEntityRenderer(com.linkyoshi90.harmontide.registry.ModEntities.CARCASS.get(), CarcassRenderer::new);
         event.registerEntityRenderer(ModEntities.ORDER_KNIGHT.get(), OrderSisterRenderer::new);
         event.registerEntityRenderer(ModEntities.ORDER_INQUISITOR.get(), OrderSisterRenderer::new);
         event.registerEntityRenderer(ModEntities.ORDER_CAPTAIN.get(), OrderSisterRenderer::new);

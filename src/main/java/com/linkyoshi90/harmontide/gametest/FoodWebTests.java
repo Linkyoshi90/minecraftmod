@@ -72,8 +72,9 @@ public class FoodWebTests {
             down = FoodWeb.strike(level, wolf, chicken);
         }
         check(down && !FoodWeb.hungry(wolf), "brought down and eaten");
-        var left = level.getEntitiesOfClass(ItemEntity.class, wolf.getBoundingBox().inflate(4));
-        check(left.stream().anyMatch(i -> i.getItem().is(Items.BONE)) && left.stream().noneMatch(i -> i.getItem().is(Items.CHICKEN)), "the meat eaten, the bones left");
+        var carcasses = level.getEntitiesOfClass(com.linkyoshi90.harmontide.entity.Carcass.class, wolf.getBoundingBox().inflate(6));
+        check(carcasses.size() == 1 && carcasses.get(0).meat() < carcasses.get(0).full(), "a carcass where it fell, her share eaten");
+        check(level.getEntitiesOfClass(ItemEntity.class, wolf.getBoundingBox().inflate(6), i -> i.getItem().is(Items.CHICKEN)).isEmpty(), "no loose drops: the meat is on the carcass");
         helper.succeed();
     }
 
@@ -89,6 +90,31 @@ public class FoodWebTests {
         check(FoodWeb.scavenge(level, wolf), "leftovers eaten");
         FoodWeb.died(level, helper.absolutePos(new BlockPos(12, 2, 12)));
         check(FoodWeb.carrion(level, helper.absolutePos(new BlockPos(9, 2, 9)), 20) != null, "the place something died is known");
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "carcassesAndButchering")
+    public static void carcassesAndButchering(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Cow cow = helper.spawn(EntityType.COW, new BlockPos(5, 2, 5));
+        com.linkyoshi90.harmontide.entity.Carcass c = com.linkyoshi90.harmontide.entity.Carcass.of(level, cow);
+        check(c != null && c.meat() == 8 && c.full() == 8 && c.stage() == com.linkyoshi90.harmontide.entity.Carcass.Stage.FRESH, "a cow carries the most meat");
+        Chicken chicken = helper.spawn(EntityType.CHICKEN, new BlockPos(9, 2, 5));
+        var small = com.linkyoshi90.harmontide.entity.Carcass.of(level, chicken);
+        check(small != null && small.meat() == 2, "a chicken the least");
+        check(c.bite(3) == 3 && c.meat() == 5, "a meal takes meat off the bones");
+        var got = c.butcher(level.getRandom());
+        int beef = got.stream().filter(s -> s.is(Items.BEEF)).mapToInt(ItemStack::getCount).sum();
+        check(beef >= 3 && beef <= 5 && got.stream().anyMatch(s -> s.is(Items.BONE)), "butchered: a share of what's left, and a bone: " + beef);
+        c.setAge(com.linkyoshi90.harmontide.entity.Carcass.FRESH + 10);
+        c.goOff();
+        check(c.stage() == com.linkyoshi90.harmontide.entity.Carcass.Stage.ROTTING, "it goes off");
+        check(c.butcher(level.getRandom()).stream().anyMatch(s -> s.is(Items.ROTTEN_FLESH)), "and some meat comes away rotten");
+        c.setMeat(0);
+        check(c.stage() == com.linkyoshi90.harmontide.entity.Carcass.Stage.BONES, "picked clean: bones");
+        AbstractMonsterGirl ghoul = still(helper, GirlSpecies.GHOUL_UNDEAD, new BlockPos(9, 2, 6));
+        FoodWeb.starve(ghoul);
+        check(FoodWeb.scavenge(level, ghoul) && small.meat() < 2, "a scavenger eats from the carcass");
         helper.succeed();
     }
 }
