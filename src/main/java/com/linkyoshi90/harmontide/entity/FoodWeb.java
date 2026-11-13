@@ -244,9 +244,13 @@ public final class FoodWeb {
         if (!greens(s)) return false;
         level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, s), plant.getX() + 0.5, plant.getY() + 0.4, plant.getZ() + 0.5, 12, 0.3, 0.2, 0.3, 0.05);
         level.destroyBlock(plant, false);
+        Pasture.note(level, plant, Pasture.Kind.CROPPED);                    // it grows back once the grazers move on
         int herd = level.getEntitiesOfClass(AbstractMonsterGirl.class, g.getBoundingBox().inflate(16), o -> role(o) == Role.GRAZER && forages(o)).size();
         BlockPos turf = plant.below();
-        if (herd >= OVERGRAZE && level.getBlockState(turf).is(Blocks.GRASS_BLOCK) && g.getRandom().nextInt(3) == 0) level.setBlockAndUpdate(turf, Blocks.DIRT.defaultBlockState());
+        if (herd >= OVERGRAZE && level.getBlockState(turf).is(Blocks.GRASS_BLOCK) && g.getRandom().nextInt(3) == 0) {
+            level.setBlockAndUpdate(turf, Blocks.DIRT.defaultBlockState());
+            Pasture.note(level, turf, Pasture.Kind.WORN);
+        }
         fed(level, g);
         return true;
     }

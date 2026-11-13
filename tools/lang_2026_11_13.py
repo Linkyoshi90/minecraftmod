@@ -179,11 +179,18 @@ HERDS = {
                  "Sneak, and you can get close.",
 }
 
+PASTURE = {
+    G + "pasture.title": "Pastures",
+    G + "pasture": "The land remembers where it was grazed. A herd of three or more that keeps walking the same ground treads the grass into a game trail; "
+                   "follow one and it leads to them. Where grazers crowd together the turf wears to bare dirt. Once the herd has moved on, the land rests: "
+                   "cropped grass grows back within half a day (now and then a flower with it), bare dirt greens over in a day, and a trail fades back to grass in two.",
+}
+
 ADVANCEMENTS = {"cursed_gear": "harmontide:cursed_blade", "repeadead_scream": "minecraft:skeleton_skull", "ghost_possession": "minecraft:soul_lantern", "sea_wedding": "minecraft:nautilus_shell", "mermaid_blood": "harmontide:mermaid_blood", "sabbath_initiate": "minecraft:glass_bottle", "sabbath_adept": "minecraft:potion", "sabbath_keeper": "minecraft:black_wool",
                 "sabbath_sibling": "harmontide:realm_censer"}
 
 ALL = {}
-for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS, HERDS):
+for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS, HERDS, PASTURE):
     ALL.update(part)
 
 
