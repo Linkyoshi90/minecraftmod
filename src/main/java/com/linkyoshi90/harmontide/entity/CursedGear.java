@@ -120,6 +120,17 @@ public final class CursedGear {
         if (level.getGameTime() % WHISPER == 0 && p.getRandom().nextBoolean()) whisper(p, s);
     }
 
+    /** Client side: a faint dark aura about whoever wears or holds it (wisps of purple, now and then a soul). */
+    public static void aura(net.minecraft.world.level.Level level, Player p, ItemStack s, boolean selected) {
+        boolean worn = armour(s) && p.getItemBySlot(EquipmentSlot.CHEST) == s;
+        if (!worn && !(blade(s) && selected)) return;
+        var r = p.getRandom();
+        if (r.nextInt(4) != 0) return;
+        double y = worn ? p.getY() + 0.8 + r.nextDouble() * 0.6 : p.getY() + 0.6 + r.nextDouble() * 0.4;
+        double x = p.getX() + (r.nextDouble() - 0.5) * 0.9, z = p.getZ() + (r.nextDouble() - 0.5) * 0.9;
+        level.addParticle(r.nextInt(12) == 0 ? ParticleTypes.SOUL : ParticleTypes.WITCH, x, y, z, 0.0, 0.02, 0.0);
+    }
+
     @SubscribeEvent
     public static void onKill(LivingDeathEvent event) {
         if (event.getSource().getEntity() instanceof Player p && p.level() instanceof ServerLevel level && blade(p.getMainHandItem())

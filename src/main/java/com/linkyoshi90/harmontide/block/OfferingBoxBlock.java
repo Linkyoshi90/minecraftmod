@@ -99,4 +99,10 @@ public class OfferingBoxBlock extends Block {
         draw(server, pos, player, roll(server.random));
         return ItemInteractionResult.SUCCESS;
     }
+
+    /** Mobs path round it (or over it) instead of walking into it: a collision shape short of a full cube otherwise reads as open ground to the pathfinder. */
+    @Override
+    protected boolean isPathfindable(net.minecraft.world.level.block.state.BlockState state, net.minecraft.world.level.pathfinder.PathComputationType type) {
+        return type != net.minecraft.world.level.pathfinder.PathComputationType.LAND && super.isPathfindable(state, type);
+    }
 }

@@ -61,6 +61,10 @@ public final class Lactation {
             if (action == AbstractMonsterGirl.Action.SITTING || action == AbstractMonsterGirl.Action.NURSE) return new double[] {height * 0.42, creature.getBbWidth() * 0.3};
         }
         if (creature.isSleeping()) return new double[] {LYING_CHEST, 0.0};   // vanilla sleep lays her along the bed about her middle
+        if (creature instanceof AbstractMonsterGirl girl) {                   // read from her model (tools/gen_chest_table.py): centaurs and giraffes carry it high
+            float[] at = com.linkyoshi90.harmontide.registry.ChestTable.CHEST.get(girl.getSpecies().id());
+            if (at != null) return new double[] {height * at[0], height * at[1] + 0.05};
+        }
         return new double[] {height * 0.6, creature.getBbWidth() * 0.3};
     }
 

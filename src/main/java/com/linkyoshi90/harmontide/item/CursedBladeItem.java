@@ -22,6 +22,12 @@ public class CursedBladeItem extends SwordItem {
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity holder, int slot, boolean selected) {
         if (level instanceof ServerLevel server && holder instanceof Player p) CursedGear.carried(server, p, stack, selected);
+        else if (level.isClientSide && holder instanceof Player p) CursedGear.aura(level, p, stack, selected);
+    }
+
+    @Override
+    public boolean isFoil(ItemStack stack) {
+        return true;                                                        // a dark shimmer: something lives in it
     }
 
     @Override

@@ -36,6 +36,10 @@ public final class ModArmorMaterials {
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> REALM_SILVER = register("realm_silver", 2, 5, 6, 2, 12, SoundEvents.ARMOR_EQUIP_IRON,
             () -> ModItems.REALM_SILVER_INGOT.get());
 
+    /** Living armour (entity/CursedGear): iron's protection in blackened, purple-veined steel with an eye that watches. */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CURSED = register("cursed", 2, 5, 6, 2, 9, SoundEvents.ARMOR_EQUIP_CHAIN,
+            () -> net.minecraft.world.item.Items.IRON_INGOT);
+
     private ModArmorMaterials() {}
 
     private static DeferredHolder<ArmorMaterial, ArmorMaterial> register(String name, int boots, int legs, int chest, int helmet, int enchantability,
