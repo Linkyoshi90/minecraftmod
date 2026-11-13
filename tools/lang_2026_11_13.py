@@ -238,11 +238,32 @@ HABITAT = {
                     "so if you are looking for one, look where she would be comfortable. Make a friend comfortable at home and she will thank you for it with her health.",
 }
 
-ADVANCEMENTS = {"cursed_gear": "harmontide:cursed_blade", "repeadead_scream": "minecraft:skeleton_skull", "ghost_possession": "minecraft:soul_lantern", "sea_wedding": "minecraft:nautilus_shell", "mermaid_blood": "harmontide:mermaid_blood", "sabbath_initiate": "minecraft:glass_bottle", "sabbath_adept": "minecraft:potion", "sabbath_keeper": "minecraft:black_wool",
+TRACKS = {
+    "block.harmontide.footprint": "Footprints",
+    M + "tracks": "%s tracks, %s, heading %s.",
+    M + "tracks.fresh": "fresh",
+    M + "tracks.recent": "a few hours old",
+    M + "tracks.old": "old and fading",
+    M + "tracks.dir.north": "north",
+    M + "tracks.dir.south": "south",
+    M + "tracks.dir.east": "east",
+    M + "tracks.dir.west": "west",
+    M + "tracks.noted": "Field notes: %s (%s kinds tracked).",
+    "advancement.harmontide.tracker": "Reading the Ground",
+    "advancement.harmontide.tracker.desc": "Read a creature's footprints",
+    "advancement.harmontide.master_tracker": "Master Tracker",
+    "advancement.harmontide.master_tracker.desc": "Read the tracks of ten different kinds",
+    G + "tracks.title": "Tracks and signs",
+    G + "tracks": "Wild girls leave signs of where they have been. In sand, snow and mud they leave footprints, pointing the way they went: hooves, paws, three-toed claws, bare feet, "
+                  "or the long sweep of a tail. Use an empty hand on footprints to read them: whose they are, how fresh, and which way she went. Every kind you read goes into your field notes. "
+                  "Footprints fade after a day. Bird kinds drop a feather now and then, and the gnawers and antlered kinds strip the bark off logs where nobody took an axe.",
+}
+
+ADVANCEMENTS = {"tracker": "minecraft:sand", "master_tracker": "minecraft:compass", "cursed_gear": "harmontide:cursed_blade", "repeadead_scream": "minecraft:skeleton_skull", "ghost_possession": "minecraft:soul_lantern", "sea_wedding": "minecraft:nautilus_shell", "mermaid_blood": "harmontide:mermaid_blood", "sabbath_initiate": "minecraft:glass_bottle", "sabbath_adept": "minecraft:potion", "sabbath_keeper": "minecraft:black_wool",
                 "sabbath_sibling": "harmontide:realm_censer"}
 
 ALL = {}
-for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS, HERDS, PASTURE, TERRITORY, POLLEN, PARTNERS, DECOMPOSE, HABITAT):
+for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS, HERDS, PASTURE, TERRITORY, POLLEN, PARTNERS, DECOMPOSE, HABITAT, TRACKS):
     ALL.update(part)
 
 

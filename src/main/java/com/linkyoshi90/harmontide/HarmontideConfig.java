@@ -151,6 +151,7 @@ public final class HarmontideConfig {
     public static final ModConfigSpec.BooleanValue TERRITORIES;
     public static final ModConfigSpec.BooleanValue PARTNERSHIPS;
     public static final ModConfigSpec.BooleanValue MICROHABITATS;
+    public static final ModConfigSpec.BooleanValue TRACKS;
     public static final ModConfigSpec.BooleanValue DEAD_REALM;
     public static final ModConfigSpec.BooleanValue SABBATH;
     public static final ModConfigSpec.BooleanValue SEA_WEDDINGS;
@@ -242,6 +243,10 @@ public final class HarmontideConfig {
         SQUAD = BUILDER
                 .comment("Enlist up to four fighter friends with a goat horn (crouch, use it on her): a blown horn rallies them to you to fight, they turn on whatever strikes you, and they march home when the Order raids your hearth.")
                 .define("squad", true);
+
+        TRACKS = BUILDER
+                .comment("Tracks and signs: wild girls leave footprints in sand, snow and mud (read them with an empty hand), bird kinds drop feathers, gnawers and antlered kinds strip bark.")
+                .define("tracks", true);
 
         MICROHABITATS = BUILDER
                 .comment("Microhabitats: each kind likes shade or sun, water near or dry ground, heights, caves, cold or heat; content where it suits her (slow healing), ill at ease where not (a wild one moves to a better spot), and natural spawns where nothing suits her are thinned.")
@@ -647,6 +652,10 @@ public final class HarmontideConfig {
 
     public static boolean squad() {
         return SPEC.isLoaded() ? SQUAD.get() : SQUAD.getDefault();
+    }
+
+    public static boolean tracks() {
+        return SPEC.isLoaded() ? TRACKS.get() : TRACKS.getDefault();
     }
 
     public static boolean microhabitats() {

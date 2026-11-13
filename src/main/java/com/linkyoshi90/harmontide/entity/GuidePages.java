@@ -66,7 +66,8 @@ public final class GuidePages {
             Map.entry("pollination", 3),
             Map.entry("partners", 4),
             Map.entry("decomposers", 3),
-            Map.entry("habitats", 3));
+            Map.entry("habitats", 3),
+            Map.entry("tracks", 3));
     public static final Map<String, Integer> SIGNATURES = Map.ofEntries(
             Map.entry("anubis_canid", 2),
             Map.entry("cobra_lamia", 2),

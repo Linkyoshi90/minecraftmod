@@ -154,6 +154,11 @@ public final class ModBlocks {
     public static final DeferredBlock<com.linkyoshi90.harmontide.block.GeyseriteBlock> GEYSERITE = BLOCKS.registerBlock("geyserite",
             com.linkyoshi90.harmontide.block.GeyseriteBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).sound(SoundType.CALCITE));
+    /** Footprints (block/FootprintBlock, entity/Signs): pressed into sand, snow and mud. */
+    public static final DeferredBlock<com.linkyoshi90.harmontide.block.FootprintBlock> FOOTPRINT = BLOCKS.registerBlock("footprint",
+            com.linkyoshi90.harmontide.block.FootprintBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.NONE).noCollission().instabreak().noOcclusion().replaceable().randomTicks().noLootTable()
+                    .sound(SoundType.SAND).pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY));
     /** Grave grass, the realm of the dead (block/GraveGrassBlock, entity/DeadRealm). */
     public static final DeferredBlock<com.linkyoshi90.harmontide.block.GraveGrassBlock> GRAVE_GRASS = BLOCKS.registerBlock("grave_grass",
             com.linkyoshi90.harmontide.block.GraveGrassBlock::new,

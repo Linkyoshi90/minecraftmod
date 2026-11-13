@@ -1,0 +1,79 @@
+{
+  "variants": {
+    "facing=north,kind=paw": {
+      "model": "harmontide:block/footprint_paw"
+    },
+    "facing=east,kind=paw": {
+      "model": "harmontide:block/footprint_paw",
+      "y": 90
+    },
+    "facing=south,kind=paw": {
+      "model": "harmontide:block/footprint_paw",
+      "y": 180
+    },
+    "facing=west,kind=paw": {
+      "model": "harmontide:block/footprint_paw",
+      "y": 270
+    },
+    "facing=north,kind=hoof": {
+      "model": "harmontide:block/footprint_hoof"
+    },
+    "facing=east,kind=hoof": {
+      "model": "harmontide:block/footprint_hoof",
+      "y": 90
+    },
+    "facing=south,kind=hoof": {
+      "model": "harmontide:block/footprint_hoof",
+      "y": 180
+    },
+    "facing=west,kind=hoof": {
+      "model": "harmontide:block/footprint_hoof",
+      "y": 270
+    },
+    "facing=north,kind=claw": {
+      "model": "harmontide:block/footprint_claw"
+    },
+    "facing=east,kind=claw": {
+      "model": "harmontide:block/footprint_claw",
+      "y": 90
+    },
+    "facing=south,kind=claw": {
+      "model": "harmontide:block/footprint_claw",
+      "y": 180
+    },
+    "facing=west,kind=claw": {
+      "model": "harmontide:block/footprint_claw",
+      "y": 270
+    },
+    "facing=north,kind=foot": {
+      "model": "harmontide:block/footprint_foot"
+    },
+    "facing=east,kind=foot": {
+      "model": "harmontide:block/footprint_foot",
+      "y": 90
+    },
+    "facing=south,kind=foot": {
+      "model": "harmontide:block/footprint_foot",
+      "y": 180
+    },
+    "facing=west,kind=foot": {
+      "model": "harmontide:block/footprint_foot",
+      "y": 270
+    },
+    "facing=north,kind=slither": {
+      "model": "harmontide:block/footprint_slither"
+    },
+    "facing=east,kind=slither": {
+      "model": "harmontide:block/footprint_slither",
+      "y": 90
+    },
+    "facing=south,kind=slither": {
+      "model": "harmontide:block/footprint_slither",
+      "y": 180
+    },
+    "facing=west,kind=slither": {
+      "model": "harmontide:block/footprint_slither",
+      "y": 270
+    }
+  }
+}

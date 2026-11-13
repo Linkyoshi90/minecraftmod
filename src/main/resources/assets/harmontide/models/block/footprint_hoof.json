@@ -1,0 +1,33 @@
+{
+  "render_type": "minecraft:translucent",
+  "ambientocclusion": false,
+  "textures": {
+    "print": "harmontide:block/footprint_hoof",
+    "particle": "harmontide:block/footprint_hoof"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0.05,
+        0
+      ],
+      "to": [
+        16,
+        0.05,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#print"
+        }
+      }
+    }
+  ]
+}
