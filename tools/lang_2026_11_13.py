@@ -202,11 +202,19 @@ POLLEN = {
                        "They never sow in villages or near a hearth.",
 }
 
+PARTNERS = {
+    G + "partners.title": "Partnerships",
+    G + "partners": "Some kinds do better together. Small crabs and shrimp groom the big sea girls (orcas, sharks, krakens) in the water, soothing them and earning a meal. "
+                    "A hermit crab shelters by a sea anemone and is hard to hurt there. Small rodents and rabbit kinds ride close by the big grazers (elephants, giraffes, rhinos), "
+                    "picking them clean and staying safe by them. Ants guard plant girls and go for any monster that comes near them, and pollinators at a plant girl's blossoms keep her thriving. "
+                    "Scavengers trail wild hunters at a distance to be near the kill, and grazers of different kinds heed each other's alarm calls. Partners work for you too: keep an ant friend by your alraune.",
+}
+
 ADVANCEMENTS = {"cursed_gear": "harmontide:cursed_blade", "repeadead_scream": "minecraft:skeleton_skull", "ghost_possession": "minecraft:soul_lantern", "sea_wedding": "minecraft:nautilus_shell", "mermaid_blood": "harmontide:mermaid_blood", "sabbath_initiate": "minecraft:glass_bottle", "sabbath_adept": "minecraft:potion", "sabbath_keeper": "minecraft:black_wool",
                 "sabbath_sibling": "harmontide:realm_censer"}
 
 ALL = {}
-for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS, HERDS, PASTURE, TERRITORY, POLLEN):
+for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS, HERDS, PASTURE, TERRITORY, POLLEN, PARTNERS):
     ALL.update(part)
 
 

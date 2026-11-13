@@ -149,6 +149,7 @@ public final class HarmontideConfig {
     public static final ModConfigSpec.BooleanValue FOOD_WEB;
     public static final ModConfigSpec.BooleanValue HERDS;
     public static final ModConfigSpec.BooleanValue TERRITORIES;
+    public static final ModConfigSpec.BooleanValue PARTNERSHIPS;
     public static final ModConfigSpec.BooleanValue DEAD_REALM;
     public static final ModConfigSpec.BooleanValue SABBATH;
     public static final ModConfigSpec.BooleanValue SEA_WEDDINGS;
@@ -240,6 +241,10 @@ public final class HarmontideConfig {
         SQUAD = BUILDER
                 .comment("Enlist up to four fighter friends with a goat horn (crouch, use it on her): a blown horn rallies them to you to fight, they turn on whatever strikes you, and they march home when the Order raids your hearth.")
                 .define("squad", true);
+
+        PARTNERSHIPS = BUILDER
+                .comment("Partnerships between kinds: cleaner crustaceans and big sea girls, hermit crabs and anemones, small rodents and rabbits riding big grazers, ants guarding plant girls, pollinators and plant girls, scavengers trailing hunters, and mixed herds sharing alarms.")
+                .define("partnerships", true);
 
         TERRITORIES = BUILDER
                 .comment("Territories: wild hunters claim a home range, patrol its edge and scent-mark it; rivals of the same kind keep off and settle elsewhere. A befriended dog, cat, bear or snake kind near you lets you see the marks.")
@@ -637,6 +642,10 @@ public final class HarmontideConfig {
 
     public static boolean squad() {
         return SPEC.isLoaded() ? SQUAD.get() : SQUAD.getDefault();
+    }
+
+    public static boolean partnerships() {
+        return SPEC.isLoaded() ? PARTNERSHIPS.get() : PARTNERSHIPS.getDefault();
     }
 
     public static boolean territories() {

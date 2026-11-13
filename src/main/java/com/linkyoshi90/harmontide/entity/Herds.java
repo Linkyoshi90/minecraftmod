@@ -108,19 +108,27 @@ public final class Herds {
         List<AbstractMonsterGirl> herd = herd(lookout);
         boolean stand = stands(lookout, herd.size());
         long now = level.getGameTime();
-        for (AbstractMonsterGirl o : herd) {
-            CompoundTag pd = o.getPersistentData();
-            pd.putLong(UNTIL, now + ALARM);
-            pd.putLong(NEXT, now + ALARM_AGAIN);
-            pd.putDouble(FROM_X, from.x);
-            pd.putDouble(FROM_Z, from.z);
-            pd.putBoolean(STAND, stand);
-            if (stand) o.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, ALARM, 0, true, false, true));
+        for (AbstractMonsterGirl o : herd) hear(o, now, from, stand);
+        if (HarmontideConfig.partnerships()) {                              // mixed herds: the other kinds near take the warning too, each answering its own way
+            for (AbstractMonsterGirl o : level.getEntitiesOfClass(AbstractMonsterGirl.class, lookout.getBoundingBox().inflate(RANGE),
+                    o -> o.getSpecies() != lookout.getSpecies() && herds(o) && !alarmed(o))) {
+                hear(o, now, from, stands(o, herd(o).size()));
+            }
         }
         lookout.playAmbientSound();
         level.sendParticles(ParticleTypes.NOTE, lookout.getX(), lookout.getEyeY() + 0.6, lookout.getZ(), 3, 0.3, 0.2, 0.3, 0.0);
         lookout.startTimedAction(AbstractMonsterGirl.Action.CALL, 20);
         return herd.size();
+    }
+
+    private static void hear(AbstractMonsterGirl o, long now, Vec3 from, boolean stand) {
+        CompoundTag pd = o.getPersistentData();
+        pd.putLong(UNTIL, now + ALARM);
+        pd.putLong(NEXT, now + ALARM_AGAIN);
+        pd.putDouble(FROM_X, from.x);
+        pd.putDouble(FROM_Z, from.z);
+        pd.putBoolean(STAND, stand);
+        if (stand) o.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, ALARM, 0, true, false, true));
     }
 
     public static boolean alarmed(AbstractMonsterGirl g) {
