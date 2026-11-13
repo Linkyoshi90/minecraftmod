@@ -105,7 +105,10 @@ public final class Order {
     }
 
     public static void addNotoriety(Player player, int amount) {
-        if (!player.level().isClientSide) setNotoriety(player, notoriety(player) + amount);
+        if (!player.level().isClientSide) {
+            setNotoriety(player, notoriety(player) + amount);
+            com.linkyoshi90.harmontide.entity.Sabbath.deed(player, amount > 0 ? amount : amount / 2);   // the Sabbath hears of it too
+        }
     }
 
     /** The realm's own: devils and every girl the realm changed. */
@@ -170,7 +173,7 @@ public final class Order {
     /** Any realm grass within r blocks (and a little up and down). */
     public static boolean realmNear(ServerLevel level, BlockPos pos, int r) {
         for (BlockPos p : BlockPos.betweenClosed(pos.offset(-r, -2, -r), pos.offset(r, 1, r))) {
-            if (com.linkyoshi90.harmontide.block.RealmGrassBlock.realm(level.getBlockState(p))) return true;
+            if (com.linkyoshi90.harmontide.block.RealmGrassBlock.realm(level.getBlockState(p)) || com.linkyoshi90.harmontide.block.GraveGrassBlock.grave(level.getBlockState(p))) return true;
         }
         return false;
     }

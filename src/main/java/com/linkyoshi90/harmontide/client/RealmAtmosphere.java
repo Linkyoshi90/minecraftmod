@@ -51,13 +51,19 @@ public final class RealmAtmosphere {
     }
 
     /** The share of the realm round a spot, 0 to 1: realm grass, leaves and weepcaps within RADIUS, counted every half second. */
+    /** The share of that which is the realm of the dead (grave grass): it turns the fog grey. */
+    private static float grave, graveNow;
+    private static final float GR = 0.52F, GG = 0.56F, GB = 0.54F;
+
     public static float density(Level level, BlockPos at) {
-        int n = 0;
+        int n = 0, g = 0;
         for (BlockPos p : BlockPos.betweenClosed(at.offset(-RADIUS, -4, -RADIUS), at.offset(RADIUS, 6, RADIUS))) {
             BlockState s = level.getBlockState(p);
             if (com.linkyoshi90.harmontide.block.RealmGrassBlock.realm(s) || s.is(ModBlocks.REALM_LEAVES.get()) || s.is(ModBlocks.WEEPCAP.get())) n++;
+            else if (com.linkyoshi90.harmontide.block.GraveGrassBlock.grave(s)) g++;
         }
-        return Math.min(1.0F, n / (float) FULL);
+        grave = n + g == 0 ? graveNow : g / (float) (n + g);
+        return Math.min(1.0F, (n + g) / (float) FULL);
     }
 
     @SubscribeEvent
@@ -68,12 +74,15 @@ public final class RealmAtmosphere {
         if (p.tickCount % 10 == 0) target = com.linkyoshi90.harmontide.HarmontideConfig.realmFog() ? density(mc.level, p.blockPosition()) : 0.0F;
         last = strength;
         strength += (target - strength) * 0.04F;
+        graveNow += (grave - graveNow) * 0.05F;
         if (strength < 0.02F) return;
         RandomSource r = mc.level.random;
         for (int i = 0; i < 3; i++) {
             if (r.nextFloat() > strength) continue;
             double x = p.getX() + r.nextGaussian() * 6, y = p.getY() + r.nextDouble() * 4 - 0.5, z = p.getZ() + r.nextGaussian() * 6;
-            mc.level.addParticle(r.nextInt(4) == 0 ? ParticleTypes.PORTAL : RealmGrassBlock.HAZE, x, y, z, 0.0, 0.01, 0.0);
+            boolean dead = r.nextFloat() < graveNow;
+            mc.level.addParticle(dead ? (r.nextInt(6) == 0 ? ParticleTypes.SOUL : com.linkyoshi90.harmontide.block.GraveGrassBlock.MIST)
+                    : r.nextInt(4) == 0 ? ParticleTypes.PORTAL : RealmGrassBlock.HAZE, x, y, z, 0.0, 0.01, 0.0);
         }
         if (strength > 0.5F && r.nextInt(500) == 0) {
             mc.getSoundManager().play(SimpleSoundInstance.forAmbientAddition(r.nextBoolean()
@@ -88,7 +97,7 @@ public final class RealmAtmosphere {
     /** Deep in the realm the music changes: the crimson forest's uneasy score, as long as you stay. */
     @SubscribeEvent
     public static void onMusic(net.neoforged.neoforge.client.event.SelectMusicEvent event) {
-        if (strength < 0.6F || Minecraft.getInstance().player == null || Minecraft.getInstance().player.level().dimension() != Level.OVERWORLD) return;
+        if (strength < 0.6F || graveNow > 0.5F || Minecraft.getInstance().player == null || Minecraft.getInstance().player.level().dimension() != Level.OVERWORLD) return;
         event.setMusic(REALM_MUSIC);
     }
 
@@ -103,9 +112,9 @@ public final class RealmAtmosphere {
         }
         float s = now((float) event.getPartialTick()) * 0.75F;
         if (s <= 0.01F) return;
-        event.setRed(Mth.lerp(s, event.getRed(), R));
-        event.setGreen(Mth.lerp(s, event.getGreen(), G));
-        event.setBlue(Mth.lerp(s, event.getBlue(), B));
+        event.setRed(Mth.lerp(s, event.getRed(), Mth.lerp(graveNow, R, GR)));
+        event.setGreen(Mth.lerp(s, event.getGreen(), Mth.lerp(graveNow, G, GG)));
+        event.setBlue(Mth.lerp(s, event.getBlue(), Mth.lerp(graveNow, B, GB)));
     }
 
     @SubscribeEvent

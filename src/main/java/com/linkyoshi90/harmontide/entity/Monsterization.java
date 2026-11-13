@@ -164,7 +164,7 @@ public final class Monsterization {
     public static AbstractMonsterGirl step(ServerLevel level, Mob mob, boolean dark) {
         GirlSpecies kind = kindOf(mob);
         if (kind == null || !HarmontideConfig.monsterization()) return null;
-        if (!dark || !(DemonRealm.inRealm(mob) || guardsTheTurned(mob)) || com.linkyoshi90.harmontide.block.HolyFontBlock.warded(level, mob.blockPosition())) return null;
+        if (!dark || !(DemonRealm.inRealm(mob) || guardsTheTurned(mob) || HarmontideConfig.deadRealm() && DeadRealm.turnsHere(mob) && DeadRealm.inDeadRealm(mob)) || com.linkyoshi90.harmontide.block.HolyFontBlock.warded(level, mob.blockPosition())) return null;
         int soaked = soaked(mob) + (RoseMoon.tonight(level) ? 2 : 1);   // a rose moon: twice as fast
         mob.getPersistentData().putInt(SOAKED, soaked);
         level.sendParticles(RealmGrassBlock.HAZE, mob.getX(), mob.getY() + mob.getBbHeight() * 0.5, mob.getZ(), 3 + soaked / 2, 0.3, 0.3, 0.3, 0.0);
@@ -671,6 +671,7 @@ public final class Monsterization {
         Mob girl = mob.convertTo(type, false);
         if (girl == null) return null;
         witnessed(level, girl, "realm_changed");
+        for (net.minecraft.world.entity.player.Player p : level.getEntitiesOfClass(net.minecraft.world.entity.player.Player.class, girl.getBoundingBox().inflate(16))) Sabbath.deed(p, Sabbath.CHANGED);
         girl.finalizeSpawn(level, level.getCurrentDifficultyAt(girl.blockPosition()), MobSpawnType.CONVERSION, null);
         if (girl instanceof com.linkyoshi90.harmontide.entity.girl.Minotaur cow) cow.setMale(false);   // the realm turns cows, not bulls
         girl.setPersistenceRequired();                                  // a far player must not despawn the one creature this happened to

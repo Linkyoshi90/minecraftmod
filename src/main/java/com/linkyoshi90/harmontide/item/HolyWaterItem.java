@@ -32,6 +32,11 @@ public class HolyWaterItem extends Item {
             RealmGrassBlock.purify(level, p.immutable());
             count++;
         }
+        for (BlockPos p : BlockPos.betweenClosed(centre.offset(-RADIUS, -2, -RADIUS), centre.offset(RADIUS, 2, RADIUS))) {      // the realm of the dead too
+            if (p.distSqr(centre) > (RADIUS + 0.5) * (RADIUS + 0.5) || !com.linkyoshi90.harmontide.block.GraveGrassBlock.grave(level.getBlockState(p))) continue;
+            com.linkyoshi90.harmontide.block.GraveGrassBlock.purify(level, p.immutable());
+            count++;
+        }
         for (BlockPos p : BlockPos.betweenClosed(centre.offset(-RADIUS, 0, -RADIUS), centre.offset(RADIUS, CANOPY, RADIUS))) {   // and the trees above
             if (level.getBlockState(p).is(ModBlocks.REALM_LEAVES.get())) com.linkyoshi90.harmontide.block.RealmLeavesBlock.purify(level, p.immutable());
             else if (level.getBlockState(p).is(ModBlocks.REALM_LOG.get())) com.linkyoshi90.harmontide.block.RealmLogBlock.purify(level, p.immutable());

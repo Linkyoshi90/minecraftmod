@@ -468,6 +468,9 @@ public class OrderSister extends Monster implements RangedAttackMob {
             if (com.linkyoshi90.harmontide.block.RealmGrassBlock.realm(level.getBlockState(p))) {
                 RealmGrassBlock.purify(level, p.immutable());
                 n++;
+            } else if (com.linkyoshi90.harmontide.block.GraveGrassBlock.grave(level.getBlockState(p))) {
+                com.linkyoshi90.harmontide.block.GraveGrassBlock.purify(level, p.immutable());
+                n++;
             }
         }
         return n;
