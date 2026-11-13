@@ -58,6 +58,8 @@ public final class Marriage {
     public static final ResourceLocation BLISS = ResourceLocation.fromNamespaceAndPath(HarmontideMod.MODID, "wedded_bliss");
     private static final String SPOUSE = "SpouseOf", ENGAGED = "EngagedTo", WED_DAY = "WedDay", VEIL_UNTIL = "VeilUntil", LAST_ANNIVERSARY = "WedAnniversary";
     private static final String SPOUSES = "Spouses", WARMED = "FamilyWarmedAt";
+    /** The journal list of a player's wives (and fiancées), for SeaWeddings. */
+    public static final String SPOUSES_KEY = SPOUSES;
     public static final double FAMILY = 8;
     public static final int BLISS_CAP = 3, WARMTH_COOLDOWN = 1200, BIG_FAMILY = 3;
     /** Tests set this to stand in for the maxSpouses setting; negative = use the setting. */
@@ -378,8 +380,10 @@ public final class Marriage {
 
     /** One bride's part of a ceremony; with {@code lead} false (the second and later brides of a group wedding) the guests' bouquet and presents aren't repeated. */
     public static int wed(ServerLevel level, Mob mob, Player player, BlockPos hearth, boolean realm, boolean lead) {
+        if (!realm) SeaWeddings.onWed(level, mob, player, hearth);   // a sea bride by the water, a sea bishop among the guests
         if (realm) {
             RealmTouched.addTouch(player, REALM_VOWS);
+            Sabbath.deed(player, Sabbath.WEDDING);
             level.sendParticles(ParticleTypes.WITCH, hearth.getX() + 0.5, hearth.getY() + 1.5, hearth.getZ() + 0.5, 60, 1.5, 1.0, 1.5, 0.05);
             level.sendParticles(ParticleTypes.PORTAL, mob.getX(), mob.getEyeY(), mob.getZ(), 40, 0.6, 0.6, 0.6, 0.3);
             player.displayClientMessage(Component.translatable("message.harmontide.marriage.realm", mob.getDisplayName()).withStyle(ChatFormatting.DARK_PURPLE), false);
