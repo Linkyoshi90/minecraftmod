@@ -153,6 +153,7 @@ public final class HarmontideConfig {
     public static final ModConfigSpec.BooleanValue MICROHABITATS;
     public static final ModConfigSpec.BooleanValue TRACKS;
     public static final ModConfigSpec.BooleanValue WEATHER_WAYS;
+    public static final ModConfigSpec.BooleanValue FIDGETS;
     public static final ModConfigSpec.BooleanValue DEAD_REALM;
     public static final ModConfigSpec.BooleanValue SABBATH;
     public static final ModConfigSpec.BooleanValue SEA_WEDDINGS;
@@ -244,6 +245,10 @@ public final class HarmontideConfig {
         SQUAD = BUILDER
                 .comment("Enlist up to four fighter friends with a goat horn (crouch, use it on her): a blown horn rallies them to you to fight, they turn on whatever strikes you, and they march home when the Order raids your hearth.")
                 .define("squad", true);
+
+        FIDGETS = BUILDER
+                .comment("Idle fidgets: standing about, girls now and then stretch, yawn, look back, swish a tail, or do their family's or their own signature fidget; the playful families get the zoomies.")
+                .define("fidgets", true);
 
         WEATHER_WAYS = BUILDER
                 .comment("Weather ways: most kinds take cover in thunderstorms; storm-lovers are thrilled by them, rain-lovers come out in the rain, birds, insects and cats dry off in the sun after it, cold kinds play in falling snow and warmth-lovers shiver and take cover.")
@@ -657,6 +662,10 @@ public final class HarmontideConfig {
 
     public static boolean squad() {
         return SPEC.isLoaded() ? SQUAD.get() : SQUAD.getDefault();
+    }
+
+    public static boolean fidgets() {
+        return SPEC.isLoaded() ? FIDGETS.get() : FIDGETS.getDefault();
     }
 
     public static boolean weatherWays() {

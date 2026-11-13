@@ -125,6 +125,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     private static final EntityDataAccessor<Byte> DATA_OUTFIT = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
     /** What she is aiming (GirlArms.RangedGoal), for the client's aiming pose (client.AimPose). */
     private static final EntityDataAccessor<Byte> DATA_AIM = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.BYTE);
+    /** The fidget clip she is playing (Action.FIDGET, entity/girl/Fidgets). */
+    private static final EntityDataAccessor<String> DATA_FIDGET = SynchedEntityData.defineId(AbstractMonsterGirl.class, EntityDataSerializers.STRING);
     public static final int AIM_NONE = 0, AIM_BOW = 1, AIM_CROSSBOW = 2, AIM_GUN = 3;
     /** The entity event of a shot she fires: the client's recoil and bow release. */
     public static final byte EVENT_SHOT = 101;
@@ -166,7 +168,9 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         HANG("hang", false), RUNDOWN("rundown", false), WATCH("watch", true),
         PLAY("play", false), DANCE("dance", false),
         /** Sitting with her baby held to her chest (or, for the baby, held there): the sit animation with the cradle pose over it. */
-        NURSE("sit", false);
+        NURSE("sit", false),
+        /** An idle fidget (entity/girl/Fidgets): which clip is in DATA_FIDGET. */
+        FIDGET(null, true);
 
         public final String animation;
         public final boolean once;
@@ -341,7 +345,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.goalSelector.addGoal(8, new com.linkyoshi90.harmontide.entity.Territories.PatrolGoal(this));
         this.goalSelector.addGoal(7, new com.linkyoshi90.harmontide.entity.Pollination.VisitGoal(this));
         this.goalSelector.addGoal(8, new com.linkyoshi90.harmontide.entity.Partnerships.TrailGoal(this));
-        this.goalSelector.addGoal(9, new com.linkyoshi90.harmontide.entity.Microhabitats.SeekGoal(this));   // somewhere that suits her better   // a scavenger trailing a hunter   // flower to flower (entity/Pollination)   // marking her range (entity/Territories)   // wild, she feeds herself (entity/FoodWeb)
+        this.goalSelector.addGoal(9, new com.linkyoshi90.harmontide.entity.Microhabitats.SeekGoal(this));
+        this.goalSelector.addGoal(8, new Fidgets.ZoomiesGoal(this));                                     // a sudden mad dash (entity/girl/Fidgets)   // somewhere that suits her better   // a scavenger trailing a hunter   // flower to flower (entity/Pollination)   // marking her range (entity/Territories)   // wild, she feeds herself (entity/FoodWeb)
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
     }
@@ -364,6 +369,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         builder.define(DATA_TAILS, (byte) 1);
         builder.define(DATA_OUTFIT, (byte) 0);
         builder.define(DATA_AIM, (byte) AIM_NONE);
+        builder.define(DATA_FIDGET, "");
     }
 
     public Action getAction() {
@@ -372,6 +378,18 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     public void setAction(Action action) {
         this.entityData.set(DATA_ACTION, (byte) action.ordinal());
+    }
+
+    public String getFidget() {
+        return this.entityData.get(DATA_FIDGET);
+    }
+
+    /** Starts a fidget clip for so many ticks (only from standing idle). True if it started. */
+    public boolean fidget(String name, int ticks) {
+        if (this.getAction() != Action.NONE) return false;
+        this.entityData.set(DATA_FIDGET, name);
+        this.startTimedAction(Action.FIDGET, ticks);
+        return this.getAction() == Action.FIDGET;
     }
 
     /** Plays an action for a while (unless another one is already playing), then goes back to NONE. */
@@ -1380,6 +1398,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (this.isDeadOrDying() && this.hasDeathAnimation()) return state.setAndContinue(this.anim("death", true));
         if (this.isPassenger() && this.hasRideAnimation()) return state.setAndContinue(this.anim("ride", false));
         Action action = this.getAction();
+        if (action == Action.FIDGET && !this.getFidget().isEmpty() && !state.isMoving()) return state.setAndContinue(this.anim("fidget_" + this.getFidget(), true));
         if (action.animation != null) return state.setAndContinue(this.anim(action.animation, action.once));
         if (this.isInWater() && this.hasSwimAnimation()) return state.setAndContinue(this.anim(state.isMoving() ? "swim" : "idle", false));
         if ((this.canFly() && this.hasFlyAnimation() || this.isGliding()) && !this.onGround() && !this.isInWater()) return state.setAndContinue(this.anim("fly", false));
