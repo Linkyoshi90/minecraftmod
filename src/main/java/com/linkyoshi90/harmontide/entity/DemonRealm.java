@@ -83,7 +83,10 @@ public final class DemonRealm {
         if (!sabbath(mob, BedSharing.fullMoon(mob.level()))) return false;
         if (mob.level() instanceof ServerLevel level) {
             level.sendParticles(com.linkyoshi90.harmontide.block.RealmGrassBlock.HAZE, mob.getX(), mob.getY() + 0.3, mob.getZ(), 8, 0.8, 0.2, 0.8, 0.0);
-            for (Player p : level.getEntitiesOfClass(Player.class, mob.getBoundingBox().inflate(16))) com.linkyoshi90.harmontide.entity.Dairy.award(p, "realm_sabbath");
+            for (Player p : level.getEntitiesOfClass(Player.class, mob.getBoundingBox().inflate(16))) {
+                com.linkyoshi90.harmontide.entity.Dairy.award(p, "realm_sabbath");
+                Sabbath.danced(level, p);
+            }
         }
         return true;
     }

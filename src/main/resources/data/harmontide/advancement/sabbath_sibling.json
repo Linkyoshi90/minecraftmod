@@ -1,0 +1,23 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "id": "harmontide:realm_censer"
+    },
+    "title": {
+      "translate": "advancement.harmontide.sabbath_sibling"
+    },
+    "description": {
+      "translate": "advancement.harmontide.sabbath_sibling.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
