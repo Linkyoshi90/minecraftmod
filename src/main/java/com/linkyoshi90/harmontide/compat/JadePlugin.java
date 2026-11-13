@@ -68,6 +68,12 @@ public class JadePlugin implements IWailaPlugin {
             if (accessor.getEntity() instanceof com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl g) {   // what anyone watching can tell: her place in the food web, her hours
                 data.putString("FoodRole", com.linkyoshi90.harmontide.entity.FoodWeb.role(g).key());
                 data.putString("Rhythm", g.rhythm().key());
+                var needs = com.linkyoshi90.harmontide.entity.Microhabitats.needs(g);
+                if (!needs.isEmpty()) {
+                    data.putString("Needs", String.join(",", needs.stream().map(com.linkyoshi90.harmontide.entity.Microhabitats.Need::key).toList()));
+                    float c = com.linkyoshi90.harmontide.entity.Microhabitats.comfort(g);
+                    data.putString("Comfort", c >= com.linkyoshi90.harmontide.entity.Microhabitats.CONTENT ? "content" : c < com.linkyoshi90.harmontide.entity.Microhabitats.UNEASY ? "uneasy" : "settled");
+                }
             }
             if (accessor.getEntity() instanceof com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl g && accessor.getPlayer() != null
                     && g.getAffection(accessor.getPlayer()) >= com.linkyoshi90.harmontide.entity.Orders.AFFECTION && !g.isBaby()) {   // what her friends know
@@ -120,6 +126,15 @@ public class JadePlugin implements IWailaPlugin {
             if (data.contains("Birthday")) tooltip.add(Component.translatable("jade.harmontide.birthday", data.getInt("Birthday")).withStyle(net.minecraft.ChatFormatting.GOLD));
             if (data.contains("Rhythm")) tooltip.add(Component.translatable("jade.harmontide.ecology", Component.translatable("foodweb.harmontide." + data.getString("FoodRole")),
                     Component.translatable("rhythm.harmontide." + data.getString("Rhythm"))).withStyle(net.minecraft.ChatFormatting.DARK_GREEN));
+            if (data.contains("Needs")) {
+                net.minecraft.network.chat.MutableComponent likes = Component.empty();
+                String[] needs = data.getString("Needs").split(",");
+                for (int i = 0; i < needs.length; i++) {
+                    if (i > 0) likes.append(", ");
+                    likes.append(Component.translatable("habitat.harmontide." + needs[i]));
+                }
+                tooltip.add(Component.translatable("jade.harmontide.habitat", likes, Component.translatable("habitat.harmontide.feel." + data.getString("Comfort"))).withStyle(net.minecraft.ChatFormatting.DARK_GREEN));
+            }
             if (data.contains("Hobby")) tooltip.add(Component.translatable("jade.harmontide.hobby", Component.translatable("hobby.harmontide." + data.getString("Hobby"))).withStyle(net.minecraft.ChatFormatting.GREEN));
             if (data.contains("Favourite")) tooltip.add(Component.translatable("jade.harmontide.favourite", Component.translatable(data.getString("Favourite"))).withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
             if (com.linkyoshi90.harmontide.entity.girl.Mining.isMiner(accessor.getEntity()) && !((net.minecraft.world.entity.LivingEntity) accessor.getEntity()).isBaby()) {

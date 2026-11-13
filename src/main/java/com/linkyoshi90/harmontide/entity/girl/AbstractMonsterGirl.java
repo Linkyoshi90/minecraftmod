@@ -339,7 +339,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.goalSelector.addGoal(7, new com.linkyoshi90.harmontide.entity.Herds.KeepTogetherGoal(this));
         this.goalSelector.addGoal(8, new com.linkyoshi90.harmontide.entity.Territories.PatrolGoal(this));
         this.goalSelector.addGoal(7, new com.linkyoshi90.harmontide.entity.Pollination.VisitGoal(this));
-        this.goalSelector.addGoal(8, new com.linkyoshi90.harmontide.entity.Partnerships.TrailGoal(this));   // a scavenger trailing a hunter   // flower to flower (entity/Pollination)   // marking her range (entity/Territories)   // wild, she feeds herself (entity/FoodWeb)
+        this.goalSelector.addGoal(8, new com.linkyoshi90.harmontide.entity.Partnerships.TrailGoal(this));
+        this.goalSelector.addGoal(9, new com.linkyoshi90.harmontide.entity.Microhabitats.SeekGoal(this));   // somewhere that suits her better   // a scavenger trailing a hunter   // flower to flower (entity/Pollination)   // marking her range (entity/Territories)   // wild, she feeds herself (entity/FoodWeb)
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
     }

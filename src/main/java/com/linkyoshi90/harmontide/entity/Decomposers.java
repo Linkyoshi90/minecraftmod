@@ -117,18 +117,21 @@ public final class Decomposers {
     /** The ground round a spot improves a little. What changed, or null. */
     @javax.annotation.Nullable
     public static BlockPos enrich(ServerLevel level, BlockPos around, RandomSource r) {
-        for (int i = 0; i < 16; i++) {
-            BlockPos p = around.offset(r.nextInt(9) - 4, r.nextInt(5) - 2, r.nextInt(9) - 4);
+        java.util.List<BlockPos> can = new java.util.ArrayList<>();
+        for (BlockPos p : BlockPos.betweenClosed(around.offset(-4, -2, -4), around.offset(4, 2, 4))) {
             BlockState s = level.getBlockState(p);
-            boolean open = level.getBlockState(p.above()).isAir();
+            if (s.is(Blocks.COARSE_DIRT) || s.is(Blocks.DIRT) && level.getBlockState(p.above()).isAir() && level.getMaxLocalRawBrightness(p.above()) >= 9
+                    || s.is(net.minecraft.tags.BlockTags.CROPS) || s.is(net.minecraft.tags.BlockTags.SAPLINGS)) can.add(p.immutable());
+        }
+        java.util.Collections.shuffle(can, new java.util.Random(r.nextLong()));
+        for (BlockPos p : can) {
+            BlockState s = level.getBlockState(p);
             if (s.is(Blocks.COARSE_DIRT)) level.setBlockAndUpdate(p, Blocks.DIRT.defaultBlockState());
-            else if (s.is(Blocks.DIRT) && open && level.getMaxLocalRawBrightness(p.above()) >= 9) level.setBlockAndUpdate(p, Blocks.GRASS_BLOCK.defaultBlockState());
-            else if ((s.is(net.minecraft.tags.BlockTags.CROPS) || s.is(net.minecraft.tags.BlockTags.SAPLINGS))
-                    && BoneMealItem.growCrop(new ItemStack(Items.BONE_MEAL), level, p)) {
-                level.levelEvent(1505, p, 0);                                // the bone meal sparkle
-            } else continue;
+            else if (s.is(Blocks.DIRT)) level.setBlockAndUpdate(p, Blocks.GRASS_BLOCK.defaultBlockState());
+            else if (BoneMealItem.growCrop(new ItemStack(Items.BONE_MEAL), level, p)) level.levelEvent(1505, p, 0);   // the bone meal sparkle
+            else continue;
             level.sendParticles(ParticleTypes.HAPPY_VILLAGER, p.getX() + 0.5, p.getY() + 1.0, p.getZ() + 0.5, 4, 0.3, 0.1, 0.3, 0.0);
-            return p.immutable();
+            return p;
         }
         return null;
     }

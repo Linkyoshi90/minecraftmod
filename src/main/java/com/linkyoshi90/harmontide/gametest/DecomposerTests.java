@@ -49,9 +49,8 @@ public class DecomposerTests {
         check(!c.isAlive(), "the last bones are broken down");
         check(!level.getEntitiesOfClass(ItemEntity.class, slime.getBoundingBox().inflate(5), i -> i.getItem().is(Items.BONE_MEAL)).isEmpty(), "into bone meal");
         helper.setBlock(new BlockPos(9, 1, 9), Blocks.COARSE_DIRT);
-        BlockPos changed = null;
-        for (int i = 0; i < 40 && changed == null; i++) changed = Decomposers.enrich(level, helper.absolutePos(new BlockPos(9, 2, 9)), level.getRandom());
-        check(changed != null, "the soil round her improves");
+        BlockPos changed = Decomposers.enrich(level, helper.absolutePos(new BlockPos(9, 2, 9)), level.getRandom());
+        check(changed != null && level.getBlockState(changed).is(Blocks.DIRT), "the coarse dirt loosens");
         helper.succeed();
     }
 }

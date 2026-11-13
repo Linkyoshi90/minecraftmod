@@ -218,11 +218,31 @@ DECOMPOSE = {
                        "Keep a decomposer friend by your composter and she fills it for you.",
 }
 
+HABITAT = {
+    "jade.harmontide.habitat": "Likes %s (%s)",
+    "habitat.harmontide.shade": "shade",
+    "habitat.harmontide.sun": "sun",
+    "habitat.harmontide.wet": "water near",
+    "habitat.harmontide.dry": "dry ground",
+    "habitat.harmontide.high": "heights",
+    "habitat.harmontide.deep": "caves",
+    "habitat.harmontide.cold": "the cold",
+    "habitat.harmontide.hot": "the heat",
+    "habitat.harmontide.feel.content": "content here",
+    "habitat.harmontide.feel.settled": "settled here",
+    "habitat.harmontide.feel.uneasy": "ill at ease here",
+    G + "habitats.title": "Microhabitats",
+    G + "habitats": "Every kind cares about the little things about where she is: shade or sun, water close by or dry ground, heights, caves, cold or heat. "
+                    "Look at a girl to see what she likes and how she feels where she is. Content, she heals slowly and sparkles now and then; "
+                    "ill at ease, she sighs, and a wild one wanders off to find a spot that suits her better. They turn up most where the land suits them, "
+                    "so if you are looking for one, look where she would be comfortable. Make a friend comfortable at home and she will thank you for it with her health.",
+}
+
 ADVANCEMENTS = {"cursed_gear": "harmontide:cursed_blade", "repeadead_scream": "minecraft:skeleton_skull", "ghost_possession": "minecraft:soul_lantern", "sea_wedding": "minecraft:nautilus_shell", "mermaid_blood": "harmontide:mermaid_blood", "sabbath_initiate": "minecraft:glass_bottle", "sabbath_adept": "minecraft:potion", "sabbath_keeper": "minecraft:black_wool",
                 "sabbath_sibling": "harmontide:realm_censer"}
 
 ALL = {}
-for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS, HERDS, PASTURE, TERRITORY, POLLEN, PARTNERS, DECOMPOSE):
+for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS, HERDS, PASTURE, TERRITORY, POLLEN, PARTNERS, DECOMPOSE, HABITAT):
     ALL.update(part)
 
 

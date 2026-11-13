@@ -150,6 +150,7 @@ public final class HarmontideConfig {
     public static final ModConfigSpec.BooleanValue HERDS;
     public static final ModConfigSpec.BooleanValue TERRITORIES;
     public static final ModConfigSpec.BooleanValue PARTNERSHIPS;
+    public static final ModConfigSpec.BooleanValue MICROHABITATS;
     public static final ModConfigSpec.BooleanValue DEAD_REALM;
     public static final ModConfigSpec.BooleanValue SABBATH;
     public static final ModConfigSpec.BooleanValue SEA_WEDDINGS;
@@ -241,6 +242,10 @@ public final class HarmontideConfig {
         SQUAD = BUILDER
                 .comment("Enlist up to four fighter friends with a goat horn (crouch, use it on her): a blown horn rallies them to you to fight, they turn on whatever strikes you, and they march home when the Order raids your hearth.")
                 .define("squad", true);
+
+        MICROHABITATS = BUILDER
+                .comment("Microhabitats: each kind likes shade or sun, water near or dry ground, heights, caves, cold or heat; content where it suits her (slow healing), ill at ease where not (a wild one moves to a better spot), and natural spawns where nothing suits her are thinned.")
+                .define("microhabitats", true);
 
         PARTNERSHIPS = BUILDER
                 .comment("Partnerships between kinds: cleaner crustaceans and big sea girls, hermit crabs and anemones, small rodents and rabbits riding big grazers, ants guarding plant girls, pollinators and plant girls, scavengers trailing hunters, and mixed herds sharing alarms.")
@@ -642,6 +647,10 @@ public final class HarmontideConfig {
 
     public static boolean squad() {
         return SPEC.isLoaded() ? SQUAD.get() : SQUAD.getDefault();
+    }
+
+    public static boolean microhabitats() {
+        return SPEC.isLoaded() ? MICROHABITATS.get() : MICROHABITATS.getDefault();
     }
 
     public static boolean partnerships() {
