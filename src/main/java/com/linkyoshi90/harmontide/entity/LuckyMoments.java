@@ -148,6 +148,7 @@ public final class LuckyMoments {
         boolean close = Flirting.canFlirt(mob, player);
         say(player, close ? "trip_close" : "trip", mob);
         b.blushFor(close ? 200 : 120);
+        DullahanHeads.startle(level, mob);                                  // a dullahan's head goes flying
         mob.playSound(SoundEvents.WOOL_FALL, 1.0F, 1.0F);
         level.sendParticles(ParticleTypes.POOF, player.getX(), player.getY() + 0.4, player.getZ(), 6, 0.3, 0.1, 0.3, 0.02);
         player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 30, 1));

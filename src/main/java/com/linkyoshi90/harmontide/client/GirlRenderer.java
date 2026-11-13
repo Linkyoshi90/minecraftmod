@@ -276,6 +276,13 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
                     }
                 }
             }
+            if (girl.getSpecies() == GirlSpecies.DULLAHAN_UNDEAD) {             // her head popped off (entity/DullahanHeads)
+                boolean off = girl.hasFlag(AbstractMonsterGirl.FLAG_HEADLESS);
+                for (String b : new String[]{"head", "hair_side_r", "hair_side_l", "hair_back", "rider_helm"}) {
+                    GeoBone h = proc.getBone(b);
+                    if (h != null) h.setHidden(off);
+                }
+            }
             GeoBone tail = proc.getBone("tail");                               // a gecko's tail grows back after she sheds it
             if (tail != null && girl.getSpecies() == GirlSpecies.GECKO_LIZARDFOLK) tail.setHidden(girl.hasFlag(AbstractMonsterGirl.FLAG_TAILLESS));
             for (String b : new String[]{"wrap_arm_r", "wrap_arm_l", "wrap_fore_r", "wrap_fore_l", "wrap_shin_r", "wrap_shin_l"}) {   // the mummy's layers

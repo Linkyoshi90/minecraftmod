@@ -39,7 +39,9 @@ public final class Flirting {
 
     public static boolean onPet(ServerLevel level, net.minecraft.world.entity.Mob mob, Player player) {
         Marriage.warmth(level, mob, player);                                    // the rest of the family is glad of it
+        SeaWeddings.onPet(level, mob, player, mob.getRandom().nextInt(SeaWeddings.BLOOD_ODDS) == 0);   // once in a life, mermaid blood
         if (!canFlirt(mob, player) || mob.getRandom().nextInt(chance(mob, player)) != 0) return false;
+        DullahanHeads.startle(level, mob);                                      // flustered: a dullahan's head pops off
         if (Marriage.married(mob, player)) tease(level, mob, player, "flirt_wife", WIFE_LINES);   // a wife has her own way of teasing
         else tease(level, mob, player, "flirt", LINES);
         return true;

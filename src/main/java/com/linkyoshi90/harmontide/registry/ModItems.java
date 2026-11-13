@@ -224,6 +224,7 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> MAILBOX = ITEMS.registerSimpleBlockItem(ModBlocks.MAILBOX);
     public static final DeferredItem<BlockItem> OFFERING_BOX = ITEMS.registerSimpleBlockItem(ModBlocks.OFFERING_BOX);
     public static final DeferredItem<BlockItem> REALM_FROST = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_FROST);
+    public static final DeferredItem<BlockItem> GRAVE_GRASS = ITEMS.registerSimpleBlockItem(ModBlocks.GRAVE_GRASS);
     public static final DeferredItem<BlockItem> REALM_BOG = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_BOG);
     public static final DeferredItem<BlockItem> REALM_SAND = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_SAND);
     public static final DeferredItem<BlockItem> REALM_LEAVES = ITEMS.registerSimpleBlockItem(ModBlocks.REALM_LEAVES);
@@ -267,6 +268,12 @@ public final class ModItems {
             props -> new net.minecraft.world.item.ArmorItem(ModArmorMaterials.REALM_SILVER, net.minecraft.world.item.ArmorItem.Type.BOOTS,
                     props.durability(net.minecraft.world.item.ArmorItem.Type.BOOTS.getDurability(15))));
     /** Holy water with gunpowder: thrown, it turns the realm back and frees the possessed where it breaks (entity/ThrownHolyWater). */
+    /** A dullahan's head (entity/DullahanHeads): hand it back to her. */
+    public static final DeferredItem<com.linkyoshi90.harmontide.item.DullahanHeadItem> DULLAHAN_HEAD = ITEMS.registerItem("dullahan_head",
+            com.linkyoshi90.harmontide.item.DullahanHeadItem::new, new Item.Properties().stacksTo(1));
+    /** Mermaid blood (entity/SeaWeddings): a lasting extra heart, once. */
+    public static final DeferredItem<com.linkyoshi90.harmontide.item.MermaidBloodItem> MERMAID_BLOOD = ITEMS.registerItem("mermaid_blood",
+            com.linkyoshi90.harmontide.item.MermaidBloodItem::new, new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.RARE));
     public static final DeferredItem<Item> SPLASH_HOLY_WATER = ITEMS.registerItem("splash_holy_water", props -> new Item(props.stacksTo(16)) {
         @Override
         public net.minecraft.world.InteractionResultHolder<net.minecraft.world.item.ItemStack> use(net.minecraft.world.level.Level level,
