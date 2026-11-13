@@ -145,6 +145,14 @@ public final class HarmontideConfig {
     public static final ModConfigSpec.BooleanValue HEADGEAR;
     public static final ModConfigSpec.BooleanValue WANDERING_MERCHANTS;
     public static final ModConfigSpec.BooleanValue SQUAD;
+    public static final ModConfigSpec.BooleanValue WIFE_BLESSINGS;
+    public static final ModConfigSpec.BooleanValue DEAD_REALM;
+    public static final ModConfigSpec.BooleanValue SABBATH;
+    public static final ModConfigSpec.BooleanValue SEA_WEDDINGS;
+    public static final ModConfigSpec.BooleanValue GHOST_POSSESSION;
+    public static final ModConfigSpec.BooleanValue COOKING;
+    public static final ModConfigSpec.BooleanValue DULLAHAN_HEADS;
+    public static final ModConfigSpec.BooleanValue CURSED_GEAR;
     public static final ModConfigSpec.BooleanValue MONSTERIZATION;
     public static final ModConfigSpec.BooleanValue POSSESSION;
     public static final ModConfigSpec.BooleanValue REALM_SUMMONS;
@@ -229,6 +237,38 @@ public final class HarmontideConfig {
         SQUAD = BUILDER
                 .comment("Enlist up to four fighter friends with a goat horn (crouch, use it on her): a blown horn rallies them to you to fight, they turn on whatever strikes you, and they march home when the Order raids your hearth.")
                 .define("squad", true);
+
+        WIFE_BLESSINGS = BUILDER
+                .comment("Wives bless the land: each wife near her husband's hearth brings the home her kind's blessing (crops grow, herds thrive, fishing luck, monsters weakened, haste, gentle regeneration).")
+                .define("wifeBlessings", true);
+
+        DEAD_REALM = BUILDER
+                .comment("The realm of the dead: a wild lich or koschei seeds grave-grass that spreads in the dark, keeps twilight mist, and turns zombies and skeletons that linger on it. Sunlight, light and holy water push it back.")
+                .define("deadRealm", true);
+
+        SABBATH = BUILDER
+                .comment("The Sabbath: realm deeds earn standing with the witches' Sabbath (ranks, a witch familiar, Sabbath trades and a title), the realm-side mirror of the Order's notoriety.")
+                .define("sabbath", true);
+
+        SEA_WEDDINGS = BUILDER
+                .comment("Sea weddings: a wedding to a sea kind held by the sea, blessed by a sea bishop, gives water breathing near the ocean; a merfolk close friend may once give mermaid blood (a lasting extra heart).")
+                .define("seaWeddings", true);
+
+        GHOST_POSSESSION = BUILDER
+                .comment("Ghost possession: a ghost friend can slip into you for a minute (night vision, monsters lose track of you, a faint glow); wild ghosts do it as a prank.")
+                .define("ghostPossession", true);
+
+        COOKING = BUILDER
+                .comment("Every girl has her own cooking skill: a home-cooked meal she makes for you may be a treat with a buff, or burnt love food (mild sickness, but she is happy you ate it).")
+                .define("cooking", true);
+
+        DULLAHAN_HEADS = BUILDER
+                .comment("A startled dullahan's head pops off: hand it back for her thanks, or she chases it.")
+                .define("dullahanHeads", true);
+
+        CURSED_GEAR = BUILDER
+                .comment("Cursed gear: living armour and cursed blades found in old places work as gear, whisper, grow fond of whoever uses them, and at full fondness step out as a girl.")
+                .define("cursedGear", true);
 
         MONSTERIZATION = BUILDER
                 .comment("Grown vanilla animals and monsters that linger on Demon Realm grass in the dark turn into monster girls of their kind (a tamed pet stays her owner's friend).")
@@ -582,6 +622,38 @@ public final class HarmontideConfig {
 
     public static boolean squad() {
         return SPEC.isLoaded() ? SQUAD.get() : SQUAD.getDefault();
+    }
+
+    public static boolean wifeBlessings() {
+        return SPEC.isLoaded() ? WIFE_BLESSINGS.get() : WIFE_BLESSINGS.getDefault();
+    }
+
+    public static boolean deadRealm() {
+        return SPEC.isLoaded() ? DEAD_REALM.get() : DEAD_REALM.getDefault();
+    }
+
+    public static boolean sabbath() {
+        return SPEC.isLoaded() ? SABBATH.get() : SABBATH.getDefault();
+    }
+
+    public static boolean seaWeddings() {
+        return SPEC.isLoaded() ? SEA_WEDDINGS.get() : SEA_WEDDINGS.getDefault();
+    }
+
+    public static boolean ghostPossession() {
+        return SPEC.isLoaded() ? GHOST_POSSESSION.get() : GHOST_POSSESSION.getDefault();
+    }
+
+    public static boolean cooking() {
+        return SPEC.isLoaded() ? COOKING.get() : COOKING.getDefault();
+    }
+
+    public static boolean dullahanHeads() {
+        return SPEC.isLoaded() ? DULLAHAN_HEADS.get() : DULLAHAN_HEADS.getDefault();
+    }
+
+    public static boolean cursedGear() {
+        return SPEC.isLoaded() ? CURSED_GEAR.get() : CURSED_GEAR.getDefault();
     }
 
     public static boolean wanderingMerchants() {
