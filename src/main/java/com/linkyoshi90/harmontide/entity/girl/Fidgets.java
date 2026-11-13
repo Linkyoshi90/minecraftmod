@@ -43,7 +43,12 @@ public final class Fidgets {
 
     /** Her fidgets and their lengths in ticks. */
     public static Map<String, Integer> of(GirlSpecies s) {
-        return PARSED.computeIfAbsent(s.id(), id -> {
+        return of(s.id());
+    }
+
+    /** By species id: the girls', and the harpies' and frogs' model names (sparrow_harpy, bullywug...). */
+    public static Map<String, Integer> of(String species) {
+        return PARSED.computeIfAbsent(species, id -> {
             Map<String, Integer> out = new java.util.LinkedHashMap<>();
             String row = FidgetTable.FIDGETS.get(id);
             if (row != null) for (String part : row.split(",")) {
@@ -102,9 +107,49 @@ public final class Fidgets {
         return g.fidget(n, of(g.getSpecies()).get(n)) ? n : null;
     }
 
+    /** A harpy's or a frog's fidget: no moods, just her habits (she leans to her own signature). What she played, or null. */
+    @Nullable
+    public static String fidgetOther(net.minecraft.world.entity.Mob m, String species, RandomSource r) {
+        Map<String, Integer> all = of(species);
+        if (all.isEmpty() || !HarmontideConfig.fidgets() || m.isBaby() || m.isInWater() || m.isPassenger() || m.getTarget() != null
+                || !m.getNavigation().isDone() || m.getDeltaMovement().horizontalDistanceSqr() > 1.0E-4) return null;
+        List<String> names = new ArrayList<>(all.keySet());
+        long habit = m.getUUID().getMostSignificantBits();
+        double total = 0;
+        double[] w = new double[names.size()];
+        for (int i = 0; i < names.size(); i++) total += w[i] = 1.0 + ((habit >>> (i * 3)) & 3) + (names.get(i).equals("signature") ? 2 : 0);
+        double x = r.nextDouble() * total;
+        String pick = names.get(names.size() - 1);
+        for (int i = 0; i < names.size(); i++) if ((x -= w[i]) <= 0) { pick = names.get(i); break; }
+        boolean ok = m instanceof com.linkyoshi90.harmontide.entity.AbstractHarpy h ? !h.isAirborne() && h.fidget(pick, all.get(pick))
+                : m instanceof com.linkyoshi90.harmontide.entity.AbstractAnuran a && a.fidget(pick, all.get(pick));
+        return ok ? pick : null;
+    }
+
+    private static boolean due(net.minecraft.world.entity.Mob m, long now) {
+        var pd = m.getPersistentData();
+        if (!pd.contains(NEXT)) pd.putLong(NEXT, now + MIN_GAP + m.getRandom().nextInt(MAX_GAP - MIN_GAP));
+        if (now < pd.getLong(NEXT)) return false;
+        pd.putLong(NEXT, now + MIN_GAP + m.getRandom().nextInt(MAX_GAP - MIN_GAP));
+        return true;
+    }
+
     @SubscribeEvent
     public static void onTick(EntityTickEvent.Post event) {
-        if (!(event.getEntity() instanceof AbstractMonsterGirl g) || !(g.level() instanceof ServerLevel level) || g.tickCount % 20 != 13) return;
+        if (event.getEntity().tickCount % 20 != 13 || !(event.getEntity().level() instanceof ServerLevel lvl)) return;
+        if (event.getEntity() instanceof com.linkyoshi90.harmontide.entity.AbstractHarpy h) {
+            if (h.getAction() == com.linkyoshi90.harmontide.entity.AbstractHarpy.Action.FIDGETING && h.getDeltaMovement().horizontalDistanceSqr() > 4.0E-3) {
+                h.setAction(com.linkyoshi90.harmontide.entity.AbstractHarpy.Action.NONE);
+            } else if (h.getAction() == com.linkyoshi90.harmontide.entity.AbstractHarpy.Action.NONE && due(h, lvl.getGameTime())) fidgetOther(h, h.modelName(), h.getRandom());
+            return;
+        }
+        if (event.getEntity() instanceof com.linkyoshi90.harmontide.entity.AbstractAnuran a) {
+            if (a.getAction() == com.linkyoshi90.harmontide.entity.AbstractAnuran.Action.FIDGETING && a.getDeltaMovement().horizontalDistanceSqr() > 4.0E-3) {
+                a.setAction(com.linkyoshi90.harmontide.entity.AbstractAnuran.Action.NONE);
+            } else if (a.getAction() == com.linkyoshi90.harmontide.entity.AbstractAnuran.Action.NONE && due(a, lvl.getGameTime())) fidgetOther(a, a.modelName(), a.getRandom());
+            return;
+        }
+        if (!(event.getEntity() instanceof AbstractMonsterGirl g) || !(g.level() instanceof ServerLevel level)) return;
         if (g.getAction() == AbstractMonsterGirl.Action.FIDGET && g.getDeltaMovement().horizontalDistanceSqr() > 4.0E-3) {
             g.setAction(AbstractMonsterGirl.Action.NONE);                       // off she goes: the fidget breaks off
             return;

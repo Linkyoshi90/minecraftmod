@@ -29,6 +29,21 @@ public class FidgetTests {
         helper.succeed();
     }
 
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "harpiesAndFrogsFidgetToo")
+    public static void harpiesAndFrogsFidgetToo(GameTestHelper helper) {
+        for (String s : new String[]{"sparrow_harpy", "flamingo_harpy", "owl_harpy", "bullywug", "tree_frog", "vodyanoy"}) {
+            check(Fidgets.of(s).containsKey("signature"), s + " has a fidget of her own");
+        }
+        check(Fidgets.of("sparrow_harpy").containsKey("preen") && Fidgets.of("bullywug").containsKey("throat_pulse"), "and their family's");
+        var sparrow = helper.spawn(com.linkyoshi90.harmontide.registry.ModEntities.SPARROW_HARPY.get(), new BlockPos(5, 2, 5));
+        sparrow.setNoAi(true);
+        helper.runAfterDelay(5, () -> {
+            String n = Fidgets.fidgetOther(sparrow, sparrow.modelName(), sparrow.getRandom());
+            check(n != null && sparrow.getAction() == com.linkyoshi90.harmontide.entity.AbstractHarpy.Action.FIDGETING && sparrow.getFidget().equals(n), "a harpy fidgets: " + n);
+            helper.succeed();
+        });
+    }
+
     @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "sheFidgetsWhenIdle")
     public static void sheFidgetsWhenIdle(GameTestHelper helper) {
         AbstractMonsterGirl horse = spawn(helper, GirlSpecies.HORSE_CENTAUR, new BlockPos(5, 2, 5));

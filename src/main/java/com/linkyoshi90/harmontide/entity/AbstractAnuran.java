@@ -70,6 +70,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     private int blushTicks;
     private static final EntityDataAccessor<Byte> DATA_ACTION =
             SynchedEntityData.defineId(AbstractAnuran.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<String> DATA_FIDGET = SynchedEntityData.defineId(AbstractAnuran.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Byte> DATA_STAGE =
             SynchedEntityData.defineId(AbstractAnuran.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> DATA_CLIMBING =
@@ -95,7 +96,9 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         WARNING("warn", false), PEEPING("peep", false), GUARDING("guard", false), STOMPING("stomp", false), LIFTING("lift", false),
         SCREAMING("scream", false), BURROWING("burrow", true), SIPPING("sip", false), UNKEN("unken", false), TRILLING("trill", false),
         GULPING("gulp", false), SQUIRTING("squirt", false), CHORUS("chorus", false), SWEEPING("sweep", false),
-        BROODING("brood", false), BIRTH("birth", true), PULLING("pull", true);
+        BROODING("brood", false), BIRTH("birth", true), PULLING("pull", true),
+        /** An idle fidget (entity/girl/Fidgets): which clip is in DATA_FIDGET. */
+        FIDGETING(null, true);
 
         /** The animation.&lt;species&gt;.&lt;name&gt; this action plays, and whether it plays once and holds its last pose. */
         public final String animation;
@@ -235,6 +238,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ACTION, (byte) Action.NONE.ordinal());
+        builder.define(DATA_FIDGET, "");
         builder.define(DATA_BLUSHING, false);
         builder.define(DATA_CLIMBING, false);
         builder.define(DATA_STAGE, ADULT);
@@ -297,6 +301,19 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
 
     public void setAction(Action action) {
         this.entityData.set(DATA_ACTION, (byte) action.ordinal());
+    }
+
+    /** The fidget clip she is playing (entity/girl/Fidgets). */
+    public String getFidget() {
+        return this.entityData.get(DATA_FIDGET);
+    }
+
+    /** Starts a fidget clip for so many ticks (only from standing idle). True if it started. */
+    public boolean fidget(String name, int ticks) {
+        if (this.getAction() != Action.NONE) return false;
+        this.entityData.set(DATA_FIDGET, name);
+        this.startTimedAction(Action.FIDGETING, ticks);
+        return this.getAction() == Action.FIDGETING;
     }
 
     /** Plays an action's animation for a while (unless something else is animating her), then goes back to NONE. */
@@ -829,6 +846,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
             return state.setAndContinue(this.anim(state.isMoving() ? (this.isAggressive() ? "hop" : this.movingAnimation().equals("hop") ? "hop" : "walk") : "idle"));
         }
         Action action = this.getAction();
+        if (action == Action.FIDGETING && !this.getFidget().isEmpty() && !state.isMoving() && !this.isInWater()) return state.setAndContinue(this.animOnce("fidget_" + this.getFidget()));
         if (action.animation != null) return state.setAndContinue(action.once ? this.animOnce(action.animation) : this.anim(action.animation));
         String special = this.specialMovementAnimation();
         if (special != null) return state.setAndContinue(this.anim(special));

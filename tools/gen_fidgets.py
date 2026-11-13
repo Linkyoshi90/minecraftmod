@@ -900,9 +900,98 @@ def fidgets_for(model, species, family, text, rig, seen):
     return out
 
 
+# ----------------------------------------------------------------------------- harpies and frogs (their own classes, the same bone names)
+def h_preen(rig, p):
+    L = 2.2 * p["s"]
+    wing = "wing_r" if p["side"] > 0 else "wing_l"
+    out = pulse("head", rig.rest("head"), (24, 55 * p["side"], 0), L, 0.25, 0.75)
+    out["head"]["position"] = Tk((0, (0, 0, 0)), (L * 0.25, (0.6 * p["side"], -0.4, 0)), (L * 0.75, (0.6 * p["side"], -0.4, 0)), (L, (0, 0, 0)))
+    if wing in rig.bones:
+        out.update(pulse(wing, rig.rest(wing), add(rig.rest(wing), (0, 20 * p["side"], -30 * p["side"])), L, 0.25, 0.75))
+    return L, out
+
+
+def h_fluff(rig, p):
+    L = 1.4 * p["s"]
+    puff = Tk((0, (1, 1, 1)), (L * 0.3, (1.12, 1.06, 1.12)), (L * 0.5, (1.12, 1.06, 1.12)), (L * 0.6, (0.98, 1, 0.98)), (L, (1, 1, 1)))
+    out = {"body": {"scale": puff}}
+    out.update(both(rig, "wing", lambda b, s: osc(b, rig.rest(b), 2, -8 * s, 3, L, 0.1, 0.7)))
+    return L, out
+
+
+def h_head_bob(rig, p):
+    L = 1.2 * p["s"]
+    return L, {"head": {"position": Tk(*[(L * k / 6, (0, 0, -0.9 if k % 2 else 0)) for k in range(7)])}}
+
+
+def h_one_leg(rig, p):
+    L = 3.2 * p["s"]
+    leg, shin = ("leg_l", "shin_l") if p["side"] > 0 else ("leg_r", "shin_r")
+    out = pulse(leg, rig.rest(leg), (-70, 0, 0), L, 0.2, 0.85)
+    if shin in rig.bones:
+        out.update(pulse(shin, rig.rest(shin), (110, 0, 0), L, 0.2, 0.85))
+    out.update(pulse("head", rig.rest("head"), (14, 0, 0), L, 0.3, 0.8))
+    return L, out
+
+
+def h_swivel(rig, p):
+    L = 2.6 * p["s"]
+    rest = rig.rest("head")
+    turn = 150 * p["side"]
+    return L, {"head": {"rotation": Tk((0, r3(rest)), (L * 0.2, (0, turn, 0)), (L * 0.45, (0, turn, 0)), (L * 0.55, (0, -turn * 0.6, 0)),
+                                       (L * 0.8, (0, -turn * 0.6, 0)), (L, r3(rest)))}}
+
+
+def h_throat(rig, p):
+    L = 1.8 * p["s"]
+    b = "throat" if rig.has("throat") else "belly"
+    return L, {b: {"scale": Tk(*[(L * k / 6, (1.5, 1.5, 1.5) if k % 2 else (1, 1, 1)) for k in range(7)])}}
+
+
+def h_eye_lick(rig, p):
+    L = 1.2 * p["s"]
+    out = pulse("head", rig.rest("head"), (0, 0, 14 * p["side"]), L, 0.2, 0.7)
+    if rig.has("tongue"):
+        out["tongue"] = {"scale": Tk((0, (1, 1, 1)), (L * 0.25, (1, 1, 3)), (L * 0.45, (1, 1, 3)), (L * 0.55, (1, 1, 1)), (L, (1, 1, 1)))}
+    if rig.has("eyelids"):
+        out["eyelids"] = {"position": Tk((0, (0, 0, 0)), (L * 0.25, H.OUT_), (L * 0.5, H.OUT_), (L * 0.55, (0, 0, 0)), (L, (0, 0, 0)))}
+    return L, out
+
+
+FAMILY["HARPY"] = [("preen", h_preen), ("fluff", h_fluff), ("head_bob", h_head_bob)]
+FAMILY["ANURAN"] = [("throat_pulse", h_throat), ("eye_lick", h_eye_lick), ("pushup", f_pushup)]
+
+HARPY_SIG = {"albatross": s_bow, "alkonost": s_sing, "argentowlis": h_swivel, "bennu": s_flame, "cassowrath": s_guard, "coin_magpie": s_count,
+             "condorune": s_gaze_up, "crow": s_listen, "dodobold": s_slump, "duck": s_wring, "emberu": s_skyward, "emu": s_crouch_wiggle,
+             "finch": s_clap, "flamingo": h_one_leg, "garuda": s_proud, "hummingbird": s_wave, "ibiset": s_cast, "ibisking": s_admire,
+             "ironbeak": s_salute, "landharpy": s_dig, "lechuza": h_swivel, "macaw": s_dance, "mirror_crane": s_admire, "motmora": s_weave,
+             "ostrich": f_stamp, "owl": h_swivel, "peaflare": s_proud, "pelican": s_cast, "penguin": s_shiver, "phoenix": s_flame, "poultry": s_dig,
+             "pumpkingull": s_point, "reliquary_dove": s_cradle, "riflebird": s_dance, "roc": s_skyward, "rookmourn": s_hide_face, "seagull": s_point,
+             "skycrow": s_gaze_up, "sparrow": s_sing, "stigowl": h_swivel, "swan": s_bow, "tengu": s_salute, "toucan": s_admire,
+             "trickster_raven": s_crouch_wiggle, "yatagarasu": s_gaze_up, "zhuque": s_flame, "ziz": s_skyward}
+ANURAN_SIG = {"bullfrog": h_throat, "bullywug": s_guard, "cane_toad": s_proud, "desert_rain_frog": s_hide_face, "fire_bellied_toad": s_flame,
+              "glass_frog": s_admire, "goliath_frog": f_pushup, "mailtoad": s_wave, "mucus_toad": s_wring, "natterjack": s_sing,
+              "poison_dart_frog": s_point, "surinam_toad": s_cradle, "tree_frog": s_skyward, "vodyanoy": s_cast}
+
+
+def others():
+    """harpy and frog models (their adult ones): species -> family; and their signature motions go into HAND"""
+    out = {}
+    for f in os.listdir(os.path.join(ASSETS, "geo", "entity")):
+        name = f[:-len(".geo.json")]
+        if name.endswith("_harpy") and name[:-len("_harpy")] in HARPY_SIG:
+            out[name] = "HARPY"
+            HAND[name] = HARPY_SIG[name[:-len("_harpy")]]
+        elif name in ANURAN_SIG:
+            out[name] = "ANURAN"
+            HAND[name] = ANURAN_SIG[name]
+    return out
+
+
 def main():
     texts = concepts()
     species = girls()
+    species.update(others())
     seen = {}
     table = {}
     files = sorted(f[:-len(".animation.json")] for f in os.listdir(os.path.join(ASSETS, "animations", "entity")) if f.endswith(".animation.json"))

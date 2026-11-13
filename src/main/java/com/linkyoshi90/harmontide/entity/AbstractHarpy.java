@@ -67,6 +67,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     private int blushTicks;
     private static final EntityDataAccessor<Byte> DATA_ACTION =
             SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<String> DATA_FIDGET = SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Boolean> DATA_BABY =
             SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.BOOLEAN);
     /** How far along her pregnancy is, 0-100, for the renderer to round out her belly. */
@@ -93,7 +94,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     /** How far away a harpy hears (and reacts to) a jukebox playing. */
     public static final int MUSIC_RANGE = 16;
 
-    public enum Action { NONE, SINGING, BATHING, CAWING, KNOCKING, PRANKING, DISPLAYING, KICKING, BROODING, HOOTING, SLEEPING, POUNCING, BEGGING, DANCING, STRIKING, CRYING, CACHING, SITTING, LYING, NESTING, DRINKING, CLACKING, PERCHING }
+    public enum Action { NONE, SINGING, BATHING, CAWING, KNOCKING, PRANKING, DISPLAYING, KICKING, BROODING, HOOTING, SLEEPING, POUNCING, BEGGING, DANCING, STRIKING, CRYING, CACHING, SITTING, LYING, NESTING, DRINKING, CLACKING, PERCHING, FIDGETING }
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -206,6 +207,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ACTION, (byte) Action.NONE.ordinal());
+        builder.define(DATA_FIDGET, "");
         builder.define(DATA_BLUSHING, false);
         builder.define(DATA_BABY, false);
         builder.define(DATA_BELLY, (byte) 0);
@@ -220,6 +222,19 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
 
     public void setAction(Action action) {
         this.entityData.set(DATA_ACTION, (byte) action.ordinal());
+    }
+
+    /** The fidget clip she is playing (entity/girl/Fidgets). */
+    public String getFidget() {
+        return this.entityData.get(DATA_FIDGET);
+    }
+
+    /** Starts a fidget clip for so many ticks (only from standing idle). True if it started. */
+    public boolean fidget(String name, int ticks) {
+        if (this.getAction() != Action.NONE) return false;
+        this.entityData.set(DATA_FIDGET, name);
+        this.startTimedAction(Action.FIDGETING, ticks);
+        return this.getAction() == Action.FIDGETING;
     }
 
     /** Plays an action's animation for a while (unless a goal is already animating her), then goes back to NONE. */
@@ -866,6 +881,10 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         return ANIMATIONS.computeIfAbsent("animation." + this.modelName() + "." + name, n -> RawAnimation.begin().thenLoop(n));
     }
 
+    private RawAnimation animOnce(String name) {
+        return ANIMATIONS.computeIfAbsent("once:animation." + this.modelName() + "." + name, n -> RawAnimation.begin().thenPlayAndHold(n.substring("once:".length())));
+    }
+
     /** What the model, animations and texture are called: the species, or species_hatchling while she is small. */
     public String modelName() {
         return this.isBaby() ? this.species() + "_hatchling" : this.species();
@@ -883,6 +902,9 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         }
         // Once airborne the wings take over; actions (caw, sing, knock...) only show on the ground or perched.
         if (flying && !this.actionShowsInFlight(this.getAction())) return state.setAndContinue(this.anim(this.flyingAnimation()));
+        if (this.getAction() == Action.FIDGETING && !this.getFidget().isEmpty() && !state.isMoving() && !flying) {
+            return state.setAndContinue(this.animOnce("fidget_" + this.getFidget()));   // an idle fidget (entity/girl/Fidgets)
+        }
         // every adult harpy model has these poses (tools/add_harpy_extras.py)
         switch (this.getAction()) {
             case SITTING, NESTING -> {

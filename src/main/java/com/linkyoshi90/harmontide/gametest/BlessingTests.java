@@ -72,7 +72,8 @@ public class BlessingTests {
             check(given.get(Blessings.Blessing.WARD) == 1 && given.get(Blessings.Blessing.GROWTH) == 1 && given.size() == 2, "a wolf wards, an alraune grows: " + given);
             check(zombie.hasEffect(MobEffects.GLOWING) && zombie.hasEffect(MobEffects.WEAKNESS), "the monster is marked and weakened");
             BlockPos wheat = helper.absolutePos(new BlockPos(3, 2, 3));
-            check(Blessings.grow(level, wheat) && ((CropBlock) Blocks.WHEAT).getAge(level.getBlockState(wheat)) == 1, "the wheat grows a stage");
+            int before = ((CropBlock) Blocks.WHEAT).getAge(level.getBlockState(wheat));   // the alraune may have helped it along already
+            check(Blessings.grow(level, wheat) && ((CropBlock) Blocks.WHEAT).getAge(level.getBlockState(wheat)) == before + 1, "the wheat grows a stage");
             HarpyTestUtil.remove(p);
             helper.succeed();
         });
