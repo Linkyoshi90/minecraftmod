@@ -107,11 +107,40 @@ DULLAHAN = {
                     "Headless, she stumbles slowly after it. Catch it first and hand it back, and she'll be very grateful. Keep it, and it finds its own way home after a while.",
 }
 
-ADVANCEMENTS = {"ghost_possession": "minecraft:soul_lantern", "sea_wedding": "minecraft:nautilus_shell", "mermaid_blood": "harmontide:mermaid_blood", "sabbath_initiate": "minecraft:glass_bottle", "sabbath_adept": "minecraft:potion", "sabbath_keeper": "minecraft:black_wool",
+CURSED = {
+    "item.harmontide.cursed_blade": "Cursed Blade",
+    "item.harmontide.living_armor": "Living Armour",
+    "item.harmontide.cursed.fondness": "Fondness: %s / %s",
+    M + "cursed.whisper.blade.0": "...who are you? ...your hand is warm...",
+    M + "cursed.whisper.blade.1": "...again. Cut again. I like the way you swing me...",
+    M + "cursed.whisper.blade.2": "...don't put me down. Don't ever put me down...",
+    M + "cursed.whisper.blade.3": "...I'm yours. Only yours. Soon you'll see me...",
+    M + "cursed.whisper.armor.0": "...a heartbeat... how long since I held a heartbeat...",
+    M + "cursed.whisper.armor.1": "...let them strike. I'll take it. I'll take all of it...",
+    M + "cursed.whisper.armor.2": "...stay inside me a little longer. It's so warm...",
+    M + "cursed.whisper.armor.3": "...I want to hold you with real arms...",
+    M + "cursed.step_out.blade": "The black blade shudders, and %s steps out of it, her own sword in her hand. She doesn't plan to leave your side.",
+    M + "cursed.step_out.armor": "The breastplate grows warm, then light, and %s steps out of it, armoured head to foot. She bows to you.",
+    M + "repeadead.scream": "%s screams! You can't move!",
+    "advancement.harmontide.cursed_gear": "It Loved You Back",
+    "advancement.harmontide.cursed_gear.desc": "Use cursed gear until its spirit steps out to meet you",
+    "advancement.harmontide.repeadead_scream": "Frozen Stiff",
+    "advancement.harmontide.repeadead_scream.desc": "Be frozen by a repeadead's scream",
+    G + "cursed.title": "Cursed gear",
+    G + "cursed": "Now and then the chests of old places (dungeons, mineshafts, strongholds, temples, mansions, ancient cities) hold cursed gear: a black blade or a living breastplate, each with a spirit in it. "
+                  "They work as well as iron, and they grow fond of whoever uses them: the blade with every kill, the armour with every blow it takes for you and every minute you wear it. They whisper to you as they do. "
+                  "At full fondness the spirit steps out as a girl, devoted to you from the first: the living armour shrugs off blows and goes for whatever hurts you, and the cursed blade's strikes heal her.",
+    G + "repeadead.title": "The repeadead",
+    G + "repeadead": "In dark forests, swamps and the deep dark she stands or crouches stock-still, her mourning mask frozen in horror. Walk in front of her and she screams: "
+                     "you can't move while she comes for you and clings on, drinking your life. Hit her while she holds you to break free. Befriended, she leaves friendly creatures be "
+                     "and turns her scream and her grip on the monsters around you.",
+}
+
+ADVANCEMENTS = {"cursed_gear": "harmontide:cursed_blade", "repeadead_scream": "minecraft:skeleton_skull", "ghost_possession": "minecraft:soul_lantern", "sea_wedding": "minecraft:nautilus_shell", "mermaid_blood": "harmontide:mermaid_blood", "sabbath_initiate": "minecraft:glass_bottle", "sabbath_adept": "minecraft:potion", "sabbath_keeper": "minecraft:black_wool",
                 "sabbath_sibling": "harmontide:realm_censer"}
 
 ALL = {}
-for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN):
+for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED):
     ALL.update(part)
 
 

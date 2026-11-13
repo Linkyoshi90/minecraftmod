@@ -1035,3 +1035,13 @@ A shapeshifter after Monster Musume and the changelings of fey lore (`entity/gir
 | Species | Design |
 |---|---|
 | **Doppelganger** (elf) | Ash-violet skin, long silver hair, mirror-silver eyes, a dark corset and mantle with mirror-silver trim, dark stockings; variants mirror, ash, ink, pearl, dusk. Dark forests, birch woods and taiga at dusk. Wild, she wears the look of the nearest girl she can copy; befriended, the look of the companion her friend is fondest of. A glass pane shows her true face (and again lets her borrow one). Only her look changes: her own size, hitbox and animations stay, and she copies only the biped families (not merfolk, centaurs, lamias, arachnes, harpies, bugs or dragons). |
+
+## Forty-second wave (2026-11-13, in the game)
+
+Three undead from this run's ideas (`tools/gen_undead.py`, forty-second wave in `family_concepts_harmontide.py`).
+
+| Species | Design |
+|---|---|
+| **Repeadead** | An original design for the user's idea: a gaunt, ash-grey woman wound in grave linen (sarashi, arm wraps, strips), ragged dark hair, and a porcelain mourning mask fixed to her face: hollow eyes, brows raised in dread, a mouth open in a silent cry, black tear tracks and a hairline crack. Variants ash, bone, bog, soot, dusk. Dark forests, swamps, the deep dark and old spruce taiga, at night. |
+| **Living Armour** | A knight's plate a spirit made its own: steel corset, pauldrons, bracers, an open great-helm with cheek guards, a nasal and a small plume, a pale face with violet eyes. Variants steel, black, gilt, rust, frost. Only from cursed gear. |
+| **Cursed Blade** | The spirit of a black sword: lilac-grey skin, a short black coat and capelet, long black hime hair, red eyes, her own black blade with a glowing edge in her right hand. Variants violet, crimson, azure, jade, white. Only from cursed gear. |

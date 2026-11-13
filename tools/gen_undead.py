@@ -17,6 +17,40 @@ import girl_lib as G  # noqa: E402
 from girl_lib import H, cube, pick, noise, skin, CLEAR  # noqa: E402
 
 SPECIES = {
+    # forty-second wave (2026-11-13): the repeadead, an original design for the user's idea: a gaunt, ash-grey woman wound in grave linen,
+    # her ragged hair over her shoulders, and a porcelain mourning mask fixed to her face: hollow eyes wide and a mouth open in horror,
+    # tear tracks of black lacquer and a hairline crack. She stands or crouches stock-still in the dark until someone walks before her.
+    "repeadead_undead": dict(
+        build="slim", outfit=dict(top=["sarashi"], bottom="strips", extras=["arm_wraps"], colors=dict(bandage="#b4ac9c", cloth2="#5e584e")),
+        hair="shaggy", bangs="parted", ears=None, legs="bare", foot="claw", tattered=True, rmask=True,
+        pal=dict(SKIN="#8c8a84", HAIR="#2e2a28", FUR="#8c8a84", LIGHT="#b4b2aa", MARK="#4a4642", EYE="#2a2a2a", CLOTH="#6e685e", TRIM="#b4ac9c",
+                 extra=dict(claw="#3a3632", mask="#e8e2d6", lacquer="#1a1618", crack="#7a6a5a", bandage="#b4ac9c")),
+        variants={"bone": dict(SKIN="#b0aa9c", HAIR="#d8d0c0", FUR="#b0aa9c", extra=dict(claw="#6a6258", mask="#f4eee0", lacquer="#3a2a24", crack="#a08a6a", bandage="#d8d0bc")),
+                  "bog": dict(SKIN="#6a7466", HAIR="#1e2a20", FUR="#6a7466", CLOTH="#4a5446", extra=dict(claw="#2a3026", mask="#d8dccc", lacquer="#1a2a1e", crack="#5a6a4a", bandage="#8a907a")),
+                  "soot": dict(SKIN="#4a4846", HAIR="#141214", FUR="#4a4846", CLOTH="#2a2826", extra=dict(claw="#141214", mask="#d0ccc4", lacquer="#5a0e14", crack="#3a3230", bandage="#5e5a54")),
+                  "dusk": dict(SKIN="#847c8c", HAIR="#2a2234", FUR="#847c8c", CLOTH="#4a4258", extra=dict(claw="#2a2234", mask="#ece4f0", lacquer="#3a1e4a", crack="#8a7a9a", bandage="#a89cb4"))}),
+    # forty-second wave: the living armour, a knight's plate that a wandering spirit made its own: steel from collar to greaves, an
+    # open great-helm over a pale face with violet eyes. Found as gear in old places; it steps out as her once it loves its wearer.
+    "living_armor_undead": dict(
+        build="athletic", outfit=dict(top=["corset"], bottom="hakama", extras=["pauldron", "bracers", "belt"], colors=dict(cloth2="#4a4c56", leather="#3a2e2a")),
+        hair="ponytail", bangs="parted", ears=None, legs="bare", foot="shoe", la_helm=True,
+        pal=dict(SKIN="#dcd8e4", HAIR="#4a4458", FUR="#dcd8e4", LIGHT="#f4f2f8", MARK="#5a5468", EYE="#a86af0", CLOTH="#7a7e8a", TRIM="#c8ccd6",
+                 extra=dict(boot="#5a5e6a", steel="#9a9eaa", plume="#7a3ab0")),
+        variants={"black": dict(CLOTH="#2e2e34", TRIM="#7a7a84", EYE="#e83a5a", extra=dict(boot="#1e1e22", steel="#44444c", plume="#a81e2e", cloth2="#24242a")),
+                  "gilt": dict(CLOTH="#8a7a4a", TRIM="#e8c860", EYE="#5ac8f0", extra=dict(boot="#5a4a2a", steel="#c8a858", plume="#e8e4d8", cloth2="#6a5a34")),
+                  "rust": dict(CLOTH="#7a4a32", TRIM="#b0805a", EYE="#f0a03a", extra=dict(boot="#4a2a1e", steel="#8a5a3e", plume="#3a5a3a", cloth2="#5a3424")),
+                  "frost": dict(CLOTH="#a8c4d8", TRIM="#eef6fc", EYE="#5af0f8", HAIR="#eef4f8", extra=dict(boot="#7a96aa", steel="#c8dcec", plume="#3a7ab0", cloth2="#8aa8bc"))}),
+    # forty-second wave: the cursed blade, the spirit of a sword that whispers to whoever holds it: lilac-grey skin, a short black coat,
+    # long dark hair, red eyes, and her own black blade in her hand, its edge glowing faintly. Found as a sword in old places.
+    "cursed_blade_undead": dict(
+        build="slim", outfit=dict(top=["corset", "capelet"], bottom="shorts", extras=["belt", "bracers"], colors=dict(cloth2="#2a1e30", leather="#1e161e")),
+        hair="hime", bangs="blunt", ears=None, legs="bare", foot="shoe", cblade=True, glow=["cb_edge"],
+        pal=dict(SKIN="#c8bccc", HAIR="#1a141e", FUR="#c8bccc", LIGHT="#ece4f0", MARK="#5a3a6a", EYE="#e82a4a", CLOTH="#241a2a", TRIM="#8a5aa8",
+                 extra=dict(boot="#140e16", blade="#1e1a22", edge="#c84af0", hilt="#5a3a6a")),
+        variants={"crimson": dict(TRIM="#c82a3a", extra=dict(boot="#140e16", blade="#1e1a22", edge="#f03a4a", hilt="#7a1e2a", cloth2="#3a141a")),
+                  "azure": dict(EYE="#3ab0f0", TRIM="#3a7ac8", extra=dict(boot="#0e1420", blade="#1a1e2a", edge="#3ab8f8", hilt="#2a4a7a", cloth2="#141e30")),
+                  "jade": dict(EYE="#3af08a", TRIM="#2a8a5a", extra=dict(boot="#0e1a14", blade="#1a221e", edge="#4af08a", hilt="#1e5a3a", cloth2="#142a1e")),
+                  "white": dict(SKIN="#e4e0e8", HAIR="#eceaf0", CLOTH="#d8d4e0", TRIM="#5a4a6a", EYE="#8a4ae8", extra=dict(boot="#a8a4b0", blade="#e8e6ee", edge="#a86af8", hilt="#4a3a5a", cloth2="#c0bcc8"))}),
     # fortieth wave (weather spirits): the ame-onna, the rain woman: long hair always wet, a kimono the grey of a downpour, pale as a cloud
     "ame_onna_undead": dict(
         build="slim", outfit=dict(top=["kimono"], bottom="hakama", colors=dict(kimono="#7a8a9a", kimono_trim="#c8d8e8", obi="#3a5a7a", cloth2="#6a7a8a")),
@@ -323,6 +357,12 @@ SPECIES = {
 
 def declare_hook(sp, d):
     out = []
+    if d.get("rmask"):                                   # forty-second wave: the repeadead's mourning mask, a thin porcelain plate over her face
+        out += [("rmask", 7, 7.5, .5)]
+    if d.get("la_helm"):                                 # the living armour's open great-helm (crown, cheek guards, a nasal) and its plume
+        out += [("la_crown", 10.5, 4, 10.5), ("la_cheek", 1, 5, 7), ("la_nasal", 1, 3, .5), ("la_plume", 1, 2.5, 4)]
+    if d.get("cblade"):                                  # the cursed blade: grip, guard, the blade and its glowing edge
+        out += [("cb_hilt", 1, 4, 1), ("cb_guard", 4, 1, 1.25), ("cb_blade", .5, 12, 2), ("cb_edge", .25, 11, .5)]
     if d.get("famished"):                                # thirtieth wave: the Famished's long claws
         out += [("fm_claw", .5, 3.5, .5)]
     if d.get("cordyceps"):                               # twenty-ninth wave: the fungus fruiting from her; the Soul Cluster's other faces
@@ -359,6 +399,44 @@ def declare_hook(sp, d):
 
 
 def paint_hook(pt, pal, d):
+    if d.get("rmask"):
+        mask, lac, crack = G.shades(pal.extra["mask"]), G.shades(pal.extra["lacquer"]), G.shades(pal.extra["crack"])
+
+        def mourning(f, x, y, w, h):                     # brows raised in dread, hollow eyes, a mouth open in a silent cry, black tear tracks
+            if f != "north":
+                return pick(mask, 0.55, x, y)
+            u, v = (x + 0.5) / w, (y + 0.5) / h
+            if (u < 0.12 or u > 0.88) and (v < 0.12 or v > 0.9):
+                return CLEAR                                 # rounded corners
+            for ec in (0.29, 0.71):
+                if abs(u - ec) < 0.12 and abs(v - 0.4) < 0.1:
+                    return pick(lac, 0.12, x, y)             # wide, hollow eyes
+                if abs(u - (ec - 0.04 if ec < 0.5 else ec + 0.04)) < 0.045 and 0.5 < v < 0.84:
+                    return pick(lac, 0.35, x, y)             # tear tracks
+            if 0.18 < v < 0.27 and (0.12 < u < 0.42 or 0.58 < u < 0.88):
+                inner = u > 0.5 and u < 0.7 or u < 0.5 and u > 0.3
+                if inner and v < 0.23 or not inner and v > 0.22:
+                    return pick(lac, 0.3, x, y)              # brows tilted up toward the middle
+            if abs(u - 0.5) < 0.11 and 0.6 < v < 0.86:
+                return pick(lac, 0.08, x, y)                 # the open mouth
+            if abs(u - (0.56 + 0.3 * v)) < 0.05 and v < 0.3:
+                return pick(crack, 0.4, x, y)                # a hairline crack from the brow
+            return pick(mask, 0.62 + 0.08 * (v < 0.15), x, y)
+        pt("rmask", "all", mourning)
+    if d.get("la_helm"):
+        steel, plume = G.shades(pal.extra["steel"]), G.shades(pal.extra["plume"])
+        pt("la_crown", "all", lambda f, x, y, w, h: CLEAR if f == "down" else pick(steel, 0.42 + 0.18 * (f == "up") + 0.12 * (y == h - 1) + 0.1 * (x % 4 == 0 and f != "up"), x, y))
+        pt("la_cheek", "all", lambda f, x, y, w, h: pick(steel, 0.45 + 0.1 * (y == 0), x, y))
+        pt("la_nasal", "all", lambda f, x, y, w, h: pick(steel, 0.55, x, y))
+        pt("la_plume", "all", lambda f, x, y, w, h: pick(plume, 0.45 + 0.2 * ((x + y) % 3 == 0), x, y))
+        for p in ("chest", "corset", "panel_f", "midriff"):
+            pt(p, ("north", "south", "east", "west"), lambda f, x, y, w, h: pick(steel, 0.4 + 0.2 * (y % 5 == 0), x, y) if (x + y) % 7 != 0 else None)
+    if d.get("cblade"):
+        blade, edge, hilt = G.shades(pal.extra["blade"]), G.shades(pal.extra["edge"]), G.shades(pal.extra["hilt"])
+        pt("cb_hilt", "all", lambda f, x, y, w, h: pick(hilt, 0.35 + 0.25 * (y % 2), x, y))
+        pt("cb_guard", "all", lambda f, x, y, w, h: pick(hilt, 0.55, x, y) if x not in (0, w - 1) else pick(edge, 0.6, x, y))
+        pt("cb_blade", "all", lambda f, x, y, w, h: pick(blade, 0.3 + 0.2 * (f in ("east", "west")) + 0.1 * ((x + y) % 6 == 0), x, y))
+        pt("cb_edge", "all", lambda f, x, y, w, h: pick(edge, 0.7 + 0.15 * (y % 3 == 0), x, y))
     if d.get("famished"):
         cl = G.shades(pal.extra["fclaw"])
         pt("fm_claw", "all", lambda f, x, y, w, h: CLEAR if pal.extra.get("sated") else pick(cl, 0.5, x, y))
@@ -504,6 +582,17 @@ def paint_hook(pt, pal, d):
 
 
 def build_hook(r, g, d):
+    if d.get("rmask"):                                  # the mask over her face (her eyes and mouth stay behind it)
+        r.put("head", cube("rmask", [-3.5, g.hy + 0.25, -4.55 + g.z]))
+    if d.get("la_helm"):                                # the helm's crown sits on her head, cheek guards down its sides, the nasal over her nose; the plume rides on top
+        hy, z = g.hy, g.z
+        r.add("hair_helm", "head", [0, hy + 6, z], [cube("la_crown", [-5.25, hy + 4.8, -5.25 + z]), cube("la_cheek", [-5.3, hy + 0.2, -4.8 + z]),
+                                                    cube("la_cheek", [4.3, hy + 0.2, -4.8 + z]), cube("la_nasal", [-0.5, hy + 2.6, -5.3 + z]),
+                                                    cube("la_plume", [-0.5, hy + 8.7, -2.0 + z])])
+    if d.get("cblade"):                                 # held point-down along her leg at rest, out of her right fist
+        px, py, pz = r.b["hand_r"]["pivot"]
+        r.add("cblade", "hand_r", [px, py - 1.5, pz], [cube("cb_hilt", [px - 0.5, py - 4.5, pz - 0.5]), cube("cb_guard", [px - 2.0, py - 5.5, pz - 0.625]),
+                                                       cube("cb_blade", [px - 0.25, py - 17.5, pz - 1.0]), cube("cb_edge", [px - 0.125, py - 17.0, pz - 1.6])])
     if d.get("famished"):
         px, py, pz = r.b["hand_r"]["pivot"]
         claws = lambda x: [G.rot_cube("fm_claw", [x + o - 0.25, py - 5.5, pz + zz - 0.25], [x, py - 2, pz], 8, 0, 0) for o, zz in ((-0.7, -0.5), (0, -0.7), (0.7, -0.5))]

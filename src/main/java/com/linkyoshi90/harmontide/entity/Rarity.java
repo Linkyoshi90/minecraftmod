@@ -94,7 +94,7 @@ public final class Rarity {
             "minoan_minotaur", "aurochs_minotaur", "bronzejaw_minotaur", "brasshorn_minotaur", "skjoldram_minotaur",
             "kraken_mollusk", "ammonite_mollusk", "min_min_mollusk",
             "valkyrie_elf", "angel_elf", "gandharva_elf", "apsara_elf", "domovoi_elf", "mad_hatter_elf", "nymph_elf",
-            "dullahan_undead", "lich_undead", "banshee_undead", "llorona_undead", "yurei_undead", "draugr_undead", "jiangshi_undead",
+            "repeadead_undead", "dullahan_undead", "lich_undead", "banshee_undead", "llorona_undead", "yurei_undead", "draugr_undead", "jiangshi_undead",
             "mano_peluda_undead", "soul_cluster_undead", "sandman_undead", "poltergeist_undead",
             "kappa_lizardfolk", "chupacabra_lizardfolk", "archelon_lizardfolk", "argentinosaurus_lizardfolk", "iron_kobold_lizardfolk",
             "anvil_tortoise_lizardfolk",

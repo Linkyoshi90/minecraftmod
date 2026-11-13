@@ -3992,3 +3992,27 @@ for _sid, _variant in [("cave_bat", ("jewel_thief", "Jewel Thief", "White hair, 
         for _s in _fam["species"]:
             if _s["id"] == _sid and all(v[0] != _variant[0] for v in _s["variants"]):
                 _s["variants"].append(_variant)
+
+# forty-second wave (2026-11-13): the repeadead (an original design for the user's idea) and cursed gear (living armour, cursed blade).
+FORTY_SECOND = {
+    "undead": [_c("repeadead_undead", "Repeadead", "Graveyards and dark ruins at night", "Still · clinging", 1.75, ['dark_forest', 'swamp', 'deep_dark', 'old_growth_spruce_taiga'], "Still",
+                  "A gaunt, ash-grey woman wound in grave linen, a porcelain mourning mask fixed to her face in a look of horror. She stands or crouches stock-still in the dark until someone walks in front of her.",
+                  "Rotten flesh and sweet berries.", ("Grave Scream", "Seen, she screams: whoever hears it is frozen in place while she clings to them and drinks their life. Befriended, she leaves friendly creatures be and turns the scream and the grip on monsters."),
+                  "High.", ["Ash", "Bone", "Bog", "Soot", "Dusk"], "Paralysing scream and a life-draining grip"),
+               _c("living_armor_undead", "Living Armour", "Old ruins, crypts and strongholds", "Loyal · stern", 1.85, [], "Loyal",
+                  "A knight's plate that a wandering spirit made its own: steel from collar to greaves, an open great-helm over a pale face with violet eyes. Worn as gear, it grows fond of its wearer, and in time steps out as her.",
+                  "Iron nuggets and bread.", ("Steel Faith", "She takes hits for her friend: befriended, she stands between them and the monsters, and is hard to hurt."),
+                  "Low.", ["Steel", "Black", "Gilt", "Rust", "Frost"], "Found as armour; steps out as a girl"),
+               _c("cursed_blade_undead", "Cursed Blade", "Old ruins, crypts and strongholds", "Hungry · devoted", 1.7, [], "Hungry",
+                  "The spirit of a black sword that whispers to whoever holds it: lilac-grey skin, a short black coat, red eyes, and her own blade in her hand, its edge faintly glowing. Wielded, it grows fond of its bearer, and in time steps out as her.",
+                  "Cooked meat.", ("Hungry Edge", "Her blade drinks from what it cuts: befriended, her blows heal her a little."),
+                  "Medium.", ["Violet", "Crimson", "Azure", "Jade", "White"], "Found as a sword; steps out as a girl")],
+}
+for _fid, _entries in FORTY_SECOND.items():
+    _fam = C.family(_fid)
+    for _species, _cols in _entries:
+        if any(s["id"] == _species["id"] for s in _fam["species"]):
+            continue
+        _fam["species"].append(_species)
+        for _label, _values in _fam.get("split", []):
+            _values.append(_cols.get(_label, "-"))

@@ -155,7 +155,7 @@ public enum Clade {
                  "kasurenijimi_undead", "draugr_undead", "ghoul_undead", "gashadokuro_undead", "nasnas_undead", "jiangshi_undead", "hand_undead",
                  "koschei_undead", "mano_peluda_undead", "gaitress_undead", "cordyceps_undead", "lost_soul_undead", "soul_cluster_undead",
                  "soul_leech_undead", "drowned_undead", "famished_undead", "skeleton_undead", "poltergeist_undead", "sandman_undead",
-                 "candle_spirit_undead", "ame_onna_undead" -> UNDEAD;
+                 "candle_spirit_undead", "ame_onna_undead", "repeadead_undead", "living_armor_undead", "cursed_blade_undead" -> UNDEAD;
             case "lesser_devil", "succubus_devil", "greater_devil", "jack_o_lantern_devil", "jiang_shi_devil", "oni_devil", "gremlin_devil",
                  "karakasa_obake_devil", "chochin_obake_devil", "ittan_momen_devil", "rokurokubi_devil", "kikimora_devil", "akaname_devil",
                  "cyclops_devil", "genie_devil", "ogre_devil", "taotie_devil", "behemoth_devil", "fire_giant_devil", "frost_giant_devil",

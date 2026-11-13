@@ -18780,5 +18780,113 @@
         "type": "event"
       }
     ]
+  },
+  "entity.cursed_blade_undead.ambient": {
+    "subtitle": "subtitles.harmontide.entity.cursed_blade_undead.ambient",
+    "sounds": [
+      {
+        "name": "minecraft:entity.allay.ambient_without_item",
+        "type": "event"
+      }
+    ]
+  },
+  "entity.cursed_blade_undead.death": {
+    "subtitle": "subtitles.harmontide.entity.cursed_blade_undead.death",
+    "sounds": [
+      {
+        "name": "minecraft:particle.soul_escape",
+        "type": "event"
+      }
+    ]
+  },
+  "entity.cursed_blade_undead.eat": {
+    "subtitle": "subtitles.harmontide.entity.cursed_blade_undead.eat",
+    "sounds": [
+      {
+        "name": "minecraft:entity.generic.eat",
+        "type": "event"
+      }
+    ]
+  },
+  "entity.cursed_blade_undead.hurt": {
+    "subtitle": "subtitles.harmontide.entity.cursed_blade_undead.hurt",
+    "sounds": [
+      {
+        "name": "minecraft:entity.player.hurt",
+        "type": "event"
+      }
+    ]
+  },
+  "entity.living_armor_undead.ambient": {
+    "subtitle": "subtitles.harmontide.entity.living_armor_undead.ambient",
+    "sounds": [
+      {
+        "name": "minecraft:entity.allay.ambient_without_item",
+        "type": "event"
+      }
+    ]
+  },
+  "entity.living_armor_undead.death": {
+    "subtitle": "subtitles.harmontide.entity.living_armor_undead.death",
+    "sounds": [
+      {
+        "name": "minecraft:particle.soul_escape",
+        "type": "event"
+      }
+    ]
+  },
+  "entity.living_armor_undead.eat": {
+    "subtitle": "subtitles.harmontide.entity.living_armor_undead.eat",
+    "sounds": [
+      {
+        "name": "minecraft:entity.generic.eat",
+        "type": "event"
+      }
+    ]
+  },
+  "entity.living_armor_undead.hurt": {
+    "subtitle": "subtitles.harmontide.entity.living_armor_undead.hurt",
+    "sounds": [
+      {
+        "name": "minecraft:entity.player.hurt",
+        "type": "event"
+      }
+    ]
+  },
+  "entity.repeadead_undead.ambient": {
+    "subtitle": "subtitles.harmontide.entity.repeadead_undead.ambient",
+    "sounds": [
+      {
+        "name": "minecraft:entity.allay.ambient_without_item",
+        "type": "event"
+      }
+    ]
+  },
+  "entity.repeadead_undead.death": {
+    "subtitle": "subtitles.harmontide.entity.repeadead_undead.death",
+    "sounds": [
+      {
+        "name": "minecraft:particle.soul_escape",
+        "type": "event"
+      }
+    ]
+  },
+  "entity.repeadead_undead.eat": {
+    "subtitle": "subtitles.harmontide.entity.repeadead_undead.eat",
+    "sounds": [
+      {
+        "name": "minecraft:entity.generic.eat",
+        "type": "event"
+      }
+    ]
+  },
+  "entity.repeadead_undead.hurt": {
+    "subtitle": "subtitles.harmontide.entity.repeadead_undead.hurt",
+    "sounds": [
+      {
+        "name": "minecraft:entity.player.hurt",
+        "type": "event"
+      }
+    ]
   }
 }

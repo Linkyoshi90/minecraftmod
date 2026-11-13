@@ -890,3 +890,19 @@ All 12 species have **ambient, hurt, death, eat, tongue, bellow**, all on the fr
 - [ ] Maybe: a test command to make a merchant on the spot (natural spawns only today).
 - [x] The squad (2026-11-11, `entity/Squad`): goat horn enlists up to 4 fighter friends (crouch-use), rallies them (use), they defend their leader when hit and march to the hearth during an Order crusade. Config squad, guide squad.
 - [ ] Dev client: squad pathing when rallied from far away.
+
+## 2026-11-13 run (MGE/Monmusu ideas, all approved)
+
+- [x] Wives bless the land (`entity/Blessings`): each wife within 32 of her husband's hearth gives it her clade's blessing (growth, herd, catch, ward, hoard, soothe), up to 3 stacking. Config wifeBlessings, guide blessings.
+- [x] Realm of the dead (`entity/DeadRealm`, `block/GraveGrassBlock`, `tools/gen_dead_realm_assets.py`): a wild lich/koschei seeds grave grass; spreads in the dark, withers in open sun (not its heart), lamplight/holy water/Order sisters cleanse it; undead mobs on it turn (Monsterization#step); undead friends get Regen + Resistance; the dead rise at night (max 3 undead girls within 48). Grey fog in RealmAtmosphere. Config deadRealm, guide dead_realm.
+- [ ] Dev client: grave mist look and fog colour blend; maybe a world-gen patch near graveyards.
+- [x] The Sabbath (`entity/Sabbath`): standing mirrors Order notoriety (+ dance, realm changes nearby, censer weddings); ranks initiate (witches spare you), adept (witch trades with an empty hand), keeper (black cat familiar, night vision near her), sibling (title after the name). Config sabbath, guide sabbath, 4 advancements.
+- [x] Sea weddings + mermaid blood (`entity/SeaWeddings`, `item/MermaidBloodItem`): sea bride + water by the hearth + another sea girl as sea bishop = water breathing and dolphin's grace in sea/beach/river water while wed; a merfolk close friend gives mermaid blood once per life (+2 max health, kept through death).
+- [ ] Maybe: a real sea bishop species.
+- [x] Ghost possession (`entity/GhostPossession`): crouch + empty hand on a ghost friend (yurei, banshee, poltergeist, lost soul, llorona): 1 min of night vision, glow, monsters drop you; once a day each; wild ghosts prank at night (nausea).
+- [x] Who can't cook (`entity/Cooking`): crouch + raw food on a friend; skill from her UUID (hopeless..masterful), burnt love food pleases her when eaten nearby.
+- [x] Dullahan head pops (`entity/DullahanHeads`, `item/DullahanHeadItem`, FLAG_HEADLESS): blows (1 in 3), flirts and trips pop her head; she chases it; hand it back for +5; a kept head goes home after 5 min.
+- [ ] Dev client: headless dullahan render (head and hair bones hidden), head item rolling.
+- [x] Cursed gear (`entity/CursedGear`, `item/CursedBladeItem`, `item/LivingArmorItem`): 6% in old-place chests; fondness from kills / blows taken / minutes worn, whispers; at 100 the spirit steps out as `cursed_blade_undead` or `living_armor_undead`, devoted.
+- [x] Repeadead (`repeadead_undead`, `entity/girl/Repeadead`): original design (porcelain mourning mask, grave linen). Waits still in the dark, screams when someone walks in front of her (frozen 3 s via attribute modifiers), clings and drains; a blow from her victim breaks the grip. Befriended she hunts monsters the same way.
+- [ ] Dev client: the repeadead's crouch/stand wait, the scream's feel, mask look in game.

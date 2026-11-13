@@ -80,6 +80,7 @@ public class Undead extends AbstractMonsterGirl {
             this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Player.class, 10.0F, 1.0, 1.4,
                     e -> e instanceof Player p && !p.isShiftKeyDown() && this.getAffection(p) < BED_AFFECTION && !p.isSpectator()));
         }
+        if (species == GirlSpecies.REPEADEAD_UNDEAD) this.goalSelector.addGoal(0, new Repeadead.WaitGoal(this));   // stock-still in the dark
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, true));
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.0, species == GirlSpecies.ZOMBIE_UNDEAD
                 ? Ingredient.of(Items.ROTTEN_FLESH, Items.PUMPKIN_PIE) : Ingredient.of(Items.PUMPKIN_PIE), false));
@@ -100,6 +101,9 @@ public class Undead extends AbstractMonsterGirl {
         if (s == GirlSpecies.GAITRESS_UNDEAD) return girlAttributes(26, 0.4, 5).add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_KNOCKBACK, 2.0);
         return switch (s) {
             case HAND_UNDEAD -> girlAttributes(12, 0.33, 2);
+            case REPEADEAD_UNDEAD -> girlAttributes(30, 0.24, 4);
+            case LIVING_ARMOR_UNDEAD -> girlAttributes(36, 0.26, 5).add(net.minecraft.world.entity.ai.attributes.Attributes.ARMOR, 10);
+            case CURSED_BLADE_UNDEAD -> girlAttributes(26, 0.31, 7);
             case YUREI_UNDEAD -> girlAttributes(18, 0.3, 2);
             case LIVING_DOLL_UNDEAD -> girlAttributes(14, 0.3, 0);
             case WILL_O_WISP_UNDEAD -> girlAttributes(16, 0.3, 3);
