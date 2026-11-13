@@ -144,11 +144,38 @@ FOODWEB = {
                    "Your animals are safe: nothing tame, named, leashed or penned, nothing in a village or near a hearth. Befriended girls are fed by you and don't hunt.",
 }
 
+CARCASS = {
+    "entity.harmontide.carcass": "Carcass",
+    M + "carcass.blade": "You'd need a blade (a sword or an axe) to butcher it.",
+    G + "carcasses.title": "Carcasses",
+    G + "carcasses": "A wild animal killed by anything but you (a hunter, a wolf, a monster, a fall) leaves a carcass where it fell, bloodied, with feathers or wool torn loose round it. "
+                     "Scavengers and hungry hunters come to feed on it, and each meal takes meat off the bones. A cow carries the most meat, a pig a little less, a sheep or goat half as much, a chicken or rabbit a mouthful. "
+                     "Use a sword or an axe on it to butcher it: a share of the meat that's left, the hide or wool, and a bone. After a day it starts to rot (flies, and some of the meat comes away rotten); "
+                     "after two only bones are left, and on the third day nothing.",
+}
+
+RHYTHMS = {
+    "jade.harmontide.ecology": "%s, %s",
+    "foodweb.harmontide.hunter": "Hunter",
+    "foodweb.harmontide.fisher": "Fisher",
+    "foodweb.harmontide.scavenger": "Scavenger",
+    "foodweb.harmontide.grazer": "Grazer",
+    "foodweb.harmontide.none": "Lives on other things",
+    "rhythm.harmontide.diurnal": "up by day",
+    "rhythm.harmontide.nocturnal": "up by night",
+    "rhythm.harmontide.crepuscular": "up at dawn and dusk",
+    "rhythm.harmontide.cathemeral": "naps round the clock",
+    G + "rhythms.title": "Day and night",
+    G + "rhythms": "Every kind keeps its own hours. Most are up by day and sleep at night; night kinds sleep through the day. Dawn-and-dusk kinds are up at first and last light "
+                   "and rest through midday and the dead of night, and a few nap in short bouts round the clock. A wild girl out in the open looks for somewhere covered to sleep first: "
+                   "under trees, an overhang or a roof. Asleep she isn't foraging or watching for you, so that is the time to meet the shy ones. Look at any girl to see her place in the food web and her hours.",
+}
+
 ADVANCEMENTS = {"cursed_gear": "harmontide:cursed_blade", "repeadead_scream": "minecraft:skeleton_skull", "ghost_possession": "minecraft:soul_lantern", "sea_wedding": "minecraft:nautilus_shell", "mermaid_blood": "harmontide:mermaid_blood", "sabbath_initiate": "minecraft:glass_bottle", "sabbath_adept": "minecraft:potion", "sabbath_keeper": "minecraft:black_wool",
                 "sabbath_sibling": "harmontide:realm_censer"}
 
 ALL = {}
-for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB):
+for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS):
     ALL.update(part)
 
 

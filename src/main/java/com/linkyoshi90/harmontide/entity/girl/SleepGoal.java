@@ -22,7 +22,24 @@ public class SleepGoal extends Goal {
 
     /** Her sleeping hours: night for most, day for the nocturnal. */
     public boolean bedtime() {
-        return this.girl.isNocturnal() ? this.girl.level().isDay() : this.girl.level().isNight();
+        return this.girl.restingHours();
+    }
+
+    /** Wild and out in the open, she first beds down somewhere covered (under trees, an overhang, a roof). */
+    @javax.annotation.Nullable private net.minecraft.core.BlockPos shelter;
+    private int walking;
+
+    @javax.annotation.Nullable
+    public static net.minecraft.core.BlockPos cover(AbstractMonsterGirl g) {
+        var level = g.level();
+        var r = g.getRandom();
+        net.minecraft.core.BlockPos at = g.blockPosition();
+        for (int i = 0; i < 24; i++) {
+            net.minecraft.core.BlockPos p = at.offset(r.nextInt(25) - 12, r.nextInt(7) - 3, r.nextInt(25) - 12);
+            if (level.isEmptyBlock(p) && level.isEmptyBlock(p.above()) && level.getBlockState(p.below()).isFaceSturdy(level, p.below(), net.minecraft.core.Direction.UP)
+                    && !level.canSeeSky(p.above()) && level.getFluidState(p).isEmpty()) return p;
+        }
+        return null;
     }
 
     private boolean mayStayAsleep() {
@@ -48,11 +65,22 @@ public class SleepGoal extends Goal {
     @Override
     public void start() {
         this.girl.getNavigation().stop();
-        this.girl.setAction(AbstractMonsterGirl.Action.LYING);
+        this.walking = 0;
+        this.shelter = !this.girl.hasAnyAffection() && this.girl.level().canSeeSky(this.girl.blockPosition().above()) ? cover(this.girl) : null;
+        if (this.shelter == null) this.girl.setAction(AbstractMonsterGirl.Action.LYING);
     }
 
     @Override
     public void tick() {
+        if (this.shelter != null) {                                         // on her way to somewhere covered first
+            if (++this.walking > 200 || this.girl.blockPosition().closerThan(this.shelter, 1.5)) {
+                this.shelter = null;
+                this.girl.setAction(AbstractMonsterGirl.Action.LYING);
+            } else {
+                if (this.walking % 20 == 1) this.girl.getNavigation().moveTo(this.shelter.getX() + 0.5, this.shelter.getY(), this.shelter.getZ() + 0.5, 0.9);
+                return;
+            }
+        }
         this.girl.getNavigation().stop();
         this.girl.setDeltaMovement(this.girl.getDeltaMovement().multiply(0.0, 1.0, 0.0));
         if (this.girl.getAction() == AbstractMonsterGirl.Action.NONE) this.girl.setAction(AbstractMonsterGirl.Action.LYING);

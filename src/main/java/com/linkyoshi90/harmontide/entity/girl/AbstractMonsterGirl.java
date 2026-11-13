@@ -1439,8 +1439,45 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         return this.wokenUntil;
     }
 
-    /** Up at night, asleep by day: the undead, foxes, moths and mosquitoes, the night elf, the succubus, the jiang shi and the jack o'lantern, the tapir. */
+    /** Her daily rhythm (2026-11-13): when she is up and about, and when she sleeps. */
+    public enum Rhythm {
+        DIURNAL, NOCTURNAL, CREPUSCULAR, CATHEMERAL;
+
+        public String key() {
+            return name().toLowerCase(java.util.Locale.ROOT);
+        }
+    }
+
+    /** By day for most; the listed night kinds by night; otherwise as her concept says (registry/RhythmTable, tools/gen_diet_table.py). */
+    public Rhythm rhythm() {
+        if (this.listedNocturnal()) return Rhythm.NOCTURNAL;
+        String r = com.linkyoshi90.harmontide.registry.RhythmTable.RHYTHM.get(this.species.id());
+        return r == null ? Rhythm.DIURNAL : Rhythm.valueOf(r);
+    }
+
+    /** Up at night, asleep by day. */
     public boolean isNocturnal() {
+        return this.rhythm() == Rhythm.NOCTURNAL;
+    }
+
+    /**
+     * Her resting hours: the night for day kinds, the day for night kinds, midday and the dead of night for the dawn-and-dusk kinds
+     * (up 21000 to 4000 and 9000 to 15000), and one nap in four for the round-the-clock nappers (bouts of 1500 ticks, her own phase).
+     */
+    public boolean restingHours() {
+        if (this.level().dimensionType().hasFixedTime()) return false;      // no day and night down there
+        long t = Math.floorMod(this.level().getDayTime(), 24000L);
+        boolean night = t >= 13000 && t < 23000;                            // by the clock, not the sky (a storm isn't night)
+        return switch (this.rhythm()) {
+            case DIURNAL -> night;
+            case NOCTURNAL -> !night;
+            case CREPUSCULAR -> t >= 4000 && t < 9000 || t >= 15000 && t < 21000;
+            case CATHEMERAL -> Math.floorMod(this.level().getDayTime() / 1500L + (this.getUUID().getLeastSignificantBits() & 3L), 4L) == 0;
+        };
+    }
+
+    /** The species known to be up at night: the undead, foxes, moths and mosquitoes, the night elf, the succubus, the jiang shi and the jack o'lantern, the tapir. */
+    private boolean listedNocturnal() {
         return switch (this.species) {
             case NIGHT_ELF, MOTH_BUG, MOSQUITO_BUG, SUCCUBUS_DEVIL, JIANG_SHI_DEVIL, JACK_O_LANTERN_DEVIL, TAPIR_CENTAUR, OCELOT_NEKOMATA, ANUBIS_CANID,
                  CHUPACABRA_LIZARDFOLK, FIREFLY_BUG, CAVE_BAT, ONI_DEVIL, GARGOYLE_CONSTRUCT, SLOTHREN_ARMOURED, BROWNIE_ELF, GREMLIN_DEVIL -> true;

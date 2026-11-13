@@ -65,6 +65,10 @@ public class JadePlugin implements IWailaPlugin {
                     data.putInt("FavourCount", f.getInt("Count"));
                 }
             }
+            if (accessor.getEntity() instanceof com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl g) {   // what anyone watching can tell: her place in the food web, her hours
+                data.putString("FoodRole", com.linkyoshi90.harmontide.entity.FoodWeb.role(g).key());
+                data.putString("Rhythm", g.rhythm().key());
+            }
             if (accessor.getEntity() instanceof com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl g && accessor.getPlayer() != null
                     && g.getAffection(accessor.getPlayer()) >= com.linkyoshi90.harmontide.entity.Orders.AFFECTION && !g.isBaby()) {   // what her friends know
                 data.putInt("Birthday", com.linkyoshi90.harmontide.entity.girl.Treats.birthday(g) + 1);
@@ -114,6 +118,8 @@ public class JadePlugin implements IWailaPlugin {
                         .withStyle(clade.mythic() ? net.minecraft.ChatFormatting.DARK_PURPLE : net.minecraft.ChatFormatting.DARK_AQUA));
             }
             if (data.contains("Birthday")) tooltip.add(Component.translatable("jade.harmontide.birthday", data.getInt("Birthday")).withStyle(net.minecraft.ChatFormatting.GOLD));
+            if (data.contains("Rhythm")) tooltip.add(Component.translatable("jade.harmontide.ecology", Component.translatable("foodweb.harmontide." + data.getString("FoodRole")),
+                    Component.translatable("rhythm.harmontide." + data.getString("Rhythm"))).withStyle(net.minecraft.ChatFormatting.DARK_GREEN));
             if (data.contains("Hobby")) tooltip.add(Component.translatable("jade.harmontide.hobby", Component.translatable("hobby.harmontide." + data.getString("Hobby"))).withStyle(net.minecraft.ChatFormatting.GREEN));
             if (data.contains("Favourite")) tooltip.add(Component.translatable("jade.harmontide.favourite", Component.translatable(data.getString("Favourite"))).withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
             if (com.linkyoshi90.harmontide.entity.girl.Mining.isMiner(accessor.getEntity()) && !((net.minecraft.world.entity.LivingEntity) accessor.getEntity()).isBaby()) {
