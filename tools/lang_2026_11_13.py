@@ -171,11 +171,19 @@ RHYTHMS = {
                    "under trees, an overhang or a roof. Asleep she isn't foraging or watching for you, so that is the time to meet the shy ones. Look at any girl to see her place in the food web and her hours.",
 }
 
+HERDS = {
+    G + "herds.title": "Herds and schools",
+    G + "herds": "Wild grazers keep together with their own kind, and wild fish-eaters swim together as a school, all heading the same way; a straggler hurries back. "
+                 "Each of them keeps watch. At a monster, a wild hunter of another kind, or a stranger running up (or walking right up), the first to see it calls the alarm. "
+                 "A big herd, or a herd of big kinds, bunches up and faces the danger, hard to hurt; a small one flees together, all the same way. Schools always flee. "
+                 "Sneak, and you can get close.",
+}
+
 ADVANCEMENTS = {"cursed_gear": "harmontide:cursed_blade", "repeadead_scream": "minecraft:skeleton_skull", "ghost_possession": "minecraft:soul_lantern", "sea_wedding": "minecraft:nautilus_shell", "mermaid_blood": "harmontide:mermaid_blood", "sabbath_initiate": "minecraft:glass_bottle", "sabbath_adept": "minecraft:potion", "sabbath_keeper": "minecraft:black_wool",
                 "sabbath_sibling": "harmontide:realm_censer"}
 
 ALL = {}
-for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS):
+for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS, HERDS):
     ALL.update(part)
 
 

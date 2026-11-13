@@ -147,6 +147,7 @@ public final class HarmontideConfig {
     public static final ModConfigSpec.BooleanValue SQUAD;
     public static final ModConfigSpec.BooleanValue WIFE_BLESSINGS;
     public static final ModConfigSpec.BooleanValue FOOD_WEB;
+    public static final ModConfigSpec.BooleanValue HERDS;
     public static final ModConfigSpec.BooleanValue DEAD_REALM;
     public static final ModConfigSpec.BooleanValue SABBATH;
     public static final ModConfigSpec.BooleanValue SEA_WEDDINGS;
@@ -238,6 +239,10 @@ public final class HarmontideConfig {
         SQUAD = BUILDER
                 .comment("Enlist up to four fighter friends with a goat horn (crouch, use it on her): a blown horn rallies them to you to fight, they turn on whatever strikes you, and they march home when the Order raids your hearth.")
                 .define("squad", true);
+
+        HERDS = BUILDER
+                .comment("Herds and schools: wild grazers keep together on land and wild fishers school in the water; a lookout calls the alarm at a monster, a hunter or a stranger rushing up, and the herd flees together or bunches up and stands its ground.")
+                .define("herds", true);
 
         FOOD_WEB = BUILDER
                 .comment("The food web: wild girls feed themselves as their diet says (hunters bring down wild animals their size, fishers take fish, grazers crop the grass, scavengers eat what was left), move on when the land is eaten out, and thinned-out herds come back over time. Farm animals (tame, named, leashed, penned, in villages, near a hearth) are left alone.")
@@ -627,6 +632,10 @@ public final class HarmontideConfig {
 
     public static boolean squad() {
         return SPEC.isLoaded() ? SQUAD.get() : SQUAD.getDefault();
+    }
+
+    public static boolean herds() {
+        return SPEC.isLoaded() ? HERDS.get() : HERDS.getDefault();
     }
 
     public static boolean foodWeb() {
