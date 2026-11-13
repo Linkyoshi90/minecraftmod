@@ -210,11 +210,19 @@ PARTNERS = {
                     "Scavengers trail wild hunters at a distance to be near the kill, and grazers of different kinds heed each other's alarm calls. Partners work for you too: keep an ant friend by your alraune.",
 }
 
+DECOMPOSE = {
+    G + "decomposers.title": "Decomposers",
+    G + "decomposers": "Slimes, the fungus kinds (matango, shiitake, censhroom, shroomotaur, cordyceps) and the date beetle break down whatever is left lying about: "
+                       "rotten flesh, bones, spoiled food, leaves, saplings, seeds and flowers. They pick carcasses to the bone faster and break the last bones into bone meal. "
+                       "What they take in goes back to the soil: coarse dirt loosens, bare dirt greens over, crops and saplings round them get a dose of bone meal. "
+                       "Keep a decomposer friend by your composter and she fills it for you.",
+}
+
 ADVANCEMENTS = {"cursed_gear": "harmontide:cursed_blade", "repeadead_scream": "minecraft:skeleton_skull", "ghost_possession": "minecraft:soul_lantern", "sea_wedding": "minecraft:nautilus_shell", "mermaid_blood": "harmontide:mermaid_blood", "sabbath_initiate": "minecraft:glass_bottle", "sabbath_adept": "minecraft:potion", "sabbath_keeper": "minecraft:black_wool",
                 "sabbath_sibling": "harmontide:realm_censer"}
 
 ALL = {}
-for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS, HERDS, PASTURE, TERRITORY, POLLEN, PARTNERS):
+for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS, HERDS, PASTURE, TERRITORY, POLLEN, PARTNERS, DECOMPOSE):
     ALL.update(part)
 
 
