@@ -61,7 +61,8 @@ public final class GuidePages {
             Map.entry("carcasses", 3),
             Map.entry("rhythms", 3),
             Map.entry("herds", 3),
-            Map.entry("pasture", 2));
+            Map.entry("pasture", 2),
+            Map.entry("territories", 3));
     public static final Map<String, Integer> SIGNATURES = Map.ofEntries(
             Map.entry("anubis_canid", 2),
             Map.entry("cobra_lamia", 2),

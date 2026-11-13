@@ -186,11 +186,19 @@ PASTURE = {
                    "cropped grass grows back within half a day (now and then a flower with it), bare dirt greens over in a day, and a trail fades back to grass in two.",
 }
 
+TERRITORY = {
+    G + "territories.title": "Territories",
+    G + "territories": "Wild hunters each hold a home range of their own. Now and then one patrols out to its edge and leaves a scent mark there. "
+                       "A rival of her kind who comes across a fresh mark turns away and makes her home somewhere else, so hunters spread out across the land instead of crowding together. "
+                       "You can't smell the marks yourself, but a befriended dog, cat, bear or snake kind can: with one near you, the marks round about show as faint wisps in the colour of whoever left them. "
+                       "Marks fade after two days unless they are renewed.",
+}
+
 ADVANCEMENTS = {"cursed_gear": "harmontide:cursed_blade", "repeadead_scream": "minecraft:skeleton_skull", "ghost_possession": "minecraft:soul_lantern", "sea_wedding": "minecraft:nautilus_shell", "mermaid_blood": "harmontide:mermaid_blood", "sabbath_initiate": "minecraft:glass_bottle", "sabbath_adept": "minecraft:potion", "sabbath_keeper": "minecraft:black_wool",
                 "sabbath_sibling": "harmontide:realm_censer"}
 
 ALL = {}
-for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS, HERDS, PASTURE):
+for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS, HERDS, PASTURE, TERRITORY):
     ALL.update(part)
 
 
