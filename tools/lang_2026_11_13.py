@@ -194,11 +194,19 @@ TERRITORY = {
                        "Marks fade after two days unless they are renewed.",
 }
 
+POLLEN = {
+    G + "pollination.title": "Pollen and seeds",
+    G + "pollination": "Bees, moths, butterflies, fairies, pixies and nectar bats go from flower to flower, wild or befriended, and carry pollen between them. "
+                       "A flower they pollinate seeds another of its kind beside it, and the crops, stems and berry bushes round it grow on a little: keep a pollinator friend near your garden. "
+                       "Wild girls who eat fruit, nuts and seeds carry a seed away from their meals and leave it far off on open grass: a sapling suited to the land, or a berry bush in the taiga. "
+                       "They never sow in villages or near a hearth.",
+}
+
 ADVANCEMENTS = {"cursed_gear": "harmontide:cursed_blade", "repeadead_scream": "minecraft:skeleton_skull", "ghost_possession": "minecraft:soul_lantern", "sea_wedding": "minecraft:nautilus_shell", "mermaid_blood": "harmontide:mermaid_blood", "sabbath_initiate": "minecraft:glass_bottle", "sabbath_adept": "minecraft:potion", "sabbath_keeper": "minecraft:black_wool",
                 "sabbath_sibling": "harmontide:realm_censer"}
 
 ALL = {}
-for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS, HERDS, PASTURE, TERRITORY):
+for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS, HERDS, PASTURE, TERRITORY, POLLEN):
     ALL.update(part)
 
 

@@ -143,6 +143,7 @@ public final class FoodWeb {
         g.getPersistentData().putLong(LAST_MEAL, level.getGameTime());
         g.heal(g.getMaxHealth());
         g.playSound(SoundEvents.GENERIC_EAT, 1.0F, 0.9F);
+        Pollination.swallow(level, g);                                      // a fruit eater carries a seed away
     }
 
     // --- what is safe --------------------------------------------------------------------------------------------------
