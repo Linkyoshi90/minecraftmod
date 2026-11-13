@@ -107,7 +107,7 @@ def tar_shroom():
                     px[x, y] = c
         cap_y = int(top + r * 0.6)
         stem_w = max(1, int(r * 0.35))
-        for y in range(cap_y, min(16, cap_y + h - int(r))):
+        for y in range(cap_y, 16):                           # every stem reaches the ground (they used to stop short: the shrooms floated)
             for x in range(cx - stem_w, cx + stem_w):
                 if not px[x, y][3]:
                     px[x, y] = stem if x < cx else stem_dark
