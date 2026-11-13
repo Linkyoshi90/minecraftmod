@@ -73,9 +73,34 @@ def dullahan_head():
     dump(os.path.join(ASSETS, "models", "item", "dullahan_head.json"), {"parent": "minecraft:item/generated", "textures": {"layer0": "harmontide:item/dullahan_head"}})
 
 
+def recolour(src, name, dark, light, accent, handheld=False):
+    """a vanilla item sprite recoloured by brightness: dark ... light, with its brightest pixels in the accent colour."""
+    img = from_rows(_vanilla_rgba(src))
+    out = Image.new("RGBA", img.size)
+    for y in range(img.height):
+        for x in range(img.width):
+            r, g, b, a = img.getpixel((x, y))
+            if a == 0:
+                continue
+            lum = (r * 0.3 + g * 0.59 + b * 0.11) / 255.0
+            grey = abs(r - g) < 30 and abs(g - b) < 30
+            if grey and lum > 0.82:
+                c = accent
+            elif grey:
+                c = tuple(int(dark[i] + (light[i] - dark[i]) * lum) for i in range(3))
+            else:
+                c = (r, g, b)
+            out.putpixel((x, y), tuple(c) + (a,))
+    out.save(os.path.join(ASSETS, "textures", "item", name + ".png"))
+    dump(os.path.join(ASSETS, "models", "item", name + ".json"),
+         {"parent": "minecraft:item/handheld" if handheld else "minecraft:item/generated", "textures": {"layer0": f"harmontide:item/{name}"}})
+
+
 def main():
     tint_overlay("mermaid_blood", (150, 20, 60), shimmer=(170, 230, 240))
     dullahan_head()
+    recolour("item/iron_sword", "cursed_blade", (14, 10, 18), (70, 56, 84), (200, 80, 240), handheld=True)
+    recolour("item/iron_chestplate", "living_armor", (40, 40, 52), (176, 178, 192), (170, 110, 240))
 
 
 if __name__ == "__main__":

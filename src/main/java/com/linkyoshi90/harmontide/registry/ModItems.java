@@ -268,6 +268,11 @@ public final class ModItems {
             props -> new net.minecraft.world.item.ArmorItem(ModArmorMaterials.REALM_SILVER, net.minecraft.world.item.ArmorItem.Type.BOOTS,
                     props.durability(net.minecraft.world.item.ArmorItem.Type.BOOTS.getDurability(15))));
     /** Holy water with gunpowder: thrown, it turns the realm back and frees the possessed where it breaks (entity/ThrownHolyWater). */
+    /** Cursed gear (entity/CursedGear): a sword and a breastplate with spirits in them. */
+    public static final DeferredItem<com.linkyoshi90.harmontide.item.CursedBladeItem> CURSED_BLADE = ITEMS.registerItem("cursed_blade",
+            com.linkyoshi90.harmontide.item.CursedBladeItem::new, new Item.Properties().rarity(net.minecraft.world.item.Rarity.UNCOMMON));
+    public static final DeferredItem<com.linkyoshi90.harmontide.item.LivingArmorItem> LIVING_ARMOR = ITEMS.registerItem("living_armor",
+            com.linkyoshi90.harmontide.item.LivingArmorItem::new, new Item.Properties().rarity(net.minecraft.world.item.Rarity.UNCOMMON));
     /** A dullahan's head (entity/DullahanHeads): hand it back to her. */
     public static final DeferredItem<com.linkyoshi90.harmontide.item.DullahanHeadItem> DULLAHAN_HEAD = ITEMS.registerItem("dullahan_head",
             com.linkyoshi90.harmontide.item.DullahanHeadItem::new, new Item.Properties().stacksTo(1));

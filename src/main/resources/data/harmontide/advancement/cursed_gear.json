@@ -1,0 +1,23 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "id": "harmontide:cursed_blade"
+    },
+    "title": {
+      "translate": "advancement.harmontide.cursed_gear"
+    },
+    "description": {
+      "translate": "advancement.harmontide.cursed_gear.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
