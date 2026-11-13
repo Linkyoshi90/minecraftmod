@@ -100,8 +100,10 @@ public final class Pollination {
         int n = 0;
         var r = level.getRandom();
         if (s.is(BlockTags.SMALL_FLOWERS)) {
-            for (int i = 0; i < 8; i++) {
-                BlockPos p = flower.offset(r.nextInt(5) - 2, r.nextInt(3) - 1, r.nextInt(5) - 2);
+            java.util.List<BlockPos> spots = new java.util.ArrayList<>();
+            for (BlockPos q : BlockPos.betweenClosed(flower.offset(-2, -1, -2), flower.offset(2, 1, 2))) spots.add(q.immutable());
+            java.util.Collections.shuffle(spots, new java.util.Random(r.nextLong()));
+            for (BlockPos p : spots) {
                 if (level.isEmptyBlock(p) && level.getBlockState(p.below()).is(BlockTags.DIRT) && s.canSurvive(level, p)) {
                     level.setBlockAndUpdate(p, s.getBlock().defaultBlockState());
                     level.sendParticles(ParticleTypes.HAPPY_VILLAGER, p.getX() + 0.5, p.getY() + 0.4, p.getZ() + 0.5, 4, 0.2, 0.2, 0.2, 0.0);

@@ -334,7 +334,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(2, new com.linkyoshi90.harmontide.entity.Herds.AlarmGoal(this));        // the herd's alarm (entity/Herds)
+        this.goalSelector.addGoal(2, new com.linkyoshi90.harmontide.entity.Herds.AlarmGoal(this));
+        this.goalSelector.addGoal(5, new com.linkyoshi90.harmontide.entity.WeatherWays.ShelterGoal(this));   // out of the storm (entity/WeatherWays)        // the herd's alarm (entity/Herds)
         this.goalSelector.addGoal(7, new com.linkyoshi90.harmontide.entity.FoodWeb.ForageGoal(this));
         this.goalSelector.addGoal(7, new com.linkyoshi90.harmontide.entity.Herds.KeepTogetherGoal(this));
         this.goalSelector.addGoal(8, new com.linkyoshi90.harmontide.entity.Territories.PatrolGoal(this));
@@ -1472,6 +1473,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
      */
     public boolean restingHours() {
         if (this.level().dimensionType().hasFixedTime()) return false;      // no day and night down there
+        if (com.linkyoshi90.harmontide.entity.WeatherWays.awakeInRain(this)) return false;   // rain-lovers are out in the rain
         long t = Math.floorMod(this.level().getDayTime(), 24000L);
         boolean night = t >= 13000 && t < 23000;                            // by the clock, not the sky (a storm isn't night)
         return switch (this.rhythm()) {

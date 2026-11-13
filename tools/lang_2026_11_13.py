@@ -259,11 +259,19 @@ TRACKS = {
                   "Footprints fade after a day. Bird kinds drop a feather now and then, and the gnawers and antlered kinds strip the bark off logs where nobody took an axe.",
 }
 
+WEATHER = {
+    G + "weather.title": "Weather ways",
+    G + "weather": "Every kind meets the weather in her own way. In a thunderstorm most take cover under trees, an overhang or a roof and huddle there till it passes; "
+                   "the raiju, the sylph and the dragons are thrilled by it instead, faster and stronger in the open. Frogs and newts, slimes, snails and the fungus kinds come out "
+                   "and liven up in the rain, even the ones who usually sleep through the day. When the sun comes back after rain, birds, insects and cats sun or groom themselves dry. "
+                   "The cold kinds play in falling snow, and the ones who love the sun and the heat shiver in it and go looking for cover. A friend following you stays with you whatever the sky.",
+}
+
 ADVANCEMENTS = {"tracker": "minecraft:sand", "master_tracker": "minecraft:compass", "cursed_gear": "harmontide:cursed_blade", "repeadead_scream": "minecraft:skeleton_skull", "ghost_possession": "minecraft:soul_lantern", "sea_wedding": "minecraft:nautilus_shell", "mermaid_blood": "harmontide:mermaid_blood", "sabbath_initiate": "minecraft:glass_bottle", "sabbath_adept": "minecraft:potion", "sabbath_keeper": "minecraft:black_wool",
                 "sabbath_sibling": "harmontide:realm_censer"}
 
 ALL = {}
-for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS, HERDS, PASTURE, TERRITORY, POLLEN, PARTNERS, DECOMPOSE, HABITAT, TRACKS):
+for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB, CARCASS, RHYTHMS, HERDS, PASTURE, TERRITORY, POLLEN, PARTNERS, DECOMPOSE, HABITAT, TRACKS, WEATHER):
     ALL.update(part)
 
 
