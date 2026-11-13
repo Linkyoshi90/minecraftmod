@@ -146,6 +146,7 @@ public final class HarmontideConfig {
     public static final ModConfigSpec.BooleanValue WANDERING_MERCHANTS;
     public static final ModConfigSpec.BooleanValue SQUAD;
     public static final ModConfigSpec.BooleanValue WIFE_BLESSINGS;
+    public static final ModConfigSpec.BooleanValue FOOD_WEB;
     public static final ModConfigSpec.BooleanValue DEAD_REALM;
     public static final ModConfigSpec.BooleanValue SABBATH;
     public static final ModConfigSpec.BooleanValue SEA_WEDDINGS;
@@ -237,6 +238,10 @@ public final class HarmontideConfig {
         SQUAD = BUILDER
                 .comment("Enlist up to four fighter friends with a goat horn (crouch, use it on her): a blown horn rallies them to you to fight, they turn on whatever strikes you, and they march home when the Order raids your hearth.")
                 .define("squad", true);
+
+        FOOD_WEB = BUILDER
+                .comment("The food web: wild girls feed themselves as their diet says (hunters bring down wild animals their size, fishers take fish, grazers crop the grass, scavengers eat what was left), move on when the land is eaten out, and thinned-out herds come back over time. Farm animals (tame, named, leashed, penned, in villages, near a hearth) are left alone.")
+                .define("foodWeb", true);
 
         WIFE_BLESSINGS = BUILDER
                 .comment("Wives bless the land: each wife near her husband's hearth brings the home her kind's blessing (crops grow, herds thrive, fishing luck, monsters weakened, haste, gentle regeneration).")
@@ -622,6 +627,10 @@ public final class HarmontideConfig {
 
     public static boolean squad() {
         return SPEC.isLoaded() ? SQUAD.get() : SQUAD.getDefault();
+    }
+
+    public static boolean foodWeb() {
+        return SPEC.isLoaded() ? FOOD_WEB.get() : FOOD_WEB.getDefault();
     }
 
     public static boolean wifeBlessings() {

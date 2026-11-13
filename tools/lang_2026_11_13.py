@@ -136,11 +136,19 @@ CURSED = {
                      "and turns her scream and her grip on the monsters around you.",
 }
 
+FOODWEB = {
+    G + "foodweb.title": "The food web",
+    G + "foodweb": "Wild girls feed themselves as their diet says. Hunters bring down the wild animals of their size (rabbits and chickens for the small, sheep, pigs and goats for most, cows for the big ones), "
+                   "eat the meat where it fell and leave the bones and hide. Fishers take fish and squid. Grazers crop the grass and flowers, and where many graze together the turf wears to bare dirt. "
+                   "Scavengers go where something died and eat what was left. Where the land is eaten out they move on, and thinned-out herds come back over time when no hunter is about. "
+                   "Your animals are safe: nothing tame, named, leashed or penned, nothing in a village or near a hearth. Befriended girls are fed by you and don't hunt.",
+}
+
 ADVANCEMENTS = {"cursed_gear": "harmontide:cursed_blade", "repeadead_scream": "minecraft:skeleton_skull", "ghost_possession": "minecraft:soul_lantern", "sea_wedding": "minecraft:nautilus_shell", "mermaid_blood": "harmontide:mermaid_blood", "sabbath_initiate": "minecraft:glass_bottle", "sabbath_adept": "minecraft:potion", "sabbath_keeper": "minecraft:black_wool",
                 "sabbath_sibling": "harmontide:realm_censer"}
 
 ALL = {}
-for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED):
+for part in (BLESSINGS, SABBATH, SEA, GHOSTS, COOKING, DULLAHAN, CURSED, FOODWEB):
     ALL.update(part)
 
 

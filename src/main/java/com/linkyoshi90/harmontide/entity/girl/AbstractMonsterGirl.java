@@ -334,6 +334,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(7, new com.linkyoshi90.harmontide.entity.FoodWeb.ForageGoal(this));   // wild, she feeds herself (entity/FoodWeb)
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
     }
