@@ -43,6 +43,7 @@ public class OstrichHarpyRenderer extends GeoEntityRenderer<OstrichHarpy> {
             public void setCustomAnimations(OstrichHarpy harpy, long instanceId, AnimationState<OstrichHarpy> animationState) {
                 super.setCustomAnimations(harpy, instanceId, animationState);
                 Bellies.harpy(this, harpy);
+                PupilLook.lookAt(this, harpy);
             }
 
             @Override

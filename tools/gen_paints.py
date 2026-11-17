@@ -137,7 +137,31 @@ import json  # noqa: E402
 import math  # noqa: E402
 import random  # noqa: E402
 
-HAIR_BONES = ("hair", "bang", "strand", "tuft", "ahoge", "mane", "braid", "pony", "drill", "bun", "twin")
+HAIR_BONES = ("hair", "bang", "strand", "tuft", "ahoge", "mane", "braid", "pony", "drill", "bun", "twin", "fringe")
+_SOFT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "soft_faces_manifest.json")
+SOFT_HEADS = json.load(open(_SOFT, encoding="utf-8"))["heads"] if os.path.exists(_SOFT) else {}
+_BEAUTY = os.path.join(os.path.dirname(os.path.abspath(__file__)), "beauty_manifest.json")
+# beautify_model.py split body cubes into rounded pieces: {model: {bone: [the old cubes' uv dicts]}}
+BEAUTY = {n: e.get("orig", {}) for n, e in json.load(open(_BEAUTY, encoding="utf-8"))["models"].items()} if os.path.exists(_BEAUTY) else {}
+
+
+def _inside_any(c, olds):
+    """is every face of cube c a sub-rectangle of the same face of one of the given (pre-soften) UV dicts?"""
+    uv = c.get("uv")
+    if not isinstance(uv, dict) or c.get("inflate"):
+        return False
+    for o in olds:
+        ok = True
+        for f, fu in uv.items():
+            (u, v), (w, h) = fu["uv"], fu["uv_size"]
+            (ou, ov), (ow, oh) = o[f]["uv"], o[f]["uv_size"]
+            if not (min(ou, ou + ow) - 1e-6 <= min(u, u + w) and max(u, u + w) <= max(ou, ou + ow) + 1e-6
+                    and min(ov, ov + oh) - 1e-6 <= min(v, v + h) and max(v, v + h) <= max(ov, ov + oh) + 1e-6):
+                ok = False
+                break
+        if ok:
+            return True
+    return False
 
 
 def faces(model, width):
@@ -148,12 +172,27 @@ def faces(model, width):
     g = json.load(open(path))["minecraft:geometry"][0]
     k = width / g["description"]["texture_width"]
     out = []
+    soft = SOFT_HEADS.get(model)        # soften_faces.py cut the head and hair cap into pieces: paint them as the old two cubes
     for b in g["bones"]:
         name = b["name"]
         cubes = b.get("cubes", [])
+        if soft and name == "head" and all(h.get("orig") for h in soft):
+            olds = [h["orig"][k] for h in soft for k in ("head", "cap") if h["orig"][k]]
+            cubes = [c for c in cubes if not _inside_any(c, olds)]
+            cubes = [{"size": [8, 8, 8], "uv": h["orig"]["head"]} for h in soft] +                     [{"size": [8, 8, 8], "uv": h["orig"]["cap"]} for h in soft if h["orig"]["cap"]] + cubes
+        split = BEAUTY.get(model, {}).get(name)
+        if split:                       # rounded pieces: paint them as the old cubes they came from
+            cubes = [c for c in cubes if not _inside_any(c, split)] + [{"size": [1, 1, 1], "uv": o} for o in split]
         head_cube = max(cubes, key=lambda c: c["size"][0] * c["size"][1] * c["size"][2]) if name == "head" and cubes else None
         for c in cubes:
             hair = any(t in name for t in HAIR_BONES) or (name == "head" and c is not head_cube)
+            if name.startswith("pupil"):                # the pupils are part of her eyes
+                for fname, f in c["uv"].items():
+                    (u, v), (w, h) = f["uv"], f["uv_size"]
+                    if abs(w) > 1:
+                        out.append((False, True, fname, int(round(min(u, u + w) * k)), int(round(min(v, v + h) * k)),
+                                    int(round(abs(w) * k)), int(round(abs(h) * k))))
+                continue
             uv = c.get("uv")
             if not isinstance(uv, dict):
                 continue
@@ -992,7 +1031,7 @@ def models():
             if os.path.exists(os.path.join(GEO, m + ".geo.json")) and os.path.exists(os.path.join(ENT, m + ".png")):
                 out.append(m)
     for sp in OTHERS:
-        for m in (sp, sp + "_hatchling", sp + "_tadpole", sp + "_froglet", sp + "_detailed"):
+        for m in (sp, sp + "_hatchling", sp + "_tadpole", sp + "_froglet", sp + "_detailed", sp + "_soft"):
             if os.path.exists(os.path.join(ENT, m + ".png")):
                 out.append(m)
     return out

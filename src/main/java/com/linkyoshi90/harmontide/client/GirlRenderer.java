@@ -232,6 +232,7 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
             if (sprouts != null) sprouts.setHidden(girl.hasFlag(AbstractMonsterGirl.FLAG_PRUNED));   // Shiitake's offshoots, regrowing
             AimPose.apply(proc, girl, look == null ? 0.0F : look.headPitch(), state.getPartialTick());   // a weapon raised over any animation
             NursePose.apply(proc, girl);                                      // a mother cradling her baby
+            PupilLook.lookAt(this, girl);                                   // her eyes follow you
             // the jack o'lantern hiding as a pumpkin: only the disguise bone shows (it is shrunk away in every animation)
             GeoBone disguise = proc.getBone("disguise");
             boolean hiding = disguise != null && girl.hasFlag(AbstractMonsterGirl.FLAG_HIDDEN);

@@ -38,11 +38,12 @@ public class HarpyRenderer<T extends AbstractHarpy> extends GeoEntityRenderer<T>
                 return harpy.isBaby() ? YoungModels.anim(harpy.modelName()) : super.getAnimationResource(harpy);
             }
 
-            /** Her belly rounds out while she is expecting. */
+            /** Her belly rounds out while she is expecting; her eyes follow you. */
             @Override
             public void setCustomAnimations(T harpy, long instanceId, AnimationState<T> animationState) {
                 super.setCustomAnimations(harpy, instanceId, animationState);
                 Bellies.harpy(this, harpy);
+                PupilLook.lookAt(this, harpy);
             }
 
             @Override

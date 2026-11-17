@@ -36,6 +36,7 @@ public class CrowHarpyRenderer extends GeoEntityRenderer<CrowHarpy> {
             public void setCustomAnimations(CrowHarpy harpy, long instanceId, AnimationState<CrowHarpy> animationState) {
                 super.setCustomAnimations(harpy, instanceId, animationState);
                 Bellies.harpy(this, harpy);
+                PupilLook.lookAt(this, harpy);
             }
 
             @Override

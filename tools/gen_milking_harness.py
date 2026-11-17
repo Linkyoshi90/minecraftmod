@@ -65,6 +65,10 @@ def girl_ids():
     return girls + [n for n in others if os.path.exists(os.path.join(ASSETS, "geo", "entity", n + ".geo.json"))]
 
 
+_MANIFEST = os.path.join(os.path.dirname(os.path.abspath(__file__)), "soft_faces_manifest.json")
+SOFT = json.load(open(_MANIFEST, encoding="utf-8"))["heads"] if os.path.exists(_MANIFEST) else {}
+
+
 def main():
     H.write_png(os.path.join(ASSETS, "textures", "entity", "milking_harness.png"), harness_texture())
     for name in girl_ids():                              # every girl: a species with no face gets an empty overlay
@@ -76,13 +80,18 @@ def main():
             rows = [[(0, 0, 0, 0)] * size for _ in range(size)]
         else:
             face = head["cubes"][0]["uv"]["north"]
-            rows = blush_rows(face["uv"][0], face["uv"][1], size, abs(face["uv_size"][0]) / 32, abs(face["uv_size"][1]) / 32)
+            u, v, fw, fh_ = face["uv"][0], face["uv"][1], abs(face["uv_size"][0]), abs(face["uv_size"][1])
+            soft = SOFT.get(name)                        # soften_faces.py split the head: its whole face rect is in the manifest
+            if soft:
+                u, v, fw, fh_ = soft[0]["rect"]
+            rows = blush_rows(u, v, size, fw / 32, fh_ / 32)
         H.write_png(os.path.join(ASSETS, "textures", "entity", name + "_blush.png"), rows)
     I.dump(os.path.join(ASSETS, "particles", "milk_drip.json"), {"textures": ["minecraft:drip_fall"]})
 
     prefix = "harmontide.configuration."
     lang = {prefix + "title": "Harmontide Settings",
             prefix + "detailedSparrowModel": "Detailed sparrow model",
+            prefix + "softSparrowFace": "Soft sparrow face",
             prefix + "wildSpawnChance": "Wild spawn chance",
             prefix + "wildSpacing": "Wild spacing (blocks)",
             prefix + "spawnRate": "Spawn rate (%)",

@@ -11,32 +11,40 @@ import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SparrowHarpyRenderer extends GeoEntityRenderer<SparrowHarpy> {
     /** The geo model is 2 blocks tall; sparrows are the small ones. Keep in sync with the hitbox in ModEntities. */
     public static final float SCALE = 0.75F;
 
-    private static final ResourceLocation DETAILED_MODEL = HarmontideMod.id("geo/entity/sparrow_harpy_detailed.geo.json");
-    private static final Map<SparrowHarpy.Variant, ResourceLocation> TEXTURES = new EnumMap<>(SparrowHarpy.Variant.class);
-    private static final Map<SparrowHarpy.Variant, ResourceLocation> DETAILED_TEXTURES = new EnumMap<>(SparrowHarpy.Variant.class);
+    /** model name (HarmontideClientConfig.sparrowModel) -> geo, base texture and per-variant textures */
+    private static final Map<String, ResourceLocation> MODELS = new HashMap<>();
+    private static final Map<String, ResourceLocation> BASE_TEXTURES = new HashMap<>();
+    private static final Map<String, Map<SparrowHarpy.Variant, ResourceLocation>> TEXTURES = new HashMap<>();
 
     static {
-        for (SparrowHarpy.Variant variant : SparrowHarpy.Variant.values()) {
-            String suffix = variant == SparrowHarpy.Variant.HOUSE ? "" : "_" + variant.getSerializedName();
-            TEXTURES.put(variant, HarmontideMod.id("textures/entity/sparrow_harpy" + suffix + ".png"));
-            DETAILED_TEXTURES.put(variant, HarmontideMod.id("textures/entity/sparrow_harpy_detailed" + suffix + ".png"));
+        for (String name : new String[]{"sparrow_harpy", "sparrow_harpy_detailed", "sparrow_harpy_soft"}) {
+            MODELS.put(name, HarmontideMod.id("geo/entity/" + name + ".geo.json"));
+            BASE_TEXTURES.put(name, HarmontideMod.id("textures/entity/" + name + ".png"));
+            Map<SparrowHarpy.Variant, ResourceLocation> byVariant = new EnumMap<>(SparrowHarpy.Variant.class);
+            for (SparrowHarpy.Variant variant : SparrowHarpy.Variant.values()) {
+                String suffix = variant == SparrowHarpy.Variant.HOUSE ? "" : "_" + variant.getSerializedName();
+                byVariant.put(variant, HarmontideMod.id("textures/entity/" + name + suffix + ".png"));
+            }
+            TEXTURES.put(name, byVariant);
         }
     }
 
     public SparrowHarpyRenderer(EntityRendererProvider.Context context) {
         // Resolves geo/entity/sparrow_harpy.geo.json and animations/entity/...; true = head follows look direction.
-        // The detailed model (tools/gen_sparrow_detailed_harpy.py) has the same bones and reuses these animations.
+        // The detailed and soft models (tools/gen_sparrow_detailed_harpy.py, gen_sparrow_soft_harpy.py) have the same
+        // bones and reuse these animations.
         super(context, new DefaultedEntityGeoModel<>(HarmontideMod.id("sparrow_harpy"), true) {
             @Override
             public ResourceLocation getModelResource(SparrowHarpy harpy) {
                 if (harpy.isBaby()) return YoungModels.geo(harpy.modelName());
-                return HarmontideClientConfig.detailedSparrow() ? DETAILED_MODEL : super.getModelResource(harpy);
+                return MODELS.get(HarmontideClientConfig.sparrowModel());
             }
 
             @Override
@@ -49,14 +57,15 @@ public class SparrowHarpyRenderer extends GeoEntityRenderer<SparrowHarpy> {
             public void setCustomAnimations(SparrowHarpy harpy, long instanceId, AnimationState<SparrowHarpy> animationState) {
                 super.setCustomAnimations(harpy, instanceId, animationState);
                 Bellies.harpy(this, harpy);
+                PupilLook.lookAt(this, harpy);
             }
 
             @Override
             public ResourceLocation getTextureResource(SparrowHarpy harpy) {
                 if (harpy.isBaby()) return Paints.of(YoungModels.tex(harpy.modelName()), harpy.getPaintName());
-                if (Paints.shown(harpy.getPaintName()) != null) return Paints.of(HarmontideMod.id(HarmontideClientConfig.detailedSparrow()
-                        ? "textures/entity/sparrow_harpy_detailed.png" : "textures/entity/sparrow_harpy.png"), harpy.getPaintName());
-                return (HarmontideClientConfig.detailedSparrow() ? DETAILED_TEXTURES : TEXTURES).get(harpy.getVariant());
+                String model = HarmontideClientConfig.sparrowModel();
+                if (Paints.shown(harpy.getPaintName()) != null) return Paints.of(BASE_TEXTURES.get(model), harpy.getPaintName());
+                return TEXTURES.get(model).get(harpy.getVariant());
             }
         });
         this.withScale(SCALE);

@@ -466,8 +466,16 @@ def write_png(path, rows):
     png = (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 6, 0, 0, 0))
            + chunk(b"IDAT", zlib.compress(raw, 9)) + chunk(b"IEND", b""))
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "wb") as fh:
-        fh.write(png)
+    for attempt in range(20):                # Windows (scanner/indexer) can hold a fresh file for seconds (OSError 22/13)
+        try:
+            with open(path, "wb") as fh:
+                fh.write(png)
+            return
+        except OSError:
+            if attempt == 19:
+                raise
+            import time
+            time.sleep(min(0.25 * (attempt + 1), 4))
 
 
 def upscale(tex, k):
