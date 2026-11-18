@@ -3,28 +3,28 @@
     "subtitle": "subtitles.harmontide.entity.sparrow_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/idle1",
-        "pitch": 1.3
+        "name": "harmontide:shared/songbird/1",
+        "pitch": 1.15
       },
       {
-        "name": "minecraft:mob/parrot/idle2",
-        "pitch": 1.3
+        "name": "harmontide:shared/songbird/2",
+        "pitch": 1.15
       },
       {
-        "name": "minecraft:mob/parrot/idle3",
-        "pitch": 1.3
+        "name": "harmontide:shared/songbird/3",
+        "pitch": 1.15
       },
       {
-        "name": "minecraft:mob/parrot/idle4",
-        "pitch": 1.3
+        "name": "harmontide:shared/songbird/4",
+        "pitch": 1.15
       },
       {
-        "name": "minecraft:mob/parrot/idle5",
-        "pitch": 1.3
+        "name": "harmontide:shared/songbird/5",
+        "pitch": 1.15
       },
       {
-        "name": "minecraft:mob/parrot/idle6",
-        "pitch": 1.3
+        "name": "harmontide:shared/songbird/6",
+        "pitch": 1.15
       }
     ]
   },
@@ -32,12 +32,24 @@
     "subtitle": "subtitles.harmontide.entity.sparrow_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/hurt1",
-        "pitch": 1.3
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.15
       },
       {
-        "name": "minecraft:mob/parrot/hurt2",
-        "pitch": 1.3
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.15
       }
     ]
   },
@@ -45,20 +57,20 @@
     "subtitle": "subtitles.harmontide.entity.sparrow_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/death1",
-        "pitch": 1.3
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.15
       },
       {
-        "name": "minecraft:mob/parrot/death2",
-        "pitch": 1.3
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.15
       },
       {
-        "name": "minecraft:mob/parrot/death3",
-        "pitch": 1.3
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.15
       },
       {
-        "name": "minecraft:mob/parrot/death4",
-        "pitch": 1.3
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.15
       }
     ]
   },
@@ -66,16 +78,28 @@
     "subtitle": "subtitles.harmontide.entity.sparrow_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/eat1",
-        "pitch": 1.3
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.15
       },
       {
-        "name": "minecraft:mob/parrot/eat2",
-        "pitch": 1.3
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.15
       },
       {
-        "name": "minecraft:mob/parrot/eat3",
-        "pitch": 1.3
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.15
       }
     ]
   },
@@ -120,28 +144,24 @@
     "subtitle": "subtitles.harmontide.entity.crow_harpy.giggle",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/idle1",
-        "pitch": 1.4
+        "name": "harmontide:shared/girl_giggle/1",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/idle2",
-        "pitch": 1.4
+        "name": "harmontide:shared/girl_giggle/2",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/idle3",
-        "pitch": 1.4
+        "name": "harmontide:shared/girl_giggle/3",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/idle4",
-        "pitch": 1.4
+        "name": "harmontide:shared/girl_giggle/4",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/idle5",
-        "pitch": 1.4
-      },
-      {
-        "name": "minecraft:mob/parrot/idle6",
-        "pitch": 1.4
+        "name": "harmontide:shared/girl_giggle/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -149,12 +169,24 @@
     "subtitle": "subtitles.harmontide.entity.crow_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/hurt1",
-        "pitch": 0.6
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/hurt2",
-        "pitch": 0.6
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -162,20 +194,20 @@
     "subtitle": "subtitles.harmontide.entity.crow_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/death1",
-        "pitch": 0.6
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/death2",
-        "pitch": 0.6
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/death3",
-        "pitch": 0.6
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/death4",
-        "pitch": 0.6
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.0
       }
     ]
   },
@@ -183,16 +215,28 @@
     "subtitle": "subtitles.harmontide.entity.crow_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/eat1",
-        "pitch": 0.7
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/eat2",
-        "pitch": 0.7
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/eat3",
-        "pitch": 0.7
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -248,20 +292,24 @@
     "subtitle": "subtitles.harmontide.entity.ostrich_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:mob/camel/hurt1",
-        "pitch": 1.1
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.95
       },
       {
-        "name": "minecraft:mob/camel/hurt2",
-        "pitch": 1.1
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.95
       },
       {
-        "name": "minecraft:mob/camel/hurt3",
-        "pitch": 1.1
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.95
       },
       {
-        "name": "minecraft:mob/camel/hurt4",
-        "pitch": 1.1
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.95
       }
     ]
   },
@@ -269,12 +317,20 @@
     "subtitle": "subtitles.harmontide.entity.ostrich_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:mob/camel/death1",
-        "pitch": 1.1
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.95
       },
       {
-        "name": "minecraft:mob/camel/death2",
-        "pitch": 1.1
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.95
       }
     ]
   },
@@ -282,24 +338,28 @@
     "subtitle": "subtitles.harmontide.entity.ostrich_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:mob/camel/eat1",
-        "pitch": 1.1
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.95
       },
       {
-        "name": "minecraft:mob/camel/eat2",
-        "pitch": 1.1
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.95
       },
       {
-        "name": "minecraft:mob/camel/eat3",
-        "pitch": 1.1
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.95
       },
       {
-        "name": "minecraft:mob/camel/eat4",
-        "pitch": 1.1
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.95
       },
       {
-        "name": "minecraft:mob/camel/eat5",
-        "pitch": 1.1
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.95
       }
     ]
   },
@@ -307,12 +367,24 @@
     "subtitle": "subtitles.harmontide.entity.crow_harpy.laugh",
     "sounds": [
       {
-        "name": "minecraft:entity/witch/celebrate",
-        "pitch": 1.3
+        "name": "harmontide:shared/girl_giggle/1",
+        "pitch": 0.95
       },
       {
-        "name": "minecraft:entity/witch/celebrate",
-        "pitch": 1.45
+        "name": "harmontide:shared/girl_giggle/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_giggle/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_giggle/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_giggle/5",
+        "pitch": 0.95
       }
     ]
   },
@@ -333,12 +405,24 @@
     "subtitle": "subtitles.harmontide.entity.owl_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/hurt1",
-        "pitch": 0.75
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.95
       },
       {
-        "name": "minecraft:mob/parrot/hurt2",
-        "pitch": 0.75
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.95
       }
     ]
   },
@@ -346,20 +430,20 @@
     "subtitle": "subtitles.harmontide.entity.owl_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/death1",
-        "pitch": 0.75
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.95
       },
       {
-        "name": "minecraft:mob/parrot/death2",
-        "pitch": 0.75
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.95
       },
       {
-        "name": "minecraft:mob/parrot/death3",
-        "pitch": 0.75
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.95
       },
       {
-        "name": "minecraft:mob/parrot/death4",
-        "pitch": 0.75
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.95
       }
     ]
   },
@@ -367,16 +451,28 @@
     "subtitle": "subtitles.harmontide.entity.owl_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/eat1",
-        "pitch": 0.8
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.95
       },
       {
-        "name": "minecraft:mob/parrot/eat2",
-        "pitch": 0.8
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.95
       },
       {
-        "name": "minecraft:mob/parrot/eat3",
-        "pitch": 0.8
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.95
       }
     ]
   },
@@ -384,28 +480,24 @@
     "subtitle": "subtitles.harmontide.entity.seagull_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/idle1",
-        "pitch": 0.85
+        "name": "harmontide:shared/seabird/1",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/idle2",
-        "pitch": 0.85
+        "name": "harmontide:shared/seabird/2",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/idle3",
-        "pitch": 0.85
+        "name": "harmontide:shared/seabird/3",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/idle4",
-        "pitch": 0.85
+        "name": "harmontide:shared/seabird/4",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/idle5",
-        "pitch": 0.85
-      },
-      {
-        "name": "minecraft:mob/parrot/idle6",
-        "pitch": 0.85
+        "name": "harmontide:shared/seabird/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -421,12 +513,24 @@
     "subtitle": "subtitles.harmontide.entity.seagull_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/hurt1",
-        "pitch": 1.0
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.05
       },
       {
-        "name": "minecraft:mob/parrot/hurt2",
-        "pitch": 1.0
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.05
       }
     ]
   },
@@ -434,20 +538,20 @@
     "subtitle": "subtitles.harmontide.entity.seagull_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/death1",
-        "pitch": 1.0
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.05
       },
       {
-        "name": "minecraft:mob/parrot/death2",
-        "pitch": 1.0
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.05
       },
       {
-        "name": "minecraft:mob/parrot/death3",
-        "pitch": 1.0
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.05
       },
       {
-        "name": "minecraft:mob/parrot/death4",
-        "pitch": 1.0
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.05
       }
     ]
   },
@@ -455,16 +559,28 @@
     "subtitle": "subtitles.harmontide.entity.seagull_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/eat1",
-        "pitch": 1.0
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.05
       },
       {
-        "name": "minecraft:mob/parrot/eat2",
-        "pitch": 1.0
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.05
       },
       {
-        "name": "minecraft:mob/parrot/eat3",
-        "pitch": 1.0
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.05
       }
     ]
   },
@@ -472,28 +588,24 @@
     "subtitle": "subtitles.harmontide.entity.albatross_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/idle1",
-        "pitch": 0.55
+        "name": "harmontide:shared/seabird/1",
+        "pitch": 0.75
       },
       {
-        "name": "minecraft:mob/parrot/idle2",
-        "pitch": 0.55
+        "name": "harmontide:shared/seabird/2",
+        "pitch": 0.75
       },
       {
-        "name": "minecraft:mob/parrot/idle3",
-        "pitch": 0.55
+        "name": "harmontide:shared/seabird/3",
+        "pitch": 0.75
       },
       {
-        "name": "minecraft:mob/parrot/idle4",
-        "pitch": 0.55
+        "name": "harmontide:shared/seabird/4",
+        "pitch": 0.75
       },
       {
-        "name": "minecraft:mob/parrot/idle5",
-        "pitch": 0.55
-      },
-      {
-        "name": "minecraft:mob/parrot/idle6",
-        "pitch": 0.55
+        "name": "harmontide:shared/seabird/5",
+        "pitch": 0.75
       }
     ]
   },
@@ -501,12 +613,24 @@
     "subtitle": "subtitles.harmontide.entity.albatross_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/hurt1",
-        "pitch": 0.6
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.9
       },
       {
-        "name": "minecraft:mob/parrot/hurt2",
-        "pitch": 0.6
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.9
       }
     ]
   },
@@ -514,20 +638,20 @@
     "subtitle": "subtitles.harmontide.entity.albatross_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/death1",
-        "pitch": 0.6
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.9
       },
       {
-        "name": "minecraft:mob/parrot/death2",
-        "pitch": 0.6
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.9
       },
       {
-        "name": "minecraft:mob/parrot/death3",
-        "pitch": 0.6
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.9
       },
       {
-        "name": "minecraft:mob/parrot/death4",
-        "pitch": 0.6
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.9
       }
     ]
   },
@@ -535,16 +659,28 @@
     "subtitle": "subtitles.harmontide.entity.albatross_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/eat1",
-        "pitch": 0.65
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.9
       },
       {
-        "name": "minecraft:mob/parrot/eat2",
-        "pitch": 0.65
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.9
       },
       {
-        "name": "minecraft:mob/parrot/eat3",
-        "pitch": 0.65
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.9
       }
     ]
   },
@@ -552,28 +688,28 @@
     "subtitle": "subtitles.harmontide.entity.riflebird_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/idle1",
-        "pitch": 1.1
+        "name": "harmontide:shared/songbird/1",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/idle2",
-        "pitch": 1.1
+        "name": "harmontide:shared/songbird/2",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/idle3",
-        "pitch": 1.1
+        "name": "harmontide:shared/songbird/3",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/idle4",
-        "pitch": 1.1
+        "name": "harmontide:shared/songbird/4",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/idle5",
-        "pitch": 1.1
+        "name": "harmontide:shared/songbird/5",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/idle6",
-        "pitch": 1.1
+        "name": "harmontide:shared/songbird/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -617,12 +753,24 @@
     "subtitle": "subtitles.harmontide.entity.riflebird_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/hurt1",
-        "pitch": 1.1
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.05
       },
       {
-        "name": "minecraft:mob/parrot/hurt2",
-        "pitch": 1.1
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.05
       }
     ]
   },
@@ -630,20 +778,20 @@
     "subtitle": "subtitles.harmontide.entity.riflebird_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/death1",
-        "pitch": 1.1
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.05
       },
       {
-        "name": "minecraft:mob/parrot/death2",
-        "pitch": 1.1
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.05
       },
       {
-        "name": "minecraft:mob/parrot/death3",
-        "pitch": 1.1
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.05
       },
       {
-        "name": "minecraft:mob/parrot/death4",
-        "pitch": 1.1
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.05
       }
     ]
   },
@@ -651,16 +799,28 @@
     "subtitle": "subtitles.harmontide.entity.riflebird_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/eat1",
-        "pitch": 1.1
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.05
       },
       {
-        "name": "minecraft:mob/parrot/eat2",
-        "pitch": 1.1
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.05
       },
       {
-        "name": "minecraft:mob/parrot/eat3",
-        "pitch": 1.1
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.05
       }
     ]
   },
@@ -668,48 +828,16 @@
     "subtitle": "subtitles.harmontide.entity.phoenix_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/idle1",
-        "pitch": 0.75
+        "name": "harmontide:shared/raptor/1",
+        "pitch": 1.1
       },
       {
-        "name": "minecraft:mob/parrot/idle2",
-        "pitch": 0.75
+        "name": "harmontide:shared/raptor/2",
+        "pitch": 1.1
       },
       {
-        "name": "minecraft:mob/parrot/idle3",
-        "pitch": 0.75
-      },
-      {
-        "name": "minecraft:mob/parrot/idle4",
-        "pitch": 0.75
-      },
-      {
-        "name": "minecraft:mob/parrot/idle5",
-        "pitch": 0.75
-      },
-      {
-        "name": "minecraft:mob/parrot/idle6",
-        "pitch": 0.75
-      },
-      {
-        "name": "minecraft:mob/blaze/breathe1",
-        "pitch": 1.3,
-        "volume": 0.6
-      },
-      {
-        "name": "minecraft:mob/blaze/breathe2",
-        "pitch": 1.3,
-        "volume": 0.6
-      },
-      {
-        "name": "minecraft:mob/blaze/breathe3",
-        "pitch": 1.3,
-        "volume": 0.6
-      },
-      {
-        "name": "minecraft:mob/blaze/breathe4",
-        "pitch": 1.3,
-        "volume": 0.6
+        "name": "harmontide:shared/raptor/3",
+        "pitch": 1.1
       }
     ]
   },
@@ -749,20 +877,24 @@
     "subtitle": "subtitles.harmontide.entity.phoenix_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:mob/blaze/hit1",
-        "pitch": 1.3
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/blaze/hit2",
-        "pitch": 1.3
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/blaze/hit3",
-        "pitch": 1.3
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/blaze/hit4",
-        "pitch": 1.3
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -770,20 +902,20 @@
     "subtitle": "subtitles.harmontide.entity.phoenix_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:mob/parrot/death1",
-        "pitch": 0.7
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/death2",
-        "pitch": 0.7
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/death3",
-        "pitch": 0.7
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.0
       },
       {
-        "name": "minecraft:mob/parrot/death4",
-        "pitch": 0.7
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.0
       }
     ]
   },
@@ -791,9 +923,28 @@
     "subtitle": "subtitles.harmontide.entity.bullywug.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.7
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 0.75
       }
     ]
   },
@@ -801,9 +952,24 @@
     "subtitle": "subtitles.harmontide.entity.bullywug.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.hurt",
-        "type": "event",
-        "pitch": 0.77
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.95
       }
     ]
   },
@@ -811,9 +977,20 @@
     "subtitle": "subtitles.harmontide.entity.bullywug.death",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.death",
-        "type": "event",
-        "pitch": 0.7
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.95
       }
     ]
   },
@@ -821,9 +998,28 @@
     "subtitle": "subtitles.harmontide.entity.bullywug.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.eat",
-        "type": "event",
-        "pitch": 0.7
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.95
       }
     ]
   },
@@ -831,9 +1027,32 @@
     "subtitle": "subtitles.harmontide.entity.bullywug.tongue",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.tongue",
-        "type": "event",
-        "pitch": 0.77
+        "name": "harmontide:shared/tongue/1",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/tongue/2",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/tongue/3",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/tongue/4",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/tongue/5",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/tongue/6",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/tongue/7",
+        "pitch": 0.75
       }
     ]
   },
@@ -841,9 +1060,32 @@
     "subtitle": "subtitles.harmontide.entity.bullywug.bellow",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.42
+        "name": "harmontide:shared/bullfrog/1",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 0.8
       }
     ]
   },
@@ -851,9 +1093,36 @@
     "subtitle": "subtitles.harmontide.entity.mucus_toad.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.55
+        "name": "harmontide:shared/toad/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/toad/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 0.85
       }
     ]
   },
@@ -861,9 +1130,24 @@
     "subtitle": "subtitles.harmontide.entity.mucus_toad.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.hurt",
-        "type": "event",
-        "pitch": 0.61
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.95
       }
     ]
   },
@@ -871,9 +1155,20 @@
     "subtitle": "subtitles.harmontide.entity.mucus_toad.death",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.death",
-        "type": "event",
-        "pitch": 0.55
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.95
       }
     ]
   },
@@ -881,9 +1176,28 @@
     "subtitle": "subtitles.harmontide.entity.mucus_toad.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.eat",
-        "type": "event",
-        "pitch": 0.55
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.95
       }
     ]
   },
@@ -891,9 +1205,32 @@
     "subtitle": "subtitles.harmontide.entity.mucus_toad.tongue",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.tongue",
-        "type": "event",
-        "pitch": 0.61
+        "name": "harmontide:shared/tongue/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/tongue/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/tongue/3",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/tongue/4",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/tongue/5",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/tongue/6",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/tongue/7",
+        "pitch": 0.85
       }
     ]
   },
@@ -901,9 +1238,36 @@
     "subtitle": "subtitles.harmontide.entity.mucus_toad.bellow",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.33
+        "name": "harmontide:shared/toad/1",
+        "pitch": 0.65
+      },
+      {
+        "name": "harmontide:shared/toad/2",
+        "pitch": 0.65
+      },
+      {
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 0.65
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 0.65
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 0.65
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 0.65
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 0.65
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 0.65
       }
     ]
   },
@@ -911,9 +1275,32 @@
     "subtitle": "subtitles.harmontide.entity.bullfrog.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.5
+        "name": "harmontide:shared/bullfrog/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -921,9 +1308,24 @@
     "subtitle": "subtitles.harmontide.entity.bullfrog.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.hurt",
-        "type": "event",
-        "pitch": 0.55
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.95
       }
     ]
   },
@@ -931,9 +1333,20 @@
     "subtitle": "subtitles.harmontide.entity.bullfrog.death",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.death",
-        "type": "event",
-        "pitch": 0.5
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.95
       }
     ]
   },
@@ -941,9 +1354,28 @@
     "subtitle": "subtitles.harmontide.entity.bullfrog.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.eat",
-        "type": "event",
-        "pitch": 0.5
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.95
       }
     ]
   },
@@ -951,9 +1383,32 @@
     "subtitle": "subtitles.harmontide.entity.bullfrog.tongue",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.tongue",
-        "type": "event",
-        "pitch": 0.55
+        "name": "harmontide:shared/tongue/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/6",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/7",
+        "pitch": 1.0
       }
     ]
   },
@@ -961,9 +1416,32 @@
     "subtitle": "subtitles.harmontide.entity.bullfrog.bellow",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.3
+        "name": "harmontide:shared/bullfrog/1",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 0.8
       }
     ]
   },
@@ -971,8 +1449,11 @@
     "subtitle": "subtitles.harmontide.entity.tree_frog.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
+        "name": "harmontide:shared/frog_chirp/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_chirp/2",
         "pitch": 1.0
       }
     ]
@@ -981,8 +1462,23 @@
     "subtitle": "subtitles.harmontide.entity.tree_frog.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.hurt",
-        "type": "event",
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
         "pitch": 1.1
       }
     ]
@@ -991,9 +1487,20 @@
     "subtitle": "subtitles.harmontide.entity.tree_frog.death",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.death",
-        "type": "event",
-        "pitch": 1.0
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.1
       }
     ]
   },
@@ -1001,9 +1508,28 @@
     "subtitle": "subtitles.harmontide.entity.tree_frog.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.eat",
-        "type": "event",
-        "pitch": 1.0
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.1
       }
     ]
   },
@@ -1011,9 +1537,32 @@
     "subtitle": "subtitles.harmontide.entity.tree_frog.tongue",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.tongue",
-        "type": "event",
-        "pitch": 1.1
+        "name": "harmontide:shared/tongue/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/6",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/7",
+        "pitch": 1.0
       }
     ]
   },
@@ -1021,9 +1570,28 @@
     "subtitle": "subtitles.harmontide.entity.tree_frog.bellow",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.6
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -1031,8 +1599,11 @@
     "subtitle": "subtitles.harmontide.entity.poison_dart_frog.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
+        "name": "harmontide:shared/frog_chirp/1",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/frog_chirp/2",
         "pitch": 1.2
       }
     ]
@@ -1041,9 +1612,24 @@
     "subtitle": "subtitles.harmontide.entity.poison_dart_frog.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.hurt",
-        "type": "event",
-        "pitch": 1.32
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.2
       }
     ]
   },
@@ -1051,8 +1637,19 @@
     "subtitle": "subtitles.harmontide.entity.poison_dart_frog.death",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.death",
-        "type": "event",
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
         "pitch": 1.2
       }
     ]
@@ -1061,8 +1658,27 @@
     "subtitle": "subtitles.harmontide.entity.poison_dart_frog.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.eat",
-        "type": "event",
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/eat/6",
         "pitch": 1.2
       }
     ]
@@ -1071,9 +1687,32 @@
     "subtitle": "subtitles.harmontide.entity.poison_dart_frog.tongue",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.tongue",
-        "type": "event",
-        "pitch": 1.32
+        "name": "harmontide:shared/tongue/1",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/tongue/2",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/tongue/3",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/tongue/4",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/tongue/5",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/tongue/6",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/tongue/7",
+        "pitch": 1.2
       }
     ]
   },
@@ -1081,9 +1720,12 @@
     "subtitle": "subtitles.harmontide.entity.poison_dart_frog.bellow",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.72
+        "name": "harmontide:shared/frog_chirp/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/frog_chirp/2",
+        "pitch": 0.9
       }
     ]
   },
@@ -1091,9 +1733,12 @@
     "subtitle": "subtitles.harmontide.entity.glass_frog.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 1.5
+        "name": "harmontide:shared/frog_chirp/1",
+        "pitch": 1.35
+      },
+      {
+        "name": "harmontide:shared/frog_chirp/2",
+        "pitch": 1.35
       }
     ]
   },
@@ -1101,9 +1746,24 @@
     "subtitle": "subtitles.harmontide.entity.glass_frog.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.hurt",
-        "type": "event",
-        "pitch": 1.65
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.2
       }
     ]
   },
@@ -1111,9 +1771,20 @@
     "subtitle": "subtitles.harmontide.entity.glass_frog.death",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.death",
-        "type": "event",
-        "pitch": 1.5
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.2
       }
     ]
   },
@@ -1121,9 +1792,28 @@
     "subtitle": "subtitles.harmontide.entity.glass_frog.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.eat",
-        "type": "event",
-        "pitch": 1.5
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.2
       }
     ]
   },
@@ -1131,9 +1821,32 @@
     "subtitle": "subtitles.harmontide.entity.glass_frog.tongue",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.tongue",
-        "type": "event",
-        "pitch": 1.65
+        "name": "harmontide:shared/tongue/1",
+        "pitch": 1.35
+      },
+      {
+        "name": "harmontide:shared/tongue/2",
+        "pitch": 1.35
+      },
+      {
+        "name": "harmontide:shared/tongue/3",
+        "pitch": 1.35
+      },
+      {
+        "name": "harmontide:shared/tongue/4",
+        "pitch": 1.35
+      },
+      {
+        "name": "harmontide:shared/tongue/5",
+        "pitch": 1.35
+      },
+      {
+        "name": "harmontide:shared/tongue/6",
+        "pitch": 1.35
+      },
+      {
+        "name": "harmontide:shared/tongue/7",
+        "pitch": 1.35
       }
     ]
   },
@@ -1141,9 +1854,12 @@
     "subtitle": "subtitles.harmontide.entity.glass_frog.bellow",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.9
+        "name": "harmontide:shared/frog_chirp/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_chirp/2",
+        "pitch": 1.0
       }
     ]
   },
@@ -1151,9 +1867,32 @@
     "subtitle": "subtitles.harmontide.entity.goliath_frog.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.35
+        "name": "harmontide:shared/bullfrog/1",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 0.7
       }
     ]
   },
@@ -1161,9 +1900,24 @@
     "subtitle": "subtitles.harmontide.entity.goliath_frog.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.hurt",
-        "type": "event",
-        "pitch": 0.39
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.85
       }
     ]
   },
@@ -1171,9 +1925,20 @@
     "subtitle": "subtitles.harmontide.entity.goliath_frog.death",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.death",
-        "type": "event",
-        "pitch": 0.35
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.85
       }
     ]
   },
@@ -1181,9 +1946,28 @@
     "subtitle": "subtitles.harmontide.entity.goliath_frog.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.eat",
-        "type": "event",
-        "pitch": 0.35
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.85
       }
     ]
   },
@@ -1191,9 +1975,32 @@
     "subtitle": "subtitles.harmontide.entity.goliath_frog.tongue",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.tongue",
-        "type": "event",
-        "pitch": 0.39
+        "name": "harmontide:shared/tongue/1",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/tongue/2",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/tongue/3",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/tongue/4",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/tongue/5",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/tongue/6",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/tongue/7",
+        "pitch": 0.7
       }
     ]
   },
@@ -1201,9 +2008,32 @@
     "subtitle": "subtitles.harmontide.entity.goliath_frog.bellow",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.21
+        "name": "harmontide:shared/bullfrog/1",
+        "pitch": 0.55
+      },
+      {
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 0.55
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 0.55
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 0.55
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 0.55
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 0.55
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 0.55
       }
     ]
   },
@@ -1211,9 +2041,12 @@
     "subtitle": "subtitles.harmontide.entity.desert_rain_frog.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 1.6
+        "name": "harmontide:shared/frog_chirp/1",
+        "pitch": 1.5
+      },
+      {
+        "name": "harmontide:shared/frog_chirp/2",
+        "pitch": 1.5
       }
     ]
   },
@@ -1221,9 +2054,24 @@
     "subtitle": "subtitles.harmontide.entity.desert_rain_frog.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.hurt",
-        "type": "event",
-        "pitch": 1.76
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.3
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.3
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.3
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.3
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.3
       }
     ]
   },
@@ -1231,9 +2079,20 @@
     "subtitle": "subtitles.harmontide.entity.desert_rain_frog.death",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.death",
-        "type": "event",
-        "pitch": 1.6
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.3
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.3
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.3
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.3
       }
     ]
   },
@@ -1241,9 +2100,28 @@
     "subtitle": "subtitles.harmontide.entity.desert_rain_frog.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.eat",
-        "type": "event",
-        "pitch": 1.6
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.3
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.3
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.3
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.3
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.3
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.3
       }
     ]
   },
@@ -1251,9 +2129,32 @@
     "subtitle": "subtitles.harmontide.entity.desert_rain_frog.tongue",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.tongue",
-        "type": "event",
-        "pitch": 1.76
+        "name": "harmontide:shared/tongue/1",
+        "pitch": 1.5
+      },
+      {
+        "name": "harmontide:shared/tongue/2",
+        "pitch": 1.5
+      },
+      {
+        "name": "harmontide:shared/tongue/3",
+        "pitch": 1.5
+      },
+      {
+        "name": "harmontide:shared/tongue/4",
+        "pitch": 1.5
+      },
+      {
+        "name": "harmontide:shared/tongue/5",
+        "pitch": 1.5
+      },
+      {
+        "name": "harmontide:shared/tongue/6",
+        "pitch": 1.5
+      },
+      {
+        "name": "harmontide:shared/tongue/7",
+        "pitch": 1.5
       }
     ]
   },
@@ -1261,9 +2162,12 @@
     "subtitle": "subtitles.harmontide.entity.desert_rain_frog.bellow",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.96
+        "name": "harmontide:shared/frog_chirp/1",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/frog_chirp/2",
+        "pitch": 1.2
       }
     ]
   },
@@ -1271,9 +2175,36 @@
     "subtitle": "subtitles.harmontide.entity.fire_bellied_toad.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.9
+        "name": "harmontide:shared/toad/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/toad/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 1.1
       }
     ]
   },
@@ -1281,9 +2212,24 @@
     "subtitle": "subtitles.harmontide.entity.fire_bellied_toad.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.hurt",
-        "type": "event",
-        "pitch": 0.99
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.05
       }
     ]
   },
@@ -1291,9 +2237,20 @@
     "subtitle": "subtitles.harmontide.entity.fire_bellied_toad.death",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.death",
-        "type": "event",
-        "pitch": 0.9
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.05
       }
     ]
   },
@@ -1301,9 +2258,28 @@
     "subtitle": "subtitles.harmontide.entity.fire_bellied_toad.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.eat",
-        "type": "event",
-        "pitch": 0.9
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.05
       }
     ]
   },
@@ -1311,9 +2287,32 @@
     "subtitle": "subtitles.harmontide.entity.fire_bellied_toad.tongue",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.tongue",
-        "type": "event",
-        "pitch": 0.99
+        "name": "harmontide:shared/tongue/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/tongue/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/tongue/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/tongue/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/tongue/5",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/tongue/6",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/tongue/7",
+        "pitch": 1.1
       }
     ]
   },
@@ -1321,9 +2320,36 @@
     "subtitle": "subtitles.harmontide.entity.fire_bellied_toad.bellow",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.54
+        "name": "harmontide:shared/toad/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/toad/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 0.9
       }
     ]
   },
@@ -1331,9 +2357,36 @@
     "subtitle": "subtitles.harmontide.entity.cane_toad.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.45
+        "name": "harmontide:shared/toad/1",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/toad/2",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 0.8
       }
     ]
   },
@@ -1341,9 +2394,24 @@
     "subtitle": "subtitles.harmontide.entity.cane_toad.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.hurt",
-        "type": "event",
-        "pitch": 0.5
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.95
       }
     ]
   },
@@ -1351,9 +2419,20 @@
     "subtitle": "subtitles.harmontide.entity.cane_toad.death",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.death",
-        "type": "event",
-        "pitch": 0.45
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.95
       }
     ]
   },
@@ -1361,9 +2440,28 @@
     "subtitle": "subtitles.harmontide.entity.cane_toad.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.eat",
-        "type": "event",
-        "pitch": 0.45
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.95
       }
     ]
   },
@@ -1371,9 +2469,32 @@
     "subtitle": "subtitles.harmontide.entity.cane_toad.tongue",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.tongue",
-        "type": "event",
-        "pitch": 0.5
+        "name": "harmontide:shared/tongue/1",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/tongue/2",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/tongue/3",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/tongue/4",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/tongue/5",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/tongue/6",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/tongue/7",
+        "pitch": 0.8
       }
     ]
   },
@@ -1381,9 +2502,32 @@
     "subtitle": "subtitles.harmontide.entity.cane_toad.bellow",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.27
+        "name": "harmontide:shared/bullfrog/1",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 0.75
       }
     ]
   },
@@ -1391,9 +2535,36 @@
     "subtitle": "subtitles.harmontide.entity.natterjack.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.8
+        "name": "harmontide:shared/toad/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/toad/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -1401,9 +2572,24 @@
     "subtitle": "subtitles.harmontide.entity.natterjack.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.hurt",
-        "type": "event",
-        "pitch": 0.88
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -1411,9 +2597,20 @@
     "subtitle": "subtitles.harmontide.entity.natterjack.death",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.death",
-        "type": "event",
-        "pitch": 0.8
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.0
       }
     ]
   },
@@ -1421,9 +2618,28 @@
     "subtitle": "subtitles.harmontide.entity.natterjack.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.eat",
-        "type": "event",
-        "pitch": 0.8
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -1431,9 +2647,32 @@
     "subtitle": "subtitles.harmontide.entity.natterjack.tongue",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.tongue",
-        "type": "event",
-        "pitch": 0.88
+        "name": "harmontide:shared/tongue/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/6",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/tongue/7",
+        "pitch": 1.0
       }
     ]
   },
@@ -1441,9 +2680,36 @@
     "subtitle": "subtitles.harmontide.entity.natterjack.bellow",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.48
+        "name": "harmontide:shared/toad/1",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/toad/2",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 0.8
       }
     ]
   },
@@ -1451,9 +2717,28 @@
     "subtitle": "subtitles.harmontide.entity.surinam_toad.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.6
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 0.8
       }
     ]
   },
@@ -1461,9 +2746,24 @@
     "subtitle": "subtitles.harmontide.entity.surinam_toad.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.hurt",
-        "type": "event",
-        "pitch": 0.66
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.95
       }
     ]
   },
@@ -1471,9 +2771,20 @@
     "subtitle": "subtitles.harmontide.entity.surinam_toad.death",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.death",
-        "type": "event",
-        "pitch": 0.6
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.95
       }
     ]
   },
@@ -1481,9 +2792,28 @@
     "subtitle": "subtitles.harmontide.entity.surinam_toad.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.eat",
-        "type": "event",
-        "pitch": 0.6
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.95
       }
     ]
   },
@@ -1491,9 +2821,32 @@
     "subtitle": "subtitles.harmontide.entity.surinam_toad.tongue",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.tongue",
-        "type": "event",
-        "pitch": 0.66
+        "name": "harmontide:shared/tongue/1",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/tongue/2",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/tongue/3",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/tongue/4",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/tongue/5",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/tongue/6",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/tongue/7",
+        "pitch": 0.8
       }
     ]
   },
@@ -1501,9 +2854,36 @@
     "subtitle": "subtitles.harmontide.entity.surinam_toad.bellow",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.36
+        "name": "harmontide:shared/toad/1",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/toad/2",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 0.7
       }
     ]
   },
@@ -1511,9 +2891,32 @@
     "subtitle": "subtitles.harmontide.entity.vodyanoy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.55
+        "name": "harmontide:shared/bullfrog/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 0.85
       }
     ]
   },
@@ -1521,9 +2924,24 @@
     "subtitle": "subtitles.harmontide.entity.vodyanoy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.hurt",
-        "type": "event",
-        "pitch": 0.6
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.9
       }
     ]
   },
@@ -1531,9 +2949,20 @@
     "subtitle": "subtitles.harmontide.entity.vodyanoy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.death",
-        "type": "event",
-        "pitch": 0.55
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.9
       }
     ]
   },
@@ -1541,9 +2970,28 @@
     "subtitle": "subtitles.harmontide.entity.vodyanoy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.eat",
-        "type": "event",
-        "pitch": 0.6
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.9
       }
     ]
   },
@@ -1557,9 +3005,32 @@
     "subtitle": "subtitles.harmontide.entity.vodyanoy.tongue",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.tongue",
-        "type": "event",
-        "pitch": 0.6
+        "name": "harmontide:shared/tongue/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/tongue/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/tongue/3",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/tongue/4",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/tongue/5",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/tongue/6",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/tongue/7",
+        "pitch": 0.85
       }
     ]
   },
@@ -1567,9 +3038,32 @@
     "subtitle": "subtitles.harmontide.entity.vodyanoy.bellow",
     "sounds": [
       {
-        "name": "minecraft:entity.frog.ambient",
-        "type": "event",
-        "pitch": 0.35
+        "name": "harmontide:shared/bullfrog/1",
+        "pitch": 0.65
+      },
+      {
+        "name": "harmontide:shared/frog_croak/1",
+        "pitch": 0.65
+      },
+      {
+        "name": "harmontide:shared/frog_croak/2",
+        "pitch": 0.65
+      },
+      {
+        "name": "harmontide:shared/frog_croak/3",
+        "pitch": 0.65
+      },
+      {
+        "name": "harmontide:shared/frog_croak/4",
+        "pitch": 0.65
+      },
+      {
+        "name": "harmontide:shared/frog_croak/5",
+        "pitch": 0.65
+      },
+      {
+        "name": "harmontide:shared/frog_croak/6",
+        "pitch": 0.65
       }
     ]
   },
@@ -1757,8 +3251,28 @@
     "subtitle": "subtitles.harmontide.entity.alkonost_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/songbird/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/songbird/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/songbird/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/songbird/4",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/songbird/5",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/songbird/6",
+        "pitch": 0.9
       }
     ]
   },
@@ -1766,8 +3280,20 @@
     "subtitle": "subtitles.harmontide.entity.alkonost_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.0
       }
     ]
   },
@@ -1775,8 +3301,28 @@
     "subtitle": "subtitles.harmontide.entity.alkonost_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -1784,8 +3330,24 @@
     "subtitle": "subtitles.harmontide.entity.alkonost_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -2558,8 +4120,20 @@
     "subtitle": "subtitles.harmontide.entity.argentowlis_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/owl/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/owl/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/owl/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/owl/4",
+        "pitch": 0.9
       }
     ]
   },
@@ -2567,8 +4141,20 @@
     "subtitle": "subtitles.harmontide.entity.argentowlis_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.0
       }
     ]
   },
@@ -2576,8 +4162,28 @@
     "subtitle": "subtitles.harmontide.entity.argentowlis_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -2585,8 +4191,24 @@
     "subtitle": "subtitles.harmontide.entity.argentowlis_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -2792,8 +4414,28 @@
     "subtitle": "subtitles.harmontide.entity.axolotl_mermaid.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.axolotl.idle_air",
-        "type": "event"
+        "name": "harmontide:shared/bubbles/1",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/bubbles/2",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/bubbles/3",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/bubbles/4",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/bubbles/5",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/bubbles/6",
+        "pitch": 1.2
       }
     ]
   },
@@ -2801,8 +4443,20 @@
     "subtitle": "subtitles.harmontide.entity.axolotl_mermaid.death",
     "sounds": [
       {
-        "name": "minecraft:entity.axolotl.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.15
       }
     ]
   },
@@ -2810,8 +4464,28 @@
     "subtitle": "subtitles.harmontide.entity.axolotl_mermaid.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.dolphin.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.15
       }
     ]
   },
@@ -2819,8 +4493,24 @@
     "subtitle": "subtitles.harmontide.entity.axolotl_mermaid.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.axolotl.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.15
       }
     ]
   },
@@ -2828,8 +4518,28 @@
     "subtitle": "subtitles.harmontide.entity.axolume_mermaid.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.dolphin.ambient",
-        "type": "event"
+        "name": "harmontide:shared/bubbles/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/bubbles/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/bubbles/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/bubbles/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/bubbles/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/bubbles/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -2837,8 +4547,20 @@
     "subtitle": "subtitles.harmontide.entity.axolume_mermaid.death",
     "sounds": [
       {
-        "name": "minecraft:entity.dolphin.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.05
       }
     ]
   },
@@ -2846,8 +4568,28 @@
     "subtitle": "subtitles.harmontide.entity.axolume_mermaid.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.dolphin.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.05
       }
     ]
   },
@@ -2855,8 +4597,24 @@
     "subtitle": "subtitles.harmontide.entity.axolume_mermaid.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.dolphin.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.05
       }
     ]
   },
@@ -3314,8 +5072,16 @@
     "subtitle": "subtitles.harmontide.entity.bennu_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/raptor/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/raptor/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/raptor/3",
+        "pitch": 0.95
       }
     ]
   },
@@ -3323,8 +5089,20 @@
     "subtitle": "subtitles.harmontide.entity.bennu_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.0
       }
     ]
   },
@@ -3332,8 +5110,28 @@
     "subtitle": "subtitles.harmontide.entity.bennu_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -3341,8 +5139,24 @@
     "subtitle": "subtitles.harmontide.entity.bennu_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -5042,8 +6856,20 @@
     "subtitle": "subtitles.harmontide.entity.coin_magpie_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.1
       }
     ]
   },
@@ -5051,8 +6877,28 @@
     "subtitle": "subtitles.harmontide.entity.coin_magpie_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.1
       }
     ]
   },
@@ -5060,8 +6906,24 @@
     "subtitle": "subtitles.harmontide.entity.coin_magpie_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.1
       }
     ]
   },
@@ -5096,8 +6958,20 @@
     "subtitle": "subtitles.harmontide.entity.condorune_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.9
       }
     ]
   },
@@ -5105,8 +6979,28 @@
     "subtitle": "subtitles.harmontide.entity.condorune_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.9
       }
     ]
   },
@@ -5114,8 +7008,24 @@
     "subtitle": "subtitles.harmontide.entity.condorune_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.9
       }
     ]
   },
@@ -5654,8 +7564,16 @@
     "subtitle": "subtitles.harmontide.entity.dodobold_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.chicken.ambient",
-        "type": "event"
+        "name": "harmontide:shared/poultry/1",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/poultry/2",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/poultry/3",
+        "pitch": 0.8
       }
     ]
   },
@@ -5663,8 +7581,20 @@
     "subtitle": "subtitles.harmontide.entity.dodobold_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.chicken.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.95
       }
     ]
   },
@@ -5672,8 +7602,28 @@
     "subtitle": "subtitles.harmontide.entity.dodobold_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.95
       }
     ]
   },
@@ -5681,8 +7631,24 @@
     "subtitle": "subtitles.harmontide.entity.dodobold_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.chicken.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.95
       }
     ]
   },
@@ -5987,8 +7953,28 @@
     "subtitle": "subtitles.harmontide.entity.duck_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.chicken.ambient",
-        "type": "event"
+        "name": "harmontide:shared/waterfowl/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/waterfowl/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/waterfowl/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/waterfowl/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/waterfowl/5",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/waterfowl/6",
+        "pitch": 1.1
       }
     ]
   },
@@ -5996,8 +7982,20 @@
     "subtitle": "subtitles.harmontide.entity.duck_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.chicken.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.1
       }
     ]
   },
@@ -6005,8 +8003,28 @@
     "subtitle": "subtitles.harmontide.entity.duck_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.1
       }
     ]
   },
@@ -6014,8 +8032,24 @@
     "subtitle": "subtitles.harmontide.entity.duck_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.chicken.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.1
       }
     ]
   },
@@ -6338,8 +8372,16 @@
     "subtitle": "subtitles.harmontide.entity.emberu_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.chicken.ambient",
-        "type": "event"
+        "name": "harmontide:shared/poultry/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/poultry/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/poultry/3",
+        "pitch": 1.1
       }
     ]
   },
@@ -6347,8 +8389,20 @@
     "subtitle": "subtitles.harmontide.entity.emberu_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.chicken.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.1
       }
     ]
   },
@@ -6356,8 +8410,28 @@
     "subtitle": "subtitles.harmontide.entity.emberu_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.generic.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.1
       }
     ]
   },
@@ -6365,8 +8439,24 @@
     "subtitle": "subtitles.harmontide.entity.emberu_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.chicken.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.1
       }
     ]
   },
@@ -6374,8 +8464,16 @@
     "subtitle": "subtitles.harmontide.entity.emu_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/ratite/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/ratite/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/ratite/3",
+        "pitch": 1.05
       }
     ]
   },
@@ -6383,8 +8481,20 @@
     "subtitle": "subtitles.harmontide.entity.emu_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.0
       }
     ]
   },
@@ -6392,8 +8502,28 @@
     "subtitle": "subtitles.harmontide.entity.emu_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -6401,8 +8531,24 @@
     "subtitle": "subtitles.harmontide.entity.emu_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -6725,8 +8871,28 @@
     "subtitle": "subtitles.harmontide.entity.finch_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/songbird/1",
+        "pitch": 1.25
+      },
+      {
+        "name": "harmontide:shared/songbird/2",
+        "pitch": 1.25
+      },
+      {
+        "name": "harmontide:shared/songbird/3",
+        "pitch": 1.25
+      },
+      {
+        "name": "harmontide:shared/songbird/4",
+        "pitch": 1.25
+      },
+      {
+        "name": "harmontide:shared/songbird/5",
+        "pitch": 1.25
+      },
+      {
+        "name": "harmontide:shared/songbird/6",
+        "pitch": 1.25
       }
     ]
   },
@@ -6734,8 +8900,20 @@
     "subtitle": "subtitles.harmontide.entity.finch_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.2
       }
     ]
   },
@@ -6743,8 +8921,28 @@
     "subtitle": "subtitles.harmontide.entity.finch_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.2
       }
     ]
   },
@@ -6752,8 +8950,24 @@
     "subtitle": "subtitles.harmontide.entity.finch_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.2
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.2
       }
     ]
   },
@@ -6896,8 +9110,12 @@
     "subtitle": "subtitles.harmontide.entity.flamingo_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/crane/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/crane/2",
+        "pitch": 1.1
       }
     ]
   },
@@ -6905,8 +9123,20 @@
     "subtitle": "subtitles.harmontide.entity.flamingo_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.05
       }
     ]
   },
@@ -6914,8 +9144,28 @@
     "subtitle": "subtitles.harmontide.entity.flamingo_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.05
       }
     ]
   },
@@ -6923,8 +9173,24 @@
     "subtitle": "subtitles.harmontide.entity.flamingo_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.05
       }
     ]
   },
@@ -7274,8 +9540,16 @@
     "subtitle": "subtitles.harmontide.entity.garuda_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/raptor/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/raptor/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/raptor/3",
+        "pitch": 0.85
       }
     ]
   },
@@ -7283,8 +9557,20 @@
     "subtitle": "subtitles.harmontide.entity.garuda_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.95
       }
     ]
   },
@@ -7292,8 +9578,28 @@
     "subtitle": "subtitles.harmontide.entity.garuda_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.95
       }
     ]
   },
@@ -7301,8 +9607,24 @@
     "subtitle": "subtitles.harmontide.entity.garuda_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.95
       }
     ]
   },
@@ -8525,8 +10847,28 @@
     "subtitle": "subtitles.harmontide.entity.hummingbird_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/songbird/1",
+        "pitch": 1.45
+      },
+      {
+        "name": "harmontide:shared/songbird/2",
+        "pitch": 1.45
+      },
+      {
+        "name": "harmontide:shared/songbird/3",
+        "pitch": 1.45
+      },
+      {
+        "name": "harmontide:shared/songbird/4",
+        "pitch": 1.45
+      },
+      {
+        "name": "harmontide:shared/songbird/5",
+        "pitch": 1.45
+      },
+      {
+        "name": "harmontide:shared/songbird/6",
+        "pitch": 1.45
       }
     ]
   },
@@ -8534,8 +10876,20 @@
     "subtitle": "subtitles.harmontide.entity.hummingbird_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.25
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.25
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.25
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.25
       }
     ]
   },
@@ -8543,8 +10897,28 @@
     "subtitle": "subtitles.harmontide.entity.hummingbird_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.25
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.25
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.25
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.25
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.25
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.25
       }
     ]
   },
@@ -8552,8 +10926,24 @@
     "subtitle": "subtitles.harmontide.entity.hummingbird_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.25
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.25
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.25
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.25
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.25
       }
     ]
   },
@@ -8597,8 +10987,12 @@
     "subtitle": "subtitles.harmontide.entity.ibiset_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/crane/1",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/crane/2",
+        "pitch": 1.15
       }
     ]
   },
@@ -8606,8 +11000,20 @@
     "subtitle": "subtitles.harmontide.entity.ibiset_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.1
       }
     ]
   },
@@ -8615,8 +11021,28 @@
     "subtitle": "subtitles.harmontide.entity.ibiset_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.1
       }
     ]
   },
@@ -8624,8 +11050,24 @@
     "subtitle": "subtitles.harmontide.entity.ibiset_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.1
       }
     ]
   },
@@ -8633,8 +11075,12 @@
     "subtitle": "subtitles.harmontide.entity.ibisking_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/crane/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/crane/2",
+        "pitch": 0.9
       }
     ]
   },
@@ -8642,8 +11088,20 @@
     "subtitle": "subtitles.harmontide.entity.ibisking_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.95
       }
     ]
   },
@@ -8651,8 +11109,28 @@
     "subtitle": "subtitles.harmontide.entity.ibisking_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.95
       }
     ]
   },
@@ -8660,8 +11138,24 @@
     "subtitle": "subtitles.harmontide.entity.ibisking_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.95
       }
     ]
   },
@@ -8831,8 +11325,16 @@
     "subtitle": "subtitles.harmontide.entity.ironbeak_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/raptor/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/raptor/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/raptor/3",
+        "pitch": 0.9
       }
     ]
   },
@@ -8840,8 +11342,20 @@
     "subtitle": "subtitles.harmontide.entity.ironbeak_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.95
       }
     ]
   },
@@ -8849,8 +11363,28 @@
     "subtitle": "subtitles.harmontide.entity.ironbeak_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.95
       }
     ]
   },
@@ -8858,8 +11392,24 @@
     "subtitle": "subtitles.harmontide.entity.ironbeak_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.95
       }
     ]
   },
@@ -9965,8 +12515,16 @@
     "subtitle": "subtitles.harmontide.entity.landharpy_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/raptor/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/raptor/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/raptor/3",
+        "pitch": 1.0
       }
     ]
   },
@@ -9974,8 +12532,20 @@
     "subtitle": "subtitles.harmontide.entity.landharpy_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.0
       }
     ]
   },
@@ -9983,8 +12553,28 @@
     "subtitle": "subtitles.harmontide.entity.landharpy_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -9992,8 +12582,24 @@
     "subtitle": "subtitles.harmontide.entity.landharpy_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -10001,8 +12607,20 @@
     "subtitle": "subtitles.harmontide.entity.lechuza_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/owl/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/owl/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/owl/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/owl/4",
+        "pitch": 1.1
       }
     ]
   },
@@ -10010,8 +12628,20 @@
     "subtitle": "subtitles.harmontide.entity.lechuza_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.05
       }
     ]
   },
@@ -10019,8 +12649,28 @@
     "subtitle": "subtitles.harmontide.entity.lechuza_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.05
       }
     ]
   },
@@ -10028,8 +12678,24 @@
     "subtitle": "subtitles.harmontide.entity.lechuza_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.05
       }
     ]
   },
@@ -10568,8 +13234,28 @@
     "subtitle": "subtitles.harmontide.entity.macaw_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/parrot/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/parrot/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/parrot/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/parrot/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/parrot/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/parrot/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -10577,8 +13263,20 @@
     "subtitle": "subtitles.harmontide.entity.macaw_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.05
       }
     ]
   },
@@ -10586,8 +13284,28 @@
     "subtitle": "subtitles.harmontide.entity.macaw_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.05
       }
     ]
   },
@@ -10595,8 +13313,24 @@
     "subtitle": "subtitles.harmontide.entity.macaw_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.05
       }
     ]
   },
@@ -11270,8 +14004,12 @@
     "subtitle": "subtitles.harmontide.entity.mirror_crane_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/crane/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/crane/2",
+        "pitch": 1.0
       }
     ]
   },
@@ -11279,8 +14017,20 @@
     "subtitle": "subtitles.harmontide.entity.mirror_crane_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.0
       }
     ]
   },
@@ -11288,8 +14038,28 @@
     "subtitle": "subtitles.harmontide.entity.mirror_crane_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -11297,8 +14067,24 @@
     "subtitle": "subtitles.harmontide.entity.mirror_crane_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -11819,8 +14605,28 @@
     "subtitle": "subtitles.harmontide.entity.motmora_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/songbird/1",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/songbird/2",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/songbird/3",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/songbird/4",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/songbird/5",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/songbird/6",
+        "pitch": 0.8
       }
     ]
   },
@@ -11828,8 +14634,20 @@
     "subtitle": "subtitles.harmontide.entity.motmora_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.0
       }
     ]
   },
@@ -11837,8 +14655,28 @@
     "subtitle": "subtitles.harmontide.entity.motmora_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -11846,8 +14684,24 @@
     "subtitle": "subtitles.harmontide.entity.motmora_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -12107,8 +14961,20 @@
     "subtitle": "subtitles.harmontide.entity.newt_lizardfolk.death",
     "sounds": [
       {
-        "name": "minecraft:entity.player.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.1
       }
     ]
   },
@@ -12116,8 +14982,28 @@
     "subtitle": "subtitles.harmontide.entity.newt_lizardfolk.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.turtle.egg_crack",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.1
       }
     ]
   },
@@ -12125,8 +15011,24 @@
     "subtitle": "subtitles.harmontide.entity.newt_lizardfolk.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.player.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.1
       }
     ]
   },
@@ -12467,8 +15369,28 @@
     "subtitle": "subtitles.harmontide.entity.olm_mermaid.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.dolphin.ambient",
-        "type": "event"
+        "name": "harmontide:shared/bubbles/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/bubbles/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/bubbles/3",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/bubbles/4",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/bubbles/5",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/bubbles/6",
+        "pitch": 0.85
       }
     ]
   },
@@ -12476,8 +15398,20 @@
     "subtitle": "subtitles.harmontide.entity.olm_mermaid.death",
     "sounds": [
       {
-        "name": "minecraft:entity.dolphin.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.0
       }
     ]
   },
@@ -12485,8 +15419,28 @@
     "subtitle": "subtitles.harmontide.entity.olm_mermaid.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.dolphin.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -12494,8 +15448,24 @@
     "subtitle": "subtitles.harmontide.entity.olm_mermaid.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.dolphin.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -12971,8 +15941,16 @@
     "subtitle": "subtitles.harmontide.entity.peaflare_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/peacock/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/peacock/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/peacock/3",
+        "pitch": 1.0
       }
     ]
   },
@@ -12980,8 +15958,20 @@
     "subtitle": "subtitles.harmontide.entity.peaflare_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.0
       }
     ]
   },
@@ -12989,8 +15979,28 @@
     "subtitle": "subtitles.harmontide.entity.peaflare_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -12998,8 +16008,24 @@
     "subtitle": "subtitles.harmontide.entity.peaflare_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -13043,8 +16069,24 @@
     "subtitle": "subtitles.harmontide.entity.pelican_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.chicken.ambient",
-        "type": "event"
+        "name": "harmontide:shared/seabird/1",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/seabird/2",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/seabird/3",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/seabird/4",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/seabird/5",
+        "pitch": 0.7
       }
     ]
   },
@@ -13052,8 +16094,20 @@
     "subtitle": "subtitles.harmontide.entity.pelican_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.chicken.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.9
       }
     ]
   },
@@ -13061,8 +16115,28 @@
     "subtitle": "subtitles.harmontide.entity.pelican_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.9
       }
     ]
   },
@@ -13070,8 +16144,24 @@
     "subtitle": "subtitles.harmontide.entity.pelican_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.chicken.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.9
       }
     ]
   },
@@ -13079,8 +16169,28 @@
     "subtitle": "subtitles.harmontide.entity.penguin_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.donkey.ambient",
-        "type": "event"
+        "name": "harmontide:shared/waterfowl/1",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/waterfowl/2",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/waterfowl/3",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/waterfowl/4",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/waterfowl/5",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/waterfowl/6",
+        "pitch": 0.75
       }
     ]
   },
@@ -13088,8 +16198,20 @@
     "subtitle": "subtitles.harmontide.entity.penguin_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.1
       }
     ]
   },
@@ -13097,8 +16219,28 @@
     "subtitle": "subtitles.harmontide.entity.penguin_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.generic.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.1
       }
     ]
   },
@@ -13106,8 +16248,24 @@
     "subtitle": "subtitles.harmontide.entity.penguin_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.1
       }
     ]
   },
@@ -13430,8 +16588,16 @@
     "subtitle": "subtitles.harmontide.entity.poultry_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/poultry/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/poultry/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/poultry/3",
+        "pitch": 1.0
       }
     ]
   },
@@ -13439,8 +16605,20 @@
     "subtitle": "subtitles.harmontide.entity.poultry_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.05
       }
     ]
   },
@@ -13448,8 +16626,28 @@
     "subtitle": "subtitles.harmontide.entity.poultry_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.05
       }
     ]
   },
@@ -13457,8 +16655,24 @@
     "subtitle": "subtitles.harmontide.entity.poultry_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.05
       }
     ]
   },
@@ -13538,8 +16752,20 @@
     "subtitle": "subtitles.harmontide.entity.pumpkingull_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.0
       }
     ]
   },
@@ -13547,8 +16773,28 @@
     "subtitle": "subtitles.harmontide.entity.pumpkingull_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -13556,8 +16802,24 @@
     "subtitle": "subtitles.harmontide.entity.pumpkingull_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -14168,8 +17430,24 @@
     "subtitle": "subtitles.harmontide.entity.reliquary_dove_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/dove/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/dove/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/dove/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/dove/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/dove/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -14177,8 +17455,20 @@
     "subtitle": "subtitles.harmontide.entity.reliquary_dove_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.0
       }
     ]
   },
@@ -14186,8 +17476,28 @@
     "subtitle": "subtitles.harmontide.entity.reliquary_dove_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -14195,8 +17505,24 @@
     "subtitle": "subtitles.harmontide.entity.reliquary_dove_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -14375,8 +17701,16 @@
     "subtitle": "subtitles.harmontide.entity.roc_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/raptor/1",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/raptor/2",
+        "pitch": 0.7
+      },
+      {
+        "name": "harmontide:shared/raptor/3",
+        "pitch": 0.7
       }
     ]
   },
@@ -14384,8 +17718,20 @@
     "subtitle": "subtitles.harmontide.entity.roc_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.85
       }
     ]
   },
@@ -14393,8 +17739,28 @@
     "subtitle": "subtitles.harmontide.entity.roc_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.85
       }
     ]
   },
@@ -14402,8 +17768,24 @@
     "subtitle": "subtitles.harmontide.entity.roc_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.85
       }
     ]
   },
@@ -14483,8 +17865,20 @@
     "subtitle": "subtitles.harmontide.entity.rookmourn_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.9
       }
     ]
   },
@@ -14492,8 +17886,28 @@
     "subtitle": "subtitles.harmontide.entity.rookmourn_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.9
       }
     ]
   },
@@ -14501,8 +17915,24 @@
     "subtitle": "subtitles.harmontide.entity.rookmourn_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.9
       }
     ]
   },
@@ -14654,8 +18084,20 @@
     "subtitle": "subtitles.harmontide.entity.salamander_lizardfolk.death",
     "sounds": [
       {
-        "name": "minecraft:entity.player.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.0
       }
     ]
   },
@@ -14663,8 +18105,28 @@
     "subtitle": "subtitles.harmontide.entity.salamander_lizardfolk.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.turtle.egg_crack",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.0
       }
     ]
   },
@@ -14672,8 +18134,24 @@
     "subtitle": "subtitles.harmontide.entity.salamander_lizardfolk.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.player.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.0
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.0
       }
     ]
   },
@@ -15590,8 +19068,24 @@
     "subtitle": "subtitles.harmontide.entity.skycrow_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/corvid/1",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/corvid/2",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/corvid/3",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/corvid/4",
+        "pitch": 1.1
+      },
+      {
+        "name": "harmontide:shared/corvid/5",
+        "pitch": 1.1
       }
     ]
   },
@@ -15599,8 +19093,20 @@
     "subtitle": "subtitles.harmontide.entity.skycrow_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.05
       }
     ]
   },
@@ -15608,8 +19114,28 @@
     "subtitle": "subtitles.harmontide.entity.skycrow_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.05
       }
     ]
   },
@@ -15617,8 +19143,24 @@
     "subtitle": "subtitles.harmontide.entity.skycrow_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.05
       }
     ]
   },
@@ -16373,8 +19915,20 @@
     "subtitle": "subtitles.harmontide.entity.stigowl_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.phantom.ambient",
-        "type": "event"
+        "name": "harmontide:shared/owl/1",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/owl/2",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/owl/3",
+        "pitch": 0.75
+      },
+      {
+        "name": "harmontide:shared/owl/4",
+        "pitch": 0.75
       }
     ]
   },
@@ -16382,8 +19936,20 @@
     "subtitle": "subtitles.harmontide.entity.stigowl_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.85
       }
     ]
   },
@@ -16391,8 +19957,28 @@
     "subtitle": "subtitles.harmontide.entity.stigowl_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.85
       }
     ]
   },
@@ -16400,8 +19986,24 @@
     "subtitle": "subtitles.harmontide.entity.stigowl_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.85
       }
     ]
   },
@@ -16517,8 +20119,28 @@
     "subtitle": "subtitles.harmontide.entity.swan_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.chicken.ambient",
-        "type": "event"
+        "name": "harmontide:shared/waterfowl/1",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/waterfowl/2",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/waterfowl/3",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/waterfowl/4",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/waterfowl/5",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/waterfowl/6",
+        "pitch": 0.8
       }
     ]
   },
@@ -16526,8 +20148,20 @@
     "subtitle": "subtitles.harmontide.entity.swan_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.chicken.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.95
       }
     ]
   },
@@ -16535,8 +20169,28 @@
     "subtitle": "subtitles.harmontide.entity.swan_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.95
       }
     ]
   },
@@ -16544,8 +20198,24 @@
     "subtitle": "subtitles.harmontide.entity.swan_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.chicken.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.95
       }
     ]
   },
@@ -17003,8 +20673,28 @@
     "subtitle": "subtitles.harmontide.entity.toucan_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/parrot/1",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/parrot/2",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/parrot/3",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/parrot/4",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/parrot/5",
+        "pitch": 0.9
+      },
+      {
+        "name": "harmontide:shared/parrot/6",
+        "pitch": 0.9
       }
     ]
   },
@@ -17012,8 +20702,20 @@
     "subtitle": "subtitles.harmontide.entity.toucan_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.05
       }
     ]
   },
@@ -17021,8 +20723,28 @@
     "subtitle": "subtitles.harmontide.entity.toucan_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.05
       }
     ]
   },
@@ -17030,8 +20752,24 @@
     "subtitle": "subtitles.harmontide.entity.toucan_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.05
       }
     ]
   },
@@ -17075,8 +20813,20 @@
     "subtitle": "subtitles.harmontide.entity.trickster_raven_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.05
       }
     ]
   },
@@ -17084,8 +20834,28 @@
     "subtitle": "subtitles.harmontide.entity.trickster_raven_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.05
       }
     ]
   },
@@ -17093,8 +20863,24 @@
     "subtitle": "subtitles.harmontide.entity.trickster_raven_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.05
       }
     ]
   },
@@ -18434,8 +22220,24 @@
     "subtitle": "subtitles.harmontide.entity.yatagarasu_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/corvid/1",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/corvid/2",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/corvid/3",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/corvid/4",
+        "pitch": 0.8
+      },
+      {
+        "name": "harmontide:shared/corvid/5",
+        "pitch": 0.8
       }
     ]
   },
@@ -18443,8 +22245,20 @@
     "subtitle": "subtitles.harmontide.entity.yatagarasu_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.95
       }
     ]
   },
@@ -18452,8 +22266,28 @@
     "subtitle": "subtitles.harmontide.entity.yatagarasu_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.95
       }
     ]
   },
@@ -18461,8 +22295,24 @@
     "subtitle": "subtitles.harmontide.entity.yatagarasu_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.95
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.95
       }
     ]
   },
@@ -18614,8 +22464,16 @@
     "subtitle": "subtitles.harmontide.entity.zhuque_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/raptor/1",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/raptor/2",
+        "pitch": 1.15
+      },
+      {
+        "name": "harmontide:shared/raptor/3",
+        "pitch": 1.15
       }
     ]
   },
@@ -18623,8 +22481,20 @@
     "subtitle": "subtitles.harmontide.entity.zhuque_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 1.05
       }
     ]
   },
@@ -18632,8 +22502,28 @@
     "subtitle": "subtitles.harmontide.entity.zhuque_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 1.05
       }
     ]
   },
@@ -18641,8 +22531,24 @@
     "subtitle": "subtitles.harmontide.entity.zhuque_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 1.05
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 1.05
       }
     ]
   },
@@ -18650,8 +22556,16 @@
     "subtitle": "subtitles.harmontide.entity.ziz_harpy.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "harmontide:shared/raptor/1",
+        "pitch": 0.65
+      },
+      {
+        "name": "harmontide:shared/raptor/2",
+        "pitch": 0.65
+      },
+      {
+        "name": "harmontide:shared/raptor/3",
+        "pitch": 0.65
       }
     ]
   },
@@ -18659,8 +22573,20 @@
     "subtitle": "subtitles.harmontide.entity.ziz_harpy.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "harmontide:shared/girl_death/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_death/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_death/3",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_death/4",
+        "pitch": 0.85
       }
     ]
   },
@@ -18668,8 +22594,28 @@
     "subtitle": "subtitles.harmontide.entity.ziz_harpy.eat",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.eat",
-        "type": "event"
+        "name": "harmontide:shared/eat/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/3",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/4",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/5",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/eat/6",
+        "pitch": 0.85
       }
     ]
   },
@@ -18677,8 +22623,24 @@
     "subtitle": "subtitles.harmontide.entity.ziz_harpy.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "harmontide:shared/girl_hurt/1",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/2",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/3",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/4",
+        "pitch": 0.85
+      },
+      {
+        "name": "harmontide:shared/girl_hurt/5",
+        "pitch": 0.85
       }
     ]
   },
