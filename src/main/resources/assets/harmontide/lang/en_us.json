@@ -2049,6 +2049,8 @@
   "harmontide.configuration.title": "Harmontide Settings",
   "harmontide.configuration.detailedSparrowModel": "Detailed sparrow model",
   "harmontide.configuration.softSparrowFace": "Soft sparrow face",
+  "harmontide.configuration.creatureVolume": "Creature volume (%)",
+  "harmontide.configuration.creatureChatter": "Creature chatter (%)",
   "harmontide.configuration.wildSpawnChance": "Wild spawn chance",
   "harmontide.configuration.wildSpacing": "Wild spacing (blocks)",
   "harmontide.configuration.spawnRate": "Spawn rate (%)",
