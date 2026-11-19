@@ -17,6 +17,44 @@ tasks.named('wrapper', Wrapper).configure {
 version = mod_version
 group = mod_group_id
 
+// The short git commit, shown after the version in the Mods screen (0.2.0+332651b) so two builds
+// of the same version can be told apart. "+dirty" marks a build with uncommitted changes.
+// Without git (or outside a checkout) it is just the plain version.
+def gitStamp = providers.provider {
+    try {
+        def hash = providers.exec { commandLine 'git', 'rev-parse', '--short', 'HEAD'; ignoreExitValue = true }
+                .standardOutput.asText.get().trim()
+        if (!hash) return ''
+        def dirty = providers.exec { commandLine 'git', 'status', '--porcelain', '--untracked-files=no'; ignoreExitValue = true }
+                .standardOutput.asText.get().trim()
+        return '+' + hash + (dirty ? '.dirty' : '')
+    } catch (Exception ignored) {
+        return ''
+    }
+}
+def displayVersion = "${mod_version}${gitStamp.get()}"
+
+// ./gradlew bumpVersion [-Ppart=patch|minor|major] raises mod_version in gradle.properties.
+tasks.register('bumpVersion') {
+    def propsFile = file('gradle.properties')
+    def part = providers.gradleProperty('part').orElse('patch')
+    doLast {
+        def text = propsFile.getText('UTF-8')
+        def m = text =~ /(?m)^mod_version=(\d+)\.(\d+)\.(\d+)\s*$/
+        if (!m.find()) throw new GradleException('mod_version=X.Y.Z not found in gradle.properties')
+        int major = m.group(1) as int, minor = m.group(2) as int, patch = m.group(3) as int
+        switch (part.get()) {
+            case 'major': major++; minor = 0; patch = 0; break
+            case 'minor': minor++; patch = 0; break
+            case 'patch': patch++; break
+            default: throw new GradleException("part must be patch, minor or major, not ${part.get()}")
+        }
+        def next = "${major}.${minor}.${patch}"
+        propsFile.write(text.replaceFirst(/(?m)^mod_version=.*$/, "mod_version=${next}"), 'UTF-8')
+        println "mod_version ${m.group(1)}.${m.group(2)}.${m.group(3)} -> ${next}"
+    }
+}
+
 sourceSets {
     paints {
         java.srcDirs = []
@@ -178,7 +216,7 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             mod_id                 : mod_id,
             mod_name               : mod_name,
             mod_license            : mod_license,
-            mod_version            : mod_version,
+            mod_version            : displayVersion,
             geckolib_version       : geckolib_version,
     ]
     inputs.properties replaceProperties
