@@ -134,13 +134,13 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     private static final Map<String, RawAnimation> ANIMATIONS = new ConcurrentHashMap<>();
 
     /** Synced flags (bits of DATA_FLAGS). */
-    private int blushTicks, towelTicks, harnessTicks;
+    private int blushTicks, towelTicks, harnessTicks, bareTicks;
     public static final int FLAG_TRUE_FORM = 1, FLAG_HIDDEN = 2, FLAG_DECOY = 4, FLAG_HALF = 8, FLAG_CARRYING = 16, FLAG_SADDLED = 32, FLAG_CHEST = 64,
             FLAG_CALM = 128, FLAG_SHELLS = 256, FLAG_SMILE = 512, FLAG_MALE = 1024, FLAG_RETRACTED = 2048, FLAG_LIT = 4096, FLAG_MASKED = 8192,
             FLAG_MERCHANT = 16384, FLAG_TOWING = 32768, FLAG_MOONSTRUCK = 65536, FLAG_INJURED = 131072, FLAG_WAXED = 262144,
             FLAG_TAILLESS = 524288, FLAG_UNWRAP_A = 1048576, FLAG_UNWRAP_B = 2097152, FLAG_SHORN = 4194304, FLAG_BLINDFOLD = 8388608,
             FLAG_BLUSHING = 16777216, FLAG_HARNESSED = 33554432, FLAG_PRUNED = 67108864, FLAG_TOWEL = 134217728, FLAG_VEIL = 268435456,
-            FLAG_HEADLESS = 536870912;
+            FLAG_HEADLESS = 536870912, FLAG_BARE = 1073741824;
     /** The flags that are saved (the others are moment-to-moment state). */
     private static final int SAVED_FLAGS = FLAG_TRUE_FORM | FLAG_SADDLED | FLAG_CHEST | FLAG_HALF | FLAG_CALM | FLAG_SHELLS | FLAG_MALE | FLAG_MASKED | FLAG_MERCHANT
             | FLAG_INJURED | FLAG_WAXED | FLAG_TAILLESS | FLAG_UNWRAP_A | FLAG_UNWRAP_B | FLAG_SHORN;
@@ -170,7 +170,9 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         /** Sitting with her baby held to her chest (or, for the baby, held there): the sit animation with the cradle pose over it. */
         NURSE("sit", false),
         /** An idle fidget (entity/girl/Fidgets): which clip is in DATA_FIDGET. */
-        FIDGET(null, true);
+        FIDGET(null, true),
+        /** Kneeling astride her partner. The clip is idle; the pose is applied on top (client/CowgirlPose). */
+        KNEEL(null, false);
 
         public final String animation;
         public final boolean once;
@@ -461,6 +463,18 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.setFlag(FLAG_BLUSHING, true);
     }
 
+    /** Topless texture for a bucket milking (client/Topless). Not saved. */
+    public void bareFor(int ticks) {
+        this.bareTicks = Math.max(this.bareTicks, ticks);
+        this.setFlag(FLAG_BARE, true);
+    }
+
+    /** Her top comes back after this many ticks, or at once when ticks is 0. */
+    public void dressAfter(int ticks) {
+        this.bareTicks = Math.max(0, ticks);
+        this.setFlag(FLAG_BARE, ticks > 0);
+    }
+
     /** How far behind her waist a rider sits, in blocks: her model is drawn this far forward so she turns about her rider (GirlRenderer). */
     public double seatBack() {
         return 0.0;
@@ -676,7 +690,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     @Override
     public void leaveBed() {
-        if (this.getAction() == Action.LYING) this.setAction(Action.NONE);
+        if (this.getAction() == Action.LYING || this.getAction() == Action.KNEEL) this.setAction(Action.NONE);
     }
 
     /** Called when the player whose bed she shared wakes up in the morning (a family's bed perk). */
@@ -840,6 +854,12 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         }
         InteractionResult errand = Foraging.interact(this, player, stack);   // a crouched sample: off to gather it
         if (errand != null) return errand;
+        if (stack.is(Items.BUCKET) && com.linkyoshi90.harmontide.entity.HandMilking.interested(this, player)) {
+            if (this.level() instanceof ServerLevel server && player instanceof net.minecraft.server.level.ServerPlayer sp) {
+                com.linkyoshi90.harmontide.entity.HandMilking.tryBegin(server, this, sp, hand);
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         InteractionResult family = this.familyInteract(player, hand, stack);
         if (family != null) return family;
         if (this.isBaby() && (this.isFood(stack) || stack.is(ModTags.MEAT) || stack.has(net.minecraft.core.component.DataComponents.FOOD))
@@ -1069,6 +1089,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     public void aiStep() {
         super.aiStep();
         if (!this.level().isClientSide && this.blushTicks > 0 && --this.blushTicks == 0) this.setFlag(FLAG_BLUSHING, false);
+        if (!this.level().isClientSide && this.bareTicks > 0 && --this.bareTicks == 0) this.setFlag(FLAG_BARE, false);
         if (this.level() instanceof ServerLevel party && this.tickCount % 101 == 0) com.linkyoshi90.harmontide.entity.HomeLife.dance(party, this, com.linkyoshi90.harmontide.entity.JukeboxSensing.findPlaying(party, this.blockPosition(), 16) != null
                 || com.linkyoshi90.harmontide.entity.DemonRealm.sabbath(this));
         if (!this.level().isClientSide && this.towelTicks > 0 && --this.towelTicks == 0) this.setFlag(FLAG_TOWEL, false);
@@ -1398,6 +1419,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (this.isDeadOrDying() && this.hasDeathAnimation()) return state.setAndContinue(this.anim("death", true));
         if (this.isPassenger() && this.hasRideAnimation()) return state.setAndContinue(this.anim("ride", false));
         Action action = this.getAction();
+        if (action == Action.KNEEL) return state.setAndContinue(this.anim("idle", false));
         if (action == Action.FIDGET && !this.getFidget().isEmpty() && !state.isMoving()) return state.setAndContinue(this.anim("fidget_" + this.getFidget(), true));
         if (action.animation != null) return state.setAndContinue(this.anim(action.animation, action.once));
         if (this.isInWater() && this.hasSwimAnimation()) return state.setAndContinue(this.anim(state.isMoving() ? "swim" : "idle", false));

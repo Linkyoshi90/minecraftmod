@@ -42,16 +42,23 @@ public class HarpyRenderer<T extends AbstractHarpy> extends GeoEntityRenderer<T>
             @Override
             public void setCustomAnimations(T harpy, long instanceId, AnimationState<T> animationState) {
                 super.setCustomAnimations(harpy, instanceId, animationState);
+                var proc = this.getAnimationProcessor();
+                Jiggle.install(proc);
                 Bellies.harpy(this, harpy);
                 PupilLook.lookAt(this, harpy);
+                CowgirlPose.apply(proc, harpy, animationState.getPartialTick());
+                MilkPose.apply(proc, harpy);
+                Jiggle.apply(proc, harpy, animationState.getPartialTick());
             }
 
             @Override
             public ResourceLocation getTextureResource(T harpy) {
-                if (harpy.isBaby()) return Paints.of(YoungModels.tex(harpy.modelName()), harpy.getPaintName());
-                if (Paints.shown(harpy.getPaintName()) != null) return Paints.of(HarmontideMod.id("textures/entity/" + species + ".png"), harpy.getPaintName());
-                return this.textures.computeIfAbsent(textureSuffix.apply(harpy),
+                ResourceLocation tex;
+                if (harpy.isBaby()) tex = Paints.of(YoungModels.tex(harpy.modelName()), harpy.getPaintName());
+                else if (Paints.shown(harpy.getPaintName()) != null) tex = Paints.of(HarmontideMod.id("textures/entity/" + species + ".png"), harpy.getPaintName());
+                else tex = this.textures.computeIfAbsent(textureSuffix.apply(harpy),
                         suffix -> HarmontideMod.id("textures/entity/" + species + suffix + ".png"));
+                return harpy.isBare() ? Topless.worn(tex, this.getModelResource(harpy)) : tex;
             }
         });
         this.withScale(scale);

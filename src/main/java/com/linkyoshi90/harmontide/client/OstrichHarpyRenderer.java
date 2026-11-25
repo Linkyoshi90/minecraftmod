@@ -42,15 +42,22 @@ public class OstrichHarpyRenderer extends GeoEntityRenderer<OstrichHarpy> {
             @Override
             public void setCustomAnimations(OstrichHarpy harpy, long instanceId, AnimationState<OstrichHarpy> animationState) {
                 super.setCustomAnimations(harpy, instanceId, animationState);
+                var proc = this.getAnimationProcessor();
+                Jiggle.install(proc);
                 Bellies.harpy(this, harpy);
                 PupilLook.lookAt(this, harpy);
+                CowgirlPose.apply(proc, harpy, animationState.getPartialTick());
+                MilkPose.apply(proc, harpy);
+                Jiggle.apply(proc, harpy, animationState.getPartialTick());
             }
 
             @Override
             public ResourceLocation getTextureResource(OstrichHarpy ostrich) {
-                if (ostrich.isBaby()) return Paints.of(YoungModels.tex(ostrich.modelName()), ostrich.getPaintName());
-                if (Paints.shown(ostrich.getPaintName()) != null) return Paints.of(HarmontideMod.id("textures/entity/ostrich_harpy.png"), ostrich.getPaintName());
-                return TEXTURES.get(ostrich.getVariant());
+                ResourceLocation tex;
+                if (ostrich.isBaby()) tex = Paints.of(YoungModels.tex(ostrich.modelName()), ostrich.getPaintName());
+                else if (Paints.shown(ostrich.getPaintName()) != null) tex = Paints.of(HarmontideMod.id("textures/entity/ostrich_harpy.png"), ostrich.getPaintName());
+                else tex = TEXTURES.get(ostrich.getVariant());
+                return ostrich.isBare() ? Topless.worn(tex, this.getModelResource(ostrich)) : tex;
             }
         });
         this.withScale(SCALE);

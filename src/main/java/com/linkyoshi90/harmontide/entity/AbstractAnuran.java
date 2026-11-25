@@ -67,7 +67,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity, Bonded, Painted, WeddingVeil {
     private static final EntityDataAccessor<Boolean> DATA_BLUSHING = SynchedEntityData.defineId(AbstractAnuran.class, EntityDataSerializers.BOOLEAN);
-    private int blushTicks;
+    private static final EntityDataAccessor<Boolean> DATA_BARE = SynchedEntityData.defineId(AbstractAnuran.class, EntityDataSerializers.BOOLEAN);
+    private int blushTicks, bareTicks;
     private static final EntityDataAccessor<Byte> DATA_ACTION =
             SynchedEntityData.defineId(AbstractAnuran.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<String> DATA_FIDGET = SynchedEntityData.defineId(AbstractAnuran.class, EntityDataSerializers.STRING);
@@ -98,7 +99,9 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         GULPING("gulp", false), SQUIRTING("squirt", false), CHORUS("chorus", false), SWEEPING("sweep", false),
         BROODING("brood", false), BIRTH("birth", true), PULLING("pull", true),
         /** An idle fidget (entity/girl/Fidgets): which clip is in DATA_FIDGET. */
-        FIDGETING(null, true);
+        FIDGETING(null, true),
+        /** Kneeling astride her partner. Idle underneath; the pose is applied on top (client/CowgirlPose). */
+        KNEEL(null, false);
 
         /** The animation.&lt;species&gt;.&lt;name&gt; this action plays, and whether it plays once and holds its last pose. */
         public final String animation;
@@ -240,6 +243,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         builder.define(DATA_ACTION, (byte) Action.NONE.ordinal());
         builder.define(DATA_FIDGET, "");
         builder.define(DATA_BLUSHING, false);
+        builder.define(DATA_BARE, false);
         builder.define(DATA_CLIMBING, false);
         builder.define(DATA_STAGE, ADULT);
         builder.define(DATA_VARIANT, (byte) 0);
@@ -443,10 +447,26 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         return this.entityData.get(DATA_BLUSHING);
     }
 
+    /** Topless texture for a bucket milking (client/Topless). */
+    public void bareFor(int ticks) {
+        this.bareTicks = Math.max(this.bareTicks, ticks);
+        this.entityData.set(DATA_BARE, true);
+    }
+
+    public void dressAfter(int ticks) {
+        this.bareTicks = Math.max(0, ticks);
+        this.entityData.set(DATA_BARE, ticks > 0);
+    }
+
+    public boolean isBare() {
+        return this.entityData.get(DATA_BARE);
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
         if (!this.level().isClientSide && this.blushTicks > 0 && --this.blushTicks == 0) this.entityData.set(DATA_BLUSHING, false);
+        if (!this.level().isClientSide && this.bareTicks > 0 && --this.bareTicks == 0) this.entityData.set(DATA_BARE, false);
         if (this.level() instanceof ServerLevel hurt) Injury.tick(hurt, this);
         if (this.level() instanceof ServerLevel milky) com.linkyoshi90.harmontide.entity.Lactation.tick(milky, this);
         if (this.level() instanceof ServerLevel) {
@@ -482,6 +502,12 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         InteractionResult paint = Painted.interact(this, this, player, hand);
         if (paint != null) return paint;
         ItemStack stack = player.getItemInHand(hand);
+        if (stack.is(Items.BUCKET) && com.linkyoshi90.harmontide.entity.HandMilking.interested(this, player)) {
+            if (this.level() instanceof ServerLevel server && player instanceof net.minecraft.server.level.ServerPlayer sp) {
+                com.linkyoshi90.harmontide.entity.HandMilking.tryBegin(server, this, sp, hand);
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         if (hand == InteractionHand.MAIN_HAND && stack.is(Items.STICK) && !this.isTadpole()) {
             if (!this.level().isClientSide) Orders.onStick(this, this.orders, player);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
@@ -689,7 +715,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     @Override
     public void leaveBed() {
         this.inBed = false;
-        if (this.getAction() == Action.SITTING && !this.orderedToSit) this.setAction(Action.NONE);
+        if (this.getAction() == Action.KNEEL || this.getAction() == Action.SITTING && !this.orderedToSit) this.setAction(Action.NONE);
     }
 
     @Override
@@ -846,6 +872,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
             return state.setAndContinue(this.anim(state.isMoving() ? (this.isAggressive() ? "hop" : this.movingAnimation().equals("hop") ? "hop" : "walk") : "idle"));
         }
         Action action = this.getAction();
+        if (action == Action.KNEEL) return state.setAndContinue(this.anim("idle"));
         if (action == Action.FIDGETING && !this.getFidget().isEmpty() && !state.isMoving() && !this.isInWater()) return state.setAndContinue(this.animOnce("fidget_" + this.getFidget()));
         if (action.animation != null) return state.setAndContinue(action.once ? this.animOnce(action.animation) : this.anim(action.animation));
         String special = this.specialMovementAnimation();

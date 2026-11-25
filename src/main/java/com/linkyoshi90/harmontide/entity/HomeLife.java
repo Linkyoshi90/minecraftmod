@@ -178,8 +178,7 @@ public final class HomeLife {
         b.addAffection(player, 1);
         hearts(level, mob);
         if (mob instanceof AbstractMonsterGirl girl) {
-            Flirting.inTub(level, girl, player);
-            if (Flirting.canFlirt(girl, player)) {
+            if (Flirting.inTub(level, girl, player) || Flirting.canFlirt(girl, player)) {
                 girl.towelFor(TOWEL_TICKS);
                 girl.blushFor(TOWEL_TICKS);
             }

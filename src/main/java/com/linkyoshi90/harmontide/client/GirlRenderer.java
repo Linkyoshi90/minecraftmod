@@ -211,6 +211,11 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
 
         @Override
         public ResourceLocation getTextureResource(AbstractMonsterGirl girl) {
+            ResourceLocation tex = this.plainTexture(girl);
+            return girl.hasFlag(AbstractMonsterGirl.FLAG_BARE) ? Topless.worn(tex, this.getModelResource(girl)) : tex;
+        }
+
+        private ResourceLocation plainTexture(AbstractMonsterGirl girl) {
             String borrowed = girl.disguise();
             if (!borrowed.isEmpty()) return this.textures.computeIfAbsent("tex:" + borrowed, s -> HarmontideMod.id("textures/entity/" + borrowed + ".png"));
             String name = this.modelName(girl);
@@ -227,6 +232,7 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         public void setCustomAnimations(AbstractMonsterGirl girl, long instanceId, AnimationState<AbstractMonsterGirl> state) {
             super.setCustomAnimations(girl, instanceId, state);
             var proc = this.getAnimationProcessor();
+            Jiggle.install(proc);
             var look = state.getData(software.bernie.geckolib.constant.DataTickets.ENTITY_MODEL_DATA);
             var sprouts = proc.getBone("hair_sprouts");
             if (sprouts != null) sprouts.setHidden(girl.hasFlag(AbstractMonsterGirl.FLAG_PRUNED));   // Shiitake's offshoots, regrowing
@@ -315,6 +321,9 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
                 mouth.setScaleY(1.5F);
                 mouth.setPosZ(-0.4F);                                               // the open mouth slides out of the face
             }
+            CowgirlPose.apply(proc, girl, state.getPartialTick());
+            MilkPose.apply(proc, girl);
+            Jiggle.apply(proc, girl, state.getPartialTick());
         }
     }
 

@@ -37,8 +37,13 @@ public class AnuranRenderer<T extends AbstractAnuran> extends GeoEntityRenderer<
             @Override
             public void setCustomAnimations(T animatable, long instanceId, AnimationState<T> animationState) {
                 super.setCustomAnimations(animatable, instanceId, animationState);
+                var proc = this.getAnimationProcessor();
+                Jiggle.install(proc);
                 Bellies.anuran(this, animatable);
                 PupilLook.lookAt(this, animatable);
+                CowgirlPose.apply(proc, animatable, animationState.getPartialTick());
+                MilkPose.apply(proc, animatable);
+                Jiggle.apply(proc, animatable, animationState.getPartialTick());
                 if (animatable instanceof com.linkyoshi90.harmontide.entity.Bullywug wug) {   // the outfit that comes off
                     boolean off = wug.isUndressed();
                     for (String b : new String[]{"skirt", "cattails"}) {
@@ -51,11 +56,12 @@ public class AnuranRenderer<T extends AbstractAnuran> extends GeoEntityRenderer<
             @Override
             public ResourceLocation getTextureResource(T animatable) {
                 String paint = Paints.shown(animatable.getPaintName());                    // a painted one: her paint over the default colours
-                if (animatable.isBaby() && animatable.hasYoungModels()) return Paints.of(YoungModels.tex(animatable.modelName()), paint);
-                if (paint != null) return Paints.of(HarmontideMod.id("textures/entity/" + species + ".png"), paint);
-                // colour variants: textures/entity/<species>_<variant>.png (the default colours have no suffix)
-                return this.textures.computeIfAbsent(animatable.getVariantSuffix(),
+                ResourceLocation tex;
+                if (animatable.isBaby() && animatable.hasYoungModels()) tex = Paints.of(YoungModels.tex(animatable.modelName()), paint);
+                else if (paint != null) tex = Paints.of(HarmontideMod.id("textures/entity/" + species + ".png"), paint);
+                else tex = this.textures.computeIfAbsent(animatable.getVariantSuffix(),
                         suffix -> HarmontideMod.id("textures/entity/" + species + suffix + ".png"));
+                return animatable.isBare() ? Topless.worn(tex, this.getModelResource(animatable)) : tex;
             }
         });
         this.withScale(scale);

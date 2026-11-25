@@ -64,7 +64,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, FlyingAnimal, Bonded, GiftGiver, Painted, WeddingVeil, Voices.Voiced {
     private static final EntityDataAccessor<Boolean> DATA_BLUSHING = SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.BOOLEAN);
-    private int blushTicks;
+    private static final EntityDataAccessor<Boolean> DATA_BARE = SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.BOOLEAN);
+    private int blushTicks, bareTicks;
     private static final EntityDataAccessor<Byte> DATA_ACTION =
             SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<String> DATA_FIDGET = SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.STRING);
@@ -94,7 +95,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     /** How far away a harpy hears (and reacts to) a jukebox playing. */
     public static final int MUSIC_RANGE = 16;
 
-    public enum Action { NONE, SINGING, BATHING, CAWING, KNOCKING, PRANKING, DISPLAYING, KICKING, BROODING, HOOTING, SLEEPING, POUNCING, BEGGING, DANCING, STRIKING, CRYING, CACHING, SITTING, LYING, NESTING, DRINKING, CLACKING, PERCHING, FIDGETING }
+    public enum Action { NONE, SINGING, BATHING, CAWING, KNOCKING, PRANKING, DISPLAYING, KICKING, BROODING, HOOTING, SLEEPING, POUNCING, BEGGING, DANCING, STRIKING, CRYING, CACHING, SITTING, LYING, NESTING, DRINKING, CLACKING, PERCHING, FIDGETING, KNEEL }
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -209,6 +210,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         builder.define(DATA_ACTION, (byte) Action.NONE.ordinal());
         builder.define(DATA_FIDGET, "");
         builder.define(DATA_BLUSHING, false);
+        builder.define(DATA_BARE, false);
         builder.define(DATA_BABY, false);
         builder.define(DATA_BELLY, (byte) 0);
         builder.define(DATA_MOONSTRUCK, false);
@@ -334,6 +336,12 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         InteractionResult paint = Painted.interact(this, this, player, hand);
         if (paint != null) return paint;
+        if (player.getItemInHand(hand).is(Items.BUCKET) && com.linkyoshi90.harmontide.entity.HandMilking.interested(this, player)) {
+            if (this.level() instanceof ServerLevel server && player instanceof net.minecraft.server.level.ServerPlayer sp) {
+                com.linkyoshi90.harmontide.entity.HandMilking.tryBegin(server, this, sp, hand);
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         if (hand == InteractionHand.MAIN_HAND && player.getMainHandItem().is(Items.STICK)) {
             if (!this.level().isClientSide) Orders.onStick(this, this.orders, player);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
@@ -640,7 +648,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
 
     @Override
     public void leaveBed() {
-        if (this.getAction() == Action.LYING) this.setAction(Action.NONE);
+        if (this.getAction() == Action.LYING || this.getAction() == Action.KNEEL) this.setAction(Action.NONE);
     }
 
     // --- sitting on command --------------------------------------------------------------------------------------
@@ -710,10 +718,26 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         return this.entityData.get(DATA_BLUSHING);
     }
 
+    /** Topless texture for a bucket milking (client/Topless). */
+    public void bareFor(int ticks) {
+        this.bareTicks = Math.max(this.bareTicks, ticks);
+        this.entityData.set(DATA_BARE, true);
+    }
+
+    public void dressAfter(int ticks) {
+        this.bareTicks = Math.max(0, ticks);
+        this.entityData.set(DATA_BARE, ticks > 0);
+    }
+
+    public boolean isBare() {
+        return this.entityData.get(DATA_BARE);
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
         if (!this.level().isClientSide && this.blushTicks > 0 && --this.blushTicks == 0) this.entityData.set(DATA_BLUSHING, false);
+        if (!this.level().isClientSide && this.bareTicks > 0 && --this.bareTicks == 0) this.entityData.set(DATA_BARE, false);
         if (this.level() instanceof ServerLevel hurt) Injury.tick(hurt, this);
         if (this.level() instanceof ServerLevel milky) com.linkyoshi90.harmontide.entity.Lactation.tick(milky, this);
         if (this.level() instanceof ServerLevel) {
@@ -900,6 +924,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         if (this.isBaby()) {   // a hatchling only knows how to stand, toddle and flutter
             return state.setAndContinue(this.anim(flying ? "fly" : state.isMoving() ? "walk" : "idle"));
         }
+        if (this.getAction() == Action.KNEEL) return state.setAndContinue(this.anim("idle"));
         // Once airborne the wings take over; actions (caw, sing, knock...) only show on the ground or perched.
         if (flying && !this.actionShowsInFlight(this.getAction())) return state.setAndContinue(this.anim(this.flyingAnimation()));
         if (this.getAction() == Action.FIDGETING && !this.getFidget().isEmpty() && !state.isMoving() && !flying) {

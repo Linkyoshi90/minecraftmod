@@ -322,6 +322,20 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
         return this.species == GirlSpecies.CAMEL_CENTAUR || this.species == GirlSpecies.DROMEDARY_CENTAUR;
     }
 
+    public boolean isMilkReady() {
+        return this.level().getGameTime() >= this.nextMilk;
+    }
+
+    /** A bucket of camel milk. By hand at once, or at the end of the close-up. Plain milk, on her own clock. */
+    public void giveCamelMilk(ServerLevel server, Player player, ItemStack stack) {
+        this.nextMilk = server.getGameTime() + Minotaur.MILK_COOLDOWN;
+        stack.consume(1, player);
+        ItemStack milk = new ItemStack(Items.MILK_BUCKET);
+        if (!player.getInventory().add(milk)) player.drop(milk, false);
+        this.addAffection(player, 1);
+        this.playSound(SoundEvents.COW_MILK, 1.0F, 0.9F);
+    }
+
     /** Camels carry anyone; the kelpie only under a saddle and the pegasus under her golden bridle (put on by a friend); the others at high friendship. */
     private boolean letsRide(Player player) {
         if (this.isCamel()) return true;
@@ -524,13 +538,9 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
             if (this.level() instanceof ServerLevel server) {
                 if (server.getGameTime() < this.nextMilk) {
                     player.displayClientMessage(Component.translatable("message.harmontide.no_milk", this.getDisplayName()), true);
-                } else {
-                    this.nextMilk = server.getGameTime() + Minotaur.MILK_COOLDOWN;
-                    stack.consume(1, player);
-                    ItemStack milk = new ItemStack(Items.MILK_BUCKET);
-                    if (!player.getInventory().add(milk)) player.drop(milk, false);
-                    this.addAffection(player, 1);
-                    this.playSound(SoundEvents.COW_MILK, 1.0F, 0.9F);
+                } else if (!(player instanceof net.minecraft.server.level.ServerPlayer sp)
+                        || !com.linkyoshi90.harmontide.entity.HandMilking.offer(server, this, sp, hand, false)) {
+                    this.giveCamelMilk(server, player, stack);        // option off, or she is not a grown partner
                 }
             }
             return InteractionResult.sidedSuccess(client);

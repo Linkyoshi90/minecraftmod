@@ -8,9 +8,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 
 /**
- * A little flirting from close friends: now and then a pat gets a teasing line and a blush of hearts. Words only, and nothing past a tease.
- * Girls, harpies and frogs alike. Only for grown, full-size ones (anyone under CHILDLIKE_HEIGHT stays out, as from the bed), never one and her own father, and it has
- * an off switch (the flirting option).
+ * A little flirting from close friends: now and then a pat gets a teasing line and a blush of hearts. Words only, and nothing past a tease,
+ * unless the nsfw option is on (see {@link Nsfw}). Girls, harpies and frogs alike. Only for grown, full-size ones (anyone under
+ * CHILDLIKE_HEIGHT stays out, as from the bed), never one and her own father, and it has an off switch (the flirting option).
  */
 public final class Flirting {
     public static final int LINES = 8;
@@ -40,9 +40,11 @@ public final class Flirting {
     public static boolean onPet(ServerLevel level, net.minecraft.world.entity.Mob mob, Player player) {
         Marriage.warmth(level, mob, player);                                    // the rest of the family is glad of it
         SeaWeddings.onPet(level, mob, player, mob.getRandom().nextInt(SeaWeddings.BLOOD_ODDS) == 0);   // once in a life, mermaid blood
-        if (!canFlirt(mob, player) || mob.getRandom().nextInt(chance(mob, player)) != 0) return false;
+        boolean spicy = Nsfw.close(mob, player);
+        if ((!spicy && !canFlirt(mob, player)) || mob.getRandom().nextInt(chance(mob, player)) != 0) return false;
         DullahanHeads.startle(level, mob);                                      // flustered: a dullahan's head pops off
-        if (Marriage.married(mob, player)) tease(level, mob, player, "flirt_wife", WIFE_LINES);   // a wife has her own way of teasing
+        if (spicy) Nsfw.say(level, mob, player, Marriage.married(mob, player) ? Nsfw.Kind.WIFE : Nsfw.Kind.FLIRT);
+        else if (Marriage.married(mob, player)) tease(level, mob, player, "flirt_wife", WIFE_LINES);   // a wife has her own way of teasing
         else tease(level, mob, player, "flirt", LINES);
         return true;
     }
@@ -54,9 +56,12 @@ public final class Flirting {
         return MatingSeason.inSeason(mob) ? Math.max(1, chance / 2) : chance;
     }
 
-    /** Sharing the tub, a line of her own. */
-    public static void inTub(ServerLevel level, AbstractMonsterGirl girl, Player player) {
-        if (canFlirt(girl, player)) tease(level, girl, player, "flirt_tub", TUB_LINES);
+    /** Sharing the tub, a line of her own. True if she said something. */
+    public static boolean inTub(ServerLevel level, AbstractMonsterGirl girl, Player player) {
+        if (Nsfw.say(level, girl, player, Nsfw.Kind.TUB)) return true;
+        if (!canFlirt(girl, player)) return false;
+        tease(level, girl, player, "flirt_tub", TUB_LINES);
+        return true;
     }
 
     private static void tease(ServerLevel level, net.minecraft.world.entity.Mob girl, Player player, String key, int lines) {

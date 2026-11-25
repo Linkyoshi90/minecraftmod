@@ -134,6 +134,7 @@ public final class HarmontideConfig {
 
     public static final ModConfigSpec.BooleanValue MILK_DRIPS;
     public static final ModConfigSpec.BooleanValue FLIRTING;
+    public static final ModConfigSpec.BooleanValue NSFW;
     public static final ModConfigSpec.BooleanValue DEMON_REALM;
     public static final ModConfigSpec.BooleanValue REALM_FOG;
     public static final ModConfigSpec.BooleanValue LUCKY_MOMENTS;
@@ -201,6 +202,14 @@ public final class HarmontideConfig {
         FLIRTING = BUILDER
                 .comment("Close friends now and then answer a pat with a teasing line and a few hearts.")
                 .define("flirting", true);
+
+        NSFW = BUILDER
+                .comment("Private-server adult content. Off, nothing here runs.",
+                        "On, the call from bed is blunt, and a grown partner who can already share it (never the young,",
+                        "never anyone of childlike height, never the men, never her own father) speaks plainly. A biped kneels astride you and bounces; anyone else rocks along the mattress.",
+                        "A pat, the tub, the morning after and a milking do too. A bucket on any grown girl opens a close-up: she blushes, her top comes off, and she leans over the pail. Drag down toward the nipple until she is empty, and the top comes back. The pumps are unchanged.",
+                        "Leave this off on any world you might share or publish.")
+                .define("nsfw", false);
 
         DEMON_REALM = BUILDER
                 .comment("A wild Lilith grows Demon Realm grass around her, and it spreads in the dark until light or holy water drives it back. Off: no new realm grows or spreads.")
@@ -770,6 +779,10 @@ public final class HarmontideConfig {
 
     public static boolean flirting() {
         return SPEC.isLoaded() ? FLIRTING.get() : FLIRTING.getDefault();
+    }
+
+    public static boolean nsfw() {
+        return SPEC.isLoaded() ? NSFW.get() : NSFW.getDefault();
     }
 
     public static boolean milkDrips() {

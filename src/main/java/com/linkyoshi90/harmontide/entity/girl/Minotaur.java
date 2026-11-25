@@ -313,19 +313,9 @@ public class Minotaur extends AbstractMonsterGirl {
             if (this.level() instanceof ServerLevel server) {
                 if (server.getGameTime() < this.nextMilk) {
                     player.displayClientMessage(Component.translatable("message.harmontide.no_milk", this.getDisplayName()), true);
-                } else {
-                    boolean friend = this.getAffection(player) >= BED_AFFECTION;
-                    this.setNextMilk(server.getGameTime() + (friend ? MILK_COOLDOWN / 2 : MILK_COOLDOWN));
-                    stack.consume(1, player);
-                    com.linkyoshi90.harmontide.entity.Lactation.relieve(server, this, player);
-                    ItemStack milk = bottle ? new ItemStack(com.linkyoshi90.harmontide.registry.ModItems.HOLSTAUR_MILK.get(), 3)
-                            : com.linkyoshi90.harmontide.entity.Dairy.flavoured(this, new ItemStack(Items.MILK_BUCKET));
-                    if (!player.getInventory().add(milk)) player.drop(milk, false);
-                    com.linkyoshi90.harmontide.entity.Dairy.recordMilk(player, this);
-                    this.addAffection(player, 1);
-                    this.startTimedAction(Action.MILK, 40);
-                    if (com.linkyoshi90.harmontide.HarmontideConfig.milkEmbarrassed()) this.blush(BUCKET_BLUSH_TICKS);
-                    this.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
+                } else if (!(player instanceof net.minecraft.server.level.ServerPlayer sp)
+                        || !com.linkyoshi90.harmontide.entity.HandMilking.offer(server, this, sp, hand, bottle)) {
+                    this.giveMilk(server, player, stack, bottle);             // option off, or she is not a grown partner
                 }
             }
             return InteractionResult.sidedSuccess(client);
@@ -462,6 +452,22 @@ public class Minotaur extends AbstractMonsterGirl {
     }
 
     // --- tick ----------------------------------------------------------------------------------------------------
+
+    /** The pail (or a holstaur's three bottles). Same result by hand at once, or at the end of the close-up. */
+    public void giveMilk(ServerLevel server, Player player, ItemStack stack, boolean bottle) {
+        boolean friend = this.getAffection(player) >= BED_AFFECTION;
+        this.setNextMilk(server.getGameTime() + (friend ? MILK_COOLDOWN / 2 : MILK_COOLDOWN));
+        stack.consume(1, player);
+        com.linkyoshi90.harmontide.entity.Lactation.relieve(server, this, player);
+        ItemStack milk = bottle ? new ItemStack(com.linkyoshi90.harmontide.registry.ModItems.HOLSTAUR_MILK.get(), 3)
+                : com.linkyoshi90.harmontide.entity.Dairy.flavoured(this, new ItemStack(Items.MILK_BUCKET));
+        if (!player.getInventory().add(milk)) player.drop(milk, false);
+        com.linkyoshi90.harmontide.entity.Dairy.recordMilk(player, this);
+        this.addAffection(player, 1);
+        this.startTimedAction(Action.MILK, 40);
+        if (com.linkyoshi90.harmontide.HarmontideConfig.milkEmbarrassed()) this.blush(BUCKET_BLUSH_TICKS);
+        this.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
+    }
 
     /** A bowl of mushroom stew, on the same clock as a pail of milk. Whether she had any. */
     public boolean fillBowl(ServerLevel level, Player player, ItemStack bowl) {

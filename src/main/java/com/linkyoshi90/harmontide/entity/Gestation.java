@@ -78,6 +78,23 @@ public final class Gestation {
         this.ticksLeft = ticks;
     }
 
+    /**
+     * Whether {@code check} holds once a current pregnancy and the day after are set aside.
+     * The bucket uses this: those are the days she has milk, and {@code canShareBed} is false for them.
+     */
+    public boolean ignoringTerm(java.util.function.BooleanSupplier check) {
+        int left = this.ticksLeft;
+        int cool = this.cooldown;
+        this.ticksLeft = -1;
+        this.cooldown = 0;
+        try {
+            return check.getAsBoolean();
+        } finally {
+            this.ticksLeft = left;
+            this.cooldown = cool;
+        }
+    }
+
     public void tick() {
         if (this.ticksLeft > 0) this.ticksLeft--;
         if (this.cooldown > 0) this.cooldown--;

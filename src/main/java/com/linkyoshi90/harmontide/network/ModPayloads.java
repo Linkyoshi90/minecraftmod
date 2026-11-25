@@ -11,7 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
-/** What travels between client and server: so far only the call from bed (see {@link BedCall}). */
+/** What travels between client and server: the call from bed ({@link BedCall}), and the bucket close-up ({@link com.linkyoshi90.harmontide.entity.HandMilking}). */
 public final class ModPayloads {
     private ModPayloads() {}
 
@@ -60,14 +60,70 @@ public final class ModPayloads {
         }
     }
 
+    /** Server to client: open the bucket close-up on this girl. */
+    public record OpenMilk(int token, int entityId, int need) implements CustomPacketPayload {
+        public static final Type<OpenMilk> TYPE = new Type<>(HarmontideMod.id("open_milk"));
+        public static final StreamCodec<ByteBuf, OpenMilk> CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT, OpenMilk::token,
+                ByteBufCodecs.VAR_INT, OpenMilk::entityId, ByteBufCodecs.VAR_INT, OpenMilk::need, OpenMilk::new);
+
+        @Override
+        public Type<OpenMilk> type() {
+            return TYPE;
+        }
+    }
+
+    /** Client to server: one back-and-forth pull. */
+    public record MilkStroke(int token) implements CustomPacketPayload {
+        public static final Type<MilkStroke> TYPE = new Type<>(HarmontideMod.id("milk_stroke"));
+        public static final StreamCodec<ByteBuf, MilkStroke> CODEC = ByteBufCodecs.VAR_INT.map(MilkStroke::new, MilkStroke::token);
+
+        @Override
+        public Type<MilkStroke> type() {
+            return TYPE;
+        }
+    }
+
+    /** Client to server: the screen closed early. Nothing is given. */
+    public record CloseMilk(int token) implements CustomPacketPayload {
+        public static final Type<CloseMilk> TYPE = new Type<>(HarmontideMod.id("close_milk"));
+        public static final StreamCodec<ByteBuf, CloseMilk> CODEC = ByteBufCodecs.VAR_INT.map(CloseMilk::new, CloseMilk::token);
+
+        @Override
+        public Type<CloseMilk> type() {
+            return TYPE;
+        }
+    }
+
+    /** Server to client: how many pulls count. need 0 means the session was dropped. */
+    public record MilkProgress(int token, int strokes, int need, boolean done) implements CustomPacketPayload {
+        public static final Type<MilkProgress> TYPE = new Type<>(HarmontideMod.id("milk_progress"));
+        public static final StreamCodec<ByteBuf, MilkProgress> CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT, MilkProgress::token,
+                ByteBufCodecs.VAR_INT, MilkProgress::strokes, ByteBufCodecs.VAR_INT, MilkProgress::need, ByteBufCodecs.BOOL, MilkProgress::done, MilkProgress::new);
+
+        @Override
+        public Type<MilkProgress> type() {
+            return TYPE;
+        }
+    }
+
     public static void register(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");
         registrar.playToClient(BedCallStage.TYPE, BedCallStage.CODEC, (payload, context) -> BedCallScreen.setStage(payload.stage()));
         registrar.playToClient(Possessed.TYPE, Possessed.CODEC,
                 (payload, context) -> com.linkyoshi90.harmontide.client.PossessedEyesLayer.set(payload.entityId(), payload.on()));
         registrar.playToClient(RoseMoonSky.TYPE, RoseMoonSky.CODEC, (payload, context) -> com.linkyoshi90.harmontide.client.RealmAtmosphere.roseMoon(payload.on()));
+        registrar.playToClient(OpenMilk.TYPE, OpenMilk.CODEC, (payload, context) -> context.enqueueWork(() ->
+                com.linkyoshi90.harmontide.client.MilkingScreen.open(payload.token(), payload.entityId(), payload.need())));
+        registrar.playToClient(MilkProgress.TYPE, MilkProgress.CODEC, (payload, context) -> context.enqueueWork(() ->
+                com.linkyoshi90.harmontide.client.MilkingScreen.progress(payload.token(), payload.strokes(), payload.need(), payload.done())));
         registrar.playToServer(SkipNight.TYPE, SkipNight.CODEC, (payload, context) -> {
             if (context.player() instanceof ServerPlayer player) BedCall.skipNight(player);
+        });
+        registrar.playToServer(MilkStroke.TYPE, MilkStroke.CODEC, (payload, context) -> {
+            if (context.player() instanceof ServerPlayer player) com.linkyoshi90.harmontide.entity.HandMilking.stroke(player, payload.token());
+        });
+        registrar.playToServer(CloseMilk.TYPE, CloseMilk.CODEC, (payload, context) -> {
+            if (context.player() instanceof ServerPlayer player) com.linkyoshi90.harmontide.entity.HandMilking.close(player, payload.token());
         });
     }
 }

@@ -29,7 +29,9 @@ import java.util.UUID;
  * A monster girl who trusts a player enough ({@link Bonded#BED_AFFECTION}) may join them when they lie down in a
  * bed: once a night she makes up her mind ({@link Bonded#bedChance}, better the more she likes them), comes over,
  * hops into the bed beside them and lies down. If the player sleeps right through to morning she is expecting
- * (see {@code BedSharing}). Nothing more than that is shown: the night passes the way it always does.
+ * (see {@code BedSharing}). Nothing more than that is shown, unless the nsfw option is on: then she says so, and a
+ * biped kneels astride him and bounces while anyone else rocks along the mattress
+ * (see {@link com.linkyoshi90.harmontide.entity.Nsfw}). The night still passes as it always does.
  * <p>
  * Under a full moon her hormones answer the moonlight: she comes without fail, eyes aglow ({@link Bonded#isMoonstruck}),
  * and waits by the bed while another has her turn. Once she has had hers she is expecting, her eyes go back to normal
@@ -171,7 +173,10 @@ public class ShareBedGoal<T extends PathfinderMob & Bonded> extends Goal {
         this.inBed = true;
         this.mob.getGestation().setSharingWith(this.partner.getUUID());
         this.mob.settleInBed();
-        this.partner.displayClientMessage(Component.translatable("message.harmontide.into_bed", this.mob.getDisplayName()), false);   // in chat: who it is
+        if (!(this.mob.level() instanceof ServerLevel server) || !(this.partner instanceof ServerPlayer sleeper)
+                || !com.linkyoshi90.harmontide.entity.Nsfw.say(server, this.mob, sleeper, com.linkyoshi90.harmontide.entity.Nsfw.Kind.BED)) {
+            this.partner.displayClientMessage(Component.translatable("message.harmontide.into_bed", this.mob.getDisplayName()), false);   // in chat: who it is
+        }
         this.mob.level().playSound(null, this.bed, SoundEvents.WOOL_STEP, SoundSource.NEUTRAL, 0.8F, 1.1F);
         this.stayInBed();
     }
@@ -181,9 +186,13 @@ public class ShareBedGoal<T extends PathfinderMob & Bonded> extends Goal {
         float yaw = yawInBed(this.mob.level(), this.bed);
         this.mob.getNavigation().stop();
         this.mob.setDeltaMovement(Vec3.ZERO);
-        this.mob.moveTo(spot.x, spot.y, spot.z, yaw, 0.0F);
-        this.mob.setYBodyRot(yaw);
-        this.mob.setYHeadRot(yaw);
+        if (!(this.mob.level() instanceof ServerLevel server) || !(this.partner instanceof ServerPlayer sleeper)
+                || !com.linkyoshi90.harmontide.entity.Nsfw.rock(server, this.mob, sleeper, spot, yaw, this.bed)) {
+            com.linkyoshi90.harmontide.entity.Nsfw.lieDown(this.mob);
+            this.mob.moveTo(spot.x, spot.y, spot.z, yaw, 0.0F);
+            this.mob.setYBodyRot(yaw);
+            this.mob.setYHeadRot(yaw);
+        }
         if (this.ticks % 60 == 0 && this.mob.level() instanceof ServerLevel server) {
             server.sendParticles(ParticleTypes.HEART, this.mob.getX(), this.mob.getY() + 0.5, this.mob.getZ(), 1, 0.2, 0.1, 0.2, 0.0);
         }

@@ -56,16 +56,25 @@ public class SparrowHarpyRenderer extends GeoEntityRenderer<SparrowHarpy> {
             @Override
             public void setCustomAnimations(SparrowHarpy harpy, long instanceId, AnimationState<SparrowHarpy> animationState) {
                 super.setCustomAnimations(harpy, instanceId, animationState);
+                var proc = this.getAnimationProcessor();
+                Jiggle.install(proc);
                 Bellies.harpy(this, harpy);
                 PupilLook.lookAt(this, harpy);
+                CowgirlPose.apply(proc, harpy, animationState.getPartialTick());
+                MilkPose.apply(proc, harpy);
+                Jiggle.apply(proc, harpy, animationState.getPartialTick());
             }
 
             @Override
             public ResourceLocation getTextureResource(SparrowHarpy harpy) {
-                if (harpy.isBaby()) return Paints.of(YoungModels.tex(harpy.modelName()), harpy.getPaintName());
-                String model = HarmontideClientConfig.sparrowModel();
-                if (Paints.shown(harpy.getPaintName()) != null) return Paints.of(BASE_TEXTURES.get(model), harpy.getPaintName());
-                return TEXTURES.get(model).get(harpy.getVariant());
+                ResourceLocation tex;
+                if (harpy.isBaby()) tex = Paints.of(YoungModels.tex(harpy.modelName()), harpy.getPaintName());
+                else {
+                    String model = HarmontideClientConfig.sparrowModel();
+                    tex = Paints.shown(harpy.getPaintName()) != null ? Paints.of(BASE_TEXTURES.get(model), harpy.getPaintName())
+                            : TEXTURES.get(model).get(harpy.getVariant());
+                }
+                return harpy.isBare() ? Topless.worn(tex, this.getModelResource(harpy)) : tex;
             }
         });
         this.withScale(SCALE);

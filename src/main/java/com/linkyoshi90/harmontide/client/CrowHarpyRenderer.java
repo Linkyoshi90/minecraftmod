@@ -35,16 +35,22 @@ public class CrowHarpyRenderer extends GeoEntityRenderer<CrowHarpy> {
             @Override
             public void setCustomAnimations(CrowHarpy harpy, long instanceId, AnimationState<CrowHarpy> animationState) {
                 super.setCustomAnimations(harpy, instanceId, animationState);
+                var proc = this.getAnimationProcessor();
+                Jiggle.install(proc);
                 Bellies.harpy(this, harpy);
                 PupilLook.lookAt(this, harpy);
+                CowgirlPose.apply(proc, harpy, animationState.getPartialTick());
+                MilkPose.apply(proc, harpy);
+                Jiggle.apply(proc, harpy, animationState.getPartialTick());
             }
 
             @Override
             public ResourceLocation getTextureResource(CrowHarpy crow) {
-                if (crow.isBaby()) return Paints.of(YoungModels.tex(crow.modelName()), crow.getPaintName());
-                if (Paints.shown(crow.getPaintName()) != null) return Paints.of(HarmontideMod.id("textures/entity/crow_harpy.png"), crow.getPaintName());
-                // "" -> crow_harpy.png, "_hooded" -> crow_harpy_hooded.png, ...
-                return TEXTURES.computeIfAbsent(crow.getVariantSuffix(), suffix -> HarmontideMod.id("textures/entity/crow_harpy" + suffix + ".png"));
+                ResourceLocation tex;
+                if (crow.isBaby()) tex = Paints.of(YoungModels.tex(crow.modelName()), crow.getPaintName());
+                else if (Paints.shown(crow.getPaintName()) != null) tex = Paints.of(HarmontideMod.id("textures/entity/crow_harpy.png"), crow.getPaintName());
+                else tex = TEXTURES.computeIfAbsent(crow.getVariantSuffix(), suffix -> HarmontideMod.id("textures/entity/crow_harpy" + suffix + ".png"));
+                return crow.isBare() ? Topless.worn(tex, this.getModelResource(crow)) : tex;
             }
         });
         this.withScale(SCALE);

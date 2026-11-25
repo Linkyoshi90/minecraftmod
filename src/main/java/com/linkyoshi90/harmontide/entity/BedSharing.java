@@ -33,6 +33,7 @@ public final class BedSharing {
                     dreamer = mob;
                 }
                 if (nightShared(level, player, mob)) expecting++;
+                Nsfw.say(level, mob, player, Nsfw.Kind.MORNING);
             }
             Marriage.familyBed(level, player, wives);
             if (dreamer != null) Marriage.sharedDream(level, player, dreamer, false);   // now and then she dreamt of somewhere real

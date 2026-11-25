@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nullable;
@@ -131,7 +132,9 @@ public final class Lactation {
         level.sendParticles(ParticleTypes.HEART, creature.getX(), creature.getEyeY() + 0.3, creature.getZ(), 4, 0.3, 0.2, 0.3, 0.0);
         if (friend != null && creature instanceof Bonded bonded) {
             bonded.addAffection(friend, RELIEF);
-            friend.displayClientMessage(Component.translatable("message.harmontide.milk_relief", creature.getDisplayName()), true);
+            if (!(creature instanceof Mob mob) || !Nsfw.say(level, mob, friend, Nsfw.Kind.MILK)) {
+                friend.displayClientMessage(Component.translatable("message.harmontide.milk_relief", creature.getDisplayName()), true);
+            }
         }
         return true;
     }

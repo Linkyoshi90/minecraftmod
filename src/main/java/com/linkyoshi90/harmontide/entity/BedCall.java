@@ -42,7 +42,7 @@ public final class BedCall {
 
     public static void begin(ServerPlayer player) {
         CALLS.put(player, new Call());
-        player.displayClientMessage(Component.translatable("message.harmontide.call_friends"), false);
+        player.displayClientMessage(Component.translatable(Nsfw.callKey()), false);
         send(player, WAITING);
     }
 
