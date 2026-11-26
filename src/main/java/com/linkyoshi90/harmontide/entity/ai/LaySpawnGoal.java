@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -22,12 +23,15 @@ public class LaySpawnGoal extends Goal {
     public static final int SEARCH_RADIUS = 24;
     private static final double REACH_SQR = 6.25;
     private static final int GIVE_UP_TICKS = 600;
+    /** On her stomach at the water before the spawn mass is out. */
+    private static final int PUSH_TICKS = 28;
 
     private final AbstractAnuran mob;
     private int searchDelay;
     @Nullable
     private BlockPos waterPos;
     private int ticks;
+    private int laying;
 
     public LaySpawnGoal(AbstractAnuran mob) {
         this.mob = mob;
@@ -74,6 +78,7 @@ public class LaySpawnGoal extends Goal {
     @Override
     public void start() {
         this.ticks = 0;
+        this.laying = 0;
     }
 
     @Override
@@ -83,9 +88,15 @@ public class LaySpawnGoal extends Goal {
         double z = this.waterPos.getZ() + 0.5;
         this.mob.getLookControl().setLookAt(x, this.waterPos.getY(), z);
         if (this.mob.distanceToSqr(x, this.waterPos.getY(), z) > REACH_SQR) {
+            if (this.laying > 0 && this.mob.getAction() == AbstractAnuran.Action.LAYING) this.mob.setAction(AbstractAnuran.Action.NONE);
+            this.laying = 0;
             if (this.mob.getNavigation().isDone()) this.mob.getNavigation().moveTo(x, this.waterPos.getY(), z, 1.0);
             return;
         }
+        this.mob.getNavigation().stop();
+        this.mob.setDeltaMovement(Vec3.ZERO);
+        this.mob.setAction(AbstractAnuran.Action.LAYING);
+        if (++this.laying < PUSH_TICKS) return;
         this.lay();
     }
 
@@ -102,10 +113,13 @@ public class LaySpawnGoal extends Goal {
             }
         }
         this.waterPos = null;
+        if (this.mob.getAction() == AbstractAnuran.Action.LAYING) this.mob.setAction(AbstractAnuran.Action.NONE);
     }
 
     @Override
     public void stop() {
         this.waterPos = null;
+        this.laying = 0;
+        if (this.mob.getAction() == AbstractAnuran.Action.LAYING) this.mob.setAction(AbstractAnuran.Action.NONE);
     }
 }

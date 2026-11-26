@@ -2,10 +2,13 @@ package com.linkyoshi90.harmontide.gametest;
 
 import com.linkyoshi90.harmontide.HarmontideConfig;
 import com.linkyoshi90.harmontide.HarmontideMod;
+import com.linkyoshi90.harmontide.entity.BedSharing;
 import com.linkyoshi90.harmontide.entity.DuckHarpy;
 import com.linkyoshi90.harmontide.entity.HandMilking;
 import com.linkyoshi90.harmontide.entity.Marriage;
+import com.linkyoshi90.harmontide.entity.MorningOral;
 import com.linkyoshi90.harmontide.entity.Nsfw;
+import com.linkyoshi90.harmontide.entity.WildEncounter;
 import com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl;
 import com.linkyoshi90.harmontide.entity.girl.Centaur;
 import com.linkyoshi90.harmontide.entity.girl.GirlSpecies;
@@ -20,6 +23,8 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
@@ -64,8 +69,12 @@ public class NsfwTests {
             check(!Nsfw.adult(fairy, player) && Nsfw.line(fairy, player, Nsfw.Kind.BED) == null, "childlike height stays out");
             check(!Nsfw.adult(man, player), "he is a man");
             grown.setFather(player.getUUID());
-            check(!Nsfw.adult(grown, player) && !Nsfw.rock(level, grown, player, grown.position(), 0.0F), "not with her own father");
+            check(Nsfw.adult(grown, player) && !grown.trustsEnoughForBed(player)
+                    && !Nsfw.rock(level, grown, player, grown.position(), 0.0F), "no sex without a condom");
+            player.getInventory().add(new ItemStack(ModItems.CONDOM.get()));
+            check(grown.trustsEnoughForBed(player) && Nsfw.rock(level, grown, player, grown.position(), 0.0F), "a condom, and she will");
             grown.setFather(null);
+            player.getInventory().clearContent();
             check(Nsfw.adult(grown, player), "a grown partner");
             String flirt = Nsfw.line(grown, player, Nsfw.Kind.FLIRT);
             check(flirt != null && flirt.startsWith("message.harmontide.nsfw_flirt."), "she says so");
@@ -78,8 +87,30 @@ public class NsfwTests {
             AbstractMonsterGirl horse = still(helper, GirlSpecies.CAMEL_CENTAUR, new BlockPos(1, 2, 7));
             horse.tickCount = 3;
             Vec3 hoof = horse.position();
-            check(!Nsfw.bipedal(horse) && Nsfw.rock(level, horse, player, hoof, 0.0F), "a camel has no knees for it");
-            check(Math.abs(horse.getZ() - hoof.z) > 0.05, "she rocks along the mattress");
+            check(!Nsfw.bipedal(horse) && Nsfw.quadruped(horse) && Nsfw.rock(level, horse, player, hoof, 0.0F), "a camel sits back");
+            check(Math.abs(horse.getX() - hoof.x) < 1.0E-4 && Math.abs(horse.getZ() - hoof.z) < 1.0E-4, "she stays over him");
+            check(Math.abs(horse.getY() - hoof.y) > 0.02 && horse.getAction() == AbstractMonsterGirl.Action.SITBACK, "her back lowers and rises");
+            AbstractMonsterGirl snake = still(helper, GirlSpecies.BOA_LAMIA, new BlockPos(11, 2, 7));
+            snake.tickCount = 3;
+            Vec3 coil = snake.position();
+            check(!Nsfw.quadruped(snake) && Nsfw.rock(level, snake, player, coil, 0.0F), "a serpent lies on him");
+            check(Math.abs(snake.getX() - coil.x) < 1.0E-4 && Math.abs(snake.getZ() - coil.z) < 1.0E-4, "she stays along him");
+            check(Math.abs(snake.getY() - coil.y) > 0.02 && snake.getAction() == AbstractMonsterGirl.Action.COUPLE, "her hips rise");
+            AbstractMonsterGirl spider = still(helper, GirlSpecies.BLACK_WIDOW_ARACHNE, new BlockPos(4, 2, 12));
+            spider.tickCount = 3;
+            Vec3 web = spider.position();
+            check(Nsfw.rock(level, spider, player, web, 0.0F), "a spider stands over him");
+            check(Math.abs(spider.getZ() - web.z) < 1.0E-4 && spider.getAction() == AbstractMonsterGirl.Action.COUPLE, "her legs do the bending");
+            AbstractMonsterGirl mer = still(helper, GirlSpecies.LORELEI_MERMAID, new BlockPos(8, 2, 12));
+            mer.tickCount = 3;
+            Vec3 tide = mer.position();
+            check(Nsfw.rock(level, mer, player, tide, 0.0F) && mer.getAction() == AbstractMonsterGirl.Action.COUPLE, "a mermaid lies on him");
+            check(Math.abs(mer.getY() - tide.y) > 0.02, "her tail pumps");
+            AbstractMonsterGirl blob = still(helper, GirlSpecies.HONEY_SLIME, new BlockPos(12, 2, 12));
+            blob.tickCount = 3;
+            Vec3 puddle = blob.position();
+            check(Nsfw.rock(level, blob, player, puddle, 0.0F) && blob.getAction() == AbstractMonsterGirl.Action.COUPLE, "a slime bounces");
+            check(Math.abs(blob.getY() - puddle.y) > 0.05 && Math.abs(blob.getZ() - puddle.z) < 1.0E-4, "up and down, like a harpy");
             check(Nsfw.say(level, grown, player, Nsfw.Kind.MORNING), "the morning after");
         } finally {
             HarmontideConfig.NSFW.set(was);
@@ -166,7 +197,7 @@ public class NsfwTests {
             who.getInventory().selected = 6;
             interact(calf, who, new ItemStack(Items.BUCKET));
             check(who.getInventory().countItem(Items.MILK_BUCKET) == 1 && !HandMilking.isOpen(who), "a calf gives no milk");
-            check(!Nsfw.adult(daughter, who), "not with her own father");
+            check(Nsfw.adult(daughter, who) && !HandMilking.interested(daughter, who), "grown, and milking stays the old pail");
             who.getInventory().selected = 5;
             interact(daughter, who, new ItemStack(Items.BUCKET));
             check(who.getInventory().countItem(Items.MILK_BUCKET) == 2 && !HandMilking.isOpen(who), "her father gets the old pail, not the close-up");
@@ -247,5 +278,97 @@ public class NsfwTests {
                 }
             }
         });
+    }
+
+    /** A grown daughter will, with a condom, and the night does not take. A little one still will not. */
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "aGrownDaughterUsesACondom")
+    public static void aGrownDaughterUsesACondom(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        AbstractMonsterGirl daughter = still(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(4, 2, 4));
+        AbstractMonsterGirl fairy = still(helper, GirlSpecies.FAIRY_BUG, new BlockPos(8, 2, 4));
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(6, 2, 4));
+        daughter.setFather(player.getUUID());
+        daughter.setAffection(player.getUUID(), 100);
+        fairy.setFather(player.getUUID());
+        boolean was = HarmontideConfig.NSFW.get();
+        try {
+            HarmontideConfig.NSFW.set(true);
+            check(!daughter.trustsEnoughForBed(player) && !Nsfw.rock(level, daughter, player, daughter.position(), 0.0F), "no condom, no sex");
+            player.getInventory().add(new ItemStack(ModItems.CONDOM.get()));
+            check(daughter.trustsEnoughForBed(player), "the condom changes her mind");
+            player.getInventory().add(new ItemStack(ModItems.CONDOM.get()));
+            check(!Nsfw.adult(fairy, player) && !fairy.trustsEnoughForBed(player), "a little one stays out, condom or not");
+            daughter.getGestation().setSharingWith(player.getUUID());
+            player.startSleeping(helper.absolutePos(new BlockPos(6, 2, 4)));
+            BedSharing.onNightSkipped(level);
+            check(!daughter.getGestation().isCarrying(), "the condom held");
+            check(player.getInventory().countItem(ModItems.CONDOM.get()) == 1, "one was used, one is left");
+            check(MorningOral.pending(daughter), "she stays for the morning");
+            for (int i = 0; i < 5; i++) MorningOral.step(level);
+            check(daughter.getAction() == AbstractMonsterGirl.Action.ORAL, "she kneels to it");
+            for (int i = 0; i < MorningOral.TICKS; i++) MorningOral.step(level);
+            check(!MorningOral.pending(daughter) && daughter.getAction() != AbstractMonsterGirl.Action.ORAL, "the morning ends");
+            player.stopSleeping();
+        } finally {
+            HarmontideConfig.NSFW.set(was);
+        }
+        HarpyTestUtil.remove(player);
+        helper.succeed();
+    }
+
+    /** A wild grown girl catches him, grows fond, and leaves him restored. The young stay out. A daughter needs a condom and does not conceive. */
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "aWildGirlCatchesHim")
+    public static void aWildGirlCatchesHim(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        AbstractMonsterGirl daughter = still(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(4, 2, 4));
+        AbstractMonsterGirl baby = still(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(7, 2, 4));
+        AbstractMonsterGirl fairy = still(helper, GirlSpecies.FAIRY_BUG, new BlockPos(9, 2, 4));
+        AbstractMonsterGirl man = still(helper, GirlSpecies.GANDHARVA_ELF, new BlockPos(2, 2, 4));
+        AbstractMonsterGirl stranger = still(helper, GirlSpecies.SERVAL_NEKOMATA, new BlockPos(4, 2, 6));
+        baby.setBaby(true);
+        ServerPlayer player = HarpyTestUtil.survivalPlayer(helper, new BlockPos(4, 2, 5));
+        daughter.setFather(player.getUUID());
+        boolean was = HarmontideConfig.NSFW.get();
+        int odds = HarmontideConfig.CONCEPTION_CHANCE.get();
+        try {
+            HarmontideConfig.NSFW.set(false);
+            check(!WildEncounter.start(level, daughter, player), "off, and she walks on");
+            HarmontideConfig.NSFW.set(true);
+            check(!WildEncounter.start(level, baby, player), "a baby stays out");
+            check(!WildEncounter.start(level, fairy, player), "childlike height stays out");
+            check(!WildEncounter.start(level, man, player), "he is a man");
+            check(!WildEncounter.start(level, daughter, player), "no condom, no catching her father");
+            player.getInventory().add(new ItemStack(ModItems.CONDOM.get()));
+            check(WildEncounter.start(level, daughter, player), "a condom, and she will");
+            for (int i = 0; i < WildEncounter.TACKLE + WildEncounter.SCENE; i++) WildEncounter.step(level);
+            check(!WildEncounter.active(daughter) && daughter.getAction() != AbstractMonsterGirl.Action.KNEEL, "she lets go");
+            check(!player.isSwimming() && player.getPose() != Pose.SWIMMING, "he is back on his feet");
+            check(!daughter.getGestation().isCarrying(), "the condom held");
+            check(player.getInventory().countItem(ModItems.CONDOM.get()) == 0, "the condom was used");
+            check(daughter.getAffection(player) == WildEncounter.AFFECTION, "she is fond of him");
+            HarmontideConfig.CONCEPTION_CHANCE.set(100);
+            player.getFoodData().setFoodLevel(8);
+            check(WildEncounter.start(level, stranger, player), "a stranger comes for him");
+            WildEncounter.step(level);
+            check(WildEncounter.active(stranger) && stranger.getAction() == AbstractMonsterGirl.Action.POUNCE
+                    && !player.isSwimming(), "she is still tackling");
+            for (int i = 1; i < WildEncounter.TACKLE; i++) WildEncounter.step(level);
+            check(player.isSwimming() && player.getPose() == Pose.SWIMMING
+                    && stranger.getAction() != AbstractMonsterGirl.Action.KNEEL, "he is down, and the pose has not started");
+            WildEncounter.step(level);
+            check(stranger.getAction() == AbstractMonsterGirl.Action.KNEEL && player.isSwimming(), "then she is on him");
+            for (int i = 1; i < WildEncounter.SCENE; i++) WildEncounter.step(level);
+            check(!WildEncounter.active(stranger) && stranger.getAction() != AbstractMonsterGirl.Action.KNEEL, "then she lets go");
+            check(!player.isSwimming(), "and he gets up");
+            check(stranger.getGestation().isCarrying(), "she may conceive");
+            check(stranger.getAffection(player) == WildEncounter.AFFECTION, "and she is fond of him");
+            check(player.hasEffect(MobEffects.REGENERATION) && player.hasEffect(MobEffects.ABSORPTION), "he is restored");
+            check(player.getFoodData().getFoodLevel() >= 12, "and he is less hungry");
+        } finally {
+            HarmontideConfig.CONCEPTION_CHANCE.set(odds);
+            HarmontideConfig.NSFW.set(was);
+        }
+        HarpyTestUtil.remove(player);
+        helper.succeed();
     }
 }

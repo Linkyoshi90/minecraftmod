@@ -15,7 +15,7 @@ import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
-import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
+
 import software.bernie.geckolib.renderer.layer.ItemArmorGeoLayer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -48,7 +48,7 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         super(context, new Model(species));
         this.species = species;
         this.shadowRadius = species.width() * 0.6F;
-        if (GLOWING.contains(species.id())) this.addRenderLayer(new AutoGlowingGeoLayer<>(this));
+        if (GLOWING.contains(species.id())) this.addRenderLayer(new SafeGlowLayer<>(this));
         if (species.family() == GirlSpecies.Family.CENTAUR) this.addRenderLayer(new TorsoArmourLayer(this));
         if (species == GirlSpecies.SHEEP_MINOTAUR || species == GirlSpecies.RHIWOOL_MINOTAUR) this.addRenderLayer(new DyedWoolLayer(this));
         this.addRenderLayer(new BlushLayer(this));
@@ -60,7 +60,7 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         this.addRenderLayer(new HeldItemLayer(this));
         this.addRenderLayer(new PaintGlowLayer<>(this, AbstractMonsterGirl::getPaintName));
         if (species == GirlSpecies.CHESHIRE_NEKOMATA) {                    // her grin glows, whole, however faded the rest of her is
-            this.addRenderLayer(new AutoGlowingGeoLayer<>(this) {
+            this.addRenderLayer(new SafeGlowLayer<>(this) {
                 @Override
                 public void render(PoseStack poseStack, AbstractMonsterGirl girl, BakedGeoModel model, RenderType renderType, MultiBufferSource buffers,
                                    VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
@@ -71,7 +71,7 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
             });
         }
         if (species == GirlSpecies.FIREFLY_BUG) {                          // every firefly pulses in time with the others (the world's clock)
-            this.addRenderLayer(new AutoGlowingGeoLayer<>(this) {
+            this.addRenderLayer(new SafeGlowLayer<>(this) {
                 @Override
                 public void render(PoseStack poseStack, AbstractMonsterGirl girl, BakedGeoModel model, RenderType renderType, MultiBufferSource buffers,
                                    VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
@@ -322,6 +322,11 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
                 mouth.setPosZ(-0.4F);                                               // the open mouth slides out of the face
             }
             CowgirlPose.apply(proc, girl, state.getPartialTick());
+            SitBackPose.apply(proc, girl, state.getPartialTick());
+            CouplePose.apply(proc, girl, state.getPartialTick());
+            BirthPose.apply(proc, girl, state.getPartialTick());
+            FeedPose.apply(proc, girl, state.getPartialTick());
+            OralPose.apply(proc, girl, state.getPartialTick());
             MilkPose.apply(proc, girl);
             Jiggle.apply(proc, girl, state.getPartialTick());
         }

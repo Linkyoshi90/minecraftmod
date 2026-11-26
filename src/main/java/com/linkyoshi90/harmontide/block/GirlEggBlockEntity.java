@@ -55,6 +55,12 @@ public class GirlEggBlockEntity extends BlockEntity {
         return this.count;
     }
 
+    /** One more egg has been pushed out. The clutch block is still the one block; the count is what hatches. */
+    public void setCount(int count) {
+        this.count = Math.max(1, count);
+        this.setChanged();
+    }
+
     @Nullable
     public UUID getFather() {
         return this.father;

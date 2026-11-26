@@ -1,0 +1,49 @@
+{
+ "spec": 2,
+ "metadata": {
+  "name": "Harmontide Harpy",
+  "tips": "A harpy girl from the Harmontide mod. Six plumages in the texture list; wheel animations: Wave, Spread wings, Dance, Shy, Preen, Sit down.",
+  "license": {
+   "type": "All Rights Reserved",
+   "desc": "Made for the Harmontide mod."
+  },
+  "authors": [
+   {
+    "name": "Linkyoshi90",
+    "role": "model"
+   }
+  ]
+ },
+ "properties": {
+  "preview_animation": "idle",
+  "default_texture": "sparrow",
+  "extra_animation": {
+   "extra0": "Wave",
+   "extra1": "Spread wings",
+   "extra2": "Dance",
+   "extra3": "Shy",
+   "extra4": "Preen",
+   "extra5": "Sit down"
+  }
+ },
+ "files": {
+  "player": {
+   "model": {
+    "main": "models/main.json",
+    "arm": "models/arm.json"
+   },
+   "animation": {
+    "main": "animations/main.animation.json",
+    "extra": "animations/extra.animation.json"
+   },
+   "texture": [
+    "textures/sparrow.png",
+    "textures/albatross.png",
+    "textures/crow.png",
+    "textures/owl.png",
+    "textures/flamingo.png",
+    "textures/seagull.png"
+   ]
+  }
+ }
+}

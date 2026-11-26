@@ -172,7 +172,17 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         /** An idle fidget (entity/girl/Fidgets): which clip is in DATA_FIDGET. */
         FIDGET(null, true),
         /** Kneeling astride her partner. The clip is idle; the pose is applied on top (client/CowgirlPose). */
-        KNEEL(null, false);
+        KNEEL(null, false),
+        /** A taur sitting back onto her partner. Her own sit clip, with the settle on top (client/SitBackPose). */
+        SITBACK("sit", false),
+        /** On him without a kneel. Idle underneath; the pose is client/CouplePose. */
+        COUPLE(null, false),
+        /** Labor: a sit, a crouch, or a prone lay. Idle underneath; the pose is the client birth pose. */
+        LABOR(null, false),
+        /** Feeding someone at her chest. Idle underneath; the pose is client/FeedPose. */
+        FEED(null, false),
+        /** The morning after. Idle underneath; the pose is client/OralPose. */
+        ORAL(null, false);
 
         public final String animation;
         public final boolean once;
@@ -222,11 +232,13 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         this.segments = SerpentSegment.of(this, species);
         if (this.segments.length > 0) this.setId(ENTITY_COUNTER.getAndAdd(this.segments.length + 1) + 1);
         this.goalSelector.addGoal(-1, new SitWhenOrderedGoal<>(this));
+        this.goalSelector.addGoal(0, new com.linkyoshi90.harmontide.entity.ai.LaborGoal(this));
         this.goalSelector.addGoal(1, new com.linkyoshi90.harmontide.entity.ai.StayNearGoal<>(this));
         this.goalSelector.addGoal(2, new com.linkyoshi90.harmontide.entity.ai.FetchBallGoal<>(this));
         this.goalSelector.addGoal(3, new com.linkyoshi90.harmontide.entity.ai.SeekMilkingMachineGoal<>(this));
         this.goalSelector.addGoal(4, new com.linkyoshi90.harmontide.entity.ai.FridgeGoal<>(this));
         this.goalSelector.addGoal(3, new com.linkyoshi90.harmontide.entity.ai.NurseGoal(this));
+        this.goalSelector.addGoal(4, new com.linkyoshi90.harmontide.entity.ai.BreastfeedGoal(this));
         this.goalSelector.addGoal(3, new FarmhandGoal<>(this));
         this.goalSelector.addGoal(5, new Chores.ChoresGoal<>(this));
         this.goalSelector.addGoal(7, new SleepGoal(this));
@@ -639,10 +651,9 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         return this.gestation;
     }
 
-    /** A girl monsterized by the Demon Realm joins any sleeper's bed, friend or not, but never her father's (entity/Monsterization). */
+    /** A girl the realm changed joins any sleeper. A grown daughter joins her father only with a condom ({@link com.linkyoshi90.harmontide.entity.Condom}). */
     @Override
     public boolean trustsEnoughForBed(Player player) {
-        if (com.linkyoshi90.harmontide.entity.Monsterization.monsterized(this)) return !player.getUUID().equals(this.getFather());
         return com.linkyoshi90.harmontide.entity.Bonded.super.trustsEnoughForBed(player);
     }
 
@@ -690,7 +701,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     @Override
     public void leaveBed() {
-        if (this.getAction() == Action.LYING || this.getAction() == Action.KNEEL) this.setAction(Action.NONE);
+        if (this.getAction() == Action.LYING || this.getAction() == Action.KNEEL
+                || this.getAction() == Action.SITBACK || this.getAction() == Action.COUPLE) this.setAction(Action.NONE);
     }
 
     /** Called when the player whose bed she shared wakes up in the morning (a family's bed perk). */
@@ -891,6 +903,12 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (stack.isEmpty() && this.level() instanceof ServerLevel rescue && com.linkyoshi90.harmontide.entity.MilkRescue.accept(rescue, this, player)) {
             return InteractionResult.SUCCESS;                           // a cup of her milk, offered when they were poisoned
         }
+        if (stack.isEmpty() && !player.isShiftKeyDown() && com.linkyoshi90.harmontide.entity.Breastfeed.clickWouldAsk(this, player)) {
+            if (!(this.level() instanceof ServerLevel) || player instanceof net.minecraft.server.level.ServerPlayer sp
+                    && com.linkyoshi90.harmontide.entity.Breastfeed.ask(this, sp)) {
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
+            }
+        }
         if (stack.isEmpty() && !player.isShiftKeyDown()) return this.pet(player);
         if (stack.isEmpty() && this.level() instanceof ServerLevel game && HideAndSeek.start(game, this, player)) return InteractionResult.SUCCESS;   // crouching: let's play
         return super.mobInteract(player, hand);
@@ -1039,8 +1057,13 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
      * live young right beside her; egg-laying families override.
      */
     protected boolean giveBirth(ServerLevel level, @Nullable UUID father) {
+        BlockPos at = this.blockPosition();
+        if (this.getAction() == Action.LABOR) {                         // between her knees, a step in front of the labor pose
+            var look = this.getLookAngle();
+            at = BlockPos.containing(this.getX() + look.x * 0.7, this.getY(), this.getZ() + look.z * 0.7);
+        }
         int n = this.litterSize();
-        for (int i = 0; i < n; i++) this.spawnYoung(level, this.blockPosition(), father);
+        for (int i = 0; i < n; i++) this.spawnYoung(level, at, father);
         return true;
     }
 
@@ -1130,14 +1153,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (this.tickCount % 100 == 65 && this.gestation.isCarrying()) Cravings.tick(server, this);
         if (this.tickCount % Cradle.EVERY == 55 && this.isBaby()) Cradle.tick(server, this, server.isNight());
         if (this.tickCount % 60 == 37 && this.isBaby()) GrowingUp.tick(server, this);
-        if (this.gestation.isReady() && this.tickCount % 40 == 0 && this.giveBirth(server, this.gestation.getFather())) {
-            boolean twins = Cravings.twins(this);
-            if (twins) this.giveBirth(server, this.gestation.getFather());   // her craving was answered: twins
-            com.linkyoshi90.harmontide.entity.Marriage.announceBirth(server, this, this.gestation.getFather(), twins);
-            this.gestation.clear();
-            if (com.linkyoshi90.harmontide.entity.Monsterization.monsterized(this)) this.gestation.halveCooldown();   // eager again sooner
-            server.playSound(null, this.blockPosition(), net.minecraft.sounds.SoundEvents.CHICKEN_EGG, net.minecraft.sounds.SoundSource.NEUTRAL, 0.8F, 1.3F);
-        }
+        if (this.gestation.isReady() || Labor.active(this)) Labor.tick(server, this);
         if (this.hasTrueForm() && !this.isTrueForm() && this.tickCount % 100 == 0) {
             if (this.bestAffection() >= FULL_AFFECTION) {
                 if (this.devotedSince == NOT_DEVOTED) this.devotedSince = server.getGameTime();
@@ -1419,7 +1435,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (this.isDeadOrDying() && this.hasDeathAnimation()) return state.setAndContinue(this.anim("death", true));
         if (this.isPassenger() && this.hasRideAnimation()) return state.setAndContinue(this.anim("ride", false));
         Action action = this.getAction();
-        if (action == Action.KNEEL) return state.setAndContinue(this.anim("idle", false));
+        if (action == Action.KNEEL || action == Action.COUPLE || action == Action.LABOR || action == Action.FEED
+                || action == Action.ORAL) return state.setAndContinue(this.anim("idle", false));
         if (action == Action.FIDGET && !this.getFidget().isEmpty() && !state.isMoving()) return state.setAndContinue(this.anim("fidget_" + this.getFidget(), true));
         if (action.animation != null) return state.setAndContinue(this.anim(action.animation, action.once));
         if (this.isInWater() && this.hasSwimAnimation()) return state.setAndContinue(this.anim(state.isMoving() ? "swim" : "idle", false));

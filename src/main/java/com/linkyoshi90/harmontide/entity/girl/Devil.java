@@ -306,7 +306,7 @@ public class Devil extends AbstractMonsterGirl {
     /** She slips into a bed whatever her friendship, and every night she is sure of it. */
     @Override
     public boolean trustsEnoughForBed(Player player) {
-        return this.species == GirlSpecies.SUCCUBUS_DEVIL ? !player.getUUID().equals(this.getFather()) : super.trustsEnoughForBed(player);
+        return this.species == GirlSpecies.SUCCUBUS_DEVIL ? !com.linkyoshi90.harmontide.entity.Condom.barred(this, player) : super.trustsEnoughForBed(player);
     }
 
     @Override

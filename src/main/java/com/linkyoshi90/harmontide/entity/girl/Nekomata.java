@@ -424,9 +424,13 @@ public class Nekomata extends AbstractMonsterGirl {
         return 2 + this.random.nextInt(2);
     }
 
-    /** The litter is born in a den: the darkest roofed nook within reach, or where she is. */
+    /**
+     * The litter is born in a den: the darkest roofed nook within reach, or where she is.
+     * In labor she is already sitting for the birth, so the kittens come out at her body.
+     */
     @Override
     protected boolean giveBirth(ServerLevel level, @Nullable UUID father) {
+        if (this.getAction() == Action.LABOR) return super.giveBirth(level, father);
         BlockPos den = this.blockPosition();
         int best = 99;
         for (BlockPos p : BlockPos.betweenClosed(den.offset(-8, -2, -8), den.offset(8, 2, 8))) {

@@ -70,6 +70,8 @@ public final class Liaison {
         t.get(1).add(buy(Items.PAPER, 24, 16, 2));
         t.get(2).add(sell(3, ModItems.FRIENDSHIP_BRACELET, 8, 5));
         t.get(2).add(sell(2, ModItems.LOVE_LETTER, 8, 5));
+        t.get(2).add((trader, random) -> new net.minecraft.world.item.trading.MerchantOffer(
+                new net.minecraft.world.item.trading.ItemCost(Items.EMERALD, 1), new net.minecraft.world.item.ItemStack(ModItems.CONDOM.get(), 8), 16, 4, 0.05F));
         t.get(2).add(buy(Items.SUGAR, 16, 12, 10));
         t.get(3).add(sell(6, ModItems.RAINCOAT, 4, 10));
         t.get(3).add(sell(8, ModItems.WINTER_COAT, 4, 10));

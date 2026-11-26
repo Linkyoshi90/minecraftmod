@@ -206,8 +206,11 @@ public final class HarmontideConfig {
         NSFW = BUILDER
                 .comment("Private-server adult content. Off, nothing here runs.",
                         "On, the call from bed is blunt, and a grown partner who can already share it (never the young,",
-                        "never anyone of childlike height, never the men, never her own father) speaks plainly. A biped kneels astride you and bounces; anyone else rocks along the mattress.",
+                        "never anyone of childlike height, never the men) speaks plainly. A grown daughter will, and only with a condom; that night does not conceive.",
+                        "A biped kneels astride you and bounces. A taur sits back onto you, her back lowered.",
+                        "A serpent or a mermaid lies along you and her tail pumps her hips. A spider stands over you and bends her legs in turn. A slime bounces on you.",
                         "A pat, the tub, the morning after and a milking do too. A bucket on any grown girl opens a close-up: she blushes, her top comes off, and she leans over the pail. Drag down toward the nipple until she is empty, and the top comes back. The pumps are unchanged.",
+                        "A wild grown girl who is not yet close enough to share your bed may catch you. She tackles you to the ground first. She grows fond of you, may conceive, and leaves you healed. A grown daughter still needs a condom, and does not conceive.",
                         "Leave this off on any world you might share or publish.")
                 .define("nsfw", false);
 

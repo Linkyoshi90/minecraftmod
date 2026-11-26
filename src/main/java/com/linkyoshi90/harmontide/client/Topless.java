@@ -52,7 +52,7 @@ public final class Topless {
             }
             DynamicTexture dyn = new DynamicTexture(image);
             ResourceLocation id = HarmontideMod.id("dynamic/bare/" + Integer.toUnsignedString(texture.getPath().hashCode())
-                    + "_" + Integer.toUnsignedString(model.getPath().hashCode()));
+                    + "_" + Integer.toUnsignedString(model.getPath().hashCode()) + ".png");
             mc.getTextureManager().register(id, dyn);
             return id;
         } catch (Exception e) {

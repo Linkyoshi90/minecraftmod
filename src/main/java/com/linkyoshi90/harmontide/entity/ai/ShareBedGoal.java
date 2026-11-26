@@ -79,7 +79,10 @@ public class ShareBedGoal<T extends PathfinderMob & Bonded> extends Goal {
         for (Player p : this.mob.level().players()) {
             if (!p.isSleeping() || p.isSpectator() || p.distanceToSqr(this.mob) > RANGE * RANGE) continue;
             if (onPost && !(p instanceof ServerPlayer caller && BedCall.isCalling(caller))) continue;
-            if (!this.mob.trustsEnoughForBed(p)) continue;
+            if (!this.mob.trustsEnoughForBed(p)) {
+                if (this.mob.level() instanceof ServerLevel server) com.linkyoshi90.harmontide.entity.Condom.mention(server, this.mob, p);
+                continue;
+            }
             if (best == null || p.distanceToSqr(this.mob) < best.distanceToSqr(this.mob)) best = p;
         }
         if (best == null || best.getSleepingPos().isEmpty() || !this.wantsTo(best)) return false;

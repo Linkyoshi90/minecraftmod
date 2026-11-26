@@ -19,13 +19,15 @@ import javax.annotation.Nullable;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Private-server adult content. Off unless the nsfw option is on, and then only for a grown partner who can already
- * share a bed: never the young, never anyone of childlike height, never the men, and never her own father.
- * In the bed a biped kneels astride him and bounces ({@link #rock}); anyone without that pair of legs still rocks along the mattress.
+ * share a bed: never the young, never anyone of childlike height, and never the men. A grown daughter is included,
+ * and only while he is carrying a condom ({@link Condom}).
+ * In the bed a biped kneels astride him and bounces ({@link #rock}). A taur sits back onto him, her back lowered.
+ * A serpent or a mermaid lies along him and her tail pumps her hips. A spider stands over him and bends her legs in turn.
+ * A slime bounces on him. Out in the world, a wild one who is not yet that close may catch him ({@link WildEncounter}).
  * A bucket opens {@link HandMilking} instead of filling at once.
  */
 public final class Nsfw {
@@ -35,6 +37,8 @@ public final class Nsfw {
     /** Bounce of a kneel, in radians per tick, and how far it lifts her. */
     private static final double BOUNCE = 0.38;
     private static final double LIFT = 0.09;
+    /** How far a taur's origin sits toward the foot. Her rump is behind that, over his hips. */
+    private static final double SIT_ALONG = 1.15;
     /** Models already checked for a pair of legs and shins. */
     private static final Map<String, Boolean> LEGS = new ConcurrentHashMap<>();
 
@@ -69,16 +73,14 @@ public final class Nsfw {
         return on() ? "message.harmontide.call_friends_nsfw" : "message.harmontide.call_friends";
     }
 
-    /** Grown enough for the bed, and not with her own father. The option itself is separate. */
+    /** Grown enough for the bed. A daughter still counts; the condom is {@link Condom#allows}. The option itself is separate. */
     public static boolean adult(Mob mob, Player player) {
-        if (!(mob instanceof Bonded bonded) || !bonded.canShareBed()) return false;
-        UUID father = bonded.getFather();
-        return father == null || !father.equals(player.getUUID());
+        return player != null && mob instanceof Bonded bonded && bonded.canShareBed();
     }
 
-    /** A pat, the tub or a milking: she already likes them, or she is their wife. */
+    /** A pat, the tub or a milking: she already likes them, or she is their wife. A daughter needs a condom. */
     public static boolean close(Mob mob, Player player) {
-        if (!on() || !adult(mob, player)) return false;
+        if (!on() || !adult(mob, player) || !Condom.allows(mob, player)) return false;
         if (Marriage.married(mob, player)) return true;
         return ((Bonded) mob).getAffection(player) >= Bonded.BED_AFFECTION;
     }
@@ -86,7 +88,8 @@ public final class Nsfw {
     /** The line she would say, or null if this moment stays as it is. */
     @Nullable
     public static String line(Mob mob, Player player, Kind kind) {
-        boolean allowed = kind == Kind.BED || kind == Kind.MORNING ? on() && adult(mob, player) : close(mob, player);
+        boolean allowed = kind == Kind.BED || kind == Kind.MORNING
+                ? on() && adult(mob, player) && Condom.allows(mob, player) : close(mob, player);
         if (!allowed) return null;
         return "message.harmontide." + kind.key + "." + mob.getRandom().nextInt(kind.lines);
     }
@@ -112,17 +115,20 @@ public final class Nsfw {
     }
 
     /**
-     * In the bed, with the option on. A biped kneels astride the sleeper and bounces; anyone else rocks along the
-     * mattress. True if she did, and the caller should not also pin her to the still spot. {@code spot} and {@code yaw}
-     * are the lying place (towards the foot). {@code bed} is the head of the bed, when she is really in one.
+     * In the bed, with the option on. A biped kneels. A taur sits back. A serpent, a mermaid, a spider or a slime
+     * takes her own place on top of him. Anyone else rocks along the mattress. True if she did, and the caller
+     * should not also pin her to the still spot.
+     * {@code spot} and {@code yaw} are the lying place (towards the foot). {@code bed} is the head of the bed, when she is really in one.
      */
     public static boolean rock(ServerLevel level, Mob mob, Player player, Vec3 spot, float yaw) {
         return rock(level, mob, player, spot, yaw, null);
     }
 
     public static boolean rock(ServerLevel level, Mob mob, Player player, Vec3 spot, float yaw, @Nullable BlockPos bed) {
-        if (!on() || !adult(mob, player)) return false;
+        if (!on() || !adult(mob, player) || !Condom.allows(mob, player)) return false;
         if (bipedal(mob)) kneel(level, mob, spot, yaw, bed);
+        else if (quadruped(mob)) sitBack(level, mob, spot, yaw, bed);
+        else if (couple(mob)) onTop(level, mob, spot, yaw, bed);
         else slide(level, mob, spot, yaw);
         return true;
     }
@@ -135,15 +141,25 @@ public final class Nsfw {
         return false;
     }
 
-    /** Back to however her family lies in a bed. Used when the kneel should stop. */
+    /** A taur is sitting back onto someone, so the renderer settles her back down. */
+    public static boolean sittingBack(Mob mob) {
+        return mob instanceof AbstractMonsterGirl girl && girl.getAction() == AbstractMonsterGirl.Action.SITBACK;
+    }
+
+    /** She is on him without a kneel, so the renderer plays her family's version. */
+    public static boolean coupling(Mob mob) {
+        return mob instanceof AbstractMonsterGirl girl && girl.getAction() == AbstractMonsterGirl.Action.COUPLE;
+    }
+
+    /** Back to however her family lies in a bed. Used when the bed pose should stop. */
     public static void lieDown(Mob mob) {
-        if (!kneeling(mob)) return;
+        if (!kneeling(mob) && !sittingBack(mob) && !coupling(mob)) return;
         if (mob instanceof Bonded bonded) bonded.settleInBed();
     }
 
     /**
      * Two legs and two shins, and a body that can fold them. A taur, a serpent, a spider, a mermaid and a slime
-     * keep the old rock even when a leftover bone happens to be named like a leg.
+     * do not kneel, even when a leftover bone happens to be named like a leg.
      */
     public static boolean bipedal(Mob mob) {
         if (mob.isBaby()) return false;
@@ -153,6 +169,19 @@ public final class Nsfw {
         if (family == GirlSpecies.Family.LAMIA || family == GirlSpecies.Family.ARACHNE || family == GirlSpecies.Family.CENTAUR
                 || family == GirlSpecies.Family.MERFOLK || family == GirlSpecies.Family.SLIME) return false;
         return legs(girl.getSpecies().id());
+    }
+
+    /** Four legs and a back that can sit down. */
+    public static boolean quadruped(Mob mob) {
+        return !mob.isBaby() && mob instanceof AbstractMonsterGirl girl && girl.getSpecies().family() == GirlSpecies.Family.CENTAUR;
+    }
+
+    /** A serpent, a mermaid, a spider or a slime: on him, and not by kneeling. */
+    private static boolean couple(Mob mob) {
+        if (mob.isBaby() || !(mob instanceof AbstractMonsterGirl girl)) return false;
+        GirlSpecies.Family family = girl.getSpecies().family();
+        return family == GirlSpecies.Family.LAMIA || family == GirlSpecies.Family.MERFOLK
+                || family == GirlSpecies.Family.ARACHNE || family == GirlSpecies.Family.SLIME;
     }
 
     private static boolean legs(String model) {
@@ -200,7 +229,70 @@ public final class Nsfw {
         }
     }
 
-    /** The old motion: a short slide along the mattress, for a body that cannot kneel. */
+    /** Reverse of the kneel: she faces the foot of the bed and sits, so her back lowers onto him. */
+    private static void sitBack(ServerLevel level, Mob mob, Vec3 spot, float yaw, @Nullable BlockPos bed) {
+        double wave = bounce(mob.tickCount);
+        double x = spot.x;
+        double z = spot.z;
+        double y = spot.y + wave * 0.05;
+        float face = yaw;
+        if (bed != null && mob.level().getBlockState(bed).getBlock() instanceof BedBlock) {
+            BlockState state = mob.level().getBlockState(bed);
+            Direction facing = state.hasProperty(BedBlock.FACING) ? state.getValue(BedBlock.FACING) : Direction.NORTH;
+            Direction foot = facing.getOpposite();
+            Vec3 head = Vec3.atBottomCenterOf(bed);
+            x = head.x + foot.getStepX() * SIT_ALONG;
+            z = head.z + foot.getStepZ() * SIT_ALONG;
+            y = head.y + 0.42 + wave * 0.05;
+            face = foot.toYRot();
+        }
+        mob.setDeltaMovement(Vec3.ZERO);
+        mob.moveTo(x, y, z, face, 0.0F);
+        mob.setYBodyRot(face);
+        mob.setYHeadRot(face);
+        if (mob instanceof AbstractMonsterGirl girl) girl.setAction(AbstractMonsterGirl.Action.SITBACK);
+        if (mob.tickCount % 40 == 0) {
+            level.sendParticles(ParticleTypes.HEART, x, y + 0.8, z, 2, 0.15, 0.1, 0.15, 0.0);
+            ((Bonded) mob).blushFor(80);
+        }
+    }
+
+    /**
+     * Over his hips, facing him, the same place as a kneel. How high she sits, and how far she rises, depend on the body.
+     * A serpent and a mermaid stay low, since they are lying down. A slime rises as far as a harpy.
+     */
+    private static void onTop(ServerLevel level, Mob mob, Vec3 spot, float yaw, @Nullable BlockPos bed) {
+        GirlSpecies.Family family = ((AbstractMonsterGirl) mob).getSpecies().family();
+        boolean lying = family == GirlSpecies.Family.LAMIA || family == GirlSpecies.Family.MERFOLK;
+        double lift = family == GirlSpecies.Family.SLIME ? LIFT : lying ? 0.05 : 0.06;
+        double base = lying ? 0.36 : 0.50;
+        double wave = bounce(mob.tickCount);
+        double x = spot.x;
+        double z = spot.z;
+        double y = spot.y + wave * lift;
+        float face = yaw;
+        if (bed != null && mob.level().getBlockState(bed).getBlock() instanceof BedBlock) {
+            BlockState state = mob.level().getBlockState(bed);
+            Direction facing = state.hasProperty(BedBlock.FACING) ? state.getValue(BedBlock.FACING) : Direction.NORTH;
+            Direction foot = facing.getOpposite();
+            Vec3 head = Vec3.atBottomCenterOf(bed);
+            x = head.x + foot.getStepX() * 0.58;
+            z = head.z + foot.getStepZ() * 0.58;
+            y = head.y + base + wave * lift;
+            face = facing.toYRot();
+        }
+        mob.setDeltaMovement(Vec3.ZERO);
+        mob.moveTo(x, y, z, face, 0.0F);
+        mob.setYBodyRot(face);
+        mob.setYHeadRot(face);
+        if (mob instanceof AbstractMonsterGirl girl) girl.setAction(AbstractMonsterGirl.Action.COUPLE);
+        if (mob.tickCount % 40 == 0) {
+            level.sendParticles(ParticleTypes.HEART, x, y + 0.7, z, 2, 0.15, 0.1, 0.15, 0.0);
+            ((Bonded) mob).blushFor(80);
+        }
+    }
+
+    /** The old motion: a short slide along the mattress, for a body with none of these poses. */
     private static void slide(ServerLevel level, Mob mob, Vec3 spot, float yaw) {
         lieDown(mob);
         double shift = along(mob.tickCount);

@@ -76,8 +76,9 @@ public interface Bonded {
     Orders getOrders();
 
     default boolean trustsEnoughForBed(Player player) {
-        if (this instanceof net.minecraft.world.entity.Mob m && Monsterization.monsterized(m)) return !player.getUUID().equals(this.getFather());   // the realm changed her: any sleeper
-        return this.getAffection(player) >= BED_AFFECTION && !player.getUUID().equals(this.getFather());
+        if (this instanceof net.minecraft.world.entity.Mob m && Condom.barred(m, player)) return false;
+        if (this instanceof net.minecraft.world.entity.Mob m && Monsterization.monsterized(m)) return true;   // the realm changed her: any sleeper
+        return this.getAffection(player) >= BED_AFFECTION;
     }
 
     /**

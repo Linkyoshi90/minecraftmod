@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.RenderType;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoRenderer;
-import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 
 import java.util.function.Function;
 
@@ -15,7 +14,7 @@ import java.util.function.Function;
  * The glowing paints (glow, magma, thunder, neon) light up in the dark: textures/entity/&lt;texture&gt;_paint_&lt;paint&gt;_glowmask.png
  * (tools/gen_paints.py), drawn full-bright. Every other creature skips this layer.
  */
-public class PaintGlowLayer<T extends GeoAnimatable> extends AutoGlowingGeoLayer<T> {
+public class PaintGlowLayer<T extends GeoAnimatable> extends SafeGlowLayer<T> {
     private final Function<T, String> paint;
 
     public PaintGlowLayer(GeoRenderer<T> renderer, Function<T, String> paint) {

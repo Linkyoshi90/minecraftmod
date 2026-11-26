@@ -47,6 +47,9 @@ public class HarpyRenderer<T extends AbstractHarpy> extends GeoEntityRenderer<T>
                 Bellies.harpy(this, harpy);
                 PupilLook.lookAt(this, harpy);
                 CowgirlPose.apply(proc, harpy, animationState.getPartialTick());
+                BirthPose.apply(proc, harpy, animationState.getPartialTick());
+                FeedPose.apply(proc, harpy, animationState.getPartialTick());
+                OralPose.apply(proc, harpy, animationState.getPartialTick());
                 MilkPose.apply(proc, harpy);
                 Jiggle.apply(proc, harpy, animationState.getPartialTick());
             }

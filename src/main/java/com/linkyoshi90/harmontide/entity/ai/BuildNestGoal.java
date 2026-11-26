@@ -30,11 +30,17 @@ public class BuildNestGoal extends Goal {
     private static final int GIVE_UP_TICKS = 1200;
     private static final int SEARCH_RADIUS = 6;
 
+    private static final int PUSH_TICKS = 14;
+
     private final AbstractHarpy harpy;
     @Nullable
     private BlockPos spot;
     private int ticks;
     private int built;
+    /** How many eggs this clutch will hold, once she has started pushing them out. 0 while she is still weaving. */
+    private int eggsWanted;
+    private int eggsLaid;
+    private int pushTicks;
 
     public BuildNestGoal(AbstractHarpy harpy) {
         this.harpy = harpy;
@@ -58,12 +64,18 @@ public class BuildNestGoal extends Goal {
     public void start() {
         this.ticks = 0;
         this.built = 0;
+        this.eggsWanted = 0;
+        this.eggsLaid = 0;
+        this.pushTicks = 0;
     }
 
     @Override
     public void stop() {
-        if (this.harpy.getAction() == AbstractHarpy.Action.NESTING) this.harpy.setAction(AbstractHarpy.Action.NONE);
+        if (this.harpy.getAction() == AbstractHarpy.Action.NESTING || this.harpy.getAction() == AbstractHarpy.Action.LAYING) {
+            this.harpy.setAction(AbstractHarpy.Action.NONE);
+        }
         this.spot = null;
+        this.eggsWanted = 0;
     }
 
     @Override
@@ -97,10 +109,14 @@ public class BuildNestGoal extends Goal {
     public void tick() {
         if (this.spot == null) return;                       // spot lost (taken, or the clutch is laid): the goal stops on its next check
         this.ticks++;
+        if (this.eggsWanted > 0) {
+            this.pushEgg();
+            return;
+        }
         if (this.ticks > GIVE_UP_TICKS) {
             BlockPos here = findSpot(this.harpy.level(), this.harpy.blockPosition(), 2);
             if (here != null) this.spot = here;
-            this.layClutch();
+            this.beginClutch();
             return;
         }
         Vec3 centre = Vec3.atBottomCenterOf(this.spot);
@@ -121,23 +137,69 @@ public class BuildNestGoal extends Goal {
             server.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, twig), centre.x, centre.y + 0.2, centre.z, 4, 0.3, 0.05, 0.3, 0.02);
             server.playSound(null, this.spot, SoundEvents.GRASS_PLACE, SoundSource.NEUTRAL, 0.6F, 1.2F);
         }
-        if (++this.built >= BUILD_TICKS) this.layClutch();
+        if (++this.built >= BUILD_TICKS) this.beginClutch();
     }
 
-    private void layClutch() {
+    /** The nest, with the first egg. The rest are pushed out one at a time. */
+    private void beginClutch() {
         BlockPos pos = this.spot;
-        this.spot = null;
         Level level = this.harpy.level();
         HarpyEggBlock.Species species = HarpyEggBlock.Species.forEntityId(this.harpy.speciesId());
-        if (pos == null || species == null || !canNestAt(level, pos)) return;
+        if (pos == null || species == null || !canNestAt(level, pos)) {
+            this.spot = null;
+            return;
+        }
+        BlockState nest = ModBlocks.HARPY_EGG.get().defaultBlockState().setValue(HarpyEggBlock.SPECIES, species).setValue(HarpyEggBlock.EGGS, 1);
+        if (!level.setBlock(pos, nest, 3)) {
+            this.spot = null;
+            return;
+        }
         int eggs = com.linkyoshi90.harmontide.entity.girl.Cravings.twins(this.harpy) ? HarpyEggBlock.MAX_EGGS   // her craving answered: a full clutch
                 : 2 + this.harpy.getRandom().nextInt(HarpyEggBlock.MAX_EGGS - 1);
-        BlockState nest = ModBlocks.HARPY_EGG.get().defaultBlockState().setValue(HarpyEggBlock.SPECIES, species).setValue(HarpyEggBlock.EGGS, eggs);
-        if (!level.setBlock(pos, nest, 3)) return;
         ParentageBlockEntity.setFatherAt(level, pos, this.harpy.getGestation().getFather());
         ParentageBlockEntity.setPaintAt(level, pos, this.harpy.getPaint());
-        level.playSound(null, pos, SoundEvents.TURTLE_EGG_CRACK, SoundSource.NEUTRAL, 0.8F, 1.2F);
-        this.harpy.getGestation().clear();
         this.harpy.setHomePos(pos);
+        this.eggsWanted = Math.max(1, eggs);
+        this.eggsLaid = 1;
+        this.pushTicks = 0;
+        level.playSound(null, pos, SoundEvents.TURTLE_EGG_CRACK, SoundSource.NEUTRAL, 0.7F, 1.3F);
+        this.harpy.setAction(AbstractHarpy.Action.LAYING);
+        if (this.eggsLaid >= this.eggsWanted) this.finishClutch();
+    }
+
+    /** Still over the nest, prone, until the next egg joins the clutch. */
+    private void pushEgg() {
+        if (this.spot == null) return;
+        this.harpy.setAction(AbstractHarpy.Action.LAYING);
+        this.harpy.getNavigation().stop();
+        this.harpy.setDeltaMovement(Vec3.ZERO);
+        Vec3 centre = Vec3.atBottomCenterOf(this.spot);
+        this.harpy.moveTo(centre.x, this.spot.getY(), centre.z, this.harpy.getYRot(), 0.0F);
+        if (++this.pushTicks < PUSH_TICKS) return;
+        this.pushTicks = 0;
+        this.eggsLaid++;
+        Level level = this.harpy.level();
+        BlockState state = level.getBlockState(this.spot);
+        if (!state.is(ModBlocks.HARPY_EGG.get())) {
+            this.finishClutch();
+            return;
+        }
+        int shown = Math.min(Math.max(this.eggsLaid, 1), HarpyEggBlock.MAX_EGGS);
+        level.setBlock(this.spot, state.setValue(HarpyEggBlock.EGGS, shown), 3);
+        level.playSound(null, this.spot, SoundEvents.TURTLE_EGG_CRACK, SoundSource.NEUTRAL, 0.7F, 1.2F);
+        if (level instanceof ServerLevel server) {
+            server.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Items.EGG)),
+                    centre.x, centre.y + 0.25, centre.z, 3, 0.12, 0.04, 0.12, 0.02);
+        }
+        if (this.eggsLaid >= this.eggsWanted) this.finishClutch();
+    }
+
+    private void finishClutch() {
+        this.harpy.getGestation().clear();
+        if (this.harpy.getAction() == AbstractHarpy.Action.LAYING || this.harpy.getAction() == AbstractHarpy.Action.NESTING) {
+            this.harpy.setAction(AbstractHarpy.Action.NONE);
+        }
+        this.spot = null;
+        this.eggsWanted = 0;
     }
 }

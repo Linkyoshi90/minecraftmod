@@ -336,6 +336,8 @@ public final class ModItems {
     public static final DeferredItem<Item> MAID_APRON = ITEMS.registerSimpleItem("maid_apron", new Item.Properties().stacksTo(1));
     /** Given to a devoted friend, a proposal (entity/Marriage). */
     public static final DeferredItem<Item> WEDDING_RING = ITEMS.registerSimpleItem("wedding_ring", new Item.Properties().stacksTo(1));
+    /** Used when a grown daughter spends the night. One is spent, and she does not conceive. */
+    public static final DeferredItem<Item> CONDOM = ITEMS.registerSimpleItem("condom", new Item.Properties().stacksTo(16));
     public static final DeferredItem<com.linkyoshi90.harmontide.item.HolyWaterItem> HOLY_WATER = ITEMS.register("holy_water",
             () -> new com.linkyoshi90.harmontide.item.HolyWaterItem(new Item.Properties().stacksTo(16)));
     public static final DeferredItem<com.linkyoshi90.harmontide.item.UmbrellaItem> UMBRELLA = ITEMS.register("umbrella", () -> new com.linkyoshi90.harmontide.item.UmbrellaItem(new Item.Properties().stacksTo(1)));

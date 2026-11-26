@@ -32,8 +32,10 @@ public final class BedSharing {
                     wives++;
                     dreamer = mob;
                 }
+                boolean covered = Condom.allows(mob, player);
+                if (covered) Nsfw.say(level, mob, player, Nsfw.Kind.MORNING);
+                if (covered && Nsfw.on() && Nsfw.adult(mob, player)) MorningOral.queue(mob, player);
                 if (nightShared(level, player, mob)) expecting++;
-                Nsfw.say(level, mob, player, Nsfw.Kind.MORNING);
             }
             Marriage.familyBed(level, player, wives);
             if (dreamer != null) Marriage.sharedDream(level, player, dreamer, false);   // now and then she dreamt of somewhere real
@@ -48,7 +50,9 @@ public final class BedSharing {
         if (mob instanceof com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl girl) girl.onNightShared(player);   // her bed perk
         if (!((Bonded) mob).canShareBed()) return false;
         level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getY() + mob.getBbHeight() + 0.3, mob.getZ(), 5, 0.3, 0.2, 0.3, 0.0);
-        if (!conceives(level, player, mob)) return false;
+        boolean daughter = Condom.grownOffspring(mob, player);
+        if (daughter && !Condom.take(player)) Condom.mention(level, mob, player);
+        if (daughter || !conceives(level, player, mob)) return false;
         gestation.conceive(player.getUUID());
         player.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.harmontide.happy_news", mob.getDisplayName())
                 .withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE), false);   // she can tell, and she's glowing

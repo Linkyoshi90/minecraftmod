@@ -101,7 +101,13 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         /** An idle fidget (entity/girl/Fidgets): which clip is in DATA_FIDGET. */
         FIDGETING(null, true),
         /** Kneeling astride her partner. Idle underneath; the pose is applied on top (client/CowgirlPose). */
-        KNEEL(null, false);
+        KNEEL(null, false),
+        /** On her stomach at the water, pushing the spawn out. Idle underneath. */
+        LAYING(null, false),
+        /** Feeding someone at her chest. Idle underneath; the pose is client/FeedPose. */
+        FEED(null, false),
+        /** The morning after. Idle underneath; the pose is client/OralPose. */
+        ORAL(null, false);
 
         /** The animation.&lt;species&gt;.&lt;name&gt; this action plays, and whether it plays once and holds its last pose. */
         public final String animation;
@@ -163,6 +169,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         this.targetSelector.addGoal(1, new com.linkyoshi90.harmontide.entity.ai.StanceTargetGoal<>(this));
         this.goalSelector.addGoal(2, new LaySpawnGoal(this));
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));
+        this.goalSelector.addGoal(4, new com.linkyoshi90.harmontide.entity.ai.BreastfeedGoal(this));
     }
 
     /** e.g. "bullywug"; animations are looked up as animation.&lt;species&gt;.&lt;name&gt;. */
@@ -514,6 +521,13 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         }
         if (hand == InteractionHand.MAIN_HAND && stack.isEmpty() && this.level() instanceof ServerLevel rescue && MilkRescue.accept(rescue, this, player)) {
             return InteractionResult.SUCCESS;                           // a cup of her milk, offered when they were poisoned
+        }
+        if (hand == InteractionHand.MAIN_HAND && stack.isEmpty() && !player.isShiftKeyDown()
+                && com.linkyoshi90.harmontide.entity.Breastfeed.clickWouldAsk(this, player)) {
+            if (!(this.level() instanceof ServerLevel) || player instanceof net.minecraft.server.level.ServerPlayer sp
+                    && com.linkyoshi90.harmontide.entity.Breastfeed.ask(this, sp)) {
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
+            }
         }
         if (hand == InteractionHand.MAIN_HAND && stack.isEmpty() && !player.isShiftKeyDown()) {
             if (this.level() instanceof ServerLevel server) {
@@ -872,7 +886,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
             return state.setAndContinue(this.anim(state.isMoving() ? (this.isAggressive() ? "hop" : this.movingAnimation().equals("hop") ? "hop" : "walk") : "idle"));
         }
         Action action = this.getAction();
-        if (action == Action.KNEEL) return state.setAndContinue(this.anim("idle"));
+        if (action == Action.KNEEL || action == Action.LAYING || action == Action.FEED || action == Action.ORAL) return state.setAndContinue(this.anim("idle"));
         if (action == Action.FIDGETING && !this.getFidget().isEmpty() && !state.isMoving() && !this.isInWater()) return state.setAndContinue(this.animOnce("fidget_" + this.getFidget()));
         if (action.animation != null) return state.setAndContinue(action.once ? this.animOnce(action.animation) : this.anim(action.animation));
         String special = this.specialMovementAnimation();

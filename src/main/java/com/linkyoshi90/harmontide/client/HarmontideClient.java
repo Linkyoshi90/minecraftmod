@@ -66,7 +66,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
+
 
 @EventBusSubscriber(modid = HarmontideMod.MODID, value = Dist.CLIENT)
 public final class HarmontideClient {
@@ -142,7 +142,7 @@ public final class HarmontideClient {
         event.registerEntityRenderer(ModEntities.TENGU_HARPY.get(), ctx -> new HarpyRenderer<TenguHarpy>(ctx, "tengu_harpy", 0.8F, 0.35F, TenguHarpy::getVariantSuffix));
         event.registerEntityRenderer(ModEntities.ZHUQUE_HARPY.get(), ctx -> {
             HarpyRenderer<ZhuqueHarpy> renderer = new HarpyRenderer<>(ctx, "zhuque_harpy", 0.85F, 0.35F, ZhuqueHarpy::getVariantSuffix);
-            renderer.addRenderLayer(new AutoGlowingGeoLayer<>(renderer)); // her flame tips glow (zhuque_harpy[_variant]_glowmask.png)
+            renderer.addRenderLayer(new SafeGlowLayer<>(renderer)); // her flame tips glow (zhuque_harpy[_variant]_glowmask.png)
             return renderer;
         });
         event.registerEntityRenderer(ModEntities.ROOKMOURN_HARPY.get(), ctx -> new HarpyRenderer<RookmournHarpy>(ctx, "rookmourn_harpy", 0.8F, 0.3F, RookmournHarpy::getVariantSuffix));
@@ -193,7 +193,7 @@ public final class HarmontideClient {
         event.registerEntityRenderer(ModEntities.DESERT_RAIN_FROG.get(), ctx -> new AnuranRenderer<DesertRainFrog>(ctx, "desert_rain_frog", 1.0F, 0.39F));
         event.registerEntityRenderer(ModEntities.FIRE_BELLIED_TOAD.get(), ctx -> {
             AnuranRenderer<FireBelliedToad> renderer = new AnuranRenderer<>(ctx, "fire_bellied_toad", 1.0F, 0.35F);
-            renderer.addRenderLayer(new AutoGlowingGeoLayer<>(renderer)); // the lantern glows (fire_bellied_toad_glowmask.png)
+            renderer.addRenderLayer(new SafeGlowLayer<>(renderer)); // the lantern glows (fire_bellied_toad_glowmask.png)
             return renderer;
         });
         event.registerEntityRenderer(ModEntities.CANE_TOAD.get(), ctx -> new AnuranRenderer<CaneToad>(ctx, "cane_toad", 1.0F, 0.45F));
@@ -205,7 +205,7 @@ public final class HarmontideClient {
         }
         event.registerEntityRenderer(ModEntities.PHOENIX_HARPY.get(), ctx -> {
             HarpyRenderer<PhoenixHarpy> renderer = new HarpyRenderer<>(ctx, "phoenix_harpy", 0.85F, 0.35F, PhoenixHarpy::getVariantSuffix);
-            renderer.addRenderLayer(new AutoGlowingGeoLayer<>(renderer)); // flames glow (phoenix_harpy[_variant]_glowmask.png)
+            renderer.addRenderLayer(new SafeGlowLayer<>(renderer)); // flames glow (phoenix_harpy[_variant]_glowmask.png)
             return renderer;
         });
     }

@@ -11,7 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
-/** What travels between client and server: the call from bed ({@link BedCall}), and the bucket close-up ({@link com.linkyoshi90.harmontide.entity.HandMilking}). */
+/** What travels between client and server: the call from bed ({@link BedCall}), the bucket close-up ({@link com.linkyoshi90.harmontide.entity.HandMilking}), and the question before a feed ({@link com.linkyoshi90.harmontide.entity.Breastfeed}). */
 public final class ModPayloads {
     private ModPayloads() {}
 
@@ -94,6 +94,29 @@ public final class ModPayloads {
         }
     }
 
+    /** Server to client: she is asking whether a hungry player wants to be fed. */
+    public record OpenFeed(int entityId) implements CustomPacketPayload {
+        public static final Type<OpenFeed> TYPE = new Type<>(HarmontideMod.id("open_feed"));
+        public static final StreamCodec<ByteBuf, OpenFeed> CODEC = ByteBufCodecs.VAR_INT.map(OpenFeed::new, OpenFeed::entityId);
+
+        @Override
+        public Type<OpenFeed> type() {
+            return TYPE;
+        }
+    }
+
+    /** Client to server: yes or no to that question. */
+    public record FeedAnswer(int entityId, boolean yes) implements CustomPacketPayload {
+        public static final Type<FeedAnswer> TYPE = new Type<>(HarmontideMod.id("feed_answer"));
+        public static final StreamCodec<ByteBuf, FeedAnswer> CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT, FeedAnswer::entityId,
+                ByteBufCodecs.BOOL, FeedAnswer::yes, FeedAnswer::new);
+
+        @Override
+        public Type<FeedAnswer> type() {
+            return TYPE;
+        }
+    }
+
     /** Server to client: how many pulls count. need 0 means the session was dropped. */
     public record MilkProgress(int token, int strokes, int need, boolean done) implements CustomPacketPayload {
         public static final Type<MilkProgress> TYPE = new Type<>(HarmontideMod.id("milk_progress"));
@@ -116,6 +139,8 @@ public final class ModPayloads {
                 com.linkyoshi90.harmontide.client.MilkingScreen.open(payload.token(), payload.entityId(), payload.need())));
         registrar.playToClient(MilkProgress.TYPE, MilkProgress.CODEC, (payload, context) -> context.enqueueWork(() ->
                 com.linkyoshi90.harmontide.client.MilkingScreen.progress(payload.token(), payload.strokes(), payload.need(), payload.done())));
+        registrar.playToClient(OpenFeed.TYPE, OpenFeed.CODEC, (payload, context) -> context.enqueueWork(() ->
+                com.linkyoshi90.harmontide.client.FeedOfferScreen.open(payload.entityId())));
         registrar.playToServer(SkipNight.TYPE, SkipNight.CODEC, (payload, context) -> {
             if (context.player() instanceof ServerPlayer player) BedCall.skipNight(player);
         });
@@ -124,6 +149,12 @@ public final class ModPayloads {
         });
         registrar.playToServer(CloseMilk.TYPE, CloseMilk.CODEC, (payload, context) -> {
             if (context.player() instanceof ServerPlayer player) com.linkyoshi90.harmontide.entity.HandMilking.close(player, payload.token());
+        });
+        registrar.playToServer(FeedAnswer.TYPE, FeedAnswer.CODEC, (payload, context) -> {
+            if (context.player() instanceof ServerPlayer player) {
+                if (payload.yes()) com.linkyoshi90.harmontide.entity.Breastfeed.accept(player, payload.entityId());
+                else com.linkyoshi90.harmontide.entity.Breastfeed.decline(player, payload.entityId());
+            }
         });
     }
 }

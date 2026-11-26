@@ -42,6 +42,9 @@ public class AnuranRenderer<T extends AbstractAnuran> extends GeoEntityRenderer<
                 Bellies.anuran(this, animatable);
                 PupilLook.lookAt(this, animatable);
                 CowgirlPose.apply(proc, animatable, animationState.getPartialTick());
+                BirthPose.apply(proc, animatable, animationState.getPartialTick());
+                FeedPose.apply(proc, animatable, animationState.getPartialTick());
+                OralPose.apply(proc, animatable, animationState.getPartialTick());
                 MilkPose.apply(proc, animatable);
                 Jiggle.apply(proc, animatable, animationState.getPartialTick());
                 if (animatable instanceof com.linkyoshi90.harmontide.entity.Bullywug wug) {   // the outfit that comes off

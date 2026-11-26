@@ -35,6 +35,10 @@ public final class RelationshipEvents {
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         BedCall.tick(player);
+        if (player.level() instanceof ServerLevel level) {
+            com.linkyoshi90.harmontide.entity.MorningOral.tick(level);
+            com.linkyoshi90.harmontide.entity.WildEncounter.tick(level);
+        }
         if (player.isSleeping()) BedSharing.holdNight(player);
     }
 }

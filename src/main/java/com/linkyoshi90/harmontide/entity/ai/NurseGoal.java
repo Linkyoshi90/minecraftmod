@@ -1,6 +1,7 @@
 package com.linkyoshi90.harmontide.entity.ai;
 
 import com.linkyoshi90.harmontide.entity.Lactation;
+import com.linkyoshi90.harmontide.entity.Nsfw;
 import com.linkyoshi90.harmontide.entity.Nursing;
 import com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl;
 import net.minecraft.core.particles.ParticleTypes;
@@ -14,7 +15,8 @@ import java.util.EnumSet;
  * Every three to six minutes a nursing mother with milk ready calls her baby over (within SEARCH), sits, and holds her to her chest for
  * Nursing.FEED_TICKS: the baby rides her, both in the NURSE action, hearts now and then. A joey stays in her pouch for it. With no baby
  * of her own to feed, a mother with milk fosters an orphan within FOSTER (Nursing.isOrphan): a calf, a wolf pup, a hatchling, any
- * species but a villager's child.
+ * species but a villager's child. With the adult option on, her top comes up for the feed and goes back down after.
+ * The baby stays clothed.
  */
 public class NurseGoal extends Goal {
     public static final int SEARCH = 16, FOSTER = 8, EVERY = 3600, PATIENCE = 400;
@@ -23,6 +25,8 @@ public class NurseGoal extends Goal {
     @Nullable
     private net.minecraft.world.entity.Mob baby;
     private int patience, feeding;
+    /** She was dressed when this feed started, so the end of it puts the top back. */
+    private boolean opened;
 
     public NurseGoal(AbstractMonsterGirl mother) {
         this.mother = mother;
@@ -82,6 +86,7 @@ public class NurseGoal extends Goal {
             if (this.baby.getVehicle() != this.mother) this.baby.startRiding(this.mother, true);
             this.mother.setAction(AbstractMonsterGirl.Action.NURSE);
             if (this.baby instanceof AbstractMonsterGirl girl) girl.setAction(AbstractMonsterGirl.Action.NURSE);
+            this.openTop();
             this.feeding = 1;
             return;
         }
@@ -109,7 +114,18 @@ public class NurseGoal extends Goal {
     private net.minecraft.world.entity.Mob finish(net.minecraft.world.entity.Mob baby) {
         if (baby instanceof AbstractMonsterGirl girl && girl.getAction() == AbstractMonsterGirl.Action.NURSE) girl.setAction(AbstractMonsterGirl.Action.NONE);
         if (this.mother.getAction() == AbstractMonsterGirl.Action.NURSE) this.mother.setAction(AbstractMonsterGirl.Action.NONE);
+        if (this.opened) {
+            this.mother.dressAfter(30);
+            this.opened = false;
+        }
         if (baby.getVehicle() == this.mother && !(this.mother instanceof com.linkyoshi90.harmontide.entity.girl.Marsupial)) baby.stopRiding();
         return null;
+    }
+
+    /** Her top up for the length of the feed. Off, she stays dressed, and a baby is never bared. */
+    private void openTop() {
+        if (!Nsfw.on()) return;
+        if (!this.mother.hasFlag(AbstractMonsterGirl.FLAG_BARE)) this.opened = true;
+        this.mother.bareFor(Nursing.FEED_TICKS);
     }
 }

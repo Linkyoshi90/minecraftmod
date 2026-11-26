@@ -27,6 +27,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.FlyingAnimal;
@@ -51,6 +52,7 @@ import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -95,7 +97,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     /** How far away a harpy hears (and reacts to) a jukebox playing. */
     public static final int MUSIC_RANGE = 16;
 
-    public enum Action { NONE, SINGING, BATHING, CAWING, KNOCKING, PRANKING, DISPLAYING, KICKING, BROODING, HOOTING, SLEEPING, POUNCING, BEGGING, DANCING, STRIKING, CRYING, CACHING, SITTING, LYING, NESTING, DRINKING, CLACKING, PERCHING, FIDGETING, KNEEL }
+    public enum Action { NONE, SINGING, BATHING, CAWING, KNOCKING, PRANKING, DISPLAYING, KICKING, BROODING, HOOTING, SLEEPING, POUNCING, BEGGING, DANCING, STRIKING, CRYING, CACHING, SITTING, LYING, NESTING, DRINKING, CLACKING, PERCHING, FIDGETING, KNEEL, LAYING, FEED, ORAL }
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -136,6 +138,8 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.goalSelector.addGoal(5, new com.linkyoshi90.harmontide.entity.girl.Chores.ChoresGoal<>(this));
         this.targetSelector.addGoal(1, new com.linkyoshi90.harmontide.entity.ai.StanceTargetGoal<>(this));
         this.goalSelector.addGoal(2, new BuildNestGoal(this));
+        this.goalSelector.addGoal(2, new LooseEggGoal());
+        this.goalSelector.addGoal(4, new com.linkyoshi90.harmontide.entity.ai.BreastfeedGoal(this));
         this.goalSelector.addGoal(2, new com.linkyoshi90.harmontide.entity.ai.FetchBallGoal<>(this));
         this.goalSelector.addGoal(3, new com.linkyoshi90.harmontide.entity.ai.SeekMilkingMachineGoal<>(this));
         this.goalSelector.addGoal(4, new com.linkyoshi90.harmontide.entity.ai.FridgeGoal<>(this));
@@ -360,6 +364,13 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         }
         if (hand == InteractionHand.MAIN_HAND && player.getMainHandItem().isEmpty() && this.level() instanceof ServerLevel rescue && MilkRescue.accept(rescue, this, player)) {
             return InteractionResult.SUCCESS;                           // a cup of her milk, offered when they were poisoned
+        }
+        if (hand == InteractionHand.MAIN_HAND && player.getMainHandItem().isEmpty() && !player.isShiftKeyDown()
+                && com.linkyoshi90.harmontide.entity.Breastfeed.clickWouldAsk(this, player)) {
+            if (!(this.level() instanceof ServerLevel) || player instanceof net.minecraft.server.level.ServerPlayer sp
+                    && com.linkyoshi90.harmontide.entity.Breastfeed.ask(this, sp)) {
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
+            }
         }
         if (hand != InteractionHand.MAIN_HAND || !player.getMainHandItem().isEmpty() || player.isShiftKeyDown()) {
             return super.mobInteract(player, hand);
@@ -798,12 +809,16 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     public static final int ROOST_DROP_INTERVAL = 3000;
     /** How long a laid egg waits for her to get back to her roost before it is simply dropped. */
     private static final int EGG_HOLD = 600;
+    /** One prone push, the same length as a fertilised egg joining the nest. No nest is built. */
+    private static final int LOOSE_PUSH_TICKS = 14;
 
     @Nullable
     private BlockPos roost;
     private boolean roosting;
     private int eggTime = EGG_INTERVAL;
     private int roostDropTime = ROOST_DROP_INTERVAL;
+    /** -1 idle. Otherwise ticks already spent prone over the loose egg. Not saved: a reload starts the push again. */
+    private int loosePush = -1;
 
     /** Her unfertilised egg (empty: she does not lay any). */
     protected ItemStack unfertilisedEgg() {
@@ -851,18 +866,26 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
 
     /**
      * The hen's clock: every five to ten minutes a grown harpy lays an unfertilised egg, into her hopper if she roosts in
-     * one (she waits a little to get back to it) or at her feet. A roosting sparrow or gull also sheds into her hopper.
+     * one (she waits a little to get back to it) or at her feet. She lies prone and pushes it, the same pose as a
+     * fertilised lay, and builds no nest. A roosting sparrow or gull also sheds into her hopper, and that stays instant.
      */
     private void tickLaying(ServerLevel level) {
-        if (this.isBaby()) return;
+        if (this.isBaby()) {
+            if (this.loosePush >= 0) this.endLoosePush();
+            return;
+        }
         ItemStack egg = this.unfertilisedEgg();
-        if (!egg.isEmpty()) {
-            if (--this.eggTime <= 0) {
-                boolean waiting = this.roost != null && !this.roosting && this.eggTime > -EGG_HOLD;
-                if (!waiting) {
-                    this.deliver(level, egg);
-                    level.playSound(null, this.blockPosition(), SoundEvents.CHICKEN_EGG, SoundSource.NEUTRAL, 0.8F, 1.3F);
-                    this.eggTime = EGG_INTERVAL + this.random.nextInt(EGG_INTERVAL);
+        if (egg.isEmpty()) {
+            if (this.loosePush >= 0) this.endLoosePush();
+        } else if (this.loosePush >= 0) {
+            this.pushLooseEgg(level, egg);
+        } else if (--this.eggTime <= 0) {
+            boolean waiting = this.roost != null && !this.roosting && this.eggTime > -EGG_HOLD;
+            if (!waiting) {
+                if (this.fertilisedLayBusy()) this.eggTime = 0;   // keep the egg until the clutch is finished
+                else {
+                    this.loosePush = 0;
+                    this.pushLooseEgg(level, egg);
                 }
             }
         }
@@ -872,6 +895,84 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
                 ItemStack drop = this.roostDrop();
                 if (!drop.isEmpty()) this.deliver(level, drop);
             }
+        }
+    }
+
+    /** A fertilised clutch already owns the laying pose, or she is still carrying it. */
+    private boolean fertilisedLayBusy() {
+        Action action = this.getAction();
+        return action == Action.NESTING || action == Action.LAYING || this.gestation.isCarrying();
+    }
+
+    /** Prone, held still, then the same loose egg she has always laid. */
+    private void pushLooseEgg(ServerLevel level, ItemStack egg) {
+        this.setAction(Action.LAYING);
+        this.getNavigation().stop();
+        this.setDeltaMovement(Vec3.ZERO);
+        this.plantForLooseEgg();
+        if (++this.loosePush < LOOSE_PUSH_TICKS) return;
+        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, egg.copy()),
+                this.getX(), this.getY() + 0.3, this.getZ(), 3, 0.12, 0.04, 0.12, 0.02);
+        this.deliver(level, egg);
+        level.playSound(null, this.blockPosition(), SoundEvents.CHICKEN_EGG, SoundSource.NEUTRAL, 0.8F, 1.3F);
+        this.eggTime = EGG_INTERVAL + this.random.nextInt(EGG_INTERVAL);
+        this.endLoosePush();
+    }
+
+    private void endLoosePush() {
+        this.loosePush = -1;
+        if (this.getAction() == Action.LAYING) {
+            this.setAction(this.roosting || this.orderedToSit ? Action.SITTING : Action.NONE);
+        }
+    }
+
+    /** Onto the block under her, so a push caught in the air is still on her stomach. A roost is left where it is. */
+    private void plantForLooseEgg() {
+        if (this.roosting || this.onGround()) return;
+        Level level = this.level();
+        int x = this.getBlockX();
+        int z = this.getBlockZ();
+        int min = level.getMinBuildHeight();
+        for (int y = this.getBlockY(); y > min && this.getBlockY() - y < 16; y--) {
+            BlockPos pos = new BlockPos(x, y, z);
+            if (!level.getBlockState(pos).getCollisionShape(level, pos).isEmpty()) {
+                this.moveTo(this.getX(), y + 1.0, this.getZ(), this.getYRot(), 0.0F);
+                this.setDeltaMovement(Vec3.ZERO);
+                this.fallDistance = 0.0F;
+                return;
+            }
+        }
+    }
+
+    /**
+     * Stops her wandering for the loose-egg push. Registered beside the nest goal, so a fertilised clutch
+     * (added first, same priority) is never pushed aside. Stays out of the way while she is already roosting.
+     */
+    private final class LooseEggGoal extends Goal {
+        private LooseEggGoal() {
+            this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.JUMP));
+        }
+
+        @Override
+        public boolean canUse() {
+            return AbstractHarpy.this.loosePush >= 0 && !AbstractHarpy.this.roosting;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.canUse();
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+        @Override
+        public void tick() {
+            AbstractHarpy.this.getNavigation().stop();
+            AbstractHarpy.this.setDeltaMovement(Vec3.ZERO);
+            AbstractHarpy.this.plantForLooseEgg();
         }
     }
 
@@ -924,7 +1025,8 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         if (this.isBaby()) {   // a hatchling only knows how to stand, toddle and flutter
             return state.setAndContinue(this.anim(flying ? "fly" : state.isMoving() ? "walk" : "idle"));
         }
-        if (this.getAction() == Action.KNEEL) return state.setAndContinue(this.anim("idle"));
+        if (this.getAction() == Action.KNEEL || this.getAction() == Action.LAYING || this.getAction() == Action.FEED
+                || this.getAction() == Action.ORAL) return state.setAndContinue(this.anim("idle"));
         // Once airborne the wings take over; actions (caw, sing, knock...) only show on the ground or perched.
         if (flying && !this.actionShowsInFlight(this.getAction())) return state.setAndContinue(this.anim(this.flyingAnimation()));
         if (this.getAction() == Action.FIDGETING && !this.getFidget().isEmpty() && !state.isMoving() && !flying) {
