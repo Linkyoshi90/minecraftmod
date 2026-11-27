@@ -519,4 +519,17 @@ public class TraversalTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "saddledBearCarriesARider")
+    public static void saddledBearCarriesARider(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
+        com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl bear = spawn(helper, GirlSpecies.GRIZZLY_CANID, new BlockPos(6, 2, 5));
+        bear.setAffection(p.getUUID(), 25);
+        interact(bear, p, new ItemStack(Items.SADDLE));
+        check(bear.hasFlag(com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl.FLAG_SADDLED), "saddled");
+        interact(bear, p, ItemStack.EMPTY);
+        check(p.getVehicle() == bear && bear.getControllingPassenger() == p, "up on her back, steering");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

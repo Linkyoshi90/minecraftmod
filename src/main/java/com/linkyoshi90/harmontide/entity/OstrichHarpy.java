@@ -71,7 +71,7 @@ import java.util.UUID;
  * her territory: she follows you (sneak + empty hand to make her stay), drives off anything hostile that comes
  * close, attacks whatever you attack, and can be saddled and ridden, sprinting faster than any horse.
  */
-public class OstrichHarpy extends AbstractHarpy {
+public class OstrichHarpy extends AbstractHarpy implements net.minecraft.world.entity.PlayerRideableJumping {
     private static final EntityDataAccessor<Byte> DATA_VARIANT =
             SynchedEntityData.defineId(OstrichHarpy.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> DATA_SADDLED =
@@ -479,6 +479,37 @@ public class OstrichHarpy extends AbstractHarpy {
         Vec2 rotation = new Vec2(player.getXRot() * 0.5F, player.getYRot());
         this.setRot(rotation.y, rotation.x);
         this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
+        if (this.jumpPending > 0) {                                        // a running leap with her rider (entity/Traversal)
+            if (this.onGround()) {
+                Vec3 fwd = Vec3.directionFromRotation(0, this.getYRot()).scale(0.45 * this.jumpPending);
+                Vec3 v = this.getDeltaMovement();
+                this.setDeltaMovement(v.x + fwd.x, 0.42 + 0.45 * this.jumpPending, v.z + fwd.z);
+                this.hasImpulse = true;
+            }
+            this.jumpPending = 0;
+        }
+    }
+
+    private float jumpPending;
+
+    @Override
+    public void onPlayerJump(int power) {
+        if (this.canJump()) this.jumpPending = power >= 90 ? 1.0F : 0.4F + 0.6F * power / 90.0F;
+    }
+
+    /** Saddled and ridden, she leaps like a horse (hold jump and let go). */
+    @Override
+    public boolean canJump() {
+        return this.isSaddled() && this.isVehicle() && Traversal.on();
+    }
+
+    @Override
+    public void handleStartJump(int power) {
+        this.playSound(net.minecraft.sounds.SoundEvents.HORSE_JUMP, 0.5F, 1.4F);
+    }
+
+    @Override
+    public void handleStopJump() {
     }
 
     @Override

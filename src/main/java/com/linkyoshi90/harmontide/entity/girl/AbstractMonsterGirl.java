@@ -287,7 +287,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
 
     @Override
     protected Vec3 getPassengerAttachmentPoint(Entity passenger, net.minecraft.world.entity.EntityDimensions dims, float scale) {
-        if (passenger instanceof Player && this.ferries()) {                // astride her back
+        if (passenger instanceof Player && (this.ferries() || com.linkyoshi90.harmontide.entity.Traversal.landMount(this))) {   // astride her back
             return new Vec3(0.0, dims.height() * 0.42, -dims.width() * 0.2).yRot(-this.yBodyRot * net.minecraft.util.Mth.DEG_TO_RAD);
         }
         if (this.nursingRider(passenger)) {                             // her middle at her mother's chest, just in front of it
@@ -343,11 +343,39 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         return this.ferries() && this.getFirstPassenger() instanceof Player p ? p : null;
     }
 
+    /** Saddled, a big beast carries her friend on land (entity/Traversal). */
+    public boolean ridden() {
+        return this.hasFlag(FLAG_SADDLED) && com.linkyoshi90.harmontide.entity.Traversal.landMount(this) && this.getFirstPassenger() instanceof Player;
+    }
+
     @Nullable
     @Override
     public LivingEntity getControllingPassenger() {
         Player swimmer = this.ferried();
-        return swimmer != null && this.isInWater() ? swimmer : super.getControllingPassenger();
+        if (swimmer != null && this.isInWater()) return swimmer;
+        if (this.ridden()) return (Player) this.getFirstPassenger();
+        return super.getControllingPassenger();
+    }
+
+    @Override
+    protected void tickRidden(Player player, Vec3 travel) {
+        super.tickRidden(player, travel);
+        if (!this.ridden()) return;
+        this.setRot(player.getYRot(), player.getXRot() * 0.5F);
+        this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
+    }
+
+    @Override
+    protected Vec3 getRiddenInput(Player player, Vec3 travel) {
+        if (!this.ridden()) return super.getRiddenInput(player, travel);
+        return new Vec3(player.xxa * 0.5F, 0.0, player.zza > 0 ? player.zza : player.zza * 0.25F);
+    }
+
+    @Override
+    protected float getRiddenSpeed(Player player) {
+        if (!this.ridden()) return super.getRiddenSpeed(player);
+        float base = com.linkyoshi90.harmontide.entity.Traversal.LAND_MOUNTS.getOrDefault(this.species, 0.25F);
+        return player.isSprinting() ? base * 1.3F : base;
     }
 
     /** In the water she swims where the rider on her back faces, at the surface. */
@@ -937,6 +965,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (errand != null) return errand;
         InteractionResult ferry = com.linkyoshi90.harmontide.entity.Traversal.ferryInteract(this, player, stack);   // a swimmer climbs onto her back
         if (ferry != null) return ferry;
+        InteractionResult mount = com.linkyoshi90.harmontide.entity.Traversal.mountInteract(this, player, stack);   // a saddled beast carries her friend
+        if (mount != null) return mount;
         InteractionResult guide = com.linkyoshi90.harmontide.entity.Instincts.guide(this, player, stack);   // shown a torch or a lantern: the way
         if (guide != null) return guide;
 
@@ -1197,7 +1227,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (!(this.level() instanceof ServerLevel server)) return;
         com.linkyoshi90.harmontide.entity.Painted.tickCopper(this, this);
         if (this.tickCount % 10 == 7) com.linkyoshi90.harmontide.entity.Traversal.hopUp(this);
-        if (this.ferried() instanceof Player swimmer && !this.isInWater() && this.onGround()) swimmer.stopRiding();   // ashore: off her back
+        if (this.ferried() instanceof Player swimmer && !this.isInWater() && this.onGround() && !this.ridden()) swimmer.stopRiding();   // ashore: off her back (unless saddled)
         if (this.ferried() instanceof Player diver && this.isInWater() && com.linkyoshi90.harmontide.entity.Traversal.DIVERS.contains(this.species)) diver.setAirSupply(diver.getMaxAirSupply());
         com.linkyoshi90.harmontide.entity.Instincts.tick(server, this);
         if (this.tickCount % 100 == 0) Settlement.tick(server, this);

@@ -58,6 +58,9 @@ import java.util.Set;
  *   squidkin, the krakens, the cuttlefish and the nautilus dive with them instead, sharing their air.</li>
  *   <li><b>A blink.</b> Crouch and hold out an empty hand to an ender slime friend (10+): she sends you, the way an enderman
  *   goes, to the spot you look at (up to {@link #BLINK} blocks), unhurt. Every ten seconds.</li>
+ *   <li><b>Mounts.</b> Saddle a polar bear, grizzly, bison, yak, water buffalo, aurochs, hippo, rhino or capybara who trusts you
+ *   a lot (25+) and ride her on land, steering like a horse (crouch to pat her instead). The swimmers among them still
+ *   ferry you across the water.</li>
  *   <li><b>A golem's toss.</b> Crouch and hold out an empty hand to a big construct friend (golem, talosling, automaton,
  *   gargoyle): she throws you up and forward, and you land unhurt.</li>
  *   <li><b>Company on the road.</b> What a friend following you lends you: a cat girl, her landing (falls hurt half as much);
@@ -243,6 +246,40 @@ public final class Traversal {
                 net.minecraft.sounds.SoundSource.PLAYERS, 0.8F, 1.3F);
         award(p, "air_step");
         return true;
+    }
+
+    // --- mounts --------------------------------------------------------------------------------------------------------
+
+    /** The big beasts who carry a saddled friend on land, and how fast. */
+    public static final java.util.Map<GirlSpecies, Float> LAND_MOUNTS = java.util.Map.of(GirlSpecies.POLAR_BEAR_CANID, 0.3F, GirlSpecies.GRIZZLY_CANID, 0.3F,
+            GirlSpecies.BISON_MINOTAUR, 0.32F, GirlSpecies.YAK_MINOTAUR, 0.26F, GirlSpecies.WATER_BUFFALO_MINOTAUR, 0.28F, GirlSpecies.AUROCHS_MINOTAUR, 0.32F,
+            GirlSpecies.HIPPO_MINOTAUR, 0.24F, GirlSpecies.RHINO_MINOTAUR, 0.3F, GirlSpecies.CAPYBARA_RODENT, 0.22F);
+
+    public static boolean landMount(AbstractMonsterGirl g) {
+        return on() && !g.isBaby() && LAND_MOUNTS.containsKey(g.getSpecies());
+    }
+
+    /** A saddle for a big beast who trusts you a lot; once she wears it, an empty hand climbs on. Null to carry on. */
+    @Nullable
+    public static net.minecraft.world.InteractionResult mountInteract(AbstractMonsterGirl g, Player p, net.minecraft.world.item.ItemStack stack) {
+        if (!landMount(g) || g.getAffection(p) < Bonded.BED_AFFECTION) return null;
+        boolean client = g.level().isClientSide;
+        if (stack.is(net.minecraft.world.item.Items.SADDLE) && !g.hasFlag(AbstractMonsterGirl.FLAG_SADDLED)) {
+            if (!client) {
+                stack.consume(1, p);
+                g.setFlag(AbstractMonsterGirl.FLAG_SADDLED, true);
+                g.playSound(net.minecraft.sounds.SoundEvents.HORSE_SADDLE, 1.0F, 0.9F);
+            }
+            return net.minecraft.world.InteractionResult.sidedSuccess(client);
+        }
+        if (!stack.isEmpty() || p.isShiftKeyDown() || !g.hasFlag(AbstractMonsterGirl.FLAG_SADDLED) || g.isVehicle() || p.isPassenger()) return null;
+        if (!client) {
+            g.getNavigation().stop();
+            g.setTarget(null);
+            g.setOrderedToSit(false);
+            p.startRiding(g);
+        }
+        return net.minecraft.world.InteractionResult.sidedSuccess(client);
     }
 
     // --- ferries ------------------------------------------------------------------------------------------------------

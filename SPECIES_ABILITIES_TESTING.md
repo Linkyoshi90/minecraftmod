@@ -53,6 +53,9 @@ milk-drip bucket tests, the bed visit and the frog spawn), because a bucket then
 - **Vine ladder.** Crouch + bone meal on a plant girl friend while looking up at a wall: real vines up it (they stay).
 - **Dragon mounts.** Besides the gryphon and wyrm, a devoted (100) wyvern, long dragon, amphiptere, quetzalcoatl, bahamut, chimera,
   ender dragon, kun or alebrije lets you ride (empty hand) and fly where you look, and catches you when you fall. **(client)**
+- **Beast mounts.** Give a saddle to a polar bear, grizzly, bison, yak, water buffalo, aurochs, hippo, rhino or capybara at friendship 25,
+  then an empty hand rides her on land (crouch pats). The swimmers among them keep you aboard when they wade into water. **(client)**
+- **Ostrich leap.** A saddled ostrich you ride takes the same charged jump as a horse. **(client)**
 - **Centaur leaps.** Riding any centaur, hold jump and release: the jump bar fills and she leaps with you (goat highest, camels,
   elephant and giraffe lowest; not while winded). **(client)** Does the jump bar show and feel right?
 - **Ender slime blink.** Crouch + empty hand on an ender slime friend: you're sent to the spot you look at (16 blocks max, every 10 s).
