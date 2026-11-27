@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "cured=false": {
+      "model": "harmontide:block/leviathan_cyst"
+    },
+    "cured=true": {
+      "model": "harmontide:block/leviathan_cyst_cured"
+    }
+  }
+}

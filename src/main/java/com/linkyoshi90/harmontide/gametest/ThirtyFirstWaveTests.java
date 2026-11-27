@@ -37,7 +37,7 @@ public class ThirtyFirstWaveTests {
         }
         List<String> thin = new ArrayList<>();
         biomes.holders().forEach(biome -> {
-            if (biome.is(Biomes.THE_VOID)) return;
+            if (biome.is(Biomes.THE_VOID) || biome.is(com.linkyoshi90.harmontide.leviathan.LeviathanRegistry.INTERIOR_BIOME)) return;   // her insides: nothing lives there
             int count = 0;
             Set<String> families = new HashSet<>();
             for (ResourceLocation id : species) {

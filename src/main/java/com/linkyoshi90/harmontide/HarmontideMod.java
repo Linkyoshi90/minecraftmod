@@ -21,6 +21,7 @@ public final class HarmontideMod {
         container.registerConfig(ModConfig.Type.CLIENT, HarmontideClientConfig.SPEC);
         container.registerConfig(ModConfig.Type.COMMON, HarmontideConfig.SPEC);
         ModGirls.init();                                   // the later families' entity types and spawn eggs
+        com.linkyoshi90.harmontide.leviathan.LeviathanRegistry.init();   // the Dream-Leviathan's blocks, items and creatures
         com.linkyoshi90.harmontide.registry.ModFluids.FLUID_TYPES.register(modBus);
         com.linkyoshi90.harmontide.registry.ModFluids.FLUIDS.register(modBus);
         ModBlocks.BLOCKS.register(modBus);
@@ -57,6 +58,8 @@ public final class HarmontideMod {
         modBus.addListener(ModItems::addToCreativeTabs);
         modBus.addListener(HarmontideMod::registerCapabilities);
         modBus.addListener(com.linkyoshi90.harmontide.network.ModPayloads::register);
+        modBus.addListener(com.linkyoshi90.harmontide.leviathan.LeviathanNet::register);
+        modBus.addListener(com.linkyoshi90.harmontide.leviathan.LeviathanRegistry::registerAttributes);
     }
 
     /** Every girl's ammo pouch as her item handler: where TaCZ looks for her ammunition when she reloads (GirlArms). */

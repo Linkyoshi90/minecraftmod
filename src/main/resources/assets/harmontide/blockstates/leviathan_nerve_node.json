@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "harmontide:block/leviathan_nerve_node"
+    },
+    "lit=true": {
+      "model": "harmontide:block/leviathan_nerve_node_lit"
+    }
+  }
+}

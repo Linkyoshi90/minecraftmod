@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "open=false": {
+      "model": "harmontide:block/leviathan_pulse_wall"
+    },
+    "open=true": {
+      "model": "harmontide:block/leviathan_pulse_wall_open"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "harmontide:leviathan_interior",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "harmontide:leviathan_interior",
+      "layers": [
+        {
+          "block": "minecraft:air",
+          "height": 1
+        }
+      ],
+      "lakes": false,
+      "features": false,
+      "structure_overrides": []
+    }
+  }
+}

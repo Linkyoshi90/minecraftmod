@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "SHS",
+    " S "
+  ],
+  "key": {
+    "S": {
+      "item": "harmontide:dream_scale"
+    },
+    "H": {
+      "item": "minecraft:goat_horn"
+    }
+  },
+  "result": {
+    "id": "harmontide:dream_horn",
+    "count": 1
+  }
+}

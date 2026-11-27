@@ -1,0 +1,23 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "id": "harmontide:dream_leviathan_egg"
+    },
+    "title": {
+      "translate": "advancement.harmontide.dream_blessing"
+    },
+    "description": {
+      "translate": "advancement.harmontide.dream_blessing.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -72,7 +72,8 @@ public final class GuidePages {
             Map.entry("traversal", 25),
             Map.entry("jobs", 10),
             Map.entry("instincts", 9),
-            Map.entry("workshop", 9));
+            Map.entry("workshop", 9),
+            Map.entry("leviathan", 8));
     public static final Map<String, Integer> SIGNATURES = Map.ofEntries(
             Map.entry("anubis_canid", 2),
             Map.entry("cobra_lamia", 2),

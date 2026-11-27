@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "retracted=false": {
+      "model": "harmontide:block/leviathan_cilia"
+    },
+    "retracted=true": {
+      "model": "harmontide:block/leviathan_cilia_folded"
+    }
+  }
+}

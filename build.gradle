@@ -290,6 +290,7 @@ var checkServerSafe = tasks.register("checkServerSafe") {
         def allowed = [
             "com/linkyoshi90/harmontide/HarmontideMod": "HarmontideClientConfig is a plain ModConfigSpec holder, safe on a server",
             "com/linkyoshi90/harmontide/network/ModPayloads": "client classes only inside playToClient handlers, which never run on a server",
+            "com/linkyoshi90/harmontide/leviathan/LeviathanNet": "the same: DreamSky and DreamHeartHud only inside playToClient handlers",
             "com/linkyoshi90/harmontide/item/WingedCapItem\$1": "GeckoLib's render provider, created only by createGeoRenderer on the client",
             "com/linkyoshi90/harmontide/item/HeadgearItem\$1": "the same render provider, for the headgear friends give",
         ]

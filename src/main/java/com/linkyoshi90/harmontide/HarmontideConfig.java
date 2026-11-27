@@ -167,6 +167,9 @@ public final class HarmontideConfig {
     public static final ModConfigSpec.BooleanValue DEAD_COMPANY;
     public static final ModConfigSpec.BooleanValue INSTINCTS;
     public static final ModConfigSpec.BooleanValue WORKSHOP;
+    public static final ModConfigSpec.BooleanValue DREAM_LEVIATHAN;
+    public static final ModConfigSpec.IntValue LEVIATHAN_FIRST_DAY;
+    public static final ModConfigSpec.IntValue LEVIATHAN_DAYS;
     public static final ModConfigSpec.BooleanValue MONSTERIZATION;
     public static final ModConfigSpec.BooleanValue POSSESSION;
     public static final ModConfigSpec.BooleanValue REALM_SUMMONS;
@@ -346,6 +349,18 @@ public final class HarmontideConfig {
         WORKSHOP = BUILDER
                 .comment("Hands at the workbench: elves at enchanting tables, dwarves at anvils, the dinner bell, winged friends catching a fall, a yuki-onna freezing a path over water.")
                 .define("workshop", true);
+
+        DREAM_LEVIATHAN = BUILDER
+                .comment("The Dream-Leviathan: once per world a sick sky whale lands near a player; inside her are puzzle rooms and five waves of infection, and touching her heart blesses you with a second heart bar and her egg. A dream horn calls her back. Off: she never comes (a horn does nothing).")
+                .define("dreamLeviathan", true);
+
+        LEVIATHAN_FIRST_DAY = BUILDER
+                .comment("The day (counted from the world's start) from which the Dream-Leviathan may make her first visit.")
+                .defineInRange("leviathanFirstDay", 3, 0, 1000);
+
+        LEVIATHAN_DAYS = BUILDER
+                .comment("How many days the landed Dream-Leviathan lasts before she dies, if nobody heals her.")
+                .defineInRange("leviathanDays", 3, 1, 30);
 
         MONSTERIZATION = BUILDER
                 .comment("Grown vanilla animals and monsters that linger on Demon Realm grass in the dark turn into monster girls of their kind (a tamed pet stays her owner's friend).")
@@ -783,6 +798,18 @@ public final class HarmontideConfig {
 
     public static boolean workshop() {
         return SPEC.isLoaded() ? WORKSHOP.get() : WORKSHOP.getDefault();
+    }
+
+    public static boolean dreamLeviathan() {
+        return SPEC.isLoaded() ? DREAM_LEVIATHAN.get() : DREAM_LEVIATHAN.getDefault();
+    }
+
+    public static int leviathanFirstDay() {
+        return SPEC.isLoaded() ? LEVIATHAN_FIRST_DAY.get() : LEVIATHAN_FIRST_DAY.getDefault();
+    }
+
+    public static int leviathanDays() {
+        return SPEC.isLoaded() ? LEVIATHAN_DAYS.get() : LEVIATHAN_DAYS.getDefault();
     }
 
     public static boolean wanderingMerchants() {

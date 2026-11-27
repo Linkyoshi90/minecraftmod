@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "harmontide:block/leviathan_membrane"
+  },
+  "render_type": "minecraft:translucent"
+}

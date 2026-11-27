@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "open=false": {
+      "model": "harmontide:block/leviathan_membrane"
+    },
+    "open=true": {
+      "model": "harmontide:block/leviathan_membrane_open"
+    }
+  }
+}
