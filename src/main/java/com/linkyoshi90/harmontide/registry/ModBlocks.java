@@ -164,6 +164,10 @@ public final class ModBlocks {
             com.linkyoshi90.harmontide.block.SilkBridgeBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.WOOL).instabreak().noOcclusion().noLootTable().sound(SoundType.WOOL)
                     .ignitedByLava().pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY));
+    /** A rabbit burrow a jackalope dug: two linked ones make a tunnel (block/RabbitBurrowBlock, entity/Traversal#digBurrow). */
+    public static final DeferredBlock<com.linkyoshi90.harmontide.block.RabbitBurrowBlock> RABBIT_BURROW = BLOCKS.registerBlock("rabbit_burrow",
+            com.linkyoshi90.harmontide.block.RabbitBurrowBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).strength(0.6F).noLootTable().sound(SoundType.ROOTED_DIRT));
     /** A silk ladder an arachne strung up a wall (block/SilkLadderBlock, entity/girl/Arachne#spinLadder). */
     public static final DeferredBlock<com.linkyoshi90.harmontide.block.SilkLadderBlock> SILK_LADDER = BLOCKS.registerBlock("silk_ladder",
             com.linkyoshi90.harmontide.block.SilkLadderBlock::new,

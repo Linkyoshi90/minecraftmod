@@ -64,6 +64,10 @@ TRAVERSAL = {
     "block.harmontide.silk_bridge": "Silk Bridge",
     "block.harmontide.lava_crust": "Lava Crust",
     "block.harmontide.silk_ladder": "Silk Ladder",
+    "block.harmontide.rabbit_burrow": "Rabbit Burrow",
+    M + "burrow_first": "%s digs a burrow under your feet. Dig another one somewhere else to make a tunnel.",
+    M + "burrow_linked": "%s digs the other end. Crouch on either burrow to come up out of the other.",
+    M + "burrow_none": "%s can't dig here: she needs soft ground under you and air above.",
     M + "silk_ladder": "%s strings a silk ladder %s blocks up the wall. It will hold for a few minutes.",
     M + "silk_ladder_none": "%s looks for a wall in front of you to climb, and finds none.",
     M + "shoulder_warning": "%s tugs at your ear: %s, behind you!",
@@ -101,6 +105,7 @@ TRAVERSAL = {
                      "Saddle a polar bear, grizzly, bison, yak, water buffalo, aurochs, hippo, rhino or capybara who trusts you a lot and ride her on land too. Crouch to pat her instead. "
                      "An octopus, a squid girl, a kraken, a cuttlefish or a nautilus dives with you instead, wherever you look, and shares her air. "
                      "A mermaid who trusts you a lot swims ahead of your boat and pushes it along. "
+                     "Hand a jackalope friend a shovel and she digs a burrow under your feet. Do it again somewhere else and the two burrows are linked: crouch on one and you come up out of the other. "
                      "Crouch and hold out an empty hand to an ender slime friend: she sends you, the way an enderman goes, to the spot you look at, up to sixteen blocks off. "
                      "Crouch and hold out an empty hand to a big construct friend, a golem, a talosling, an automaton or a gargoyle: she tosses you up and forward, and you land unhurt. "
                      "Press jump again in mid-air and a friend with you may lift you once more: a kitsune following you gives a spirit leap, a sylph, angel or valkyrie a gust that lets you down gently, a wolpertinger a second hop, and a fairy or pixie on your shoulder a little flutter. "
@@ -163,6 +168,7 @@ INSTINCTS = {
                      "A befriended boar girl roots about in soft ground now and then and turns something up: mushrooms, potatoes, carrots, beetroot seeds, and once in a while the seeds only a sniffer finds. "
                      "A befriended anteater snaps up the silverfish near her, and a puff of dust shows you which stone around her is infested. "
                      "A befriended giraffe browses the treetops and now and then shakes down an apple, a cocoa bean or a stick. "
+                     "A mole or meerkat girl near a friend digs out the suspicious sand and gravel around her as gently as a brush, and the find pops out. "
                      "A gryphon or a wyrm who would let you ride her catches you on her back if you fall past her. Now the other great fliers carry a devoted friend too: the wyvern, the long dragon, the amphiptere, Quetzalcoatl, Bahamut, the chimera, the ender dragon, the kun and the alebrije. "
                      "When you are badly hurt, a kitsune who trusts you a lot wraps you in an illusion: you vanish for a few seconds and whatever was after you loses you. "
                      "A mummy friend binds your wounds when you are down to half your health, and you heal quickly for a while. "
@@ -235,6 +241,28 @@ for part in (TRAVERSAL, JOBS, INSTINCTS, WORKSHOP, TIPS, ADV_LANG):
     ALL.update(part)
 
 
+def rabbit_burrow():
+    """Dirt seen from above, with a dark rabbit hole in the middle."""
+    from PIL import Image
+    rnd = random.Random(3011)
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 255))
+    for y in range(16):
+        for x in range(16):
+            d = ((x - 7.5) ** 2 + (y - 7.5) ** 2) ** 0.5
+            if d < 3.6:
+                v = 16 + int(d * 4)
+                img.putpixel((x, y), (v, v - 4, v - 6, 255))
+            elif d < 4.6:
+                img.putpixel((x, y), (74, 52, 34, 255))
+            else:
+                v = rnd.randrange(18)
+                img.putpixel((x, y), (124 + v, 88 + v, 60 + v // 2, 255))
+    img.save(os.path.join(ASSETS, "textures", "block", "rabbit_burrow_top.png"))
+    write_json("models/block/rabbit_burrow.json", {"parent": "minecraft:block/cube_bottom_top", "textures": {
+        "top": "harmontide:block/rabbit_burrow_top", "side": "minecraft:block/coarse_dirt", "bottom": "minecraft:block/dirt"}})
+    write_json("blockstates/rabbit_burrow.json", {"variants": {"": {"model": "harmontide:block/rabbit_burrow"}}})
+
+
 def silk_ladder():
     """Two long strands and silk rungs between them."""
     from PIL import Image
@@ -305,6 +333,7 @@ def crab_armour_piece():
 def main():
     silk_bridge()
     silk_ladder()
+    rabbit_burrow()
     lava_crust()
     crab_armour_piece()
     advancements()

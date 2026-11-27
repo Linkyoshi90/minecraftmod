@@ -13,6 +13,8 @@ public final class ModBlockEntities {
 
     /** Who fathered a harpy clutch or frog spawn. */
     @SuppressWarnings("DataFlowIssue")
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.linkyoshi90.harmontide.block.RabbitBurrowBlockEntity>> RABBIT_BURROW = BLOCK_ENTITIES.register("rabbit_burrow",
+            () -> BlockEntityType.Builder.of(com.linkyoshi90.harmontide.block.RabbitBurrowBlockEntity::new, ModBlocks.RABBIT_BURROW.get()).build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.linkyoshi90.harmontide.block.FootprintBlockEntity>> FOOTPRINT = BLOCK_ENTITIES.register("footprint",
             () -> BlockEntityType.Builder.of(com.linkyoshi90.harmontide.block.FootprintBlockEntity::new, ModBlocks.FOOTPRINT.get()).build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ParentageBlockEntity>> PARENTAGE = BLOCK_ENTITIES.register("parentage",

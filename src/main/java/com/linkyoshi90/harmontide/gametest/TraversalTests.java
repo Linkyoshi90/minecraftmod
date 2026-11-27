@@ -532,4 +532,18 @@ public class TraversalTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "jackalopeDigsATunnel")
+    public static void jackalopeDigsATunnel(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 3));
+        com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl bunny = spawn(helper, GirlSpecies.JACK_JACKALOPE, new BlockPos(5, 2, 5));
+        bunny.setAffection(p.getUUID(), Orders.AFFECTION);
+        interact(bunny, p, new ItemStack(Items.IRON_SHOVEL));
+        check(helper.getBlockState(new BlockPos(3, 1, 3)).is(com.linkyoshi90.harmontide.registry.ModBlocks.RABBIT_BURROW.get()), "the first burrow");
+        check(Traversal.digBurrow(helper.getLevel(), bunny, helper.absolutePos(new BlockPos(11, 1, 11))) == 2, "the second end: a tunnel");
+        check(Traversal.useBurrow(p, helper.absolutePos(new BlockPos(3, 1, 3))), "down the rabbit hole");
+        check(p.blockPosition().equals(helper.absolutePos(new BlockPos(11, 2, 11))), "and up out of the other end: " + helper.relativePos(p.blockPosition()));
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

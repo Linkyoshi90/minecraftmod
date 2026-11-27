@@ -39,6 +39,8 @@ import javax.annotation.Nullable;
  *   infested (a puff of dust over each block).</li>
  *   <li><b>Treetop browsing.</b> A befriended giraffe browses the leaves above her and now and then shakes down an apple
  *   (from oak and dark oak), a cocoa bean (jungle) or a stick.</li>
+ *   <li><b>Little archaeologists.</b> A mole or meerkat girl near a friend (10+) digs out the suspicious sand and gravel around
+ *   her, as gently as a brush, and the find pops out for them.</li>
  *   <li><b>Belly slides.</b> A penguin on ice drops to her belly and slides, three times as fast.</li>
  *   <li><b>The way out.</b> Show a bat girl friend (10+) a torch underground and she tells you which way the open sky is.</li>
  *   <li><b>The lie of the land.</b> Show a kitsune friend (10+) a lantern and she tells you the way to the nearest village;
@@ -273,6 +275,33 @@ public final class Instincts {
         return find;
     }
 
+    // --- little archaeologists ----------------------------------------------------------------------------------------------
+
+    /** A suspicious block within reach of a digger, or null. */
+    @Nullable
+    public static BlockPos suspicious(ServerLevel level, BlockPos at) {
+        for (BlockPos p : BlockPos.betweenClosed(at.offset(-4, -3, -4), at.offset(4, 2, 4))) {
+            if (level.getBlockEntity(p) instanceof net.minecraft.world.level.block.entity.BrushableBlockEntity) return p.immutable();
+        }
+        return null;
+    }
+
+    /** One stroke of her digging at a suspicious block near her friend (as a brush stroke in the friend's name). Whether she dug. */
+    public static boolean dig(ServerLevel level, AbstractMonsterGirl g) {
+        if ((g.getSpecies() != GirlSpecies.MOLE_RODENT && g.getSpecies() != GirlSpecies.MEERKAT_RODENT) || g.isBaby()) return false;
+        Player friend = g.bondedPlayer(Orders.AFFECTION, 16);
+        BlockPos at = friend == null ? null : suspicious(level, g.blockPosition());
+        if (at == null || !(level.getBlockEntity(at) instanceof net.minecraft.world.level.block.entity.BrushableBlockEntity dig)) return false;
+        g.getLookControl().setLookAt(at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5);
+        if (g.distanceToSqr(Vec3.atCenterOf(at)) > 2.5 * 2.5) {
+            g.getNavigation().moveTo(at.getX() + 0.5, at.getY() + 1, at.getZ() + 0.5, 1.0);
+            return false;
+        }
+        dig.brush(level.getGameTime(), friend, net.minecraft.core.Direction.UP);
+        g.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+        return true;
+    }
+
     // --- zoomies -------------------------------------------------------------------------------------------------------
 
     public static boolean dusk(ServerLevel level) {
@@ -307,6 +336,8 @@ public final class Instincts {
         else if (g.getSpecies().family() == GirlSpecies.Family.NEKOMATA && com.linkyoshi90.harmontide.HarmontideConfig.instincts()) zoomies(level, g, false);
         else if (ROOTERS.contains(g.getSpecies()) && g.tickCount % 100 == 41 && com.linkyoshi90.harmontide.HarmontideConfig.instincts()) root(level, g, false);
         else if (g.getSpecies() == GirlSpecies.ANTEATER_ARMOURED && g.tickCount % 40 == 17 && com.linkyoshi90.harmontide.HarmontideConfig.instincts()) anteater(level, g);
+        else if ((g.getSpecies() == GirlSpecies.MOLE_RODENT || g.getSpecies() == GirlSpecies.MEERKAT_RODENT) && g.tickCount % 5 == 2
+                && com.linkyoshi90.harmontide.HarmontideConfig.instincts()) dig(level, g);
         else if (g.getSpecies() == GirlSpecies.GIRAFFE_CENTAUR && g.tickCount % 100 == 67 && com.linkyoshi90.harmontide.HarmontideConfig.instincts()) browse(level, g, false);
     }
 

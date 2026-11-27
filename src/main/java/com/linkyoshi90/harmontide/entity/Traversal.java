@@ -61,6 +61,8 @@ import java.util.Set;
  *   <li><b>Mounts.</b> Saddle a polar bear, grizzly, bison, yak, water buffalo, aurochs, hippo, rhino or capybara who trusts you
  *   a lot (25+) and ride her on land, steering like a horse (crouch to pat her instead). The swimmers among them still
  *   ferry you across the water.</li>
+ *   <li><b>Rabbit tunnels.</b> Hand a jackalope friend (10+) a shovel and she digs a burrow under your feet; do it again
+ *   somewhere else and the two are linked. Crouch on one and you come up out of the other.</li>
  *   <li><b>A golem's toss.</b> Crouch and hold out an empty hand to a big construct friend (golem, talosling, automaton,
  *   gargoyle): she throws you up and forward, and you land unhurt.</li>
  *   <li><b>Company on the road.</b> What a friend following you lends you: a cat girl, her landing (falls hurt half as much);
@@ -280,6 +282,69 @@ public final class Traversal {
             p.startRiding(g);
         }
         return net.minecraft.world.InteractionResult.sidedSuccess(client);
+    }
+
+    // --- rabbit tunnels -----------------------------------------------------------------------------------------------
+
+    public static final String BURROW_OPEN = "BurrowOpen", BURROW_DIM = "BurrowDim", BURROWED = "BurrowedUntil";
+
+    /** Ground a burrow can be dug in. */
+    public static boolean burrowable(net.minecraft.world.level.block.state.BlockState s) {
+        return s.is(net.minecraft.tags.BlockTags.DIRT) || s.is(net.minecraft.tags.BlockTags.SAND) || s.is(net.minecraft.world.level.block.Blocks.GRAVEL)
+                || s.is(net.minecraft.world.level.block.Blocks.SNOW_BLOCK);
+    }
+
+    /** She digs a burrow here: the first of a pair waits, the second links to it. 0: nothing dug, 1: the first, 2: a tunnel. */
+    public static int digBurrow(ServerLevel level, AbstractMonsterGirl g, BlockPos ground) {
+        if (!burrowable(level.getBlockState(ground)) || !level.getBlockState(ground.above()).isAir()) return 0;
+        level.setBlockAndUpdate(ground, com.linkyoshi90.harmontide.registry.ModBlocks.RABBIT_BURROW.get().defaultBlockState());
+        level.playSound(null, ground, net.minecraft.sounds.SoundEvents.ROOTED_DIRT_BREAK, net.minecraft.sounds.SoundSource.NEUTRAL, 1.0F, 1.2F);
+        var d = g.getPersistentData();
+        BlockPos open = d.contains(BURROW_OPEN) ? BlockPos.of(d.getLong(BURROW_OPEN)) : null;
+        boolean sameWorld = level.dimension().location().toString().equals(d.getString(BURROW_DIM));
+        if (open != null && sameWorld && !open.equals(ground) && level.getBlockEntity(open) instanceof com.linkyoshi90.harmontide.block.RabbitBurrowBlockEntity first
+                && level.getBlockEntity(ground) instanceof com.linkyoshi90.harmontide.block.RabbitBurrowBlockEntity second) {
+            first.setLink(ground);
+            second.setLink(open);
+            d.remove(BURROW_OPEN);
+            d.remove(BURROW_DIM);
+            return 2;
+        }
+        d.putLong(BURROW_OPEN, ground.asLong());
+        d.putString(BURROW_DIM, level.dimension().location().toString());
+        return 1;
+    }
+
+    /** A shovel handed to a jackalope friend: a burrow under the player's feet. */
+    @Nullable
+    public static net.minecraft.world.InteractionResult burrowInteract(AbstractMonsterGirl g, Player p, net.minecraft.world.item.ItemStack stack) {
+        if (!on() || g.getSpecies().family() != GirlSpecies.Family.JACKALOPE || g.isBaby() || !stack.is(net.minecraft.tags.ItemTags.SHOVELS)
+                || g.getAffection(p) < Orders.AFFECTION) return null;
+        if (g.level() instanceof ServerLevel level) {
+            int dug = digBurrow(level, g, p.blockPosition().below());
+            if (dug > 0) stack.hurtAndBreak(1, p, net.minecraft.world.entity.EquipmentSlot.MAINHAND);
+            p.displayClientMessage(Component.translatable("message.harmontide.burrow_" + (dug == 2 ? "linked" : dug == 1 ? "first" : "none"), g.getDisplayName()), true);
+        }
+        return net.minecraft.world.InteractionResult.sidedSuccess(g.level().isClientSide);
+    }
+
+    /** A crouching player on a linked burrow comes up out of the other end. Whether they went. */
+    public static boolean useBurrow(ServerPlayer p, BlockPos at) {
+        if (!on() || p.level().getGameTime() < p.getPersistentData().getLong(BURROWED)) return false;
+        if (!(p.level().getBlockEntity(at) instanceof com.linkyoshi90.harmontide.block.RabbitBurrowBlockEntity burrow) || burrow.link() == null) return false;
+        BlockPos out = burrow.link();
+        if (!p.level().getBlockState(out).is(com.linkyoshi90.harmontide.registry.ModBlocks.RABBIT_BURROW.get())) {
+            burrow.setLink(null);                                              // the other end was filled in
+            return false;
+        }
+        p.getPersistentData().putLong(BURROWED, p.level().getGameTime() + 60);
+        ServerLevel level = p.serverLevel();
+        level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(net.minecraft.core.particles.ParticleTypes.BLOCK,
+                net.minecraft.world.level.block.Blocks.DIRT.defaultBlockState()), p.getX(), p.getY(), p.getZ(), 16, 0.3, 0.1, 0.3, 0.1);
+        p.teleportTo(out.getX() + 0.5, out.getY() + 1.0, out.getZ() + 0.5);
+        p.resetFallDistance();
+        level.playSound(null, out, net.minecraft.sounds.SoundEvents.RABBIT_JUMP, net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F);
+        return true;
     }
 
     // --- ferries ------------------------------------------------------------------------------------------------------
@@ -626,6 +691,10 @@ public final class Traversal {
         if (event.getEntity() instanceof ServerPlayer p && p.fallDistance >= CATCH_FALL && p.tickCount % 2 == 0) catchFalling(p);
         if (event.getEntity() instanceof ServerPlayer rider && rider.isPassenger() && rider.tickCount % 5 == 0) pullCart(rider);
         if (event.getEntity() instanceof ServerPlayer walker && walker.tickCount % 20 == 3) company(walker);
+        if (event.getEntity() instanceof ServerPlayer digger && digger.isShiftKeyDown() && digger.tickCount % 5 == 1
+                && digger.level().getBlockState(digger.blockPosition().below()).is(com.linkyoshi90.harmontide.registry.ModBlocks.RABBIT_BURROW.get())) {
+            useBurrow(digger, digger.blockPosition().below());                 // down the rabbit hole
+        }
         if (event.getEntity() instanceof ServerPlayer watched && watched.isVehicle() && watched.tickCount % 10 == 5) watchBack(watched);
         if (event.getEntity() instanceof ServerPlayer grounded && (grounded.onGround() || grounded.isInWater()) && grounded.getPersistentData().contains(STEPPED)) {
             grounded.getPersistentData().remove(STEPPED);                  // back on the ground: an air step is ready again

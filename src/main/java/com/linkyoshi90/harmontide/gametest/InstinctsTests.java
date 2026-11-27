@@ -176,4 +176,16 @@ public class InstinctsTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 400, batch = "moleDigsOutSuspiciousSand")
+    public static void moleDigsOutSuspiciousSand(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
+        helper.setBlock(new BlockPos(8, 1, 7), Blocks.SUSPICIOUS_SAND);
+        AbstractMonsterGirl mole = spawn(helper, GirlSpecies.MOLE_RODENT, new BlockPos(7, 2, 7));
+        mole.setAffection(p.getUUID(), Orders.AFFECTION);
+        helper.succeedWhen(() -> {
+            check(!helper.getBlockState(new BlockPos(8, 1, 7)).is(Blocks.SUSPICIOUS_SAND), "dug out");
+            HarpyTestUtil.remove(p);
+        });
+    }
 }

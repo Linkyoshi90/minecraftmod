@@ -242,6 +242,8 @@ public class Jackalope extends AbstractMonsterGirl {
     @Nullable
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        InteractionResult burrow = com.linkyoshi90.harmontide.entity.Traversal.burrowInteract(this, player, stack);   // a shovel: a rabbit burrow, two make a tunnel
+        if (burrow != null) return burrow;
         if (this.species == GirlSpecies.MOON_RABBIT_JACKALOPE && stack.is(net.minecraft.world.item.Items.CHORUS_FRUIT) && !this.isBaby()) {
             if (this.level() instanceof ServerLevel) this.pound(player, stack);
             return InteractionResult.sidedSuccess(this.level().isClientSide);

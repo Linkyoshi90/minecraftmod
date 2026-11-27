@@ -58,6 +58,8 @@ milk-drip bucket tests, the bed visit and the frog spawn), because a bucket then
 - **Ostrich leap.** A saddled ostrich you ride takes the same charged jump as a horse. **(client)**
 - **Centaur leaps.** Riding any centaur, hold jump and release: the jump bar fills and she leaps with you (goat highest, camels,
   elephant and giraffe lowest; not while winded). **(client)** Does the jump bar show and feel right?
+- **Rabbit tunnels.** Hand a jackalope friend a shovel: a burrow under your feet. Do it again somewhere else: the two link. Crouch
+  on either and you come up out of the other (3 s cooldown). **(client)** Does the burrow top texture read as a hole?
 - **Ender slime blink.** Crouch + empty hand on an ender slime friend: you're sent to the spot you look at (16 blocks max, every 10 s).
 - **Centaurs pull minecarts.** Sit in a minecart on rails with a centaur ordered to follow: she runs ahead and the cart rolls.
 - **Golem toss.** Crouch + empty hand on a golem, talosling, automaton or gargoyle friend: thrown up and forward, no fall damage.
@@ -95,6 +97,7 @@ These run for girls who are fond of *anyone*, while free or on patrol (not while
   village; a **dwarf**: the nearest mineshaft (a world search, so expect a small hitch).
 - **Boar girls** (piglette, aegis boar, gribboar, daeodon) root up finds in soft ground every few minutes, now and then torchflower seeds or a pitcher pod.
 - An **anteater** friend eats silverfish near her and puffs dust over infested stone.
+- A **mole or meerkat** girl near you (friendship 10) digs out suspicious sand and gravel around her, and the find pops out.
 - A **giraffe** friend browses the leaves above her head and now and then shakes down an apple (oak), cocoa beans (jungle) or a stick.
 - A **dinner bell** keeps calling a friend for half a minute, so she gets there even if something distracts her.
 - **Cat girls** get the zoomies at dusk now and then. **Owl harpies** give you night vision in the dark. **Penguins** belly-slide on ice
