@@ -44,6 +44,8 @@ import java.util.Set;
  *   <li><b>A path of ice.</b> A yuki-onna friend (10+) near you freezes the water under your feet as you walk over it.</li>
  *   <li><b>A vine ladder.</b> Crouch and hand a plant girl friend (10+) bone meal while you look up at a wall: she grows real vines
  *   up it, as high as the wall goes (at most {@link #VINES_MAX}). They stay.</li>
+ *   <li><b>Songbirds at the note block.</b> A sparrow, finch, alkonost, macaw or hummingbird harpy near a note block that plays
+ *   sings along, and her friends (10+) nearby heal a little. Every ten seconds at most.</li>
  *   <li><b>A crust on the lava.</b> A fire kind friend (10+) near you (salamander, blaze cat, magma slime, ifrit, fire giant,
  *   hellhound) cools the lava under your feet into a crust that melts back a few seconds later.</li>
  * </ul>
@@ -168,6 +170,30 @@ public final class Workshop {
         event.setCanceled(true);
         wings.teleportTo(p.getX() + 0.6, p.getY() + 0.5, p.getZ());
         p.displayClientMessage(Component.translatable("message.harmontide.winged_catch", wings.getDisplayName()), true);
+    }
+
+    // --- songbirds at the note block ---------------------------------------------------------------------------------
+
+    public static final Set<String> SONGBIRDS = Set.of("sparrow_harpy", "finch_harpy", "alkonost_harpy", "macaw_harpy", "hummingbird_harpy");
+
+    /** A songbird sings along: her friends near her heal a little. Whether she sang (once every ten seconds). */
+    public static boolean singAlong(ServerLevel level, AbstractHarpy bird) {
+        long now = level.getGameTime();
+        if (bird.isBaby() || now < bird.getPersistentData().getLong("SangAlongUntil")) return false;
+        bird.getPersistentData().putLong("SangAlongUntil", now + 200);
+        bird.startTimedAction(AbstractHarpy.Action.SINGING, 40);
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.NOTE, bird.getX(), bird.getY() + bird.getBbHeight() + 0.3, bird.getZ(), 5, 0.4, 0.2, 0.4, 0.5);
+        for (Player p : level.getEntitiesOfClass(Player.class, bird.getBoundingBox().inflate(12), p -> bird.getAffection(p) >= Orders.AFFECTION)) {
+            p.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.REGENERATION, 60, 0, true, true));
+        }
+        return true;
+    }
+
+    @SubscribeEvent
+    public static void onNoteBlock(net.neoforged.neoforge.event.level.NoteBlockEvent.Play event) {
+        if (!(event.getLevel() instanceof ServerLevel level) || !com.linkyoshi90.harmontide.HarmontideConfig.workshop()) return;
+        for (AbstractHarpy bird : level.getEntitiesOfClass(AbstractHarpy.class, new AABB(event.getPos()).inflate(12),
+                b -> b.isAlive() && SONGBIRDS.contains(b.speciesId()))) singAlong(level, bird);
     }
 
     // --- a vine ladder ----------------------------------------------------------------------------------------------

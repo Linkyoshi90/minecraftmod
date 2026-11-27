@@ -213,4 +213,15 @@ public class WorkshopTests {
         check(helper.getBlockState(new BlockPos(7, 3, 6)).is(Blocks.VINE), "real vines");
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "songbirdSingsAlong")
+    public static void songbirdSingsAlong(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
+        var sparrow = helper.spawn(com.linkyoshi90.harmontide.registry.ModEntities.SPARROW_HARPY.get(), new BlockPos(7, 2, 5));
+        sparrow.setAffection(p.getUUID(), Orders.AFFECTION);
+        check(Workshop.singAlong(helper.getLevel(), sparrow) && p.hasEffect(net.minecraft.world.effect.MobEffects.REGENERATION), "she sings, her friend heals");
+        check(!Workshop.singAlong(helper.getLevel(), sparrow), "not again right away");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

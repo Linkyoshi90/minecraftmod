@@ -106,6 +106,8 @@ These run for girls who are fond of *anyone*, while free or on patrol (not while
 - An **elf** fond of anyone near an enchanting table makes it offer as if 15 bookshelves stood around it.
 - A **dwarf, cyclops, iron kobold or anvil tortoise** friend gives back half the levels of an anvil job.
 - **Ring a bell**: free friends nearby come to it.
+- **Play a note block** near a sparrow, finch, alkonost, macaw or hummingbird harpy: she sings along and her friends nearby get a few
+  seconds of Regeneration (every 10 s at most).
 - **Winged friends** (valkyrie, angel, gandharva, ophanim, sylph, phantom, moths, mothman, papillon, dragonfly) catch your fall.
 - A **yuki-onna** friend freezes water under your feet. **Fire kinds** (salamander, blaze cat, magma slime, ifrit, fire giant, hellhound)
   cool lava under your feet into a crust that melts back after about 6 seconds. Careful.

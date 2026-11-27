@@ -187,6 +187,7 @@ WORKSHOP = {
                     "A lich, or Koschei, keeps a brewing stand with potions and an ingredient in it going without blaze powder, and it brews twice as fast. "
                     "A dragon lights an unlit campfire as well as tending furnaces. "
                     "Ring a bell and your friends nearby who are free to come hurry over to it. "
+                    "Play a note block near a sparrow, finch, alkonost, macaw or hummingbird harpy and she sings along. Her friends nearby heal a little. "
                     "A winged friend, such as a valkyrie, an angel, a sylph, a phantom or a moth girl, catches you before you hit the ground. "
                     "Crouch and hand a plant girl friend bone meal while you look up at a wall, and she grows real vines up it for you to climb. "
                     "A yuki-onna friend near you freezes the water under your feet as you walk across it. "
