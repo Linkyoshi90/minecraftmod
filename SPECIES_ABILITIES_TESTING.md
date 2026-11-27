@@ -52,11 +52,14 @@ milk-drip bucket tests, the bed visit and the frog spawn), because a bucket then
 - **Vine ladder.** Crouch + bone meal on a plant girl friend while looking up at a wall: real vines up it (they stay).
 - **Dragon mounts.** Besides the gryphon and wyrm, a devoted (100) wyvern, long dragon, amphiptere, quetzalcoatl, bahamut, chimera,
   ender dragon, kun or alebrije lets you ride (empty hand) and fly where you look, and catches you when you fall. **(client)**
+- **Centaur leaps.** Riding any centaur, hold jump and release: the jump bar fills and she leaps with you (goat highest, camels,
+  elephant and giraffe lowest; not while winded). **(client)** Does the jump bar show and feel right?
+- **Ender slime blink.** Crouch + empty hand on an ender slime friend: you're sent to the spot you look at (16 blocks max, every 10 s).
 - **Centaurs pull minecarts.** Sit in a minecart on rails with a centaur ordered to follow: she runs ahead and the cart rolls.
 - **Golem toss.** Crouch + empty hand on a golem, talosling, automaton or gargoyle friend: thrown up and forward, no fall damage.
 - **Company on the road.** Followers lend you: cat girls halve fall damage, jackalopes/kangaroos give Jump Boost, wolves/hellhounds give Speed when you sprint,
   snow kinds (snow leopard, arctic fox, polar bear, yak, highland, reindeer, caribou) stop powder snow freezing you, fire kinds put you out
-  when you burn, mermaids give Conduit Power under water.
+  when you burn, mermaids give Conduit Power under water, a chameleon makes you invisible while you crouch and keep still.
 - **Eyes behind you.** With anyone on your shoulder, a monster coming at you from behind glows and she tugs your ear (action bar).
 
 ## Work about the home

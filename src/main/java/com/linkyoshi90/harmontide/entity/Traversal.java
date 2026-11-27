@@ -55,6 +55,8 @@ import java.util.Set;
  *   <li><b>A ferry.</b> A capybara, turtle, snapping turtle, water buffalo, hippo, polar bear or spinosaur friend (10+) lets a
  *   swimming player climb onto her back and swims them where they face; ashore they slide off. The octopus, Ika, the
  *   squidkin, the krakens, the cuttlefish and the nautilus dive with them instead, sharing their air.</li>
+ *   <li><b>A blink.</b> Crouch and hold out an empty hand to an ender slime friend (10+): she sends you, the way an enderman
+ *   goes, to the spot you look at (up to {@link #BLINK} blocks), unhurt. Every ten seconds.</li>
  *   <li><b>A golem's toss.</b> Crouch and hold out an empty hand to a big construct friend (golem, talosling, automaton,
  *   gargoyle): she throws you up and forward, and you land unhurt.</li>
  *   <li><b>Company on the road.</b> What a friend following you lends you: a cat girl, her landing (falls hurt half as much);
@@ -253,6 +255,47 @@ public final class Traversal {
             g.getNavigation().stop();
             g.setOrderedToSit(false);
             if (player.startRiding(g, true)) award(player, "ferried");
+        }
+        return net.minecraft.world.InteractionResult.sidedSuccess(g.level().isClientSide);
+    }
+
+    // --- the ender slime's blink -------------------------------------------------------------------------------------
+
+    public static final int BLINK = 16, BLINK_REST = 200;
+
+    /** Where a blink along this player's gaze would put them (on top of the block they look at, or just short of it), or null. */
+    @Nullable
+    public static Vec3 blinkSpot(Player p) {
+        Vec3 eye = p.getEyePosition(), end = eye.add(p.getLookAngle().scale(BLINK));
+        var hit = p.level().clip(new net.minecraft.world.level.ClipContext(eye, end, net.minecraft.world.level.ClipContext.Block.COLLIDER,
+                net.minecraft.world.level.ClipContext.Fluid.NONE, p));
+        if (hit.getType() != net.minecraft.world.phys.HitResult.Type.BLOCK) return null;
+        BlockPos top = hit.getBlockPos().above();
+        for (Vec3 spot : new Vec3[] {Vec3.atBottomCenterOf(top), hit.getLocation().subtract(p.getLookAngle().scale(0.6)).subtract(0, p.getEyeHeight() * 0.5, 0)}) {
+            if (p.level().noCollision(p, p.getBoundingBox().move(spot.subtract(p.position())))) return spot;
+        }
+        return null;
+    }
+
+    /** A crouching empty hand to an ender slime friend: a blink to where they look. */
+    @Nullable
+    public static net.minecraft.world.InteractionResult blink(AbstractMonsterGirl g, Player p, net.minecraft.world.item.ItemStack stack) {
+        if (!on() || g.getSpecies() != GirlSpecies.ENDER_SLIME || g.isBaby() || !stack.isEmpty() || !p.isShiftKeyDown() || p.isPassenger()
+                || g.getAffection(p) < Orders.AFFECTION) return null;
+        if (p instanceof ServerPlayer sp) {
+            long now = sp.level().getGameTime();
+            Vec3 to = now < g.getPersistentData().getLong("BlinkRestUntil") ? null : blinkSpot(sp);
+            if (to == null) {
+                sp.displayClientMessage(Component.translatable("message.harmontide.blink_no", g.getDisplayName()), true);
+            } else {
+                g.getPersistentData().putLong("BlinkRestUntil", now + BLINK_REST);
+                ServerLevel level = sp.serverLevel();
+                level.sendParticles(net.minecraft.core.particles.ParticleTypes.PORTAL, sp.getX(), sp.getY() + 1, sp.getZ(), 30, 0.4, 0.8, 0.4, 0.2);
+                sp.teleportTo(to.x, to.y, to.z);
+                sp.resetFallDistance();
+                level.sendParticles(net.minecraft.core.particles.ParticleTypes.PORTAL, to.x, to.y + 1, to.z, 30, 0.4, 0.8, 0.4, 0.2);
+                level.playSound(null, BlockPos.containing(to), net.minecraft.sounds.SoundEvents.ENDERMAN_TELEPORT, net.minecraft.sounds.SoundSource.PLAYERS, 0.8F, 1.2F);
+            }
         }
         return net.minecraft.world.InteractionResult.sidedSuccess(g.level().isClientSide);
     }

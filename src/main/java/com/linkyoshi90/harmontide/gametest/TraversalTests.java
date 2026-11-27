@@ -466,4 +466,32 @@ public class TraversalTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "enderSlimeBlinksYouAcross")
+    public static void enderSlimeBlinksYouAcross(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(3, 2, 7));
+        p.setYRot(-90.0F);                                                 // facing east
+        p.setXRot(30.0F);                                                  // looking down at the floor ahead
+        com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl slime = spawn(helper, GirlSpecies.ENDER_SLIME, new BlockPos(3, 2, 9));
+        slime.setAffection(p.getUUID(), Orders.AFFECTION);
+        double before = p.getX();
+        p.setShiftKeyDown(true);
+        interact(slime, p, ItemStack.EMPTY);
+        check(p.getX() - before > 2.0, "sent ahead: " + (p.getX() - before));
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "everyCentaurLeapsWithHerRider")
+    public static void everyCentaurLeapsWithHerRider(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
+        com.linkyoshi90.harmontide.entity.girl.Centaur horse = spawn(helper, GirlSpecies.HORSE_CENTAUR, new BlockPos(6, 2, 5));
+        check(!horse.canJump(), "no leap without a rider");
+        check(p.startRiding(horse, true), "up on her back");
+        check(horse.canJump(), "with one: a leap");
+        horse.onPlayerJump(90);
+        check(horse.leapHeight() > 0.9, "a good height");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

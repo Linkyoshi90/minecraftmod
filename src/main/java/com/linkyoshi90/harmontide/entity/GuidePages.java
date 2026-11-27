@@ -69,7 +69,7 @@ public final class GuidePages {
             Map.entry("habitats", 3),
             Map.entry("tracks", 3),
             Map.entry("weather", 4),
-            Map.entry("traversal", 20),
+            Map.entry("traversal", 22),
             Map.entry("jobs", 10),
             Map.entry("instincts", 9),
             Map.entry("workshop", 8));

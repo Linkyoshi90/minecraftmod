@@ -144,6 +144,8 @@ public class SlimeGirl extends AbstractMonsterGirl {
     @Nullable
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        InteractionResult blink = com.linkyoshi90.harmontide.entity.Traversal.blink(this, player, stack);   // the ender slime sends you where you look
+        if (blink != null) return blink;
         if (this.species == GirlSpecies.COPPER_SLIME && (stack.is(Items.HONEYCOMB) || stack.getItem() instanceof net.minecraft.world.item.AxeItem)) {
             if (!this.level().isClientSide) {
                 if (stack.is(Items.HONEYCOMB)) {
