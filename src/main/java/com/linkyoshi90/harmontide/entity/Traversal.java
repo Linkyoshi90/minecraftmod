@@ -39,6 +39,8 @@ import java.util.Set;
  *   gliderune up; any of them told to follow hops up by herself. Two seconds of crouching sets her down (for a minute).
  *   A spiderling is a safety line (no fall damage) and parts any cobweb; a gliderune slows falls; a fairy mends a little;
  *   a pixie or a kesaran-pasaran brings luck; the waterlil lets you breathe under water; the doll lends her night eyes.</li>
+ *   <li><b>Eyes behind you.</b> A little friend on your shoulder watches your back: a monster coming at you from behind
+ *   makes her tug your ear, and it glows for a moment.</li>
  *   <li><b>A lift.</b> A bonded harpy (25+) given a crouching empty hand takes the player up hanging from her talons. The
  *   big birds fly ({@link AbstractHarpy.Lift#STRONG}, half a minute, longer for a devoted one), most only glide them down
  *   ({@link AbstractHarpy.Lift#GLIDE}); the hummingbird and finch are too small. Out of breath she sinks and sets them
@@ -56,7 +58,9 @@ import java.util.Set;
  *   <li><b>A golem's toss.</b> Crouch and hold out an empty hand to a big construct friend (golem, talosling, automaton,
  *   gargoyle): she throws you up and forward, and you land unhurt.</li>
  *   <li><b>Company on the road.</b> What a friend following you lends you: a cat girl, her landing (falls hurt half as much);
- *   a jackalope or a kangaroo, her spring (Jump Boost); a wolf or a hellhound, the pack's pace when you sprint (Speed).</li>
+ *   a jackalope or a kangaroo, her spring (Jump Boost); a wolf or a hellhound, the pack's pace when you sprint (Speed); a
+ *   snow kind, her warmth (powder snow never freezes you); a fire kind, a quick hand with flames (you stop burning);
+ *   a mermaid, under the water, the sea's own strength (Conduit Power).</li>
  *   <li><b>An air step.</b> Press jump again in mid-air: a kitsune following you gives a spirit leap, a winged elf (sylph,
  *   angel, valkyrie, gandharva, ophanim) a gust that lifts you and lets you down slowly, a wolpertinger a second hop, a fairy
  *   or pixie on your shoulder a little flutter. Once each time you leave the ground.</li>
@@ -128,6 +132,9 @@ public final class Traversal {
     // --- company on the road ------------------------------------------------------------------------------------------
 
     public static final String CAT_GRACE = "CatGraceUntil";
+    /** The furred kinds of the snow, whose warmth keeps a friend from freezing. */
+    public static final Set<GirlSpecies> WARM_FUR = Set.of(GirlSpecies.SNOW_LEOPARD_NEKOMATA, GirlSpecies.ARCTIC_KITSUNE, GirlSpecies.POLAR_BEAR_CANID,
+            GirlSpecies.YAK_MINOTAUR, GirlSpecies.REINDEER_CENTAUR, GirlSpecies.HIGHLAND_MINOTAUR, GirlSpecies.CARIBOU_CENTAUR);
     public static final double COMPANY = 16;
 
     /** The girls following this player (told to, within {@link #COMPANY}). */
@@ -144,6 +151,11 @@ public final class Traversal {
             if (s.family() == GirlSpecies.Family.NEKOMATA) p.getPersistentData().putLong(CAT_GRACE, p.level().getGameTime() + 40);
             if (s.family() == GirlSpecies.Family.JACKALOPE || s == GirlSpecies.KANGAROO_MARSUPIAL) p.addEffect(new MobEffectInstance(MobEffects.JUMP, 40, 0, true, false));
             if ((s == GirlSpecies.WOLF_CANID || s == GirlSpecies.HELLHOUND_CANID) && p.isSprinting()) p.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 40, 0, true, false));
+            if (WARM_FUR.contains(s) && p.getTicksFrozen() > 0) p.setTicksFrozen(0);                       // her warmth
+            if (Workshop.FIRE_WALKERS.contains(s) && p.getRemainingFireTicks() > 20) p.setRemainingFireTicks(20);   // she pats the flames out
+            if (s.family() == GirlSpecies.Family.MERFOLK && p.isEyeInFluid(net.minecraft.tags.FluidTags.WATER)) {
+                p.addEffect(new MobEffectInstance(MobEffects.CONDUIT_POWER, 60, 0, true, false));        // the sea's own strength
+            }
         }
     }
 
@@ -153,6 +165,35 @@ public final class Traversal {
         if (event.getEntity() instanceof ServerPlayer p && p.level().getGameTime() < p.getPersistentData().getLong(CAT_GRACE)) {
             event.setDamageMultiplier(event.getDamageMultiplier() * 0.5F);
         }
+    }
+
+    // --- eyes behind you ----------------------------------------------------------------------------------------------
+
+    public static final double WATCH = 10;
+
+    /** The little friend riding this player's shoulder (a girl or a harpy hatchling), or null. */
+    @Nullable
+    public static net.minecraft.world.entity.Mob shoulderFriend(Player p) {
+        for (Entity e : p.getPassengers()) if (e instanceof AbstractMonsterGirl || e instanceof AbstractHarpy) return (net.minecraft.world.entity.Mob) e;
+        return null;
+    }
+
+    /** A monster closing on the player from behind (out of their sight line) that the shoulder friend spots: it glows, she tugs their ear. It, or null. */
+    @Nullable
+    public static net.minecraft.world.entity.monster.Monster watchBack(ServerPlayer p) {
+        net.minecraft.world.entity.Mob friend = shoulderFriend(p);
+        if (!on() || friend == null) return null;
+        Vec3 look = p.getViewVector(1.0F).multiply(1, 0, 1).normalize();
+        for (net.minecraft.world.entity.monster.Monster m : p.level().getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, p.getBoundingBox().inflate(WATCH),
+                m -> m.isAlive() && (m.getTarget() == p || m instanceof net.minecraft.world.entity.monster.Creeper) && !m.hasEffect(MobEffects.GLOWING))) {
+            Vec3 to = m.position().subtract(p.position()).multiply(1, 0, 1).normalize();
+            if (look.dot(to) > -0.2) continue;                                  // in front or to the side: they can see it
+            m.addEffect(new MobEffectInstance(MobEffects.GLOWING, 80, 0, true, false));
+            p.displayClientMessage(Component.translatable("message.harmontide.shoulder_warning", friend.getDisplayName(), m.getDisplayName()), true);
+            friend.playSound(net.minecraft.sounds.SoundEvents.FOX_SNIFF, 0.6F, 1.8F);
+            return m;
+        }
+        return null;
     }
 
     // --- an air step -------------------------------------------------------------------------------------------------
@@ -481,6 +522,7 @@ public final class Traversal {
         if (event.getEntity() instanceof ServerPlayer p && p.fallDistance >= CATCH_FALL && p.tickCount % 2 == 0) catchFalling(p);
         if (event.getEntity() instanceof ServerPlayer rider && rider.isPassenger() && rider.tickCount % 5 == 0) pullCart(rider);
         if (event.getEntity() instanceof ServerPlayer walker && walker.tickCount % 20 == 3) company(walker);
+        if (event.getEntity() instanceof ServerPlayer watched && watched.isVehicle() && watched.tickCount % 10 == 5) watchBack(watched);
         if (event.getEntity() instanceof ServerPlayer grounded && (grounded.onGround() || grounded.isInWater()) && grounded.getPersistentData().contains(STEPPED)) {
             grounded.getPersistentData().remove(STEPPED);                  // back on the ground: an air step is ready again
         }

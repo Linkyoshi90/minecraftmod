@@ -440,4 +440,30 @@ public class TraversalTests {
         check(helper.getBlockState(new BlockPos(7, 4, 6)).is(net.minecraft.tags.BlockTags.CLIMBABLE), "and you can climb them");
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "shoulderFriendWatchesYourBack")
+    public static void shoulderFriendWatchesYourBack(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(7, 2, 7));
+        p.setYRot(0.0F);                                                   // facing south (+z)
+        var behind = helper.spawn(EntityType.CREEPER, new BlockPos(7, 2, 3));   // to the north: behind them
+        check(Traversal.watchBack(p) == null, "nobody on the shoulder to see it");
+        Arachne s = spiderling(helper, p, new BlockPos(8, 2, 7));
+        check(Traversal.perchOn(s, p), "perched");
+        check(Traversal.watchBack(p) == behind && behind.hasEffect(MobEffects.GLOWING), "she spots the creeper behind them");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "snowFriendKeepsYouWarm")
+    public static void snowFriendKeepsYouWarm(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
+        com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl leopard = spawn(helper, GirlSpecies.SNOW_LEOPARD_NEKOMATA, new BlockPos(7, 2, 5));
+        leopard.setAffection(p.getUUID(), Orders.AFFECTION);
+        leopard.getOrders().set(Orders.Command.FOLLOW, p, null);
+        p.setTicksFrozen(100);
+        Traversal.company(p);
+        check(p.getTicksFrozen() == 0, "her warmth: no frost on them");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

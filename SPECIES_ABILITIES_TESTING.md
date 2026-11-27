@@ -54,7 +54,10 @@ milk-drip bucket tests, the bed visit and the frog spawn), because a bucket then
   ender dragon, kun or alebrije lets you ride (empty hand) and fly where you look, and catches you when you fall. **(client)**
 - **Centaurs pull minecarts.** Sit in a minecart on rails with a centaur ordered to follow: she runs ahead and the cart rolls.
 - **Golem toss.** Crouch + empty hand on a golem, talosling, automaton or gargoyle friend: thrown up and forward, no fall damage.
-- **Company on the road.** Followers lend you: cat girls halve fall damage, jackalopes/kangaroos give Jump Boost, wolves/hellhounds give Speed when you sprint.
+- **Company on the road.** Followers lend you: cat girls halve fall damage, jackalopes/kangaroos give Jump Boost, wolves/hellhounds give Speed when you sprint,
+  snow kinds (snow leopard, arctic fox, polar bear, yak, highland, reindeer, caribou) stop powder snow freezing you, fire kinds put you out
+  when you burn, mermaids give Conduit Power under water.
+- **Eyes behind you.** With anyone on your shoulder, a monster coming at you from behind glows and she tugs your ear (action bar).
 
 ## Work about the home
 

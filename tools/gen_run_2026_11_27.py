@@ -66,6 +66,7 @@ TRAVERSAL = {
     "block.harmontide.silk_ladder": "Silk Ladder",
     M + "silk_ladder": "%s strings a silk ladder %s blocks up the wall. It will hold for a few minutes.",
     M + "silk_ladder_none": "%s looks for a wall in front of you to climb, and finds none.",
+    M + "shoulder_warning": "%s tugs at your ear: %s, behind you!",
     M + "safety_line": "%s holds you on her safety line: you float down unhurt.",
     M + "silk_bridge": "%s spins a silk bridge %s blocks long. It will hold for a few minutes.",
     M + "silk_bridge_tired": "%s is still spinning out the last bridge. Give her a moment.",
@@ -81,6 +82,7 @@ TRAVERSAL = {
                      "Other tiny friends hop up when told to follow you: a fairy mends you a little, a pixie or a kesaran-pasaran brings luck, the waterlil cat lets you breathe under water, and the living doll lends you her night eyes. "
                      "A harpy hatchling who likes you rides your shoulder like a parrot: crouch and hold out an empty hand. "
                      "Crouch for two seconds to set any of them down. She stays down for a minute. "
+                     "Whoever rides your shoulder watches your back: a monster coming at you from behind makes her tug your ear, and it glows for a moment. "
                      "Crouch and hand an arachne some string, and she spins a silk bridge across the gap in front of you. It lasts a few minutes. "
                      "Do it while looking up at a wall and she strings a silk ladder up it instead. "
                      "An arachne following you swings across on a silk line when she cannot walk to you. "
@@ -98,7 +100,7 @@ TRAVERSAL = {
                      "A mermaid who trusts you a lot swims ahead of your boat and pushes it along. "
                      "Crouch and hold out an empty hand to a big construct friend, a golem, a talosling, an automaton or a gargoyle: she tosses you up and forward, and you land unhurt. "
                      "Press jump again in mid-air and a friend with you may lift you once more: a kitsune following you gives a spirit leap, a sylph, angel or valkyrie a gust that lets you down gently, a wolpertinger a second hop, and a fairy or pixie on your shoulder a little flutter. "
-                     "Friends following you lend you a little of themselves: with a cat girl at your heels falls hurt half as much, a jackalope or a kangaroo puts a spring in your step, and a wolf or a hellhound sets the pack's pace when you sprint.",
+                     "Friends following you lend you a little of themselves: with a cat girl at your heels falls hurt half as much, a jackalope or a kangaroo puts a spring in your step, a wolf or a hellhound sets the pack's pace when you sprint, a snow leopard, arctic fox, polar bear, yak, highland cow, reindeer or caribou keeps powder snow from freezing you, a fire kind pats out the flames when you catch fire, and a mermaid gives you the sea's own strength under the water (Conduit Power).",
 }
 
 JOBS = {
