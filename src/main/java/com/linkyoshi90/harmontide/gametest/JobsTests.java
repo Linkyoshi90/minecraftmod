@@ -205,4 +205,20 @@ public class JobsTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    /** Joining a world sends every recipe to the client; one that cannot be written drops the connection. */
+    @GameTest(template = PLATFORM, timeoutTicks = 20, batch = "everyRecipeSyncsToTheClient")
+    public static void everyRecipeSyncsToTheClient(GameTestHelper helper) {
+        net.minecraft.server.MinecraftServer server = helper.getLevel().getServer();
+        net.minecraft.network.RegistryFriendlyByteBuf buf = new net.minecraft.network.RegistryFriendlyByteBuf(
+                io.netty.buffer.Unpooled.buffer(), server.registryAccess(), net.neoforged.neoforge.network.connection.ConnectionType.NEOFORGE);
+        try {
+            net.minecraft.network.protocol.game.ClientboundUpdateRecipesPacket.STREAM_CODEC.encode(buf,
+                    new net.minecraft.network.protocol.game.ClientboundUpdateRecipesPacket(server.getRecipeManager().getRecipes()));
+            net.minecraft.network.protocol.game.ClientboundUpdateRecipesPacket.STREAM_CODEC.decode(buf);
+        } finally {
+            buf.release();
+        }
+        helper.succeed();
+    }
 }

@@ -18,6 +18,11 @@ import net.minecraft.world.level.Level;
 public class CrabMendRecipe implements SmithingRecipe {
     /** How much of an item's full durability one piece gives back. */
     public static final float MENDS = 0.5F;
+    /** The only one: it has no settings, and StreamCodec.unit only sends the very instance it was built with. */
+    public static final CrabMendRecipe INSTANCE = new CrabMendRecipe();
+
+    private CrabMendRecipe() {
+    }
 
     @Override
     public boolean isTemplateIngredient(ItemStack stack) {
@@ -63,8 +68,8 @@ public class CrabMendRecipe implements SmithingRecipe {
 
     /** No settings: the recipe file only names the type. */
     public static final class Serializer implements RecipeSerializer<CrabMendRecipe> {
-        private static final MapCodec<CrabMendRecipe> CODEC = MapCodec.unit(CrabMendRecipe::new);
-        private static final StreamCodec<RegistryFriendlyByteBuf, CrabMendRecipe> STREAM = StreamCodec.unit(new CrabMendRecipe());
+        private static final MapCodec<CrabMendRecipe> CODEC = MapCodec.unit(INSTANCE);
+        private static final StreamCodec<RegistryFriendlyByteBuf, CrabMendRecipe> STREAM = StreamCodec.unit(INSTANCE);
 
         @Override
         public MapCodec<CrabMendRecipe> codec() {
