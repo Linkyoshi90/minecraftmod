@@ -97,7 +97,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
     /** How far away a harpy hears (and reacts to) a jukebox playing. */
     public static final int MUSIC_RANGE = 16;
 
-    public enum Action { NONE, SINGING, BATHING, CAWING, KNOCKING, PRANKING, DISPLAYING, KICKING, BROODING, HOOTING, SLEEPING, POUNCING, BEGGING, DANCING, STRIKING, CRYING, CACHING, SITTING, LYING, NESTING, DRINKING, CLACKING, PERCHING, FIDGETING, KNEEL, LAYING, FEED, ORAL }
+    public enum Action { NONE, SINGING, BATHING, CAWING, KNOCKING, PRANKING, DISPLAYING, KICKING, BROODING, HOOTING, SLEEPING, POUNCING, BEGGING, DANCING, STRIKING, CRYING, CACHING, SITTING, LYING, NESTING, DRINKING, CLACKING, PERCHING, FIDGETING, KNEEL, LAYING, FEED, ORAL, STAND, FACE, TRIBE, STRAP, TAKEN }
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -144,6 +144,8 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.goalSelector.addGoal(3, new com.linkyoshi90.harmontide.entity.ai.SeekMilkingMachineGoal<>(this));
         this.goalSelector.addGoal(4, new com.linkyoshi90.harmontide.entity.ai.FridgeGoal<>(this));
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));
+        this.goalSelector.addGoal(2, new com.linkyoshi90.harmontide.entity.ai.GroupGoal(this));
+        this.goalSelector.addGoal(2, new com.linkyoshi90.harmontide.entity.ai.NpcGoal(this));
         this.goalSelector.addGoal(3, new GiftGoal<>(this));
         if (this.floatsOnWater()) {                                        // asked from the constructor: species constants only
             this.setPathfindingMalus(PathType.WATER, 0.0F);
@@ -1292,7 +1294,8 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
             return state.setAndContinue(this.anim(flying ? "fly" : state.isMoving() ? "walk" : "idle"));
         }
         if (this.getAction() == Action.KNEEL || this.getAction() == Action.LAYING || this.getAction() == Action.FEED
-                || this.getAction() == Action.ORAL) return state.setAndContinue(this.anim("idle"));
+                || this.getAction() == Action.ORAL || this.getAction() == Action.STAND || this.getAction() == Action.FACE
+                || this.getAction() == Action.TRIBE || this.getAction() == Action.STRAP || this.getAction() == Action.TAKEN) return state.setAndContinue(this.anim("idle"));
         // Once airborne the wings take over; actions (caw, sing, knock...) only show on the ground or perched.
         if (flying && !this.actionShowsInFlight(this.getAction())) return state.setAndContinue(this.anim(this.flyingAnimation()));
         if (this.getAction() == Action.FIDGETING && !this.getFidget().isEmpty() && !state.isMoving() && !flying) {

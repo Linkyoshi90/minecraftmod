@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
  * A tapir (Centaur#dreamWard) keeps her out.</li>
  * </ul>
  * Only grown, full-size visitors, never a player's own daughter; teasing lines only. Behind the dreamVisits option.
+ * A rarer night may take the sleeper into the dream instead ({@link Dreaming}).
  */
 @EventBusSubscriber(modid = HarmontideMod.MODID)
 public final class DreamVisits {
@@ -63,6 +64,7 @@ public final class DreamVisits {
 
     /** The night's dream. What it was. */
     public static Dream dream(ServerLevel level, Player p) {
+        if (Dreaming.tookTheNight(p)) return Dream.NONE;
         if (!HarmontideConfig.dreamVisits() || p.isSpectator()) return Dream.NONE;
         AbstractMonsterGirl friend = nearest(level, p, g -> Flirting.canFlirt(g, p));
         if (friend != null) {

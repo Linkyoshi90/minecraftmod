@@ -25,7 +25,8 @@ import javax.annotation.Nullable;
  * Mating season, the restless days both Monmusu and the Encyclopedia like to tease about. Every branch of the tree of life (Clade) has
  * {@link #LENGTH} restless days in each {@link #CYCLE}-day year, each branch at its own time. A grown, full-size friend in season is
  * clingy: she comes to the side of a close friend ({@link Bonded#BED_AFFECTION}+) within {@link #CLING_RANGE}, blushes, flirts twice as often
- * (Flirting#chance) and is a quarter likelier to come to bed (Missing#bedBonus). Blushes, hearts and teasing only.
+ * (Flirting#chance) and is a quarter likelier to come to bed (Missing#bedBonus). With the adult option on she may ask to be taken
+ * standing ({@link Horniness}). Otherwise it stays blushes, hearts and teasing.
  * <p>
  * Cold calms her: a cold biome, or something icy fed to her (snowball, ice, packed or blue ice), which settles her for the rest of this season.
  * Behind the matingSeason option.

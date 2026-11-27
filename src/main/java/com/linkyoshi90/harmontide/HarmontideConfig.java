@@ -135,6 +135,7 @@ public final class HarmontideConfig {
     public static final ModConfigSpec.BooleanValue MILK_DRIPS;
     public static final ModConfigSpec.BooleanValue FLIRTING;
     public static final ModConfigSpec.BooleanValue NSFW;
+    public static final ModConfigSpec.BooleanValue GAY_SEX;
     public static final ModConfigSpec.BooleanValue DEMON_REALM;
     public static final ModConfigSpec.BooleanValue REALM_FOG;
     public static final ModConfigSpec.BooleanValue LUCKY_MOMENTS;
@@ -214,13 +215,19 @@ public final class HarmontideConfig {
         NSFW = BUILDER
                 .comment("Private-server adult content. Off, nothing here runs.",
                         "On, the call from bed is blunt, and a grown partner who can already share it (never the young,",
-                        "never anyone of childlike height, never the men) speaks plainly. A grown daughter will, and only with a condom; that night does not conceive.",
+                        "never anyone of childlike height, never the men unless Gay sex is on) speaks plainly. A grown daughter will, and only with a condom; that night does not conceive.",
                         "A biped kneels astride you and bounces. A taur sits back onto you, her back lowered.",
                         "A serpent or a mermaid lies along you and her tail pumps her hips. A spider stands over you and bends her legs in turn. A slime bounces on you.",
                         "A pat, the tub, the morning after and a milking do too. A bucket on any grown girl opens a close-up: she blushes, her top comes off, and she leans over the pail. Drag down toward the nipple until she is empty, and the top comes back. The pumps are unchanged.",
                         "A wild grown girl who is not yet close enough to share your bed may catch you. She tackles you to the ground first. She grows fond of you, may conceive, and leaves you healed. A grown daughter still needs a condom, and does not conceive.",
                         "Leave this off on any world you might share or publish.")
                 .define("nsfw", false);
+
+        GAY_SEX = BUILDER
+                .comment("Male variants can have sex with you: a bull, a gandharva, a vodyanoy, a leshy.",
+                        "Does nothing while nsfw is off. No young come of it. A grown son still needs a condom.",
+                        "The settings screen cannot hide a row, so this stays listed and simply does not apply until nsfw is on.")
+                .define("gaySex", false);
 
         DEMON_REALM = BUILDER
                 .comment("A wild Lilith grows Demon Realm grass around her, and it spreads in the dark until light or holy water drives it back. Off: no new realm grows or spreads.")
@@ -351,7 +358,7 @@ public final class HarmontideConfig {
                 .define("workshop", true);
 
         DREAM_LEVIATHAN = BUILDER
-                .comment("The Dream-Leviathan: once per world a sick sky whale lands near a player; inside her are puzzle rooms and five waves of infection, and touching her heart blesses you with a second heart bar and her egg. A dream horn calls her back. Off: she never comes (a horn does nothing).")
+                .comment("The Dream-Leviathan: once per world a sick sky whale lands near a player; inside her are puzzle rooms and five waves of infection, and touching her egg-cell blesses you with a second heart bar and her egg. A dream horn calls her back. Off: she never comes (a horn does nothing).")
                 .define("dreamLeviathan", true);
 
         LEVIATHAN_FIRST_DAY = BUILDER
@@ -858,6 +865,11 @@ public final class HarmontideConfig {
 
     public static boolean nsfw() {
         return SPEC.isLoaded() ? NSFW.get() : NSFW.getDefault();
+    }
+
+    /** Only while {@link #nsfw()} is on. Off, male variants stay out of sex with the player. */
+    public static boolean gaySex() {
+        return nsfw() && (SPEC.isLoaded() ? GAY_SEX.get() : GAY_SEX.getDefault());
     }
 
     public static boolean milkDrips() {

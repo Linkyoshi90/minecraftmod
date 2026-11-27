@@ -243,7 +243,7 @@ public final class LeviathanBlocks {
         }
     }
 
-    /** Her heart, at the centre of the round chamber: touch it once she is clean of the infection. */
+    /** Her egg-cell, at the centre of the round chamber: touch it once she is clean of the infection. */
     public static class Heart extends Block {
         public Heart(Properties p) {
             super(p);

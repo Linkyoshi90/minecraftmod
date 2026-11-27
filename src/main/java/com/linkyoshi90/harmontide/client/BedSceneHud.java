@@ -70,15 +70,18 @@ public final class BedSceneHud {
         if (mob instanceof AbstractMonsterGirl girl) {
             AbstractMonsterGirl.Action action = girl.getAction();
             return action == AbstractMonsterGirl.Action.KNEEL || action == AbstractMonsterGirl.Action.SITBACK
-                    || action == AbstractMonsterGirl.Action.COUPLE || action == AbstractMonsterGirl.Action.ORAL;
+                    || action == AbstractMonsterGirl.Action.COUPLE || action == AbstractMonsterGirl.Action.ORAL
+                    || action == AbstractMonsterGirl.Action.FACE;
         }
         if (mob instanceof AbstractHarpy harpy) {
             AbstractHarpy.Action action = harpy.getAction();
-            return action == AbstractHarpy.Action.KNEEL || action == AbstractHarpy.Action.ORAL;
+            return action == AbstractHarpy.Action.KNEEL || action == AbstractHarpy.Action.ORAL
+                    || action == AbstractHarpy.Action.FACE;
         }
         if (mob instanceof AbstractAnuran anuran) {
             AbstractAnuran.Action action = anuran.getAction();
-            return action == AbstractAnuran.Action.KNEEL || action == AbstractAnuran.Action.ORAL;
+            return action == AbstractAnuran.Action.KNEEL || action == AbstractAnuran.Action.ORAL
+                    || action == AbstractAnuran.Action.FACE;
         }
         return false;
     }

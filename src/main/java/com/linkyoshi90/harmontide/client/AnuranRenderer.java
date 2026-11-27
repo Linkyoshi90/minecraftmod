@@ -45,6 +45,10 @@ public class AnuranRenderer<T extends AbstractAnuran> extends GeoEntityRenderer<
                 BirthPose.apply(proc, animatable, animationState.getPartialTick());
                 FeedPose.apply(proc, animatable, animationState.getPartialTick());
                 OralPose.apply(proc, animatable, animationState.getPartialTick());
+                StandPose.apply(proc, animatable, animationState.getPartialTick());
+                FacePose.apply(proc, animatable, animationState.getPartialTick());
+                TribePose.apply(proc, animatable, animationState.getPartialTick());
+                MountPose.apply(proc, animatable, animationState.getPartialTick());
                 MilkPose.apply(proc, animatable);
                 Jiggle.apply(proc, animatable, animationState.getPartialTick());
                 if (animatable instanceof com.linkyoshi90.harmontide.entity.Bullywug wug) {   // the outfit that comes off

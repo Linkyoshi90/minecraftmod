@@ -597,6 +597,7 @@ public class Devil extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.getPersistentData().getBoolean(com.linkyoshi90.harmontide.entity.Dreaming.COPY)) return;
         if (this.species == GirlSpecies.BOOK_SPIRIT_DEVIL && this.level() instanceof net.minecraft.server.level.ServerLevel shelves && !this.isBaby() && this.tickCount % 2401 == 0) this.study(shelves);
         if (this.species == GirlSpecies.TROLL_DEVIL && this.level() instanceof net.minecraft.server.level.ServerLevel stone) {
             if (this.isStone()) {

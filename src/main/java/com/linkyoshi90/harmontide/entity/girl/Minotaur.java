@@ -205,10 +205,11 @@ public class Minotaur extends AbstractMonsterGirl {
         return super.finalizeSpawn(level, difficulty, type, group);
     }
 
-    /** Bulls never share a player's bed. */
+    /** Bulls share a bed only while gay sex is on, and that does not conceive. */
     @Override
     public boolean canShareBed() {
-        return !this.isMale() && super.canShareBed();
+        if (this.isMale() && !com.linkyoshi90.harmontide.entity.Nsfw.gay()) return false;
+        return super.canShareBed();
     }
 
     @Override

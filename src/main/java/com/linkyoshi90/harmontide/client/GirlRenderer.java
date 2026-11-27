@@ -338,6 +338,10 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
             BirthPose.apply(proc, girl, state.getPartialTick());
             FeedPose.apply(proc, girl, state.getPartialTick());
             OralPose.apply(proc, girl, state.getPartialTick());
+            StandPose.apply(proc, girl, state.getPartialTick());
+            FacePose.apply(proc, girl, state.getPartialTick());
+            TribePose.apply(proc, girl, state.getPartialTick());
+            MountPose.apply(proc, girl, state.getPartialTick());
             MilkPose.apply(proc, girl);
             Jiggle.apply(proc, girl, state.getPartialTick());
         }

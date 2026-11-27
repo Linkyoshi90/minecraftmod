@@ -19,6 +19,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
@@ -44,6 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Inside the Dream-Leviathan (the harmontide:leviathan_interior dimension). Every landing gets its own string of rooms, laid out at
@@ -51,7 +54,7 @@ import java.util.Set;
  * <ol>
  *   <li>the entry chamber behind her mouth (everyone arrives at the same spot; the way back out is in its wall),</li>
  *   <li>then five times a puzzle room followed by a fight against a wave of the infection (each puzzle kind once, in random order),</li>
- *   <li>and last the round chamber with her heart hanging in the middle.</li>
+ *   <li>and last the round chamber with her egg-cell hanging in the middle.</li>
  * </ol>
  * Two side rooms off the way hold what she swallowed. A sphincter of membrane closes each room's way on until it is solved or its wave
  * is beaten. The puzzles: strike her nerves as they light up ({@link Kind#NERVES}), slip through walls that clench with her heartbeat
@@ -59,8 +62,9 @@ import java.util.Set;
  * from a gland ({@link Kind#CYSTS}), and run over cilia that fold away under you ({@link Kind#CILIA}).
  * <p>
  * Dying in here, or using the way out, puts you outside beside her with everything you carried. If everyone leaves while a wave is
- * on, the wave starts over next time; beaten rooms stay beaten. Touching her heart blesses everyone there (leviathan/DreamHeart) and
- * heals her (leviathan/LeviathanEvent).
+ * on, the wave starts over next time; beaten rooms stay beaten. Touching her egg-cell blesses everyone there (leviathan/DreamHeart)
+ * and heals her (leviathan/LeviathanEvent). With the adult option on, that touch is a short press into the egg-cell, and the blessing
+ * comes at the end of it.
  */
 public class Interior extends SavedData {
     private static final String NAME = "harmontide_leviathan_interior";
@@ -734,6 +738,7 @@ public class Interior extends SavedData {
 
     /** Puts the player back outside, beside her (or where she lay), with everything they carried. */
     public static void leave(ServerPlayer p, String key) {
+        if (HUMPS.remove(p.getUUID()) != null) release(p);
         ServerLevel over = p.server.overworld();
         Vec3 out = LeviathanEvent.get(over).exitPoint(over);
         if (out == null) {
@@ -832,7 +837,8 @@ public class Interior extends SavedData {
             case ACID -> tell(players, "message.harmontide.leviathan.acid_hint");
             case HEARTBEAT -> tell(players, "message.harmontide.leviathan.heartbeat_hint");
             case CILIA -> tell(players, "message.harmontide.leviathan.cilia_hint");
-            case HEART -> tell(players, "message.harmontide.leviathan.heart_hint");
+            case HEART -> tell(players, LeviathanEvent.nsfwEntry()
+                    ? "message.harmontide.leviathan.egg_hint" : "message.harmontide.leviathan.heart_hint");
             default -> {
             }
         }
@@ -1166,9 +1172,36 @@ public class Interior extends SavedData {
         }
     }
 
-    // --- her heart ----------------------------------------------------------------------------------------------------------------------
+    // --- her egg-cell -------------------------------------------------------------------------------------------------------------------
 
-    /** Her heart was touched: if the way here is cleared, everyone inside is blessed, put outside, and she is healed. */
+    /** How long a press into the egg-cell lasts, and how far from its axis he stands and rocks. */
+    private static final int HUMP_FOR = 70;
+    private static final double STAND = 1.35, THRUST = 0.32;
+    private static final Map<UUID, Hump> HUMPS = new HashMap<>();
+
+    /** One player's press: where the egg-cell is, which way is out from it, and how far the thrust has gone. */
+    private static final class Hump {
+        final BlockPos pos;
+        final Vec3 axis, out;
+        final float yaw;
+        int ticks;
+
+        Hump(BlockPos pos, Vec3 axis, Vec3 out, float yaw) {
+            this.pos = pos;
+            this.axis = axis;
+            this.out = out;
+            this.yaw = yaw;
+        }
+    }
+
+    public static boolean humping(ServerPlayer p) {
+        return HUMPS.containsKey(p.getUUID());
+    }
+
+    /**
+     * Her egg-cell was touched. If the way here is cleared and the adult option is on, he rocks into it for a few seconds and the
+     * blessing waits until that is over. Otherwise everyone inside is blessed, put outside, and she is healed straight away.
+     */
     public static void onHeart(ServerLevel level, BlockPos pos, ServerPlayer toucher) {
         Interior in = get(level.getServer());
         RunState run = in.runAt(Vec3.atCenterOf(pos));
@@ -1180,14 +1213,96 @@ public class Interior extends SavedData {
         }
         LeviathanEvent event = LeviathanEvent.get(level.getServer().overworld());
         if (event.phase != LeviathanEvent.LANDED || event.run != run.id) return;
+        if (LeviathanEvent.nsfwEntry() && !toucher.isSpectator() && inside(level)) {
+            if (!HUMPS.isEmpty()) return;
+            beginHump(level, pos, r, toucher);
+            return;
+        }
+        reward(level, pos, toucher, false);
+    }
+
+    private static void beginHump(ServerLevel level, BlockPos pos, Room r, ServerPlayer p) {
+        Vec3 axis = new Vec3(r.centre.getX() + 0.5, FLOOR, r.centre.getZ() + 0.5);
+        Vec3 flat = new Vec3(p.getX() - axis.x, 0, p.getZ() - axis.z);
+        if (flat.lengthSqr() < 0.04) flat = new Vec3(0, 0, 1);
+        Vec3 out = flat.normalize();
+        float yaw = (float) Math.toDegrees(Mth.atan2(out.x, -out.z)); // look back along out, into the egg-cell
+        HUMPS.put(p.getUUID(), new Hump(pos, axis, out, yaw));
+        p.noPhysics = true;
+        p.displayClientMessage(Component.translatable("message.harmontide.leviathan.egg_hump").withStyle(ChatFormatting.LIGHT_PURPLE), false);
+        level.playSound(null, p.getX(), p.getY(), p.getZ(), SoundEvents.SLIME_SQUISH_SMALL, SoundSource.PLAYERS, 0.8F, 0.6F);
+    }
+
+    /**
+     * Runs after {@link #tick}, so the finishing tick can heal her and send him home without that tick's "visit is over" check
+     * throwing him out first and wiping the line.
+     */
+    public static void tickHumps(MinecraftServer server) {
+        if (HUMPS.isEmpty()) return;
+        for (UUID id : new ArrayList<>(HUMPS.keySet())) {
+            Hump h = HUMPS.get(id);
+            if (h == null) continue;
+            ServerPlayer p = server.getPlayerList().getPlayer(id);
+            if (p == null || !p.isAlive() || !inside(p.level())) {
+                HUMPS.remove(id);
+                if (p != null) release(p);
+                continue;
+            }
+            if (h.ticks >= HUMP_FOR) {
+                HUMPS.remove(id);
+                release(p);
+                reward(p.serverLevel(), h.pos, p, true);
+                continue;
+            }
+            pose(p, h);
+            h.ticks++;
+        }
+    }
+
+    private static void pose(ServerPlayer p, Hump h) {
+        double reach = STAND + Math.sin(h.ticks * 0.85) * THRUST;
+        Vec3 at = h.axis.add(h.out.scale(reach));
+        p.noPhysics = true;
+        p.teleportTo(p.serverLevel(), at.x, FLOOR, at.z, h.yaw, -35.0F);
+        p.setDeltaMovement(Vec3.ZERO);
+        p.setYHeadRot(h.yaw);
+        p.yRotO = h.yaw;
+        p.yBodyRot = p.yBodyRotO = h.yaw;
+        p.xRotO = -35.0F;
+        p.hurtMarked = true;
+        p.resetFallDistance();
+        p.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 6, false, false, false));
+        if (h.ticks % 8 == 0 && p.level() instanceof ServerLevel level) {
+            level.sendParticles(ParticleTypes.HEART, h.axis.x, FLOOR + 1.15, h.axis.z, 3, 0.35, 0.2, 0.35, 0.0);
+            level.playSound(null, at.x, FLOOR + 1.0, at.z, SoundEvents.SLIME_SQUISH_SMALL, SoundSource.PLAYERS, 0.7F, 0.8F);
+        }
+    }
+
+    private static void release(ServerPlayer p) {
+        p.noPhysics = false;
+        p.setDeltaMovement(Vec3.ZERO);
+        p.resetFallDistance();
+        MobEffectInstance slow = p.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        if (slow != null && slow.getAmplifier() == 6 && slow.getDuration() <= 15) p.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+    }
+
+    /** The thanks: bless everyone still inside, heal her if she is still landed, and carry them out. */
+    private static void reward(ServerLevel level, BlockPos pos, ServerPlayer toucher, boolean humped) {
+        Interior in = get(level.getServer());
+        RunState run = in.runAt(Vec3.atCenterOf(pos));
+        if (run == null) return;
+        Room r = run.current();
+        if (r.kind != Kind.HEART) return;
+        LeviathanEvent event = LeviathanEvent.get(level.getServer().overworld());
         run.done.add(r.index);
         in.setDirty();
         List<ServerPlayer> players = in.playersIn(level, run);
         if (!players.contains(toucher)) players.add(toucher);
         for (ServerPlayer p : players) DreamHeart.bless(p);
-        event.heal(level.getServer().overworld());
+        if (event.phase == LeviathanEvent.LANDED && event.run == run.id) event.heal(level.getServer().overworld());
+        String key = humped ? "message.harmontide.leviathan.egg_out" : "message.harmontide.leviathan.healed_out";
         for (ServerPlayer p : players) {
-            leave(p, "message.harmontide.leviathan.healed_out");
+            leave(p, key);
             Traversal.award(p, "dream_blessing");
         }
     }

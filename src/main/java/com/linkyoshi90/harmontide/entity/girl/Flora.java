@@ -558,7 +558,8 @@ public class Flora extends AbstractMonsterGirl {
 
     @Override
     public boolean canShareBed() {
-        return this.species != GirlSpecies.LESHY_FLORA && this.species != GirlSpecies.SHIITAKE_FLORA && super.canShareBed();
+        if (this.species == GirlSpecies.LESHY_FLORA) return com.linkyoshi90.harmontide.entity.Nsfw.gay() && super.canShareBed();
+        return this.species != GirlSpecies.SHIITAKE_FLORA && super.canShareBed();
     }
 
     public void setNextPlant(long t) {

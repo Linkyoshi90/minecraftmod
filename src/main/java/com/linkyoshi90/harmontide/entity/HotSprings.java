@@ -79,6 +79,7 @@ public final class HotSprings {
             }
             warm(level, m);
             if (HomeLife.soak(level, m, p)) shared++;
+            Bathing.consider(level, m, p);
         }
         for (Mob m : level.getEntitiesOfClass(Mob.class, p.getBoundingBox().inflate(NEAR), m -> m instanceof Bonded b && !b.hasAnyAffection() && inSpring(m))) {
             warm(level, m);

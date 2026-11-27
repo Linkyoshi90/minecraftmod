@@ -2,6 +2,7 @@ package com.linkyoshi90.harmontide.leviathan;
 
 import com.linkyoshi90.harmontide.HarmontideMod;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -23,6 +24,7 @@ public final class LeviathanEvents {
     public static void onServerTick(ServerTickEvent.Post event) {
         LeviathanEvent.get(event.getServer().overworld()).tick(event.getServer().overworld());
         Interior.tick(event.getServer());
+        Interior.tickHumps(event.getServer());
     }
 
     @SubscribeEvent
@@ -36,7 +38,13 @@ public final class LeviathanEvents {
     /** The blessing bar takes the hurt first (after armour and Absorption). */
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onDamage(LivingDamageEvent.Pre event) {
-        if (event.getEntity() instanceof ServerPlayer p) event.setNewDamage(DreamHeart.absorb(p, event.getSource(), event.getNewDamage()));
+        if (!(event.getEntity() instanceof ServerPlayer p)) return;
+        // Pressed into the egg-cell, his head is inside the sphere. Zero damage ends the suffocation before it lands.
+        if (Interior.humping(p) && event.getSource().is(DamageTypes.IN_WALL)) {
+            event.setNewDamage(0);
+            return;
+        }
+        event.setNewDamage(DreamHeart.absorb(p, event.getSource(), event.getNewDamage()));
     }
 
     /** Dying inside her: she puts you back outside, whole, with everything you carried. */

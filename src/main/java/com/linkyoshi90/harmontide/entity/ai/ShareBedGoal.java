@@ -3,6 +3,7 @@ package com.linkyoshi90.harmontide.entity.ai;
 import com.linkyoshi90.harmontide.entity.BedCall;
 import com.linkyoshi90.harmontide.entity.BedSharing;
 import com.linkyoshi90.harmontide.entity.Bonded;
+import com.linkyoshi90.harmontide.entity.Group;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -74,6 +75,7 @@ public class ShareBedGoal<T extends PathfinderMob & Bonded> extends Goal {
         if (--this.scanDelay > 0) return false;
         this.scanDelay = 20;
         if (!this.mob.canShareBed() || this.mob.isOrderedToSit() || this.mob.getTarget() != null || this.mob.isInWater()) return false;
+        if (Group.guest(this.mob)) return false;
         boolean onPost = com.linkyoshi90.harmontide.entity.Orders.holdsPlace(this.mob);   // a guard only leaves her post when called
         Player best = null;
         for (Player p : this.mob.level().players()) {
@@ -105,7 +107,7 @@ public class ShareBedGoal<T extends PathfinderMob & Bonded> extends Goal {
     @Override
     public boolean canContinueToUse() {
         if (this.partner == null || !this.partner.isAlive() || !this.partner.isSleeping() || this.mob.getTarget() != null
-                || this.mob.isOrderedToSit()) return false;
+                || this.mob.isOrderedToSit() || Group.guest(this.mob)) return false;
         return this.spent || this.mob.canShareBed() && (this.inBed || this.ticks < GIVE_UP_TICKS);
     }
 
@@ -156,7 +158,7 @@ public class ShareBedGoal<T extends PathfinderMob & Bonded> extends Goal {
         }
         if (this.inBed) {
             this.stayInBed();
-            if (this.moon && ++this.turn >= TURN_TICKS) this.finishTurn();
+            if (this.moon && ++this.turn >= TURN_TICKS && !Group.holding(this.mob)) this.finishTurn();
             return;
         }
         this.mob.getLookControl().setLookAt(this.partner);
@@ -189,8 +191,9 @@ public class ShareBedGoal<T extends PathfinderMob & Bonded> extends Goal {
         float yaw = yawInBed(this.mob.level(), this.bed);
         this.mob.getNavigation().stop();
         this.mob.setDeltaMovement(Vec3.ZERO);
-        if (!(this.mob.level() instanceof ServerLevel server) || !(this.partner instanceof ServerPlayer sleeper)
-                || !com.linkyoshi90.harmontide.entity.Nsfw.rock(server, this.mob, sleeper, spot, yaw, this.bed)) {
+        // Over his face this round, Group places her. Otherwise she rides, or she lies still.
+        if (!Group.onFace(this.mob) && (!(this.mob.level() instanceof ServerLevel server) || !(this.partner instanceof ServerPlayer sleeper)
+                || !com.linkyoshi90.harmontide.entity.Nsfw.rock(server, this.mob, sleeper, spot, yaw, this.bed))) {
             com.linkyoshi90.harmontide.entity.Nsfw.lieDown(this.mob);
             this.mob.moveTo(spot.x, spot.y, spot.z, yaw, 0.0F);
             this.mob.setYBodyRot(yaw);

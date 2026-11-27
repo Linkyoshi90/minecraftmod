@@ -50,6 +50,10 @@ public class OstrichHarpyRenderer extends GeoEntityRenderer<OstrichHarpy> {
                 BirthPose.apply(proc, harpy, animationState.getPartialTick());
                 FeedPose.apply(proc, harpy, animationState.getPartialTick());
                 OralPose.apply(proc, harpy, animationState.getPartialTick());
+                StandPose.apply(proc, harpy, animationState.getPartialTick());
+                FacePose.apply(proc, harpy, animationState.getPartialTick());
+                TribePose.apply(proc, harpy, animationState.getPartialTick());
+                MountPose.apply(proc, harpy, animationState.getPartialTick());
                 MilkPose.apply(proc, harpy);
                 Jiggle.apply(proc, harpy, animationState.getPartialTick());
             }

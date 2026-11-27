@@ -52,7 +52,7 @@ public final class BedSharing {
         level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getY() + mob.getBbHeight() + 0.3, mob.getZ(), 5, 0.3, 0.2, 0.3, 0.0);
         boolean daughter = Condom.grownOffspring(mob, player);
         if (daughter && !Condom.take(player)) Condom.mention(level, mob, player);
-        if (daughter || !conceives(level, player, mob)) return false;
+        if (daughter || !Nsfw.bearsYoung(mob) || !conceives(level, player, mob)) return false;
         gestation.conceive(player.getUUID());
         player.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.harmontide.happy_news", mob.getDisplayName())
                 .withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE), false);   // she can tell, and she's glowing

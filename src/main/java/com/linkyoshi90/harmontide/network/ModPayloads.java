@@ -116,6 +116,29 @@ public final class ModPayloads {
         }
     }
 
+    /** Server to client: in her season, she asks to be taken standing. */
+    public record OpenStand(int entityId) implements CustomPacketPayload {
+        public static final Type<OpenStand> TYPE = new Type<>(HarmontideMod.id("open_stand"));
+        public static final StreamCodec<ByteBuf, OpenStand> CODEC = ByteBufCodecs.VAR_INT.map(OpenStand::new, OpenStand::entityId);
+
+        @Override
+        public Type<OpenStand> type() {
+            return TYPE;
+        }
+    }
+
+    /** Client to server: yes or no to standing with her. */
+    public record StandAnswer(int entityId, boolean yes) implements CustomPacketPayload {
+        public static final Type<StandAnswer> TYPE = new Type<>(HarmontideMod.id("stand_answer"));
+        public static final StreamCodec<ByteBuf, StandAnswer> CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT, StandAnswer::entityId,
+                ByteBufCodecs.BOOL, StandAnswer::yes, StandAnswer::new);
+
+        @Override
+        public Type<StandAnswer> type() {
+            return TYPE;
+        }
+    }
+
     /** Client to server: yes or no to that question. */
     public record FeedAnswer(int entityId, boolean yes) implements CustomPacketPayload {
         public static final Type<FeedAnswer> TYPE = new Type<>(HarmontideMod.id("feed_answer"));
@@ -152,6 +175,8 @@ public final class ModPayloads {
                 com.linkyoshi90.harmontide.client.MilkingScreen.progress(payload.token(), payload.strokes(), payload.need(), payload.done())));
         registrar.playToClient(OpenFeed.TYPE, OpenFeed.CODEC, (payload, context) -> context.enqueueWork(() ->
                 com.linkyoshi90.harmontide.client.FeedOfferScreen.open(payload.entityId())));
+        registrar.playToClient(OpenStand.TYPE, OpenStand.CODEC, (payload, context) -> context.enqueueWork(() ->
+                com.linkyoshi90.harmontide.client.StandOfferScreen.open(payload.entityId())));
         registrar.playToServer(AirStep.TYPE, AirStep.CODEC, (payload, context) -> context.enqueueWork(() -> {
             if (context.player() instanceof ServerPlayer player) com.linkyoshi90.harmontide.entity.Traversal.airStep(player);
         }));
@@ -168,6 +193,12 @@ public final class ModPayloads {
             if (context.player() instanceof ServerPlayer player) {
                 if (payload.yes()) com.linkyoshi90.harmontide.entity.Breastfeed.accept(player, payload.entityId());
                 else com.linkyoshi90.harmontide.entity.Breastfeed.decline(player, payload.entityId());
+            }
+        });
+        registrar.playToServer(StandAnswer.TYPE, StandAnswer.CODEC, (payload, context) -> {
+            if (context.player() instanceof ServerPlayer player) {
+                if (payload.yes()) com.linkyoshi90.harmontide.entity.Horniness.accept(player, payload.entityId());
+                else com.linkyoshi90.harmontide.entity.Horniness.decline(player, payload.entityId());
             }
         });
     }

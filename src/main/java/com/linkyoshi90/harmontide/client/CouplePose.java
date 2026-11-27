@@ -25,11 +25,11 @@ final class CouplePose {
         }
     }
 
-    /** Face-down along him, the same pitch as her lie. The tail base shoves the hips up and down. */
+    /** On her back along him, belly to his. The tail base shoves the hips up and down. */
     private static void lay(AnimationProcessor<?> proc, float tick) {
         float pump = (float) Nsfw.bounce(tick);
-        CowgirlPose.setRot(proc, "root", -90, 0, 0);
-        CowgirlPose.setPos(proc, "root", 0, 3, -6);
+        CowgirlPose.setRot(proc, "root", 90, 0, 0);
+        CowgirlPose.setPos(proc, "root", 0, 3, 6);
         CowgirlPose.setPos(proc, "body", 0, pump * 2.4F, 0);
         CowgirlPose.setRot(proc, "head", -14, 0, 0);
         pumpChain(proc, "seg_", pump);

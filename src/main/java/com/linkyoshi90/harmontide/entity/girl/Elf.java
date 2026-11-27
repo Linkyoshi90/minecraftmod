@@ -825,7 +825,8 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
 
     @Override
     public boolean canShareBed() {
-        return this.species != GirlSpecies.GANDHARVA_ELF && super.canShareBed();
+        if (this.species == GirlSpecies.GANDHARVA_ELF) return com.linkyoshi90.harmontide.entity.Nsfw.gay() && super.canShareBed();
+        return super.canShareBed();
     }
 
     // --- the valkyrie --------------------------------------------------------------------------------------------

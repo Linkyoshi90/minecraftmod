@@ -72,7 +72,7 @@ public final class Breastfeed {
      * this: those are the days the milk is in. The option itself is separate.
      */
     public static boolean canOffer(Mob girl, Player player) {
-        if (!HandMilking.interested(girl, player) || !Lactation.isLactating(girl) || WildEncounter.active(girl)) return false;
+        if (!HandMilking.interested(girl, player) || !Lactation.isLactating(girl) || WildEncounter.active(girl) || Horniness.active(girl) || Group.active(girl) || Bathing.active(girl) || Dreaming.active(girl) || NpcSex.active(girl)) return false;
         if (player.isSpectator() || !player.isAlive() || girl.getTarget() != null) return false;
         return player.getFoodData().getFoodLevel() <= HUNGRY;
     }
@@ -115,7 +115,7 @@ public final class Breastfeed {
 
     /** Time to walk over, if the roll says so and no baby of hers is waiting. */
     public static boolean wants(Mob girl) {
-        if (active(girl) || WildEncounter.active(girl) || girl.isBaby() || girl.getTarget() != null || !idle(girl)) return false;
+        if (active(girl) || WildEncounter.active(girl) || Horniness.active(girl) || Group.active(girl) || Bathing.active(girl) || Dreaming.active(girl) || NpcSex.active(girl) || girl.isBaby() || girl.getTarget() != null || !idle(girl)) return false;
         if (girl.tickCount % 40 != 0 || !(girl.level() instanceof ServerLevel level)) return false;
         long now = level.getGameTime();
         if (now < girl.getPersistentData().getLong(NEXT)) return false;

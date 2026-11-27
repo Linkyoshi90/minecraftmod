@@ -183,7 +183,7 @@ public final class WildEncounter {
     }
 
     private static boolean busy(Mob mob) {
-        if (MorningOral.pending(mob) || MorningOral.posing(mob) || Breastfeed.active(mob) || Encounters.of(mob) != null) return true;
+        if (MorningOral.pending(mob) || MorningOral.posing(mob) || Breastfeed.active(mob) || Group.active(mob) || Bathing.active(mob) || Dreaming.active(mob) || NpcSex.active(mob) || Encounters.of(mob) != null) return true;
         if (mob instanceof Bonded bonded && bonded.getGestation().getSharingWith() != null) return true;
         if (mob instanceof AbstractMonsterGirl girl) {
             if (Courtship.snaring(girl)) return true;
@@ -304,7 +304,7 @@ public final class WildEncounter {
         player.getFoodData().eat(FOOD, 0.6F);
         boolean daughter = Condom.grownOffspring(mob, player);
         if (daughter && !Condom.take(player)) Condom.mention(level, mob, player);
-        else if (!daughter && mob.getRandom().nextFloat() < Missing.conceptionChance(mob, player)) {
+        else if (!daughter && Nsfw.bearsYoung(mob) && mob.getRandom().nextFloat() < Missing.conceptionChance(mob, player)) {
             ((Bonded) mob).getGestation().conceive(player.getUUID());
             player.displayClientMessage(Component.translatable("message.harmontide.wild_encounter.expecting", mob.getDisplayName())
                     .withStyle(ChatFormatting.LIGHT_PURPLE), false);

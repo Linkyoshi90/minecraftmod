@@ -107,7 +107,17 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         /** Feeding someone at her chest. Idle underneath; the pose is client/FeedPose. */
         FEED(null, false),
         /** The morning after. Idle underneath; the pose is client/OralPose. */
-        ORAL(null, false);
+        ORAL(null, false),
+        /** Standing against her partner, out of bed. Idle underneath; the pose is client/StandPose. */
+        STAND(null, false),
+        /** Over his face while someone else rides. Idle underneath; the pose is client/FacePose. */
+        FACE(null, false),
+        /** Hips to hips with another girl. Idle underneath; the pose is client/TribePose. */
+        TRIBE(null, false),
+        /** Behind her, with a strap. Idle underneath; the pose is client/MountPose. */
+        STRAP(null, false),
+        /** Taken from behind. Idle underneath; the pose is client/MountPose. */
+        TAKEN(null, false);
 
         /** The animation.&lt;species&gt;.&lt;name&gt; this action plays, and whether it plays once and holds its last pose. */
         public final String animation;
@@ -169,6 +179,8 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
         this.targetSelector.addGoal(1, new com.linkyoshi90.harmontide.entity.ai.StanceTargetGoal<>(this));
         this.goalSelector.addGoal(2, new LaySpawnGoal(this));
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));
+        this.goalSelector.addGoal(2, new com.linkyoshi90.harmontide.entity.ai.GroupGoal(this));
+        this.goalSelector.addGoal(2, new com.linkyoshi90.harmontide.entity.ai.NpcGoal(this));
         this.goalSelector.addGoal(4, new com.linkyoshi90.harmontide.entity.ai.BreastfeedGoal(this));
     }
 
@@ -887,7 +899,9 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
             return state.setAndContinue(this.anim(state.isMoving() ? (this.isAggressive() ? "hop" : this.movingAnimation().equals("hop") ? "hop" : "walk") : "idle"));
         }
         Action action = this.getAction();
-        if (action == Action.KNEEL || action == Action.LAYING || action == Action.FEED || action == Action.ORAL) return state.setAndContinue(this.anim("idle"));
+        if (action == Action.KNEEL || action == Action.LAYING || action == Action.FEED || action == Action.ORAL
+                || action == Action.STAND || action == Action.FACE || action == Action.TRIBE
+                || action == Action.STRAP || action == Action.TAKEN) return state.setAndContinue(this.anim("idle"));
         if (action == Action.FIDGETING && !this.getFidget().isEmpty() && !state.isMoving() && !this.isInWater()) return state.setAndContinue(this.animOnce("fidget_" + this.getFidget()));
         if (action.animation != null) return state.setAndContinue(action.once ? this.animOnce(action.animation) : this.anim(action.animation));
         String special = this.specialMovementAnimation();

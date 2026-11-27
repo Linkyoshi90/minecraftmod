@@ -127,10 +127,10 @@ public class Vodyanoy extends AbstractAnuran {
         return 2400;
     }
 
-    /** He is a man: he shares no bed and bears no young. */
+    /** He is a man: he shares a bed only while gay sex is on, and he bears no young. */
     @Override
     public boolean canShareBed() {
-        return false;
+        return com.linkyoshi90.harmontide.entity.Nsfw.gay() && super.canShareBed();
     }
 
     /** Never born, never a tadpole: one model only. */

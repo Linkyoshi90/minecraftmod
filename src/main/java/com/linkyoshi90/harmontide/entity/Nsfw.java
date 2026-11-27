@@ -3,6 +3,7 @@ package com.linkyoshi90.harmontide.entity;
 import com.linkyoshi90.harmontide.HarmontideConfig;
 import com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl;
 import com.linkyoshi90.harmontide.entity.girl.GirlSpecies;
+import com.linkyoshi90.harmontide.entity.girl.Minotaur;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,11 +24,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Private-server adult content. Off unless the nsfw option is on, and then only for a grown partner who can already
- * share a bed: never the young, never anyone of childlike height, and never the men. A grown daughter is included,
+ * share a bed: never the young, never anyone of childlike height, and never the men unless {@link #gay()} is also on.
+ * A man does not conceive. A grown daughter is included,
  * and only while he is carrying a condom ({@link Condom}).
  * In the bed a biped kneels astride him and bounces ({@link #rock}). A taur sits back onto him, her back lowered.
  * A serpent or a mermaid lies along him and her tail pumps her hips. A spider stands over him and bends her legs in turn.
- * A slime bounces on him. Out in the world, a wild one who is not yet that close may catch him ({@link WildEncounter}).
+ * A slime bounces on him. In her season she may ask to be taken standing ({@link Horniness}). Sometimes a second girl joins her there ({@link Group}).
+ * A soak in a hot spring can become that standing press ({@link Bathing}). Out in the world, a wild one who is not yet that close may catch him ({@link WildEncounter}).
+ * Two friends in season may find each other, and two adult male minotaurs may, and none of that conceives ({@link NpcSex}).
  * A bucket opens {@link HandMilking} instead of filling at once.
  */
 public final class Nsfw {
@@ -66,6 +70,27 @@ public final class Nsfw {
 
     public static boolean on() {
         return HarmontideConfig.nsfw();
+    }
+
+    /** Male variants may have sex with the player. False while the adult option is off, whatever this switch says. */
+    public static boolean gay() {
+        return HarmontideConfig.gaySex();
+    }
+
+    /** A bull, a gandharva, a vodyanoy or a leshy. */
+    public static boolean man(Mob mob) {
+        if (mob instanceof Minotaur mino && mino.isMale()) return true;
+        if (mob instanceof Vodyanoy) return true;
+        if (mob instanceof AbstractMonsterGirl girl) {
+            GirlSpecies species = girl.getSpecies();
+            return species == GirlSpecies.GANDHARVA_ELF || species == GirlSpecies.LESHY_FLORA;
+        }
+        return false;
+    }
+
+    /** Sex with a man does not make young. */
+    public static boolean bearsYoung(Mob mob) {
+        return !man(mob);
     }
 
     /** The line for calling out from bed. The blunt one only while {@link #on()}. */
@@ -144,6 +169,46 @@ public final class Nsfw {
     /** A taur is sitting back onto someone, so the renderer settles her back down. */
     public static boolean sittingBack(Mob mob) {
         return mob instanceof AbstractMonsterGirl girl && girl.getAction() == AbstractMonsterGirl.Action.SITBACK;
+    }
+
+    /** She is standing against him, out of bed, so the renderer plays that pose. */
+    public static boolean standing(Mob mob) {
+        if (mob instanceof AbstractMonsterGirl girl) return girl.getAction() == AbstractMonsterGirl.Action.STAND;
+        if (mob instanceof AbstractHarpy harpy) return harpy.getAction() == AbstractHarpy.Action.STAND;
+        if (mob instanceof AbstractAnuran anuran) return anuran.getAction() == AbstractAnuran.Action.STAND;
+        return false;
+    }
+
+    /** She is over his face while someone else rides, so the renderer plays that pose. */
+    public static boolean facing(Mob mob) {
+        if (mob instanceof AbstractMonsterGirl girl) return girl.getAction() == AbstractMonsterGirl.Action.FACE;
+        if (mob instanceof AbstractHarpy harpy) return harpy.getAction() == AbstractHarpy.Action.FACE;
+        if (mob instanceof AbstractAnuran anuran) return anuran.getAction() == AbstractAnuran.Action.FACE;
+        return false;
+    }
+
+    /** Hips to hips with another girl. */
+    public static boolean tribing(Mob mob) {
+        if (mob instanceof AbstractMonsterGirl girl) return girl.getAction() == AbstractMonsterGirl.Action.TRIBE;
+        if (mob instanceof AbstractHarpy harpy) return harpy.getAction() == AbstractHarpy.Action.TRIBE;
+        if (mob instanceof AbstractAnuran anuran) return anuran.getAction() == AbstractAnuran.Action.TRIBE;
+        return false;
+    }
+
+    /** Behind the other, strap on. */
+    public static boolean mounting(Mob mob) {
+        if (mob instanceof AbstractMonsterGirl girl) return girl.getAction() == AbstractMonsterGirl.Action.STRAP;
+        if (mob instanceof AbstractHarpy harpy) return harpy.getAction() == AbstractHarpy.Action.STRAP;
+        if (mob instanceof AbstractAnuran anuran) return anuran.getAction() == AbstractAnuran.Action.STRAP;
+        return false;
+    }
+
+    /** Bent, and taken from behind. */
+    public static boolean presented(Mob mob) {
+        if (mob instanceof AbstractMonsterGirl girl) return girl.getAction() == AbstractMonsterGirl.Action.TAKEN;
+        if (mob instanceof AbstractHarpy harpy) return harpy.getAction() == AbstractHarpy.Action.TAKEN;
+        if (mob instanceof AbstractAnuran anuran) return anuran.getAction() == AbstractAnuran.Action.TAKEN;
+        return false;
     }
 
     /** She is on him without a kneel, so the renderer plays her family's version. */

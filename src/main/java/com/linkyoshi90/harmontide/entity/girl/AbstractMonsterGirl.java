@@ -182,7 +182,17 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         /** Feeding someone at her chest. Idle underneath; the pose is client/FeedPose. */
         FEED(null, false),
         /** The morning after. Idle underneath; the pose is client/OralPose. */
-        ORAL(null, false);
+        ORAL(null, false),
+        /** Standing against her partner, out of bed. Idle underneath; the pose is client/StandPose. */
+        STAND(null, false),
+        /** Over his face while someone else rides. Idle underneath; the pose is client/FacePose. */
+        FACE(null, false),
+        /** Hips to hips with another girl. Idle underneath; the pose is client/TribePose. */
+        TRIBE(null, false),
+        /** Behind her, with a strap. Idle underneath; the pose is client/MountPose. */
+        STRAP(null, false),
+        /** Taken from behind. Idle underneath; the pose is client/MountPose. */
+        TAKEN(null, false);
 
         public final String animation;
         public final boolean once;
@@ -245,6 +255,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (species.clade() == com.linkyoshi90.harmontide.entity.Clade.FELIFORMIA) this.goalSelector.addGoal(6, new RainMoods.ShelterGoal(this));   // cats hate the rain
         this.targetSelector.addGoal(1, new com.linkyoshi90.harmontide.entity.ai.StanceTargetGoal<>(this));
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));
+        this.goalSelector.addGoal(2, new com.linkyoshi90.harmontide.entity.ai.GroupGoal(this));
+        this.goalSelector.addGoal(2, new com.linkyoshi90.harmontide.entity.ai.NpcGoal(this));
         this.goalSelector.addGoal(3, new GiftGoal<>(this));
         this.goalSelector.addGoal(5, new FollowEntityGoal(this, this::mother, 1.1, 6.0F, 2.5F));
         this.targetSelector.addGoal(2, new net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal<>(this, Player.class, 10, true, false,
@@ -1559,7 +1571,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (this.isPassenger() && this.hasRideAnimation()) return state.setAndContinue(this.anim("ride", false));
         Action action = this.getAction();
         if (action == Action.KNEEL || action == Action.COUPLE || action == Action.LABOR || action == Action.FEED
-                || action == Action.ORAL) return state.setAndContinue(this.anim("idle", false));
+                || action == Action.ORAL || action == Action.STAND || action == Action.FACE
+                || action == Action.TRIBE || action == Action.STRAP || action == Action.TAKEN) return state.setAndContinue(this.anim("idle", false));
         if (action == Action.FIDGET && !this.getFidget().isEmpty() && !state.isMoving()) return state.setAndContinue(this.anim("fidget_" + this.getFidget(), true));
         if (action.animation != null) return state.setAndContinue(this.anim(action.animation, action.once));
         if (this.isInWater() && this.hasSwimAnimation()) return state.setAndContinue(this.anim(state.isMoving() ? "swim" : "idle", false));

@@ -67,7 +67,8 @@ public final class DreamHeart {
             ItemStack egg = new ItemStack(LeviathanRegistry.DREAM_EGG.get());
             if (!p.getInventory().add(egg)) p.drop(egg, false);
             gave = true;
-            p.displayClientMessage(Component.translatable("message.harmontide.leviathan.got_egg").withStyle(ChatFormatting.LIGHT_PURPLE), false);
+            p.displayClientMessage(Component.translatable(LeviathanEvent.nsfwEntry()
+                    ? "message.harmontide.leviathan.got_egg_yours" : "message.harmontide.leviathan.got_egg").withStyle(ChatFormatting.LIGHT_PURPLE), false);
         }
         if (!gave) p.displayClientMessage(Component.translatable("message.harmontide.leviathan.already_blessed").withStyle(ChatFormatting.LIGHT_PURPLE), false);
         put(p, t);
