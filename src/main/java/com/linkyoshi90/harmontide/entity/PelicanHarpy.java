@@ -217,4 +217,10 @@ public class PelicanHarpy extends AbstractHarpy {
     protected SoundEvent getEatSound() {
         return SoundEvents.PARROT_EAT;
     }
+
+    /** A sea bird rests on the water rather than sinking (entity/Traversal). */
+    @Override
+    protected boolean floatsOnWater() {
+        return true;
+    }
 }

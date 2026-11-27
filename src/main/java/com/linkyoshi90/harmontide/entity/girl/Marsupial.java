@@ -121,8 +121,6 @@ public class Marsupial extends AbstractMonsterGirl {
 
     // --- the gliderune ---------------------------------------------------------------------------------------------------
 
-    private int crouchTicks;
-
     public boolean isGlider() {
         return this.species == GirlSpecies.GLIDERUNE_MARSUPIAL;
     }
@@ -138,19 +136,14 @@ public class Marsupial extends AbstractMonsterGirl {
     protected net.minecraft.world.InteractionResult familyInteract(Player player, net.minecraft.world.InteractionHand hand, ItemStack stack) {
         if (!this.isGlider() || !stack.isEmpty() || !player.isShiftKeyDown() || this.isBaby() || this.getAffection(player) < com.linkyoshi90.harmontide.entity.Orders.AFFECTION
                 || player.isVehicle()) return null;
-        if (!this.level().isClientSide) this.startRiding(player, true);
+        if (!this.level().isClientSide) com.linkyoshi90.harmontide.entity.Traversal.perchOn(this, player);
         return net.minecraft.world.InteractionResult.sidedSuccess(this.level().isClientSide);
     }
 
-    /** On a shoulder: her friend floats down gently; two seconds of crouching sets her down. Off it: she glides. */
+    /** On a shoulder: her friend floats down gently (two seconds of crouching sets her down: Traversal). Off it: she glides. */
     private void tickGlider() {
         if (this.getVehicle() instanceof Player p) {
             if (this.tickCount % 20 == 0) p.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SLOW_FALLING, 40, 0, true, false));
-            this.crouchTicks = p.isShiftKeyDown() ? this.crouchTicks + 1 : 0;
-            if (this.crouchTicks > 40) {
-                this.stopRiding();
-                this.crouchTicks = 0;
-            }
         } else if (!this.onGround() && this.getDeltaMovement().y < -0.12 && !this.isInWater()) {
             this.setDeltaMovement(this.getDeltaMovement().x, -0.12, this.getDeltaMovement().z);
             this.resetFallDistance();
@@ -170,7 +163,8 @@ public class Marsupial extends AbstractMonsterGirl {
     @Override
     protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float scale) {
         if (passenger instanceof Marsupial) {                          // a kangaroo's joey in her pouch; a koala's on her back
-            return this.isKoala() ? new Vec3(0, dimensions.height() * 0.45, -dimensions.width() * 0.5) : new Vec3(0, dimensions.height() * 0.3, dimensions.width() * 0.55);
+            Vec3 seat = this.isKoala() ? new Vec3(0, dimensions.height() * 0.45, -dimensions.width() * 0.5) : new Vec3(0, dimensions.height() * 0.3, dimensions.width() * 0.55);
+            return seat.yRot(-this.yBodyRot * net.minecraft.util.Mth.DEG_TO_RAD);   // turned with her
         }
         return super.getPassengerAttachmentPoint(passenger, dimensions, scale);
     }

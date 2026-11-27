@@ -162,6 +162,11 @@ public final class HarmontideConfig {
     public static final ModConfigSpec.BooleanValue COOKING;
     public static final ModConfigSpec.BooleanValue DULLAHAN_HEADS;
     public static final ModConfigSpec.BooleanValue CURSED_GEAR;
+    public static final ModConfigSpec.BooleanValue TRAVERSAL;
+    public static final ModConfigSpec.BooleanValue BLOCK_JOBS;
+    public static final ModConfigSpec.BooleanValue DEAD_COMPANY;
+    public static final ModConfigSpec.BooleanValue INSTINCTS;
+    public static final ModConfigSpec.BooleanValue WORKSHOP;
     public static final ModConfigSpec.BooleanValue MONSTERIZATION;
     public static final ModConfigSpec.BooleanValue POSSESSION;
     public static final ModConfigSpec.BooleanValue REALM_SUMMONS;
@@ -321,6 +326,26 @@ public final class HarmontideConfig {
         CURSED_GEAR = BUILDER
                 .comment("Cursed gear: living armour and cursed blades found in old places work as gear, whisper, grow fond of whoever uses them, and at full fondness step out as a girl.")
                 .define("cursedGear", true);
+
+        TRAVERSAL = BUILDER
+                .comment("Getting about together: spiderlings and gliderunes on your shoulder, harpies lifting and catching friends, ducks, swans and mermaids towing swimmers, sea lamias diving with a rider, lamia coils, slime bounces, arachne silk bridges and swings, centaurs pulling minecarts.")
+                .define("traversal", true);
+
+        BLOCK_JOBS = BUILDER
+                .comment("Work about the home: dragons at furnaces and campfires, liches at brewing stands, cattle minotaurs at cheese shelves, bug girls at beehives, rodents planting saplings, arachne at looms, elves at fletching tables, crabs shedding armour pieces.")
+                .define("blockJobs", true);
+
+        DEAD_COMPANY = BUILDER
+                .comment("The company of the dead: while a zombie girl walks with you, the undead and creepers leave you alone (until you strike one).")
+                .define("deadCompany", true);
+
+        INSTINCTS = BUILDER
+                .comment("Little instincts: a minotaur shown a compass points the way home, cat girls get the zoomies at dusk, owl harpies lend you night vision, penguins slide on ice.")
+                .define("instincts", true);
+
+        WORKSHOP = BUILDER
+                .comment("Hands at the workbench: elves at enchanting tables, dwarves at anvils, the dinner bell, winged friends catching a fall, a yuki-onna freezing a path over water.")
+                .define("workshop", true);
 
         MONSTERIZATION = BUILDER
                 .comment("Grown vanilla animals and monsters that linger on Demon Realm grass in the dark turn into monster girls of their kind (a tamed pet stays her owner's friend).")
@@ -738,6 +763,26 @@ public final class HarmontideConfig {
 
     public static boolean cursedGear() {
         return SPEC.isLoaded() ? CURSED_GEAR.get() : CURSED_GEAR.getDefault();
+    }
+
+    public static boolean traversal() {
+        return SPEC.isLoaded() ? TRAVERSAL.get() : TRAVERSAL.getDefault();
+    }
+
+    public static boolean blockJobs() {
+        return SPEC.isLoaded() ? BLOCK_JOBS.get() : BLOCK_JOBS.getDefault();
+    }
+
+    public static boolean deadCompany() {
+        return SPEC.isLoaded() ? DEAD_COMPANY.get() : DEAD_COMPANY.getDefault();
+    }
+
+    public static boolean instincts() {
+        return SPEC.isLoaded() ? INSTINCTS.get() : INSTINCTS.getDefault();
+    }
+
+    public static boolean workshop() {
+        return SPEC.isLoaded() ? WORKSHOP.get() : WORKSHOP.getDefault();
     }
 
     public static boolean wanderingMerchants() {

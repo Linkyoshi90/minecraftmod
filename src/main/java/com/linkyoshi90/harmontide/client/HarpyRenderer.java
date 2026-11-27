@@ -89,4 +89,12 @@ public class HarpyRenderer<T extends AbstractHarpy> extends GeoEntityRenderer<T>
         return Paints.translucent(animatable.getPaintName()) ? net.minecraft.client.renderer.RenderType.entityTranslucent(texture)
                 : super.getRenderType(animatable, texture, buffers, partialTick);
     }
+
+    /** A hatchling on the player's own shoulder is not drawn in first person (she would sit in front of the camera). */
+    @Override
+    public boolean shouldRender(T harpy, net.minecraft.client.renderer.culling.Frustum frustum, double x, double y, double z) {
+        var mc = net.minecraft.client.Minecraft.getInstance();
+        if (mc.player != null && harpy.getVehicle() == mc.player && mc.options.getCameraType().isFirstPerson()) return false;
+        return super.shouldRender(harpy, frustum, x, y, z);
+    }
 }

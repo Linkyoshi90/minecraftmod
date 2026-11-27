@@ -133,7 +133,7 @@ public class PenguinHarpy extends AbstractHarpy {
 
     @Override
     protected String movingAnimation() {
-        return this.isInWater() ? "swim" : "walk";
+        return this.isInWater() ? "swim" : !this.isBaby() && com.linkyoshi90.harmontide.entity.Instincts.onIce(this) ? "lie" : "walk";   // on ice: a belly slide
     }
 
     // --- variant, colony, the wanderer ------------------------------------------------------------------------------
@@ -352,5 +352,11 @@ public class PenguinHarpy extends AbstractHarpy {
     @Override
     protected SoundEvent getEatSound() {
         return SoundEvents.GENERIC_EAT;
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (!this.level().isClientSide && !this.isBaby()) com.linkyoshi90.harmontide.entity.Instincts.bellySlide(this);   // three times as fast on ice
     }
 }

@@ -199,7 +199,7 @@ public class Dragon extends AbstractMonsterGirl {
                 this.startTimedAction(Action.CALL, 30);
                 return InteractionResult.SUCCESS;
             }
-            int need = this.species == GirlSpecies.GRYPHON_DRAGON ? GRYPHON_RIDE : this.species == GirlSpecies.WYRM_DRAGON ? FULL_AFFECTION : Integer.MAX_VALUE;
+            int need = this.rideNeed();
             if (!player.isShiftKeyDown() && this.getAffection(player) >= need && !this.isVehicle()) {
                 if (!client) {
                     this.setOrderedToSit(false);
@@ -230,6 +230,24 @@ public class Dragon extends AbstractMonsterGirl {
     }
 
     // --- riding: the gryphon and the wyrm carry a friend through the air ----------------------------------------
+
+    /** The friendship she wants before she carries someone (never, for most dragons). */
+    public int rideNeed() {
+        return this.species == GirlSpecies.GRYPHON_DRAGON ? GRYPHON_RIDE : this.species == GirlSpecies.WYRM_DRAGON ? FULL_AFFECTION : Integer.MAX_VALUE;
+    }
+
+    /** A dragon who would carry this player swoops under them when they fall (entity/Traversal). Whether she caught them. */
+    public boolean catchFalling(Player p) {
+        if (this.isBaby() || this.isVehicle() || this.isPassenger() || !this.canFly() || this.getAffection(p) < this.rideNeed()) return false;
+        Vec3 under = p.position().subtract(0, this.getBbHeight() * 0.6, 0);
+        if (!this.level().noCollision(this, this.getBoundingBox().move(under.subtract(this.position())))) return false;
+        this.setPos(under);
+        this.setOrderedToSit(false);
+        this.getNavigation().stop();
+        this.setDeltaMovement(Vec3.ZERO);
+        p.resetFallDistance();
+        return p.startRiding(this, true);
+    }
 
     @Nullable
     @Override

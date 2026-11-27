@@ -299,4 +299,10 @@ public class AlbatrossHarpy extends AbstractHarpy {
     protected net.minecraft.world.item.ItemStack unfertilisedEgg() {
         return new net.minecraft.world.item.ItemStack(com.linkyoshi90.harmontide.registry.ModItems.ALBATROSS_EGG.get());
     }
+
+    /** A sea bird rests on the water rather than sinking (entity/Traversal). */
+    @Override
+    protected boolean floatsOnWater() {
+        return true;
+    }
 }

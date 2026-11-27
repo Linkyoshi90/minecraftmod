@@ -86,6 +86,17 @@ public class GirlRenderer extends GeoEntityRenderer<AbstractMonsterGirl> {
         }
     }
 
+    @Override
+    public boolean shouldRender(AbstractMonsterGirl girl, net.minecraft.client.renderer.culling.Frustum frustum, double x, double y, double z) {
+        return !SilkLine.hiddenOnShoulder(girl) && super.shouldRender(girl, frustum, x, y, z);
+    }
+
+    @Override
+    public void render(AbstractMonsterGirl girl, float yaw, float partialTick, PoseStack pose, MultiBufferSource buffers, int light) {
+        super.render(girl, yaw, partialTick, pose, buffers, light);
+        if (girl instanceof com.linkyoshi90.harmontide.entity.girl.Arachne spinner) SilkLine.render(spinner, partialTick, pose, buffers);
+    }
+
     /** A firefly's glow over her 3-second cycle: it swells and fades for two seconds, then she is dark for one. */
     static float fireflyPulse(float time) {
         float phase = time % 60.0F;

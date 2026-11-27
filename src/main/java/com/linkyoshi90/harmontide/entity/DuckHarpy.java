@@ -66,6 +66,12 @@ public class DuckHarpy extends AbstractHarpy {
         super(type, level);
     }
 
+    /** She floats, paddles about ponds (entity/ai/PaddleGoal) and tows a swimming friend (entity/Traversal). */
+    @Override
+    protected boolean towsSwimmers() {
+        return true;
+    }
+
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 14.0)

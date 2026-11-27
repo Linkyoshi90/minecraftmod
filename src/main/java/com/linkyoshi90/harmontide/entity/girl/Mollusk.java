@@ -157,6 +157,10 @@ public class Mollusk extends AbstractMonsterGirl {
 
     @Override
     public void travel(Vec3 input) {
+        if (this.ferried() != null && this.isInWater()) {                      // a diver on her: the ferry's stroke (AbstractMonsterGirl)
+            super.travel(input);
+            return;
+        }
         if (this.swims() && this.isControlledByLocalInstance() && this.isInWater()) {
             this.moveRelative(this.getSpeed() * (this.species == GirlSpecies.JELLYFISH_MOLLUSK ? 0.35F : 1.5F), input);   // the jellyfish only drifts
             this.move(net.minecraft.world.entity.MoverType.SELF, this.getDeltaMovement());

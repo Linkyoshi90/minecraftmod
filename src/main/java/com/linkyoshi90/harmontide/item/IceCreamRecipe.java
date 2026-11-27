@@ -24,6 +24,9 @@ public class IceCreamRecipe extends CustomRecipe {
     public static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, HarmontideMod.MODID);
     public static final DeferredHolder<RecipeSerializer<?>, SimpleCraftingRecipeSerializer<IceCreamRecipe>> SERIALIZER =
             SERIALIZERS.register("ice_cream", () -> new SimpleCraftingRecipeSerializer<>(IceCreamRecipe::new));
+    /** A crab armour piece mends worn gear at the smithing table (CrabMendRecipe). */
+    public static final DeferredHolder<RecipeSerializer<?>, CrabMendRecipe.Serializer> CRAB_MEND =
+            SERIALIZERS.register("crab_mend", CrabMendRecipe.Serializer::new);
 
     public IceCreamRecipe(CraftingBookCategory category) {
         super(category);

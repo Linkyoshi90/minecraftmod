@@ -184,6 +184,8 @@ public final class ModItems {
     public static final DeferredItem<Item> SHED_SKIN = ITEMS.registerSimpleItem("shed_skin", new Item.Properties().stacksTo(64));
     /** A tarantula's moult. */
     public static final DeferredItem<Item> EXOSKELETON = ITEMS.registerSimpleItem("exoskeleton", new Item.Properties().stacksTo(64));
+    /** A piece of a crab's shed shell (entity/girl/Crustacean): mends any worn item at the smithing table (item/CrabMendRecipe). */
+    public static final DeferredItem<Item> CRAB_ARMOUR_PIECE = ITEMS.registerSimpleItem("crab_armour_piece", new Item.Properties().stacksTo(16));
     /** A woven nest for riflebirds to adopt and lay their eggs in. */
     public static final DeferredItem<BlockItem> RIFLEBIRD_NEST = ITEMS.registerSimpleBlockItem(ModBlocks.RIFLEBIRD_NEST);
     /** An Easter Bunny's painted egg (place it to hide it again). */

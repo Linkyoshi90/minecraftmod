@@ -180,6 +180,7 @@ public class Crustacean extends AbstractMonsterGirl {
         this.getPersistentData().putLong("MoultDay", day + 1);
         this.setHealth(this.getMaxHealth());
         this.spawnAtLocation(new ItemStack(com.linkyoshi90.harmontide.registry.ModItems.EXOSKELETON.get()));
+        this.spawnAtLocation(new ItemStack(com.linkyoshi90.harmontide.registry.ModItems.CRAB_ARMOUR_PIECE.get()));   // and a piece of the old shell
         return true;
     }
 
@@ -214,6 +215,37 @@ public class Crustacean extends AbstractMonsterGirl {
         if (this.species == GirlSpecies.LOBSTER_CRUSTACEAN && !this.level().isClientSide && !this.isBaby() && this.tickCount % 21 == 0) this.moult(this.level().getDayTime() / 24000L);
         if (this.species == GirlSpecies.SPIDER_CRAB_CRUSTACEAN && this.level() instanceof net.minecraft.server.level.ServerLevel clawed && !this.isBaby() && this.tickCount % 60 == 0) this.pin(clawed);
         if (this.species == GirlSpecies.FLOODCRAB_CRUSTACEAN && !this.isBaby() && this.tickCount % 400 == 0 && this.level() instanceof ServerLevel server) this.puddle(server);
+        if (this.level() instanceof ServerLevel shore && !this.isBaby() && this.tickCount % 200 == 17) this.shed(shore);
+    }
+
+    /** Every two to three days a befriended crab sheds her shell. */
+    public static final int SHED_EVERY = 48000, SHED_SPREAD = 24000;
+
+    /** Whether her kind sheds a shell you can use (not the starfish). */
+    public boolean shedsShell() {
+        return this.species != GirlSpecies.STARFISH_CRUSTACEAN;
+    }
+
+    /**
+     * A befriended crab outgrows her shell now and then and leaves a piece of it for her friend: a crab armour piece, which mends
+     * any worn item at the smithing table (item/CrabMendRecipe). True if she shed one now.
+     */
+    public boolean shed(ServerLevel level) {
+        if (!this.shedsShell() || !this.hasAnyAffection() || !com.linkyoshi90.harmontide.HarmontideConfig.blockJobs()) return false;
+        long now = level.getGameTime();
+        long next = this.getPersistentData().getLong("NextShed");
+        if (next == 0) {
+            this.getPersistentData().putLong("NextShed", now + SHED_EVERY / 2 + this.random.nextInt(SHED_SPREAD));
+            return false;
+        }
+        if (now < next) return false;
+        this.getPersistentData().putLong("NextShed", now + SHED_EVERY + this.random.nextInt(SHED_SPREAD));
+        ItemStack piece = new ItemStack(com.linkyoshi90.harmontide.registry.ModItems.CRAB_ARMOUR_PIECE.get());
+        Player friend = this.bondedPlayer(com.linkyoshi90.harmontide.entity.Orders.AFFECTION, 16);
+        if (friend != null) friend.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.harmontide.crab_shed", this.getDisplayName()), true);
+        if (friend == null || !friend.getInventory().add(piece)) this.spawnAtLocation(piece);
+        this.playSound(net.minecraft.sounds.SoundEvents.ARMADILLO_SCUTE_DROP, 1.0F, 1.2F);
+        return true;
     }
 
     /** Befriended: a block of dirt or grass beside water within 4 blocks of her turns to mud. Where, or null. */

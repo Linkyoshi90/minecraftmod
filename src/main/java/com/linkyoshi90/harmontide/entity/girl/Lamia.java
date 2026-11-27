@@ -154,8 +154,25 @@ public class Lamia extends AbstractMonsterGirl {
         return ((this.species == GirlSpecies.BOA_LAMIA || this.species == GirlSpecies.CENTIPEDE_LAMIA) && this.horizontalCollision) || super.onClimbable();
     }
 
+    /** The sea snake and the sea serpent keep a rider in their coils under the water too, diving wherever the rider looks (entity/Traversal). */
+    public boolean swimsWithRider() {
+        return com.linkyoshi90.harmontide.entity.Traversal.on() && (this.species == GirlSpecies.SEA_SNAKE_LAMIA || this.species == GirlSpecies.SEA_SERPENT_LAMIA);
+    }
+
+    @Override
+    public boolean canBeRiddenUnderFluidType(net.neoforged.neoforge.fluids.FluidType type, net.minecraft.world.entity.Entity rider) {
+        return this.swimsWithRider() || super.canBeRiddenUnderFluidType(type, rider);
+    }
+
     @Override
     public void travel(Vec3 input) {
+        if (this.swimsWithRider() && this.isInWater() && this.getControllingPassenger() instanceof Player diver && this.isControlledByLocalInstance()) {
+            Vec3 v = com.linkyoshi90.harmontide.entity.Traversal.diveStroke(this.getDeltaMovement(), diver, 0.22F);
+            if (this.horizontalCollision) v = v.add(0, 0.2, 0);
+            this.setDeltaMovement(v);
+            this.move(net.minecraft.world.entity.MoverType.SELF, v);
+            return;
+        }
         if ((this.species == GirlSpecies.SEA_SNAKE_LAMIA || this.species == GirlSpecies.SEA_SERPENT_LAMIA) && this.isControlledByLocalInstance() && this.isInWater()) {
             double y = this.getY();
             this.moveRelative(this.getSpeed() * 1.4F, input);       // a paddle tail: fast in the water
@@ -479,6 +496,9 @@ public class Lamia extends AbstractMonsterGirl {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.swimsWithRider() && !this.level().isClientSide && this.isInWater() && this.getControllingPassenger() instanceof Player rider) {
+            rider.setAirSupply(rider.getMaxAirSupply());                       // under the water in her coils, her friend never runs short of air
+        }
         if (this.species == GirlSpecies.ECHIDNA_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel den && !this.isBaby() && this.tickCount % 5 == 0) this.hush(den);
         if (this.species == GirlSpecies.CENTIPEDE_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel burrow && !this.isBaby() && this.tickCount % 61 == 0) this.forcipules(burrow);
         if (this.species == GirlSpecies.ANACONDA_LAMIA && this.level() instanceof net.minecraft.server.level.ServerLevel coils && !this.isBaby()) {

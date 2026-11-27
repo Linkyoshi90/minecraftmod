@@ -132,6 +132,8 @@ public class Construct extends AbstractMonsterGirl {
     @Nullable
     @Override
     protected net.minecraft.world.InteractionResult familyInteract(Player player, net.minecraft.world.InteractionHand hand, ItemStack stack) {
+        net.minecraft.world.InteractionResult toss = com.linkyoshi90.harmontide.entity.Traversal.toss(this, player, stack);   // up onto the ledge with you
+        if (toss != null) return toss;
         if (this.isTin() && !this.isBaby()) {
             ItemStack nuggets = this.scrap(stack);
             if (nuggets != null) {

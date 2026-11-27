@@ -159,6 +159,16 @@ public final class ModBlocks {
             com.linkyoshi90.harmontide.block.FootprintBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.NONE).noCollission().instabreak().noOcclusion().replaceable().randomTicks().noLootTable()
                     .sound(SoundType.SAND).pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY));
+    /** A silk bridge an arachne spun across a gap (block/SilkBridgeBlock, entity/girl/Arachne#spinBridge). */
+    public static final DeferredBlock<com.linkyoshi90.harmontide.block.SilkBridgeBlock> SILK_BRIDGE = BLOCKS.registerBlock("silk_bridge",
+            com.linkyoshi90.harmontide.block.SilkBridgeBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOL).instabreak().noOcclusion().noLootTable().sound(SoundType.WOOL)
+                    .ignitedByLava().pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY));
+    /** Lava a fire kind cooled under her friend's feet for a moment (block/LavaCrustBlock, entity/Workshop#crustPath). */
+    public static final DeferredBlock<com.linkyoshi90.harmontide.block.LavaCrustBlock> LAVA_CRUST = BLOCKS.registerBlock("lava_crust",
+            com.linkyoshi90.harmontide.block.LavaCrustBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(0.5F).noLootTable().lightLevel(s -> 6).sound(SoundType.BASALT)
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.BLOCK));
     /** Grave grass, the realm of the dead (block/GraveGrassBlock, entity/DeadRealm). */
     public static final DeferredBlock<com.linkyoshi90.harmontide.block.GraveGrassBlock> GRAVE_GRASS = BLOCKS.registerBlock("grave_grass",
             com.linkyoshi90.harmontide.block.GraveGrassBlock::new,

@@ -145,6 +145,11 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.goalSelector.addGoal(4, new com.linkyoshi90.harmontide.entity.ai.FridgeGoal<>(this));
         this.goalSelector.addGoal(3, new ShareBedGoal<>(this));
         this.goalSelector.addGoal(3, new GiftGoal<>(this));
+        if (this.floatsOnWater()) {                                        // asked from the constructor: species constants only
+            this.setPathfindingMalus(PathType.WATER, 0.0F);
+            this.setPathfindingMalus(PathType.WATER_BORDER, 0.0F);
+        }
+        if (this.towsSwimmers()) this.goalSelector.addGoal(6, new com.linkyoshi90.harmontide.entity.ai.PaddleGoal(this));
     }
 
     /** Flightless species (the ostrich) walk with ground navigation, fall normally and have no "fly" animation. */
@@ -220,6 +225,8 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         builder.define(DATA_MOONSTRUCK, false);
         builder.define(DATA_VEILED, false);
         builder.define(DATA_PAINT, 0);
+        builder.define(DATA_CARRY, CARRY_NONE);
+        builder.define(DATA_LIFT, 0);
     }
 
     public Action getAction() {
@@ -360,6 +367,15 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
                 this.playSound(this.getEatSound(), 1.0F, this.getVoicePitch());
                 server.sendParticles(ParticleTypes.HEART, this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ(), 3, 0.3, 0.2, 0.3, 0.0);
             }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+        if (hand == InteractionHand.MAIN_HAND && player.getMainHandItem().isEmpty() && !this.isBaby()) {
+            InteractionResult lift = this.liftInteract(player);                 // a tow through the water, a lift through the air
+            if (lift != null) return lift;
+        }
+        if (hand == InteractionHand.MAIN_HAND && player.getMainHandItem().isEmpty() && this.isBaby() && player.isShiftKeyDown() && Traversal.on()
+                && this.getAffection(player) >= Orders.AFFECTION && !player.isVehicle() && !this.isPassenger()) {   // a hatchling up onto the shoulder
+            if (!this.level().isClientSide && this.startRiding(player, true)) Traversal.award(player, "shoulder_friend");
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
         if (hand == InteractionHand.MAIN_HAND && player.getMainHandItem().isEmpty() && this.level() instanceof ServerLevel rescue && MilkRescue.accept(rescue, this, player)) {
@@ -557,6 +573,247 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         navigation.setCanFloat(true);
         navigation.setCanPassDoors(true);
         return navigation;
+    }
+
+    private boolean livened;
+
+    /**
+     * A species that set up no wandering of its own gets the usual: she panics when hurt, strolls (or flies) about, looks at
+     * people and around her. Checked once, on her first tick, when every constructor has added its goals.
+     */
+    private void liven() {
+        this.livened = true;
+        for (var g : this.goalSelector.getAvailableGoals()) if (g.getGoal() instanceof net.minecraft.world.entity.ai.goal.RandomStrollGoal) return;
+        this.goalSelector.addGoal(1, new net.minecraft.world.entity.ai.goal.PanicGoal(this, 1.25));
+        this.goalSelector.addGoal(8, this.canFly() ? new net.minecraft.world.entity.ai.goal.WaterAvoidingRandomFlyingGoal(this, 1.0)
+                : new net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal(this, 0.9));
+        this.goalSelector.addGoal(9, new net.minecraft.world.entity.ai.goal.LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(10, new net.minecraft.world.entity.ai.goal.RandomLookAroundGoal(this));
+    }
+
+    // --- getting about together (entity/Traversal): a lift, a catch, a tow --------------------------------------------
+
+    /** What she is doing with the player hanging on: nothing, flying with them under her, or towing them through the water. */
+    public static final byte CARRY_NONE = 0, CARRY_FLIGHT = 1, CARRY_TOW = 2;
+    private static final EntityDataAccessor<Byte> DATA_CARRY = SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.BYTE);
+    /** Flight left in her wings while she carries someone (ticks; at 0 she can only sink). */
+    private static final EntityDataAccessor<Integer> DATA_LIFT = SynchedEntityData.defineId(AbstractHarpy.class, EntityDataSerializers.INT);
+    private int carryGrace;
+    private long nextCarry;
+
+    /** How well she carries a grown person: not at all (the tiny), a glide down (most), or real flight (the big birds). */
+    public enum Lift { NONE, GLIDE, STRONG }
+
+    public Lift lift() {
+        if (!this.canFly() || this.isBaby()) return Lift.NONE;
+        return Traversal.liftOf(this.species());
+    }
+
+    public byte carryMode() {
+        return this.entityData.get(DATA_CARRY);
+    }
+
+    public int liftLeft() {
+        return this.entityData.get(DATA_LIFT);
+    }
+
+    /** Ducks and swans paddle on the water and tow a swimming friend. */
+    protected boolean towsSwimmers() {
+        return false;
+    }
+
+    /** Water birds sit on the water instead of sinking: ducks, swans, gulls, pelicans, albatrosses. */
+    protected boolean floatsOnWater() {
+        return this.towsSwimmers();
+    }
+
+    /** Afloat she bobs up to the surface and stays there, riding a little low. */
+    protected void bob() {
+        if (!this.isInWater()) return;
+        double depth = this.getFluidHeight(net.minecraft.tags.FluidTags.WATER);
+        Vec3 v = this.getDeltaMovement();
+        if (depth > 0.35) this.setDeltaMovement(v.x * 0.9, Math.min(v.y + 0.06, 0.12), v.z * 0.9);
+        else if (v.y < 0) this.setDeltaMovement(v.x, v.y * 0.3, v.z);
+    }
+
+    /** A hatchling rides her friend's shoulder like a parrot: a crouching empty hand lifts her up (entity/Traversal). */
+    @Override
+    public Vec3 getVehicleAttachmentPoint(net.minecraft.world.entity.Entity vehicle) {
+        if (vehicle instanceof Player p) return Traversal.shoulderSeat(p);
+        return super.getVehicleAttachmentPoint(vehicle);
+    }
+
+    private int perchCrouch;
+
+    @Override
+    public void rideTick() {
+        super.rideTick();
+        if (!(this.getVehicle() instanceof Player p)) {
+            this.perchCrouch = 0;
+            return;
+        }
+        this.perchCrouch = p.isShiftKeyDown() ? this.perchCrouch + 1 : 0;
+        this.yBodyRot = p.yBodyRot;
+        this.setYRot(p.yBodyRot);
+        if (!this.level().isClientSide && (this.perchCrouch > Traversal.CROUCH_OFF || !this.isBaby() || p.isSleeping() || !p.isAlive())) this.stopRiding();
+    }
+
+    /** An empty hand: in the water a tow (water birds, friend), crouching a lift into the air (bonded). Null to carry on. */
+    @Nullable
+    private InteractionResult liftInteract(Player player) {
+        boolean client = this.level().isClientSide;
+        if (!Traversal.on()) return null;
+        if (!player.isShiftKeyDown() && this.towsSwimmers() && player.isInWater() && this.isInWater() && this.getAffection(player) >= Orders.AFFECTION) {
+            if (!client) this.tow(player);
+            return InteractionResult.sidedSuccess(client);
+        }
+        if (player.isShiftKeyDown() && this.lift() != Lift.NONE && this.getAffection(player) >= BED_AFFECTION) {
+            if (!client && !this.pickUp(player, false)) {
+                player.displayClientMessage(Component.translatable("message.harmontide.carry_rest", this.getDisplayName()), true);
+            }
+            return InteractionResult.sidedSuccess(client);
+        }
+        return null;
+    }
+
+    /** Whether she is free to take someone up (or catch them) now. */
+    public boolean canCarry() {
+        return Traversal.on() && this.lift() != Lift.NONE && !this.isVehicle() && !this.isPassenger() && this.isAlive() && this.level().getGameTime() >= this.nextCarry;
+    }
+
+    /**
+     * Up she goes with the player hanging from her talons: steered by where they look (forward to fly, back to slow), for as
+     * long as {@link Traversal#liftTicks} allows; then she sinks and sets them down. A catch picks up someone falling past her.
+     */
+    public boolean pickUp(Player p, boolean caught) {
+        if (!this.canCarry() || p.isPassenger() || p.isSpectator() || p.isFallFlying()) return false;
+        if (caught) {
+            Vec3 over = p.position().add(0, Traversal.HANG + 0.1, 0);
+            if (!this.level().noCollision(this, this.getBoundingBox().move(over.subtract(this.position())))) return false;
+            this.setPos(over);
+            if (this.level() instanceof ServerLevel server) server.sendParticles(ParticleTypes.CLOUD, over.x, over.y, over.z, 8, 0.4, 0.2, 0.4, 0.02);
+        } else if (this.level().noCollision(this, this.getBoundingBox().move(0, Traversal.HANG, 0))) {
+            this.setPos(this.getX(), this.getY() + Traversal.HANG, this.getZ());   // she rises a body's height first: their feet clear the ground
+        }
+        this.orderedToSit = false;
+        this.getNavigation().stop();
+        this.entityData.set(DATA_CARRY, CARRY_FLIGHT);
+        this.entityData.set(DATA_LIFT, Traversal.liftTicks(this.lift(), this.getAffection(p)));
+        this.carryGrace = 20;
+        this.setDeltaMovement(Vec3.ZERO);
+        p.resetFallDistance();
+        if (!p.startRiding(this, true)) {
+            this.entityData.set(DATA_CARRY, CARRY_NONE);
+            return false;
+        }
+        this.playSound(SoundEvents.PHANTOM_FLAP, 1.0F, 1.2F);
+        if (!caught) Traversal.award(p, "carried_aloft");
+        return true;
+    }
+
+    /** A swimming friend takes hold of her and she paddles them along. */
+    public boolean tow(Player p) {
+        if (!Traversal.on() || !this.towsSwimmers() || this.isVehicle() || this.isPassenger() || p.isPassenger() || this.isBaby()) return false;
+        this.orderedToSit = false;
+        this.getNavigation().stop();
+        this.entityData.set(DATA_CARRY, CARRY_TOW);
+        if (!p.startRiding(this, true)) {
+            this.entityData.set(DATA_CARRY, CARRY_NONE);
+            return false;
+        }
+        Traversal.award(p, "ferried");
+        return true;
+    }
+
+    /** She lets go: a flight ends in a slow, safe drop (and a rest for her wings). */
+    public void dropCarried(@Nullable Player p) {
+        byte was = this.carryMode();
+        if (was == CARRY_NONE) return;
+        this.entityData.set(DATA_CARRY, CARRY_NONE);
+        this.entityData.set(DATA_LIFT, 0);
+        this.nextCarry = this.level().getGameTime() + (was == CARRY_FLIGHT ? Traversal.CARRY_REST : 20);
+        if (p == null) return;
+        if (p.getVehicle() == this) p.stopRiding();
+        p.resetFallDistance();
+        if (was == CARRY_FLIGHT) p.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SLOW_FALLING, 60, 0, true, false));
+    }
+
+    /** Server, every tick: wings tiring, set down once their feet touch ground or water, the tow over once she is ashore. */
+    private void tickCarry(ServerLevel level) {
+        byte mode = this.carryMode();
+        if (mode == CARRY_NONE) return;
+        if (!(this.getFirstPassenger() instanceof Player p)) {
+            this.dropCarried(null);
+            return;
+        }
+        if (mode == CARRY_FLIGHT) {
+            int left = this.liftLeft();
+            if (left > 0) {
+                this.entityData.set(DATA_LIFT, left - 1);
+                if (left == 61) p.displayClientMessage(Component.translatable("message.harmontide.carry_tiring", this.getDisplayName()), true);
+            }
+            p.resetFallDistance();
+            if (this.carryGrace > 0) this.carryGrace--;
+            else if (p.isInWater() || this.isInWater() || !level.noCollision(p, p.getBoundingBox().move(0, -0.2, 0))) this.dropCarried(p);
+        } else if (!this.isInWater() && (this.onGround() || !p.isInWater())) {
+            this.dropCarried(p);                                            // ashore
+        }
+    }
+
+    @Override
+    protected void removePassenger(net.minecraft.world.entity.Entity passenger) {
+        super.removePassenger(passenger);
+        if (!this.level().isClientSide && passenger instanceof Player p) this.dropCarried(p);   // they let go themselves (crouched)
+    }
+
+    @Nullable
+    @Override
+    public net.minecraft.world.entity.LivingEntity getControllingPassenger() {
+        if (this.carryMode() != CARRY_NONE && this.getFirstPassenger() instanceof Player p) return p;
+        return super.getControllingPassenger();
+    }
+
+    /** Carried: hanging from her talons, their shoulders at her feet. Towed: holding on behind her. */
+    @Override
+    protected Vec3 getPassengerAttachmentPoint(net.minecraft.world.entity.Entity passenger, EntityDimensions dims, float scale) {
+        byte mode = this.carryMode();
+        if (mode == CARRY_FLIGHT) return new Vec3(0, 0.6 - Traversal.HANG, 0);
+        if (mode == CARRY_TOW) return new Vec3(0, -0.35, -(dims.width() * 0.5 + 0.45)).yRot(-this.yBodyRot * net.minecraft.util.Mth.DEG_TO_RAD);
+        return super.getPassengerAttachmentPoint(passenger, dims, scale);
+    }
+
+    /** Someone hanging from her or holding on behind is not sitting. */
+    @Override
+    public boolean shouldRiderSit() {
+        return this.carryMode() == CARRY_NONE && super.shouldRiderSit();
+    }
+
+    @Override
+    public boolean canBeRiddenUnderFluidType(net.neoforged.neoforge.fluids.FluidType type, net.minecraft.world.entity.Entity rider) {
+        return this.carryMode() == CARRY_TOW || super.canBeRiddenUnderFluidType(type, rider);
+    }
+
+    /** Steered by whoever she carries (their client moves her). */
+    @Override
+    public void travel(Vec3 input) {
+        byte mode = this.carryMode();
+        if (mode != CARRY_NONE && this.getControllingPassenger() instanceof Player p) {
+            this.setYRot(p.getYRot());
+            this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
+            Vec3 v = mode == CARRY_FLIGHT ? Traversal.flightStroke(this.getDeltaMovement(), p, this.lift(), this.liftLeft())
+                    : Traversal.towStroke(this.getDeltaMovement(), p, this.getYRot(), this.isInWater() ? this.getFluidHeight(net.minecraft.tags.FluidTags.WATER) : 0, this.towSpeed());
+            if (mode == CARRY_TOW && this.horizontalCollision) v = v.add(0, 0.25, 0);   // up onto the bank
+            this.setNoGravity(mode == CARRY_FLIGHT);
+            this.setDeltaMovement(v);
+            this.move(net.minecraft.world.entity.MoverType.SELF, v);
+            return;
+        }
+        super.travel(input);
+    }
+
+    /** How fast she tows a swimmer (walk, sprint). */
+    protected float towSpeed() {
+        return 0.36F;
     }
 
     // --- young, eggs, bed ---------------------------------------------------------------------------------------------
@@ -764,7 +1021,11 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         if (this.canFly() && !this.onGround() && motion.y < 0.0) {
             this.setDeltaMovement(motion.multiply(1.0, 0.6, 1.0));
         }
+        if (this.floatsOnWater() && this.isControlledByLocalInstance() && this.getControllingPassenger() == null) this.bob();   // afloat: she rides the surface
         if (this.level() instanceof ServerLevel server) {
+            if (!this.livened) this.liven();
+            if (this.tickCount % 40 == 13 && Instincts.OWLS.contains(this.species())) Instincts.owlEyes(server, this);   // her eyes for her friend at night
+            this.tickCarry(server);
             this.tickHeldItem(server);
             if (this.timedActionTicks > 0 && --this.timedActionTicks == 0) this.setAction(Action.NONE);
             this.tickLaying(server);
@@ -1045,6 +1306,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         }
         String action = this.actionAnimation(this.getAction());
         if (action != null) return state.setAndContinue(this.anim(action));
+        if (this.floatsOnWater() && this.isInWater()) return state.setAndContinue(this.anim("sit"));   // afloat, legs folded under her
         return state.setAndContinue(this.anim(state.isMoving() ? this.movingAnimation() : "idle"));
     }
 

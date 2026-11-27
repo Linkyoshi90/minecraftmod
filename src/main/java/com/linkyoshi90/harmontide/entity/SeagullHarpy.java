@@ -312,4 +312,10 @@ public class SeagullHarpy extends AbstractHarpy {
     protected net.minecraft.world.item.ItemStack roostDrop() {
         return new net.minecraft.world.item.ItemStack(this.random.nextBoolean() ? net.minecraft.world.item.Items.FEATHER : net.minecraft.world.item.Items.FLINT);
     }
+
+    /** A sea bird rests on the water rather than sinking (entity/Traversal). */
+    @Override
+    protected boolean floatsOnWater() {
+        return true;
+    }
 }

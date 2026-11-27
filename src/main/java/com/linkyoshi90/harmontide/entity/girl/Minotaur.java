@@ -265,6 +265,8 @@ public class Minotaur extends AbstractMonsterGirl {
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
         boolean client = this.level().isClientSide;
+        InteractionResult home = com.linkyoshi90.harmontide.entity.Instincts.labyrinthSense(this, player, stack);   // shown a compass: the way home
+        if (home != null) return home;
         if (this.isWoolly() && !this.isBaby()) {
             if (stack.is(Items.SHEARS) && !this.isShorn()) {
                 if (this.level() instanceof ServerLevel server) {

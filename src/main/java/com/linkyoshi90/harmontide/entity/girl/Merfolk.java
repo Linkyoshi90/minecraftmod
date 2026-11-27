@@ -175,6 +175,14 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     /** Fast in the water; on land a slow crawl (the seal and axolotl manage better). */
     @Override
     public void travel(Vec3 input) {
+        if (this.towed() instanceof Player diver && this.isControlledByLocalInstance()) {
+            Vec3 v = this.isInWater() ? com.linkyoshi90.harmontide.entity.Traversal.diveStroke(this.getDeltaMovement(), diver, this.getSpeed())
+                    : this.getDeltaMovement().add(0, -0.08, 0);
+            if (this.isInWater() && this.horizontalCollision) v = v.add(0, 0.2, 0);
+            this.setDeltaMovement(v);
+            this.move(MoverType.SELF, v);
+            return;
+        }
         if (this.isControlledByLocalInstance() && this.isInWater()) {
             double y = this.getY();
             this.moveRelative(this.getSpeed() * 1.6F, input);
@@ -271,6 +279,15 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         if (this.isManta() && stack.isEmpty() && !player.isShiftKeyDown() && !this.isBaby() && !this.isVehicle()
                 && this.getAffection(player) >= com.linkyoshi90.harmontide.entity.Orders.AFFECTION) {   // a friend climbs on
             if (!this.level().isClientSide) player.startRiding(this);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+        if (this.towsDivers() && stack.isEmpty() && !player.isShiftKeyDown() && player.isInWater() && this.isInWater() && !this.isVehicle()
+                && this.getAffection(player) >= com.linkyoshi90.harmontide.entity.Orders.AFFECTION) {   // a swimming friend takes her hand
+            if (!this.level().isClientSide) {
+                this.getNavigation().stop();
+                this.setOrderedToSit(false);
+                if (player.startRiding(this, true)) com.linkyoshi90.harmontide.entity.Traversal.award(player, "ferried");
+            }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
         if (this.isBaby() && stack.is(Items.WATER_BUCKET)) {                 // the young fit in a bucket
@@ -586,6 +603,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     @Override
     public void aiStep() {
         super.aiStep();
+        if (!this.level().isClientSide) this.tickTow();
         if (this.level() instanceof ServerLevel current && !this.isBaby()) {
             if (this.species == GirlSpecies.NARWHAL_MERMAID && this.tickCount % 21 == 0) this.iceBreaker(current);
             if (this.species == GirlSpecies.SEAHORSE_MERMAID && this.tickCount % 21 == 0) this.airLine();
@@ -723,12 +741,53 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     @Nullable
     @Override
     public LivingEntity getControllingPassenger() {
-        return this.isManta() && this.getFirstPassenger() instanceof Player p ? p : super.getControllingPassenger();
+        return (this.isManta() || this.towsDivers()) && this.getFirstPassenger() instanceof Player p ? p : super.getControllingPassenger();
+    }
+
+    // --- a tow through the water (entity/Traversal): any grown mermaid but the merchants and the manta (who is ridden) ---
+
+    /** Whether she takes a swimming friend by the hand and pulls them along, under the water as well as on it. */
+    public boolean towsDivers() {
+        return com.linkyoshi90.harmontide.entity.Traversal.on() && !this.isManta() && !this.isBaby() && !this.isMerchant();
+    }
+
+    /** The one she is towing, or null. */
+    @Nullable
+    public Player towed() {
+        return this.towsDivers() && this.getFirstPassenger() instanceof Player p ? p : null;
+    }
+
+    /** Hand in hand: they swim at her side. */
+    @Override
+    protected Vec3 getPassengerAttachmentPoint(net.minecraft.world.entity.Entity passenger, net.minecraft.world.entity.EntityDimensions dims, float scale) {
+        if (passenger instanceof Player && this.towsDivers()) {
+            return new Vec3(-(dims.width() * 0.5 + 0.35), dims.height() * 0.15 - 0.3, 0).yRot(-this.yBodyRot * net.minecraft.util.Mth.DEG_TO_RAD);
+        }
+        return super.getPassengerAttachmentPoint(passenger, dims, scale);
+    }
+
+    @Override
+    public boolean shouldRiderSit() {
+        return this.towed() == null && super.shouldRiderSit();
+    }
+
+    /** Server: her breath is theirs while she holds on; ashore she lets go. */
+    private void tickTow() {
+        Player p = this.towed();
+        if (p == null) return;
+        p.setAirSupply(p.getMaxAirSupply());
+        if (this.tickCount % 40 == 0) p.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 60, 0, true, false));
+        if (!this.isInWater() && this.onGround()) p.stopRiding();
     }
 
     @Override
     protected void tickRidden(Player player, Vec3 travel) {
         super.tickRidden(player, travel);
+        if (!this.isManta()) {                                          // a tow: she dives and climbs the way they look
+            this.setRot(player.getYRot(), player.getXRot());
+            this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
+            return;
+        }
         this.setRot(player.getYRot(), player.getXRot() * 0.5F);
         this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
         if (this.isInWater()) {                                         // faster than a boat; she keeps her rider at the surface
@@ -752,7 +811,7 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
 
     @Override
     public boolean canBeRiddenUnderFluidType(net.neoforged.neoforge.fluids.FluidType type, net.minecraft.world.entity.Entity rider) {
-        return this.isManta() || super.canBeRiddenUnderFluidType(type, rider);
+        return this.isManta() || this.towsDivers() || super.canBeRiddenUnderFluidType(type, rider);
     }
 
     /** Now and then she leaps clear of the waves. */

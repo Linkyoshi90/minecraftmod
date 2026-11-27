@@ -2,6 +2,7 @@ package com.linkyoshi90.harmontide.entity.girl;
 
 import com.linkyoshi90.harmontide.block.GirlEggBlock;
 import com.linkyoshi90.harmontide.block.GirlEggBlockEntity;
+import com.linkyoshi90.harmontide.entity.Orders;
 import com.linkyoshi90.harmontide.registry.ModBlocks;
 import com.linkyoshi90.harmontide.registry.ModItems;
 import net.minecraft.core.BlockPos;
@@ -96,6 +97,7 @@ public class Arachne extends AbstractMonsterGirl {
             }
         });
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.goalSelector.addGoal(3, new SwingGoal());
         if (species == GirlSpecies.ORB_WEAVER_ARACHNE) {
             // anything caught in her hunting web is dinner (a player she is calm with excepted)
             this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 5, false, false,
@@ -145,11 +147,6 @@ public class Arachne extends AbstractMonsterGirl {
         return (this.species != GirlSpecies.TRAPDOOR_SPIDER_ARACHNE && this.horizontalCollision) || super.onClimbable();
     }
 
-    @Override
-    public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
-        return this.species != GirlSpecies.JUMPING_SPIDER_ARACHNE && super.causeFallDamage(distance, multiplier, source);   // a safety line
-    }
-
     // --- silk, food, presents ------------------------------------------------------------------------------------
 
     public boolean hasSilk() {
@@ -164,6 +161,13 @@ public class Arachne extends AbstractMonsterGirl {
     @Nullable
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
+        if (this.isBaby() && this.species == GirlSpecies.JUMPING_SPIDER_ARACHNE && stack.isEmpty() && player.isShiftKeyDown()
+                && this.getAffection(player) >= com.linkyoshi90.harmontide.entity.Orders.AFFECTION) {   // a crouching hand: up onto the shoulder
+            if (!this.level().isClientSide) com.linkyoshi90.harmontide.entity.Traversal.perchOn(this, player);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+        InteractionResult silk = this.silkInteract(player, stack);
+        if (silk != null) return silk;
         if (!stack.is(Items.BRUSH)) return null;
         if (!this.hasSilk() || this.isBaby()) return InteractionResult.PASS;
         if (this.level() instanceof ServerLevel server) {
@@ -349,6 +353,7 @@ public class Arachne extends AbstractMonsterGirl {
         if (this.species == GirlSpecies.SPOODR_ARACHNE && this.level() instanceof ServerLevel webs && !this.isBaby() && this.tickCount % 40 == 0) this.sweepWebs(webs);
         if (this.species == GirlSpecies.USHI_ONI_ARACHNE && this.level() instanceof ServerLevel shore && !this.isBaby() && this.tickCount % 20 == 0) this.bellow(shore);
         if (!(this.level() instanceof ServerLevel server)) return;
+        if (this.swingRest > 0 && !this.isSwinging() && this.onGround()) this.swingRest--;
         if (this.species == GirlSpecies.JOROGUMO_ARACHNE) {
             if (this.tickCount % 40 == 0) this.bindingWeb(server, !server.isDay());
             if (!this.snares.isEmpty() && this.tickCount % 10 == 0) this.meltSnares(server, false);
@@ -669,5 +674,252 @@ public class Arachne extends AbstractMonsterGirl {
         this.playSound(net.minecraft.sounds.SoundEvents.RAVAGER_ROAR, 1.5F, 0.8F);
         this.nextBellow = level.getGameTime() + 400;
         return near.size();
+    }
+
+    // --- silk bridges -----------------------------------------------------------------------------------------------
+
+    /** The longest bridge she spins, how wide it is, and how long she rests between two. */
+    public static final int BRIDGE_MAX = 32, BRIDGE_WIDTH = 3, BRIDGE_REST = 200;
+    private long nextBridge;
+
+    /** A crouching friend (10+) handing her string: she spins a silk bridge the way they face. */
+    @Nullable
+    private InteractionResult silkInteract(Player player, ItemStack stack) {
+        if (!stack.is(Items.STRING) || !player.isShiftKeyDown() || this.isBaby() || !com.linkyoshi90.harmontide.entity.Traversal.on()
+                || this.getAffection(player) < com.linkyoshi90.harmontide.entity.Orders.AFFECTION) return null;
+        if (this.level() instanceof ServerLevel server) {
+            int laid = server.getGameTime() < this.nextBridge ? -1 : this.spinBridge(server, player.blockPosition(), player.getDirection());
+            if (laid > 0) {
+                stack.consume(1, player);
+                this.addAffection(player, 1);
+                com.linkyoshi90.harmontide.entity.Traversal.award(player, "silk_bridge");
+            }
+            player.displayClientMessage(net.minecraft.network.chat.Component.translatable(laid > 0 ? "message.harmontide.silk_bridge"
+                    : laid < 0 ? "message.harmontide.silk_bridge_tired" : "message.harmontide.silk_bridge_none", this.getDisplayName(), laid), true);
+        }
+        return InteractionResult.sidedSuccess(this.level().isClientSide);
+    }
+
+    /**
+     * A silk bridge from the edge the player stands on across the gap in front of them ({@link #BRIDGE_WIDTH} wide), on to the far
+     * side or {@link #BRIDGE_MAX} blocks out. It only fills air, and dries to nothing after a few minutes (block/SilkBridgeBlock).
+     * How many blocks long it is (0: no gap ahead to bridge).
+     */
+    public int spinBridge(ServerLevel level, BlockPos feet, Direction facing) {
+        BlockPos floor = feet.below();
+        int start = -1;
+        for (int i = 1; i <= 3 && start < 0; i++) if (level.getBlockState(floor.relative(facing, i)).isAir()) start = i;   // where the ground ends
+        if (start < 0) return 0;
+        int length = 0;
+        for (int i = start; i < start + BRIDGE_MAX; i++) {
+            BlockPos at = floor.relative(facing, i);
+            if (!level.getBlockState(at).isAir()) break;                              // the far side
+            for (int side = -(BRIDGE_WIDTH / 2); side <= BRIDGE_WIDTH / 2; side++) {
+                BlockPos p = at.relative(facing.getClockWise(), side);
+                if (level.getBlockState(p).isAir()) level.setBlock(p, ModBlocks.SILK_BRIDGE.get().defaultBlockState(), 3);
+            }
+            length++;
+            if (i % 3 == 0) level.sendParticles(ParticleTypes.WHITE_ASH, at.getX() + 0.5, at.getY() + 0.6, at.getZ() + 0.5, 4, 0.6, 0.1, 0.6, 0.01);
+        }
+        if (length == 0) return 0;
+        this.nextBridge = level.getGameTime() + BRIDGE_REST;
+        this.startTimedAction(Action.SPIN, 40);
+        this.playSound(SoundEvents.SPIDER_AMBIENT, 0.8F, 1.5F);
+        return length;
+    }
+
+    // --- swinging on silk ------------------------------------------------------------------------------------------
+
+    private static final net.minecraft.network.syncher.EntityDataAccessor<java.util.Optional<BlockPos>> DATA_SWING =
+            net.minecraft.network.syncher.SynchedEntityData.defineId(Arachne.class, net.minecraft.network.syncher.EntityDataSerializers.OPTIONAL_BLOCK_POS);
+    /** How far she swings at most, how high the anchor may be, and the longest a swing may last. */
+    public static final double SWING_REACH = 16;
+    public static final int ANCHOR_HIGH = 14, SWING_TICKS = 80;
+    @Nullable
+    private Vec3 swingTo;
+    private double swingLength;
+    private int swingTicks, swingRest;
+
+    @Override
+    protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SWING, java.util.Optional.empty());
+    }
+
+    /** The block her silk line hangs from while she swings (the renderer draws the line to it). */
+    public java.util.Optional<BlockPos> getSwingAnchor() {
+        return this.entityData.get(DATA_SWING);
+    }
+
+    public boolean isSwinging() {
+        return this.swingTo != null;
+    }
+
+    /** Light enough to swing: not the burrowing trapdoor spider, the heavy tarantula, the ushi-oni, nor a youngling. */
+    public boolean canSwing() {
+        return !this.isBaby() && this.species != GirlSpecies.TRAPDOOR_SPIDER_ARACHNE && this.species != GirlSpecies.TARANTULA_ARACHNE
+                && this.species != GirlSpecies.USHI_ONI_ARACHNE;
+    }
+
+    /** Where her line attaches to her (the spinnerets, about her shoulders' height). */
+    private Vec3 lineEnd() {
+        return this.position().add(0, this.getBbHeight() * 0.85, 0);
+    }
+
+    /**
+     * Something solid to hang a line from, above and between her and where she is going: the underside of a block with air
+     * below it, in plain sight of her, at least three blocks over the higher end. Null if there is none.
+     */
+    @Nullable
+    public BlockPos findAnchor(Vec3 to) {
+        Vec3 from = this.position();
+        if (from.distanceTo(to) > SWING_REACH) return null;
+        Vec3 mid = from.add(to).scale(0.5);
+        int top = (int) Math.floor(Math.max(from.y, to.y));
+        for (int dy = 3; dy <= ANCHOR_HIGH; dy++) {
+            for (int r = 0; r <= 2; r++) {
+                for (int dx = -r; dx <= r; dx++) {
+                    for (int dz = -r; dz <= r; dz++) {
+                        if (Math.max(Math.abs(dx), Math.abs(dz)) != r) continue;   // ring by ring, the middle first
+                        BlockPos p = BlockPos.containing(mid.x + dx, top + dy, mid.z + dz);
+                        BlockState s = this.level().getBlockState(p);
+                        if (s.getCollisionShape(this.level(), p).isEmpty() || !this.level().getBlockState(p.below()).isAir()) continue;
+                        Vec3 hook = Vec3.atBottomCenterOf(p);
+                        var sight = this.level().clip(new net.minecraft.world.level.ClipContext(this.lineEnd(), hook.add(0, 0.05, 0),
+                                net.minecraft.world.level.ClipContext.Block.COLLIDER, net.minecraft.world.level.ClipContext.Fluid.NONE, this));
+                        if (sight.getType() == net.minecraft.world.phys.HitResult.Type.BLOCK && !sight.getBlockPos().equals(p)) continue;
+                        if (hook.distanceTo(to) > hook.distanceTo(this.lineEnd()) + 2.5) continue;     // the arc would fall short of it
+                        return p;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    /** Off she swings from this anchor toward `to`. Whether she could. */
+    public boolean startSwing(Vec3 to, BlockPos anchor) {
+        if (!this.canSwing() || this.isPassenger() || this.isVehicle()) return false;
+        this.swingTo = to;
+        this.swingLength = Vec3.atBottomCenterOf(anchor).distanceTo(this.lineEnd());
+        this.swingTicks = 0;
+        this.entityData.set(DATA_SWING, java.util.Optional.of(anchor));
+        this.getNavigation().stop();
+        Vec3 dir = new Vec3(to.x - this.getX(), 0, to.z - this.getZ()).normalize();
+        this.setDeltaMovement(dir.x * 0.35, 0.3, dir.z * 0.35);              // a hop off, the line already fast
+        this.startTimedAction(Action.LEAP, 14);
+        this.playSound(SoundEvents.SPIDER_STEP, 0.8F, 1.6F);
+        return true;
+    }
+
+    private void endSwing(boolean fling) {
+        if (fling && this.swingTo != null) {                                // let go at the top of the swing: a last throw forward
+            Vec3 dir = new Vec3(this.swingTo.x - this.getX(), 0, this.swingTo.z - this.getZ()).normalize();
+            this.setDeltaMovement(this.getDeltaMovement().add(dir.x * 0.12, 0.12, dir.z * 0.12));
+        }
+        this.swingTo = null;
+        this.swingRest = 40;
+        this.entityData.set(DATA_SWING, java.util.Optional.empty());
+    }
+
+    /** A pendulum on a line: gravity, a pump toward where she is going, and the line never longer than it was. */
+    private void tickSwing() {
+        java.util.Optional<BlockPos> anchor = this.getSwingAnchor();
+        if (anchor.isEmpty() || this.swingTo == null || this.level().getBlockState(anchor.get()).getCollisionShape(this.level(), anchor.get()).isEmpty()) {
+            this.endSwing(false);                                           // the branch broke
+            return;
+        }
+        Vec3 hook = Vec3.atBottomCenterOf(anchor.get());
+        Vec3 dir = new Vec3(this.swingTo.x - this.getX(), 0, this.swingTo.z - this.getZ());
+        double left = dir.length();
+        dir = left < 1.0E-4 ? Vec3.ZERO : dir.scale(1 / left);
+        Vec3 v = this.getDeltaMovement().add(0, -0.08, 0).scale(0.99);
+        if (v.x * dir.x + v.z * dir.z > 0) v = v.add(dir.scale(0.03));     // she pumps as she swings forward
+        Vec3 end = this.lineEnd();
+        Vec3 next = end.add(v);
+        Vec3 out = next.subtract(hook);
+        if (out.length() > this.swingLength) {                              // taut: round the arc, not away from the anchor
+            Vec3 n = out.normalize();
+            next = hook.add(n.scale(this.swingLength));
+            double away = v.dot(n);
+            if (away > 0) v = v.subtract(n.scale(away));
+        }
+        this.move(net.minecraft.world.entity.MoverType.SELF, next.subtract(end));
+        this.setDeltaMovement(v);
+        this.resetFallDistance();
+        this.swingTicks++;
+        Vec3 fromHook = this.position().subtract(hook);
+        boolean past = fromHook.x * dir.x + fromHook.z * dir.z > 0.5;
+        if (left < 1.5 || this.horizontalCollision || this.swingTicks > SWING_TICKS || this.onGround() && this.swingTicks > 6) this.endSwing(false);
+        else if (past && v.y > 0.02) this.endSwing(true);                   // over the far side and rising: let go
+    }
+
+    @Override
+    public void travel(Vec3 input) {
+        if (this.swingTo != null && !this.level().isClientSide) {
+            this.tickSwing();
+            return;
+        }
+        super.travel(input);
+    }
+
+    @Override
+    public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
+        return this.species != GirlSpecies.JUMPING_SPIDER_ARACHNE && this.swingRest <= 0 && super.causeFallDamage(distance, multiplier, source);   // a safety line
+    }
+
+    /**
+     * When the way to the player she follows is cut (a ravine, a river, a drop she cannot climb down to), or now and then just
+     * for the joy of it among trees and cave roofs, she shoots a line up and swings across.
+     */
+    private final class SwingGoal extends net.minecraft.world.entity.ai.goal.Goal {
+        SwingGoal() {
+            this.setFlags(java.util.EnumSet.of(Flag.MOVE, Flag.JUMP));
+        }
+
+        @Override
+        public boolean canUse() {
+            if (!com.linkyoshi90.harmontide.entity.Traversal.on() || !Arachne.this.canSwing() || Arachne.this.isSwinging() || Arachne.this.swingRest > 0 || Arachne.this.isPassenger()
+                    || Arachne.this.isOrderedToSit() || !Arachne.this.onGround() || Arachne.this.isHidden()) return false;
+            Vec3 to = Arachne.this.swingTarget();
+            if (to == null) return false;
+            BlockPos anchor = Arachne.this.findAnchor(to);
+            return anchor != null && Arachne.this.startSwing(to, anchor);
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return Arachne.this.isSwinging();
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+    }
+
+    /** Where she would like to swing to now, or null: across to her player when walking there will not do, else rarely a branch. */
+    @Nullable
+    public Vec3 swingTarget() {
+        if (Orders.current(this) == Orders.Command.FOLLOW) {
+            Player p = this.getOrders().commander(this);
+            if (p != null && p.level() == this.level() && !p.isSpectator() && this.tickCount % 10 == 0) {
+                double d = p.distanceTo(this);
+                if (d > 6 && d < SWING_REACH) {
+                    var path = this.getNavigation().createPath(p, 1);
+                    if (path == null || !path.canReach() || path.getNodeCount() > d * 2.5) return p.position();   // no way, or a long way round
+                }
+            }
+            return null;
+        }
+        if (this.getTarget() != null || this.random.nextInt(900) != 0) return null;
+        for (int i = 0; i < 6; i++) {                                       // for fun: somewhere 8-14 blocks off with ground to land on
+            double a = this.random.nextDouble() * Math.PI * 2, r = 8 + this.random.nextDouble() * 6;
+            BlockPos p = BlockPos.containing(this.getX() + Math.cos(a) * r, this.getY() + 2, this.getZ() + Math.sin(a) * r);
+            for (int dy = 0; dy < 6; dy++, p = p.below()) {
+                if (this.level().getBlockState(p).isAir() && this.level().getBlockState(p.below()).isFaceSturdy(this.level(), p.below(), Direction.UP)) return Vec3.atBottomCenterOf(p);
+            }
+        }
+        return null;
     }
 }
