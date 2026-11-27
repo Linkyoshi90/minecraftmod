@@ -604,6 +604,8 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     public void aiStep() {
         super.aiStep();
         if (!this.level().isClientSide) this.tickTow();
+        if (!this.isBaby() && this.tickCount % 10 == 0 && !this.level().isClientSide) this.checkBoat();
+        if (this.hasFlag(FLAG_TOWING) && !this.isBaby()) this.pushBoat();   // a friend's boat, pushed along
         if (this.level() instanceof ServerLevel current && !this.isBaby()) {
             if (this.species == GirlSpecies.NARWHAL_MERMAID && this.tickCount % 21 == 0) this.iceBreaker(current);
             if (this.species == GirlSpecies.SEAHORSE_MERMAID && this.tickCount % 21 == 0) this.airLine();
@@ -769,6 +771,30 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     @Override
     public boolean shouldRiderSit() {
         return this.towed() == null && super.shouldRiderSit();
+    }
+
+    /** Server: with her friend (25+) in a boat on the water near her, she swims ahead and pushes it (both sides move it, see {@link #pushBoat}). */
+    private void checkBoat() {
+        Player p = this.bondedPlayer(BED_AFFECTION, 12);
+        boolean pushing = this.towsDivers() && p != null && p.getVehicle() instanceof net.minecraft.world.entity.vehicle.Boat b && b.isInWater() && this.isInWater();
+        if (pushing != this.hasFlag(FLAG_TOWING)) this.setFlag(FLAG_TOWING, pushing);
+        if (pushing) {
+            Vec3 ahead = p.getVehicle().position().add(p.getViewVector(1.0F).multiply(1, 0, 1).normalize().scale(2.5));
+            this.getNavigation().moveTo(ahead.x, p.getVehicle().getY() - 1.0, ahead.z, 1.6);
+        }
+    }
+
+    /** Both sides (a boat moves where its rider's game runs): a push the way the rider looks. Whether she pushed one. */
+    public boolean pushBoat() {
+        var boats = this.level().getEntitiesOfClass(net.minecraft.world.entity.vehicle.Boat.class, this.getBoundingBox().inflate(8),
+                b -> b.getControllingPassenger() instanceof Player && b.isInWater());
+        if (boats.isEmpty() || !(boats.get(0).getControllingPassenger() instanceof Player rider)) return false;
+        Vec3 look = rider.getViewVector(1.0F).multiply(1, 0, 1).normalize();
+        Vec3 v = boats.get(0).getDeltaMovement().add(look.scale(0.03));
+        double h = v.horizontalDistance();
+        if (h > 0.9) v = new Vec3(v.x / h * 0.9, v.y, v.z / h * 0.9);
+        boats.get(0).setDeltaMovement(v);
+        return true;
     }
 
     /** Server: her breath is theirs while she holds on; ashore she lets go. */

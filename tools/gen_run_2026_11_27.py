@@ -80,6 +80,7 @@ TRAVERSAL = {
                      "Crouch for two seconds to set any of them down. She stays down for a minute. "
                      "Crouch and hand an arachne some string, and she spins a silk bridge across the gap in front of you. It lasts a few minutes. "
                      "An arachne following you swings across on a silk line when she cannot walk to you. "
+                     "Saddle a tarantula, a wolf spider or an ushi-oni who trusts you a lot and ride her: she climbs straight up walls and cliffs with you on her back. "
                      "A harpy who trusts you a lot lifts you when you crouch and hold out an empty hand. The big birds, such as rocs, albatrosses, swans and owls, fly you wherever you look for half a minute. "
                      "Most others can only glide you down, and hummingbirds and finches are too small. When she tires she sets you down, and if you let go you drift down slowly. "
                      "She also catches you if you fall past her. "
@@ -90,12 +91,14 @@ TRAVERSAL = {
                      "Sit in a minecart on a track while a centaur follows you, and she takes the front and pulls you along. "
                      "In the water, a capybara, turtle, water buffalo, hippo, beaver, polar bear or spinosaur friend lets you climb onto her back, and she swims you wherever you face. "
                      "An octopus, a squid girl, a kraken, a cuttlefish or a nautilus dives with you instead, wherever you look, and shares her air. "
+                     "A mermaid who trusts you a lot swims ahead of your boat and pushes it along. "
                      "Crouch and hold out an empty hand to a big construct friend, a golem, a talosling, an automaton or a gargoyle: she tosses you up and forward, and you land unhurt. "
                      "Friends following you lend you a little of themselves: with a cat girl at your heels falls hurt half as much, a jackalope or a kangaroo puts a spring in your step, and a wolf or a hellhound sets the pack's pace when you sprint.",
 }
 
 JOBS = {
     "item.harmontide.crab_armour_piece": "Crab Armour Piece",
+    M + "beaver_axe": "%s takes the axe. She will fell the wild trees around here and put the logs in the nearest chest.",
     M + "crab_shed": "%s has shed her shell. She gives you a piece of it.",
     M + "forest_given": "%s tucks away %s %s. She will plant them around here.",
     M + "forest_done": "%s has planted every sapling you gave her.",
@@ -106,6 +109,7 @@ JOBS = {
                 "Cattle minotaurs and holstaurs carry buckets of milk from a chest or barrel to a cheese shelf with room on it. They take the hard cheeses off the shelves and put them in a chest that already holds cheese. "
                 "Bug girls take the honey from full hives without angering the bees, and calm bees that are angry. The honey goes into a glass bottle if a chest nearby has one, else it comes as honeycomb. Fairies keep to their fountains instead. "
                 "Hand a rodent a stack of saplings and she plants them all around the spot where you gave them to her, a few blocks apart. "
+                "Hand a beaver an axe and she fells the wild trees around that spot, one every few minutes, and puts the logs into the nearest chest. She leaves anything built alone. Crouch with an empty hand to take the axe back. "
                 "The mooskuh fills the bowls in a chest near her with mushroom stew, one every couple of minutes. "
                 "A holstaur bakes a cake, with her own milk in it, from the sugar, egg and wheat in a chest beside a crafting table. A brownie or a domovoi bakes bread from the wheat there. "
                 "A slime girl fills an empty cauldron near her with what she is made of, once every five minutes: the undine with water, the frost slime with powder snow, the magma slime with lava. "
@@ -116,6 +120,14 @@ JOBS = {
 
 INSTINCTS = {
     M + "labyrinth": "%1$s points %3$s. Home is %2$s blocks that way.",
+    M + "bat_way_out": "%1$s squeaks: the open sky is %2$s blocks %3$s, %4$s above you.",
+    M + "bat_sky": "%s flutters about you. You are under the open sky already.",
+    M + "bat_lost": "%s listens to the echoes and shakes her head. No way out near here.",
+    M + "guide_way.village": "%1$s points %3$s. The nearest village is about %2$s blocks that way.",
+    M + "guide_way.mineshaft": "%1$s points %3$s. An old mineshaft runs about %2$s blocks that way.",
+    M + "guide_none.village": "%s sniffs the wind and finds no village anywhere near.",
+    M + "guide_none.mineshaft": "%s taps the stone and hears no mineshaft anywhere near.",
+    M + "guide_rest": "%s is still getting her bearings. Ask her again in a moment.",
     M + "fox_veil": "%s wraps you in an illusion. For a moment, nothing can see you.",
     M + "mummy_bandage": "%s binds your wounds.",
     M + "labyrinth_below": "%1$s points %3$s and down. Home is %2$s blocks that way, %4$s below you.",
@@ -135,9 +147,14 @@ INSTINCTS = {
                      "At dusk a cat girl sometimes tears about for a few seconds for no reason at all. "
                      "An owl harpy at your side in the dark lends you her eyes, and you see as if by day. "
                      "On ice a penguin drops onto her belly and slides along three times as fast. "
+                     "A befriended boar girl roots about in soft ground now and then and turns something up: mushrooms, potatoes, carrots, beetroot seeds, and once in a while the seeds only a sniffer finds. "
+                     "A befriended anteater snaps up the silverfish near her, and a puff of dust shows you which stone around her is infested. "
+                     "A befriended giraffe browses the treetops and now and then shakes down an apple, a cocoa bean or a stick. "
                      "A gryphon or a wyrm who would let you ride her catches you on her back if you fall past her. "
                      "When you are badly hurt, a kitsune who trusts you a lot wraps you in an illusion: you vanish for a few seconds and whatever was after you loses you. "
-                     "A mummy friend binds your wounds when you are down to half your health, and you heal quickly for a while.",
+                     "A mummy friend binds your wounds when you are down to half your health, and you heal quickly for a while. "
+                     "Lost underground? Show a bat girl friend a torch and she tells you which way the open sky is. "
+                     "Show a kitsune friend a lantern and she tells you the way to the nearest village. A dwarf shown one tells you the way to the nearest mineshaft.",
 }
 
 WORKSHOP = {
@@ -165,6 +182,8 @@ TIPS = {
     "tip.harmontide.sapling": "Hand a stack to a rodent friend: she plants them",
     "tip.harmontide.crab_armour_piece": "Mends half a worn item's wear at a smithing table, no template",
     "tip.harmontide.bell": "Ring it to call your friends nearby",
+    "tip.harmontide.lantern": "Show it to a kitsune or dwarf friend: she knows the way",
+    "tip.harmontide.torch": "Show it to a bat friend underground: she knows the way out",
 }
 
 ADVANCEMENTS = {

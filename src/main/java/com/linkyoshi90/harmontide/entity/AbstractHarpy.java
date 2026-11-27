@@ -1024,6 +1024,7 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         if (this.floatsOnWater() && this.isControlledByLocalInstance() && this.getControllingPassenger() == null) this.bob();   // afloat: she rides the surface
         if (this.level() instanceof ServerLevel server) {
             if (!this.livened) this.liven();
+            Workshop.answerBell(this);                                         // on her way to a dinner bell
             if (this.tickCount % 40 == 13 && Instincts.OWLS.contains(this.species())) Instincts.owlEyes(server, this);   // her eyes for her friend at night
             this.tickCarry(server);
             this.tickHeldItem(server);

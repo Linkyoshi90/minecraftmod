@@ -96,10 +96,10 @@ public final class Traversal {
     /** How close to a slime girl a landing has to be to bounce. */
     public static final double BOUNCE_REACH = 1.3;
 
-    /** The ones who ferry a swimmer across the water on their backs, and how fast. */
     /** The tentacled ones dive with their swimmer instead (wherever they look, under the water too), and share their air. */
     public static final Set<GirlSpecies> DIVERS = Set.of(GirlSpecies.OCTOPUS_MOLLUSK, GirlSpecies.IKA_MOLLUSK, GirlSpecies.SQUIDKIN_MOLLUSK, GirlSpecies.KRAKEN_MOLLUSK,
             GirlSpecies.GIANT_KRAKEN_MOLLUSK, GirlSpecies.CUTTLEFISH_MOLLUSK, GirlSpecies.NAUTILUS_MOLLUSK);
+    /** The ones who ferry a swimmer across the water on their backs (the divers among them), and how fast. */
     public static final Set<GirlSpecies> FERRIES = java.util.stream.Stream.concat(DIVERS.stream(), Set.of(GirlSpecies.CAPYBARA_RODENT, GirlSpecies.TURTLE_LIZARDFOLK,
             GirlSpecies.SNAPPING_TURTLE_LIZARDFOLK, GirlSpecies.WATER_BUFFALO_MINOTAUR, GirlSpecies.HIPPO_MINOTAUR, GirlSpecies.POLAR_BEAR_CANID,
             GirlSpecies.SPINOSAUR_THEROPOD, GirlSpecies.BEAVER_RODENT).stream()).collect(java.util.stream.Collectors.toUnmodifiableSet());
@@ -394,6 +394,7 @@ public final class Traversal {
     public static void tickPerch(AbstractMonsterGirl g, Player p, int crouching) {
         g.setYRot(p.yBodyRot);
         g.yBodyRot = p.yBodyRot;
+        if (g.getAction() == AbstractMonsterGirl.Action.NONE) g.setAction(AbstractMonsterGirl.Action.SITTING);   // she sits on the shoulder
         if (crouching > CROUCH_OFF) g.getPersistentData().putLong(PERCH_REST, g.level().getGameTime() + SET_DOWN);   // set down: she stays down a while
         else if (g.tickCount % 40 == 0) perchGift(g, p);
         if (crouching > CROUCH_OFF || !perches(g) || p.isSleeping() || !p.isAlive() || p.isSpectator()) g.stopRiding();

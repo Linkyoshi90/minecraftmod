@@ -61,6 +61,9 @@ import java.util.function.Predicate;
  *   <li><b>Stew.</b> The mooskuh fills the bowls in a chest near her with mushroom stew, one every couple of minutes.</li>
  *   <li><b>Cauldrons.</b> A slime girl fills an empty cauldron near her with what she is made of, once every five minutes:
  *   the undine with water, the frost slime with powder snow, the magma slime with lava.</li>
+ *   <li><b>The beaver's axe.</b> Hand a beaver friend (10+) an axe: she fells the wild trees (logs with natural leaves on them,
+ *   never anything built) around the spot where you gave it to her, one every few minutes, and puts the logs into the chest
+ *   nearest that spot. Crouch with an empty hand to take the axe back.</li>
  *   <li><b>Forests.</b> Hand a rodent a stack of saplings and she plants them, a few blocks apart, all around the spot where
  *   you gave them to her.</li>
  * </ul>
@@ -94,6 +97,7 @@ public final class Jobs {
         if (DAIRY_COWS.contains(s)) g.goalSelector.addGoal(4, new CheeseGoal(g));
         if (s.family() == GirlSpecies.Family.BUG && !FAIRIES.contains(s) && !s.id().contains("larva")) g.goalSelector.addGoal(4, new BeeGoal(g));
         if (s.family() == GirlSpecies.Family.RODENT) g.goalSelector.addGoal(4, new PlantGoal(g));
+        if (s == GirlSpecies.BEAVER_RODENT) g.goalSelector.addGoal(4, new LumberGoal(g));
         if (s.family() == GirlSpecies.Family.ARACHNE) g.goalSelector.addGoal(4, new CraftGoal(g, Blocks.LOOM, WEAVE));
         if (FLETCHERS.contains(s)) g.goalSelector.addGoal(4, new CraftGoal(g, Blocks.FLETCHING_TABLE, FLETCH));
         if (s == GirlSpecies.MOOSKUH_MINOTAUR) g.goalSelector.addGoal(4, new StewGoal(g));
@@ -646,6 +650,149 @@ public final class Jobs {
                 ? SoundEvents.BUCKET_EMPTY_POWDER_SNOW : SoundEvents.BUCKET_EMPTY, SoundSource.NEUTRAL, 0.8F, 1.0F);
         level.sendParticles(ParticleTypes.ITEM_SLIME, p.getX() + 0.5, p.getY() + 1.0, p.getZ() + 0.5, 8, 0.3, 0.2, 0.3, 0.05);
         return false;
+    }
+
+    // --- the beaver fells trees ---------------------------------------------------------------------------------------------
+
+    public static final String AXE = "LumberAxe", WOODS = "LumberAt";
+    public static final int FELL_MAX = 64;
+
+    public static ItemStack axe(AbstractMonsterGirl g) {
+        CompoundTag d = g.getPersistentData();
+        return d.contains(AXE) ? ItemStack.parseOptional(g.registryAccess(), d.getCompound(AXE)) : ItemStack.EMPTY;
+    }
+
+    static void setAxe(AbstractMonsterGirl g, ItemStack s) {
+        if (s.isEmpty()) {
+            g.getPersistentData().remove(AXE);
+            g.getPersistentData().remove(WOODS);
+        } else {
+            g.getPersistentData().put(AXE, s.save(g.registryAccess()));
+        }
+    }
+
+    /** An axe handed to a beaver friend (she starts on the trees round here), or a crouching empty hand taking it back. */
+    @Nullable
+    public static InteractionResult beaverAxe(AbstractMonsterGirl g, Player player, ItemStack stack) {
+        if (g.getSpecies() != GirlSpecies.BEAVER_RODENT || g.isBaby() || g.getAffection(player) < Orders.AFFECTION || !com.linkyoshi90.harmontide.HarmontideConfig.blockJobs()) return null;
+        if (stack.is(ItemTags.AXES) && !player.isShiftKeyDown()) {
+            if (!g.level().isClientSide) {
+                ItemStack had = axe(g);
+                if (!had.isEmpty()) player.getInventory().placeItemBackInInventory(had);
+                setAxe(g, stack.split(1));
+                g.getPersistentData().putLong(WOODS, g.blockPosition().asLong());
+                player.displayClientMessage(Component.translatable("message.harmontide.beaver_axe", g.getDisplayName()), true);
+            }
+            return InteractionResult.sidedSuccess(g.level().isClientSide);
+        }
+        if (stack.isEmpty() && player.isShiftKeyDown() && !axe(g).isEmpty()) {
+            if (!g.level().isClientSide) {
+                player.getInventory().placeItemBackInInventory(axe(g));
+                setAxe(g, ItemStack.EMPTY);
+            }
+            return InteractionResult.sidedSuccess(g.level().isClientSide);
+        }
+        return null;
+    }
+
+    /** Natural leaves (not placed by a player) touching this log. */
+    static boolean leafy(ServerLevel level, BlockPos log) {
+        for (BlockPos q : BlockPos.betweenClosed(log.offset(-1, -1, -1), log.offset(1, 1, 1))) {
+            BlockState s = level.getBlockState(q);
+            if (s.getBlock() instanceof net.minecraft.world.level.block.LeavesBlock && !s.getValue(net.minecraft.world.level.block.LeavesBlock.PERSISTENT)) return true;
+        }
+        return false;
+    }
+
+    /** The logs of one wild tree from its bottom log up (connected, at most {@link #FELL_MAX}), or empty if it is not a wild tree. */
+    public static java.util.List<BlockPos> tree(ServerLevel level, BlockPos bottom) {
+        java.util.List<BlockPos> logs = new java.util.ArrayList<>();
+        if (!level.getBlockState(bottom).is(net.minecraft.tags.BlockTags.LOGS) || !level.getBlockState(bottom.below()).is(net.minecraft.tags.BlockTags.DIRT)) return logs;
+        Deque<BlockPos> todo = new ArrayDeque<>(java.util.List.of(bottom));
+        java.util.Set<BlockPos> seen = new java.util.HashSet<>();
+        boolean leaves = false;
+        while (!todo.isEmpty() && logs.size() < FELL_MAX) {
+            BlockPos p = todo.poll();
+            if (!seen.add(p) || !level.getBlockState(p).is(net.minecraft.tags.BlockTags.LOGS)) continue;
+            logs.add(p);
+            if (!leaves && leafy(level, p)) leaves = true;
+            for (BlockPos q : BlockPos.betweenClosed(p.offset(-1, 0, -1), p.offset(1, 1, 1))) if (q.getY() >= bottom.getY()) todo.add(q.immutable());
+        }
+        if (!leaves) logs.clear();                                              // bare logs: somebody built that
+        return logs;
+    }
+
+    /** The bottom log of a wild tree near the woods spot, or null. */
+    @Nullable
+    static BlockPos wildTree(ServerLevel level, BlockPos woods) {
+        for (BlockPos p : BlockPos.betweenClosed(woods.offset(-REACH, -3, -REACH), woods.offset(REACH, 3, REACH))) {
+            if (level.getBlockState(p).is(net.minecraft.tags.BlockTags.LOGS) && level.getBlockState(p.below()).is(net.minecraft.tags.BlockTags.DIRT)
+                    && !tree(level, p.immutable()).isEmpty()) return p.immutable();
+        }
+        return null;
+    }
+
+    /** She fells it: every log of it, as items. The axe wears; at its end she stops. */
+    public static java.util.List<ItemStack> fell(ServerLevel level, AbstractMonsterGirl beaver, BlockPos bottom) {
+        java.util.List<ItemStack> wood = new java.util.ArrayList<>();
+        ItemStack axe = axe(beaver);
+        for (BlockPos p : tree(level, bottom)) {
+            if (axe.isEmpty()) break;
+            BlockState s = level.getBlockState(p);
+            wood.add(new ItemStack(s.getBlock().asItem()));
+            level.destroyBlock(p, false, beaver);
+            axe.setDamageValue(axe.getDamageValue() + 1);
+            if (axe.getDamageValue() >= axe.getMaxDamage()) axe = ItemStack.EMPTY;
+        }
+        setAxe(beaver, axe);
+        if (axe.isEmpty()) beaver.playSound(SoundEvents.ITEM_BREAK, 1.0F, 1.0F);
+        return wood;
+    }
+
+    static final class LumberGoal extends ErrandGoal {
+        private final java.util.List<ItemStack> logs = new java.util.ArrayList<>();
+
+        LumberGoal(AbstractMonsterGirl girl) {
+            super(girl);
+        }
+
+        @Override
+        protected int every() {
+            return 1200;
+        }
+
+        @Override
+        protected boolean plan(ServerLevel level) {
+            CompoundTag d = this.girl.getPersistentData();
+            if (axe(this.girl).isEmpty() || !d.contains(WOODS) || !level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) return false;
+            BlockPos woods = BlockPos.of(d.getLong(WOODS));
+            BlockPos bottom = wildTree(level, woods);
+            if (bottom == null) return false;
+            this.step(bottom, l -> {
+                this.logs.clear();
+                this.logs.addAll(fell(l, this.girl, bottom));
+                return !this.logs.isEmpty();
+            });
+            BlockPos store = containerWith(level, woods, st -> true);
+            BlockPos chest = store != null ? store : woods;
+            this.step(chest, l -> {
+                Container c = container(l, chest);
+                for (ItemStack w : this.logs) {
+                    ItemStack left = c == null ? w : put(c, w);
+                    if (!left.isEmpty()) this.girl.spawnAtLocation(left);
+                }
+                this.logs.clear();
+                return true;
+            });
+            return true;
+        }
+
+        @Override
+        public void stop() {
+            super.stop();
+            for (ItemStack w : this.logs) this.girl.spawnAtLocation(w);
+            this.logs.clear();
+        }
     }
 
     // --- bees --------------------------------------------------------------------------------------------------------

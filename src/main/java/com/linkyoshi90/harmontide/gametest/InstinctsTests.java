@@ -118,4 +118,48 @@ public class InstinctsTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "batKnowsTheWayOut")
+    public static void batKnowsTheWayOut(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
+        AbstractMonsterGirl bat = spawn(helper, GirlSpecies.CAVE_BAT, new BlockPos(7, 2, 5));
+        check(Instincts.batGuide(bat, p, new ItemStack(Items.TORCH)) == null, "a stranger keeps her echoes to herself");
+        bat.setAffection(p.getUUID(), Orders.AFFECTION);
+        check(Instincts.batGuide(bat, p, new ItemStack(Items.TORCH)) != null, "a friend shows the way");
+        check(Instincts.batGuide(bat, p, ItemStack.EMPTY) == null, "only for a torch");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "boarRootsUpAFind")
+    public static void boarRootsUpAFind(GameTestHelper helper) {
+        AbstractMonsterGirl boar = spawn(helper, GirlSpecies.PIGLETTE_ARMOURED, new BlockPos(7, 2, 7));
+        helper.runAfterDelay(10, () -> {                                   // (on her feet on the grass first)
+            check(Instincts.root(helper.getLevel(), boar, true).isEmpty(), "a wild boar roots for herself");
+            boar.setAffection(java.util.UUID.randomUUID(), 5);
+            check(!Instincts.root(helper.getLevel(), boar, true).isEmpty(), "a friendly one turns something up");
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "anteaterEatsSilverfish")
+    public static void anteaterEatsSilverfish(GameTestHelper helper) {
+        AbstractMonsterGirl anteater = spawn(helper, GirlSpecies.ANTEATER_ARMOURED, new BlockPos(7, 2, 7));
+        anteater.setAffection(java.util.UUID.randomUUID(), 5);
+        var bug = helper.spawn(net.minecraft.world.entity.EntityType.SILVERFISH, new BlockPos(9, 2, 7));
+        check(Instincts.anteater(helper.getLevel(), anteater) == 1, "she snaps it up");
+        helper.succeedWhen(() -> check(!bug.isAlive(), "gone"));
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "giraffeShakesDownAnApple")
+    public static void giraffeShakesDownAnApple(GameTestHelper helper) {
+        AbstractMonsterGirl giraffe = spawn(helper, GirlSpecies.GIRAFFE_CENTAUR, new BlockPos(7, 2, 7));
+        giraffe.setAffection(java.util.UUID.randomUUID(), 5);
+        giraffe.setNoAi(true);
+        BlockPos head = BlockPos.containing(giraffe.getX(), giraffe.getEyeY(), giraffe.getZ());
+        helper.getLevel().setBlockAndUpdate(head.above(), net.minecraft.world.level.block.Blocks.OAK_LEAVES.defaultBlockState()
+                .setValue(net.minecraft.world.level.block.LeavesBlock.PERSISTENT, true));
+        check(Instincts.browse(helper.getLevel(), giraffe, true).is(Items.APPLE), "an apple from the oak");
+        helper.succeed();
+    }
 }

@@ -166,6 +166,8 @@ public class Arachne extends AbstractMonsterGirl {
             if (!this.level().isClientSide) com.linkyoshi90.harmontide.entity.Traversal.perchOn(this, player);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
+        InteractionResult mount = this.mountInteract(player, stack);
+        if (mount != null) return mount;
         InteractionResult silk = this.silkInteract(player, stack);
         if (silk != null) return silk;
         if (!stack.is(Items.BRUSH)) return null;
@@ -676,6 +678,70 @@ public class Arachne extends AbstractMonsterGirl {
         return near.size();
     }
 
+    // --- a spider to ride: up walls and cliffs ---------------------------------------------------------------------------
+
+    /** The big ones carry a rider (saddled, at 25+): the tarantula, the wolf spider and the ushi-oni. On her back you climb walls. */
+    public boolean isMount() {
+        return !this.isBaby() && (this.species == GirlSpecies.TARANTULA_ARACHNE || this.species == GirlSpecies.WOLF_SPIDER_ARACHNE
+                || this.species == GirlSpecies.USHI_ONI_ARACHNE) && com.linkyoshi90.harmontide.entity.Traversal.on();
+    }
+
+    /** A saddle for a big spider who trusts you a lot; once saddled, an empty hand climbs on (crouch to pat her instead). */
+    @Nullable
+    private InteractionResult mountInteract(Player player, ItemStack stack) {
+        if (!this.isMount() || this.getAffection(player) < BED_AFFECTION) return null;
+        boolean client = this.level().isClientSide;
+        if (stack.is(Items.SADDLE) && !this.hasFlag(FLAG_SADDLED)) {
+            if (!client) {
+                stack.consume(1, player);
+                this.setFlag(FLAG_SADDLED, true);
+                this.playSound(SoundEvents.HORSE_SADDLE, 1.0F, 1.2F);
+            }
+            return InteractionResult.sidedSuccess(client);
+        }
+        if (!stack.isEmpty() || !this.hasFlag(FLAG_SADDLED)) return null;
+        if (player.isShiftKeyDown()) return this.pet(player);
+        if (this.isVehicle()) return null;
+        if (!client) {
+            this.getNavigation().stop();
+            this.setTarget(null);
+            this.setOrderedToSit(false);
+            player.startRiding(this);
+        }
+        return InteractionResult.sidedSuccess(client);
+    }
+
+    @Nullable
+    @Override
+    public LivingEntity getControllingPassenger() {
+        if (this.isMount() && this.hasFlag(FLAG_SADDLED) && this.getFirstPassenger() instanceof Player p) return p;
+        return super.getControllingPassenger();
+    }
+
+    @Override
+    protected void tickRidden(Player player, Vec3 travel) {
+        super.tickRidden(player, travel);
+        this.setRot(player.getYRot(), player.getXRot() * 0.5F);
+        this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
+    }
+
+    @Override
+    protected Vec3 getRiddenInput(Player player, Vec3 travel) {
+        return new Vec3(player.xxa * 0.5F, 0.0, player.zza > 0 ? player.zza : player.zza * 0.3F);
+    }
+
+    @Override
+    protected float getRiddenSpeed(Player player) {
+        return this.species == GirlSpecies.USHI_ONI_ARACHNE ? 0.34F : this.species == GirlSpecies.WOLF_SPIDER_ARACHNE ? 0.32F : 0.26F;
+    }
+
+    /** Astride her spider back, behind her waist. */
+    @Override
+    protected Vec3 getPassengerAttachmentPoint(Entity passenger, net.minecraft.world.entity.EntityDimensions dims, float scale) {
+        if (passenger instanceof Player && this.isMount()) return new Vec3(0, dims.height() * 0.42, -dims.width() * 0.3).yRot(-this.yBodyRot * net.minecraft.util.Mth.DEG_TO_RAD);
+        return super.getPassengerAttachmentPoint(passenger, dims, scale);
+    }
+
     // --- silk bridges -----------------------------------------------------------------------------------------------
 
     /** The longest bridge she spins, how wide it is, and how long she rests between two. */
@@ -807,7 +873,7 @@ public class Arachne extends AbstractMonsterGirl {
         this.getNavigation().stop();
         Vec3 dir = new Vec3(to.x - this.getX(), 0, to.z - this.getZ()).normalize();
         this.setDeltaMovement(dir.x * 0.35, 0.3, dir.z * 0.35);              // a hop off, the line already fast
-        this.startTimedAction(Action.LEAP, 14);
+        this.startTimedAction(Action.LEAP, SWING_TICKS);                     // arms up on the line the whole way
         this.playSound(SoundEvents.SPIDER_STEP, 0.8F, 1.6F);
         return true;
     }
@@ -820,6 +886,7 @@ public class Arachne extends AbstractMonsterGirl {
         this.swingTo = null;
         this.swingRest = 40;
         this.entityData.set(DATA_SWING, java.util.Optional.empty());
+        if (this.getAction() == Action.LEAP) this.setAction(Action.NONE);
     }
 
     /** A pendulum on a line: gravity, a pump toward where she is going, and the line never longer than it was. */

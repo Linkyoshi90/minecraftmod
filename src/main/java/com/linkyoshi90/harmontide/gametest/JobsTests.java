@@ -187,4 +187,22 @@ public class JobsTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 100, batch = "beaverFellsOnlyWildTrees")
+    public static void beaverFellsOnlyWildTrees(GameTestHelper helper) {
+        for (int y = 2; y <= 5; y++) helper.setBlock(new BlockPos(9, y, 9), Blocks.OAK_LOG);
+        helper.setBlock(new BlockPos(9, 6, 9), Blocks.OAK_LEAVES);                       // natural leaves: a tree
+        for (int y = 2; y <= 4; y++) helper.setBlock(new BlockPos(3, y, 9), Blocks.OAK_LOG); // bare logs: a build
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(6, 2, 6));
+        AbstractMonsterGirl beaver = spawn(helper, GirlSpecies.BEAVER_RODENT, new BlockPos(6, 2, 7));
+        beaver.setAffection(p.getUUID(), Orders.AFFECTION);
+        interact(beaver, p, new ItemStack(Items.IRON_AXE));
+        check(!Jobs.axe(beaver).isEmpty() && p.getMainHandItem().isEmpty(), "she has the axe");
+        check(Jobs.tree(helper.getLevel(), helper.absolutePos(new BlockPos(3, 2, 9))).isEmpty(), "bare logs are somebody's building");
+        var wood = Jobs.fell(helper.getLevel(), beaver, helper.absolutePos(new BlockPos(9, 2, 9)));
+        check(wood.size() == 4 && helper.getBlockState(new BlockPos(9, 3, 9)).isAir(), "the tree is down: four logs");
+        check(Jobs.axe(beaver).getDamageValue() == 4, "the axe wears");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

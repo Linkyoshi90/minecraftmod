@@ -315,17 +315,18 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         return super.getVehicleAttachmentPoint(vehicle);
     }
 
-    private int perchCrouch;
+    private int perchCrouch = -1;   // -1: not on a shoulder
 
     @Override
     public void rideTick() {
         super.rideTick();
         if (this.getVehicle() instanceof Player p) {
-            this.perchCrouch = p.isShiftKeyDown() ? this.perchCrouch + 1 : 0;
+            this.perchCrouch = p.isShiftKeyDown() ? Math.max(0, this.perchCrouch) + 1 : 0;
             if (this.level().isClientSide) this.yBodyRot = p.yBodyRot;
             else com.linkyoshi90.harmontide.entity.Traversal.tickPerch(this, p, this.perchCrouch);
         } else {
-            this.perchCrouch = 0;
+            if (this.perchCrouch >= 0 && !this.level().isClientSide && !this.isOrderedToSit() && this.getAction() == Action.SITTING) this.setAction(Action.NONE);   // down off the shoulder: up on her feet
+            this.perchCrouch = -1;
         }
     }
 
@@ -936,6 +937,8 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         if (errand != null) return errand;
         InteractionResult ferry = com.linkyoshi90.harmontide.entity.Traversal.ferryInteract(this, player, stack);   // a swimmer climbs onto her back
         if (ferry != null) return ferry;
+        InteractionResult guide = com.linkyoshi90.harmontide.entity.Instincts.guide(this, player, stack);   // shown a torch or a lantern: the way
+        if (guide != null) return guide;
 
         if (stack.is(Items.BUCKET) && com.linkyoshi90.harmontide.entity.HandMilking.interested(this, player)) {
             if (this.level() instanceof ServerLevel server && player instanceof net.minecraft.server.level.ServerPlayer sp) {

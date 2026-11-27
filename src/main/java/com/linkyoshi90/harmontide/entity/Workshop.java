@@ -114,7 +114,10 @@ public final class Workshop {
         if (!com.linkyoshi90.harmontide.HarmontideConfig.workshop()) return 0;
         for (Mob m : HomeLife.friendsOf(level, p, new AABB(bell).inflate(BELL_REACH))) {
             if (Orders.holdsPlace(m) || m.isPassenger() || m.isVehicle() || m.getTarget() != null) continue;
-            if (m.getNavigation().moveTo(bell.getX() + 0.5, bell.getY(), bell.getZ() + 0.5, 1.25)) came++;
+            m.getPersistentData().putLong(BELL_AT, bell.asLong());                  // she keeps coming for half a minute (answerBell)
+            m.getPersistentData().putLong(BELL_UNTIL, level.getGameTime() + 600);
+            m.getNavigation().moveTo(bell.getX() + 0.5, bell.getY(), bell.getZ() + 0.5, 1.25);
+            came++;
         }
         return came;
     }
@@ -128,6 +131,22 @@ public final class Workshop {
         p.getPersistentData().putLong("BellRestUntil", now + BELL_REST);
         int came = ringBell(level, p, event.getPos());
         if (came > 0) p.displayClientMessage(Component.translatable("message.harmontide.dinner_bell", came), true);
+    }
+
+    public static final String BELL_AT = "BellAt", BELL_UNTIL = "BellUntil";
+
+    /** Every tick for one who heard a bell: on her way until she is there (or half a minute has passed). Whether she still is. */
+    public static boolean answerBell(Mob m) {
+        var d = m.getPersistentData();
+        if (!d.contains(BELL_UNTIL)) return false;
+        BlockPos bell = BlockPos.of(d.getLong(BELL_AT));
+        if (m.level().getGameTime() > d.getLong(BELL_UNTIL) || m.blockPosition().closerThan(bell, 3.0) || m.getTarget() != null) {
+            d.remove(BELL_UNTIL);
+            d.remove(BELL_AT);
+            return false;
+        }
+        if (m.getNavigation().isDone() || m.tickCount % 20 == 0) m.getNavigation().moveTo(bell.getX() + 0.5, bell.getY(), bell.getZ() + 0.5, 1.25);
+        return true;
     }
 
     // --- wings to catch you ------------------------------------------------------------------------------------------
@@ -204,7 +223,8 @@ public final class Workshop {
         net.minecraft.world.item.ItemStack s = event.getItemStack();
         String tip = s.is(net.minecraft.world.item.Items.STRING) ? "string" : s.is(net.minecraft.world.item.Items.COMPASS) ? "compass"
                 : s.is(net.minecraft.tags.ItemTags.SAPLINGS) ? "sapling" : s.is(com.linkyoshi90.harmontide.registry.ModItems.CRAB_ARMOUR_PIECE.get()) ? "crab_armour_piece"
-                : s.is(net.minecraft.world.item.Items.BELL) ? "bell" : null;
+                : s.is(net.minecraft.world.item.Items.BELL) ? "bell" : s.is(net.minecraft.world.item.Items.LANTERN) || s.is(net.minecraft.world.item.Items.SOUL_LANTERN) ? "lantern"
+                : s.is(net.minecraft.world.item.Items.TORCH) ? "torch" : null;
         if (tip != null) event.getToolTip().add(Component.translatable("tip.harmontide." + tip).withStyle(net.minecraft.ChatFormatting.GRAY));
     }
 }

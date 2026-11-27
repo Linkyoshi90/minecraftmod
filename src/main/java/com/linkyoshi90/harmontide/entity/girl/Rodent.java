@@ -452,6 +452,8 @@ public class Rodent extends AbstractMonsterGirl {
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
         InteractionResult saplings = Jobs.giveSaplings(this, player, stack);   // a stack of saplings: a forest planted (Jobs)
         if (saplings != null) return saplings;
+        InteractionResult axe = Jobs.beaverAxe(this, player, stack);            // an axe: the beaver fells the wild trees round here
+        if (axe != null) return axe;
         if (this.species == GirlSpecies.TANUKI_RODENT && stack.is(net.minecraft.tags.ItemTags.LEAVES) && this.getAffection(player) >= com.linkyoshi90.harmontide.entity.Orders.AFFECTION) {
             if (!this.level().isClientSide && this.leafMoney(this.level().getDayTime() / 24000L)) {
                 stack.consume(1, player);

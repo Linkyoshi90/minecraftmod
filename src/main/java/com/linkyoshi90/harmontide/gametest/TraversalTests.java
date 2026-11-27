@@ -213,10 +213,10 @@ public class TraversalTests {
     public static void duckFloatsAndPaddles(GameTestHelper helper) {
         pool(helper);
         DuckHarpy duck = helper.spawn(ModEntities.DUCK_HARPY.get(), new BlockPos(6, 1, 6));
-        helper.runAfterDelay(60, () -> helper.succeedWhen(() -> {
-            check(duck.isInWater(), "still on the pond");
+        helper.succeedWhen(() -> {                                          // (she may fly off later: she is free to)
+            check(duck.isInWater() && duck.tickCount > 20, "afloat a moment after landing on the pond");
             check(duck.getY() > helper.absolutePos(new BlockPos(6, 1, 6)).getY() + 0.3, "riding the surface, not lying on the bottom: " + duck.getY());
-        }));
+        });
     }
 
     @GameTest(template = PLATFORM, timeoutTicks = 200, batch = "mermaidTowsADiver")
@@ -401,5 +401,18 @@ public class TraversalTests {
             check(p.getAirSupply() == p.getMaxAirSupply(), "her air is theirs");
             HarpyTestUtil.remove(p);
         });
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "tarantulaIsAWallClimbingMount")
+    public static void tarantulaIsAWallClimbingMount(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
+        Arachne t = spawn(helper, GirlSpecies.TARANTULA_ARACHNE, new BlockPos(6, 2, 5));
+        t.setAffection(p.getUUID(), 25);
+        check(t.isMount(), "a tarantula carries a rider");
+        interact(t, p, new ItemStack(Items.SADDLE));
+        interact(t, p, ItemStack.EMPTY);
+        check(p.getVehicle() == t && t.getControllingPassenger() == p, "saddled, she carries them and they steer");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
     }
 }
