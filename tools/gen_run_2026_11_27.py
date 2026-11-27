@@ -94,7 +94,7 @@ TRAVERSAL = {
                      "Ducks and swans float and paddle about ponds. Take hold of one while you both swim and she tows you. "
                      "A mermaid takes your hand in the water and swims you anywhere you look, even far down, and you never run out of air. "
                      "A lamia who trusts you a lot coils around you when you are badly hurt near her: you take less damage and heal, and your attackers turn on her. "
-                     "Land on a slime girl and you bounce back up unharmed. Crouch to sink in instead. "
+                     "Land on a slime girl and you bounce back up unharmed. Crouch to sink in instead. Land on a sheep girl who hasn't been shorn and her fleece catches you. "
                      "Riding a centaur, hold jump and let go to leap like a horse: the mountain goat leaps highest, the camels least. "
                      "Sit in a minecart on a track while a centaur follows you, and she takes the front and pulls you along. "
                      "In the water, a capybara, turtle, water buffalo, hippo, beaver, polar bear or spinosaur friend lets you climb onto her back, and she swims you wherever you face. "
@@ -103,7 +103,7 @@ TRAVERSAL = {
                      "Crouch and hold out an empty hand to an ender slime friend: she sends you, the way an enderman goes, to the spot you look at, up to sixteen blocks off. "
                      "Crouch and hold out an empty hand to a big construct friend, a golem, a talosling, an automaton or a gargoyle: she tosses you up and forward, and you land unhurt. "
                      "Press jump again in mid-air and a friend with you may lift you once more: a kitsune following you gives a spirit leap, a sylph, angel or valkyrie a gust that lets you down gently, a wolpertinger a second hop, and a fairy or pixie on your shoulder a little flutter. "
-                     "Friends following you lend you a little of themselves: with a cat girl at your heels falls hurt half as much, a jackalope or a kangaroo puts a spring in your step, a wolf or a hellhound sets the pack's pace when you sprint, a snow leopard, arctic fox, polar bear, yak, highland cow, reindeer or caribou keeps powder snow from freezing you, a fire kind pats out the flames when you catch fire, and a mermaid gives you the sea's own strength under the water (Conduit Power).",
+                     "Friends following you lend you a little of themselves: with a cat girl at your heels falls hurt half as much, a jackalope or a kangaroo puts a spring in your step, a wolf or a hellhound sets the pack's pace when you sprint, a snow leopard, arctic fox, polar bear, yak, highland cow, reindeer or caribou keeps powder snow from freezing you, a fire kind pats out the flames when you catch fire, a mermaid gives you the sea's own strength under the water (Conduit Power), and with a chameleon at your side you fade from sight while you crouch and keep still.",
 }
 
 JOBS = {

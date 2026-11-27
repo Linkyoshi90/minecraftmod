@@ -38,7 +38,8 @@ milk-drip bucket tests, the bed visit and the frog spawn), because a bucket then
 - **Sea lamias** (sea snake, sea serpent): ride in their coils as usual; now they dive with you and you keep your air. **(client)**
 - **Lamia coils.** Get badly hurt (below 40%) by a mob near a lamia at friendship 25: she lunges and wraps you up (Resistance II, Regeneration,
   attackers switch to her). Crouch to slip out. Once a minute.
-- **Slime bounce.** Fall onto (or beside) a slime girl: no damage and you bounce back up. Crouch to just sink in.
+- **Slime bounce.** Fall onto (or beside) a slime girl: no damage and you bounce back up. Crouch to just sink in. An unshorn sheep or
+  rhiwool minotaur catches you in her fleece the same way (no bounce).
 - **Arachne silk.** Crouch + string on an arachne friend while standing at the edge of a gap: a 3-wide silk bridge to the far side (up to 32).
   It dries away after about 5 minutes. **(client)** Is the silk texture readable? An arachne told to follow you swings across on a silk line when
   she can't walk to you, and sometimes for fun between trees. **(client)** Does the white line show from her to the anchor block?

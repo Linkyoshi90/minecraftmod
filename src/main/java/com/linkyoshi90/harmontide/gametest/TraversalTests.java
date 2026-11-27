@@ -494,4 +494,29 @@ public class TraversalTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "chameleonLendsHerColours")
+    public static void chameleonLendsHerColours(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
+        com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl cham = spawn(helper, GirlSpecies.CHAMELEON_LIZARDFOLK, new BlockPos(7, 2, 5));
+        cham.setAffection(p.getUUID(), Orders.AFFECTION);
+        cham.getOrders().set(Orders.Command.FOLLOW, p, null);
+        p.setShiftKeyDown(true);
+        p.xo = p.getX();
+        p.zo = p.getZ();
+        Traversal.company(p);
+        check(p.hasEffect(MobEffects.INVISIBILITY), "crouched and still beside her: unseen");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "sheepGirlsFleeceCatchesYou")
+    public static void sheepGirlsFleeceCatchesYou(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
+        com.linkyoshi90.harmontide.entity.girl.Minotaur sheep = spawn(helper, GirlSpecies.SHEEP_MINOTAUR, new BlockPos(5, 2, 5));
+        sheep.setNoAi(true);
+        check(!p.causeFallDamage(9.0F, 1.0F, helper.getLevel().damageSources().fall()), "into her wool, unhurt");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

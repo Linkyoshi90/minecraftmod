@@ -51,7 +51,8 @@ import java.util.Set;
  *   <li><b>Coils.</b> A bonded lamia (25+) within {@link #COIL_REACH} of a friend struck down to {@link #COIL_HEALTH} of
  *   their health lunges and wraps them in her coils: Resistance and Regeneration for a while, and whatever was after
  *   them turns on her instead. Once a minute.</li>
- *   <li><b>A bounce.</b> Landing on or right beside a slime girl bounces a player back up (unless they crouch), no damage.</li>
+ *   <li><b>A bounce.</b> Landing on or right beside a slime girl bounces a player back up (unless they crouch), no damage.
+ *   Landing on a woolly minotaur (sheep, rhiwool) who hasn't been shorn: a soft landing in her fleece, no damage.</li>
  *   <li><b>A ferry.</b> A capybara, turtle, snapping turtle, water buffalo, hippo, polar bear or spinosaur friend (10+) lets a
  *   swimming player climb onto her back and swims them where they face; ashore they slide off. The octopus, Ika, the
  *   squidkin, the krakens, the cuttlefish and the nautilus dive with them instead, sharing their air.</li>
@@ -62,7 +63,8 @@ import java.util.Set;
  *   <li><b>Company on the road.</b> What a friend following you lends you: a cat girl, her landing (falls hurt half as much);
  *   a jackalope or a kangaroo, her spring (Jump Boost); a wolf or a hellhound, the pack's pace when you sprint (Speed); a
  *   snow kind, her warmth (powder snow never freezes you); a fire kind, a quick hand with flames (you stop burning);
- *   a mermaid, under the water, the sea's own strength (Conduit Power).</li>
+ *   a mermaid, under the water, the sea's own strength (Conduit Power); a chameleon, her colours (crouch and keep still,
+ *   and you fade from sight).</li>
  *   <li><b>An air step.</b> Press jump again in mid-air: a kitsune following you gives a spirit leap, a winged elf (sylph,
  *   angel, valkyrie, gandharva, ophanim) a gust that lifts you and lets you down slowly, a wolpertinger a second hop, a fairy
  *   or pixie on your shoulder a little flutter. Once each time you leave the ground.</li>
@@ -155,6 +157,9 @@ public final class Traversal {
             if ((s == GirlSpecies.WOLF_CANID || s == GirlSpecies.HELLHOUND_CANID) && p.isSprinting()) p.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 40, 0, true, false));
             if (WARM_FUR.contains(s) && p.getTicksFrozen() > 0) p.setTicksFrozen(0);                       // her warmth
             if (Workshop.FIRE_WALKERS.contains(s) && p.getRemainingFireTicks() > 20) p.setRemainingFireTicks(20);   // she pats the flames out
+            if (s == GirlSpecies.CHAMELEON_LIZARDFOLK && p.isShiftKeyDown() && Math.abs(p.getX() - p.xo) + Math.abs(p.getZ() - p.zo) < 0.01) {
+                p.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 30, 0, true, false));          // her colours: still and crouched, unseen
+            }
             if (s.family() == GirlSpecies.Family.MERFOLK && p.isEyeInFluid(net.minecraft.tags.FluidTags.WATER)) {
                 p.addEffect(new MobEffectInstance(MobEffects.CONDUIT_POWER, 60, 0, true, false));        // the sea's own strength
             }
@@ -400,6 +405,25 @@ public final class Traversal {
         for (SlimeGirl s : p.level().getEntitiesOfClass(SlimeGirl.class, p.getBoundingBox().inflate(BOUNCE_REACH, 1.0, BOUNCE_REACH),
                 s -> s.isAlive() && !s.isBaby() && s.getTarget() != p)) return s;
         return null;
+    }
+
+    /** A woolly minotaur, unshorn, that a landing player came down on (or right beside), or null. */
+    @Nullable
+    public static com.linkyoshi90.harmontide.entity.girl.Minotaur fleece(Player p) {
+        for (com.linkyoshi90.harmontide.entity.girl.Minotaur m : p.level().getEntitiesOfClass(com.linkyoshi90.harmontide.entity.girl.Minotaur.class,
+                p.getBoundingBox().inflate(BOUNCE_REACH, 1.0, BOUNCE_REACH), m -> m.isAlive() && !m.isBaby() && m.isWoolly() && !m.isShorn())) return m;
+        return null;
+    }
+
+    /** Down into a sheep girl's fleece: no harm. */
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onFleece(LivingFallEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer p) || event.getDistance() <= 2.0F || !on()) return;
+        var sheep = fleece(p);
+        if (sheep == null) return;
+        sheep.playSound(net.minecraft.sounds.SoundEvents.WOOL_FALL, 1.0F, 1.0F);
+        event.setDistance(0.0F);
+        event.setCanceled(true);
     }
 
     /** How fast a fall of this many blocks sends you back up off her: most of the way, never sky-high. */
