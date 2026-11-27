@@ -42,6 +42,8 @@ import java.util.Set;
  *   <li><b>Wings to catch you.</b> A winged friend (valkyrie, angel, gandharva, ophanim, sylph; a moth, mothman, papillon or
  *   dragonfly) within {@link #WINGS} of a falling friend catches them before they land.</li>
  *   <li><b>A path of ice.</b> A yuki-onna friend (10+) near you freezes the water under your feet as you walk over it.</li>
+ *   <li><b>A vine ladder.</b> Crouch and hand a plant girl friend (10+) bone meal while you look up at a wall: she grows real vines
+ *   up it, as high as the wall goes (at most {@link #VINES_MAX}). They stay.</li>
  *   <li><b>A crust on the lava.</b> A fire kind friend (10+) near you (salamander, blaze cat, magma slime, ifrit, fire giant,
  *   hellhound) cools the lava under your feet into a crust that melts back a few seconds later.</li>
  * </ul>
@@ -168,6 +170,45 @@ public final class Workshop {
         p.displayClientMessage(Component.translatable("message.harmontide.winged_catch", wings.getDisplayName()), true);
     }
 
+    // --- a vine ladder ----------------------------------------------------------------------------------------------
+
+    public static final int VINES_MAX = 16;
+
+    /** Vines up the wall in front of a spot (from that spot up, against the wall facing that way). How many blocks tall. */
+    public static int growVines(ServerLevel level, BlockPos feet, net.minecraft.core.Direction facing) {
+        BlockPos at = feet;
+        if (!level.getBlockState(at).isAir() || !level.getBlockState(at.relative(facing)).isFaceSturdy(level, at.relative(facing), facing.getOpposite())) {
+            at = feet.relative(facing);
+            if (!level.getBlockState(at).isAir() || !level.getBlockState(at.relative(facing)).isFaceSturdy(level, at.relative(facing), facing.getOpposite())) return 0;
+        }
+        BlockState vine = Blocks.VINE.defaultBlockState().setValue(net.minecraft.world.level.block.VineBlock.getPropertyForFace(facing), true);
+        int height = 0;
+        for (int i = 0; i < VINES_MAX; i++, at = at.above()) {
+            BlockPos wall = at.relative(facing);
+            if (!level.getBlockState(at).isAir() || !level.getBlockState(wall).isFaceSturdy(level, wall, facing.getOpposite())) break;
+            level.setBlock(at, vine, 3);
+            height++;
+        }
+        return height;
+    }
+
+    /** Bone meal handed to a plant girl friend while looking up a wall: a vine ladder. */
+    @Nullable
+    public static net.minecraft.world.InteractionResult vineLadder(AbstractMonsterGirl g, Player p, net.minecraft.world.item.ItemStack stack) {
+        if (!com.linkyoshi90.harmontide.HarmontideConfig.workshop() || g.getSpecies().family() != GirlSpecies.Family.FLORA || g.isBaby()
+                || !stack.is(net.minecraft.world.item.Items.BONE_MEAL) || !p.isShiftKeyDown() || p.getXRot() > -35.0F || g.getAffection(p) < Orders.AFFECTION) return null;
+        if (g.level() instanceof ServerLevel level) {
+            int tall = growVines(level, p.blockPosition(), p.getDirection());
+            if (tall > 0) {
+                stack.consume(1, p);
+                level.playSound(null, p.blockPosition(), net.minecraft.sounds.SoundEvents.BONE_MEAL_USE, net.minecraft.sounds.SoundSource.NEUTRAL, 1.0F, 1.0F);
+                level.sendParticles(net.minecraft.core.particles.ParticleTypes.HAPPY_VILLAGER, p.getX(), p.getY() + 1, p.getZ(), 12, 0.6, 1.5, 0.6, 0.0);
+            }
+            p.displayClientMessage(Component.translatable(tall > 0 ? "message.harmontide.vine_ladder" : "message.harmontide.vine_ladder_none", g.getDisplayName(), tall), true);
+        }
+        return net.minecraft.world.InteractionResult.sidedSuccess(g.level().isClientSide);
+    }
+
     // --- a path of ice -----------------------------------------------------------------------------------------------
 
     /** Freezes the water just under a walking player into frosted ice (like Frost Walker). How many blocks froze. */
@@ -224,7 +265,7 @@ public final class Workshop {
         String tip = s.is(net.minecraft.world.item.Items.STRING) ? "string" : s.is(net.minecraft.world.item.Items.COMPASS) ? "compass"
                 : s.is(net.minecraft.tags.ItemTags.SAPLINGS) ? "sapling" : s.is(com.linkyoshi90.harmontide.registry.ModItems.CRAB_ARMOUR_PIECE.get()) ? "crab_armour_piece"
                 : s.is(net.minecraft.world.item.Items.BELL) ? "bell" : s.is(net.minecraft.world.item.Items.LANTERN) || s.is(net.minecraft.world.item.Items.SOUL_LANTERN) ? "lantern"
-                : s.is(net.minecraft.world.item.Items.TORCH) ? "torch" : null;
+                : s.is(net.minecraft.world.item.Items.TORCH) ? "torch" : s.is(net.minecraft.world.item.Items.BONE_MEAL) ? "bone_meal" : null;
         if (tip != null) event.getToolTip().add(Component.translatable("tip.harmontide." + tip).withStyle(net.minecraft.ChatFormatting.GRAY));
     }
 }

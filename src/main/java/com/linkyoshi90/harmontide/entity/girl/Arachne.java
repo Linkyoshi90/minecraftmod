@@ -753,6 +753,16 @@ public class Arachne extends AbstractMonsterGirl {
     private InteractionResult silkInteract(Player player, ItemStack stack) {
         if (!stack.is(Items.STRING) || !player.isShiftKeyDown() || this.isBaby() || !com.linkyoshi90.harmontide.entity.Traversal.on()
                 || this.getAffection(player) < com.linkyoshi90.harmontide.entity.Orders.AFFECTION) return null;
+        if (this.level() instanceof ServerLevel server && player.getXRot() < -35.0F) {   // looking up a wall: a ladder instead
+            int laid = server.getGameTime() < this.nextBridge ? -1 : this.spinLadder(server, player.blockPosition(), player.getDirection());
+            if (laid > 0) {
+                stack.consume(1, player);
+                this.addAffection(player, 1);
+            }
+            player.displayClientMessage(net.minecraft.network.chat.Component.translatable(laid > 0 ? "message.harmontide.silk_ladder"
+                    : laid < 0 ? "message.harmontide.silk_bridge_tired" : "message.harmontide.silk_ladder_none", this.getDisplayName(), laid), true);
+            return InteractionResult.SUCCESS;
+        }
         if (this.level() instanceof ServerLevel server) {
             int laid = server.getGameTime() < this.nextBridge ? -1 : this.spinBridge(server, player.blockPosition(), player.getDirection());
             if (laid > 0) {
@@ -792,6 +802,34 @@ public class Arachne extends AbstractMonsterGirl {
         this.startTimedAction(Action.SPIN, 40);
         this.playSound(SoundEvents.SPIDER_AMBIENT, 0.8F, 1.5F);
         return length;
+    }
+
+    /** The tallest ladder she spins. */
+    public static final int LADDER_MAX = 24;
+
+    /**
+     * A silk ladder up the wall in front of the player: from their feet up, in the air against the wall, as far as the wall goes
+     * (at most {@link #LADDER_MAX}). It dries away like her bridges. How many blocks tall (0: no wall to climb there).
+     */
+    public int spinLadder(ServerLevel level, BlockPos feet, Direction facing) {
+        BlockPos at = feet;
+        if (!level.getBlockState(at).isAir() || !level.getBlockState(at.relative(facing)).isFaceSturdy(level, at.relative(facing), facing.getOpposite())) {
+            at = feet.relative(facing);                                         // or the air just in front, with the wall one further
+            if (!level.getBlockState(at).isAir() || !level.getBlockState(at.relative(facing)).isFaceSturdy(level, at.relative(facing), facing.getOpposite())) return 0;
+        }
+        BlockState rung = ModBlocks.SILK_LADDER.get().defaultBlockState().setValue(net.minecraft.world.level.block.LadderBlock.FACING, facing.getOpposite());
+        int height = 0;
+        for (int i = 0; i < LADDER_MAX; i++, at = at.above()) {
+            BlockPos wall = at.relative(facing);
+            if (!level.getBlockState(at).isAir() || !level.getBlockState(wall).isFaceSturdy(level, wall, facing.getOpposite())) break;
+            level.setBlock(at, rung, 3);
+            height++;
+        }
+        if (height == 0) return 0;
+        this.nextBridge = level.getGameTime() + BRIDGE_REST;
+        this.startTimedAction(Action.SPIN, 40);
+        this.playSound(SoundEvents.SPIDER_AMBIENT, 0.8F, 1.5F);
+        return height;
     }
 
     // --- swinging on silk ------------------------------------------------------------------------------------------

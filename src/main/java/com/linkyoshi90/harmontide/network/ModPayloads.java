@@ -15,6 +15,17 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 public final class ModPayloads {
     private ModPayloads() {}
 
+    /** Client to server: jump pressed again in mid-air; someone with you may give an air step (entity/Traversal#airStep). */
+    public record AirStep() implements CustomPacketPayload {
+        public static final Type<AirStep> TYPE = new Type<>(HarmontideMod.id("air_step"));
+        public static final StreamCodec<ByteBuf, AirStep> CODEC = StreamCodec.unit(new AirStep());
+
+        @Override
+        public Type<AirStep> type() {
+            return TYPE;
+        }
+    }
+
     /** Server to client: where the player's call stands. */
     public record BedCallStage(int stage) implements CustomPacketPayload {
         public static final Type<BedCallStage> TYPE = new Type<>(HarmontideMod.id("bed_call_stage"));
@@ -141,6 +152,9 @@ public final class ModPayloads {
                 com.linkyoshi90.harmontide.client.MilkingScreen.progress(payload.token(), payload.strokes(), payload.need(), payload.done())));
         registrar.playToClient(OpenFeed.TYPE, OpenFeed.CODEC, (payload, context) -> context.enqueueWork(() ->
                 com.linkyoshi90.harmontide.client.FeedOfferScreen.open(payload.entityId())));
+        registrar.playToServer(AirStep.TYPE, AirStep.CODEC, (payload, context) -> context.enqueueWork(() -> {
+            if (context.player() instanceof ServerPlayer player) com.linkyoshi90.harmontide.entity.Traversal.airStep(player);
+        }));
         registrar.playToServer(SkipNight.TYPE, SkipNight.CODEC, (payload, context) -> {
             if (context.player() instanceof ServerPlayer player) BedCall.skipNight(player);
         });

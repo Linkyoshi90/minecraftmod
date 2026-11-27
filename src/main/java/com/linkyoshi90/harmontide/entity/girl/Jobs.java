@@ -152,7 +152,8 @@ public final class Jobs {
     /** Close enough to work a block: within reach across, and not far above or below it (a flier hovers). */
     static boolean within(AbstractMonsterGirl g, BlockPos at) {
         double dx = g.getX() - (at.getX() + 0.5), dz = g.getZ() - (at.getZ() + 0.5), dy = g.getY() - at.getY();
-        return dx * dx + dz * dz <= (HANDS + 0.4) * (HANDS + 0.4) && dy > -2.5 && dy < 3.0;
+        double up = g.canFly() ? 4.5 : 3.0;                                    // a flier may hover over it
+        return dx * dx + dz * dz <= (HANDS + 0.4) * (HANDS + 0.4) && dy > -2.5 && dy < up;
     }
 
     /** A short errand of steps (go there, do that). The job plans it; she walks it; whatever she carries is dropped if it fails. */

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "harmontide:block/silk_ladder"
+    },
+    "facing=east": {
+      "model": "harmontide:block/silk_ladder",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "harmontide:block/silk_ladder",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "harmontide:block/silk_ladder",
+      "y": 270
+    }
+  }
+}

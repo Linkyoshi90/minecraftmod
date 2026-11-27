@@ -162,4 +162,18 @@ public class InstinctsTests {
         check(Instincts.browse(helper.getLevel(), giraffe, true).is(Items.APPLE), "an apple from the oak");
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "devotedWyvernCarriesARider")
+    public static void devotedWyvernCarriesARider(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
+        Dragon wyvern = spawn(helper, GirlSpecies.WYVERN_DRAGON, new BlockPos(7, 2, 5));
+        wyvern.setAffection(p.getUUID(), 60);
+        interact(wyvern, p, ItemStack.EMPTY);
+        check(!p.isPassenger(), "not before she is devoted");
+        wyvern.setAffection(p.getUUID(), 100);
+        interact(wyvern, p, ItemStack.EMPTY);
+        check(p.getVehicle() == wyvern && wyvern.getControllingPassenger() == p, "devoted: up on her back, steering");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

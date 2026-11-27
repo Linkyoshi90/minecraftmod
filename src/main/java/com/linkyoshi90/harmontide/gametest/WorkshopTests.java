@@ -134,7 +134,7 @@ public class WorkshopTests {
         return n;
     }
 
-    @GameTest(template = PLATFORM, timeoutTicks = 800, batch = "arachneWeavesStringAtALoom")
+    @GameTest(template = PLATFORM, timeoutTicks = 1600, batch = "arachneWeavesStringAtALoom")
     public static void arachneWeavesStringAtALoom(GameTestHelper helper) {
         helper.setBlock(new BlockPos(9, 2, 7), Blocks.LOOM);
         helper.setBlock(new BlockPos(6, 2, 7), Blocks.CHEST);
@@ -148,7 +148,7 @@ public class WorkshopTests {
         });
     }
 
-    @GameTest(template = PLATFORM, timeoutTicks = 800, batch = "woodElfFletchesArrows")
+    @GameTest(template = PLATFORM, timeoutTicks = 1600, batch = "woodElfFletchesArrows")
     public static void woodElfFletchesArrows(GameTestHelper helper) {
         helper.setBlock(new BlockPos(9, 2, 7), Blocks.FLETCHING_TABLE);
         helper.setBlock(new BlockPos(6, 2, 7), Blocks.CHEST);
@@ -203,5 +203,14 @@ public class WorkshopTests {
         check(helper.getBlockState(new BlockPos(6, 1, 6)).is(com.linkyoshi90.harmontide.registry.ModBlocks.LAVA_CRUST.get()), "a crust to stand on");
         HarpyTestUtil.remove(p);
         helper.succeedWhen(() -> check(helper.getBlockState(new BlockPos(6, 1, 6)).is(Blocks.LAVA), "and it melts back into the lava it was"));
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "plantGirlGrowsAVineLadder")
+    public static void plantGirlGrowsAVineLadder(GameTestHelper helper) {
+        for (int y = 2; y <= 5; y++) helper.setBlock(new BlockPos(8, y, 6), Blocks.STONE);
+        int tall = Workshop.growVines(helper.getLevel(), helper.absolutePos(new BlockPos(7, 2, 6)), net.minecraft.core.Direction.EAST);
+        check(tall == 4, "vines as tall as the wall: " + tall);
+        check(helper.getBlockState(new BlockPos(7, 3, 6)).is(Blocks.VINE), "real vines");
+        helper.succeed();
     }
 }

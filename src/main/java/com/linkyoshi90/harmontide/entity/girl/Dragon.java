@@ -231,9 +231,15 @@ public class Dragon extends AbstractMonsterGirl {
 
     // --- riding: the gryphon and the wyrm carry a friend through the air ----------------------------------------
 
-    /** The friendship she wants before she carries someone (never, for most dragons). */
+    /** The great fliers who carry someone once they are devoted (entity/Traversal: they catch a falling rider too). */
+    public static final java.util.Set<GirlSpecies> SKY_MOUNTS = java.util.Set.of(GirlSpecies.WYRM_DRAGON, GirlSpecies.WYVERN_DRAGON, GirlSpecies.LONG_DRAGON,
+            GirlSpecies.AMPHIPTERE_DRAGON, GirlSpecies.QUETZALCOATL_DRAGON, GirlSpecies.BAHAMUT_DRAGON, GirlSpecies.CHIMERA_DRAGON, GirlSpecies.ENDER_DRAGON,
+            GirlSpecies.KUN_DRAGON, GirlSpecies.ALEBRIJE_DRAGON);
+
+    /** The friendship she wants before she carries someone: the gryphon at 25, the great fliers devoted, the rest never. */
     public int rideNeed() {
-        return this.species == GirlSpecies.GRYPHON_DRAGON ? GRYPHON_RIDE : this.species == GirlSpecies.WYRM_DRAGON ? FULL_AFFECTION : Integer.MAX_VALUE;
+        if (this.species == GirlSpecies.GRYPHON_DRAGON) return GRYPHON_RIDE;
+        return SKY_MOUNTS.contains(this.species) ? FULL_AFFECTION : Integer.MAX_VALUE;
     }
 
     /** A dragon who would carry this player swoops under them when they fall (entity/Traversal). Whether she caught them. */

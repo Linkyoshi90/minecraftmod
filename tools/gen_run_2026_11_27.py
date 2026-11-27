@@ -63,6 +63,9 @@ def silk_bridge():
 TRAVERSAL = {
     "block.harmontide.silk_bridge": "Silk Bridge",
     "block.harmontide.lava_crust": "Lava Crust",
+    "block.harmontide.silk_ladder": "Silk Ladder",
+    M + "silk_ladder": "%s strings a silk ladder %s blocks up the wall. It will hold for a few minutes.",
+    M + "silk_ladder_none": "%s looks for a wall in front of you to climb, and finds none.",
     M + "safety_line": "%s holds you on her safety line: you float down unhurt.",
     M + "silk_bridge": "%s spins a silk bridge %s blocks long. It will hold for a few minutes.",
     M + "silk_bridge_tired": "%s is still spinning out the last bridge. Give her a moment.",
@@ -79,6 +82,7 @@ TRAVERSAL = {
                      "A harpy hatchling who likes you rides your shoulder like a parrot: crouch and hold out an empty hand. "
                      "Crouch for two seconds to set any of them down. She stays down for a minute. "
                      "Crouch and hand an arachne some string, and she spins a silk bridge across the gap in front of you. It lasts a few minutes. "
+                     "Do it while looking up at a wall and she strings a silk ladder up it instead. "
                      "An arachne following you swings across on a silk line when she cannot walk to you. "
                      "Saddle a tarantula, a wolf spider or an ushi-oni who trusts you a lot and ride her: she climbs straight up walls and cliffs with you on her back. "
                      "A harpy who trusts you a lot lifts you when you crouch and hold out an empty hand. The big birds, such as rocs, albatrosses, swans and owls, fly you wherever you look for half a minute. "
@@ -93,6 +97,7 @@ TRAVERSAL = {
                      "An octopus, a squid girl, a kraken, a cuttlefish or a nautilus dives with you instead, wherever you look, and shares her air. "
                      "A mermaid who trusts you a lot swims ahead of your boat and pushes it along. "
                      "Crouch and hold out an empty hand to a big construct friend, a golem, a talosling, an automaton or a gargoyle: she tosses you up and forward, and you land unhurt. "
+                     "Press jump again in mid-air and a friend with you may lift you once more: a kitsune following you gives a spirit leap, a sylph, angel or valkyrie a gust that lets you down gently, a wolpertinger a second hop, and a fairy or pixie on your shoulder a little flutter. "
                      "Friends following you lend you a little of themselves: with a cat girl at your heels falls hurt half as much, a jackalope or a kangaroo puts a spring in your step, and a wolf or a hellhound sets the pack's pace when you sprint.",
 }
 
@@ -128,6 +133,8 @@ INSTINCTS = {
     M + "guide_none.village": "%s sniffs the wind and finds no village anywhere near.",
     M + "guide_none.mineshaft": "%s taps the stone and hears no mineshaft anywhere near.",
     M + "guide_rest": "%s is still getting her bearings. Ask her again in a moment.",
+    M + "vine_ladder": "%s coaxes vines %s blocks up the wall.",
+    M + "vine_ladder_none": "%s looks for a wall in front of you to grow vines on, and finds none.",
     M + "fox_veil": "%s wraps you in an illusion. For a moment, nothing can see you.",
     M + "mummy_bandage": "%s binds your wounds.",
     M + "labyrinth_below": "%1$s points %3$s and down. Home is %2$s blocks that way, %4$s below you.",
@@ -150,7 +157,7 @@ INSTINCTS = {
                      "A befriended boar girl roots about in soft ground now and then and turns something up: mushrooms, potatoes, carrots, beetroot seeds, and once in a while the seeds only a sniffer finds. "
                      "A befriended anteater snaps up the silverfish near her, and a puff of dust shows you which stone around her is infested. "
                      "A befriended giraffe browses the treetops and now and then shakes down an apple, a cocoa bean or a stick. "
-                     "A gryphon or a wyrm who would let you ride her catches you on her back if you fall past her. "
+                     "A gryphon or a wyrm who would let you ride her catches you on her back if you fall past her. Now the other great fliers carry a devoted friend too: the wyvern, the long dragon, the amphiptere, Quetzalcoatl, Bahamut, the chimera, the ender dragon, the kun and the alebrije. "
                      "When you are badly hurt, a kitsune who trusts you a lot wraps you in an illusion: you vanish for a few seconds and whatever was after you loses you. "
                      "A mummy friend binds your wounds when you are down to half your health, and you heal quickly for a while. "
                      "Lost underground? Show a bat girl friend a torch and she tells you which way the open sky is. "
@@ -169,6 +176,7 @@ WORKSHOP = {
                     "A dragon lights an unlit campfire as well as tending furnaces. "
                     "Ring a bell and your friends nearby who are free to come hurry over to it. "
                     "A winged friend, such as a valkyrie, an angel, a sylph, a phantom or a moth girl, catches you before you hit the ground. "
+                    "Crouch and hand a plant girl friend bone meal while you look up at a wall, and she grows real vines up it for you to climb. "
                     "A yuki-onna friend near you freezes the water under your feet as you walk across it. "
                     "A fire kind friend near you, a salamander, a blaze cat, a magma slime, an ifrit, a fire giant or a hellhound, cools the lava under your feet into a crust you can walk on. It melts back a few seconds later. "
                     "An arachne weaves the string in a chest beside a loom into white wool, four string to a block. "
@@ -177,11 +185,12 @@ WORKSHOP = {
 }
 
 TIPS = {
-    "tip.harmontide.string": "Crouch and hand it to an arachne friend: a silk bridge",
+    "tip.harmontide.string": "Crouch and hand it to an arachne friend: a silk bridge (look up a wall: a ladder)",
     "tip.harmontide.compass": "Show it to a minotaur friend: she points the way home",
     "tip.harmontide.sapling": "Hand a stack to a rodent friend: she plants them",
     "tip.harmontide.crab_armour_piece": "Mends half a worn item's wear at a smithing table, no template",
     "tip.harmontide.bell": "Ring it to call your friends nearby",
+    "tip.harmontide.bone_meal": "Crouch and hand it to a plant girl friend, looking up a wall: vines to climb",
     "tip.harmontide.lantern": "Show it to a kitsune or dwarf friend: she knows the way",
     "tip.harmontide.torch": "Show it to a bat friend underground: she knows the way out",
 }
@@ -192,6 +201,7 @@ ADVANCEMENTS = {
     "caught_falling": ("minecraft:phantom_membrane", "Caught!", "Be caught by a winged friend while falling"),
     "ferried": ("minecraft:oak_boat", "Ferry Crossing", "Be towed or carried across the water by a friend"),
     "silk_bridge": ("minecraft:string", "Bridge of Silk", "Have an arachne spin you a bridge across a gap"),
+    "air_step": ("minecraft:phantom_membrane", "Second Wind", "Jump again in mid-air with a friend's help"),
 }
 ADV_LANG = {}
 for _k, (_icon, _title, _desc) in ADVANCEMENTS.items():
@@ -217,6 +227,19 @@ def advancements():
 ALL = {}
 for part in (TRAVERSAL, JOBS, INSTINCTS, WORKSHOP, TIPS, ADV_LANG):
     ALL.update(part)
+
+
+def silk_ladder():
+    """Two long strands and silk rungs between them."""
+    from PIL import Image
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y in range(16):
+        for x in (2, 13):
+            img.putpixel((x, y), (236, 236, 244, 235))
+    for y in (1, 5, 9, 13):
+        for x in range(2, 14):
+            img.putpixel((x, y), (214, 216, 228, 215))
+    img.save(os.path.join(ASSETS, "textures", "block", "silk_ladder.png"))
 
 
 def lava_crust():
@@ -275,6 +298,7 @@ def crab_armour_piece():
 
 def main():
     silk_bridge()
+    silk_ladder()
     lava_crust()
     crab_armour_piece()
     advancements()

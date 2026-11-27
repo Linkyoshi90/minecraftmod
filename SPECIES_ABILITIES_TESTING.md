@@ -45,6 +45,13 @@ milk-drip bucket tests, the bed visit and the frog spawn), because a bucket then
 - **Spider mounts.** Give a saddle to a tarantula, wolf spider or ushi-oni at friendship 25, then right-click with an empty hand to ride
   (crouch to pat her instead). Walk into a wall and she climbs it with you. **(client)** Does climbing with a rider work and feel good?
 - **Mermaids push your boat.** A mermaid at friendship 25 swims ahead of the boat you're in and pushes it the way you look. **(client)**
+- **Air step.** Press jump again in mid-air: with a kitsune following you, a spirit leap; with a sylph, angel, valkyrie, gandharva
+  or ophanim, a gust and a slow fall; with a wolpertinger, a second hop; with a fairy or pixie on your shoulder, a little flutter.
+  Once per jump. **(client)** Does the second press feel responsive (it waits for the server's answer)?
+- **Silk ladder.** Crouch + string on an arachne friend while *looking up* at a wall: a climbable silk ladder up it (dries after ~5 min).
+- **Vine ladder.** Crouch + bone meal on a plant girl friend while looking up at a wall: real vines up it (they stay).
+- **Dragon mounts.** Besides the gryphon and wyrm, a devoted (100) wyvern, long dragon, amphiptere, quetzalcoatl, bahamut, chimera,
+  ender dragon, kun or alebrije lets you ride (empty hand) and fly where you look, and catches you when you fall. **(client)**
 - **Centaurs pull minecarts.** Sit in a minecart on rails with a centaur ordered to follow: she runs ahead and the cart rolls.
 - **Golem toss.** Crouch + empty hand on a golem, talosling, automaton or gargoyle friend: thrown up and forward, no fall damage.
 - **Company on the road.** Followers lend you: cat girls halve fall damage, jackalopes/kangaroos give Jump Boost, wolves/hellhounds give Speed when you sprint.

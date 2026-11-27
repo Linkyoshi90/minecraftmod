@@ -164,6 +164,11 @@ public final class ModBlocks {
             com.linkyoshi90.harmontide.block.SilkBridgeBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.WOOL).instabreak().noOcclusion().noLootTable().sound(SoundType.WOOL)
                     .ignitedByLava().pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY));
+    /** A silk ladder an arachne strung up a wall (block/SilkLadderBlock, entity/girl/Arachne#spinLadder). */
+    public static final DeferredBlock<com.linkyoshi90.harmontide.block.SilkLadderBlock> SILK_LADDER = BLOCKS.registerBlock("silk_ladder",
+            com.linkyoshi90.harmontide.block.SilkLadderBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOL).instabreak().noOcclusion().noLootTable().sound(SoundType.WOOL)
+                    .ignitedByLava().pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY));
     /** Lava a fire kind cooled under her friend's feet for a moment (block/LavaCrustBlock, entity/Workshop#crustPath). */
     public static final DeferredBlock<com.linkyoshi90.harmontide.block.LavaCrustBlock> LAVA_CRUST = BLOCKS.registerBlock("lava_crust",
             com.linkyoshi90.harmontide.block.LavaCrustBlock::new,

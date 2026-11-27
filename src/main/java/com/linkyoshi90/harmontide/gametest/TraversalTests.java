@@ -415,4 +415,29 @@ public class TraversalTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "kitsuneGivesAnAirStep")
+    public static void kitsuneGivesAnAirStep(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 4, 5));
+        p.setOnGround(false);
+        check(!Traversal.airStep(p), "nobody with them: no air step");
+        com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl fox = spawn(helper, GirlSpecies.RED_KITSUNE, new BlockPos(7, 2, 5));
+        fox.setAffection(p.getUUID(), Orders.AFFECTION);
+        fox.getOrders().set(Orders.Command.FOLLOW, p, null);
+        check(Traversal.airStep(p) && p.getDeltaMovement().y > 0.5, "a spirit leap");
+        check(!Traversal.airStep(p), "once until they land");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "arachneSpinsASilkLadder")
+    public static void arachneSpinsASilkLadder(GameTestHelper helper) {
+        for (int y = 2; y <= 6; y++) helper.setBlock(new BlockPos(8, y, 6), Blocks.STONE);   // a wall five high
+        Arachne a = spawn(helper, GirlSpecies.JUMPING_SPIDER_ARACHNE, new BlockPos(3, 2, 3));
+        int tall = a.spinLadder(helper.getLevel(), helper.absolutePos(new BlockPos(7, 2, 6)), Direction.EAST);
+        check(tall == 5, "a ladder as tall as the wall: " + tall);
+        check(helper.getBlockState(new BlockPos(7, 4, 6)).is(com.linkyoshi90.harmontide.registry.ModBlocks.SILK_LADDER.get()), "silk rungs against it");
+        check(helper.getBlockState(new BlockPos(7, 4, 6)).is(net.minecraft.tags.BlockTags.CLIMBABLE), "and you can climb them");
+        helper.succeed();
+    }
 }

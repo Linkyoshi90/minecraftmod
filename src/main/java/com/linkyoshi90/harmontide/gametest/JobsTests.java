@@ -116,7 +116,7 @@ public class JobsTests {
     public static void bugTakesHoneyCalmly(GameTestHelper helper) {
         BlockPos hive = new BlockPos(9, 2, 7);
         helper.setBlock(hive, Blocks.BEEHIVE.defaultBlockState().setValue(BeehiveBlock.HONEY_LEVEL, BeehiveBlock.MAX_HONEY_LEVELS));
-        befriended(helper, GirlSpecies.BEE_BUG, new BlockPos(4, 2, 7));
+        befriended(helper, GirlSpecies.ANT_BUG, new BlockPos(4, 2, 7));   // (a walker: the bee flies about her own hive-filling too)
         helper.succeedWhen(() -> check(helper.getBlockState(hive).getValue(BeehiveBlock.HONEY_LEVEL) == 0, "the honey taken"));
     }
 

@@ -57,6 +57,9 @@ import java.util.Set;
  *   gargoyle): she throws you up and forward, and you land unhurt.</li>
  *   <li><b>Company on the road.</b> What a friend following you lends you: a cat girl, her landing (falls hurt half as much);
  *   a jackalope or a kangaroo, her spring (Jump Boost); a wolf or a hellhound, the pack's pace when you sprint (Speed).</li>
+ *   <li><b>An air step.</b> Press jump again in mid-air: a kitsune following you gives a spirit leap, a winged elf (sylph,
+ *   angel, valkyrie, gandharva, ophanim) a gust that lifts you and lets you down slowly, a wolpertinger a second hop, a fairy
+ *   or pixie on your shoulder a little flutter. Once each time you leave the ground.</li>
  *   <li><b>A pull along the rails.</b> A centaur following a player who sits in a minecart takes the front and pulls it along
  *   the track, like a furnace minecart.</li>
  * </ul>
@@ -150,6 +153,48 @@ public final class Traversal {
         if (event.getEntity() instanceof ServerPlayer p && p.level().getGameTime() < p.getPersistentData().getLong(CAT_GRACE)) {
             event.setDamageMultiplier(event.getDamageMultiplier() * 0.5F);
         }
+    }
+
+    // --- an air step -------------------------------------------------------------------------------------------------
+
+    public static final String STEPPED = "AirStepped";
+    public static final Set<GirlSpecies> GUSTS = Set.of(GirlSpecies.SYLPH_ELF, GirlSpecies.ANGEL_ELF, GirlSpecies.VALKYRIE_ELF,
+            GirlSpecies.GANDHARVA_ELF, GirlSpecies.OPHANIM_ELF);
+
+    /** How much lift someone with this player gives them in mid-air (0: nobody can), the strongest one counting. */
+    public static double airLift(Player p) {
+        double lift = 0;
+        for (AbstractMonsterGirl g : followers(p)) {
+            GirlSpecies s = g.getSpecies();
+            if (GUSTS.contains(s)) lift = Math.max(lift, 0.9);
+            else if (s.family() == GirlSpecies.Family.KITSUNE) lift = Math.max(lift, 0.62);
+            else if (s == GirlSpecies.WOLPERTINGER_JACKALOPE) lift = Math.max(lift, 0.55);
+        }
+        for (Entity e : p.getPassengers()) {
+            if (e instanceof AbstractMonsterGirl g && (g.getSpecies() == GirlSpecies.FAIRY_BUG || g.getSpecies() == GirlSpecies.PIXI_BUG)) lift = Math.max(lift, 0.45);
+        }
+        return lift;
+    }
+
+    /** Jump pressed again in mid-air (client/AirStepKey): up again, once until they touch the ground. Whether it worked. */
+    public static boolean airStep(ServerPlayer p) {
+        if (!on() || p.onGround() || p.isPassenger() || p.isFallFlying() || p.getAbilities().flying || p.isInWater() || p.isSpectator()
+                || p.getPersistentData().getBoolean(STEPPED)) return false;
+        double lift = airLift(p);
+        if (lift <= 0) return false;
+        p.getPersistentData().putBoolean(STEPPED, true);
+        Vec3 v = p.getDeltaMovement();
+        p.setDeltaMovement(v.x * 1.1, lift, v.z * 1.1);
+        p.hurtMarked = true;
+        p.resetFallDistance();
+        if (lift >= 0.9) p.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 40, 0, true, false));   // the gust lets them down gently
+        ServerLevel level = p.serverLevel();
+        level.sendParticles(lift >= 0.9 ? net.minecraft.core.particles.ParticleTypes.CLOUD : lift >= 0.6 ? net.minecraft.core.particles.ParticleTypes.SOUL_FIRE_FLAME
+                : net.minecraft.core.particles.ParticleTypes.END_ROD, p.getX(), p.getY(), p.getZ(), 10, 0.3, 0.05, 0.3, 0.02);
+        level.playSound(null, p.blockPosition(), lift >= 0.9 ? net.minecraft.sounds.SoundEvents.BREEZE_JUMP : net.minecraft.sounds.SoundEvents.FOX_SNIFF,
+                net.minecraft.sounds.SoundSource.PLAYERS, 0.8F, 1.3F);
+        award(p, "air_step");
+        return true;
     }
 
     // --- ferries ------------------------------------------------------------------------------------------------------
@@ -436,6 +481,9 @@ public final class Traversal {
         if (event.getEntity() instanceof ServerPlayer p && p.fallDistance >= CATCH_FALL && p.tickCount % 2 == 0) catchFalling(p);
         if (event.getEntity() instanceof ServerPlayer rider && rider.isPassenger() && rider.tickCount % 5 == 0) pullCart(rider);
         if (event.getEntity() instanceof ServerPlayer walker && walker.tickCount % 20 == 3) company(walker);
+        if (event.getEntity() instanceof ServerPlayer grounded && (grounded.onGround() || grounded.isInWater()) && grounded.getPersistentData().contains(STEPPED)) {
+            grounded.getPersistentData().remove(STEPPED);                  // back on the ground: an air step is ready again
+        }
     }
 
     /** Landing on a slime girl: no harm, and up again (crouch to just sink in). Before the soft-landing cushion (entity/Company). */

@@ -1,0 +1,23 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "id": "minecraft:phantom_membrane"
+    },
+    "title": {
+      "translate": "advancement.harmontide.air_step"
+    },
+    "description": {
+      "translate": "advancement.harmontide.air_step.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

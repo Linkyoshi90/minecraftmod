@@ -142,6 +142,8 @@ public final class Instincts {
     /** The guides, asked with what you show them (a bat a torch; a kitsune or dwarf a lantern). */
     @Nullable
     public static InteractionResult guide(AbstractMonsterGirl g, Player player, ItemStack stack) {
+        InteractionResult vines = Workshop.vineLadder(g, player, stack);       // (and a plant girl shown bone meal at a wall: vines)
+        if (vines != null) return vines;
         InteractionResult r = batGuide(g, player, stack);
         return r != null ? r : landGuide(g, player, stack);
     }
