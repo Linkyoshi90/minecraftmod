@@ -655,6 +655,9 @@ public abstract class AbstractHarpy extends PathfinderMob implements GeoEntity, 
         this.perchCrouch = p.isShiftKeyDown() ? this.perchCrouch + 1 : 0;
         this.yBodyRot = p.yBodyRot;
         this.setYRot(p.yBodyRot);
+        if (!this.level().isClientSide && p.fallDistance > 3.0F && !p.hasEffect(net.minecraft.world.effect.MobEffects.SLOW_FALLING)) {
+            p.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SLOW_FALLING, 40, 0, true, false));   // she flutters
+        }
         if (!this.level().isClientSide && (this.perchCrouch > Traversal.CROUCH_OFF || !this.isBaby() || p.isSleeping() || !p.isAlive())) this.stopRiding();
     }
 

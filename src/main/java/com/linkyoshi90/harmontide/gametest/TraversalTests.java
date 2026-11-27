@@ -554,4 +554,14 @@ public class TraversalTests {
         check(dolphin.leapsWithDiver() && !koi.leapsWithDiver(), "the dolphin leaps with you, the koi does not");
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 60, batch = "fireflyIsAShoulderLantern")
+    public static void fireflyIsAShoulderLantern(GameTestHelper helper) {
+        ServerPlayer p = HarpyTestUtil.survivalPlayer(helper, new BlockPos(5, 2, 5));
+        com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl firefly = spawn(helper, GirlSpecies.FIREFLY_BUG, new BlockPos(7, 2, 5));
+        firefly.setAffection(p.getUUID(), Orders.AFFECTION);
+        check(Traversal.perches(firefly) && Traversal.perchOn(firefly, p), "a firefly fits on a shoulder");
+        HarpyTestUtil.remove(p);
+        helper.succeed();
+    }
 }

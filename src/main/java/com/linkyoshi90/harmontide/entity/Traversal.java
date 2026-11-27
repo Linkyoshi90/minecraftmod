@@ -38,7 +38,8 @@ import java.util.Set;
  *   a fairy or pixie, the waterlil cat, a kesaran-pasaran, the living doll. A crouching empty hand lifts a spiderling or
  *   gliderune up; any of them told to follow hops up by herself. Two seconds of crouching sets her down (for a minute).
  *   A spiderling is a safety line (no fall damage) and parts any cobweb; a gliderune slows falls; a fairy mends a little;
- *   a pixie or a kesaran-pasaran brings luck; the waterlil lets you breathe under water; the doll lends her night eyes.</li>
+ *   a pixie or a kesaran-pasaran brings luck; the waterlil lets you breathe under water; the doll lends her night eyes; a
+ *   firefly is a lantern on your shoulder (her own glow, at night). A harpy hatchling flutters to slow your falls.</li>
  *   <li><b>Eyes behind you.</b> A little friend on your shoulder watches your back: a monster coming at you from behind
  *   makes her tug your ear, and it glows for a moment.</li>
  *   <li><b>A lift.</b> A bonded harpy (25+) given a crouching empty hand takes the player up hanging from her talons. The
@@ -602,7 +603,7 @@ public final class Traversal {
 
     /** The tiny ones, grown, who fit on a shoulder. */
     public static final Set<GirlSpecies> TINY_PERCHERS = Set.of(GirlSpecies.GLIDERUNE_MARSUPIAL, GirlSpecies.FAIRY_BUG, GirlSpecies.PIXI_BUG,
-            GirlSpecies.WATERLIL_NEKOMATA, GirlSpecies.KESARAN_PASARAN_FLORA, GirlSpecies.LIVING_DOLL_UNDEAD);
+            GirlSpecies.WATERLIL_NEKOMATA, GirlSpecies.KESARAN_PASARAN_FLORA, GirlSpecies.LIVING_DOLL_UNDEAD, GirlSpecies.FIREFLY_BUG);
 
     /** Whether she is small enough to ride a shoulder: one of the tiny kinds, or a jumping spider still young. */
     public static boolean perches(AbstractMonsterGirl g) {

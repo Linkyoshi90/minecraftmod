@@ -22,8 +22,8 @@ milk-drip bucket tests, the bed visit and the frog spawn), because a bucket then
 
 - **Shoulder riders.** A jumping-spider youngling: crouch + empty hand, or tell her to follow and she hops up herself. On your shoulder: no
   fall damage, and cobwebs don't slow you. Also on the shoulder: gliderunes (slow falling), fairies (a little healing), pixies and
-  kesaran-pasaran (Luck), the waterlil cat (water breathing in water), the living doll (night vision in the dark), and harpy hatchlings
-  (crouch + empty hand). Crouch two seconds to set one down; she stays down a minute. She sits while she rides. **(client)** Is she on
+  kesaran-pasaran (Luck), the waterlil cat (water breathing in water), the living doll (night vision in the dark), fireflies (their own
+  glow lights your way at night), and harpy hatchlings (crouch + empty hand; they flutter to slow a fall). Crouch two seconds to set one down; she stays down a minute. She sits while she rides. **(client)** Is she on
   the *left shoulder* in third person, and hidden in first person? Does she turn with you? Does the sitting pose fit there?
 - **Harpy lift.** Crouch + empty hand on a harpy at friendship 25: she rises and you hang under her. Hold forward to fly where you look.
   Big birds (roc, albatross, swan, owl, garuda...) fly freely for 30 seconds (45 at 100). Most others only glide down. Hummingbirds and
