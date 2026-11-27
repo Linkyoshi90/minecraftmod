@@ -96,7 +96,7 @@ TRAVERSAL = {
                      "Most others can only glide you down, and hummingbirds and finches are too small. When she tires she sets you down, and if you let go you drift down slowly. "
                      "She also catches you if you fall past her. "
                      "Ducks and swans float and paddle about ponds. Take hold of one while you both swim and she tows you. "
-                     "A mermaid takes your hand in the water and swims you anywhere you look, even far down, and you never run out of air. "
+                     "A mermaid takes your hand in the water and swims you anywhere you look, even far down, and you never run out of air. A dolphin, orca or beluga leaps clear of the waves with you when you sprint along the surface. "
                      "A lamia who trusts you a lot coils around you when you are badly hurt near her: you take less damage and heal, and your attackers turn on her. "
                      "Land on a slime girl and you bounce back up unharmed. Crouch to sink in instead. Land on a sheep girl who hasn't been shorn and her fleece catches you. "
                      "Riding a centaur, hold jump and let go to leap like a horse: the mountain goat leaps highest, the camels least. A saddled ostrich leaps the same way. "

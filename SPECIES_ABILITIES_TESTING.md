@@ -32,7 +32,7 @@ milk-drip bucket tests, the bed visit and the frog spawn), because a bucket then
 - **Harpy catch.** Jump off something high with a bonded harpy (or a gryphon or wyrm you could ride) within 12 blocks: she swoops and catches you.
 - **Ducks and swans** float on ponds and paddle about. Swim up to one (friendship 10), right-click: she tows you; she lets go ashore. **(client)**
 - **Mermaids** (any but the merchants and the manta): in the water, right-click to take her hand. Look where you want to dive and hold
-  forward. You never run out of air. **(client)**
+  forward. You never run out of air. A dolphin, orca or beluga leaps clear of the waves with you when you sprint at the surface. **(client)**
 - **Ferries.** In the water, a capybara, turtle, snapping turtle, water buffalo, hippo, beaver, polar bear or spinosaur carries you on her back
   (surface). The octopus, Ika, squidkin, krakens, cuttlefish and nautilus dive with you like a mermaid. **(client)**
 - **Sea lamias** (sea snake, sea serpent): ride in their coils as usual; now they dive with you and you keep your air. **(client)**

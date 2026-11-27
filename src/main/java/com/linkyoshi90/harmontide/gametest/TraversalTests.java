@@ -546,4 +546,12 @@ public class TraversalTests {
         HarpyTestUtil.remove(p);
         helper.succeed();
     }
+
+    @GameTest(template = PLATFORM, timeoutTicks = 40, batch = "dolphinsLeapWithTheirDiver")
+    public static void dolphinsLeapWithTheirDiver(GameTestHelper helper) {
+        Merfolk dolphin = spawn(helper, GirlSpecies.DOLPHIN_MERMAID, new BlockPos(4, 2, 4));
+        Merfolk koi = spawn(helper, GirlSpecies.KOI_MERMAID, new BlockPos(9, 2, 9));
+        check(dolphin.leapsWithDiver() && !koi.leapsWithDiver(), "the dolphin leaps with you, the koi does not");
+        helper.succeed();
+    }
 }

@@ -368,11 +368,25 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
 
     @Override
     public boolean canJump() {
-        return this.species == GirlSpecies.PEGASUS_CENTAUR && this.hasFlag(FLAG_SADDLED);
+        if (this.species == GirlSpecies.PEGASUS_CENTAUR) return this.hasFlag(FLAG_SADDLED);
+        return this.isVehicle() && !this.winded && com.linkyoshi90.harmontide.entity.Traversal.on();   // every centaur leaps a fence with her rider
+    }
+
+    /** How high a centaur leaps with her rider at full charge (the mountain goat highest, the camels lowest). */
+    public double leapHeight() {
+        return switch (this.species) {
+            case GOAT_CENTAUR -> 1.15;
+            case CAMEL_CENTAUR, DROMEDARY_CENTAUR, ELEPHANT_CENTAUR, GIRAFFE_CENTAUR -> 0.6;
+            default -> 0.95;
+        };
     }
 
     @Override
     public void handleStartJump(int power) {
+        if (this.species != GirlSpecies.PEGASUS_CENTAUR) {
+            this.playSound(SoundEvents.HORSE_JUMP, 0.6F, 1.1F);
+            return;
+        }
         this.playSound(SoundEvents.ENDER_DRAGON_FLAP, 0.6F, 1.6F);
     }
 
@@ -697,6 +711,15 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
         Vec2 rot = new Vec2(player.getXRot() * 0.5F, player.getYRot());
         this.setRot(rot.y, rot.x);
         this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
+        if (this.species != GirlSpecies.PEGASUS_CENTAUR && this.jumpPending > 0) {   // a leap with her rider, like a horse
+            if (this.onGround()) {
+                Vec3 fwd = Vec3.directionFromRotation(0, this.getYRot()).scale(0.35 * this.jumpPending);
+                Vec3 v = this.getDeltaMovement();
+                this.setDeltaMovement(v.x + fwd.x, 0.42 + (this.leapHeight() - 0.42) * this.jumpPending, v.z + fwd.z);
+                this.hasImpulse = true;
+            }
+            this.jumpPending = 0;
+        }
         if (this.species == GirlSpecies.PEGASUS_CENTAUR) {
             if (this.jumpPending > 0 && this.onGround()) {              // the leap: up and forward on her wings
                 Vec3 fwd = Vec3.directionFromRotation(0, this.getYRot()).scale(1.2 * this.jumpPending);

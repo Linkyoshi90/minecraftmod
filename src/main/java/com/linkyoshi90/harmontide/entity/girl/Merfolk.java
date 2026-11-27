@@ -179,6 +179,13 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
             Vec3 v = this.isInWater() ? com.linkyoshi90.harmontide.entity.Traversal.diveStroke(this.getDeltaMovement(), diver, this.getSpeed())
                     : this.getDeltaMovement().add(0, -0.08, 0);
             if (this.isInWater() && this.horizontalCollision) v = v.add(0, 0.2, 0);
+            if (this.leapsWithDiver() && this.isInWater() && diver.isSprinting() && diver.zza > 0 && this.leapRest <= 0
+                    && this.getFluidHeight(net.minecraft.tags.FluidTags.WATER) < 1.2) {   // at the surface, at speed: a leap clear of the waves
+                Vec3 look = diver.getLookAngle().multiply(1, 0, 1).normalize();
+                v = new Vec3(look.x * 0.75, 0.7, look.z * 0.75);
+                this.leapRest = 60;
+            }
+            if (this.leapRest > 0) this.leapRest--;
             this.setDeltaMovement(v);
             this.move(MoverType.SELF, v);
             return;
@@ -747,6 +754,13 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
     }
 
     // --- a tow through the water (entity/Traversal): any grown mermaid but the merchants and the manta (who is ridden) ---
+
+    private int leapRest;
+
+    /** The dolphin, the orca and the beluga leap clear of the waves with the one they tow when they sprint at the surface. */
+    public boolean leapsWithDiver() {
+        return this.species == GirlSpecies.DOLPHIN_MERMAID || this.species == GirlSpecies.ORCA_MERMAID || this.species == GirlSpecies.BELUGA_MERMAID;
+    }
 
     /** Whether she takes a swimming friend by the hand and pulls them along, under the water as well as on it. */
     public boolean towsDivers() {
