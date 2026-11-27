@@ -635,6 +635,15 @@ public class Centaur extends AbstractMonsterGirl implements net.minecraft.world.
         return null;
     }
 
+    /** A riddle, or a ride, already uses the plain click. Crouch asks for a feed while you are hungry. */
+    @Override
+    protected boolean feedOnShift(Player player) {
+        if (super.feedOnShift(player)) return true;
+        if (this.isBaby()) return false;
+        if (this.species == GirlSpecies.SPHINX_CENTAUR) return true;
+        return !this.isVehicle() && this.letsRide(player);
+    }
+
     private net.minecraft.world.item.Item woolColour() {
         return switch (this.getVariantName()) {
             case "fawn", "brown" -> Items.BROWN_WOOL;

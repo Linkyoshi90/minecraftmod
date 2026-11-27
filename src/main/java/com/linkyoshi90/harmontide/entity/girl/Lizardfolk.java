@@ -163,6 +163,14 @@ public class Lizardfolk extends AbstractMonsterGirl {
         return net.minecraft.world.InteractionResult.sidedSuccess(this.level().isClientSide);
     }
 
+    /** The Galapagos shell is the plain click. */
+    @Override
+    protected boolean feedOnShift(Player player) {
+        if (super.feedOnShift(player)) return true;
+        return this.species == GirlSpecies.GALAPAGOS_TORTOISE_LIZARDFOLK && !this.isBaby() && !this.isVehicle()
+                && this.getAffection(player) >= com.linkyoshi90.harmontide.entity.Orders.AFFECTION;
+    }
+
     // --- the crocora and the iron kobold -------------------------------------------------------------------------------
 
     /** Iron or chainmail tools and armour: what the kobold mends (anything an iron ingot repairs). */

@@ -904,6 +904,20 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
         return null;
     }
 
+    /**
+     * Her plain empty right-click is already a job (a stall, a ride, a riddle), so a feed is asked with crouch.
+     * Everyone else is asked with the plain click. A wandering merchant's stall counts, whichever family she is.
+     */
+    protected boolean feedOnShift(Player player) {
+        return com.linkyoshi90.harmontide.entity.WanderingMerchants.isMerchant(this);
+    }
+
+    /** This empty-hand click is the one that asks her to feed, when she would. */
+    private boolean wantsFeedClick(Player player) {
+        if (player.isShiftKeyDown() != this.feedOnShift(player)) return false;
+        return com.linkyoshi90.harmontide.entity.Breastfeed.clickWouldAsk(this, player);
+    }
+
     /** How much a pat is worth to her (0 = she does not want it now). */
     protected int petValue(Player player) {
         return 1;
@@ -976,6 +990,15 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
+        if (stack.isEmpty() && this.level() instanceof ServerLevel rescue && com.linkyoshi90.harmontide.entity.MilkRescue.accept(rescue, this, player)) {
+            return InteractionResult.SUCCESS;                           // a cup of her milk, offered when they were poisoned
+        }
+        if (stack.isEmpty() && this.wantsFeedClick(player)) {
+            if (!(this.level() instanceof ServerLevel) || player instanceof net.minecraft.server.level.ServerPlayer sp
+                    && com.linkyoshi90.harmontide.entity.Breastfeed.ask(this, sp)) {
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
+            }
+        }
         InteractionResult family = this.familyInteract(player, hand, stack);
         if (family != null) return family;
         if (this.isBaby() && (this.isFood(stack) || stack.is(ModTags.MEAT) || stack.has(net.minecraft.core.component.DataComponents.FOOD))
@@ -1001,15 +1024,6 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
                     this.playSound(this.getEatSound(), 1.0F, this.getVoicePitch());
                     this.hearts(server, 2);
                 }
-                return InteractionResult.sidedSuccess(this.level().isClientSide);
-            }
-        }
-        if (stack.isEmpty() && this.level() instanceof ServerLevel rescue && com.linkyoshi90.harmontide.entity.MilkRescue.accept(rescue, this, player)) {
-            return InteractionResult.SUCCESS;                           // a cup of her milk, offered when they were poisoned
-        }
-        if (stack.isEmpty() && !player.isShiftKeyDown() && com.linkyoshi90.harmontide.entity.Breastfeed.clickWouldAsk(this, player)) {
-            if (!(this.level() instanceof ServerLevel) || player instanceof net.minecraft.server.level.ServerPlayer sp
-                    && com.linkyoshi90.harmontide.entity.Breastfeed.ask(this, sp)) {
                 return InteractionResult.sidedSuccess(this.level().isClientSide);
             }
         }
@@ -1215,6 +1229,7 @@ public abstract class AbstractMonsterGirl extends PathfinderMob implements GeoEn
     @Override
     public void aiStep() {
         super.aiStep();
+        com.linkyoshi90.harmontide.entity.Breastfeed.ensure(this);
         if (!this.level().isClientSide && this.blushTicks > 0 && --this.blushTicks == 0) this.setFlag(FLAG_BLUSHING, false);
         if (!this.level().isClientSide && this.bareTicks > 0 && --this.bareTicks == 0) this.setFlag(FLAG_BARE, false);
         if (this.level() instanceof ServerLevel party && this.tickCount % 101 == 0) com.linkyoshi90.harmontide.entity.HomeLife.dance(party, this, com.linkyoshi90.harmontide.entity.JukeboxSensing.findPlaying(party, this.blockPosition(), 16) != null

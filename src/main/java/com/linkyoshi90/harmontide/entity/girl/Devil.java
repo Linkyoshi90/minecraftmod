@@ -441,6 +441,14 @@ public class Devil extends AbstractMonsterGirl {
         return null;
     }
 
+    /** The ittan-momen carries a friend on a plain click. */
+    @Override
+    protected boolean feedOnShift(Player player) {
+        if (super.feedOnShift(player)) return true;
+        return this.species == GirlSpecies.ITTAN_MOMEN_DEVIL && !this.isBaby() && !this.isVehicle()
+                && this.getAffection(player) >= com.linkyoshi90.harmontide.entity.Orders.AFFECTION;
+    }
+
     @Override
     public ItemStack rollGift(Player player) {
         int r = this.random.nextInt(100);

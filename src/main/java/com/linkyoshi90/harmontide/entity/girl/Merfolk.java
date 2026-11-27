@@ -320,6 +320,15 @@ public class Merfolk extends AbstractMonsterGirl implements net.minecraft.world.
         return InteractionResult.sidedSuccess(this.level().isClientSide);
     }
 
+    /** A merchant's stall, or a ride on the manta, already uses the plain click. */
+    @Override
+    protected boolean feedOnShift(Player player) {
+        if (super.feedOnShift(player)) return true;
+        if (this.isBaby()) return false;
+        if (this.isMerchant() && this.tradingPlayer == null) return true;
+        return this.isManta() && !this.isVehicle() && this.getAffection(player) >= com.linkyoshi90.harmontide.entity.Orders.AFFECTION;
+    }
+
     private ItemStack seaTreasure(int affection) {
         int r = this.random.nextInt(100);
         if (affection >= 60 && r < 3) return new ItemStack(Items.HEART_OF_THE_SEA);

@@ -140,7 +140,12 @@ public class BreastfeedTests {
             check(Lactation.isLactating(cow) && cow.getAction() != AbstractMonsterGirl.Action.FEED && !Breastfeed.active(cow), "the hold is over, and the milk is still in");
             player.getFoodData().setFoodLevel(4);
             check(Breastfeed.canOffer(cow, player) && Breastfeed.startFeed(cow, player), "she can feed him again");
-            Breastfeed.stop(cow);
+            for (int i = 0; i < Breastfeed.FEED_TICKS; i++) {
+                cow.tickCount++;
+                Breastfeed.ensure(cow);
+            }
+            check(player.getFoodData().getFoodLevel() == 20, "a click she already accepted still fills him");
+            check(!Breastfeed.active(cow), "that one ends itself too");
         } finally {
             HarmontideConfig.NSFW.set(was);
         }

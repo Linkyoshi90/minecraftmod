@@ -883,6 +883,14 @@ public class Lamia extends AbstractMonsterGirl {
         return InteractionResult.sidedSuccess(this.level().isClientSide);
     }
 
+    /** Her coils are the plain click, once she lets you climb in. */
+    @Override
+    protected boolean feedOnShift(Player player) {
+        if (super.feedOnShift(player)) return true;
+        return !this.isBaby() && !this.isVehicle() && this.species != GirlSpecies.WADJET_LAMIA
+                && this.getAffection(player) >= BED_AFFECTION;
+    }
+
     /**
      * Whoever she let into her coils steers. No friendship check here: the client decides who steers, and friendship is
      * not synced to it (the check is made when you climb in).

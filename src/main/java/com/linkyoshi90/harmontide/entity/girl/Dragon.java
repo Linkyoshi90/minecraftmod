@@ -213,6 +213,16 @@ public class Dragon extends AbstractMonsterGirl {
         return null;
     }
 
+    /** A gryphon or a wyrm is ridden with a plain click, so a feed is the crouch. */
+    @Override
+    protected boolean feedOnShift(Player player) {
+        if (super.feedOnShift(player)) return true;
+        if (this.isBaby() || this.isVehicle()) return false;
+        if (this.species == GirlSpecies.GRYPHON_DRAGON) return this.getAffection(player) >= GRYPHON_RIDE;
+        if (this.species == GirlSpecies.WYRM_DRAGON) return this.getAffection(player) >= FULL_AFFECTION;
+        return false;
+    }
+
     @Override
     public ItemStack rollGift(Player player) {
         int r = this.random.nextInt(100);

@@ -41,9 +41,13 @@ public final class FeedOfferScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        graphics.fill(0, 0, this.width, this.height, 0x88000000);
-        graphics.drawWordWrap(this.font, this.question, this.width / 2 - 140, this.height / 2 - 36, 280, 0xFFFFFF);
+        // The screen blurs whatever was drawn before it. The question has to come after, or the words fade and only the buttons stay sharp.
         super.render(graphics, mouseX, mouseY, partialTick);
+        int left = this.width / 2 - 150;
+        int top = this.height / 2 - 52;
+        int right = this.width / 2 + 150;
+        graphics.fill(left, top, right, top + 44, 0xF0101010);
+        graphics.drawWordWrap(this.font, this.question, left + 10, top + 8, right - left - 20, 0xFFFFFFFF);
     }
 
     @Override

@@ -471,8 +471,7 @@ public class Undead extends AbstractMonsterGirl {
                 && this.takeBook(server, player, stack)) {
             return InteractionResult.SUCCESS;
         }
-        if (this.species == GirlSpecies.VAMPIRE_UNDEAD && stack.isEmpty() && !player.isShiftKeyDown() && !this.isBaby()
-                && this.level().getGameTime() < this.nextDrinkOffer + 600 && this.nextDrinkOffer > 0) {
+        if (this.species == GirlSpecies.VAMPIRE_UNDEAD && stack.isEmpty() && !player.isShiftKeyDown() && this.offeringDrink()) {
             if (!this.level().isClientSide) {
                 drinkFrom(player, this);
                 this.nextDrinkOffer = 0;
@@ -480,6 +479,19 @@ public class Undead extends AbstractMonsterGirl {
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
         return null;
+    }
+
+    /** The lost soul's way home, or a vampire's drink, already uses the plain click. */
+    @Override
+    protected boolean feedOnShift(Player player) {
+        if (super.feedOnShift(player)) return true;
+        if (this.species == GirlSpecies.LOST_SOUL_UNDEAD && this.getAffection(player) >= com.linkyoshi90.harmontide.entity.Orders.AFFECTION) return true;
+        return this.offeringDrink();
+    }
+
+    private boolean offeringDrink() {
+        return this.species == GirlSpecies.VAMPIRE_UNDEAD && !this.isBaby() && this.nextDrinkOffer > 0
+                && this.level().getGameTime() < this.nextDrinkOffer + 600;
     }
 
     // --- food, presents ------------------------------------------------------------------------------------------

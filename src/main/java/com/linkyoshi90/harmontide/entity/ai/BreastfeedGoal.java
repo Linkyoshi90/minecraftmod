@@ -20,7 +20,7 @@ public class BreastfeedGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return Breastfeed.wants(this.girl);
+        return Breastfeed.active(this.girl) || Breastfeed.wants(this.girl);
     }
 
     @Override
@@ -35,11 +35,11 @@ public class BreastfeedGoal extends Goal {
 
     @Override
     public void tick() {
-        Breastfeed.tick(this.girl);
+        Breastfeed.ensure(this.girl);
     }
 
     @Override
     public void stop() {
-        Breastfeed.stop(this.girl);
+        Breastfeed.releaseApproach(this.girl);
     }
 }

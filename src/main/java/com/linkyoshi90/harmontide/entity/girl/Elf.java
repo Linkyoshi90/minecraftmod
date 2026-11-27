@@ -360,7 +360,7 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
         return this.level().isClientSide;
     }
 
-    /** An empty hand opens her trades once she is fond of you (crouch to pat her instead). */
+    /** An empty hand opens her trades once she is fond of you. Crouch pats her, or asks for a feed when you are hungry. */
     @Nullable
     @Override
     protected InteractionResult familyInteract(Player player, InteractionHand hand, ItemStack stack) {
@@ -376,6 +376,12 @@ public class Elf extends AbstractMonsterGirl implements Merchant, RangedAttackMo
             this.openTradingScreen(player, this.getDisplayName(), 1);
         }
         return InteractionResult.sidedSuccess(this.level().isClientSide);
+    }
+
+    /** The stall is her plain right-click. A brownie does not keep a stall. */
+    @Override
+    protected boolean feedOnShift(Player player) {
+        return super.feedOnShift(player) || !this.isBaby() && this.species != GirlSpecies.BROWNIE_ELF;
     }
 
     // --- food, presents ------------------------------------------------------------------------------------------

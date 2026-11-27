@@ -472,6 +472,7 @@ public abstract class AbstractAnuran extends PathfinderMob implements GeoEntity,
     @Override
     public void aiStep() {
         super.aiStep();
+        com.linkyoshi90.harmontide.entity.Breastfeed.ensure(this);
         if (!this.level().isClientSide && this.blushTicks > 0 && --this.blushTicks == 0) this.entityData.set(DATA_BLUSHING, false);
         if (!this.level().isClientSide && this.bareTicks > 0 && --this.bareTicks == 0) this.entityData.set(DATA_BARE, false);
         if (this.level() instanceof ServerLevel hurt) Injury.tick(hurt, this);

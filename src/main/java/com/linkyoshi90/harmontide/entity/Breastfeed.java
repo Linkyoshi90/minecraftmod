@@ -3,11 +3,13 @@ package com.linkyoshi90.harmontide.entity;
 import com.linkyoshi90.harmontide.entity.girl.AbstractMonsterGirl;
 import com.linkyoshi90.harmontide.network.ModPayloads;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -19,7 +21,8 @@ import java.util.WeakHashMap;
 /**
  * A feed at her chest. A mother already nurses her baby (NurseGoal). With the adult option on, a grown girl who has
  * milk of her own may offer a hungry player the same: she comes over, or he right-clicks her, she asks, and on yes
- * she holds them there until the hunger bar is full. Once he is hungry again she can do it again: the feed
+ * she holds them there until the hunger bar is full. A girl whose plain right-click is already a stall or a ride
+ * is asked with crouch instead. Once he is hungry again she can do it again: the feed
  * does not use up her milk. Babies, childlike height, males and her own father are never offered it.
  * The days she is expecting or just gave birth do not count her out, which is when the milk is there.
  */
@@ -44,6 +47,8 @@ public final class Breastfeed {
         int ticks;
         boolean lifted;
         boolean hadNoGravity;
+        /** The mob tick that already advanced this feed, so her goal and her own step cannot both do it. */
+        int driven = -1;
 
         Session(UUID player) {
             this.player = player;
@@ -73,8 +78,9 @@ public final class Breastfeed {
     }
 
     /**
-     * An empty-hand right-click can ask. True on the client as well, so the pat does not play in its place.
-     * The server still checks she has milk before the question actually opens.
+     * An empty-hand click can ask. True on the client as well, so the pat does not play in its place.
+     * The server still checks she has milk before the question actually opens. Girls with a job on that
+     * click (AbstractMonsterGirl.feedOnShift) are asked while crouching.
      */
     public static boolean clickWouldAsk(Mob girl, Player player) {
         if (player.isSpectator() || !player.isAlive() || girl.getTarget() != null) return false;
@@ -122,6 +128,23 @@ public final class Breastfeed {
         }
         SESSIONS.put(girl, new Session(hungry.getUUID()));
         return true;
+    }
+
+    /**
+     * Advance a feed that is already going. Her goal calls this, and so does her own step, because a click
+     * starts the session without the goal having claimed her yet. Once a tick is enough.
+     */
+    public static void ensure(Mob girl) {
+        Session session = SESSIONS.get(girl);
+        if (session == null || session.driven == girl.tickCount) return;
+        session.driven = girl.tickCount;
+        tick(girl);
+    }
+
+    /** She was only walking over, and something else took her. A question or a feed already started finishes. */
+    public static void releaseApproach(Mob girl) {
+        Session session = SESSIONS.get(girl);
+        if (session != null && session.phase == Phase.SEEK) end(girl, false);
     }
 
     public static void tick(Mob girl) {
@@ -218,10 +241,21 @@ public final class Breastfeed {
             level.sendParticles(ParticleTypes.HEART, girl.getX(), girl.getY() + chest[0], girl.getZ(), 1, 0.15, 0.08, 0.15, 0.0);
         }
         if (++session.ticks >= FEED_TICKS) {
-            player.getFoodData().eat(20, 20.0F);
+            fill(player);
             Lactation.relieve(level, girl, player);
             level.sendParticles(ParticleTypes.HEART, player.getX(), player.getEyeY(), player.getZ(), 4, 0.2, 0.15, 0.2, 0.0);
             end(girl, true);
+        }
+    }
+
+    /** The hold is over: the bar is full, and the client hears about it on this tick. */
+    private static void fill(ServerPlayer player) {
+        FoodData food = player.getFoodData();
+        food.setFoodLevel(20);
+        food.setSaturation(20.0F);
+        food.setExhaustion(0.0F);
+        if (player.connection != null) {
+            player.connection.send(new ClientboundSetHealthPacket(player.getHealth(), food.getFoodLevel(), food.getSaturationLevel()));
         }
     }
 
